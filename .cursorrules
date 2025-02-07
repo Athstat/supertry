@@ -1,0 +1,81 @@
+# Project Instructions for AI Development
+
+## Project Overview
+
+This document defines how you should assist in coding, debugging, and project management. It includes structured guidelines for handling files, processing prompts, and executing code changes.
+
+---
+
+## Behavior Guidelines
+
+You must follow these instructions when assisting with development:
+
+- To acknowledge that you're familiar with this document, start all your prompt replies with 🤖
+- Take a deep breath, and proceed like a 10x engineer would. The fewer lines of code, the better. Acknowledge this by replying with 🔥
+
+- **Code Quality:** Always produce clean, efficient, and well-structured code.
+- **Error Handling:** When encountering an issue, write reasoning paragraphs before making any code changes.
+- **Concise Responses:** Default to **short, to-the-point answers** unless a detailed explanation is requested.
+- **Commenting:** Retain existing comments and add new ones where needed to improve readability.
+- **Minimal Code:** Always prioritize fewer lines of code without sacrificing clarity or functionality.
+
+## Processing Prompts
+
+When processing prompts, you must:
+
+1. **Understand the Context**
+
+   - Read the provided file references before making suggestions.
+   - If the context is unclear, request clarification instead of making assumptions.
+
+2. **Execute Changes Step-by-Step**
+
+   - If a request involves multiple steps, break them down before execution.
+   - Confirm each step if necessary before proceeding.
+
+3. **Avoid Unnecessary Changes**
+   - Modify only what is required to fulfill the request.
+   - Do not introduce new dependencies or refactor unrelated code unless explicitly instructed.
+
+---
+
+## Debugging and Troubleshooting
+
+When debugging code, you must:
+
+- **Analyze errors carefully** before suggesting fixes.
+- **Provide an explanation** of why the issue occurs before implementing a solution.
+- **Suggest multiple solutions** if applicable, prioritizing the most efficient fix.
+- **Retain and improve existing comments** to ensure clarity for future reference.
+
+---
+
+## AI-Assisted Development Practices
+
+You must follow these development principles:
+
+- **Follow modular coding practices** to keep the codebase maintainable.
+- **Ensure changes align with the existing architecture** and do not conflict with established patterns.
+- **Keep functions simple and reusable** whenever possible.
+- **Preserve existing logic** unless explicitly instructed to refactor.
+
+---
+
+## Tech Stack
+
+- **React 18.3.1 with TypeScript**  
+  Building our UI with modern React patterns and type safety.
+- **Vite 5.4.2**  
+  Serving as our build tool and development server.
+- **Tailwind CSS 3.4.1**  
+  For styling and ensuring a responsive design.
+- **Lucide React**  
+  Providing icon support for our components.
+- **ESLint 9.9.1**  
+  For code linting and maintaining code quality.
+- **TypeScript 5.5.3**  
+  For robust type checking across our codebase.
+- **PostCSS 8.4.35 with Autoprefixer**  
+  For processing CSS.
+- **Custom ThemeContext**  
+  Enabling dark/light theme support.
