@@ -24,7 +24,7 @@ export function TeamCard({
         hover:bg-gray-200/80 dark:hover:bg-gray-800/60
         shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)]
         hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.16)]
-        backdrop-blur-sm"
+        "
     >
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Users, Lock, Unlock, Plus, Search, ChevronRight } from 'lucide-react';
+import React, { useState } from "react";
+import { Users, Lock, Unlock, Plus, Search, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface League {
   id: string;
@@ -11,49 +12,52 @@ interface League {
   isPrivate: boolean;
 }
 
-interface JoinLeagueScreenProps {
-  onJoinLeague: (league: League) => void;
-}
-
-export function JoinLeagueScreen({ onJoinLeague }: JoinLeagueScreenProps) {
-  const [joinCode, setJoinCode] = useState('');
+export function JoinLeagueScreen() {
+  const navigate = useNavigate();
+  const [joinCode, setJoinCode] = useState("");
   const [showPrivateLeagueForm, setShowPrivateLeagueForm] = useState(false);
-  
+
   const availableLeagues: League[] = [
     {
-      id: '1',
-      name: 'Premier Weekly',
-      entryFee: '$10',
-      prizePool: '$1,000',
+      id: "1",
+      name: "Premier Weekly",
+      entryFee: "$10",
+      prizePool: "$1,000",
       players: 128,
       maxPlayers: 256,
       isPrivate: false,
     },
     {
-      id: '2',
-      name: 'Rookie League',
-      entryFee: 'Free',
-      prizePool: '$100',
+      id: "2",
+      name: "Rookie League",
+      entryFee: "Free",
+      prizePool: "$100",
       players: 64,
       maxPlayers: 100,
       isPrivate: false,
     },
     {
-      id: '3',
-      name: 'Pro Circuit',
-      entryFee: '$25',
-      prizePool: '$2,500',
+      id: "3",
+      name: "Pro Circuit",
+      entryFee: "$25",
+      prizePool: "$2,500",
       players: 32,
       maxPlayers: 64,
       isPrivate: false,
     },
   ];
 
+  const handleJoinLeague = (league: League) => {
+    navigate("/create-team", { state: { league } });
+  };
+
   return (
     <main className="container mx-auto px-4 py-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">Join a League</h1>
-        
+        <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">
+          Join a League
+        </h1>
+
         {/* League Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <button
@@ -79,7 +83,9 @@ export function JoinLeagueScreen({ onJoinLeague }: JoinLeagueScreenProps) {
 
         {/* Available Leagues */}
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">Available Leagues</h2>
+          <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+            Available Leagues
+          </h2>
           {availableLeagues.map((league) => (
             <div
               key={league.id}
@@ -88,31 +94,49 @@ export function JoinLeagueScreen({ onJoinLeague }: JoinLeagueScreenProps) {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-semibold dark:text-gray-100">{league.name}</h3>
+                    <h3 className="text-lg font-semibold dark:text-gray-100">
+                      {league.name}
+                    </h3>
                     {league.isPrivate ? (
-                      <Lock size={16} className="text-gray-400 dark:text-gray-500" />
+                      <Lock
+                        size={16}
+                        className="text-gray-400 dark:text-gray-500"
+                      />
                     ) : (
-                      <Unlock size={16} className="text-gray-400 dark:text-gray-500" />
+                      <Unlock
+                        size={16}
+                        className="text-gray-400 dark:text-gray-500"
+                      />
                     )}
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Users size={16} />
-                    <span>{league.players}/{league.maxPlayers} players</span>
+                    <span>
+                      {league.players}/{league.maxPlayers} players
+                    </span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Entry Fee</div>
-                  <div className="font-semibold dark:text-gray-200">{league.entryFee}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Entry Fee
+                  </div>
+                  <div className="font-semibold dark:text-gray-200">
+                    {league.entryFee}
+                  </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Prize Pool</div>
-                  <div className="font-semibold text-green-600 dark:text-green-500">{league.prizePool}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Prize Pool
+                  </div>
+                  <div className="font-semibold text-green-600 dark:text-green-500">
+                    {league.prizePool}
+                  </div>
                 </div>
                 <button
-                  onClick={() => onJoinLeague(league)}
+                  onClick={() => handleJoinLeague(league)}
                   className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors flex items-center gap-1"
                 >
                   Join Now

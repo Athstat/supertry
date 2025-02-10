@@ -42,40 +42,33 @@ export function DashboardScreen() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* My Teams Section - Modernized */}
         <div className="col-span-1 lg:col-span-2">
-          <div className="dark:bg-gray-800/40 backdrop-blur-sm dark:bg-dark-850/60 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6 mb-6">
+          <div className="dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6 mb-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold flex items-center gap-2 dark:text-gray-100">
                 <Users size={24} className="text-primary-500" />
                 My Teams
               </h2>
-              <button
-                onClick={() => navigate("/join-league")}
-                className="text-primary-400 hover:text-primary-300 font-medium flex items-center gap-1.5 transition-colors"
-              >
-                <PlusCircle size={20} />
-                New Team
-              </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <TeamCard
                 name="Thunder Warriors"
                 points={2456}
                 rank={1}
-                players={15}
+                players={5}
                 isFavorite={true}
               />
               <TeamCard
                 name="Rugby Legends"
                 points={2198}
                 rank={3}
-                players={15}
+                players={5}
                 isFavorite={false}
               />
             </div>
           </div>
 
           {/* Active Leagues - Modernized */}
-          <div className="dark:bg-gray-800/40 backdrop-blur-sm dark:bg-dark-850/60 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6">
+          <div className="dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6">
             <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
               <Trophy size={24} className="text-primary-500 shrink-0" />
               Active Leagues
@@ -106,13 +99,13 @@ export function DashboardScreen() {
                 <div
                   key={league.id}
                   className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl 
-                    dark:bg-gray-700/20 dark:bg-dark-800/40 hover:bg-gray-700/30 dark:hover:bg-dark-800/60
-                    transition-all duration-200 backdrop-blur-sm"
+                    dark:bg-gray-700/20 hover:bg-gray-700/30 dark:hover:bg-dark-800/60
+                    transition-all duration-200 "
                 >
                   {/* Status Badge - Updated */}
                   <div
                     className={`absolute top-4 right-4 sm:static px-2.5 py-1 text-xs font-medium rounded-full whitespace-nowrap
-                      backdrop-blur-sm transition-colors
+                       transition-colors
                       ${
                         league.status === "live"
                           ? "bg-green-500/20 text-green-400 dark:bg-green-400/10"
@@ -168,7 +161,7 @@ export function DashboardScreen() {
                       bg-gradient-to-r from-primary-500/80 to-primary-600/80 hover:from-primary-500/90 hover:to-primary-600/90
                       text-white font-medium rounded-xl transition-all duration-200 
                       flex items-center justify-center gap-2 shrink-0 mt-3 sm:mt-0
-                      backdrop-blur-sm shadow-sm shadow-primary-950/10"
+                       shadow-sm shadow-primary-950/10"
                   >
                     <span className="whitespace-nowrap">Join Now</span>
                     <ChevronRight size={20} className="shrink-0" />

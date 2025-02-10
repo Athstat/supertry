@@ -33,12 +33,12 @@ export function BottomNav() {
 
   const navItems = [
     { id: "dashboard", path: "/dashboard", icon: Home, label: "Home" },
-    { id: "leagues", path: "/leagues", icon: Trophy, label: "Leagues" },
+    { id: "leagues", path: "/join-league", icon: Trophy, label: "Leagues" },
     { id: "my-teams", path: "/my-teams", icon: Users, label: "My Teams" },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-dark-850 border-t border-gray-200 dark:border-dark-600 px-6 py-2 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-dark-850 border-t border-gray-700 dark:border-dark-600 px-6 py-2 z-50">
       <div className="flex justify-between items-center max-w-lg mx-auto">
         {navItems.map(({ id, path, icon: Icon, label }) => (
           <Link

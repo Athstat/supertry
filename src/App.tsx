@@ -22,12 +22,14 @@ import { BottomNav } from "./components/BottomNav";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { MyTeamsScreen } from "./screens/MyTeamsScreen";
+import { MyTeamScreen } from "./screens/MyTeamScreen";
+import { ProfileScreen } from "./screens/ProfileScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
   <div className="min-h-screen bg-gray-50 dark:bg-dark-850 pb-20">
     <Header />
-    {children}
+    <div className="pt-1">{children}</div>
     <BottomNav />
   </div>
 );
@@ -88,6 +90,24 @@ function App() {
         element={
           <Layout>
             <ReviewTeamScreen />
+          </Layout>
+        }
+      />
+      <Route
+        path="/my-team/:teamId"
+        element={
+          <Layout>
+            <MyTeamScreen />
+          </Layout>
+        }
+      />
+
+      {/* Profile route */}
+      <Route
+        path="/profile"
+        element={
+          <Layout>
+            <ProfileScreen />
           </Layout>
         }
       />

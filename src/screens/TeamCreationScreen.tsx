@@ -1,20 +1,27 @@
-import React from 'react';
-import { Zap, AlertCircle, ChevronRight, X } from 'lucide-react';
-import { TeamHeader } from '../components/team-creation/TeamHeader';
-import { TeamStats } from '../components/team-creation/TeamStats';
-import { PositionGroup } from '../components/team-creation/PositionGroup';
-import { useTeamCreation } from '../hooks/useTeamCreation';
-import { positionGroups } from '../data/positionGroups';
-import { Player } from '../types/player';
-import { PlayerListModal } from '../components/team-creation/PlayerListModal';
-import { PlayerDetailsModal } from '../components/team-creation/PlayerDetailsModal';
+import React from "react";
+import { Zap, AlertCircle, ChevronRight, X } from "lucide-react";
+import { TeamHeader } from "../components/team-creation/TeamHeader";
+import { TeamStats } from "../components/team-creation/TeamStats";
+import { PositionGroup } from "../components/team-creation/PositionGroup";
+import { useTeamCreation } from "../hooks/useTeamCreation";
+import { positionGroups } from "../data/positionGroups";
+import { Player } from "../types/player";
+import { PlayerListModal } from "../components/team-creation/PlayerListModal";
+import { PlayerDetailsModal } from "../components/team-creation/PlayerDetailsModal";
+import { useLocation } from "react-router-dom";
 
 interface TeamCreationScreenProps {
-  league: any;
-  onComplete: (players: Record<string, Player>, teamName: string, isFavorite: boolean) => void;
+  onComplete: (
+    players: Record<string, Player>,
+    teamName: string,
+    isFavorite: boolean
+  ) => void;
 }
 
-export function TeamCreationScreen({ league, onComplete }: TeamCreationScreenProps) {
+export function TeamCreationScreen({ onComplete }: TeamCreationScreenProps) {
+  const location = useLocation();
+  const league = location.state?.league;
+
   const {
     selectedPlayers,
     isFavorite,
@@ -42,8 +49,10 @@ export function TeamCreationScreen({ league, onComplete }: TeamCreationScreenPro
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4">
       <div className="container mx-auto px-4 max-w-lg">
-        <div className="bg-white dark:bg-dark-800 rounded-xl shadow-sm dark:shadow-dark-sm p-4 mb-6 border border-gray-200 dark:border-dark-600">
-          <h1 className="text-2xl font-bold mb-4 dark:text-gray-100">Create Your Team</h1>
+        <div className="dark:bg-gray-800/40 backdrop-blur-sm dark:bg-dark-850/60 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6 mb-6">
+          <h1 className="text-2xl font-bold mb-4 dark:text-gray-100">
+            Create Your Team
+          </h1>
 
           <TeamHeader
             teamName={teamName}
@@ -94,7 +103,9 @@ export function TeamCreationScreen({ league, onComplete }: TeamCreationScreenPro
           <div className="flex flex-col space-y-4">
             <div className="flex items-center gap-2 text-yellow-600 dark:text-yellow-500">
               <AlertCircle size={20} />
-              <span className="text-sm">Select all 15 players to complete your team</span>
+              <span className="text-sm">
+                Select all 15 players to complete your team
+              </span>
             </div>
             <button
               onClick={handleReviewTeam}
