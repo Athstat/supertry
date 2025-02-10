@@ -90,4 +90,5 @@ export const mockTeam: Team = {
       image: pro_pic,
     },
   ],
+  matchesPlayed: 24,
 };

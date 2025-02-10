@@ -7,6 +7,7 @@ interface TeamCardProps {
   rank: number;
   players: number;
   isFavorite: boolean;
+  onClick: () => void;
 }
 
 export function TeamCard({
@@ -15,16 +16,18 @@ export function TeamCard({
   rank,
   players,
   isFavorite,
+  onClick,
 }: TeamCardProps) {
   return (
     <div
       className="relative rounded-2xl p-5 transition-all duration-200
         bg-gray-100/80 dark:bg-gray-800/40 
-        border border-gray-200/60 dark:border-gray-700/40 
+        border-2 border-gray-200/60 dark:border-gray-700/40 
         hover:bg-gray-200/80 dark:hover:bg-gray-800/60
         shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)]
         hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.16)]
         "
+      onClick={onClick}
     >
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -35,7 +38,7 @@ export function TeamCard({
             isFavorite
               ? "text-yellow-500"
               : "text-gray-400 hover:text-yellow-500 dark:text-gray-500"
-          } focus:outline-none focus:ring-2 focus:ring-yellow-500/50 rounded-full p-1`}
+          } focus:outline-none focus:ring-2 focus:ring-yellow-500/50 rounded-full`}
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           <Star size={20} fill={isFavorite ? "currentColor" : "none"} />

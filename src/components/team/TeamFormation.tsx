@@ -27,7 +27,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
 
   return (
     <div className="relative h-[580px] bg-gradient-to-b from-green-600 to-green-700 rounded-2xl overflow-hidden p-8">
-      <div className="absolute inset-0 flex flex-col justify-between py-10 px-16">
+      <div className="absolute inset-0 flex flex-col justify-between py-10 pl-16 pr-8">
         {/* Front Row - Top */}
         <div className="flex justify-center -translate-x-10">
           {positionGroups["Front Row"].map((player) => (

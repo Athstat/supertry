@@ -20,6 +20,10 @@ export function DashboardScreen() {
     navigate("/create-team", { state: { league } });
   };
 
+  const handleTeamClick = (teamId: string) => {
+    navigate(`/my-team/${teamId}`);
+  };
+
   return (
     <main className="container mx-auto px-4 py-6">
       {/* Hero Section */}
@@ -54,15 +58,17 @@ export function DashboardScreen() {
                 name="Thunder Warriors"
                 points={2456}
                 rank={1}
-                players={5}
+                players={7}
                 isFavorite={true}
+                onClick={() => handleTeamClick("1")}
               />
               <TeamCard
                 name="Rugby Legends"
                 points={2198}
                 rank={3}
-                players={5}
+                players={7}
                 isFavorite={false}
+                onClick={() => handleTeamClick("2")}
               />
             </div>
           </div>

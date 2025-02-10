@@ -4,44 +4,48 @@ import { useNavigate } from "react-router-dom";
 export function MyTeamsScreen() {
   const navigate = useNavigate();
 
+  const handleTeamClick = (teamId: string) => {
+    navigate(`/my-team/${teamId}`);
+  };
+
   return (
     <main className="container mx-auto px-4 py-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold flex items-center gap-2 dark:text-gray-100">
-          <Users size={24} className="text-primary-500" />
-          My Teams
-        </h2>
-        <button
-          onClick={() => navigate("/join-league")}
-          className="flex items-center gap-2 text-primary-400 hover:text-primary-300 font-medium transition-colors"
-        >
-          <PlusCircle size={20} />
-          <span>New Team</span>
-        </button>
+      <div className="flex flex-col">
+        <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">My Teams</h1>
       </div>
 
       <div className="grid gap-4">
         {[
           {
+            id: "1",
             name: "Thunder Warriors",
             points: 2456,
             rank: 1,
-            players: 15,
+            players: 7,
             isFavorite: true,
           },
           {
+            id: "2",
             name: "Rugby Legends",
             points: 2198,
             rank: 3,
-            players: 15,
+            players: 7,
             isFavorite: false,
           },
         ].map((team) => (
           <div
             key={team.name}
+            onClick={() => handleTeamClick(team.id)}
             className="relative flex items-center justify-between p-4 rounded-xl 
               bg-gray-700/20 dark:bg-dark-800/40 hover:bg-gray-700/30 dark:hover:bg-dark-800/60
-              transition-all duration-200 backdrop-blur-sm"
+              transition-all duration-200 backdrop-blur-sm cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                handleTeamClick(team.id);
+              }
+            }}
           >
             <div className="flex items-center gap-4">
               <div className="flex-1">
@@ -50,9 +54,18 @@ export function MyTeamsScreen() {
                     {team.name}
                   </h3>
                   <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Add favorite toggle logic here
+                    }}
                     className={`text-gray-400 hover:text-yellow-400 transition-colors ${
                       team.isFavorite ? "text-yellow-400" : ""
                     }`}
+                    aria-label={
+                      team.isFavorite
+                        ? "Remove from favorites"
+                        : "Add to favorites"
+                    }
                   >
                     <Star
                       size={18}

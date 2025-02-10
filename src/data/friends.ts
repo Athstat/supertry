@@ -5,7 +5,7 @@ export const friends: Friend[] = [
     id: "1",
     name: "Sarah Johnson",
     avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+      "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/67338e73953975001dd4b461.png",
     points: 3250,
     rank: 1,
   },
@@ -13,7 +13,7 @@ export const friends: Friend[] = [
     id: "2",
     name: "Michael Chen",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
+      "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/67338d47953975001dd4b428.png",
     points: 2980,
     rank: 2,
   },
@@ -21,7 +21,7 @@ export const friends: Friend[] = [
     id: "3",
     name: "David Wilson",
     avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop",
+      "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/67338d47953975001dd4b42c.png",
     points: 2840,
     rank: 3,
   },
@@ -29,7 +29,7 @@ export const friends: Friend[] = [
     id: "4",
     name: "Emma Thompson",
     avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+      "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/67338d47953975001dd4b42b.png",
     points: 2750,
     rank: 4,
   },
@@ -37,7 +37,7 @@ export const friends: Friend[] = [
     id: "5",
     name: "James Rodriguez",
     avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop",
+      "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/67338d47953975001dd4b430.png",
     points: 2600,
     rank: 5,
   },

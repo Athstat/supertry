@@ -18,4 +18,5 @@ export interface Team {
   rank: number;
   players: Player[];
   formation: string;
+  matchesPlayed: number;
 }
