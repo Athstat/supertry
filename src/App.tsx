@@ -105,7 +105,7 @@ function App() {
 
       {/* Profile route */}
       <Route
-        path="/profile"
+        path="/profile/"
         element={
           <Layout>
             <ProfileScreen />
