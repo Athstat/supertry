@@ -40,7 +40,7 @@ export function TeamStats({ team }: TeamStatsProps) {
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4 flex items-center"
+          className="bg-gray-100 dark:bg-dark-800/40 rounded-xl p-4 flex items-center"
         >
           <stat.icon size={30} className={stat.color} />
           <div className="flex ml-3 mb-1 flex-col">
