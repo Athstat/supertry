@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
-import { MessageSquare, ChevronDown } from 'lucide-react';
-import { ChatMessage as ChatMessageComponent } from './ChatMessage';
-import { ChatInput } from './ChatInput';
-import { ChatMessage, ChatUser } from '../../../types/chat';
+import React, { useRef, useEffect, useState } from "react";
+import { MessageSquare, ChevronDown } from "lucide-react";
+import { ChatMessage as ChatMessageComponent } from "./ChatMessage";
+import { ChatInput } from "./ChatInput";
+import { ChatMessage, ChatUser } from "../../../types/chat";
 
 interface ChatFeedProps {
   messages: ChatMessage[];
@@ -21,15 +21,16 @@ export function ChatFeed({
 }: ChatFeedProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const [showScrollButton, setShowScrollButton] = React.useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      const { scrollHeight, scrollTop, clientHeight } = chatContainerRef.current;
+      const { scrollHeight, scrollTop, clientHeight } =
+        chatContainerRef.current;
       setShowScrollButton(scrollHeight - scrollTop - clientHeight > 100);
     }
   }, [messages]);
@@ -40,10 +41,10 @@ export function ChatFeed({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col h-[500px]">
-      <div className="p-3 border-b border-gray-100">
-        <h2 className="text-lg font-semibold flex items-center gap-2">
-          <MessageSquare size={20} className="text-indigo-600" />
+    <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm overflow-hidden flex flex-col h-[500px]">
+      <div className="p-3 border-b border-gray-100 dark:border-gray-800/40">
+        <h2 className="text-lg font-semibold flex items-center gap-2 dark:text-gray-100">
+          <MessageSquare size={20} className="text-primary-500" />
           League Discussion
         </h2>
       </div>
@@ -51,7 +52,7 @@ export function ChatFeed({
       <div
         ref={chatContainerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
+        className="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-white dark:bg-dark-800/40"
       >
         {messages.map((message) => (
           <ChatMessageComponent
@@ -72,13 +73,15 @@ export function ChatFeed({
       {showScrollButton && (
         <button
           onClick={scrollToBottom}
-          className="absolute bottom-16 right-4 p-2 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition-colors animate-fade-scale-up"
+          className="absolute bottom-16 right-4 p-2 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-colors animate-fade-scale-up"
         >
           <ChevronDown size={18} />
         </button>
       )}
 
-      <ChatInput onSendMessage={onSendMessage} />
+      <div className="border-t border-gray-100 dark:border-gray-700/50 p-3 bg-white dark:bg-dark-800/40 ">
+        <ChatInput onSendMessage={onSendMessage} />
+      </div>
     </div>
   );
 }

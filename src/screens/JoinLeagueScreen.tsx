@@ -47,8 +47,24 @@ export function JoinLeagueScreen() {
     },
   ];
 
+  const currentLeagues: League[] = [
+    {
+      id: "1",
+      name: "Super Weekly",
+      entryFee: "$10",
+      prizePool: "$3,000",
+      players: 108,
+      maxPlayers: 256,
+      isPrivate: false,
+    },
+  ];
+
   const handleJoinLeague = (league: League) => {
     navigate("/create-team", { state: { league } });
+  };
+
+  const handleViewLeague = (league: League) => {
+    navigate("/leagues", { state: { league } });
   };
 
   return (
@@ -62,7 +78,7 @@ export function JoinLeagueScreen() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <button
             onClick={() => setShowPrivateLeagueForm(true)}
-            className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-4 rounded-xl hover:bg-indigo-700 transition-colors"
+            className="flex font-bold items-center justify-center gap-2 bg-primary-600 text-white px-6 py-4 rounded-xl hover:bg-primary-700 transition-colors"
           >
             <Plus size={20} />
             Create Private League
@@ -75,10 +91,76 @@ export function JoinLeagueScreen() {
               onChange={(e) => setJoinCode(e.target.value)}
               className="w-full px-6 py-4 rounded-xl border border-gray-200 dark:border-dark-600 dark:bg-dark-850 dark:text-gray-100 dark:placeholder-gray-400 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
             />
-            <button className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400">
+            <button className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
               <Search size={20} />
             </button>
           </div>
+        </div>
+
+        {/* Current Leagues */}
+        <div className="space-y-4 mb-10">
+          <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+            Current Leagues
+          </h2>
+          {currentLeagues.map((league) => (
+            <div
+              key={league.id}
+              className="bg-white dark:bg-dark-800/40 rounded-xl p-6 hover:border-primary-600 dark:hover:border-primary-500 transition-all shadow-sm dark:shadow-dark-sm"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-semibold dark:text-gray-100">
+                      {league.name}
+                    </h3>
+                    {league.isPrivate ? (
+                      <Lock
+                        size={16}
+                        className="text-gray-400 dark:text-gray-500"
+                      />
+                    ) : (
+                      <Unlock
+                        size={16}
+                        className="text-gray-400 dark:text-gray-500"
+                      />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <Users size={16} />
+                    <span>
+                      {league.players}/{league.maxPlayers} players
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Entry Fee
+                  </div>
+                  <div className="font-semibold dark:text-gray-200">
+                    {league.entryFee}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Prize Pool
+                  </div>
+                  <div className="font-semibold text-green-600 dark:text-green-500">
+                    {league.prizePool}
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleViewLeague(league)}
+                  className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center gap-1"
+                >
+                  View League
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Available Leagues */}
@@ -89,7 +171,7 @@ export function JoinLeagueScreen() {
           {availableLeagues.map((league) => (
             <div
               key={league.id}
-              className="bg-white dark:bg-dark-850 rounded-xl border border-gray-200 dark:border-dark-600 p-6 hover:border-indigo-600 dark:hover:border-indigo-500 transition-all shadow-sm dark:shadow-dark-sm"
+              className="bg-white dark:bg-dark-800/40 rounded-xl p-6 hover:border-primary-600 dark:hover:border-primary-500 transition-all shadow-sm dark:shadow-dark-sm"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -137,7 +219,7 @@ export function JoinLeagueScreen() {
                 </div>
                 <button
                   onClick={() => handleJoinLeague(league)}
-                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors flex items-center gap-1"
+                  className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center gap-1"
                 >
                   Join Now
                   <ChevronRight size={16} />

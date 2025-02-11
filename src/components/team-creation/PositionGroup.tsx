@@ -1,8 +1,8 @@
-import React from 'react';
-import { Position } from '../../types/position';
-import { Player } from '../../types/player';
-import { PlayerCard } from './PlayerCard';
-import { EmptyPositionCard } from './EmptyPositionCard';
+import React from "react";
+import { Position } from "../../types/position";
+import { Player } from "../../types/player";
+import { PlayerCard } from "./PlayerCard";
+import { EmptyPositionCard } from "./EmptyPositionCard";
 
 interface PositionGroupProps {
   name: string;
@@ -20,9 +20,9 @@ export function PositionGroup({
   onRemovePlayer,
 }: PositionGroupProps) {
   return (
-    <div className="bg-white dark:bg-dark-850 rounded-xl shadow-sm dark:shadow-dark-sm p-4 border border-gray-200 dark:border-dark-600">
+    <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm p-4 ">
       <h2 className="text-lg font-semibold mb-3 dark:text-gray-100">{name}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {positions.map((position) => {
           const player = selectedPlayers[position.id];
           return (

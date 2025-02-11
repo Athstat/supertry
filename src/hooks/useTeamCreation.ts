@@ -1,20 +1,37 @@
-import { useState } from 'react';
-import { Player } from '../types/player';
-import { Position } from '../types/position';
-import { availablePlayers } from '../data/availablePlayers';
-import { positions } from '../data/positions';
+import { useState } from "react";
+import { Player } from "../types/player";
+import { Position } from "../types/position";
+import { availablePlayers } from "../data/availablePlayers";
+import { positions } from "../data/positions";
 
-export function useTeamCreation(maxBudget: number, onComplete: (players: Record<string, Player>, teamName: string, isFavorite: boolean) => void) {
-  const [selectedPlayers, setSelectedPlayers] = useState<Record<string, Player>>({});
+export function useTeamCreation(
+  maxBudget: number,
+  onComplete: (
+    players: Record<string, Player>,
+    teamName: string,
+    isFavorite: boolean
+  ) => void
+) {
+  const [selectedPlayers, setSelectedPlayers] = useState<
+    Record<string, Player>
+  >({});
   const [isFavorite, setIsFavorite] = useState(false);
-  const [teamName, setTeamName] = useState('');
-  const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
+  const [teamName, setTeamName] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState<Position | null>(
+    null
+  );
   const [showPlayerList, setShowPlayerList] = useState(false);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
-  const [selectedPlayerForModal, setSelectedPlayerForModal] = useState<Player | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPlayerForModal, setSelectedPlayerForModal] =
+    useState<Player | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const currentBudget = maxBudget - Object.values(selectedPlayers).reduce((acc, player) => acc + player.cost, 0);
+  const currentBudget =
+    maxBudget -
+    Object.values(selectedPlayers).reduce(
+      (acc, player) => acc + player.cost,
+      0
+    );
 
   const handlePositionClick = (position: Position) => {
     setSelectedPosition(position);
@@ -30,7 +47,7 @@ export function useTeamCreation(maxBudget: number, onComplete: (players: Record<
     if (selectedPosition && selectedPlayerForModal) {
       setSelectedPlayers({
         ...selectedPlayers,
-        [selectedPosition.id]: selectedPlayerForModal
+        [selectedPosition.id]: selectedPlayerForModal,
       });
       setShowPlayerModal(false);
       setShowPlayerList(false);
@@ -47,7 +64,7 @@ export function useTeamCreation(maxBudget: number, onComplete: (players: Record<
 
   const handleReset = () => {
     setSelectedPlayers({});
-    setTeamName('');
+    setTeamName("");
     setIsFavorite(false);
   };
 
@@ -58,17 +75,21 @@ export function useTeamCreation(maxBudget: number, onComplete: (players: Record<
     // Helper function to get available players for a position
     const getAvailablePlayersForPosition = (positionName: string) => {
       return availablePlayers
-        .filter(p => p.position === positionName)
+        .filter((p) => p.position === positionName)
         .sort((a, b) => b.pr - a.pr); // Sort by performance rating
     };
 
     // Try to fill each position
     for (const position of positions) {
-      const availableForPosition = getAvailablePlayersForPosition(position.name);
-      
+      const availableForPosition = getAvailablePlayersForPosition(
+        position.name
+      );
+
       // Find the best player we can afford
-      const affordablePlayer = availableForPosition.find(player => {
-        const isNotSelected = !Object.values(newSelectedPlayers).some(p => p.id === player.id);
+      const affordablePlayer = availableForPosition.find((player) => {
+        const isNotSelected = !Object.values(newSelectedPlayers).some(
+          (p) => p.id === player.id
+        );
         return player.cost <= remainingBudget && isNotSelected;
       });
 
@@ -82,44 +103,27 @@ export function useTeamCreation(maxBudget: number, onComplete: (players: Record<
     if (Object.keys(newSelectedPlayers).length === 15) {
       setSelectedPlayers(newSelectedPlayers);
       if (!teamName) {
-        setTeamName('Auto Generated Team');
+        setTeamName("Auto Generated Team");
       }
     } else {
-      alert('Could not auto-generate a valid team within the budget. Please try manual selection.');
+      alert(
+        "Could not auto-generate a valid team within the budget. Please try manual selection."
+      );
     }
-  };
-
-  const handleReviewTeam = () => {
-    if (teamName.trim() === '') {
-      alert('Please enter a team name');
-      return;
-    }
-    if (Object.keys(selectedPlayers).length !== 15) {
-      alert('Please select all 15 players');
-      return;
-    }
-    if (currentBudget < 0) {
-      alert('You have exceeded the budget');
-      return;
-    }
-    onComplete(selectedPlayers, teamName, isFavorite);
   };
 
   return {
     selectedPlayers,
-    setSelectedPlayers,
     isFavorite,
     setIsFavorite,
     teamName,
     setTeamName,
     selectedPosition,
-    setSelectedPosition,
     showPlayerList,
     setShowPlayerList,
     showPlayerModal,
     setShowPlayerModal,
     selectedPlayerForModal,
-    setSelectedPlayerForModal,
     searchQuery,
     setSearchQuery,
     currentBudget,
@@ -128,7 +132,6 @@ export function useTeamCreation(maxBudget: number, onComplete: (players: Record<
     handleAddPlayer,
     handleRemovePlayer,
     handleReset,
-    handleReviewTeam,
     handleAutoGenerate,
   };
 }

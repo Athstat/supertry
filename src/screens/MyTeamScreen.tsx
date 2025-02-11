@@ -15,6 +15,11 @@ export function MyTeamScreen() {
   // Use mock data from data file
   const team = mockTeam;
 
+  // Add useEffect to scroll to top on mount
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleBack = () => {
     navigate("/my-teams");
   };

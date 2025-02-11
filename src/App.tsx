@@ -24,6 +24,7 @@ import { DashboardScreen } from "./screens/DashboardScreen";
 import { MyTeamsScreen } from "./screens/MyTeamsScreen";
 import { MyTeamScreen } from "./screens/MyTeamScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
+import { RankingsScreen } from "./screens/RankingsScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -108,6 +109,16 @@ function App() {
         element={
           <Layout>
             <ProfileScreen />
+          </Layout>
+        }
+      />
+
+      {/* Add Rankings route */}
+      <Route
+        path="/rankings"
+        element={
+          <Layout>
+            <RankingsScreen />
           </Layout>
         }
       />
