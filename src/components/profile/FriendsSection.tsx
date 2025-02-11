@@ -71,7 +71,10 @@ export function FriendsSection({
           </span>
         </button>
 
-        <div className="flex items-center">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={handleFollowersClick}
+        >
           {friends.slice(0, 5).map((friend, index) => (
             <div
               key={friend.id}
