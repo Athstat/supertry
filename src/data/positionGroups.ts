@@ -1,28 +1,33 @@
-import { positions } from './positions';
+import { positions } from "./positions";
 
 export const positionGroups = [
   {
-    name: 'Front Row',
-    positions: positions.filter(p => ['prop1', 'hooker', 'prop2'].includes(p.id))
+    name: "Front Row",
+    positions: positions.filter((p) => p.id === "frontrow"),
   },
   {
-    name: 'Second Row',
-    positions: positions.filter(p => ['lock1', 'lock2'].includes(p.id))
+    name: "Second Row",
+    positions: positions.filter((p) => p.id === "secondrow"),
   },
   {
-    name: 'Back Row',
-    positions: positions.filter(p => ['flanker1', 'number8', 'flanker2'].includes(p.id))
+    name: "Back Row",
+    positions: positions.filter((p) => p.id === "backrow"),
   },
   {
-    name: 'Half Backs',
-    positions: positions.filter(p => ['scrumhalf', 'flyhalf'].includes(p.id))
+    name: "Halfback",
+    positions: positions.filter((p) => p.id === "halfback"),
   },
   {
-    name: 'Centers',
-    positions: positions.filter(p => ['center1', 'center2'].includes(p.id))
+    name: "Back",
+    positions: positions.filter((p) => p.id === "back"),
   },
-  {
-    name: 'Back Three',
-    positions: positions.filter(p => ['wing1', 'fullback', 'wing2'].includes(p.id))
-  }
-];
+].map((group) => ({
+  ...group,
+  positions: group.positions.length
+    ? group.positions
+    : [
+        positions.find(
+          (p) => p.id === group.name.toLowerCase().replace(" ", "")
+        )!,
+      ],
+}));

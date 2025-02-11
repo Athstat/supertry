@@ -1,204 +1,128 @@
-import { Player } from '../types/player';
+import { Player } from "../types/player";
 
 export const availablePlayers: Player[] = [
+  // Front Row Players
   {
-    id: '1',
-    name: 'James Wilson',
-    position: 'Fly-half',
-    points: 156,
-    cost: 12,
-    pr: 8.5,
-    team: 'Crusaders',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '2',
-    name: 'Tom Carter',
-    position: 'Scrum-half',
-    points: 142,
-    cost: 10,
-    pr: 7.8,
-    team: 'Blues',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '3',
-    name: 'Ethan Clarke',
-    position: 'Loosehead Prop',
+    id: "fr1",
+    name: "John Smith",
+    position: "Front Row",
+    team: "Blues",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 95,
+    pr: 85,
     points: 120,
-    cost: 9,
-    pr: 6.7,
-    team: 'Hurricanes',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
   },
   {
-    id: '4',
-    name: 'Liam Henderson',
-    position: 'Hooker',
-    points: 135,
-    cost: 11,
-    pr: 7.9,
-    team: 'Chiefs',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
+    id: "fr2",
+    name: "Mike Johnson",
+    position: "Front Row",
+    team: "Reds",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 85,
+    pr: 80,
+    points: 80,
+  },
+
+  // Second Row Players
+  {
+    id: "sr1",
+    name: "James Wilson",
+    position: "Second Row",
+    team: "Chiefs",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 90,
+    pr: 82,
+    points: 82,
   },
   {
-    id: '5',
-    name: 'Oscar Bennett',
-    position: 'Tighthead Prop',
-    points: 110,
-    cost: 8,
-    pr: 6.5,
-    team: 'Waratahs',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
+    id: "sr2",
+    name: "Tom Brown",
+    position: "Second Row",
+    team: "Hurricanes",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 88,
+    pr: 81,
+    points: 81,
+  },
+
+  // Back Row Players
+  {
+    id: "br1",
+    name: "Sam Taylor",
+    position: "Back Row",
+    team: "Crusaders",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 92,
+    pr: 86,
+    points: 86,
   },
   {
-    id: '6',
-    name: 'Noah Richards',
-    position: 'Lock',
-    points: 145,
-    cost: 10,
-    pr: 7.4,
-    team: 'Brumbies',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
+    id: "br2",
+    name: "David Lee",
+    position: "Back Row",
+    team: "Highlanders",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 87,
+    pr: 83,
+    points: 83,
+  },
+
+  // Halfback Players
+  {
+    id: "hb1",
+    name: "Aaron Smith",
+    position: "Halfback",
+    team: "All Blacks",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 98,
+    pr: 90,
+    points: 90,
   },
   {
-    id: '7',
-    name: 'Leo Harrison',
-    position: 'Lock',
-    points: 138,
-    cost: 9,
-    pr: 7.0,
-    team: 'Stormers',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
+    id: "hb2",
+    name: "Faf de Klerk",
+    position: "Halfback",
+    team: "Springboks",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 95,
+    pr: 88,
+    points: 88,
+  },
+
+  // Back Players
+  {
+    id: "b1",
+    name: "Beauden Barrett",
+    position: "Back",
+    team: "All Blacks",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 99,
+    pr: 91,
+    points: 91,
   },
   {
-    id: '8',
-    name: 'Max Walker',
-    position: 'Blindside Flanker',
-    points: 150,
-    cost: 11,
-    pr: 8.2,
-    team: 'Lions',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
+    id: "b2",
+    name: "Richie Mo'unga",
+    position: "Back",
+    team: "Crusaders",
+    image:
+      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+    cost: 96,
+    pr: 89,
+    points: 89,
   },
-  {
-    id: '9',
-    name: 'Charlie Adams',
-    position: 'Number 8',
-    points: 160,
-    cost: 12,
-    pr: 8.8,
-    team: 'Bulls',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '10',
-    name: 'Jack Thompson',
-    position: 'Openside Flanker',
-    points: 132,
-    cost: 10,
-    pr: 7.3,
-    team: 'Rebels',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '11',
-    name: 'George Fraser',
-    position: 'Inside Center',
-    points: 148,
-    cost: 11,
-    pr: 8.0,
-    team: 'Highlanders',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '12',
-    name: 'Nathan Brooks',
-    position: 'Outside Center',
-    points: 143,
-    cost: 10,
-    pr: 7.6,
-    team: 'Sharks',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '13',
-    name: 'Ben Morgan',
-    position: 'Left Wing',
-    points: 155,
-    cost: 12,
-    pr: 8.4,
-    team: 'Jaguares',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '14',
-    name: 'Oliver Scott',
-    position: 'Fullback',
-    points: 162,
-    cost: 13,
-    pr: 8.9,
-    team: 'Cheetahs',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '15',
-    name: 'Ryan Douglas',
-    position: 'Right Wing',
-    points: 159,
-    cost: 12,
-    pr: 8.6,
-    team: 'Sunwolves',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '16',
-    name: 'Daniel Foster',
-    position: 'Fly-half',
-    points: 150,
-    cost: 11,
-    pr: 8.1,
-    team: 'Panthers',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '17',
-    name: 'Luke Martin',
-    position: 'Scrum-half',
-    points: 141,
-    cost: 10,
-    pr: 7.5,
-    team: 'Kings',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '18',
-    name: 'Sam Peterson',
-    position: 'Fullback',
-    points: 165,
-    cost: 13,
-    pr: 9.0,
-    team: 'Dragons',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '19',
-    name: 'Harry Johnson',
-    position: 'Loosehead Prop',
-    points: 119,
-    cost: 9,
-    pr: 6.8,
-    team: 'Tigers',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  },
-  {
-    id: '20',
-    name: 'Zachary Moore',
-    position: 'Tighthead Prop',
-    points: 126,
-    cost: 9,
-    pr: 7.0,
-    team: 'Falcons',
-    image: 'https://dims.apnews.com/dims4/default/d70faaf/2147483647/strip/true/crop/2527x1687+0+0/resize/599x400!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F33%2F30%2F6d5bd65cce9e6697a4dae75a9b47%2F6abab34f30f548af86112ba3755fedf5'
-  }
 ];
+
+export const availablePlayersWithPoints = availablePlayers.map((player) => ({
+  ...player,
+  points: player.points || player.pr * 10,
+}));

@@ -45,8 +45,8 @@ export function TeamCreationScreen() {
       alert("Please enter a team name");
       return;
     }
-    if (Object.keys(selectedPlayers).length !== 15) {
-      alert("Please select all 15 players");
+    if (Object.keys(selectedPlayers).length !== 5) {
+      alert("Please select all 5 players");
       return;
     }
     if (currentBudget < 0) {
@@ -106,6 +106,7 @@ export function TeamCreationScreen() {
             league={league}
             currentBudget={currentBudget}
             selectedPlayersCount={Object.keys(selectedPlayers).length}
+            totalPositions={5}
           />
 
           <button
@@ -117,7 +118,7 @@ export function TeamCreationScreen() {
           </button>
         </div>
 
-        <div className="space-y-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           {positionGroups.map((group) => (
             <PositionGroup
               key={group.name}
@@ -145,7 +146,7 @@ export function TeamCreationScreen() {
             <div className="flex items-center gap-2 text-yellow-600 dark:text-yellow-500">
               <AlertCircle size={20} />
               <span className="text-sm">
-                Select all 15 players to complete your team
+                Select all 5 players to complete your team
               </span>
             </div>
             <button

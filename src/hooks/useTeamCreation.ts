@@ -100,7 +100,7 @@ export function useTeamCreation(
     }
 
     // Only update if we could fill all positions
-    if (Object.keys(newSelectedPlayers).length === 15) {
+    if (Object.keys(newSelectedPlayers).length === 5) {
       setSelectedPlayers(newSelectedPlayers);
       if (!teamName) {
         setTeamName("Auto Generated Team");

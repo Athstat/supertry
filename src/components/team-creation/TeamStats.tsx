@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface TeamStatsProps {
   league: {
@@ -7,9 +7,15 @@ interface TeamStatsProps {
   };
   currentBudget: number;
   selectedPlayersCount: number;
+  totalPositions: number;
 }
 
-export function TeamStats({ league, currentBudget, selectedPlayersCount }: TeamStatsProps) {
+export function TeamStats({
+  league,
+  currentBudget,
+  selectedPlayersCount,
+  totalPositions,
+}: TeamStatsProps) {
   return (
     <div className="space-y-3">
       <div className="flex flex-col">
@@ -18,20 +24,36 @@ export function TeamStats({ league, currentBudget, selectedPlayersCount }: TeamS
       </div>
 
       <div className="flex flex-col">
-        <span className="text-sm text-gray-600 dark:text-gray-400">Prize Pool</span>
-        <span className="font-semibold text-green-600 dark:text-green-500">{league.prizePool}</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">
+          Prize Pool
+        </span>
+        <span className="font-semibold text-green-600 dark:text-green-500">
+          {league.prizePool}
+        </span>
       </div>
 
       <div className="flex flex-col">
-        <span className="text-sm text-gray-600 dark:text-gray-400">Budget Remaining</span>
-        <span className={`font-bold text-lg ${currentBudget < 0 ? 'text-red-600 dark:text-red-500' : 'text-green-600 dark:text-green-500'}`}>
+        <span className="text-sm text-gray-600 dark:text-gray-400">
+          Budget Remaining
+        </span>
+        <span
+          className={`font-bold text-lg ${
+            currentBudget < 0
+              ? "text-red-600 dark:text-red-500"
+              : "text-green-600 dark:text-green-500"
+          }`}
+        >
           {currentBudget} points
         </span>
       </div>
 
       <div className="flex flex-col">
-        <span className="text-sm text-gray-600 dark:text-gray-400">Players Selected</span>
-        <span className="font-bold text-lg dark:text-gray-100">{selectedPlayersCount}/15</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">
+          Players Selected
+        </span>
+        <span className="font-bold text-lg dark:text-gray-100">
+          {selectedPlayersCount}/{totalPositions}
+        </span>
       </div>
     </div>
   );
