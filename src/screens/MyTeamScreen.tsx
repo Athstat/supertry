@@ -78,7 +78,7 @@ export function MyTeamScreen() {
             size={20}
             className="group-hover:-translate-x-0.5 transition-transform"
           />
-          <span className="text-sm font-medium">Back to My Teams</span>
+          <span className="text-sm font-medium">My Teams</span>
         </button>
 
         {/* Team Stats */}
