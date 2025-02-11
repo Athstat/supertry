@@ -7,6 +7,7 @@ import {
   History,
 } from "lucide-react";
 import { rankingsData } from "../data/rankings";
+import React from "react";
 
 interface Player {
   id: string;
@@ -40,6 +41,10 @@ export function RankingsScreen() {
 
   const isInPromotionZone = (rank: number) => rank <= 5;
   const isInDemotionZone = (rank: number) => rank >= 11;
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <main className="container mx-auto px-4 py-6 max-w-2xl">
