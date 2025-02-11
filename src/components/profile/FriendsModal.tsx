@@ -133,9 +133,14 @@ export function FriendsModal({
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  Rank #{friend.rank}
-                </span>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm text-primary-600 dark:text-primary-400 font-bold">
+                    Division #{friend.division}
+                  </span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Rank #{friend.rank}
+                  </span>
+                </div>
                 <ChevronRight size={20} className="text-gray-400" />
               </div>
             </div>

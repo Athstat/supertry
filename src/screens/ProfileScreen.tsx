@@ -28,8 +28,9 @@ export function ProfileScreen() {
 
   const userStats = {
     totalPoints: 2456,
-    currentRank: 42,
-    bestRank: 12,
+    currentRank: 7,
+    currentDivision: 2,
+    bestRank: 3,
     bestSeason: "2023/24",
     favoriteTeam: "Crusaders",
     gamesPlayed: 156,
@@ -100,6 +101,14 @@ export function ProfileScreen() {
               </div>
               <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
                 {userStats.totalPoints}
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
+              <div className="text-sm text-gray-600 dark:text-white">
+                Current Division
+              </div>
+              <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
+                #{userStats.currentDivision}
               </div>
             </div>
             <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
