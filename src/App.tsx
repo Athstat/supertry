@@ -25,6 +25,9 @@ import { MyTeamsScreen } from "./screens/MyTeamsScreen";
 import { MyTeamScreen } from "./screens/MyTeamScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { RankingsScreen } from "./screens/RankingsScreen";
+import { WelcomeScreen } from "./screens/auth/WelcomeScreen";
+import { SignUpScreen } from "./screens/auth/SignUpScreen";
+import { SignInScreen } from "./screens/auth/SignInScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -38,10 +41,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 function App() {
   return (
     <Routes>
-      {/* Redirect root to dashboard */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Auth routes */}
+      <Route path="/" element={<WelcomeScreen />} />
+      <Route path="/signup" element={<SignUpScreen />} />
+      <Route path="/signin" element={<SignInScreen />} />
 
-      {/* Main dashboard route */}
+      {/* Redirect dashboard to signin if not authenticated */}
       <Route
         path="/dashboard"
         element={
@@ -51,7 +56,7 @@ function App() {
         }
       />
 
-      {/* League routes */}
+      {/* Main dashboard route */}
       <Route
         path="/leagues"
         element={
