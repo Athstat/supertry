@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Home, Trophy, Users, Shield } from "lucide-react";
+import { Home, Trophy, Users, BarChart } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useState } from "react";
 
@@ -30,10 +30,10 @@ export function BottomNav() {
   };
 
   const navItems = [
-    { id: "dashboard", path: "/dashboard", icon: Home, label: "Home" },
-    { id: "leagues", path: "/join-league", icon: Shield, label: "Leagues" },
+    { id: "home", path: "/dashboard", icon: Home, label: "Home" },
+    { id: "leagues", path: "/leagues", icon: Trophy, label: "Leagues" },
     { id: "my-teams", path: "/my-teams", icon: Users, label: "My Teams" },
-    { id: "rankings", path: "/rankings", icon: Trophy, label: "Rankings" },
+    { id: "rankings", path: "/rankings", icon: BarChart, label: "Rankings" },
   ];
 
   return (

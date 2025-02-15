@@ -1,0 +1,263 @@
+import { RugbyPlayer } from "../types/rugbyPlayer";
+
+export const rugbyPlayers: RugbyPlayer[] = [
+  // Forwards - Front Row
+  {
+    id: "p1",
+    name: "Tendai Mtawarira",
+    position: "Front Row",
+    nationality: "South Africa",
+    club: "Sharks",
+    image: "https://example.com/player-images/beast.jpg",
+    fantasyPoints: 45,
+    stats: {
+      tries: 1,
+      tackles: 25,
+      missedTackles: 2,
+      carryMeters: 50,
+      lineBreaks: 1,
+      kicksFromHand: 0,
+      goalKickingAccuracy: 0,
+      rucksWon: 15,
+      turnoversWon: 3,
+      passes: 8,
+      offloads: 2,
+      assists: 1,
+    },
+  },
+  {
+    id: "p2",
+    name: "Malcolm Marx",
+    position: "Front Row",
+    nationality: "South Africa",
+    club: "Lions",
+    image: "https://example.com/player-images/marx.jpg",
+    fantasyPoints: 52,
+    stats: {
+      tries: 2,
+      tackles: 20,
+      missedTackles: 1,
+      carryMeters: 45,
+      lineBreaks: 2,
+      kicksFromHand: 0,
+      goalKickingAccuracy: 0,
+      rucksWon: 12,
+      turnoversWon: 4,
+      passes: 10,
+      offloads: 3,
+      assists: 2,
+    },
+  },
+
+  // Second Row
+  {
+    id: "p3",
+    name: "Brodie Retallick",
+    position: "Second Row",
+    nationality: "New Zealand",
+    club: "Chiefs",
+    image: "https://example.com/player-images/retallick.jpg",
+    fantasyPoints: 48,
+    stats: {
+      tries: 1,
+      tackles: 30,
+      missedTackles: 3,
+      carryMeters: 55,
+      lineBreaks: 1,
+      kicksFromHand: 0,
+      goalKickingAccuracy: 0,
+      rucksWon: 20,
+      turnoversWon: 2,
+      passes: 12,
+      offloads: 4,
+      assists: 1,
+    },
+  },
+
+  // Back Row
+  {
+    id: "p4",
+    name: "Ardie Savea",
+    position: "Back Row",
+    nationality: "New Zealand",
+    club: "Hurricanes",
+    image: "https://example.com/player-images/savea.jpg",
+    fantasyPoints: 65,
+    stats: {
+      tries: 3,
+      tackles: 35,
+      missedTackles: 2,
+      carryMeters: 120,
+      lineBreaks: 4,
+      kicksFromHand: 1,
+      goalKickingAccuracy: 0,
+      rucksWon: 25,
+      turnoversWon: 5,
+      passes: 15,
+      offloads: 6,
+      assists: 3,
+    },
+  },
+
+  // Halfbacks
+  {
+    id: "p5",
+    name: "Aaron Smith",
+    position: "Halfback",
+    nationality: "New Zealand",
+    club: "Highlanders",
+    image: "https://example.com/player-images/asmith.jpg",
+    fantasyPoints: 58,
+    stats: {
+      tries: 2,
+      tackles: 15,
+      missedTackles: 2,
+      carryMeters: 45,
+      lineBreaks: 3,
+      kicksFromHand: 25,
+      goalKickingAccuracy: 0,
+      rucksWon: 5,
+      turnoversWon: 2,
+      passes: 150,
+      offloads: 8,
+      assists: 5,
+    },
+  },
+
+  // Backs
+  {
+    id: "p6",
+    name: "Beauden Barrett",
+    position: "Back",
+    nationality: "New Zealand",
+    club: "Blues",
+    image: "https://example.com/player-images/barrett.jpg",
+    fantasyPoints: 72,
+    stats: {
+      tries: 4,
+      tackles: 18,
+      missedTackles: 3,
+      carryMeters: 150,
+      lineBreaks: 6,
+      kicksFromHand: 30,
+      goalKickingAccuracy: 85,
+      rucksWon: 3,
+      turnoversWon: 2,
+      passes: 80,
+      offloads: 10,
+      assists: 6,
+    },
+  },
+  {
+    id: "p7",
+    name: "Cheslin Kolbe",
+    position: "Back",
+    nationality: "South Africa",
+    club: "Toulouse",
+    image: "https://example.com/player-images/kolbe.jpg",
+    fantasyPoints: 68,
+    stats: {
+      tries: 5,
+      tackles: 12,
+      missedTackles: 2,
+      carryMeters: 180,
+      lineBreaks: 8,
+      kicksFromHand: 10,
+      goalKickingAccuracy: 0,
+      rucksWon: 2,
+      turnoversWon: 3,
+      passes: 25,
+      offloads: 7,
+      assists: 4,
+    },
+  },
+
+  // Additional players...
+  {
+    id: "p8",
+    name: "Maro Itoje",
+    position: "Second Row",
+    nationality: "England",
+    club: "Saracens",
+    image: "https://example.com/player-images/itoje.jpg",
+    fantasyPoints: 55,
+    stats: {
+      tries: 1,
+      tackles: 40,
+      missedTackles: 2,
+      carryMeters: 45,
+      lineBreaks: 1,
+      kicksFromHand: 0,
+      goalKickingAccuracy: 0,
+      rucksWon: 22,
+      turnoversWon: 6,
+      passes: 10,
+      offloads: 3,
+      assists: 1,
+    },
+  },
+  {
+    id: "p9",
+    name: "Antoine Dupont",
+    position: "Halfback",
+    nationality: "France",
+    club: "Toulouse",
+    image: "https://example.com/player-images/dupont.jpg",
+    fantasyPoints: 70,
+    stats: {
+      tries: 3,
+      tackles: 20,
+      missedTackles: 2,
+      carryMeters: 85,
+      lineBreaks: 5,
+      kicksFromHand: 20,
+      goalKickingAccuracy: 0,
+      rucksWon: 6,
+      turnoversWon: 3,
+      passes: 140,
+      offloads: 12,
+      assists: 8,
+    },
+  },
+  {
+    id: "p10",
+    name: "Owen Farrell",
+    position: "Back",
+    nationality: "England",
+    club: "Saracens",
+    image: "https://example.com/player-images/farrell.jpg",
+    fantasyPoints: 65,
+    stats: {
+      tries: 2,
+      tackles: 25,
+      missedTackles: 2,
+      carryMeters: 80,
+      lineBreaks: 3,
+      kicksFromHand: 35,
+      goalKickingAccuracy: 90,
+      rucksWon: 4,
+      turnoversWon: 2,
+      passes: 90,
+      offloads: 5,
+      assists: 7,
+    },
+  },
+];
+
+// Helper function to calculate fantasy points based on stats
+export const calculateFantasyPoints = (stats: RugbyPlayer["stats"]): number => {
+  return (
+    stats.tries * 5 +
+    stats.assists * 2 +
+    stats.tackles * 1 +
+    stats.missedTackles * -2 +
+    stats.lineBreaks * 3 +
+    (stats.goalKickingAccuracy > 0 ? 2 : 0)
+  );
+};
+
+// Export players with calculated fantasy points
+export const rugbyPlayersWithPoints = rugbyPlayers.map((player) => ({
+  ...player,
+  fantasyPoints: calculateFantasyPoints(player.stats),
+}));

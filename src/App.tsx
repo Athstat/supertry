@@ -28,6 +28,8 @@ import { RankingsScreen } from "./screens/RankingsScreen";
 import { WelcomeScreen } from "./screens/auth/WelcomeScreen";
 import { SignUpScreen } from "./screens/auth/SignUpScreen";
 import { SignInScreen } from "./screens/auth/SignInScreen";
+import { PlayersScreen } from "./screens/PlayersScreen";
+import { PlayerProfileScreen } from "./screens/PlayerProfileScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -124,6 +126,24 @@ function App() {
         element={
           <Layout>
             <RankingsScreen />
+          </Layout>
+        }
+      />
+
+      {/* Players routes */}
+      <Route
+        path="/players"
+        element={
+          <Layout>
+            <PlayersScreen />
+          </Layout>
+        }
+      />
+      <Route
+        path="/players/:playerId"
+        element={
+          <Layout>
+            <PlayerProfileScreen />
           </Layout>
         }
       />
