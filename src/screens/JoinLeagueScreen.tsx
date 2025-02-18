@@ -64,7 +64,7 @@ export function JoinLeagueScreen() {
   };
 
   const handleViewLeague = (league: League) => {
-    navigate("/leagues", { state: { league } });
+    navigate(`/league/${league.id}`, { state: { league } });
   };
 
   React.useEffect(() => {
@@ -74,9 +74,7 @@ export function JoinLeagueScreen() {
   return (
     <main className="container mx-auto px-4 py-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">
-          Join a League
-        </h1>
+        <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">Leagues</h1>
 
         {/* League Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -136,14 +134,6 @@ export function JoinLeagueScreen() {
                     </span>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Entry Fee
-                  </div>
-                  <div className="font-semibold dark:text-gray-200">
-                    {league.entryFee}
-                  </div>
-                </div>
               </div>
 
               <div className="flex items-center justify-between">
@@ -200,14 +190,6 @@ export function JoinLeagueScreen() {
                     <span>
                       {league.players}/{league.maxPlayers} players
                     </span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Entry Fee
-                  </div>
-                  <div className="font-semibold dark:text-gray-200">
-                    {league.entryFee}
                   </div>
                 </div>
               </div>

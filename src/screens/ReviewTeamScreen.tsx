@@ -66,7 +66,7 @@ export function ReviewTeamScreen() {
 
   const handleGoToLeague = () => {
     setShowSuccessModal(false);
-    navigate("/leagues", {
+    navigate("/league/1", {
       state: {
         league,
         teamName,

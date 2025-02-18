@@ -8,7 +8,7 @@ export const availablePlayers: Player[] = [
     position: "Front Row",
     team: "Blues",
     image:
-      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+      "https://www.algoafm.co.za/images/cmsimages/big/siyaresize-news-1643273438111214.jpeg",
     cost: 95,
     pr: 85,
     points: 120,
@@ -19,7 +19,7 @@ export const availablePlayers: Player[] = [
     position: "Front Row",
     team: "Reds",
     image:
-      "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
+      "https://static.independent.co.uk/2023/09/12/18/358a9a42f5e2063da124709fe32dece7Y29udGVudHNlYXJjaGFwaSwxNjk0NjIxNTY1-2.71164774.jpg",
     cost: 85,
     pr: 80,
     points: 80,

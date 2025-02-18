@@ -9,6 +9,38 @@ import { Player } from "../types/player";
 import { PlayerListModal } from "../components/team-creation/PlayerListModal";
 import { PlayerDetailsModal } from "../components/team-creation/PlayerDetailsModal";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Position } from "../types/position";
+
+interface PositionGroup {
+  name: string;
+  positions: Array<{
+    id: string;
+    name: string;
+    shortName: string;
+    x: number;
+    y: number;
+  }>;
+}
+
+// Update the positionGroups type annotation
+// const positionGroups: PositionGroup[] = [
+//   {
+//     name: "Front Row",
+//     positions: [{ id: "fr1", name: "Front Row", shortName: "FR", x: 0, y: 0 }],
+//   },
+//   {
+//     name: "Second Row",
+//     positions: [{ id: "sr1", name: "Second Row", shortName: "SR", x: 0, y: 1 }],
+//   },
+//   {
+//     name: "Back Row",
+//     positions: [{ id: "br1", name: "Back Row", shortName: "BR", x: 0, y: 2 }],
+//   },
+//   {
+//     name: "Halfback",
+//     positions: [{ id: "hb1", name: "Halfback", shortName: "HB", x: 1, y: 0 }],
+//   },
+// ];
 
 export function TeamCreationScreen() {
   const navigate = useNavigate();
@@ -89,7 +121,7 @@ export function TeamCreationScreen() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4">
-      <div className="container mx-auto px-4 max-w-lg">
+      <div className="container mx-auto px-4 max-w-[1024px]">
         <div className="dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6 mb-6">
           <h1 className="text-2xl font-bold mb-4 dark:text-gray-100">
             Create Your Team
@@ -118,7 +150,7 @@ export function TeamCreationScreen() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {positionGroups.map((group) => (
             <PositionGroup
               key={group.name}
@@ -131,7 +163,7 @@ export function TeamCreationScreen() {
           ))}
         </div>
 
-        <div className="space-y-3 mb-6">
+        <div className="space-y-3 mb-6 mt-6">
           <button
             onClick={handleReset}
             className="w-full bg-gray-100 dark:bg-dark-800 text-gray-700 dark:text-gray-300 px-4 py-3 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-dark-700 transition-colors flex items-center justify-center gap-2"

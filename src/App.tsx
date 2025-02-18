@@ -63,15 +63,15 @@ function App() {
         path="/leagues"
         element={
           <Layout>
-            <LeagueScreen />
+            <JoinLeagueScreen />
           </Layout>
         }
       />
       <Route
-        path="/join-league"
+        path="/league/:leagueId"
         element={
           <Layout>
-            <JoinLeagueScreen />
+            <LeagueScreen />
           </Layout>
         }
       />

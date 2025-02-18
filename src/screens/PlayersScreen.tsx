@@ -60,7 +60,7 @@ export const PlayersScreen = () => {
             placeholder="Search players..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
+            className="w-full pl-10 pr-4 py-3 bg-white dark:bg-dark-800/40 border dark:border-dark-700 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
           />
         </div>
 
@@ -71,7 +71,7 @@ export const PlayersScreen = () => {
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "all"
                 ? "bg-primary-600 text-white"
-                : "bg-gray-100 dark:bg-dark-800 text-gray-600 dark:text-gray-300"
+                : "bg-gray-100 dark:bg-dark-800/40 text-gray-600 dark:text-gray-300"
             }`}
           >
             All Players
@@ -81,7 +81,7 @@ export const PlayersScreen = () => {
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "trending"
                 ? "bg-primary-600 text-white"
-                : "bg-gray-100 dark:bg-dark-800 text-gray-600 dark:text-gray-300"
+                : "bg-gray-100 dark:bg-dark-800/40 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
             }`}
           >
             Trending
@@ -91,7 +91,7 @@ export const PlayersScreen = () => {
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "top"
                 ? "bg-primary-600 text-white"
-                : "bg-gray-100 dark:bg-dark-800 text-gray-600 dark:text-gray-300"
+                : "bg-gray-100 dark:bg-dark-800/40 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
             }`}
           >
             Top Fantasy Performers
@@ -101,7 +101,7 @@ export const PlayersScreen = () => {
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "new"
                 ? "bg-primary-600 text-white"
-                : "bg-gray-100 dark:bg-dark-800 text-gray-600 dark:text-gray-300"
+                : "bg-gray-100 dark:bg-dark-800/40 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
             }`}
           >
             New Players
@@ -111,7 +111,7 @@ export const PlayersScreen = () => {
         {/* Filter Button */}
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
         >
           <Filter size={20} />
           Filters
@@ -125,7 +125,7 @@ export const PlayersScreen = () => {
       </div>
 
       {/* Player Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {players.map((player) => (
           <PlayerCard
             key={player.id}
@@ -149,7 +149,7 @@ const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
   return (
     <button
       onClick={onClick}
-      className="bg-white dark:bg-dark-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+      className="bg-white dark:bg-dark-800/40 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
     >
       <div className="aspect-[4/3] relative overflow-hidden">
         <img
@@ -159,7 +159,7 @@ const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <h3 className="font-bold text-lg">{player.name}</h3>
+          <h3 className="font-bold text-lg text-left">{player.name}</h3>
           <div className="flex items-center justify-between">
             <span className="text-sm opacity-90">{player.position}</span>
             <span className="text-sm opacity-90">{player.club}</span>

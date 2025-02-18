@@ -17,7 +17,7 @@ export const PlayerProfileScreen = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-dark-900">
+    <main className="min-h-screen bg-gray-50 dark:bg-dark-900/40">
       {/* Header */}
       <div className="bg-gradient-to-br from-primary-600 to-primary-700 text-white">
         <div className="container mx-auto px-4 py-6">
@@ -63,7 +63,7 @@ export const PlayerProfileScreen = () => {
 
       {/* Stats Tabs */}
       <div className="container mx-auto px-4 py-6">
-        <div className="bg-white dark:bg-dark-800 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm overflow-hidden">
           <div className="flex overflow-x-auto">
             <TabButton
               active={activeTab === "overview"}

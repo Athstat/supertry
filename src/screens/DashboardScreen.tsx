@@ -35,7 +35,7 @@ export function DashboardScreen() {
           Create your dream team and compete in weekly leagues
         </p>
         <button
-          onClick={() => navigate("/join-league")}
+          onClick={() => navigate("/leagues")}
           className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
         >
           Join Weekly League <ChevronRight size={20} />
@@ -105,8 +105,8 @@ export function DashboardScreen() {
                 <div
                   key={league.id}
                   className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl 
-                    dark:bg-gray-700/20 hover:bg-gray-700/30 dark:hover:bg-dark-800/60
-                    transition-all duration-200 "
+                    bg-white dark:bg-dark-800/40 hover:bg-gray-100 dark:hover:bg-dark-800/60
+                    transition-all duration-200"
                 >
                   {/* Status Badge - Updated */}
                   <div
@@ -147,16 +147,6 @@ export function DashboardScreen() {
                           {league.prizePool}
                         </span>
                       </div>
-                      {league.entryFee !== "Free" && (
-                        <>
-                          <div className="hidden sm:block text-gray-600 dark:text-gray-500">
-                            •
-                          </div>
-                          <div className="text-sm text-gray-400 dark:text-gray-400 whitespace-nowrap">
-                            Entry: {league.entryFee}
-                          </div>
-                        </>
-                      )}
                     </div>
                   </div>
 
@@ -221,7 +211,7 @@ export function DashboardScreen() {
           </div>
 
           {/* News Feed */}
-          <div className="bg-white dark:bg-dark-850 rounded-xl shadow-sm dark:shadow-dark-sm p-6 border border-gray-200 dark:border-dark">
+          {/* <div className="bg-white dark:bg-dark-850 rounded-xl shadow-sm dark:shadow-dark-sm p-6 border border-gray-200 dark:border-dark">
             <h2 className="text-xl font-semibold flex items-center gap-2 mb-4 dark:text-gray-100">
               <Newspaper size={24} className="text-primary-500" />
               Rugby News
@@ -238,7 +228,7 @@ export function DashboardScreen() {
                 image="https://images.unsplash.com/photo-1512299286776-c18be8ed6a1a?auto=format&fit=crop&q=80&w=300"
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>
