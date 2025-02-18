@@ -37,7 +37,7 @@ export function MyTeamsScreen() {
             key={team.name}
             onClick={() => handleTeamClick(team.id)}
             className="relative flex items-center justify-between p-4 rounded-xl 
-              bg-gray-700/20 dark:bg-dark-800/40 hover:bg-gray-700/30 dark:hover:bg-dark-800/60
+              bg-gray-100/80 dark:bg-gray-800/40  hover:bg-gray-300/30 dark:hover:bg-dark-800/60
               transition-all duration-200 backdrop-blur-sm cursor-pointer"
             role="button"
             tabIndex={0}
