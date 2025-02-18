@@ -11,9 +11,9 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
 
   const menuItems = [
     { icon: Search, label: "Players", path: "/players" },
-    { icon: Settings, label: "Settings", path: "/settings" },
-    { icon: HelpCircle, label: "Support", path: "/support" },
-    { icon: Share2, label: "Invite Friends", path: "/invite" },
+    { icon: Settings, label: "Settings", path: "#" },
+    { icon: HelpCircle, label: "Support", path: "#" },
+    { icon: Share2, label: "Invite Friends", path: "#" },
   ];
 
   const handleNavigation = (path: string) => {
