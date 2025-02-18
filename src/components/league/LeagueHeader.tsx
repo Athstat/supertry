@@ -1,5 +1,6 @@
 import React from "react";
-import { Shield, Settings } from "lucide-react";
+import { Shield, Settings, ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface LeagueInfo {
   name: string;
@@ -19,6 +20,8 @@ export function LeagueHeader({
   leagueInfo,
   onOpenSettings,
 }: LeagueHeaderProps) {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-gradient-to-r from-primary-700 to-primary-600 text-white">
       <div className="container mx-auto px-4 py-6">
@@ -27,12 +30,21 @@ export function LeagueHeader({
             <h1 className="text-2xl md:text-3xl font-bold">
               {leagueInfo.name}
             </h1>
-            <div className="flex items-center gap-2 text-primary-100 mt-1">
+            <div className="flex items-center gap-2 text-primary-100 mt-3 mb-3 font-bold">
               <Shield size={16} />
               <span>{leagueInfo.type} League</span>
-              {/* <span className="mx-2">•</span>
-              <span>Gameweek {leagueInfo.currentGameweek}</span> */}
             </div>
+            <div className="container">
+              <button
+                onClick={() => navigate("/leagues")}
+                className="flex items-center gap-1 text-primary-100 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >
+                <ChevronLeft size={16} />
+                <span>Back to leagues</span>
+              </button>
+            </div>
+            {/* <span className="mx-2">•</span>
+              <span>Gameweek {leagueInfo.currentGameweek}</span> */}
           </div>
           <button
             onClick={onOpenSettings}

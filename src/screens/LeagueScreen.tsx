@@ -7,6 +7,8 @@ import { LeagueSettings } from "../components/league/LeagueSettings";
 import { ChatFeed } from "../components/league/chat/ChatFeed";
 import { TeamStats, Fixture, LeagueInfo } from "../types/league";
 import { ChatMessage, ChatUser } from "../types/chat";
+import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -176,9 +178,11 @@ export function LeagueScreen() {
     },
   ];
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const userTeam = teams.find((team) => team.isUserTeam);
-    setShowJumpButton(userTeam?.rank && userTeam.rank > 5);
+    setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
   }, []);
 
   React.useEffect(() => {
