@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   User,
   Trophy,
@@ -10,9 +10,13 @@ import {
   Lock,
   ChevronRight,
   Edit2,
+  LogOut,
 } from "lucide-react";
 import { FriendsSection } from "../components/profile/FriendsSection";
 import { friends } from "../data/friends";
+import { authService } from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface Achievement {
   id: string;
@@ -25,6 +29,26 @@ interface Achievement {
 export function ProfileScreen() {
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [userInfo, setUserInfo] = useState<{
+    email: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+  } | null>(null);
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get user info from token
+    const info = authService.getUserInfo();
+    setUserInfo(info);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/signin");
+  };
 
   const userStats = {
     totalPoints: 2456,
@@ -80,11 +104,16 @@ export function ProfileScreen() {
               <div className="flex items-start justify-between">
                 <div>
                   <h1 className="text-xl font-bold dark:text-gray-100">
-                    Xiang Lee
+                    {userInfo
+                      ? `${userInfo.firstName} ${userInfo.lastName}`
+                      : "Loading..."}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-400">
-                    @superCrypt
+                    {userInfo?.username || ""}
                   </p>
+                  {/* <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                    {userInfo?.email || ""}
+                  </p> */}
                 </div>
                 <button className="px-4 py-2 bg-primary-600 dark:bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">
                   Edit Profile
@@ -212,26 +241,17 @@ export function ProfileScreen() {
               </button>
             </div>
 
-            {/* <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800 rounded-xl">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+            >
               <div className="flex items-center gap-3">
-                <Moon size={20} className="text-gray-500" />
-                <span className="font-medium dark:text-gray-100">
-                  Dark Mode
+                <LogOut size={20} className="text-red-500" />
+                <span className="font-medium text-red-600 dark:text-red-400">
+                  Logout
                 </span>
               </div>
-              <button
-                onClick={() => setDarkMode(!darkMode)}
-                className={`w-12 h-6 rounded-full transition-colors ${
-                  darkMode ? "bg-indigo-600" : "bg-gray-300 dark:bg-dark-600"
-                }`}
-              >
-                <div
-                  className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
-                    darkMode ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
-              </button>
-            </div> */}
+            </button>
           </div>
         </div>
       </div>

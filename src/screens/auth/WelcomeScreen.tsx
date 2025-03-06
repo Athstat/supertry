@@ -1,37 +1,47 @@
-import { Shield, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthLayout } from "../../components/auth/AuthLayout";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function WelcomeScreen() {
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-primary-600 to-primary-800 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-12 text-center">
-        <div className="space-y-4">
-          <Shield className="w-20 h-20 text-white mx-auto" />
-          <h1 className="text-4xl font-bold text-white">RugbyFantasy</h1>
-          <p className="text-primary-100 text-lg">
-            Build your dream team. Compete with friends. Rise through divisions.
-          </p>
-        </div>
+  const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth();
 
-        <div className="space-y-4">
-          <Link
-            to="/signup"
-            className="w-full bg-white text-primary-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-          >
-            Get Started
-            <ArrowRight size={20} />
-          </Link>
-          <p className="text-primary-100">
-            Already have an account?{" "}
-            <Link
-              to="/signin"
-              className="text-white font-medium hover:underline"
-            >
-              Sign In
-            </Link>
-          </p>
-        </div>
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !loading) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, loading, navigate]);
+
+  // If still loading, show a loading indicator
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
       </div>
-    </main>
+    );
+  }
+
+  return (
+    <AuthLayout
+      title="Welcome to AthStat Games"
+      subtitle="The ultimate fantasy sports experience"
+    >
+      <div className="mt-8 space-y-4">
+        <Link
+          to="/signin"
+          className="block w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors text-center"
+        >
+          Sign In
+        </Link>
+        <Link
+          to="/signup"
+          className="block w-full bg-white dark:bg-dark-800 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-400 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors text-center"
+        >
+          Create Account
+        </Link>
+      </div>
+    </AuthLayout>
   );
 }

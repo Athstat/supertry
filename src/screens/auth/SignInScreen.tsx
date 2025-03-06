@@ -2,24 +2,57 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import { AuthLayout } from "../../components/auth/AuthLayout";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function SignInScreen() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Display environment variables for debugging (can be removed in production)
+  // console.debug("Environment variables:", {
+  //   clientId: process.env.REACT_APP_CLIENT_ID,
+  //   tokenUrl: process.env.REACT_APP_KEYCLOAK_TOKEN_URL,
+  //   grantType: process.env.REACT_APP_GRANT_TYPE,
+  //   scope: process.env.REACT_APP_SCOPE,
+  // });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add validation and API call here
-    navigate("/dashboard");
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      // Use the login method from AuthContext
+      await login(form.email, form.password);
+
+      // If login is successful, redirect to dashboard
+      navigate("/dashboard");
+    } catch (err) {
+      // Handle login error
+      setError(
+        err instanceof Error ? err.message : "Login failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <AuthLayout title="Welcome back" subtitle="Sign in to your account">
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+
         <div className="space-y-4">
           <div>
             <label
@@ -86,9 +119,10 @@ export function SignInScreen() {
 
         <button
           type="submit"
-          className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors"
+          disabled={isLoading}
+          className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Sign in
+          {isLoading ? "Signing in..." : "Sign in"}
         </button>
 
         <div className="text-center">
