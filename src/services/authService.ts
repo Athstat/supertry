@@ -1,7 +1,7 @@
 import { UserRepresentation } from "../types/auth";
 
 // The API already includes the /api prefix
-const API_BASE_URL = "";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID || "athstat-frontend";
 const KEYCLOAK_URL =
   import.meta.env.VITE_AUTH_KEYCLOAK_URL ||
@@ -15,13 +15,21 @@ export const authService = {
    */
   async registerUser(userData: UserRepresentation): Promise<any> {
     try {
-      const response = await fetch(`/api/v1/unauth/create-keycloak-user/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      // Use the full URL in production, relative URL in development
+      const baseUrl = import.meta.env.PROD
+        ? "http://qa-games-app.athstat-next.com"
+        : "";
+
+      const response = await fetch(
+        `${baseUrl}/api/v1/unauth/create-keycloak-user/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       // Check if the response is JSON
       const contentType = response.headers.get("content-type");
