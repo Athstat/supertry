@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Search, Filter, ChevronDown } from "lucide-react";
+import { Search, Filter, ChevronDown, AlertCircle } from "lucide-react";
 import { RugbyPlayer } from "../types/rugbyPlayer";
-import { rugbyPlayersWithPoints } from "../data/rugbyPlayers";
 import { useNavigate } from "react-router-dom";
+import { athleteService } from "../services/athleteService";
 
 type SortTab = "all" | "trending" | "top" | "new";
 type SortOption = "points" | "name" | "position" | "club";
+
+// Default competition ID - this could come from a context or route param
+const DEFAULT_COMPETITION_ID = "7f6ac8a5-1723-5325-96bd-44b8b36cfb9e"; // Replace with actual default ID
 
 export const PlayersScreen = () => {
   const navigate = useNavigate();
@@ -13,26 +16,59 @@ export const PlayersScreen = () => {
   const [sortBy, setSortBy] = useState<SortOption>("points");
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [players, setPlayers] = useState<RugbyPlayer[]>(rugbyPlayersWithPoints);
+  const [players, setPlayers] = useState<RugbyPlayer[]>([]);
+  const [filteredPlayers, setFilteredPlayers] = useState<RugbyPlayer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Fetch players from API
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await athleteService.getAthletesByCompetition(
+          DEFAULT_COMPETITION_ID
+        );
+        setPlayers(data);
+        setFilteredPlayers(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load players");
+        console.error("Error fetching players:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPlayers();
+  }, []);
+
+  // Handle player selection
   const handlePlayerClick = (playerId: string) => {
     navigate(`/players/${playerId}`);
   };
 
+  // Handle search filtering
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    const filtered = rugbyPlayersWithPoints.filter(
+    if (!query.trim()) {
+      setFilteredPlayers(players);
+      return;
+    }
+
+    const filtered = players.filter(
       (player) =>
         player.name.toLowerCase().includes(query.toLowerCase()) ||
         player.club.toLowerCase().includes(query.toLowerCase()) ||
         player.position.toLowerCase().includes(query.toLowerCase())
     );
-    setPlayers(filtered);
+    setFilteredPlayers(filtered);
   };
 
+  // Handle sorting
   const handleSort = (option: SortOption) => {
     setSortBy(option);
-    const sorted = [...players].sort((a, b) => {
+    const sorted = [...filteredPlayers].sort((a, b) => {
       switch (option) {
         case "points":
           return b.fantasyPoints - a.fantasyPoints;
@@ -46,7 +82,35 @@ export const PlayersScreen = () => {
           return 0;
       }
     });
-    setPlayers(sorted);
+    setFilteredPlayers(sorted);
+  };
+
+  // Handle tab changes
+  const handleTabChange = (tab: SortTab) => {
+    setActiveTab(tab);
+
+    // Apply different filters based on tab
+    switch (tab) {
+      case "all":
+        setFilteredPlayers(players);
+        break;
+      case "trending":
+        // Example: Players with recent point increases
+        setFilteredPlayers(players.filter((p) => p.trending));
+        break;
+      case "top":
+        // Top performers by fantasy points
+        setFilteredPlayers(
+          [...players]
+            .sort((a, b) => b.fantasyPoints - a.fantasyPoints)
+            .slice(0, 20)
+        );
+        break;
+      case "new":
+        // Example: Recently added players
+        setFilteredPlayers(players.filter((p) => p.isNew));
+        break;
+    }
   };
 
   return (
@@ -67,7 +131,7 @@ export const PlayersScreen = () => {
         {/* Sorting Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-2">
           <button
-            onClick={() => setActiveTab("all")}
+            onClick={() => handleTabChange("all")}
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "all"
                 ? "bg-primary-600 text-white"
@@ -77,7 +141,7 @@ export const PlayersScreen = () => {
             All Players
           </button>
           <button
-            onClick={() => setActiveTab("trending")}
+            onClick={() => handleTabChange("trending")}
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "trending"
                 ? "bg-primary-600 text-white"
@@ -87,7 +151,7 @@ export const PlayersScreen = () => {
             Trending
           </button>
           <button
-            onClick={() => setActiveTab("top")}
+            onClick={() => handleTabChange("top")}
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "top"
                 ? "bg-primary-600 text-white"
@@ -97,7 +161,7 @@ export const PlayersScreen = () => {
             Top Fantasy Performers
           </button>
           <button
-            onClick={() => setActiveTab("new")}
+            onClick={() => handleTabChange("new")}
             className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
               activeTab === "new"
                 ? "bg-primary-600 text-white"
@@ -124,16 +188,58 @@ export const PlayersScreen = () => {
         </button>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600 mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading players...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !isLoading && (
+        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-6 rounded-lg flex items-center gap-3 my-6">
+          <AlertCircle className="h-6 w-6 flex-shrink-0" />
+          <div>
+            <h3 className="font-medium">Failed to load players</h3>
+            <p className="text-sm">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-2 text-sm font-medium underline"
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!isLoading && !error && filteredPlayers.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-600 dark:text-gray-400">No players found</p>
+          {searchQuery && (
+            <button
+              onClick={() => handleSearch("")}
+              className="mt-2 text-primary-600 dark:text-primary-400 font-medium"
+            >
+              Clear search
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Player Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {players.map((player) => (
-          <PlayerCard
-            key={player.id}
-            player={player}
-            onClick={() => handlePlayerClick(player.id)}
-          />
-        ))}
-      </div>
+      {!isLoading && !error && filteredPlayers.length > 0 && (
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filteredPlayers.map((player) => (
+            <PlayerCard
+              key={player.id}
+              player={player}
+              onClick={() => handlePlayerClick(player.id)}
+            />
+          ))}
+        </div>
+      )}
     </main>
   );
 };
@@ -156,6 +262,11 @@ const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
           src={player.image}
           alt={player.name}
           className="w-full h-full object-cover"
+          onError={(e) => {
+            // Fallback image if player image fails to load
+            (e.target as HTMLImageElement).src =
+              "https://via.placeholder.com/300x225?text=Player";
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">

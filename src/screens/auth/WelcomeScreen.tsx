@@ -25,8 +25,8 @@ export function WelcomeScreen() {
 
   return (
     <AuthLayout
-      title="Welcome to AthStat Games"
-      subtitle="The ultimate fantasy sports experience"
+      title="Welcome to SUPERTRY"
+      subtitle="The ultimate rugby fantasy sports experience"
     >
       <div className="mt-8 space-y-4">
         <Link
@@ -37,7 +37,7 @@ export function WelcomeScreen() {
         </Link>
         <Link
           to="/signup"
-          className="block w-full bg-white dark:bg-dark-800 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-400 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors text-center"
+          className="block w-full bg-white dark:bg-transparent text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-400 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-dark-800/40 transition-colors text-center"
         >
           Create Account
         </Link>

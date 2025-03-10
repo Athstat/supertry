@@ -15,12 +15,11 @@ export default defineConfig(({ mode }) => {
     server: {
       historyApiFallback: true,
       proxy: {
-        "/api": {
+        "/api/v1": {
           target: "http://qa-games-app.athstat-next.com",
           changeOrigin: true,
           secure: false,
-          // Don't rewrite the path - keep the /api prefix
-          // rewrite: (path) => path.replace(/^\/api/, ""),
+          rewrite: (path) => path.replace(/^\/api\/v1/, "/api/v1"),
         },
       },
     },

@@ -30,7 +30,7 @@ export function Header() {
             <div className="flex items-center gap-2">
               <Shield className="w-8 h-8 text-primary-500" />
               <span className="text-xl font-bold dark:text-gray-100">
-                RugbyFantasy
+                SUPERTRY
               </span>
             </div>
           </div>
