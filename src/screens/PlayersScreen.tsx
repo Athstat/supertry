@@ -292,17 +292,17 @@ const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
         <div className="space-y-2">
           <StatBar
             label="Tries"
-            value={getStatPercentage(player.stats.tries, 5)}
+            value={30} //getStatPercentage(player.stats.tries, 5)}
             color="bg-green-500"
           />
           <StatBar
             label="Tackles"
-            value={getStatPercentage(player.stats.tackles, 40)}
+            value={40} //getStatPercentage(player.stats.tackles, 40)}
             color="bg-blue-500"
           />
           <StatBar
             label="Meters"
-            value={getStatPercentage(player.stats.carryMeters, 180)}
+            value={50} //getStatPercentage(player.stats.carryMeters, 180)}
             color="bg-yellow-500"
           />
         </div>

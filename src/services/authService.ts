@@ -17,7 +17,7 @@ export const authService = {
     try {
       // Use the full URL in production, relative URL in development
       const baseUrl = import.meta.env.PROD
-        ? "http://qa-games-app.athstat-next.com"
+        ? "https://qa-games-app.athstat-next.com"
         : "";
 
       const response = await fetch(

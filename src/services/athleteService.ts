@@ -6,7 +6,7 @@ export const athleteService = {
   ): Promise<RugbyPlayer[]> => {
     try {
       // Try to fetch from API first
-      const baseUrl = "http://qa-games-app.athstat-next.com";
+      const baseUrl = "https://qa-games-app.athstat-next.com";
 
       try {
         const response = await fetch(
