@@ -4,13 +4,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   // Forwards - Front Row
   {
     id: "p1",
-    name: "Tendai Mtawarira",
-    position: "Front Row",
-    nationality: "South Africa",
-    club: "Sharks",
-    image:
+    player_name: "Tendai Mtawarira",
+    position_class: "Front Row",
+    team_name: "Sharks",
+    image_url:
       "https://e0.365dm.com/20/04/1600x900/skysports-siya-kolisi-springboks_4971943.jpg?20200419075503",
-    fantasyPoints: 45,
+    power_rank_rating: 45,
     stats: {
       tries: 1,
       tackles: 25,
@@ -28,13 +27,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   },
   {
     id: "p2",
-    name: "Malcolm Marx",
-    position: "Front Row",
-    nationality: "South Africa",
-    club: "Lions",
-    image:
+    player_name: "Malcolm Marx",
+    position_class: "Front Row",
+    team_name: "Lions",
+    image_url:
       "https://static.independent.co.uk/2023/09/12/18/358a9a42f5e2063da124709fe32dece7Y29udGVudHNlYXJjaGFwaSwxNjk0NjIxNTY1-2.71164774.jpg",
-    fantasyPoints: 52,
+    power_rank_rating: 52,
     stats: {
       tries: 2,
       tackles: 20,
@@ -54,13 +52,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   // Second Row
   {
     id: "p3",
-    name: "Brodie Retallick",
-    position: "Second Row",
-    nationality: "New Zealand",
-    club: "Chiefs",
-    image:
+    player_name: "Brodie Retallick",
+    position_class: "Second Row",
+    team_name: "Chiefs",
+    image_url:
       "https://static.independent.co.uk/2023/09/12/18/358a9a42f5e2063da124709fe32dece7Y29udGVudHNlYXJjaGFwaSwxNjk0NjIxNTY1-2.71164774.jpg",
-    fantasyPoints: 48,
+    power_rank_rating: 48,
     stats: {
       tries: 1,
       tackles: 30,
@@ -80,13 +77,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   // Back Row
   {
     id: "p4",
-    name: "Ardie Savea",
-    position: "Back Row",
-    nationality: "New Zealand",
-    club: "Hurricanes",
-    image:
+    player_name: "Ardie Savea",
+    position_class: "Back Row",
+    team_name: "Hurricanes",
+    image_url:
       "https://images.immediate.co.uk/production/volatile/sites/3/2023/02/Jonah-Lomu-048de74.jpg",
-    fantasyPoints: 65,
+    power_rank_rating: 65,
     stats: {
       tries: 3,
       tackles: 35,
@@ -106,13 +102,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   // Halfbacks
   {
     id: "p5",
-    name: "Aaron Smith",
-    position: "Halfback",
-    nationality: "New Zealand",
-    club: "Highlanders",
-    image:
+    player_name: "Aaron Smith",
+    position_class: "Halfback",
+    team_name: "Highlanders",
+    image_url:
       "https://images.immediate.co.uk/production/volatile/sites/3/2023/02/Jonah-Lomu-048de74.jpg",
-    fantasyPoints: 58,
+    power_rank_rating: 58,
     stats: {
       tries: 2,
       tackles: 15,
@@ -132,13 +127,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   // Backs
   {
     id: "p6",
-    name: "Beauden Barrett",
-    position: "Back",
-    nationality: "New Zealand",
-    club: "Blues",
-    image:
+    player_name: "Beauden Barrett",
+    position_class: "Back",
+    team_name: "Blues",
+    image_url:
       "https://images.immediate.co.uk/production/volatile/sites/3/2023/02/Jonah-Lomu-048de74.jpg",
-    fantasyPoints: 72,
+    power_rank_rating: 72,
     stats: {
       tries: 4,
       tackles: 18,
@@ -156,13 +150,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   },
   {
     id: "p7",
-    name: "Cheslin Kolbe",
-    position: "Back",
-    nationality: "South Africa",
-    club: "Toulouse",
-    image:
+    player_name: "Cheslin Kolbe",
+    position_class: "Back",
+    team_name: "Toulouse",
+    image_url:
       "https://images.immediate.co.uk/production/volatile/sites/3/2023/02/Jonah-Lomu-048de74.jpg",
-    fantasyPoints: 68,
+    power_rank_rating: 68,
     stats: {
       tries: 5,
       tackles: 12,
@@ -182,13 +175,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   // Additional players...
   {
     id: "p8",
-    name: "Maro Itoje",
-    position: "Second Row",
-    nationality: "England",
-    club: "Saracens",
-    image:
+    player_name: "Maro Itoje",
+    position_class: "Second Row",
+    team_name: "Saracens",
+    image_url:
       "https://images.immediate.co.uk/production/volatile/sites/3/2023/02/Jonah-Lomu-048de74.jpg",
-    fantasyPoints: 55,
+    power_rank_rating: 55,
     stats: {
       tries: 1,
       tackles: 40,
@@ -206,13 +198,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   },
   {
     id: "p9",
-    name: "Antoine Dupont",
-    position: "Halfback",
-    nationality: "France",
-    club: "Toulouse",
-    image:
+    player_name: "Antoine Dupont",
+    position_class: "Halfback",
+    team_name: "Toulouse",
+    image_url:
       "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
-    fantasyPoints: 70,
+    power_rank_rating: 70,
     stats: {
       tries: 3,
       tackles: 20,
@@ -230,13 +221,12 @@ export const rugbyPlayers: RugbyPlayer[] = [
   },
   {
     id: "p10",
-    name: "Owen Farrell",
-    position: "Back",
-    nationality: "England",
-    club: "Saracens",
-    image:
+    player_name: "Owen Farrell",
+    position_class: "Back",
+    team_name: "Saracens",
+    image_url:
       "https://media.istockphoto.com/id/1203011527/vector/rugby-player-running-with-ball-isolated-vector-silhouette-ink-drawing.jpg?s=612x612&w=0&k=20&c=8ypjaOZdM0xSjvW0ZZh6j7HRK4vmnXwRGoOEWmK9j08=",
-    fantasyPoints: 65,
+    power_rank_rating: 65,
     stats: {
       tries: 2,
       tackles: 25,

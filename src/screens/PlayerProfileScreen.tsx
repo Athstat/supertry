@@ -1,19 +1,26 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, Trophy, Shield, Zap, Target } from "lucide-react";
-import { rugbyPlayersWithPoints } from "../data/rugbyPlayers";
+import { RugbyPlayer } from "../types/rugbyPlayer";
 
 type StatTab = "overview" | "attack" | "defense" | "kicking" | "discipline";
 
 export const PlayerProfileScreen = () => {
-  const { playerId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<StatTab>("overview");
 
-  const player = rugbyPlayersWithPoints.find((p) => p.id === playerId);
+  // Get player data from navigation state
+  const player = location.state?.player as RugbyPlayer;
 
   if (!player) {
-    return <div>Player not found</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-900/40 p-4">
+        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-6 rounded-lg">
+          Player not found
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -32,28 +39,36 @@ export const PlayerProfileScreen = () => {
           <div className="flex items-center gap-6">
             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white/20">
               <img
-                src={player.image}
-                alt={player.name}
+                src={player.image_url}
+                alt={player.player_name}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
+                }}
               />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">{player.name}</h1>
+              <h1 className="text-2xl font-bold">{player.player_name}</h1>
               <div className="flex items-center gap-2 text-white/80">
-                <span>{player.position}</span>
+                <span>{player.position_class}</span>
                 <span>•</span>
-                <span>{player.club}</span>
+                <span>{player.team_name}</span>
               </div>
               <div className="mt-2 flex items-center gap-4">
                 <div className="flex items-center gap-1">
                   <Trophy size={16} />
                   <span className="font-medium">
-                    {player.fantasyPoints} pts
+                    {player.power_rank_rating} pts
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Shield size={16} />
-                  <span>{player.nationality}</span>
+                  <img
+                    src={player.team_logo}
+                    alt={`${player.team_name} logo`}
+                    className="h-4 w-4 object-contain"
+                  />
+                  <span>{player.team_name}</span>
                 </div>
               </div>
             </div>
@@ -89,12 +104,6 @@ export const PlayerProfileScreen = () => {
             >
               Kicking
             </TabButton>
-            <TabButton
-              active={activeTab === "discipline"}
-              onClick={() => setActiveTab("discipline")}
-            >
-              Discipline
-            </TabButton>
           </div>
 
           <div className="p-6">
@@ -116,8 +125,8 @@ export const PlayerProfileScreen = () => {
                   icon={<Shield className="text-blue-500" size={20} />}
                 />
                 <StatCard
-                  label="Fantasy Points"
-                  value={player.fantasyPoints}
+                  label="Power Ranking"
+                  value={player.power_rank_rating}
                   icon={<Trophy className="text-purple-500" size={20} />}
                 />
               </div>
@@ -166,26 +175,25 @@ export const PlayerProfileScreen = () => {
                   value={player.stats.turnoversWon}
                   maxValue={6}
                 />
-                <StatBar
-                  label="Rucks Won"
-                  value={player.stats.rucksWon}
-                  maxValue={25}
-                />
               </div>
             )}
 
             {activeTab === "kicking" && (
               <div className="space-y-4">
                 <StatBar
-                  label="Kicks from Hand"
-                  value={player.stats.kicksFromHand}
+                  label="Kicks"
+                  value={player.stats.kicks}
                   maxValue={35}
                 />
                 <StatBar
-                  label="Goal Kicking Accuracy"
-                  value={player.stats.goalKickingAccuracy}
-                  maxValue={100}
-                  suffix="%"
+                  label="Conversions"
+                  value={player.stats.conversions}
+                  maxValue={10}
+                />
+                <StatBar
+                  label="Penalties"
+                  value={player.stats.penalties}
+                  maxValue={8}
                 />
               </div>
             )}

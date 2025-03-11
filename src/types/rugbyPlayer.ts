@@ -1,11 +1,11 @@
 export interface RugbyPlayer {
   id: string;
-  name: string;
-  position: string;
-  nationality: string;
-  club: string;
-  image: string;
-  fantasyPoints: number;
+  player_name: string;
+  image_url: string;
+  position_class: string;
+  team_name: string;
+  team_logo: string;
+  power_rank_rating: number;
   stats: {
     tries: number;
     tackles: number;
