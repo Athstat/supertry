@@ -28,7 +28,20 @@ export function PlayerCard({ player, position, onRemove }: PlayerCardProps) {
       <div className="text-sm font-semibold truncate mt-2 dark:text-gray-100">
         {player.name}
       </div>
-      <div className="text-xs text-gray-600 dark:text-gray-400">
+      <div className="flex items-center gap-2 mt-1">
+        <img
+          src={player.teamLogo}
+          alt={`${player.teamName} logo`}
+          className="h-4 w-4 object-contain"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "fallback-team-logo.png";
+          }}
+        />
+        <span className="text-xs text-gray-600 dark:text-gray-400">
+          {player.teamName}
+        </span>
+      </div>
+      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
         {position.name}
       </div>
       <div className="flex items-center justify-between mt-2">

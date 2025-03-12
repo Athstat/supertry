@@ -1,11 +1,14 @@
 export interface RugbyPlayer {
   id: string;
+  tracking_id?: string;
   player_name: string;
-  image_url: string;
-  position_class: string;
   team_name: string;
-  team_logo: string;
+  position_class: string;
   power_rank_rating: number;
+  image_url?: string;
+  team_logo?: string;
+  trending?: boolean;
+  isNew?: boolean;
   stats: {
     tries: number;
     tackles: number;

@@ -9,9 +9,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    optimizeDeps: {
-      exclude: ["lucide-react"],
-    },
     server: {
       historyApiFallback: true,
       proxy: {
