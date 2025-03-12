@@ -17,6 +17,11 @@ export const PlayerProfileScreen = () => {
     location.state?.player || null
   );
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Fetch player data if not available in navigation state
   useEffect(() => {
     const fetchPlayer = async () => {
@@ -85,7 +90,7 @@ export const PlayerProfileScreen = () => {
               <img
                 src={player.image_url}
                 alt={player.player_name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
                     "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
