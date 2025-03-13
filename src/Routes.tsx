@@ -128,7 +128,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/create-team"
+        path="/:officialLeagueId/create-team"
         element={
           <ProtectedRoute>
             <Layout>

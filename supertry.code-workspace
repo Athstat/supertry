@@ -1,11 +1,14 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../../athstat-games-2/athstat-games/server"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "../../athstat-games-2/athstat-games/server"
+    },
+    {
+      "path": "../../athstat-games-mobile-app"
+    }
+  ],
+  "settings": {}
 }

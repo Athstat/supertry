@@ -52,6 +52,13 @@ export function DashboardScreen() {
                 <Users size={24} className="text-primary-500" />
                 My Teams
               </h2>
+              <button
+                onClick={() => navigate("/create-team")}
+                className="text-primary-500 hover:text-primary-600 transition-colors"
+                aria-label="Create new team"
+              >
+                <PlusCircle size={24} />
+              </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <TeamCard

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Zap, AlertCircle, ChevronRight, X } from "lucide-react";
 import { TeamHeader } from "../components/team-creation/TeamHeader";
 import { TeamStats } from "../components/team-creation/TeamStats";
@@ -8,8 +8,10 @@ import { positionGroups } from "../data/positionGroups";
 import { Player } from "../types/player";
 import { PlayerListModal } from "../components/team-creation/PlayerListModal";
 import { PlayerDetailsModal } from "../components/team-creation/PlayerDetailsModal";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Position } from "../types/position";
+import { leagueService } from "../services/leagueService";
+import { IGamesLeagueConfig } from "../types/leagueConfig";
 
 interface PositionGroup {
   name: string;
@@ -45,7 +47,42 @@ interface PositionGroup {
 export function TeamCreationScreen() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
   const league = location.state?.league;
+
+  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch league config on mount
+  useEffect(() => {
+    const fetchLeagueConfig = async () => {
+      if (!officialLeagueId) {
+        setError("League ID is missing");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const config = await leagueService.getLeagueConfig(officialLeagueId);
+        if (config) {
+          setLeagueConfig(config);
+          setError(null);
+        } else {
+          setError("Failed to load league configuration");
+        }
+      } catch (err) {
+        console.error("Error fetching league config:", err);
+        setError("An error occurred while loading league configuration");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLeagueConfig();
+  }, [officialLeagueId]);
 
   // Add useEffect to scroll to top on mount
   React.useEffect(() => {
@@ -117,7 +154,32 @@ export function TeamCreationScreen() {
     handleRemovePlayer,
     handleReset,
     handleAutoGenerate,
-  } = useTeamCreation(1000, handleComplete);
+  } = useTeamCreation(leagueConfig?.team_budget || 1000, handleComplete);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4 flex items-center justify-center">
+        <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-6 rounded-lg max-w-md">
+          <h2 className="text-xl font-bold mb-2">Error</h2>
+          <p>{error}</p>
+          <button
+            onClick={() => navigate("/leagues")}
+            className="mt-4 bg-primary-600 text-white px-4 py-2 rounded-lg"
+          >
+            Back to Leagues
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4">
@@ -136,6 +198,7 @@ export function TeamCreationScreen() {
 
           <TeamStats
             league={league}
+            leagueConfig={leagueConfig}
             currentBudget={currentBudget}
             selectedPlayersCount={Object.keys(selectedPlayers).length}
             totalPositions={5}
