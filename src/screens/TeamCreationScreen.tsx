@@ -12,6 +12,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Position } from "../types/position";
 import { leagueService } from "../services/leagueService";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
+import { athleteService } from "../services/athleteService";
+import { RugbyPlayer } from "../types/rugbyPlayer";
 
 interface PositionGroup {
   name: string;
@@ -24,25 +26,8 @@ interface PositionGroup {
   }>;
 }
 
-// Update the positionGroups type annotation
-// const positionGroups: PositionGroup[] = [
-//   {
-//     name: "Front Row",
-//     positions: [{ id: "fr1", name: "Front Row", shortName: "FR", x: 0, y: 0 }],
-//   },
-//   {
-//     name: "Second Row",
-//     positions: [{ id: "sr1", name: "Second Row", shortName: "SR", x: 0, y: 1 }],
-//   },
-//   {
-//     name: "Back Row",
-//     positions: [{ id: "br1", name: "Back Row", shortName: "BR", x: 0, y: 2 }],
-//   },
-//   {
-//     name: "Halfback",
-//     positions: [{ id: "hb1", name: "Halfback", shortName: "HB", x: 1, y: 0 }],
-//   },
-// ];
+// Default competition ID - this could come from a context or route param
+const DEFAULT_COMPETITION_ID = "7f6ac8a5-1723-5325-96bd-44b8b36cfb9e";
 
 export function TeamCreationScreen() {
   const navigate = useNavigate();
@@ -55,6 +40,66 @@ export function TeamCreationScreen() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Add state for players
+  const [allPlayers, setAllPlayers] = useState<RugbyPlayer[]>([]);
+  const [loadingPlayers, setLoadingPlayers] = useState(true);
+
+  // Function to map position_class to UI position
+  const mapPositionClassToUIPosition = (positionClass: string): string => {
+    if (!positionClass) return "";
+
+    const lowerCasePosition = positionClass.toLowerCase();
+
+    if (lowerCasePosition === "forward") {
+      // Randomly assign forwards to either First Row or Second Row
+      return Math.random() > 0.5 ? "Front Row" : "Second Row";
+    } else if (lowerCasePosition === "back") {
+      // Randomly distribute backs among Back Row, Half Back, and Backs
+      const random = Math.random();
+      if (random < 0.33) return "Back Row";
+      if (random < 0.66) return "Halfback";
+      return "Backs";
+    }
+
+    return positionClass; // Fallback to original position if not forward/back
+  };
+
+  // Function to get players by UI position
+  const getPlayersByUIPosition = (
+    players: RugbyPlayer[],
+    uiPosition: string
+  ): RugbyPlayer[] => {
+    if (!players || players.length === 0) return [];
+
+    return players.filter((player) => {
+      const mappedPosition = mapPositionClassToUIPosition(
+        player.position_class
+      );
+      return mappedPosition === uiPosition;
+    });
+  };
+
+  // Fetch players from API
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        setLoadingPlayers(true);
+        const data = await athleteService.getAthletesByCompetition(
+          DEFAULT_COMPETITION_ID
+        );
+        console.log("Fetched players:", data.length);
+        setAllPlayers(data);
+      } catch (err) {
+        console.error("Error fetching players:", err);
+        // Don't set error state here to avoid blocking the UI
+      } finally {
+        setLoadingPlayers(false);
+      }
+    };
+
+    fetchPlayers();
+  }, []);
 
   // Fetch league config on mount
   useEffect(() => {
@@ -154,9 +199,21 @@ export function TeamCreationScreen() {
     handleRemovePlayer,
     handleReset,
     handleAutoGenerate,
-  } = useTeamCreation(leagueConfig?.team_budget || 1000, handleComplete);
+    setAvailablePlayers,
+  } = useTeamCreation(
+    leagueConfig?.team_budget || 1000,
+    handleComplete,
+    allPlayers
+  );
 
-  if (isLoading) {
+  // Update available players when allPlayers changes
+  useEffect(() => {
+    if (allPlayers.length > 0) {
+      setAvailablePlayers(allPlayers);
+    }
+  }, [allPlayers, setAvailablePlayers]);
+
+  if (isLoading || loadingPlayers) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
@@ -262,6 +319,7 @@ export function TeamCreationScreen() {
             setSearchQuery={setSearchQuery}
             onClose={() => setShowPlayerList(false)}
             onSelectPlayer={handlePlayerSelect}
+            players={getPlayersByUIPosition(allPlayers, selectedPosition.name)}
           />
         )}
 

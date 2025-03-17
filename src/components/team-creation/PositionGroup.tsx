@@ -1,9 +1,7 @@
 import React from "react";
 import { Position } from "../../types/position";
 import { Player } from "../../types/player";
-import { PlayerCard } from "./PlayerCard";
-import { EmptyPositionCard } from "./EmptyPositionCard";
-import { X, Plus } from "lucide-react";
+import { User, X, Plus } from "lucide-react";
 
 interface PositionGroupProps {
   name: string;
@@ -20,6 +18,8 @@ export function PositionGroup({
   onPositionClick,
   onRemovePlayer,
 }: PositionGroupProps) {
+  console.log("selectedPlayers: ", selectedPlayers);
+
   return (
     <div className="bg-white dark:bg-gray-800/40 rounded-2xl p-4 shadow-sm">
       <h3 className="text-lg font-semibold mb-3 dark:text-gray-100">{name}</h3>
@@ -35,13 +35,19 @@ export function PositionGroup({
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-lg bg-gray-200 dark:bg-gray-600 overflow-hidden">
-                      {player.image && (
+                    <div className="h-12 w-12 rounded-lg bg-gray-200 dark:bg-gray-600 overflow-hidden flex items-center justify-center">
+                      {player.image_url ? (
                         <img
-                          src={player.image}
+                          src={player.image_url}
                           alt={player.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-top"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
+                          }}
                         />
+                      ) : (
+                        <User size={24} className="text-gray-400" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -49,12 +55,12 @@ export function PositionGroup({
                         {player.name}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {position.name}
+                        {player.team}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-primary-600 dark:text-primary-400 font-semibold">
-                        {player.points}pts
+                        {player.price || player.points}pts
                       </span>
                     </div>
                   </div>

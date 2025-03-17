@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Player } from "../types/player";
 import { Position } from "../types/position";
-import { availablePlayers } from "../data/availablePlayers";
-import { positions } from "../data/positions";
+import { RugbyPlayer } from "../types/rugbyPlayer";
 
 export function useTeamCreation(
-  maxBudget: number,
+  budget: number,
   onComplete: (
     players: Record<string, Player>,
     teamName: string,
     isFavorite: boolean
-  ) => void
+  ) => void,
+  serverPlayers: RugbyPlayer[] = []
 ) {
   const [selectedPlayers, setSelectedPlayers] = useState<
     Record<string, Player>
@@ -25,92 +25,59 @@ export function useTeamCreation(
   const [selectedPlayerForModal, setSelectedPlayerForModal] =
     useState<Player | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [availablePlayers, setAvailablePlayers] =
+    useState<RugbyPlayer[]>(serverPlayers);
 
   const currentBudget =
-    maxBudget -
+    budget -
     Object.values(selectedPlayers).reduce(
-      (acc, player) => acc + player.cost,
+      (total, player) => total + (player.price || 0),
       0
     );
 
-  const handlePositionClick = (position: Position) => {
+  const handlePositionClick = useCallback((position: Position) => {
     setSelectedPosition(position);
     setShowPlayerList(true);
-  };
+    setSearchQuery("");
+  }, []);
 
-  const handlePlayerSelect = (player: Player) => {
+  const handlePlayerSelect = useCallback((player: Player) => {
     setSelectedPlayerForModal(player);
+    setShowPlayerList(false);
     setShowPlayerModal(true);
-  };
+  }, []);
 
-  const handleAddPlayer = () => {
-    if (selectedPosition && selectedPlayerForModal) {
-      setSelectedPlayers({
-        ...selectedPlayers,
-        [selectedPosition.id]: selectedPlayerForModal,
-      });
-      setShowPlayerModal(false);
-      setShowPlayerList(false);
-      setSelectedPosition(null);
-      setSelectedPlayerForModal(null);
-    }
-  };
+  const handleAddPlayer = useCallback(
+    (player: Player) => {
+      if (selectedPosition) {
+        setSelectedPlayers((prev) => ({
+          ...prev,
+          [selectedPosition.id]: player,
+        }));
+        setShowPlayerModal(false);
+        setSelectedPosition(null);
+      }
+    },
+    [selectedPosition]
+  );
 
-  const handleRemovePlayer = (positionId: string) => {
-    const newSelectedPlayers = { ...selectedPlayers };
-    delete newSelectedPlayers[positionId];
-    setSelectedPlayers(newSelectedPlayers);
-  };
+  const handleRemovePlayer = useCallback((positionId: string) => {
+    setSelectedPlayers((prev) => {
+      const newPlayers = { ...prev };
+      delete newPlayers[positionId];
+      return newPlayers;
+    });
+  }, []);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setSelectedPlayers({});
-    setTeamName("");
-    setIsFavorite(false);
-  };
+  }, []);
 
-  const handleAutoGenerate = () => {
-    const newSelectedPlayers: Record<string, Player> = {};
-    let remainingBudget = maxBudget;
-
-    // Helper function to get available players for a position
-    const getAvailablePlayersForPosition = (positionName: string) => {
-      return availablePlayers
-        .filter((p) => p.position === positionName)
-        .sort((a, b) => b.pr - a.pr); // Sort by performance rating
-    };
-
-    // Try to fill each position
-    for (const position of positions) {
-      const availableForPosition = getAvailablePlayersForPosition(
-        position.name
-      );
-
-      // Find the best player we can afford
-      const affordablePlayer = availableForPosition.find((player) => {
-        const isNotSelected = !Object.values(newSelectedPlayers).some(
-          (p) => p.id === player.id
-        );
-        return player.cost <= remainingBudget && isNotSelected;
-      });
-
-      if (affordablePlayer) {
-        newSelectedPlayers[position.id] = affordablePlayer;
-        remainingBudget -= affordablePlayer.cost;
-      }
-    }
-
-    // Only update if we could fill all positions
-    if (Object.keys(newSelectedPlayers).length === 5) {
-      setSelectedPlayers(newSelectedPlayers);
-      if (!teamName) {
-        setTeamName("Auto Generated Team");
-      }
-    } else {
-      alert(
-        "Could not auto-generate a valid team within the budget. Please try manual selection."
-      );
-    }
-  };
+  const handleAutoGenerate = useCallback(() => {
+    // Auto-generate team logic here
+    // This is a placeholder
+    alert("Auto-generate team feature coming soon!");
+  }, []);
 
   return {
     selectedPlayers,
@@ -133,5 +100,6 @@ export function useTeamCreation(
     handleRemovePlayer,
     handleReset,
     handleAutoGenerate,
+    setAvailablePlayers,
   };
 }

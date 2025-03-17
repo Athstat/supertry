@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Target, Zap, Shield, Trophy } from "lucide-react";
+import { X, Target, Zap, Shield, Trophy, User } from "lucide-react";
 import { Player } from "../../types/player";
 
 type StatTab = "overview" | "attack" | "defense" | "kicking" | "discipline";
@@ -7,7 +7,7 @@ type StatTab = "overview" | "attack" | "defense" | "kicking" | "discipline";
 interface PlayerDetailsModalProps {
   player: Player;
   onClose: () => void;
-  onAdd: () => void;
+  onAdd: (player: Player) => void;
 }
 
 export function PlayerDetailsModal({
@@ -34,12 +34,21 @@ export function PlayerDetailsModal({
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white/20">
-              <img
-                src={player.image}
-                alt={player.name}
-                className="w-full h-full object-cover"
-              />
+            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white/20 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+              {player.image_url ? (
+                <img
+                  src={player.image_url}
+                  alt={player.name}
+                  className="w-full h-full object-cover object-top"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    e.currentTarget.src =
+                      "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
+                  }}
+                />
+              ) : (
+                <User size={36} className="text-gray-400" />
+              )}
             </div>
             <div>
               <h3 className="text-2xl font-bold">{player.name}</h3>
@@ -50,7 +59,7 @@ export function PlayerDetailsModal({
               </div>
               <div className="mt-2">
                 <span className="font-semibold text-white">
-                  {player.cost} points
+                  {player.points} points
                 </span>
               </div>
             </div>
@@ -113,7 +122,7 @@ export function PlayerDetailsModal({
                 />
                 <StatCard
                   label="PR"
-                  value={95}
+                  value={player.points || 95}
                   icon={<Trophy className="text-purple-500" size={20} />}
                 />
               </div>
@@ -168,7 +177,7 @@ export function PlayerDetailsModal({
           </div>
 
           <button
-            onClick={onAdd}
+            onClick={() => onAdd(player)}
             className="w-full bg-primary-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
           >
             Add to Team

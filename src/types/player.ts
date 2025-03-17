@@ -17,11 +17,15 @@ interface PlayerStats {
 export interface Player {
   id: string;
   name: string;
-  position: string;
-  points: number;
-  cost: number;
-  pr: number;
   team: string;
-  image: string;
-  stats: PlayerStats;
+  position: string;
+  price?: number;
+  points: number;
+  image_url?: string;
+  // Optional fields to maintain compatibility
+  cost?: number;
+  pr?: number;
+  stats?: any;
+  image?: string;
+  power_rank_rating?: number;
 }
