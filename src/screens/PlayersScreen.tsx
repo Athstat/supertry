@@ -47,7 +47,6 @@ export const PlayersScreen = () => {
         const data = await athleteService.getAthletesByCompetition(
           DEFAULT_COMPETITION_ID
         );
-        console.log("Players: ", data);
         setPlayers(data);
         setFilteredPlayers(data);
 

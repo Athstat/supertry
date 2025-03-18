@@ -22,7 +22,6 @@ export function TeamStats({
   selectedPlayersCount,
   totalPositions,
 }: TeamStatsProps) {
-  console.log(leagueConfig);
   return (
     <div className="space-y-3">
       <div className="flex flex-col">
@@ -47,12 +46,12 @@ export function TeamStats({
         </span>
         <span
           className={`font-bold text-lg ${
-            leagueConfig.team_budget < 0
+            currentBudget < 0
               ? "text-red-600 dark:text-red-500"
               : "text-green-600 dark:text-green-500"
           }`}
         >
-          {leagueConfig.team_budget} points
+          {currentBudget} points
         </span>
       </div>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Zap, AlertCircle, ChevronRight, X } from "lucide-react";
+import { Zap, AlertCircle, ChevronRight, X, Users, Wallet } from "lucide-react";
 import { TeamHeader } from "../components/team-creation/TeamHeader";
 import { TeamStats } from "../components/team-creation/TeamStats";
 import { PositionGroup } from "../components/team-creation/PositionGroup";
@@ -14,6 +14,7 @@ import { leagueService } from "../services/leagueService";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { athleteService } from "../services/athleteService";
 import { RugbyPlayer } from "../types/rugbyPlayer";
+import { Toast } from "../components/ui/Toast";
 
 interface PositionGroup {
   name: string;
@@ -28,6 +29,45 @@ interface PositionGroup {
 
 // Default competition ID - this could come from a context or route param
 const DEFAULT_COMPETITION_ID = "7f6ac8a5-1723-5325-96bd-44b8b36cfb9e";
+
+// Update the StickyHeader component with a border-top that matches the background
+const StickyHeader = ({
+  selectedCount,
+  totalCount,
+  budget,
+  isNegativeBudget,
+}: {
+  selectedCount: number;
+  totalCount: number;
+  budget: number;
+  isNegativeBudget: boolean;
+}) => {
+  return (
+    <div className="fixed top-[61px] left-0 right-0 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm z-40 flex items-center px-4">
+      <div className="container mx-auto max-w-[1024px] flex justify-between items-center py-3">
+        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1.5">
+          <Users size={16} className="text-primary-600 dark:text-primary-400" />
+          <span className="text-gray-800 dark:text-white font-medium text-sm">
+            {selectedCount}/{totalCount} players
+          </span>
+        </div>
+
+        <div
+          className={`flex items-center gap-2 rounded-full px-3 py-1.5 ${
+            isNegativeBudget
+              ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
+              : "bg-green-100 text-green-700 dark:bg-gray-800 dark:text-green-400"
+          }`}
+        >
+          <Wallet size={16} />
+          <span className="font-medium text-sm">
+            {budget.toLocaleString()} pts
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export function TeamCreationScreen() {
   const navigate = useNavigate();
@@ -45,25 +85,19 @@ export function TeamCreationScreen() {
   const [allPlayers, setAllPlayers] = useState<RugbyPlayer[]>([]);
   const [loadingPlayers, setLoadingPlayers] = useState(true);
 
-  // Function to map position_class to UI position
-  const mapPositionClassToUIPosition = (positionClass: string): string => {
-    if (!positionClass) return "";
+  // Add toast state
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+    isVisible: boolean;
+  }>({
+    message: "",
+    type: "info",
+    isVisible: false,
+  });
 
-    const lowerCasePosition = positionClass.toLowerCase();
-
-    if (lowerCasePosition === "forward") {
-      // Randomly assign forwards to either First Row or Second Row
-      return Math.random() > 0.5 ? "Front Row" : "Second Row";
-    } else if (lowerCasePosition === "back") {
-      // Randomly distribute backs among Back Row, Half Back, and Backs
-      const random = Math.random();
-      if (random < 0.33) return "Back Row";
-      if (random < 0.66) return "Halfback";
-      return "Backs";
-    }
-
-    return positionClass; // Fallback to original position if not forward/back
-  };
+  // Add state to track scrolling
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Function to get players by UI position
   const getPlayersByUIPosition = (
@@ -72,11 +106,30 @@ export function TeamCreationScreen() {
   ): RugbyPlayer[] => {
     if (!players || players.length === 0) return [];
 
+    // Get already selected player IDs to filter them out
+    const selectedPlayerIds = Object.values(selectedPlayers).map(
+      (player) => player.id
+    );
+
     return players.filter((player) => {
-      const mappedPosition = mapPositionClassToUIPosition(
-        player.position_class
-      );
-      return mappedPosition === uiPosition;
+      // Skip already selected players
+      if (selectedPlayerIds.includes(player.id)) {
+        return false;
+      }
+
+      const positionClass = (player.position_class || "").toLowerCase();
+
+      // Map UI positions to position classes
+      if (uiPosition === "Front Row" || uiPosition === "Second Row") {
+        return positionClass === "forward";
+      } else if (
+        ["Back Row", "Halfback", "Back", "Backs"].includes(uiPosition)
+      ) {
+        return positionClass === "back";
+      }
+
+      // Fallback for any other positions
+      return positionClass === uiPosition.toLowerCase();
     });
   };
 
@@ -134,6 +187,20 @@ export function TeamCreationScreen() {
     window.scrollTo(0, 0);
   }, []);
 
+  // Update the scroll event listener
+  useEffect(() => {
+    // Set initial scroll state
+    setIsScrolled(window.scrollY > 50);
+
+    const handleScroll = () => {
+      // Show sticky header after scrolling down 50px (reduced from 100px)
+      setIsScrolled(window.scrollY > 350);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleComplete = async (
     players: Record<string, Player>,
     teamName: string,
@@ -154,19 +221,37 @@ export function TeamCreationScreen() {
     }
   };
 
+  // Function to show toast
+  const showToast = (message: string, type: "success" | "error" | "info") => {
+    setToast({
+      message,
+      type,
+      isVisible: true,
+    });
+  };
+
+  // Function to hide toast
+  const hideToast = () => {
+    setToast((prev) => ({
+      ...prev,
+      isVisible: false,
+    }));
+  };
+
+  // Replace alert calls with showToast
   const handleReview = () => {
     if (teamName.trim() === "") {
-      alert("Please enter a team name");
+      showToast("Please enter a team name", "error");
       return;
     }
     if (Object.keys(selectedPlayers).length !== 5) {
-      alert("Please select all 5 players");
+      showToast("Please select all 5 players", "error");
       return;
     }
-    if (currentBudget < 0) {
-      alert("You have exceeded the budget");
-      return;
-    }
+    // if (currentBudget < 0) {
+    //   showToast("You have exceeded the budget", "error");
+    //   return;
+    // }
 
     navigate("/review-team", {
       state: {
@@ -238,8 +323,20 @@ export function TeamCreationScreen() {
     );
   }
 
+  console.log("currentBudget: ", currentBudget);
+
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4">
+      {/* Always render the header but control visibility with CSS */}
+      <div className={`${isScrolled ? "block" : "hidden"}`}>
+        <StickyHeader
+          selectedCount={Object.keys(selectedPlayers).length}
+          totalCount={5}
+          budget={currentBudget}
+          isNegativeBudget={currentBudget < 0}
+        />
+      </div>
+
       <div className="container mx-auto px-4 max-w-[1024px]">
         <div className="dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6 mb-6">
           <h1 className="text-2xl font-bold mb-4 dark:text-gray-100">
@@ -255,7 +352,13 @@ export function TeamCreationScreen() {
 
           <TeamStats
             league={league}
-            leagueConfig={leagueConfig}
+            leagueConfig={
+              leagueConfig || {
+                team_budget: 1000,
+                team_size: 5,
+                lineup_size: 5,
+              }
+            }
             currentBudget={currentBudget}
             selectedPlayersCount={Object.keys(selectedPlayers).length}
             totalPositions={5}
@@ -303,7 +406,7 @@ export function TeamCreationScreen() {
             </div>
             <button
               onClick={handleReview}
-              disabled={currentBudget < 0}
+              disabled={false}
               className="w-full bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Review & Submit Team
@@ -320,6 +423,7 @@ export function TeamCreationScreen() {
             onClose={() => setShowPlayerList(false)}
             onSelectPlayer={handlePlayerSelect}
             players={getPlayersByUIPosition(allPlayers, selectedPosition.name)}
+            selectedPlayers={selectedPlayers}
           />
         )}
 
@@ -330,6 +434,14 @@ export function TeamCreationScreen() {
             onAdd={handleAddPlayer}
           />
         )}
+
+        {/* Add Toast component */}
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          isVisible={toast.isVisible}
+          onClose={hideToast}
+        />
       </div>
     </main>
   );

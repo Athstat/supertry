@@ -18,8 +18,6 @@ export function PositionGroup({
   onPositionClick,
   onRemovePlayer,
 }: PositionGroupProps) {
-  console.log("selectedPlayers: ", selectedPlayers);
-
   return (
     <div className="bg-white dark:bg-gray-800/40 rounded-2xl p-4 shadow-sm">
       <h3 className="text-lg font-semibold mb-3 dark:text-gray-100">{name}</h3>

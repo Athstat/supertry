@@ -14,6 +14,7 @@ interface PlayerListModalProps {
   onClose: () => void;
   onSelectPlayer: (player: Player) => void;
   players?: RugbyPlayer[]; // Add this prop to accept players from parent
+  selectedPlayers: Record<string, Player>; // New prop to accept selected players
 }
 
 export function PlayerListModal({
@@ -23,6 +24,7 @@ export function PlayerListModal({
   onClose,
   onSelectPlayer,
   players = [], // Default to empty array
+  selectedPlayers, // Accept selected players
 }: PlayerListModalProps) {
   const [filteredPlayers, setFilteredPlayers] = useState<RugbyPlayer[]>([]);
   const [sortField, setSortField] = useState<SortField>("power_rank_rating");
@@ -33,6 +35,7 @@ export function PlayerListModal({
   const [availableTeams, setAvailableTeams] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [showSort, setShowSort] = useState(false);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Extract unique positions and teams for filters
   useEffect(() => {
@@ -63,6 +66,11 @@ export function PlayerListModal({
 
     let result = [...players];
 
+    // Get already selected player IDs to filter them out
+    const selectedPlayerIds = Object.values(selectedPlayers).map(
+      (player) => player.id
+    );
+
     // Apply search filter
     if (searchQuery.trim()) {
       result = result.filter(
@@ -76,6 +84,12 @@ export function PlayerListModal({
             .includes(searchQuery.toLowerCase())
       );
     }
+
+    // Filter out already selected players
+    result = result.filter((player) => {
+      const playerId = player.tracking_id || "";
+      return !selectedPlayerIds.includes(playerId);
+    });
 
     // Apply position filter
     if (positionFilter) {
@@ -113,6 +127,7 @@ export function PlayerListModal({
     });
 
     setFilteredPlayers(result);
+    setLoading(false);
   }, [
     players,
     searchQuery,
@@ -120,6 +135,7 @@ export function PlayerListModal({
     teamFilter,
     sortField,
     sortDirection,
+    selectedPlayers,
   ]);
 
   // Convert RugbyPlayer to Player for the onSelectPlayer callback
@@ -178,145 +194,165 @@ export function PlayerListModal({
         </div>
 
         <div className="p-4 border-b dark:border-gray-700">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search size={18} className="text-gray-400" />
+          {loading ? ( // Show loader if loading
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
             </div>
-            <input
-              type="text"
-              placeholder="Search players..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
-            />
-          </div>
+          ) : (
+            <>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search size={18} className="text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search players..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+                />
+              </div>
 
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
-            >
-              <Filter size={16} />
-              Filter
-            </button>
-            <button
-              onClick={() => setShowSort(!showSort)}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
-            >
-              <ArrowUpDown size={16} />
-              Sort
-            </button>
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white"
+                >
+                  <Filter size={16} />
+                  Filter
+                </button>
+                <button
+                  onClick={() => setShowSort(!showSort)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white"
+                >
+                  <ArrowUpDown size={16} />
+                  Sort
+                </button>
 
-            {(positionFilter || teamFilter) && (
-              <button
-                onClick={clearFilters}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/30"
-              >
-                Clear Filters
-              </button>
-            )}
-          </div>
+                {(positionFilter || teamFilter) && (
+                  <button
+                    onClick={clearFilters}
+                    className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/30"
+                  >
+                    Clear Filters
+                  </button>
+                )}
+              </div>
 
-          {/* Filter Panel */}
-          {showFilters && (
-            <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="mb-3">
-                <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
-                  Position
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {availablePositions.map((pos) => (
+              {/* Filter Panel */}
+              {showFilters && (
+                <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg relative">
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="absolute top-3 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    <X size={20} />
+                  </button>
+                  <div className="mb-3">
+                    <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
+                      Position
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {availablePositions.map((pos) => (
+                        <button
+                          key={pos}
+                          onClick={() => handlePositionFilter(pos)}
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            positionFilter === pos
+                              ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
+                              : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
+                          }`}
+                        >
+                          {pos}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
+                      Team
+                    </h3>
+                    <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
+                      {availableTeams.map((team) => (
+                        <button
+                          key={team}
+                          onClick={() => handleTeamFilter(team)}
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            teamFilter === team
+                              ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
+                              : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
+                          }`}
+                        >
+                          {team}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Sort Panel */}
+              {showSort && (
+                <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg relative">
+                  <button
+                    onClick={() => setShowSort(false)}
+                    className="absolute top-3 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    <X size={20} />
+                  </button>
+                  <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
+                    Sort By
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
                     <button
-                      key={pos}
-                      onClick={() => handlePositionFilter(pos)}
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        positionFilter === pos
+                      onClick={() => handleSort("power_rank_rating")}
+                      className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
+                        sortField === "power_rank_rating"
                           ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
                           : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
                       }`}
                     >
-                      {pos}
+                      Rating
+                      {sortField === "power_rank_rating" && (
+                        <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
+                      )}
                     </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
-                  Team
-                </h3>
-                <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
-                  {availableTeams.map((team) => (
                     <button
-                      key={team}
-                      onClick={() => handleTeamFilter(team)}
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        teamFilter === team
+                      onClick={() => handleSort("player_name")}
+                      className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
+                        sortField === "player_name"
                           ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
                           : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
                       }`}
                     >
-                      {team}
+                      Name
+                      {sortField === "player_name" && (
+                        <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
+                      )}
                     </button>
-                  ))}
+                    <button
+                      onClick={() => handleSort("price")}
+                      className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
+                        sortField === "price"
+                          ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
+                          : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
+                      }`}
+                    >
+                      Price
+                      {sortField === "price" && (
+                        <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* Sort Panel */}
-          {showSort && (
-            <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
-                Sort By
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => handleSort("power_rank_rating")}
-                  className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-                    sortField === "power_rank_rating"
-                      ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
-                      : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
-                  }`}
-                >
-                  Rating
-                  {sortField === "power_rank_rating" && (
-                    <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-                  )}
-                </button>
-                <button
-                  onClick={() => handleSort("player_name")}
-                  className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-                    sortField === "player_name"
-                      ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
-                      : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
-                  }`}
-                >
-                  Name
-                  {sortField === "player_name" && (
-                    <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-                  )}
-                </button>
-                <button
-                  onClick={() => handleSort("price")}
-                  className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-                    sortField === "price"
-                      ? "bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
-                      : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
-                  }`}
-                >
-                  Price
-                  {sortField === "price" && (
-                    <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-                  )}
-                </button>
-              </div>
-            </div>
+              )}
+            </>
           )}
         </div>
 
         <div className="overflow-y-auto flex-1">
-          {filteredPlayers.length === 0 ? (
+          {filteredPlayers.length === 0 && !loading ? (
             <div className="p-4 text-center text-gray-500 dark:text-gray-400">
               No players found
             </div>
@@ -351,10 +387,11 @@ export function PlayerListModal({
                     {/* Player Info */}
                     <div className="flex-1">
                       <div className="font-medium dark:text-white">
-                        {player.player_name}
+                        {player.player_name || "Unknown Player"}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {player.team_name} • {player.position_class}
+                        {player.team_name || "Unknown Team"} •{" "}
+                        {player.position_class}
                       </div>
                     </div>
 

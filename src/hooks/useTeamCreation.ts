@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Player } from "../types/player";
 import { Position } from "../types/position";
 import { RugbyPlayer } from "../types/rugbyPlayer";
@@ -27,13 +27,16 @@ export function useTeamCreation(
   const [searchQuery, setSearchQuery] = useState("");
   const [availablePlayers, setAvailablePlayers] =
     useState<RugbyPlayer[]>(serverPlayers);
+  const [currentBudget, setCurrentBudget] = useState(budget);
 
-  const currentBudget =
-    budget -
-    Object.values(selectedPlayers).reduce(
+  // Update current budget whenever selected players change
+  useEffect(() => {
+    const usedBudget = Object.values(selectedPlayers).reduce(
       (total, player) => total + (player.price || 0),
       0
     );
+    setCurrentBudget(budget - usedBudget);
+  }, [selectedPlayers, budget]);
 
   const handlePositionClick = useCallback((position: Position) => {
     setSelectedPosition(position);

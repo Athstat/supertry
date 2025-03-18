@@ -17,7 +17,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 border-b border-gray-700 dark:border-dark-600 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none mb-0 pb-0">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -30,7 +30,7 @@ export function Header() {
             <div className="flex items-center gap-2">
               <Shield className="w-8 h-8 text-primary-500" />
               <span className="text-xl font-bold dark:text-gray-100">
-                SUPERTRY
+                SCRUMMY
               </span>
             </div>
           </div>
