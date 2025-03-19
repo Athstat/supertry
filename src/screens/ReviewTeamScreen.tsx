@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Star,
   Zap,
@@ -15,6 +15,7 @@ import { Position } from "../types/position";
 import { Player } from "../types/player";
 import { positionGroups } from "../data/positionGroups";
 import { useNavigate, useLocation } from "react-router-dom";
+import { teamService } from "../services/teamService";
 
 interface ReviewTeamScreenProps {
   teamName: string;
@@ -35,33 +36,55 @@ export function ReviewTeamScreen() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("list");
-
-  const totalCost = Object.values(players).reduce(
-    (acc, player) => acc + player.cost,
+  const totalCost = Object.values(players as Record<string, Player>).reduce(
+    (acc, player) => acc + (player.price ?? 0),
     0
   );
+  console.log("players: ", players);
   const averagePR =
-    Object.values(players).reduce((acc, player) => acc + player.pr, 0) / 15;
+    Object.values(players as Record<string, Player>).reduce(
+      (acc, player) => acc + (player.power_rank_rating ?? 0),
+      0
+    ) / 15;
+
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleEdit = () => {
     navigate(-1); // Go back to team creation
   };
 
-  const handleSubmit = () => {
-    // Handle the final team submission
-    navigate("/my-teams", {
-      state: {
-        teamCreated: true,
-        teamName,
-        players,
-        isFavorite,
-      },
-    });
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError(null);
+      setShowConfirmModal(false);
+
+      // Submit the team to the server
+      if (league && league.official_league_id) {
+        await teamService.submitTeam(
+          teamName,
+          players,
+          league.official_league_id
+        );
+
+        // Show success modal after successful submission
+        setShowSuccessModal(true);
+      } else {
+        setSubmitError("League information is missing");
+      }
+    } catch (error) {
+      console.error("Failed to save team:", error);
+      setSubmitError(
+        error instanceof Error ? error.message : "Failed to submit team"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSubmitSuccess = () => {
-    setShowConfirmModal(false);
-    setShowSuccessModal(true);
+    handleSubmit();
   };
 
   const handleGoToLeague = () => {
@@ -84,10 +107,12 @@ export function ReviewTeamScreen() {
         team: {
           id: teamId,
           name: teamName,
-          players: Object.values(players).map((player) => ({
-            ...player,
-            isSubstitute: false, // Set initial substitute status
-          })),
+          players: Object.values(players as Record<string, Player>).map(
+            (player) => ({
+              ...player,
+              isSubstitute: false, // Set initial substitute status
+            })
+          ),
           league: league,
           isFavorite: isFavorite,
           totalPoints: 0, // Initial points
@@ -161,7 +186,7 @@ export function ReviewTeamScreen() {
                 Total Cost
               </div>
               <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-500">
-                {totalCost} pts
+                {totalCost.toString()} pts
               </div>
             </div>
             <div className="bg-gray-50 dark:bg-dark-800/40 rounded-lg p-3 sm:p-4">
@@ -224,9 +249,14 @@ export function ReviewTeamScreen() {
                             <td className="py-3 px-4">
                               <div className="flex items-center gap-2">
                                 <img
-                                  src={player.image}
+                                  src={player.image_url}
                                   alt={player.name}
                                   className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                                  onError={(e) => {
+                                    // Fallback if image fails to load
+                                    e.currentTarget.src =
+                                      "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
+                                  }}
                                 />
                                 <span className="font-medium truncate dark:text-gray-100">
                                   {player.name}
@@ -240,10 +270,10 @@ export function ReviewTeamScreen() {
                               {player.team}
                             </td>
                             <td className="py-3 px-2 text-right font-medium text-yellow-600 dark:text-yellow-500 whitespace-nowrap">
-                              {player.pr}
+                              {player.power_rank_rating}
                             </td>
                             <td className="py-3 px-2 text-right font-medium text-green-600 dark:text-green-500 whitespace-nowrap">
-                              {player.cost} pts
+                              {player.price} pts
                             </td>
                             <td className="py-3 px-2">
                               <div className="flex justify-center">
@@ -322,9 +352,17 @@ export function ReviewTeamScreen() {
             </div>
             <button
               onClick={() => setShowConfirmModal(true)}
-              className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-all active:transform active:scale-[0.98]"
+              disabled={isSubmitting}
+              className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-all active:transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Submit Team
+              {isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></span>
+                  Submitting...
+                </span>
+              ) : (
+                "Submit Team"
+              )}
             </button>
           </div>
         </div>
@@ -391,6 +429,15 @@ export function ReviewTeamScreen() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {submitError && (
+        <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-4 rounded-lg mb-4">
+          <div className="flex items-center gap-2">
+            <AlertCircle size={20} className="flex-shrink-0" />
+            <span>{submitError}</span>
           </div>
         </div>
       )}

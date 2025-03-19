@@ -148,6 +148,7 @@ export function PlayerListModal({
       price: rugbyPlayer.price || 0,
       points: rugbyPlayer.power_rank_rating || 0,
       image_url: rugbyPlayer.image_url || "",
+      power_rank_rating: rugbyPlayer.power_rank_rating || 0,
     };
     onSelectPlayer(player);
   };

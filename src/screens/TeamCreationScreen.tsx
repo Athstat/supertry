@@ -15,6 +15,7 @@ import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { athleteService } from "../services/athleteService";
 import { RugbyPlayer } from "../types/rugbyPlayer";
 import { Toast } from "../components/ui/Toast";
+import { ReviewTeamModal } from "../components/team-creation/ReviewTeamModal";
 
 interface PositionGroup {
   name: string;
@@ -98,6 +99,9 @@ export function TeamCreationScreen() {
 
   // Add state to track scrolling
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Add this state in the TeamCreationScreen component
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   // Function to get players by UI position
   const getPlayersByUIPosition = (
@@ -238,7 +242,7 @@ export function TeamCreationScreen() {
     }));
   };
 
-  // Replace alert calls with showToast
+  // Replace the handleReview function with this updated version
   const handleReview = () => {
     if (teamName.trim() === "") {
       showToast("Please enter a team name", "error");
@@ -253,14 +257,8 @@ export function TeamCreationScreen() {
     //   return;
     // }
 
-    navigate("/review-team", {
-      state: {
-        players: selectedPlayers,
-        teamName,
-        isFavorite,
-        league,
-      },
-    });
+    // Show the review modal instead of navigating
+    setShowReviewModal(true);
   };
 
   const {
@@ -322,8 +320,6 @@ export function TeamCreationScreen() {
       </div>
     );
   }
-
-  console.log("currentBudget: ", currentBudget);
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4">
@@ -442,6 +438,16 @@ export function TeamCreationScreen() {
           isVisible={toast.isVisible}
           onClose={hideToast}
         />
+
+        {showReviewModal && (
+          <ReviewTeamModal
+            teamName={teamName}
+            isFavorite={isFavorite}
+            players={selectedPlayers}
+            league={league}
+            onClose={() => setShowReviewModal(false)}
+          />
+        )}
       </div>
     </main>
   );
