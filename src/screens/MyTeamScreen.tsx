@@ -127,33 +127,65 @@ export function MyTeamScreen() {
   // Convert IFantasyTeamAthlete to Player format for the TeamFormation component
   const convertToPlayerFormat = (athletes: IFantasyTeamAthlete[]): Player[] => {
     return athletes.map((athlete) => ({
-      id: athlete.id || athlete.athlete_id || "",
-      name: athlete.athlete?.name || "Unknown Player",
-      position: athlete.athlete?.position?.name || "Unknown",
+      id: athlete.athlete_id,
+      name: athlete.player_name,
+      position: athlete.position_class,
       team: athlete.athlete?.team?.name || "Unknown Team",
-      points: athlete.score || 0,
+      points: athlete.price,
+      form: athlete.power_rank_rating, // Add form for PR calculation
       isSubstitute: !athlete.is_starting,
-      image: athlete.athlete?.image_url || "",
-      price: athlete.purchase_price || 0,
+      image: athlete.image_url,
+      price: athlete.price,
     }));
   };
 
   const players = convertToPlayerFormat(athletes);
 
-  // Determine formation based on positions
-  const determineFormation = (players: Player[]): string => {
-    // Simple formation detection - count players by position
-    const starters = players.filter((p) => !p.isSubstitute);
-    const defenders = starters.filter((p) => p.position.includes("DEF")).length;
-    const midfielders = starters.filter((p) =>
-      p.position.includes("MID")
-    ).length;
-    const forwards = starters.filter((p) => p.position.includes("FWD")).length;
+  console.log("players", players);
 
-    return `${defenders}-${midfielders}-${forwards}`;
+  // Determine formation based on positions for rugby
+  const determineFormation = (players: Player[]): string => {
+    // Simple formation detection - count players by position for rugby
+    const starters = players.filter((p) => !p.isSubstitute);
+    const frontRow = starters.filter((p) =>
+      p.position.includes("Front Row")
+    ).length;
+    const secondRow = starters.filter((p) =>
+      p.position.includes("Second Row")
+    ).length;
+    const backRow = starters.filter((p) =>
+      p.position.includes("Back Row")
+    ).length;
+    const halfbacks = starters.filter((p) =>
+      p.position.includes("Halfback")
+    ).length;
+    const backs = starters.filter((p) => p.position.includes("Back")).length;
+
+    return `${frontRow}-${secondRow}-${backRow}-${halfbacks}-${backs}`;
   };
 
   const formation = determineFormation(players);
+
+  // Calculate average PR
+  const calculateAveragePR = (players: Player[]): number => {
+    if (!players.length) return 0;
+    const totalPR = players.reduce(
+      (sum, player) => sum + (player.form || 0),
+      0
+    );
+    return totalPR / players.length;
+  };
+
+  const averagePR = calculateAveragePR(players);
+
+  // Calculate total points
+  const totalPoints = athletes.reduce(
+    (sum, athlete) => sum + (athlete.score || 0),
+    0
+  );
+
+  // Calculate matches played
+  const matchesPlayed = team?.matches_played || 0;
 
   if (isLoading) {
     return (
@@ -180,52 +212,16 @@ export function MyTeamScreen() {
     );
   }
 
-  // Calculate total points
-  const totalPoints = athletes.reduce(
-    (sum, athlete) => sum + (athlete.score || 0),
-    0
-  );
-
   return (
     <main className="container mx-auto px-4 py-6">
       <div className="max-w-4xl mx-auto">
-        {/* Team Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold dark:text-gray-100">
-              {team.name}
-            </h1>
-            <div className="flex items-center gap-4 mt-2">
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                <Trophy size={20} className="text-yellow-500" />
-                <span>
-                  {team.rank ? `Rank ${team.rank}` : "Not ranked yet"}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                <Users
-                  size={20}
-                  className="text-primary-700 dark:text-primary-500"
-                />
-                <span>{athletes.length} Players</span>
-              </div>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Total Points Earned
-            </div>
-            <div className="text-3xl font-bold text-primary-700 dark:text-primary-500">
-              {totalPoints}
-            </div>
-          </div>
-        </div>
-
         {/* Back Button */}
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-700 dark:hover:dark:text-primary-500 mb-6 group transition-colors"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-700 dark:hover:text-primary-500 mb-6 group transition-colors"
           aria-label="Back to My Teams"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && handleBack()}
         >
           <ChevronLeft
             size={20}
@@ -233,6 +229,44 @@ export function MyTeamScreen() {
           />
           <span className="text-sm font-medium">My Teams</span>
         </button>
+        {/* Team Header */}
+        <div className="bg-white dark:bg-dark-800/40 rounded-xl p-4 mb-6 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Team Name and Stats */}
+            <div className="flex flex-col">
+              <h1 className="text-xl sm:text-2xl font-bold dark:text-gray-100">
+                {team.name}
+              </h1>
+              <div className="flex flex-wrap items-center gap-3 mt-2">
+                <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                  <Trophy size={18} className="text-yellow-500 shrink-0" />
+                  <span className="whitespace-nowrap">
+                    {team.rank ? `Rank ${team.rank}` : "Not ranked yet"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                  <Users
+                    size={18}
+                    className="text-primary-700 dark:text-primary-500 shrink-0"
+                  />
+                  <span className="whitespace-nowrap">
+                    {athletes.length} Players
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Points Display */}
+            <div className="flex items-center justify-between sm:justify-end gap-3 mt-2 sm:mt-0 bg-gray-50 dark:bg-dark-700/40 p-2 sm:p-3 rounded-lg">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Total Game Points
+              </div>
+              <div className="text-xl sm:text-2xl font-bold text-primary-700 dark:text-primary-500">
+                {totalPoints}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Team Stats */}
         <TeamStats
@@ -242,6 +276,8 @@ export function MyTeamScreen() {
               totalPoints,
               players,
               formation,
+              matchesPlayed,
+              rank: team.rank || 0,
             } as Team
           }
         />
@@ -254,12 +290,12 @@ export function MyTeamScreen() {
           <TeamFormation
             players={players}
             formation={formation}
-            onPlayerClick={handlePlayerClick}
+            onPlayerClick={() => {}} // Disable player click functionality
           />
         </div>
 
         {/* Substitutes */}
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
             Substitutes
           </h2>
@@ -267,10 +303,9 @@ export function MyTeamScreen() {
             {players
               .filter((player) => player.isSubstitute)
               .map((player) => (
-                <button
+                <div
                   key={player.id}
-                  onClick={() => handlePlayerClick(player)}
-                  className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4 border-2 border-gray-700 dark:border-dark-600 hover:border-primary-500 dark:hover:border-primary-400 transition-all"
+                  className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4 border-2 border-gray-200 dark:border-dark-600"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-semibold dark:text-gray-100">
@@ -288,10 +323,10 @@ export function MyTeamScreen() {
                       {player.points} pts
                     </span>
                   </div>
-                </button>
+                </div>
               ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Substitution Modal */}

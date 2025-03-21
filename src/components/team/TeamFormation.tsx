@@ -8,21 +8,22 @@ interface TeamFormationProps {
 }
 
 export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
+  console.log("players", players);
   // Group players by position
   const positionGroups = {
     "Front Row": players.filter(
-      (p) => p.position === "Front Row" && !p.isSubstitute
+      (p) => p.position === "front-row" && !p.isSubstitute
     ),
     "Second Row": players.filter(
-      (p) => p.position === "Second Row" && !p.isSubstitute
+      (p) => p.position === "second-row" && !p.isSubstitute
     ),
     "Back Row": players.filter(
-      (p) => p.position === "Back Row" && !p.isSubstitute
+      (p) => p.position === "back-row" && !p.isSubstitute
     ),
     Halfback: players.filter(
-      (p) => p.position === "Halfback" && !p.isSubstitute
+      (p) => p.position === "half-back" && !p.isSubstitute
     ),
-    Back: players.filter((p) => p.position === "Back" && !p.isSubstitute),
+    Back: players.filter((p) => p.position === "back" && !p.isSubstitute),
   };
 
   return (
@@ -103,7 +104,12 @@ function PlayerButton({
         <img
           src={player.image}
           alt={player.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top"
+          onError={(e) => {
+            // Fallback if image fails to load
+            e.currentTarget.src =
+              "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
+          }}
         />
       </div>
       <span className="text-xs font-medium text-white group-hover:text-yellow-300 transition-colors">
