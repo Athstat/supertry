@@ -75,11 +75,12 @@ export function SignUpScreen() {
         attributes: {
           nationality: form.nationality ? form.nationality.code : null,
           favoriteTeam: form.favoriteTeam ? form.favoriteTeam.id : null,
+          terms_and_conditions: [Math.random()], // Adding terms acceptance like in mobile app
         },
       };
 
-      // Register the user
-      await authService.registerUser(userData);
+      // Register the user with both Keycloak and games database
+      await authService.createGamesUser(userData);
 
       // Auto-login after successful registration
       try {

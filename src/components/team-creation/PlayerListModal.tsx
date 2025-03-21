@@ -62,7 +62,11 @@ export function PlayerListModal({
 
   // Apply all filters and sorting
   useEffect(() => {
-    if (players.length === 0) return;
+    if (players.length === 0) {
+      // Set loading to false even when there are no players
+      setLoading(false);
+      return;
+    }
 
     let result = [...players];
 
@@ -126,6 +130,7 @@ export function PlayerListModal({
       return 0;
     });
 
+    console.log("Filtered players:", result);
     setFilteredPlayers(result);
     setLoading(false);
   }, [
@@ -137,6 +142,18 @@ export function PlayerListModal({
     sortDirection,
     selectedPlayers,
   ]);
+
+  // Add this useEffect to ensure loading state is cleared after a timeout
+  useEffect(() => {
+    // Set a timeout to ensure loading state is cleared after 3 seconds
+    const timer = setTimeout(() => {
+      if (loading) {
+        setLoading(false);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   // Convert RugbyPlayer to Player for the onSelectPlayer callback
   const handleSelectPlayer = (rugbyPlayer: RugbyPlayer) => {
@@ -392,7 +409,15 @@ export function PlayerListModal({
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
                         {player.team_name || "Unknown Team"} •{" "}
-                        {player.position_class}
+                        {player.position_class
+                          ? player.position_class
+                              .split("-")
+                              .map(
+                                (word) =>
+                                  word.charAt(0).toUpperCase() + word.slice(1)
+                              )
+                              .join(" ")
+                          : "Unknown Position"}
                       </div>
                     </div>
 

@@ -211,4 +211,87 @@ export const authService = {
       return null;
     }
   },
+
+  /**
+   * Register a new user with both Keycloak and the games database
+   */
+  async createGamesUser(userData: UserRepresentation): Promise<any> {
+    try {
+      // Use the full URL in production, relative URL in development
+      const baseUrl = import.meta.env.PROD
+        ? "https://qa-games-app.athstat-next.com"
+        : "";
+
+      // Create the dbuser object similar to the mobile app
+      const dbuser = {
+        email: userData.email,
+        first_name: userData.firstName,
+        last_name: userData.lastName,
+        us_state: "",
+        verification_state: "pending",
+        athcoin_balance: 0,
+        geolocation_allowed: false,
+        device_id: "",
+        encrypted_id: userData.email, // Using email as the encrypted_id like in the mobile app
+      };
+
+      // Create the payload with user, dbuser, and club (using email as club)
+      const payload = {
+        user: userData,
+        dbuser: dbuser,
+        clubName: userData.email,
+      };
+
+      const response = await fetch(
+        `${baseUrl}/api/v1/unauth/create-games-user/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      // Check if the response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        // Get the text response for better debugging
+        const textResponse = await response.text();
+        console.error("Non-JSON response:", textResponse);
+
+        // Check for specific error messages in the text response
+        if (textResponse.includes("User already exists")) {
+          throw new Error("User already exists");
+        }
+
+        throw new Error(
+          "Server returned non-JSON response. Please check server configuration."
+        );
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+
+        // Check for specific error messages
+        if (
+          errorData === "User already exists in Keycloak" ||
+          errorData === "User already exists"
+        ) {
+          throw new Error("User already exists");
+        }
+
+        if (errorData === "error" || errorData === "Unable to create user") {
+          throw new Error("An error occurred, please try again later");
+        }
+
+        throw new Error(errorData || "Registration failed");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Registration error:", error);
+      throw error;
+    }
+  },
 };

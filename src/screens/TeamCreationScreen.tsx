@@ -29,7 +29,7 @@ interface PositionGroup {
 }
 
 // Default competition ID - this could come from a context or route param
-const DEFAULT_COMPETITION_ID = "7f6ac8a5-1723-5325-96bd-44b8b36cfb9e";
+const DEFAULT_COMPETITION_ID = "b5cae2ff-d123-5f12-a771-5faa6d40e967";
 
 // Update the StickyHeader component with a border-top that matches the background
 const StickyHeader = ({
@@ -124,16 +124,23 @@ export function TeamCreationScreen() {
       const positionClass = (player.position_class || "").toLowerCase();
 
       // Map UI positions to position classes
-      if (uiPosition === "Front Row" || uiPosition === "Second Row") {
-        return positionClass === "forward";
-      } else if (
-        ["Back Row", "Halfback", "Back", "Backs"].includes(uiPosition)
-      ) {
+      if (uiPosition === "Front Row") {
+        return positionClass === "front-row";
+      } else if (uiPosition === "Second Row") {
+        return positionClass === "second-row";
+      } else if (uiPosition === "Back Row") {
+        return positionClass === "back-row";
+      } else if (uiPosition === "Halfback") {
+        return positionClass === "half-back";
+      } else if (uiPosition === "Back") {
         return positionClass === "back";
       }
 
-      // Fallback for any other positions
-      return positionClass === uiPosition.toLowerCase();
+      // Fallback for any other positions - match exact position or position class
+      return (
+        positionClass === uiPosition.toLowerCase() ||
+        player.position === uiPosition
+      );
     });
   };
 
@@ -145,7 +152,7 @@ export function TeamCreationScreen() {
         const data = await athleteService.getAthletesByCompetition(
           DEFAULT_COMPETITION_ID
         );
-        console.log("Fetched players:", data.length);
+        console.log("Fetched players:", data);
         setAllPlayers(data);
       } catch (err) {
         console.error("Error fetching players:", err);
@@ -248,10 +255,10 @@ export function TeamCreationScreen() {
       showToast("Please enter a team name", "error");
       return;
     }
-    if (Object.keys(selectedPlayers).length !== 5) {
-      showToast("Please select all 5 players", "error");
-      return;
-    }
+    // if (Object.keys(selectedPlayers).length !== 5) {
+    //   showToast("Please select all 5 players", "error");
+    //   return;
+    // }
     // if (currentBudget < 0) {
     //   showToast("You have exceeded the budget", "error");
     //   return;
@@ -295,6 +302,11 @@ export function TeamCreationScreen() {
       setAvailablePlayers(allPlayers);
     }
   }, [allPlayers, setAvailablePlayers]);
+
+  // Add this function to handle the auto-generate button click
+  const handleAutoGenerateClick = () => {
+    showToast("Feature coming soon", "info");
+  };
 
   if (isLoading || loadingPlayers) {
     return (
@@ -361,7 +373,7 @@ export function TeamCreationScreen() {
           />
 
           <button
-            onClick={handleAutoGenerate}
+            onClick={handleAutoGenerateClick}
             className="w-full bg-primary-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 mt-5"
           >
             <Zap size={20} />

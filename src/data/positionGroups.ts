@@ -3,19 +3,19 @@ import { positions } from "./positions";
 export const positionGroups = [
   {
     name: "Front Row",
-    positions: positions.filter((p) => p.id === "frontrow"),
+    positions: positions.filter((p) => p.id === "front-row"),
   },
   {
     name: "Second Row",
-    positions: positions.filter((p) => p.id === "secondrow"),
+    positions: positions.filter((p) => p.id === "second-row"),
   },
   {
     name: "Back Row",
-    positions: positions.filter((p) => p.id === "backrow"),
+    positions: positions.filter((p) => p.id === "back-row"),
   },
   {
     name: "Halfback",
-    positions: positions.filter((p) => p.id === "halfback"),
+    positions: positions.filter((p) => p.id === "half-back"),
   },
   {
     name: "Back",

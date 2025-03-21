@@ -87,25 +87,14 @@ export function ReviewTeamModal({
     });
   };
 
-  const handleViewTeam = () => {
+  const handleViewTeams = () => {
     setShowSuccessModal(false);
     onClose();
-    // Generate a temporary team ID (in a real app, this would come from the backend)
-    const teamId = Date.now().toString();
-    navigate(`/my-team/${teamId}`, {
+    navigate("/my-teams", {
       state: {
-        team: {
-          id: teamId,
-          name: teamName,
-          players: Object.values(players).map((player) => ({
-            ...player,
-            isSubstitute: false, // Set initial substitute status
-          })),
-          league: league,
-          isFavorite: isFavorite,
-          totalPoints: 0, // Initial points
-          rank: null, // Initial rank
-        },
+        teamCreated: true,
+        teamName,
+        leagueId: league?.official_league_id,
       },
     });
   };
@@ -308,11 +297,11 @@ export function ReviewTeamModal({
                   Go to League
                 </button>
                 <button
-                  onClick={handleViewTeam}
+                  onClick={handleViewTeams}
                   className="w-full bg-white dark:bg-dark-850 text-primary-600 dark:text-primary-400 px-6 py-3 rounded-xl font-semibold hover:bg-indigo-50 dark:hover:bg-dark-700 transition-all flex items-center justify-center gap-2"
                 >
                   <Users size={20} />
-                  View Your Team
+                  View Your Teams
                 </button>
               </div>
             </div>

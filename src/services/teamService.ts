@@ -6,6 +6,121 @@ import {
 
 export const teamService = {
   /**
+   * Fetch the user's club information
+   */
+  fetchUserClub: async () => {
+    try {
+      const baseUrl = import.meta.env.PROD
+        ? "https://qa-games-app.athstat-next.com"
+        : "";
+
+      // Get user ID from token
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        throw new Error(
+          "Authentication token is missing. Please log in again."
+        );
+      }
+
+      // Extract user ID from token
+      let userId = "default-user-id";
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        userId = payload.sub || userId;
+      } catch (error) {
+        console.error("Error extracting user ID from token:", error);
+        throw new Error(
+          "Could not determine user identity. Please log in again."
+        );
+      }
+
+      // Make API request to get user's club
+      const response = await fetch(
+        `${baseUrl}/api/v1/fantasy-teams/fantasy-clubs/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch user club:", await response.text());
+        return null;
+      }
+
+      const data = await response.json();
+
+      // Return the first club if available
+      if (data && data.length > 0) {
+        return data[0];
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching user club:", error);
+      return null;
+    }
+  },
+
+  /**
+   * Fetch all teams for the current user
+   */
+  fetchUserTeams: async (leagueId?: string): Promise<IFantasyClubTeam[]> => {
+    try {
+      const baseUrl = "https://qa-games-app.athstat-next.com";
+
+      // Get user ID from token
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        throw new Error(
+          "Authentication token is missing. Please log in again."
+        );
+      }
+
+      // Extract user ID from token
+      let userId = "default-user-id";
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        userId = payload.sub || userId;
+      } catch (error) {
+        console.error("Error extracting user ID from token:", error);
+        throw new Error(
+          "Could not determine user identity. Please log in again."
+        );
+      }
+
+      const defaultLeagueId = "b5cae2ff-d123-5f12-a771-5faa6d40e967";
+
+      // Construct the URL based on whether leagueId is provided
+      const url = `${baseUrl}/api/v1/fantasy-teams/${userId}/${defaultLeagueId}`;
+
+      // Make API request to get user's teams
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.error("Failed to fetch user teams:", await response.text());
+        return [];
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching user teams:", error);
+      return [];
+    }
+  },
+
+  /**
    * Submit a fantasy team to the server
    */
   submitTeam: async (
@@ -48,9 +163,19 @@ export const teamService = {
         })
       );
 
+      // Fetch the user's club - use direct reference to the function
+      const club = await teamService.fetchUserClub();
+
+      // Throw error if club not found
+      if (!club || !club.id) {
+        throw new Error(
+          "Unable to retrieve your club information. Please try again later."
+        );
+      }
+
       // Prepare the request payload
       const payload = {
-        clubId: 10, //need to update this
+        clubId: club.id,
         leagueId: leagueId,
         name: teamName,
         team: teamAthletes,
@@ -90,6 +215,48 @@ export const teamService = {
     } catch (error) {
       console.error("Error in teamService.submitTeam:", error);
       throw error;
+    }
+  },
+
+  /**
+   * Fetch athletes for a specific team
+   */
+  fetchTeamAthletes: async (teamId: string): Promise<IFantasyTeamAthlete[]> => {
+    try {
+      const baseUrl = import.meta.env.PROD
+        ? "https://qa-games-app.athstat-next.com"
+        : "";
+
+      // Get token for authentication
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        throw new Error(
+          "Authentication token is missing. Please log in again."
+        );
+      }
+
+      // Make API request to get team athletes
+      const response = await fetch(
+        `${baseUrl}/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch team athletes:", await response.text());
+        return [];
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching team athletes:", error);
+      return [];
     }
   },
 };
