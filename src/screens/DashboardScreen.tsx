@@ -35,9 +35,18 @@ export function DashboardScreen() {
       try {
         setIsLoadingTeams(true);
         // Get teams directly using fetchUserTeams
-        const userTeams = await teamService.fetchUserTeams();
+        let userTeams = await teamService.fetchUserTeams();
+        // Sort teams by creation date (newest first)
+        const sortedTeams = [...userTeams].sort((a, b) => {
+          const dateA = new Date(a.created_date || 0).getTime();
+          const dateB = new Date(b.created_date || 0).getTime();
+          return dateB - dateA; // Descending order (newest first)
+        });
+
+        // Use the sorted teams instead of the original array
+        userTeams = sortedTeams;
+
         setTeams(userTeams);
-        console.log("userTeams", userTeams);
 
         // Fetch athletes for each team
         const athletesMap = new Map<string, IFantasyTeamAthlete[]>();
@@ -160,41 +169,55 @@ export function DashboardScreen() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {teams.map((team) => (
-                  <div
-                    key={team.id}
-                    onClick={() => handleTeamClick(team.id)}
-                    className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="font-semibold text-lg dark:text-white">
-                        {team.name}
-                      </h3>
-                      <div className="flex items-center gap-1">
-                        <Trophy size={16} className="text-yellow-500" />
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                          {team.rank ? `#${team.rank}` : "Not ranked"}
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {teams.slice(0, 2).map((team) => (
+                    <div
+                      key={team.id}
+                      onClick={() => handleTeamClick(team.id)}
+                      className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <h3 className="font-semibold text-lg dark:text-white">
+                          {team.name}
+                        </h3>
+                        <div className="flex items-center gap-1">
+                          <Trophy size={16} className="text-yellow-500" />
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                            {team.rank ? `#${team.rank}` : "Not ranked"}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <Users size={16} />
+                        <span>
+                          {(teamsWithAthletes.get(team.id) || []).length}{" "}
+                          Players
+                        </span>
+                      </div>
+                      <div className="mt-3 flex justify-between items-center">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          Points
+                        </span>
+                        <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                          {getTeamPoints(team.id)}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <Users size={16} />
-                      <span>
-                        {(teamsWithAthletes.get(team.id) || []).length} Players
-                      </span>
-                    </div>
-                    <div className="mt-3 flex justify-between items-center">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Points
-                      </span>
-                      <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
-                        {getTeamPoints(team.id)}
-                      </span>
-                    </div>
+                  ))}
+                </div>
+
+                {teams.length > 2 && (
+                  <div className="mt-4 text-center">
+                    <button
+                      onClick={() => navigate("/my-teams")}
+                      className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm"
+                    >
+                      View All Teams ({teams.length})
+                    </button>
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             )}
           </div>
         </div>

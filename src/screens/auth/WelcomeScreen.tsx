@@ -25,7 +25,7 @@ export function WelcomeScreen() {
 
   return (
     <AuthLayout
-      title="Welcome to SUPERTRY"
+      title="Welcome to SCRUMMY"
       subtitle="The ultimate rugby fantasy sports experience"
     >
       <div className="mt-8 space-y-4">
