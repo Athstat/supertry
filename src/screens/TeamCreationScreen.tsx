@@ -255,14 +255,14 @@ export function TeamCreationScreen() {
       showToast("Please enter a team name", "error");
       return;
     }
-    // if (Object.keys(selectedPlayers).length !== 5) {
-    //   showToast("Please select all 5 players", "error");
-    //   return;
-    // }
-    // if (currentBudget < 0) {
-    //   showToast("You have exceeded the budget", "error");
-    //   return;
-    // }
+    if (Object.keys(selectedPlayers).length !== 5) {
+      showToast("Please select all 5 players", "error");
+      return;
+    }
+    if (currentBudget < 0) {
+      showToast("You have exceeded the budget", "error");
+      return;
+    }
 
     // Show the review modal instead of navigating
     setShowReviewModal(true);
