@@ -27,12 +27,20 @@ export function MyTeamsScreen() {
       try {
         setIsLoading(true);
         const userTeams = await teamService.fetchUserTeams();
-        setTeams(userTeams);
+
+        // Sort teams by creation date (newest first)
+        const sortedTeams = [...userTeams].sort((a, b) => {
+          const dateA = new Date(a.created_date || 0).getTime();
+          const dateB = new Date(b.created_date || 0).getTime();
+          return dateB - dateA; // Descending order (newest first)
+        });
+
+        setTeams(sortedTeams);
 
         // Fetch athletes for each team
         const athletesMap = new Map<string, IFantasyTeamAthlete[]>();
 
-        for (const team of userTeams) {
+        for (const team of sortedTeams) {
           try {
             const athletes = await teamService.fetchTeamAthletes(team.id);
             athletesMap.set(team.id, athletes);

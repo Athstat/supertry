@@ -1,42 +1,122 @@
+import React, { useState, useEffect } from "react";
 import {
   ChevronRight,
   Users,
   Trophy,
   Award,
-  Newspaper,
   PlusCircle,
+  Loader,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { TeamCard } from "../components/TeamCard";
 import { LeagueCard } from "../components/LeagueCard";
-import { NewsCard } from "../components/NewsCard";
+import { teamService } from "../services/teamService";
+import { leagueService } from "../services/leagueService";
+import {
+  IFantasyClubTeam,
+  IFantasyTeamAthlete,
+} from "../types/fantasyTeamAthlete";
+import { IFantasyLeague } from "../types/fantasyLeague";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
+  const [teams, setTeams] = useState<IFantasyClubTeam[]>([]);
+  const [teamsWithAthletes, setTeamsWithAthletes] = useState<
+    Map<string, IFantasyTeamAthlete[]>
+  >(new Map());
+  const [leagues, setLeagues] = useState<IFantasyLeague[]>([]);
+  const [isLoadingTeams, setIsLoadingTeams] = useState(true);
+  const [isLoadingLeagues, setIsLoadingLeagues] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleJoinLeague = (league: any) => {
-    // Store league data in state management solution (e.g., React Context)
-    // For now, we'll use URL state
-    navigate("/create-team", { state: { league } });
+  // Fetch user's teams
+  useEffect(() => {
+    const fetchUserTeams = async () => {
+      try {
+        setIsLoadingTeams(true);
+        // Get teams directly using fetchUserTeams
+        const userTeams = await teamService.fetchUserTeams();
+        setTeams(userTeams);
+        console.log("userTeams", userTeams);
+
+        // Fetch athletes for each team
+        const athletesMap = new Map<string, IFantasyTeamAthlete[]>();
+
+        for (const team of userTeams) {
+          const athletes = await teamService.fetchTeamAthletes(team.id);
+          athletesMap.set(team.id, athletes);
+        }
+
+        setTeamsWithAthletes(athletesMap);
+      } catch (err) {
+        console.error("Failed to fetch teams:", err);
+        setError("Failed to load your teams. Please try again later.");
+      } finally {
+        setIsLoadingTeams(false);
+      }
+    };
+
+    fetchUserTeams();
+  }, []);
+
+  // Fetch available leagues
+  useEffect(() => {
+    const fetchLeagues = async () => {
+      try {
+        setIsLoadingLeagues(true);
+        const allLeagues = await leagueService.getAllLeagues();
+
+        // Filter leagues based on is_open status (same as JoinLeagueScreen)
+        const availableLeagues = allLeagues.filter(
+          (league) => league.is_open && !league.has_ended
+        );
+        console.log("availableLeagues", availableLeagues);
+        setLeagues(availableLeagues);
+      } catch (err) {
+        console.error("Failed to fetch leagues:", err);
+        setError("Failed to load leagues. Please try again later.");
+      } finally {
+        setIsLoadingLeagues(false);
+      }
+    };
+
+    fetchLeagues();
+  }, []);
+
+  const handleJoinLeague = (league: IFantasyLeague) => {
+    navigate(`/${league.official_league_id}/create-team`, {
+      state: { league },
+    });
   };
 
   const handleTeamClick = (teamId: string) => {
-    navigate(`/my-team/${teamId}`);
+    const team = teams.find((t) => t.id === teamId);
+    const athletes = teamsWithAthletes.get(teamId) || [];
+
+    navigate(`/my-team/${teamId}`, {
+      state: { team, athletes },
+    });
+  };
+
+  // Calculate team points
+  const getTeamPoints = (teamId: string): number => {
+    const athletes = teamsWithAthletes.get(teamId) || [];
+    return athletes.reduce((sum, athlete) => sum + (athlete.score || 0), 0);
   };
 
   return (
     <main className="container mx-auto px-4 py-6">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary-700 to-primary-600 rounded-2xl p-8 mb-8 text-white">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">
+      <div className="bg-gradient-to-r from-primary-700 to-primary-600 rounded-2xl p-6 sm:p-8 mb-8 text-white">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
           Weekly Rugby Fantasy Leagues
         </h1>
-        <p className="text-lg mb-6 opacity-90">
+        <p className="text-base sm:text-lg mb-4 sm:mb-6 opacity-90">
           Create your dream team and compete in weekly leagues
         </p>
         <button
           onClick={() => navigate("/leagues")}
-          className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
+          className="bg-white text-primary-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
         >
           Join Weekly League <ChevronRight size={20} />
         </button>
@@ -44,198 +124,139 @@ export function DashboardScreen() {
 
       {/* Dashboard Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* My Teams Section - Modernized */}
+        {/* My Teams Section */}
         <div className="col-span-1 lg:col-span-2">
-          <div className="dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6 mb-6">
+          <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6 mb-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold flex items-center gap-2 dark:text-gray-100">
                 <Users size={24} className="text-primary-500" />
                 My Teams
               </h2>
               <button
-                onClick={() => navigate("/create-team")}
-                className="text-primary-500 hover:text-primary-600 transition-colors"
-                aria-label="Create new team"
+                onClick={() => navigate("/leagues")}
+                className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 flex items-center gap-1 text-sm font-medium"
               >
-                <PlusCircle size={24} />
+                <PlusCircle size={18} />
+                Create Team
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TeamCard
-                name="Thunder Warriors"
-                points={2456}
-                rank={1}
-                players={7}
-                isFavorite={true}
-                onClick={() => handleTeamClick("1")}
-              />
-              <TeamCard
-                name="Rugby Legends"
-                points={2198}
-                rank={3}
-                players={7}
-                isFavorite={false}
-                onClick={() => handleTeamClick("2")}
-              />
-            </div>
-          </div>
 
-          {/* Active Leagues - Modernized */}
-          <div className="dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
-              <Trophy size={24} className="text-primary-500 shrink-0" />
-              Active Leagues
-            </h2>
-            <div className="space-y-4">
-              {[
-                {
-                  id: "1",
-                  name: "Premier Weekly",
-                  entryFee: "$10",
-                  prizePool: "$1,000",
-                  players: 128,
-                  maxPlayers: 256,
-                  status: "live",
-                  isPrivate: false,
-                },
-                {
-                  id: "2",
-                  name: "Rookie League",
-                  entryFee: "Free",
-                  prizePool: "$100",
-                  players: 64,
-                  maxPlayers: 100,
-                  status: "joining",
-                  isPrivate: false,
-                },
-              ].map((league) => (
-                <div
-                  key={league.id}
-                  className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl 
-                    bg-white dark:bg-dark-800/40 hover:bg-gray-100 dark:hover:bg-dark-800/60
-                    transition-all duration-200"
+            {isLoadingTeams ? (
+              <div className="flex justify-center py-8">
+                <Loader className="w-8 h-8 text-primary-500 animate-spin" />
+              </div>
+            ) : error ? (
+              <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-lg">
+                {error}
+              </div>
+            ) : teams.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <p>You don't have any teams yet.</p>
+                <button
+                  onClick={() => navigate("/leagues")}
+                  className="mt-4 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors"
                 >
-                  {/* Status Badge - Updated */}
+                  Create Your First Team
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {teams.map((team) => (
                   <div
-                    className={`absolute top-4 right-4 sm:static px-2.5 py-1 text-xs font-medium rounded-full whitespace-nowrap
-                       transition-colors
-                      ${
-                        league.status === "live"
-                          ? "bg-green-500/20 text-green-400 dark:bg-green-400/10"
-                          : "bg-blue-500/20 text-blue-400 dark:bg-blue-400/10"
-                      }`}
+                    key={team.id}
+                    onClick={() => handleTeamClick(team.id)}
+                    className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700"
                   >
-                    {league.status === "live" ? "Live" : "Joining"}
-                  </div>
-
-                  {/* League Info - Updated */}
-                  <div className="flex-1 min-w-0 w-full sm:w-auto">
-                    <h3 className="text-lg font-semibold mb-2 sm:mb-0 pr-16 sm:pr-0 dark:text-gray-100 truncate">
-                      {league.name}
-                    </h3>
-
-                    {/* Mobile: Stacked, Desktop: Row */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mt-1 sm:mt-1">
-                      <div className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400 whitespace-nowrap">
-                        <Users size={16} className="shrink-0" />
-                        <span>
-                          {league.players}/{league.maxPlayers}
-                        </span>
-                      </div>
-                      <div className="hidden sm:block text-gray-600 dark:text-gray-500">
-                        •
-                      </div>
-                      <div className="flex items-center gap-1.5 text-sm whitespace-nowrap">
-                        <Trophy
-                          size={16}
-                          className="shrink-0 text-gray-400 dark:text-gray-400"
-                        />
-                        <span className="font-medium text-primary-300">
-                          {league.prizePool}
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="font-semibold text-lg dark:text-white">
+                        {team.name}
+                      </h3>
+                      <div className="flex items-center gap-1">
+                        <Trophy size={16} className="text-yellow-500" />
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                          {team.rank ? `#${team.rank}` : "Not ranked"}
                         </span>
                       </div>
                     </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <Users size={16} />
+                      <span>
+                        {(teamsWithAthletes.get(team.id) || []).length} Players
+                      </span>
+                    </div>
+                    <div className="mt-3 flex justify-between items-center">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Points
+                      </span>
+                      <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                        {getTeamPoints(team.id)}
+                      </span>
+                    </div>
                   </div>
-
-                  {/* Join Button - Updated */}
-                  <button
-                    onClick={() => handleJoinLeague(league)}
-                    className="w-full sm:w-auto min-h-[44px] px-5 sm:px-6 py-2 sm:py-3 
-                      bg-gradient-to-r from-primary-500/80 to-primary-600/80 hover:from-primary-500/90 hover:to-primary-600/90
-                      text-white font-medium rounded-xl transition-all duration-200 
-                      flex items-center justify-center gap-2 shrink-0 mt-3 sm:mt-0
-                       shadow-sm shadow-primary-950/10"
-                  >
-                    <span className="whitespace-nowrap">Join Now</span>
-                    <ChevronRight size={20} className="shrink-0" />
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* Active Leagues Section */}
         <div className="col-span-1">
-          {/* Leaderboard */}
-          <div className="bg-white dark:bg-dark-850 rounded-xl shadow-sm dark:shadow-dark-sm p-6 mb-6 border border-gray-200 dark:border-dark">
-            <h2 className="text-xl font-semibold flex items-center gap-2 mb-4 dark:text-gray-100">
-              <Award size={24} className="text-primary-500" />
-              Top Players
+          <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6">
+            <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
+              <Trophy size={24} className="text-primary-500" />
+              Active Leagues
             </h2>
-            <div className="space-y-4">
-              {[
-                { name: "John Smith", points: 2856, rank: 1 },
-                { name: "Sarah Jones", points: 2754, rank: 2 },
-                { name: "Mike Wilson", points: 2698, rank: 3 },
-              ].map((player) => (
-                <div
-                  key={player.rank}
-                  className="flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                        player.rank === 1
-                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
-                          : player.rank === 2
-                          ? "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                          : "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300"
-                      }`}
-                    >
-                      {player.rank}
-                    </span>
-                    <span className="font-medium dark:text-gray-100">
-                      {player.name}
-                    </span>
-                  </div>
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {player.points}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* News Feed */}
-          {/* <div className="bg-white dark:bg-dark-850 rounded-xl shadow-sm dark:shadow-dark-sm p-6 border border-gray-200 dark:border-dark">
-            <h2 className="text-xl font-semibold flex items-center gap-2 mb-4 dark:text-gray-100">
-              <Newspaper size={24} className="text-primary-500" />
-              Rugby News
-            </h2>
-            <div className="space-y-4">
-              <NewsCard
-                title="Top 5 Players to Watch This Week"
-                time="2h ago"
-                image="https://images.unsplash.com/photo-1544552866-d3ed42536cfd?auto=format&fit=crop&q=80&w=300"
-              />
-              <NewsCard
-                title="Weekly League Updates"
-                time="4h ago"
-                image="https://images.unsplash.com/photo-1512299286776-c18be8ed6a1a?auto=format&fit=crop&q=80&w=300"
-              />
-            </div>
-          </div> */}
+            {isLoadingLeagues ? (
+              <div className="flex justify-center py-8">
+                <Loader className="w-8 h-8 text-primary-500 animate-spin" />
+              </div>
+            ) : leagues.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <p>No active leagues available.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {leagues.slice(0, 3).map((league) => (
+                  <div
+                    key={league.id}
+                    className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 border border-gray-100 dark:border-gray-700"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-semibold dark:text-white">
+                        {league.title}
+                      </h3>
+                      <div className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs rounded-full">
+                        {league.status || "Live"}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      <Users size={16} />
+                      <span>
+                        {league.participants_count || "0"}/
+                        {league.max_participants || "∞"}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleJoinLeague(league)}
+                      className="w-full bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+                    >
+                      Join Now
+                    </button>
+                  </div>
+                ))}
+
+                {leagues.length > 3 && (
+                  <button
+                    onClick={() => navigate("/leagues")}
+                    className="w-full text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 py-2 text-sm font-medium"
+                  >
+                    View All Leagues
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </main>
