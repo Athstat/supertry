@@ -1,7 +1,7 @@
 import { RugbyPlayer } from "../types/rugbyPlayer";
 
 export const athleteService = {
-  getAthletesByCompetition: async (
+  getRugbyAthletesByCompetition: async (
     competitionId: string
   ): Promise<RugbyPlayer[]> => {
     try {
@@ -10,7 +10,7 @@ export const athleteService = {
 
       try {
         const response = await fetch(
-          `${baseUrl}/api/v1/unauth/athletes-by-competition/${competitionId}`,
+          `${baseUrl}/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`,
           {
             method: "GET",
             headers: {

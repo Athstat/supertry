@@ -117,7 +117,7 @@ export function TeamCreationScreen() {
 
     return players.filter((player) => {
       // Skip already selected players
-      if (selectedPlayerIds.includes(player.id)) {
+      if (selectedPlayerIds.includes(player.id || "")) {
         return false;
       }
 
@@ -139,7 +139,7 @@ export function TeamCreationScreen() {
       // Fallback for any other positions - match exact position or position class
       return (
         positionClass === uiPosition.toLowerCase() ||
-        player.position === uiPosition
+        player.position_class === uiPosition
       );
     });
   };
@@ -360,13 +360,11 @@ export function TeamCreationScreen() {
 
           <TeamStats
             league={league}
-            leagueConfig={
-              leagueConfig || {
-                team_budget: 1000,
-                team_size: 5,
-                lineup_size: 5,
-              }
-            }
+            leagueConfig={{
+              team_budget: leagueConfig?.team_budget || 1000,
+              team_size: leagueConfig?.team_size || 5,
+              lineup_size: leagueConfig?.lineup_size || 5,
+            }}
             currentBudget={currentBudget}
             selectedPlayersCount={Object.keys(selectedPlayers).length}
             totalPositions={5}
@@ -386,7 +384,7 @@ export function TeamCreationScreen() {
             <PositionGroup
               key={group.name}
               name={group.name}
-              positions={group.positions}
+              positions={group.positions as Position[]}
               selectedPlayers={selectedPlayers}
               onPositionClick={handlePositionClick}
               onRemovePlayer={handleRemovePlayer}

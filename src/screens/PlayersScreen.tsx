@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { RugbyPlayer } from "../types/rugbyPlayer";
-import { athleteService } from "../services/athleteService";
+import { useAthletes } from "../contexts/AthleteContext";
 
 // Components
 import { PlayerCard } from "../components/players/PlayerCard";
@@ -18,66 +18,18 @@ type SortOption = "points" | "name" | "position" | "club";
 type SortDirection = "asc" | "desc";
 type SortField = "power_rank_rating" | "player_name";
 
-// Default competition ID - this could come from a context or route param
-const DEFAULT_COMPETITION_ID = "7f6ac8a5-1723-5325-96bd-44b8b36cfb9e";
-
 export const PlayersScreen = () => {
   const navigate = useNavigate();
+  const { athletes, error, isLoading, refreshAthletes, positions, teams } =
+    useAthletes();
   const [activeTab, setActiveTab] = useState<SortTab>("all");
-  const [sortBy, setSortBy] = useState<SortOption>("points");
   const [sortField, setSortField] = useState<SortField>("power_rank_rating");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [searchQuery, setSearchQuery] = useState("");
-  const [players, setPlayers] = useState<RugbyPlayer[]>([]);
   const [filteredPlayers, setFilteredPlayers] = useState<RugbyPlayer[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [isSorting, setIsSorting] = useState(false);
   const [positionFilter, setPositionFilter] = useState<string>("");
   const [teamFilter, setTeamFilter] = useState<string>("");
-  const [availablePositions, setAvailablePositions] = useState<string[]>([]);
-  const [availableTeams, setAvailableTeams] = useState<string[]>([]);
-
-  // Fetch players from API
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const data = await athleteService.getAthletesByCompetition(
-          DEFAULT_COMPETITION_ID
-        );
-        setPlayers(data);
-        setFilteredPlayers(data);
-
-        // Extract unique positions and teams for filters
-        const positions = [
-          ...new Set(
-            data.map((player) => {
-              // Capitalize the first letter of position_class
-              const position = player.position_class || "";
-              return position.charAt(0).toUpperCase() + position.slice(1);
-            })
-          ),
-        ]
-          .filter(Boolean)
-          .sort();
-        const teams = [...new Set(data.map((player) => player.team_name))]
-          .filter(Boolean)
-          .sort();
-
-        setAvailablePositions(positions);
-        setAvailableTeams(teams);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load players");
-        console.error("Error fetching players:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPlayers();
-  }, []);
 
   // Handle player selection
   const handlePlayerClick = (player: RugbyPlayer) => {
@@ -89,20 +41,17 @@ export const PlayersScreen = () => {
   // Handle search filtering
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    applyFilters();
   };
 
   // Handle tab changes
   const handleTabChange = (tab: SortTab) => {
     setActiveTab(tab);
-    applyFilters();
   };
 
   // Handle sorting by field and direction
   const handleSortByField = (field: SortField, direction: SortDirection) => {
     setSortField(field);
     setSortDirection(direction);
-    applyFilters();
   };
 
   // Handle position filter change
@@ -119,40 +68,48 @@ export const PlayersScreen = () => {
   const clearFilters = () => {
     setPositionFilter("");
     setTeamFilter("");
-    applyFilters();
+    setSearchQuery("");
   };
 
-  // Apply all filters (search, position, team, tab, sort)
-  const applyFilters = () => {
+  // Apply filters and sorting
+  useEffect(() => {
+    if (athletes.length === 0) {
+      refreshAthletes(); // Fetch athletes if not already cached
+    } else {
+      setFilteredPlayers(athletes); // Use cached athletes
+    }
+  }, [athletes, refreshAthletes]);
+
+  // Apply sorting and filtering
+  useEffect(() => {
+    if (athletes.length === 0) return;
+
+    // Only set isSorting to true when the user applies sorting or filtering
     setIsSorting(true);
 
-    setTimeout(() => {
-      let result = [...players];
+    // Use setTimeout to avoid blocking the UI during filtering/sorting
+    const timeoutId = setTimeout(() => {
+      let result = [...athletes];
 
       // Apply search filter
-      if (searchQuery.trim()) {
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
         result = result.filter(
           (player) =>
-            player.player_name
-              ?.toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            player.team_name
-              ?.toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            player.position_class
-              ?.toLowerCase()
-              .includes(searchQuery.toLowerCase())
+            player.player_name?.toLowerCase().includes(query) ||
+            player.team_name?.toLowerCase().includes(query) ||
+            player.position_class?.toLowerCase().includes(query)
         );
       }
 
       // Apply position filter
       if (positionFilter) {
         result = result.filter((player) => {
-          // Capitalize the first letter of position_class for comparison
           const position = player.position_class || "";
-          const capitalizedPosition =
-            position.charAt(0).toUpperCase() + position.slice(1);
-          return capitalizedPosition === positionFilter;
+          return (
+            position.charAt(0).toUpperCase() + position.slice(1) ===
+            positionFilter
+          );
         });
       }
 
@@ -161,17 +118,12 @@ export const PlayersScreen = () => {
         result = result.filter((player) => player.team_name === teamFilter);
       }
 
-      // Apply tab filters
+      // Apply tab-specific filtering
       switch (activeTab) {
-        case "all":
-          // No additional filtering needed
-          break;
         case "trending":
-          // Example: Players with recent point increases
           result = result.filter((p) => p.trending === true);
           break;
         case "top":
-          // Top performers by fantasy points
           result = result
             .sort(
               (a, b) => (b.power_rank_rating || 0) - (a.power_rank_rating || 0)
@@ -179,7 +131,6 @@ export const PlayersScreen = () => {
             .slice(0, 20);
           break;
         case "new":
-          // Example: Recently added players
           result = result.filter((p) => p.isNew === true);
           break;
       }
@@ -201,15 +152,10 @@ export const PlayersScreen = () => {
       });
 
       setFilteredPlayers(result);
-      setIsSorting(false);
+      setIsSorting(false); // Set isSorting to false after sorting is done
     }, 300);
-  };
 
-  // Apply filters when they change
-  useEffect(() => {
-    if (!isLoading && players.length > 0) {
-      applyFilters();
-    }
+    return () => clearTimeout(timeoutId);
   }, [
     positionFilter,
     teamFilter,
@@ -224,22 +170,17 @@ export const PlayersScreen = () => {
       {/* Search and Filter Header */}
       <div className="space-y-4 mb-6">
         <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
-
-        {/* Sorting Tabs */}
         <PlayerTabs activeTab={activeTab} onTabChange={handleTabChange} />
-
-        {/* Filter and Sort Buttons */}
         <div className="flex gap-2">
           <PlayerFilters
             positionFilter={positionFilter}
             teamFilter={teamFilter}
-            availablePositions={availablePositions}
-            availableTeams={availableTeams}
+            availablePositions={positions}
+            availableTeams={teams}
             onPositionFilter={handlePositionFilter}
             onTeamFilter={handleTeamFilter}
             onClearFilters={clearFilters}
           />
-
           <PlayerSort
             sortField={sortField}
             sortDirection={sortDirection}
@@ -249,23 +190,27 @@ export const PlayersScreen = () => {
       </div>
 
       {/* Loading State - for initial load */}
-      {isLoading && <LoadingState message="Loading players..." />}
+      {isLoading && <LoadingState message="Loading..." />}
 
       {/* Sorting Loading State */}
-      {isSorting && !isLoading && <LoadingState message="Sorting players..." />}
+      {isSorting && !isLoading && <LoadingState message="Loading..." />}
 
       {/* Error State */}
       {error && !isLoading && !isSorting && (
-        <ErrorState message={error} onRetry={() => window.location.reload()} />
+        <ErrorState message={error} onRetry={refreshAthletes} />
       )}
 
       {/* Empty State */}
-      {!isLoading && !error && !isSorting && filteredPlayers.length === 0 && (
-        <EmptyState
-          searchQuery={searchQuery}
-          onClearSearch={() => handleSearch("")}
-        />
-      )}
+      {!isLoading &&
+        !error &&
+        !isSorting &&
+        filteredPlayers.length === 0 &&
+        athletes.length > 0 && (
+          <EmptyState
+            searchQuery={searchQuery}
+            onClearSearch={() => handleSearch("")}
+          />
+        )}
 
       {/* Player Grid */}
       {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (

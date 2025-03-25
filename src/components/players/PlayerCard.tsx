@@ -31,8 +31,10 @@ export const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
           </h3>
           <span className="text-sm text-gray-200 opacity-90">
             {player.position_class
-              ? player.position_class.charAt(0).toUpperCase() +
-                player.position_class.slice(1)
+              ? player.position_class
+                  .split("-")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")
               : ""}
           </span>
         </div>
