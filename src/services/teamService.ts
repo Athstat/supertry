@@ -181,9 +181,7 @@ export const teamService = {
         team: teamAthletes,
       };
 
-      console.log("Submitting team with payload:", payload);
-
-      // Make the API request
+      // Submit the team to the server
       const response = await fetch(
         `${baseUrl}/api/v1/fantasy-athletes/fantasy-team-athletes`,
         {
@@ -194,13 +192,6 @@ export const teamService = {
           },
           body: JSON.stringify(payload),
         }
-      );
-
-      // Log response details for debugging
-      console.log("Response status:", response.status);
-      console.log(
-        "Response headers:",
-        Object.fromEntries([...response.headers])
       );
 
       if (!response.ok) {

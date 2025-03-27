@@ -152,7 +152,7 @@ export function TeamCreationScreen() {
         const data = await athleteService.getRugbyAthletesByCompetition(
           DEFAULT_COMPETITION_ID
         );
-        console.log("Fetched players:", data);
+        //console.log("Fetched players:", data);
         setAllPlayers(data);
       } catch (err) {
         console.error("Error fetching players:", err);
@@ -308,6 +308,18 @@ export function TeamCreationScreen() {
     showToast("Feature coming soon", "info");
   };
 
+  // Create wrapper functions to control modal behavior
+  const handlePlayerSelectWrapper = (player: Player) => {
+    // Keep the player list modal open when showing player details
+    handlePlayerSelect(player);
+  };
+
+  const handleAddPlayerWrapper = (player: Player) => {
+    handleAddPlayer(player);
+    // Only close the details modal, player list should remain open
+    setShowPlayerModal(false);
+  };
+
   if (isLoading || loadingPlayers) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4 flex items-center justify-center">
@@ -427,7 +439,7 @@ export function TeamCreationScreen() {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             onClose={() => setShowPlayerList(false)}
-            onSelectPlayer={handlePlayerSelect}
+            onSelectPlayer={handlePlayerSelectWrapper}
             players={getPlayersByUIPosition(allPlayers, selectedPosition.name)}
             selectedPlayers={selectedPlayers}
           />
@@ -437,7 +449,7 @@ export function TeamCreationScreen() {
           <PlayerDetailsModal
             player={selectedPlayerForModal}
             onClose={() => setShowPlayerModal(false)}
-            onAdd={handleAddPlayer}
+            onAdd={handleAddPlayerWrapper}
           />
         )}
 

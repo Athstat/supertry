@@ -12,6 +12,7 @@ import {
 import { Player } from "../../types/player";
 import { positionGroups } from "../../data/positionGroups";
 import { teamService } from "../../services/teamService";
+import { leagueService } from "../../services/leagueService";
 import { useNavigate } from "react-router-dom";
 
 interface ReviewTeamModalProps {
@@ -54,21 +55,26 @@ export function ReviewTeamModal({
 
       // Submit the team to the server
       if (league && league.official_league_id) {
+        // Step 1: Submit the team
         await teamService.submitTeam(
           teamName,
           players,
           league.official_league_id
         );
+        // Step 2: Join the league using the recently submitted team
+        await leagueService.joinLeague(league);
 
-        // Show success modal after successful submission
+        // Show success modal after successful submission and joining
         setShowSuccessModal(true);
       } else {
         setSubmitError("League information is missing");
       }
     } catch (error) {
-      console.error("Failed to save team:", error);
+      console.error("Failed to save team or join league:", error);
       setSubmitError(
-        error instanceof Error ? error.message : "Failed to submit team"
+        error instanceof Error
+          ? error.message
+          : "Failed to submit team or join league"
       );
     } finally {
       setIsSubmitting(false);
