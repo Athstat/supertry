@@ -149,7 +149,7 @@ export function TeamCreationScreen() {
     const fetchPlayers = async () => {
       try {
         setLoadingPlayers(true);
-        const data = await athleteService.getAthletesByCompetition(
+        const data = await athleteService.getRugbyAthletesByCompetition(
           DEFAULT_COMPETITION_ID
         );
         console.log("Fetched players:", data);
