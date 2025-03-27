@@ -1,8 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Users, Lock, Unlock, Plus, Search, ChevronRight } from "lucide-react";
+import {
+  Users,
+  Lock,
+  Unlock,
+  Plus,
+  Search,
+  ChevronRight,
+  Trophy,
+  X,
+  ArrowLeft,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Import components
+import { LeagueActions } from "../components/leagues/LeagueActions";
+import { MyLeagueCard } from "../components/leagues/MyLeagueCard";
+import { AvailableLeagueCard } from "../components/leagues/AvailableLeagueCard";
+import { JoinPrivateLeagueModal } from "../components/leagues/JoinPrivateLeagueModal";
+import { CreatePrivateLeagueModal } from "../components/leagues/CreatePrivateLeagueModal";
+import {
+  LoadingState,
+  ErrorState,
+  EmptyState,
+  NoSearchResults,
+} from "../components/leagues/LeagueStates";
 
 interface League {
   id: string;
@@ -16,7 +40,6 @@ interface League {
 
 export function JoinLeagueScreen() {
   const navigate = useNavigate();
-  const [joinCode, setJoinCode] = useState("");
   const [showPrivateLeagueForm, setShowPrivateLeagueForm] = useState(false);
   const [availableLeagues, setAvailableLeagues] = useState<IFantasyLeague[]>(
     []
@@ -24,6 +47,40 @@ export function JoinLeagueScreen() {
   const [currentLeagues, setCurrentLeagues] = useState<IFantasyLeague[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredLeagues, setFilteredLeagues] = useState<IFantasyLeague[]>([]);
+  const [isJoiningPrivate, setIsJoiningPrivate] = useState(false);
+  const [privateLeagueCode, setPrivateLeagueCode] = useState("");
+  const [isSubmittingCode, setIsSubmittingCode] = useState(false);
+  const [codeError, setCodeError] = useState<string | null>(null);
+
+  // Animation variants
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 25,
+        delay: custom * 0.1, // Add delay based on index
+      },
+    }),
+  };
+
+  // Add a separate container animation for the Available Leagues section
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.2, // 0.5 second delay for the Available Leagues section
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
   useEffect(() => {
     const fetchLeagues = async () => {
@@ -35,9 +92,7 @@ export function JoinLeagueScreen() {
         const available = leagues.filter(
           (league) => league.is_open && !league.has_ended
         );
-        const current = leagues.filter(
-          (league) => !league.is_open || league.has_ended
-        );
+        const current = leagues.filter((league) => !league.has_ended);
 
         setAvailableLeagues(available);
         setCurrentLeagues(current);
@@ -53,6 +108,21 @@ export function JoinLeagueScreen() {
     fetchLeagues();
   }, []);
 
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setFilteredLeagues(availableLeagues);
+    } else {
+      const filtered = availableLeagues.filter((league) =>
+        league.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredLeagues(filtered);
+    }
+  }, [searchTerm, availableLeagues]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleJoinLeague = (league: IFantasyLeague) => {
     navigate(`/${league.official_league_id}/create-team`, {
       state: { league },
@@ -63,22 +133,46 @@ export function JoinLeagueScreen() {
     navigate(`/league/${league.id}`, { state: { league } });
   };
 
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // Helper function to format entry fee
-  const formatEntryFee = (fee: number | null): string => {
-    if (fee === null || fee === 0) return "Free";
-    return `$${fee}`;
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
-  // Helper function to format prize pool
-  const formatPrizePool = (league: IFantasyLeague): string => {
-    if (league.reward_description) return league.reward_description;
-    return league.reward_type === "cash"
-      ? `$${league.entry_fee || 0 * 10}`
-      : "N/A";
+  const handleJoinPrivateLeague = async () => {
+    if (!privateLeagueCode.trim()) {
+      setCodeError("Please enter a league code");
+      return;
+    }
+
+    try {
+      setIsSubmittingCode(true);
+      setCodeError(null);
+
+      // This would be replaced with actual API call to join a private league
+      // const league = await leagueService.joinPrivateLeague(privateLeagueCode);
+
+      // For now, simulate a delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Mock response - in a real app, you'd use the API response
+      setIsJoiningPrivate(false);
+      setPrivateLeagueCode("");
+
+      // If successful, you would navigate to the team creation screen
+      // navigate(`/${league.official_league_id}/create-team`, { state: { league } });
+    } catch (err) {
+      console.error("Failed to join private league:", err);
+      setCodeError("Failed to join league. Please try again.");
+    } finally {
+      setIsSubmittingCode(false);
+    }
+  };
+
+  const handleCreatePrivateLeague = () => {
+    setShowPrivateLeagueForm(true);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
   };
 
   return (
@@ -87,177 +181,113 @@ export function JoinLeagueScreen() {
         <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">Leagues</h1>
 
         {/* League Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <button
-            onClick={() => setShowPrivateLeagueForm(true)}
-            className="flex font-bold items-center justify-center gap-2 bg-primary-600 text-white px-6 py-4 rounded-xl hover:bg-primary-700 transition-colors"
-          >
-            <Plus size={20} />
-            Create Private League
-          </button>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Enter league code"
-              value={joinCode}
-              onChange={(e) => setJoinCode(e.target.value)}
-              className="w-full px-6 py-4 rounded-xl border border-gray-200 dark:border-dark-600 dark:bg-dark-850 dark:text-gray-100 dark:placeholder-gray-400 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-            />
-            <button className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
-              <Search size={20} />
-            </button>
-          </div>
-        </div>
+        <LeagueActions
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          onCreateLeague={handleCreatePrivateLeague}
+          onJoinPrivate={() => setIsJoiningPrivate(true)}
+        />
 
-        {/* Loading State */}
-        {isLoading && (
-          <div className="text-center py-10">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">
-              Loading leagues...
-            </p>
-          </div>
-        )}
+        {/* Loading, Error and Empty States */}
+        <LoadingState isLoading={isLoading} />
+        <ErrorState error={error} isLoading={isLoading} />
+        <EmptyState
+          isLoading={isLoading}
+          availableLeagues={availableLeagues}
+          currentLeagues={currentLeagues}
+          error={error}
+          cardVariants={cardVariants}
+        />
+        <NoSearchResults
+          isLoading={isLoading}
+          searchTerm={searchTerm}
+          filteredLeagues={filteredLeagues}
+          availableLeagues={availableLeagues}
+          cardVariants={cardVariants}
+          onClearSearch={handleClearSearch}
+        />
 
-        {/* Error State */}
-        {error && (
-          <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-4 rounded-lg mb-6">
-            <p>{error}</p>
-          </div>
-        )}
-
-        {/* Current Leagues */}
-        {/* {!isLoading && currentLeagues.length > 0 && (
+        {/* My Leagues */}
+        {!isLoading && currentLeagues.length > 0 && (
           <div className="space-y-4 mb-10">
-            <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
-              Current Leagues
+            <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center gap-2">
+              <Trophy size={20} className="text-primary-500" />
+              My Leagues
             </h2>
-            {currentLeagues.map((league) => (
-              <div
-                key={league.id}
-                className="bg-white dark:bg-dark-800/40 rounded-xl p-6 hover:border-primary-600 dark:hover:border-primary-500 transition-all shadow-sm dark:shadow-dark-sm"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-semibold dark:text-gray-100">
-                        {league.title}
-                      </h3>
-                      {league.is_private ? (
-                        <Lock
-                          size={16}
-                          className="text-gray-400 dark:text-gray-500"
-                        />
-                      ) : (
-                        <Unlock
-                          size={16}
-                          className="text-gray-400 dark:text-gray-500"
-                        />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <Users size={16} />
-                      <span>
-                        {/* We don't have player count in the API response */
-        /*}
-                        {league.duration_type} league
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      {league.reward_type === "cash" ? "Prize Pool" : "Reward"}
-                    </div>
-                    <div className="font-semibold text-green-600 dark:text-green-500">
-                      {formatPrizePool(league)}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleViewLeague(league)}
-                    className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center gap-1"
-                  >
-                    View League
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              </div>
-            ))}
+            <div className="grid grid-cols-1 gap-4">
+              <AnimatePresence>
+                {currentLeagues.map((league, index) => (
+                  <MyLeagueCard
+                    key={league.id}
+                    league={league}
+                    onViewLeague={handleViewLeague}
+                    cardVariants={cardVariants}
+                    custom={index}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
-        )} */}
+        )}
 
         {/* Available Leagues */}
-        {!isLoading && availableLeagues.length > 0 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+        {!isLoading && filteredLeagues.length > 0 && (
+          <>
+            <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center gap-2">
+              <Users size={20} className="text-primary-500" />
               Available Leagues
             </h2>
-            {availableLeagues.map((league) => (
-              <div
-                key={league.id}
-                className="bg-white dark:bg-dark-800/40 rounded-xl p-6 hover:border-primary-600 dark:hover:border-primary-500 transition-all shadow-sm dark:shadow-dark-sm"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-semibold dark:text-gray-100">
-                        {league.title}
-                      </h3>
-                      {league.is_private ? (
-                        <Lock
-                          size={16}
-                          className="text-gray-400 dark:text-gray-500"
-                        />
-                      ) : (
-                        <Unlock
-                          size={16}
-                          className="text-gray-400 dark:text-gray-500"
-                        />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <Users size={16} />
-                      <span>{league.duration_type} league</span>
-                    </div>
-                  </div>
-                </div>
+            <motion.div
+              className="space-y-4"
+              initial="hidden"
+              animate="visible"
+              variants={containerVariants}
+            >
+              <div className="grid grid-cols-1 gap-4">
+                <AnimatePresence>
+                  {filteredLeagues.map((league, index) => {
+                    // Check if this league is already in the user's current leagues
+                    const isAlreadyJoined = currentLeagues.some(
+                      (currentLeague) => currentLeague.id === league.id
+                    );
 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      {league.reward_type === "cash" ? "Prize Pool" : "Reward"}
-                    </div>
-                    <div className="font-semibold text-green-600 dark:text-green-500">
-                      {formatPrizePool(league)}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleJoinLeague(league)}
-                    className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center gap-1"
-                  >
-                    Join Now
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
+                    return (
+                      <AvailableLeagueCard
+                        key={league.id}
+                        league={league}
+                        onJoinLeague={handleJoinLeague}
+                        cardVariants={cardVariants}
+                        isAlreadyJoined={isAlreadyJoined}
+                        custom={index}
+                      />
+                    );
+                  })}
+                </AnimatePresence>
               </div>
-            ))}
-          </div>
+            </motion.div>
+          </>
         )}
-
-        {/* No Leagues Available */}
-        {!isLoading &&
-          availableLeagues.length === 0 &&
-          currentLeagues.length === 0 &&
-          !error && (
-            <div className="text-center py-10">
-              <p className="text-gray-600 dark:text-gray-400">
-                No leagues available at the moment.
-              </p>
-            </div>
-          )}
       </div>
+
+      {/* Modals */}
+      <AnimatePresence>
+        <JoinPrivateLeagueModal
+          isOpen={isJoiningPrivate}
+          onClose={() => setIsJoiningPrivate(false)}
+          onJoin={handleJoinPrivateLeague}
+          code={privateLeagueCode}
+          onCodeChange={(e) => setPrivateLeagueCode(e.target.value)}
+          error={codeError}
+          isSubmitting={isSubmittingCode}
+        />
+      </AnimatePresence>
+
+      <AnimatePresence>
+        <CreatePrivateLeagueModal
+          isOpen={showPrivateLeagueForm}
+          onClose={() => setShowPrivateLeagueForm(false)}
+        />
+      </AnimatePresence>
     </main>
   );
 }
