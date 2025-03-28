@@ -43,7 +43,7 @@ export function LeagueScreen() {
           leagueId
         );
 
-        console.log("participatingTeams", participatingTeams);
+        //console.log("participatingTeams", participatingTeams);
 
         if (participatingTeams && participatingTeams.length > 0) {
           // Sort teams by score in descending order
@@ -81,6 +81,7 @@ export function LeagueScreen() {
 
           // Update league info
           const leagueDetails = participatingTeams[0]?.league || {};
+          console.log("leagueDetails", leagueDetails);
           setLeagueInfo({
             name: leagueDetails.title || "League",
             type: leagueDetails.is_private ? "Private" : "Public",
