@@ -7,6 +7,7 @@ import {
   Users,
   Wallet,
   Star,
+  ChevronLeft,
 } from "lucide-react";
 import { TeamHeader } from "../components/team-creation/TeamHeader";
 import { TeamStats } from "../components/team-creation/TeamStats";
@@ -413,6 +414,16 @@ export function TeamCreationScreen() {
       </div>
 
       <div className="container mx-auto px-4 max-w-[1024px]">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/leagues")}
+          className="flex items-center mb-4 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          aria-label="Back to leagues"
+        >
+          <ChevronLeft size={20} />
+          <span className="font-medium">Back to Leagues</span>
+        </button>
+
         {/* League Title Section */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2 dark:text-gray-100">

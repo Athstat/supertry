@@ -296,39 +296,32 @@ export function JoinLeagueScreen() {
         />
 
         {/* My Leagues */}
-        {!isLoading &&
-          currentLeagues.length > 0 &&
-          currentLeagues.some(
-            (league) =>
-              // Only count leagues that the user has actually joined
-              league.is_joined === true || league.user_has_joined === true
-          ) && (
-            <div className="space-y-4 mb-10">
-              <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center gap-2">
-                <Trophy size={20} className="text-primary-500" />
-                My Leagues
-              </h2>
-              <div className="grid grid-cols-1 gap-4">
-                <AnimatePresence>
-                  {currentLeagues
-                    .filter(
-                      (league) =>
-                        league.is_joined === true ||
-                        league.user_has_joined === true
-                    )
-                    .map((league, index) => (
-                      <MyLeagueCard
-                        key={league.id}
-                        league={league}
-                        onViewLeague={handleViewLeague}
-                        cardVariants={cardVariants}
-                        custom={index}
-                      />
-                    ))}
-                </AnimatePresence>
-              </div>
+        {!isLoading && (
+          <div className="space-y-4 mb-10">
+            <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center gap-2">
+              <Trophy size={20} className="text-primary-500" />
+              My Leagues
+            </h2>
+            <div className="grid grid-cols-1 gap-4">
+              <AnimatePresence>
+                {filteredLeagues.map((league, index) => (
+                  <>
+                    {" "}
+                    <AvailableLeagueCard
+                      key={league.id}
+                      league={league}
+                      onJoinLeague={handleJoinLeague}
+                      onViewLeague={handleViewLeague}
+                      cardVariants={cardVariants}
+                      isAlreadyJoined={true}
+                      custom={index}
+                    />
+                  </>
+                ))}
+              </AnimatePresence>
             </div>
-          )}
+          </div>
+        )}
 
         {/* Available Leagues */}
         {!isLoading && filteredLeagues.length > 0 && (
@@ -348,15 +341,6 @@ export function JoinLeagueScreen() {
                   {filteredLeagues.map((league, index) => (
                     <>
                       {" "}
-                      <AvailableLeagueCard
-                        key={league.id}
-                        league={league}
-                        onJoinLeague={handleJoinLeague}
-                        onViewLeague={handleViewLeague}
-                        cardVariants={cardVariants}
-                        isAlreadyJoined={true}
-                        custom={index}
-                      />
                       <AvailableLeagueCard
                         key={league.id}
                         league={league}
