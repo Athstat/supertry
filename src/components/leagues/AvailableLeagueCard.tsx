@@ -2,10 +2,12 @@ import React from "react";
 import { Users, Lock, Unlock, ChevronRight } from "lucide-react";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface AvailableLeagueCardProps {
   league: IFantasyLeague;
   onJoinLeague: (league: IFantasyLeague) => void;
+  onViewLeague?: (league: IFantasyLeague) => void;
   cardVariants: any;
   isAlreadyJoined?: boolean;
   custom?: number;
@@ -14,10 +16,19 @@ interface AvailableLeagueCardProps {
 export function AvailableLeagueCard({
   league,
   onJoinLeague,
+  onViewLeague,
   cardVariants,
   isAlreadyJoined = false,
   custom = 0,
 }: AvailableLeagueCardProps) {
+  const navigate = useNavigate();
+
+  console.log("League: ", league);
+  // Add a more reliable check for joined status
+  const actuallyJoined =
+    isAlreadyJoined &&
+    (league.is_joined === true || league.user_has_joined === true);
+
   // Helper function to format entry fee
   const formatEntryFee = (fee: number | null): string => {
     if (fee === null || fee === 0) return "Free";
@@ -33,7 +44,18 @@ export function AvailableLeagueCard({
   };
 
   // Button text based on joined status
-  const buttonText = isAlreadyJoined ? "Already Joined" : "Join Now";
+  const buttonText = isAlreadyJoined ? "View League" : "Join Now";
+
+  // Handle button click based on joined status
+  const handleButtonClick = () => {
+    if (isAlreadyJoined) {
+      onViewLeague
+        ? onViewLeague(league)
+        : navigate(`/league/${league.official_league_id}`);
+    } else {
+      onJoinLeague(league);
+    }
+  };
 
   return (
     <motion.div
@@ -95,16 +117,15 @@ export function AvailableLeagueCard({
             </div>
           </div> */}
           <button
-            onClick={() => !isAlreadyJoined && onJoinLeague(league)}
-            disabled={isAlreadyJoined}
+            onClick={handleButtonClick}
             className={`px-6 py-2 rounded-lg font-medium flex items-center gap-1 transition-colors ${
-              isAlreadyJoined
-                ? "bg-gray-300 text-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed"
+              actuallyJoined
+                ? "bg-primary-600 text-white hover:bg-primary-700"
                 : "bg-primary-600 text-white hover:bg-primary-700"
             }`}
             aria-label={
-              isAlreadyJoined
-                ? `Already joined ${league.title}`
+              actuallyJoined
+                ? `View league ${league.title}`
                 : `Join league ${league.title}`
             }
           >

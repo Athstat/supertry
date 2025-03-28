@@ -52,7 +52,11 @@ export function MyLeagueCard({
             <Unlock size={16} className="text-gray-400 dark:text-gray-500" />
           )}
           <div className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs rounded-full">
-            {league.has_ended ? "Ended" : "Active"}
+            {league.has_ended
+              ? "Ended"
+              : league.is_active
+              ? "Active"
+              : "Pending"}
           </div>
         </div>
       </div>

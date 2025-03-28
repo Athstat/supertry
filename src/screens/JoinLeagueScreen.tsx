@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
+import { teamService } from "../services/teamService";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -53,10 +54,17 @@ export function JoinLeagueScreen() {
   const [privateLeagueCode, setPrivateLeagueCode] = useState("");
   const [isSubmittingCode, setIsSubmittingCode] = useState(false);
   const [codeError, setCodeError] = useState<string | null>(null);
+  const [userJoinedLeagueIds, setUserJoinedLeagueIds] = useState<Set<string>>(
+    new Set()
+  );
+  const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(true);
+  const [userJoinedLeagues, setUserJoinedLeagues] = useState<Set<string>>(
+    new Set()
+  );
 
   // Animation variants
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: (custom: number) => ({
       opacity: 1,
       y: 0,
@@ -92,10 +100,11 @@ export function JoinLeagueScreen() {
         const available = leagues.filter(
           (league) => league.is_open && !league.has_ended
         );
-        const current = leagues.filter((league) => !league.has_ended);
+
+        //const current = leagues.filter((league) => !league.has_ended);
 
         setAvailableLeagues(available);
-        setCurrentLeagues(current);
+        //setCurrentLeagues(current);
         setError(null);
       } catch (err) {
         console.error("Failed to fetch leagues:", err);
@@ -123,6 +132,71 @@ export function JoinLeagueScreen() {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    const fetchUserTeams = async () => {
+      try {
+        setIsLoadingUserTeams(true);
+        const userTeams = await teamService.fetchUserTeams();
+        console.log("userTeams", userTeams);
+
+        // Extract league IDs from user teams
+        const joinedLeagueIds = new Set<string>();
+        userTeams.forEach((team) => {
+          if (team.official_league_id) {
+            joinedLeagueIds.add(team.official_league_id);
+          }
+          if (team.official_league_id) {
+            joinedLeagueIds.add(team.official_league_id);
+          }
+        });
+
+        setUserJoinedLeagueIds(joinedLeagueIds);
+      } catch (err) {
+        console.error("Failed to fetch user teams:", err);
+      } finally {
+        setIsLoadingUserTeams(false);
+      }
+    };
+
+    fetchUserTeams();
+  }, []);
+
+  useEffect(() => {
+    const checkUserLeagueStatuses = async () => {
+      if (!availableLeagues.length) return;
+
+      const joinedLeagueIds = new Set<string>();
+
+      // Process leagues in batches to avoid too many simultaneous requests
+      const batchSize = 3;
+      for (let i = 0; i < availableLeagues.length; i += batchSize) {
+        const batch = availableLeagues.slice(i, i + batchSize);
+
+        // Process each batch in parallel
+        const results = await Promise.all(
+          batch.map(async (league) => {
+            const leagueId = league.official_league_id || league.id;
+            const hasJoined = await leagueService.checkUserLeagueStatus(
+              leagueId
+            );
+            return { leagueId, hasJoined };
+          })
+        );
+
+        // Add joined league IDs to the set
+        results.forEach(({ leagueId, hasJoined }) => {
+          console.log("leagueId: ", leagueId);
+          console.log("hasJoined: ", hasJoined);
+          if (hasJoined) joinedLeagueIds.add(leagueId);
+        });
+      }
+
+      setUserJoinedLeagues(joinedLeagueIds);
+    };
+
+    checkUserLeagueStatuses();
+  }, [availableLeagues]);
+
   const handleJoinLeague = (league: IFantasyLeague) => {
     navigate(`/${league.official_league_id}/create-team`, {
       state: { league },
@@ -130,7 +204,9 @@ export function JoinLeagueScreen() {
   };
 
   const handleViewLeague = (league: IFantasyLeague) => {
-    navigate(`/league/${league.id}`, { state: { league } });
+    navigate(`/league/${league.official_league_id}`, {
+      state: { league },
+    });
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,6 +251,18 @@ export function JoinLeagueScreen() {
     setSearchTerm("");
   };
 
+  const hasUserJoinedLeague = (league: IFantasyLeague): boolean => {
+    const leagueId = league.official_league_id || league.id;
+
+    // Check all possible indicators that a user has joined
+    return (
+      league.is_joined === true ||
+      league.user_has_joined === true ||
+      userJoinedLeagueIds.has(leagueId) ||
+      userJoinedLeagues.has(leagueId)
+    );
+  };
+
   return (
     <main className="container mx-auto px-4 py-6">
       <div className="max-w-4xl mx-auto">
@@ -208,27 +296,39 @@ export function JoinLeagueScreen() {
         />
 
         {/* My Leagues */}
-        {!isLoading && currentLeagues.length > 0 && (
-          <div className="space-y-4 mb-10">
-            <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center gap-2">
-              <Trophy size={20} className="text-primary-500" />
-              My Leagues
-            </h2>
-            <div className="grid grid-cols-1 gap-4">
-              <AnimatePresence>
-                {currentLeagues.map((league, index) => (
-                  <MyLeagueCard
-                    key={league.id}
-                    league={league}
-                    onViewLeague={handleViewLeague}
-                    cardVariants={cardVariants}
-                    custom={index}
-                  />
-                ))}
-              </AnimatePresence>
+        {!isLoading &&
+          currentLeagues.length > 0 &&
+          currentLeagues.some(
+            (league) =>
+              // Only count leagues that the user has actually joined
+              league.is_joined === true || league.user_has_joined === true
+          ) && (
+            <div className="space-y-4 mb-10">
+              <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center gap-2">
+                <Trophy size={20} className="text-primary-500" />
+                My Leagues
+              </h2>
+              <div className="grid grid-cols-1 gap-4">
+                <AnimatePresence>
+                  {currentLeagues
+                    .filter(
+                      (league) =>
+                        league.is_joined === true ||
+                        league.user_has_joined === true
+                    )
+                    .map((league, index) => (
+                      <MyLeagueCard
+                        key={league.id}
+                        league={league}
+                        onViewLeague={handleViewLeague}
+                        cardVariants={cardVariants}
+                        custom={index}
+                      />
+                    ))}
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Available Leagues */}
         {!isLoading && filteredLeagues.length > 0 && (
@@ -245,23 +345,29 @@ export function JoinLeagueScreen() {
             >
               <div className="grid grid-cols-1 gap-4">
                 <AnimatePresence>
-                  {filteredLeagues.map((league, index) => {
-                    // Check if this league is already in the user's current leagues
-                    const isAlreadyJoined = currentLeagues.some(
-                      (currentLeague) => currentLeague.id === league.id
-                    );
-
-                    return (
+                  {filteredLeagues.map((league, index) => (
+                    <>
+                      {" "}
                       <AvailableLeagueCard
                         key={league.id}
                         league={league}
                         onJoinLeague={handleJoinLeague}
+                        onViewLeague={handleViewLeague}
                         cardVariants={cardVariants}
-                        isAlreadyJoined={isAlreadyJoined}
+                        isAlreadyJoined={true}
                         custom={index}
                       />
-                    );
-                  })}
+                      <AvailableLeagueCard
+                        key={league.id}
+                        league={league}
+                        onJoinLeague={handleJoinLeague}
+                        onViewLeague={handleViewLeague}
+                        cardVariants={cardVariants}
+                        isAlreadyJoined={false}
+                        custom={index}
+                      />
+                    </>
+                  ))}
                 </AnimatePresence>
               </div>
             </motion.div>

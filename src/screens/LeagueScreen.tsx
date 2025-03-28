@@ -8,11 +8,156 @@ import { ChatFeed } from "../components/league/chat/ChatFeed";
 import { TeamStats, Fixture, LeagueInfo } from "../types/league";
 import { ChatMessage, ChatUser } from "../types/chat";
 import { ChevronLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { leagueService } from "../services/leagueService";
+import { teamService } from "../services/teamService";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
+  const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({
+    name: "Loading...",
+    type: "Public",
+    currentGameweek: 0,
+    totalGameweeks: 0,
+    totalTeams: 0,
+    prizePool: "$0",
+  });
+  const [teams, setTeams] = useState<TeamStats[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Get the league ID from URL params
+  const { leagueId } = useParams<{ leagueId: string }>();
+
+  // Fetch participating teams when component mounts
+  useEffect(() => {
+    const fetchLeagueData = async () => {
+      if (!leagueId) return;
+
+      try {
+        setIsLoading(true);
+
+        // Fetch participating teams
+        const participatingTeams = await leagueService.fetchParticipatingTeams(
+          leagueId
+        );
+
+        console.log("participatingTeams", participatingTeams);
+
+        if (participatingTeams && participatingTeams.length > 0) {
+          // Sort teams by score in descending order
+          const sortedTeams = participatingTeams.sort(
+            (a, b) => b.score - a.score
+          );
+
+          // Map to TeamStats format
+          const mappedTeams: TeamStats[] = sortedTeams.map((team, index) => ({
+            id: team.team_id,
+            rank: index + 1,
+            teamName: team.name || `Team ${index + 1}`,
+            managerName: team.manager_name || "Unknown Manager",
+            totalPoints: team.overall_score || 0,
+            weeklyPoints: team.score || 0,
+            lastRank: team.last_rank || index + 1,
+            isUserTeam: false, // Will be set below if it matches
+          }));
+
+          // Get current user's team ID
+          const currentUserTeamId = await getCurrentUserTeamId(leagueId);
+
+          // Mark user's team and get user's rank
+          let userRank = 0;
+          if (currentUserTeamId) {
+            mappedTeams.forEach((team) => {
+              if (team.id === currentUserTeamId) {
+                team.isUserTeam = true;
+                userRank = team.rank;
+              }
+            });
+          }
+
+          setTeams(mappedTeams);
+
+          // Update league info
+          const leagueDetails = participatingTeams[0]?.league || {};
+          setLeagueInfo({
+            name: leagueDetails.title || "League",
+            type: leagueDetails.is_private ? "Private" : "Public",
+            currentGameweek: leagueDetails.current_gameweek || 0,
+            totalGameweeks: leagueDetails.total_gameweeks || 0,
+            totalTeams: mappedTeams.length,
+            prizePool: formatPrizePool(leagueDetails),
+            userRank: userRank || 0,
+          });
+        }
+
+        setError(null);
+      } catch (err) {
+        console.error("Failed to fetch league data:", err);
+        setError("Failed to load league data. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLeagueData();
+  }, [leagueId]);
+
+  // Helper function to get current user's team ID
+  const getCurrentUserTeamId = async (
+    leagueId: string
+  ): Promise<string | null> => {
+    try {
+      // Get user ID from token
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No access token found");
+        return null;
+      }
+
+      // Extract user ID from token
+      let userId: string;
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        userId = payload.sub;
+        if (!userId) {
+          console.error("No user ID found in token");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error extracting user ID from token:", error);
+        return null;
+      }
+
+      // Fetch user teams from the teamService
+      const userTeams = await teamService.fetchUserTeams(leagueId);
+
+      // Find the team that belongs to this league
+      const teamInLeague = userTeams.find(
+        (team) => team.league_id === leagueId
+      );
+
+      if (teamInLeague) {
+        return teamInLeague.id;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error getting current user team ID:", error);
+      return null;
+    }
+  };
+
+  // Helper function to format prize pool
+  const formatPrizePool = (league: any): string => {
+    if (!league) return "$0";
+    if (league.reward_description) return league.reward_description;
+    return league.reward_type === "cash"
+      ? `$${(league.entry_fee || 0) * (league.participants_count || 0)}`
+      : "N/A";
+  };
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -53,109 +198,6 @@ export function LeagueScreen() {
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
     isAdmin: true,
   };
-
-  const leagueInfo: LeagueInfo = {
-    name: "Premier Weekly League",
-    type: "Public",
-    currentGameweek: 12,
-    totalGameweeks: 38,
-    totalTeams: 256,
-    prizePool: "$1,000",
-  };
-
-  const teams: TeamStats[] = [
-    {
-      id: "1",
-      rank: 1,
-      teamName: "Thunder Warriors",
-      managerName: "John Smith",
-      totalPoints: 876,
-      weeklyPoints: 64,
-      lastRank: 2,
-    },
-    {
-      id: "2",
-      rank: 2,
-      teamName: "Rugby Legends",
-      managerName: "Sarah Johnson",
-      totalPoints: 854,
-      weeklyPoints: 58,
-      lastRank: 1,
-    },
-    {
-      id: "3",
-      rank: 3,
-      teamName: "Mighty Dragons",
-      managerName: "You",
-      totalPoints: 842,
-      weeklyPoints: 72,
-      lastRank: 4,
-      isUserTeam: true,
-    },
-    {
-      id: "4",
-      rank: 4,
-      teamName: "Phoenix Rising",
-      managerName: "Emma Davis",
-      totalPoints: 835,
-      weeklyPoints: 55,
-      lastRank: 3,
-    },
-    {
-      id: "5",
-      rank: 5,
-      teamName: "Storm Chasers",
-      managerName: "Alex Turner",
-      totalPoints: 821,
-      weeklyPoints: 61,
-      lastRank: 5,
-    },
-    {
-      id: "6",
-      rank: 6,
-      teamName: "Iron Titans",
-      managerName: "Daniel Brown",
-      totalPoints: 805,
-      weeklyPoints: 60,
-      lastRank: 7,
-    },
-    {
-      id: "7",
-      rank: 7,
-      teamName: "Shadow Strikers",
-      managerName: "Olivia Martinez",
-      totalPoints: 793,
-      weeklyPoints: 54,
-      lastRank: 6,
-    },
-    {
-      id: "8",
-      rank: 8,
-      teamName: "Blazing Bulls",
-      managerName: "Ethan Wright",
-      totalPoints: 780,
-      weeklyPoints: 50,
-      lastRank: 9,
-    },
-    {
-      id: "9",
-      rank: 9,
-      teamName: "Furious Falcons",
-      managerName: "Sophia Lee",
-      totalPoints: 775,
-      weeklyPoints: 52,
-      lastRank: 8,
-    },
-    {
-      id: "10",
-      rank: 10,
-      teamName: "Banana Splits",
-      managerName: "Mike Wilson",
-      totalPoints: 654,
-      weeklyPoints: 48,
-      lastRank: 45,
-    },
-  ];
 
   const fixtures: Fixture[] = [
     {
@@ -267,6 +309,7 @@ export function LeagueScreen() {
       <LeagueHeader
         leagueInfo={leagueInfo}
         onOpenSettings={() => setShowSettings(true)}
+        isLoading={isLoading}
       />
 
       <div className="container mx-auto px-4 py-6">
@@ -275,21 +318,33 @@ export function LeagueScreen() {
             <LeagueStandings
               teams={teams}
               showJumpButton={showJumpButton}
-              onJumpToTeam={() => {}}
+              onJumpToTeam={() => {
+                const userTeamRef = document.querySelector(
+                  '[data-user-team="true"]'
+                );
+                if (userTeamRef) {
+                  userTeamRef.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                  });
+                }
+              }}
+              isLoading={isLoading}
+              error={error}
             />
-            <ChatFeed
+            {/* <ChatFeed
               messages={messages}
               currentUser={currentUser}
               onSendMessage={handleSendMessage}
               onDeleteMessage={handleDeleteMessage}
               onReactToMessage={handleReactToMessage}
-            />
+            /> */}
           </div>
 
-          <div className="lg:col-span-5 space-y-6">
+          {/* <div className="lg:col-span-5 space-y-6">
             <FixturesList fixtures={fixtures} />
             <LeagueInsights />
-          </div>
+          </div> */}
         </div>
       </div>
 

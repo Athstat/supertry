@@ -84,7 +84,11 @@ export function ReviewTeamModal({
   const handleGoToLeague = () => {
     setShowSuccessModal(false);
     onClose();
-    navigate("/league/1", {
+
+    // Use the league's official ID from the league object
+    const leagueId = league?.official_league_id || "1";
+
+    navigate(`/league/${leagueId}`, {
       state: {
         league,
         teamName,
@@ -304,7 +308,7 @@ export function ReviewTeamModal({
                 </button>
                 <button
                   onClick={handleViewTeams}
-                  className="w-full bg-white dark:bg-dark-850 text-primary-600 dark:text-primary-400 px-6 py-3 rounded-xl font-semibold hover:bg-indigo-50 dark:hover:bg-dark-700 transition-all flex items-center justify-center gap-2"
+                  className="w-full dark:bg-transparent text-primary-600 dark:text-primary-400 px-6 py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 border border-primary-200 dark:border-primary-800"
                 >
                   <Users size={20} />
                   View Your Teams

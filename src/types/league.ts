@@ -26,4 +26,5 @@ export interface LeagueInfo {
   totalGameweeks: number;
   totalTeams: number;
   prizePool: string;
+  userRank?: number;
 }

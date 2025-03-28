@@ -255,10 +255,7 @@ export function DashboardScreen() {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
                       <Users size={16} />
-                      <span>
-                        {league.participants_count || "0"}/
-                        {league.max_participants || "∞"}
-                      </span>
+                      <span>{league.participants_count || "0"}</span>
                     </div>
                     <button
                       onClick={() => handleJoinLeague(league)}

@@ -9,16 +9,19 @@ interface LeagueInfo {
   totalGameweeks: number;
   totalTeams: number;
   prizePool: string;
+  userRank?: number;
 }
 
 interface LeagueHeaderProps {
   leagueInfo: LeagueInfo;
   onOpenSettings: () => void;
+  isLoading?: boolean;
 }
 
 export function LeagueHeader({
   leagueInfo,
   onOpenSettings,
+  isLoading = false,
 }: LeagueHeaderProps) {
   const navigate = useNavigate();
 
@@ -27,27 +30,25 @@ export function LeagueHeader({
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-4">
           <div>
+            <button
+              onClick={() => navigate("/leagues")}
+              className="flex items-center text-primary-100 hover:text-white mb-2 transition-colors"
+              aria-label="Back to leagues"
+            >
+              <ChevronLeft size={20} />
+              <span>Back to leagues</span>
+            </button>
             <h1 className="text-2xl md:text-3xl font-bold">
-              {leagueInfo.name}
+              {isLoading ? "Loading..." : leagueInfo.name}
             </h1>
             <div className="flex items-center gap-2 text-primary-100 mt-3 mb-3 font-bold">
               <Shield size={16} />
               <span>{leagueInfo.type} League</span>
             </div>
-            <div className="container">
-              <button
-                onClick={() => navigate("/leagues")}
-                className="flex items-center gap-1 text-primary-100 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-              >
-                <ChevronLeft size={16} />
-                <span>Back to leagues</span>
-              </button>
-            </div>
-            {/* <span className="mx-2">•</span>
-              <span>Gameweek {leagueInfo.currentGameweek}</span> */}
           </div>
           <button
             onClick={onOpenSettings}
+            aria-label="League settings"
             className="p-2 hover:bg-white/10 rounded-lg transition-colors"
           >
             <Settings size={24} />
@@ -57,21 +58,25 @@ export function LeagueHeader({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Total Teams</div>
-            <div className="text-xl font-bold">{leagueInfo.totalTeams}</div>
+            <div className="text-xl font-bold">
+              {isLoading ? "..." : leagueInfo.totalTeams}
+            </div>
           </div>
           <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Prize Pool</div>
-            <div className="text-xl font-bold">{leagueInfo.prizePool}</div>
-          </div>
-          {/* <div className="bg-white/10 rounded-lg p-4">
-            <div className="text-sm text-primary-100">Gameweek</div>
             <div className="text-xl font-bold">
-              {leagueInfo.currentGameweek}/{leagueInfo.totalGameweeks}
+              {isLoading ? "..." : leagueInfo.prizePool}
             </div>
-          </div> */}
+          </div>
           <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Your Rank</div>
-            <div className="text-xl font-bold">#3</div>
+            <div className="text-xl font-bold">
+              {isLoading
+                ? "..."
+                : leagueInfo.userRank
+                ? `#${leagueInfo.userRank}`
+                : "N/A"}
+            </div>
           </div>
         </div>
       </div>
