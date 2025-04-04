@@ -266,7 +266,7 @@ export function DashboardScreen() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleViewLeague(league)}
-                        className="flex-1 bg-white border border-primary-600 text-primary-600 py-2 rounded-lg hover:bg-primary-50 transition-colors text-sm font-medium"
+                        className="flex-1 bg-transparent border border-primary-600 dark:border-primary-500 text-primary-600 dark:text-primary-400 py-2 rounded-lg hover:bg-primary-50/30 dark:hover:bg-primary-900/20 transition-colors text-sm font-medium"
                       >
                         View League
                       </button>

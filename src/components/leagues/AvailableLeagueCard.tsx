@@ -64,7 +64,7 @@ export function AvailableLeagueCard({
         <div className="flex flex-col space-y-2">
           <button
             onClick={() => onViewLeague(league)}
-            className="w-full bg-white border border-primary-600 text-primary-600 px-4 py-2 rounded-lg font-medium hover:bg-primary-50 transition-colors flex items-center justify-center gap-1"
+            className="w-full bg-transparent border border-primary-600 dark:border-primary-500 text-primary-600 dark:text-primary-400 px-4 py-2 rounded-lg font-medium hover:bg-primary-50/30 dark:hover:bg-primary-900/20 transition-colors flex items-center justify-center gap-1"
             aria-label={`View league ${league.title}`}
           >
             View League
