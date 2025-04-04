@@ -40,7 +40,7 @@ interface PositionGroup {
 }
 
 // Default competition ID - this could come from a context or route param
-const DEFAULT_COMPETITION_ID = "b5cae2ff-d123-5f12-a771-5faa6d40e967";
+const DEFAULT_COMPETITION_ID = "d313fbf5-c721-569b-975d-d9ec242a6f19";
 
 // Update the StickyHeader component with improved styling
 const StickyHeader = ({

@@ -3,7 +3,7 @@ import { RugbyPlayer } from "../types/rugbyPlayer";
 import { athleteService } from "../services/athleteService";
 
 // Default competition ID
-const DEFAULT_COMPETITION_ID = "7f6ac8a5-1723-5325-96bd-44b8b36cfb9e";
+const DEFAULT_COMPETITION_ID = "d313fbf5-c721-569b-975d-d9ec242a6f19";
 
 interface AthleteContextType {
   athletes: RugbyPlayer[];
