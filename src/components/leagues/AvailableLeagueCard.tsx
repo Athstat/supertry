@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 interface AvailableLeagueCardProps {
   league: IFantasyLeague;
   onJoinLeague: (league: IFantasyLeague) => void;
-  onViewLeague?: (league: IFantasyLeague) => void;
+  onViewLeague: (league: IFantasyLeague) => void;
   cardVariants: any;
   isAlreadyJoined?: boolean;
+  showBothButtons?: boolean;
   custom?: number;
 }
 
@@ -19,6 +20,7 @@ export function AvailableLeagueCard({
   onViewLeague,
   cardVariants,
   isAlreadyJoined = false,
+  showBothButtons = false,
   custom = 0,
 }: AvailableLeagueCardProps) {
   const navigate = useNavigate();
@@ -49,12 +51,50 @@ export function AvailableLeagueCard({
   // Handle button click based on joined status
   const handleButtonClick = () => {
     if (isAlreadyJoined) {
-      onViewLeague
-        ? onViewLeague(league)
-        : navigate(`/league/${league.official_league_id}`);
+      onViewLeague(league);
     } else {
       onJoinLeague(league);
     }
+  };
+
+  // Render buttons based on props
+  const renderButtons = () => {
+    if (showBothButtons) {
+      return (
+        <div className="flex flex-col space-y-2">
+          <button
+            onClick={() => onViewLeague(league)}
+            className="w-full bg-white border border-primary-600 text-primary-600 px-4 py-2 rounded-lg font-medium hover:bg-primary-50 transition-colors flex items-center justify-center gap-1"
+            aria-label={`View league ${league.title}`}
+          >
+            View League
+          </button>
+          <button
+            onClick={() => onJoinLeague(league)}
+            className="w-full bg-primary-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-1"
+            aria-label={`Join league ${league.title}`}
+          >
+            Join Now
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <button
+        onClick={handleButtonClick}
+        className="w-full bg-primary-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-1"
+        aria-label={
+          isAlreadyJoined
+            ? `View league ${league.title}`
+            : `Join league ${league.title}`
+        }
+      >
+        {buttonText}
+        <ChevronRight size={16} />
+      </button>
+    );
   };
 
   return (
@@ -98,8 +138,8 @@ export function AvailableLeagueCard({
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex flex-col mt-4">
+        <div className="mb-2">
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {league.reward_type === "cash" ? "Prize Pool" : "Reward"}
           </div>
@@ -107,32 +147,7 @@ export function AvailableLeagueCard({
             {formatPrizePool(league)}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {/* <div className="text-right mr-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Entry Fee
-            </div>
-            <div className="font-semibold dark:text-gray-200">
-              {formatEntryFee(league.entry_fee)}
-            </div>
-          </div> */}
-          <button
-            onClick={handleButtonClick}
-            className={`px-6 py-2 rounded-lg font-medium flex items-center gap-1 transition-colors ${
-              actuallyJoined
-                ? "bg-primary-600 text-white hover:bg-primary-700"
-                : "bg-primary-600 text-white hover:bg-primary-700"
-            }`}
-            aria-label={
-              actuallyJoined
-                ? `View league ${league.title}`
-                : `Join league ${league.title}`
-            }
-          >
-            {buttonText}
-            <ChevronRight size={16} />
-          </button>
-        </div>
+        {renderButtons()}
       </div>
     </motion.div>
   );

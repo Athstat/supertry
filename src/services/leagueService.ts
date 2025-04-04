@@ -82,9 +82,7 @@ export const leagueService = {
 
   joinLeague: async (league: any): Promise<any> => {
     try {
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl = "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -107,6 +105,8 @@ export const leagueService = {
         );
       }
 
+      console.log("League for joining: ", league);
+
       // Fetch the user's latest team
       const userTeams = await teamService.fetchUserTeams(
         league.official_league_id
@@ -118,6 +118,8 @@ export const leagueService = {
 
       // Use the most recently created team (assuming it's the one we just submitted)
       const latestTeam = userTeams[userTeams.length - 1];
+
+      console.log("User latestTeam: ", latestTeam);
 
       // Make API request to join the league
       const response = await fetch(
@@ -158,7 +160,7 @@ export const leagueService = {
       console.log("LeagueId: ", leagueId);
 
       const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-leagues/participating-teams/11`,
+        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/12`,
         {
           method: "GET",
           headers: {
@@ -170,7 +172,7 @@ export const leagueService = {
         }
       );
 
-      console.log("Response: ", response.json);
+      //console.log("Response: ", await response.json());
 
       if (response.ok) {
         const data = await response.json();

@@ -296,7 +296,7 @@ export function JoinLeagueScreen() {
         />
 
         {/* My Leagues */}
-        {!isLoading && (
+        {/* {!isLoading && (
           <div className="space-y-4 mb-10">
             <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center gap-2">
               <Trophy size={20} className="text-primary-500" />
@@ -321,7 +321,7 @@ export function JoinLeagueScreen() {
               </AnimatePresence>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Available Leagues */}
         {!isLoading && filteredLeagues.length > 0 && (
@@ -339,18 +339,16 @@ export function JoinLeagueScreen() {
               <div className="grid grid-cols-1 gap-4">
                 <AnimatePresence>
                   {filteredLeagues.map((league, index) => (
-                    <>
-                      {" "}
-                      <AvailableLeagueCard
-                        key={league.id}
-                        league={league}
-                        onJoinLeague={handleJoinLeague}
-                        onViewLeague={handleViewLeague}
-                        cardVariants={cardVariants}
-                        isAlreadyJoined={false}
-                        custom={index}
-                      />
-                    </>
+                    <AvailableLeagueCard
+                      key={league.id}
+                      league={league}
+                      onJoinLeague={handleJoinLeague}
+                      onViewLeague={handleViewLeague}
+                      cardVariants={cardVariants}
+                      isAlreadyJoined={hasUserJoinedLeague(league)}
+                      showBothButtons={true}
+                      custom={index}
+                    />
                   ))}
                 </AnimatePresence>
               </div>

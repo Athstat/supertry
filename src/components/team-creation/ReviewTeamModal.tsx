@@ -53,6 +53,8 @@ export function ReviewTeamModal({
       setSubmitError(null);
       setShowConfirmModal(false);
 
+      console.log("League: ", league, "League ID: ", league.official_league_id);
+
       // Submit the team to the server
       if (league && league.official_league_id) {
         // Step 1: Submit the team

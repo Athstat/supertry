@@ -11,6 +11,7 @@ import { ChevronLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { teamService } from "../services/teamService";
+import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -26,6 +27,9 @@ export function LeagueScreen() {
   const [teams, setTeams] = useState<TeamStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<TeamStats | null>(null);
+  const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
+  const [loadingAthletes, setLoadingAthletes] = useState(false);
 
   // Get the league ID from URL params
   const { leagueId } = useParams<{ leagueId: string }>();
@@ -38,12 +42,14 @@ export function LeagueScreen() {
       try {
         setIsLoading(true);
 
+        console.log("leagueId", leagueId);
+
         // Fetch participating teams
         const participatingTeams = await leagueService.fetchParticipatingTeams(
           leagueId
         );
 
-        //console.log("participatingTeams", participatingTeams);
+        console.log("participatingTeams", participatingTeams);
 
         if (participatingTeams && participatingTeams.length > 0) {
           // Sort teams by score in descending order
@@ -56,7 +62,7 @@ export function LeagueScreen() {
             id: team.team_id,
             rank: index + 1,
             teamName: team.name || `Team ${index + 1}`,
-            managerName: team.manager_name || "Unknown Manager",
+            managerName: team.first_name + " " + team.last_name,
             totalPoints: team.overall_score || 0,
             weeklyPoints: team.score || 0,
             lastRank: team.last_rank || index + 1,
@@ -305,6 +311,29 @@ export function LeagueScreen() {
     );
   };
 
+  // Handle team click
+  const handleTeamClick = async (team: TeamStats) => {
+    setSelectedTeam(team);
+    setLoadingAthletes(true);
+
+    try {
+      // Fetch team athletes
+      const athletes = await teamService.fetchTeamAthletes(team.id);
+      setTeamAthletes(athletes);
+    } catch (error) {
+      console.error("Failed to fetch team athletes:", error);
+      // You can set an error state here if needed
+    } finally {
+      setLoadingAthletes(false);
+    }
+  };
+
+  // Close team athletes modal
+  const handleCloseModal = () => {
+    setSelectedTeam(null);
+    setTeamAthletes([]);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
       <LeagueHeader
@@ -332,6 +361,7 @@ export function LeagueScreen() {
               }}
               isLoading={isLoading}
               error={error}
+              onTeamClick={handleTeamClick}
             />
             {/* <ChatFeed
               messages={messages}
@@ -351,6 +381,16 @@ export function LeagueScreen() {
 
       {showSettings && (
         <LeagueSettings onClose={() => setShowSettings(false)} />
+      )}
+
+      {/* Team Athletes Modal */}
+      {selectedTeam && (
+        <TeamAthletesModal
+          team={selectedTeam}
+          athletes={teamAthletes}
+          onClose={handleCloseModal}
+          isLoading={loadingAthletes}
+        />
       )}
     </div>
   );

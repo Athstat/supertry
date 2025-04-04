@@ -15,6 +15,7 @@ interface LeagueStandingsProps {
   onJumpToTeam: () => void;
   isLoading?: boolean;
   error?: string | null;
+  onTeamClick?: (team: TeamStats) => void;
 }
 
 export function LeagueStandings({
@@ -23,6 +24,7 @@ export function LeagueStandings({
   onJumpToTeam,
   isLoading = false,
   error = null,
+  onTeamClick,
 }: LeagueStandingsProps) {
   const userTeamRef = useRef<HTMLTableRowElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -123,6 +125,13 @@ export function LeagueStandings({
     }
   };
 
+  // Handle team row click
+  const handleTeamClick = (team: TeamStats) => {
+    if (onTeamClick) {
+      onTeamClick(team);
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm overflow-hidden">
       <div className="p-4 sticky top-0 bg-white dark:bg-dark-800/40 z-10">
@@ -194,6 +203,15 @@ export function LeagueStandings({
                       cursor-pointer transition-colors
                       ${getRowBackground(team.rank, index, team.isUserTeam)}
                     `}
+                    onClick={() => handleTeamClick(team)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        handleTeamClick(team);
+                        e.preventDefault();
+                      }
+                    }}
+                    tabIndex={0}
+                    aria-label={`View ${team.teamName} details`}
                   >
                     <td className="py-4 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">

@@ -98,6 +98,12 @@ export function DashboardScreen() {
     });
   };
 
+  const handleViewLeague = (league: IFantasyLeague) => {
+    navigate(`/league/${league.official_league_id}`, {
+      state: { league },
+    });
+  };
+
   const handleTeamClick = (teamId: string) => {
     const team = teams.find((t) => t.id === teamId);
     const athletes = teamsWithAthletes.get(teamId) || [];
@@ -257,12 +263,20 @@ export function DashboardScreen() {
                       <Users size={16} />
                       <span>{league.participants_count || "0"}</span>
                     </div>
-                    <button
-                      onClick={() => handleJoinLeague(league)}
-                      className="w-full bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
-                    >
-                      Join Now
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleViewLeague(league)}
+                        className="flex-1 bg-white border border-primary-600 text-primary-600 py-2 rounded-lg hover:bg-primary-50 transition-colors text-sm font-medium"
+                      >
+                        View League
+                      </button>
+                      <button
+                        onClick={() => handleJoinLeague(league)}
+                        className="flex-1 bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+                      >
+                        Join Now
+                      </button>
+                    </div>
                   </div>
                 ))}
 
