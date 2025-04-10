@@ -39,7 +39,7 @@ export function LeagueHeader({
               <span>Back to leagues</span>
             </button>
             <h1 className="text-2xl md:text-3xl font-bold">
-              {isLoading ? "Loading..." : "EPCR Challenge Cup - Week 15"}
+              {isLoading ? "Loading..." : "EPCR Challenge Cup - Quarter Finals"}
             </h1>
             <div className="flex items-center gap-2 text-primary-100 mt-3 mb-3 font-bold">
               <Shield size={16} />
