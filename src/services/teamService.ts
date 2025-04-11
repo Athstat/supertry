@@ -69,7 +69,9 @@ export const teamService = {
   /**
    * Fetch all teams for the current user
    */
-  fetchUserTeams: async (leagueId?: string): Promise<IFantasyClubTeam[]> => {
+  fetchUserTeams: async (
+    officialLeagueId: string
+  ): Promise<IFantasyClubTeam[]> => {
     try {
       const baseUrl = "https://qa-games-app.athstat-next.com";
 
@@ -94,10 +96,10 @@ export const teamService = {
         );
       }
 
-      const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19";
+      //const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19";
 
       // Construct the URL based on whether leagueId is provided
-      const url = `${baseUrl}/api/v1/fantasy-teams/${userId}/${defaultLeagueId}`;
+      const url = `${baseUrl}/api/v1/fantasy-teams/${userId}/${officialLeagueId}`;
 
       // Make API request to get user's teams
       const response = await fetch(url, {
@@ -125,7 +127,7 @@ export const teamService = {
    */
   submitTeam: async (
     teamName: string,
-    players: Record<string, Player>,
+    teamAthletes: IFantasyTeamAthlete[],
     leagueId: string
   ): Promise<IFantasyClubTeam> => {
     try {
@@ -148,18 +150,6 @@ export const teamService = {
       } catch (error) {
         console.error("Error extracting user ID from token:", error);
       }
-
-      // Convert players to IFantasyTeamAthlete format
-      const teamAthletes: IFantasyTeamAthlete[] = Object.values(players).map(
-        (player, index) => ({
-          athlete_id: player.id,
-          purchase_price: player.price || player.cost || 0,
-          purchase_date: new Date(),
-          is_starting: true, // All players are starting by default
-          slot: index + 1, // Assign slots sequentially
-          score: 0, // Initial score is 0
-        })
-      );
 
       // Fetch the user's club - use direct reference to the function
       const club = await teamService.fetchUserClub();

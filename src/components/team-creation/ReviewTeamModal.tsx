@@ -14,6 +14,7 @@ import { positionGroups } from "../../data/positionGroups";
 import { teamService } from "../../services/teamService";
 import { leagueService } from "../../services/leagueService";
 import { useNavigate } from "react-router-dom";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 
 interface ReviewTeamModalProps {
   teamName: string;
@@ -55,14 +56,26 @@ export function ReviewTeamModal({
 
       console.log("League: ", league, "League ID: ", league.official_league_id);
 
+      const teamAthletes: IFantasyTeamAthlete[] = Object.values(players).map(
+        (player, index) => ({
+          athlete_id: player.id,
+          purchase_price: player.price || 0,
+          purchase_date: new Date(),
+          is_starting: true, // All players are starting by default
+          slot: index + 1, // Assign slots sequentially
+          score: 0, // Initial score is 0
+        })
+      );
+
       // Submit the team to the server
-      if (league && league.official_league_id) {
+      if (league) {
         // Step 1: Submit the team
         await teamService.submitTeam(
           teamName,
-          players,
+          teamAthletes,
           league.official_league_id
         );
+
         // Step 2: Join the league using the recently submitted team
         await leagueService.joinLeague(league);
 
@@ -205,10 +218,10 @@ export function ReviewTeamModal({
                       {/* Player Stats */}
                       <div className="flex flex-col items-end">
                         <div className="font-semibold text-green-600 dark:text-green-400">
-                          {player.price || player.cost || 0} pts
+                          {player.price} pts
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400">
-                          PR: {player.power_rank_rating || player.pr || 0}
+                          PR: {player.power_rank_rating}
                         </div>
                       </div>
                     </div>

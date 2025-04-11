@@ -1,4 +1,5 @@
 import { IFantasyLeague } from "../types/fantasyLeague";
+import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { teamService } from "./teamService";
 
@@ -105,9 +106,9 @@ export const leagueService = {
         );
       }
 
-      console.log("League for joining: ", league);
+      //console.log("League for joining: ", league);
 
-      // Fetch the user's latest team
+      // // Fetch the user's latest team
       const userTeams = await teamService.fetchUserTeams(
         league.official_league_id
       );
@@ -116,10 +117,15 @@ export const leagueService = {
         throw new Error("Could not find your team. Please try again.");
       }
 
-      // Use the most recently created team (assuming it's the one we just submitted)
-      const latestTeam = userTeams[userTeams.length - 1];
+      //console.log("User teams: ", userTeams);
 
-      console.log("User latestTeam: ", latestTeam);
+      // Use the most recently created team (assuming it's the one we just submitted)
+      const latestTeam = userTeams.reduce(
+        (highest, team) => (team.id > highest.id ? team : highest),
+        userTeams[0]
+      );
+
+      //console.log("User latestTeam: ", latestTeam);
 
       // Make API request to join the league
       const response = await fetch(
@@ -132,7 +138,7 @@ export const leagueService = {
           },
           body: JSON.stringify({
             team: latestTeam,
-            league,
+            league: league,
             user_id: userId,
           }),
         }
@@ -159,8 +165,9 @@ export const leagueService = {
 
       console.log("LeagueId: ", leagueId);
 
+      //Update league number
       const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/12`,
+        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/13`,
         {
           method: "GET",
           headers: {
