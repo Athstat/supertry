@@ -45,14 +45,14 @@ export function LeagueScreen() {
       try {
         setIsLoading(true);
 
-        console.log("leagueFromState", leagueFromState);
+        //console.log("leagueFromState", leagueFromState);
 
         // Fetch participating teams
         const participatingTeams = await leagueService.fetchParticipatingTeams(
           leagueFromState.id
         );
 
-        console.log("participatingTeams", participatingTeams);
+        //console.log("participatingTeams", participatingTeams);
 
         if (participatingTeams && participatingTeams.length > 0) {
           // Sort teams by score in descending order
@@ -77,7 +77,7 @@ export function LeagueScreen() {
             participatingTeams
           );
 
-          console.log("currentUserTeamId", currentUserTeamId);
+          //console.log("currentUserTeamId", currentUserTeamId);
 
           // Mark user's team and get user's rank
           let userRank = 0;
@@ -90,22 +90,22 @@ export function LeagueScreen() {
             });
           }
 
-          console.log("mappedTeams", mappedTeams);
+          //console.log("mappedTeams", mappedTeams);
 
-          console.log("Current user team ID:", currentUserTeamId);
-          console.log(
-            "Teams with IDs:",
-            mappedTeams.map((team) => ({ id: team.id, name: team.teamName }))
-          );
+          //console.log("Current user team ID:", currentUserTeamId);
+          //console.log(
+          //  "Teams with IDs:",
+          //  mappedTeams.map((team) => ({ id: team.id, name: team.teamName }))
+          //);
           // Check if any team has isUserTeam set to true
-          console.log(
-            "User team found:",
-            mappedTeams.some((team) => team.isUserTeam)
-          );
+          //console.log(
+          //  "User team found:",
+          //  mappedTeams.some((team) => team.isUserTeam)
+          //);
 
           setTeams(mappedTeams);
 
-          console.log("leagueFromState", leagueFromState);
+          //console.log("leagueFromState", leagueFromState);
 
           setLeagueInfo({
             name: leagueFromState.title || "League",
@@ -163,7 +163,7 @@ export function LeagueScreen() {
         (team) => team.kc_id === userId
       );
 
-      console.log("teamInLeague", teamInLeague);
+      //console.log("teamInLeague", teamInLeague);
 
       if (teamInLeague) {
         // Return team_id instead of id to match what's used in mappedTeams

@@ -26,6 +26,7 @@ export function TeamAthletesModal({
   onClose,
   isLoading = false,
 }: TeamAthletesModalProps) {
+  console.log("athletes", athletes);
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md max-h-[80vh] flex flex-col">
@@ -85,7 +86,7 @@ export function TeamAthletesModal({
                       {/* Athlete Info */}
                       <div className="flex-1">
                         <div className="font-medium dark:text-white">
-                          {athlete.name || "Unknown Athlete"}
+                          {athlete.player_name}
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
                           {athlete.position
@@ -103,7 +104,7 @@ export function TeamAthletesModal({
                       {/* Athlete Stats */}
                       <div className="flex flex-col items-end">
                         <div className="font-semibold text-green-600 dark:text-green-400">
-                          {athlete.score || 0} pts
+                          -
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
                           PR: {athlete.power_rank_rating || 0}
