@@ -40,6 +40,103 @@ export const leagueService = {
     }
   },
 
+  /**
+   * Fetch a league by its ID
+   */
+  getLeagueById: async (leagueId: number): Promise<IFantasyLeague | null> => {
+    try {
+      const baseUrl = import.meta.env.PROD
+        ? "https://qa-games-app.athstat-next.com"
+        : "";
+
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error(
+          "Authentication token is missing. Please log in again."
+        );
+      }
+
+      const response = await fetch(
+        `${baseUrl}/api/v1/fantasy-leagues/${leagueId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch league:", await response.text());
+        return null;
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching league by ID:", error);
+      return null;
+    }
+  },
+
+  /**
+   * Check if the current user has joined a specific league
+   */
+  checkUserLeagueStatus: async (leagueId: string): Promise<boolean> => {
+    try {
+      // Get user teams for the specified league
+      const userTeams = await teamService.fetchUserTeams(leagueId);
+
+      // If the user has any teams in this league, they've joined it
+      return userTeams.length > 0;
+    } catch (error) {
+      console.error("Error checking user league status:", error);
+      return false;
+    }
+  },
+
+  /**
+   * Fetch participating teams for a league
+   */
+  fetchParticipatingTeams: async (leagueId: string): Promise<any[]> => {
+    try {
+      const baseUrl = import.meta.env.PROD
+        ? "https://qa-games-app.athstat-next.com"
+        : "";
+
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error(
+          "Authentication token is missing. Please log in again."
+        );
+      }
+
+      const response = await fetch(
+        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error(
+          "Failed to fetch participating teams:",
+          await response.text()
+        );
+        return [];
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching participating teams:", error);
+      return [];
+    }
+  },
+
   getLeagueConfig: async (
     officialLeagueId: string
   ): Promise<IGamesLeagueConfig | null> => {
@@ -159,7 +256,7 @@ export const leagueService = {
     }
   },
 
-  fetchParticipatingTeams: async (leagueId: string): Promise<any[]> => {
+  fetchParticipatingTeams: async (leagueId: number): Promise<any[]> => {
     try {
       const baseUrl = "https://qa-games-app.athstat-next.com";
 
@@ -167,7 +264,7 @@ export const leagueService = {
 
       //Update league number
       const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/13`,
+        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`,
         {
           method: "GET",
           headers: {

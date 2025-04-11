@@ -8,10 +8,11 @@ import { ChatFeed } from "../components/league/chat/ChatFeed";
 import { TeamStats, Fixture, LeagueInfo } from "../types/league";
 import { ChatMessage, ChatUser } from "../types/chat";
 import { ChevronLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { teamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
+import { IFantasyLeague } from "../types/fantasyLeague";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -33,6 +34,8 @@ export function LeagueScreen() {
 
   // Get the league ID from URL params
   const { leagueId } = useParams<{ leagueId: string }>();
+  const location = useLocation();
+  const leagueFromState = location.state?.league;
 
   // Fetch participating teams when component mounts
   useEffect(() => {
@@ -42,11 +45,11 @@ export function LeagueScreen() {
       try {
         setIsLoading(true);
 
-        console.log("leagueId", leagueId);
+        console.log("leagueFromState", leagueFromState);
 
         // Fetch participating teams
         const participatingTeams = await leagueService.fetchParticipatingTeams(
-          leagueId
+          leagueFromState.id
         );
 
         console.log("participatingTeams", participatingTeams);
@@ -54,7 +57,7 @@ export function LeagueScreen() {
         if (participatingTeams && participatingTeams.length > 0) {
           // Sort teams by score in descending order
           const sortedTeams = participatingTeams.sort(
-            (a, b) => b.score - a.score
+            (a, b) => b.overall_score - a.overall_score
           );
 
           // Map to TeamStats format
@@ -64,13 +67,17 @@ export function LeagueScreen() {
             teamName: team.name || `Team ${index + 1}`,
             managerName: team.first_name + " " + team.last_name,
             totalPoints: team.overall_score || 0,
-            weeklyPoints: team.score || 0,
+            weeklyPoints: team.overall_score || 0,
             lastRank: team.last_rank || index + 1,
             isUserTeam: false, // Will be set below if it matches
           }));
 
           // Get current user's team ID
-          const currentUserTeamId = await getCurrentUserTeamId(leagueId);
+          const currentUserTeamId = await getCurrentUserTeamId(
+            participatingTeams
+          );
+
+          console.log("currentUserTeamId", currentUserTeamId);
 
           // Mark user's team and get user's rank
           let userRank = 0;
@@ -83,18 +90,30 @@ export function LeagueScreen() {
             });
           }
 
+          console.log("mappedTeams", mappedTeams);
+
+          console.log("Current user team ID:", currentUserTeamId);
+          console.log(
+            "Teams with IDs:",
+            mappedTeams.map((team) => ({ id: team.id, name: team.teamName }))
+          );
+          // Check if any team has isUserTeam set to true
+          console.log(
+            "User team found:",
+            mappedTeams.some((team) => team.isUserTeam)
+          );
+
           setTeams(mappedTeams);
 
-          // Update league info
-          const leagueDetails = participatingTeams[0]?.league || {};
-          console.log("leagueDetails", leagueDetails);
+          console.log("leagueFromState", leagueFromState);
+
           setLeagueInfo({
-            name: leagueDetails.title || "League",
-            type: leagueDetails.is_private ? "Private" : "Public",
-            currentGameweek: leagueDetails.current_gameweek || 0,
-            totalGameweeks: leagueDetails.total_gameweeks || 0,
+            name: leagueFromState.title || "League",
+            type: leagueFromState.is_private ? "Private" : "Public",
+            currentGameweek: leagueFromState.current_gameweek || 0,
+            totalGameweeks: leagueFromState.total_gameweeks || 0,
             totalTeams: mappedTeams.length,
-            prizePool: formatPrizePool(leagueDetails),
+            prizePool: formatPrizePool(leagueFromState),
             userRank: userRank || 0,
           });
         }
@@ -109,12 +128,14 @@ export function LeagueScreen() {
     };
 
     fetchLeagueData();
-  }, [leagueId]);
+  }, [leagueId, leagueFromState]);
 
   // Helper function to get current user's team ID
   const getCurrentUserTeamId = async (
-    leagueId: string
+    participatingTeams: any[]
   ): Promise<string | null> => {
+    if (!participatingTeams) return null;
+
     try {
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -137,16 +158,16 @@ export function LeagueScreen() {
         return null;
       }
 
-      // Fetch user teams from the teamService
-      const userTeams = await teamService.fetchUserTeams(leagueId);
-
       // Find the team that belongs to this league
-      const teamInLeague = userTeams.find(
-        (team) => team.league_id === leagueId
+      const teamInLeague = participatingTeams.find(
+        (team) => team.kc_id === userId
       );
 
+      console.log("teamInLeague", teamInLeague);
+
       if (teamInLeague) {
-        return teamInLeague.id;
+        // Return team_id instead of id to match what's used in mappedTeams
+        return teamInLeague.team_id;
       }
 
       return null;

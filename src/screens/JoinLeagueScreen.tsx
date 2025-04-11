@@ -136,17 +136,14 @@ export function JoinLeagueScreen() {
     const fetchUserTeams = async () => {
       try {
         setIsLoadingUserTeams(true);
-        const userTeams = await teamService.fetchUserTeams();
+        const userTeams = await teamService.fetchUserTeams("");
         console.log("userTeams", userTeams);
 
         // Extract league IDs from user teams
         const joinedLeagueIds = new Set<string>();
         userTeams.forEach((team) => {
-          if (team.official_league_id) {
-            joinedLeagueIds.add(team.official_league_id);
-          }
-          if (team.official_league_id) {
-            joinedLeagueIds.add(team.official_league_id);
+          if (team.league_id) {
+            joinedLeagueIds.add(team.league_id);
           }
         });
 
