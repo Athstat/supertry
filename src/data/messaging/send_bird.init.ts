@@ -1,15 +1,19 @@
 import SendBird from "sendbird";
 import { ThrowablePromise } from "../../services/errors";
+import { AuthUser } from "../../types/auth";
 
-const SEND_BIRD_APP_ID = process.env.REACT_APP_SENDBIRD_APP_ID || "437A36CF-633F-4200-A54C-39DAB06F3C7F";
+
+const SEND_BIRD_APP_ID = import.meta.env.VITE_SEND_BIRD_APP_ID ?? "";
 
 const sb = new SendBird({
     appId: SEND_BIRD_APP_ID
 });
 
-export async function connectUserToSendBird(userId: string) : ThrowablePromise<SendBird.SendBirdInstance> {
+export async function connectUserToSendBird(user: AuthUser) : ThrowablePromise<SendBird.SendBirdInstance> {
     try {
-        await sb.connect(userId);
+        await sb.connect(user.id);
+        sb.updateCurrentUserInfo(user.firstName + " " + user.lastName, "");
+
         return { data: sb };
     } catch (error) {
         return {error: { message: "Failed to connect" } };

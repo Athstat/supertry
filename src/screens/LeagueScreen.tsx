@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
-import { FixturesList } from "../components/league/FixturesList";
-import { LeagueInsights } from "../components/league/LeagueInsights";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { ChatFeed } from "../components/league/chat/ChatFeed";
-import { TeamStats, Fixture, LeagueInfo } from "../types/league";
+import { TeamStats, Fixture, LeagueInfo, LeagueFromState } from "../types/league";
 import { ChatMessage, ChatUser } from "../types/chat";
-import { ChevronLeft } from "lucide-react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { teamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
-import { IFantasyLeague } from "../types/fantasyLeague";
+import LeagueOpenChat from "../components/leagues/LeagueOpenChat";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -384,13 +381,15 @@ export function LeagueScreen() {
               error={error}
               onTeamClick={handleTeamClick}
             />
-            <ChatFeed
+            {/* <ChatFeed
               messages={messages}
               currentUser={currentUser}
               onSendMessage={handleSendMessage}
               onDeleteMessage={handleDeleteMessage}
               onReactToMessage={handleReactToMessage}
-            /> 
+            />  */}
+
+            <LeagueOpenChat league={leagueFromState as LeagueFromState} />
           </div>
 
           {/* <div className="lg:col-span-5 space-y-6">

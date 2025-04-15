@@ -1,24 +1,21 @@
 import { ThrowablePromise } from "../../services/errors";
 
-export async function createOrGetChannel(channelUrl: string, channelName: string , sb: SendBird.SendBirdInstance) : ThrowablePromise<SendBird.OpenChannel> {
+export async function createOrGetChannel(channelUrl: string, channelName: string , sb: SendBird.SendBirdInstance) : ThrowablePromise<SendBird.GroupChannel> {
     
     try {
 
-        const exisitingChannel = await sb.OpenChannel.getChannel(channelUrl);
+        const exisitingChannel = await sb.GroupChannel.getChannel(channelUrl);
         
         if (exisitingChannel) {
             return { data: exisitingChannel };
         }
         
-        const createChannelParams = new sb.OpenChannelParams();
+        const createChannelParams = new sb.GroupChannelParams();
         createChannelParams.channelUrl = channelUrl;
         createChannelParams.name = channelName;
-        createChannelParams.coverUrlOrImage = "";
-        createChannelParams.data = "";
-        createChannelParams.customType = "";
-        createChannelParams.operatorUserIds = [];
+        createChannelParams.operatorUserIds = ["1"];
         
-        const newChannel = await sb.OpenChannel.createChannel(createChannelParams);
+        const newChannel = await sb.GroupChannel.createChannel(createChannelParams);
         
         return {data: newChannel};
     } catch (error) {
@@ -27,4 +24,4 @@ export async function createOrGetChannel(channelUrl: string, channelName: string
         return {error: { message: "Failed to connect to channel" }};
 
     }
-}
+} 
