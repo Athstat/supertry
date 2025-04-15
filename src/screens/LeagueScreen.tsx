@@ -9,7 +9,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { teamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
-import LeagueOpenChat from "../components/leagues/LeagueOpenChat";
+import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -389,7 +389,7 @@ export function LeagueScreen() {
               onReactToMessage={handleReactToMessage}
             />  */}
 
-            <LeagueOpenChat league={leagueFromState as LeagueFromState} />
+            <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
           </div>
 
           {/* <div className="lg:col-span-5 space-y-6">

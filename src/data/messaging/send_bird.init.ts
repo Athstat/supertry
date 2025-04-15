@@ -3,7 +3,7 @@ import { ThrowablePromise } from "../../services/errors";
 import { AuthUser } from "../../types/auth";
 
 
-const SEND_BIRD_APP_ID = import.meta.env.VITE_SEND_BIRD_APP_ID ?? "";
+export const SEND_BIRD_APP_ID = import.meta.env.VITE_SEND_BIRD_APP_ID ?? "";
 
 const sb = new SendBird({
     appId: SEND_BIRD_APP_ID

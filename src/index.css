@@ -7,6 +7,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -15,4 +16,219 @@
 
 .animate-fade-scale-up {
   animation: fade-scale-up 0.3s ease-out forwards;
+}
+
+/* Enhanced SendBird UI Styles */
+.sendbird-channel {
+  background-color: #111827 !important;
+  color: #ffffff;
+  min-height: 100%;
+  background-image: linear-gradient(to bottom, #111827, #1f2937);
+}
+
+/* Message List Container */
+.sendbird-message-list {
+  padding: 20px;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Message Card Wrapper */
+.sendbird-message {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sendbird-message:hover {
+  transform: translateY(-1px);
+}
+
+/* Received Message Card */
+.sendbird-message--incoming .sendbird-message__bubble {
+  background-color: #1f2937 !important;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin: 4px 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  max-width: 80%;
+  position: relative;
+  border-left: 4px solid #4b5563;
+}
+
+/* Sent Message Card */
+.sendbird-message--outgoing .sendbird-message__bubble {
+  background-color: #1d4ed8 !important;
+  background-image: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin: 4px 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  max-width: 80%;
+  position: relative;
+  border-right: 4px solid #60a5fa;
+}
+
+/* Message Text */
+.sendbird-message__text {
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  letter-spacing: 0.015em;
+}
+
+/* Username/Nickname */
+.sendbird-message__author {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: capitalize;
+}
+
+/* Timestamp */
+.sendbird-message__time {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  opacity: 0.9;
+}
+
+/* Reactions Container */
+.sendbird-message__reactions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+/* Individual Reaction */
+.sendbird-message-reaction {
+  background-color: #374151;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid #4b5563;
+}
+
+.sendbird-message-reaction:hover {
+  background-color: #4b5563;
+  transform: scale(1.05);
+}
+
+.sendbird-message-reaction--selected {
+  background-color: #3b82f6;
+  border-color: #60a5fa;
+}
+
+/* Reaction Count */
+.sendbird-message-reaction__count {
+  color: #e5e7eb;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Reaction Emoji */
+.sendbird-message-reaction__emoji {
+  font-size: 1.1rem;
+}
+
+/* Message Input Area */
+.sendbird-message-input {
+  background-color: #1f2937 !important;
+  border-top: 1px solid #374151;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.sendbird-message-input__textarea {
+  background-color: #374151 !important;
+  color: #ffffff;
+  border: none !important;
+  border-radius: 24px !important;
+  padding: 14px 20px !important;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sendbird-message-input__textarea:focus {
+  background-color: #4b5563 !important;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5) !important;
+  outline: none;
+}
+
+/* Send Button */
+.sendbird-message-input__send-button {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border: none;
+  border-radius: 50% !important;
+  width: 44px !important;
+  height: 44px !important;
+  padding: 10px !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sendbird-message-input__send-button:hover {
+  background-color: #2563eb !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* File Upload Button */
+.sendbird-message-input__upload-button {
+  background-color: #374151 !important;
+  border-radius: 50%;
+  padding: 8px;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.sendbird-message-input__upload-button:hover {
+  background-color: #4b5563 !important;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Typing Indicator */
+.sendbird-typing-indicator {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  padding: 8px 20px;
+  background-color: rgba(31, 41, 55, 0.8);
+  border-radius: 20px;
+  margin: 8px 16px;
+  backdrop-filter: blur(4px);
+}
+
+/* Message Status */
+.sendbird-message__status {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* System Messages */
+.sendbird-message--admin {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 20px 0;
+  padding: 8px 16px;
+  background-color: rgba(31, 41, 55, 0.6);
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
 }

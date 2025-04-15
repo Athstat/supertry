@@ -2,15 +2,18 @@ import { useEffect, useState } from 'react';
 import { getLeagueChatChannelUrl, getLeagueChatName } from '../../data/messaging/messaging.utils'
 import { AsyncError } from '../../services/errors';
 import { LeagueFromState } from '../../types/league'
-import { connectUserToSendBird } from '../../data/messaging/send_bird.init';
+import { connectUserToSendBird, SEND_BIRD_APP_ID } from '../../data/messaging/send_bird.init';
 import { authService } from '../../services/authService';
-import { createOrGetChannel } from '../../data/messaging/open_channel.send_bird.init';
+import { createOrGetChannel as createOrGetGroupChannel } from '../../data/messaging/open_channel.send_bird.init';
+import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
+import GroupChannel from '@sendbird/uikit-react/GroupChannel';
+import GroupChatFeed from '../messaging/GroupChatFeed';
 
 type Props = {
     league: LeagueFromState
 }
 
-export default function LeagueOpenChat({league} : Props) {
+export default function LeagueGroupChatFeed({league} : Props) {
 
     const authUser = authService.getUserInfo();
     if (authUser === null) return <></>;
@@ -31,7 +34,7 @@ export default function LeagueOpenChat({league} : Props) {
             if (sb) {
                 setSbInstance(sb);
                 const channelName = getLeagueChatName(league);
-                const {data: channel, error: channelError} = await createOrGetChannel(channelUrl, channelName , sb);
+                const {data: channel, error: channelError} = await createOrGetGroupChannel(channelUrl, channelName , sb);
 
                 if (channel) setChannel(channel);
                 if (channelError) setError(channelError);
@@ -55,7 +58,11 @@ export default function LeagueOpenChat({league} : Props) {
         <h2 className='text-slate-400' >{league.title}</h2>
 
         {error && <p className='text-red-500' >{error.message}</p>}
-        {channel && <p className='text-green-500' >Connected to channel: {channel.name}</p>}
+        {channel && sbInstance &&
+            <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
+                <GroupChatFeed sb={sbInstance} channel={channel} />
+            </SendbirdProvider>
+        }
     </div>
   )
 }
