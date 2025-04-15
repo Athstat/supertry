@@ -384,13 +384,13 @@ export function LeagueScreen() {
               error={error}
               onTeamClick={handleTeamClick}
             />
-            {/* <ChatFeed
+            <ChatFeed
               messages={messages}
               currentUser={currentUser}
               onSendMessage={handleSendMessage}
               onDeleteMessage={handleDeleteMessage}
               onReactToMessage={handleReactToMessage}
-            /> */}
+            /> 
           </div>
 
           {/* <div className="lg:col-span-5 space-y-6">
