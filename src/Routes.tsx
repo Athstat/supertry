@@ -17,6 +17,7 @@ import { PlayerProfileScreen } from "./screens/PlayerProfileScreen";
 import { useAuth } from "./contexts/AuthContext";
 import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
+import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -199,6 +200,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <PlayerProfileScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/sbr"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <SchoolBoyRugbyScreen />
             </Layout>
           </ProtectedRoute>
         }
