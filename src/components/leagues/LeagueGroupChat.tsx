@@ -4,7 +4,7 @@ import { AsyncError } from '../../services/errors';
 import { LeagueFromState } from '../../types/league'
 import { connectUserToSendBird, SEND_BIRD_APP_ID } from '../../data/messaging/send_bird.init';
 import { authService } from '../../services/authService';
-import { createOrGetChannel as createOrGetGroupChannel } from '../../data/messaging/open_channel.send_bird.init';
+import { createOrGetGroupChannel as createOrGetGroupChannel } from '../../data/messaging/group_channel.send_bird.init';
 import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
 import GroupChannel from '@sendbird/uikit-react/GroupChannel';
 

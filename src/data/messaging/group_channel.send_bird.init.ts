@@ -1,7 +1,7 @@
 import SendBird from "sendbird";
 import { ThrowablePromise } from "../../services/errors";
 
-export async function createOrGetChannel(channelUrl: string, channelName: string , sb: SendBird.SendBirdInstance) : ThrowablePromise<SendBird.GroupChannel> {
+export async function createOrGetGroupChannel(channelUrl: string, channelName: string , sb: SendBird.SendBirdInstance) : ThrowablePromise<SendBird.GroupChannel> {
     
     try {
 
