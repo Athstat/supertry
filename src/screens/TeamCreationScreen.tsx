@@ -304,14 +304,14 @@ export function TeamCreationScreen() {
               position={selectedPosition}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
-              onClose={() => setShowPlayerList(false)}
+              onClose={() => {
+                setShowPlayerList(false);
+                // Only reset search query when closing the modal
+                setSearchQuery("");
+              }}
               onSelectPlayer={(player) => {
-                handlePlayerSelectWithFeedback(player);
-                // Hide player list but keep it mounted when showing details
-                setPlayerListVisible(false);
-                // Open the player details modal
+                handlePlayerSelect(player);
                 setShowPlayerModal(true);
-                setSelectedPlayerForModal(player);
               }}
               players={getPlayersByUIPosition(
                 allPlayers,

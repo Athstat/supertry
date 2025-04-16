@@ -15,6 +15,19 @@ interface PlayerListModalProps {
   onSelectPlayer: (player: Player) => void;
   players?: RugbyPlayer[]; // Add this prop to accept players from parent
   selectedPlayers: Record<string, Player>; // New prop to accept selected players
+  // Making all sort/filter props optional
+  sortField?: string;
+  setSortField?: (field: string) => void;
+  sortDirection?: string;
+  setSortDirection?: (direction: string) => void;
+  positionFilter?: string;
+  setPositionFilter?: (position: string) => void;
+  teamFilter?: string;
+  setTeamFilter?: (team: string) => void;
+  showFilters?: boolean;
+  setShowFilters?: (show: boolean) => void;
+  showSort?: boolean;
+  setShowSort?: (show: boolean) => void;
 }
 
 export function PlayerListModal({
@@ -25,16 +38,47 @@ export function PlayerListModal({
   onSelectPlayer,
   players = [], // Default to empty array
   selectedPlayers, // Accept selected players
+  // All props now optional with defaults
+  sortField: externalSortField,
+  setSortField: externalSetSortField,
+  sortDirection: externalSortDirection,
+  setSortDirection: externalSetSortDirection,
+  positionFilter: externalPositionFilter,
+  setPositionFilter: externalSetPositionFilter,
+  teamFilter: externalTeamFilter,
+  setTeamFilter: externalSetTeamFilter,
+  showFilters: externalShowFilters,
+  setShowFilters: externalSetShowFilters,
+  showSort: externalShowSort,
+  setShowSort: externalSetShowSort,
 }: PlayerListModalProps) {
+  // Local state for when external state is not provided
+  const [localSortField, setLocalSortField] =
+    useState<string>("power_rank_rating");
+  const [localSortDirection, setLocalSortDirection] =
+    useState<SortDirection>("desc");
+  const [localPositionFilter, setLocalPositionFilter] = useState<string>("");
+  const [localTeamFilter, setLocalTeamFilter] = useState<string>("");
+  const [localShowFilters, setLocalShowFilters] = useState<boolean>(false);
+  const [localShowSort, setLocalShowSort] = useState<boolean>(false);
+
+  // Use external state if available, otherwise use local state
+  const sortField = externalSortField ?? localSortField;
+  const setSortField = externalSetSortField ?? setLocalSortField;
+  const sortDirection = externalSortDirection ?? localSortDirection;
+  const setSortDirection = externalSetSortDirection ?? setLocalSortDirection;
+  const positionFilter = externalPositionFilter ?? localPositionFilter;
+  const setPositionFilter = externalSetPositionFilter ?? setLocalPositionFilter;
+  const teamFilter = externalTeamFilter ?? localTeamFilter;
+  const setTeamFilter = externalSetTeamFilter ?? setLocalTeamFilter;
+  const showFilters = externalShowFilters ?? localShowFilters;
+  const setShowFilters = externalSetShowFilters ?? setLocalShowFilters;
+  const showSort = externalShowSort ?? localShowSort;
+  const setShowSort = externalSetShowSort ?? setLocalShowSort;
+
   const [filteredPlayers, setFilteredPlayers] = useState<RugbyPlayer[]>([]);
-  const [sortField, setSortField] = useState<SortField>("power_rank_rating");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const [positionFilter, setPositionFilter] = useState<string>("");
-  const [teamFilter, setTeamFilter] = useState<string>("");
   const [availablePositions, setAvailablePositions] = useState<string[]>([]);
   const [availableTeams, setAvailableTeams] = useState<string[]>([]);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showSort, setShowSort] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
 
   // Extract unique positions and teams for filters
@@ -216,12 +260,12 @@ export function PlayerListModal({
 
   // Handle position filter change
   const handlePositionFilter = (position: string) => {
-    setPositionFilter(position === positionFilter ? "" : position);
+    setPositionFilter(positionFilter === position ? "" : position);
   };
 
   // Handle team filter change
   const handleTeamFilter = (team: string) => {
-    setTeamFilter(team === teamFilter ? "" : team);
+    setTeamFilter(teamFilter === team ? "" : team);
   };
 
   // Clear all filters
@@ -231,10 +275,12 @@ export function PlayerListModal({
   };
 
   // Toggle sort direction or change sort field
-  const handleSort = (field: SortField) => {
+  const handleSort = (field: string) => {
     if (sortField === field) {
+      // Toggle direction if clicking the same field
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
+      // Set new field and default to descending
       setSortField(field);
       setSortDirection("desc");
     }
