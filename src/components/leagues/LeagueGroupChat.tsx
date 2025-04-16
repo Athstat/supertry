@@ -6,13 +6,15 @@ import { connectUserToSendBird, SEND_BIRD_APP_ID } from '../../data/messaging/se
 import { authService } from '../../services/authService';
 import { createOrGetChannel as createOrGetGroupChannel } from '../../data/messaging/open_channel.send_bird.init';
 import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
-import GroupChatFeed from '../messaging/GroupChatFeed';
+import GroupChannel from '@sendbird/uikit-react/GroupChannel';
+
+import "@sendbird/uikit-react/dist/index.css";
 
 type Props = {
     league: LeagueFromState
 }
 
-export default function LeagueGroupChatFeed({league} : Props) {
+export default function LeagueGroupChatFeed({ league }: Props) {
 
     const authUser = authService.getUserInfo();
     if (authUser === null) return <></>;
@@ -22,18 +24,18 @@ export default function LeagueGroupChatFeed({league} : Props) {
     const [channel, setChannel] = useState<SendBird.GroupChannel>();
     const [error, setError] = useState<AsyncError>();
 
-    
+
     useEffect(() => {
         const init = async () => {
             if (!authUser) return;
 
-            const {data: sb, error: sbError} = await connectUserToSendBird(authUser);
+            const { data: sb, error: sbError } = await connectUserToSendBird(authUser);
             if (!sb) setError(sbError);
-            
+
             if (sb) {
                 setSbInstance(sb);
                 const channelName = getLeagueChatName(league);
-                const {data: channel, error: channelError} = await createOrGetGroupChannel(channelUrl, channelName , sb);
+                const { data: channel, error: channelError } = await createOrGetGroupChannel(channelUrl, channelName, sb);
 
                 if (channel) setChannel(channel);
                 if (channelError) setError(channelError);
@@ -51,19 +53,22 @@ export default function LeagueGroupChatFeed({league} : Props) {
 
     }, [channelUrl]);
 
-  return (
-    <div className='league-group-chat-container'>
-        <div className='text-white bg-slate-800/50 p-5 rounded-xl' >
-            <h1 className='text-2xl font-bold' >League Chat Room</h1>
-            <h2 className='text-slate-400' >{league.title}</h2>
+    return (
+        <div className=''>
+            <div className='text-white bg-slate-800/60 p-5 rounded-xl' >
+                <h1 className='text-2xl font-bold' >League Chat Room</h1>
+                <h2 className='text-slate-400' >{league.title}</h2>
 
-            {error && <p className='text-red-500' >{error.message}</p>}
-            {channel && sbInstance &&
-                <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
-                    <GroupChatFeed sb={sbInstance} channel={channel} />
-                </SendbirdProvider>
-            }
+                {error && <p className='text-red-500' >{error.message}</p>}
+                {channel && sbInstance &&
+                <div className='h-[600px]' >    
+                    <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
+                        <GroupChannel   channelUrl={channel.url} >
+                        </GroupChannel>
+                    </SendbirdProvider>
+                </div>
+                }
+            </div>
         </div>
-    </div>
-  )
+    )
 }

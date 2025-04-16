@@ -1,4 +1,5 @@
 import GroupChannel from '@sendbird/uikit-react/GroupChannel';
+import "@sendbird/uikit-react/dist/index.css";
 
 type Props = {
     sb: SendBird.SendBirdInstance;
