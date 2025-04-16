@@ -14,6 +14,8 @@ import {
   TrendingUp,
   Crosshair,
   Dumbbell,
+  Coins,
+  ArrowLeft,
 } from "lucide-react";
 import { Player } from "../../types/player";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,12 +25,14 @@ type StatTab = "overview" | "attack" | "defense" | "kicking" | "discipline";
 interface PlayerDetailsModalProps {
   player: Player;
   onClose: () => void;
+  onBack?: () => void;
   onAdd: (player: Player) => void;
 }
 
 export function PlayerDetailsModal({
   player,
   onClose,
+  onBack,
   onAdd,
 }: PlayerDetailsModalProps) {
   const [activeTab, setActiveTab] = useState<StatTab>("overview");
@@ -79,7 +83,16 @@ export function PlayerDetailsModal({
         {/* Header */}
         <div className="bg-gradient-to-br from-primary-600 to-primary-700 text-white p-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-bold">Player Details</h2>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={onBack || onClose}
+                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                aria-label="Back to player list"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <h2 className="text-xl font-bold">Player Details</h2>
+            </div>
             <button
               onClick={onClose}
               className="p-2 hover:bg-white/10 rounded-full transition-colors"
@@ -115,7 +128,7 @@ export function PlayerDetailsModal({
               </div>
               <div className="mt-1">
                 <span className="font-semibold text-white">
-                  {player.points} points
+                  {player.price} <Coins size={14} className="inline-block" />
                 </span>
               </div>
             </div>

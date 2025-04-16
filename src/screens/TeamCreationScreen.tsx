@@ -68,7 +68,7 @@ export function TeamCreationScreen() {
     isVisible: false,
   });
 
-  // Get team creation state and methods from custom hook
+  // The useTeamCreation hook should be called after we have the leagueConfig
   const {
     selectedPlayers,
     isFavorite,
@@ -80,22 +80,76 @@ export function TeamCreationScreen() {
     setShowPlayerList,
     showPlayerModal,
     setShowPlayerModal,
-    selectedPlayerForModal,
+    handlePositionClick,
+    handleAddPlayer,
+    handlePlayerSelect,
+    handleRemovePlayer,
+    handleReset,
     searchQuery,
     setSearchQuery,
     currentBudget,
-    handlePositionClick,
-    handlePlayerSelect,
-    handleAddPlayer,
-    handleRemovePlayer,
-    handleReset,
-    handleAutoGenerate,
-    setAvailablePlayers,
-  } = useTeamCreation(
-    leagueConfig?.team_budget || 1000,
-    handleComplete,
-    allPlayers
-  );
+    selectedPlayerForModal,
+    setSelectedPlayerForModal,
+    setSelectedPosition,
+  } = useTeamCreation(leagueConfig?.team_budget || 1000, allPlayers);
+
+  // When viewing player details, keep player list modal mounted but hidden
+  const [playerListVisible, setPlayerListVisible] = useState(true);
+
+  // Function to show toast message
+  const showToast = (message: string, type: "success" | "error" | "info") => {
+    setToast({
+      message,
+      type,
+      isVisible: true,
+    });
+  };
+
+  // Function to hide toast message
+  const hideToast = () => {
+    setToast((prev) => ({
+      ...prev,
+      isVisible: false,
+    }));
+  };
+
+  // Function to handle the review button click
+  const handleReview = () => {
+    if (teamName.trim() === "") {
+      showToast("Please enter a team name", "error");
+      return;
+    }
+    if (Object.keys(selectedPlayers).length !== 5) {
+      showToast("Please select all 5 players", "error");
+      return;
+    }
+    if (currentBudget < 0) {
+      showToast("You have exceeded the budget", "error");
+      return;
+    }
+
+    // Show the review modal
+    setShowReviewModal(true);
+  };
+
+  // Function to handle auto-generate button click
+  const handleAutoGenerateClick = () => {
+    showToast("Feature coming soon", "info");
+  };
+
+  // Function to handle player selection with animation feedback
+  const handlePlayerSelectWithFeedback = (player: Player) => {
+    handlePlayerSelect(player);
+  };
+
+  // Function to handle player addition with animation feedback
+  const handleAddPlayerWithFeedback = (player: Player) => {
+    handleAddPlayer(player);
+    // Only close the details modal, player list should remain open
+    setShowPlayerModal(false);
+    // Make player list visible again when returning from details
+    setPlayerListVisible(true);
+  };
 
   // Fetch players from API
   useEffect(() => {
@@ -164,87 +218,6 @@ export function TeamCreationScreen() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Update available players when allPlayers changes
-  useEffect(() => {
-    if (allPlayers.length > 0) {
-      setAvailablePlayers(allPlayers);
-    }
-  }, [allPlayers, setAvailablePlayers]);
-
-  // Function to handle team completion
-  async function handleComplete(
-    players: Record<string, Player>,
-    teamName: string,
-    isFavorite: boolean
-  ) {
-    try {
-      // Navigate on success
-      navigate("/my-teams", {
-        state: {
-          teamCreated: true,
-          teamName,
-          players,
-          isFavorite,
-        },
-      });
-    } catch (error) {
-      console.error("Failed to save team:", error);
-    }
-  }
-
-  // Function to show toast
-  const showToast = (message: string, type: "success" | "error" | "info") => {
-    setToast({
-      message,
-      type,
-      isVisible: true,
-    });
-  };
-
-  // Function to hide toast
-  const hideToast = () => {
-    setToast((prev) => ({
-      ...prev,
-      isVisible: false,
-    }));
-  };
-
-  // Function to handle the review button click
-  const handleReview = () => {
-    if (teamName.trim() === "") {
-      showToast("Please enter a team name", "error");
-      return;
-    }
-    if (Object.keys(selectedPlayers).length !== 5) {
-      showToast("Please select all 5 players", "error");
-      return;
-    }
-    if (currentBudget < 0) {
-      showToast("You have exceeded the budget", "error");
-      return;
-    }
-
-    // Show the review modal
-    setShowReviewModal(true);
-  };
-
-  // Function to handle auto-generate button click
-  const handleAutoGenerateClick = () => {
-    showToast("Feature coming soon", "info");
-  };
-
-  // Function to handle player selection with animation feedback
-  const handlePlayerSelectWithFeedback = (player: Player) => {
-    handlePlayerSelect(player);
-  };
-
-  // Function to handle player addition with animation feedback
-  const handleAddPlayerWithFeedback = (player: Player) => {
-    handleAddPlayer(player);
-    // Only close the details modal, player list should remain open
-    setShowPlayerModal(false);
-  };
-
   // Show loading state while fetching initial data
   if (isLoading || loadingPlayers) {
     return <LoadingState />;
@@ -256,47 +229,31 @@ export function TeamCreationScreen() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4">
-      {/* Always render the header but control visibility with CSS */}
-      <div className={`${isScrolled ? "block" : "hidden"}`}>
-        <StickyHeader
-          selectedCount={Object.keys(selectedPlayers).length}
-          totalCount={5}
-          budget={currentBudget}
-          isNegativeBudget={currentBudget < 0}
-        />
-      </div>
-
-      <div className="container mx-auto px-4 max-w-[1024px]">
-        {/* Header Section */}
-        <TeamCreationHeader title={league?.title || "Create Your Team"} />
-
-        {/* Coach's Tip */}
-        <AnimatePresence>
-          {showCoachTip && (
-            <CoachTip
-              message={coachTipMessage}
-              onDismiss={() => setShowCoachTip(false)}
-            />
-          )}
-        </AnimatePresence>
-
-        {/* Team Stats Card */}
-        <TeamStatCard
-          league={league}
-          leagueConfig={{
-            team_budget: leagueConfig?.team_budget || 1000,
-            team_size: leagueConfig?.team_size || 5,
-            lineup_size: leagueConfig?.lineup_size || 5,
-          }}
+    <main className="min-h-screen bg-gray-50 dark:bg-dark-850">
+      <div className="container mx-auto px-4 max-w-[1024px] pb-4">
+        {/* Updated Header with stats */}
+        <TeamCreationHeader
+          title={league?.title || "Create Your Team"}
           currentBudget={currentBudget}
+          totalBudget={leagueConfig?.team_budget || 1000}
           selectedPlayersCount={Object.keys(selectedPlayers).length}
           totalPositions={5}
-          onAutoGenerate={handleAutoGenerateClick}
         />
 
-        {/* Position Groups */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Move Coach's Tip below the sticky header with some margin */}
+        <div className="pt-4">
+          <AnimatePresence>
+            {showCoachTip && (
+              <CoachTip
+                message={coachTipMessage}
+                onDismiss={() => setShowCoachTip(false)}
+              />
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Position Groups - now start directly after coach tip */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 mt-6">
           {positionGroups.map((group) => (
             <motion.div
               key={group.name}
@@ -342,25 +299,48 @@ export function TeamCreationScreen() {
 
         {/* Modals */}
         {showPlayerList && selectedPosition && (
-          <PlayerListModal
-            position={selectedPosition}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            onClose={() => setShowPlayerList(false)}
-            onSelectPlayer={handlePlayerSelectWithFeedback}
-            players={getPlayersByUIPosition(
-              allPlayers,
-              selectedPosition.name,
-              selectedPlayers
-            )}
-            selectedPlayers={selectedPlayers}
-          />
+          <div style={{ display: playerListVisible ? "block" : "none" }}>
+            <PlayerListModal
+              position={selectedPosition}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onClose={() => setShowPlayerList(false)}
+              onSelectPlayer={(player) => {
+                handlePlayerSelectWithFeedback(player);
+                // Hide player list but keep it mounted when showing details
+                setPlayerListVisible(false);
+                // Open the player details modal
+                setShowPlayerModal(true);
+                setSelectedPlayerForModal(player);
+              }}
+              players={getPlayersByUIPosition(
+                allPlayers,
+                selectedPosition.name,
+                selectedPlayers
+              )}
+              selectedPlayers={selectedPlayers}
+            />
+          </div>
         )}
 
         {showPlayerModal && selectedPlayerForModal && (
           <PlayerDetailsModal
             player={selectedPlayerForModal}
-            onClose={() => setShowPlayerModal(false)}
+            onClose={() => {
+              // Close both modals when X is clicked
+              setShowPlayerModal(false);
+              setShowPlayerList(false);
+              // Reset visibility for next time
+              setPlayerListVisible(true);
+            }}
+            onBack={() => {
+              // Only close the details modal when back is clicked
+              setShowPlayerModal(false);
+              // Make the player list visible again
+              setPlayerListVisible(true);
+              // Ensure the player list modal stays mounted
+              setShowPlayerList(true);
+            }}
             onAdd={handleAddPlayerWithFeedback}
           />
         )}
