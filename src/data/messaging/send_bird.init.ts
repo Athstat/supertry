@@ -11,10 +11,15 @@ const sb = new SendBird({
 
 export async function connectUserToSendBird(user: AuthUser) : ThrowablePromise<SendBird.SendBirdInstance> {
     try {
-        await sb.connect(user.id);
-        sb.updateCurrentUserInfo(user.firstName + " " + user.lastName, "");
+        console.log("SendBird Connection State: ", sb.getConnectionState());
+
+        if (sb.getConnectionState() !== "OPEN") {   
+            await sb.connect(user.id);
+            sb.updateCurrentUserInfo(user.firstName + " " + user.lastName, "");
+        }
 
         return { data: sb };
+
     } catch (error) {
         console.log(error);
         return {error: { message: "Failed to connect" } };
