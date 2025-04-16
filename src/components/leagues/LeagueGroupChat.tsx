@@ -9,6 +9,8 @@ import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
 import GroupChannel from '@sendbird/uikit-react/GroupChannel';
 
 import "@sendbird/uikit-react/dist/index.css";
+import { useGroupChat } from '../../hooks/useGroupChat';
+import { SCHOOL_BOY_RUGBY_CHANNEL_NAME as channelName, SCHOOL_BOY_RUGBY_CHANNEL_URL as channelUrl } from '../../data/messaging/school_boy_ruby';
 
 type Props = {
     league: LeagueFromState
@@ -16,42 +18,14 @@ type Props = {
 
 export default function LeagueGroupChatFeed({ league }: Props) {
 
-    const authUser = authService.getUserInfo();
-    if (authUser === null) return <></>;
-
-    const channelUrl = getLeagueChatChannelUrl(league);
-    const [sbInstance, setSbInstance] = useState<SendBird.SendBirdInstance>();
-    const [channel, setChannel] = useState<SendBird.GroupChannel>();
-    const [error, setError] = useState<AsyncError>();
-
+    const {error, channel, sbInstance, authUser} = useGroupChat(getLeagueChatChannelUrl(league), getLeagueChatName(league));
+    const channelReady = channel && sbInstance && authUser;
 
     useEffect(() => {
-        const init = async () => {
-            if (!authUser) return;
-
-            const { data: sb, error: sbError } = await connectUserToSendBird(authUser);
-            if (!sb) setError(sbError);
-
-            if (sb) {
-                setSbInstance(sb);
-                const channelName = getLeagueChatName(league);
-                const { data: channel, error: channelError } = await createOrGetGroupChannel(channelUrl, channelName, sb);
-
-                if (channel) setChannel(channel);
-                if (channelError) setError(channelError);
-            }
-        }
-
-        init();
-
         return () => {
-
-            if (sbInstance) {
-                sbInstance.disconnect();
-            }
+            if (sbInstance) sbInstance.disconnect();
         }
-
-    }, [channelUrl]);
+    }, []);
 
     return (
         <div className='' >
@@ -59,7 +33,8 @@ export default function LeagueGroupChatFeed({ league }: Props) {
             <h2 className='text-slate-400' >{league.title}</h2>
 
             {error && <p className='text-red-500' >{error.message}</p>}
-            {channel && sbInstance &&
+
+            {channelReady &&
                 <div className='h-[600px]' >
                     <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
                         <GroupChannel channelUrl={channel.url} >

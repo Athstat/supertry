@@ -16,6 +16,7 @@ export async function connectUserToSendBird(user: AuthUser) : ThrowablePromise<S
 
         return { data: sb };
     } catch (error) {
+        console.log(error);
         return {error: { message: "Failed to connect" } };
     }
 }
