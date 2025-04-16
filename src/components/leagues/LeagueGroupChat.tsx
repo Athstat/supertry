@@ -6,7 +6,6 @@ import { connectUserToSendBird, SEND_BIRD_APP_ID } from '../../data/messaging/se
 import { authService } from '../../services/authService';
 import { createOrGetChannel as createOrGetGroupChannel } from '../../data/messaging/open_channel.send_bird.init';
 import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
-import GroupChannel from '@sendbird/uikit-react/GroupChannel';
 import GroupChatFeed from '../messaging/GroupChatFeed';
 
 type Props = {

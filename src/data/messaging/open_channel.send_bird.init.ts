@@ -1,10 +1,11 @@
+import SendBird from "sendbird";
 import { ThrowablePromise } from "../../services/errors";
 
 export async function createOrGetChannel(channelUrl: string, channelName: string , sb: SendBird.SendBirdInstance) : ThrowablePromise<SendBird.GroupChannel> {
     
     try {
 
-        const exisitingChannel = await sb.GroupChannel.getChannel(channelUrl);
+        const exisitingChannel = await getExistingGroupChannel(channelUrl, sb);
         
         if (exisitingChannel) {
             return { data: exisitingChannel };
@@ -24,4 +25,15 @@ export async function createOrGetChannel(channelUrl: string, channelName: string
         return {error: { message: "Failed to connect to channel" }};
 
     }
-} 
+}
+
+
+export async function getExistingGroupChannel(channelUrl: string, sb: SendBird.SendBirdInstance) : Promise<SendBird.GroupChannel | undefined> {
+    
+    try {
+        return await sb.GroupChannel.getChannel(channelUrl);
+    } catch (SendBirdError) {
+        return undefined;
+    }
+
+}
