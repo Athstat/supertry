@@ -54,21 +54,20 @@ export default function LeagueGroupChatFeed({ league }: Props) {
     }, [channelUrl]);
 
     return (
-        <div className=''>
-            <div className='text-white bg-slate-800/60 p-5 rounded-xl' >
-                <h1 className='text-2xl font-bold' >League Chat Room</h1>
-                <h2 className='text-slate-400' >{league.title}</h2>
+        <div className='' >
+            <h1 className='text-2xl mt-10 font-bold' >League Chat Room</h1>
+            <h2 className='text-slate-400' >{league.title}</h2>
 
-                {error && <p className='text-red-500' >{error.message}</p>}
-                {channel && sbInstance &&
-                <div className='h-[600px]' >    
+            {error && <p className='text-red-500' >{error.message}</p>}
+            {channel && sbInstance &&
+                <div className='h-[600px]' >
                     <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
-                        <GroupChannel   channelUrl={channel.url} >
+                        <GroupChannel channelUrl={channel.url} >
                         </GroupChannel>
                     </SendbirdProvider>
                 </div>
-                }
-            </div>
+            }
         </div>
+
     )
 }
