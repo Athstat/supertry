@@ -209,7 +209,7 @@ const AppRoutes = () => {
         path="/sbr"
         element={
           <ProtectedRoute>
-            <Layout>
+            <Layout  >
               <SchoolBoyRugbyScreen />
             </Layout>
           </ProtectedRoute>

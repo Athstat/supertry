@@ -1,22 +1,33 @@
-import SendBird from "sendbird";
+import SendbirdChat, { SendbirdChatParams, SendbirdChatWith } from "@sendbird/chat";
 import { ThrowablePromise } from "../../services/errors";
 import { AuthUser } from "../../types/auth";
+import { OpenChannelModule } from "@sendbird/chat/openChannel";
 
 
 export const SEND_BIRD_APP_ID = import.meta.env.VITE_SEND_BIRD_APP_ID ?? "";
 
-const sb = new SendBird({
-    appId: SEND_BIRD_APP_ID
-});
+const params: SendbirdChatParams<[OpenChannelModule]> = {
+    appId: SEND_BIRD_APP_ID,
+    modules: [
+        new OpenChannelModule()
+    ]
+}
 
-export async function connectUserToSendBird(user: AuthUser) : ThrowablePromise<SendBird.SendBirdInstance> {
+export type CustomSendBirdInstance = SendbirdChatWith<[OpenChannelModule]>;
+
+const sb = SendbirdChat.init(params);
+
+export async function connectUserToSendBird(user: AuthUser) : ThrowablePromise<SendbirdChatWith<[OpenChannelModule]>> {
     try {
-        console.log("SendBird Connection State: ", sb.getConnectionState());
-
-        if (sb.getConnectionState() !== "OPEN") {   
-            await sb.connect(user.id);
-            sb.updateCurrentUserInfo(user.firstName + " " + user.lastName, "");
-        }
+        
+        await sb.connect(user.id);
+        
+        const userNickName = user.firstName + " " + user.lastName;
+        sb.updateCurrentUserInfo({
+            nickname: userNickName
+        });
+        
+        console.log("SendBird Connection State: ", sb.connectionState);
 
         return { data: sb };
 
