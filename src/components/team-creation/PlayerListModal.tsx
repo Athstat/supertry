@@ -456,7 +456,7 @@ export function PlayerListModal({
             <EmptyState />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {filteredPlayers.map((player) => {
+              {filteredPlayers.map((player, index) => {
                 // Calculate ratings
                 const attackRating = calculateAttackRating(player);
                 const defenseRating = calculateDefenseRating(player);
@@ -467,6 +467,7 @@ export function PlayerListModal({
                     key={player.id || player.tracking_id || Math.random()}
                     player={player}
                     handleSelectPlayer={handleSelectPlayer}
+                    isFirstCard={index === 0} // First card in the list should always glint
                   />
                 );
               })}

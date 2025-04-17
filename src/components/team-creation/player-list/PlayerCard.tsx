@@ -7,9 +7,12 @@ import { StarRating } from "./StarRating";
 interface PlayerCardProps {
   player: RugbyPlayer;
   handleSelectPlayer: (player: RugbyPlayer) => void;
+  isFirstCard?: boolean;
 }
 
 // Helper functions for calculating ratings
+const GLINT_PROBABILITY = 0.1; // 20% chance for a card to show the glint effect
+
 const calculateAttackRating = (player: RugbyPlayer): number => {
   const stats = [
     player.ball_carrying || 0,
@@ -99,6 +102,7 @@ const getBadgeBackground = (tier: "common" | "rare" | "elite"): string => {
 export const PlayerCard: React.FC<PlayerCardProps> = ({
   player,
   handleSelectPlayer,
+  isFirstCard = false,
 }) => {
   // Animation controls for the glinting effect
   const glintControls = useAnimationControls();
@@ -106,10 +110,63 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
   const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Determine if this card should glint - set once at component initialization
+  // First card always glints, others based on probability
+  const [shouldGlint] = useState(() => {
+    // If this is the first card, always return true to ensure it glints
+    if (isFirstCard) {
+      return true;
+    }
+
+    // For other cards, use the probability-based calculation
+    // Using player name combined with power ranking and other available properties to create a unique seed
+    const uniqueSeed =
+      (player.player_name || "") +
+      (player.team_name || "") +
+      (player.power_rank_rating?.toString() || "");
+
+    // Create a deterministic value between 0-1 based on the seed
+    // Using simple string hashing technique to get a value between 0-1
+    let hashValue = 0;
+    for (let i = 0; i < uniqueSeed.length; i++) {
+      hashValue = (hashValue << 5) - hashValue + uniqueSeed.charCodeAt(i);
+      hashValue = hashValue & hashValue; // Convert to 32bit integer
+    }
+
+    // Normalize to a value between 0-1
+    const normalizedValue = Math.abs(hashValue) / 2147483647;
+
+    // Return true if the value is below the threshold
+    return normalizedValue < GLINT_PROBABILITY;
+  });
+
+  // Special effect for first card - make it glint right after mounting
+  useEffect(() => {
+    // If this is marked as the first card, trigger animation immediately after a short delay
+    if (isFirstCard && !hasAnimated) {
+      const timer = setTimeout(() => {
+        const animateFirstCardGlint = async () => {
+          await glintControls.start("animate");
+          setHasAnimated(true);
+        };
+
+        animateFirstCardGlint();
+      }, 800); // Short delay to allow card to be visible first
+
+      return () => clearTimeout(timer);
+    }
+  }, [isFirstCard, hasAnimated, glintControls]);
+
   // Use IntersectionObserver to detect when card is visible
   useEffect(() => {
-    // Skip if animation has already played or browser doesn't support IntersectionObserver
-    if (hasAnimated || !window.IntersectionObserver || !cardRef.current) {
+    // Skip if animation has already played, card shouldn't glint, or browser doesn't support IntersectionObserver
+    if (
+      hasAnimated ||
+      !shouldGlint ||
+      !window.IntersectionObserver ||
+      !cardRef.current ||
+      isFirstCard // Skip this effect for the first card as it has its own animation trigger
+    ) {
       return;
     }
 
@@ -152,7 +209,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
         observer.unobserve(cardRef.current);
       }
     };
-  }, [glintControls, hasAnimated, hasBeenVisible]);
+  }, [glintControls, hasAnimated, hasBeenVisible, shouldGlint, isFirstCard]);
 
   // Calculate ratings
   const attackRating = calculateAttackRating(player);
