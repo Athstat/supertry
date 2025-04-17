@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { X, Search, User, Filter, ArrowUpDown, Coins } from "lucide-react";
+import {
+  X,
+  Search,
+  User,
+  Filter,
+  ArrowUpDown,
+  Coins,
+  Star,
+  StarHalf,
+} from "lucide-react";
 import { Position } from "../../types/position";
 import { Player } from "../../types/player";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
@@ -29,6 +38,94 @@ interface PlayerListModalProps {
   showSort?: boolean;
   setShowSort?: (show: boolean) => void;
 }
+
+// Add new helper functions at the top of the file (before the type definitions)
+const calculateAttackRating = (player: RugbyPlayer | Player): number => {
+  const stats = [
+    player.ball_carrying || 0,
+    player.try_scoring || 0,
+    player.offloading || 0,
+    player.playmaking || 0,
+    player.strength || 0,
+  ];
+
+  const sum = stats.reduce((acc, val) => acc + val, 0);
+  return stats.filter(Boolean).length > 0
+    ? sum / stats.filter(Boolean).length
+    : 0;
+};
+
+const calculateDefenseRating = (player: RugbyPlayer | Player): number => {
+  const stats = [
+    player.tackling || 0,
+    player.defensive_positioning || 0,
+    player.breakdown_work || 0,
+    player.discipline || 0,
+  ];
+
+  const sum = stats.reduce((acc, val) => acc + val, 0);
+  return stats.filter(Boolean).length > 0
+    ? sum / stats.filter(Boolean).length
+    : 0;
+};
+
+const calculateKickingRating = (player: RugbyPlayer | Player): number => {
+  const stats = [
+    player.points_kicking || 0,
+    player.infield_kicking || 0,
+    player.tactical_kicking || 0,
+    player.goal_kicking || 0,
+  ];
+
+  const sum = stats.reduce((acc, val) => acc + val, 0);
+  return stats.filter(Boolean).length > 0
+    ? sum / stats.filter(Boolean).length
+    : 0;
+};
+
+// Create a reusable star rating component
+const StarRating: React.FC<{ rating: number; maxRating: number }> = ({
+  rating,
+  maxRating = 5,
+}) => {
+  // Convert the rating to a 0-5 scale
+  const scaledRating = (rating / 10) * maxRating;
+
+  return (
+    <div className="flex">
+      {Array.from({ length: maxRating }).map((_, i) => {
+        if (i < Math.floor(scaledRating)) {
+          // Full star
+          return (
+            <Star
+              key={i}
+              size={12}
+              className="text-primary-500 dark:text-primary-400 fill-current"
+            />
+          );
+        } else if (i < Math.floor(scaledRating + 0.5)) {
+          // Half star
+          return (
+            <StarHalf
+              key={i}
+              size={12}
+              className="text-primary-500 dark:text-primary-400 fill-current"
+            />
+          );
+        } else {
+          // Empty star
+          return (
+            <Star
+              key={i}
+              size={12}
+              className="text-gray-300 dark:text-gray-600"
+            />
+          );
+        }
+      })}
+    </div>
+  );
+};
 
 export function PlayerListModal({
   position,
@@ -288,7 +385,7 @@ export function PlayerListModal({
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
-      <div className="bg-white dark:bg-[#14181E]  rounded-xl w-full max-w-md max-h-[80vh] flex flex-col shadow-xl border border-gray-100 dark:border-gray-800">
+      <div className="bg-white dark:bg-[#14181E] rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-100 dark:border-gray-800">
         <div className="p-4 border-b dark:border-gray-800 flex justify-between items-center">
           <h2 className="text-lg font-semibold dark:text-gray-100">
             Select {position.name}
@@ -459,72 +556,112 @@ export function PlayerListModal({
           )}
         </div>
 
-        <div className="overflow-y-auto flex-1">
+        <div className="overflow-y-auto flex-1 px-2 py-2">
           {filteredPlayers.length === 0 && !loading ? (
             <div className="p-4 text-center text-gray-500 dark:text-gray-400">
               No players found
             </div>
           ) : (
-            <ul className="divide-y dark:divide-gray-800">
-              {filteredPlayers.map((player) => (
-                <li key={player.id || player.tracking_id || Math.random()}>
-                  <button
-                    onClick={() => handleSelectPlayer(player)}
-                    className="w-full p-4 text-left hover:bg-gray-50 dark:hover:bg-slate-800/50 flex items-center gap-3"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {filteredPlayers.map((player) => {
+                // Calculate ratings
+                const attackRating = calculateAttackRating(player);
+                const defenseRating = calculateDefenseRating(player);
+                const kickingRating = calculateKickingRating(player);
+
+                return (
+                  <div
+                    key={player.id || player.tracking_id || Math.random()}
+                    className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
                   >
-                    {/* Player Image */}
-                    <div className="flex-shrink-0">
-                      {player.image_url ? (
-                        <img
-                          src={player.image_url}
-                          alt={player.player_name || "Player"}
-                          className="w-12 h-12 rounded-full object-cover object-top bg-gray-100 dark:bg-slate-800 border dark:border-slate-700"
-                          onError={(e) => {
-                            // Fallback if image fails to load
-                            e.currentTarget.src =
-                              "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
-                          }}
-                        />
-                      ) : (
-                        <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-slate-800 border dark:border-slate-700 flex items-center justify-center">
-                          <User size={24} className="text-gray-400" />
+                    <button
+                      onClick={() => handleSelectPlayer(player)}
+                      className="w-full text-left flex flex-col"
+                    >
+                      {/* Header with PR and price - clean version without percentage */}
+                      <div className="w-full flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-slate-700">
+                        <div className="flex items-center">
+                          <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                            PR: {player.power_rank_rating || 0}
+                          </span>
                         </div>
-                      )}
-                    </div>
+                        <div className="flex items-center">
+                          <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                            {player.price || 0}{" "}
+                            <Coins size={14} className="inline mr-1" />
+                          </span>
+                        </div>
+                      </div>
 
-                    {/* Player Info */}
-                    <div className="flex-1">
-                      <div className="font-medium dark:text-gray-100">
-                        {player.player_name || "Unknown Player"}
-                      </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {player.team_name || "Unknown Team"} •{" "}
-                        {player.position_class
-                          ? player.position_class
-                              .split("-")
-                              .map(
-                                (word) =>
-                                  word.charAt(0).toUpperCase() + word.slice(1)
-                              )
-                              .join(" ")
-                          : "Unknown Position"}
-                      </div>
-                    </div>
+                      {/* Player info */}
+                      <div className="flex p-3 gap-3">
+                        {/* Player Image - enhanced with square format and fade effect */}
+                        <div className="flex-shrink-0 relative w-20 h-20 overflow-hidden rounded-lg">
+                          {player.image_url ? (
+                            <>
+                              <img
+                                src={player.image_url}
+                                alt={player.player_name || "Player"}
+                                className="w-full h-full object-cover object-top"
+                                onError={(e) => {
+                                  // Fallback if image fails to load
+                                  e.currentTarget.src =
+                                    "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
+                                }}
+                              />
+                              {/* Gradient overlay for subtle bottom fade effect */}
+                              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white/40 via-white/10 to-transparent pointer-events-none dark:from-white/50 dark:via-white/15"></div>
+                            </>
+                          ) : (
+                            <div className="w-full h-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center">
+                              <User size={32} className="text-gray-400" />
+                            </div>
+                          )}
+                        </div>
 
-                    {/* Player Stats */}
-                    <div className="flex flex-col items-end">
-                      <div className="font-semibold text-primary-600 dark:text-primary-400 flex items-center gap-1">
-                        {player.price || 0}{" "}
-                        <Coins size={14} className="inline-block" />
+                        {/* Player Details */}
+                        <div className="flex-1">
+                          <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">
+                            {player.player_name || "Unknown Player"}
+                          </h3>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                            {player.team_name || "Unknown Team"}
+                          </p>
+
+                          {/* Stats with star ratings */}
+                          <div className="grid grid-cols-3 gap-1 text-xs">
+                            <div className="flex flex-col">
+                              <span className="text-gray-500 dark:text-gray-400">
+                                Attack
+                              </span>
+                              <StarRating rating={attackRating} maxRating={5} />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-gray-500 dark:text-gray-400">
+                                Defense
+                              </span>
+                              <StarRating
+                                rating={defenseRating}
+                                maxRating={5}
+                              />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-gray-500 dark:text-gray-400">
+                                Kicking
+                              </span>
+                              <StarRating
+                                rating={kickingRating}
+                                maxRating={5}
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        PR: {player.power_rank_rating || 0}
-                      </div>
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
       </div>
