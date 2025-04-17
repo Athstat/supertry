@@ -154,10 +154,15 @@ export function TeamCreationScreen() {
   // Fetch players from API
   useEffect(() => {
     const fetchPlayers = async () => {
+      if (!officialLeagueId) {
+        setError("League ID is missing");
+        setIsLoading(false);
+        return;
+      }
       try {
         setLoadingPlayers(true);
         const data = await athleteService.getRugbyAthletesByCompetition(
-          DEFAULT_COMPETITION_ID
+          officialLeagueId
         );
         setAllPlayers(data);
       } catch (err) {

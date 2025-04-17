@@ -12,6 +12,13 @@ import {
 import { Position } from "../../types/position";
 import { Player } from "../../types/player";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
+import { PlayerSearchBar } from "./player-list/PlayerSearchBar";
+import { FilterSortControls } from "./player-list/FilterSortControls";
+import { FilterPanel } from "./player-list/FilterPanel";
+import { SortPanel } from "./player-list/SortPanel";
+import { PlayerCard } from "./player-list/PlayerCard";
+import { LoadingSpinner } from "./player-list/LoadingSpinner";
+import { EmptyState } from "./player-list/EmptyState";
 
 type SortField = "power_rank_rating" | "player_name" | "price";
 type SortDirection = "asc" | "desc";
@@ -384,8 +391,8 @@ export function PlayerListModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
-      <div className="bg-white dark:bg-[#14181E] rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-100 dark:border-gray-800">
+    <div className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
+      <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-100 dark:border-gray-800">
         <div className="p-4 border-b dark:border-gray-800 flex justify-between items-center">
           <h2 className="text-lg font-semibold dark:text-gray-100">
             Select {position.name}
@@ -393,6 +400,8 @@ export function PlayerListModal({
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            aria-label="Close"
+            tabIndex={0}
           >
             <X size={20} />
           </button>
@@ -400,157 +409,43 @@ export function PlayerListModal({
 
         <div className="p-4 border-b dark:border-gray-800">
           {loading ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-            </div>
+            <LoadingSpinner />
           ) : (
             <>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search size={18} className="text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search players..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 dark:focus:ring-slate-500"
-                />
-              </div>
+              <PlayerSearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+              />
 
-              <div className="flex gap-2 mt-3">
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-gray-100 dark:bg-slate-800 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 dark:text-gray-200"
-                >
-                  <Filter size={16} />
-                  Filter
-                </button>
-                <button
-                  onClick={() => setShowSort(!showSort)}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm bg-gray-100 dark:bg-slate-800 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 dark:text-gray-200"
-                >
-                  <ArrowUpDown size={16} />
-                  Sort
-                </button>
+              <FilterSortControls
+                showFilters={showFilters}
+                setShowFilters={setShowFilters}
+                showSort={showSort}
+                setShowSort={setShowSort}
+                positionFilter={positionFilter}
+                teamFilter={teamFilter}
+                clearFilters={clearFilters}
+              />
 
-                {(positionFilter || teamFilter) && (
-                  <button
-                    onClick={clearFilters}
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/30"
-                  >
-                    Clear Filters
-                  </button>
-                )}
-              </div>
-
-              {/* Filter Panel */}
               {showFilters && (
-                <div className="mt-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg relative border dark:border-slate-700">
-                  <button
-                    onClick={() => setShowFilters(false)}
-                    className="absolute top-3 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    <X size={20} />
-                  </button>
-                  <div className="mb-3">
-                    <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
-                      Position
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {availablePositions.map((pos) => (
-                        <button
-                          key={pos}
-                          onClick={() => handlePositionFilter(pos)}
-                          className={`px-2 py-1 text-xs rounded-full ${
-                            positionFilter === pos
-                              ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-                              : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-                          }`}
-                        >
-                          {pos}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
-                      Team
-                    </h3>
-                    <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
-                      {availableTeams.map((team) => (
-                        <button
-                          key={team}
-                          onClick={() => handleTeamFilter(team)}
-                          className={`px-2 py-1 text-xs rounded-full ${
-                            teamFilter === team
-                              ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-                              : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-                          }`}
-                        >
-                          {team}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <FilterPanel
+                  setShowFilters={setShowFilters}
+                  availablePositions={availablePositions}
+                  positionFilter={positionFilter}
+                  handlePositionFilter={handlePositionFilter}
+                  availableTeams={availableTeams}
+                  teamFilter={teamFilter}
+                  handleTeamFilter={handleTeamFilter}
+                />
               )}
 
-              {/* Sort Panel */}
               {showSort && (
-                <div className="mt-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg relative border dark:border-slate-700">
-                  <button
-                    onClick={() => setShowSort(false)}
-                    className="absolute top-3 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    <X size={20} />
-                  </button>
-                  <h3 className="text-sm font-medium mb-2 dark:text-gray-200">
-                    Sort By
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => handleSort("power_rank_rating")}
-                      className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-                        sortField === "power_rank_rating"
-                          ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-                          : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-                      }`}
-                    >
-                      Rating
-                      {sortField === "power_rank_rating" && (
-                        <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => handleSort("player_name")}
-                      className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-                        sortField === "player_name"
-                          ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-                          : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-                      }`}
-                    >
-                      Name
-                      {sortField === "player_name" && (
-                        <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => handleSort("price")}
-                      className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-                        sortField === "price"
-                          ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-                          : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-                      }`}
-                    >
-                      Price
-                      {sortField === "price" && (
-                        <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-                      )}
-                    </button>
-                  </div>
-                </div>
+                <SortPanel
+                  setShowSort={setShowSort}
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  handleSort={handleSort}
+                />
               )}
             </>
           )}
@@ -558,9 +453,7 @@ export function PlayerListModal({
 
         <div className="overflow-y-auto flex-1 px-2 py-2">
           {filteredPlayers.length === 0 && !loading ? (
-            <div className="p-4 text-center text-gray-500 dark:text-gray-400">
-              No players found
-            </div>
+            <EmptyState />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {filteredPlayers.map((player) => {
@@ -570,95 +463,11 @@ export function PlayerListModal({
                 const kickingRating = calculateKickingRating(player);
 
                 return (
-                  <div
+                  <PlayerCard
                     key={player.id || player.tracking_id || Math.random()}
-                    className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
-                  >
-                    <button
-                      onClick={() => handleSelectPlayer(player)}
-                      className="w-full text-left flex flex-col"
-                    >
-                      {/* Header with PR and price - clean version without percentage */}
-                      <div className="w-full flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-slate-700">
-                        <div className="flex items-center">
-                          <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                            PR: {player.power_rank_rating || 0}
-                          </span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
-                            {player.price || 0}{" "}
-                            <Coins size={14} className="inline mr-1" />
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Player info */}
-                      <div className="flex p-3 gap-3">
-                        {/* Player Image - enhanced with square format and fade effect */}
-                        <div className="flex-shrink-0 relative w-20 h-20 overflow-hidden rounded-lg">
-                          {player.image_url ? (
-                            <>
-                              <img
-                                src={player.image_url}
-                                alt={player.player_name || "Player"}
-                                className="w-full h-full object-cover object-top"
-                                onError={(e) => {
-                                  // Fallback if image fails to load
-                                  e.currentTarget.src =
-                                    "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
-                                }}
-                              />
-                              {/* Gradient overlay for subtle bottom fade effect */}
-                              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white/40 via-white/10 to-transparent pointer-events-none dark:from-white/50 dark:via-white/15"></div>
-                            </>
-                          ) : (
-                            <div className="w-full h-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center">
-                              <User size={32} className="text-gray-400" />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Player Details */}
-                        <div className="flex-1">
-                          <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">
-                            {player.player_name || "Unknown Player"}
-                          </h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                            {player.team_name || "Unknown Team"}
-                          </p>
-
-                          {/* Stats with star ratings */}
-                          <div className="grid grid-cols-3 gap-1 text-xs">
-                            <div className="flex flex-col">
-                              <span className="text-gray-500 dark:text-gray-400">
-                                Attack
-                              </span>
-                              <StarRating rating={attackRating} maxRating={5} />
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-gray-500 dark:text-gray-400">
-                                Defense
-                              </span>
-                              <StarRating
-                                rating={defenseRating}
-                                maxRating={5}
-                              />
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-gray-500 dark:text-gray-400">
-                                Kicking
-                              </span>
-                              <StarRating
-                                rating={kickingRating}
-                                maxRating={5}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
+                    player={player}
+                    handleSelectPlayer={handleSelectPlayer}
+                  />
                 );
               })}
             </div>

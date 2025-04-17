@@ -2,26 +2,31 @@ export interface RugbyPlayer {
   id?: string;
   tracking_id?: string;
   player_name?: string;
-  position_class?: string;
   team_name?: string;
-  image_url?: string;
-  power_rank_rating?: number;
+  position_class?: string;
   price?: number;
-  team_logo?: string;
-  trending?: boolean;
-  isNew?: boolean;
-  stats?: {
-    tries?: number;
-    tackles?: number;
-    missedTackles?: number;
-    carryMeters?: number;
-    lineBreaks?: number;
-    kicksFromHand?: number;
-    goalKickingAccuracy?: number;
-    rucksWon?: number;
-    turnoversWon?: number;
-    passes?: number;
-    offloads?: number;
-    assists?: number;
-  };
+  power_rank_rating?: number;
+  image_url?: string;
+
+  // Stats
+  ball_carrying?: number;
+  try_scoring?: number;
+  offloading?: number;
+  playmaking?: number;
+  strength?: number;
+  tackling?: number;
+  defensive_positioning?: number;
+  breakdown_work?: number;
+  discipline?: number;
+  points_kicking?: number;
+  infield_kicking?: number;
+  tactical_kicking?: number;
+  goal_kicking?: number;
+
+  // UI display stats
+  tries?: number;
+  assists?: number;
+  tackles?: number;
+  penalties_conceded?: number;
+  cards?: number;
 }
