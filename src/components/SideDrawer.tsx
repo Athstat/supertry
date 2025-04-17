@@ -47,9 +47,9 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
         </div>
 
         <nav className="px-4 py-2">
-          {menuItems.map(({ icon: Icon, label, path }) => (
+          {menuItems.map(({ icon: Icon, label, path }, index) => (
             <button
-              key={path}
+              key={index}
               onClick={() => handleNavigation(path)}
               className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 rounded-lg transition-colors"
             >

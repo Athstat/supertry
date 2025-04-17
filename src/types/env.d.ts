@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_KEYCLOAK_TOKEN_URL: string;
   readonly VITE_GRANT_TYPE: string;
   readonly VITE_SCOPE: string;
+  readonly VITE_SEND_BIRD_APP_ID: string;
   // more env variables...
 }
 

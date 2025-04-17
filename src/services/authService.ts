@@ -188,6 +188,7 @@ export const authService = {
    * Get user info from the token
    */
   getUserInfo(): {
+    id: string;
     email: string;
     firstName: string;
     lastName: string;
@@ -202,6 +203,7 @@ export const authService = {
 
       return {
         email: payload.email || "",
+        id: payload.sub || "",
         firstName: payload.given_name || "",
         lastName: payload.family_name || "",
         username: payload.preferred_username || "",
