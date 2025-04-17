@@ -1,12 +1,14 @@
-import { useEffect} from 'react';
-import { getLeagueChatChannelUrl, getLeagueChatName } from '../../data/messaging/messaging.utils'
+import { useEffect } from 'react';
+import { getLeagueChatChannelUrl, getLeagueChannelName } from '../../data/messaging/messaging.utils'
 import { LeagueFromState } from '../../types/league'
-import {SEND_BIRD_APP_ID } from '../../data/messaging/send_bird.init';
+import { SEND_BIRD_APP_ID } from '../../data/messaging/send_bird.init';
 import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
 import GroupChannel from '@sendbird/uikit-react/GroupChannel';
 
 import "@sendbird/uikit-react/dist/index.css";
-import { useGroupChat } from '../../hooks/useGroupChat';
+import { useOpenChat } from '../../hooks/useOpenChat';
+import { ErrorState } from '../ui/ErrorState';
+import { OpenChannel } from '@sendbird/uikit-react';
 
 type Props = {
     league: LeagueFromState
@@ -14,8 +16,10 @@ type Props = {
 
 export default function LeagueGroupChatFeed({ league }: Props) {
 
-    const {error, channel, sbInstance, authUser} = useGroupChat(getLeagueChatChannelUrl(league), getLeagueChatName(league));
-    const channelReady = channel && sbInstance && authUser;
+    const channelUrl = getLeagueChatChannelUrl(league);
+    const channelName = getLeagueChannelName(league);
+    
+    const { authUser, sbInstance } = useOpenChat(channelUrl, channelName)
 
     useEffect(() => {
         return () => {
@@ -23,21 +27,18 @@ export default function LeagueGroupChatFeed({ league }: Props) {
         }
     }, []);
 
+    if (!authUser) return <ErrorState message={"You must be logged in to access the School Boy Rugby Chat"} />
+
+
     return (
         <div className='' >
             <h1 className='text-2xl mt-10 font-bold' >League Chat Room</h1>
-            <h2 className='text-slate-500' >{league.title}</h2>
 
-            {error && <p className='text-red-500' >{error.message}</p>}
-
-            {channelReady &&
-                <div className='h-[600px]' >
-                    <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
-                        <GroupChannel channelUrl={channel.url} >
-                        </GroupChannel>
-                    </SendbirdProvider>
-                </div>
-            }
+            <div className='h-[600px]' >
+                <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
+                    <OpenChannel channelUrl={channelUrl} />
+                </SendbirdProvider>
+            </div>
         </div>
 
     )

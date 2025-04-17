@@ -31,8 +31,12 @@ export async function createOrGetGroupChannel(channelUrl: string, channelName: s
 export async function getExistingGroupChannel(channelUrl: string, sb: SendBird.SendBirdInstance) : Promise<SendBird.GroupChannel | undefined> {
     
     try {
+        
+        const channel = await sb.GroupChannel.getChannel(channelUrl);
         return await sb.GroupChannel.getChannel(channelUrl);
+        
     } catch (SendBirdError) {
+        console.log("Error getting channel: ", SendBirdError);
         return undefined;
     }
 
