@@ -9,6 +9,8 @@ import "@sendbird/uikit-react/dist/index.css";
 import { useOpenChat } from '../../hooks/useOpenChat';
 import { ErrorState } from '../ui/ErrorState';
 import { OpenChannel } from '@sendbird/uikit-react';
+import { OpenChannelProvider } from '@sendbird/uikit-react/OpenChannel/context';
+import OpenChannelUI from '@sendbird/uikit-react/OpenChannel/components/OpenChannelUI';
 
 type Props = {
     league: LeagueFromState
@@ -18,7 +20,7 @@ export default function LeagueGroupChatFeed({ league }: Props) {
 
     const channelUrl = getLeagueChatChannelUrl(league);
     const channelName = getLeagueChannelName(league);
-    
+
     const { authUser, sbInstance } = useOpenChat(channelUrl, channelName)
 
     useEffect(() => {
@@ -32,11 +34,15 @@ export default function LeagueGroupChatFeed({ league }: Props) {
 
     return (
         <div className='' >
-            <h1 className='text-2xl mt-10 font-bold' >League Chat Room</h1>
 
             <div className='h-[600px]' >
-                <SendbirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
-                    <OpenChannel channelUrl={channelUrl} />
+                <SendbirdProvider 
+                    appId={SEND_BIRD_APP_ID}
+                    userId={authUser.id}
+                >
+                    <OpenChannelProvider channelUrl={channelUrl}>
+                        <OpenChannelUI />
+                    </OpenChannelProvider>
                 </SendbirdProvider>
             </div>
         </div>
