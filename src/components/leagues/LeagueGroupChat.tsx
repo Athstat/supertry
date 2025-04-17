@@ -3,12 +3,10 @@ import { getLeagueChatChannelUrl, getLeagueChannelName } from '../../data/messag
 import { LeagueFromState } from '../../types/league'
 import { SEND_BIRD_APP_ID } from '../../data/messaging/send_bird.init';
 import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
-import GroupChannel from '@sendbird/uikit-react/GroupChannel';
 
 import "@sendbird/uikit-react/dist/index.css";
 import { useOpenChat } from '../../hooks/useOpenChat';
 import { ErrorState } from '../ui/ErrorState';
-import { OpenChannel } from '@sendbird/uikit-react';
 import { OpenChannelProvider } from '@sendbird/uikit-react/OpenChannel/context';
 import OpenChannelUI from '@sendbird/uikit-react/OpenChannel/components/OpenChannelUI';
 
