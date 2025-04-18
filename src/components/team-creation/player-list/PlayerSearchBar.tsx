@@ -31,7 +31,7 @@ export const PlayerSearchBar: React.FC<PlayerSearchBarProps> = ({
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="w-full pl-10 pr-9 py-2 border dark:border-slate-700/50 rounded-lg 
+        className="search-input w-full pl-10 pr-9 py-2 border dark:border-slate-700/50 rounded-lg 
           bg-white/10 dark:bg-slate-800/30 
           text-gray-900 dark:text-gray-100 
           backdrop-blur-md

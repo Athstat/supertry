@@ -268,6 +268,7 @@ export function PlayerListModal({
 
   // Refs for scroll behavior
   const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll({
     container: containerRef,
   });
@@ -288,7 +289,8 @@ export function PlayerListModal({
   );
   const prevScrollY = useRef<number>(0);
 
-  // Update scroll direction based on scroll position changes
+  // REMOVE the scroll-triggered search expansion behavior
+  // We'll keep a simplified version just to track scroll direction for UI effects
   useMotionValueEvent(scrollY, "change", (latest) => {
     const currentScrollY = latest;
     const direction = currentScrollY > prevScrollY.current ? "down" : "up";
@@ -296,15 +298,6 @@ export function PlayerListModal({
     // Only update if direction has changed to avoid excessive re-renders
     if (direction !== scrollDirection) {
       setScrollDirection(direction);
-    }
-
-    // On mobile, update search visibility based on scroll direction
-    if (isMobile) {
-      if (direction === "up") {
-        setShowSearchAndFilters(true);
-      } else if (direction === "down" && currentScrollY > 40) {
-        setShowSearchAndFilters(false);
-      }
     }
 
     prevScrollY.current = currentScrollY;
@@ -317,8 +310,11 @@ export function PlayerListModal({
 
   // State to track if we're on a mobile device
   const [isMobile, setIsMobile] = useState(false);
-  // State to track if search and filters should be visible
-  const [showSearchAndFilters, setShowSearchAndFilters] = useState(true);
+  // State to track if search and filters should be visible - START COLLAPSED
+  const [showSearchAndFilters, setShowSearchAndFilters] = useState(false);
+
+  // Ref for player cards
+  const playerCardRef = useRef<HTMLDivElement>(null);
 
   // Detect mobile devices
   useEffect(() => {
@@ -557,18 +553,54 @@ export function PlayerListModal({
     }
   };
 
-  // Function to toggle search visibility on mobile
+  // Function to toggle search visibility
   const handleToggleSearch = () => {
-    // Force showing search bar
-    setShowSearchAndFilters(true);
-    // Scroll back to top so the search is visible
-    if (containerRef.current) {
-      containerRef.current.scrollTo({
-        top: 0,
-        behavior: "smooth",
+    // Toggle search bar visibility without affecting scroll
+    setShowSearchAndFilters((prev) => !prev);
+
+    // Focus on search input after a short delay when opening
+    if (!showSearchAndFilters) {
+      requestAnimationFrame(() => {
+        const searchInput = document.querySelector(
+          ".search-input"
+        ) as HTMLInputElement;
+        if (searchInput) {
+          searchInput.focus();
+        }
       });
     }
   };
+
+  // Handle escape key to close search panel and ESC behavior for sort/filter panels
+  useEffect(() => {
+    const handleEscKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        // Close search panel if it's open
+        if (showSearchAndFilters) {
+          e.stopPropagation(); // Prevent default ESC behavior
+          setShowSearchAndFilters(false);
+          return;
+        }
+
+        // Otherwise close filters or sort if they're open
+        if (showFilters) {
+          setShowFilters(false);
+        }
+        if (showSort) {
+          setShowSort(false);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleEscKey);
+    return () => window.removeEventListener("keydown", handleEscKey);
+  }, [
+    showSearchAndFilters,
+    showFilters,
+    showSort,
+    setShowFilters,
+    setShowSort,
+  ]);
 
   // Calculate remaining budget based on selected players
   const calculateRemainingBudget = () => {
@@ -583,109 +615,149 @@ export function PlayerListModal({
   const selectedPlayerCount = Object.keys(selectedPlayers).length;
   const remainingBudget = calculateRemainingBudget();
 
+  // Add effect to set header height CSS variable
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      if (headerRef.current) {
+        const height = headerRef.current.offsetHeight;
+        document.documentElement.style.setProperty(
+          "--header-height",
+          `${height}px`
+        );
+      }
+    };
+
+    // Initial measurement
+    updateHeaderHeight();
+
+    // Re-measure on window resize and after 100ms for safety
+    window.addEventListener("resize", updateHeaderHeight);
+    const timeout = setTimeout(updateHeaderHeight, 100);
+
+    // Clean up
+    return () => {
+      window.removeEventListener("resize", updateHeaderHeight);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <div className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
       <div
-        className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden 
-[--header-gradient:linear-gradient(to_bottom,#F8FAFC,#fff,#fff)] 
-dark:[--header-gradient:linear-gradient(to_bottom,#090A0A,#0A0A0A,#0A0A0A)] 
-[--header-shadow-default:0_1px_2px_rgba(0,0,0,0.05)] 
-dark:[--header-shadow-default:0_1px_3px_rgba(0,0,0,0.2)] 
+        className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden relative
+[--header-gradient:linear-gradient(to_bottom,rgba(248,250,252,1),rgba(255,255,255,1),rgba(255,255,255,0.98))] 
+dark:[--header-gradient:linear-gradient(to_bottom,rgba(10,10,10,1),rgba(15,15,15,1),rgba(18,18,18,0.98))] 
+[--header-shadow-default:0_1px_3px_rgba(0,0,0,0.06)] 
+dark:[--header-shadow-default:0_1px_4px_rgba(0,0,0,0.3)] 
 [--header-shadow-scrolled:0_8px_16px_-6px_rgba(0,0,0,0.15),0_3px_6px_-4px_rgba(0,0,0,0.1)] 
-dark:[--header-shadow-scrolled:0_12px_20px_-8px_rgba(0,0,0,0.5),0_4px_8px_-4px_rgba(0,0,0,0.3)] 
-[--gradient-shadow-color:rgba(0,0,0,0.06)] 
-dark:[--gradient-shadow-color:rgba(0,0,0,0.15)]"
+dark:[--header-shadow-scrolled:0_12px_24px_-8px_rgba(0,0,0,0.6),0_4px_10px_-4px_rgba(0,0,0,0.4)] 
+[--gradient-shadow-color:rgba(0,0,0,0.08)] 
+dark:[--gradient-shadow-color:rgba(0,0,0,0.25)]"
       >
-        {/* Combined header with unified styling */}
-        <motion.div
-          className="sticky top-0 z-50 transition-all duration-300 ease-in-out shadow-md dark:shadow-lg overflow-visible"
-          style={{
-            background: "var(--header-gradient)",
-            backdropFilter: "blur(12px)",
-            boxShadow: useTransform(
-              scrollY,
-              [0, 20],
-              [
-                "0 2px 8px rgba(0, 0, 0, 0.08)",
-                "0 8px 16px -6px rgba(0, 0, 0, 0.15), 0 3px 6px -4px rgba(0, 0, 0, 0.1)",
-              ]
-            ),
-            transition:
-              "background 0.3s ease-in-out, transform 0.2s ease-in-out",
-            scaleX: headerScale,
-            scaleY: headerScale,
-          }}
-          initial={{ marginBottom: 0 }}
-          animate={{ marginBottom: 2 }}
-        >
-          {/* Title and indicators section */}
-          <div className="relative flex flex-wrap md:flex-nowrap justify-between items-center p-4 pr-12">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mr-2 transition-colors duration-300">
-              Select {position.name}
-            </h2>
+        {/* Header section - sticky top row with permanent controls */}
+        <div className="sticky top-0 inset-x-0 z-30">
+          {/* Always visible top row with title, close button, and indicators */}
+          <motion.div
+            ref={headerRef}
+            className="w-full border-b border-gray-200/40 dark:border-gray-800/40 relative"
+            style={{
+              background: "var(--header-gradient)",
+              backdropFilter: "blur(12px)",
+              boxShadow: useTransform(
+                scrollY,
+                [0, 20],
+                [
+                  "var(--header-shadow-default)",
+                  "var(--header-shadow-scrolled)",
+                ]
+              ),
+            }}
+          >
+            {/* Title and indicators section */}
+            <div className="relative flex flex-wrap md:flex-nowrap justify-between items-center p-4 pr-12">
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mr-2 transition-colors duration-300">
+                Select {position.name}
+              </h2>
 
-            {/* Close button positioned at the absolute top-right */}
-            <button
-              onClick={onClose}
-              className="absolute top-2 right-2 bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors"
-              aria-label="Close"
-              tabIndex={0}
-            >
-              <X size={18} />
-            </button>
+              {/* Close button positioned at the absolute top-right */}
+              <button
+                onClick={onClose}
+                className="absolute top-2 right-2 bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors"
+                aria-label="Close"
+                tabIndex={0}
+              >
+                <X size={18} />
+              </button>
 
-            <div className="flex items-center gap-2 mt-1 md:mt-0">
-              {!showSearchAndFilters && (
-                <button
+              <div className="flex items-center gap-2 mt-1 md:mt-0">
+                <motion.button
                   onClick={handleToggleSearch}
-                  className="bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors"
-                  aria-label="Show search"
+                  className={`bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors ${
+                    showSearchAndFilters
+                      ? "bg-gray-300/90 dark:bg-white/20 ring-2 ring-primary-300 dark:ring-primary-700"
+                      : ""
+                  }`}
+                  aria-label={
+                    showSearchAndFilters ? "Hide search" : "Show search"
+                  }
+                  aria-expanded={showSearchAndFilters}
                   tabIndex={0}
+                  whileTap={{ scale: 0.95 }}
+                  animate={
+                    showSearchAndFilters
+                      ? {
+                          rotate: [0, -10, 0],
+                          boxShadow: [
+                            "0 0 0 rgba(37, 99, 235, 0)",
+                            "0 0 0 2px rgba(37, 99, 235, 0.3)",
+                            "0 0 0 rgba(37, 99, 235, 0)",
+                          ],
+                          transition: { duration: 0.3, times: [0, 0.5, 1] },
+                        }
+                      : {}
+                  }
                 >
                   <Search size={18} />
-                </button>
-              )}
-              <PlayerCountIndicator
-                selectedCount={selectedPlayerCount}
-                maxPlayers={maxPlayers}
-                animate={shouldAnimatePlayerCount}
-              />
-              <BudgetIndicator budget={remainingBudget} maxBudget={maxBudget} />
+                </motion.button>
+                <PlayerCountIndicator
+                  selectedCount={selectedPlayerCount}
+                  maxPlayers={maxPlayers}
+                  animate={shouldAnimatePlayerCount}
+                />
+                <BudgetIndicator
+                  budget={remainingBudget}
+                  maxBudget={maxBudget}
+                />
+              </div>
             </div>
-          </div>
+          </motion.div>
+        </div>
 
-          {/* Search and filter section */}
-          {loading ? (
-            <div className="px-4 pb-3">
-              <LoadingSpinner />
-            </div>
-          ) : (
-            <AnimatePresence initial={false}>
-              {showSearchAndFilters && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                  animate={{
-                    height: "auto",
-                    opacity: 1,
-                    marginTop: 0,
-                  }}
-                  exit={{
-                    height: 0,
-                    opacity: 0,
-                    marginTop: "-8px",
-                  }}
-                  transition={{
-                    height: {
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 40,
-                    },
-                    opacity: {
-                      duration: 0.15,
-                    },
-                  }}
-                  className="overflow-hidden px-4 pb-3 transition-colors duration-300 ease-in-out"
-                >
+        {/* Search and filter panel - Absolutely positioned overlay */}
+        <AnimatePresence initial={false}>
+          {showSearchAndFilters && (
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{
+                duration: 0.2,
+                ease: "easeOut",
+              }}
+              className="absolute top-[var(--header-height)] left-0 right-0 z-40"
+              style={{
+                background: "var(--header-gradient)",
+                backdropFilter: "blur(12px)",
+                boxShadow: "0 6px 12px -6px var(--gradient-shadow-color)",
+                borderBottom: "1px solid rgba(0,0,0,0.05)",
+              }}
+            >
+              <div className="px-4 py-3 relative">
+                {loading ? (
+                  <div className="py-1">
+                    <LoadingSpinner />
+                  </div>
+                ) : (
                   <div className="space-y-3">
                     <PlayerSearchBar
                       searchQuery={searchQuery}
@@ -703,17 +775,36 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.15)]"
                       clearFilters={clearFilters}
                     />
                   </div>
+                )}
 
-                  {/* Filter and sort panels */}
-                  <AnimatePresence>
-                    {showFilters && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="mt-2"
-                      >
+                {/* Filter and sort panels overlays */}
+                <AnimatePresence>
+                  {/* Backdrop for filter and sort panels */}
+                  {(showFilters || showSort) && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="fixed inset-0 bg-black/10 dark:bg-black/20 z-40"
+                      onClick={() => {
+                        setShowFilters(false);
+                        setShowSort(false);
+                      }}
+                    />
+                  )}
+
+                  {/* Filter panel */}
+                  {showFilters && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5, scaleY: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                      exit={{ opacity: 0, y: -5, scaleY: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute left-0 right-0 top-full mt-1 px-4 z-50"
+                      style={{ transformOrigin: "top center" }}
+                    >
+                      <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh]">
                         <FilterPanel
                           setShowFilters={setShowFilters}
                           availablePositions={availablePositions}
@@ -723,45 +814,50 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.15)]"
                           teamFilter={teamFilter}
                           handleTeamFilter={handleTeamFilter}
                         />
-                      </motion.div>
-                    )}
+                      </div>
+                    </motion.div>
+                  )}
 
-                    {showSort && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="mt-2"
-                      >
+                  {/* Sort panel */}
+                  {showSort && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5, scaleY: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                      exit={{ opacity: 0, y: -5, scaleY: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute left-0 right-0 top-full mt-1 px-4 z-50"
+                      style={{ transformOrigin: "top center" }}
+                    >
+                      <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh]">
                         <SortPanel
                           setShowSort={setShowSort}
                           sortField={sortField}
                           sortDirection={sortDirection}
                           handleSort={handleSort}
                         />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
           )}
-        </motion.div>
+        </AnimatePresence>
 
-        {/* Gradient fade below header for enhanced depth effect */}
-        <div
-          className="sticky top-[calc(100%-6px)] left-0 right-0 h-[6px] z-40 pointer-events-none"
+        {/* Gradient fade for depth effect - appears after header */}
+        <motion.div
+          className="h-[3px] z-10 pointer-events-none relative w-full"
           style={{
             background:
-              "linear-gradient(to bottom, var(--gradient-shadow-color, rgba(0,0,0,0.06)), transparent)",
+              "linear-gradient(to bottom, var(--gradient-shadow-color), transparent)",
+            opacity: useTransform(scrollY, [0, 30], [1, 0.4]),
           }}
         />
 
         {/* Scrollable content area with cards */}
         <div
           ref={containerRef}
-          className="overflow-y-auto flex-1 px-2 pt-4 pb-3 scroll-smooth relative -mt-1"
+          className="overflow-y-auto flex-1 px-2 pt-2 pb-3 scroll-smooth"
         >
           {filteredPlayers.length === 0 && !loading ? (
             <EmptyState />
@@ -784,6 +880,8 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.15)]"
               })}
             </div>
           )}
+          {/* Add some empty space at the bottom for better scrolling experience */}
+          <div className="h-4" />
         </div>
       </div>
     </div>
