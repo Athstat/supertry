@@ -276,7 +276,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
 
       <button
         onClick={() => handleSelectPlayer(player)}
-        className="w-full h-full flex flex-col items-center"
+        className="w-full h-full flex flex-col items-center rounded-2xl overflow-hidden"
         aria-label={`Select ${player.player_name || "player"}`}
         tabIndex={0}
         onKeyDown={(e) => {
@@ -286,12 +286,12 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
         }}
       >
         {/* Full-size player image background with adjusted positioning */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 rounded-2xl overflow-hidden">
           {player.image_url ? (
             <img
               src={player.image_url}
               alt={player.player_name || "Player"}
-              className="w-full object-cover"
+              className="w-full h-full object-cover"
               style={{ objectPosition: "center 30px" }}
               onError={(e) => {
                 e.currentTarget.src =
@@ -299,7 +299,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
               }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center rounded-2xl">
               <User size={60} className="text-slate-400" />
             </div>
           )}
@@ -325,10 +325,10 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
         </div>
 
         {/* Glassmorphism background overlay - bottom third (BACKGROUND ONLY) */}
-        <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/90 via-black/70 to-transparent backdrop-blur-sm z-10"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/90 via-black/70 to-transparent backdrop-blur-sm z-10 rounded-b-2xl"></div>
 
         {/* Player Details Content - stacked above the blur */}
-        <div className="absolute bottom-0 left-0 right-0 flex flex-col p-3 space-y-2 z-20">
+        <div className="absolute bottom-0 left-0 right-0 flex flex-col p-3 space-y-2 z-20 rounded-b-2xl">
           {/* Player Name & Team */}
           <div className="text-center">
             <h3 className="font-bold text-xl text-white truncate px-2">

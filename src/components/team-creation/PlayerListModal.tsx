@@ -154,8 +154,8 @@ const BudgetIndicator: React.FC<{ budget?: number; maxBudget?: number }> = ({
     <motion.div
       className={`flex items-center gap-1 px-3 py-2 rounded-full shadow-sm ${
         isDangerouslyLow
-          ? "bg-red-100/80 dark:bg-red-900/30 text-red-700 dark:text-red-300 shadow-red-500/20"
-          : "bg-white/20 dark:bg-slate-700/30 text-gray-700 dark:text-gray-200 backdrop-blur-md"
+          ? "bg-red-50/90 dark:bg-red-900/30 text-red-700 dark:text-red-300 shadow-red-500/20"
+          : "bg-gray-100/80 dark:bg-slate-700/30 text-gray-700 dark:text-gray-200 backdrop-blur-md"
       }`}
       animate={{
         boxShadow: isDangerouslyLow
@@ -194,17 +194,12 @@ const PlayerCountIndicator: React.FC<{
 }> = ({ selectedCount, maxPlayers = 15, animate = false }) => {
   return (
     <motion.div
-      className="flex items-center gap-1 px-3 py-2 rounded-full bg-white/20 dark:bg-slate-700/30 text-gray-700 dark:text-gray-200 backdrop-blur-md shadow-sm"
+      className="flex items-center gap-1 px-3 py-2 rounded-full bg-gray-100/80 dark:bg-slate-800/30 text-gray-700 dark:text-gray-200 backdrop-blur-md shadow-sm"
       initial={animate ? { scale: 1 } : false}
       animate={
         animate
           ? {
               scale: [1, 1.1, 1],
-              backgroundColor: [
-                "rgba(255,255,255,0.2)",
-                "rgba(156,163,175,0.3)",
-                "rgba(255,255,255,0.2)",
-              ],
             }
           : {}
       }
@@ -281,7 +276,7 @@ export function PlayerListModal({
   const headerShadow = useTransform(
     scrollY,
     [0, 20],
-    ["0 1px 3px rgba(0,0,0,0.1)", "0 8px 15px -5px rgba(0,0,0,0.3)"]
+    ["none", "0 4px 10px rgba(0, 0, 0, 0.1)"]
   );
 
   // Track scroll direction
@@ -312,10 +307,8 @@ export function PlayerListModal({
     prevScrollY.current = currentScrollY;
   });
 
-  // Shared background style for both header sections
+  // Shared background style for both header sections - theme aware
   const headerBackgroundStyle = {
-    background:
-      "linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9))",
     backdropFilter: "blur(12px)",
   };
 
@@ -589,26 +582,39 @@ export function PlayerListModal({
 
   return (
     <div className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
-      <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden [--header-gradient:linear-gradient(to_bottom,#e5ecf5,#f4f7fb,#dde6f3)] dark:[--header-gradient:linear-gradient(to_bottom,#1b1e29,#1e2230,#13151f)] [--header-shadow-default:0_1px_2px_rgba(0,0,0,0.05)] dark:[--header-shadow-default:0_1px_3px_rgba(0,0,0,0.2)] [--header-shadow-scrolled:0_4px_10px_-4px_rgba(0,0,0,0.15)] dark:[--header-shadow-scrolled:0_8px_15px_-5px_rgba(0,0,0,0.3)]">
         {/* Combined header with unified styling */}
         <motion.div
-          className="sticky top-0 z-40 border-b border-gray-700/50 dark:border-gray-700/50"
+          className="sticky top-0 z-40 border-b border-gray-200/70 dark:border-gray-800/30 transition-colors duration-300 ease-in-out"
           style={{
-            ...headerBackgroundStyle,
+            background: "var(--header-gradient)",
+            backdropFilter: "blur(12px)",
             boxShadow: headerShadow,
+            transition:
+              "background 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
           }}
         >
           {/* Title and indicators section */}
-          <div className="relative flex flex-wrap md:flex-nowrap justify-between items-center p-4">
-            <h2 className="text-lg font-semibold text-white mr-2">
+          <div className="relative flex flex-wrap md:flex-nowrap justify-between items-center p-4 pr-12">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mr-2 transition-colors duration-300">
               Select {position.name}
             </h2>
+
+            {/* Close button positioned at the absolute top-right */}
+            <button
+              onClick={onClose}
+              className="absolute top-2 right-2 bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors"
+              aria-label="Close"
+              tabIndex={0}
+            >
+              <X size={18} />
+            </button>
 
             <div className="flex items-center gap-2 mt-1 md:mt-0">
               {!showSearchAndFilters && (
                 <button
                   onClick={handleToggleSearch}
-                  className="bg-white/10 hover:bg-white/20 text-white p-1.5 rounded-lg transition-colors"
+                  className="bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors"
                   aria-label="Show search"
                   tabIndex={0}
                 >
@@ -621,14 +627,6 @@ export function PlayerListModal({
                 animate={shouldAnimatePlayerCount}
               />
               <BudgetIndicator budget={remainingBudget} maxBudget={maxBudget} />
-              <button
-                onClick={onClose}
-                className="ml-2 bg-white/10 hover:bg-white/20 text-white p-1.5 rounded-lg transition-colors"
-                aria-label="Close"
-                tabIndex={0}
-              >
-                <X size={18} />
-              </button>
             </div>
           </div>
 
@@ -662,7 +660,7 @@ export function PlayerListModal({
                       duration: 0.15,
                     },
                   }}
-                  className="overflow-hidden px-4 pb-3"
+                  className="overflow-hidden px-4 pb-3 transition-colors duration-300 ease-in-out"
                 >
                   <div className="space-y-3">
                     <PlayerSearchBar
