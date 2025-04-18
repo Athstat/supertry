@@ -11,7 +11,7 @@ interface PlayerCardProps {
 }
 
 // Helper functions for calculating ratings
-const GLINT_PROBABILITY = 0.1; // 20% chance for a card to show the glint effect
+const GLINT_PROBABILITY = 0.1; // 10% chance for a card to show the glint effect
 
 const calculateAttackRating = (player: RugbyPlayer): number => {
   const stats = [
