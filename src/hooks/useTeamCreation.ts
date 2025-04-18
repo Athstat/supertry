@@ -46,7 +46,7 @@ export function useTeamCreation(
 
   const handlePlayerSelect = useCallback((player: Player) => {
     setSelectedPlayerForModal(player);
-    setShowPlayerList(false);
+    //setShowPlayerList(false);
     setShowPlayerModal(true);
   }, []);
 
