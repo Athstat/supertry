@@ -8,6 +8,7 @@ interface PlayerCardProps {
   player: RugbyPlayer;
   handleSelectPlayer: (player: RugbyPlayer) => void;
   isFirstCard?: boolean;
+  layoutId?: string;
 }
 
 // Helper functions for calculating ratings
@@ -103,6 +104,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
   player,
   handleSelectPlayer,
   isFirstCard = false,
+  layoutId,
 }) => {
   // Animation controls for the glinting effect
   const glintControls = useAnimationControls();
@@ -257,6 +259,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
     <motion.div
       ref={cardRef}
       className={`relative rounded-2xl overflow-hidden shadow-xl h-full aspect-[7/8] ${cardBackground}`}
+      layoutId={layoutId}
       whileHover={{
         scale: 1.04,
         boxShadow: "0 25px 30px -10px rgba(0, 0, 0, 0.25)",
@@ -286,7 +289,10 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
         }}
       >
         {/* Full-size player image background with adjusted positioning */}
-        <div className="absolute inset-0 rounded-2xl overflow-hidden">
+        <motion.div
+          className="absolute inset-0 rounded-2xl overflow-hidden"
+          layoutId={layoutId ? `${layoutId}-image` : undefined}
+        >
           {player.image_url ? (
             <img
               src={player.image_url}
@@ -303,7 +309,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
               <User size={60} className="text-slate-400" />
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Top section: Badges - always visible */}
         <div className="absolute top-3 left-0 right-0 px-3 flex justify-between">
@@ -328,7 +334,10 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
         <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/90 via-black/70 to-transparent backdrop-blur-sm z-10 rounded-b-2xl"></div>
 
         {/* Player Details Content - stacked above the blur */}
-        <div className="absolute bottom-0 left-0 right-0 flex flex-col p-3 space-y-2 z-20 rounded-b-2xl">
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 flex flex-col p-3 space-y-2 z-20 rounded-b-2xl"
+          layoutId={layoutId ? `${layoutId}-info` : undefined}
+        >
           {/* Player Name & Team */}
           <div className="text-center">
             <h3 className="font-bold text-xl text-white truncate px-2">
@@ -384,7 +393,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </button>
     </motion.div>
   );

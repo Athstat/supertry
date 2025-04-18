@@ -17,6 +17,7 @@ import {
   AnimatePresence,
   useMotionValueEvent,
 } from "framer-motion";
+import { PlayerDetailsModal } from "./PlayerDetailsModal";
 
 type SortField = "power_rank_rating" | "player_name" | "price";
 type SortDirection = "asc" | "desc";
@@ -466,7 +467,11 @@ export function PlayerListModal({
     return () => clearTimeout(timer);
   }, [loading]);
 
-  // Convert RugbyPlayer to Player for the onSelectPlayer callback
+  // Add state for selected player and its layout ID
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [selectedLayoutId, setSelectedLayoutId] = useState<string | null>(null);
+
+  // Update the handleSelectPlayer function to store the player temporarily for the modal
   const handleSelectPlayer = (rugbyPlayer: RugbyPlayer) => {
     const player: Player = {
       id: rugbyPlayer.id || rugbyPlayer.tracking_id || String(Math.random()),
@@ -522,7 +527,28 @@ export function PlayerListModal({
         rugbyPlayer.discipline || Number((Math.random() * 2 + 3).toFixed(1)),
       cards: rugbyPlayer.cards || Number((Math.random() * 2).toFixed(1)),
     };
+
+    // Store the selected player for the modal
+    setSelectedPlayer(player);
+
+    // Generate a unique layout ID for the shared element transition
+    const layoutId = `player-card-${player.id}`;
+    setSelectedLayoutId(layoutId);
+
+    // The actual onSelectPlayer will be called when the user confirms in the modal
+  };
+
+  // Function to handle adding the player to the team from the modal
+  const handleAddPlayer = (player: Player) => {
     onSelectPlayer(player);
+    setSelectedPlayer(null);
+    setSelectedLayoutId(null);
+  };
+
+  // Function to handle closing the player details modal
+  const handleClosePlayerDetails = () => {
+    setSelectedPlayer(null);
+    setSelectedLayoutId(null);
   };
 
   // Handle position filter change
@@ -651,8 +677,8 @@ dark:[--header-gradient:linear-gradient(to_bottom,rgba(10,10,10,1),rgba(15,15,15
 dark:[--header-shadow-default:0_1px_4px_rgba(0,0,0,0.3)] 
 [--header-shadow-scrolled:0_8px_16px_-6px_rgba(0,0,0,0.15),0_3px_6px_-4px_rgba(0,0,0,0.1)] 
 dark:[--header-shadow-scrolled:0_12px_24px_-8px_rgba(0,0,0,0.6),0_4px_10px_-4px_rgba(0,0,0,0.4)] 
-[--gradient-shadow-color:rgba(0,0,0,0.08)] 
-dark:[--gradient-shadow-color:rgba(0,0,0,0.25)]"
+[--gradient-shadow-color:rgba(0,0,0,0.05)]
+dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
       >
         {/* Header section - sticky top row with permanent controls */}
         <div className="sticky top-0 inset-x-0 z-30">
@@ -869,13 +895,22 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.25)]"
                 const defenseRating = calculateDefenseRating(player);
                 const kickingRating = calculateKickingRating(player);
 
+                // Create a unique layout ID for this player card
+                const cardLayoutId = `player-card-${
+                  player.id || player.tracking_id || Math.random()
+                }`;
+
                 return (
-                  <PlayerCard
+                  <motion.div
                     key={player.id || player.tracking_id || Math.random()}
-                    player={player}
-                    handleSelectPlayer={handleSelectPlayer}
-                    isFirstCard={index === 0} // First card in the list should always glint
-                  />
+                  >
+                    <PlayerCard
+                      player={player}
+                      handleSelectPlayer={handleSelectPlayer}
+                      isFirstCard={index === 0} // First card in the list should always glint
+                      layoutId={cardLayoutId}
+                    />
+                  </motion.div>
                 );
               })}
             </div>
@@ -884,6 +919,19 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.25)]"
           <div className="h-4" />
         </div>
       </div>
+
+      {/* Player Details Modal with shared element transition */}
+      <AnimatePresence>
+        {selectedPlayer && (
+          <PlayerDetailsModal
+            player={selectedPlayer}
+            onClose={handleClosePlayerDetails}
+            onBack={handleClosePlayerDetails}
+            onAdd={handleAddPlayer}
+            layoutId={selectedLayoutId || undefined}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
