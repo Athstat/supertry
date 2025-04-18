@@ -272,12 +272,15 @@ export function PlayerListModal({
     container: containerRef,
   });
 
-  // Calculate header shadow based on scroll position
+  // Calculate header effects based on scroll position
   const headerShadow = useTransform(
     scrollY,
     [0, 20],
     ["none", "0 4px 10px rgba(0, 0, 0, 0.1)"]
   );
+
+  // Subtle scale effect for header on scroll
+  const headerScale = useTransform(scrollY, [0, 30], [1, 0.99]);
 
   // Track scroll direction
   const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(
@@ -582,17 +585,38 @@ export function PlayerListModal({
 
   return (
     <div className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
-      <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden [--header-gradient:linear-gradient(to_bottom,#e5ecf5,#f4f7fb,#dde6f3)] dark:[--header-gradient:linear-gradient(to_bottom,#1b1e29,#1e2230,#13151f)] [--header-shadow-default:0_1px_2px_rgba(0,0,0,0.05)] dark:[--header-shadow-default:0_1px_3px_rgba(0,0,0,0.2)] [--header-shadow-scrolled:0_4px_10px_-4px_rgba(0,0,0,0.15)] dark:[--header-shadow-scrolled:0_8px_15px_-5px_rgba(0,0,0,0.3)]">
+      <div
+        className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden 
+[--header-gradient:linear-gradient(to_bottom,#F8FAFC,#fff,#fff)] 
+dark:[--header-gradient:linear-gradient(to_bottom,#090A0A,#0A0A0A,#0A0A0A)] 
+[--header-shadow-default:0_1px_2px_rgba(0,0,0,0.05)] 
+dark:[--header-shadow-default:0_1px_3px_rgba(0,0,0,0.2)] 
+[--header-shadow-scrolled:0_8px_16px_-6px_rgba(0,0,0,0.15),0_3px_6px_-4px_rgba(0,0,0,0.1)] 
+dark:[--header-shadow-scrolled:0_12px_20px_-8px_rgba(0,0,0,0.5),0_4px_8px_-4px_rgba(0,0,0,0.3)] 
+[--gradient-shadow-color:rgba(0,0,0,0.06)] 
+dark:[--gradient-shadow-color:rgba(0,0,0,0.15)]"
+      >
         {/* Combined header with unified styling */}
         <motion.div
-          className="sticky top-0 z-40 border-b border-gray-200/70 dark:border-gray-800/30 transition-colors duration-300 ease-in-out"
+          className="sticky top-0 z-50 transition-all duration-300 ease-in-out shadow-md dark:shadow-lg overflow-visible"
           style={{
             background: "var(--header-gradient)",
             backdropFilter: "blur(12px)",
-            boxShadow: headerShadow,
+            boxShadow: useTransform(
+              scrollY,
+              [0, 20],
+              [
+                "0 2px 8px rgba(0, 0, 0, 0.08)",
+                "0 8px 16px -6px rgba(0, 0, 0, 0.15), 0 3px 6px -4px rgba(0, 0, 0, 0.1)",
+              ]
+            ),
             transition:
-              "background 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+              "background 0.3s ease-in-out, transform 0.2s ease-in-out",
+            scaleX: headerScale,
+            scaleY: headerScale,
           }}
+          initial={{ marginBottom: 0 }}
+          animate={{ marginBottom: 2 }}
         >
           {/* Title and indicators section */}
           <div className="relative flex flex-wrap md:flex-nowrap justify-between items-center p-4 pr-12">
@@ -725,10 +749,19 @@ export function PlayerListModal({
           )}
         </motion.div>
 
+        {/* Gradient fade below header for enhanced depth effect */}
+        <div
+          className="sticky top-[calc(100%-6px)] left-0 right-0 h-[6px] z-40 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, var(--gradient-shadow-color, rgba(0,0,0,0.06)), transparent)",
+          }}
+        />
+
         {/* Scrollable content area with cards */}
         <div
           ref={containerRef}
-          className="overflow-y-auto flex-1 px-2 py-3 scroll-smooth"
+          className="overflow-y-auto flex-1 px-2 pt-4 pb-3 scroll-smooth relative -mt-1"
         >
           {filteredPlayers.length === 0 && !loading ? (
             <EmptyState />
