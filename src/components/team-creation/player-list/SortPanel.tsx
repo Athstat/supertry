@@ -8,6 +8,15 @@ interface SortPanelProps {
   handleSort: (field: string) => void;
 }
 
+const sortOptions = [
+  { id: "power_rank_rating", label: "Power Ranking" },
+  { id: "player_name", label: "Player Name" },
+  { id: "price", label: "Price" },
+  { id: "attack", label: "Attack Rating" },
+  { id: "defense", label: "Defense Rating" },
+  { id: "kicking", label: "Kicking Rating" },
+];
+
 export const SortPanel: React.FC<SortPanelProps> = ({
   setShowSort,
   sortField,
@@ -28,74 +37,31 @@ export const SortPanel: React.FC<SortPanelProps> = ({
       <h3 className="text-sm font-medium mb-2 dark:text-gray-200">Sort By</h3>
 
       <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => handleSort("power_rank_rating")}
-          className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-            sortField === "power_rank_rating"
-              ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-              : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-          }`}
-          aria-label={`Sort by rating ${
-            sortField === "power_rank_rating"
-              ? sortDirection === "asc"
-                ? "ascending"
-                : "descending"
-              : ""
-          }`}
-          aria-pressed={sortField === "power_rank_rating"}
-          tabIndex={0}
-        >
-          Rating
-          {sortField === "power_rank_rating" && (
-            <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-          )}
-        </button>
-
-        <button
-          onClick={() => handleSort("player_name")}
-          className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-            sortField === "player_name"
-              ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-              : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-          }`}
-          aria-label={`Sort by name ${
-            sortField === "player_name"
-              ? sortDirection === "asc"
-                ? "ascending"
-                : "descending"
-              : ""
-          }`}
-          aria-pressed={sortField === "player_name"}
-          tabIndex={0}
-        >
-          Name
-          {sortField === "player_name" && (
-            <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-          )}
-        </button>
-
-        <button
-          onClick={() => handleSort("price")}
-          className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
-            sortField === "price"
-              ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
-              : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
-          }`}
-          aria-label={`Sort by price ${
-            sortField === "price"
-              ? sortDirection === "asc"
-                ? "ascending"
-                : "descending"
-              : ""
-          }`}
-          aria-pressed={sortField === "price"}
-          tabIndex={0}
-        >
-          Price
-          {sortField === "price" && (
-            <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
-          )}
-        </button>
+        {sortOptions.map((option) => (
+          <button
+            key={option.id}
+            onClick={() => handleSort(option.id)}
+            className={`px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 ${
+              sortField === option.id
+                ? "bg-primary-100 text-primary-800 dark:bg-slate-600 dark:text-gray-100"
+                : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-gray-200"
+            }`}
+            aria-label={`Sort by ${option.label.toLowerCase()} ${
+              sortField === option.id
+                ? sortDirection === "asc"
+                  ? "ascending"
+                  : "descending"
+                : ""
+            }`}
+            aria-pressed={sortField === option.id}
+            tabIndex={0}
+          >
+            {option.label.split(" ")[0]}
+            {sortField === option.id && (
+              <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
+            )}
+          </button>
+        ))}
       </div>
     </div>
   );

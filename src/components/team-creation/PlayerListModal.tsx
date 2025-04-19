@@ -12,9 +12,16 @@ import { PlayerDetailsModal } from "./PlayerDetailsModal";
 import { ModalHeader } from "./player-list/ModalHeader";
 import { SearchFilterPanel } from "./player-list/SearchFilterPanel";
 import { PlayerList } from "./player-list/PlayerList";
+import { ViewToggle, ViewMode } from "./player-list/ViewToggle";
 import { createPlayerFromRugbyPlayer } from "../../utils/playerRatings";
 
-type SortField = "power_rank_rating" | "player_name" | "price";
+type SortField =
+  | "power_rank_rating"
+  | "player_name"
+  | "price"
+  | "attack"
+  | "defense"
+  | "kicking";
 type SortDirection = "asc" | "desc";
 
 interface PlayerListModalProps {
@@ -218,6 +225,47 @@ export function PlayerListModal({
       result = result.filter((player) => player.team_name === teamFilter);
     }
 
+    // Helper functions for calculating composite ratings
+    const calculateAttackRating = (player: RugbyPlayer): number => {
+      const stats = [
+        player.ball_carrying || 0,
+        player.try_scoring || 0,
+        player.offloading || 0,
+        player.playmaking || 0,
+        player.strength || 0,
+      ];
+      const sum = stats.reduce((acc, val) => acc + val, 0);
+      return stats.filter(Boolean).length > 0
+        ? sum / stats.filter(Boolean).length
+        : 0;
+    };
+
+    const calculateDefenseRating = (player: RugbyPlayer): number => {
+      const stats = [
+        player.tackling || 0,
+        player.defensive_positioning || 0,
+        player.breakdown_work || 0,
+        player.discipline || 0,
+      ];
+      const sum = stats.reduce((acc, val) => acc + val, 0);
+      return stats.filter(Boolean).length > 0
+        ? sum / stats.filter(Boolean).length
+        : 0;
+    };
+
+    const calculateKickingRating = (player: RugbyPlayer): number => {
+      const stats = [
+        player.points_kicking || 0,
+        player.infield_kicking || 0,
+        player.tactical_kicking || 0,
+        player.goal_kicking || 0,
+      ];
+      const sum = stats.reduce((acc, val) => acc + val, 0);
+      return stats.filter(Boolean).length > 0
+        ? sum / stats.filter(Boolean).length
+        : 0;
+    };
+
     // Apply sorting
     result = result.sort((a, b) => {
       if (sortField === "power_rank_rating") {
@@ -233,6 +281,18 @@ export function PlayerListModal({
       } else if (sortField === "price") {
         const valueA = a.price || 0;
         const valueB = b.price || 0;
+        return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
+      } else if (sortField === "attack") {
+        const valueA = calculateAttackRating(a);
+        const valueB = calculateAttackRating(b);
+        return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
+      } else if (sortField === "defense") {
+        const valueA = calculateDefenseRating(a);
+        const valueB = calculateDefenseRating(b);
+        return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
+      } else if (sortField === "kicking") {
+        const valueA = calculateKickingRating(a);
+        const valueB = calculateKickingRating(b);
         return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
       }
       return 0;
@@ -423,6 +483,31 @@ export function PlayerListModal({
     };
   }, []);
 
+  // Add view mode state
+  const [viewMode, setViewMode] = useState<ViewMode>("card");
+
+  // Add a wrapper function for setSortDirection to handle type conversion
+  const handleSetSortDirection = (direction: string) => {
+    if (direction === "asc" || direction === "desc") {
+      setSortDirection(direction as SortDirection);
+    }
+  };
+
+  // Add a wrapper function for setSortField to handle type conversion
+  const handleSetSortField = (field: string) => {
+    const validFields: SortField[] = [
+      "power_rank_rating",
+      "player_name",
+      "price",
+      "attack",
+      "defense",
+      "kicking",
+    ];
+    if (validFields.includes(field as SortField)) {
+      setSortField(field as SortField);
+    }
+  };
+
   return (
     <div className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
       <div
@@ -473,6 +558,11 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
           handleSort={handleSort}
         />
 
+        {/* View Toggle Component */}
+        <div className="px-3 pt-1 pb-2 flex justify-end items-center z-10">
+          <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+        </div>
+
         {/* Player List Component */}
         <PlayerList
           filteredPlayers={filteredPlayers}
@@ -480,6 +570,13 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
           containerRef={containerRef}
           scrollY={scrollY}
           handleSelectPlayer={handleSelectPlayer}
+          onSelectPlayer={onSelectPlayer}
+          positionName={position.name}
+          viewMode={viewMode}
+          sortField={sortField}
+          setSortField={handleSetSortField}
+          sortDirection={sortDirection}
+          setSortDirection={handleSetSortDirection}
         />
       </div>
 
