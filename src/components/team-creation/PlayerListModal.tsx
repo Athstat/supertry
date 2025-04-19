@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Search, Users, Coins, Star, StarHalf } from "lucide-react";
 import { Position } from "../../types/position";
 import { Player } from "../../types/player";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
-import { PlayerSearchBar } from "./player-list/PlayerSearchBar";
-import { FilterSortControls } from "./player-list/FilterSortControls";
-import { FilterPanel } from "./player-list/FilterPanel";
-import { SortPanel } from "./player-list/SortPanel";
-import { PlayerCard } from "./player-list/PlayerCard";
-import { LoadingSpinner } from "./player-list/LoadingSpinner";
-import { EmptyState } from "./player-list/EmptyState";
 import {
   motion,
   useScroll,
-  useTransform,
   AnimatePresence,
   useMotionValueEvent,
 } from "framer-motion";
 import { PlayerDetailsModal } from "./PlayerDetailsModal";
+import { ModalHeader } from "./player-list/ModalHeader";
+import { SearchFilterPanel } from "./player-list/SearchFilterPanel";
+import { PlayerList } from "./player-list/PlayerList";
+import { createPlayerFromRugbyPlayer } from "../../utils/playerRatings";
 
 type SortField = "power_rank_rating" | "player_name" | "price";
 type SortDirection = "asc" | "desc";
@@ -48,171 +43,6 @@ interface PlayerListModalProps {
   maxBudget?: number;
   maxPlayers?: number;
 }
-
-// Add new helper functions at the top of the file (before the type definitions)
-const calculateAttackRating = (player: RugbyPlayer | Player): number => {
-  const stats = [
-    player.ball_carrying || 0,
-    player.try_scoring || 0,
-    player.offloading || 0,
-    player.playmaking || 0,
-    player.strength || 0,
-  ];
-
-  const sum = stats.reduce((acc, val) => acc + val, 0);
-  return stats.filter(Boolean).length > 0
-    ? sum / stats.filter(Boolean).length
-    : 0;
-};
-
-const calculateDefenseRating = (player: RugbyPlayer | Player): number => {
-  const stats = [
-    player.tackling || 0,
-    player.defensive_positioning || 0,
-    player.breakdown_work || 0,
-    player.discipline || 0,
-  ];
-
-  const sum = stats.reduce((acc, val) => acc + val, 0);
-  return stats.filter(Boolean).length > 0
-    ? sum / stats.filter(Boolean).length
-    : 0;
-};
-
-const calculateKickingRating = (player: RugbyPlayer | Player): number => {
-  const stats = [
-    player.points_kicking || 0,
-    player.infield_kicking || 0,
-    player.tactical_kicking || 0,
-    player.goal_kicking || 0,
-  ];
-
-  const sum = stats.reduce((acc, val) => acc + val, 0);
-  return stats.filter(Boolean).length > 0
-    ? sum / stats.filter(Boolean).length
-    : 0;
-};
-
-// Create a reusable star rating component
-const StarRating: React.FC<{ rating: number; maxRating: number }> = ({
-  rating,
-  maxRating = 5,
-}) => {
-  // Convert the rating to a 0-5 scale
-  const scaledRating = (rating / 10) * maxRating;
-
-  return (
-    <div className="flex">
-      {Array.from({ length: maxRating }).map((_, i) => {
-        if (i < Math.floor(scaledRating)) {
-          // Full star
-          return (
-            <Star
-              key={i}
-              size={12}
-              className="text-primary-500 dark:text-primary-400 fill-current"
-            />
-          );
-        } else if (i < Math.floor(scaledRating + 0.5)) {
-          // Half star
-          return (
-            <StarHalf
-              key={i}
-              size={12}
-              className="text-primary-500 dark:text-primary-400 fill-current"
-            />
-          );
-        } else {
-          // Empty star
-          return (
-            <Star
-              key={i}
-              size={12}
-              className="text-gray-300 dark:text-gray-600"
-            />
-          );
-        }
-      })}
-    </div>
-  );
-};
-
-// New component for the Budget Indicator
-const BudgetIndicator: React.FC<{ budget?: number; maxBudget?: number }> = ({
-  budget = 0,
-  maxBudget = 200,
-}) => {
-  const [lastBudget, setLastBudget] = useState(budget);
-  const isDangerouslyLow = budget < 50;
-  const hasChanged = budget !== lastBudget;
-
-  // Update lastBudget when budget changes
-  useEffect(() => {
-    setLastBudget(budget);
-  }, [budget]);
-
-  return (
-    <motion.div
-      className={`flex items-center gap-1 px-3 py-2 rounded-full shadow-sm ${
-        isDangerouslyLow
-          ? "bg-red-50/90 dark:bg-red-900/30 text-red-700 dark:text-red-300 shadow-red-500/20"
-          : "bg-gray-100/80 dark:bg-slate-700/30 text-gray-700 dark:text-gray-200 backdrop-blur-md"
-      }`}
-      animate={{
-        boxShadow: isDangerouslyLow
-          ? [
-              "0 0 0 rgba(239, 68, 68, 0.2)",
-              "0 0 12px rgba(239, 68, 68, 0.4)",
-              "0 0 5px rgba(239, 68, 68, 0.2)",
-            ]
-          : "0 1px 3px rgba(0, 0, 0, 0.1)",
-        scale: hasChanged ? [1, 1.05, 1] : 1,
-      }}
-      transition={{
-        boxShadow: {
-          repeat: isDangerouslyLow ? Infinity : 0,
-          duration: 1.5,
-          repeatType: "reverse",
-        },
-        scale: {
-          duration: 0.3,
-        },
-      }}
-    >
-      <Coins size={14} className="text-yellow-500 dark:text-yellow-400" />
-      <span className="text-xs font-medium whitespace-nowrap">
-        {budget} / {maxBudget}
-      </span>
-    </motion.div>
-  );
-};
-
-// New component for the Player Count Indicator
-const PlayerCountIndicator: React.FC<{
-  selectedCount: number;
-  maxPlayers?: number;
-  animate?: boolean;
-}> = ({ selectedCount, maxPlayers = 15, animate = false }) => {
-  return (
-    <motion.div
-      className="flex items-center gap-1 px-3 py-2 rounded-full bg-gray-100/80 dark:bg-slate-800/30 text-gray-700 dark:text-gray-200 backdrop-blur-md shadow-sm"
-      initial={animate ? { scale: 1 } : false}
-      animate={
-        animate
-          ? {
-              scale: [1, 1.1, 1],
-            }
-          : {}
-      }
-      transition={{ duration: 0.6 }}
-    >
-      <Users size={14} className="text-indigo-500 dark:text-indigo-400" />
-      <span className="text-xs font-medium whitespace-nowrap">
-        {selectedCount} / {maxPlayers}
-      </span>
-    </motion.div>
-  );
-};
 
 export function PlayerListModal({
   position,
@@ -274,24 +104,13 @@ export function PlayerListModal({
     container: containerRef,
   });
 
-  // Calculate header effects based on scroll position
-  const headerShadow = useTransform(
-    scrollY,
-    [0, 20],
-    ["none", "0 4px 10px rgba(0, 0, 0, 0.1)"]
-  );
-
-  // Subtle scale effect for header on scroll
-  const headerScale = useTransform(scrollY, [0, 30], [1, 0.99]);
-
   // Track scroll direction
   const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(
     null
   );
   const prevScrollY = useRef<number>(0);
 
-  // REMOVE the scroll-triggered search expansion behavior
-  // We'll keep a simplified version just to track scroll direction for UI effects
+  // Track scroll direction for UI effects
   useMotionValueEvent(scrollY, "change", (latest) => {
     const currentScrollY = latest;
     const direction = currentScrollY > prevScrollY.current ? "down" : "up";
@@ -304,35 +123,12 @@ export function PlayerListModal({
     prevScrollY.current = currentScrollY;
   });
 
-  // Shared background style for both header sections - theme aware
-  const headerBackgroundStyle = {
-    backdropFilter: "blur(12px)",
-  };
-
   // State to track if we're on a mobile device
   const [isMobile, setIsMobile] = useState(false);
   // State to track if search and filters should be visible - START COLLAPSED
   const [showSearchAndFilters, setShowSearchAndFilters] = useState(false);
 
-  // Ref for player cards
-  const playerCardRef = useRef<HTMLDivElement>(null);
-
-  // Detect mobile devices
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Check on mount
-    checkMobile();
-
-    // Add resize listener
-    window.addEventListener("resize", checkMobile);
-
-    // Clean up
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
+  // Filtered players state
   const [filteredPlayers, setFilteredPlayers] = useState<RugbyPlayer[]>([]);
   const [availablePositions, setAvailablePositions] = useState<string[]>([]);
   const [availableTeams, setAvailableTeams] = useState<string[]>([]);
@@ -442,7 +238,6 @@ export function PlayerListModal({
       return 0;
     });
 
-    //console.log("Filtered players:", result);
     setFilteredPlayers(result);
     setLoading(false);
   }, [
@@ -473,60 +268,7 @@ export function PlayerListModal({
 
   // Update the handleSelectPlayer function to store the player temporarily for the modal
   const handleSelectPlayer = (rugbyPlayer: RugbyPlayer) => {
-    const player: Player = {
-      id: rugbyPlayer.id || rugbyPlayer.tracking_id || String(Math.random()),
-      name: rugbyPlayer.player_name || "Unknown Player",
-      team: rugbyPlayer.team_name || "Unknown Team",
-      position: position.name,
-      price: rugbyPlayer.price || 0,
-      points: rugbyPlayer.power_rank_rating || 0,
-      image_url: rugbyPlayer.image_url || "",
-      power_rank_rating: rugbyPlayer.power_rank_rating || 0,
-
-      // Database stats (directly from schema)
-      points_kicking:
-        rugbyPlayer.points_kicking ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      tackling:
-        rugbyPlayer.tackling || Number((Math.random() * 2 + 3).toFixed(1)),
-      infield_kicking:
-        rugbyPlayer.infield_kicking ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      strength:
-        rugbyPlayer.strength || Number((Math.random() * 2 + 3).toFixed(1)),
-      playmaking:
-        rugbyPlayer.playmaking || Number((Math.random() * 2 + 3).toFixed(1)),
-      ball_carrying:
-        rugbyPlayer.ball_carrying || Number((Math.random() * 2 + 3).toFixed(1)),
-
-      // UI display stats (generated if not available)
-      tries: rugbyPlayer.tries || Math.floor(Math.random() * 15),
-      assists: rugbyPlayer.assists || Math.floor(Math.random() * 10),
-      tackles: rugbyPlayer.tackles || Math.floor(Math.random() * 150 + 50),
-
-      // Derived stats for UI display
-      try_scoring:
-        rugbyPlayer.try_scoring || Number((Math.random() * 2 + 3).toFixed(1)),
-      offloading:
-        rugbyPlayer.offloading || Number((Math.random() * 2 + 3).toFixed(1)),
-      breakdown_work:
-        rugbyPlayer.breakdown_work ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      defensive_positioning:
-        rugbyPlayer.defensive_positioning ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      goal_kicking:
-        rugbyPlayer.goal_kicking || Number((Math.random() * 2 + 3).toFixed(1)),
-      tactical_kicking:
-        rugbyPlayer.tactical_kicking ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      penalties_conceded:
-        rugbyPlayer.penalties_conceded ||
-        Number((Math.random() * 2 + 1).toFixed(1)),
-      discipline:
-        rugbyPlayer.discipline || Number((Math.random() * 2 + 3).toFixed(1)),
-      cards: rugbyPlayer.cards || Number((Math.random() * 2).toFixed(1)),
-    };
+    const player = createPlayerFromRugbyPlayer(rugbyPlayer, position.name);
 
     // Store the selected player for the modal
     setSelectedPlayer(player);
@@ -534,8 +276,6 @@ export function PlayerListModal({
     // Generate a unique layout ID for the shared element transition
     const layoutId = `player-card-${player.id}`;
     setSelectedLayoutId(layoutId);
-
-    // The actual onSelectPlayer will be called when the user confirms in the modal
   };
 
   // Function to handle adding the player to the team from the modal
@@ -628,6 +368,22 @@ export function PlayerListModal({
     setShowSort,
   ]);
 
+  // Detect mobile devices
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Check on mount
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener("resize", checkMobile);
+
+    // Clean up
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Calculate remaining budget based on selected players
   const calculateRemainingBudget = () => {
     const usedBudget = Object.values(selectedPlayers).reduce(
@@ -680,244 +436,51 @@ dark:[--header-shadow-scrolled:0_12px_24px_-8px_rgba(0,0,0,0.6),0_4px_10px_-4px_
 [--gradient-shadow-color:rgba(0,0,0,0.05)]
 dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
       >
-        {/* Header section - sticky top row with permanent controls */}
-        <div className="sticky top-0 inset-x-0 z-30">
-          {/* Always visible top row with title, close button, and indicators */}
-          <motion.div
-            ref={headerRef}
-            className="w-full border-b border-gray-200/40 dark:border-gray-800/40 relative"
-            style={{
-              background: "var(--header-gradient)",
-              backdropFilter: "blur(12px)",
-              boxShadow: useTransform(
-                scrollY,
-                [0, 20],
-                [
-                  "var(--header-shadow-default)",
-                  "var(--header-shadow-scrolled)",
-                ]
-              ),
-            }}
-          >
-            {/* Title and indicators section */}
-            <div className="relative flex flex-wrap md:flex-nowrap justify-between items-center p-4 pr-12">
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mr-2 transition-colors duration-300">
-                Select {position.name}
-              </h2>
-
-              {/* Close button positioned at the absolute top-right */}
-              <button
-                onClick={onClose}
-                className="absolute top-2 right-2 bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors"
-                aria-label="Close"
-                tabIndex={0}
-              >
-                <X size={18} />
-              </button>
-
-              <div className="flex items-center gap-2 mt-1 md:mt-0">
-                <motion.button
-                  onClick={handleToggleSearch}
-                  className={`bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors ${
-                    showSearchAndFilters
-                      ? "bg-gray-300/90 dark:bg-white/20 ring-2 ring-primary-300 dark:ring-primary-700"
-                      : ""
-                  }`}
-                  aria-label={
-                    showSearchAndFilters ? "Hide search" : "Show search"
-                  }
-                  aria-expanded={showSearchAndFilters}
-                  tabIndex={0}
-                  whileTap={{ scale: 0.95 }}
-                  animate={
-                    showSearchAndFilters
-                      ? {
-                          rotate: [0, -10, 0],
-                          boxShadow: [
-                            "0 0 0 rgba(37, 99, 235, 0)",
-                            "0 0 0 2px rgba(37, 99, 235, 0.3)",
-                            "0 0 0 rgba(37, 99, 235, 0)",
-                          ],
-                          transition: { duration: 0.3, times: [0, 0.5, 1] },
-                        }
-                      : {}
-                  }
-                >
-                  <Search size={18} />
-                </motion.button>
-                <PlayerCountIndicator
-                  selectedCount={selectedPlayerCount}
-                  maxPlayers={maxPlayers}
-                  animate={shouldAnimatePlayerCount}
-                />
-                <BudgetIndicator
-                  budget={remainingBudget}
-                  maxBudget={maxBudget}
-                />
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Search and filter panel - Absolutely positioned overlay */}
-        <AnimatePresence initial={false}>
-          {showSearchAndFilters && (
-            <motion.div
-              initial={{ opacity: 0, y: -5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              transition={{
-                duration: 0.2,
-                ease: "easeOut",
-              }}
-              className="absolute top-[var(--header-height)] left-0 right-0 z-40"
-              style={{
-                background: "var(--header-gradient)",
-                backdropFilter: "blur(12px)",
-                boxShadow: "0 6px 12px -6px var(--gradient-shadow-color)",
-                borderBottom: "1px solid rgba(0,0,0,0.05)",
-              }}
-            >
-              <div className="px-4 py-3 relative">
-                {loading ? (
-                  <div className="py-1">
-                    <LoadingSpinner />
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <PlayerSearchBar
-                      searchQuery={searchQuery}
-                      setSearchQuery={setSearchQuery}
-                    />
-
-                    {/* Filter controls */}
-                    <FilterSortControls
-                      showFilters={showFilters}
-                      setShowFilters={setShowFilters}
-                      showSort={showSort}
-                      setShowSort={setShowSort}
-                      positionFilter={positionFilter}
-                      teamFilter={teamFilter}
-                      clearFilters={clearFilters}
-                    />
-                  </div>
-                )}
-
-                {/* Filter and sort panels overlays */}
-                <AnimatePresence>
-                  {/* Backdrop for filter and sort panels */}
-                  {(showFilters || showSort) && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="fixed inset-0 bg-black/10 dark:bg-black/20 z-40"
-                      onClick={() => {
-                        setShowFilters(false);
-                        setShowSort(false);
-                      }}
-                    />
-                  )}
-
-                  {/* Filter panel */}
-                  {showFilters && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5, scaleY: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scaleY: 1 }}
-                      exit={{ opacity: 0, y: -5, scaleY: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute left-0 right-0 top-full mt-1 px-4 z-50"
-                      style={{ transformOrigin: "top center" }}
-                    >
-                      <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh]">
-                        <FilterPanel
-                          setShowFilters={setShowFilters}
-                          availablePositions={availablePositions}
-                          positionFilter={positionFilter}
-                          handlePositionFilter={handlePositionFilter}
-                          availableTeams={availableTeams}
-                          teamFilter={teamFilter}
-                          handleTeamFilter={handleTeamFilter}
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Sort panel */}
-                  {showSort && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5, scaleY: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scaleY: 1 }}
-                      exit={{ opacity: 0, y: -5, scaleY: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute left-0 right-0 top-full mt-1 px-4 z-50"
-                      style={{ transformOrigin: "top center" }}
-                    >
-                      <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh]">
-                        <SortPanel
-                          setShowSort={setShowSort}
-                          sortField={sortField}
-                          sortDirection={sortDirection}
-                          handleSort={handleSort}
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Gradient fade for depth effect - appears after header */}
-        <motion.div
-          className="h-[3px] z-10 pointer-events-none relative w-full"
-          style={{
-            background:
-              "linear-gradient(to bottom, var(--gradient-shadow-color), transparent)",
-            opacity: useTransform(scrollY, [0, 30], [1, 0.4]),
-          }}
+        {/* Header Component */}
+        <ModalHeader
+          title={`Select ${position.name}`}
+          onClose={onClose}
+          showSearchAndFilters={showSearchAndFilters}
+          handleToggleSearch={handleToggleSearch}
+          selectedPlayerCount={selectedPlayerCount}
+          maxPlayers={maxPlayers}
+          remainingBudget={remainingBudget}
+          maxBudget={maxBudget}
+          shouldAnimatePlayerCount={shouldAnimatePlayerCount}
+          headerRef={headerRef}
+          scrollY={scrollY}
         />
 
-        {/* Scrollable content area with cards */}
-        <div
-          ref={containerRef}
-          className="overflow-y-auto flex-1 px-2 pt-2 pb-3 scroll-smooth"
-        >
-          {filteredPlayers.length === 0 && !loading ? (
-            <EmptyState />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {filteredPlayers.map((player, index) => {
-                // Calculate ratings
-                const attackRating = calculateAttackRating(player);
-                const defenseRating = calculateDefenseRating(player);
-                const kickingRating = calculateKickingRating(player);
+        {/* Search and Filter Panel Component */}
+        <SearchFilterPanel
+          showSearchAndFilters={showSearchAndFilters}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          showFilters={showFilters}
+          setShowFilters={setShowFilters}
+          showSort={showSort}
+          setShowSort={setShowSort}
+          positionFilter={positionFilter}
+          teamFilter={teamFilter}
+          clearFilters={clearFilters}
+          loading={loading}
+          availablePositions={availablePositions}
+          handlePositionFilter={handlePositionFilter}
+          availableTeams={availableTeams}
+          handleTeamFilter={handleTeamFilter}
+          sortField={sortField}
+          sortDirection={sortDirection}
+          handleSort={handleSort}
+        />
 
-                // Create a unique layout ID for this player card
-                const cardLayoutId = `player-card-${
-                  player.id || player.tracking_id || Math.random()
-                }`;
-
-                return (
-                  <motion.div
-                    key={player.id || player.tracking_id || Math.random()}
-                  >
-                    <PlayerCard
-                      player={player}
-                      handleSelectPlayer={handleSelectPlayer}
-                      isFirstCard={index === 0} // First card in the list should always glint
-                      layoutId={cardLayoutId}
-                    />
-                  </motion.div>
-                );
-              })}
-            </div>
-          )}
-          {/* Add some empty space at the bottom for better scrolling experience */}
-          <div className="h-4" />
-        </div>
+        {/* Player List Component */}
+        <PlayerList
+          filteredPlayers={filteredPlayers}
+          loading={loading}
+          containerRef={containerRef}
+          scrollY={scrollY}
+          handleSelectPlayer={handleSelectPlayer}
+        />
       </div>
 
       {/* Player Details Modal with shared element transition */}
