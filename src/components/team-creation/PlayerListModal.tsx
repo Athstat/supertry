@@ -483,8 +483,8 @@ export function PlayerListModal({
     };
   }, []);
 
-  // Add view mode state
-  const [viewMode, setViewMode] = useState<ViewMode>("card");
+  // Add view mode state - Changed default from "card" to "list"
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   // Add a wrapper function for setSortDirection to handle type conversion
   const handleSetSortDirection = (direction: string) => {
@@ -511,7 +511,7 @@ export function PlayerListModal({
   return (
     <div className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
       <div
-        className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden relative
+        className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl lg:max-w-[75%] max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden relative
 [--header-gradient:linear-gradient(to_bottom,rgba(248,250,252,1),rgba(255,255,255,1),rgba(255,255,255,0.98))] 
 dark:[--header-gradient:linear-gradient(to_bottom,rgba(10,10,10,1),rgba(15,15,15,1),rgba(18,18,18,0.98))] 
 [--header-shadow-default:0_1px_3px_rgba(0,0,0,0.06)] 
@@ -534,6 +534,8 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
           shouldAnimatePlayerCount={shouldAnimatePlayerCount}
           headerRef={headerRef}
           scrollY={scrollY}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
         />
 
         {/* Search and Filter Panel Component */}
@@ -557,11 +559,6 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
           sortDirection={sortDirection}
           handleSort={handleSort}
         />
-
-        {/* View Toggle Component */}
-        <div className="px-3 pt-1 pb-2 flex justify-end items-center z-10">
-          <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-        </div>
 
         {/* Player List Component */}
         <PlayerList

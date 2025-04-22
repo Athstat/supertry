@@ -72,7 +72,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           <EmptyState />
         ) : viewMode === "card" ? (
           // Card View
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
             {filteredPlayers.map((player, index) => {
               // Create a unique layout ID for this player card
               const cardLayoutId = `player-card-${

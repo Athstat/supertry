@@ -35,7 +35,7 @@ export const PlayerSearchBar: React.FC<PlayerSearchBarProps> = ({
           bg-white/10 dark:bg-slate-800/30 
           text-gray-900 dark:text-gray-100 
           backdrop-blur-md
-          focus:ring-2 focus:ring-primary-500/70 dark:focus:ring-slate-500/70
+          
           placeholder-gray-500 dark:placeholder-gray-400"
         aria-label="Search players"
         tabIndex={0}

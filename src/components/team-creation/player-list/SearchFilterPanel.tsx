@@ -66,7 +66,7 @@ export const SearchFilterPanel: React.FC<SearchFilterPanelProps> = ({
             borderBottom: "1px solid rgba(0,0,0,0.05)",
           }}
         >
-          <div className="px-4 py-3 relative">
+          <div className="px-4 py-3 relative max-w-3xl lg:max-w-[90%] mx-auto">
             {loading ? (
               <div className="py-1">
                 <LoadingSpinner />
@@ -118,7 +118,7 @@ export const SearchFilterPanel: React.FC<SearchFilterPanelProps> = ({
                   className="absolute left-0 right-0 top-full mt-1 px-4 z-50"
                   style={{ transformOrigin: "top center" }}
                 >
-                  <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh]">
+                  <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh] mx-auto max-w-3xl lg:max-w-[90%]">
                     <FilterPanel
                       setShowFilters={setShowFilters}
                       availablePositions={availablePositions}
@@ -142,7 +142,7 @@ export const SearchFilterPanel: React.FC<SearchFilterPanelProps> = ({
                   className="absolute left-0 right-0 top-full mt-1 px-4 z-50"
                   style={{ transformOrigin: "top center" }}
                 >
-                  <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh]">
+                  <div className="bg-white dark:bg-dark-800 shadow-xl dark:shadow-black/40 rounded-lg border border-gray-200/50 dark:border-gray-700/30 overflow-auto max-h-[60vh] mx-auto max-w-3xl lg:max-w-[90%]">
                     <SortPanel
                       setShowSort={setShowSort}
                       sortField={sortField}

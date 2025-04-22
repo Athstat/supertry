@@ -58,9 +58,6 @@ const PlayerTooltip: React.FC<{ player: RugbyPlayer }> = ({ player }) => {
           <p className="text-sm text-gray-600 dark:text-gray-300">
             {player.team_name} | {player.position_class}
           </p>
-          <div className="mt-1 text-sm font-semibold text-primary-600 dark:text-primary-400">
-            £{player.price}M
-          </div>
         </div>
       </div>
 
@@ -150,7 +147,18 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
           "defense",
           "kicking",
         ]);
+      } else if (window.innerWidth < 1280) {
+        setVisibleColumns([
+          "power_rank_rating",
+          "price",
+          "attack",
+          "defense",
+          "kicking",
+          "try_scoring",
+          "playmaking",
+        ]);
       } else {
+        // For very large screens (xl and above)
         setVisibleColumns([
           "power_rank_rating",
           "price",
@@ -161,6 +169,8 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
           "playmaking",
           "tackling",
           "discipline",
+          "breakdown_work",
+          "strength",
         ]);
       }
     };
@@ -187,12 +197,11 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
   };
 
   const calculateDefenseRating = (player: RugbyPlayer): number => {
-    const stats = [
-      player.tackling || 0,
-      player.defensive_positioning || 0,
-      player.breakdown_work || 0,
-      player.discipline || 0,
-    ];
+    console.log("Rugby Player", player);
+    if (!player.tackling) {
+      return 0;
+    }
+    const stats = [player.tackling];
 
     const sum = stats.reduce((acc, val) => acc + val, 0);
     return stats.filter(Boolean).length > 0
@@ -383,9 +392,6 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
               <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
                 {player.team_name}
               </div>
-              <div className="text-xs font-medium text-primary-600 dark:text-primary-400">
-                £{player.price}M
-              </div>
             </div>
 
             {/* Add button/indicator */}
@@ -416,7 +422,7 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
         {/* Price */}
         {visibleColumns.includes("price") && (
           <td className="px-2 py-3 text-center text-sm font-medium">
-            £{player.price}M
+            {player.price}
           </td>
         )}
 

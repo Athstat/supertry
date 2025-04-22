@@ -1,7 +1,7 @@
 import React from "react";
-import { Grid, List } from "lucide-react";
+import { LayoutGrid, ListIcon } from "lucide-react";
 
-export type ViewMode = "card" | "list";
+export type ViewMode = "grid" | "list";
 
 interface ViewToggleProps {
   viewMode: ViewMode;
@@ -12,35 +12,37 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
   viewMode,
   setViewMode,
 }) => {
-  const handleToggleView = (mode: ViewMode) => {
-    setViewMode(mode);
-  };
+  const handleToggleGrid = () => setViewMode("grid");
+  const handleToggleList = () => setViewMode("list");
 
   return (
-    <div className="flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden bg-white/50 dark:bg-dark-900/30 backdrop-blur-sm p-0.5">
+    <div className="flex items-center bg-gray-100/80 dark:bg-slate-800/60 rounded-lg p-1 shadow-sm">
       <button
-        onClick={() => handleToggleView("card")}
-        className={`flex items-center justify-center p-2 rounded transition-all ${
-          viewMode === "card"
-            ? "bg-primary-500 text-white shadow-sm"
-            : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-800"
+        onClick={handleToggleGrid}
+        className={`flex items-center justify-center p-1.5 rounded-md transition-colors ${
+          viewMode === "grid"
+            ? "bg-white dark:bg-slate-700 text-primary-600 dark:text-primary-400 shadow-sm"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/50 dark:hover:bg-slate-700/50"
         }`}
-        aria-label="Card view"
-        aria-pressed={viewMode === "card"}
+        aria-label="Grid view"
+        aria-pressed={viewMode === "grid"}
+        tabIndex={0}
       >
-        <Grid size={18} />
+        <LayoutGrid size={18} />
       </button>
+
       <button
-        onClick={() => handleToggleView("list")}
-        className={`flex items-center justify-center p-2 rounded transition-all ${
+        onClick={handleToggleList}
+        className={`flex items-center justify-center p-1.5 rounded-md transition-colors ${
           viewMode === "list"
-            ? "bg-primary-500 text-white shadow-sm"
-            : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-800"
+            ? "bg-white dark:bg-slate-700 text-primary-600 dark:text-primary-400 shadow-sm"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/50 dark:hover:bg-slate-700/50"
         }`}
         aria-label="List view"
         aria-pressed={viewMode === "list"}
+        tabIndex={0}
       >
-        <List size={18} />
+        <ListIcon size={18} />
       </button>
     </div>
   );

@@ -1,6 +1,6 @@
 import React from "react";
-import { Users } from "lucide-react";
 import { motion } from "framer-motion";
+import { User } from "lucide-react";
 
 interface PlayerCountIndicatorProps {
   selectedCount: number;
@@ -13,21 +13,32 @@ export const PlayerCountIndicator: React.FC<PlayerCountIndicatorProps> = ({
   maxPlayers = 15,
   animate = false,
 }) => {
+  // Determine color based on count
+  const getCountColor = () => {
+    if (selectedCount === maxPlayers)
+      return "text-green-500 dark:text-green-400";
+    if (selectedCount >= maxPlayers * 0.7)
+      return "text-amber-500 dark:text-amber-400";
+    return "text-blue-500 dark:text-blue-400";
+  };
+
   return (
     <motion.div
-      className="flex items-center gap-1 px-3 py-2 rounded-full bg-gray-100/80 dark:bg-slate-800/30 text-gray-700 dark:text-gray-200 backdrop-blur-md shadow-sm"
-      initial={animate ? { scale: 1 } : false}
+      className="flex items-center gap-1.5 px-3 py-1.5 bg-white/80 dark:bg-slate-800/80 rounded-lg text-sm shadow-sm"
       animate={
         animate
           ? {
-              scale: [1, 1.1, 1],
+              scale: [1, 1.05, 1],
+              transition: { duration: 0.3 },
             }
           : {}
       }
-      transition={{ duration: 0.6 }}
     >
-      <Users size={14} className="text-indigo-500 dark:text-indigo-400" />
-      <span className="text-xs font-medium whitespace-nowrap">
+      <User size={14} className="text-gray-500 dark:text-gray-400" />
+      <span className="text-gray-500 dark:text-gray-400 font-medium">
+        Players:
+      </span>
+      <span className={`font-semibold ${getCountColor()}`}>
         {selectedCount} / {maxPlayers}
       </span>
     </motion.div>
