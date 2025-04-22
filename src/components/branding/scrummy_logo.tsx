@@ -1,15 +1,6 @@
 import { ThemeProvider, useTheme } from '../../contexts/ThemeContext'
 
 export default function ScrummyLogo() {
-    return (
-        <ThemeProvider>
-            <ThemedLogoWrapper />
-        </ThemeProvider>
-    )
-}
-
-function ThemedLogoWrapper() {
-
     const { theme } = useTheme();
 
     return (
@@ -30,7 +21,7 @@ export function ScrummyLightModeLogo() {
 export function ScrummyDarkModeLogo() {
     return (
         <>
-            <p>Dark Mode Logo</p>
+            <p className='text-white' >Dark Mode Logo</p>
         </>
     )
 }

@@ -3,6 +3,7 @@ import { Bell, Menu, Shield, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
+import ScrummyLogo from "./branding/scrummy_logo";
 
 export function Header() {
   const navigate = useNavigate();
@@ -28,10 +29,7 @@ export function Header() {
               <Menu size={24} />
             </button>
             <div className="flex items-center gap-2">
-              <Shield className="w-8 h-8 text-primary-500" />
-              <span className="text-xl font-bold dark:text-gray-100">
-                SCRUMMY
-              </span>
+              <ScrummyLogo />
             </div>
           </div>
 
