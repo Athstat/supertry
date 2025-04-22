@@ -1,27 +1,34 @@
-import { ThemeProvider, useTheme } from '../../contexts/ThemeContext'
+import { useTheme } from '../../contexts/ThemeContext'
+import lightModeLogo from "./logo_light_mode.svg";
+import darkModeLogo from "./logo_dark_mode.svg";
+import { twMerge } from 'tailwind-merge';
 
-export default function ScrummyLogo() {
+type LogoProps = {
+    className?:string
+}
+
+export default function ScrummyLogo({className} : LogoProps) {
     const { theme } = useTheme();
 
     return (
         <>
-            {theme === 'light' ? <ScrummyLightModeLogo /> : <ScrummyDarkModeLogo />}
+            {theme === 'light' ? <ScrummyLightModeLogo className={className}  /> : <ScrummyDarkModeLogo className={className} />}
         </>
     )
 }
 
-export function ScrummyLightModeLogo() {
+export function ScrummyLightModeLogo({className} : LogoProps) {
     return (
         <>
-            <p>Light Mode Logo</p>
+            <img className={twMerge('w-24 h-24', className)} src={lightModeLogo} alt='scrummy_logo' />
         </>
     )
 }
 
-export function ScrummyDarkModeLogo() {
+export function ScrummyDarkModeLogo({className} : LogoProps) {
     return (
         <>
-            <p className='text-white' >Dark Mode Logo</p>
+            <img className={twMerge('w-24 h-24', className)} src={darkModeLogo} alt='scrummy_logo' />
         </>
     )
 }

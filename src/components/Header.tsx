@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Bell, Menu, Shield, User } from "lucide-react";
+import { useState } from "react";
+import { Bell, Menu, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
