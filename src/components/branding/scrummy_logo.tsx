@@ -7,6 +7,8 @@ type LogoProps = {
     className?:string
 }
 
+const defaultLogoClass = "w-20 h-20 md:w-24 md:h-24";
+
 export default function ScrummyLogo({className} : LogoProps) {
     const { theme } = useTheme();
 
@@ -20,7 +22,7 @@ export default function ScrummyLogo({className} : LogoProps) {
 export function ScrummyLightModeLogo({className} : LogoProps) {
     return (
         <>
-            <img className={twMerge('w-24 h-24', className)} src={lightModeLogo} alt='scrummy_logo' />
+            <img className={twMerge(defaultLogoClass, className)} src={lightModeLogo} alt='scrummy_logo' />
         </>
     )
 }
@@ -28,7 +30,7 @@ export function ScrummyLightModeLogo({className} : LogoProps) {
 export function ScrummyDarkModeLogo({className} : LogoProps) {
     return (
         <>
-            <img className={twMerge('w-24 h-24', className)} src={darkModeLogo} alt='scrummy_logo' />
+            <img className={twMerge(defaultLogoClass, className)} src={darkModeLogo} alt='scrummy_logo' />
         </>
     )
 }
