@@ -1,6 +1,6 @@
 import { useTheme } from '../../contexts/ThemeContext'
-import lightModeLogo from "./logo_light_mode.svg";
-import darkModeLogo from "./logo_dark_mode.svg";
+import lightModeLogo from "./assets/logo_light_mode.svg";
+import darkModeLogo from "./assets/logo_dark_mode.svg";
 import { twMerge } from 'tailwind-merge';
 
 type LogoProps = {
