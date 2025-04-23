@@ -12,7 +12,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center items-center justify-center flex flex-col">
 
-           <ScrummyLogo className="w-44 h-44"/>
+           <ScrummyLogo className="w-44 h-44 md:w-44 md:h-44"/>
 
           <h1 className="text-2xl mt-0 font-bold text-gray-900 dark:text-gray-100">
             {title}
