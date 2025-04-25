@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Bell, Menu, Shield, User } from "lucide-react";
+import { useState } from "react";
+import { Bell, Menu, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
+import ScrummyLogo from "./branding/scrummy_logo";
+import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
 
 export function Header() {
   const navigate = useNavigate();
@@ -18,8 +20,9 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none mb-0 pb-0">
+        
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center">
             <button
               onClick={() => setIsDrawerOpen(true)}
               className="p-2 -ml-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
@@ -27,11 +30,9 @@ export function Header() {
             >
               <Menu size={24} />
             </button>
-            <div className="flex items-center gap-2">
-              <Shield className="w-8 h-8 text-primary-500" />
-              <span className="text-xl font-bold dark:text-gray-100">
-                SCRUMMY
-              </span>
+
+            <div className="flex flex-row items-start justify-start">
+              <ScrummyLogoHorizontal />
             </div>
           </div>
 
