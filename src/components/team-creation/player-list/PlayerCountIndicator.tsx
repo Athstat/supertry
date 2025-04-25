@@ -10,7 +10,7 @@ interface PlayerCountIndicatorProps {
 
 export const PlayerCountIndicator: React.FC<PlayerCountIndicatorProps> = ({
   selectedCount,
-  maxPlayers = 15,
+  maxPlayers = 5,
   animate = false,
 }) => {
   // Determine color based on count

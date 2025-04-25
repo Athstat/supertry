@@ -1,13 +1,13 @@
 {
   "folders": [
     {
+      "path": "../../supertry/supertry-web-view/supertry"
+    },
+    {
+      "path": "../../athstat-games-2/athstat-games"
+    },
+    {
       "path": "."
-    },
-    {
-      "path": "../../athstat-games-2/athstat-games/server"
-    },
-    {
-      "path": "../../athstat-games-mobile-app"
     }
   ],
   "settings": {}

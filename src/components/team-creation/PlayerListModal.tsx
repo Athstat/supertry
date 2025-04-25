@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Position } from "../../types/position";
 import { Player } from "../../types/player";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
@@ -14,6 +14,7 @@ import { SearchFilterPanel } from "./player-list/SearchFilterPanel";
 import { PlayerList } from "./player-list/PlayerList";
 import { ViewToggle, ViewMode } from "./player-list/ViewToggle";
 import { createPlayerFromRugbyPlayer } from "../../utils/playerRatings";
+import { X } from "lucide-react";
 
 type SortField =
   | "power_rank_rating"
@@ -75,8 +76,14 @@ export function PlayerListModal({
   // New props with defaults
   budget = 100,
   maxBudget = 200,
-  maxPlayers = 15,
+  maxPlayers = 5,
 }: PlayerListModalProps) {
+  // Create a wrapper for onClose to ensure it's called properly
+  const handleClose = useCallback(() => {
+    console.log("Closing PlayerListModal");
+    onClose();
+  }, [onClose]);
+
   // Local state for when external state is not provided
   const [localSortField, setLocalSortField] =
     useState<string>("power_rank_rating");
@@ -401,6 +408,12 @@ export function PlayerListModal({
   useEffect(() => {
     const handleEscKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        // Close the entire modal first if escape is pressed
+        handleClose();
+        return;
+
+        // These sections will no longer be reached since we're returning above
+        // but we'll keep them for reference
         // Close search panel if it's open
         if (showSearchAndFilters) {
           e.stopPropagation(); // Prevent default ESC behavior
@@ -426,6 +439,7 @@ export function PlayerListModal({
     showSort,
     setShowFilters,
     setShowSort,
+    handleClose,
   ]);
 
   // Detect mobile devices
@@ -509,7 +523,15 @@ export function PlayerListModal({
   };
 
   return (
-    <div className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200">
+    <div
+      className="fixed inset-0 dark:bg-dark-850/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-200"
+      onClick={(e) => {
+        // Only close if the click was directly on the backdrop (not bubbled from children)
+        if (e.target === e.currentTarget) {
+          handleClose();
+        }
+      }}
+    >
       <div
         className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-2xl lg:max-w-[75%] max-h-[80vh] flex flex-col shadow-xl border border-gray-200/80 dark:border-gray-800 overflow-hidden relative
 [--header-gradient:linear-gradient(to_bottom,rgba(248,250,252,1),rgba(255,255,255,1),rgba(255,255,255,0.98))] 
@@ -520,11 +542,25 @@ dark:[--header-shadow-default:0_1px_4px_rgba(0,0,0,0.3)]
 dark:[--header-shadow-scrolled:0_12px_24px_-8px_rgba(0,0,0,0.6),0_4px_10px_-4px_rgba(0,0,0,0.4)] 
 [--gradient-shadow-color:rgba(0,0,0,0.05)]
 dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
       >
+        {/* Close button as a direct child for improved accessibility */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleClose();
+          }}
+          className="absolute top-2 right-2 bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors z-[60]"
+          aria-label="Close modal"
+          tabIndex={0}
+        >
+          <X size={18} />
+        </button>
+
         {/* Header Component */}
         <ModalHeader
           title={`Select ${position.name}`}
-          onClose={onClose}
+          onClose={handleClose}
           showSearchAndFilters={showSearchAndFilters}
           handleToggleSearch={handleToggleSearch}
           selectedPlayerCount={selectedPlayerCount}
@@ -574,6 +610,7 @@ dark:[--gradient-shadow-color:rgba(0,0,0,0.3)]"
           setSortField={handleSetSortField}
           sortDirection={sortDirection}
           setSortDirection={handleSetSortDirection}
+          selectedPlayers={selectedPlayers}
         />
       </div>
 

@@ -35,7 +35,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
   showSearchAndFilters,
   handleToggleSearch,
   selectedPlayerCount,
-  maxPlayers = 15,
+  maxPlayers = 5,
   remainingBudget,
   maxBudget = 200,
   shouldAnimatePlayerCount,
@@ -93,15 +93,6 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
           willChange: "transform", // Hint for GPU acceleration
         }}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 bg-gray-200/70 hover:bg-gray-300/70 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white p-1.5 rounded-lg transition-colors z-10"
-          aria-label="Close"
-          tabIndex={0}
-        >
-          <X size={18} />
-        </button>
-
         {/* Content wrapper with blur prevention */}
         <div
           className="relative z-10"

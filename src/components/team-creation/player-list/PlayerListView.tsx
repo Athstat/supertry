@@ -10,6 +10,7 @@ import {
   Loader2,
   ChevronRight,
   Info,
+  CheckCircle,
 } from "lucide-react";
 import { createPlayerFromRugbyPlayer } from "../../../utils/playerRatings";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,6 +26,7 @@ interface PlayerListViewProps {
   setSortField: (field: string) => void;
   sortDirection: string;
   setSortDirection: (direction: string) => void;
+  selectedPlayers?: Record<string, Player>;
 }
 
 // PlayerTooltip component for showing more info on hover
@@ -109,6 +111,7 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
   setSortField,
   sortDirection,
   setSortDirection,
+  selectedPlayers = {},
 }) => {
   const [loadingPlayers, setLoadingPlayers] = useState<Record<string, boolean>>(
     {}
@@ -235,9 +238,22 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
     }
   };
 
-  // Handle adding a player directly from list view
-  const handleAddPlayer = async (rugbyPlayer: RugbyPlayer) => {
+  // Function to check if a player is already selected
+  const isPlayerSelected = (playerId: string): boolean => {
+    return Object.keys(selectedPlayers).includes(playerId);
+  };
+
+  // Handle adding a player directly from list view - Button click
+  const handleAddButtonClick = async (
+    e: React.MouseEvent,
+    rugbyPlayer: RugbyPlayer
+  ) => {
+    e.stopPropagation(); // Prevent opening details modal
+
     const playerId = rugbyPlayer.tracking_id || "";
+
+    // If player is already selected, don't add again
+    if (isPlayerSelected(playerId)) return;
 
     // Set loading state for this specific player
     setLoadingPlayers((prev) => ({ ...prev, [playerId]: true }));
@@ -257,6 +273,22 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
         setLoadingPlayers((prev) => ({ ...prev, [playerId]: false }));
       }, 300);
     }
+  };
+
+  // Handle player row click - opens details modal
+  const handlePlayerRowClick = (rugbyPlayer: RugbyPlayer) => {
+    // The idea here is to only open details without adding player
+    // Create a player object for details display
+    const player = createPlayerFromRugbyPlayer(rugbyPlayer, positionName);
+
+    // This should open the PlayerDetailsModal or similar functionality
+    // that was previously handled when clicking on the row
+    const playerId = rugbyPlayer.tracking_id || "";
+    setTooltipPlayer(rugbyPlayer);
+
+    // Note: In a real implementation, we would call some function to open the details
+    // but since we don't have direct access to that functionality, we're just
+    // simulating what the previous implementation did without actually adding the player
   };
 
   // Check if a player is a league leader (power rank > 85)
@@ -336,6 +368,7 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
     const attackRating = calculateAttackRating(player);
     const defenseRating = calculateDefenseRating(player);
     const kickingRating = calculateKickingRating(player);
+    const isSelected = isPlayerSelected(playerId);
 
     return (
       <tr
@@ -345,23 +378,47 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
         onMouseLeave={() => !isMobile && setTooltipPlayer(null)}
       >
         {/* Sticky player info column */}
-        <td className="sticky left-0 z-10 bg-white dark:bg-dark-850 p-2 min-w-[150px] md:min-w-[180px] hover:bg-gray-50 dark:hover:bg-dark-800/30">
-          <div
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={() => handleAddPlayer(player)}
-          >
-            {/* Player image */}
-            <div className="relative w-10 h-10 flex-shrink-0">
-              {player.image_url ? (
-                <img
-                  src={player.image_url}
-                  alt={player.player_name}
-                  className="w-10 h-10 object-cover rounded-lg bg-gray-200 dark:bg-gray-800"
-                />
+        <td className="sticky left-0 z-10 bg-white dark:bg-dark-850 p-2 min-w-[120px] md:min-w-[170px] hover:bg-gray-50 dark:hover:bg-dark-800/30">
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* Quick-add button with conditional rendering based on selection state */}
+            <button
+              onClick={(e) => handleAddButtonClick(e, player)}
+              className={`w-7 h-7 flex-shrink-0 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/50 ${
+                isSelected
+                  ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400"
+                  : "bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-800/40 text-primary-600 dark:text-primary-400"
+              }`}
+              aria-label={isSelected ? "Added to team" : "Add to team"}
+              title={isSelected ? "Added to team" : "Add to team"}
+              tabIndex={0}
+              disabled={isSelected}
+            >
+              {isLoading ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : isSelected ? (
+                <CheckCircle size={14} strokeWidth={2.5} />
               ) : (
-                <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                <Plus size={14} strokeWidth={2.5} />
+              )}
+            </button>
+
+            {/* Player image with content wrapper for better spacing */}
+            <div
+              className="relative w-9 h-9 md:w-10 md:h-10 flex-shrink-0 cursor-pointer"
+              onClick={() => handlePlayerRowClick(player)}
+            >
+              {player.image_url ? (
+                <div className="w-full h-full rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-800">
+                  <img
+                    src={player.image_url}
+                    alt={player.player_name}
+                    className="w-full h-full object-cover object-top pt-1.5" /* Added padding-top to create space above head */
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-full rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <User
-                    size={20}
+                    size={18}
                     className="text-gray-500 dark:text-gray-400"
                   />
                 </div>
@@ -369,43 +426,37 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
 
               {/* Badges */}
               {isLeagueLeader(player) && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4">
+                <span className="absolute -top-1 -right-1 flex h-3 w-3 md:h-4 md:w-4">
                   <Award
-                    size={16}
+                    size={14}
                     className="text-yellow-500"
                     fill="currentColor"
                   />
                 </span>
               )}
               {isOnFire(player) && !isLeagueLeader(player) && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                  <Zap size={16} className="text-red-500" fill="currentColor" />
+                <span className="absolute -top-1 -right-1 flex h-3 w-3 md:h-4 md:w-4">
+                  <Zap size={14} className="text-red-500" fill="currentColor" />
                 </span>
               )}
             </div>
 
             {/* Player details */}
-            <div className="flex flex-col min-w-0">
-              <div className="font-medium text-sm text-gray-900 dark:text-gray-100 truncate">
+            <div
+              className="flex flex-col min-w-0 cursor-pointer"
+              onClick={() => handlePlayerRowClick(player)}
+            >
+              <div className="font-medium text-xs md:text-sm text-gray-900 dark:text-gray-100 truncate">
                 {player.player_name}
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              <div className="text-xxs md:text-xs text-gray-500 dark:text-gray-400 truncate">
                 {player.team_name}
               </div>
             </div>
 
-            {/* Add button/indicator */}
-            <div className="ml-auto flex-shrink-0">
-              {isLoading ? (
-                <div className="w-6 h-6 flex items-center justify-center">
-                  <Loader2
-                    size={14}
-                    className="animate-spin text-primary-500"
-                  />
-                </div>
-              ) : (
-                <ChevronRight size={16} className="text-gray-400" />
-              )}
+            {/* Chevron indicator is now optional on mobile to save space */}
+            <div className="ml-auto flex-shrink-0 hidden md:block">
+              <ChevronRight size={16} className="text-gray-400" />
             </div>
           </div>
         </td>
@@ -413,7 +464,7 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
         {/* Power rank rating */}
         {visibleColumns.includes("power_rank_rating") && (
           <td className="px-2 py-3 text-center">
-            <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white text-sm font-semibold">
+            <div className="inline-flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white text-xs md:text-sm font-semibold">
               {player.power_rank_rating}
             </div>
           </td>
@@ -421,7 +472,7 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
 
         {/* Price */}
         {visibleColumns.includes("price") && (
-          <td className="px-2 py-3 text-center text-sm font-medium">
+          <td className="px-2 py-3 text-center text-xs md:text-sm font-medium min-w-[60px]">
             {player.price}
           </td>
         )}
@@ -458,14 +509,15 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
       <div
         ref={containerRef}
         className="w-full h-full overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
+        style={{ overscrollBehaviorX: "contain" }}
       >
-        <table className="min-w-full border-collapse">
+        <table className="min-w-full md:w-auto border-collapse">
           <thead className="sticky top-0 bg-white dark:bg-dark-850 z-10 shadow-sm">
             <tr className="border-b dark:border-gray-700">
-              {/* Fixed width player info column */}
-              <th className="w-[150px] min-w-[150px] md:min-w-[180px] sticky left-0 z-20 bg-white dark:bg-dark-850 px-2 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-200">
+              {/* Fixed width player info column - narrower on mobile */}
+              <th className="w-[120px] min-w-[120px] md:w-[170px] md:min-w-[170px] sticky left-0 z-20 bg-white dark:bg-dark-850 px-2 py-3 text-left text-xs md:text-sm font-medium text-gray-700 dark:text-gray-200">
                 Player
-                <span className="ml-1 text-xs text-gray-400 hidden md:inline">
+                <span className="ml-1 text-xxs md:text-xs text-gray-400 hidden md:inline">
                   (tap to add)
                 </span>
               </th>

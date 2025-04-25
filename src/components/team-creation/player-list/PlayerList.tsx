@@ -32,6 +32,7 @@ interface PlayerListProps {
   setSortField: (field: string) => void;
   sortDirection: string;
   setSortDirection: (direction: string) => void;
+  selectedPlayers?: Record<string, Player>; // Add selectedPlayers prop
 }
 
 export const PlayerList: React.FC<PlayerListProps> = ({
@@ -47,6 +48,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   setSortField,
   sortDirection,
   setSortDirection,
+  selectedPlayers = {}, // Default to empty object
 }) => {
   // Create opacity transform from scroll position
   const gradientOpacity = useTransform(scrollY, [0, 30], [1, 0.4]);
@@ -70,7 +72,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
       >
         {filteredPlayers.length === 0 && !loading ? (
           <EmptyState />
-        ) : viewMode === "card" ? (
+        ) : viewMode === "grid" ? (
           // Card View
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
             {filteredPlayers.map((player, index) => {
@@ -103,6 +105,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
             setSortField={setSortField}
             sortDirection={sortDirection}
             setSortDirection={setSortDirection}
+            selectedPlayers={selectedPlayers}
           />
         )}
         {/* Add some empty space at the bottom for better scrolling experience */}
