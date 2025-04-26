@@ -4,6 +4,7 @@ import { motion, useTransform } from "framer-motion";
 import { BudgetIndicator } from "./BudgetIndicator";
 import { PlayerCountIndicator } from "./PlayerCountIndicator";
 import { ViewToggle, ViewMode } from "./ViewToggle";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 interface ModalHeaderProps {
   title: string;
@@ -52,6 +53,9 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
   teamFilter,
   clearFilters,
 }) => {
+  // Use media query to detect mobile view
+  const isMobile = useMediaQuery("(max-width: 767px)");
+
   // Generate the transform value from scrollY
   const headerShadow = useTransform(
     scrollY,
@@ -196,10 +200,12 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
                 </motion.button>
               </div>
 
-              {/* Desktop only view toggle */}
-              <div className="hidden md:block">
-                <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-              </div>
+              {/* Only show view toggle on desktop */}
+              {!isMobile && (
+                <div className="ml-auto">
+                  <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+                </div>
+              )}
             </div>
 
             {/* Mobile Filter, Sort, and View Toggle in single row */}

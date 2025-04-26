@@ -15,6 +15,7 @@ import { PlayerList } from "./player-list/PlayerList";
 import { ViewToggle, ViewMode } from "./player-list/ViewToggle";
 import { createPlayerFromRugbyPlayer } from "../../utils/playerRatings";
 import { X } from "lucide-react";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 type SortField =
   | "power_rank_rating"
@@ -138,7 +139,7 @@ export function PlayerListModal({
   });
 
   // State to track if we're on a mobile device
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
   // State to track if search and filters should be visible - START COLLAPSED
   const [showSearchAndFilters, setShowSearchAndFilters] = useState(false);
 
@@ -441,22 +442,6 @@ export function PlayerListModal({
     setShowSort,
     handleClose,
   ]);
-
-  // Detect mobile devices
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Check on mount
-    checkMobile();
-
-    // Add resize listener
-    window.addEventListener("resize", checkMobile);
-
-    // Clean up
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   // Calculate remaining budget based on selected players
   const calculateRemainingBudget = () => {

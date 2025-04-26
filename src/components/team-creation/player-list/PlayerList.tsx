@@ -2,10 +2,12 @@ import React from "react";
 import { motion, useTransform } from "framer-motion";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { PlayerCard } from "./PlayerCard";
-import { PlayerListView } from "./PlayerListView";
+import { PlayerListDesktop } from "./PlayerListDesktop";
+import { PlayerListMobile } from "./PlayerListMobile";
 import { EmptyState } from "./EmptyState";
 import { ViewMode } from "./ViewToggle";
 import { Player } from "../../../types/player";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 // Custom sort fields for the list view
 export type CustomSortField =
@@ -53,6 +55,9 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   // Create opacity transform from scroll position
   const gradientOpacity = useTransform(scrollY, [0, 30], [1, 0.4]);
 
+  // Use media query to detect screen size - use max-width for mobile
+  const isMobile = useMediaQuery("(max-width: 767px)");
+
   return (
     <>
       {/* Gradient fade for depth effect - appears after header */}
@@ -95,9 +100,17 @@ export const PlayerList: React.FC<PlayerListProps> = ({
               );
             })}
           </div>
+        ) : // List View - conditionally render mobile or desktop view based on screen size
+        isMobile ? (
+          <PlayerListMobile
+            filteredPlayers={filteredPlayers}
+            onSelectPlayer={onSelectPlayer}
+            positionName={positionName}
+            selectedPlayers={selectedPlayers}
+            loading={loading}
+          />
         ) : (
-          // List View
-          <PlayerListView
+          <PlayerListDesktop
             filteredPlayers={filteredPlayers}
             onSelectPlayer={onSelectPlayer}
             positionName={positionName}
@@ -106,6 +119,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
             sortDirection={sortDirection}
             setSortDirection={setSortDirection}
             selectedPlayers={selectedPlayers}
+            loading={loading}
           />
         )}
         {/* Add some empty space at the bottom for better scrolling experience */}

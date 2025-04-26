@@ -118,6 +118,7 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isScrolledHorizontally, setIsScrolledHorizontally] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     "power_rank_rating",
     "price",
@@ -139,49 +140,50 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
 
-      // Adjust visible columns based on screen width
-      if (window.innerWidth < 768) {
-        setVisibleColumns(["power_rank_rating", "price", "attack"]);
-      } else if (window.innerWidth < 1024) {
-        setVisibleColumns([
-          "power_rank_rating",
-          "price",
-          "attack",
-          "defense",
-          "kicking",
-        ]);
-      } else if (window.innerWidth < 1280) {
-        setVisibleColumns([
-          "power_rank_rating",
-          "price",
-          "attack",
-          "defense",
-          "kicking",
-          "try_scoring",
-          "playmaking",
-        ]);
-      } else {
-        // For very large screens (xl and above)
-        setVisibleColumns([
-          "power_rank_rating",
-          "price",
-          "attack",
-          "defense",
-          "kicking",
-          "try_scoring",
-          "playmaking",
-          "tackling",
-          "discipline",
-          "breakdown_work",
-          "strength",
-        ]);
-      }
+      // Remove the dynamic column visibility logic to always show all columns
+      // No matter the screen size, we want to show all columns and allow scrolling
+      setVisibleColumns([
+        "power_rank_rating",
+        "price",
+        "attack",
+        "defense",
+        "kicking",
+        "try_scoring",
+        "playmaking",
+        "tackling",
+        "discipline",
+        "breakdown_work",
+        "strength",
+      ]);
     };
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Add scroll listener to detect horizontal scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current && isMobile) {
+        // Check if scrolled horizontally (more than 10px)
+        setIsScrolledHorizontally(containerRef.current.scrollLeft > 10);
+      }
+    };
+
+    const scrollContainer = containerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll, {
+        passive: true,
+      });
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [containerRef, isMobile]);
 
   // Helper functions for rating calculations (same as before)
   const calculateAttackRating = (player: RugbyPlayer): number => {
@@ -331,10 +333,8 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
   const renderSortableHeader = (title: string, field: string) => {
     const isActive = sortField === field;
     const sortIcon = sortDirection === "asc" ? "↑" : "↓";
-    const isVisible = visibleColumns.includes(field);
 
-    if (!isVisible) return null;
-
+    // Remove the visibility check since we always want to show all columns
     return (
       <th
         onClick={() => handleSort(field)}
@@ -354,10 +354,7 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
 
   // Function to render a stat column for a player
   const renderStatColumn = (field: string, value: number) => {
-    const isVisible = visibleColumns.includes(field);
-
-    if (!isVisible) return null;
-
+    // Remove the visibility check since we always want to show all columns
     return <td className="px-2 py-3">{renderStars(ratingToStars(value))}</td>;
   };
 
@@ -373,36 +370,48 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
     return (
       <tr
         key={playerId}
-        className="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-dark-800/30 transition-colors relative"
+        className="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-dark-800/30 transition-colors relative group"
         onMouseEnter={() => !isMobile && setTooltipPlayer(player)}
         onMouseLeave={() => !isMobile && setTooltipPlayer(null)}
       >
-        {/* Sticky player info column */}
-        <td className="sticky left-0 z-10 bg-white dark:bg-dark-850 p-2 min-w-[120px] md:min-w-[170px] hover:bg-gray-50 dark:hover:bg-dark-800/30">
-          <div className="flex items-center gap-2 md:gap-3">
-            {/* Quick-add button with conditional rendering based on selection state */}
-            <button
-              onClick={(e) => handleAddButtonClick(e, player)}
-              className={`w-7 h-7 flex-shrink-0 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/50 ${
-                isSelected
-                  ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400"
-                  : "bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-800/40 text-primary-600 dark:text-primary-400"
+        {/* Sticky player info column - improved with shadow for better visibility and proper hover background */}
+        <td className="sticky left-0 z-10 bg-white dark:bg-dark-850 p-2 pl-0 pr-1 md:p-2 min-w-[120px] md:min-w-[170px] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_5px_-2px_rgba(0,0,0,0.3)] group-hover:bg-gray-50 dark:group-hover:bg-dark-800/30">
+          <div className="flex items-center gap-1 md:gap-3">
+            {/* Quick-add button with conditional rendering based on selection state and horizontal scroll */}
+            <div
+              className={`transition-all duration-200 ${
+                isMobile && isScrolledHorizontally
+                  ? "opacity-0 scale-0 w-0 mr-0"
+                  : "opacity-100 scale-100 w-7 mr-1"
               }`}
-              aria-label={isSelected ? "Added to team" : "Add to team"}
-              title={isSelected ? "Added to team" : "Add to team"}
-              tabIndex={0}
-              disabled={isSelected}
             >
-              {isLoading ? (
-                <Loader2 size={14} className="animate-spin" />
-              ) : isSelected ? (
-                <CheckCircle size={14} strokeWidth={2.5} />
-              ) : (
-                <Plus size={14} strokeWidth={2.5} />
-              )}
-            </button>
+              <button
+                onClick={(e) => handleAddButtonClick(e, player)}
+                className={`h-7 flex-shrink-0 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/50 ${
+                  isSelected
+                    ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400"
+                    : "bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-800/40 text-primary-600 dark:text-primary-400"
+                } ${
+                  isMobile && isScrolledHorizontally
+                    ? "w-0 p-0 opacity-0"
+                    : "w-7"
+                }`}
+                aria-label={isSelected ? "Added to team" : "Add to team"}
+                title={isSelected ? "Added to team" : "Add to team"}
+                tabIndex={0}
+                disabled={isSelected || (isMobile && isScrolledHorizontally)}
+              >
+                {isLoading ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : isSelected ? (
+                  <CheckCircle size={14} strokeWidth={2.5} />
+                ) : (
+                  <Plus size={14} strokeWidth={2.5} />
+                )}
+              </button>
+            </div>
 
-            {/* Player image with content wrapper for better spacing */}
+            {/* Player image with content wrapper for better spacing - zoomed in for mobile */}
             <div
               className="relative w-9 h-9 md:w-10 md:h-10 flex-shrink-0 cursor-pointer"
               onClick={() => handlePlayerRowClick(player)}
@@ -412,7 +421,9 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
                   <img
                     src={player.image_url}
                     alt={player.player_name}
-                    className="w-full h-full object-cover object-top pt-1.5" /* Added padding-top to create space above head */
+                    className={`w-full h-full object-cover object-top ${
+                      isMobile ? "scale-[1.2] origin-top pt-2" : "pt-1.5"
+                    }`}
                   />
                 </div>
               ) : (
@@ -441,9 +452,9 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
               )}
             </div>
 
-            {/* Player details */}
+            {/* Player details - optimized spacing for mobile */}
             <div
-              className="flex flex-col min-w-0 cursor-pointer"
+              className="flex flex-col min-w-0 cursor-pointer px-1"
               onClick={() => handlePlayerRowClick(player)}
             >
               <div className="font-medium text-xs md:text-sm text-gray-900 dark:text-gray-100 truncate">
@@ -461,32 +472,22 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
           </div>
         </td>
 
-        {/* Power rank rating */}
-        {visibleColumns.includes("power_rank_rating") && (
-          <td className="px-2 py-3 text-center">
-            <div className="inline-flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white text-xs md:text-sm font-semibold">
-              {player.power_rank_rating}
-            </div>
-          </td>
-        )}
+        {/* Power rank rating - now always visible */}
+        <td className="px-2 py-3 text-center">
+          <div className="inline-flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white text-xs md:text-sm font-semibold">
+            {player.power_rank_rating}
+          </div>
+        </td>
 
-        {/* Price */}
-        {visibleColumns.includes("price") && (
-          <td className="px-2 py-3 text-center text-xs md:text-sm font-medium min-w-[60px]">
-            {player.price}
-          </td>
-        )}
+        {/* Price - now always visible */}
+        <td className="px-2 py-3 text-center text-xs md:text-sm font-medium min-w-[60px]">
+          {player.price}
+        </td>
 
-        {/* Attack rating */}
+        {/* All stat columns - now always rendered */}
         {renderStatColumn("attack", attackRating)}
-
-        {/* Defense rating */}
         {renderStatColumn("defense", defenseRating)}
-
-        {/* Kicking rating */}
         {renderStatColumn("kicking", kickingRating)}
-
-        {/* Additional stats with simple star ratings */}
         {renderStatColumn("try_scoring", player.try_scoring || 0)}
         {renderStatColumn("playmaking", player.playmaking || 0)}
         {renderStatColumn("tackling", player.tackling || 0)}
@@ -506,30 +507,37 @@ export const PlayerListView: React.FC<PlayerListViewProps> = ({
 
   return (
     <div className="w-full overflow-hidden">
+      {/* Add an indicator for mobile users that the table is scrollable */}
+      {isMobile && (
+        <div className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1 flex items-center justify-start mb-1">
+          <span className="animate-pulse mr-1">←</span>
+          <span>Swipe to see all stats</span>
+          <span className="animate-pulse ml-1">→</span>
+        </div>
+      )}
+
       <div
         ref={containerRef}
-        className="w-full h-full overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
+        className="w-full h-full overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 pb-2"
         style={{ overscrollBehaviorX: "contain" }}
       >
-        <table className="min-w-full md:w-auto border-collapse">
+        <table className="min-w-[950px] border-collapse">
           <thead className="sticky top-0 bg-white dark:bg-dark-850 z-10 shadow-sm">
             <tr className="border-b dark:border-gray-700">
-              {/* Fixed width player info column - narrower on mobile */}
-              <th className="w-[120px] min-w-[120px] md:w-[170px] md:min-w-[170px] sticky left-0 z-20 bg-white dark:bg-dark-850 px-2 py-3 text-left text-xs md:text-sm font-medium text-gray-700 dark:text-gray-200">
+              {/* Fixed width player info column - sticky on all screens */}
+              <th className="w-[120px] min-w-[120px] md:w-[170px] md:min-w-[170px] sticky left-0 z-20 bg-white dark:bg-dark-850 px-2 py-3 text-left text-xs md:text-sm font-medium text-gray-700 dark:text-gray-200 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] dark:shadow-[2px_0_5px_-2px_rgba(0,0,0,0.3)]">
                 Player
                 <span className="ml-1 text-xxs md:text-xs text-gray-400 hidden md:inline">
                   (tap to add)
                 </span>
               </th>
 
-              {/* Stat columns */}
+              {/* Stat columns - now always rendered regardless of screen size */}
               {renderSortableHeader("Power", "power_rank_rating")}
               {renderSortableHeader("Price", "price")}
               {renderSortableHeader("Attack", "attack")}
               {renderSortableHeader("Defense", "defense")}
               {renderSortableHeader("Kicking", "kicking")}
-
-              {/* Additional stats */}
               {renderSortableHeader("Try Scoring", "try_scoring")}
               {renderSortableHeader("Playmaking", "playmaking")}
               {renderSortableHeader("Tackling", "tackling")}
