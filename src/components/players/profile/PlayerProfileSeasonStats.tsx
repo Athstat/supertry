@@ -1,48 +1,27 @@
 import { forwardRef, useCallback } from "react"
 import { RugbyPlayer } from "../../../types/rugbyPlayer"
 import { GroupedStatsGrid } from "../../shared/GroupedStatsGrid"
-import { useAsync } from "../../../hooks/useAsync"
-import { athleteSportActionsService } from "../../../services/athleteSportsActions"
-import { ErrorState } from "../../ui/ErrorState"
 import { StatCard } from "../../shared/StatCard"
-import { AthleteSportsActionAggregated } from "../../../types/sports_actions"
+import { AthleteSportsActionAggregated, getPlayerAggregatedStat } from "../../../types/sports_actions"
 import { PlayCircleIcon, WatchIcon } from "lucide-react"
 
 type Props = {
-    player: RugbyPlayer
+    player: RugbyPlayer,
+    aggregatedStats: AthleteSportsActionAggregated[]
 }
 
-export const PlayerProfileSeasonStats = forwardRef<HTMLDivElement, Props>(({ player }, ref) => {
 
-    const fetchData = useCallback(async () => {
-        return athleteSportActionsService.getByAthlete(player.tracking_id ?? "");
-    }, []);
+export const PlayerProfileSeasonStats = forwardRef<HTMLDivElement, Props>(({ player, aggregatedStats }, ref) => {
 
-    const { data: aggregatedStats, error } = useAsync<AthleteSportsActionAggregated[]>(fetchData);
-
-    if (error || !aggregatedStats) return <ErrorState error="Something went wrong" message={"Failed to load season stats"} />
-
-    const getStat = (key: string) => {
-        const filteredList = aggregatedStats.filter(stat => {
-            return stat.action.toLowerCase() === key.toLowerCase();
-        });
-
-        if (filteredList.length > 0) {
-            return filteredList[0];
-        }
-
-        return undefined;
-
-    }
 
     console.log(aggregatedStats.map(s => s.action));
 
 
-    const minutesPlayed = getStat("MinutesPlayed");
-    const starts = getStat("Starts");
+    const minutesPlayed = getPlayerAggregatedStat("MinutesPlayed", aggregatedStats);
+    const starts = getPlayerAggregatedStat("Starts", aggregatedStats);
 
     return (
-        <GroupedStatsGrid title="Season Stats" ref={ref}>
+        <GroupedStatsGrid title="Season Performance" ref={ref}>
             {minutesPlayed && <StatCard
                 label="Minutes Played"
                 value={minutesPlayed.action_count}

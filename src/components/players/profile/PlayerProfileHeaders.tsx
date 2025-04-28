@@ -89,7 +89,7 @@ export default function PlayerProfileHeader({player, activeTab, handleTabClick} 
                             active={activeTab === "seasonAggregate"}
                             onClick={() => handleTabClick("seasonAggregate")}
                         >
-                            Season Stats
+                            Season Performance
                         </TabButton>
                         <TabButton
                             active={activeTab === "attack"}

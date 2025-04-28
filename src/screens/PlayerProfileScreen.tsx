@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   Shield,
@@ -19,8 +19,14 @@ import { StatCard } from "../components/shared/StatCard";
 import { GroupedStatsGrid } from "../components/shared/GroupedStatsGrid";
 import { PlayerProfileSeasonStats } from "../components/players/profile/PlayerProfileSeasonStats";
 import { PlayerProfileOverview } from "../components/players/profile/PlayerProfileOverview";
+import { ErrorState } from "../components/leagues/LeagueStates";
+import { useAsync } from "../hooks/useAsync";
+import { athleteSportActionsService } from "../services/athleteSportsActions";
+import { AthleteSportsActionAggregated } from "../types/sports_actions";
+import { PlayerProfileAttack } from "../components/players/profile/PlayerProfileAttack";
 
 export type StatTab = "overview" | "physical" | "seasonAggregate" | "attack" | "defense" | "kicking";
+export type ExpanedStats = Record<string, boolean>;
 
 export const PlayerProfileScreen = () => {
   const navigate = useNavigate();
@@ -29,12 +35,12 @@ export const PlayerProfileScreen = () => {
   const [activeTab, setActiveTab] = useState<StatTab>("overview");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [expandedStats, setExpandedStats] = useState<ExpanedStats>({});
   const [player, setPlayer] = useState<RugbyPlayer | null>(
     location.state?.player || null
   );
-  const [expandedStats, setExpandedStats] = useState<Record<string, boolean>>(
-    {}
-  );
+  
 
   const overviewRef = useRef<HTMLDivElement>(null);
   const physicalRef = useRef<HTMLDivElement>(null);
@@ -148,6 +154,25 @@ export const PlayerProfileScreen = () => {
     );
   }
 
+  const fetchData = useCallback(async () => {
+    return athleteSportActionsService.getByAthlete(player.tracking_id ?? "");
+  }, []);
+
+  const { data: aggregatedStats, error: aggregatedStatsError, isLoading: isAggregatedStatsLoading } = useAsync<AthleteSportsActionAggregated[]>(fetchData);
+
+  if (isAggregatedStatsLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-900/40 p-4">
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600 mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading player...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!aggregatedStats || aggregatedStatsError) return <ErrorState error="Failed to load player data" isLoading={isAggregatedStatsLoading || isLoading} />
+
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-900/40 pb-20">
 
@@ -173,52 +198,16 @@ export const PlayerProfileScreen = () => {
         </GroupedStatsGrid>
 
 
-        <PlayerProfileSeasonStats player={player} ref={seasonAggregateRef} />
+        <PlayerProfileSeasonStats aggregatedStats={aggregatedStats} player={player} ref={seasonAggregateRef} />
 
         {/* Attack Section */}
-        <GroupedStatsGrid className="grid-cols-none space-y-4" title="Attack" ref={attackRef}>
-
-          {player.strength !== undefined && (
-            <EnhancedStatBar
-              id="strength"
-              label="Strength"
-              value={player.strength}
-              maxValue={5}
-              icon={<Dumbbell className="text-red-500" size={20} />}
-              expanded={expandedStats["strength"] || false}
-              onToggle={() => toggleStatExpanded("strength")}
-              description="Physical power in contact situations and scrums"
-              isExpanded={expandedStats["strength"] || false}
-            />
-          )}
-          {player.playmaking !== undefined && (
-            <EnhancedStatBar
-              id="playmaking"
-              label="Playmaking"
-              value={player.playmaking}
-              maxValue={5}
-              icon={<Target className="text-blue-500" size={20} />}
-              expanded={expandedStats["playmaking"] || false}
-              onToggle={() => toggleStatExpanded("playmaking")}
-              description="Ability to create opportunities and execute strategic plays"
-              isExpanded={expandedStats["playmaking"] || false}
-            />
-          )}
-          {player.ball_carrying !== undefined && (
-            <EnhancedStatBar
-              id="ball_carrying"
-              label="Ball Carrying"
-              value={player.ball_carrying}
-              maxValue={5}
-              icon={<Zap className="text-green-500" size={20} />}
-              expanded={expandedStats["ball_carrying"] || false}
-              onToggle={() => toggleStatExpanded("ball_carrying")}
-              description="Effectiveness in advancing with the ball and breaking tackles"
-              isExpanded={expandedStats["ball_carrying"] || false}
-            />
-          )}
-
-        </GroupedStatsGrid>
+        <PlayerProfileAttack 
+          player={player}
+          ref={attackRef}
+          toggleStatExpanded={toggleStatExpanded}
+          expandedStats={expandedStats}
+          aggregatedStats={aggregatedStats}
+        />
 
         {/* Defense Section */}
         <div

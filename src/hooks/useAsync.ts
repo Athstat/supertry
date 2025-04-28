@@ -9,7 +9,7 @@ export function useAsync<T>(func: () => Promise<T>) {
     useEffect(() => {
         const wrapper = async () => {
 
-            setLoading(false);
+            setLoading(true);
 
             try {
                 
@@ -21,12 +21,12 @@ export function useAsync<T>(func: () => Promise<T>) {
                 setError(err.message);
             }
 
-            setLoading(true);
+            setLoading(false);
         };
 
         wrapper();
     }, [func]);
 
-    return {data, error};
+    return {data, error, isLoading};
 
 }
