@@ -16,7 +16,6 @@ import { StatCard } from "../components/shared/StatCard";
 import { GroupedStatsGrid } from "../components/shared/GroupedStatsGrid";
 import { PlayerProfileSeasonStats } from "../components/players/profile/PlayerProfileSeasonStats";
 import { PlayerProfileOverview } from "../components/players/profile/PlayerProfileOverview";
-import { ErrorState } from "../components/leagues/LeagueStates";
 import { useAsync } from "../hooks/useAsync";
 import { athleteSportActionsService } from "../services/athleteSportsActions";
 import { AthleteSportsActionAggregated } from "../types/sports_actions";
@@ -123,8 +122,15 @@ export const PlayerProfileScreen = () => {
 
   // Determine if a stat deserves a badge
 
+  const fetchData = useCallback(async () => {
+    return athleteSportActionsService.getByAthlete(player?.tracking_id ?? "");
+  }, []);
 
-  if (isLoading) {
+  const { data: aggregatedStats, error: aggregatedStatsError, isLoading: isAggregatedStatsLoading } = useAsync<AthleteSportsActionAggregated[]>(fetchData);
+
+
+
+  if (isLoading || isAggregatedStatsLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-dark-900/40 p-4">
         <div className="flex flex-col items-center justify-center py-12">
@@ -135,13 +141,13 @@ export const PlayerProfileScreen = () => {
     );
   }
 
-  if (error || !player) {
+  if (error || !player || !aggregatedStats || aggregatedStatsError) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-dark-900/40 p-4">
         <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-6 rounded-lg">
           {error || "Player not found"}
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/players")}
             className="mt-4 text-sm font-medium underline block"
           >
             Go back to players
@@ -150,25 +156,6 @@ export const PlayerProfileScreen = () => {
       </div>
     );
   }
-
-  const fetchData = useCallback(async () => {
-    return athleteSportActionsService.getByAthlete(player.tracking_id ?? "");
-  }, []);
-
-  const { data: aggregatedStats, error: aggregatedStatsError, isLoading: isAggregatedStatsLoading } = useAsync<AthleteSportsActionAggregated[]>(fetchData);
-
-  if (isAggregatedStatsLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-dark-900/40 p-4">
-        <div className="flex flex-col items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600 mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading player...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!aggregatedStats || aggregatedStatsError) return <ErrorState error="Failed to load player data" isLoading={isAggregatedStatsLoading || isLoading} />
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-900/40 pb-20">
