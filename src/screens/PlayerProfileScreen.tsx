@@ -16,8 +16,9 @@ import { useAthletes } from "../contexts/AthleteContext";
 import PlayerProfileHeader from "../components/players/profile/PlayerProfileHeaders";
 import { EnhancedStatBar } from "../components/shared/EnhancedStatBar";
 import { StatCard } from "../components/shared/StatCard";
+import { GroupedStatsGrid } from "../components/shared/GroupedStatsGrid";
 
-export type StatTab = "overview" | "physical" | "attack" | "defense" | "kicking";
+export type StatTab = "overview" | "physical" | "seasonAggregate" | "attack" | "defense" | "kicking";
 
 export const PlayerProfileScreen = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ export const PlayerProfileScreen = () => {
 
   const overviewRef = useRef<HTMLDivElement>(null);
   const physicalRef = useRef<HTMLDivElement>(null);
+  const seasonAggregateRef = useRef<HTMLDivElement>(null);
   const attackRef = useRef<HTMLDivElement>(null);
   const defenseRef = useRef<HTMLDivElement>(null);
   const kickingRef = useRef<HTMLDivElement>(null);
@@ -87,7 +89,8 @@ export const PlayerProfileScreen = () => {
       attack: attackRef,
       defense: defenseRef,
       kicking: kickingRef,
-      physical: physicalRef
+      physical: physicalRef,
+      seasonAggregate: seasonAggregateRef
     }[tab];
 
     if (scrollToRef.current) {
@@ -114,7 +117,7 @@ export const PlayerProfileScreen = () => {
   };
 
   // Determine if a stat deserves a badge
-  
+
 
   if (isLoading) {
     return (
@@ -151,49 +154,39 @@ export const PlayerProfileScreen = () => {
 
       {/* Content - All sections in one scrollable view with padding to account for fixed headers */}
       <div className="container mx-auto px-4 pt-[180px] pb-6 space-y-8">
-        {/* Overview Section */}
 
-        <div
-          ref={overviewRef}
-          className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6"
-        >
-          <h2 className="text-xl font-bold mb-4 dark:text-gray-100">
-            Overview
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <StatCard
-              label="Power Ranking"
-              value={player.power_rank_rating || 0}
-              icon={<Trophy className="text-purple-500" size={20} />}
-            />
-            <StatCard
-              label="Points"
-              value={player.price || 0}
-              icon={<Zap className="text-yellow-500" size={20} />}
-            />
-          </div>
-        </div>
+        <GroupedStatsGrid title="Overview" ref={overviewRef} >
+          <StatCard
+            label="Power Ranking"
+            value={player.power_rank_rating || 0}
+            icon={<Trophy className="text-purple-500" size={20} />}
+          />
+          <StatCard
+            label="Points"
+            value={player.price || 0}
+            icon={<Zap className="text-yellow-500" size={20} />}
+          />
+        </GroupedStatsGrid>
 
-        <div
-          ref={physicalRef}
-          className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6"
-        >
-          <h2 className="text-xl font-bold mb-4 dark:text-gray-100">
-            Physical
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <StatCard
-              label="Height"
-              value={`${player.height} cm` || 0}
-              icon={<RulerIcon className="text-purple-500" size={20} />}
-            />
-            <StatCard
-              label="Weight"
-              value={`${player.weight} kg` || 0}
-              icon={<WeightIcon className="text-yellow-500" size={20} />}
-            />
-          </div>
-        </div>
+
+        <GroupedStatsGrid title="Physical" ref={physicalRef} >
+          <StatCard
+            label="Height"
+            value={`${player.height} cm` || 0}
+            icon={<RulerIcon className="text-purple-500" size={20} />}
+          />
+          <StatCard
+            label="Weight"
+            value={`${player.weight} kg` || 0}
+            icon={<WeightIcon className="text-yellow-500" size={20} />}
+          />
+        </GroupedStatsGrid>
+
+
+        <GroupedStatsGrid title="Season Stats" ref={seasonAggregateRef} >
+
+        </GroupedStatsGrid>
+          
 
         {/* Attack Section */}
         <div
@@ -302,7 +295,7 @@ export const PlayerProfileScreen = () => {
             )}
           </div>
         </div>
-      </div>
-    </main>
+      </div >
+    </main >
   );
 };
