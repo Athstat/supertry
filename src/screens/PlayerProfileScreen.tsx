@@ -17,6 +17,8 @@ import PlayerProfileHeader from "../components/players/profile/PlayerProfileHead
 import { EnhancedStatBar } from "../components/shared/EnhancedStatBar";
 import { StatCard } from "../components/shared/StatCard";
 import { GroupedStatsGrid } from "../components/shared/GroupedStatsGrid";
+import { PlayerProfileSeasonStats } from "../components/players/profile/PlayerProfileSeasonStats";
+import { PlayerProfileOverview } from "../components/players/profile/PlayerProfileOverview";
 
 export type StatTab = "overview" | "physical" | "seasonAggregate" | "attack" | "defense" | "kicking";
 
@@ -146,7 +148,6 @@ export const PlayerProfileScreen = () => {
     );
   }
 
-
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-900/40 pb-20">
 
@@ -155,18 +156,7 @@ export const PlayerProfileScreen = () => {
       {/* Content - All sections in one scrollable view with padding to account for fixed headers */}
       <div className="container mx-auto px-4 pt-[180px] pb-6 space-y-8">
 
-        <GroupedStatsGrid title="Overview" ref={overviewRef} >
-          <StatCard
-            label="Power Ranking"
-            value={player.power_rank_rating || 0}
-            icon={<Trophy className="text-purple-500" size={20} />}
-          />
-          <StatCard
-            label="Points"
-            value={player.price || 0}
-            icon={<Zap className="text-yellow-500" size={20} />}
-          />
-        </GroupedStatsGrid>
+        <PlayerProfileOverview ref={overviewRef} player={player} />
 
 
         <GroupedStatsGrid title="Physical" ref={physicalRef} >
@@ -183,10 +173,7 @@ export const PlayerProfileScreen = () => {
         </GroupedStatsGrid>
 
 
-        <GroupedStatsGrid title="Season Stats" ref={seasonAggregateRef} >
-
-        </GroupedStatsGrid>
-
+        <PlayerProfileSeasonStats player={player} ref={seasonAggregateRef} />
 
         {/* Attack Section */}
         <GroupedStatsGrid className="grid-cols-none space-y-4" title="Attack" ref={attackRef}>
