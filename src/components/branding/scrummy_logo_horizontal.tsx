@@ -7,7 +7,7 @@ type LogoProps = {
     className?:string
 }
 
-const defaultLogoClass = "w-44 md:w-48";
+const defaultLogoClass = "w-44 md:w-48 h-fit";
 
 export default function ScrummyLogoHorizontal({className} : LogoProps) {
     const { theme } = useTheme();
