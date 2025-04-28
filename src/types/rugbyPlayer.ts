@@ -9,6 +9,7 @@ export interface RugbyPlayer {
   image_url?: string;
   height?: number;
   weight?: number;
+  date_of_birth?: Date;
 
   // Stats
   ball_carrying?: number;
