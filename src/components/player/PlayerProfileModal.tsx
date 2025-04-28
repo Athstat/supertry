@@ -14,7 +14,7 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
   onClose,
   roundId
 }) => {
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<number>(1); // Default to Stats tab (index 1)
   const [detailedPlayerData, setDetailedPlayerData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -111,14 +111,18 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
               {player.height && (
                 <>
                   <div className="text-gray-500 dark:text-gray-400">Height</div>
-                  <div className="font-medium text-gray-700 dark:text-gray-300">{player.height} cm</div>
+                  <div className="font-medium text-gray-700 dark:text-gray-300">
+                    {player.height} cm ({Math.floor(player.height / 30.48)}'{Math.round((player.height / 2.54) % 12)}")
+                  </div>
                 </>
               )}
               
               {player.weight && (
                 <>
                   <div className="text-gray-500 dark:text-gray-400">Weight</div>
-                  <div className="font-medium text-gray-700 dark:text-gray-300">{player.weight} kg</div>
+                  <div className="font-medium text-gray-700 dark:text-gray-300">
+                    {player.weight} kg ({Math.round(player.weight * 2.20462)} lbs)
+                  </div>
                 </>
               )}
               
@@ -317,13 +321,13 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
         {/* Modal header */}
         <div className="relative">
           {/* Background image with overlay */}
-          <div className="h-60 w-full relative overflow-hidden rounded-t-lg">
+          <div className="h-80 w-full relative overflow-hidden rounded-t-lg">
             <img 
               src={player.image_url || 'https://via.placeholder.com/400'} 
               alt={player.player_name}
               className="w-full h-full object-cover object-top"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
           </div>
           
           {/* Close button */}

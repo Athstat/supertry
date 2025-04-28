@@ -288,21 +288,20 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
                 <div className="flex-1 min-w-0 pr-2">
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-sm truncate dark:text-gray-100">{player.player_name}</p>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent row selection
-                        handleViewPlayerProfile(player);
-                      }}
-                      className="ml-1 text-blue-500 dark:text-blue-400 p-1 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
-                      aria-label="View player profile"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                      </svg>
-                    </button>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{player.team_name}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{player.position || selectedPosition.name}</p>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row selection
+                      handleViewPlayerProfile(player);
+                    }}
+                    className="mt-1 text-blue-500 dark:text-blue-400 hover:underline transition-colors text-xs flex items-center"
+                    aria-label="More player information"
+                  >
+                    <span className="mr-1">→</span>
+                    <span>More Info</span>
+                  </button>
                 </div>
                 
                 {/* Price */}
