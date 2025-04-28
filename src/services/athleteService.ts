@@ -15,7 +15,7 @@ export interface PointsBreakdown {
   breakdown: BreakdownItem[];
 }
 
-const baseUrl = "https://qa-games-app.athstat-next.com";
+export const baseUrl = "https://qa-games-app.athstat-next.com";
 
 export const athleteService = {
   getRugbyAthletesByCompetition: async (
