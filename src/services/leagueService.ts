@@ -79,26 +79,11 @@ export const leagueService = {
     }
   },
 
-  /**
-   * Check if the current user has joined a specific league
-   */
-  checkUserLeagueStatus: async (leagueId: string): Promise<boolean> => {
-    try {
-      // Get user teams for the specified league
-      const userTeams = await teamService.fetchUserTeams(leagueId);
-
-      // If the user has any teams in this league, they've joined it
-      return userTeams.length > 0;
-    } catch (error) {
-      console.error("Error checking user league status:", error);
-      return false;
-    }
-  },
 
   /**
    * Fetch participating teams for a league
    */
-  fetchParticipatingTeams: async (leagueId: string): Promise<any[]> => {
+  fetchParticipatingTeams: async (leagueId: string | number): Promise<any[]> => {
     try {
       const baseUrl = import.meta.env.PROD
         ? "https://qa-games-app.athstat-next.com"
@@ -256,47 +241,25 @@ export const leagueService = {
     }
   },
 
-  fetchParticipatingTeams: async (leagueId: number): Promise<any[]> => {
-    try {
-      const baseUrl = "https://qa-games-app.athstat-next.com";
 
-      console.log("LeagueId: ", leagueId);
-
-      //Update league number
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            ...(localStorage.getItem("access_token") && {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            }),
-          },
-        }
-      );
-
-      //console.log("Response: ", await response.json());
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        console.error(
-          "Failed to fetch participating teams:",
-          await response.text()
-        );
-        throw new Error("Failed to fetch participating teams");
-      }
-    } catch (error) {
-      console.error("Error in leagueService.fetchParticipatingTeams:", error);
-      return [];
-    }
-  },
-
-  // Add this new method to check if current user has joined a specific league
+  /**
+   * Check if the current user has joined a specific league
+   * Used both methods and consolidated them into one
+   */
   checkUserLeagueStatus: async (leagueId: string): Promise<boolean> => {
     try {
+      // Try the first approach - look for user teams in the league
+      try {
+        const userTeams = await teamService.fetchUserTeams(leagueId);
+        // If the user has any teams in this league, they've joined it
+        if (userTeams.length > 0) {
+          return true;
+        }
+      } catch (error) {
+        console.log("First approach failed, trying second approach", error);
+      }
+
+      // If first approach fails, try the second approach
       const baseUrl = import.meta.env.PROD
         ? "https://qa-games-app.athstat-next.com"
         : "";
@@ -314,21 +277,14 @@ export const leagueService = {
         console.error("Error extracting user ID from token:", error);
         return false;
       }
-      console.log("LeagueId: ", leagueId);
+      
       // Fetch participating teams for this league
-      const participatingTeams = await leagueService.fetchParticipatingTeams(
-        leagueId
-      );
-
-      console.log("participatingTeams", participatingTeams);
-
+      const participatingTeams = await leagueService.fetchParticipatingTeams(leagueId);
+      
       // Check if any team belongs to the current user
       return participatingTeams.some((team) => team.user_id === userId);
     } catch (error) {
-      console.error(
-        `Error checking user status for league ${leagueId}:`,
-        error
-      );
+      console.error(`Error checking user status for league ${leagueId}:`, error);
       return false;
     }
   },
