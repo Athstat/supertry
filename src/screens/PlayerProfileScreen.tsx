@@ -20,6 +20,7 @@ import { useAsync } from "../hooks/useAsync";
 import { athleteSportActionsService } from "../services/athleteSportsActions";
 import { AthleteSportsActionAggregated } from "../types/sports_actions";
 import { PlayerProfileAttack } from "../components/players/profile/PlayerProfileAttack";
+import { PlayerProfileKicking } from "../components/players/profile/PlayerProfileKicking";
 
 export type StatTab = "overview" | "physical" | "seasonAggregate" | "attack" | "defense" | "kicking";
 export type ExpanedStats = Record<string, boolean>;
@@ -169,16 +170,16 @@ export const PlayerProfileScreen = () => {
 
 
         <GroupedStatsGrid title="Physical" ref={physicalRef} >
-          <StatCard
+          {player.height && <StatCard
             label="Height"
             value={`${player.height} cm` || 0}
             icon={<RulerIcon className="text-purple-500" size={20} />}
-          />
-          <StatCard
+          />}
+          {player.weight && <StatCard
             label="Weight"
             value={`${player.weight} kg` || 0}
             icon={<WeightIcon className="text-yellow-500" size={20} />}
-          />
+          />}
         </GroupedStatsGrid>
 
 
@@ -216,41 +217,14 @@ export const PlayerProfileScreen = () => {
           </div>
         </div>
 
-        {/* Kicking Section */}
-        <div
+        <PlayerProfileKicking 
+          player={player}
+          aggregatedStats={aggregatedStats}
+          expandedStats={expandedStats}
+          toggleStatExpanded={toggleStatExpanded} 
           ref={kickingRef}
-          className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md"
-        >
-          <h2 className="text-xl font-bold mb-4 dark:text-gray-100">Kicking</h2>
-          <div className="space-y-4">
-            {player.points_kicking !== undefined && (
-              <EnhancedStatBar
-                id="points_kicking"
-                label="Points Kicking"
-                value={player.points_kicking}
-                maxValue={5}
-                icon={<Crosshair className="text-orange-500" size={20} />}
-                expanded={expandedStats["points_kicking"] || false}
-                onToggle={() => toggleStatExpanded("points_kicking")}
-                description="Accuracy and reliability in penalty and conversion kicks"
-                isExpanded={expandedStats["points_kicking"] || false}
-              />
-            )}
-            {player.infield_kicking !== undefined && (
-              <EnhancedStatBar
-                id="infield_kicking"
-                label="Infield Kicking"
-                value={player.infield_kicking}
-                maxValue={5}
-                icon={<Target className="text-cyan-500" size={20} />}
-                expanded={expandedStats["infield_kicking"] || false}
-                onToggle={() => toggleStatExpanded("infield_kicking")}
-                description="Tactical kicking ability during open play"
-                isExpanded={expandedStats["infield_kicking"] || false}
-              />
-            )}
-          </div>
-        </div>
+        />
+          
       </div >
     </main >
   );
