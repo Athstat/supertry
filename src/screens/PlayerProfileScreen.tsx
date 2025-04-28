@@ -186,56 +186,52 @@ export const PlayerProfileScreen = () => {
         <GroupedStatsGrid title="Season Stats" ref={seasonAggregateRef} >
 
         </GroupedStatsGrid>
-          
+
 
         {/* Attack Section */}
-        <div
-          ref={attackRef}
-          className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md"
-        >
-          <h2 className="text-xl font-bold mb-4 dark:text-gray-100">Attack</h2>
-          <div className="space-y-4">
-            {player.strength !== undefined && (
-              <EnhancedStatBar
-                id="strength"
-                label="Strength"
-                value={player.strength}
-                maxValue={5}
-                icon={<Dumbbell className="text-red-500" size={20} />}
-                expanded={expandedStats["strength"] || false}
-                onToggle={() => toggleStatExpanded("strength")}
-                description="Physical power in contact situations and scrums"
-                isExpanded={expandedStats["strength"] || false}
-              />
-            )}
-            {player.playmaking !== undefined && (
-              <EnhancedStatBar
-                id="playmaking"
-                label="Playmaking"
-                value={player.playmaking}
-                maxValue={5}
-                icon={<Target className="text-blue-500" size={20} />}
-                expanded={expandedStats["playmaking"] || false}
-                onToggle={() => toggleStatExpanded("playmaking")}
-                description="Ability to create opportunities and execute strategic plays"
-                isExpanded={expandedStats["playmaking"] || false}
-              />
-            )}
-            {player.ball_carrying !== undefined && (
-              <EnhancedStatBar
-                id="ball_carrying"
-                label="Ball Carrying"
-                value={player.ball_carrying}
-                maxValue={5}
-                icon={<Zap className="text-green-500" size={20} />}
-                expanded={expandedStats["ball_carrying"] || false}
-                onToggle={() => toggleStatExpanded("ball_carrying")}
-                description="Effectiveness in advancing with the ball and breaking tackles"
-                isExpanded={expandedStats["ball_carrying"] || false}
-              />
-            )}
-          </div>
-        </div>
+        <GroupedStatsGrid className="grid-cols-none space-y-4" title="Attack" ref={attackRef}>
+
+          {player.strength !== undefined && (
+            <EnhancedStatBar
+              id="strength"
+              label="Strength"
+              value={player.strength}
+              maxValue={5}
+              icon={<Dumbbell className="text-red-500" size={20} />}
+              expanded={expandedStats["strength"] || false}
+              onToggle={() => toggleStatExpanded("strength")}
+              description="Physical power in contact situations and scrums"
+              isExpanded={expandedStats["strength"] || false}
+            />
+          )}
+          {player.playmaking !== undefined && (
+            <EnhancedStatBar
+              id="playmaking"
+              label="Playmaking"
+              value={player.playmaking}
+              maxValue={5}
+              icon={<Target className="text-blue-500" size={20} />}
+              expanded={expandedStats["playmaking"] || false}
+              onToggle={() => toggleStatExpanded("playmaking")}
+              description="Ability to create opportunities and execute strategic plays"
+              isExpanded={expandedStats["playmaking"] || false}
+            />
+          )}
+          {player.ball_carrying !== undefined && (
+            <EnhancedStatBar
+              id="ball_carrying"
+              label="Ball Carrying"
+              value={player.ball_carrying}
+              maxValue={5}
+              icon={<Zap className="text-green-500" size={20} />}
+              expanded={expandedStats["ball_carrying"] || false}
+              onToggle={() => toggleStatExpanded("ball_carrying")}
+              description="Effectiveness in advancing with the ball and breaking tackles"
+              isExpanded={expandedStats["ball_carrying"] || false}
+            />
+          )}
+
+        </GroupedStatsGrid>
 
         {/* Defense Section */}
         <div
