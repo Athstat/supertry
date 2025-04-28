@@ -3,7 +3,6 @@ import { Bell, Menu, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
-import ScrummyLogo from "./branding/scrummy_logo";
 import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
 
 export function Header() {

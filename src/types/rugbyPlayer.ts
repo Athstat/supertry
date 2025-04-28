@@ -7,6 +7,8 @@ export interface RugbyPlayer {
   price?: number;
   power_rank_rating?: number;
   image_url?: string;
+  height?: number;
+  weight?: number;
 
   // Stats
   ball_carrying?: number;

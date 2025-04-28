@@ -87,4 +87,34 @@ export const athleteService = {
       throw error;
     }
   },
+
+  getAthleteById: async (athleteId: string) : Promise<RugbyPlayer> => {
+    try {
+      const access_token = localStorage.getItem("access_token");
+      console.log("access_token", access_token);
+
+      const response = await fetch(
+        `${baseUrl}/api/v1/athletes/${athleteId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(localStorage.getItem("access_token") && {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            }),
+          },
+        }
+      );
+      console.log("response from athlete by id", response);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch points breakdown: ${response.status}`);
+      }
+
+      return (await response.json()) as RugbyPlayer;
+    } catch (error) {
+      console.error("Error fetching athlete points breakdown:", error);
+      throw error;
+    }
+  }
 };
