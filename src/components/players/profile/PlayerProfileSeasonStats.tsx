@@ -1,4 +1,4 @@
-import { forwardRef, useCallback } from "react"
+import { forwardRef} from "react"
 import { RugbyPlayer } from "../../../types/rugbyPlayer"
 import { GroupedStatsGrid } from "../../shared/GroupedStatsGrid"
 import { StatCard } from "../../shared/StatCard"
@@ -11,7 +11,7 @@ type Props = {
 }
 
 
-export const PlayerProfileSeasonStats = forwardRef<HTMLDivElement, Props>(({ player, aggregatedStats }, ref) => {
+export const PlayerProfileSeasonStats = forwardRef<HTMLDivElement, Props>(({aggregatedStats }, ref) => {
 
 
     console.log(aggregatedStats.map(s => s.action));

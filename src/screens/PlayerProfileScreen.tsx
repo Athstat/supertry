@@ -2,11 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   Shield,
-  Zap,
   Target,
   Crosshair,
-  Dumbbell,
-  Trophy,
   RulerIcon,
   WeightIcon,
 } from "lucide-react";

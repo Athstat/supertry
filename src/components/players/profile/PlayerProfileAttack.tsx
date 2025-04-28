@@ -1,4 +1,4 @@
-import { Dumbbell, RulerDimensionLine, RulerIcon, StarIcon, Target, VenetianMaskIcon, Wand2, Zap } from "lucide-react"
+import { Dumbbell, RulerDimensionLine, StarIcon, Target, VenetianMaskIcon, Wand2, Zap } from "lucide-react"
 import { RugbyPlayer } from "../../../types/rugbyPlayer"
 import { EnhancedStatBar } from "../../shared/EnhancedStatBar"
 import { GroupedStatsGrid } from "../../shared/GroupedStatsGrid"
