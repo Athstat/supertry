@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { RugbyPlayer } from '../../../types/rugbyPlayer';
 import { Crosshair, RulerDimensionLineIcon, Target } from 'lucide-react';
 import { EnhancedStatBar } from '../../shared/EnhancedStatBar';

@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
-  Shield,
-  Target,
-  Crosshair,
   RulerIcon,
   WeightIcon,
 } from "lucide-react";
@@ -11,7 +8,6 @@ import { RugbyPlayer } from "../types/rugbyPlayer";
 import { athleteService } from "../services/athleteService";
 import { useAthletes } from "../contexts/AthleteContext";
 import PlayerProfileHeader from "../components/players/profile/PlayerProfileHeaders";
-import { EnhancedStatBar } from "../components/shared/EnhancedStatBar";
 import { StatCard } from "../components/shared/StatCard";
 import { GroupedStatsGrid } from "../components/shared/GroupedStatsGrid";
 import { PlayerProfileSeasonStats } from "../components/players/profile/PlayerProfileSeasonStats";
@@ -21,6 +17,7 @@ import { athleteSportActionsService } from "../services/athleteSportsActions";
 import { AthleteSportsActionAggregated } from "../types/sports_actions";
 import { PlayerProfileAttack } from "../components/players/profile/PlayerProfileAttack";
 import { PlayerProfileKicking } from "../components/players/profile/PlayerProfileKicking";
+import { PlayerProfileDefending } from "../components/players/profile/PlayerProfileDefending";
 
 export type StatTab = "overview" | "physical" | "seasonAggregate" | "attack" | "defense" | "kicking";
 export type ExpanedStats = Record<string, boolean>;
@@ -195,27 +192,13 @@ export const PlayerProfileScreen = () => {
         />
 
         {/* Defense Section */}
-        <div
+        <PlayerProfileDefending 
+          player={player}
+          aggregatedStats={aggregatedStats}
           ref={defenseRef}
-          className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6 transition-all duration-300 hover:shadow-md"
-        >
-          <h2 className="text-xl font-bold mb-4 dark:text-gray-100">Defense</h2>
-          <div className="space-y-4">
-            {player.tackling !== undefined && (
-              <EnhancedStatBar
-                id="tackling"
-                label="Tackling"
-                value={player.tackling}
-                maxValue={5}
-                icon={<Shield className="text-indigo-500" size={20} />}
-                expanded={expandedStats["tackling"] || false}
-                onToggle={() => toggleStatExpanded("tackling")}
-                description="Ability to stop opponents and prevent line breaks"
-                isExpanded={expandedStats["tackling"] || false}
-              />
-            )}
-          </div>
-        </div>
+          expandedStats={expandedStats}
+          toggleStatExpanded={toggleStatExpanded}
+        />
 
         <PlayerProfileKicking 
           player={player}
