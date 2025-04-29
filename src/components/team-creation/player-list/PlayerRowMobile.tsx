@@ -8,10 +8,12 @@ import {
   calculateKickingRating,
 } from "../../../utils/playerRatings";
 import { motion } from "framer-motion";
+import { StarRating } from "./StarRating";
 
 interface PlayerRowMobileProps {
   player: RugbyPlayer;
   onSelectPlayer: (player: Player) => void;
+  onViewDetails: (player: RugbyPlayer) => void;
   positionName: string;
   createPlayerFromRugbyPlayer: (
     rugbyPlayer: RugbyPlayer,
@@ -23,6 +25,7 @@ interface PlayerRowMobileProps {
 export const PlayerRowMobile: React.FC<PlayerRowMobileProps> = ({
   player,
   onSelectPlayer,
+  onViewDetails,
   positionName,
   createPlayerFromRugbyPlayer,
   isSelected,
@@ -34,31 +37,15 @@ export const PlayerRowMobile: React.FC<PlayerRowMobileProps> = ({
   const defenseRating = calculateDefenseRating(player);
   const kickingRating = calculateKickingRating(player);
 
-  // Convert rating (0-100) to stars (0-5)
-  const ratingToStars = (rating: number): number => {
-    return Math.min(5, Math.max(0, Math.round((rating / 100) * 5)));
-  };
-
-  // Render stars (0-5)
+  // Use the StarRating component for star ratings
   const renderStars = (rating: number) => {
-    const count = ratingToStars(rating);
-    return (
-      <div className="flex items-center justify-center gap-0.5">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <span
-            key={i}
-            className={`
-              block w-1.5 h-1.5 rounded-full 
-              ${i < count ? "bg-yellow-400" : "bg-gray-300 dark:bg-gray-600"}
-            `}
-          />
-        ))}
-      </div>
-    );
+    return <StarRating rating={rating} size={10} className="max-w-full" />;
   };
 
-  // Handle adding a player
-  const handleAddPlayer = async () => {
+  // Handle adding a player (when tapping the add button)
+  const handleAddPlayer = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent opening details modal
+
     if (isSelected || isLoading) return;
 
     setIsLoading(true);
@@ -79,43 +66,53 @@ export const PlayerRowMobile: React.FC<PlayerRowMobileProps> = ({
     }
   };
 
+  // Handle clicking on player info (open details modal)
+  const handlePlayerInfoClick = () => {
+    onViewDetails(player);
+  };
+
   return (
     <>
-      {/* First row: Player info and add button */}
-      <tr className="border-b dark:border-gray-800 group">
-        <td rowSpan={2} className="p-2 w-12 h-24 align-middle">
-          <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
+      {/* Player row with info and add button */}
+      <tr
+        className="group cursor-pointer hover:bg-gray-50/70 dark:hover:bg-gray-800/20 transition-colors"
+        onClick={handlePlayerInfoClick}
+      >
+        {/* Player image - spans both rows with 4:5 portrait ratio */}
+        <td rowSpan={2} className="py-2 pl-2 pr-0 w-[3.5rem] align-middle">
+          <div className="relative w-14 h-[70px] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 shadow-sm">
             {player.image_url ? (
               <img
                 src={player.image_url}
                 alt={player.player_name || "Player"}
-                className="w-full h-full object-cover object-top scale-[1.2] origin-top pt-2"
+                className="w-full h-full object-cover object-top scale-[1.3] origin-top pt-2"
+                loading="lazy"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <User size={18} className="text-gray-500 dark:text-gray-400" />
+                <User size={20} className="text-gray-400 dark:text-gray-500" />
               </div>
             )}
           </div>
         </td>
-        <td colSpan={5} className="px-2 py-1.5">
+
+        {/* Player info and add button - reduce left padding */}
+        <td colSpan={5} className="pl-1 pr-2 py-2.5 border-b-0">
           <div className="flex justify-between items-center">
-            <div className="flex-1 min-w-0">
-              <div className="font-medium text-sm text-gray-900 dark:text-gray-100 truncate">
+            <div className="flex-1 min-w-0 active:opacity-70">
+              <div className="font-medium text-sm text-gray-900 dark:text-gray-100 truncate max-w-[160px]">
                 {player.player_name}
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[160px]">
                 {player.team_name}
               </div>
             </div>
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAddPlayer();
-              }}
+            <motion.button
+              onClick={handleAddPlayer}
+              whileTap={{ scale: 0.9 }}
               className={`
-                h-8 w-8 flex-shrink-0 rounded-full flex items-center justify-center 
+                ml-4 h-8 w-8 flex-shrink-0 rounded-full flex items-center justify-center 
                 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/50
                 ${
                   isSelected
@@ -140,24 +137,40 @@ export const PlayerRowMobile: React.FC<PlayerRowMobileProps> = ({
               ) : (
                 <Plus size={16} strokeWidth={2.5} />
               )}
-            </button>
+            </motion.button>
           </div>
         </td>
       </tr>
 
-      {/* Second row: Stats */}
-      <tr className="border-b dark:border-gray-800 bg-gray-50/50 dark:bg-dark-800/30 group-hover:bg-gray-100 dark:group-hover:bg-dark-800/50">
-        <td className="px-2 py-1.5 text-center">
+      {/* Stats row - with proper spacing and alignment */}
+      <tr
+        className="group-hover:bg-gray-50/80 dark:group-hover:bg-gray-800/20 cursor-pointer transition-colors"
+        onClick={handlePlayerInfoClick}
+      >
+        {/* Stats cells with appropriate alignment and spacing */}
+        <td className="pl-1 py-2 text-center">
           <div className="text-xs font-medium">{player.price || 0}</div>
         </td>
-        <td className="px-2 py-1.5 text-center">
-          <div className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white text-xs font-semibold">
+        <td className="px-1 py-2 text-center">
+          <div className="inline-flex items-center justify-center mx-auto w-6 h-6 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white text-xs font-semibold">
             {player.power_rank_rating || 0}
           </div>
         </td>
-        <td className="px-2 py-1.5">{renderStars(attackRating)}</td>
-        <td className="px-2 py-1.5">{renderStars(defenseRating)}</td>
-        <td className="px-2 py-1.5">{renderStars(kickingRating)}</td>
+        <td className="py-2">
+          <div className="flex justify-center items-center">
+            {renderStars(attackRating)}
+          </div>
+        </td>
+        <td className="py-2">
+          <div className="flex justify-center items-center">
+            {renderStars(defenseRating)}
+          </div>
+        </td>
+        <td className="py-2">
+          <div className="flex justify-center items-center">
+            {renderStars(kickingRating)}
+          </div>
+        </td>
       </tr>
     </>
   );

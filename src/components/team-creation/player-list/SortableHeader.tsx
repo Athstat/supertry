@@ -30,8 +30,9 @@ export const SortableHeader: React.FC<SortableHeaderProps> = ({
     <th
       onClick={handleClick}
       className={`
-        font-medium text-xs text-center p-2 cursor-pointer
-        transition-colors bg-white dark:bg-dark-850
+        font-medium text-xs py-2 px-1 text-center cursor-pointer
+        transition-colors duration-150 relative h-10
+        active:bg-gray-100 dark:active:bg-dark-800
         ${
           isActive
             ? "text-primary-600 dark:text-primary-400"
@@ -51,14 +52,29 @@ export const SortableHeader: React.FC<SortableHeaderProps> = ({
         }
       }}
     >
-      <div className="flex items-center justify-center gap-0.5">
-        <span>{title}</span>
-        {isActive &&
-          (currentSortDirection === "asc" ? (
-            <ChevronUp size={14} className="flex-shrink-0" />
-          ) : (
-            <ChevronDown size={14} className="flex-shrink-0" />
-          ))}
+      <div className="flex flex-col items-center justify-center h-full py-1">
+        <span className="flex items-center font-semibold whitespace-nowrap">
+          {title}
+          {isActive && (
+            <span className="ml-0.5 inline-flex">
+              {currentSortDirection === "asc" ? (
+                <ChevronUp size={14} className="text-primary-500" />
+              ) : (
+                <ChevronDown size={14} className="text-primary-500" />
+              )}
+            </span>
+          )}
+        </span>
+
+        {/* Active indicator line */}
+        {isActive && (
+          <div
+            className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500 dark:bg-primary-400"
+            style={{
+              animation: "fadeIn 0.2s ease-in-out",
+            }}
+          />
+        )}
       </div>
     </th>
   );

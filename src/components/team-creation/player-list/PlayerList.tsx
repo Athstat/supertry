@@ -105,6 +105,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           <PlayerListMobile
             filteredPlayers={filteredPlayers}
             onSelectPlayer={onSelectPlayer}
+            onViewDetails={handleSelectPlayer}
             positionName={positionName}
             selectedPlayers={selectedPlayers}
             loading={loading}

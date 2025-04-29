@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { Player } from "../../../types/player";
 import { SortableHeader } from "./SortableHeader";
@@ -19,6 +19,7 @@ type SortDirection = "asc" | "desc" | null;
 interface PlayerListMobileProps {
   filteredPlayers: RugbyPlayer[];
   onSelectPlayer: (player: Player) => void;
+  onViewDetails?: (player: RugbyPlayer) => void; // Handler for viewing player details
   positionName: string;
   selectedPlayers?: Record<string, Player>;
   loading?: boolean;
@@ -27,6 +28,7 @@ interface PlayerListMobileProps {
 export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
   filteredPlayers,
   onSelectPlayer,
+  onViewDetails,
   positionName,
   selectedPlayers = {},
   loading = false,
@@ -36,6 +38,28 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
     "power_rank_rating"
   );
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Track scroll position to add shadow to sticky header
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        setIsScrolled(containerRef.current.scrollTop > 0);
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   // Function to check if a player is already selected
   const isPlayerSelected = (playerId: string): boolean => {
@@ -60,6 +84,13 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
       setSortDirection("desc");
     }
   };
+
+  // Default handler for view details if not provided
+  const handleViewDetails =
+    onViewDetails ||
+    ((player: RugbyPlayer) => {
+      console.log("View details for player:", player.player_name);
+    });
 
   // Sort the players based on current sort settings
   const getSortedPlayers = (): RugbyPlayer[] => {
@@ -131,7 +162,7 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
   const sortedPlayers = getSortedPlayers();
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full overflow-hidden h-full flex flex-col">
       {loading ? (
         <div className="flex items-center justify-center py-8">
           <LoadingSpinner />
@@ -139,20 +170,30 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
       ) : sortedPlayers.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="w-full overflow-auto">
-          <table className="w-full border-collapse">
-            <thead className="sticky top-0 z-20 shadow-sm">
-              <tr>
-                {/* Empty cell for player image column */}
-                <th className="w-12 bg-white dark:bg-dark-850"></th>
+        <div
+          ref={containerRef}
+          className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 relative"
+        >
+          <table className="w-full border-collapse table-fixed">
+            <thead
+              className={`sticky top-0 z-20 transition-shadow duration-200 ${
+                isScrolled
+                  ? "shadow-[0_4px_10px_-4px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_10px_-4px_rgba(0,0,0,0.2)]"
+                  : ""
+              }`}
+            >
+              <tr className="border-b border-gray-100 dark:border-gray-800">
+                {/* Player image column - fixed width */}
+                <th className="w-[2.5rem] bg-white/95 dark:bg-dark-850/95 backdrop-blur-sm p-0"></th>
 
-                {/* Stats header cells */}
+                {/* Stats header cells - with improved spacing */}
                 <SortableHeader
                   title="COST"
                   sortField="price"
                   currentSortField={sortField}
                   currentSortDirection={sortDirection}
                   onSort={() => handleSort("price")}
+                  className="bg-white/95 dark:bg-dark-850/95 backdrop-blur-sm w-[15%]"
                 />
 
                 <SortableHeader
@@ -161,6 +202,7 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
                   currentSortField={sortField}
                   currentSortDirection={sortDirection}
                   onSort={() => handleSort("power_rank_rating")}
+                  className="bg-white/95 dark:bg-dark-850/95 backdrop-blur-sm w-[15%]"
                 />
 
                 <SortableHeader
@@ -169,6 +211,7 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
                   currentSortField={sortField}
                   currentSortDirection={sortDirection}
                   onSort={() => handleSort("attack")}
+                  className="bg-white/95 dark:bg-dark-850/95 backdrop-blur-sm w-[15%]"
                 />
 
                 <SortableHeader
@@ -177,6 +220,7 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
                   currentSortField={sortField}
                   currentSortDirection={sortDirection}
                   onSort={() => handleSort("defense")}
+                  className="bg-white/95 dark:bg-dark-850/95 backdrop-blur-sm w-[15%]"
                 />
 
                 <SortableHeader
@@ -185,11 +229,12 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
                   currentSortField={sortField}
                   currentSortDirection={sortDirection}
                   onSort={() => handleSort("kicking")}
+                  className="bg-white/95 dark:bg-dark-850/95 backdrop-blur-sm w-[15%]"
                 />
               </tr>
             </thead>
 
-            <tbody>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-800/70">
               {sortedPlayers.map((player) => {
                 const playerId = player.tracking_id || player.id || "";
 
@@ -198,6 +243,7 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
                     key={playerId}
                     player={player}
                     onSelectPlayer={onSelectPlayer}
+                    onViewDetails={handleViewDetails}
                     positionName={positionName}
                     createPlayerFromRugbyPlayer={createPlayerFromRugbyPlayer}
                     isSelected={isPlayerSelected(playerId)}
@@ -208,7 +254,7 @@ export const PlayerListMobile: React.FC<PlayerListMobileProps> = ({
           </table>
 
           {/* Add some padding at the bottom for better scrolling */}
-          <div className="h-4" />
+          <div className="h-6" />
         </div>
       )}
     </div>

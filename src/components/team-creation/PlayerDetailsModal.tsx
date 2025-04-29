@@ -15,6 +15,8 @@ import {
   ArrowLeft,
   Plus,
   Coins,
+  ChevronLeft,
+  X,
 } from "lucide-react";
 import { Player } from "../../types/player";
 import {
@@ -286,12 +288,16 @@ export function PlayerDetailsModal({
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
-        variants={overlayVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        onClick={onClose}
+        className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            onClose();
+          }
+        }}
       >
         <motion.div
           className="bg-white dark:bg-gray-950 rounded-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
@@ -345,13 +351,23 @@ export function PlayerDetailsModal({
               animate={{ opacity: 1 }}
             >
               {/* Back Button - Left */}
-              <button
-                onClick={onBack || onClose}
-                className="p-2 bg-black/20 hover:bg-black/30 rounded-full transition-colors text-white"
-                aria-label="Back to player list"
-              >
-                <ArrowLeft size={18} />
-              </button>
+              <div className="flex items-center justify-between w-full mb-4">
+                <button
+                  onClick={onBack}
+                  className="flex items-center px-3 py-1.5 text-sm rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
+                >
+                  <ChevronLeft size={16} className="mr-1" />
+                  <span>Back</span>
+                </button>
+
+                <button
+                  onClick={onClose}
+                  className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
+                  aria-label="Close"
+                >
+                  <X size={18} />
+                </button>
+              </div>
 
               {/* Price Badge with Coins Icon - Right */}
               <div
