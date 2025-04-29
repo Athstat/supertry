@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchPlayerDetails, findPlayerInRoster } from '../../services/playerApi';
+import { fetchPlayerStats } from '../../services/playerApi';
 
 interface PlayerProfileModalProps {
   player: any;
@@ -15,51 +15,51 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
   roundId
 }) => {
   const [activeTab, setActiveTab] = useState<number>(1); // Default to Stats tab (index 1)
-  const [detailedPlayerData, setDetailedPlayerData] = useState<any>(null);
+  const [playerStats, setPlayerStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   
-  // Fetch detailed player data
+  // Fetch player statistics data
   useEffect(() => {
-    const fetchDetailedData = async () => {
-      if (
-        player.incrowed_team_id && 
-        player.incrowed_competition_id && 
-        player.incrowed_season_id
-      ) {
-        setIsLoading(true);
-        try {
-          const response = await fetchPlayerDetails(
-            player.incrowed_team_id,
-            player.incrowed_competition_id,
-            player.incrowed_season_id
-          );
-          
-          if (response && response.data && Array.isArray(response.data)) {
-            // Find the specific player in the roster
-            const matchedPlayer = findPlayerInRoster(
-              response.data, 
-              player.player_name
-            );
-            
-            if (matchedPlayer) {
-              console.log('Found player in roster:', matchedPlayer);
-              setDetailedPlayerData(matchedPlayer);
-            } else {
-              console.log('Player not found in roster data');
-            }
-          }
-        } catch (err) {
-          console.error('Error fetching detailed player data:', err);
-          setError('Failed to load detailed player statistics');
-        } finally {
-          setIsLoading(false);
-        }
+    const fetchPlayerData = async () => {
+      if (!player) {
+        console.log('No player data available');
+        return;
+      }
+      
+      // Log all available IDs to help debug
+      console.log('Player object:', player);
+      console.log('Available IDs:', { 
+        id: player.id, 
+        tracking_id: player.tracking_id,
+        athlete_id: player.athlete_id
+      });
+      
+      // Use the first available ID in this priority order
+      const athleteId = player.id || player.tracking_id || player.athlete_id;
+      
+      if (!athleteId) {
+        console.warn('No valid ID found for player:', player.player_name);
+        return;
+      }
+      
+      setIsLoading(true);
+      try {
+        console.log('Calling fetchPlayerStats with ID:', athleteId);
+        const stats = await fetchPlayerStats(athleteId);
+        console.log('Fetched player stats:', stats);
+        setPlayerStats(stats);
+      } catch (err) {
+        console.error('Error fetching player statistics:', err);
+        setError('Failed to load player statistics');
+      } finally {
+        setIsLoading(false);
       }
     };
     
     if (isOpen && player) {
-      fetchDetailedData();
+      console.log('Player profile opened, fetching data...');
+      fetchPlayerData();
     }
   }, [isOpen, player]);
   
@@ -204,86 +204,83 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
               </div>
             </div>
 
-            {/* Detailed statistics from API if available */}
-            {detailedPlayerData && detailedPlayerData.stats && (
+            {/* Detailed statistics from our API */}
+            {playerStats && (
               <>
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Season Performance</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {detailedPlayerData.stats.tries !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.tries}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Tries</div>
-                      </div>
-                    )}
-                    
-                    {detailedPlayerData.stats.points !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.points}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Points</div>
-                      </div>
-                    )}
-                    
-                    {detailedPlayerData.stats.appearances !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.appearances}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Appearances</div>
-                      </div>
-                    )}
+                {/* General Stats */}
+                {playerStats.categorizedStats.general.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Season Performance</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {playerStats.categorizedStats.general.map((stat: any) => (
+                        <div key={stat.action} className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                          <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stat.displayValue}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
                 
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Attack</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {detailedPlayerData.stats.carries !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.carries}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Carries</div>
-                      </div>
-                    )}
-                    
-                    {detailedPlayerData.stats.metres !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.metres}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Metres Gained</div>
-                      </div>
-                    )}
-                    
-                    {detailedPlayerData.stats.cleanBreaks !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.cleanBreaks}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Clean Breaks</div>
-                      </div>
-                    )}
+                {/* Attack Stats */}
+                {playerStats.categorizedStats.attack.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Attack</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {playerStats.categorizedStats.attack.map((stat: any) => (
+                        <div key={stat.action} className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                          <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stat.displayValue}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
                 
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Defense</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {detailedPlayerData.stats.tackles !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.tackles}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Tackles</div>
-                      </div>
-                    )}
-                    
-                    {detailedPlayerData.stats.missedTackles !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{detailedPlayerData.stats.missedTackles}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Missed Tackles</div>
-                      </div>
-                    )}
-                    
-                    {detailedPlayerData.stats.tackleSuccess !== null && (
-                      <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{Math.round(detailedPlayerData.stats.tackleSuccess * 100)}%</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">Tackle Success</div>
-                      </div>
-                    )}
+                {/* Defense Stats */}
+                {playerStats.categorizedStats.defense.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Defense</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {playerStats.categorizedStats.defense.map((stat: any) => (
+                        <div key={stat.action} className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                          <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stat.displayValue}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
+                
+                {/* Set Piece Stats */}
+                {playerStats.categorizedStats.setpiece.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Set Piece</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {playerStats.categorizedStats.setpiece.map((stat: any) => (
+                        <div key={stat.action} className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                          <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stat.displayValue}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Discipline Stats */}
+                {playerStats.categorizedStats.discipline.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Discipline</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {playerStats.categorizedStats.discipline.map((stat: any) => (
+                        <div key={stat.action} className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                          <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stat.displayValue}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
