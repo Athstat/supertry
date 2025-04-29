@@ -15,6 +15,16 @@ export interface PointsBreakdown {
   breakdown: BreakdownItem[];
 }
 
+// Define the type for power ranking item
+export interface PowerRankingItem {
+  athlete_id: string;
+  game_id: string;
+  updated_power_ranking: number;
+  team_name: string;
+  opposition_name: string;
+  kickoff_time: string;
+}
+
 const baseUrl = "https://qa-games-app.athstat-next.com";
 
 // Map of action names to human-friendly labels for player stats
@@ -57,7 +67,6 @@ export const athleteService = {
   ): Promise<RugbyPlayer[]> => {
     try {
       // Try to fetch from API first
-
       try {
         const response = await fetch(
           `${baseUrl}/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`,
@@ -164,6 +173,38 @@ export const athleteService = {
       console.warn('Falling back to mock data due to error');
       return getMockPlayerStats();
     }
+  },
+
+  // Get player power rankings history
+  getAthletePowerRankings: async (athleteId: string): Promise<PowerRankingItem[]> => {
+    console.log('Fetching power rankings for athlete ID:', athleteId);
+    
+    try {
+      const url = `${baseUrl}/api/v1/unauth/athletes-power-rankings/${athleteId}`;
+      console.log('Fetching from URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      
+      console.log('API response status:', response.status);
+      
+      if (!response.ok) {
+        console.error('API error response:', response);
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Power Rankings data:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching player power rankings:', error);
+      // Return mock data in case of any error
+      return getMockPowerRankings();
+    }
   }
 };
 
@@ -197,6 +238,65 @@ const getMockPlayerStats = () => {
   ];
   
   return processStatsData(mockRawStats);
+};
+
+/**
+ * Generate mock power rankings for development/testing
+ */
+const getMockPowerRankings = (): PowerRankingItem[] => {
+  console.log('Generating mock power rankings data');
+  
+  // Sample mock data mimicking API response format
+  return [
+    {
+      "athlete_id": "mock-id",
+      "game_id": "3bfe942e-179e-55df-b72e-ee674d4afcda",
+      "updated_power_ranking": 88,
+      "team_name": "Connacht Rugby",
+      "opposition_name": "Munster Rugby",
+      "kickoff_time": "2025-03-29T14:30:00.000Z"
+    },
+    {
+      "athlete_id": "mock-id",
+      "game_id": "80b4f49b-2ac4-57e7-a12e-9dc7c29b8db4",
+      "updated_power_ranking": 76,
+      "team_name": "Connacht Rugby",
+      "opposition_name": "Vodacom Bulls",
+      "kickoff_time": "2024-11-30T17:30:00.000Z"
+    },
+    {
+      "athlete_id": "mock-id",
+      "game_id": "e65594ee-f7e9-5191-9615-7fe22df36fd1",
+      "updated_power_ranking": 81,
+      "team_name": "Leinster Rugby",
+      "opposition_name": "Connacht Rugby",
+      "kickoff_time": "2024-12-21T17:30:00.000Z"
+    },
+    {
+      "athlete_id": "mock-id",
+      "game_id": "ec52bfc9-8120-5f76-902d-e92c04bc9522",
+      "updated_power_ranking": 82,
+      "team_name": "Glasgow Warriors",
+      "opposition_name": "Connacht Rugby",
+      "kickoff_time": "2025-01-26T15:30:00.000Z"
+    },
+    {
+      "athlete_id": "mock-id",
+      "game_id": "fd82c96a-9eb2-53fa-a655-ba5fde8323d9",
+      "updated_power_ranking": 92,
+      "team_name": "Connacht Rugby",
+      "opposition_name": "Cardiff Rugby",
+      "kickoff_time": "2025-04-05T19:00:00.000Z"
+    },
+    {
+      "athlete_id": "mock-id",
+      "game_id": "ad329bd8-3d2c-56d7-91b3-7a9311b59791",
+      "updated_power_ranking": 90,
+      "team_name": "Connacht Rugby",
+      "opposition_name": "Racing 92",
+      "kickoff_time": "2025-04-12T19:00:00.000Z"
+    }
+  ];
 };
 
 /**
