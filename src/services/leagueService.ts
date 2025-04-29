@@ -1,5 +1,4 @@
 import { IFantasyLeague } from "../types/fantasyLeague";
-import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { teamService } from "./teamService";
 
