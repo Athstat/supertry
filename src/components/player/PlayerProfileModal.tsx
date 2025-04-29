@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchPlayerStats } from '../../services/playerApi';
+import { athleteService } from '../../services/athleteService';
 
 interface PlayerProfileModalProps {
   player: any;
@@ -45,8 +45,8 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
       
       setIsLoading(true);
       try {
-        console.log('Calling fetchPlayerStats with ID:', athleteId);
-        const stats = await fetchPlayerStats(athleteId);
+        console.log('Calling athleteService.getAthleteStats with ID:', athleteId);
+        const stats = await athleteService.getAthleteStats(athleteId);
         console.log('Fetched player stats:', stats);
         setPlayerStats(stats);
       } catch (err) {
