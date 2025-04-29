@@ -202,8 +202,8 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center overflow-y-auto">
-      <div className="bg-white dark:bg-dark-800 w-full max-w-4xl mx-auto my-4 rounded-lg shadow-xl max-h-[calc(100vh-2rem)] flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex sm:items-center sm:justify-center overflow-y-auto">
+      <div className="bg-white dark:bg-dark-800 w-full max-w-4xl sm:mx-auto sm:my-4 sm:rounded-lg shadow-xl h-full sm:h-auto sm:max-h-[calc(100vh-2rem)] flex flex-col rounded-none sm:rounded-lg">
         {/* Modal header */}
         <div className="flex justify-between items-center px-6 py-4 border-b dark:border-gray-700">
           <h2 className="text-xl font-bold dark:text-white">Select {selectedPosition?.name}</h2>
