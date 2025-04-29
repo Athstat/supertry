@@ -1,4 +1,3 @@
-import { Player } from "../types/player";
 import {
   IFantasyTeamAthlete,
   IFantasyClubTeam,

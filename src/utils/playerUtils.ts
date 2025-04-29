@@ -41,3 +41,19 @@ export const getPlayersByUIPosition = (
     );
   });
 };
+
+
+export function calculateAge(dob: Date) {
+  const newDob = new Date(dob);
+  const today = new Date();
+
+  const newDobEpoch = newDob.valueOf();
+  const todayEpoch = today.valueOf();
+
+  const diff = todayEpoch - newDobEpoch;
+
+  const yearEpoch = 1000 * 60 * 60 * 24 * 365;
+  const yearDiff = diff / yearEpoch;
+
+  return Math.floor(yearDiff);
+}

@@ -3,7 +3,6 @@ import { Bell, Menu, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
-import ScrummyLogo from "./branding/scrummy_logo";
 import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
 
 export function Header() {
@@ -21,7 +20,7 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none mb-0 pb-0">
         
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="container mx-auto px-4 h-16 overflow-hidden flex items-center justify-between">
           <div className="flex items-center">
             <button
               onClick={() => setIsDrawerOpen(true)}
@@ -31,8 +30,8 @@ export function Header() {
               <Menu size={24} />
             </button>
 
-            <div className="flex flex-row items-start justify-start">
-              <ScrummyLogoHorizontal />
+            <div className="flex flex-row overflow-hidden items-start justify-start">
+              <ScrummyLogoHorizontal className="" />
             </div>
           </div>
 
