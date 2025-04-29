@@ -79,25 +79,11 @@ export const leagueService = {
   },
 
   /**
-   * Check if the current user has joined a specific league
-   */
-  checkUserLeagueStatus: async (leagueId: string): Promise<boolean> => {
-    try {
-      // Get user teams for the specified league
-      const userTeams = await teamService.fetchUserTeams(leagueId);
-
-      // If the user has any teams in this league, they've joined it
-      return userTeams.length > 0;
-    } catch (error) {
-      console.error("Error checking user league status:", error);
-      return false;
-    }
-  },
-
-  /**
    * Fetch participating teams for a league
    */
-  fetchParticipatingTeams: async (leagueId: string): Promise<any[]> => {
+  fetchParticipatingTeams: async (
+    leagueId: string | number
+  ): Promise<any[]> => {
     try {
       const baseUrl = import.meta.env.PROD
         ? "https://qa-games-app.athstat-next.com"
@@ -255,4 +241,55 @@ export const leagueService = {
     }
   },
 
+  /**
+   * Check if the current user has joined a specific league
+   * Used both methods and consolidated them into one
+   */
+  checkUserLeagueStatus: async (leagueId: string): Promise<boolean> => {
+    try {
+      // Try the first approach - look for user teams in the league
+      try {
+        const userTeams = await teamService.fetchUserTeams(leagueId);
+        // If the user has any teams in this league, they've joined it
+        if (userTeams.length > 0) {
+          return true;
+        }
+      } catch (error) {
+        console.log("First approach failed, trying second approach", error);
+      }
+
+      // If first approach fails, try the second approach
+      const baseUrl = import.meta.env.PROD
+        ? "https://qa-games-app.athstat-next.com"
+        : "";
+
+      // Get token for authentication
+      const token = localStorage.getItem("access_token");
+      if (!token) return false;
+
+      // Extract user ID from token
+      let userId;
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        userId = payload.sub;
+      } catch (error) {
+        console.error("Error extracting user ID from token:", error);
+        return false;
+      }
+
+      // Fetch participating teams for this league
+      const participatingTeams = await leagueService.fetchParticipatingTeams(
+        leagueId
+      );
+
+      // Check if any team belongs to the current user
+      return participatingTeams.some((team) => team.user_id === userId);
+    } catch (error) {
+      console.error(
+        `Error checking user status for league ${leagueId}:`,
+        error
+      );
+      return false;
+    }
+  },
 };
