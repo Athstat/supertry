@@ -18,7 +18,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ sortBy, sortOrder, onSort }) 
   
   return (
     <div className="flex items-center px-4 py-3 bg-gray-100 dark:bg-dark-700 border-y dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300">
-      <div className="w-10 mr-3"></div> {/* Image space */}
+      <div className="hidden sm:block w-10 mr-3"></div> {/* Image space - hidden on mobile */}
       <div className="flex-1 pr-2">Player / Team</div>
       
       <button 

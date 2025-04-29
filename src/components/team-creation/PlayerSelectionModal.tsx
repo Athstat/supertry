@@ -269,8 +269,8 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
                 onClick={() => handlePlayerSelect(convertToPlayer(player))}
                 className="flex items-center px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-700 cursor-pointer transition"
               >
-                {/* Player image/initials */}
-                <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
+                {/* Player image/initials - hidden on mobile */}
+                <div className="hidden sm:flex w-10 h-10 rounded-full bg-gray-300 items-center justify-center mr-3">
                   {player.image_url ? (
                     <img 
                       src={player.image_url} 
@@ -286,8 +286,8 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
                 
                 {/* Player info */}
                 <div className="flex-1 min-w-0 pr-2">
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold text-sm truncate dark:text-gray-100">{player.player_name}</p>
+                  <div className="flex items-start sm:items-center justify-between">
+                    <p className="font-semibold text-sm leading-tight break-words sm:truncate dark:text-gray-100 max-w-[150px] sm:max-w-none">{player.player_name}</p>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{player.team_name}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{player.position || selectedPosition.name}</p>
@@ -304,7 +304,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
                   </button>
                 </div>
                 
-                {/* Price */}
+                {/* Price - always visible */}
                 <div className="w-12 text-center">
                   <p className="font-bold text-sm dark:text-gray-200">{player.price}</p>
                 </div>
