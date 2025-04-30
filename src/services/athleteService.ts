@@ -25,7 +25,7 @@ export interface PowerRankingItem {
   kickoff_time: string;
 }
 
-const baseUrl = "https://qa-games-app.athstat-next.com";
+export const baseUrl = "https://qa-games-app.athstat-next.com";
 
 // Map of action names to human-friendly labels for player stats
 export const actionLabels: Record<string, string> = {
