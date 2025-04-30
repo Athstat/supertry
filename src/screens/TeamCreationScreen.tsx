@@ -14,6 +14,7 @@ import PositionsGrid from "./team-creation-components/PositionsGrid";
 import TeamNameInput from "./team-creation-components/TeamNameInput";
 import TeamToast from "./team-creation-components/TeamToast";
 import useTeamCreationState from "./team-creation-components/useTeamCreationState";
+import { leagueService } from "../services/leagueService";
 
 export function TeamCreationScreen() {
   const navigate = useNavigate();
@@ -26,14 +27,14 @@ export function TeamCreationScreen() {
     // Data
     allPlayers,
     positionList,
-    
+
     // UI states
     isLoading,
     error,
     showPlayerSelection,
     setShowPlayerSelection,
     selectedPosition,
-    
+
     // Team creation values
     teamName,
     setTeamName,
@@ -43,18 +44,18 @@ export function TeamCreationScreen() {
     handleAddPlayer,
     handleRemovePlayer,
     handleReset,
-    
+
     // Budget info
     teamBudget,
     remainingBudget,
     selectedPlayersCount,
     requiredPlayersCount,
     isTeamComplete,
-    
+
     // Toast
     toast,
     showToast,
-    hideToast
+    hideToast,
   } = useTeamCreationState(officialLeagueId);
 
   // Handle team submission
@@ -72,31 +73,38 @@ export function TeamCreationScreen() {
       showToast("You have exceeded the budget", "error");
       return;
     }
-    
+    if (!officialLeagueId) {
+      showToast("League ID is required", "error");
+      return;
+    }
+
     try {
       // Convert selected players to the required format for API (IFantasyTeamAthlete)
-      const teamAthletes = Object.values(selectedPlayers).map((player, index) => ({
-        athlete_id: player.id,
-        purchase_price: player.price,
-        purchase_date: new Date(),
-        is_starting: true,
-        slot: index + 1,
-        score: player.points || 0
-      }));
-      
-      // Submit the team using the team service
-      await teamService.submitTeam(
-        teamName,
-        teamAthletes,
-        officialLeagueId || ''
+      const teamAthletes = Object.values(selectedPlayers).map(
+        (player, index) => ({
+          athlete_id: player.id,
+          purchase_price: player.price,
+          purchase_date: new Date(),
+          is_starting: true,
+          slot: index + 1,
+          score: player.points || 0,
+        })
       );
-      
+
+      // Submit the team using the team service
+      await teamService.submitTeam(teamName, teamAthletes, officialLeagueId);
+
+      // Step 2: Join the league using the recently submitted team
+      await leagueService.joinLeague(league);
+
       showToast("Team saved successfully!", "success");
-      navigate('/my-teams');
+      navigate("/my-teams");
     } catch (error) {
       console.error("Error saving team:", error);
       showToast(
-        error instanceof Error ? error.message : "Failed to save team. Please try again.",
+        error instanceof Error
+          ? error.message
+          : "Failed to save team. Please try again.",
         "error"
       );
     }
@@ -127,20 +135,17 @@ export function TeamCreationScreen() {
         onPositionSelect={handlePositionSelect}
         onPlayerRemove={handleRemovePlayer}
       />
-      
+
       {/* Team name input */}
-      <TeamNameInput
-        teamName={teamName}
-        onTeamNameChange={setTeamName}
-      />
-      
+      <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />
+
       {/* Team action buttons */}
       <TeamActions
         isTeamComplete={isTeamComplete}
         onReset={handleReset}
         onSave={handleSaveTeam}
       />
-      
+
       {/* Player selection modal */}
       {showPlayerSelection && selectedPosition && (
         <PlayerSelectionModal
@@ -151,10 +156,10 @@ export function TeamCreationScreen() {
           selectedPlayers={Object.values(selectedPlayers)}
           handlePlayerSelect={handleAddPlayer}
           onClose={() => setShowPlayerSelection(false)}
-          roundId={parseInt(officialLeagueId || '0')}
+          roundId={parseInt(officialLeagueId || "0")}
         />
       )}
-      
+
       {/* Toast component for notifications */}
       <TeamToast
         message={toast.message}
