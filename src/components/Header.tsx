@@ -19,7 +19,6 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none mb-0 pb-0">
-        
         <div className="container mx-auto px-4 h-16 overflow-hidden flex items-center justify-between">
           <div className="flex items-center">
             <button
@@ -30,19 +29,24 @@ export function Header() {
               <Menu size={24} />
             </button>
 
-            <div className="flex flex-row overflow-hidden items-start justify-start">
+            <div
+              className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
+              onClick={() => navigate("/")}
+              tabIndex={0}
+              aria-label="Navigate to home"
+            >
               <ScrummyLogoHorizontal className="" />
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <button
+            {/* <button
               className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
               aria-label="Notifications"
             >
               <Bell size={20} />
-            </button>
+            </button> */}
             <button
               onClick={handleProfileClick}
               className={`p-2 transition-colors ${
