@@ -1,5 +1,4 @@
 import { IFantasyLeague } from "../types/fantasyLeague";
-import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { teamService } from "./teamService";
 
@@ -79,11 +78,12 @@ export const leagueService = {
     }
   },
 
-
   /**
    * Fetch participating teams for a league
    */
-  fetchParticipatingTeams: async (leagueId: string | number): Promise<any[]> => {
+  fetchParticipatingTeams: async (
+    leagueId: string | number
+  ): Promise<any[]> => {
     try {
       const baseUrl = import.meta.env.PROD
         ? "https://qa-games-app.athstat-next.com"
@@ -241,7 +241,6 @@ export const leagueService = {
     }
   },
 
-
   /**
    * Check if the current user has joined a specific league
    * Used both methods and consolidated them into one
@@ -277,14 +276,19 @@ export const leagueService = {
         console.error("Error extracting user ID from token:", error);
         return false;
       }
-      
+
       // Fetch participating teams for this league
-      const participatingTeams = await leagueService.fetchParticipatingTeams(leagueId);
-      
+      const participatingTeams = await leagueService.fetchParticipatingTeams(
+        leagueId
+      );
+
       // Check if any team belongs to the current user
       return participatingTeams.some((team) => team.user_id === userId);
     } catch (error) {
-      console.error(`Error checking user status for league ${leagueId}:`, error);
+      console.error(
+        `Error checking user status for league ${leagueId}:`,
+        error
+      );
       return false;
     }
   },
