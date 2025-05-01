@@ -1,12 +1,5 @@
 import { useRef, useEffect } from "react";
-import {
-  Trophy,
-  Filter,
-  ChevronDown,
-  ArrowUp,
-  ArrowDown,
-  Loader,
-} from "lucide-react";
+import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { TeamStats } from "../../types/league";
 
 interface LeagueStandingsProps {
@@ -44,7 +37,8 @@ export function LeagueStandings({
     ) {
       // Add a small delay to ensure the table is fully rendered
       setTimeout(() => {
-        const userTeamPosition = userTeamRef.current?.offsetTop - HEADER_HEIGHT;
+        const userTeamPosition =
+          userTeamRef.current && userTeamRef.current.offsetTop - HEADER_HEIGHT;
         if (userTeamPosition) {
           tableRef.current?.scrollTo({
             top: userTeamPosition,
@@ -57,9 +51,9 @@ export function LeagueStandings({
 
   const getRankChange = (currentRank: number, lastRank: number) => {
     if (currentRank < lastRank) {
-      return <ArrowUp className="text-green-500" size={16} />;
+      return <span className="text-green-500">↑</span>;
     } else if (currentRank > lastRank) {
-      return <ArrowDown className="text-red-500" size={16} />;
+      return <span className="text-red-500">↓</span>;
     }
     return null;
   };
@@ -105,9 +99,9 @@ export function LeagueStandings({
   const getRowBackground = (
     rank: number,
     index: number,
-    isUserTeam: boolean
+    isUserTeam?: boolean
   ) => {
-    if (isUserTeam) {
+    if (isUserTeam === true) {
       return "bg-primary-50/50 dark:bg-primary-800/40 border-l-4 border-primary-500";
     }
 
@@ -132,6 +126,11 @@ export function LeagueStandings({
     }
   };
 
+  // Helper function to check if a team is the user's team
+  const isUserTeamCheck = (team: TeamStats): boolean => {
+    return team.isUserTeam === true;
+  };
+
   return (
     <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm overflow-hidden">
       <div className="p-4 sticky top-0 bg-white dark:bg-dark-800/40 z-10">
@@ -140,14 +139,6 @@ export function LeagueStandings({
             <Trophy size={24} className="text-primary-500" />
             League Standings
           </h2>
-          <div className="flex items-center gap-2">
-            <button
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 rounded-lg"
-              aria-label="Filter standings"
-            >
-              <Filter size={20} />
-            </button>
-          </div>
         </div>
       </div>
 
@@ -253,6 +244,9 @@ export function LeagueStandings({
                     <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400">
                       {team.totalPoints}
                     </td>
+                    <td className="absolute right-4 top-1/2 -translate-y-1/2">
+                      <ChevronRight className="text-gray-400" />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -261,7 +255,7 @@ export function LeagueStandings({
         </div>
       )}
 
-      {showJumpButton && teams.some((team) => team.isUserTeam) && (
+      {showJumpButton && teams.some(isUserTeamCheck) && (
         <div className="p-3 border-t border-gray-200 dark:border-dark-700">
           <button
             onClick={onJumpToTeam}
@@ -269,27 +263,29 @@ export function LeagueStandings({
             aria-label="Jump to my team"
           >
             Jump to my team
-            <ChevronDown size={16} />
+            <span>↓</span>
           </button>
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes pulse-subtle {
-          0% {
-            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+      <style>
+        {`
+          @keyframes pulse-subtle {
+            0% {
+              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+            }
+            70% {
+              box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+            }
+            100% {
+              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
           }
-          70% {
-            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+          .animate-pulse-subtle {
+            animation: pulse-subtle 2s infinite;
           }
-          100% {
-            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-          }
-        }
-        .animate-pulse-subtle {
-          animation: pulse-subtle 2s infinite;
-        }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 }

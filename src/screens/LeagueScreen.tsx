@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
+import { ChevronRight } from "lucide-react";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { ChatFeed } from "../components/league/chat/ChatFeed";
-import { TeamStats, Fixture, LeagueInfo, LeagueFromState } from "../types/league";
+import {
+  TeamStats,
+  Fixture,
+  LeagueInfo,
+  LeagueFromState,
+} from "../types/league";
 import { ChatMessage, ChatUser } from "../types/chat";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
@@ -13,6 +19,7 @@ import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
+  const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({
     name: "Loading...",
@@ -33,6 +40,21 @@ export function LeagueScreen() {
   const { leagueId } = useParams<{ leagueId: string }>();
   const location = useLocation();
   const leagueFromState = location.state?.league;
+  const navigate = useNavigate();
+
+  // Handle joining a league
+  const handleJoinLeague = () => {
+    // This would typically make an API call to join the league
+    console.log("Joining league:", leagueId);
+    setHasJoinedLeague(true);
+    // You might want to navigate to team creation or show a success message
+  };
+
+  // Function to view a team's details
+  const viewTeam = (teamId: string) => {
+    console.log("Viewing team:", teamId);
+    // Navigate to team details page or open a modal
+  };
 
   // Fetch participating teams when component mounts
   useEffect(() => {
@@ -83,6 +105,7 @@ export function LeagueScreen() {
               if (team.id === currentUserTeamId) {
                 team.isUserTeam = true;
                 userRank = team.rank;
+                setHasJoinedLeague(true);
               }
             });
           }
@@ -245,8 +268,6 @@ export function LeagueScreen() {
     },
   ];
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const userTeam = teams.find((team) => team.isUserTeam);
     setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
@@ -358,44 +379,49 @@ export function LeagueScreen() {
         leagueInfo={leagueInfo}
         onOpenSettings={() => setShowSettings(true)}
         isLoading={isLoading}
-      />
+      >
+        {!hasJoinedLeague && (
+          <button
+            onClick={handleJoinLeague}
+            className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+          >
+            Join This League
+          </button>
+        )}
+      </LeagueHeader>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-7 space-y-6">
-            <LeagueStandings
-              teams={teams}
-              showJumpButton={showJumpButton}
-              onJumpToTeam={() => {
-                const userTeamRef = document.querySelector(
-                  '[data-user-team="true"]'
-                );
-                if (userTeamRef) {
-                  userTeamRef.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-                }
-              }}
-              isLoading={isLoading}
-              error={error}
-              onTeamClick={handleTeamClick}
-            />
-            {/* <ChatFeed
-              messages={messages}
-              currentUser={currentUser}
-              onSendMessage={handleSendMessage}
-              onDeleteMessage={handleDeleteMessage}
-              onReactToMessage={handleReactToMessage}
-            />  */}
+      <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
+        <div className="space-y-6">
+          <LeagueStandings
+            teams={teams}
+            showJumpButton={showJumpButton}
+            onJumpToTeam={() => {
+              const userTeamRef = document.querySelector(
+                '[data-user-team="true"]'
+              );
+              if (userTeamRef) {
+                userTeamRef.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+              }
+            }}
+            isLoading={isLoading}
+            error={error}
+            onTeamClick={(team) => {
+              handleTeamClick(team);
+              viewTeam(team.id);
+            }}
+          />
+          {/* <ChatFeed
+            messages={messages}
+            currentUser={currentUser}
+            onSendMessage={handleSendMessage}
+            onDeleteMessage={handleDeleteMessage}
+            onReactToMessage={handleReactToMessage}
+          />  */}
 
-            <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
-          </div>
-
-          {/* <div className="lg:col-span-5 space-y-6">
-            <FixturesList fixtures={fixtures} />
-            <LeagueInsights />
-          </div> */}
+          <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
         </div>
       </div>
 
@@ -406,11 +432,21 @@ export function LeagueScreen() {
       {/* Team Athletes Modal */}
       {selectedTeam && (
         <TeamAthletesModal
-          team={selectedTeam}
+          team={selectedTeam as TeamStats}
           athletes={teamAthletes}
           onClose={handleCloseModal}
           isLoading={loadingAthletes}
         />
+      )}
+
+      {/* Mobile CTA Button */}
+      {!hasJoinedLeague && (
+        <button
+          onClick={handleJoinLeague}
+          className="lg:hidden fixed bottom-16 inset-x-4 z-50 bg-blue-600 text-white font-semibold rounded-xl py-3 shadow-lg"
+        >
+          Join This League
+        </button>
       )}
     </div>
   );
