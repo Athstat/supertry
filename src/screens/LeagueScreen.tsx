@@ -4,6 +4,7 @@ import { LeagueStandings } from "../components/league/LeagueStandings";
 import { ChevronRight } from "lucide-react";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { ChatFeed } from "../components/league/chat/ChatFeed";
+import { TabButton } from "../components/shared/TabButton";
 import {
   TeamStats,
   Fixture,
@@ -21,6 +22,9 @@ export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
+  const [activeTab, setActiveTab] = useState<"standings" | "chat" | "fixtures">(
+    "standings"
+  );
   const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({
     name: "Loading...",
     type: "Public",
@@ -44,10 +48,14 @@ export function LeagueScreen() {
 
   // Handle joining a league
   const handleJoinLeague = () => {
-    // This would typically make an API call to join the league
-    console.log("Joining league:", leagueId);
-    setHasJoinedLeague(true);
-    // You might want to navigate to team creation or show a success message
+    // Navigate to team creation screen with league details
+    if (leagueFromState && leagueId) {
+      navigate(`/${leagueFromState.official_league_id}/create-team`, {
+        state: { league: leagueFromState },
+      });
+    } else {
+      console.error("League information is missing");
+    }
   };
 
   // Function to view a team's details
@@ -391,37 +399,68 @@ export function LeagueScreen() {
       </LeagueHeader>
 
       <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
-        <div className="space-y-6">
-          <LeagueStandings
-            teams={teams}
-            showJumpButton={showJumpButton}
-            onJumpToTeam={() => {
-              const userTeamRef = document.querySelector(
-                '[data-user-team="true"]'
-              );
-              if (userTeamRef) {
-                userTeamRef.scrollIntoView({
-                  behavior: "smooth",
-                  block: "center",
-                });
-              }
-            }}
-            isLoading={isLoading}
-            error={error}
-            onTeamClick={(team) => {
-              handleTeamClick(team);
-              viewTeam(team.id);
-            }}
-          />
-          {/* <ChatFeed
-            messages={messages}
-            currentUser={currentUser}
-            onSendMessage={handleSendMessage}
-            onDeleteMessage={handleDeleteMessage}
-            onReactToMessage={handleReactToMessage}
-          />  */}
+        {/* Tab Navigation */}
+        <div className="flex overflow-x-auto mb-6 bg-white dark:bg-dark-800 rounded-t-xl shadow-sm">
+          <TabButton
+            active={activeTab === "standings"}
+            onClick={() => setActiveTab("standings")}
+          >
+            Standings
+          </TabButton>
+          <TabButton
+            active={activeTab === "chat"}
+            onClick={() => setActiveTab("chat")}
+          >
+            Chat
+          </TabButton>
+          <TabButton
+            active={activeTab === "fixtures"}
+            onClick={() => setActiveTab("fixtures")}
+          >
+            Fixtures
+          </TabButton>
+        </div>
 
-          <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
+        {/* Tab Content */}
+        <div className="space-y-6">
+          {activeTab === "standings" && (
+            <LeagueStandings
+              teams={teams}
+              showJumpButton={showJumpButton}
+              onJumpToTeam={() => {
+                const userTeamRef = document.querySelector(
+                  '[data-user-team="true"]'
+                );
+                if (userTeamRef) {
+                  userTeamRef.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                  });
+                }
+              }}
+              isLoading={isLoading}
+              error={error}
+              onTeamClick={(team) => {
+                handleTeamClick(team);
+                viewTeam(team.id);
+              }}
+            />
+          )}
+
+          {activeTab === "chat" && (
+            <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
+          )}
+
+          {activeTab === "fixtures" && (
+            <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6 text-center">
+              <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+                Fixtures
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                List of fixtures coming soon!
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
