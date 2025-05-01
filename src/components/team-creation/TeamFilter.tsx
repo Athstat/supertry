@@ -24,7 +24,6 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
         <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Teams:
         </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Select multiple teams to see players from all of them <span className="italic">(scroll to see more →)</span></p>
         <div className="relative">
           <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white dark:from-dark-800 to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white dark:from-dark-800 to-transparent z-10 pointer-events-none"></div>
