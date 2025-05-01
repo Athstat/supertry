@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
+import { motion } from "framer-motion";
 import { TeamStats } from "../../types/league";
 import { athleteService, PointsBreakdown } from "../../services/athleteService";
 
@@ -154,8 +155,19 @@ export function TeamAthletesModal({
 
   console.log("Points breakdown", pointsBreakdown);
 
+  // Handle click on the modal overlay (background)
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    // Only close if the click is directly on the overlay, not on the modal content
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      onClick={handleOverlayClick}
+    >
       <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md max-h-[80vh] flex flex-col">
         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
           <div className="flex-1">
@@ -231,7 +243,9 @@ export function TeamAthletesModal({
                 Total Score
               </span>
               <span className="text-2xl font-bold text-green-600 dark:text-green-400">
-                {pointsBreakdown.reduce((acc, item) => acc + item.score, 0)}
+                {pointsBreakdown
+                  .reduce((acc, item) => acc + item.score, 0)
+                  .toFixed(2)}{" "}
               </span>
             </div>
           </div>
@@ -287,7 +301,7 @@ export function TeamAthletesModal({
                                     : "dark:text-white"
                                 }`}
                               >
-                                {item.score.toFixed(1)} pts
+                                {item.score.toFixed(2)}
                               </span>
                             </div>
                           </li>
@@ -322,7 +336,7 @@ export function TeamAthletesModal({
                     <li key={athlete.athlete_id || athlete.id}>
                       <div
                         onClick={() => handleViewBreakdown(athleteId)}
-                        className="p-4 flex items-center gap-3"
+                        className="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         {/* Athlete Image */}
                         <div className="flex-shrink-0">
@@ -371,7 +385,7 @@ export function TeamAthletesModal({
                             {isLoadingScores
                               ? "Loading..."
                               : `${
-                                  athleteScores[athleteId]?.toFixed(1) || "0.0"
+                                  athleteScores[athleteId]?.toFixed(2) || "0.00"
                                 } pts`}
                           </div>
                           <button

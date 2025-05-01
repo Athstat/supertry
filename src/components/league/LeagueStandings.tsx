@@ -165,7 +165,7 @@ export function LeagueStandings({
       ) : (
         <div
           ref={tableRef}
-          className="overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-600 scrollbar-track-gray-100 dark:scrollbar-track-dark-800 relative"
+          className="overflow-hidden scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-600 scrollbar-track-gray-100 dark:scrollbar-track-dark-800 relative"
           style={{ maxHeight: `${TABLE_HEIGHT}px` }}
         >
           <div className="relative">
@@ -190,12 +190,11 @@ export function LeagueStandings({
                     ref={team.isUserTeam ? userTeamRef : null}
                     data-user-team={team.isUserTeam}
                     className={`
-                      hover:bg-gray-50 dark:hover:bg-dark-800 
-                      cursor-pointer transition-colors
+                      cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-800
                       ${getRowBackground(team.rank, index, team.isUserTeam)}
                     `}
                     onClick={() => handleTeamClick(team)}
-                    onKeyDown={(e) => {
+                    onKeyDown={(e: React.KeyboardEvent) => {
                       if (e.key === "Enter" || e.key === " ") {
                         handleTeamClick(team);
                         e.preventDefault();
@@ -241,11 +240,11 @@ export function LeagueStandings({
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400">
+                    <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400 relative pr-10">
                       {team.totalPoints}
-                    </td>
-                    <td className="absolute right-4 top-1/2 -translate-y-1/2">
-                      <ChevronRight className="text-gray-400" />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2">
+                        <ChevronRight className="text-gray-400" />
+                      </span>
                     </td>
                   </tr>
                 ))}
