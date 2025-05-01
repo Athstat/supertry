@@ -46,6 +46,17 @@ export function LeagueScreen() {
   const leagueFromState = location.state?.league;
   const navigate = useNavigate();
 
+  // Set league name from state as soon as possible
+  useEffect(() => {
+    if (leagueFromState && leagueFromState.title) {
+      console.log("Setting league name from state:", leagueFromState.title);
+      setLeagueInfo((prev) => ({
+        ...prev,
+        name: leagueFromState.title,
+      }));
+    }
+  }, [leagueFromState]);
+
   // Handle joining a league
   const handleJoinLeague = () => {
     // Navigate to team creation screen with league details
@@ -68,18 +79,27 @@ export function LeagueScreen() {
   useEffect(() => {
     const fetchLeagueData = async () => {
       if (!leagueId) return;
+      if (!leagueFromState) {
+        console.error("League information is missing from state");
+        setError(
+          "League information is missing. Please go back and try again."
+        );
+        setIsLoading(false);
+        return;
+      }
 
       try {
         setIsLoading(true);
 
-        //console.log("leagueFromState", leagueFromState);
+        console.log("leagueFromState", leagueFromState);
+        console.log("League title:", leagueFromState.title);
 
         // Fetch participating teams
         const participatingTeams = await leagueService.fetchParticipatingTeams(
           leagueFromState.id
         );
 
-        //console.log("participatingTeams", participatingTeams);
+        console.log("participatingTeams", participatingTeams);
 
         if (participatingTeams && participatingTeams.length > 0) {
           // Sort teams by score in descending order
@@ -133,7 +153,7 @@ export function LeagueScreen() {
 
           setTeams(mappedTeams);
 
-          //console.log("leagueFromState", leagueFromState);
+          console.log("leagueFromState", leagueFromState);
 
           setLeagueInfo({
             name: leagueFromState.title || "League",
@@ -482,7 +502,7 @@ export function LeagueScreen() {
       {!hasJoinedLeague && (
         <button
           onClick={handleJoinLeague}
-          className="lg:hidden fixed bottom-16 inset-x-4 z-50 bg-blue-600 text-white font-semibold rounded-xl py-3 shadow-lg"
+          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 text-white font-semibold rounded-xl py-3 shadow-lg"
         >
           Join This League
         </button>

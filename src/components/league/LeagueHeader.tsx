@@ -27,6 +27,8 @@ export function LeagueHeader({
 }: LeagueHeaderProps) {
   const navigate = useNavigate();
 
+  console.log("leagueInfo", leagueInfo);
+
   return (
     <div className="bg-gradient-to-r from-primary-700 to-primary-600 text-white">
       <div className="container mx-auto px-4 py-6 max-w-3xl">
@@ -41,7 +43,7 @@ export function LeagueHeader({
               <span>Back to leagues</span>
             </button>
             <h1 className="text-2xl md:text-3xl font-bold">
-              {isLoading ? "Loading..." : leagueInfo.name}
+              {leagueInfo.name}
             </h1>
           </div>
           {children}
