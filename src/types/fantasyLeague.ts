@@ -15,4 +15,6 @@ export interface IFantasyLeague {
   disclaimer: string | null;
   has_ended: boolean;
   duration_type: string;
+  status: string;
+  participants_count: number;
 }
