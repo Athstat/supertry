@@ -7,12 +7,19 @@ import {
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
 
+// Extended interface to include UI-specific properties
+interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
+  isFavorite?: boolean;
+  score?: number;
+  rank?: number;
+}
+
 export function MyTeamsScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { teamCreated, teamName, leagueId } = location.state || {};
 
-  const [teams, setTeams] = useState<IFantasyClubTeam[]>([]);
+  const [teams, setTeams] = useState<ExtendedFantasyClubTeam[]>([]);
   const [teamsWithAthletes, setTeamsWithAthletes] = useState<
     Map<string, IFantasyTeamAthlete[]>
   >(new Map());
@@ -26,12 +33,14 @@ export function MyTeamsScreen() {
     const fetchTeams = async () => {
       try {
         setIsLoading(true);
-        const userTeams = await teamService.fetchUserTeams();
+        // Use the default league ID as in DashboardScreen
+        const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19";
+        const userTeams = await teamService.fetchUserTeams(defaultLeagueId);
 
         // Sort teams by creation date (newest first)
         const sortedTeams = [...userTeams].sort((a, b) => {
-          const dateA = new Date(a.created_date || 0).getTime();
-          const dateB = new Date(b.created_date || 0).getTime();
+          const dateA = new Date(a.created_at || 0).getTime();
+          const dateB = new Date(b.created_at || 0).getTime();
           return dateB - dateA; // Descending order (newest first)
         });
 
@@ -216,10 +225,11 @@ export function MyTeamsScreen() {
                           : "Add to favorites"
                       }
                     >
-                      <Star
-                        size={18}
-                        fill={team.isFavorite ? "currentColor" : "none"}
-                      />
+                      {team.isFavorite ? (
+                        <Star size={18} className="fill-current" />
+                      ) : (
+                        <Star size={18} />
+                      )}
                     </button>
                   </div>
                   <div className="flex items-center gap-3 mt-1">
