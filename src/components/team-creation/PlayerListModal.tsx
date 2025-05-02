@@ -474,7 +474,7 @@ export function PlayerListModal({
   // Update the handleSelectPlayer function to store the player temporarily for the modal
   const handleSelectPlayer = (rugbyPlayer: RugbyPlayer) => {
     const player: Player = {
-      id: rugbyPlayer.id || rugbyPlayer.tracking_id || String(Math.random()),
+      id: rugbyPlayer.id || rugbyPlayer.tracking_id || 0,
       name: rugbyPlayer.player_name || "Unknown Player",
       team: rugbyPlayer.team_name || "Unknown Team",
       position: position.name,
@@ -484,48 +484,28 @@ export function PlayerListModal({
       power_rank_rating: rugbyPlayer.power_rank_rating || 0,
 
       // Database stats (directly from schema)
-      points_kicking:
-        rugbyPlayer.points_kicking ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      tackling:
-        rugbyPlayer.tackling || Number((Math.random() * 2 + 3).toFixed(1)),
-      infield_kicking:
-        rugbyPlayer.infield_kicking ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      strength:
-        rugbyPlayer.strength || Number((Math.random() * 2 + 3).toFixed(1)),
-      playmaking:
-        rugbyPlayer.playmaking || Number((Math.random() * 2 + 3).toFixed(1)),
-      ball_carrying:
-        rugbyPlayer.ball_carrying || Number((Math.random() * 2 + 3).toFixed(1)),
+      points_kicking:        rugbyPlayer.points_kicking        || 0,
+      tackling:              rugbyPlayer.tackling              || 0,
+      infield_kicking:       rugbyPlayer.infield_kicking       || 0,
+      strength:              rugbyPlayer.strength              || 0,
+      playmaking:            rugbyPlayer.playmaking            || 0,
+      ball_carrying:         rugbyPlayer.ball_carrying         || 0,
 
       // UI display stats (generated if not available)
-      tries: rugbyPlayer.tries || Math.floor(Math.random() * 15),
-      assists: rugbyPlayer.assists || Math.floor(Math.random() * 10),
-      tackles: rugbyPlayer.tackles || Math.floor(Math.random() * 150 + 50),
+      tries:                 rugbyPlayer.tries                 || 0,
+      assists:               rugbyPlayer.assists               || 0,
+      tackles:               rugbyPlayer.tackles               || 0,
 
       // Derived stats for UI display
-      try_scoring:
-        rugbyPlayer.try_scoring || Number((Math.random() * 2 + 3).toFixed(1)),
-      offloading:
-        rugbyPlayer.offloading || Number((Math.random() * 2 + 3).toFixed(1)),
-      breakdown_work:
-        rugbyPlayer.breakdown_work ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      defensive_positioning:
-        rugbyPlayer.defensive_positioning ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      goal_kicking:
-        rugbyPlayer.goal_kicking || Number((Math.random() * 2 + 3).toFixed(1)),
-      tactical_kicking:
-        rugbyPlayer.tactical_kicking ||
-        Number((Math.random() * 2 + 3).toFixed(1)),
-      penalties_conceded:
-        rugbyPlayer.penalties_conceded ||
-        Number((Math.random() * 2 + 1).toFixed(1)),
-      discipline:
-        rugbyPlayer.discipline || Number((Math.random() * 2 + 3).toFixed(1)),
-      cards: rugbyPlayer.cards || Number((Math.random() * 2).toFixed(1)),
+      try_scoring:           rugbyPlayer.try_scoring           || 0,
+      offloading:            rugbyPlayer.offloading            || 0,
+      breakdown_work:        rugbyPlayer.breakdown_work        || 0,
+      defensive_positioning: rugbyPlayer.defensive_positioning || 0,
+      goal_kicking:          rugbyPlayer.goal_kicking          || 0,
+      tactical_kicking:      rugbyPlayer.tactical_kicking      || 0,
+      penalties_conceded:    rugbyPlayer.penalties_conceded    || 0,
+      discipline:            rugbyPlayer.discipline            || 0,
+      cards:                 rugbyPlayer.cards                 || 0,
     };
 
     // Store the selected player for the modal
