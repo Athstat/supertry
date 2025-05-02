@@ -4,6 +4,7 @@ import renderStatDots from './renderStatDots';
 import { convertToPlayer } from './PlayerConverter';
 import { Player } from '../../../types/player';
 import { Position } from '../../../types/position';
+import FormIndicator, { FormType } from '../../shared/FormIndicator';
 
 interface PlayerListProps {
   players: any[];
@@ -14,9 +15,9 @@ interface PlayerListProps {
   roundId?: number;
 }
 
-export const PlayerList: React.FC<PlayerListProps> = ({ 
-  players, 
-  isLoading, 
+export const PlayerList: React.FC<PlayerListProps> = ({
+  players,
+  isLoading,
   selectedPosition,
   handlePlayerSelect,
   onClose,
@@ -24,7 +25,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
 }) => {
   // Get the player profile hook
   const { showPlayerProfile } = usePlayerProfile();
-  
+
   // Function to handle viewing player profile
   const handleViewPlayerProfile = (player: any, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent row selection
@@ -49,10 +50,12 @@ export const PlayerList: React.FC<PlayerListProps> = ({
     );
   }
 
+  const playerFormOptions : FormType[]  = ["UP", "DOWN", "NEUTRAL"];
+
   return (
     <>
       {players.map(player => (
-        <div 
+        <div
           key={player.tracking_id || player.id || Math.random()}
           onClick={() => {
             handlePlayerSelect(convertToPlayer(player, selectedPosition));
@@ -63,10 +66,10 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           {/* Player image/initials - hidden on mobile */}
           <div className="hidden sm:flex w-10 h-10 rounded-full bg-gray-300 items-center justify-center mr-3">
             {player.image_url ? (
-              <img 
-                src={player.image_url} 
+              <img
+                src={player.image_url}
                 alt={player.player_name}
-                className="w-10 h-10 rounded-full object-cover" 
+                className="w-10 h-10 rounded-full object-cover"
               />
             ) : (
               <span className="text-white text-xs font-semibold">
@@ -74,7 +77,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
               </span>
             )}
           </div>
-          
+
           {/* Player info */}
           <div className="flex-1 min-w-0 pr-2">
             <div className="flex items-start sm:items-center justify-between">
@@ -82,7 +85,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{player.team_name}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">{player.position || selectedPosition.name}</p>
-            <button 
+            <button
               onClick={(e) => handleViewPlayerProfile(player, e)}
               className="mt-1 text-blue-500 dark:text-blue-400 hover:underline transition-colors text-xs flex items-center"
               aria-label="More player information"
@@ -91,27 +94,33 @@ export const PlayerList: React.FC<PlayerListProps> = ({
               <span>More Info</span>
             </button>
           </div>
-          
+
           {/* Price - always visible */}
+          <div className="w-12 text-center">
+            <p className="font-bold text-sm dark:text-gray-200">
+              <FormIndicator form={playerFormOptions[(player.ball_carrying ?? 0) % 3]} />
+            </p>
+          </div>
+
           <div className="w-12 text-center">
             <p className="font-bold text-sm dark:text-gray-200">{player.price}</p>
           </div>
-          
+
           {/* Rating */}
           <div className="w-12 text-center">
             <p className="text-sm dark:text-gray-200">{(player.power_rank_rating || 0).toFixed(1)}</p>
           </div>
-          
+
           {/* Attack stat */}
           <div className="w-16 flex justify-center px-2">
             {renderStatDots(player.ball_carrying || 0, 'bg-red-500')}
           </div>
-          
+
           {/* Defense stat */}
           <div className="w-16 flex justify-center px-2">
             {renderStatDots(player.tackling || 0, 'bg-blue-500')}
           </div>
-          
+
           {/* Kicking stat */}
           <div className="w-16 flex justify-center px-2">
             {renderStatDots(player.points_kicking || 0, 'bg-green-500')}
