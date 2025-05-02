@@ -10,6 +10,7 @@ export interface IFantasyLeague {
   reward_type: string | null;
   reward_description: string | null;
   end_round: number | null;
+  start_round: number | null;
   is_open: boolean;
   join_deadline: Date | null;
   disclaimer: string | null;

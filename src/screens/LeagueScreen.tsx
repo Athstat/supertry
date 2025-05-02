@@ -17,6 +17,8 @@ import { leagueService } from "../services/leagueService";
 import { teamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
+import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
+import { IFantasyLeague } from "../types/fantasyLeague";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -472,14 +474,7 @@ export function LeagueScreen() {
           )}
 
           {activeTab === "fixtures" && (
-            <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6 text-center">
-              <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
-                Fixtures
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                List of fixtures coming soon!
-              </p>
-            </div>
+            <FantasyLeagueFixturesList  league={leagueFromState as IFantasyLeague} />
           )}
         </div>
       </div>
