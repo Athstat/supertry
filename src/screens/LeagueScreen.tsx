@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
+import { ChevronRight } from "lucide-react";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { ChatFeed } from "../components/league/chat/ChatFeed";
-import { TeamStats, Fixture, LeagueInfo, LeagueFromState } from "../types/league";
+import { TabButton } from "../components/shared/TabButton";
+import {
+  TeamStats,
+  Fixture,
+  LeagueInfo,
+  LeagueFromState,
+} from "../types/league";
 import { ChatMessage, ChatUser } from "../types/chat";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
@@ -13,7 +20,11 @@ import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
+  const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
+  const [activeTab, setActiveTab] = useState<"standings" | "chat" | "fixtures">(
+    "standings"
+  );
   const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({
     name: "Loading...",
     type: "Public",
@@ -33,23 +44,62 @@ export function LeagueScreen() {
   const { leagueId } = useParams<{ leagueId: string }>();
   const location = useLocation();
   const leagueFromState = location.state?.league;
+  const navigate = useNavigate();
+
+  // Set league name from state as soon as possible
+  useEffect(() => {
+    if (leagueFromState && leagueFromState.title) {
+      console.log("Setting league name from state:", leagueFromState.title);
+      setLeagueInfo((prev) => ({
+        ...prev,
+        name: leagueFromState.title,
+      }));
+    }
+  }, [leagueFromState]);
+
+  // Handle joining a league
+  const handleJoinLeague = () => {
+    // Navigate to team creation screen with league details
+    if (leagueFromState && leagueId) {
+      navigate(`/${leagueFromState.official_league_id}/create-team`, {
+        state: { league: leagueFromState },
+      });
+    } else {
+      console.error("League information is missing");
+    }
+  };
+
+  // Function to view a team's details
+  const viewTeam = (teamId: string) => {
+    console.log("Viewing team:", teamId);
+    // Navigate to team details page or open a modal
+  };
 
   // Fetch participating teams when component mounts
   useEffect(() => {
     const fetchLeagueData = async () => {
       if (!leagueId) return;
+      if (!leagueFromState) {
+        console.error("League information is missing from state");
+        setError(
+          "League information is missing. Please go back and try again."
+        );
+        setIsLoading(false);
+        return;
+      }
 
       try {
         setIsLoading(true);
 
-        //console.log("leagueFromState", leagueFromState);
+        console.log("leagueFromState", leagueFromState);
+        console.log("League title:", leagueFromState.title);
 
         // Fetch participating teams
         const participatingTeams = await leagueService.fetchParticipatingTeams(
           leagueFromState.id
         );
 
-        //console.log("participatingTeams", participatingTeams);
+        console.log("participatingTeams", participatingTeams);
 
         if (participatingTeams && participatingTeams.length > 0) {
           // Sort teams by score in descending order
@@ -83,6 +133,7 @@ export function LeagueScreen() {
               if (team.id === currentUserTeamId) {
                 team.isUserTeam = true;
                 userRank = team.rank;
+                setHasJoinedLeague(true);
               }
             });
           }
@@ -102,7 +153,7 @@ export function LeagueScreen() {
 
           setTeams(mappedTeams);
 
-          //console.log("leagueFromState", leagueFromState);
+          console.log("leagueFromState", leagueFromState);
 
           setLeagueInfo({
             name: leagueFromState.title || "League",
@@ -245,8 +296,6 @@ export function LeagueScreen() {
     },
   ];
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const userTeam = teams.find((team) => team.isUserTeam);
     setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
@@ -358,11 +407,43 @@ export function LeagueScreen() {
         leagueInfo={leagueInfo}
         onOpenSettings={() => setShowSettings(true)}
         isLoading={isLoading}
-      />
+      >
+        {!hasJoinedLeague && (
+          <button
+            onClick={handleJoinLeague}
+            className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+          >
+            Join This League
+          </button>
+        )}
+      </LeagueHeader>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-7 space-y-6">
+      <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
+        {/* Tab Navigation */}
+        <div className="flex overflow-x-auto mb-6 bg-white dark:bg-dark-800 rounded-t-xl shadow-sm">
+          <TabButton
+            active={activeTab === "standings"}
+            onClick={() => setActiveTab("standings")}
+          >
+            Standings
+          </TabButton>
+          <TabButton
+            active={activeTab === "chat"}
+            onClick={() => setActiveTab("chat")}
+          >
+            Chat
+          </TabButton>
+          <TabButton
+            active={activeTab === "fixtures"}
+            onClick={() => setActiveTab("fixtures")}
+          >
+            Fixtures
+          </TabButton>
+        </div>
+
+        {/* Tab Content */}
+        <div className="space-y-6">
+          {activeTab === "standings" && (
             <LeagueStandings
               teams={teams}
               showJumpButton={showJumpButton}
@@ -379,23 +460,27 @@ export function LeagueScreen() {
               }}
               isLoading={isLoading}
               error={error}
-              onTeamClick={handleTeamClick}
+              onTeamClick={(team) => {
+                handleTeamClick(team);
+                viewTeam(team.id);
+              }}
             />
-            {/* <ChatFeed
-              messages={messages}
-              currentUser={currentUser}
-              onSendMessage={handleSendMessage}
-              onDeleteMessage={handleDeleteMessage}
-              onReactToMessage={handleReactToMessage}
-            />  */}
+          )}
 
+          {activeTab === "chat" && (
             <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
-          </div>
+          )}
 
-          {/* <div className="lg:col-span-5 space-y-6">
-            <FixturesList fixtures={fixtures} />
-            <LeagueInsights />
-          </div> */}
+          {activeTab === "fixtures" && (
+            <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm p-6 text-center">
+              <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+                Fixtures
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                List of fixtures coming soon!
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -406,11 +491,21 @@ export function LeagueScreen() {
       {/* Team Athletes Modal */}
       {selectedTeam && (
         <TeamAthletesModal
-          team={selectedTeam}
+          team={selectedTeam as TeamStats}
           athletes={teamAthletes}
           onClose={handleCloseModal}
           isLoading={loadingAthletes}
         />
+      )}
+
+      {/* Mobile CTA Button */}
+      {!hasJoinedLeague && (
+        <button
+          onClick={handleJoinLeague}
+          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 text-white font-semibold rounded-xl py-3 shadow-lg"
+        >
+          Join This League
+        </button>
       )}
     </div>
   );

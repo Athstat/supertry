@@ -1,0 +1,117 @@
+import React, { useState, useEffect } from "react";
+import { Trophy, Users, Loader, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ActiveLeaguesSectionProps } from "./types";
+import { IFantasyLeague } from "../../types/fantasyLeague";
+import { leagueService } from "../../services/leagueService";
+
+export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
+  leagues,
+  isLoading,
+  onViewLeague,
+}) => {
+  const navigate = useNavigate();
+  const [teamCounts, setTeamCounts] = useState<Record<string, number>>({});
+  const [isLoadingCounts, setIsLoadingCounts] = useState(false);
+
+  // Fetch team counts for each league
+  useEffect(() => {
+    const fetchTeamCounts = async () => {
+      if (leagues.length === 0) return;
+
+      setIsLoadingCounts(true);
+      const counts: Record<string, number> = {};
+
+      try {
+        // Fetch team counts for each league
+        for (const league of leagues.slice(0, 3)) {
+          const teams = await leagueService.fetchParticipatingTeams(league.id);
+          counts[league.id] = teams.length;
+        }
+
+        setTeamCounts(counts);
+      } catch (error) {
+        console.error("Failed to fetch team counts:", error);
+      } finally {
+        setIsLoadingCounts(false);
+      }
+    };
+
+    fetchTeamCounts();
+  }, [leagues]);
+
+  const handleLeagueClick = (league: IFantasyLeague) => {
+    onViewLeague(league);
+  };
+
+  return (
+    <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6">
+      <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
+        <Trophy size={24} className="text-primary-500" />
+        Active Leagues
+      </h2>
+
+      {isLoading ? (
+        <div className="flex justify-center py-8">
+          <Loader className="w-8 h-8 text-primary-500 animate-spin" />
+        </div>
+      ) : leagues.length === 0 ? (
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <p>No active leagues available.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {leagues.slice(0, 3).map((league) => (
+            <motion.div
+              key={league.id}
+              onClick={() => handleLeagueClick(league)}
+              className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 border border-gray-100 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow"
+              whileHover={{
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300 },
+              }}
+            >
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="font-semibold dark:text-white">
+                  {league.title}
+                </h3>
+                <div
+                  className={`px-2 py-0.5 text-xs rounded-full ${
+                    league.is_open
+                      ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                      : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
+                  }`}
+                >
+                  {league.is_open ? "Open" : "Closed"}
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <Users size={16} />
+                  <span>
+                    {isLoadingCounts ? (
+                      <Loader size={12} className="animate-spin" />
+                    ) : (
+                      `${teamCounts[league.id] || 0} teams joined`
+                    )}{" "}
+                  </span>
+                </div>
+                <ChevronRight size={18} className="text-gray-400" />
+              </div>
+            </motion.div>
+          ))}
+
+          {leagues.length > 3 && (
+            <button
+              onClick={() => navigate("/leagues")}
+              className="w-full text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 py-2 text-sm font-medium"
+            >
+              View All Leagues
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
