@@ -14,9 +14,11 @@ export default function FixtureCard({ fixture, showCompetition }: Props) {
 
     const { team_score, opposition_team_id, kickoff_time, result, round, game_status, opposition_score } = fixture;
 
-    const homeTeamWon = (game_status && team_score && opposition_score) ? team_score > opposition_score : false;
-    const awayTeamWon = (game_status && team_score && opposition_score) ? team_score < opposition_score : false;
-    const draw = (game_status && team_score && opposition_score) ? team_score === opposition_score : false;
+    const matchFinal = game_status === "completed" && team_score && opposition_score; 
+
+    const homeTeamWon = matchFinal ? team_score > opposition_score : false;
+    const awayTeamWon = matchFinal ? team_score < opposition_score : false;
+    // const draw = matchFinal ? team_score === opposition_score : false;
 
     return (
         <div
