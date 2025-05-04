@@ -32,4 +32,6 @@ declare module "lucide-react" {
   export const Shield: ComponentType<IconProps>;
   export const Minus: ComponentType<IconProps>;
   export const ArrowLeft: CIP;
+  export const MapPin: CIP;
+  export const Watch: CIP;
 }

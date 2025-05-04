@@ -7,6 +7,8 @@ import { Minus } from "lucide-react";
 import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
+import { TabButton } from "../components/shared/TabButton";
+import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
 
 export default function FixtureScreen() {
 
@@ -26,9 +28,9 @@ export default function FixtureScreen() {
   const { back } = useRouter();
 
   return (
-    <div className="dark:text-white" >
+    <div className="dark:text-white flex flex-col gap-3" >
 
-      <div className="p-4 w-full h-56 bg-gradient-to-tr from-blue-700 to-blue-900 text-white" >
+      <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-950 text-white" >
 
         <div onClick={() => back()} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
           <ArrowLeft />
@@ -55,7 +57,16 @@ export default function FixtureScreen() {
           </div>
 
         </div>
+
       </div>
+
+      <div className="flex flex-col p-4" >
+
+        {/* Overview Component */}
+        <FixtureScreenOverview fixture={fixture} />
+
+      </div>
+
 
     </div>
   )
@@ -87,7 +98,7 @@ function MatchResultsInformation({ fixture }: Props) {
     <div className='flex justify-center  flex-1 w-full flex-col items-center' >
 
       <div>
-        {game_status && <span className='text text-slate-500 font-semibold dark:text-slate-400' >{summerizeGameStatus(fixture)}</span>}
+        {game_status && <span className='text text-slate-white font-semibold dark:text-slate-100' >{summerizeGameStatus(fixture)}</span>}
       </div>
 
       <div className='flex flex-1 flex-row gap-2 items-center justify-between' >

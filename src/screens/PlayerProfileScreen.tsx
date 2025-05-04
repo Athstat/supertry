@@ -18,6 +18,7 @@ import { AthleteSportsActionAggregated } from "../types/sports_actions";
 import { PlayerProfileAttack } from "../components/players/profile/PlayerProfileAttack";
 import { PlayerProfileKicking } from "../components/players/profile/PlayerProfileKicking";
 import { PlayerProfileDefending } from "../components/players/profile/PlayerProfileDefending";
+import { TabButton } from "../components/shared/TabButton";
 
 export type StatTab = "overview" | "physical" | "seasonAggregate" | "attack" | "defense" | "kicking";
 export type ExpanedStats = Record<string, boolean>;
@@ -34,7 +35,7 @@ export const PlayerProfileScreen = () => {
   const [player, setPlayer] = useState<RugbyPlayer | null>(
     location.state?.player || null
   );
-  
+
 
   const overviewRef = useRef<HTMLDivElement>(null);
   const physicalRef = useRef<HTMLDivElement>(null);
@@ -183,7 +184,7 @@ export const PlayerProfileScreen = () => {
         <PlayerProfileSeasonStats aggregatedStats={aggregatedStats} player={player} ref={seasonAggregateRef} />
 
         {/* Attack Section */}
-        <PlayerProfileAttack 
+        <PlayerProfileAttack
           player={player}
           ref={attackRef}
           toggleStatExpanded={toggleStatExpanded}
@@ -192,7 +193,7 @@ export const PlayerProfileScreen = () => {
         />
 
         {/* Defense Section */}
-        <PlayerProfileDefending 
+        <PlayerProfileDefending
           player={player}
           aggregatedStats={aggregatedStats}
           ref={defenseRef}
@@ -200,14 +201,14 @@ export const PlayerProfileScreen = () => {
           toggleStatExpanded={toggleStatExpanded}
         />
 
-        <PlayerProfileKicking 
+        <PlayerProfileKicking
           player={player}
           aggregatedStats={aggregatedStats}
           expandedStats={expandedStats}
-          toggleStatExpanded={toggleStatExpanded} 
+          toggleStatExpanded={toggleStatExpanded}
           ref={kickingRef}
         />
-          
+
       </div >
     </main >
   );
