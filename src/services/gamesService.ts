@@ -38,11 +38,10 @@ export const gamesService = {
     },
 
     getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {
-        const uri = getUri(`/api/v1/entities/games/${gameId}`);
+        const uri = getUri(`/api/v1/entities/games-distinct/${gameId}`);
         
         try {
             const res = await fetch(uri, {
-                headers: getAuthHeader()
             });
 
             return await res.json() as IFixture;

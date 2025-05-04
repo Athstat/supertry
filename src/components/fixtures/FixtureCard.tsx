@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
+import { useRouter } from '../../hooks/useRoter';
 type Props = {
     fixture: IFixture,
     showCompetition?: boolean
@@ -106,6 +107,7 @@ type ModalProps = {
 function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
     const title = `${fixture.home_team} vs ${fixture.away_team}`;
+    const {push} = useRouter()
 
     const { team_score, kickoff_time, round, game_status, opposition_score } = fixture;
 
@@ -115,6 +117,12 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
     const awayTeamWon = matchFinal ? team_score < opposition_score : false;
 
     const gameKickedOff = kickoff_time && (new Date(kickoff_time) < new Date());
+
+
+
+    const goToFullMatchDetails = () => {
+        push(`/fixtures/${fixture.game_id}`);
+    }
 
 
     return (
@@ -148,7 +156,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
             </div>
 
             <div className='flex flex-row items-center justify-center p-3' >
-                <button className='underline text-blue-400 dark:text-blue-200 hover:text-blue-500' >View Full Match Details</button>
+                <button onClick={goToFullMatchDetails} className='underline text-blue-400 dark:text-blue-200 hover:text-blue-500' >View Full Match Details</button>
             </div>
 
         </DialogModal>
