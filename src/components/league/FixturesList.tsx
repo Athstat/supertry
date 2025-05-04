@@ -1,4 +1,3 @@
-import { Calendar } from "lucide-react";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { gamesService } from "../../services/gamesService";
 import useSWR from 'swr';
@@ -6,6 +5,7 @@ import { LoadingSpinner } from "../team-creation/player-list/LoadingSpinner";
 import { ErrorState } from "../ui/ErrorState";
 import FixtureCard from "../fixtures/FixtureCard";
 import { IFixture } from "../../types/games";
+import { Calendar } from "lucide-react";
 
 interface FixturesListProps {
   league: IFantasyLeague

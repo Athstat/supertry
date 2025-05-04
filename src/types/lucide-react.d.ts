@@ -26,4 +26,5 @@ declare module "lucide-react" {
   export const Eye: ComponentType<IconProps>;
   export const EyeOff: ComponentType<IconProps>;
   // Add other icons as needed
+  export const Calendar: ComponentType<IconProps>;
 }
