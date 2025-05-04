@@ -1,4 +1,4 @@
-// import { Shield } from 'lucide-react'
+
 import { twMerge } from 'tailwind-merge';
 import { IFixture } from '../../types/games'
 import { format } from 'date-fns';
@@ -109,15 +109,9 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
     const title = `${fixture.home_team} vs ${fixture.away_team}`;
     const {push} = useRouter()
 
-    const { team_score, kickoff_time, round, game_status, opposition_score } = fixture;
-
-    const matchFinal = game_status === "completed" && team_score && opposition_score;
-
-    const homeTeamWon = matchFinal ? team_score > opposition_score : false;
-    const awayTeamWon = matchFinal ? team_score < opposition_score : false;
+    const { kickoff_time} = fixture;
 
     const gameKickedOff = kickoff_time && (new Date(kickoff_time) < new Date());
-
 
 
     const goToFullMatchDetails = () => {
