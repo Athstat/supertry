@@ -8,6 +8,8 @@ declare module "lucide-react" {
     className?: string;
   }
 
+  type CIP = ComponentType<IconProps>
+
   export const ChevronRight: ComponentType<IconProps>;
   export const ChevronLeft: ComponentType<IconProps>;
   export const Users: ComponentType<IconProps>;
@@ -27,4 +29,7 @@ declare module "lucide-react" {
   export const EyeOff: ComponentType<IconProps>;
   // Add other icons as needed
   export const Calendar: ComponentType<IconProps>;
+  export const Shield: ComponentType<IconProps>;
+  export const Minus: ComponentType<IconProps>;
+  export const ArrowLeft: CIP;
 }
