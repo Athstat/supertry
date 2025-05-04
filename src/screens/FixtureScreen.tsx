@@ -9,6 +9,8 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
 import { TabButton } from "../components/shared/TabButton";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
+import FixtureTeamAthleteStats from "../components/fixtures/FixtureTeamAthleteStats";
+import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
 
 export default function FixtureScreen() {
 
@@ -60,11 +62,13 @@ export default function FixtureScreen() {
 
       </div>
 
-      <div className="flex flex-col p-4" >
+      <div className="flex flex-col p-4 gap-5" >
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-
+        { gameKickedOff && <FixtureHeadToHeadStats fixture={fixture} />}
+        { gameKickedOff && <FixtureTeamAthleteStats teamName={fixture.home_team} fixture={fixture} />}
+        { gameKickedOff && <FixtureTeamAthleteStats teamName={fixture.away_team} fixture={fixture} />}
       </div>
 
 

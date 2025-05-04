@@ -12,7 +12,7 @@ type Props  = {
 export default function FixtureScreenOverview({fixture} : Props) {
   return (
     <TitledCard 
-        title="Overview"
+        title="Kickoff"
         className="flex flex-col gap-3"
     >
 
