@@ -20,25 +20,25 @@ export default function DialogModal({ children, onClose, title, open, className 
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70] animate-fade-scale-up">
-            <div className="bg-white dark:bg-dark-800 rounded-xl w-full max-w-lg overflow-hidden">
-                <div className="p-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-bold dark:text-gray-100">{title}</h2>
-                        <button
-                            onClick={handleOnClose}
-                            className="p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-full text-gray-600 dark:text-gray-400"
-                        >
-                            <X size={20} />
-                        </button>
-                    </div>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70] animate-fade-scale-up ">
+            <div className="bg-white p-4 dark:bg-dark-800 rounded-xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
 
-                    {/* Tabs */}
-                    <div className={twMerge("mt-4", className)}>
-                        {children}
-                    </div>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold dark:text-gray-100">{title}</h2>
+                    <button
+                        onClick={handleOnClose}
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-full text-gray-600 dark:text-gray-400"
+                    >
+                        <X size={20} />
+                    </button>
                 </div>
+
+                {/* Tabs */}
+                <div className={twMerge("", className)}>
+                    {children}
+                </div>
+
             </div>
-        </div>
+        </div >
     )
 }

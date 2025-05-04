@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 type StatCardProps = {
   label: string;
   value: number | string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   valueClassName?:string
 }
 
