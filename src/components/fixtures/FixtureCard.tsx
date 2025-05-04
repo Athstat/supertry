@@ -6,6 +6,7 @@ import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useRouter } from '../../hooks/useRoter';
+import { useNavigate } from 'react-router-dom';
 type Props = {
     fixture: IFixture,
     showCompetition?: boolean
@@ -107,7 +108,8 @@ type ModalProps = {
 function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
     const title = `${fixture.home_team} vs ${fixture.away_team}`;
-    const {push} = useRouter()
+    
+    const navigate = useNavigate();
 
     const { kickoff_time} = fixture;
 
@@ -115,7 +117,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
 
     const goToFullMatchDetails = () => {
-        push(`/fixtures/${fixture.game_id}`);
+        navigate(`/fixtures/${fixture.game_id}`, {state: fixture});
     }
 
 

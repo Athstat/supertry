@@ -4,10 +4,11 @@ import { twMerge } from 'tailwind-merge'
 
 type Props = {
     teamId?: string,
-    alt?: string
+    alt?: string,
+    className?: string
 }
 
-export default function TeamLogo({ teamId, alt }: Props) {
+export default function TeamLogo({ teamId, alt, className }: Props) {
 
     const imageUrl = getTeamLogoUrl(teamId ?? "team_id");
     const [error, setError] = useState(false);
@@ -17,12 +18,15 @@ export default function TeamLogo({ teamId, alt }: Props) {
 
     if (error || !teamId) {
         return (
-            <Shield className="w-14 h-14 text-slate-300 dark:text-slate-600 rounded-md flex items-center justify-center"/>
+            <Shield className={twMerge(
+                "w-14 h-14 text-slate-300 dark:text-slate-600 rounded-md flex items-center justify-center",
+                className
+            )}/>
         )
     }
 
     return (
-        <div className={twMerge("w-14 h-14")} >
+        <div className={twMerge("w-14 h-14", className)} >
             <img 
                 src={imageUrl}
                 alt={alt ?? "team_logo"}

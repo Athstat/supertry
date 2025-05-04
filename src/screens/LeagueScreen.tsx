@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
-import { ChevronRight } from "lucide-react";
 import { LeagueSettings } from "../components/league/LeagueSettings";
-import { ChatFeed } from "../components/league/chat/ChatFeed";
 import { TabButton } from "../components/shared/TabButton";
 import {
   TeamStats,

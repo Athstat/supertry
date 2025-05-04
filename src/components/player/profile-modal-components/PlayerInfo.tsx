@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSticky } from '../../../hooks/useSticky';
 
 interface PlayerInfoProps {
   player: any;
