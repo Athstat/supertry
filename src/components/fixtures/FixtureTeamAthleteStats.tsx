@@ -81,7 +81,20 @@ function AthleteFixtureStatsModal({ fixture, teamName, open, onClose }: AthleteS
         </div>
       </div>
 
-      <GroupedStatsGrid className="grid grid-cols-3 p-0" title="Attack" >
+      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " title="Game Performance" >
+        <StatCard 
+          label="Minutes Played"
+          value={66}
+        />
+
+        <StatCard 
+          label="Points"
+          value={10}
+        />
+
+      </GroupedStatsGrid>
+
+      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " className="grid grid-cols-3 p-0" title="Attack" >
         <StatCard
           label="Tries"
           value={0}
@@ -108,7 +121,7 @@ function AthleteFixtureStatsModal({ fixture, teamName, open, onClose }: AthleteS
         />
       </GroupedStatsGrid>
 
-      <GroupedStatsGrid className="grid grid-cols-3 p-0" title="Defense" >
+      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " className="grid grid-cols-3 p-0" title="Defense" >
         <StatCard
           label="Tackles"
           value={10}
@@ -126,7 +139,7 @@ function AthleteFixtureStatsModal({ fixture, teamName, open, onClose }: AthleteS
 
       </GroupedStatsGrid>
 
-      <GroupedStatsGrid className="grid grid-cols-3 p-0" title="Displine" >
+      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " className="grid grid-cols-3 p-0" title="Displine" >
         <StatCard
           label="Penalties Conceded"
           value={1}
