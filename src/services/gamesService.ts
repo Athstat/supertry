@@ -1,4 +1,4 @@
-import { IFixture } from "../types/games";
+import { IFixture, IFullFixture } from "../types/games";
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 
 
@@ -37,8 +37,8 @@ export const gamesService = {
         }
     },
 
-    getGameById: async (gameId: string) : Promise<IFixture | undefined> => {
-        const uri = getUri(`/api/v1/entities/games-distinct/${gameId}`);
+    getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {
+        const uri = getUri(`/api/v1/entities/games/${gameId}`);
         
         try {
             const res = await fetch(uri, {

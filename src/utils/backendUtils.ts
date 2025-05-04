@@ -1,6 +1,4 @@
-const BACKEND_SERVER_URL = import.meta.env.PROD
-    ? "https://qa-games-app.athstat-next.com"
-    : "";
+const BACKEND_SERVER_URL = "https://qa-games-app.athstat-next.com";
 
 /** Completes an api url */
 export function getUri(endPoint: string) {

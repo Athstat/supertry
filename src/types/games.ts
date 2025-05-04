@@ -5,7 +5,7 @@ export type IFixture = {
     venue?: string,
     kickoff_time?: Date,
     competition_name?: string,
-    team_id: number,
+    team_id: string,
     opposition_team_id: string,
     is_knockout?: boolean,
     is_league_managed?: boolean,
@@ -14,7 +14,7 @@ export type IFixture = {
     hidden?: boolean,
     league_id: string,
     network?: string,
-    game_status?: string,
+    game_status?: string | "completed" | "in_progress" | "not_started",
     game_clock?: string,
     result: string,
     source_id?: string,
@@ -24,3 +24,5 @@ export type IFixture = {
     home_team: string,
     away_team: string
 }
+
+export type IFullFixture = any;
