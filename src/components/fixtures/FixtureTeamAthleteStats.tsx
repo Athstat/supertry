@@ -9,15 +9,16 @@ import { StatCard } from "../shared/StatCard"
 type Props = {
   fixture: IFixture,
   teamName?: string,
+  title?: string
 }
 
-export default function FixtureTeamAthleteStats({ teamName, fixture }: Props) {
+export default function FixtureAthletesScoreBoard({ teamName, fixture, title }: Props) {
 
   const [showModal, setShowModal] = useState(false);
   const toogle = () => setShowModal(!showModal);
 
   return (
-    <TitledCard title={teamName} >
+    <TitledCard title={title} >
       <table className="w-full" >
         <thead>
           <tr>
@@ -56,7 +57,7 @@ export default function FixtureTeamAthleteStats({ teamName, fixture }: Props) {
         </tbody>
       </table>
 
-      <AthleteFixtureStatsModal open={showModal} fixture={fixture} teamName={teamName} />
+      <AthleteFixtureStatsModal onClose={toogle} open={showModal} fixture={fixture} teamName={teamName} />
     </TitledCard>
   )
 }
@@ -68,10 +69,10 @@ type AthleteStatsModalProps = {
   onClose?: () => void
 }
 
-function AthleteFixtureStatsModal({ fixture, teamName, open, onClose }: AthleteStatsModalProps) {
+function AthleteFixtureStatsModal({ open, onClose }: AthleteStatsModalProps) {
 
   return (
-    <DialogModal open={open} className="gap-3 flex flex-col" onClose={onClose} title="John Doe" >
+    <DialogModal  open={open} className="gap-3 flex flex-col" onClose={onClose} title="John Doe" >
       <div className="flex flex-row items-center justify-start gap-3" >
         <PlayerMugshot />
 
