@@ -6,6 +6,8 @@ import { INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from "../types/constants
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import FixtureCard from "../components/fixtures/FixtureCard";
+import { useState } from "react";
+import { searchFixturesPredicate } from "../utils/fixtureUtils";
 
 const competitionIds = [
     URC_COMPETIION_ID,
@@ -14,30 +16,49 @@ const competitionIds = [
 
 export default function FixtureListScreen() {
 
-    
-    const {data: fixtures, error, isLoading} = useSWR(competitionIds, fetcher);
+
+    const { data: fixtures, error, isLoading } = useSWR(competitionIds, fetcher);
 
     if (isLoading) return <LoadingState message="Loading Fixtures" />
 
     if (!fixtures) return <ErrorState message={error} />
 
-    return (
-        <div className="dark:text-white p-4 flex flex-col gap-5" >
-            <div className="flex flex-row items-center justify-start gap-2" >
-                <Calendar className="c" />
-                <h1 className="font-bold text-xl lg:text-2xl" >Fixtures</h1>
-            </div>
+    const [search, setSearch] = useState("");
 
-            <div className=" grid grid-cols-1 gap-3 " >
-                {fixtures.map((fixture, index) => {
-                    return <FixtureCard 
-                        showLogos 
-                        showCompetition
-                        className="dark:bg-gray-800 dark:hover:bg-gray-800/80 border border-slate-100 bg-white  hover:bg-slate-50 rounded-xl" 
-                        fixture={fixture} 
-                        key={index} 
+    return (
+        <div className="dark:text-white  p-4 flex flex-col items-center justify-start" >
+            <div className="flex flex-col gap-5 w-full lg:w-3/4" >
+
+
+                <div className="flex flex-row items-center justify-start gap-2 " >
+                    <Calendar className="" />
+                    <h1 className="font-bold text-xl lg:text-2xl" >Fixtures</h1>
+                </div>
+
+                <div className="flex flex-row w-full" >
+                    <input
+                        placeholder="Search Fixtures..."
+                        className="bg-gray-800 outline-none p-3 flex-1 rounded-xl"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                     />
-                })}
+                </div>
+
+                <div className=" grid grid-cols-1 gap-3 " >
+                    {fixtures.map((fixture, index) => {
+
+                        if (searchFixturesPredicate(fixture, search)) {
+
+                            return <FixtureCard
+                                showLogos
+                                showCompetition
+                                className="dark:bg-gray-800 dark:hover:bg-gray-800/80 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
+                                fixture={fixture}
+                                key={index}
+                            />
+                        }
+                    })}
+                </div>
             </div>
 
         </div>
@@ -50,7 +71,7 @@ async function fetcher(competitionIds: string[]) {
     const fetchMatches = async (compId: string) => {
         const res = await gamesService.getGamesByCompetitionId(compId);
         matches = [...matches, ...res];
-    } 
+    }
 
     const promises = competitionIds.map((compId) => {
         return fetchMatches(compId);
@@ -60,3 +81,4 @@ async function fetcher(competitionIds: string[]) {
 
     return matches;
 }
+

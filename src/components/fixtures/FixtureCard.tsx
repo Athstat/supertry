@@ -56,7 +56,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
 
                             {fixture.team_score !== null && fixture.opposition_score !== null ? (
                                 <div className={twMerge(
-                                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-sm',
+                                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
                                     homeTeamWon && "font-bold",
                                 )}>
                                     {fixture.team_score}
@@ -79,7 +79,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                         <div className='flex flex-row gap-2 items-center w-full justify-start' >
                             {fixture.team_score !== null && fixture.opposition_score !== null ? (
                                 <div className={twMerge(
-                                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-sm',
+                                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
                                     awayTeamWon && "font-bold",
                                 )}>
                                     {fixture.opposition_score}
