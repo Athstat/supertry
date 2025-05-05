@@ -31,11 +31,13 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       <div className="hidden sm:block w-10 mr-3"></div>{" "}
       {/* Image space - hidden on mobile */}
       <div className="flex-1 pr-2">Player / Team</div>
-      <button
-        onClick={() => onSort("price")}
-        className={`w-16 text-center flex items-center justify-center transition ${
-          sortBy === "price" ? "text-green-600" : ""
-        }`}
+
+      
+      <div className="w-12 text-center flex items-center justify-center transition">FRM</div>
+      <button 
+        onClick={() => onSort('price')}
+        className={`w-12 text-center flex items-center justify-center transition ${sortBy === 'price' ? 'text-green-600' : ''}`}
+
       >
         <span className="font-semibold">COINS</span>
         {renderSortIndicator("price")}

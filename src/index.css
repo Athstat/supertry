@@ -30,3 +30,13 @@
     display: none;
   }
 }
+
+.table {
+
+}
+
+td, th {
+  text-align: start;
+  padding: 5px;
+  padding-left: 10px;
+}

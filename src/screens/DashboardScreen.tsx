@@ -13,6 +13,7 @@ import {
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import LeagueSmallCard from "../components/leagues/LeagueSmallCard";
 
 export function DashboardScreen() {
   const navigate = useNavigate();

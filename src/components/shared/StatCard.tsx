@@ -3,15 +3,19 @@ import { twMerge } from "tailwind-merge";
 type StatCardProps = {
   label: string;
   value: number | string;
-  icon: React.ReactNode;
-  valueClassName?:string
+  icon?: any;
+  valueClassName?:string;
+  iconClassName?: string
 }
 
-export function StatCard({ label, value, icon, valueClassName }: StatCardProps) {
+export function StatCard({ label, value, icon, valueClassName, iconClassName }: StatCardProps) {
+  
+  const Icon = icon;
+  
   return (
     <div className="bg-gray-50 dark:bg-dark-700/50 rounded-lg p-4 transition-all duration-300 hover:shadow-md">
       <div className="flex items-center gap-2 mb-2">
-        {icon}
+        {icon && <Icon className={iconClassName} />}
         <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
           {label}
         </span>
