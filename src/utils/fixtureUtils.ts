@@ -1,7 +1,7 @@
 import { IFixture } from "../types/games";
 
 export function fixtureSumary(fixture: IFixture) {
-    const { team_score, kickoff_time, round, game_status, opposition_score } = fixture;
+    const { team_score, kickoff_time, game_status, opposition_score } = fixture;
 
     const matchFinal = game_status === "completed" && team_score && opposition_score;
 
@@ -22,4 +22,33 @@ export function summerizeGameStatus(fixture: IFixture) {
     }
 
     return "";
+}
+
+export function searchFixturesPredicate(fixture: IFixture ,query: string) {
+
+    if (query === "") return true;
+
+    let match = false;
+
+    const phrases = [
+        `${fixture.home_team} vs ${fixture.away_team}`,
+        `${fixture.away_team} vs ${fixture.home_team}`,
+    ];
+
+    phrases.forEach((phrase: string) => {
+        
+        if (phrase === "") return false;
+         
+        phrase = phrase.toLowerCase();
+
+        const flag = phrase.startsWith(query);
+
+        match = match || flag;
+    });
+
+
+
+
+    return match;
+
 }

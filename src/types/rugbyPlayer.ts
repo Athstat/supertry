@@ -32,4 +32,51 @@ export interface RugbyPlayer {
   tackles?: number;
   penalties_conceded?: number;
   cards?: number;
+  team_id?: string;
+}
+
+
+export type IFantasyAthlete = {
+  source_id?: string,
+  tracking_id: string,
+  player_name?: string,
+  nick_name?: string,
+  birth_country?: string,
+  date_of_birth?: Date,
+  isactive?: boolean,
+  abbr?: string,
+  athstat_name: string,
+  athstat_firstname: string,
+  athstat_lastname: string,
+  athstat_middleinitial: string,
+  general_comments?: string,
+  team_id: string,
+  age?: number,
+  height?: number,
+  weight?: number,
+  best_match_full_name?: string,
+  best_match_first_name?: string,
+  best_match_last_name?: string,
+  best_match_team?: string,
+  best_match_gender?: string,
+  external_source?: string,
+  best_match_iaaid?: string,
+  unified_id?: string,
+  hidden?: boolean,
+  kc_id?: string,
+  kcsynced?: boolean,
+  gender?: "M" | "F",
+  price?: number,
+  power_rank_rating?: number,
+  region?: string,
+  position_class?: string,
+  data_source?: string,
+  position?: string,
+  on_dark_image_url?: string,
+  on_light_image_url?: string,
+  image_url?: string,
+  nationality?: string,
+  birth_place?: string,
+  form?: "DOWN" | "UP" | "NUETRAL",
+  available?: boolean
 }

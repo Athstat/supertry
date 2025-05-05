@@ -1,4 +1,4 @@
-import { Search, Settings, HelpCircle, Users, X, Share2 } from "lucide-react";
+import { Search, Settings, HelpCircle, X, Share2, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface SideDrawerProps {
@@ -11,6 +11,7 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
 
   const menuItems = [
     { icon: Search, label: "Players", path: "/players" },
+    { icon: Calendar, label: "Fixtures", path: "/fixtures" },
     { icon: Settings, label: "Settings", path: "#" },
     { icon: HelpCircle, label: "Support", path: "#" },
     { icon: Share2, label: "Invite Friends", path: "#" },

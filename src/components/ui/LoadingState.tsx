@@ -1,3 +1,5 @@
+import { twMerge } from "tailwind-merge";
+
 interface LoadingStateProps {
   message?: string;
 }
@@ -10,3 +12,25 @@ export const LoadingState = ({ message = "Loading..." }: LoadingStateProps) => {
     </div>
   );
 };
+
+type Props = {
+  count?: number,
+  className?: string
+}
+
+export function LoadingShimmer({count = 1, className} : Props) {
+
+  const nums = [];
+
+  for (let x = 0; x < count; x++) {
+    nums.push(x);
+  }
+
+  return (
+    <div className="grid grid-col-1 gap-2" >
+      {nums.map((index) => {
+        return <div key={index} className={twMerge("w-full bg-slate-100 dark:bg-slate-800 animate-pulse h-5 rounded-xl", className)} ></div>
+      })}
+    </div>
+  )
+}

@@ -19,6 +19,7 @@ import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
 import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
 import FixtureScreen from "./screens/FixtureScreen";
+import FixtureListScreen from "./screens/FixtureListScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -228,8 +229,19 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/fixtures"
+        element={
+          <ProtectedRoute>
+            <Layout  >
+              <FixtureListScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
     </Routes >
-    
+
   );
 };
 

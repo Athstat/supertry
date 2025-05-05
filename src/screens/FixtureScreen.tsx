@@ -4,24 +4,18 @@ import TeamLogo from "../components/team/TeamLogo";
 import { format } from "date-fns";
 import { fixtureSumary, summerizeGameStatus } from "../utils/fixtureUtils";
 import { Minus } from "lucide-react";
-import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
-import { TabButton } from "../components/shared/TabButton";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
-import FixtureTeamAthleteStats from "../components/fixtures/FixtureTeamAthleteStats";
-import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
+import { ErrorState } from "../components/ui/ErrorState";
 
 export default function FixtureScreen() {
 
   const { fixtureId } = useParams();
   const { state } = useLocation();
 
-
   if (!state || state.game_id !== fixtureId) {
-    return <div>
-      <p>Fixture was not found</p>
-    </div>
+    return <ErrorState message="Fxiture was not found" />
   }
 
   const fixture = state as IFixture;
@@ -39,12 +33,11 @@ export default function FixtureScreen() {
           <p>Go Back</p>
         </div>
 
-        <FixtureScreenHeader fixture={fixture} />
 
         <div className="flex flex-row h-max items-center justify-center w-full" >
 
-          <div className="flex flex-1 flex-col items-center justify-start" >
-            <TeamLogo className="w-16 h-16 dark:text-slate-200" teamId={fixture.team_id} />
+          <div className="flex flex-1 flex-col items-center justify-start gap-3" >
+            <TeamLogo className="w-16 h-16 dark:text-slate-200 " teamId={fixture.team_id} />
             <p className="text text-wrap text-center" >{fixture.home_team}</p>
           </div>
 
@@ -53,7 +46,7 @@ export default function FixtureScreen() {
             {!gameKickedOff && <KickOffInformation fixture={fixture} />}
           </div>
 
-          <div className="flex flex-1 flex-col items-center justify-end" >
+          <div className="flex flex-1 flex-col items-center gap-3 justify-end" >
             <TeamLogo className="w-16 h-16 dark:text-slate-200" teamId={fixture.opposition_team_id} />
             <p className="text text-wrap text-center" >{fixture.away_team}</p>
           </div>
@@ -62,15 +55,14 @@ export default function FixtureScreen() {
 
       </div>
 
+      {/* <FixtureScreenHeader fixture={fixture} /> */}
+      
       <div className="flex flex-col p-4 gap-5" >
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-        { gameKickedOff && <FixtureHeadToHeadStats fixture={fixture} />}
-        { gameKickedOff && <FixtureTeamAthleteStats teamName={fixture.home_team} fixture={fixture} />}
-        { gameKickedOff && <FixtureTeamAthleteStats teamName={fixture.away_team} fixture={fixture} />}
+        {/* <FixtureScreenBoxScores fixture={fixture} /> */}
       </div>
-
 
     </div>
   )
@@ -95,7 +87,7 @@ function KickOffInformation({ fixture }: Props) {
 
 function MatchResultsInformation({ fixture }: Props) {
 
-  const { kickoff_time, game_status } = fixture;
+  const { game_status } = fixture;
 
 
   return (

@@ -34,4 +34,12 @@ declare module "lucide-react" {
   export const ArrowLeft: CIP;
   export const MapPin: CIP;
   export const Watch: CIP;
+  export const RulerIcon: CIP;
+  export const WeightIcon: CIP;
+  export const Crosshair: CIP;
+  export const RulerDimensionLineIcon: CIP;
+  export const Target: CIP;
+  export const Settings: CIP;
+  export const HelpCircle: CIP;
+  export const Share2: CIP;
 }
