@@ -1,23 +1,6 @@
-import { useState} from "react";
-import {
-  ArrowUp,
-  ArrowDown,
-} from "lucide-react";
-import { rankingsData } from "../data/rankings";
 import React from "react";
 import UserRankingCard from "../components/rankings/UserRankingCard";
 import UserRankingsLeaderBoard from "../components/rankings/RankingsLeaderBoard";
-
-interface Player {
-  id: string;
-  rank: number;
-  previousRank: number;
-  name: string;
-  avatar: string;
-  points: number;
-  isCurrentUser?: boolean;
-}
-
 
 export function RankingsScreen() {
   

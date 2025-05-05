@@ -6,16 +6,6 @@ import { LoadingState } from "../ui/LoadingState";
 
 export default function UserStatsGrid() {
 
-    const userStats = {
-        totalPoints: 2456,
-        currentRank: 7,
-        currentDivision: 2,
-        bestRank: 3,
-        bestSeason: "2023/24",
-        favoriteTeam: "Crusaders",
-        gamesPlayed: 156,
-    };
-
     const user = useAuthUser();
     const  {data: rank, isLoading} = useSWR(user.id, userRankingsService.getUserRankingByUserId);
 
