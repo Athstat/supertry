@@ -52,8 +52,14 @@ const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => 
 
     const start_round = league.start_round;
     const end_round = league.end_round;
+    
+    if (start_round && end_round) {
 
-    return start_round && end_round ? f.round >= start_round && f.round <= end_round : true;
+      return f.round >= start_round && f.round <= end_round;
+    }
+
+    return true;
+
   }).sort((a, b) => new Date(b.kickoff_time ?? new Date()).valueOf() - new Date(a.kickoff_time ?? new Date()).valueOf())
 
 }
