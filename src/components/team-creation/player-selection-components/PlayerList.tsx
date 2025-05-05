@@ -4,7 +4,6 @@ import renderStatDots from './renderStatDots';
 import { convertToPlayer } from './PlayerConverter';
 import { Player } from '../../../types/player';
 import { Position } from '../../../types/position';
-import FormIndicator, { FormType } from '../../shared/FormIndicator';
 
 interface PlayerListProps {
   players: any[];
@@ -50,8 +49,6 @@ export const PlayerList: React.FC<PlayerListProps> = ({
     );
   }
 
-  const playerFormOptions : FormType[]  = ["UP", "DOWN", "NEUTRAL"];
-
   return (
     <>
       {players.map(player => (
@@ -96,11 +93,6 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           </div>
 
           {/* Price - always visible */}
-          <div className="w-12 text-center">
-            <p className="font-bold text-sm dark:text-gray-200">
-              <FormIndicator form={playerFormOptions[(player.ball_carrying ?? 0) % 3]} />
-            </p>
-          </div>
 
           <div className="w-12 text-center">
             <p className="font-bold text-sm dark:text-gray-200">{player.price}</p>

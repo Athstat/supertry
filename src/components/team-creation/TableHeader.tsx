@@ -33,7 +33,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       <div className="flex-1 pr-2">Player / Team</div>
 
       
-      <div className="w-12 text-center flex items-center justify-center transition">FRM</div>
+      {/* <div className="w-12 text-center flex items-center justify-center transition">FRM</div> */}
       <button 
         onClick={() => onSort('price')}
         className={`w-12 text-center flex items-center justify-center transition ${sortBy === 'price' ? 'text-green-600' : ''}`}

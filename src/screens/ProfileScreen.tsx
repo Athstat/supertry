@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState} from "react";
 import {
   User,
-  Trophy,
   Medal,
-  Star,
   Bell,
-  Moon,
   Mail,
   Lock,
   ChevronRight,
@@ -14,9 +11,10 @@ import {
 } from "lucide-react";
 import { FriendsSection } from "../components/profile/FriendsSection";
 import { friends } from "../data/friends";
-import { authService } from "../services/authService";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useAuthUser } from "../hooks/useAuthUser";
+import UserStatsGrid from "../components/profile/UserStatsGrid";
 
 interface Achievement {
   id: string;
@@ -28,36 +26,14 @@ interface Achievement {
 
 export function ProfileScreen() {
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
-  const [userInfo, setUserInfo] = useState<{
-    email: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-  } | null>(null);
 
+  const userInfo = useAuthUser();
   const { logout } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Get user info from token
-    const info = authService.getUserInfo();
-    setUserInfo(info);
-  }, []);
 
   const handleLogout = () => {
     logout();
     navigate("/signin");
-  };
-
-  const userStats = {
-    totalPoints: 2456,
-    currentRank: 7,
-    currentDivision: 2,
-    bestRank: 3,
-    bestSeason: "2023/24",
-    favoriteTeam: "Crusaders",
-    gamesPlayed: 156,
   };
 
   const achievements: Achievement[] = [
@@ -123,40 +99,7 @@ export function ProfileScreen() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
-            <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
-              <div className="text-sm text-gray-600 dark:text-white">
-                Total Points
-              </div>
-              <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                {userStats.totalPoints}
-              </div>
-            </div>
-            <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
-              <div className="text-sm text-gray-600 dark:text-white">
-                Current Division
-              </div>
-              <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                #{userStats.currentDivision}
-              </div>
-            </div>
-            <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
-              <div className="text-sm text-gray-600 dark:text-white">
-                Current Rank
-              </div>
-              <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                #{userStats.currentRank}
-              </div>
-            </div>
-            <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
-              <div className="text-sm text-gray-600 dark:text-white">
-                Best Rank
-              </div>
-              <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                #{userStats.bestRank}
-              </div>
-            </div>
-          </div>
+          <UserStatsGrid />
         </div>
 
         {/* Friends Section */}

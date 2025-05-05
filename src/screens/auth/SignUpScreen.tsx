@@ -21,6 +21,7 @@ export function SignUpScreen() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
   const [form, setForm] = useState<SignUpForm>({
     email: "",
     password: "",
@@ -34,6 +35,7 @@ export function SignUpScreen() {
   const handleNext = () => {
     if (currentStep === 1) {
       // Validate email and password
+      
       if (!form.email || !form.password || !form.confirmPassword) {
         setError("Please fill in all fields");
         return;
@@ -46,6 +48,12 @@ export function SignUpScreen() {
         setError("Please provide your first and last name");
         return;
       }
+
+      if (form.password.length < 8) {
+        setError("Password should be atleast 8 characters long");
+        return;
+      }
+
     }
     setError(null);
     setCurrentStep(currentStep + 1);
@@ -209,6 +217,7 @@ export function SignUpScreen() {
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, password: e.target.value }))
                   }
+                  minLength={8}
                 />
                 <button
                   type="button"
@@ -238,6 +247,7 @@ export function SignUpScreen() {
                   required
                   className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
                   value={form.confirmPassword}
+                  minLength={8}
                   onChange={(e) =>
                     setForm((prev) => ({
                       ...prev,
