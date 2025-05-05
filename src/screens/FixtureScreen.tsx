@@ -7,10 +7,10 @@ import { Minus } from "lucide-react";
 import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
-import { TabButton } from "../components/shared/TabButton";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
 import FixtureAthletesScoreBoard from "../components/fixtures/FixtureTeamAthleteStats";
 import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
+import FixtureKickingStats from "../components/fixtures/FixtureKickingStats";
 
 export default function FixtureScreen() {
 
@@ -39,7 +39,6 @@ export default function FixtureScreen() {
           <p>Go Back</p>
         </div>
 
-        <FixtureScreenHeader fixture={fixture} />
 
         <div className="flex flex-row h-max items-center justify-center w-full" >
 
@@ -62,13 +61,16 @@ export default function FixtureScreen() {
 
       </div>
 
+      {/* <FixtureScreenHeader fixture={fixture} /> */}
+      
       <div className="flex flex-col p-4 gap-5" >
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-        { gameKickedOff && <FixtureHeadToHeadStats fixture={fixture} />}
-        { gameKickedOff && <FixtureAthletesScoreBoard teamName={fixture.home_team} fixture={fixture} />}
-        { gameKickedOff && <FixtureAthletesScoreBoard teamName={fixture.away_team} fixture={fixture} />}
+        {gameKickedOff && <FixtureHeadToHeadStats fixture={fixture} />}
+        {gameKickedOff && <FixtureAthletesScoreBoard title="Fowards" fixture={fixture} />}
+        {gameKickedOff && <FixtureAthletesScoreBoard title="Backs" teamName={fixture.away_team} fixture={fixture} />}
+        {gameKickedOff && <FixtureKickingStats fixture={fixture} />}
       </div>
 
 
@@ -95,7 +97,7 @@ function KickOffInformation({ fixture }: Props) {
 
 function MatchResultsInformation({ fixture }: Props) {
 
-  const { kickoff_time, game_status } = fixture;
+  const { game_status } = fixture;
 
 
   return (
