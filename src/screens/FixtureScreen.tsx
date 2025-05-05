@@ -7,12 +7,7 @@ import { Minus } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
-import AthleteBoxScoreList from "../components/fixtures/AthleteBoxScoreList";
-import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
-import FixtureKickingStats from "../components/fixtures/FixtureKickingStats";
-import FixtureDisciplineStats from "../components/fixtures/FixtureDisciplineStats";
 import { ErrorState } from "../components/ui/ErrorState";
-import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
 
 export default function FixtureScreen() {
 

@@ -6,7 +6,7 @@ type Props = {
     fixture: IFixture
 }
 
-export default function FixtureKickingStats({ fixture }: Props) {
+export default function FixtureKickingStats({}: Props) {
     
 
       const [showModal, setShowModal] = useState(false);
