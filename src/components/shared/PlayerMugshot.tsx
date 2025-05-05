@@ -1,11 +1,19 @@
+import { twMerge } from "tailwind-merge";
+
 type Props = {
-    url?: string
+  athlete: { image_url?: string },
+  className?: string
 }
 
-export default function PlayerMugshot({url} : Props) {
+export default function PlayerMugshot({ athlete, className }: Props) {
+
+  const { image_url } = athlete;
+
   return (
-    <div className='overflow-clip w-16 h-16 rounded-full bg-slate-500 dark:bg-slate-600' >
-        
-    </div>
+    <img
+      src={image_url}
+      alt=""
+      className={twMerge('overflow-clip w-16 h-16 rounded-full bg-slate-500 dark:bg-slate-600', className)}
+    />
   )
 }

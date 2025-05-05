@@ -1,7 +1,7 @@
 export type IBoxScore = {
     game_id: string,
     athlete_id: string,
-    player_type: string,
+    player_type: 'Forward' | 'Back' | 'Unknown',
     player_name: string,
     passes: number,
     carries: number,
@@ -12,7 +12,7 @@ export type IBoxScore = {
     tries: number,
     metres: number,
     tacklesmade: number,
-    tacklesuccess: string,
+    tacklesuccess: number,
     tacklesmissed: number,
     turnoverswon: number,
     lineoutswonsteal: number,

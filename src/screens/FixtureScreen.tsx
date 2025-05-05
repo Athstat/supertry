@@ -7,21 +7,20 @@ import { Minus } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
-import FixtureAthletesScoreBoard from "../components/fixtures/FixtureTeamAthleteStats";
+import AthleteBoxScoreList from "../components/fixtures/AthleteBoxScoreList";
 import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
 import FixtureKickingStats from "../components/fixtures/FixtureKickingStats";
 import FixtureDisciplineStats from "../components/fixtures/FixtureDisciplineStats";
+import { ErrorState } from "../components/ui/ErrorState";
+import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
 
 export default function FixtureScreen() {
 
   const { fixtureId } = useParams();
   const { state } = useLocation();
 
-
   if (!state || state.game_id !== fixtureId) {
-    return <div>
-      <p>Fixture was not found</p>
-    </div>
+    return <ErrorState message="Fxiture was not found" />
   }
 
   const fixture = state as IFixture;
@@ -67,11 +66,7 @@ export default function FixtureScreen() {
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-        {gameKickedOff && <FixtureHeadToHeadStats fixture={fixture} />}
-        {gameKickedOff && <FixtureAthletesScoreBoard title="Fowards" fixture={fixture} />}
-        {gameKickedOff && <FixtureAthletesScoreBoard title="Backs" teamName={fixture.away_team} fixture={fixture} />}
-        {gameKickedOff && <FixtureKickingStats fixture={fixture} />}
-        {gameKickedOff && <FixtureDisciplineStats fixture={fixture} />}
+        <FixtureScreenBoxScores fixture={fixture} />
       </div>
 
 

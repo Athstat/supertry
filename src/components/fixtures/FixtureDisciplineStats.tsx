@@ -40,7 +40,7 @@ export default function FixtureDisciplineStats({ fixture }: Props) {
                 </tbody>
             </table>
 
-            <AthleteFixtureStatsModal onClose={toogle} open={showModal} fixture={fixture} />
+            {/* <AthleteFixtureStatsModal onClose={toogle} open={showModal} fixture={fixture} /> */}
         </TitledCard>
     )
 }
