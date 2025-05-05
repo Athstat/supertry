@@ -64,8 +64,8 @@ export const PlayerProfileScreen = () => {
           if (cachedPlayer) {
             setPlayer(cachedPlayer);
           } else {
-            const data = await athleteService.getAthleteById(id);
-            setPlayer(data);
+            // const data = await athleteService.getAthleteById(id);
+            // setPlayer(data);
           }
         } catch (err) {
           setError(

@@ -66,9 +66,8 @@ export default function FixtureScreen() {
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-        <FixtureScreenBoxScores fixture={fixture} />
+        {/* <FixtureScreenBoxScores fixture={fixture} /> */}
       </div>
-
 
     </div>
   )
