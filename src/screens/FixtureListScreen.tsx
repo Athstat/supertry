@@ -2,13 +2,14 @@ import { Calendar } from "lucide-react";
 import useSWR from "swr";
 import { IFixture } from "../types/games";
 import { gamesService } from "../services/gamesService";
-import { URC_COMPETIION_ID } from "../types/constants";
+import { INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from "../types/constants";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import FixtureCard from "../components/fixtures/FixtureCard";
 
 const competitionIds = [
-    URC_COMPETIION_ID
+    URC_COMPETIION_ID,
+    INVESTEC_CHAMPIONSHIP_CUP
 ]
 
 export default function FixtureListScreen() {

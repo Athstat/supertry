@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Loader } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MyTeamsSection,
@@ -13,7 +12,6 @@ import {
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
 import { IFantasyLeague } from "../types/fantasyLeague";
-import LeagueSmallCard from "../components/leagues/LeagueSmallCard";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
