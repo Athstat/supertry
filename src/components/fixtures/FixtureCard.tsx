@@ -5,14 +5,14 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
-import { useRouter } from '../../hooks/useRoter';
 import { useNavigate } from 'react-router-dom';
 type Props = {
     fixture: IFixture,
-    showCompetition?: boolean
+    showCompetition?: boolean,
+    className?: string
 }
 
-export default function FixtureCard({ fixture, showCompetition }: Props) {
+export default function FixtureCard({ fixture, showCompetition, className }: Props) {
 
 
     const { team_score, kickoff_time, round, game_status, opposition_score } = fixture;
@@ -31,7 +31,7 @@ export default function FixtureCard({ fixture, showCompetition }: Props) {
 
             <div
                 onClick={toogle}
-                className="p-4 flex flex-row text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors"
+                className={twMerge("p-4 flex flex-row text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors", className)}
             >
 
                 <div className='flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center' >
