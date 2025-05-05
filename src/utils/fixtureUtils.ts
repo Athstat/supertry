@@ -41,7 +41,7 @@ export function searchFixturesPredicate(fixture: IFixture ,query: string) {
          
         phrase = phrase.toLowerCase();
 
-        let flag = phrase.startsWith(query);
+        const flag = phrase.startsWith(query);
 
         match = match || flag;
     });
