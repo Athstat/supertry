@@ -26,10 +26,10 @@ export default function UserRankingCard() {
                         <Trophy className="w-8 h-8 text-amber-300" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
                             User Rankings
                         </h2>
-                        <p className="text-slate-50 text-lg font-semibold">
+                        <p className="text-slate-50 text-md font-semibold">
                             Total Points {userRank.total_score}
                         </p>
                     </div>
