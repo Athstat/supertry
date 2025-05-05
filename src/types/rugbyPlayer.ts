@@ -77,6 +77,8 @@ export type IFantasyAthlete = {
   image_url?: string,
   nationality?: string,
   birth_place?: string,
-  form?: "DOWN" | "UP" | "NUETRAL",
+  form?: FormType,
   available?: boolean
 }
+
+export type FormType = "UP" | "DOWN" | "NEUTRAL";

@@ -222,6 +222,7 @@ export const athleteService = {
   getAthleteById: async (athleteId: string) => {
     try {
       const uri = getUri(`/api/v1/fantasy-athletes/${athleteId}`);
+      
       const res = await fetch(uri, {
         headers: getAuthHeader()
       });
@@ -230,6 +231,7 @@ export const athleteService = {
       return json as IFantasyAthlete;
 
     } catch (error) {
+      
       console.log("Error fetching athlete", error);
       return undefined;
     }
