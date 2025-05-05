@@ -10,6 +10,7 @@ import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview"
 import FixtureAthletesScoreBoard from "../components/fixtures/FixtureTeamAthleteStats";
 import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
 import FixtureKickingStats from "../components/fixtures/FixtureKickingStats";
+import FixtureDisciplineStats from "../components/fixtures/FixtureDisciplineStats";
 
 export default function FixtureScreen() {
 
@@ -70,6 +71,7 @@ export default function FixtureScreen() {
         {gameKickedOff && <FixtureAthletesScoreBoard title="Fowards" fixture={fixture} />}
         {gameKickedOff && <FixtureAthletesScoreBoard title="Backs" teamName={fixture.away_team} fixture={fixture} />}
         {gameKickedOff && <FixtureKickingStats fixture={fixture} />}
+        {gameKickedOff && <FixtureDisciplineStats fixture={fixture} />}
       </div>
 
 
