@@ -9,7 +9,7 @@ type StatCardProps = {
   iconClassName?: string
 }
 
-export function StatCard({ label, value, icon, valueClassName, iconClassName }: StatCardProps) {
+export function StatCard({ label, value, icon, valueClassName}: StatCardProps) {
   
   return (
     <div className="bg-gray-50 dark:bg-dark-700/50 rounded-lg p-4 transition-all duration-300 hover:shadow-md">

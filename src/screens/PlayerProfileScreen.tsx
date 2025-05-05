@@ -18,7 +18,6 @@ import { AthleteSportsActionAggregated } from "../types/sports_actions";
 import { PlayerProfileAttack } from "../components/players/profile/PlayerProfileAttack";
 import { PlayerProfileKicking } from "../components/players/profile/PlayerProfileKicking";
 import { PlayerProfileDefending } from "../components/players/profile/PlayerProfileDefending";
-import { TabButton } from "../components/shared/TabButton";
 
 export type StatTab = "overview" | "physical" | "seasonAggregate" | "attack" | "defense" | "kicking";
 export type ExpanedStats = Record<string, boolean>;
