@@ -4,7 +4,6 @@ import TeamLogo from "../components/team/TeamLogo";
 import { format } from "date-fns";
 import { fixtureSumary, summerizeGameStatus } from "../utils/fixtureUtils";
 import { Minus } from "lucide-react";
-import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";

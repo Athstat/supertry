@@ -118,7 +118,7 @@ export default function FixtureHeadToHeadStats({ fixture }: Props) {
     return (
         <TitledCard title="Head to Head" icon={Shield} >
             <table className="w-full" >
-                <thead className="bg-slate-400 dark:bg-gray-700/20" >
+                <thead className="bg-gray-100 text-slate-600 dark:text-white  dark:bg-gray-700/20" >
                     <tr >
                         <th>Stat</th>
                         <th>{fixture.home_team}</th>
@@ -129,7 +129,7 @@ export default function FixtureHeadToHeadStats({ fixture }: Props) {
                 <tbody>
 
                     {displayStats.map((stat, index) => {
-                        return <tr className="[&:nth-child(even)]:bg-slate-700/20" key={index} >
+                        return <tr className="dark:hover:bg-slate-800/50 hover:bg-slate-100" key={index} >
                             <td>{stat.label}</td>
                             <td>{stat.homeValue}</td>
                             <td>{stat.awayValue}</td>

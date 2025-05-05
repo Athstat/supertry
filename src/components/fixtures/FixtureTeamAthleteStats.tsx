@@ -1,10 +1,6 @@
 import { useState } from "react"
 import { IFixture } from "../../types/games"
-import DialogModal from "../shared/DialogModal"
 import TitledCard from "../shared/TitledCard"
-import PlayerMugshot from "../shared/PlayerMugshot"
-import { GroupedStatsGrid } from "../shared/GroupedStatsGrid"
-import { StatCard } from "../shared/StatCard"
 import AthleteFixtureStatsModal from "./AthleteFixtureStatsModal"
 
 type Props = {
@@ -13,7 +9,7 @@ type Props = {
   title?: string
 }
 
-export default function FixtureAthletesScoreBoard({ teamName, fixture, title }: Props) {
+export default function FixtureAthletesScoreBoard({ fixture, title }: Props) {
 
   const [showModal, setShowModal] = useState(false);
   const toogle = () => setShowModal(!showModal);
@@ -21,7 +17,7 @@ export default function FixtureAthletesScoreBoard({ teamName, fixture, title }: 
   return (
     <TitledCard title={title} >
       <table className="w-full" >
-        <thead>
+        <thead className="bg-gray-100 text-slate-600 dark:text-white  dark:bg-gray-700/20" >
           <tr>
             <th>Name</th>
             <th>Tries</th>
@@ -32,7 +28,7 @@ export default function FixtureAthletesScoreBoard({ teamName, fixture, title }: 
         </thead>
 
         <tbody onClick={toogle} >
-          <tr className="hover:bg-slate-700/30" >
+          <tr className="dark:hover:bg-slate-700/30 hover:bg-slate-100" >
             <td>J. Doe</td>
             <td>1</td>
             <td>0</td>
@@ -40,7 +36,7 @@ export default function FixtureAthletesScoreBoard({ teamName, fixture, title }: 
             <td>3</td>
           </tr>
 
-          <tr className="hover:bg-slate-700/30" >
+          <tr className="dark:hover:bg-slate-700/30 hover:bg-slate-100" >
             <td>S. Kolisi</td>
             <td>0</td>
             <td>1</td>
@@ -48,7 +44,7 @@ export default function FixtureAthletesScoreBoard({ teamName, fixture, title }: 
             <td>5</td>
           </tr>
 
-          <tr className="hover:bg-slate-700/30" >
+          <tr className="dark:hover:bg-slate-700/30 hover:bg-slate-100" >
             <td>J. Watt</td>
             <td>2</td>
             <td>0</td>
