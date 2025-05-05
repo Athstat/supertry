@@ -26,6 +26,7 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
   </div>
 
   const fixtures = filterMatchesForRound(allFixtures, league);
+  
 
   return (
     <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm ">
