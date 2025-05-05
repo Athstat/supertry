@@ -30,7 +30,13 @@ export default function FixtureListScreen() {
 
             <div className=" grid grid-cols-1 gap-3 " >
                 {fixtures.map((fixture, index) => {
-                    return <FixtureCard className="dark:bg-gray-800 dark:hover:bg-gray-800/80 bg-gray-200 hover:bg-gray-300 rounded-xl" fixture={fixture} key={index} />
+                    return <FixtureCard 
+                        showLogos 
+                        showCompetition
+                        className="dark:bg-gray-800 dark:hover:bg-gray-800/80 border border-slate-100 bg-white  hover:bg-slate-50 rounded-xl" 
+                        fixture={fixture} 
+                        key={index} 
+                    />
                 })}
             </div>
 
