@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import {
   Trophy,
-  ChevronRight,
   ArrowUp,
   ArrowDown,
-  History,
 } from "lucide-react";
 import { rankingsData } from "../data/rankings";
 import React from "react";
+import useSWR from "swr";
+import { userRankingsService } from "../services/userRankingsService";
+import { LoadingState } from "../components/ui/LoadingState";
+import { authService } from "../services/authService";
+import { useAuthUser } from "../hooks/useAuthUser";
+import UserRankingCard from "../components/rankings/UserRankingCard";
 
 interface Player {
   id: string;
@@ -29,6 +33,11 @@ export function RankingsScreen() {
   const [timeUntilReset, setTimeUntilReset] = useState("6d 23h 59m");
   const [currentDivision, setCurrentDivision] = useState(rankingsData[0]);
 
+  const authUser = useAuthUser();
+
+  // const {data: rankings, isLoading: rankingsLoading} = useSWR([1, 15], userRankingsService.getUserRankings);
+  const {data: authUserRank, isLoading: userRankingLoading} = useSWR(authUser.id, userRankingsService.getUserRankingByUserId);
+
   const getRankChangeIcon = (current: number, previous: number) => {
     if (current < previous) {
       return <ArrowUp className="w-4 h-4 text-green-500" />;
@@ -46,37 +55,13 @@ export function RankingsScreen() {
     window.scrollTo(0, 0);
   }, []);
 
+  if (userRankingLoading) return <LoadingState  />
+
   return (
     <main className="container mx-auto px-4 py-6 max-w-2xl">
       {/* Top Section */}
-      <div className="bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900 rounded-2xl shadow-sm p-6 mb-6 relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white blur-2xl" />
-          <div className="absolute -left-4 -bottom-8 w-32 h-32 rounded-full bg-white blur-2xl" />
-        </div>
-
-        <div className="flex items-center justify-between mb-4 relative">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center">
-              <Trophy className="w-8 h-8 text-amber-300" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                DIVISION
-                <span className="text-xl px-2 py-0.5 rounded-lg bg-white/10 border border-white/20 backdrop-blur-sm">
-                  #{currentDivision.id}
-                </span>
-              </h2>
-              <p className="text-primary-100 font-medium">{timeUntilReset}</p>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-3xl font-bold text-white">#2</div>
-            <div className="text-primary-100">Your Rank</div>
-          </div>
-        </div>
-      </div>
+      
+      <UserRankingCard />
 
       {/* Leaderboard */}
       <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm overflow-hidden">

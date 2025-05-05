@@ -42,4 +42,8 @@ declare module "lucide-react" {
   export const Settings: CIP;
   export const HelpCircle: CIP;
   export const Share2: CIP;
+  export const ArrowUp: CIP;
+  export const ArrowDown: CIP;
+  export const History: CIP;
+
 }
