@@ -21,6 +21,7 @@ export function SignUpScreen() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
   const [form, setForm] = useState<SignUpForm>({
     email: "",
     password: "",

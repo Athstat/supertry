@@ -49,5 +49,11 @@ declare module "lucide-react" {
   export const ArrowRight: CIP;
   export const User: CIP;
   export const Flag: CIP;
+  export const ArrowDownRightIcon: CIP;
+  export const FlameIcon: CIP;
+  export const MinusIcon: CIP;
+  export const Check: CIP;
+  export const ChevronDown: CIP;
 
 }
+

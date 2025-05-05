@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Check, ChevronDown, Search } from "lucide-react";
-import { Country } from "../../types/auth";
+import { countries, Country } from "../../types/countries";
 
 interface CountrySelectProps {
   value?: Country;
@@ -12,15 +12,6 @@ export function CountrySelect({ value, onChange }: CountrySelectProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // This would typically come from an API or config
-  const countries: Country[] = [
-    { code: "NZ", name: "New Zealand", flag: "🇳🇿" },
-    { code: "AU", name: "Australia", flag: "🇦🇺" },
-    { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
-    { code: "FR", name: "France", flag: "🇫🇷" },
-    { code: "SA", name: "South Africa", flag: "🇿🇦" },
-    // Add more countries...
-  ];
 
   const filteredCountries = countries.filter((country) =>
     country.name.toLowerCase().includes(searchQuery.toLowerCase())

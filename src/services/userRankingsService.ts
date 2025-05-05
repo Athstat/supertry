@@ -10,7 +10,8 @@ export const userRankingsService = {
             const url = getUri(`/api/v1/rankings/users${queryParams}`);
 
             const res = await fetch(url, {
-                headers: getAuthHeader()
+                headers: getAuthHeader(),
+                cache: "no-store"
             });
 
             const json = await res.json();
