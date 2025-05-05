@@ -54,6 +54,11 @@ declare module "lucide-react" {
   export const MinusIcon: CIP;
   export const Check: CIP;
   export const ChevronDown: CIP;
+  export const Edit2: CIP;
+  export const LogOut: CIP;
+  export const Moon: CIP;
+  export const Bell: CIP;
+  export const Medal: CIP;
 
 }
 
