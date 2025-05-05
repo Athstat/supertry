@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { PlusCircle, Users, Star, Loader } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { teamService } from "../services/teamService";
 import {
   IFantasyClubTeam,
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
 
+// Extended interface to include UI-specific properties
+interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
+  isFavorite?: boolean;
+  score?: number;
+  rank?: number;
+}
+
 export function MyTeamsScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { teamCreated, teamName, leagueId } = location.state || {};
 
-  const [teams, setTeams] = useState<IFantasyClubTeam[]>([]);
+  const [teams, setTeams] = useState<ExtendedFantasyClubTeam[]>([]);
   const [teamsWithAthletes, setTeamsWithAthletes] = useState<
     Map<string, IFantasyTeamAthlete[]>
   >(new Map());
@@ -26,12 +34,14 @@ export function MyTeamsScreen() {
     const fetchTeams = async () => {
       try {
         setIsLoading(true);
-        const userTeams = await teamService.fetchUserTeams();
+        // Use the default league ID as in DashboardScreen
+        const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19";
+        const userTeams = await teamService.fetchUserTeams(defaultLeagueId);
 
         // Sort teams by creation date (newest first)
         const sortedTeams = [...userTeams].sort((a, b) => {
-          const dateA = new Date(a.created_date || 0).getTime();
-          const dateB = new Date(b.created_date || 0).getTime();
+          const dateA = new Date(a.created_at || 0).getTime();
+          const dateB = new Date(b.created_at || 0).getTime();
           return dateB - dateA; // Descending order (newest first)
         });
 
@@ -105,7 +115,7 @@ export function MyTeamsScreen() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-6">
+    <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
       <div className="flex flex-col">
         <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">My Teams</h1>
       </div>
@@ -181,14 +191,18 @@ export function MyTeamsScreen() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="space-y-4">
           {teams.map((team) => (
-            <div
+            <motion.div
               key={team.id}
               onClick={() => handleTeamClick(team.id)}
               className="relative flex items-center justify-between p-4 rounded-xl 
-                bg-gray-100/80 dark:bg-gray-800/40 hover:bg-gray-300/30 dark:hover:bg-dark-800/60
-                transition-all duration-200 cursor-pointer"
+                bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700
+                cursor-pointer hover:shadow-md transition-shadow"
+              whileHover={{
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300 },
+              }}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -216,10 +230,11 @@ export function MyTeamsScreen() {
                           : "Add to favorites"
                       }
                     >
-                      <Star
-                        size={18}
-                        fill={team.isFavorite ? "currentColor" : "none"}
-                      />
+                      {team.isFavorite ? (
+                        <Star size={18} className="fill-current" />
+                      ) : (
+                        <Star size={18} />
+                      )}
                     </button>
                   </div>
                   <div className="flex items-center gap-3 mt-1">
@@ -240,7 +255,7 @@ export function MyTeamsScreen() {
                   {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}

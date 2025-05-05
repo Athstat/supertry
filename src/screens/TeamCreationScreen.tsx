@@ -81,14 +81,23 @@ export function TeamCreationScreen() {
     try {
       // Convert selected players to the required format for API (IFantasyTeamAthlete)
       const teamAthletes = Object.values(selectedPlayers).map(
-        (player, index) => ({
-          athlete_id: player.id,
-          purchase_price: player.price,
-          purchase_date: new Date(),
-          is_starting: true,
-          slot: index + 1,
-          score: player.points || 0,
-        })
+        (player, index) => {
+          // Check if this player is in the Super Sub position
+          const position = positionList.find(
+            (pos) => pos.player && pos.player.id === player.id
+          );
+          const isSuperSub = position?.isSpecial || false;
+
+          return {
+            athlete_id: player.id,
+            purchase_price: player.price,
+            purchase_date: new Date(),
+            is_starting: !isSuperSub, // Super Sub is not a starting player
+            slot: index + 1,
+            score: player.points || 0,
+            is_super_sub: isSuperSub,
+          };
+        }
       );
 
       // Submit the team using the team service

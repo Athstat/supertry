@@ -579,6 +579,20 @@ export function PlayerListModal({
     }
   };
 
+  // Get display name for sort field (used for accessibility and display)
+  const getSortFieldDisplayName = (field: string) => {
+    switch (field) {
+      case "power_rank_rating":
+        return "Coins";
+      case "player_name":
+        return "Name";
+      case "price":
+        return "Price";
+      default:
+        return field;
+    }
+  };
+
   // Function to toggle search visibility
   const handleToggleSearch = () => {
     // Toggle search bar visibility without affecting scroll

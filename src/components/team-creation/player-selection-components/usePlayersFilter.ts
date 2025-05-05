@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
-import { Player } from '../../../types/player';
-import { Position } from '../../../types/position';
+import { useMemo } from "react";
+import { Player } from "../../../types/player";
+import { Position } from "../../../types/position";
 
 interface UsePlayersFilterProps {
   players: any[];
@@ -9,8 +9,8 @@ interface UsePlayersFilterProps {
   teamFilter: string[];
   remainingBudget: number;
   selectedPlayers: Player[];
-  sortBy: 'price' | 'rating' | 'attack' | 'defense' | 'kicking';
-  sortOrder: 'asc' | 'desc';
+  sortBy: "price" | "rating" | "attack" | "defense" | "kicking";
+  sortOrder: "asc" | "desc";
 }
 
 export const usePlayersFilter = ({
@@ -21,55 +21,84 @@ export const usePlayersFilter = ({
   remainingBudget,
   selectedPlayers,
   sortBy,
-  sortOrder
+  sortOrder,
 }: UsePlayersFilterProps) => {
   // Filter players based on criteria
   const filteredPlayers = useMemo(() => {
     if (!players || !selectedPosition) return [];
-    
+
     console.log("Filtering players for position:", selectedPosition.name);
     console.log("Total players available:", players.length);
-    
-    return players.filter(player => {
-      // First filter by position - use our utility function to get the correct matches
-      // Checking both ways: custom filtering and using utility
-      const matchesPosition = 
-        // Standard position matching options
-        player.position === selectedPosition.name ||
-        player.position_class === (selectedPosition as any).positionClass ||
 
-        // Handle hyphenated position classes
-        player.position_class === (selectedPosition as any).positionClass?.replace('-', '') ||
-        player.position_class === (selectedPosition as any).positionClass?.replace('_', '-') ||
+    return players.filter((player) => {
+      // If this is the Super Sub position (marked by isSpecial flag), allow any player regardless of position
+      let matchesPosition = false;
 
-        // For specific rugby positions
-        ((selectedPosition.name === "Front Row" && player.position_class === "front-row") ||
-         (selectedPosition.name === "Second Row" && player.position_class === "second-row") ||
-         (selectedPosition.name === "Back Row" && player.position_class === "back-row") ||
-         (selectedPosition.name === "Halfback" && player.position_class === "half-back") ||
-         (selectedPosition.name === "Back" && player.position_class === "back"));
-      
+      if (selectedPosition.isSpecial) {
+        // For Super Sub, allow any player regardless of position
+        matchesPosition = true;
+      } else {
+        // For regular positions, apply normal position matching
+        matchesPosition =
+          // Standard position matching options
+          player.position === selectedPosition.name ||
+          player.position_class === (selectedPosition as any).positionClass ||
+          // Handle hyphenated position classes
+          player.position_class ===
+            (selectedPosition as any).positionClass?.replace("-", "") ||
+          player.position_class ===
+            (selectedPosition as any).positionClass?.replace("_", "-") ||
+          // For specific rugby positions
+          (selectedPosition.name === "Front Row" &&
+            player.position_class === "front-row") ||
+          (selectedPosition.name === "Second Row" &&
+            player.position_class === "second-row") ||
+          (selectedPosition.name === "Back Row" &&
+            player.position_class === "back-row") ||
+          (selectedPosition.name === "Halfback" &&
+            player.position_class === "half-back") ||
+          (selectedPosition.name === "Back" &&
+            player.position_class === "back");
+      }
+
       // If we're not matching the position, skip this player
       if (!matchesPosition) return false;
-      
+
       // Search query matching
-      const matchesSearch = searchQuery === '' ||
+      const matchesSearch =
+        searchQuery === "" ||
         player.player_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         player.team_name?.toLowerCase().includes(searchQuery.toLowerCase());
-        
+
       // Team filter matching
-      const matchesTeam = teamFilter.length === 0 || teamFilter.includes(player.team_id);
-      
+      const matchesTeam =
+        teamFilter.length === 0 || teamFilter.includes(player.team_id);
+
       // Already selected check - don't show already selected players
-      const isAlreadySelected = selectedPlayers.some(p => p.id === player.id || p.id === player.tracking_id);
-      
+      const isAlreadySelected = selectedPlayers.some(
+        (p) => p.id === player.id || p.id === player.tracking_id
+      );
+
       // Budget check
       const isAffordable = player.price <= remainingBudget;
-      
+
       // Apply all filters
-      return matchesPosition && matchesSearch && matchesTeam && !isAlreadySelected && isAffordable;
+      return (
+        matchesPosition &&
+        matchesSearch &&
+        matchesTeam &&
+        !isAlreadySelected &&
+        isAffordable
+      );
     });
-  }, [players, selectedPosition, searchQuery, teamFilter, selectedPlayers, remainingBudget]);
+  }, [
+    players,
+    selectedPosition,
+    searchQuery,
+    teamFilter,
+    selectedPlayers,
+    remainingBudget,
+  ]);
 
   // Sort players
   const sortedPlayers = useMemo(() => {
@@ -78,36 +107,36 @@ export const usePlayersFilter = ({
       let bValue = 0;
 
       switch (sortBy) {
-        case 'price':
+        case "price":
           aValue = a.price || 0;
           bValue = b.price || 0;
           break;
-        case 'rating':
+        case "rating":
           aValue = a.power_rank_rating || 0;
           bValue = b.power_rank_rating || 0;
           break;
-        case 'attack':
+        case "attack":
           aValue = a.ball_carrying || 0;
           bValue = b.ball_carrying || 0;
           break;
-        case 'defense':
+        case "defense":
           aValue = a.tackling || 0;
           bValue = b.tackling || 0;
           break;
-        case 'kicking':
+        case "kicking":
           aValue = a.points_kicking || 0;
           bValue = b.points_kicking || 0;
           break;
       }
 
-      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
     });
   }, [filteredPlayers, sortBy, sortOrder]);
 
   return {
     filteredPlayers,
     sortedPlayers,
-    filteredCount: filteredPlayers.length
+    filteredCount: filteredPlayers.length,
   };
 };
 

@@ -113,7 +113,7 @@ export const athleteService = {
   ): Promise<PointsBreakdown> => {
     try {
       const access_token = localStorage.getItem("access_token");
-      console.log("access_token", access_token);
+      //console.log("access_token", access_token);
 
       const response = await fetch(
         `${baseUrl}/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`,
@@ -127,7 +127,7 @@ export const athleteService = {
           },
         }
       );
-      console.log("response", response);
+      //console.log("response", response);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch points breakdown: ${response.status}`);
