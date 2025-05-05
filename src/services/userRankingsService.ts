@@ -6,7 +6,7 @@ export const userRankingsService = {
     getUserRankings: async (start?: number, end?: number) => {
 
         try {
-            const queryParams = start && end ? `?start=${start}&end=${end}` : "";
+            const queryParams = start && end ? `?start=${Number.parseInt(start.toString())}&end=${Number.parseInt(end.toString())}` : "";
             const url = getUri(`/api/v1/rankings/users${queryParams}`);
 
             const res = await fetch(url, {
