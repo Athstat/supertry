@@ -4,6 +4,7 @@ import { useAuthUser } from "../../hooks/useAuthUser";
 import { userRankingsService } from "../../services/userRankingsService";
 import { LoadingState } from "../ui/LoadingState";
 import { UserRanking } from "../../types/userRanking";
+import UserRankingFocusShort from "./UserRankingFocusShort";
 
 export default function UserRankingsLeaderBoard() {
 
@@ -95,6 +96,9 @@ export default function UserRankingsLeaderBoard() {
                     ))}
                 </div>
             </div>
+
+            <UserRankingFocusShort rankings={rankings} />
+
             {/* Bottom Section */}
             <div className="mt-6 space-y-4 mb-6">
                 <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
