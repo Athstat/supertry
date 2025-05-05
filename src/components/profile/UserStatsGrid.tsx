@@ -28,7 +28,7 @@ export default function UserStatsGrid() {
                     Total Points
                 </div>
                 <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                    {rank ? rank.total_score : 0}
+                    {rank?.total_score ? rank.total_score : "0"}
                 </div>
             </div>
 
@@ -46,7 +46,7 @@ export default function UserStatsGrid() {
                     Current Rank
                 </div>
                 <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                    <p>{rank ? "#" + rank?.rank : "Unranked"}</p>
+                    <p>{rank?.rank ? "#" + rank?.rank : "-"}</p>
                 </div>
             </div>
             <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
@@ -54,7 +54,7 @@ export default function UserStatsGrid() {
                     Best Rank
                 </div>
                 <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                <p>{rank ? "#" + rank?.rank : "Unranked"}</p>
+                <p>{rank?.rank ? "#" + rank?.rank : "-"}</p>
                 </div>
             </div>
         </div>
