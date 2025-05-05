@@ -8,7 +8,6 @@ import { ErrorState } from "../components/ui/ErrorState";
 import FixtureCard from "../components/fixtures/FixtureCard";
 import { useRef, useState } from "react";
 import { searchFixturesPredicate } from "../utils/fixtureUtils";
-import { useScrollTo } from "../hooks/useScrollTo";
 
 const competitionIds = [
     URC_COMPETIION_ID,
@@ -16,56 +15,57 @@ const competitionIds = [
 ]
 
 export default function FixtureListScreen() {
-    
-    
+
+
     const { data: fixtures, error, isLoading } = useSWR(competitionIds, fetcher);
     const [search, setSearch] = useState("");
     const upcomingFixturesRef = useRef<HTMLDivElement>(null);
-    
+
     if (isLoading) return <LoadingState message="Loading Fixtures" />
     if (!fixtures) return <ErrorState message={error} />
-    
-    
+
+
     const dateNow = new Date();
-    
+
     const pastFixtures = fixtures.filter((f) => {
         if (f.kickoff_time) {
             return f.game_status === "complete" || new Date(f.kickoff_time).valueOf() < dateNow.valueOf();
         }
-        
+
         return false;
     });
 
-    
+
     const upcomingFixtures = fixtures.filter((f) => {
         if (f.kickoff_time) {
             return new Date(f.kickoff_time).valueOf() > dateNow.valueOf();
         }
-        
+
         return false;
     });
-    
-    useScrollTo(upcomingFixturesRef);
-    
+
+    if (upcomingFixturesRef.current) {
+        upcomingFixturesRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+
 
     return (
         <div className="dark:text-white  p-4 flex flex-col items-center justify-start" >
             <div className="flex flex-col gap-5 w-full lg:w-3/4" >
-
 
                 <div className="flex flex-row items-center justify-start gap-2 " >
                     <Calendar className="" />
                     <h1 className="font-bold text-xl lg:text-2xl" >Fixtures</h1>
                 </div>
 
-                {/* <div className="flex flex-row w-full" >
+                <div className="flex flex-row w-full" >
                     <input
                         placeholder="Search Fixtures..."
                         className="bg-gray-800 outline-none p-3 flex-1 rounded-xl"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                </div> */}
+                </div>
 
                 <div className=" grid grid-cols-1 gap-3 " >
                     {pastFixtures.map((fixture, index) => {
