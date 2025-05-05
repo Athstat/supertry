@@ -14,8 +14,6 @@ import { friends } from "../data/friends";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
-import useSWR from "swr";
-import { userRankingsService } from "../services/userRankingsService";
 import UserStatsGrid from "../components/profile/UserStatsGrid";
 
 interface Achievement {
