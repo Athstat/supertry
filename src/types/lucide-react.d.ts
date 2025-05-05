@@ -45,5 +45,9 @@ declare module "lucide-react" {
   export const ArrowUp: CIP;
   export const ArrowDown: CIP;
   export const History: CIP;
+  export const Lock: CIP;
+  export const ArrowRight: CIP;
+  export const User: CIP;
+  export const Flag: CIP;
 
 }
