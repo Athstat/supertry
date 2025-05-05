@@ -1,4 +1,4 @@
-import { IAthleteBoxScore } from "../types/boxScore";
+import { IBoxScore } from "../types/boxScore";
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 
 export const boxScoreService = {
@@ -10,7 +10,7 @@ export const boxScoreService = {
                 headers: getAuthHeader()
             });
 
-            return await res.json() as IAthleteBoxScore[]
+            return await res.json() as IBoxScore[]
             
         } catch (error) {
             console.log(error);

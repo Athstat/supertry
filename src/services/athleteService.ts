@@ -1,4 +1,5 @@
-import { RugbyPlayer } from "../types/rugbyPlayer";
+import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
+import { getAuthHeader, getUri } from "../utils/backendUtils";
 
 // Define the type for each individual breakdown item
 export interface BreakdownItem {
@@ -217,6 +218,22 @@ export const athleteService = {
       return getMockPowerRankings();
     }
   },
+
+  getAthleteById: async (athleteId: string) => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-athletes/${athleteId}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      const json = await res.json();
+      return json as IFantasyAthlete;
+
+    } catch (error) {
+      console.log("Error fetching athlete", error);
+      return undefined;
+    }
+  }
 };
 
 /**
