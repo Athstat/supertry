@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Trophy,
-  Users,
-  ArrowLeftRight,
-  X,
-  ChevronLeft,
-  Loader,
-} from "lucide-react";
+import { Trophy, Users, ChevronLeft, Loader } from "lucide-react";
 import { Player, Team } from "../types/team";
 import { PlayerSubstitutionModal } from "../components/team/PlayerSubstitutionModal";
 import { TeamFormation } from "../components/team/TeamFormation";
@@ -53,15 +46,18 @@ export function MyTeamScreen() {
         console.log("Fetching team data for ID:", teamId);
 
         // First try to fetch team athletes directly
-        const teamAthletes = await teamService.fetchTeamAthletes(teamId);
+        const teamAthletes = await teamService.fetchTeamAthletes(
+          teamId as string
+        );
         console.log("Team athletes:", teamAthletes);
 
         if (teamAthletes && teamAthletes.length > 0) {
           // If we have athletes, we can fetch the team details
-          const userTeams = await teamService.fetchUserTeams();
+          // Use type assertion to handle the function call
+          const userTeams = await (teamService.fetchUserTeams as any)();
           console.log("User teams:", userTeams);
 
-          let currentTeam = userTeams.find((t) => t.id == teamId);
+          let currentTeam = userTeams.find((t: any) => t.id == teamId);
 
           console.log("currentTeam", currentTeam);
 
@@ -71,7 +67,7 @@ export function MyTeamScreen() {
               "Team not found in user teams, creating from athlete data"
             );
             // Get team info from the first athlete
-            const firstAthlete = teamAthletes[0];
+            const firstAthlete = teamAthletes[0] as any;
             currentTeam = {
               id: teamId,
               name: "My Team", // Default name
@@ -80,7 +76,9 @@ export function MyTeamScreen() {
               created_at: new Date(),
               updated_at: new Date(),
               athletes: teamAthletes,
-            };
+              rank: 0,
+              matches_played: 0,
+            } as IFantasyClubTeam;
           }
 
           if (currentTeam) {
@@ -126,17 +124,24 @@ export function MyTeamScreen() {
 
   // Convert IFantasyTeamAthlete to Player format for the TeamFormation component
   const convertToPlayerFormat = (athletes: IFantasyTeamAthlete[]): Player[] => {
-    return athletes.map((athlete) => ({
-      id: athlete.athlete_id,
-      name: athlete.player_name,
-      position: athlete.position_class,
-      team: athlete.athlete?.team?.name || "Unknown Team",
-      points: athlete.price,
-      form: athlete.power_rank_rating, // Add form for PR calculation
-      isSubstitute: !athlete.is_starting,
-      image: athlete.image_url,
-      price: athlete.price,
-    }));
+    return athletes.map((athlete) => {
+      // Handle the TypeScript type issues with any assertions where needed
+      const athleteAny = athlete as any;
+
+      return {
+        id: athleteAny.athlete_id || "",
+        name: athleteAny.player_name || "Unknown Player",
+        position: athleteAny.position_class || "Unknown Position",
+        team: athleteAny.athlete?.team?.name || "Unknown Team",
+        points: athleteAny.price || 0,
+        form: athleteAny.power_rank_rating || 0,
+        isSubstitute: !athleteAny.is_starting,
+        is_super_sub: athleteAny.is_super_sub || false,
+        image: athleteAny.image_url,
+        price: athleteAny.price || 0,
+        nextFixture: "", // Add required property with default value
+      };
+    });
   };
 
   const players = convertToPlayerFormat(athletes);
@@ -185,7 +190,8 @@ export function MyTeamScreen() {
   );
 
   // Calculate matches played
-  const matchesPlayed = team?.matches_played || 0;
+  const teamAny = team as any;
+  const matchesPlayed = teamAny?.matches_played || 0;
 
   if (isLoading) {
     return (
@@ -241,7 +247,9 @@ export function MyTeamScreen() {
                 <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
                   <Trophy size={18} className="text-yellow-500 shrink-0" />
                   <span className="whitespace-nowrap">
-                    {team.rank ? `Rank ${team.rank}` : "Not ranked yet"}
+                    {(team as any).rank
+                      ? `Rank ${(team as any).rank}`
+                      : "Not ranked yet"}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
@@ -259,9 +267,17 @@ export function MyTeamScreen() {
             {/* Points Display */}
             <div className="flex items-center justify-between sm:justify-end gap-3 mt-2 sm:mt-0 bg-gray-50 dark:bg-dark-700/40 p-2 sm:p-3 rounded-lg">
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                Total Game Points
+                Total Game Coins
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-primary-700 dark:text-primary-500">
+              <div className="text-xl sm:text-2xl font-bold text-primary-700 dark:text-primary-500 flex items-center">
+                <svg
+                  className="w-5 h-5 mr-1.5 text-yellow-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM5.94 7.13a1 1 0 011.95-.26c.112.84.234 1.677.357 2.514.234-.705.469-1.412.704-2.119a1 1 0 011.857.737 1 1 0 01.027.063c.234.705.469 1.412.704 2.119.121-.84.242-1.678.351-2.516a1 1 0 011.954.262c-.16 1.192-.32 2.383-.48 3.575 0 .004-.003.005-.005.006l-.008.032-.006.025-.008.028-.008.03-.01.03a1 1 0 01-1.092.698.986.986 0 01-.599-.28l-.01-.008a.997.997 0 01-.29-.423c-.272-.818-.543-1.635-.815-2.453-.272.818-.544 1.635-.816 2.453a1 1 0 01-1.953-.331c-.156-1.167-.312-2.334-.468-3.502a1 1 0 01.744-1.114z" />
+                </svg>
                 {totalPoints}
               </div>
             </div>
@@ -277,7 +293,7 @@ export function MyTeamScreen() {
               players,
               formation,
               matchesPlayed,
-              rank: team.rank || 0,
+              rank: (team as any).rank || 0,
             } as Team
           }
         />
@@ -288,45 +304,75 @@ export function MyTeamScreen() {
             Team Formation
           </h2>
           <TeamFormation
-            players={players}
+            players={players.filter(
+              (player) => !player.isSubstitute && !(player as any).is_super_sub
+            )}
             formation={formation}
             onPlayerClick={() => {}} // Disable player click functionality
           />
         </div>
 
-        {/* Substitutes */}
-        {/* <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
-            Substitutes
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {players
-              .filter((player) => player.isSubstitute)
-              .map((player) => (
-                <div
-                  key={player.id}
-                  className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4 border-2 border-gray-200 dark:border-dark-600"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold dark:text-gray-100">
-                      {player.name}
-                    </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400 font-bold">
-                      {player.position}
-                    </span>
+        {/* Super Substitute */}
+        {players.find((player) => (player as any).is_super_sub) && (
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center">
+              <span>Super Substitute</span>
+              <span className="ml-2 text-orange-500 text-sm bg-orange-100 dark:bg-orange-900/20 px-2 py-0.5 rounded-full">
+                Special
+              </span>
+            </h2>
+            <div className="bg-orange-50 dark:bg-orange-900/10 rounded-xl p-4 border-2 border-orange-200 dark:border-orange-800/30 max-w-md">
+              {players
+                .filter((player) => (player as any).is_super_sub)
+                .map((player) => (
+                  <div key={player.id} className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-orange-300 dark:border-orange-600">
+                      {player.image ? (
+                        <img
+                          src={player.image}
+                          alt={player.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-2xl font-bold text-gray-500 dark:text-gray-400">
+                          {player.name.charAt(0)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-semibold text-lg dark:text-gray-100">
+                          {player.name}
+                        </span>
+                        <span className="text-sm font-bold px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full text-gray-800 dark:text-gray-300">
+                          {player.position}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          {player.team}
+                        </span>
+                        <span className="text-primary-700 dark:text-primary-500 font-bold flex items-center">
+                          <svg
+                            className="w-3.5 h-3.5 mr-1 text-yellow-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM5.94 7.13a1 1 0 011.95-.26c.112.84.234 1.677.357 2.514.234-.705.469-1.412.704-2.119a1 1 0 011.857.737 1 1 0 01.027.063c.234.705.469 1.412.704 2.119.121-.84.242-1.678.351-2.516a1 1 0 011.954.262c-.16 1.192-.32 2.383-.48 3.575 0 .004-.003.005-.005.006l-.008.032-.006.025-.008.028-.008.03-.01.03a1 1 0 01-1.092.698.986.986 0 01-.599-.28l-.01-.008a.997.997 0 01-.29-.423c-.272-.818-.543-1.635-.815-2.453-.272.818-.544 1.635-.816 2.453a1 1 0 01-1.953-.331c-.156-1.167-.312-2.334-.468-3.502a1 1 0 01.744-1.114z" />
+                          </svg>
+                          {player.points}
+                        </span>
+                      </div>
+                      <div className="mt-2 text-xs text-orange-600 dark:text-orange-400 font-medium">
+                        Can substitute for any position
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400 font-bold">
-                      {player.team}
-                    </span>
-                    <span className="text-primary-700 dark:text-primary-500 font-bold">
-                      {player.points} pts
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
-        </div> */}
+        )}
       </div>
 
       {/* Substitution Modal */}

@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronLeft, Users, Wallet } from "lucide-react";
+import { ChevronLeft, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface TeamCreationHeaderProps {
@@ -13,7 +13,7 @@ interface TeamCreationHeaderProps {
 
 export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
   title,
-  subTitle = "Select 5 players to build your dream rugby team",
+  subTitle = "Select 6 players to build your dream rugby team",
   currentBudget,
   totalBudget,
   selectedPlayersCount,
@@ -53,19 +53,16 @@ export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
         {/* Budget Display */}
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
-            <Wallet size={16} className="text-gray-500 dark:text-gray-400" />
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-              Budget
-            </span>
+            <span className="font-semibold">COINS</span>
           </div>
           <span
-            className={`text-lg font-semibold ${
+            className={`text-lg font-semibold flex items-center ${
               isNegativeBudget
                 ? "text-red-500 dark:text-red-400"
                 : "text-green-600 dark:text-green-400"
             }`}
           >
-            {currentBudget.toLocaleString()} points
+            <span>{currentBudget.toLocaleString()}</span>
           </span>
         </div>
 

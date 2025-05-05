@@ -1,5 +1,3 @@
-import { Player } from "../../types/player";
-
 interface PlayerStats {
   tries: number;
   assists: number;
@@ -26,6 +24,9 @@ export interface Player {
   image_url?: string;
   power_rank_rating?: number;
 
+  // Super Sub flag
+  is_super_sub?: boolean;
+
   // Stats from the database schema
   points_kicking?: number;
   tackling?: number;
@@ -38,6 +39,7 @@ export interface Player {
   tries?: number;
   assists?: number;
   tackles?: number;
+  nextFixture?: string;
 
   // These can be derived or generated for UI purposes
   try_scoring?: number;
