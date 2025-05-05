@@ -5,6 +5,54 @@ import {
 
 export const teamService = {
   /**
+   * Update team athletes for a fantasy team
+   */
+  updateTeamAthletes: async (
+    team: IFantasyTeamAthlete[],
+    teamId: string
+  ): Promise<any> => {
+    try {
+      const baseUrl = import.meta.env.PROD
+        ? "https://qa-games-app.athstat-next.com"
+        : "";
+
+      // Get token for authentication
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        throw new Error(
+          "Authentication token is missing. Please log in again."
+        );
+      }
+
+      // Make API request to update team athletes
+      const response = await fetch(
+        `${baseUrl}/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ team, teamId }),
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to update team athletes:", await response.text());
+        throw new Error(
+          `Failed to update team: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error updating team athletes:", error);
+      throw error;
+    }
+  },
+
+  /**
    * Fetch the user's club information
    */
   fetchUserClub: async () => {

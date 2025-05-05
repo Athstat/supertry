@@ -8,6 +8,7 @@ export interface Player {
   team: string;
   nextFixture: string;
   isSubstitute?: boolean;
+  is_super_sub?: boolean;
   image: string;
 }
 

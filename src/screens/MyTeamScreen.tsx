@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Trophy, Users, ChevronLeft, Loader } from "lucide-react";
 import { Player, Team } from "../types/team";
-import { PlayerSubstitutionModal } from "../components/team/PlayerSubstitutionModal";
+import { PlayerActionModal } from "../components/team/PlayerActionModal";
+import { SwapConfirmationModal } from "../components/team/SwapConfirmationModal";
+import { AnimatePresence, motion } from "framer-motion";
+import { usePlayerProfile } from "../hooks/usePlayerProfile";
+import PlayerSelectionModal from "../components/team-creation/PlayerSelectionModal";
+import { Position } from "../types/position";
 import { TeamFormation } from "../components/team/TeamFormation";
 import { TeamStats } from "../components/team/TeamStats";
 import { mockTeam } from "../data/team";
@@ -29,8 +34,15 @@ export function MyTeamScreen() {
     !locationTeam || !locationAthletes
   );
   const [error, setError] = useState<string | null>(null);
-  const [showSubModal, setShowSubModal] = useState(false);
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [showSwapModal, setShowSwapModal] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [newPlayer, setNewPlayer] = useState<Player | null>(null);
+  const [isSwapping, setIsSwapping] = useState(false);
+  const [positionToSwap, setPositionToSwap] = useState<string>("");
+  const [teamUpdating, setTeamUpdating] = useState(false);
+  const [teamBudget, setTeamBudget] = useState<number>(0);
 
   // Fetch team and athletes if not provided in location state
   useEffect(() => {
@@ -102,8 +114,21 @@ export function MyTeamScreen() {
     fetchTeamData();
   }, [teamId, locationTeam, locationAthletes]);
 
+  // Calculate team budget
+  useEffect(() => {
+    if (athletes.length > 0) {
+      const totalTeamValue = athletes.reduce(
+        (sum, athlete: any) => sum + (athlete.price || 0),
+        0
+      );
+      // Assume max budget is 200 for now, adjust as needed
+      const maxBudget = 200;
+      setTeamBudget(maxBudget - totalTeamValue);
+    }
+  }, [athletes]);
+
   // Add useEffect to scroll to top on mount
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
@@ -113,13 +138,114 @@ export function MyTeamScreen() {
 
   const handlePlayerClick = (player: Player) => {
     setSelectedPlayer(player);
-    setShowSubModal(true);
+    setShowActionModal(true);
   };
 
-  const handleSubstitution = (oldPlayer: Player, newPlayer: Player) => {
-    // Implement substitution logic
-    setShowSubModal(false);
+  // Get the player profile hook
+  const { showPlayerProfile } = usePlayerProfile();
+
+  const handleViewStats = (player: Player) => {
+    // Open the player profile modal
+    console.log("View stats for player:", player);
+    setShowActionModal(false);
+    // Convert to the format expected by the profile modal
+    const playerForProfile = {
+      tracking_id: player.id,
+      player_name: player.name,
+      team_name: player.team,
+      position_class: player.position,
+      price: player.price,
+      power_rank_rating: player.form,
+      image_url: player.image,
+      ball_carrying: 7,
+      tackling: 6,
+      points_kicking: 5,
+    };
+
+    showPlayerProfile(playerForProfile);
+  };
+
+  const handleSwapPlayer = (player: Player) => {
+    // When swapping a player, set the position based on whether it's a super sub
+    setPositionToSwap(player.is_super_sub ? "any" : player.position);
+    setIsSwapping(true);
+    setSelectedPlayer(player); // Ensure selected player is set
+    setShowActionModal(false);
+  };
+
+  const handlePlayerSelect = (player: Player) => {
+    setNewPlayer(player);
+    setShowSwapModal(true);
+  };
+
+  const handleConfirmSwap = async () => {
+    if (!selectedPlayer || !newPlayer || !teamId) return;
+
+    try {
+      setTeamUpdating(true);
+
+      // Find the player to replace in athletes
+      const updatedAthletes = [...athletes];
+      const playerIndex = updatedAthletes.findIndex(
+        (a: any) =>
+          a.athlete_id === selectedPlayer.id || a.id === selectedPlayer.id
+      );
+
+      if (playerIndex === -1) {
+        console.error("Player not found in team");
+        return;
+      }
+
+      // Create an updated athlete object for the new player
+      const replacementAthlete = {
+        ...updatedAthletes[playerIndex],
+        athlete_id: newPlayer.id,
+        player_name: newPlayer.name,
+        position_class: selectedPlayer.is_super_sub
+          ? selectedPlayer.position
+          : newPlayer.position,
+        team_name: newPlayer.team,
+        price: newPlayer.price,
+        power_rank_rating: newPlayer.form,
+        image_url: newPlayer.image,
+        is_super_sub: selectedPlayer.is_super_sub,
+        is_starting: !selectedPlayer.is_super_sub, // Super Sub is not a starting player
+      };
+
+      // Replace the old athlete with the new one
+      updatedAthletes[playerIndex] = replacementAthlete;
+
+      // Send the update to the server
+      await teamService.updateTeamAthletes(updatedAthletes, teamId);
+
+      // Update local state
+      setAthletes(updatedAthletes);
+
+      // Reset UI state
+      setShowSwapModal(false);
+      setSelectedPlayer(null);
+      setNewPlayer(null);
+      setIsSwapping(false);
+    } catch (error) {
+      console.error("Failed to swap player:", error);
+      // Here you might want to show an error notification
+    } finally {
+      setTeamUpdating(false);
+    }
+  };
+
+  const cancelSwap = () => {
+    setShowSwapModal(false);
+    setNewPlayer(null);
+  };
+
+  const closeAllModals = () => {
+    setShowActionModal(false);
+    setShowSwapModal(false);
+    setShowStatsModal(false);
+    setIsSwapping(false);
     setSelectedPlayer(null);
+    setNewPlayer(null);
   };
 
   // Convert IFantasyTeamAthlete to Player format for the TeamFormation component
@@ -136,7 +262,8 @@ export function MyTeamScreen() {
         points: athleteAny.price || 0,
         form: athleteAny.power_rank_rating || 0,
         isSubstitute: !athleteAny.is_starting,
-        is_super_sub: athleteAny.is_super_sub || false,
+        // Set is_super_sub based on is_starting field being false
+        is_super_sub: athleteAny.is_starting === false,
         image: athleteAny.image_url,
         price: athleteAny.price || 0,
         nextFixture: "", // Add required property with default value
@@ -304,16 +431,14 @@ export function MyTeamScreen() {
             Team Formation
           </h2>
           <TeamFormation
-            players={players.filter(
-              (player) => !player.isSubstitute && !(player as any).is_super_sub
-            )}
+            players={players.filter((player) => !player.isSubstitute)}
             formation={formation}
-            onPlayerClick={() => {}} // Disable player click functionality
+            onPlayerClick={handlePlayerClick}
           />
         </div>
 
         {/* Super Substitute */}
-        {players.find((player) => (player as any).is_super_sub) && (
+        {players.some((player) => player.isSubstitute) && (
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center">
               <span>Super Substitute</span>
@@ -323,9 +448,19 @@ export function MyTeamScreen() {
             </h2>
             <div className="bg-orange-50 dark:bg-orange-900/10 rounded-xl p-4 border-2 border-orange-200 dark:border-orange-800/30 max-w-md">
               {players
-                .filter((player) => (player as any).is_super_sub)
+                .filter((player) => player.isSubstitute)
                 .map((player) => (
-                  <div key={player.id} className="flex items-center gap-4">
+                  <motion.div
+                    key={player.id}
+                    className="flex items-center gap-4 cursor-pointer rounded-lg p-2"
+                    onClick={() => handlePlayerClick(player)}
+                    whileHover={{
+                      scale: 1.02,
+                      transition: { type: "spring", stiffness: 300 },
+                    }}
+                    initial={{ opacity: 0.9 }}
+                    animate={{ opacity: 1 }}
+                  >
                     <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-orange-300 dark:border-orange-600">
                       {player.image ? (
                         <img
@@ -368,21 +503,105 @@ export function MyTeamScreen() {
                         Can substitute for any position
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
             </div>
           </div>
         )}
       </div>
 
-      {/* Substitution Modal */}
-      {showSubModal && selectedPlayer && (
-        <PlayerSubstitutionModal
-          player={selectedPlayer}
-          onClose={() => setShowSubModal(false)}
-          onSubstitute={handleSubstitution}
+      {/* Player Action Modal */}
+      <AnimatePresence>
+        {showActionModal && selectedPlayer && (
+          <PlayerActionModal
+            player={selectedPlayer}
+            onClose={() => setShowActionModal(false)}
+            onViewStats={handleViewStats}
+            onSwapPlayer={handleSwapPlayer}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Player Selection Modal for Swapping */}
+      {isSwapping && selectedPlayer && (
+        <PlayerSelectionModal
+          visible={isSwapping}
+          selectedPosition={{
+            id: positionToSwap === "any" ? "any" : positionToSwap,
+            name: positionToSwap === "any" ? "Any Position" : positionToSwap,
+            shortName:
+              positionToSwap === "any"
+                ? "ANY"
+                : positionToSwap.substring(0, 2).toUpperCase(),
+            x: "0",
+            y: "0",
+          }}
+          players={athletes.map((a) => {
+            const athlete = a as any; // Cast to any to handle the TypeScript issues
+            return {
+              id: athlete.athlete_id || athlete.id || "",
+              tracking_id: athlete.athlete_id || athlete.id || "",
+              player_name: athlete.player_name || "Unknown Player",
+              team_name:
+                athlete.team_name ||
+                athlete.athlete?.team?.name ||
+                "Unknown Team",
+              position_class: athlete.position_class || "Unknown Position",
+              price: athlete.price || 0,
+              power_rank_rating: athlete.power_rank_rating || 0,
+              image_url: athlete.image_url || "",
+              ball_carrying: 5,
+              tackling: 5,
+              points_kicking: 5,
+            };
+          })}
+          remainingBudget={
+            selectedPlayer ? teamBudget + selectedPlayer.price : teamBudget
+          }
+          // Filter out the currently selected player to allow selecting new players
+          selectedPlayers={players
+            .filter((p) => p.id !== selectedPlayer?.id)
+            .map((p) => ({
+              id: p.id,
+              name: p.name,
+              team: p.team,
+              position: p.position,
+              price: p.price,
+              points: p.points,
+              image_url: p.image,
+              power_rank_rating: p.form,
+            }))}
+          handlePlayerSelect={(p: any) => {
+            // Convert from player.ts Player type to team.ts Player type
+            const convertedPlayer: Player = {
+              id: p.id,
+              name: p.name,
+              team: p.team,
+              position: p.position,
+              points: p.points,
+              price: p.price,
+              form: p.power_rank_rating || 0,
+              image: p.image_url || "",
+              nextFixture: "",
+            };
+            handlePlayerSelect(convertedPlayer);
+          }}
+          onClose={() => setIsSwapping(false)}
+          roundId={1}
         />
       )}
+
+      {/* Confirmation Modal */}
+      <AnimatePresence>
+        {showSwapModal && selectedPlayer && newPlayer && (
+          <SwapConfirmationModal
+            currentPlayer={selectedPlayer}
+            newPlayer={newPlayer}
+            onClose={cancelSwap}
+            onConfirm={handleConfirmSwap}
+          />
+        )}
+      </AnimatePresence>
     </main>
   );
 }
