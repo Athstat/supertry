@@ -16,6 +16,7 @@ import {
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
 import { teamService } from "../services/teamService";
+import { athleteService } from "../services/athleteService";
 
 export function MyTeamScreen() {
   const navigate = useNavigate();
@@ -43,6 +44,8 @@ export function MyTeamScreen() {
   const [positionToSwap, setPositionToSwap] = useState<string>("");
   const [teamUpdating, setTeamUpdating] = useState(false);
   const [teamBudget, setTeamBudget] = useState<number>(0);
+  const [marketPlayers, setMarketPlayers] = useState<any[]>([]);
+  const [fetchingMarketPlayers, setFetchingMarketPlayers] = useState(false);
 
   // Fetch team and athletes if not provided in location state
   useEffect(() => {
@@ -78,13 +81,12 @@ export function MyTeamScreen() {
             console.log(
               "Team not found in user teams, creating from athlete data"
             );
-            // Get team info from the first athlete
-            const firstAthlete = teamAthletes[0] as any;
+
             currentTeam = {
               id: teamId,
               name: "My Team", // Default name
-              club_id: firstAthlete.club_id || "",
-              league_id: firstAthlete.league_id || "",
+              club_id: currentTeam.club_id || "",
+              league_id: currentTeam.official_league_id || "",
               created_at: new Date(),
               updated_at: new Date(),
               athletes: teamAthletes,
@@ -165,9 +167,32 @@ export function MyTeamScreen() {
     showPlayerProfile(playerForProfile);
   };
 
-  const handleSwapPlayer = (player: Player) => {
+  const handleSwapPlayer = async (player: Player) => {
     // When swapping a player, set the position based on whether it's a super sub
     setPositionToSwap(player.is_super_sub ? "any" : player.position);
+
+    // Fetch market players when initiating a swap
+    try {
+      setFetchingMarketPlayers(true);
+
+      // Use the league ID from the team object or fallback to a default
+
+      console.log(
+        "Fetching market players for league:",
+        team?.official_league_id
+      );
+
+      const players = await athleteService.getRugbyAthletesByCompetition(
+        team?.official_league_id || ""
+      );
+      setMarketPlayers(players);
+      console.log("Fetched market players:", players.length);
+    } catch (error) {
+      console.error("Failed to fetch market players:", error);
+    } finally {
+      setFetchingMarketPlayers(false);
+    }
+
     setIsSwapping(true);
     setSelectedPlayer(player); // Ensure selected player is set
     setShowActionModal(false);
@@ -536,25 +561,7 @@ export function MyTeamScreen() {
             x: "0",
             y: "0",
           }}
-          players={athletes.map((a) => {
-            const athlete = a as any; // Cast to any to handle the TypeScript issues
-            return {
-              id: athlete.athlete_id || athlete.id || "",
-              tracking_id: athlete.athlete_id || athlete.id || "",
-              player_name: athlete.player_name || "Unknown Player",
-              team_name:
-                athlete.team_name ||
-                athlete.athlete?.team?.name ||
-                "Unknown Team",
-              position_class: athlete.position_class || "Unknown Position",
-              price: athlete.price || 0,
-              power_rank_rating: athlete.power_rank_rating || 0,
-              image_url: athlete.image_url || "",
-              ball_carrying: 5,
-              tackling: 5,
-              points_kicking: 5,
-            };
-          })}
+          players={marketPlayers}
           remainingBudget={
             selectedPlayer ? teamBudget + selectedPlayer.price : teamBudget
           }

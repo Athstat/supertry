@@ -35,8 +35,8 @@ export function MyTeamsScreen() {
       try {
         setIsLoading(true);
         // Use the default league ID as in DashboardScreen
-        const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19";
-        const userTeams = await teamService.fetchUserTeams(defaultLeagueId);
+        const userTeams = await teamService.fetchUserTeams();
+        console.log("userTeams", userTeams);
 
         // Sort teams by creation date (newest first)
         const sortedTeams = [...userTeams].sort((a, b) => {

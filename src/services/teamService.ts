@@ -116,9 +116,7 @@ export const teamService = {
   /**
    * Fetch all teams for the current user
    */
-  fetchUserTeams: async (
-    officialLeagueId: string
-  ): Promise<IFantasyClubTeam[]> => {
+  fetchUserTeams: async (): Promise<IFantasyClubTeam[]> => {
     try {
       const baseUrl = "https://qa-games-app.athstat-next.com";
 
@@ -143,10 +141,8 @@ export const teamService = {
         );
       }
 
-      //const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19";
-
       // Construct the URL based on whether leagueId is provided
-      const url = `${baseUrl}/api/v1/fantasy-teams/${userId}/${officialLeagueId}`;
+      const url = `${baseUrl}/api/v1/fantasy-teams/fantasy-teams-all/${userId}`;
 
       // Make API request to get user's teams
       const response = await fetch(url, {
