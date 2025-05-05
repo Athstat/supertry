@@ -24,7 +24,6 @@ const PositionCard: React.FC<PositionCardProps> = ({
         hover:shadow-lg transform hover:-translate-y-1 
         ${selected ? "ring-2 ring-green-500 dark:ring-green-400" : ""}
         ${hasPlayer ? "bg-gray-50 dark:bg-dark-750" : ""}
-        ${isSuperSub ? "border-2 border-orange-400 dark:border-orange-500" : ""}
       `}
     >
       <div className="flex flex-col items-center">
@@ -51,7 +50,6 @@ const PositionCard: React.FC<PositionCardProps> = ({
               }`}
             >
               {position.name}
-              {isSuperSub && <span className="ml-1">🔄</span>}
             </h3>
             <p className="text-xs text-center font-medium mb-1 dark:text-gray-300">
               {position.player.name}
@@ -112,7 +110,6 @@ const PositionCard: React.FC<PositionCardProps> = ({
               }`}
             >
               {position.name}
-              {isSuperSub && <span className="ml-1">🔄</span>}
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Add {position.name}

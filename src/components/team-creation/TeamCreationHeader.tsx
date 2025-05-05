@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronLeft, Users } from "lucide-react";
+import { ChevronLeft, Users, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface TeamCreationHeaderProps {
@@ -53,7 +53,10 @@ export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
         {/* Budget Display */}
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
-            <span className="font-semibold">COINS</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Budget
+            </span>
+            <Star size={16} className="text-gray-500 dark:text-gray-400" />
           </div>
           <span
             className={`text-lg font-semibold flex items-center ${
