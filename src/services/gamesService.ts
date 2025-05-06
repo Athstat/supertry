@@ -22,7 +22,7 @@ export const gamesService = {
     },
 
     getGamesByCompetitionId: async (competitionId: string) : Promise<IFixture[]> => {
-        const uri = getUri(`/api/v1/entities/competition-games/${competitionId}`);
+        const uri = getUri(`/api/v1/games/leagues/${competitionId}`);
         
         try {
             const res = await fetch(uri, {
@@ -35,6 +35,7 @@ export const gamesService = {
             console.log("Error fetching games", err)
             return [];
         }
+        
     },
 
     getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {

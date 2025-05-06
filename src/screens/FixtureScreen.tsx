@@ -37,7 +37,7 @@ export default function FixtureScreen() {
         <div className="flex flex-row h-max items-center justify-center w-full" >
 
           <div className="flex flex-1 flex-col items-center justify-start gap-3" >
-            <TeamLogo className="w-16 h-16 dark:text-slate-200 " teamId={fixture.team_id} />
+            <TeamLogo className="w-16 h-16 dark:text-slate-200 " url={fixture.team_image_url} />
             <p className="text text-wrap text-center" >{fixture.team_name}</p>
           </div>
 
@@ -47,7 +47,7 @@ export default function FixtureScreen() {
           </div>
 
           <div className="flex flex-1 flex-col items-center gap-3 justify-end" >
-            <TeamLogo className="w-16 h-16 dark:text-slate-200" teamId={fixture.opposition_team_id} />
+            <TeamLogo className="w-16 h-16 dark:text-slate-200" url={fixture.opposition_image_url} />
             <p className="text text-wrap text-center" >{fixture.opposition_team_name}</p>
           </div>
 

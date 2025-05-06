@@ -61,6 +61,6 @@ const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => 
 
     return true;
 
-  }).sort((a, b) => new Date(b.kickoff_time ?? new Date()).valueOf() - new Date(a.kickoff_time ?? new Date()).valueOf())
+  }).sort((a, b) => new Date(a.kickoff_time ?? new Date()).valueOf() - new Date(b.kickoff_time ?? new Date()).valueOf())
 
 }
