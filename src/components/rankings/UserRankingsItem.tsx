@@ -18,7 +18,10 @@ export default function UserRankingsItem({userRank} : Props) {
     const isInDemotionZone = (rank: number) => rank >= 11;
 
     const hasFullName = (ranking: UserRanking) => ranking.first_name && ranking.last_name;
- 
+
+    if (!userRank.first_name && !userRank.last_name) {
+        return;
+    }
     
     return (
         <>

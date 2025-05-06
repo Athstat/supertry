@@ -5,6 +5,7 @@ import { userRankingsService } from "../../services/userRankingsService";
 import { LoadingState } from "../ui/LoadingState";
 import { UserRanking } from "../../types/userRanking";
 import UserRankingFocusShort from "./UserRankingFocusShort";
+import UserRankingsItem from "./UserRankingsItem";
 
 export default function UserRankingsLeaderBoard() {
 
@@ -53,45 +54,8 @@ export default function UserRankingsLeaderBoard() {
                                     </p>
                                 </div>
                             )}
-                            <div
-                                key={index}
-                                className={`flex items-center p-4 ${isCurrentUser(user.user_id)
-                                    ? "bg-primary-50 dark:bg-primary-600/10"
-                                    : "hover:bg-gray-50 dark:hover:bg-gray-700/10"
-                                    } ${isInPromotionZone(user.rank)
-                                        ? "border-l-4 !border-l-green-500"
-                                        : isInDemotionZone(user.rank)
-                                            ? "border-l-4 !border-l-red-500"
-                                            : ""
-                                    }`}
-                            >
-                                <div className="w-12 text-center">
-                                    <span
-                                        className={`font-semibold ${user.rank === 1
-                                            ? "text-yellow-500"
-                                            : user.rank === 2
-                                                ? "text-gray-400"
-                                                : user.rank === 3
-                                                    ? "text-amber-600"
-                                                    : "text-gray-700 dark:text-gray-300"
-                                            }`}
-                                    >
-                                        {user.rank}
-                                    </span>
-                                </div>
-                                <div className="w-8">
-                                    
-                                </div>
-                                
-                                <div className="flex-1 ml-3">
-                                    <div className="font-medium dark:text-gray-100">
-                                        <p>{hasFullName(user) ? user.first_name + " " + user.last_name : user.email}</p>
-                                    </div>
-                                </div>
-                                <div className="text-right font-semibold text-primary-600 dark:text-primary-400">
-                                    {user.total_score}
-                                </div>
-                            </div>
+                            
+                            <UserRankingsItem userRank={user} index={index} />
                         </>
                     ))}
                 </div>
