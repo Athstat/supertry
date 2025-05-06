@@ -81,3 +81,53 @@ function defenseBias(statLine: IBoxScore) {
 
     return total;
 }
+
+export function aggregateTeamStats(teamId: string, boxScore: IBoxScore[]) {
+    let points = 0
+    let tries = 0;
+    let conversionsScored = 0;
+    let conversionsMissed = 0;
+    let penaltiesScored = 0;
+    let penaltiesConceded = 0;
+    let dropGoalsScored = 0;
+    let kicksAtGoal = 0;
+    let lineOutsWon = 0;
+    let turnoversWon = 0;
+    let turnoversConceded = 0;
+    let redCards = 0;
+    let yellowCards = 0;
+
+    boxScore
+    .filter(bs => bs.athlete_team_id === teamId)
+    .forEach((bs) => {
+        points += bs.points;
+        tries += bs.tries;
+        conversionsScored += bs.conversionsscored;
+        conversionsMissed += bs.conversionsmissed;
+        penaltiesConceded += bs.penaltiesconceded;
+        penaltiesScored +=bs.penaltygoalsscored;
+        dropGoalsScored += bs.dropgoalsscored;
+        kicksAtGoal += bs.trykicks;
+        lineOutsWon += bs.lineoutswon;
+        turnoversWon += bs.turnoverswon;
+        turnoversConceded += bs.turnoversconceded;
+        redCards += bs.redcards;
+        yellowCards += bs.yellowcards;
+    })
+
+    return {
+        points,
+        tries,
+        conversionsScored,
+        conversionsMissed,
+        penaltiesScored,
+        penaltiesConceded,
+        dropGoalsScored,
+        kicksAtGoal,
+        lineOutsWon,
+        turnoversWon,
+        turnoversConceded,
+        redCards,
+        yellowCards
+    }
+}
