@@ -268,6 +268,7 @@ export function LeagueScreen() {
     <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
       <LeagueHeader
         leagueInfo={leagueInfo}
+        league={leagueFromState}
         onOpenSettings={() => setShowSettings(true)}
         isLoading={isLoading}
       >
@@ -279,7 +280,7 @@ export function LeagueScreen() {
             Join This League
           </button>
         )}
-      </LeagueHeader>
+      </LeagueHeader> 
 
       <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
         {/* Tab Navigation */}
