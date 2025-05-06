@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Users, Trophy, ChevronLeft, Loader } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Trophy, Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { IFantasyLeague } from "../types/fantasyLeague";
