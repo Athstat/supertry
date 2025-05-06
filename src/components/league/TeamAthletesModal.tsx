@@ -246,6 +246,7 @@ export function TeamAthletesModal({
                 {pointsBreakdown
                   .reduce((acc, item) => acc + item.score, 0)
                   .toFixed(2)}{" "}
+                pts
               </span>
             </div>
           </div>
@@ -288,9 +289,14 @@ export function TeamAthletesModal({
                           >
                             <div className="flex justify-between items-center w-full">
                               <div className="flex flex-col">
-                                <span className="text-gray-700 dark:text-gray-300 font-medium">
-                                  {capitalizedName}
-                                </span>
+                                <div className="flex flex-col sm:flex-row sm:items-center">
+                                  <span className="text-gray-700 dark:text-gray-300 font-medium">
+                                    {capitalizedName}
+                                  </span>
+                                  <span className="text-xs text-gray-400 dark:text-gray-400 italic sm:ml-1">
+                                    (count {item.action_count})
+                                  </span>
+                                </div>
                               </div>
                               <span
                                 className={`font-bold ${
@@ -301,7 +307,7 @@ export function TeamAthletesModal({
                                     : "dark:text-white"
                                 }`}
                               >
-                                {item.score.toFixed(2)}
+                                {item.score.toFixed(2)} pts
                               </span>
                             </div>
                           </li>

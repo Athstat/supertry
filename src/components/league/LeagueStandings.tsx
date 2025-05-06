@@ -165,7 +165,7 @@ export function LeagueStandings({
       ) : (
         <div
           ref={tableRef}
-          className="overflow-hidden scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-600 scrollbar-track-gray-100 dark:scrollbar-track-dark-800 relative"
+          className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-600 scrollbar-track-gray-100 dark:scrollbar-track-dark-800 relative"
           style={{ maxHeight: `${TABLE_HEIGHT}px` }}
         >
           <div className="relative">

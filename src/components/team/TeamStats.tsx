@@ -1,6 +1,6 @@
 import React from "react";
 import { Team } from "../../types/team";
-import { TrendingUp, Award, CalendarDays } from "lucide-react";
+import { Trophy, Award, Calendar } from "lucide-react";
 
 interface TeamStatsProps {
   team: Team;
@@ -13,14 +13,14 @@ export function TeamStats({ team }: TeamStatsProps) {
       value:
         team.players.reduce((acc, player) => acc + player.form, 0) /
         team.players.length,
-      icon: TrendingUp,
+      icon: Trophy,
       format: (value: number) => value.toFixed(1),
       color: "text-primary-700 dark:text-primary-500",
     },
     {
-      label: "Average Points",
+      label: "Average Price",
       value:
-        team.players.reduce((acc, player) => acc + player.points, 0) /
+        team.players.reduce((acc, player) => acc + player.price, 0) /
         team.players.length,
       icon: Award,
       format: (value: number) => value.toFixed(0),
@@ -29,7 +29,7 @@ export function TeamStats({ team }: TeamStatsProps) {
     {
       label: "Matches Played",
       value: team.matchesPlayed || 0, // Assuming this property exists in team object
-      icon: CalendarDays,
+      icon: Calendar,
       format: (value: number) => value.toString(),
       color: "text-primary-700 dark:text-primary-500",
     },
