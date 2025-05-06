@@ -23,11 +23,12 @@ export default function TeamLogo({ url, alt, className }: Props) {
     }
 
     return (
-        <div className={twMerge("w-14 h-14", className)} >
+        <div className={twMerge("w-14 h-14 overflow-clip ", className)} >
             <img 
                 src={imageUrl}
                 alt={alt ?? "team_logo"}
                 onError={(e) => setError(true)} 
+                className='w-full h-full object-contain'
             />
         </div>
     )

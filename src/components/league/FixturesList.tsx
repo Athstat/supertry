@@ -40,7 +40,7 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
 
       <div className="divide-y divide-gray-300 dark:divide-slate-800/50 px-3">
         {fixtures.map((fixture, index) => (
-          <FixtureCard fixture={fixture} key={index} />
+          <FixtureCard showLogos fixture={fixture} key={index} />
         ))}
       </div>
     </div>
