@@ -27,38 +27,58 @@ export const usePlayersFilter = ({
   const filteredPlayers = useMemo(() => {
     if (!players || !selectedPosition) return [];
 
-    console.log("Filtering players for position:", selectedPosition.name);
+    console.log("Filtering players for position:", selectedPosition);
     console.log("Total players available:", players.length);
+    console.log(
+      "Selected Position ID:",
+      selectedPosition.id,
+      "Is 'any' position?",
+      selectedPosition.id === "any" ? "YES" : "NO"
+    );
+    console.log(
+      "Sample player structure:",
+      players.length > 0 ? JSON.stringify(players[0]) : "No players"
+    );
 
     return players.filter((player) => {
-      // If this is the Super Sub position (marked by isSpecial flag), allow any player regardless of position
+      // Check for position matching
       let matchesPosition = false;
 
-      if (selectedPosition.isSpecial) {
-        // For Super Sub, allow any player regardless of position
+      if (selectedPosition.id === "any") {
+        // For "any" position (Super Sub), allow any player regardless of position
         matchesPosition = true;
       } else {
-        // For regular positions, apply normal position matching
-        matchesPosition =
-          // Standard position matching options
-          player.position === selectedPosition.name ||
-          player.position_class === (selectedPosition as any).positionClass ||
-          // Handle hyphenated position classes
-          player.position_class ===
-            (selectedPosition as any).positionClass?.replace("-", "") ||
-          player.position_class ===
-            (selectedPosition as any).positionClass?.replace("_", "-") ||
-          // For specific rugby positions
-          (selectedPosition.name === "Front Row" &&
-            player.position_class === "front-row") ||
-          (selectedPosition.name === "Second Row" &&
-            player.position_class === "second-row") ||
-          (selectedPosition.name === "Back Row" &&
-            player.position_class === "back-row") ||
-          (selectedPosition.name === "Halfback" &&
-            player.position_class === "half-back") ||
-          (selectedPosition.name === "Back" &&
-            player.position_class === "back");
+        // Extract player position values - use either position or position_class field
+        const playerPosition = player.position || "";
+        const playerPositionClass = player.position_class || "";
+
+        // Check if player's position_class matches one of the 5 rugby positions exactly
+        // Only match the specific formats: front-row, second-row, back-row, half-back, back
+        switch (selectedPosition.name) {
+          case "front-row":
+            matchesPosition = playerPositionClass === "front-row";
+            break;
+          case "second-row":
+            matchesPosition = playerPositionClass === "second-row";
+            break;
+          case "back-row":
+            matchesPosition = playerPositionClass === "back-row";
+            break;
+          case "half-back":
+            matchesPosition = playerPositionClass === "half-back";
+            break;
+          case "back":
+            matchesPosition = playerPositionClass === "back";
+            break;
+          default:
+            // Direct match with the position string as fallback
+            matchesPosition = playerPositionClass === selectedPosition.name;
+        }
+
+        // Add debug logging to help troubleshoot
+        // console.log(
+        //   `Position match for ${playerPosition}/${playerPositionClass} against ${selectedPosition.name}: ${matchesPosition}`
+        // );
       }
 
       // If we're not matching the position, skip this player

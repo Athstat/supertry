@@ -2,6 +2,8 @@ export interface Player {
   id: string;
   name: string;
   position: string;
+  position_class: string;
+  is_starting: boolean;
   points: number;
   form: number;
   price: number;

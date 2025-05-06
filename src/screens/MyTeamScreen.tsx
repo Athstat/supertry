@@ -85,8 +85,9 @@ export function MyTeamScreen() {
             currentTeam = {
               id: teamId,
               name: "My Team", // Default name
-              club_id: currentTeam.club_id || "",
-              league_id: currentTeam.official_league_id || "",
+              club_id: "", // Default empty club_id
+              league_id: "", // Default empty league_id
+              official_league_id: "", // Add the official_league_id field
               created_at: new Date(),
               updated_at: new Date(),
               athletes: teamAthletes,
@@ -169,7 +170,31 @@ export function MyTeamScreen() {
 
   const handleSwapPlayer = async (player: Player) => {
     // When swapping a player, set the position based on whether it's a super sub
-    setPositionToSwap(player.is_super_sub ? "any" : player.position);
+    let newPositionToSwap = player.is_super_sub ? "any" : player.position_class;
+
+    // Map positions to the exact required format for position matching
+    if (!player.is_super_sub) {
+      // Convert to exact formats required by the filter: front-row, second-row, back-row, half-back, back
+      if (player.position.toLowerCase().includes("front-row")) {
+        newPositionToSwap = "front-row";
+      } else if (player.position.toLowerCase().includes("second-row")) {
+        newPositionToSwap = "second-row";
+      } else if (player.position.toLowerCase().includes("back-row")) {
+        newPositionToSwap = "back-row";
+      } else if (player.position.toLowerCase().includes("half-back")) {
+        newPositionToSwap = "half-back";
+      } else if (player.position.toLowerCase().includes("back")) {
+        newPositionToSwap = "back";
+      }
+    }
+
+    setPositionToSwap(newPositionToSwap);
+    console.log(
+      "Position to swap set to:",
+      newPositionToSwap,
+      "Is super sub?",
+      player.is_super_sub
+    );
 
     // Fetch market players when initiating a swap
     try {
@@ -182,11 +207,20 @@ export function MyTeamScreen() {
         team?.official_league_id
       );
 
-      const players = await athleteService.getRugbyAthletesByCompetition(
+      // First try with official_league_id
+      let players = await athleteService.getRugbyAthletesByCompetition(
         team?.official_league_id || ""
       );
+
+      // If we didn't get any players, try with the fallback mock data
+      if (!players || players.length === 0) {
+        console.log(
+          "No players found with official_league_id, using mock data"
+        );
+        return;
+      }
+
       setMarketPlayers(players);
-      console.log("Fetched market players:", players.length);
     } catch (error) {
       console.error("Failed to fetch market players:", error);
     } finally {
@@ -305,18 +339,18 @@ export function MyTeamScreen() {
     // Simple formation detection - count players by position for rugby
     const starters = players.filter((p) => !p.isSubstitute);
     const frontRow = starters.filter((p) =>
-      p.position.includes("Front Row")
+      p.position.includes("front-row")
     ).length;
     const secondRow = starters.filter((p) =>
-      p.position.includes("Second Row")
+      p.position.includes("second-row")
     ).length;
     const backRow = starters.filter((p) =>
-      p.position.includes("Back Row")
+      p.position.includes("back-row")
     ).length;
     const halfbacks = starters.filter((p) =>
-      p.position.includes("Halfback")
+      p.position.includes("half-back")
     ).length;
-    const backs = starters.filter((p) => p.position.includes("Back")).length;
+    const backs = starters.filter((p) => p.position.includes("back")).length;
 
     return `${frontRow}-${secondRow}-${backRow}-${halfbacks}-${backs}`;
   };
@@ -560,6 +594,7 @@ export function MyTeamScreen() {
                 : positionToSwap.substring(0, 2).toUpperCase(),
             x: "0",
             y: "0",
+            // Using ID "any" to identify the super sub position instead of isSpecial flag
           }}
           players={marketPlayers}
           remainingBudget={
