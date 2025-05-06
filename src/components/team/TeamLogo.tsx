@@ -27,7 +27,7 @@ export default function TeamLogo({ url, alt, className }: Props) {
             <img 
                 src={imageUrl}
                 alt={alt ?? "team_logo"}
-                onError={(e) => setError(true)} 
+                onError={() => setError(true)} 
                 className='w-full h-full object-contain'
             />
         </div>

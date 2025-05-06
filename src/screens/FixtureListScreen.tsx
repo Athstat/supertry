@@ -1,16 +1,17 @@
-import { Calendar } from "lucide-react";
+import { Calendar, ChevronDown } from "lucide-react";
 import useSWR from "swr";
 import { IFixture } from "../types/games";
 import { gamesService } from "../services/gamesService";
-import { INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from "../types/constants";
+import { ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP } from "../types/constants";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import FixtureCard from "../components/fixtures/FixtureCard";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { searchFixturesPredicate } from "../utils/fixtureUtils";
+import { useSectionNavigation } from "../hooks/useSectionNavigation";
 
 const competitionIds = [
-    URC_COMPETIION_ID,
+    ERPC_COMPETITION_ID,
     INVESTEC_CHAMPIONSHIP_CUP
 ]
 
@@ -19,7 +20,13 @@ export default function FixtureListScreen() {
 
     const { data: fixtures, error, isLoading } = useSWR(competitionIds, fetcher);
     const [search, setSearch] = useState("");
-    const upcomingFixturesRef = useRef<HTMLDivElement>(null);
+
+    const sectionId = "upcoming_matches";
+    const {scrollToSection} = useSectionNavigation(["upcoming_matches"])
+
+    useEffect(() => {
+        scrollToSection(sectionId);
+    }, []);
 
     if (isLoading) return <LoadingState message="Loading Fixtures" />
     if (!fixtures) return <ErrorState message={error} />
@@ -33,7 +40,10 @@ export default function FixtureListScreen() {
         }
 
         return false;
-    });
+    })
+    .sort((a, b) => a.kickoff_time && b.kickoff_time ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf() : 0)
+    .reverse()
+    .splice(0, 5);
 
 
     const upcomingFixtures = fixtures.filter((f) => {
@@ -43,11 +53,6 @@ export default function FixtureListScreen() {
 
         return false;
     });
-
-    if (upcomingFixturesRef.current) {
-        upcomingFixturesRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-
 
     return (
         <div className="dark:text-white  p-4 flex flex-col items-center justify-start" >
@@ -82,10 +87,11 @@ export default function FixtureListScreen() {
                         }
                     })}
                 </div>
-
+                
+                <section id={sectionId} ></section>
                 <h2 className="text-xl font-bold" >Upcoming Fixtures</h2>
 
-                <div ref={upcomingFixturesRef} className=" grid grid-cols-1 gap-3 " >
+                <div  className=" grid grid-cols-1 gap-3 " >
                     {upcomingFixtures.map((fixture, index) => {
 
                         if (searchFixturesPredicate(fixture, search)) {
@@ -100,6 +106,10 @@ export default function FixtureListScreen() {
                         }
                     })}
                 </div>
+            </div>
+            
+            <div onClick={() => scrollToSection(sectionId)} className="bg-primary-500 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full bottom-0 mb-20 mr-3 right-0 fixed" >
+                <ChevronDown />
             </div>
 
         </div>

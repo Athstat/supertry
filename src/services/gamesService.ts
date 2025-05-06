@@ -35,11 +35,11 @@ export const gamesService = {
             console.log("Error fetching games", err)
             return [];
         }
-        
+
     },
 
     getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {
-        const uri = getUri(`/api/v1/entities/games-distinct/${gameId}`);
+        const uri = getUri(`/api/v1/games/${gameId}`);
         
         try {
             const res = await fetch(uri, {

@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IFixture } from "../types/games";
 import TeamLogo from "../components/team/TeamLogo";
 import { format } from "date-fns";
@@ -8,20 +8,24 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
 import { ErrorState } from "../components/ui/ErrorState";
+import useSWR from "swr";
+import { gamesService } from "../services/gamesService";
+import { LoadingState } from "../components/ui/LoadingState";
+import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
 
 export default function FixtureScreen() {
 
+  const { back } = useRouter();
   const { fixtureId } = useParams();
-  const { state } = useLocation();
 
-  if (!state || state.game_id !== fixtureId) {
-    return <ErrorState message="Fxiture was not found" />
-  }
+  const {data: fixture, isLoading, error} = useSWR(fixtureId, gamesService.getGameById)
 
-  const fixture = state as IFixture;
+  if (isLoading) return <LoadingState />
+
+  if (!fixture) return <ErrorState message="Failed to load match information" />
+
   const { gameKickedOff } = fixtureSumary(fixture);
 
-  const { back } = useRouter();
 
   return (
     <div className="dark:text-white flex flex-col gap-3" >
@@ -61,7 +65,7 @@ export default function FixtureScreen() {
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-        {/* <FixtureScreenBoxScores fixture={fixture} /> */}
+        <FixtureScreenBoxScores fixture={fixture} />
       </div>
 
     </div>

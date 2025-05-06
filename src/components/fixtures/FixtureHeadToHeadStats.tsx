@@ -2,6 +2,7 @@ import { Shield } from "lucide-react"
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import { useState } from "react"
+import TeamLogo from "../team/TeamLogo"
 
 type Props = {
     fixture: IFixture
@@ -117,28 +118,35 @@ export default function FixtureHeadToHeadStats({ fixture }: Props) {
 
     return (
         <TitledCard title="Head to Head" icon={Shield} >
-            <table className="w-full" >
-                <thead className="bg-gray-100 text-slate-600 dark:text-white  dark:bg-gray-700/20" >
-                    <tr >
-                        <th>Stat</th>
-                        <th>{fixture.home_team}</th>
-                        <th>{fixture.away_team}</th>
-                    </tr>
-                </thead>
 
-                <tbody>
+            <div className="flex flex-col" >
 
-                    {displayStats.map((stat, index) => {
-                        return <tr className="dark:hover:bg-slate-800/50 hover:bg-slate-100" key={index} >
-                            <td>{stat.label}</td>
-                            <td>{stat.homeValue}</td>
-                            <td>{stat.awayValue}</td>
-                        </tr>
+                <div className="flex flex-row gap-1" >
+                    <div className="flex flex-1 items-center justify-start" >
+                        <TeamLogo className="w-10 h-10" url={fixture.team_image_url} />
+                    </div>
+                    <div className="flex flex-[3] items-center justify-center text-center " >
+                        <p>Stat</p>
+                    </div>
+                    <div className="flex flex-1 items-center justify-end" >
+                        <TeamLogo className="w-10 h-10" url={fixture.opposition_image_url} />
+                    </div>
+                </div>
 
-                    })}
-
-                </tbody>
-            </table>
+                {displayStats.map((stat, index) => {
+                    return <div key={index} className="flex flex-row " >
+                        <div className="flex flex-1 items-center justify-start" >
+                            {stat.homeValue}
+                        </div>
+                        <div className="flex flex-[3] items-center justify-center text-center " >
+                            <p className="text-slate-400" >{stat.label}</p>
+                        </div>
+                        <div className="flex flex-1 items-center justify-end" >
+                            {stat.awayValue}
+                        </div>
+                    </div>
+                })}
+            </div>
 
             <div className="mt-5" >
                 {statsArr.length > 5 && !showMore && <button onClick={toogleShowMore} className="text-blue-400 hover:text-blue-500" >Show more</button>}
