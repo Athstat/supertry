@@ -120,11 +120,11 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      {/* Upcoming Fixtures */}
+      {/* Upcoming Fixtures
       <div className="mt-5">
         <UpcomingFixturesSection
         />
-      </div>
+      </div> */}
 
     </main>
   );
