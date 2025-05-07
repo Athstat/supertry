@@ -13,6 +13,7 @@ import { gamesService } from "../services/gamesService";
 import { LoadingState } from "../components/ui/LoadingState";
 import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
 import { boxScoreService } from "../services/boxScoreService";
+import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 
 export default function FixtureScreen() {
 
@@ -63,7 +64,7 @@ export default function FixtureScreen() {
 
       </div>
 
-      {/* <FixtureScreenHeader fixture={fixture} /> */}
+      <FixtureScreenHeader fixture={fixture} />
       
       <div className="flex flex-col p-4 gap-5" >
 
