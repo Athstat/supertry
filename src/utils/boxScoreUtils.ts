@@ -10,7 +10,23 @@ export function rankByAttackingStats(stats: IBoxScore[]) {
 
 }
 
-export function rankByDeffensiveStats(stats: IBoxScore[]) {
+export function rankByDefensiveStats(stats: IBoxScore[]) {
+    
+    return stats.sort((a, b) => {
+        return defenseBias(b) - defenseBias(a);
+    });
+
+}
+
+export function rankByKickingStats(stats: IBoxScore[]) {
+    
+    return stats.sort((a, b) => {
+        return defenseBias(b) - defenseBias(a);
+    });
+
+}
+
+export function rankByDisciplineStats(stats: IBoxScore[]) {
     
     return stats.sort((a, b) => {
         return defenseBias(b) - defenseBias(a);
@@ -52,15 +68,23 @@ export function defenseBias(statLine: IBoxScore) {
 
     const {tacklesmade, tacklesmissed, lineoutswonsteal, retainedkicks, turnoverswon, redcards, yellowcards} = statLine;
 
+    if (tacklesmade != null) {
+        total += tacklesmade * 6;
+    }
+
+    if (tacklesmissed != null) {
+        total -= tacklesmissed;
+    }
+
     if (tacklesmade !== null && tacklesmissed != null) {
         const totalTackles = tacklesmade + tacklesmissed;
         const percentage = tacklesmade / totalTackles;
 
-        total += percentage * 5;
+        total += percentage * 4;
     }
 
     if (turnoverswon != null) {
-        total += turnoverswon * 4;
+        total += turnoverswon * 5;
     }
 
     if (retainedkicks != null) {
@@ -77,6 +101,43 @@ export function defenseBias(statLine: IBoxScore) {
 
     if (redcards != null) {
         total -= redcards * 3
+    }
+
+    return total;
+}
+
+export function kickingBias(statLine: IBoxScore) {
+    let total = 0;
+
+    const {dropgoalsscored, kicksfromhand, kicksfromhandmetres} = statLine;
+
+    if (kicksfromhand != null) {
+        total += kicksfromhand * 5;
+    }
+
+    if (kicksfromhandmetres != null) {
+        total += kicksfromhandmetres * 4;
+    }
+
+    
+    if (dropgoalsscored != null) {
+        total += dropgoalsscored * 3;
+    }
+
+    return total;
+}
+
+export function disciplineBias(statLine: IBoxScore) {
+    let total = 0;
+
+    const {redcards, yellowcards} = statLine;
+
+    if (redcards != null) {
+        total += redcards * 5;
+    }
+
+    if (yellowcards != null) {
+        total += yellowcards * 4;
     }
 
     return total;

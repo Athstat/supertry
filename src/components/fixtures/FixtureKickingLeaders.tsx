@@ -1,28 +1,29 @@
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import { IBoxScore } from "../../types/boxScore"
-import { rankByDefensiveStats } from "../../utils/boxScoreUtils"
+import { rankByKickingStats } from "../../utils/boxScoreUtils"
 import PlayerSmallCard from "../player/PlayerSmallCard"
-import { Shield } from "lucide-react"
 
 type Props = {
   fixture: IFixture,
   boxScores: IBoxScore[]
 }
 
-export default function FixtureDefensiveLeaders({ boxScores}: Props) {
+export default function FixtureKickingLeaders({ boxScores}: Props) {
 
-  const sortedList = rankByDefensiveStats(boxScores);
+  const sortedList = rankByKickingStats(boxScores);
   let shortList = sortedList;
-  shortList = shortList.slice(0, 4);
-
+  shortList = shortList.slice(0, 3);
 
   return (
-    <TitledCard icon={Shield} title={'Defensive Leaders'} >
+    <TitledCard title={'Kicking Leaders'} >
 
       <div className="grid grid-cols-1 gap-2 w-full" >
         
         {shortList.map((bs, index) => {
+          const showPlayer = bs.kicksfromhand !== 0 && bs.kicksfromhandmetres;
+
+          if (!showPlayer) return;
 
           return <div key={index} className="flex flex-row items-center w-full justify-start gap-2" >
 
@@ -35,9 +36,10 @@ export default function FixtureDefensiveLeaders({ boxScores}: Props) {
               position={bs.athlete_position}
             >
               <div className="flex flex-row w-full text-wrap text-slate-600 dark:text-slate-400 text-sm gap-2 items-center justify-start" >
-                {bs.tacklesuccess !== 0 && <p className="text-nowrap">Tackles {bs.tacklesmade}/{bs.tacklesmade + bs.tacklesmissed}</p>}
-                {bs.turnoverswon !== 0 && <p className="text-nowrap">T/Os Won {bs.turnoverswon}</p>}
+                {bs.kicksfromhand !== 0 && <p className="text-nowrap">Kicks From Hand {bs.kicksfromhand}</p>}
+                {bs.kicksfromhandmetres !== 0 && <p className="text-nowrap">Metres {bs.kicksfromhandmetres}</p>}
               </div>
+
             </PlayerSmallCard>
 
           </div>
