@@ -95,6 +95,7 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
             homeValue: homeStats.redCards,
             awayValue: awayStats.redCards
         }
+
     ]
 
     const [showMore, setShowMore] = useState(false);

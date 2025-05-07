@@ -21,10 +21,16 @@ export default function FixtureScreenBoxScores({ fixture, boxScore }: Props) {
     return (
 
         <>
-            <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />
+            <section id="overview" ></section>
+                <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />
+            
+            <section id="attacking" ></section>
             <FixtureAttackingLeaders boxScores={boxScore} fixture={fixture} />
+            <section id="defense" ></section>
             <FixtureDefensiveLeaders boxScores={boxScore} fixture={fixture} />
+            <section id="kicking" ></section>
             <FixtureKickingLeaders boxScores={boxScore} fixture={fixture} />
+            <section id="descipline" ></section>
             <FixtureDisciplineLeaders boxScores={boxScore} fixture={fixture} />
             {/* <AthleteBoxScoreList boxScores={backsBoxScore} title="Backs" teamName={fixture.away_team} fixture={fixture} /> */}
             {/* <FixtureKickingStats fixture={fixture} /> */}

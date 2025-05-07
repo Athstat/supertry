@@ -14,6 +14,7 @@ import { LoadingState } from "../components/ui/LoadingState";
 import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
 import { boxScoreService } from "../services/boxScoreService";
 import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
+import FixtureScreenTab from "../components/fixtures/FixtureScreenTab";
 
 export default function FixtureScreen() {
 
@@ -33,7 +34,7 @@ export default function FixtureScreen() {
 
 
   return (
-    <div className="dark:text-white flex flex-col gap-3" >
+    <div className="dark:text-white flex flex-col" >
 
       <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-800 to-blue-900 dark:from-blue-800 dark:to-blue-950 text-white" >
 
@@ -64,6 +65,7 @@ export default function FixtureScreen() {
 
       </div>
 
+      {/* {boxScore && <FixtureScreenTab />} */}
       <FixtureScreenHeader fixture={fixture} />
       
       <div className="flex flex-col p-4 gap-5" >
