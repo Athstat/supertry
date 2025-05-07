@@ -4,6 +4,7 @@ import renderStatDots from './renderStatDots';
 import { convertToPlayer } from './PlayerConverter';
 import { Player } from '../../../types/player';
 import { Position } from '../../../types/position';
+import FormIndicator from '../../shared/FormIndicator';
 
 interface PlayerListProps {
   players: any[];
@@ -93,6 +94,11 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           </div>
 
           {/* Price - always visible */}
+
+          {player.form && <div className="w-fit lg:w-12 flex flex-row items-center justify-end">
+            <FormIndicator form={player.form} />
+          </div>}
+
 
           <div className="w-12 text-center">
             <p className="font-bold text-sm dark:text-gray-200">{player.price}</p>

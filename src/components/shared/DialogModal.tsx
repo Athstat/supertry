@@ -21,7 +21,7 @@ export default function DialogModal({ children, onClose, title, open, className 
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-[200] flex items-center justify-center ">
-            <div className="bg-white dark:bg-dark-900 w-[95%] md:w-[80%] lg:w-2/3 mx-auto my-4 rounded-lg p-6 shadow-xl max-h-[90vh] overflow-y-auto flex flex-col">
+            <div className="bg-white dark:bg-gray-900 w-[95%] md:w-[80%] lg:w-2/3 mx-auto my-4 rounded-lg p-6 shadow-xl max-h-[90vh] overflow-y-auto flex flex-col">
 
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold dark:text-gray-100">{title}</h2>
