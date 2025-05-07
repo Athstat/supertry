@@ -272,6 +272,8 @@ export const teamService = {
         }
       );
 
+      console.log("fantasy-team-athletes Response: ", response);
+
       if (!response.ok) {
         console.error("Failed to fetch team athletes:", await response.text());
         return [];

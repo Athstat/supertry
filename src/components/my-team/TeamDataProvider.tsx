@@ -154,6 +154,9 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
 
       // Check for both league_id and official_league_id
       const leagueId = team.league_id || team.official_league_id;
+
+      console.log("team", team);
+
       if (!leagueId) {
         console.log("No league ID found in team data:", team);
         return;

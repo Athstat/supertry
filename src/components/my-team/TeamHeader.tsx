@@ -25,6 +25,8 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
     navigate("/my-teams");
   };
 
+  console.log("leagueInfo", leagueInfo);
+
   return (
     <>
       {/* Back Button */}
