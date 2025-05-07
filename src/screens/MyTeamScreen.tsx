@@ -40,7 +40,7 @@ const TeamContent: React.FC<{
       formation={formation}
       handlePositionSelect={handlePositionSelect}
       handlePlayerClick={handlePlayerClick}
-      fetchingMarketPlayers={fetchingMarketPlayers}
+      fetchingMarketPlayers={false} // Always pass false to prevent loading state on buttons
       handleViewStats={handleViewStats}
       handleSwapPlayer={handleSwapPlayer}
     />

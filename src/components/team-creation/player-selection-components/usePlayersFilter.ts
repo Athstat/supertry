@@ -44,10 +44,40 @@ export const usePlayersFilter = ({
       // Check for position matching
       let matchesPosition = false;
 
-      if (selectedPosition.id === "any") {
-        // For "any" position (Super Sub), allow any player regardless of position
+      // Determine if we're in the Team Creation Screen or My Team Screen context
+      // Team Creation Screen uses position names like "Front Row", "Second Row", etc.
+      // MyTeamScreen uses position names that match the position class values directly ("front-row", "second-row", etc.)
+
+      // Better detection using position name format:
+      // - If name contains a space: Team Creation Screen (e.g., "Front Row")
+      // - If name contains a dash: My Team Screen (e.g., "front-row")
+      // - Special case for "any" which is used in MyTeamScreen
+      const isMyTeamScreen =
+        selectedPosition.name.includes("-") ||
+        selectedPosition.name === "any" ||
+        selectedPosition.name === "Any Position";
+
+      console.log(
+        "Context detection:",
+        isMyTeamScreen ? "MyTeamScreen" : "TeamCreationScreen",
+        "Position name:",
+        selectedPosition.name,
+        "Position ID:",
+        selectedPosition.id
+      );
+
+      // Check for Super Sub position in both screens - allow any player for Super Sub
+      if (
+        selectedPosition.id === "any" ||
+        selectedPosition.name === "Super Sub" ||
+        (selectedPosition as any).positionClass === "super-sub" ||
+        (selectedPosition as any).isSpecial === true
+      ) {
+        // For super sub position, allow any player regardless of position
+        console.log("Super Sub position detected - allowing all players");
         matchesPosition = true;
-      } else {
+      } else if (isMyTeamScreen) {
+        // MyTeamScreen path - stricter position matching
         // Extract player position values - use either position or position_class field
         const playerPosition = player.position || "";
         const playerPositionClass = player.position_class || "";
@@ -74,11 +104,57 @@ export const usePlayersFilter = ({
             // Direct match with the position string as fallback
             matchesPosition = playerPositionClass === selectedPosition.name;
         }
+      } else {
+        // TeamCreationScreen path - original less strict position matching
+        // The Team Creation Screen position.name value is like "Front Row" but we need to match with
+        // player position_class which may be "front-row"
+        const playerPosition = player.position || "";
+        const playerPositionClass = player.position_class || "";
 
-        // Add debug logging to help troubleshoot
-        // console.log(
-        //   `Position match for ${playerPosition}/${playerPositionClass} against ${selectedPosition.name}: ${matchesPosition}`
-        // );
+        // For TeamCreationScreen, map position names to position classes for more accurate matching
+        let positionClassToMatch = "";
+        if (selectedPosition.name === "Front Row")
+          positionClassToMatch = "front-row";
+        else if (selectedPosition.name === "Second Row")
+          positionClassToMatch = "second-row";
+        else if (selectedPosition.name === "Back Row")
+          positionClassToMatch = "back-row";
+        else if (
+          selectedPosition.name === "Halfback" ||
+          selectedPosition.name === "Half Back"
+        )
+          positionClassToMatch = "half-back";
+        else if (selectedPosition.name === "Back")
+          positionClassToMatch = "back";
+        else if (selectedPosition.name === "Super Sub")
+          positionClassToMatch = "super-sub";
+        else if (selectedPosition.name === "Any Position")
+          positionClassToMatch = "any";
+
+        console.log(
+          "TeamCreationScreen matching",
+          selectedPosition.name,
+          "->",
+          positionClassToMatch,
+          "against player position:",
+          playerPositionClass
+        );
+
+        // Match using direct position class comparison for more accurate results
+        // Or fallback to the original substring method if no mapping is found
+        matchesPosition =
+          selectedPosition.name === "Any Position" || // Always match for Any Position
+          (positionClassToMatch &&
+            playerPositionClass === positionClassToMatch) || // Direct match by position class
+          (!positionClassToMatch && // Fallback to substring matching only if no mapping exists
+            ((playerPosition &&
+              playerPosition
+                .toLowerCase()
+                .includes(selectedPosition.name.toLowerCase())) ||
+              (playerPositionClass &&
+                playerPositionClass
+                  .toLowerCase()
+                  .includes(selectedPosition.name.toLowerCase()))));
       }
 
       // If we're not matching the position, skip this player
