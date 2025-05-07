@@ -5,17 +5,18 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
-import { useRouter } from '../../hooks/useRoter';
 import { useNavigate } from 'react-router-dom';
 type Props = {
     fixture: IFixture,
-    showCompetition?: boolean
+    className?: string,
+    showCompetition?: boolean,
+    showLogos?: boolean
 }
 
-export default function FixtureCard({ fixture, showCompetition }: Props) {
+export default function FixtureCard({ fixture, className, showCompetition, showLogos }: Props) {
 
 
-    const { team_score, kickoff_time, round, game_status, opposition_score } = fixture;
+    const { team_score,competition_name ,kickoff_time, round, game_status, opposition_score } = fixture;
 
     const matchFinal = game_status === "completed" && team_score && opposition_score;
 
@@ -31,63 +32,73 @@ export default function FixtureCard({ fixture, showCompetition }: Props) {
 
             <div
                 onClick={toogle}
-                className="p-4 flex flex-row text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors"
+                className={twMerge("p-4 flex flex-col text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors", className)}
             >
 
-                <div className='flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center' >
+                { showCompetition && competition_name && <div className='w-full items-center justify-center flex flex-row' >
+                    <p className='text-xs text-gray-600 dark:text-slate-400' >{competition_name}, Week {round}</p>
+                </div>}
 
-                    <div className='flex flex-row gap-2 items-center w-full justify-start' >
+                <div className='flex flex-row' >
+
+
+                    <div className='flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center' >
+
                         <div className='flex flex-row gap-2 items-center w-full justify-start' >
-                            <p className={twMerge(
-                                'text-sm w-fit text-left',
-                                awayTeamWon && ""
-                            )} >{fixture.home_team}</p>
-                        </div>
-
-                        {fixture.team_score !== null && fixture.opposition_score !== null ? (
-                            <div className={twMerge(
-                                'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-sm',
-                                homeTeamWon && "font-bold",
-                            )}>
-                                {fixture.team_score}
+                            <div className='flex flex-col gap-4 items-center w-full justify-start' >
+                                {showLogos && <TeamLogo url={fixture.team_image_url} className='w-10 h-10' />}
+                                 
+                                <p className={twMerge(
+                                    'text-sm w-fit text-center',
+                                    awayTeamWon && ""
+                                )} >{fixture.team_name}</p>
                             </div>
-                        ) : null}
 
-                    </div>
-                </div>
+                            {fixture.team_score !== null && fixture.opposition_score !== null ? (
+                                <div className={twMerge(
+                                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
+                                    homeTeamWon && "font-bold",
+                                )}>
+                                    {fixture.team_score}
+                                </div>
+                            ) : null}
 
-
-                <div className='flex-1 text-slate-700 dark:text-slate-400 flex flex-col items-center text-center justify-center' >
-                    {/* <p className='text-xs' >{fixture.venue}</p> */}
-                    {showCompetition && <p className='text-xs' >{fixture.competition_name}{round && ", Round " + round}</p>}
-                    {kickoff_time && <p className='text-xs' >{format(kickoff_time, "dd, MMM yyyy")}</p>}
-                    {kickoff_time && <p className='text-sm font-semibold' >{format(kickoff_time, "h:mm a")}</p>}
-                </div>
-
-
-                <div className='flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center' >
-
-                    <div className='flex flex-row gap-2 items-center w-full justify-start' >
-                        {fixture.team_score !== null && fixture.opposition_score !== null ? (
-                            <div className={twMerge(
-                                'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-sm',
-                                awayTeamWon && "font-bold",
-                            )}>
-                                {fixture.opposition_score}
-                            </div>
-                        ) : null}
-
-                        <div className='flex flex-row gap-2 items-center w-full justify-end' >
-                            <p className={twMerge(
-                                'text-sm w-fit text-wrap text-right',
-                                awayTeamWon && ""
-                            )} >{fixture.away_team}</p>
                         </div>
-
                     </div>
+
+
+                    <div className='flex-1 text-slate-700 dark:text-slate-400 flex flex-col items-center text-center justify-center' >
+                        {/* <p className='text-xs' >{fixture.venue}</p> */}
+                        {kickoff_time && <p className='text-xs' >{format(kickoff_time, "dd, MMM yyyy")}</p>}
+                        {kickoff_time && <p className='text-sm font-semibold' >{format(kickoff_time, "h:mm a")}</p>}
+                    </div>
+
+
+                    <div className='flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center' >
+
+                        <div className='flex flex-row gap-2 items-center w-full justify-start' >
+                            {fixture.team_score !== null && fixture.opposition_score !== null ? (
+                                <div className={twMerge(
+                                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
+                                    awayTeamWon && "font-bold",
+                                )}>
+                                    {fixture.opposition_score}
+                                </div>
+                            ) : null}
+
+                            <div className='flex flex-col gap-4 items-center w-full justify-end' >
+                            {showLogos && <TeamLogo url={fixture.opposition_team_image_url ?? fixture.opposition_image_url} className='w-10 h-10' />}
+                                
+                                <p className={twMerge(
+                                    'text-sm w-fit text-wrap text-center',
+                                    awayTeamWon && ""
+                                )} >{fixture.opposition_team_name}</p>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
-
-
 
             </div>
             <FixtureCardModal
@@ -107,47 +118,47 @@ type ModalProps = {
 
 function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
-    const title = `${fixture.home_team} vs ${fixture.away_team}`;
-    
+    const title = `${fixture.team_name} vs ${fixture.opposition_team_name}`;
+
     const navigate = useNavigate();
 
-    const { kickoff_time} = fixture;
+    const { kickoff_time } = fixture;
 
     const gameKickedOff = kickoff_time && (new Date(kickoff_time) < new Date());
 
 
     const goToFullMatchDetails = () => {
-        navigate(`/fixtures/${fixture.game_id}`, {state: fixture});
+        navigate(`/fixtures/${fixture.game_id}`, { state: fixture });
     }
 
 
     return (
-        <DialogModal 
+        <DialogModal
             onClose={onClose}
             open={showModal}
             title={title}
             className='text-black dark:text-white flex flex-col gap-3'
         >
 
-            <div className='flex p-3 text-wrap text-center rounded-xl bg-slate-200 dark:bg-slate-700 flex-row items-center justify-center' >
+            <div className='flex p-3 text-wrap text-center rounded-xl bg-slate-200 dark:bg-slate-800 flex-row items-center justify-center' >
                 <p>{fixture.venue} 𐄁 {kickoff_time && format(kickoff_time, "dd MMMM yyyy")}</p>
             </div>
 
             <div className='flex flex-row items-center justify-center dark:text-white' >
 
-                <div className='flex flex-1 flex-col items-center justify-center' >
-                    <TeamLogo />
-                    <p className='dark:text-white text-wrap text-center' >{fixture.home_team}</p>
+                <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
+                    <TeamLogo className='w-20 h-20' url={fixture.team_image_url} />
+                    <p className='dark:text-white text-wrap text-center' >{fixture.team_name}</p>
                 </div>
 
                 <div className='flex flex-1 flex-row' >
-                    { !gameKickedOff &&  <KickOffInformation fixture={fixture} />}
-                    { gameKickedOff && <MatchResultsInformation fixture={fixture} />}
+                    {!gameKickedOff && <KickOffInformation fixture={fixture} />}
+                    {gameKickedOff && <MatchResultsInformation fixture={fixture} />}
                 </div>
 
-                <div className='flex flex-1 flex-col items-center justify-center' >
-                    <TeamLogo teamId={fixture.team_id} />
-                    <p className='dark:text-white text-wrap text-center' >{fixture.away_team}</p>
+                <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
+                    <TeamLogo className='w-20 h-20' url={fixture.opposition_team_image_url ??  fixture.opposition_image_url} />
+                    <p className='dark:text-white text-wrap text-center' >{fixture.opposition_team_name}</p>
                 </div>
             </div>
 
@@ -166,10 +177,10 @@ function KickOffInformation({ fixture }: Props) {
     const { kickoff_time } = fixture;
 
     return (
-            <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >
-                {kickoff_time && <p className='font-medium' >{format(kickoff_time, "h:mm a")}</p>}
-                {kickoff_time && <p className='dark:text-slate-300 text-slate-800' >{format(kickoff_time, "dd MMM yyyy")}</p>}
-            </div>
+        <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >
+            {kickoff_time && <p className='font-medium' >{format(kickoff_time, "h:mm a")}</p>}
+            {kickoff_time && <p className='dark:text-slate-300 text-slate-800' >{format(kickoff_time, "dd MMM yyyy")}</p>}
+        </div>
     )
 }
 
@@ -180,11 +191,11 @@ function MatchResultsInformation({ fixture }: Props) {
 
     return (
         <div className='flex  flex-1 w-full flex-col items-center justify-center' >
-            
+
             <div>
-                {game_status && <span className='text-sm text-slate-500 font-medium dark:text-slate-400' >{game_status  === "completed" && "Final"}</span>}    
+                {game_status && <span className='text-sm text-slate-500 font-medium dark:text-slate-400' >{game_status === "completed" && "Final"}</span>}
             </div>
-            
+
             <div className='flex flex-1 flex-row gap-2 items-center justify-center' >
                 {/* Home Team Score */}
                 <div className='dark:text-white flex-1 text-2xl font-medium flex items-center justify-center' >
@@ -202,7 +213,7 @@ function MatchResultsInformation({ fixture }: Props) {
             </div>
 
             <div>
-                {kickoff_time && <span className='text-sm text-slate-500 dark:text-slate-400' >{format(kickoff_time, "h:mm a")}</span>}    
+                {kickoff_time && <span className='text-sm text-slate-500 dark:text-slate-400' >{format(kickoff_time, "h:mm a")}</span>}
             </div>
         </div>
     )

@@ -18,7 +18,7 @@ export default function SchoolBoyRugbyScreen() {
   if (!authUser) return <ErrorState message={"You must be logged in to access the School Boy Rugby Chat"} />
 
   return (
-  <div className='text-white h-screen'>
+  <div className='text-white h-[80vh] overflow-hidden'> 
         <SendBirdProvider appId={SEND_BIRD_APP_ID} userId={authUser?.id ?? "0"}>
           <OpenChannel channelUrl={SCHOOL_BOY_RUGBY_CHANNEL_URL} />
         </SendBirdProvider>

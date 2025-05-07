@@ -4,10 +4,11 @@ import renderStatDots from './renderStatDots';
 import { convertToPlayer } from './PlayerConverter';
 import { Player } from '../../../types/player';
 import { Position } from '../../../types/position';
-import FormIndicator, { FormType } from '../../shared/FormIndicator';
+import FormIndicator, { AvailabilityIndicator } from '../../shared/FormIndicator';
+import { RugbyPlayer } from '../../../types/rugbyPlayer';
 
 interface PlayerListProps {
-  players: any[];
+  players: RugbyPlayer[];
   isLoading: boolean;
   selectedPosition: Position;
   handlePlayerSelect: (player: Player) => void;
@@ -49,8 +50,6 @@ export const PlayerList: React.FC<PlayerListProps> = ({
       </div>
     );
   }
-
-  const playerFormOptions : FormType[]  = ["UP", "DOWN", "NEUTRAL"];
 
   return (
     <>
@@ -96,11 +95,15 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           </div>
 
           {/* Price - always visible */}
-          <div className="w-12 text-center">
-            <p className="font-bold text-sm dark:text-gray-200">
-              <FormIndicator form={playerFormOptions[(player.ball_carrying ?? 0) % 3]} />
-            </p>
-          </div>
+
+          {/* {player.form && <div className="w-fit lg:w-12 flex flex-row items-center justify-end">
+            <FormIndicator form={player.form} />
+          </div>} */}
+
+          {player.available !== undefined && <div className="w-fit lg:w-12 flex flex-row items-center justify-end">
+            <AvailabilityIndicator availability={player.available} />
+          </div>}
+
 
           <div className="w-12 text-center">
             <p className="font-bold text-sm dark:text-gray-200">{player.price}</p>

@@ -26,6 +26,7 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
   </div>
 
   const fixtures = filterMatchesForRound(allFixtures, league);
+  
 
   return (
     <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm ">
@@ -39,7 +40,7 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
 
       <div className="divide-y divide-gray-300 dark:divide-slate-800/50 px-3">
         {fixtures.map((fixture, index) => (
-          <FixtureCard fixture={fixture} key={index} />
+          <FixtureCard showLogos fixture={fixture} key={index} />
         ))}
       </div>
     </div>
@@ -52,8 +53,14 @@ const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => 
 
     const start_round = league.start_round;
     const end_round = league.end_round;
+    
+    if (start_round && end_round) {
 
-    return start_round && end_round ? f.round >= start_round && f.round <= end_round : true;
-  }).sort((a, b) => new Date(b.kickoff_time ?? new Date()).valueOf() - new Date(a.kickoff_time ?? new Date()).valueOf())
+      return f.round >= start_round && f.round <= end_round;
+    }
+
+    return true;
+
+  }).sort((a, b) => new Date(a.kickoff_time ?? new Date()).valueOf() - new Date(b.kickoff_time ?? new Date()).valueOf())
 
 }

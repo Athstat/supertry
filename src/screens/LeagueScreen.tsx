@@ -5,11 +5,9 @@ import { LeagueSettings } from "../components/league/LeagueSettings";
 import { TabButton } from "../components/shared/TabButton";
 import {
   TeamStats,
-  Fixture,
   LeagueInfo,
   LeagueFromState,
 } from "../types/league";
-import { ChatMessage, ChatUser } from "../types/chat";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { teamService } from "../services/teamService";
@@ -234,68 +232,6 @@ export function LeagueScreen() {
       : "N/A";
   };
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "1",
-      userId: "2",
-      userName: "Sarah Johnson",
-      userAvatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-      content: "Great game this weekend! My team performed really well 🎉",
-      timestamp: "2:30 PM",
-      reactions: [{ emoji: "👍", count: 2, userIds: ["1", "3"] }],
-    },
-    {
-      id: "2",
-      userId: "3",
-      userName: "Mike Wilson",
-      userAvatar:
-        "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop",
-      content: "Anyone watching the Crusaders match tonight?",
-      timestamp: "2:35 PM",
-      reactions: [],
-    },
-    {
-      id: "3",
-      userId: "1",
-      userName: "You",
-      userAvatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-      content: "I'll be watching! Should be an exciting match 🏉",
-      timestamp: "2:40 PM",
-      reactions: [{ emoji: "🔥", count: 1, userIds: ["2"] }],
-    },
-  ]);
-
-  const currentUser: ChatUser = {
-    id: "1",
-    name: "You",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-    isAdmin: true,
-  };
-
-  const fixtures: Fixture[] = [
-    {
-      id: "1",
-      homeTeam: "Crusaders",
-      awayTeam: "Blues",
-      date: "2025-03-15",
-      time: "19:45",
-      venue: "Eden Park",
-      competition: "Super Rugby",
-    },
-    {
-      id: "2",
-      homeTeam: "Hurricanes",
-      awayTeam: "Chiefs",
-      date: "2025-03-16",
-      time: "17:30",
-      venue: "Sky Stadium",
-      competition: "Super Rugby",
-    },
-  ];
-
   useEffect(() => {
     const userTeam = teams.find((team) => team.isUserTeam);
     setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
@@ -304,79 +240,6 @@ export function LeagueScreen() {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const handleSendMessage = (content: string) => {
-    const newMessage: ChatMessage = {
-      id: Date.now().toString(),
-      userId: currentUser.id,
-      userName: currentUser.name,
-      userAvatar: currentUser.avatar,
-      content,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      reactions: [],
-      isAdmin: currentUser.isAdmin,
-    };
-    setMessages((prev) => [...prev, newMessage]);
-  };
-
-  const handleDeleteMessage = (messageId: string) => {
-    setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
-  };
-
-  const handleReactToMessage = (messageId: string, emoji: string) => {
-    setMessages((prev) =>
-      prev.map((msg) => {
-        if (msg.id === messageId) {
-          const existingReaction = msg.reactions.find((r) => r.emoji === emoji);
-          if (existingReaction) {
-            if (existingReaction.userIds.includes(currentUser.id)) {
-              return {
-                ...msg,
-                reactions: msg.reactions
-                  .map((r) =>
-                    r.emoji === emoji
-                      ? {
-                          ...r,
-                          count: r.count - 1,
-                          userIds: r.userIds.filter(
-                            (id) => id !== currentUser.id
-                          ),
-                        }
-                      : r
-                  )
-                  .filter((r) => r.count > 0),
-              };
-            } else {
-              return {
-                ...msg,
-                reactions: msg.reactions.map((r) =>
-                  r.emoji === emoji
-                    ? {
-                        ...r,
-                        count: r.count + 1,
-                        userIds: [...r.userIds, currentUser.id],
-                      }
-                    : r
-                ),
-              };
-            }
-          } else {
-            return {
-              ...msg,
-              reactions: [
-                ...msg.reactions,
-                { emoji, count: 1, userIds: [currentUser.id] },
-              ],
-            };
-          }
-        }
-        return msg;
-      })
-    );
-  };
 
   // Handle team click
   const handleTeamClick = async (team: TeamStats) => {
@@ -405,6 +268,7 @@ export function LeagueScreen() {
     <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
       <LeagueHeader
         leagueInfo={leagueInfo}
+        league={leagueFromState}
         onOpenSettings={() => setShowSettings(true)}
         isLoading={isLoading}
       >
@@ -416,7 +280,7 @@ export function LeagueScreen() {
             Join This League
           </button>
         )}
-      </LeagueHeader>
+      </LeagueHeader> 
 
       <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
         {/* Tab Navigation */}
@@ -472,7 +336,7 @@ export function LeagueScreen() {
           )}
 
           {activeTab === "fixtures" && (
-            <FantasyLeagueFixturesList  league={leagueFromState as IFantasyLeague} />
+            <FantasyLeagueFixturesList league={leagueFromState as IFantasyLeague} />
           )}
         </div>
       </div>

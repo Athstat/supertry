@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Users, Trophy, ChevronLeft, Loader } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Trophy, Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
-import { teamService } from "../services/teamService";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { motion } from "framer-motion";
 
 // Import components
 import { LeagueCard } from "../components/leagues/LeagueCard";
+import { activeLeaguesFilter } from "../utils/leaguesUtils";
 
 export function JoinLeagueScreen() {
   const navigate = useNavigate();
@@ -94,6 +94,10 @@ export function JoinLeagueScreen() {
     });
   };
 
+  const leagues = activeLeaguesFilter(availableLeagues);
+
+  console.log(leagues.map(l => l.title));
+
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
       <div className="flex items-center mb-6">
@@ -119,7 +123,7 @@ export function JoinLeagueScreen() {
             Try Again
           </button>
         </div>
-      ) : availableLeagues.length === 0 ? (
+      ) : leagues.length === 0 ? (
         <div className="text-center py-12">
           <h3 className="text-xl font-semibold mb-2 dark:text-gray-200">
             No leagues available
@@ -141,7 +145,7 @@ export function JoinLeagueScreen() {
             animate="visible"
             className="space-y-4"
           >
-            {availableLeagues.map((league, index) => (
+            {leagues.map((league, index) => (
               <LeagueCard
                 key={league.id}
                 league={league}

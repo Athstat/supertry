@@ -22,7 +22,7 @@ export const gamesService = {
     },
 
     getGamesByCompetitionId: async (competitionId: string) : Promise<IFixture[]> => {
-        const uri = getUri(`/api/v1/entities/competition-games/${competitionId}`);
+        const uri = getUri(`/api/v1/games/leagues/${competitionId}`);
         
         try {
             const res = await fetch(uri, {
@@ -35,10 +35,11 @@ export const gamesService = {
             console.log("Error fetching games", err)
             return [];
         }
+
     },
 
     getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {
-        const uri = getUri(`/api/v1/entities/games-distinct/${gameId}`);
+        const uri = getUri(`/api/v1/games/${gameId}`);
         
         try {
             const res = await fetch(uri, {
@@ -49,6 +50,20 @@ export const gamesService = {
         } catch (err) {
             console.log("Error fetching games", err)
             return undefined;
+        }
+    },
+
+    getGamesByDate: async (date: Date) => {
+        try {
+            const uri = getUri(`/api/v1/unauth/matches-all/${date.toISOString()}`);
+            const res = await fetch(uri);
+
+            const json = (await res.json()) as IFixture[];
+
+            return json;
+        } catch(error) {
+            console.log("Error getting games ", error);
+            return [];
         }
     }
 }

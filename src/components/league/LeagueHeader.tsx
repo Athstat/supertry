@@ -1,6 +1,7 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { IFantasyLeague } from "../../types/fantasyLeague";
 
 interface LeagueInfo {
   name: string;
@@ -16,12 +17,14 @@ interface LeagueHeaderProps {
   leagueInfo: LeagueInfo;
   onOpenSettings: () => void;
   isLoading?: boolean;
+  league: IFantasyLeague
   children?: ReactNode;
 }
 
 export function LeagueHeader({
   leagueInfo,
   onOpenSettings,
+  league,
   isLoading = false,
   children,
 }: LeagueHeaderProps) {
@@ -56,6 +59,8 @@ export function LeagueHeader({
               {isLoading ? "..." : leagueInfo.totalTeams}
             </div>
           </div>
+
+
           <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Your Rank</div>
             <div className="text-xl font-bold">
@@ -66,6 +71,15 @@ export function LeagueHeader({
                 : "N/A"}
             </div>
           </div>
+          
+          {/* <div className="bg-white/10 rounded-lg p-4">
+            <div className="text-sm text-primary-100">Join Deadline</div>
+            <div className="text-md font-bold flex mt-1 flex-col ">
+              <p>{league.join_deadline ? format(league.join_deadline, "EEEE dd MMMM yyyy") : "-"}</p>
+              <p>{league.join_deadline ? format(league.join_deadline, "h:mm a") : "-"}</p>
+            </div>
+          </div> */}
+              
         </div>
       </div>
     </div>

@@ -1,51 +1,53 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IFixture } from "../types/games";
 import TeamLogo from "../components/team/TeamLogo";
 import { format } from "date-fns";
 import { fixtureSumary, summerizeGameStatus } from "../utils/fixtureUtils";
 import { Minus } from "lucide-react";
-import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "../hooks/useRoter";
-import { TabButton } from "../components/shared/TabButton";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
-import FixtureTeamAthleteStats from "../components/fixtures/FixtureTeamAthleteStats";
-import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
+import { ErrorState } from "../components/ui/ErrorState";
+import useSWR from "swr";
+import { gamesService } from "../services/gamesService";
+import { LoadingState } from "../components/ui/LoadingState";
+import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
+import { boxScoreService } from "../services/boxScoreService";
+import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 
 export default function FixtureScreen() {
 
+  const { back } = useRouter();
   const { fixtureId } = useParams();
-  const { state } = useLocation();
 
+  if (!fixtureId) return <ErrorState message="Match was not found" />
 
-  if (!state || state.game_id !== fixtureId) {
-    return <div>
-      <p>Fixture was not found</p>
-    </div>
-  }
+  const {data: fixture, isLoading} = useSWR(["games", fixtureId], ([, gameId]) =>  gamesService.getGameById(gameId))
+  const {data: boxScore, isLoading: loadingBoxScore} = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
+  
+  if (isLoading) return <LoadingState />
 
-  const fixture = state as IFixture;
+  if (!fixture) return <ErrorState message="Failed to load match information" />
+
   const { gameKickedOff } = fixtureSumary(fixture);
 
-  const { back } = useRouter();
 
   return (
-    <div className="dark:text-white flex flex-col gap-3" >
+    <div className="dark:text-white flex flex-col" >
 
-      <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-950 text-white" >
+      <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-800 to-blue-900 dark:from-blue-800 dark:to-blue-950 text-white" >
 
         <div onClick={() => back()} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
           <ArrowLeft />
           <p>Go Back</p>
         </div>
 
-        <FixtureScreenHeader fixture={fixture} />
 
         <div className="flex flex-row h-max items-center justify-center w-full" >
 
-          <div className="flex flex-1 flex-col items-center justify-start" >
-            <TeamLogo className="w-16 h-16 dark:text-slate-200" teamId={fixture.team_id} />
-            <p className="text text-wrap text-center" >{fixture.home_team}</p>
+          <div className="flex flex-1 flex-col items-center justify-start gap-3" >
+            <TeamLogo className="w-16 h-16 dark:text-slate-200 " url={fixture.team_image_url} />
+            <p className="text text-wrap text-center" >{fixture.team_name}</p>
           </div>
 
           <div className="flex flex-col flex-1" >
@@ -53,24 +55,25 @@ export default function FixtureScreen() {
             {!gameKickedOff && <KickOffInformation fixture={fixture} />}
           </div>
 
-          <div className="flex flex-1 flex-col items-center justify-end" >
-            <TeamLogo className="w-16 h-16 dark:text-slate-200" teamId={fixture.opposition_team_id} />
-            <p className="text text-wrap text-center" >{fixture.away_team}</p>
+          <div className="flex flex-1 flex-col items-center gap-3 justify-end" >
+            <TeamLogo className="w-16 h-16 dark:text-slate-200" url={fixture.opposition_image_url} />
+            <p className="text text-wrap text-center" >{fixture.opposition_team_name}</p>
           </div>
 
         </div>
 
       </div>
 
+      {/* {boxScore && <FixtureScreenTab />} */}
+      <FixtureScreenHeader fixture={fixture} />
+      
       <div className="flex flex-col p-4 gap-5" >
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-        { gameKickedOff && <FixtureHeadToHeadStats fixture={fixture} />}
-        { gameKickedOff && <FixtureTeamAthleteStats teamName={fixture.home_team} fixture={fixture} />}
-        { gameKickedOff && <FixtureTeamAthleteStats teamName={fixture.away_team} fixture={fixture} />}
+        {loadingBoxScore && <LoadingState />}
+        {boxScore && <FixtureScreenBoxScores boxScore={boxScore} fixture={fixture} />}
       </div>
-
 
     </div>
   )
@@ -95,7 +98,7 @@ function KickOffInformation({ fixture }: Props) {
 
 function MatchResultsInformation({ fixture }: Props) {
 
-  const { kickoff_time, game_status } = fixture;
+  const { game_status } = fixture;
 
 
   return (

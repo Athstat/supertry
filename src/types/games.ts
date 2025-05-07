@@ -14,15 +14,20 @@ export type IFixture = {
     hidden?: boolean,
     league_id: string,
     network?: string,
-    game_status?: string | "completed" | "in_progress" | "not_started",
+    game_status?: GameStatus,
     game_clock?: string,
-    result: string,
+    result?: string,
     source_id?: string,
     data_source?: string,
     is_test?: boolean,
     round: number,
-    home_team: string,
-    away_team: string
+    team_name: string,
+    team_image_url?: string,
+    opposition_team_name?: string,
+    opposition_image_url?: string,
+    opposition_team_image_url?: string,
 }
+
+export type GameStatus = string | "completed" | "in_progress" | "not_started";
 
 export type IFullFixture = any;

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Trophy, Users, Loader, ChevronRight } from "lucide-react";
+import { Trophy, Users, Loader, ChevronRight, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ActiveLeaguesSectionProps } from "./types";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { leagueService } from "../../services/leagueService";
+import { activeLeaguesFilter } from "../../utils/leaguesUtils";
+import { format } from "date-fns";
 
 export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
   leagues,
@@ -45,6 +47,8 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
     onViewLeague(league);
   };
 
+  const activeLeagues = activeLeaguesFilter(leagues);
+
   return (
     <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-6">
       <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
@@ -62,7 +66,7 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
         </div>
       ) : (
         <div className="space-y-4">
-          {leagues.slice(0, 3).map((league) => (
+          {activeLeagues.slice(0, 3).map((league) => (
             <motion.div
               key={league.id}
               onClick={() => handleLeagueClick(league)}
@@ -77,28 +81,39 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
                   {league.title}
                 </h3>
                 <div
-                  className={`px-2 py-0.5 text-xs rounded-full ${
-                    league.is_open
+                  className={`px-2 py-0.5 text-xs rounded-full ${league.is_open
                       ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
                       : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                  }`}
+                    }`}
                 >
                   {league.is_open ? "Open" : "Closed"}
                 </div>
               </div>
               <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Users size={16} />
-                  <span>
-                    {isLoadingCounts ? (
-                      <Loader size={12} className="animate-spin" />
-                    ) : (
-                      `${teamCounts[league.id] || 0} teams joined`
-                    )}{" "}
-                  </span>
+
+                <div className="flex flex-col gap-2" >
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <Users size={16} />
+                    <span>
+                      {isLoadingCounts ? (
+                        <Loader size={12} className="animate-spin" />
+                      ) : (
+                        `${teamCounts[league.id] || 0} teams joined`
+                      )}{" "}
+                    </span>
+                  </div>
+
+                  {league.join_deadline && <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <Calendar size={16} />
+                    <span>
+                      Deadline <strong>{format(league.join_deadline, "EE dd MMM h:mm a")}</strong>
+                    </span>
+                  </div>}
                 </div>
+
                 <ChevronRight size={18} className="text-gray-400" />
               </div>
+
             </motion.div>
           ))}
 
