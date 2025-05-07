@@ -77,7 +77,9 @@ export function DashboardScreen() {
       const availableLeagues = allLeagues.filter(
         (league) => league.is_open && !league.has_ended
       );
-      console.log("availableLeagues", availableLeagues);
+
+      // console.log("availableLeagues", availableLeagues);
+      
       setLeagues(availableLeagues);
     } catch (err) {
       console.error("Failed to fetch leagues:", err);

@@ -215,9 +215,9 @@ export const PlayersScreen = () => {
       {/* Player Grid */}
       {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredPlayers.map((player) => (
+          {filteredPlayers.map((player, index) => (
             <PlayerCard
-              key={player.id}
+              key={index}
               player={player}
               onClick={() => handlePlayerClick(player)}
             />
