@@ -1,30 +1,18 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { authService } from './authService';
+import { getDeviceInfo, getWeekFromLaunch, isInProduction } from '../utils/webUtils';
 
 amplitude.init('7a73614db43ac3fb1e4c8b8e24a280eb', { "autocapture": true });
 
-export const launchDate = new Date("2025-05-12T00:00");
 
-function getWeekFromLaunch() {
-
-    const dateNow = new Date();
-    dateNow.setHours(0, 0, 0, 0);
-
-    const weekEpoch = 1000 * 60 * 60 * 24 * 24;
-    const diff = dateNow.valueOf() - launchDate.valueOf();
-
-    const weeks = diff / weekEpoch;
-
-    return Math.floor(weeks) + 1;
-
-}
-
-function getDeviceInfo() {
-    const agent = navigator.userAgent;
-    return { agent };
-}
 
 function track(event: string, eventInfo?: Record<string, any>) {
+    
+    if (!isInProduction()) {
+        console.log(`Skipped recording event ${event} because app is not in production`);
+        return;
+    }
+    
     const { agent } = getDeviceInfo();
     const user = authService.getUserInfo();
 
@@ -37,6 +25,8 @@ function track(event: string, eventInfo?: Record<string, any>) {
         weekNumber: getWeekFromLaunch(),
         userId: user ? user.id : null
     });
+
+    console.log("ER")
 }
 
 function trackPageVisit(route: string) {

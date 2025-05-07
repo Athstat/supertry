@@ -96,8 +96,6 @@ export function JoinLeagueScreen() {
 
   const leagues = activeLeaguesFilter(availableLeagues);
 
-  console.log(leagues.map(l => l.title));
-
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
       <div className="flex items-center mb-6">
