@@ -1,4 +1,5 @@
 import { RugbyPlayer } from "../../types/rugbyPlayer";
+import FormIndicator from "../shared/FormIndicator";
 
 interface PlayerCardProps {
   player: RugbyPlayer;
@@ -66,6 +67,10 @@ export const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
           <span className="font-medium text-gray-900 dark:text-gray-100 ml-3 text-left">
             {player.team_name}
           </span>
+
+          {player.form && <div className="flex-1 flex flex-row items-center justify-end">
+            <FormIndicator form={player.form} />
+          </div>}
         </div>
       </div>
     </button>

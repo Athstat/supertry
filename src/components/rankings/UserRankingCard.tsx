@@ -7,9 +7,12 @@ import { userRankingsService } from '../../services/userRankingsService';
 export default function UserRankingCard() {
 
     const authUser = useAuthUser();
-    const {data: userRank, isLoading} = useSWR(authUser.id, userRankingsService.getUserRankingByUserId);
+    const { data: userRank, isLoading } = useSWR(authUser.id, userRankingsService.getUserRankingByUserId);
 
-    if (isLoading) return <div className='w-full h-20 bg-slate-100 dark:slate-800 animate-pulse' ></div>
+    const rank = userRank?.rank;
+    const totalScore = userRank?.total_score;
+
+    if (isLoading) return <div className='w-full h-20 bg-slate-100 dark:bg-slate-800 animate-pulse' ></div>
     if (!userRank) return <></>
 
     return (
@@ -27,16 +30,19 @@ export default function UserRankingCard() {
                     </div>
                     <div>
                         <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                            User Rankings
+                            Global Leader Board
                         </h2>
-                        <p className="text-slate-50 text-md font-semibold">
-                            Total Points {userRank.total_score}
-                        </p>
+                        {rank && <p className="text-slate-50 text-md">
+                            Total Points <strong>{totalScore}</strong>
+                        </p>}
+
+                        {!rank && <p className='text-slate-200' >You are not yet ranked</p>}
                     </div>
                 </div>
                 <div className="text-right">
-                    <div className="text-3xl font-bold text-white">#{userRank.rank}</div>
-                    <div className="text-primary-100">Your Rank</div>
+                    {rank && <div className="text-3xl font-bold text-white">#{rank}</div>}
+                    {/* { !rank && <div className="text-xl font-bold text-white"></div>} */}
+                    {rank && <div className="text-primary-100">Your Rank</div>}
                 </div>
             </div>
         </div>

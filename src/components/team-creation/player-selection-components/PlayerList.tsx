@@ -4,7 +4,7 @@ import renderStatDots from './renderStatDots';
 import { convertToPlayer } from './PlayerConverter';
 import { Player } from '../../../types/player';
 import { Position } from '../../../types/position';
-import FormIndicator, { AvailabilityIndicator } from '../../shared/FormIndicator';
+import FormIndicator from '../../shared/FormIndicator';
 import { RugbyPlayer } from '../../../types/rugbyPlayer';
 
 interface PlayerListProps {
@@ -100,8 +100,8 @@ export const PlayerList: React.FC<PlayerListProps> = ({
             <FormIndicator form={player.form} />
           </div>} */}
 
-          {player.available !== undefined && <div className="w-fit lg:w-12 flex flex-row items-center justify-end">
-            <AvailabilityIndicator availability={player.available} />
+          {player.form !== undefined && <div className="w-fit lg:w-12 flex flex-row items-center justify-end">
+            <FormIndicator form={player.form} />
           </div>}
 
 

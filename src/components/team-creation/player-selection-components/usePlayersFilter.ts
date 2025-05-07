@@ -11,6 +11,7 @@ interface UsePlayersFilterProps {
   selectedPlayers: Player[];
   sortBy: "price" | "rating" | "attack" | "defense" | "kicking";
   sortOrder: "asc" | "desc";
+  filterAvailable: boolean
 }
 
 export const usePlayersFilter = ({
@@ -22,6 +23,7 @@ export const usePlayersFilter = ({
   selectedPlayers,
   sortBy,
   sortOrder,
+  filterAvailable
 }: UsePlayersFilterProps) => {
   // Filter players based on criteria
   const filteredPlayers = useMemo(() => {
@@ -65,6 +67,9 @@ export const usePlayersFilter = ({
         "Position ID:",
         selectedPosition.id
       );
+
+      // filter by availability
+      const passedAvailablityFilter = filterAvailable ? player.available === true : true;
 
       // Check for Super Sub position in both screens - allow any player for Super Sub
       if (
@@ -184,7 +189,8 @@ export const usePlayersFilter = ({
         matchesSearch &&
         matchesTeam &&
         !isAlreadySelected &&
-        isAffordable
+        isAffordable &&
+        passedAvailablityFilter
       );
     });
   }, [
@@ -194,6 +200,7 @@ export const usePlayersFilter = ({
     teamFilter,
     selectedPlayers,
     remainingBudget,
+    filterAvailable
   ]);
 
   // Sort players
