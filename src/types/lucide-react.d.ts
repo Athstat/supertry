@@ -59,6 +59,8 @@ declare module "lucide-react" {
   export const Moon: CIP;
   export const Bell: CIP;
   export const Medal: CIP;
+  export const Check: CIP;
+  export const Info: CIP;
 
 }
 
