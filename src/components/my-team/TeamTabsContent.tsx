@@ -96,7 +96,7 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
 }) => {
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
         Edit Your Team
       </h2>
 
@@ -105,7 +105,7 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
         {positionList.map((position) => (
           <div key={position.id}>
             {/* Custom player card for My Team screen */}
-            <div className="bg-dark-800 rounded-lg shadow-md p-4 transition hover:shadow-lg">
+            <div className="bg-white dark:bg-dark-800 rounded-lg shadow-md p-4 transition hover:shadow-lg border border-gray-100 dark:border-gray-700">
               <div className="flex flex-col items-center">
                 {position.player ? (
                   <>
@@ -128,17 +128,17 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
 
                     {/* Position name */}
                     <h3
-                      className={`font-bold text-sm mb-1 dark:text-white ${
+                      className={`font-bold text-sm mb-1 ${
                         position.isSpecial
                           ? "text-orange-600 dark:text-orange-400"
-                          : ""
+                          : "text-gray-800 dark:text-white"
                       }`}
                     >
                       {position.name}
                     </h3>
 
                     {/* Player name */}
-                    <p className="text-xs text-center font-medium mb-1 dark:text-gray-300">
+                    <p className="text-xs text-center font-medium mb-1 text-gray-900 dark:text-gray-300">
                       {position.player.name}
                     </p>
 
@@ -224,10 +224,10 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                       </span>
                     </div>
                     <h3
-                      className={`font-bold text-sm mb-1 dark:text-white ${
+                      className={`font-bold text-sm mb-1 ${
                         position.isSpecial
                           ? "text-orange-600 dark:text-orange-400"
-                          : ""
+                          : "text-gray-800 dark:text-white"
                       }`}
                     >
                       {position.name}
@@ -272,7 +272,7 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
     <>
       {/* Team Formation - View Pitch Tab */}
       <div>
-        <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
           Team Formation
         </h2>
         <TeamFormation
@@ -285,7 +285,7 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
       {/* Super Substitute */}
       {players.some((player) => player.isSubstitute) && (
         <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4 dark:text-gray-100 flex items-center">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100 flex items-center">
             <span>Super Substitute</span>
             <span className="ml-2 text-orange-500 text-sm bg-orange-100 dark:bg-orange-900/20 px-2 py-0.5 rounded-full">
               Special
@@ -321,7 +321,7 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-semibold text-lg dark:text-gray-100">
+                      <span className="font-semibold text-lg text-gray-900 dark:text-gray-100">
                         {player.name}
                       </span>
                       <span className="text-sm font-bold px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full text-gray-800 dark:text-gray-300">
