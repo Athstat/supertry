@@ -41,19 +41,19 @@ export function attackBias(statLine: IBoxScore) {
     const {tries, passes, carries, points, defendersbeaten} = statLine;
 
     if (points != null) {
-        total += points * 5;
+        total += points * 4;
     }
 
     if (tries != null) {
-        total += tries * 4
+        total += tries * 5
     }
 
     if (carries != null) {
-        total += carries * 3
+        total += carries * 1
     }
 
     if (passes != null) {
-        total += passes * 2
+        total += passes * 0.2
     }
 
     if (defendersbeaten != null) {

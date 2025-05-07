@@ -29,7 +29,7 @@ export default function PlayerBoxScoreSmallCard({children, boxScore: bs, fixture
 
 
     return (
-        <div className="flex flex-col items-center justify-start gap-2 hover:bg-slate-100 dark:hover:bg-slate-800/50 p-1 w-full" >
+        <div className="flex flex-col cursor-pointer items-center justify-start gap-2 hover:bg-slate-100 dark:hover:bg-slate-800/50 p-1 w-full" >
 
             <div onClick={toogle} className="flex flex-row items-center w-full gap-3 justify-start" >
                 <PlayerMugshot className="w-10 h-10" url={bs.athlete_image_url} />
