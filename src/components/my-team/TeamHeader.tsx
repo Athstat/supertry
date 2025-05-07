@@ -76,7 +76,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
                   <button
                     onClick={() => {
                       if (leagueInfo) {
-                        navigate(`/leagues/${leagueInfo.id}`, {
+                        navigate(`/league/${leagueInfo.official_league_id}`, {
                           state: { league: leagueInfo },
                         });
                       }

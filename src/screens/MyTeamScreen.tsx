@@ -51,6 +51,7 @@ const TeamContent: React.FC<{
 const MyTeamContent: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
   const [activeTab, setActiveTab] = useState<TabType>("edit-team");
+  const [initialized, setInitialized] = useState(false);
 
   const {
     team,
@@ -65,8 +66,18 @@ const MyTeamContent: React.FC = () => {
     formation,
   } = useTeamData();
 
+  // Set initialized to true after first render when we know loading state
+  React.useEffect(() => {
+    setInitialized(true);
+  }, []);
+
+  // Don't render anything on initial load to prevent flicker
+  if (!initialized) {
+    return null;
+  }
+
   if (isLoading) {
-    return <TeamLoading />;
+    return <TeamLoading isFullScreen={false} />;
   }
 
   if (error || !team) {

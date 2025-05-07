@@ -148,6 +148,10 @@ export const usePlayersFilter = ({
       // Budget check
       const isAffordable = player.price <= remainingBudget;
 
+      // Availability filter check - only apply if filterAvailable is true
+      const passedAvailabilityFilter =
+        !filterAvailable || player.available !== false;
+
       // Apply all filters
       return (
         matchesPosition &&
@@ -155,7 +159,7 @@ export const usePlayersFilter = ({
         matchesTeam &&
         !isAlreadySelected &&
         isAffordable &&
-        passedAvailablityFilter
+        passedAvailabilityFilter
       );
     });
   }, [

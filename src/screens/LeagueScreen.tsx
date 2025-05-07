@@ -3,11 +3,7 @@ import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { TabButton } from "../components/shared/TabButton";
-import {
-  TeamStats,
-  LeagueInfo,
-  LeagueFromState,
-} from "../types/league";
+import { TeamStats, LeagueInfo, LeagueFromState } from "../types/league";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { teamService } from "../services/teamService";
@@ -60,7 +56,10 @@ export function LeagueScreen() {
   const handleJoinLeague = () => {
     // Navigate to team creation screen with league details
     if (leagueFromState && leagueId) {
-      analytics.trackTeamCreationStarted(leagueId, leagueFromState.official_league_id);
+      analytics.trackTeamCreationStarted(
+        leagueId,
+        leagueFromState.official_league_id
+      );
       navigate(`/${leagueFromState.official_league_id}/create-team`, {
         state: { league: leagueFromState },
       });
@@ -274,7 +273,7 @@ export function LeagueScreen() {
         onOpenSettings={() => setShowSettings(true)}
         isLoading={isLoading}
       >
-        {!hasJoinedLeague && (
+        {!isLoading && !hasJoinedLeague && (
           <button
             onClick={handleJoinLeague}
             className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
@@ -338,7 +337,9 @@ export function LeagueScreen() {
           )}
 
           {activeTab === "fixtures" && (
-            <FantasyLeagueFixturesList league={leagueFromState as IFantasyLeague} />
+            <FantasyLeagueFixturesList
+              league={leagueFromState as IFantasyLeague}
+            />
           )}
         </div>
       </div>
@@ -358,7 +359,7 @@ export function LeagueScreen() {
       )}
 
       {/* Mobile CTA Button */}
-      {!hasJoinedLeague && (
+      {!isLoading && !hasJoinedLeague && (
         <button
           onClick={handleJoinLeague}
           className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 text-white font-semibold rounded-xl py-3 shadow-lg"

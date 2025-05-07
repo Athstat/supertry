@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import {
   User,
   Medal,
@@ -91,9 +91,9 @@ export function ProfileScreen() {
                     {userInfo?.email || ""}
                   </p> */}
                 </div>
-                <button className="px-4 py-2 bg-primary-600 dark:bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">
+                {/* <button className="px-4 py-2 bg-primary-600 dark:bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">
                   Edit Profile
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
@@ -102,14 +102,14 @@ export function ProfileScreen() {
           <UserStatsGrid />
         </div>
 
-        {/* Friends Section */}
+        {/* Friends Section - Commented out
         <FriendsSection
           friends={friends}
           followingCount={142}
           followersCount={98}
-        />
+        /> */}
 
-        {/* Achievements */}
+        {/* Achievements - Commented out
         <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 dark:text-gray-100">
             <Medal size={20} className="text-primary-600" />
@@ -136,7 +136,7 @@ export function ProfileScreen() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Settings */}
         <div className="bg-white dark:bg-dark-800/40 rounded-2xl shadow-sm p-6">
@@ -145,6 +145,7 @@ export function ProfileScreen() {
             Settings
           </h2>
           <div className="space-y-4">
+            {/* Email - Commented out
             <button className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors">
               <div className="flex items-center gap-3">
                 <Mail size={20} className="text-gray-500" />
@@ -152,7 +153,9 @@ export function ProfileScreen() {
               </div>
               <ChevronRight size={20} className="text-gray-400" />
             </button>
+            */}
 
+            {/* Password - Commented out
             <button className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors">
               <div className="flex items-center gap-3">
                 <Lock size={20} className="text-gray-500" />
@@ -160,7 +163,9 @@ export function ProfileScreen() {
               </div>
               <ChevronRight size={20} className="text-gray-400" />
             </button>
+            */}
 
+            {/* Notifications - Commented out
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl">
               <div className="flex items-center gap-3">
                 <Bell size={20} className="text-gray-500" />
@@ -183,6 +188,7 @@ export function ProfileScreen() {
                 />
               </button>
             </div>
+            */}
 
             <button
               onClick={handleLogout}
