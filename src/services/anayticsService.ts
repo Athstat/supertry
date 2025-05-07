@@ -89,6 +89,22 @@ function trackTeamCreationCompleted(leagueId: string, teamId: string, officialLe
     });
 }
 
+function trackFriendInvitesSent(method: string, teamId?: string) {
+    track("Team_Invite_Sent", {
+        friendCount: null,
+        inviteMethod: method,
+        teamId: teamId
+    });
+}
+
+function trackFriendInvitesReceived(method: string, userId?: string) {
+    
+    track("Team_Invite_Received", {
+        inviterId: userId,
+        inviteMethod: method
+    });
+}
+
 export const analytics = {
     track,
     trackPageVisit,
@@ -96,6 +112,8 @@ export const analytics = {
     trackUserSignIn,
     trackUserLogout,
     trackTeamCreationStarted,
-    trackTeamCreationCompleted
+    trackTeamCreationCompleted,
+    trackFriendInvitesSent,
+    trackFriendInvitesReceived
 
 }
