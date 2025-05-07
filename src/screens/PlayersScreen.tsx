@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { RugbyPlayer } from "../types/rugbyPlayer";
+import { PlayerForm, RugbyPlayer } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 
 // Components
@@ -16,7 +16,7 @@ import { EmptyState } from "../components/players/EmptyState";
 type SortTab = "all" | "trending" | "top" | "new";
 type SortOption = "points" | "name" | "position" | "club";
 type SortDirection = "asc" | "desc";
-type SortField = "power_rank_rating" | "player_name";
+type SortField = "power_rank_rating" | "player_name" | "form";
 
 export const PlayersScreen = () => {
   const navigate = useNavigate();
@@ -121,7 +121,7 @@ export const PlayersScreen = () => {
       // Apply tab-specific filtering
       switch (activeTab) {
         case "trending":
-          result = result.filter((p) => p.trending === true);
+          result = result.filter(p => p.form === "UP");
           break;
         case "top":
           result = result
@@ -131,7 +131,8 @@ export const PlayersScreen = () => {
             .slice(0, 20);
           break;
         case "new":
-          result = result.filter((p) => p.isNew === true);
+          // result = result.filter((p) => p.isNew === true);
+          result = result;
           break;
       }
 
@@ -141,6 +142,14 @@ export const PlayersScreen = () => {
           const valueA = a.power_rank_rating || 0;
           const valueB = b.power_rank_rating || 0;
           return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
+        }
+        else if (sortField === "form" && sortDirection === "desc") {
+
+          return formBias(b.power_rank_rating ?? 0, b.form) - formBias(a.power_rank_rating ?? 0, a.form)
+        } else if (sortField === "form" && sortDirection === "asc") {
+
+          return formBias(a.power_rank_rating ?? 0, a.form) - formBias(b.power_rank_rating ?? 0, b.form)
+
         } else if (sortField === "player_name") {
           const valueA = a.player_name || "";
           const valueB = b.player_name || "";
@@ -227,3 +236,18 @@ export const PlayersScreen = () => {
     </main>
   );
 };
+
+const formBias = (powerRanking: number, form?: PlayerForm) => {
+  // small influence
+
+  switch (form) {
+    case "UP":
+      return 3 + powerRanking;
+    case "NEUTRAL":
+      return 2;
+    case "DOWN":
+      return -5;
+    default:
+      return 1; // fallback when form is undefined
+  }
+}
