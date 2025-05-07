@@ -2,7 +2,7 @@ import { Calendar, ChevronDown } from "lucide-react";
 import useSWR from "swr";
 import { IFixture } from "../types/games";
 import { gamesService } from "../services/gamesService";
-import { ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP } from "../types/constants";
+import { ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from "../types/constants";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import FixtureCard from "../components/fixtures/FixtureCard";
@@ -12,7 +12,8 @@ import { useSectionNavigation } from "../hooks/useSectionNavigation";
 
 const competitionIds = [
     ERPC_COMPETITION_ID,
-    INVESTEC_CHAMPIONSHIP_CUP
+    INVESTEC_CHAMPIONSHIP_CUP,
+    URC_COMPETIION_ID
 ]
 
 export default function FixtureListScreen() {
@@ -43,7 +44,8 @@ export default function FixtureListScreen() {
     })
     .sort((a, b) => a.kickoff_time && b.kickoff_time ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf() : 0)
     .reverse()
-    .splice(0, 5);
+    .splice(0, 100)
+    .reverse();
 
 
     const upcomingFixtures = fixtures.filter((f) => {
@@ -52,7 +54,9 @@ export default function FixtureListScreen() {
         }
 
         return false;
-    });
+    })
+    .sort((a, b) => a.kickoff_time && b.kickoff_time ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf() : 0)
+    .splice(0, 100);
 
     return (
         <div className="dark:text-white  p-4 flex flex-col items-center justify-start" >
@@ -80,7 +84,7 @@ export default function FixtureListScreen() {
                             return <FixtureCard
                                 showLogos
                                 showCompetition
-                                className="dark:bg-gray-800 dark:hover:bg-gray-800/80 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
+                                className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
                                 fixture={fixture}
                                 key={index}
                             />
@@ -99,7 +103,7 @@ export default function FixtureListScreen() {
                             return <FixtureCard
                                 showLogos
                                 showCompetition
-                                className="dark:bg-gray-800 dark:hover:bg-gray-800/80 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
+                                className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
                                 fixture={fixture}
                                 key={index}
                             />

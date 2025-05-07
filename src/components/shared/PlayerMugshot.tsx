@@ -1,19 +1,34 @@
+import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
-  athlete: { image_url?: string },
-  className?: string
+  url?: string,
+  className?: string,
+  alt?: string
 }
 
-export default function PlayerMugshot({ athlete, className }: Props) {
+export default function PlayerMugshot({ url, className, alt }: Props) {
+  
+  const imageUrl = url;
+  const [error, setError] = useState(false);
 
-  const { image_url } = athlete;
+  if (error || !url) {
+    return (
+      <div className={twMerge(
+        "w-14 h-14 bg-slate-300 dark:bg-slate-800 rounded-full",
+        className
+      )}></div>
+    )
+  }
 
   return (
-    <img
-      src={image_url}
-      alt=""
-      className={twMerge('overflow-clip w-16 h-16 rounded-full bg-slate-500 dark:bg-slate-600', className)}
-    />
+    <div className={twMerge("w-14 h-14 overflow-clip border border-slate-400 dark:border-slate-800 rounded-full", className)} >
+      <img
+        src={imageUrl}
+        alt={alt ?? "team_logo"}
+        onError={() => setError(true)}
+        className='w-full h-full object-contain'
+      />
+    </div>
   )
 }

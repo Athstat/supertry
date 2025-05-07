@@ -9,12 +9,9 @@ export const boxScoreService = {
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
+            
 
-
-            const json = await res.json() as IBoxScore[];
-
-            console.log(json);
-            return res;
+            return (await res.json()) as IBoxScore[];
             
         } catch (error) {
             console.log(error);

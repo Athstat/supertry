@@ -5,7 +5,7 @@ import { IBoxScore } from "../types/boxScore";
 export function rankByAttackingStats(stats: IBoxScore[]) {
     
     return stats.sort((a, b) => {
-        return attackBias(a) - attackBias(b);
+        return attackBias(b) - attackBias(a);
     });
 
 }
@@ -13,13 +13,13 @@ export function rankByAttackingStats(stats: IBoxScore[]) {
 export function rankByDeffensiveStats(stats: IBoxScore[]) {
     
     return stats.sort((a, b) => {
-        return defenseBias(a) - defenseBias(b);
+        return defenseBias(b) - defenseBias(a);
     });
 
 }
 
 
-function attackBias(statLine: IBoxScore) {
+export function attackBias(statLine: IBoxScore) {
     let total = 0;
 
     const {tries, passes, carries, points, defendersbeaten} = statLine;
@@ -47,7 +47,7 @@ function attackBias(statLine: IBoxScore) {
     return total;
 }
 
-function defenseBias(statLine: IBoxScore) {
+export function defenseBias(statLine: IBoxScore) {
     let total = 0;
 
     const {tacklesmade, tacklesmissed, lineoutswonsteal, retainedkicks, turnoverswon, redcards, yellowcards} = statLine;
