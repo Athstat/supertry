@@ -38,7 +38,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       <div 
         className={`w-12 text-center flex items-center justify-center transition `}
       >
-        <span className="font-semibold">FRM</span>
+        <span className="font-semibold">AVL</span>
         
       </div>
       
