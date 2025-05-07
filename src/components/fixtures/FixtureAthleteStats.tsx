@@ -1,7 +1,6 @@
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { IBoxScore } from "../../types/boxScore"
-import FixtureHeadToHeadStats from "./FixtureHeadToHeadStats"
 import FixtureAttackingLeaders from "./FixtureAttackingLeaders"
 import FixtureDefensiveLeaders from "./FixtureDefensiveLeaders"
 import FixtureKickingLeaders from "./FixtureKickingLeaders"
@@ -12,7 +11,7 @@ type Props = {
     boxScore: IBoxScore[]
 }
 
-export default function FixtureScreenBoxScores({ fixture, boxScore }: Props) {
+export default function FixtureAthleteStats({ fixture, boxScore }: Props) {
 
     const { gameKickedOff } = fixtureSumary(fixture);
 
@@ -21,9 +20,6 @@ export default function FixtureScreenBoxScores({ fixture, boxScore }: Props) {
     return (
 
         <>
-            <section id="overview" ></section>
-                <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />
-            
             <section id="attacking" ></section>
             <FixtureAttackingLeaders boxScores={boxScore} fixture={fixture} />
             <section id="defense" ></section>
@@ -32,9 +28,6 @@ export default function FixtureScreenBoxScores({ fixture, boxScore }: Props) {
             <FixtureKickingLeaders boxScores={boxScore} fixture={fixture} />
             <section id="descipline" ></section>
             <FixtureDisciplineLeaders boxScores={boxScore} fixture={fixture} />
-            {/* <AthleteBoxScoreList boxScores={backsBoxScore} title="Backs" teamName={fixture.away_team} fixture={fixture} /> */}
-            {/* <FixtureKickingStats fixture={fixture} /> */}
-            {/* <FixtureDisciplineStats fixture={fixture} /> */}
         </>
     )
 }

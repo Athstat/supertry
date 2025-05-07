@@ -11,6 +11,7 @@ interface UsePlayersFilterProps {
   selectedPlayers: Player[];
   sortBy: "price" | "rating" | "attack" | "defense" | "kicking";
   sortOrder: "asc" | "desc";
+  filterAvailable: boolean;
 }
 
 export const usePlayersFilter = ({
@@ -22,6 +23,7 @@ export const usePlayersFilter = ({
   selectedPlayers,
   sortBy,
   sortOrder,
+  filterAvailable,
 }: UsePlayersFilterProps) => {
   // Filter players based on criteria
   const filteredPlayers = useMemo(() => {
@@ -152,7 +154,8 @@ export const usePlayersFilter = ({
         matchesSearch &&
         matchesTeam &&
         !isAlreadySelected &&
-        isAffordable
+        isAffordable &&
+        passedAvailablityFilter
       );
     });
   }, [
@@ -162,6 +165,7 @@ export const usePlayersFilter = ({
     teamFilter,
     selectedPlayers,
     remainingBudget,
+    filterAvailable,
   ]);
 
   // Sort players

@@ -13,6 +13,7 @@ import PlayerList from './player-selection-components/PlayerList';
 import usePlayersFilter from './player-selection-components/usePlayersFilter';
 import useAvailableTeams from './player-selection-components/useAvailableTeams';
 import useModalEffects from './player-selection-components/useModalEffects';
+import AvailableFilter from './AvailableFilter';
 
 interface PlayerSelectionModalProps {
   visible: boolean;
@@ -41,6 +42,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   const [sortBy, setSortBy] = useState<'price' | 'rating' | 'attack' | 'defense' | 'kicking'>('rating');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [loading, setLoading] = useState(false);
+  const [filterAvailable, setFilterAvailable] = useState(false);
 
   // Get filtered and sorted players
   const { sortedPlayers, filteredCount } = usePlayersFilter({
@@ -51,7 +53,8 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     remainingBudget,
     selectedPlayers,
     sortBy,
-    sortOrder
+    sortOrder,
+    filterAvailable
   });
 
   // Get available teams for filter
@@ -82,6 +85,8 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
           searchQuery={searchQuery} 
           onSearchChange={setSearchQuery} 
         />
+
+        <AvailableFilter filterAvailable={filterAvailable} toogle={() => setFilterAvailable(!filterAvailable)} />
         
         {/* Filters section */}
         <TeamFilter

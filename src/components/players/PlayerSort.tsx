@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-type SortField = "power_rank_rating" | "player_name";
+type SortField = "power_rank_rating" | "player_name" | "form";
 type SortDirection = "asc" | "desc";
 
 interface PlayerSortProps {
@@ -106,6 +106,34 @@ export const PlayerSort = ({
               }`}
             >
               Name (Z-A)
+            </button>
+
+            <button
+              onClick={() => {
+                onSort("form", "desc");
+                setShowSortOptions(false);
+              }}
+              className={`w-full text-left px-3 py-2 rounded-md text-sm ${
+                sortField === "form" && sortDirection === "desc"
+                  ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700"
+              }`}
+            >
+              Form (High to Low)
+            </button>
+
+            <button
+              onClick={() => {
+                onSort("form", "asc");
+                setShowSortOptions(false);
+              }}
+              className={`w-full text-left px-3 py-2 rounded-md text-sm ${
+                sortField === "form" && sortDirection === "asc"
+                  ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700"
+              }`}
+            >
+              Form (Low to High)
             </button>
           </div>
         </div>

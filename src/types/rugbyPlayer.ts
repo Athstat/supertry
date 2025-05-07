@@ -10,6 +10,7 @@ export interface RugbyPlayer {
   height?: number;
   weight?: number;
   date_of_birth?: Date;
+  team_logo?: string;
 
   // Stats
   ball_carrying?: number;
@@ -33,7 +34,7 @@ export interface RugbyPlayer {
   penalties_conceded?: number;
   cards?: number;
   team_id?: string;
-  form?: FormType,
+  form?: PlayerForm,
   available?: boolean,
   position?: string
 }
@@ -82,8 +83,8 @@ export type IFantasyAthlete = {
   image_url?: string,
   nationality?: string,
   birth_place?: string,
-  form?: FormType,
+  form?: PlayerForm,
   available?: string
 }
 
-export type FormType = "UP" | "DOWN" | "NEUTRAL";
+export type PlayerForm = "UP" | "DOWN" | "NEUTRAL";
