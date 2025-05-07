@@ -13,6 +13,7 @@ import {
 } from "../../types/auth";
 import { authService } from "../../services/authService";
 import { useAuth } from "../../contexts/AuthContext";
+import { analytics } from "../../services/anayticsService";
 
 export function SignUpScreen() {
   const navigate = useNavigate();
@@ -92,7 +93,9 @@ export function SignUpScreen() {
 
       // Auto-login after successful registration
       try {
+        
         await login(form.email, form.password);
+        analytics.trackUserSignUp("Email");
 
         // If login is successful, redirect to dashboard
         navigate("/dashboard");

@@ -1,4 +1,5 @@
 import { UserRepresentation } from "../types/auth";
+import { analytics } from "./anayticsService";
 
 // The API already includes the /api prefix
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
@@ -99,6 +100,8 @@ export const authService = {
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
 
+      analytics.trackUserSignIn("Email");
+
       return data;
     } catch (error) {
       console.error("Login error:", error);
@@ -180,6 +183,7 @@ export const authService = {
    * Logout user
    */
   logout(): void {
+    analytics.trackUserLogout();
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
   },

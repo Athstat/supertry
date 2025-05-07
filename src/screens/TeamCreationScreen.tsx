@@ -14,6 +14,8 @@ import TeamNameInput from "./team-creation-components/TeamNameInput";
 import TeamToast from "./team-creation-components/TeamToast";
 import useTeamCreationState from "./team-creation-components/useTeamCreationState";
 import { leagueService } from "../services/leagueService";
+import { useEffect } from "react";
+import { analytics } from "../services/anayticsService";
 
 export function TeamCreationScreen() {
   const navigate = useNavigate();
@@ -56,6 +58,11 @@ export function TeamCreationScreen() {
     showToast,
     hideToast,
   } = useTeamCreationState(officialLeagueId);
+
+  useEffect(() => {
+    analytics.trackTeamCreationStarted(league.id, league.officialLeagueId);
+  })
+
 
   // Handle team submission
   const handleSaveTeam = async () => {
@@ -117,6 +124,8 @@ export function TeamCreationScreen() {
       );
     }
   };
+
+  
 
   // Show loading state while fetching initial data
   if (isLoading) {

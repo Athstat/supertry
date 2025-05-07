@@ -14,7 +14,6 @@ export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
         const deadline = new Date(l.join_deadline);
         const daysDiff = differenceInDays(deadline, today);
 
-        console.log(daysDiff, " is in 7 days? ", 7 >= daysDiff);
 
         return daysDiff <= 7;
     })
