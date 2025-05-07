@@ -1,26 +1,26 @@
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import { IBoxScore } from "../../types/boxScore"
-import { rankByAttackingStats } from "../../utils/boxScoreUtils"
+import { rankByDeffensiveStats } from "../../utils/boxScoreUtils"
 import PlayerSmallCard from "../player/PlayerSmallCard"
-import { Bomb } from "lucide-react"
+import { Shield } from "lucide-react"
 
 type Props = {
   fixture: IFixture,
   boxScores: IBoxScore[]
 }
 
-export default function FixtureAttackingLeaders({ boxScores }: Props) {
+export default function FixtureDefensiveLeaders({ boxScores}: Props) {
 
-  const sortedList = rankByAttackingStats(boxScores);
+  const sortedList = rankByDeffensiveStats(boxScores);
   let shortList = sortedList;
   shortList = shortList.slice(0, 4);
- 
+
 
   return (
-    <TitledCard icon={Bomb} title={'Attacking Leaders'} >
+    <TitledCard icon={Shield} title={'Defensive Leaders'} >
 
-      <div className="grid grid-cols-1 gap-3 w-full" >
+      <div className="grid grid-cols-1 gap-2 w-full" >
         
         {shortList.map((bs, index) => {
 
@@ -34,11 +34,9 @@ export default function FixtureAttackingLeaders({ boxScores }: Props) {
               lastName={bs.athlete_last_name} 
               position={bs.athlete_position}
             >
-              <div className="flex flex-row w-full text-slate-600 dark:text-slate-400 text-sm gap-2 items-center justify-start" >
-                {bs.points !== 0 && <p>Points {bs.points}</p>}
-                {bs.tries !== 0 && <p> Tries {bs.tries}</p>}
-                {bs.carries !== 0 && <p>Carries {bs.carries}</p>}
-                {bs.passes !== 0 && <p>Passes {bs.passes}</p>}
+              <div className="flex flex-row w-full text-wrap text-slate-600 dark:text-slate-400 text-sm gap-2 items-center justify-start" >
+                {bs.tacklesuccess !== 0 && <p className="text-nowrap">Tackles {bs.tacklesmade}/{bs.tacklesmade + bs.tacklesmissed}</p>}
+                {bs.turnoverswon !== 0 && <p className="text-nowrap">T/Os Won {bs.turnoverswon}</p>}
               </div>
             </PlayerSmallCard>
 
