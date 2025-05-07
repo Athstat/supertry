@@ -12,14 +12,18 @@ import useSWR from "swr";
 import { gamesService } from "../services/gamesService";
 import { LoadingState } from "../components/ui/LoadingState";
 import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
+import { boxScoreService } from "../services/boxScoreService";
 
 export default function FixtureScreen() {
 
   const { back } = useRouter();
   const { fixtureId } = useParams();
 
-  const {data: fixture, isLoading, error} = useSWR(fixtureId, gamesService.getGameById)
+  if (!fixtureId) return <ErrorState message="Match was not found" />
 
+  const {data: fixture, isLoading} = useSWR(["games", fixtureId], ([, gameId]) =>  gamesService.getGameById(gameId))
+  const {data: boxScore, isLoading: loadingBoxScore} = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
+  
   if (isLoading) return <LoadingState />
 
   if (!fixture) return <ErrorState message="Failed to load match information" />
@@ -65,7 +69,8 @@ export default function FixtureScreen() {
 
         {/* Overview Component */}
         <FixtureScreenOverview fixture={fixture} />
-        <FixtureScreenBoxScores fixture={fixture} />
+        {loadingBoxScore && <LoadingState />}
+        {boxScore && <FixtureScreenBoxScores boxScore={boxScore} fixture={fixture} />}
       </div>
 
     </div>

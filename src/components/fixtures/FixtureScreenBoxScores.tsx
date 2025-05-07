@@ -1,22 +1,14 @@
-import useSWR from "swr"
 import { IFixture } from "../../types/games"
-import FixtureHeadToHeadStats from "./FixtureHeadToHeadStats"
-import { boxScoreService } from "../../services/boxScoreService"
-import { LoadingState } from "../ui/LoadingState"
-import { ErrorState } from "../ui/ErrorState"
 import { fixtureSumary } from "../../utils/fixtureUtils"
+import { IBoxScore } from "../../types/boxScore"
+import FixtureHeadToHeadStats from "./FixtureHeadToHeadStats"
 
 type Props = {
-    fixture: IFixture
+    fixture: IFixture,
+    boxScore: IBoxScore[]
 }
 
-export default function FixtureScreenBoxScores({ fixture }: Props) {
-
-    const {data: boxscore, isLoading, error} = useSWR(fixture.game_id, boxScoreService.getBoxScoreByGameId);
-
-    if (isLoading) return <LoadingState message="" />
-
-    if (!boxscore || error) return <ErrorState message="Failed to fetch box score information" />
+export default function FixtureScreenBoxScores({ fixture, boxScore }: Props) {
 
     const { gameKickedOff } = fixtureSumary(fixture);
 
@@ -25,7 +17,7 @@ export default function FixtureScreenBoxScores({ fixture }: Props) {
     return (
 
         <>
-            <FixtureHeadToHeadStats fixture={fixture} />
+            <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />
             {/* <AthleteBoxScoreList boxScores={forwardsBoxScore} title="Fowards" fixture={fixture} /> */}
             {/* <AthleteBoxScoreList boxScores={backsBoxScore} title="Backs" teamName={fixture.away_team} fixture={fixture} /> */}
             {/* <FixtureKickingStats fixture={fixture} /> */}
