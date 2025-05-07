@@ -60,8 +60,10 @@ export function TeamCreationScreen() {
   } = useTeamCreationState(officialLeagueId);
 
   useEffect(() => {
-    analytics.trackTeamCreationStarted(league.id, league.officialLeagueId);
-  })
+    if (officialLeagueId && league) {
+      analytics.trackTeamCreationStarted(league.id, officialLeagueId);
+    }
+  }, [])
 
 
   // Handle team submission
