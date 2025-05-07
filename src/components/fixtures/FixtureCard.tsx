@@ -45,13 +45,13 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                     <div className='flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center' >
 
                         <div className='flex flex-row gap-2 items-center w-full justify-start' >
-                            <div className='flex flex-col gap-2 items-center w-full justify-start' >
-                                {showLogos && <TeamLogo teamId={fixture.home_team} className='w-10 h-10' />}
+                            <div className='flex flex-col gap-4 items-center w-full justify-start' >
+                                {showLogos && <TeamLogo url={fixture.team_image_url} className='w-10 h-10' />}
                                  
                                 <p className={twMerge(
                                     'text-sm w-fit text-center',
                                     awayTeamWon && ""
-                                )} >{fixture.home_team}</p>
+                                )} >{fixture.team_name}</p>
                             </div>
 
                             {fixture.team_score !== null && fixture.opposition_score !== null ? (
@@ -86,13 +86,13 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                                 </div>
                             ) : null}
 
-                            <div className='flex flex-col gap-2 items-center w-full justify-end' >
-                            {showLogos && <TeamLogo teamId={fixture.home_team} className='w-10 h-10' />}
+                            <div className='flex flex-col gap-4 items-center w-full justify-end' >
+                            {showLogos && <TeamLogo url={fixture.opposition_team_image_url ?? fixture.opposition_image_url} className='w-10 h-10' />}
                                 
                                 <p className={twMerge(
                                     'text-sm w-fit text-wrap text-center',
                                     awayTeamWon && ""
-                                )} >{fixture.away_team}</p>
+                                )} >{fixture.opposition_team_name}</p>
                             </div>
 
                         </div>
@@ -118,7 +118,7 @@ type ModalProps = {
 
 function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
-    const title = `${fixture.home_team} vs ${fixture.away_team}`;
+    const title = `${fixture.team_name} vs ${fixture.opposition_team_name}`;
 
     const navigate = useNavigate();
 
@@ -140,15 +140,15 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
             className='text-black dark:text-white flex flex-col gap-3'
         >
 
-            <div className='flex p-3 text-wrap text-center rounded-xl bg-slate-200 dark:bg-slate-700 flex-row items-center justify-center' >
+            <div className='flex p-3 text-wrap text-center rounded-xl bg-slate-200 dark:bg-slate-800 flex-row items-center justify-center' >
                 <p>{fixture.venue} 𐄁 {kickoff_time && format(kickoff_time, "dd MMMM yyyy")}</p>
             </div>
 
             <div className='flex flex-row items-center justify-center dark:text-white' >
 
-                <div className='flex flex-1 flex-col items-center justify-center' >
-                    <TeamLogo />
-                    <p className='dark:text-white text-wrap text-center' >{fixture.home_team}</p>
+                <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
+                    <TeamLogo className='w-20 h-20' url={fixture.team_image_url} />
+                    <p className='dark:text-white text-wrap text-center' >{fixture.team_name}</p>
                 </div>
 
                 <div className='flex flex-1 flex-row' >
@@ -156,9 +156,9 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
                     {gameKickedOff && <MatchResultsInformation fixture={fixture} />}
                 </div>
 
-                <div className='flex flex-1 flex-col items-center justify-center' >
-                    <TeamLogo teamId={fixture.team_id} />
-                    <p className='dark:text-white text-wrap text-center' >{fixture.away_team}</p>
+                <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
+                    <TeamLogo className='w-20 h-20' url={fixture.opposition_team_image_url ??  fixture.opposition_image_url} />
+                    <p className='dark:text-white text-wrap text-center' >{fixture.opposition_team_name}</p>
                 </div>
             </div>
 

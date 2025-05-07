@@ -33,7 +33,12 @@ export interface RugbyPlayer {
   penalties_conceded?: number;
   cards?: number;
   team_id?: string;
+  form?: FormType,
+  available?: boolean,
+  position?: string
 }
+
+
 
 
 export type IFantasyAthlete = {
@@ -78,7 +83,7 @@ export type IFantasyAthlete = {
   nationality?: string,
   birth_place?: string,
   form?: FormType,
-  available?: boolean
+  available?: string
 }
 
 export type FormType = "UP" | "DOWN" | "NEUTRAL";

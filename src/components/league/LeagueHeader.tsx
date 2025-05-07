@@ -1,8 +1,7 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IFantasyLeague } from "../../types/fantasyLeague";
-import { format } from "date-fns";
 
 interface LeagueInfo {
   name: string;

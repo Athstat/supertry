@@ -1,41 +1,40 @@
-import useSWR from "swr"
 import { IFixture } from "../../types/games"
-import FixtureDisciplineStats from "./FixtureDisciplineStats"
+import { fixtureSumary } from "../../utils/fixtureUtils"
+import { IBoxScore } from "../../types/boxScore"
 import FixtureHeadToHeadStats from "./FixtureHeadToHeadStats"
-import FixtureKickingStats from "./FixtureKickingStats"
-import AthleteBoxScoreList from "./AthleteBoxScoreList"
-import { boxScoreService } from "../../services/boxScoreService"
-import { LoadingState } from "../ui/LoadingState"
-import { ErrorState } from "../ui/ErrorState"
+import FixtureAttackingLeaders from "./FixtureAttackingLeaders"
+import FixtureDefensiveLeaders from "./FixtureDefensiveLeaders"
+import FixtureKickingLeaders from "./FixtureKickingLeaders"
+import FixtureDisciplineLeaders from "./FixtureDisciplineLeaders"
 
 type Props = {
-    fixture: IFixture
+    fixture: IFixture,
+    boxScore: IBoxScore[]
 }
 
-export default function FixtureScreenBoxScores({ fixture }: Props) {
+export default function FixtureScreenBoxScores({ fixture, boxScore }: Props) {
 
-    const {data: boxscore, isLoading, error} = useSWR(fixture.game_id, boxScoreService.getBoxScoreByGameId);
+    const { gameKickedOff } = fixtureSumary(fixture);
 
-    if (isLoading) return <LoadingState message="Fetching Box Score Information" />
-
-    if (!boxscore || error) return <ErrorState message="Failed to fetch box score information" />
-
-    const forwardsBoxScore = boxscore.filter((bs) => {
-        return bs.player_type === "Forward";
-    })
-
-    const backsBoxScore = boxscore.filter((bs) => {
-        return bs.player_type === "Back";
-    })
+    if (!gameKickedOff) return;
 
     return (
 
         <>
-            <FixtureHeadToHeadStats fixture={fixture} />
-            <AthleteBoxScoreList boxScores={forwardsBoxScore} title="Fowards" fixture={fixture} />
-            <AthleteBoxScoreList boxScores={backsBoxScore} title="Backs" teamName={fixture.away_team} fixture={fixture} />
-            <FixtureKickingStats fixture={fixture} />
-            <FixtureDisciplineStats fixture={fixture} />
+            <section id="overview" ></section>
+                <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />
+            
+            <section id="attacking" ></section>
+            <FixtureAttackingLeaders boxScores={boxScore} fixture={fixture} />
+            <section id="defense" ></section>
+            <FixtureDefensiveLeaders boxScores={boxScore} fixture={fixture} />
+            <section id="kicking" ></section>
+            <FixtureKickingLeaders boxScores={boxScore} fixture={fixture} />
+            <section id="descipline" ></section>
+            <FixtureDisciplineLeaders boxScores={boxScore} fixture={fixture} />
+            {/* <AthleteBoxScoreList boxScores={backsBoxScore} title="Backs" teamName={fixture.away_team} fixture={fixture} /> */}
+            {/* <FixtureKickingStats fixture={fixture} /> */}
+            {/* <FixtureDisciplineStats fixture={fixture} /> */}
         </>
     )
 }

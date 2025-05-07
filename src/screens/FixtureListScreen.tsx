@@ -1,17 +1,19 @@
-import { Calendar } from "lucide-react";
+import { Calendar, ChevronDown } from "lucide-react";
 import useSWR from "swr";
 import { IFixture } from "../types/games";
 import { gamesService } from "../services/gamesService";
-import { INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from "../types/constants";
+import { ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from "../types/constants";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import FixtureCard from "../components/fixtures/FixtureCard";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { searchFixturesPredicate } from "../utils/fixtureUtils";
+import { useSectionNavigation } from "../hooks/useSectionNavigation";
 
 const competitionIds = [
-    URC_COMPETIION_ID,
-    INVESTEC_CHAMPIONSHIP_CUP
+    ERPC_COMPETITION_ID,
+    INVESTEC_CHAMPIONSHIP_CUP,
+    URC_COMPETIION_ID
 ]
 
 export default function FixtureListScreen() {
@@ -19,7 +21,13 @@ export default function FixtureListScreen() {
 
     const { data: fixtures, error, isLoading } = useSWR(competitionIds, fetcher);
     const [search, setSearch] = useState("");
-    const upcomingFixturesRef = useRef<HTMLDivElement>(null);
+
+    const sectionId = "upcoming_matches";
+    const {scrollToSection} = useSectionNavigation(["upcoming_matches"])
+
+    useEffect(() => {
+        scrollToSection(sectionId);
+    }, []);
 
     if (isLoading) return <LoadingState message="Loading Fixtures" />
     if (!fixtures) return <ErrorState message={error} />
@@ -33,7 +41,11 @@ export default function FixtureListScreen() {
         }
 
         return false;
-    });
+    })
+    .sort((a, b) => a.kickoff_time && b.kickoff_time ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf() : 0)
+    .reverse()
+    .splice(0, 30)
+    .reverse();
 
 
     const upcomingFixtures = fixtures.filter((f) => {
@@ -42,12 +54,9 @@ export default function FixtureListScreen() {
         }
 
         return false;
-    });
-
-    if (upcomingFixturesRef.current) {
-        upcomingFixturesRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-
+    })
+    .sort((a, b) => a.kickoff_time && b.kickoff_time ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf() : 0)
+    .splice(0, 20);
 
     return (
         <div className="dark:text-white  p-4 flex flex-col items-center justify-start" >
@@ -58,14 +67,14 @@ export default function FixtureListScreen() {
                     <h1 className="font-bold text-xl lg:text-2xl" >Fixtures</h1>
                 </div>
 
-                <div className="flex flex-row w-full" >
+                {/* <div className="flex flex-row w-full" >
                     <input
                         placeholder="Search Fixtures..."
                         className="bg-gray-800 outline-none p-3 flex-1 rounded-xl"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                </div>
+                </div> */}
 
                 <div className=" grid grid-cols-1 gap-3 " >
                     {pastFixtures.map((fixture, index) => {
@@ -75,17 +84,18 @@ export default function FixtureListScreen() {
                             return <FixtureCard
                                 showLogos
                                 showCompetition
-                                className="dark:bg-gray-800 dark:hover:bg-gray-800/80 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
+                                className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
                                 fixture={fixture}
                                 key={index}
                             />
                         }
                     })}
                 </div>
-
+                
+                <section id={sectionId} className="w-full h-10" ></section>
                 <h2 className="text-xl font-bold" >Upcoming Fixtures</h2>
 
-                <div ref={upcomingFixturesRef} className=" grid grid-cols-1 gap-3 " >
+                <div  className=" grid grid-cols-1 gap-3 " >
                     {upcomingFixtures.map((fixture, index) => {
 
                         if (searchFixturesPredicate(fixture, search)) {
@@ -93,13 +103,17 @@ export default function FixtureListScreen() {
                             return <FixtureCard
                                 showLogos
                                 showCompetition
-                                className="dark:bg-gray-800 dark:hover:bg-gray-800/80 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
+                                className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
                                 fixture={fixture}
                                 key={index}
                             />
                         }
                     })}
                 </div>
+            </div>
+            
+            <div onClick={() => scrollToSection(sectionId)} className="bg-primary-500 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full bottom-0 mb-20 mr-3 right-0 fixed" >
+                <ChevronDown />
             </div>
 
         </div>
