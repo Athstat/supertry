@@ -1,29 +1,33 @@
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import { IBoxScore } from "../../types/boxScore"
-import { rankByDisciplineStats} from "../../utils/boxScoreUtils"
+import { rankByDisciplineStats } from "../../utils/boxScoreUtils"
 import PlayerBoxScoreSmallCard from "../player/PlayerSmallCard"
+import { useState } from "react"
 
 type Props = {
   fixture: IFixture,
   boxScores: IBoxScore[]
 }
 
-export default function FixtureDisciplineLeaders({ boxScores, fixture}: Props) {
+export default function FixtureDisciplineLeaders({ boxScores, fixture }: Props) {
 
-  const sortedList = rankByDisciplineStats(boxScores);
+  const [showMore, setShowMore] = useState(false);
+  const toogle = () => setShowMore(!showMore);
+
+  const sortedList = rankByDisciplineStats(boxScores)
+  .filter((a) => a.redcards !== 0 || a.yellowcards !== 0);
+  
   let shortList = sortedList;
-  shortList = shortList.slice(0, 3);
+  const length = showMore ? sortedList.length : 4
+  shortList = shortList.slice(0, length);
 
   return (
-    <TitledCard title={'Discipline Leaders'} >
+    <TitledCard title={'Discipline'} >
 
       <div className="grid grid-cols-1 gap-2 w-full" >
-        
-        {shortList.map((bs, index) => {
-          const showPlayer = bs.redcards !== 0 && bs.yellowcards;
 
-          if (!showPlayer) return;
+        {shortList.map((bs, index) => {
 
           return <div key={index} className="flex flex-row items-center w-full justify-start gap-2" >
 
@@ -44,6 +48,10 @@ export default function FixtureDisciplineLeaders({ boxScores, fixture}: Props) {
 
         })}
       </div>
+
+      {sortedList.length > 4 && <div className="mt-3" >
+        <p onClick={toogle} className="dark:text-slate-400 text-slate-600" >{showMore ? "Show Less" : "Show More"}</p>
+      </div>}
 
     </TitledCard>
   )
