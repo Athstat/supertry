@@ -38,16 +38,19 @@ type Props = {
 export default function TabView({ tabKeySearchParam = "tabKey", children, tabHeaderItems }: Props) {
 
     const [searchParams, replace] = useSearchParams();
-
-    const enabledTabs = tabHeaderItems.filter(t => !t.disabled);
+    const enabledTabs = tabHeaderItems.filter(t => t.disabled === false);
 
     useEffect(() => {
         if (enabledTabs.length > 0 && !searchParams.has(tabKeySearchParam)) {
+            const firstTab = enabledTabs[0];
 
-            searchParams.set(tabKeySearchParam, enabledTabs[0].tabKey);
-            replace(searchParams);
+            if (firstTab.disabled === false) {   
+                searchParams.set(tabKeySearchParam, firstTab.tabKey);
+                replace(searchParams);
+            }
 
         }
+
     }, [tabHeaderItems]);
 
     return (
@@ -101,7 +104,7 @@ export type TabViewHeaderItem = {
     disabled?: boolean
 }
 
-function TabViewButton({ label, tabKey, disabled }: TabViewHeaderItem) {
+function TabViewButton({ label, tabKey, disabled = false }: TabViewHeaderItem) {
 
     const { currentTabKey, changeTabKey } = useTabView();
 

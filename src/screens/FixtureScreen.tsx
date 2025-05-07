@@ -11,7 +11,7 @@ import { ErrorState } from "../components/ui/ErrorState";
 import useSWR from "swr";
 import { gamesService } from "../services/gamesService";
 import { LoadingState } from "../components/ui/LoadingState";
-import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
+import FixtureAthleteStats from "../components/fixtures/FixtureAthleteStats";
 import { boxScoreService } from "../services/boxScoreService";
 import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
@@ -19,7 +19,7 @@ import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStat
 
 export default function FixtureScreen() {
 
-  const { back } = useRouter();
+  const { push } = useRouter();
   const { fixtureId } = useParams();
 
   if (!fixtureId) return <ErrorState message="Match was not found" />
@@ -38,13 +38,13 @@ export default function FixtureScreen() {
     {
       label: "Athlete Stats",
       tabKey: "athletes-stats",
-      disabled: boxScore === undefined
+      disabled: !boxScore || boxScore.length === 0
     },
 
     {
       label: "Team Stats",
       tabKey: "team-stats",
-      disabled: boxScore === undefined
+      disabled: !boxScore || boxScore.length === 0
     },
 
     {
@@ -61,9 +61,9 @@ export default function FixtureScreen() {
 
       <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-800 to-blue-900 dark:from-blue-800 dark:to-blue-950 text-white" >
 
-        <div onClick={() => back()} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
+        <div onClick={() => push("/fixtures")} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
           <ArrowLeft />
-          <p>Go Back</p>
+          <p>All Matches</p>
         </div>
 
 
@@ -93,10 +93,10 @@ export default function FixtureScreen() {
       {/* {boxScore && <FixtureScreenTab />} */}
       <FixtureScreenHeader fixture={fixture} />
 
-      <TabView tabHeaderItems={tabItems}  >
+      { !loadingBoxScore &&  <TabView tabHeaderItems={tabItems}  >
 
         <TabViewPage className="flex flex-col p-4 gap-5" tabKey="athletes-stats" >
-          {boxScore && <FixtureScreenBoxScores boxScore={boxScore} fixture={fixture} />}
+          {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
         </TabViewPage>
 
         <TabViewPage className="flex flex-col p-4 gap-5" tabKey="kick-off" >
@@ -107,7 +107,7 @@ export default function FixtureScreen() {
           {boxScore && <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />}
         </TabViewPage>
       
-      </TabView>
+      </TabView>}
 
       <div className="flex flex-col p-4 gap-5" >
 
@@ -130,8 +130,8 @@ function KickOffInformation({ fixture }: Props) {
 
   return (
     <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >
-      {kickoff_time && <p className='font-medium' >{format(kickoff_time, "h:mm a")}</p>}
-      {kickoff_time && <p className='dark:text-slate-300 text-slate-800' >{format(kickoff_time, "dd MMM yyyy")}</p>}
+      {kickoff_time && <p className='font-bold' >{format(kickoff_time, "h:mm a")}</p>}
+      {kickoff_time && <p className='dark:text-slate-300 text-slate-200' >{format(kickoff_time, "dd MMM yyyy")}</p>}
     </div>
   )
 }
