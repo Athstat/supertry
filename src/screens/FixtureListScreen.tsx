@@ -67,14 +67,14 @@ export default function FixtureListScreen() {
                     <h1 className="font-bold text-xl lg:text-2xl" >Fixtures</h1>
                 </div>
 
-                <div className="flex flex-row w-full" >
+                {/* <div className="flex flex-row w-full" >
                     <input
                         placeholder="Search Fixtures..."
                         className="bg-gray-800 outline-none p-3 flex-1 rounded-xl"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                </div>
+                </div> */}
 
                 <div className=" grid grid-cols-1 gap-3 " >
                     {pastFixtures.map((fixture, index) => {
