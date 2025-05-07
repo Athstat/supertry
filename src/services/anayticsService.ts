@@ -81,12 +81,21 @@ function trackTeamCreationStarted(leagueId: string, officialLeagueId: string) {
     });
 }
 
+function trackTeamCreationCompleted(leagueId: string, teamId: string, officialLeagueId: string) {
+    track("Team_Created", {
+        leagueId: leagueId,
+        officialLeagueId: officialLeagueId,
+        teamId: teamId
+    });
+}
+
 export const analytics = {
     track,
     trackPageVisit,
     trackUserSignUp,
     trackUserSignIn,
     trackUserLogout,
-    trackTeamCreationStarted
+    trackTeamCreationStarted,
+    trackTeamCreationCompleted
 
 }
