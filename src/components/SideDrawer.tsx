@@ -14,7 +14,8 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
     { icon: Calendar, label: "Fixtures", path: "/fixtures" },
     { icon: Settings, label: "Settings", path: "#" },
     { icon: HelpCircle, label: "Support", path: "#" },
-    { icon: Share2, label: "Invite Friends", path: "#" },
+    { icon: Share2, label: "Invite Friends", path: "/invite-friends" },
+
   ];
 
   const handleNavigation = (path: string) => {

@@ -62,6 +62,7 @@ declare module "lucide-react" {
   export const Check: CIP;
   export const Info: CIP;
   export const Bomb: CIP;
+  export const Copy: CIP;
 
 }
 

@@ -1,5 +1,6 @@
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
+import { analytics } from "./anayticsService";
 import { teamService } from "./teamService";
 
 export const leagueService = {
@@ -233,6 +234,8 @@ export const leagueService = {
           `Failed to join league: ${response.status} ${response.statusText}`
         );
       }
+
+      analytics.trackTeamCreationCompleted(league.id, latestTeam.id, league.official_league_id);
 
       return await response.json();
     } catch (error) {

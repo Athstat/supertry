@@ -15,6 +15,7 @@ import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import { analytics } from "../services/anayticsService";
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -59,6 +60,7 @@ export function LeagueScreen() {
   const handleJoinLeague = () => {
     // Navigate to team creation screen with league details
     if (leagueFromState && leagueId) {
+      analytics.trackTeamCreationStarted(leagueId, leagueFromState.official_league_id);
       navigate(`/${leagueFromState.official_league_id}/create-team`, {
         state: { league: leagueFromState },
       });
@@ -280,7 +282,7 @@ export function LeagueScreen() {
             Join This League
           </button>
         )}
-      </LeagueHeader> 
+      </LeagueHeader>
 
       <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
         {/* Tab Navigation */}

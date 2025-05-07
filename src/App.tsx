@@ -3,6 +3,7 @@ import AppRoutes from "./Routes";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AthleteProvider } from "./contexts/AthleteContext";
 import { PlayerProfileProvider } from "./hooks/usePlayerProfile";
+import PageVisitsTracker from "./components/analytics/PageVisitTracker";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <AuthProvider>
         <AthleteProvider>
           <PlayerProfileProvider>
+            <PageVisitsTracker />
             <AppRoutes />
           </PlayerProfileProvider>
         </AthleteProvider>

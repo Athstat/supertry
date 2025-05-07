@@ -20,6 +20,7 @@ import { BottomNav } from "./components/BottomNav";
 import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
+import InviteFriendsScreen from "./screens/InviteFriendsScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -235,6 +236,18 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout  >
               <FixtureListScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Test, can be edited */}
+      <Route
+        path="/invite-friends"
+        element={
+          <ProtectedRoute>
+            <Layout  >
+              <InviteFriendsScreen />
             </Layout>
           </ProtectedRoute>
         }
