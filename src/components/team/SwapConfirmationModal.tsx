@@ -84,8 +84,11 @@ export function SwapConfirmationModal({
                 <span className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
                   {currentPlayer.position}
                 </span>
-                <span className="text-xs font-medium text-primary-700 dark:text-primary-500 text-center">
-                  {currentPlayer.points} pts
+                <span className="text-xs font-medium text-primary-700 dark:text-primary-500 text-center flex items-center justify-center gap-1">
+                  <svg viewBox="0 0 24 24" fill="#FFD700" className="w-3 h-3">
+                    <circle cx="12" cy="12" r="10" fill="#FFD700" />
+                  </svg>
+                  {currentPlayer.price}
                 </span>
               </div>
             </div>
@@ -115,31 +118,37 @@ export function SwapConfirmationModal({
                 <span className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
                   {newPlayer.position}
                 </span>
-                <span className="text-xs font-medium text-primary-700 dark:text-primary-500 text-center">
-                  {newPlayer.points} pts
+                <span className="text-xs font-medium text-primary-700 dark:text-primary-500 text-center flex items-center justify-center gap-1">
+                  <svg viewBox="0 0 24 24" fill="#FFD700" className="w-3 h-3">
+                    <circle cx="12" cy="12" r="10" fill="#FFD700" />
+                  </svg>
+                  {newPlayer.price}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Point Change */}
+          {/* Price Change */}
           <div className="flex items-center justify-center mb-6">
             <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800 rounded-full">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Point Change:
+                  Price Change:
                 </span>
                 <span
-                  className={`text-sm font-medium ${
-                    newPlayer.points > currentPlayer.points
+                  className={`text-sm font-medium flex items-center gap-1 ${
+                    newPlayer.price > currentPlayer.price
                       ? "text-green-600 dark:text-green-400"
-                      : newPlayer.points < currentPlayer.points
+                      : newPlayer.price < currentPlayer.price
                       ? "text-red-600 dark:text-red-400"
                       : "text-gray-600 dark:text-gray-400"
                   }`}
                 >
-                  {newPlayer.points > currentPlayer.points && "+"}
-                  {newPlayer.points - currentPlayer.points} pts
+                  {newPlayer.price > currentPlayer.price && "+"}
+                  {newPlayer.price - currentPlayer.price}
+                  <svg viewBox="0 0 24 24" fill="#FFD700" className="w-3 h-3">
+                    <circle cx="12" cy="12" r="10" fill="#FFD700" />
+                  </svg>
                 </span>
               </div>
             </div>

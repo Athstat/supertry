@@ -102,16 +102,31 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
 
       {/* Position Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
-        {positionList.map((position) => (
+        {positionList.map((position, index) => (
           <div key={position.id}>
             {/* Custom player card for My Team screen */}
-            <div className="bg-white dark:bg-dark-800 rounded-lg shadow-md p-4 transition hover:shadow-lg border border-gray-100 dark:border-gray-700">
+            <div
+              className={`bg-white dark:bg-dark-800 rounded-lg shadow-md p-4 transition hover:shadow-lg border ${
+                position.isSpecial ||
+                (index === positionList.length - 1 &&
+                  position.name.toLowerCase().includes("second-row"))
+                  ? "border-orange-200 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/10"
+                  : "border-gray-100 dark:border-gray-700"
+              }`}
+            >
               <div className="flex flex-col items-center">
                 {position.player ? (
                   <>
                     {/* Player image */}
                     <div className="w-16 h-16 mb-2">
-                      <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+                      <div
+                        className={`w-16 h-16 rounded-full flex items-center justify-center overflow-hidden ${
+                          position.isSpecial ||
+                          (index === positionList.length - 1 && position.player)
+                            ? "bg-gray-300 border-2 border-orange-300 dark:border-orange-600"
+                            : "bg-gray-300"
+                        }`}
+                      >
                         {position.player.image_url ? (
                           <img
                             src={position.player.image_url}
@@ -126,16 +141,25 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                       </div>
                     </div>
 
-                    {/* Position name */}
-                    <h3
-                      className={`font-bold text-sm mb-1 ${
-                        position.isSpecial
-                          ? "text-orange-600 dark:text-orange-400"
-                          : "text-gray-800 dark:text-white"
-                      }`}
-                    >
-                      {position.name}
-                    </h3>
+                    {/* Position name with badge for Super Sub */}
+                    <div className="flex flex-col items-center">
+                      <h3
+                        className={`font-bold text-sm mb-1 ${
+                          position.isSpecial
+                            ? "text-orange-600 dark:text-orange-400"
+                            : "text-gray-800 dark:text-white"
+                        }`}
+                      >
+                        {position.name}
+                      </h3>
+                      {(position.isSpecial ||
+                        (index === positionList.length - 1 &&
+                          position.player)) && (
+                        <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded-full mb-1">
+                          Super Sub
+                        </span>
+                      )}
+                    </div>
 
                     {/* Player name */}
                     <p className="text-xs text-center font-medium mb-1 text-gray-900 dark:text-gray-300">
