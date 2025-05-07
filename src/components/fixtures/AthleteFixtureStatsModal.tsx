@@ -1,147 +1,203 @@
 import { IBoxScore } from "../../types/boxScore"
-import { IFantasyAthlete } from "../../types/rugbyPlayer"
+import { IFixture } from "../../types/games"
 import DialogModal from "../shared/DialogModal"
-import { GroupedStatsGrid } from "../shared/GroupedStatsGrid"
 import PlayerMugshot from "../shared/PlayerMugshot"
 import { StatCard } from "../shared/StatCard"
 
 type AthleteStatsModalProps = {
   open?: boolean,
   onClose?: () => void,
-  athlete: IFantasyAthlete,
-  boxScoreRecord: IBoxScore
+  boxScoreRecord: IBoxScore,
+  fixture: IFixture
 }
 
-export default function AthleteFixtureStatsModal({ open, onClose, boxScoreRecord: bs, athlete }: AthleteStatsModalProps) {
+export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxScoreRecord: bs }: AthleteStatsModalProps) {
 
-  JSON.stringify(athlete);
+
+
+  const fixPosition = (inStr: string) => {
+    const parts = inStr.split("-");
+    let outStr = "";
+
+    parts.forEach((part) => {
+      const partNormalised = part[0].toUpperCase() + part.slice(1);
+      outStr += partNormalised + " ";
+    });
+
+    return outStr
+  }
+
+  const isHomePlayer = fixture.team_id === bs.athlete_team_id;
 
   return (
-    <DialogModal open={open} className="gap-6 flex dark:text-white flex-col" onClose={onClose} title={athlete.player_name} >
+    <DialogModal open={open} className="gap-6 flex dark:text-white text-slate-700 flex-col" onClose={onClose} title={bs.athlete_first_name + " " + bs.athlete_last_name} >
 
       <div className="flex flex-row items-center justify-start gap-3" >
-        <PlayerMugshot athlete={athlete} />
+        <PlayerMugshot className="w-20 h-20" url={bs.athlete_image_url} />
 
         <div className="flex-col" >
-          <p className="text-lg font-bold" >{athlete.athstat_firstname}</p>
-          <p className="text-slate-400 font-medium" >{athlete.position}</p>
+          <p className="text-lg font-bold" >{bs.athlete_first_name} {bs.athlete_last_name}</p>
+          <p className="text-slate-400 font-bold" >{bs.athlete_position && fixPosition(bs.athlete_position)}</p>
         </div>
 
       </div>
 
-      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent" className="grid-cols-3" title="Game Performance" >
-        {<StatCard
+      <div className="grid grid-cols-2 gap-3" >
+
+        <StatCard
+          label="Team"
+          valueClassName="text-md"
+          value={isHomePlayer ? fixture.team_name : fixture.opposition_team_name}
+        />
+
+        <StatCard
           label="Minutes Played"
           value={bs.minutesplayed}
-        />}
+        />
 
-        {<StatCard
+        <StatCard
           label="Points"
           value={bs.points}
-        />}
+        />
 
-      </GroupedStatsGrid>
+      </div>
 
-      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " className="grid grid-cols-3 p-0" title="Attack" >
-        
-        {<StatCard
+
+      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+
+        <p className="text-lg font-bold" >Attacking Stats</p>
+
+        <StatsRow
+          label="Points"
+          value={bs.points}
+        />
+
+        <StatsRow
           label="Tries"
           value={bs.tries}
-        />}
+        />
 
-        {<StatCard
+        <StatsRow
           label="Passes"
           value={bs.passes}
-        />}
+        />
 
-        {<StatCard
+        <StatsRow
           label="Carries"
           value={bs.carries}
-        />}
+        />
 
-        {<StatCard
+        <StatsRow
           label="Offloads"
           value={bs.offloads}
-        />}
+        />
 
-        {<StatCard
+        <StatsRow
+          label="Defenders Deaten"
+          value={bs.defendersbeaten}
+        />
+
+        <StatsRow
           label="Line Breaks"
           value={bs.linebreaks}
-        />}
+        />
 
+        <StatsRow
+          label="Turn Overs Conceded"
+          value={bs.turnoversconceded}
+        />
 
-        {<StatCard
-          label="Penalty Goals Scored"
-          value={bs.penaltygoalsscored}
-        />}
-      </GroupedStatsGrid>
+      </div>
 
-      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " className="grid grid-cols-3 p-0" title="Defense" >
-        {<StatCard
-          label="Tackles"
+      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+
+        <p className="text-lg font-bold" >Defensive Stats</p>
+
+        <StatsRow
+          label="Tackles Success"
+          value={Math.floor(bs.tacklesuccess * 100) + "%"}
+        />
+
+        <StatsRow
+          label="Tackles Made"
           value={bs.tacklesmade}
-        />}
+        />
 
-        {<StatCard
-          label="Tackle %"
-          value={`${Math.floor(bs.tacklesuccess * 100)}%`}
-        />}
+        <StatsRow
+          label="Tackled Missed"
+          value={bs.tacklesmissed}
+        />
 
-        {<StatCard
+        <StatsRow
           label="Turnovers Won"
           value={bs.turnoverswon}
-        />}
+        />
 
-        {<StatCard
-          label="Retained Kicks"
-          value={bs.retainedkicks}
-        />}
+        <StatsRow
+          label="Line Breaks Won Steal"
+          value={bs.lineoutswonsteal}
+        />
 
-      </GroupedStatsGrid>
-
-      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " className="grid grid-cols-3 p-0" title="Kicking" >
-
-        {<StatCard
-          label="Kicks From Hand"
-          value={bs.kicksfromhand}
-        />}
-
-
-        {<StatCard
-          label="Kicks From Hand Metres"
-          value={bs.kicksfromhandmetres}
-        />}
-
-        {<StatCard
-          label="Covertions"
-          value={`${bs.conversionsscored}/${bs.conversionsscored + bs.conversionsmissed}`}
-        />}
-
-        {<StatCard
-          label="Try Kicks"
-          value={bs.trykicks}
-        />}
-
-      </GroupedStatsGrid>
-
-      <GroupedStatsGrid wrapperClassName="p-0 bg-transparent dark:bg-transparent " className="grid grid-cols-3 p-0" title="Displine" >
-        {<StatCard
+        <StatsRow
           label="Penalties Conceded"
           value={bs.penaltiesconceded}
-        />}
+        />
 
-        {<StatCard
+      </div>
+
+      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+
+        <p className="text-lg font-bold" >Kicking Stats</p>
+
+        <StatsRow
+          label="Kicks From Hand"
+          value={bs.kicksfromhand}
+        />
+
+        <StatsRow
+          label="Metres"
+          value={bs.kicksfromhandmetres}
+        />
+
+      </div>
+
+      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+
+        <p className="text-lg font-bold" >Descipline Stats</p>
+
+        <StatsRow
+          label="Red Cards"
+          value={bs.redcards}
+        />
+
+        <StatsRow
           label="Yellow Cards"
           value={bs.yellowcards}
-        />}
-
-        {<StatCard
-          label="Red Cards"
-          value={0}
         />
-        }
-      </GroupedStatsGrid>
 
-    </DialogModal>
+      </div>
+
+
+    </DialogModal >
+  )
+}
+
+type StatProps = {
+  label?: string,
+  value?: string | number
+}
+
+function StatsRow({ value, label }: StatProps) {
+  return (
+    <div className="flex  flex-row items-center" >
+
+      <div className="flex flex-[3]" >
+        <p className="text-slate-700 dark:text-slate-400" >{label}</p>
+      </div>
+
+      <div className="flex flex-1" >
+        <p>{value}</p>
+      </div>
+    </div>
   )
 }
