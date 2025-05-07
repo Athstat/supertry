@@ -21,9 +21,6 @@ export default function FixtureScreenBoxScores({ fixture, boxScore }: Props) {
     return (
 
         <>
-            <section id="overview" ></section>
-                <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />
-            
             <section id="attacking" ></section>
             <FixtureAttackingLeaders boxScores={boxScore} fixture={fixture} />
             <section id="defense" ></section>

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { TabButton } from "../TabButton";
@@ -32,11 +32,23 @@ export function useTabView(tabKeySearchParam?: string) {
 type Props = {
     tabKeySearchParam?: string,
     children?: ReactNode,
-    tabHeaderItems: TabViewButtonProps[]
+    tabHeaderItems: TabViewHeaderItem[]
 }
 
 export default function TabView({ tabKeySearchParam = "tabKey", children, tabHeaderItems }: Props) {
 
+    const [searchParams, replace] = useSearchParams();
+
+    const enabledTabs = tabHeaderItems.filter(t => !t.disabled);
+
+    useEffect(() => {
+        if (enabledTabs.length > 0 && !searchParams.has(tabKeySearchParam)) {
+
+            searchParams.set(tabKeySearchParam, enabledTabs[0].tabKey);
+            replace(searchParams);
+
+        }
+    }, [tabHeaderItems]);
 
     return (
         <TabViewContext.Provider value={{ tabKeySearchParam: tabKeySearchParam }} >
@@ -44,13 +56,13 @@ export default function TabView({ tabKeySearchParam = "tabKey", children, tabHea
 
                 {/* Header */}
                 <div className="flex flex-row w-full h-10">
-                    {tabHeaderItems.map((item, index) => {
+                    {enabledTabs.map((item, index) => {
                         return (
-                            <TabViewButton label={item.label} tabKey={item.tabKey} key={index}  />
+                            <TabViewButton label={item.label} disabled={item.disabled} tabKey={item.tabKey} key={index} />
                         )
                     })}
                 </div>
-                
+
                 <div>
                     {children}
                 </div>
@@ -83,18 +95,21 @@ export function TabViewPage({ children, tabKey, className }: TabViewPageProps) {
 
 }
 
-type TabViewButtonProps = {
+export type TabViewHeaderItem = {
     label?: string,
-    tabKey: string
+    tabKey: string,
+    disabled?: boolean
 }
 
-function TabViewButton({label, tabKey} : TabViewButtonProps) {
+function TabViewButton({ label, tabKey, disabled }: TabViewHeaderItem) {
 
-    const {currentTabKey, changeTabKey} = useTabView();
+    const { currentTabKey, changeTabKey } = useTabView();
 
     const handleTabClick = (newKey: string) => {
         changeTabKey(newKey);
     }
+
+    if (disabled) return <></>
 
     return (
         <TabButton
