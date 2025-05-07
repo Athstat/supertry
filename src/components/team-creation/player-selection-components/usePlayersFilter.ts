@@ -27,19 +27,6 @@ export const usePlayersFilter = ({
   const filteredPlayers = useMemo(() => {
     if (!players || !selectedPosition) return [];
 
-    console.log("Filtering players for position:", selectedPosition);
-    console.log("Total players available:", players.length);
-    console.log(
-      "Selected Position ID:",
-      selectedPosition.id,
-      "Is 'any' position?",
-      selectedPosition.id === "any" ? "YES" : "NO"
-    );
-    console.log(
-      "Sample player structure:",
-      players.length > 0 ? JSON.stringify(players[0]) : "No players"
-    );
-
     return players.filter((player) => {
       // Check for position matching
       let matchesPosition = false;
@@ -57,15 +44,6 @@ export const usePlayersFilter = ({
         selectedPosition.name === "any" ||
         selectedPosition.name === "Any Position";
 
-      console.log(
-        "Context detection:",
-        isMyTeamScreen ? "MyTeamScreen" : "TeamCreationScreen",
-        "Position name:",
-        selectedPosition.name,
-        "Position ID:",
-        selectedPosition.id
-      );
-
       // Check for Super Sub position in both screens - allow any player for Super Sub
       if (
         selectedPosition.id === "any" ||
@@ -74,7 +52,6 @@ export const usePlayersFilter = ({
         (selectedPosition as any).isSpecial === true
       ) {
         // For super sub position, allow any player regardless of position
-        console.log("Super Sub position detected - allowing all players");
         matchesPosition = true;
       } else if (isMyTeamScreen) {
         // MyTeamScreen path - stricter position matching
@@ -130,15 +107,6 @@ export const usePlayersFilter = ({
           positionClassToMatch = "super-sub";
         else if (selectedPosition.name === "Any Position")
           positionClassToMatch = "any";
-
-        console.log(
-          "TeamCreationScreen matching",
-          selectedPosition.name,
-          "->",
-          positionClassToMatch,
-          "against player position:",
-          playerPositionClass
-        );
 
         // Match using direct position class comparison for more accurate results
         // Or fallback to the original substring method if no mapping is found

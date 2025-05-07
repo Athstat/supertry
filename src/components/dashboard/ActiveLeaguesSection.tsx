@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Trophy, Users, Loader, ChevronRight, Calendar } from "lucide-react";
+import { Trophy, Loader, Users, Calendar, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { LeagueCard } from "../leagues/LeagueCard";
 import { ActiveLeaguesSectionProps } from "./types";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { leagueService } from "../../services/leagueService";
+import { teamService } from "../../services/teamService";
 import { activeLeaguesFilter } from "../../utils/leaguesUtils";
 import { format } from "date-fns";
 
@@ -16,6 +18,8 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
   const navigate = useNavigate();
   const [teamCounts, setTeamCounts] = useState<Record<string, number>>({});
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
+  const [userTeams, setUserTeams] = useState<Record<string, boolean>>({});
+  const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(false);
 
   // Fetch team counts for each league
   useEffect(() => {
@@ -43,6 +47,36 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
     fetchTeamCounts();
   }, [leagues]);
 
+  // Fetch user's teams to check which leagues they've joined
+  useEffect(() => {
+    const fetchUserTeams = async () => {
+      if (leagues.length === 0) return;
+
+      setIsLoadingUserTeams(true);
+      const joinedLeagues: Record<string, boolean> = {};
+
+      try {
+        // Fetch all teams for the user
+        const teams = await teamService.fetchUserTeams();
+
+        // Map of joined league IDs
+        leagues.forEach((league) => {
+          // Check if any team's league_id matches the current league's id
+          const hasJoined = teams.some((team) => team.league_id === league.id);
+          joinedLeagues[league.id] = hasJoined;
+        });
+
+        setUserTeams(joinedLeagues);
+      } catch (error) {
+        console.error("Failed to fetch user teams:", error);
+      } finally {
+        setIsLoadingUserTeams(false);
+      }
+    };
+
+    fetchUserTeams();
+  }, [leagues]);
+
   const handleLeagueClick = (league: IFantasyLeague) => {
     onViewLeague(league);
   };
@@ -66,55 +100,16 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
         </div>
       ) : (
         <div className="space-y-4">
-          {activeLeagues.slice(0, 3).map((league) => (
-            <motion.div
+          {activeLeagues.slice(0, 3).map((league, index) => (
+            <LeagueCard
               key={league.id}
-              onClick={() => handleLeagueClick(league)}
-              className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 border border-gray-100 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow"
-              whileHover={{
-                scale: 1.02,
-                transition: { type: "spring", stiffness: 300 },
-              }}
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold dark:text-white">
-                  {league.title}
-                </h3>
-                <div
-                  className={`px-2 py-0.5 text-xs rounded-full ${league.is_open
-                      ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-                      : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                    }`}
-                >
-                  {league.is_open ? "Open" : "Closed"}
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-
-                <div className="flex flex-col gap-2" >
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <Users size={16} />
-                    <span>
-                      {isLoadingCounts ? (
-                        <Loader size={12} className="animate-spin" />
-                      ) : (
-                        `${teamCounts[league.id] || 0} teams joined`
-                      )}{" "}
-                    </span>
-                  </div>
-
-                  {league.join_deadline && <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <Calendar size={16} />
-                    <span>
-                      Deadline <strong>{format(league.join_deadline, "EE dd MMM h:mm a")}</strong>
-                    </span>
-                  </div>}
-                </div>
-
-                <ChevronRight size={18} className="text-gray-400" />
-              </div>
-
-            </motion.div>
+              league={league}
+              onLeagueClick={handleLeagueClick}
+              teamCount={teamCounts[league.id]}
+              isLoading={isLoadingCounts}
+              custom={index}
+              isJoined={userTeams[league.id]}
+            />
           ))}
 
           {leagues.length > 3 && (

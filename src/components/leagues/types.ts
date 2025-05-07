@@ -6,4 +6,5 @@ export interface LeagueCardProps {
   teamCount?: number;
   isLoading?: boolean;
   custom?: number;
+  isJoined?: boolean;
 }

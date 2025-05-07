@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Trophy, Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
+import { teamService } from "../services/teamService";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { motion } from "framer-motion";
 
@@ -18,6 +19,8 @@ export function JoinLeagueScreen() {
   const [error, setError] = useState<string | null>(null);
   const [teamCounts, setTeamCounts] = useState<Record<string, number>>({});
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
+  const [userTeams, setUserTeams] = useState<Record<string, boolean>>({});
+  const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(false);
 
   // Container animation
   const containerVariants = {
@@ -80,6 +83,36 @@ export function JoinLeagueScreen() {
     };
 
     fetchTeamCounts();
+  }, [availableLeagues]);
+
+  // Fetch user's teams to check which leagues they've joined
+  useEffect(() => {
+    const fetchUserTeams = async () => {
+      if (availableLeagues.length === 0) return;
+
+      setIsLoadingUserTeams(true);
+      const joinedLeagues: Record<string, boolean> = {};
+
+      try {
+        // Fetch all teams for the user
+        const teams = await teamService.fetchUserTeams();
+
+        // Map of joined league IDs
+        availableLeagues.forEach((league) => {
+          // Check if any team's league_id matches the current league's id
+          const hasJoined = teams.some((team) => team.league_id === league.id);
+          joinedLeagues[league.id] = hasJoined;
+        });
+
+        setUserTeams(joinedLeagues);
+      } catch (error) {
+        console.error("Failed to fetch user teams:", error);
+      } finally {
+        setIsLoadingUserTeams(false);
+      }
+    };
+
+    fetchUserTeams();
   }, [availableLeagues]);
 
   // Scroll to top on mount
@@ -151,6 +184,7 @@ export function JoinLeagueScreen() {
                 teamCount={teamCounts[league.id]}
                 isLoading={isLoadingCounts}
                 custom={index}
+                isJoined={userTeams[league.id]}
               />
             ))}
           </motion.div>
