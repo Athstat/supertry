@@ -30,7 +30,7 @@ export default function FixtureScreen() {
   return (
     <div className="dark:text-white flex flex-col gap-3" >
 
-      <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-950 text-white" >
+      <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-800 to-blue-900 dark:from-blue-800 dark:to-blue-950 text-white" >
 
         <div onClick={() => back()} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
           <ArrowLeft />

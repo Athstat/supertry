@@ -113,7 +113,7 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScore[]) {
         turnoversConceded += bs.turnoversconceded;
         redCards += bs.redcards;
         yellowCards += bs.yellowcards;
-    })
+    });
 
     return {
         points,
