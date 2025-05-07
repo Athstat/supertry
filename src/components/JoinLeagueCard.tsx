@@ -1,4 +1,3 @@
-import React from 'react';
 import { Users, ChevronRight } from 'lucide-react';
 
 interface JoinLeagueCardProps {

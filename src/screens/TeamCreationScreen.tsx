@@ -14,8 +14,6 @@ import TeamNameInput from "./team-creation-components/TeamNameInput";
 import TeamToast from "./team-creation-components/TeamToast";
 import useTeamCreationState from "./team-creation-components/useTeamCreationState";
 import { leagueService } from "../services/leagueService";
-import { useEffect } from "react";
-import { analytics } from "../services/anayticsService";
 
 export function TeamCreationScreen() {
   const navigate = useNavigate();
@@ -58,12 +56,6 @@ export function TeamCreationScreen() {
     showToast,
     hideToast,
   } = useTeamCreationState(officialLeagueId);
-
-  useEffect(() => {
-    if (officialLeagueId && league) {
-      analytics.trackTeamCreationStarted(league.id, officialLeagueId);
-    }
-  }, [])
 
 
   // Handle team submission

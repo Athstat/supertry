@@ -15,7 +15,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
 import UserStatsGrid from "../components/profile/UserStatsGrid";
-import { analytics } from "../services/anayticsService";
 
 interface Achievement {
   id: string;
