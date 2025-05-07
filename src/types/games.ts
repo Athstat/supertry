@@ -23,8 +23,9 @@ export type IFixture = {
     round: number,
     team_name: string,
     team_image_url?: string,
-    opposition_team_name: string,
-    opposition_image_url: string
+    opposition_team_name?: string,
+    opposition_image_url?: string,
+    opposition_team_image_url?: string,
 }
 
 export type GameStatus = string | "completed" | "in_progress" | "not_started";

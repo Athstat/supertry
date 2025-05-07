@@ -87,7 +87,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                             ) : null}
 
                             <div className='flex flex-col gap-4 items-center w-full justify-end' >
-                            {showLogos && <TeamLogo url={fixture.opposition_image_url} className='w-10 h-10' />}
+                            {showLogos && <TeamLogo url={fixture.opposition_team_image_url ?? fixture.opposition_image_url} className='w-10 h-10' />}
                                 
                                 <p className={twMerge(
                                     'text-sm w-fit text-wrap text-center',
@@ -157,7 +157,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
                 </div>
 
                 <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
-                    <TeamLogo className='w-20 h-20' url={fixture.opposition_image_url} />
+                    <TeamLogo className='w-20 h-20' url={fixture.opposition_team_image_url ??  fixture.opposition_image_url} />
                     <p className='dark:text-white text-wrap text-center' >{fixture.opposition_team_name}</p>
                 </div>
             </div>

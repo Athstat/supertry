@@ -51,5 +51,19 @@ export const gamesService = {
             console.log("Error fetching games", err)
             return undefined;
         }
+    },
+
+    getGamesByDate: async (date: Date) => {
+        try {
+            const uri = getUri(`/api/v1/unauth/matches-all/${date.toISOString()}`);
+            const res = await fetch(uri);
+
+            const json = (await res.json()) as IFixture[];
+
+            return json;
+        } catch(error) {
+            console.log("Error getting games ", error);
+            return [];
+        }
     }
 }

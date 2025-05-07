@@ -12,6 +12,7 @@ import {
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -118,6 +119,13 @@ export function DashboardScreen() {
           />
         </div>
       </div>
+
+      {/* Upcoming Fixtures */}
+      <div className="mt-5">
+        <UpcomingFixturesSection
+        />
+      </div>
+
     </main>
   );
 }

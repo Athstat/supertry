@@ -44,7 +44,7 @@ export default function FixtureListScreen() {
     })
     .sort((a, b) => a.kickoff_time && b.kickoff_time ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf() : 0)
     .reverse()
-    .splice(0, 100)
+    .splice(0, 30)
     .reverse();
 
 
@@ -56,7 +56,7 @@ export default function FixtureListScreen() {
         return false;
     })
     .sort((a, b) => a.kickoff_time && b.kickoff_time ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf() : 0)
-    .splice(0, 100);
+    .splice(0, 20);
 
     return (
         <div className="dark:text-white  p-4 flex flex-col items-center justify-start" >
@@ -92,7 +92,7 @@ export default function FixtureListScreen() {
                     })}
                 </div>
                 
-                <section id={sectionId} ></section>
+                <section id={sectionId} className="w-full h-10" ></section>
                 <h2 className="text-xl font-bold" >Upcoming Fixtures</h2>
 
                 <div  className=" grid grid-cols-1 gap-3 " >

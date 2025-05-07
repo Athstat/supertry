@@ -14,7 +14,6 @@ import { LoadingState } from "../components/ui/LoadingState";
 import FixtureScreenBoxScores from "../components/fixtures/FixtureScreenBoxScores";
 import { boxScoreService } from "../services/boxScoreService";
 import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
-import FixtureScreenTab from "../components/fixtures/FixtureScreenTab";
 
 export default function FixtureScreen() {
 
