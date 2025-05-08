@@ -13,10 +13,6 @@ type Props = {
 
 export const PlayerProfileSeasonStats = forwardRef<HTMLDivElement, Props>(({aggregatedStats }, ref) => {
 
-
-    console.log(aggregatedStats.map(s => s.action));
-
-
     const minutesPlayed = getPlayerAggregatedStat("MinutesPlayed", aggregatedStats);
     const starts = getPlayerAggregatedStat("Starts", aggregatedStats);
 

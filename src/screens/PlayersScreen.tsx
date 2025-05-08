@@ -14,7 +14,7 @@ import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/players/EmptyState";
 
 type SortTab = "all" | "trending" | "top" | "new";
-type SortOption = "points" | "name" | "position" | "club";
+// type SortOption = "points" | "name" | "position" | "club";
 type SortDirection = "asc" | "desc";
 type SortField = "power_rank_rating" | "player_name" | "form";
 

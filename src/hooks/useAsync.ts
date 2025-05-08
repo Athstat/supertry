@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { FetcherResponse, SWRResponse } from "swr/_internal";
 
 export function useAsync<T>(func: () => Promise<T>) {
 
@@ -12,7 +14,7 @@ export function useAsync<T>(func: () => Promise<T>) {
             setLoading(true);
 
             try {
-                
+
                 const res = await func();
                 setData(res);
 
@@ -27,6 +29,14 @@ export function useAsync<T>(func: () => Promise<T>) {
         wrapper();
     }, [func]);
 
-    return {data, error, isLoading};
+    return { data, error, isLoading };
 
+}
+
+export function useFetch<T, E>(
+    cacheGroup: string,
+    key: E,
+    fetcher: (key: E) => Promise<T>
+): SWRResponse<T, any> {
+    return useSWR<T>([cacheGroup, key], ([, actualKey]: [string, E]) => fetcher(actualKey));
 }

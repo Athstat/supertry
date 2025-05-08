@@ -4,9 +4,7 @@ import renderStatDots from "./renderStatDots";
 import { convertToPlayer } from "./PlayerConverter";
 import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
-import FormIndicator, {
-  AvailabilityIndicator,
-} from "../../shared/FormIndicator";
+import FormIndicator from "../../shared/FormIndicator";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 
 interface PlayerListProps {
