@@ -112,7 +112,7 @@ export function TeamCreationScreen() {
       // Step 3: Request push notification permissions after successful team creation
       // This is the perfect time to ask for permissions as the user just created a team
       // and would likely want notifications about their team's performance
-      await requestPushPermissions();
+      requestPushPermissions();
       
       // Navigate to my-teams page
       navigate("/my-teams");
