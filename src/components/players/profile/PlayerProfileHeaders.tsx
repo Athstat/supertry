@@ -3,6 +3,7 @@ import { RugbyPlayer } from '../../../types/rugbyPlayer';
 import { TabButton } from '../../shared/TabButton';
 import { useRouter } from '../../../hooks/useRoter';
 import { StatTab } from '../../../screens/PlayerProfileScreen';
+import FormIndicator from '../../shared/FormIndicator';
 
 type Props = {
     player: RugbyPlayer,
@@ -48,7 +49,12 @@ export default function PlayerProfileHeader({player, activeTab, handleTabClick} 
                             />
                         </div>
                         <div>
-                            <h1 className="text-2xl lg:text-3xl font-bold">{player.player_name}</h1>
+                            <div className='flex flex-row items-center gap-2' >
+                                <h1 className="text-2xl lg:text-3xl font-bold">{player.player_name}</h1>
+                                {player.form &&
+                                    <FormIndicator className='w-5 h-5' form={player.form} />
+                                }
+                            </div>
                             <div className="flex items-center gap-2 text-white/80 text-md lg:text-lg">
                                 <span>
                                     {player.position_class
