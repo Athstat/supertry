@@ -6,6 +6,7 @@ import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
+import { fixtureSumary } from '../../utils/fixtureUtils';
 type Props = {
     fixture: IFixture,
     className?: string,
@@ -25,6 +26,8 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
 
     const [showModal, setShowModal] = useState(false);
     const toogle = () => setShowModal(!showModal);
+
+    const {gameKickedOff} = fixtureSumary(fixture);
 
 
     return (
@@ -54,7 +57,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                                 )} >{fixture.team_name}</p>
                             </div>
 
-                            {fixture.team_score !== null && fixture.opposition_score !== null ? (
+                            {gameKickedOff && fixture.team_score !== null && fixture.opposition_score !== null ? (
                                 <div className={twMerge(
                                     'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
                                     homeTeamWon && "font-bold",
@@ -77,7 +80,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                     <div className='flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center' >
 
                         <div className='flex flex-row gap-2 items-center w-full justify-start' >
-                            {fixture.team_score !== null && fixture.opposition_score !== null ? (
+                            {gameKickedOff && fixture.team_score !== null && fixture.opposition_score !== null ? (
                                 <div className={twMerge(
                                     'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
                                     awayTeamWon && "font-bold",
@@ -124,7 +127,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
     const { kickoff_time } = fixture;
 
-    const gameKickedOff = kickoff_time && (new Date(kickoff_time) < new Date());
+    const {gameKickedOff} = fixtureSumary(fixture);
 
 
     const goToFullMatchDetails = () => {

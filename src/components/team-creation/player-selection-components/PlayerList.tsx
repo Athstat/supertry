@@ -6,6 +6,7 @@ import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
 import FormIndicator from "../../shared/FormIndicator";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
+import { AvailableTeam } from "./useAvailableTeams";
 
 interface PlayerListProps {
   players: RugbyPlayer[];
@@ -14,6 +15,7 @@ interface PlayerListProps {
   handlePlayerSelect: (player: Player) => void;
   onClose: () => void;
   roundId?: number;
+  availableTeams: AvailableTeam[]
 }
 
 export const PlayerList: React.FC<PlayerListProps> = ({
@@ -23,6 +25,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   handlePlayerSelect,
   onClose,
   roundId,
+  availableTeams
 }) => {
   // Get the player profile hook
   const { showPlayerProfile } = usePlayerProfile();
@@ -58,9 +61,14 @@ export const PlayerList: React.FC<PlayerListProps> = ({
     );
   }
 
+  const teamIds = availableTeams.map(t => t.id);
+  const availablePlayers = players.filter(p => {
+    return p.team_id && teamIds.includes(p.team_id);
+  })
+
   return (
     <>
-      {players.map((player) => (
+      {availablePlayers.map((player) => (
         <div
           key={player.tracking_id || player.id || Math.random()}
           onClick={() => {

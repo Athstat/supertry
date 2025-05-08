@@ -14,6 +14,9 @@ import usePlayersFilter from './player-selection-components/usePlayersFilter';
 import useAvailableTeams from './player-selection-components/useAvailableTeams';
 import useModalEffects from './player-selection-components/useModalEffects';
 import AvailableFilter from './AvailableFilter';
+import { useFetch } from '../../hooks/useAsync';
+import { gamesService } from '../../services/gamesService';
+import { LoadingState } from '../ui/LoadingState';
 
 interface PlayerSelectionModalProps {
   visible: boolean;
@@ -24,6 +27,9 @@ interface PlayerSelectionModalProps {
   handlePlayerSelect: (player: Player) => void;
   onClose: () => void;
   roundId: number;
+  roundStart: number;
+  roundEnd: number;
+  competitionId: string
 }
 
 const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
@@ -34,7 +40,10 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   selectedPlayers,
   handlePlayerSelect,
   onClose,
-  roundId
+  roundId,
+  roundStart,
+  roundEnd,
+  competitionId
 }) => {
   // State for filtering and sorting
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,6 +52,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [loading, setLoading] = useState(false);
   const [filterAvailable, setFilterAvailable] = useState(false);
+  const {data: fixtureData, isLoading: loadingFixtures} = useFetch("games", competitionId, gamesService.getGamesByCompetitionId);
 
   // Get filtered and sorted players
   const { sortedPlayers, filteredCount } = usePlayersFilter({
@@ -58,7 +68,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   });
 
   // Get available teams for filter
-  const availableTeams = useAvailableTeams(players);
+  const allTeams = useAvailableTeams(players);
   
   // Disable body scrolling when modal is open
   useModalEffects(visible);
@@ -72,7 +82,35 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     }
   };
 
+  if (loadingFixtures) return <LoadingState />
+
+  const fixtures = fixtureData ?? [];
+  const roundFixtures = fixtures.filter((f) => {
+
+    const start = Math.min(roundStart, roundEnd);
+    const end = Math.max(roundStart, roundEnd);
+
+    return f.round >= start && f.round <= end
+  });
+
+  const participatingTeamsId = new Set<string>();
+
+  roundFixtures.forEach(rf => {
+    if (!participatingTeamsId.has(rf.team_id)) {
+      participatingTeamsId.add(rf.team_id);
+    }
+
+    if (!participatingTeamsId.has(rf.opposition_team_id)) {
+      participatingTeamsId.add(rf.opposition_team_id);
+    }
+  });
+
+  console.log("Participating Teams", participatingTeamsId);
+
+  const availableTeams = allTeams.filter(t => participatingTeamsId.has(t.id));
+
   if (!visible) return null;
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex sm:items-center sm:justify-center overflow-y-auto">
@@ -118,6 +156,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
             handlePlayerSelect={handlePlayerSelect}
             onClose={onClose}
             roundId={roundId}
+            availableTeams={availableTeams}
           />
         </div>
       </div>

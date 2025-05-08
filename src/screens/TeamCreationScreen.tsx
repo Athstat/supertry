@@ -15,6 +15,7 @@ import TeamNameInput from "./team-creation-components/TeamNameInput";
 import TeamToast from "./team-creation-components/TeamToast";
 import useTeamCreationState from "./team-creation-components/useTeamCreationState";
 import { leagueService } from "../services/leagueService";
+import { URC_COMPETIION_ID } from "../types/constants";
 
 export function TeamCreationScreen() {
   const navigate = useNavigate();
@@ -176,6 +177,9 @@ export function TeamCreationScreen() {
           handlePlayerSelect={handleAddPlayer}
           onClose={() => setShowPlayerSelection(false)}
           roundId={parseInt(officialLeagueId || "0")}
+          roundStart={league?.start_round ?? 0}
+          roundEnd={league.end_round ?? 0}
+          competitionId={officialLeagueId ?? URC_COMPETIION_ID}
         />
       )}
 
