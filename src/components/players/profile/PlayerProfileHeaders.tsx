@@ -4,7 +4,6 @@ import { TabButton } from '../../shared/TabButton';
 import { useRouter } from '../../../hooks/useRoter';
 import { StatTab } from '../../../screens/PlayerProfileScreen';
 import FormIndicator from '../../shared/FormIndicator';
-import { useSticky } from '../../../hooks/useSticky';
 import { twMerge } from 'tailwind-merge';
 import { useState, useEffect } from 'react';
 
@@ -53,7 +52,7 @@ export default function PlayerProfileHeader({ player, activeTab, handleTabClick 
                         
                         <div className={twMerge(
                             "w-16 h-16 rounded-full overflow-hidden border-2 border-white/20 transition-all duration-300 ease-in-out",
-                            !shrink && "w-36 h-36"
+                            !shrink && "w-24 h-24"
                         )}>
                             <img
                                 src={player.image_url}
@@ -67,12 +66,12 @@ export default function PlayerProfileHeader({ player, activeTab, handleTabClick 
                         </div>
                         <div>
                             <div className='flex flex-row items-center gap-2' >
-                                <h1 className={twMerge("text-2xl lg:text-3xl font-bold", !shrink && "text-3xl")}>{player.player_name}</h1>
+                                <h1 className={twMerge("text-lg md:text-2xl lg:text-3xl font-bold")}>{player.player_name}</h1>
                                 {player.form &&
                                     <FormIndicator className='w-5 h-5' form={player.form} />
                                 }
                             </div>
-                            <div className="flex items-center gap-2 text-white/80 text-md lg:text-lg">
+                            <div className="flex items-center gap-2 text-white/80 text-sm lg:text-lg">
                                 <span>
                                     {player.position_class
                                         ? player.position_class
