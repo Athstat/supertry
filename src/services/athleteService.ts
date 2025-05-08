@@ -143,7 +143,7 @@ export const athleteService = {
   },
 
   // Get detailed player statistics by athlete ID
-  getAthleteStats: async (athleteId: string) => {
+  getAthleteStats: async (athleteId: string, competitionId?: string) => {
     console.log("Fetching stats for athlete ID:", athleteId);
 
     try {
@@ -175,9 +175,37 @@ export const athleteService = {
         throw new Error(`API error: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log("API response data:", data);
+      const json = await response.json() as SportAction[];
+
+      // Filtering logic
+      const filterByCompeition = (action: SportAction, cId: string) => {
+        const {id} = action;
+        const parts = id.split("_");
+
+        if (parts.length < 3) {
+          return false;
+        }
+
+        const [,,actionCompId] = parts;
+
+        return actionCompId === cId;
+      }
+      
+      console.log("API response data:", json);
+
+      console.log("Before filter ", json)
+      
+      const data = competitionId !== undefined ? 
+      json.filter(a => filterByCompeition(a, competitionId))
+      : json;
+
+      if (competitionId) {
+        console.log("Competition Id was set ")
+        console.log("After filter", json.filter(a => filterByCompeition(a, competitionId)))
+      }
+
       return groupSportActions(data);
+
     } catch (error) {
       console.error("Error fetching player statistics:", error);
       // Fall back to mock data in case of any error
@@ -487,7 +515,9 @@ const extractCategoryStats = (
         // Format percentage values differently
         displayValue:
           action === "TackleSuccess"
-            ? `${Math.round(statsMap[action])}%`
+            ? statsMap["TacklesMade"] && statsMap["TacklesMissed"] ? 
+              `${Math.floor( ((statsMap["TacklesMade"]) / (statsMap["TacklesMade"] + statsMap["TacklesMissed"]) * 100)) }%`  :
+              `${Math.floor(statsMap["TackleSuccess"] * 100)}%`
             : statsMap[action].toString(),
       });
     }
