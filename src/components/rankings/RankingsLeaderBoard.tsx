@@ -1,25 +1,15 @@
 import { ArrowUp, ArrowDown } from "lucide-react";
 import useSWR from "swr";
-import { useAuthUser } from "../../hooks/useAuthUser";
 import { userRankingsService } from "../../services/userRankingsService";
 import { LoadingState } from "../ui/LoadingState";
-import { UserRanking } from "../../types/userRanking";
 import UserRankingFocusShort from "./UserRankingFocusShort";
 import UserRankingsItem from "./UserRankingsItem";
 
 export default function UserRankingsLeaderBoard() {
 
-    const authUser = useAuthUser();
     const {data: rankings, isLoading} = useSWR([1, 15], userRankingsService.getUserRankings);
     
     if (isLoading) return <LoadingState  />
-
-    const isCurrentUser = (userId: string) => {
-        return authUser.id === userId;
-    }
-
-    const isInPromotionZone = (rank: number) => rank <= 5;
-    const isInDemotionZone = (rank: number) => rank >= 11;
 
     if (!rankings) return <></>
 
@@ -27,8 +17,6 @@ export default function UserRankingsLeaderBoard() {
 
     shortList = shortList.slice(0, 15);
 
-    const hasFullName = (ranking: UserRanking) => ranking.first_name && ranking.last_name;
- 
     return (
         <div>
             <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm overflow-hidden">

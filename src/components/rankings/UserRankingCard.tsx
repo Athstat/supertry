@@ -29,10 +29,10 @@ export default function UserRankingCard() {
                         <Trophy className="w-8 h-8 text-amber-300" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                        <h2 className="text-md lg:text-lg font-bold text-white flex items-center gap-2">
                             Global Leader Board
                         </h2>
-                        {rank && <p className="text-slate-50 text-md">
+                        {rank && <p className="text-slate-50 text-bse lg:text-md">
                             Total Points <strong>{totalScore}</strong>
                         </p>}
 
@@ -40,7 +40,7 @@ export default function UserRankingCard() {
                     </div>
                 </div>
                 <div className="text-right">
-                    {rank && <div className="text-3xl font-bold text-white">#{rank}</div>}
+                    {rank && <div className="text-2xl lg:text-3xl font-bold text-white">#{rank}</div>}
                     {/* { !rank && <div className="text-xl font-bold text-white"></div>} */}
                     {rank && <div className="text-primary-100">Your Rank</div>}
                 </div>
