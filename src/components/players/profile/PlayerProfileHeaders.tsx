@@ -22,7 +22,7 @@ export default function PlayerProfileHeader({player, activeTab, handleTabClick} 
     return (
         <div className="fixed top-[60px] left-0 right-0 z-30">
             {/* Player Info Header */}
-            <div className="bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-md">
+            <div className="bg-gradient-to-br from-blue-800 to-blue-900 dark:from-blue-800 dark:to-blue-950 text-white shadow-md">
                 <div className="container mx-auto px-4 py-3">
 
                     <button
@@ -32,10 +32,10 @@ export default function PlayerProfileHeader({player, activeTab, handleTabClick} 
                         onClick={backToPlayers}
                     >
                         <ChevronLeft size={20} />
-                        Back to Player
+                        Back to Players
                     </button>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex justify-start flex-row items-center gap-4">
                         <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white/20">
                             <img
                                 src={player.image_url}
@@ -48,8 +48,8 @@ export default function PlayerProfileHeader({player, activeTab, handleTabClick} 
                             />
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold">{player.player_name}</h1>
-                            <div className="flex items-center gap-2 text-white/80 text-sm">
+                            <h1 className="text-2xl lg:text-3xl font-bold">{player.player_name}</h1>
+                            <div className="flex items-center gap-2 text-white/80 text-md lg:text-lg">
                                 <span>
                                     {player.position_class
                                         ? player.position_class
@@ -79,18 +79,7 @@ export default function PlayerProfileHeader({player, activeTab, handleTabClick} 
                         >
                             Overview
                         </TabButton>
-                        <TabButton
-                            active={activeTab === "physical"}
-                            onClick={() => handleTabClick("physical")}
-                        >
-                            Physical
-                        </TabButton>
-                        <TabButton
-                            active={activeTab === "seasonAggregate"}
-                            onClick={() => handleTabClick("seasonAggregate")}
-                        >
-                            Season Performance
-                        </TabButton>
+
                         <TabButton
                             active={activeTab === "attack"}
                             onClick={() => handleTabClick("attack")}

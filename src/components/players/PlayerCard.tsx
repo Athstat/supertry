@@ -1,3 +1,4 @@
+import { twMerge } from "tailwind-merge";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import FormIndicator from "../shared/FormIndicator";
 
@@ -46,7 +47,7 @@ export const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
         {/* Fantasy Points */}
         <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
           <span className="text-sm text-gray-600 dark:text-gray-400">
-            Fantasy Points
+            Power Ranking
           </span>
           <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
             {player.power_rank_rating}
@@ -54,7 +55,7 @@ export const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
         </div>
 
         {/* Team */}
-        <div className="flex">
+        <div className={twMerge("flex")}>
           <img
             src={player.team_logo}
             alt={`${player.team_name} logo`}

@@ -109,7 +109,7 @@ export const PlayerProfileScreen = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-dark-900/40 pb-20">
+    <main className="min-h-screen pb-20">
 
       <PlayerProfileHeader player={player} activeTab={activeTab} handleTabClick={handleTabClick} />
 
