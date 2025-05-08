@@ -32,11 +32,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       {/* Image space - hidden on mobile */}
       <div className="flex-1 pr-4">Player / Team</div>
       {/* <div className="w-12 text-center flex items-center justify-center transition">FRM</div> */}
-      <div
-        className={`w-16 text-left flex items-center justify-start transition`}
-      >
-        <span className="font-semibold">AVL</span>
-      </div>
+      
       <button
         onClick={() => onSort("price")}
         className={`w-20 text-left flex items-center justify-start transition ${

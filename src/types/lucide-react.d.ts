@@ -63,6 +63,8 @@ declare module "lucide-react" {
   export const Info: CIP;
   export const Bomb: CIP;
   export const Copy: CIP;
+  export const PlayCircleIcon: CIP;
+  export const WatchIcon: CIP;
 
 }
 
