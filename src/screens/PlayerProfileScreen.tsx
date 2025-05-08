@@ -114,7 +114,7 @@ export const PlayerProfileScreen = () => {
       <PlayerProfileHeader player={player} activeTab={activeTab} handleTabClick={handleTabClick} />
 
       {/* Content - All sections in one scrollable view with padding to account for fixed headers */}
-      <div className="container mx-auto px-4 pt-[180px] pb-6 space-y-8">
+      <div className="container mx-auto px-4 pt-[250px] pb-6 space-y-8">
 
         <PlayerProfileOverview ref={overviewRef} player={player} />
 
