@@ -115,9 +115,9 @@ export const PlayerList: React.FC<PlayerListProps> = ({
             <FormIndicator form={player.form} />
           </div>} */}
 
-          {player.available !== undefined && (
+          {player.form !== undefined && (
             <div className="w-fit lg:w-16 flex flex-row items-center justify-start">
-              <AvailabilityIndicator availability={player.available} />
+              <FormIndicator form={player.form} />
             </div>
           )}
 
