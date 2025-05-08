@@ -87,9 +87,9 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           {/* Player info */}
           <div className="flex-1 min-w-0 pr-4">
             <div className="flex items-start sm:items-center justify-between">
-              <p className="font-semibold text-sm leading-tight break-words sm:truncate dark:text-gray-100 max-w-[150px] sm:max-w-none">
-                {player.player_name}
-              </p>
+              <div className="font-semibold flex flex-row gap-1 items-center text-sm leading-tight break-words sm:truncate dark:text-gray-100 max-w-[150px] sm:max-w-none">
+                {player.player_name} {player.form && player.form !== "NEUTRAL" && <FormIndicator form={player.form} />}
+              </div>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
               {player.team_name}
@@ -112,21 +112,21 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           {/* {player.form && <div className="w-fit lg:w-12 flex flex-row items-center justify-end">
             <FormIndicator form={player.form} />
           </div>} */}
-
+{/* 
           {player.form !== undefined && (
             <div className="w-fit lg:w-16 flex flex-row items-center justify-start">
               <FormIndicator form={player.form} />
             </div>
-          )}
+          )} */}
 
-          <div className="w-20 text-left">
+          <div className="w-7 text-center">
             <p className="font-bold text-sm dark:text-gray-200">
               {player.price}
             </p>
           </div>
 
           {/* Rating */}
-          <div className="w-16 text-left">
+          <div className="w-16 text-center">
             <p className="text-sm dark:text-gray-200">
               {(player.power_rank_rating || 0).toFixed(1)}
             </p>

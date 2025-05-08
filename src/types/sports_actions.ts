@@ -1,4 +1,4 @@
-export type AthleteSportsActionAggregated = {
+export type SportAction = {
     id: string,
     athlete_id: string,
     action: PlayerAggregateStatAction
@@ -13,7 +13,7 @@ type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineout
     "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" | "RetainedKicks"
 
 /** Helper function to get a stat */
-export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregatedStats: AthleteSportsActionAggregated[]) => {
+export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregatedStats: SportAction[]) => {
     const filteredList = aggregatedStats.filter(stat => {
         return stat.action.toLowerCase() === key.toLowerCase();
     });

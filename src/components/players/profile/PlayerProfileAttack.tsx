@@ -4,7 +4,7 @@ import { EnhancedStatBar } from "../../shared/EnhancedStatBar"
 import { GroupedStatsGrid } from "../../shared/GroupedStatsGrid"
 import { forwardRef } from "react"
 import { ExpanedStats } from "../../../screens/PlayerProfileScreen"
-import { AthleteSportsActionAggregated, getPlayerAggregatedStat } from "../../../types/sports_actions"
+import { SportAction, getPlayerAggregatedStat } from "../../../types/sports_actions"
 import { StatCard } from "../../shared/StatCard"
 import { MdOutlineSportsRugby } from "react-icons/md"
 import { GrRun } from "react-icons/gr"
@@ -13,7 +13,7 @@ type Props = {
     player: RugbyPlayer,
     expandedStats: ExpanedStats,
     toggleStatExpanded: (key: string) => void,
-    aggregatedStats: AthleteSportsActionAggregated[]
+    aggregatedStats: SportAction[]
 }
 
 export const PlayerProfileAttack = forwardRef<HTMLDivElement, Props>(({ player, expandedStats, toggleStatExpanded, aggregatedStats }, ref) => {

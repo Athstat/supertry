@@ -1,7 +1,7 @@
 import { ReactNode, useCallback } from "react";
 import { useAsync } from "../../../hooks/useAsync";
 import { athleteSportActionsService } from "../../../services/athleteSportsActions";
-import { AthleteSportsActionAggregated } from "../../../types/sports_actions";
+import { SportAction } from "../../../types/sports_actions";
 import { PlayerAggregateStatsContext } from "../../../contexts/PlayerAggregateStatsContext";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 
@@ -17,7 +17,7 @@ export default function PlayerAggregateStatsProvider({children, player} : Props)
     return athleteSportActionsService.getByAthlete(player.tracking_id ?? "");
   }, []);
 
-  const { data: aggregateStats, error } = useAsync<AthleteSportsActionAggregated[]>(fetchData);
+  const { data: aggregateStats, error } = useAsync<SportAction[]>(fetchData);
 
   return (
     <PlayerAggregateStatsContext.Provider value={{aggregateStats, error}}>

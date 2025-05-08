@@ -65,6 +65,9 @@ declare module "lucide-react" {
   export const Copy: CIP;
   export const PlayCircleIcon: CIP;
   export const WatchIcon: CIP;
+  export const Coins: CIP;
+  export const CoinsIcon: CIP;
+  export const CircleDollarSign: CIP;
 
 }
 

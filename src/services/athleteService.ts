@@ -1,4 +1,5 @@
 import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
+import { SportAction } from "../types/sports_actions";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 
 // Define the type for each individual breakdown item
@@ -176,7 +177,7 @@ export const athleteService = {
 
       const data = await response.json();
       console.log("API response data:", data);
-      return processStatsData(data);
+      return groupSportActions(data);
     } catch (error) {
       console.error("Error fetching player statistics:", error);
       // Fall back to mock data in case of any error
@@ -374,7 +375,7 @@ const getMockPlayerStats = () => {
     },
   ];
 
-  return processStatsData(mockRawStats);
+  return groupSportActions(mockRawStats);
 };
 
 /**
@@ -439,7 +440,7 @@ const getMockPowerRankings = (): PowerRankingItem[] => {
 /**
  * Process the raw stats data into a more usable format
  */
-const processStatsData = (rawStats: any[]) => {
+export const groupSportActions = (rawStats: any[]) => {
   // Convert array of actions to an object with action as key
   const statsMap: Record<string, number> = {};
 

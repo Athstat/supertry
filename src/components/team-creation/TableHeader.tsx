@@ -1,4 +1,6 @@
+import { CircleDollarSign } from "lucide-react";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 interface TableHeaderProps {
   sortBy: "price" | "rating" | "attack" | "defense" | "kicking";
@@ -15,14 +17,15 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 }) => {
   // Helper to render sort indicator
   const renderSortIndicator = (
-    field: "price" | "rating" | "attack" | "defense" | "kicking"
+    field: "price" | "rating" | "attack" | "defense" | "kicking",
+    className?: string
   ) => {
     if (sortBy !== field) return null;
 
     return sortOrder === "desc" ? (
-      <span className="inline ml-1">▼</span>
+      <span className={twMerge("inline ml-1", className)}>▼</span>
     ) : (
-      <span className="inline ml-1">▲</span>
+      <span className={twMerge("inline ml-1", className)}>▲</span>
     );
   };
 
@@ -35,12 +38,12 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       
       <button
         onClick={() => onSort("price")}
-        className={`w-20 text-left flex items-center justify-start transition ${
+        className={`text-left flex items-center justify-start w-10 transition ${
           sortBy === "price" ? "text-green-600" : ""
         }`}
       >
-        <span className="font-semibold">COINS</span>
-        {renderSortIndicator("price")}
+        <CircleDollarSign className="w-5 h-fit" />
+        {renderSortIndicator("price", "ml-0")}
       </button>
       <button
         onClick={() => onSort("rating")}
