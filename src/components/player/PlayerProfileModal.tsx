@@ -5,6 +5,7 @@ import PlayerInfo from './profile-modal-components/PlayerInfo';
 import TabsNavigation from './profile-modal-components/TabsNavigation';
 import TabContent from './profile-modal-components/TabContent';
 import usePlayerStats from './profile-modal-components/usePlayerStats';
+import PlayerStatsContextInfo from './profile-modal-components/PlayerStatsContextInfo';
 
 interface PlayerProfileModalProps {
   player: any;
@@ -44,6 +45,10 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
           onTabChange={setActiveTab} 
         />
         
+        <div className='p-4' >
+          <PlayerStatsContextInfo />
+        </div>
+
         {/* Tab Content - scrollable */}
         <div className="flex-1 ">
           <TabContent 

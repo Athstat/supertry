@@ -50,7 +50,7 @@ export const actionLabels: Record<string, string> = {
   Tries: "Tries",
   TurnoversConceded: "Turnovers Conceded",
   TurnoversWon: "Turnovers Won",
-  Starts: "Starts",
+  Starts: "Starts"
 };
 
 // Categories for grouping stats in the UI
@@ -179,25 +179,29 @@ export const athleteService = {
 
       // Filtering logic
       const filterByCompeition = (action: SportAction, cId: string) => {
-        const {id} = action;
+        const { id } = action;
         const parts = id.split("_");
+
+        if (action.action === "Starts") {
+          return true;
+        }
 
         if (parts.length < 3) {
           return false;
         }
 
-        const [,,actionCompId] = parts;
+        const [, actionLabel , actionCompId] = parts;
 
         return actionCompId === cId;
       }
-      
+
       console.log("API response data:", json);
 
       console.log("Before filter ", json)
-      
-      const data = competitionId !== undefined ? 
-      json.filter(a => filterByCompeition(a, competitionId))
-      : json;
+
+      const data = competitionId !== undefined ?
+        json.filter(a => filterByCompeition(a, competitionId))
+        : json;
 
       if (competitionId) {
         console.log("Competition Id was set ")
@@ -276,8 +280,8 @@ export const athleteService = {
       if (json.length === 0) return undefined;
 
       return json[0];
-      
-    } catch(error) {
+
+    } catch (error) {
       console.log("Error fetching rugby athlete ", error);
       return undefined
     }
@@ -508,6 +512,7 @@ const extractCategoryStats = (
 ) => {
   return categoryActions.reduce((result, action) => {
     if (statsMap[action] !== undefined) {
+
       result.push({
         action,
         label: actionLabels[action] || formatActionName(action),
@@ -515,10 +520,23 @@ const extractCategoryStats = (
         // Format percentage values differently
         displayValue:
           action === "TackleSuccess"
-            ? statsMap["TacklesMade"] && statsMap["TacklesMissed"] ? 
-              `${Math.floor( ((statsMap["TacklesMade"]) / (statsMap["TacklesMade"] + statsMap["TacklesMissed"]) * 100)) }%`  :
+            ? statsMap["TacklesMade"] && statsMap["TacklesMissed"] ?
+              `${Math.floor(((statsMap["TacklesMade"]) / (statsMap["TacklesMade"] + statsMap["TacklesMissed"]) * 100))}%` :
               `${Math.floor(statsMap["TackleSuccess"] * 100)}%`
             : statsMap[action].toString(),
+      });
+    }
+
+    else {
+
+      // If action is null just put 0
+      result.push({
+        action,
+        label: formatActionName(action),
+        value: 0,
+        // Format percentage values differently
+        displayValue:
+          action.endsWith("Success") ? "0%" : "0"
       });
     }
     return result;

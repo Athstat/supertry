@@ -193,7 +193,7 @@ export const leagueService = {
 
       // // Fetch the user's latest team
       const userTeams = await teamService.fetchUserTeams(
-        league.official_league_id
+        // league.official_league_id
       );
 
       if (!userTeams || userTeams.length === 0) {
@@ -252,7 +252,9 @@ export const leagueService = {
     try {
       // Try the first approach - look for user teams in the league
       try {
-        const userTeams = await teamService.fetchUserTeams(leagueId);
+        const userTeams = await teamService.fetchUserTeams(
+          // leagueId
+        );
         // If the user has any teams in this league, they've joined it
         if (userTeams.length > 0) {
           return true;
@@ -262,9 +264,9 @@ export const leagueService = {
       }
 
       // If first approach fails, try the second approach
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      // const baseUrl = import.meta.env.PROD
+      //   ? "https://qa-games-app.athstat-next.com"
+      //   : "";
 
       // Get token for authentication
       const token = localStorage.getItem("access_token");

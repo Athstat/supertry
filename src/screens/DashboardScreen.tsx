@@ -12,7 +12,6 @@ import {
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
 import { IFantasyLeague } from "../types/fantasyLeague";
-import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -37,7 +36,9 @@ export function DashboardScreen() {
       setIsLoadingTeams(true);
       // Get teams directly using fetchUserTeams with default league ID
       const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19"; // Default league ID
-      let userTeams = await teamService.fetchUserTeams(defaultLeagueId);
+      let userTeams = await teamService.fetchUserTeams(
+        // defaultLeagueId
+      );
       // Sort teams by creation date (newest first)
       const sortedTeams = [...userTeams].sort((a, b) => {
         const dateA = new Date(a.created_at || 0).getTime();
@@ -75,10 +76,13 @@ export function DashboardScreen() {
 
       // Filter leagues based on is_open status (same as JoinLeagueScreen)
       const availableLeagues = allLeagues.filter(
-        (league) => league.is_open && !league.has_ended
+        (league) => {
+          const hasLeagueEnded = league.is_open && !league.has_ended;
+          return hasLeagueEnded;
+        }
       );
 
-      // console.log("availableLeagues", availableLeagues);
+      console.log("availableLeagues", availableLeagues);
       
       setLeagues(availableLeagues);
     } catch (err) {
