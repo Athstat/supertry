@@ -16,8 +16,7 @@ interface PlayerProfileModalProps {
 export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({ 
   player, 
   isOpen, 
-  onClose,
-  roundId
+  onClose
 }) => {
   const [activeTab, setActiveTab] = useState<number>(1); // Default to Stats tab (index 1)
   const { playerStats, isLoading, error } = usePlayerStats(player, isOpen);

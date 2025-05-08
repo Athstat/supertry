@@ -5,6 +5,8 @@ interface PlayerStatsProps {
 }
 
 export const PlayerStats: React.FC<PlayerStatsProps> = ({ player }) => {
+
+  
   return (
     <div className="flex justify-between px-4 py-3 -mt-10 relative z-10">
       <div className="bg-white dark:bg-dark-700 flex-1 mx-1 rounded-lg shadow-md flex flex-col items-center justify-center p-3">
