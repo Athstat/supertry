@@ -55,7 +55,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </button>
       <button
         onClick={() => onSort("attack")}
-        className={`w-20 text-left flex items-center justify-start transition ${
+        className={`w-14 text-left flex items-center justify-start transition ${
           sortBy === "attack" ? "text-green-600" : ""
         }`}
       >
@@ -63,7 +63,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </button>
       <button
         onClick={() => onSort("defense")}
-        className={`w-20 text-left flex items-center justify-start transition ${
+        className={`w-14 text-left flex items-center justify-start transition ${
           sortBy === "defense" ? "text-green-600" : ""
         }`}
       >
@@ -71,7 +71,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </button>
       <button
         onClick={() => onSort("kicking")}
-        className={`w-20 text-left flex items-center justify-start transition ${
+        className={`w-14 text-left flex items-center justify-start transition ${
           sortBy === "kicking" ? "text-green-600" : ""
         }`}
       >

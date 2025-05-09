@@ -7,6 +7,7 @@ import { Position } from "../../../types/position";
 import FormIndicator from "../../shared/FormIndicator";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { AvailableTeam } from "./useAvailableTeams";
+import { formatPosition } from "../../../utils/athleteUtils";
 
 interface PlayerListProps {
   players: RugbyPlayer[];
@@ -99,12 +100,16 @@ export const PlayerList: React.FC<PlayerListProps> = ({
                 {player.player_name} {player.form && player.form !== "NEUTRAL" && <FormIndicator form={player.form} />}
               </div>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-              {player.team_name}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {player.position || selectedPosition.name}
-            </p>
+
+            <div className="flex flex-col gap-0 lg:flex-col" >
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {player.team_name}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {formatPosition(player.position || selectedPosition.name)}
+              </p>
+            </div>
+
             <button
               onClick={(e) => handleViewPlayerProfile(player, e)}
               className="mt-1 text-blue-500 dark:text-blue-400 hover:underline transition-colors text-xs flex items-center"
@@ -120,7 +125,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           {/* {player.form && <div className="w-fit lg:w-12 flex flex-row items-center justify-end">
             <FormIndicator form={player.form} />
           </div>} */}
-{/* 
+          {/* 
           {player.form !== undefined && (
             <div className="w-fit lg:w-16 flex flex-row items-center justify-start">
               <FormIndicator form={player.form} />
@@ -141,17 +146,17 @@ export const PlayerList: React.FC<PlayerListProps> = ({
           </div>
 
           {/* Attack stat */}
-          <div className="w-20 flex justify-start px-2">
+          <div className="w-14 flex justify-center px-2">
             {renderStatDots(player.ball_carrying || 0, "bg-red-500")}
           </div>
 
           {/* Defense stat */}
-          <div className="w-20 flex justify-start px-2">
+          <div className="w-14 flex justify-center px-2">
             {renderStatDots(player.tackling || 0, "bg-blue-500")}
           </div>
 
           {/* Kicking stat */}
-          <div className="w-20 flex justify-start px-2">
+          <div className="w-14 flex justify-center px-2">
             {renderStatDots(player.points_kicking || 0, "bg-green-500")}
           </div>
         </div>
