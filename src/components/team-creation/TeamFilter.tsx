@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface Team {
   id: string;
@@ -15,7 +15,7 @@ interface TeamFilterProps {
 const TeamFilter: React.FC<TeamFilterProps> = ({
   availableTeams,
   teamFilter,
-  toggleTeamFilter
+  toggleTeamFilter,
 }) => {
   return (
     <div className="px-6 py-4 border-b dark:border-gray-700">
@@ -27,28 +27,33 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
         <div className="relative">
           <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white dark:from-dark-800 to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white dark:from-dark-800 to-transparent z-10 pointer-events-none"></div>
-          <div className="flex overflow-x-auto py-2 no-scrollbar whitespace-nowrap gap-2 px-6 after:content-[''] after:w-4 after:shrink-0 scroll-smooth" style={{ WebkitOverflowScrolling: 'touch' }}>
-          {availableTeams.map(team => (
-            <button
-              key={team.id}
-              onClick={() => toggleTeamFilter(team.id)}
-              className={`
+          <div
+            className="flex overflow-x-auto py-2 no-scrollbar whitespace-nowrap gap-2 px-6 after:content-[''] after:w-4 after:shrink-0 scroll-smooth"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
+            {availableTeams.map((team) => (
+              <button
+                key={team.id}
+                onClick={() => toggleTeamFilter(team.id)}
+                className={`
                 px-3 py-1.5 rounded-full text-xs font-medium transition shrink-0
-                ${teamFilter.includes(team.id) 
-                  ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border border-green-500 shadow-sm' 
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-transparent hover:bg-gray-200 dark:hover:bg-gray-600'}
+                ${
+                  teamFilter.includes(team.id)
+                    ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border border-green-500 shadow-sm"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-transparent hover:bg-gray-200 dark:hover:bg-gray-600"
+                }
               `}
-            >
-              {team.logo && (
-                <img 
-                  src={team.logo} 
-                  alt={team.name} 
-                  className="w-4 h-4 inline mr-1"
-                />
-              )}
-              {team.name}
-            </button>
-          ))}
+              >
+                {team.logo && (
+                  <img
+                    src={team.logo}
+                    alt={team.name}
+                    className="w-4 h-4 inline mr-1"
+                  />
+                )}
+                {team.name}
+              </button>
+            ))}
           </div>
         </div>
       </div>
