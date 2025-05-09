@@ -7,14 +7,13 @@ export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
     return leagues.filter((l) => {
 
         if (!l.join_deadline) {
-            return true;
+            return false;
         }
 
         const today = new Date()
         const deadline = new Date(l.join_deadline);
         const daysDiff = differenceInDays(deadline, today);
 
-
-        return daysDiff <= 7;
-    })
+        return daysDiff <= 5;
+    });
 }

@@ -3,6 +3,7 @@ import { Users, ChevronRight, Loader, Calendar, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { LeagueCardProps } from "./types";
 import { format } from "date-fns";
+import { useCountdown } from "../../hooks/useCountdown";
 
 export function LeagueCard({
   league,
@@ -46,11 +47,10 @@ export function LeagueCard({
             </div>
           )}
           <div
-            className={`px-2 py-0.5 text-xs rounded-full ${
-              league.is_open
+            className={`px-2 py-0.5 text-xs rounded-full ${league.is_open
                 ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
                 : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-            }`}
+              }`}
           >
             {league.is_open ? "Open" : "Closed"}
           </div>
@@ -70,20 +70,50 @@ export function LeagueCard({
           </div>
 
           {league.join_deadline && (
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-              <Calendar size={16} />
-              <span>
-                Deadline{" "}
-                <strong>
-                  {format(league.join_deadline, "EE dd MMM h:mm a")}
-                </strong>
-              </span>
-            </div>
+            <JoinDeadlineCountdown  joinDeadline={league.join_deadline} />
           )}
+
         </div>
 
         <ChevronRight size={18} className="text-gray-400" />
       </div>
     </motion.div>
   );
+}
+
+
+type JoinDeadlineCountdownProps = {
+  joinDeadline: Date
+}
+
+function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
+
+  // Countdown should start two days before the join deadline
+  const today = new Date();
+  const deadline = new Date(joinDeadline);
+
+  const twoDays = 1000 * 60 * 60 * 24 * 2;
+  const diff = deadline.valueOf() - today.valueOf();
+  const deadlinePassed = diff < 0;
+
+  const showCountDown = !deadlinePassed && diff <= twoDays;
+
+  const {hours, seconds, minutes} = useCountdown(showCountDown ? deadline.valueOf() : 0);
+
+  return (
+    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+      <Calendar size={16} />
+      <span>
+        {showCountDown ? "Starts in " : "Deadline "}
+        {!showCountDown && <strong>
+          {format(joinDeadline, "EE dd MMM h:mm a")}
+        </strong>}
+
+        {showCountDown && <strong>
+          {`${hours}:${minutes}:${seconds < 10 ? "0"+ seconds : seconds}`}
+        </strong>}
+      </span>
+    </div>
+  )
+
 }
