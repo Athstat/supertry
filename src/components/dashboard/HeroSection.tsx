@@ -31,7 +31,7 @@ export function HeroSection({ availableLeagues, onViewLeague }: Props) {
 
 
   return (
-    <div className="bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 rounded-2xl p-4 sm:p-6 md:p-8 mb-8 text-white">
+    <div className="bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 rounded-2xl p-4 mb-6 text-white">
       {!leagueOnTheClock &&
         <div className="space-y-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
