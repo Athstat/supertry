@@ -24,21 +24,21 @@ export function JoinLeagueScreen() {
   const [userTeams, setUserTeams] = useState<Record<string, boolean>>({});
   const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(false);
 
-    const activeLeagues = activeLeaguesFilter(availableLeagues);
-    
-    let leagueOnTheClock: IFantasyLeague | undefined;
-    const twoDays = 1000 * 60 * 60 * 24 * 2;
-  
-    const leaguesOnTheClock = activeLeagues.filter((l) => {
-      return (isLeagueOnTheClock(l, twoDays));
-    });
-  
-  
-    console.log(leaguesOnTheClock);
-  
-    if (leaguesOnTheClock.length > 0) {
-      leagueOnTheClock = leaguesOnTheClock[0];
-    }
+  const activeLeagues = activeLeaguesFilter(availableLeagues);
+
+  let leagueOnTheClock: IFantasyLeague | undefined;
+  const twoDays = 1000 * 60 * 60 * 24 * 2;
+
+  const leaguesOnTheClock = activeLeagues.filter((l) => {
+    return (isLeagueOnTheClock(l, twoDays));
+  });
+
+
+  console.log(leaguesOnTheClock);
+
+  if (leaguesOnTheClock.length > 0) {
+    leagueOnTheClock = leaguesOnTheClock[0];
+  }
 
   // Container animation
   const containerVariants = {
@@ -145,7 +145,10 @@ export function JoinLeagueScreen() {
     });
   };
 
-  const leagues = activeLeaguesFilter(availableLeagues);
+  const leagues = activeLeaguesFilter(availableLeagues)
+
+  const otherLeagues = availableLeagues
+    .sort((a, b) => new Date(a.join_deadline ?? new Date()).valueOf() - new Date(b.join_deadline ?? new Date()).valueOf());
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
@@ -210,7 +213,34 @@ export function JoinLeagueScreen() {
           </motion.div>
         </div>
       )}
+
+      <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
+        <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
+          <Trophy size={24} className="text-primary-500" />
+          All Leagues
+        </h2>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-4"
+        >
+          {otherLeagues.map((league, index) => (
+            <LeagueCard
+              key={league.id}
+              league={league}
+              onLeagueClick={handleLeagueClick}
+              teamCount={teamCounts[league.id]}
+              isLoading={isLoadingCounts}
+              custom={index}
+              isJoined={userTeams[league.id]}
+            />
+          ))}
+        </motion.div>
+      </div>
     </div>
+
   );
 }
 
@@ -247,7 +277,7 @@ function JoinDeadlineCountdown({ league, onViewLeague }: JoinDeadlineCountdownPr
 
       <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
         {timeBlocks.map((block) => (
-          <div 
+          <div
             key={block.label}
             className="p-2 sm:p-3 md:min-w-[80px] items-center justify-center flex flex-col rounded-xl bg-slate-50/50 dark:bg-white/10 border border-slate-200 dark:border-white/10"
           >
@@ -262,7 +292,7 @@ function JoinDeadlineCountdown({ league, onViewLeague }: JoinDeadlineCountdownPr
       </div>
 
       <div className="flex items-center gap-4">
-        <button 
+        <button
           onClick={() => onViewLeague(league)}
           className="w-full sm:w-auto bg-primary-500 text-primary-50 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center justify-center sm:justify-start gap-2 shadow-lg"
         >

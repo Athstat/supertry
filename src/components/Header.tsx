@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, Menu, User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
@@ -31,7 +31,7 @@ export function Header() {
 
             <div
               className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/dashboard")}
               tabIndex={0}
               aria-label="Navigate to home"
             >
