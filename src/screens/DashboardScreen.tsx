@@ -81,8 +81,6 @@ export function DashboardScreen() {
           return hasLeagueEnded;
         }
       );
-
-      console.log("availableLeagues", availableLeagues);
       
       setLeagues(availableLeagues);
     } catch (err) {
@@ -101,8 +99,13 @@ export function DashboardScreen() {
 
   return (
     <main className="container mx-auto px-4 py-6">
+      
       {/* Hero Section */}
-      <HeroSection />
+      
+      <HeroSection 
+        availableLeagues={leagues}
+        onViewLeague={handleViewLeague} 
+      />
 
       {/* Dashboard Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -98,7 +98,7 @@ function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
 
   const showCountDown = !deadlinePassed && diff <= oneDay;
 
-  const {hours, seconds, minutes} = useCountdown(showCountDown ? deadline.valueOf() : 0);
+  const {hours, seconds, minutes} = useCountdown(showCountDown ? diff : 0);
 
   return (
     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
@@ -110,7 +110,7 @@ function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
         </strong>}
 
         {showCountDown && <strong>
-          {`${hours}:${minutes}:${seconds < 10 ? "0"+ seconds : seconds}`}
+          {`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0") }`}
         </strong>}
       </span>
     </div>
