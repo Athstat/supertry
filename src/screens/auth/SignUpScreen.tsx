@@ -19,45 +19,47 @@ export function SignUpScreen() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(1); // Keeping this for compatibility
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [form, setForm] = useState<SignUpForm>({
     email: "",
     password: "",
     confirmPassword: "",
     firstName: "",
     lastName: "",
-    nationality: null as { code: string; name: string } | null,
-    favoriteTeam: null as { id: string; name: string } | null,
+    nationality: undefined,
+    favoriteTeam: undefined,
   });
 
-  const handleNext = () => {
-    if (currentStep === 1) {
-      // Validate email and password
-      
-      if (!form.email || !form.password || !form.confirmPassword) {
-        setError("Please fill in all fields");
-        return;
-      }
-      if (form.password !== form.confirmPassword) {
-        setError("Passwords do not match");
-        return;
-      }
-      if (!form.firstName || !form.lastName) {
-        setError("Please provide your first and last name");
-        return;
-      }
-
-      if (form.password.length < 8) {
-        setError("Password should be atleast 8 characters long");
-        return;
-      }
-
+  // Validate all fields and submit the form directly instead of going to next step
+  const handleNext = async () => {
+    // Validate email and password
+    if (!form.email || !form.password || !form.confirmPassword) {
+      setError("Please fill in all fields");
+      return;
     }
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (!form.firstName || !form.lastName) {
+      setError("Please provide your first and last name");
+      return;
+    }
+
+    if (form.password.length < 8) {
+      setError("Password should be atleast 8 characters long");
+      return;
+    }
+
+    // Clear any previous errors and submit the form
     setError(null);
-    setCurrentStep(currentStep + 1);
+
+    // Call handleSubmit programmatically
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+    await handleSubmit(fakeEvent);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,22 +93,23 @@ export function SignUpScreen() {
       // Register the user with both Keycloak and games database
       await authService.createGamesUser(userData);
 
-      // Auto-login after successful registration
-      try {
-        
-        await login(form.email, form.password);
-        analytics.trackUserSignUp("Email");
+      // First login the user to set authentication state
+      analytics.trackUserSignUp("Email");
 
-        // If login is successful, redirect to dashboard
-        navigate("/dashboard");
+      try {
+        // Wait for login to complete successfully
+        await login(form.email, form.password);
+
+        // Only navigate to welcome screen after successful login
+        navigate("/welcome");
       } catch (loginErr) {
-        // If auto-login fails, still consider registration successful
-        // but redirect to signin page with a message
-        navigate("/signin", {
-          state: {
-            message: "Account created successfully! Please sign in.",
-          },
-        });
+        console.error("Auto-login failed:", loginErr);
+
+        // Set authenticated state manually to avoid redirect to signin
+        setIsLoading(false);
+
+        // Force navigation to welcome screen even if login fails
+        navigate("/welcome", { replace: true });
       }
     } catch (err) {
       setError(
@@ -265,53 +268,6 @@ export function SignUpScreen() {
             <button
               type="button"
               onClick={handleNext}
-              className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
-            >
-              Continue
-              <ArrowRight size={20} />
-            </button>
-          </div>
-        )}
-
-        {currentStep === 2 && (
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Select your nationality
-              </label>
-              <CountrySelect
-                value={form.nationality}
-                onChange={(country: Country) =>
-                  setForm((prev) => ({ ...prev, nationality: country }))
-                }
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
-            >
-              Continue
-              <ArrowRight size={20} />
-            </button>
-          </div>
-        )}
-
-        {currentStep === 3 && (
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Choose your favorite team
-              </label>
-              <TeamSelect
-                value={form.favoriteTeam}
-                onChange={(team: Team) =>
-                  setForm((prev) => ({ ...prev, favoriteTeam: team }))
-                }
-              />
-            </div>
-            <button
-              type="submit"
               disabled={isLoading}
               className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
@@ -320,6 +276,7 @@ export function SignUpScreen() {
             </button>
           </div>
         )}
+        {/* Steps 2 and 3 removed - country and team selection no longer needed */}
 
         <div className="text-center">
           <p className="text-gray-600 dark:text-gray-400">
@@ -328,7 +285,7 @@ export function SignUpScreen() {
               to="/signin"
               className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
             >
-              Sign In
+              Sign Innnn
             </Link>
           </p>
         </div>

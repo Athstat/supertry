@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 
 interface LeagueInfo {
@@ -17,7 +17,7 @@ interface LeagueHeaderProps {
   leagueInfo: LeagueInfo;
   onOpenSettings: () => void;
   isLoading?: boolean;
-  league: IFantasyLeague
+  league: IFantasyLeague;
   children?: ReactNode;
 }
 
@@ -29,8 +29,20 @@ export function LeagueHeader({
   children,
 }: LeagueHeaderProps) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if coming from welcome screen
+  const isFromWelcome = location.state?.from === "welcome";
 
   console.log("leagueInfo", leagueInfo);
+
+  const handleBackClick = () => {
+    if (isFromWelcome) {
+      navigate("/welcome");
+    } else {
+      navigate("/leagues");
+    }
+  };
 
   return (
     <div className="bg-gradient-to-r from-primary-700 to-primary-600 text-white">
@@ -38,12 +50,14 @@ export function LeagueHeader({
         <div className="flex items-center justify-between mb-4">
           <div>
             <button
-              onClick={() => navigate("/leagues")}
+              onClick={handleBackClick}
               className="flex items-center text-primary-100 hover:text-white mb-2 transition-colors"
-              aria-label="Back to leagues"
+              aria-label={isFromWelcome ? "Back to welcome" : "Back to leagues"}
             >
               <ChevronLeft size={20} />
-              <span>Back to leagues</span>
+              <span>
+                {isFromWelcome ? "Back to welcome screen" : "Back to leagues"}
+              </span>
             </button>
             <h1 className="text-2xl md:text-3xl font-bold">
               {leagueInfo.name}
@@ -60,7 +74,6 @@ export function LeagueHeader({
             </div>
           </div>
 
-
           <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Your Rank</div>
             <div className="text-xl font-bold">
@@ -71,7 +84,7 @@ export function LeagueHeader({
                 : "N/A"}
             </div>
           </div>
-          
+
           {/* <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Join Deadline</div>
             <div className="text-md font-bold flex mt-1 flex-col ">
@@ -79,7 +92,6 @@ export function LeagueHeader({
               <p>{league.join_deadline ? format(league.join_deadline, "h:mm a") : "-"}</p>
             </div>
           </div> */}
-              
         </div>
       </div>
     </div>

@@ -1,12 +1,18 @@
-import React from 'react';
+import React from "react";
 
 interface TeamActionsProps {
   isTeamComplete: boolean;
+  isLoading: boolean;
   onReset: () => void;
   onSave: () => void;
 }
 
-const TeamActions: React.FC<TeamActionsProps> = ({ isTeamComplete, onReset, onSave }) => {
+const TeamActions: React.FC<TeamActionsProps> = ({
+  isTeamComplete,
+  isLoading,
+  onReset,
+  onSave,
+}) => {
   return (
     <div className="flex justify-between mt-10 mb-8 px-4">
       <button
@@ -15,18 +21,27 @@ const TeamActions: React.FC<TeamActionsProps> = ({ isTeamComplete, onReset, onSa
       >
         Reset Selection
       </button>
-      
+
       <button
         onClick={onSave}
-        disabled={!isTeamComplete}
-      className={`
-        px-6 py-3 rounded-lg font-medium transition focus:outline-none focus:ring-2 focus:ring-green-500
-        ${isTeamComplete 
-          ? 'bg-green-600 hover:bg-green-700 text-white dark:bg-green-700 dark:hover:bg-green-600' 
-          : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'}
-      `}
+        disabled={!isTeamComplete || isLoading}
+        className={`
+          px-6 py-3 rounded-lg font-medium transition focus:outline-none focus:ring-2 focus:ring-green-500
+          ${
+            isTeamComplete && !isLoading
+              ? "bg-green-600 hover:bg-green-700 text-white dark:bg-green-700 dark:hover:bg-green-600"
+              : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+          }
+        `}
       >
-        Save Team
+        {isLoading ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></span>
+            Saving...
+          </span>
+        ) : (
+          "Save Team"
+        )}
       </button>
     </div>
   );

@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthLayout } from "../../components/auth/AuthLayout";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ChevronRight } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import ScrummyLogo from "../../components/branding/scrummy_logo";
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -23,25 +25,59 @@ export function WelcomeScreen() {
     );
   }
 
+  const handleGetStarted = () => {
+    navigate("/signup");
+  };
+
   return (
-    <AuthLayout
-      title="Welcome to SCRUMMY"
-      subtitle="The ultimate rugby fantasy sports experience"
-    >
-      <div className="mt-8 space-y-4">
-        <Link
-          to="/signin"
-          className="block w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors text-center"
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-dark-850 px-4">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md flex flex-col items-center"
+      >
+        <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40 mb-6" />
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
         >
-          Sign In
-        </Link>
-        <Link
-          to="/signup"
-          className="block w-full bg-white dark:bg-transparent text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-400 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-dark-800/40 transition-colors text-center"
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center">
+            Welcome to Scrummy
+          </h1>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
         >
-          Create Account
-        </Link>
-      </div>
-    </AuthLayout>
+          <p className="mt-3 text-xl text-gray-600 dark:text-gray-300 text-center">
+            Join the Scrum!
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
+          className="w-full mt-12"
+        >
+          <motion.button
+            whileHover={{
+              scale: 1.05,
+              transition: { type: "spring", stiffness: 300 },
+            }}
+            onClick={handleGetStarted}
+            className="w-full bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg flex items-center justify-center"
+          >
+            <span>Get Started</span>
+            <ChevronRight className="ml-2 h-5 w-5" />
+          </motion.button>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 }

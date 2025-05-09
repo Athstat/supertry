@@ -1,5 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { requestPushPermissions } from '../utils/bridgeUtils';
+import { requestPushPermissions } from "../utils/bridgeUtils";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 // Components
 import { LoadingState } from "../components/team-creation/LoadingState";
@@ -7,6 +9,7 @@ import { ErrorState } from "../components/team-creation/ErrorState";
 import PlayerSelectionModal from "../components/team-creation/PlayerSelectionModal";
 import TeamActions from "../components/team-creation/TeamActions";
 import { teamService } from "../services/teamService";
+import { Check, Trophy, Users } from "lucide-react";
 
 // Refactored team creation components
 import TeamCreationContainer from "./team-creation-components/TeamCreationContainer";
@@ -17,11 +20,81 @@ import useTeamCreationState from "./team-creation-components/useTeamCreationStat
 import { leagueService } from "../services/leagueService";
 import { URC_COMPETIION_ID } from "../types/constants";
 
+// Success Modal Component
+interface SuccessModalProps {
+  isVisible: boolean;
+  teamName: string;
+  leagueName: string;
+  onClose: () => void;
+  onGoToLeague: () => void;
+  onViewTeam: () => void;
+}
+
+const SuccessModal: React.FC<SuccessModalProps> = ({
+  isVisible,
+  teamName,
+  leagueName,
+  onClose,
+  onGoToLeague,
+  onViewTeam,
+}) => {
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+      <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6 transform transition-all animate-fade-scale-up">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
+            <Check size={32} />
+          </div>
+          <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">
+            Team Submitted!
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Congratulations! Your team "{teamName}" has been successfully
+            submitted to the {leagueName} league.
+          </p>
+          <div className="flex flex-col gap-3">
+            <motion.button
+              onClick={onGoToLeague}
+              className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
+              whileHover={{
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300 },
+              }}
+            >
+              <Trophy size={20} />
+              Go to League
+            </motion.button>
+            <motion.button
+              onClick={onViewTeam}
+              className="w-full dark:bg-transparent text-primary-600 dark:text-primary-400 px-6 py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 border border-primary-200 dark:border-primary-800"
+              whileHover={{
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300 },
+              }}
+            >
+              <Users size={20} />
+              View Your Team
+            </motion.button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export function TeamCreationScreen() {
+  const [isSaving, setIsSaving] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [createdTeamId, setCreatedTeamId] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
   const league = location.state?.league;
+
+  // Check if coming from welcome screen
+  const isFromWelcome = location.state?.from === "welcome";
 
   // Use our centralized team creation state hook
   const {
@@ -61,6 +134,7 @@ export function TeamCreationScreen() {
 
   // Handle team submission
   const handleSaveTeam = async () => {
+    setIsSaving(true);
     // Validate team
     if (teamName.trim() === "") {
       showToast("Please enter a team name", "error");
@@ -102,20 +176,25 @@ export function TeamCreationScreen() {
       );
 
       // Submit the team using the team service
-      await teamService.submitTeam(teamName, teamAthletes, officialLeagueId);
+      const result = await teamService.submitTeam(
+        teamName,
+        teamAthletes,
+        officialLeagueId
+      );
+
+      // Store the created team ID for navigation
+      if (result && result.id) {
+        setCreatedTeamId(result.id);
+      }
 
       // Step 2: Join the league using the recently submitted team
       await leagueService.joinLeague(league);
 
-      showToast("Team saved successfully!", "success");
-      
       // Step 3: Request push notification permissions after successful team creation
-      // This is the perfect time to ask for permissions as the user just created a team
-      // and would likely want notifications about their team's performance
       requestPushPermissions();
-      
-      // Navigate to my-teams page
-      navigate("/my-teams");
+
+      // Show success modal instead of navigating away
+      setShowSuccessModal(true);
     } catch (error) {
       console.error("Error saving team:", error);
       showToast(
@@ -124,6 +203,8 @@ export function TeamCreationScreen() {
           : "Failed to save team. Please try again.",
         "error"
       );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -134,7 +215,7 @@ export function TeamCreationScreen() {
 
   // Show error state if there was an error
   if (error) {
-    return <ErrorState error={error} />;
+    return <ErrorState error={error} isFromWelcome={isFromWelcome} />;
   }
 
   return (
@@ -144,6 +225,7 @@ export function TeamCreationScreen() {
       totalBudget={teamBudget}
       selectedPlayersCount={selectedPlayersCount}
       requiredPlayersCount={requiredPlayersCount}
+      isFromWelcome={isFromWelcome}
     >
       {/* Position selection grid */}
       <PositionsGrid
@@ -159,6 +241,7 @@ export function TeamCreationScreen() {
       {/* Team action buttons */}
       <TeamActions
         isTeamComplete={isTeamComplete}
+        isLoading={isSaving}
         onReset={handleReset}
         onSave={handleSaveTeam}
       />
@@ -186,6 +269,34 @@ export function TeamCreationScreen() {
         type={toast.type}
         isVisible={toast.isVisible}
         onClose={hideToast}
+      />
+
+      {/* Success Modal */}
+      <SuccessModal
+        isVisible={showSuccessModal}
+        teamName={teamName}
+        leagueName={league?.title || league?.name || "League"}
+        onClose={() => setShowSuccessModal(false)}
+        onGoToLeague={() => {
+          setShowSuccessModal(false);
+          // Navigate to the specific league with the league object as state
+          navigate(`/league/${officialLeagueId}`, {
+            state: {
+              league,
+              from: "team-creation",
+            },
+          });
+        }}
+        onViewTeam={() => {
+          setShowSuccessModal(false);
+          // Navigate to the specific team if we have its ID
+          if (createdTeamId) {
+            navigate(`/my-team/${createdTeamId}`);
+          } else {
+            // Fallback to teams list
+            navigate("/my-teams");
+          }
+        }}
       />
     </TeamCreationContainer>
   );
