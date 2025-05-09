@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { WelcomeScreen } from "./screens/auth/WelcomeScreen";
 import { SignUpScreen } from "./screens/auth/SignUpScreen";
 import { SignInScreen } from "./screens/auth/SignInScreen";
+import PostSignUpWelcomeScreen from "./screens/PostSignUpWelcomeScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { JoinLeagueScreen } from "./screens/JoinLeagueScreen";
 import { LeagueScreen } from "./screens/LeagueScreen";
@@ -51,7 +52,7 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   if (loading) return <div>Loading...</div>;
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/welcome" />;
   }
 
   return <>{children}</>;
@@ -212,7 +213,7 @@ const AppRoutes = () => {
         path="/sbr"
         element={
           <ProtectedRoute>
-            <Layout  >
+            <Layout>
               <SchoolBoyRugbyScreen />
             </Layout>
           </ProtectedRoute>
@@ -223,7 +224,7 @@ const AppRoutes = () => {
         path="/fixtures/:fixtureId"
         element={
           <ProtectedRoute>
-            <Layout  >
+            <Layout>
               <FixtureScreen />
             </Layout>
           </ProtectedRoute>
@@ -234,7 +235,7 @@ const AppRoutes = () => {
         path="/fixtures"
         element={
           <ProtectedRoute>
-            <Layout  >
+            <Layout>
               <FixtureListScreen />
             </Layout>
           </ProtectedRoute>
@@ -246,15 +247,23 @@ const AppRoutes = () => {
         path="/invite-friends"
         element={
           <ProtectedRoute>
-            <Layout  >
+            <Layout>
               <InviteFriendsScreen />
             </Layout>
           </ProtectedRoute>
         }
       />
 
-    </Routes >
-
+      {/* Post-Sign-Up Welcome Screen */}
+      <Route
+        path="/welcome"
+        element={
+          <ProtectedRoute>
+            <PostSignUpWelcomeScreen />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 };
 

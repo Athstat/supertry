@@ -39,6 +39,7 @@ export function LeagueScreen() {
   const { leagueId } = useParams<{ leagueId: string }>();
   const location = useLocation();
   const leagueFromState = location.state?.league;
+  const isFromWelcome = location.state?.from === "welcome";
   const navigate = useNavigate();
 
   // Set league name from state as soon as possible
@@ -50,7 +51,12 @@ export function LeagueScreen() {
         name: leagueFromState.title,
       }));
     }
-  }, [leagueFromState]);
+
+    // Log if coming from welcome screen for debugging
+    if (isFromWelcome) {
+      console.log("User navigated from welcome screen");
+    }
+  }, [leagueFromState, isFromWelcome]);
 
   // Handle joining a league
   const handleJoinLeague = () => {

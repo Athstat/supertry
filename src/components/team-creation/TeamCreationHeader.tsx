@@ -9,6 +9,7 @@ interface TeamCreationHeaderProps {
   totalBudget: number;
   selectedPlayersCount: number;
   totalPositions: number;
+  isFromWelcome?: boolean;
 }
 
 export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
@@ -18,11 +19,17 @@ export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
   totalBudget,
   selectedPlayersCount,
   totalPositions,
+  isFromWelcome,
 }) => {
   const navigate = useNavigate();
   const isNegativeBudget = currentBudget < 0;
+
   const handleBackClick = () => {
-    navigate("/leagues");
+    if (isFromWelcome) {
+      navigate("/welcome");
+    } else {
+      navigate("/leagues");
+    }
   };
 
   return (
@@ -31,11 +38,13 @@ export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
       <button
         onClick={handleBackClick}
         className="flex items-center mb-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-        aria-label="Back to leagues"
+        aria-label={isFromWelcome ? "Back to welcome" : "Back to leagues"}
         tabIndex={0}
       >
         <ChevronLeft size={20} />
-        <span className="font-medium">Back to Leagues</span>
+        <span className="font-medium">
+          {isFromWelcome ? "Back to Welcome Screen" : "Back to Leagues"}
+        </span>
       </button>
 
       {/* League Title Section */}
