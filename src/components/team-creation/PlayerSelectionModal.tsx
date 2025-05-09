@@ -130,9 +130,9 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
           filterAvailable={filterAvailable}
           toogle={() => setFilterAvailable(!filterAvailable)}
           remainingBudget={remainingBudget}
-          totalBudget={200} // Default budget value
+          totalBudget={240} // Default budget value
           selectedPlayersCount={selectedPlayers.length}
-          requiredPlayersCount={15} // Default required players value
+          requiredPlayersCount={6} // Default required players value
         />
 
         {/* Filters section */}

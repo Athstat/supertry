@@ -66,7 +66,7 @@ const PlayerCountIndicator: React.FC<{
   selectedCount: number;
   maxPlayers?: number;
   animate?: boolean;
-}> = ({ selectedCount, maxPlayers = 15, animate = false }) => {
+}> = ({ selectedCount, maxPlayers = 6, animate = false }) => {
   return (
     <motion.div
       className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100/80 dark:bg-slate-800/30 text-gray-700 dark:text-gray-200 backdrop-blur-md shadow-sm"
@@ -94,7 +94,7 @@ export default function AvailableFilter({
   remainingBudget = 0,
   totalBudget = 200,
   selectedPlayersCount = 0,
-  requiredPlayersCount = 15,
+  requiredPlayersCount = 6,
 }: Props) {
   return (
     <div className="dark:text-slate-300 py-2 px-6 w-full items-center justify-between flex flex-row">
