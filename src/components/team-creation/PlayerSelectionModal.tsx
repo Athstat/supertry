@@ -27,9 +27,9 @@ interface PlayerSelectionModalProps {
   handlePlayerSelect: (player: Player) => void;
   onClose: () => void;
   roundId: number;
-  roundStart: number;
-  roundEnd: number;
-  competitionId: string;
+  roundStart?: number;
+  roundEnd?: number;
+  competitionId?: string;
 }
 
 const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
@@ -54,11 +54,13 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [loading, setLoading] = useState(false);
   const [filterAvailable, setFilterAvailable] = useState(false);
-  const { data: fixtureData, isLoading: loadingFixtures } = useFetch(
-    "games",
-    competitionId,
-    gamesService.getGamesByCompetitionId
-  );
+  // Only fetch fixtures if competitionId is provided (TeamCreationScreen)
+  const { data: fixtureData, isLoading: loadingFixtures } = competitionId
+    ? useFetch("games", competitionId, gamesService.getGamesByCompetitionId)
+    : { data: null, isLoading: false };
+
+  // Determine if we're in MyTeamScreen context
+  const isMyTeamContext = !competitionId;
 
   // Get filtered and sorted players
   const { sortedPlayers, filteredCount } = usePlayersFilter({
@@ -89,31 +91,44 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     }
   };
 
-  if (loadingFixtures) return <LoadingState />;
+  // Skip fixture loading for MyTeamScreen
+  if (loadingFixtures && !isMyTeamContext) return <LoadingState />;
 
-  const fixtures = fixtureData ?? [];
-  const roundFixtures = fixtures.filter((f) => {
-    const start = Math.min(roundStart, roundEnd);
-    const end = Math.max(roundStart, roundEnd);
+  // For MyTeamScreen, use all available teams
+  // For TeamCreationScreen, filter teams by fixtures
+  let availableTeams = allTeams;
 
-    return f.round >= start && f.round <= end;
-  });
+  if (!isMyTeamContext && fixtureData) {
+    const fixtures = fixtureData ?? [];
+    const roundFixtures = fixtures.filter((f) => {
+      // Only filter by round if we have start/end values
+      if (roundStart !== undefined && roundEnd !== undefined) {
+        const start = Math.min(roundStart, roundEnd);
+        const end = Math.max(roundStart, roundEnd);
+        return f.round >= start && f.round <= end;
+      }
+      return true;
+    });
 
-  const participatingTeamsId = new Set<string>();
+    const participatingTeamsId = new Set<string>();
 
-  roundFixtures.forEach((rf) => {
-    if (!participatingTeamsId.has(rf.team_id)) {
-      participatingTeamsId.add(rf.team_id);
+    roundFixtures.forEach((rf) => {
+      if (!participatingTeamsId.has(rf.team_id)) {
+        participatingTeamsId.add(rf.team_id);
+      }
+
+      if (!participatingTeamsId.has(rf.opposition_team_id)) {
+        participatingTeamsId.add(rf.opposition_team_id);
+      }
+    });
+
+    console.log("Participating Teams", participatingTeamsId);
+
+    // Only filter teams if there are participating teams
+    if (participatingTeamsId.size > 0) {
+      availableTeams = allTeams.filter((t) => participatingTeamsId.has(t.id));
     }
-
-    if (!participatingTeamsId.has(rf.opposition_team_id)) {
-      participatingTeamsId.add(rf.opposition_team_id);
-    }
-  });
-
-  console.log("Participating Teams", participatingTeamsId);
-
-  const availableTeams = allTeams.filter((t) => participatingTeamsId.has(t.id));
+  }
 
   if (!visible) return null;
 

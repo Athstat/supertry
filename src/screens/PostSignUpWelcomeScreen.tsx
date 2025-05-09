@@ -125,7 +125,7 @@ export default function PostSignUpWelcomeScreen() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-dark-850 px-4 py-8">
       <div className="w-full max-w-md flex flex-col items-center">
-        <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40" />
+        <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40 mb-6" />
 
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center">
           Welcome to Scrummy!

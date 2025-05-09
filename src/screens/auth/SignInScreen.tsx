@@ -32,8 +32,8 @@ export function SignInScreen() {
       // Use the login method from AuthContext
       await login(form.email, form.password);
 
-      // If login is successful, redirect to welcome screen
-      navigate("/welcome");
+      // If login is successful, redirect to dashboard
+      navigate("/dashboard");
     } catch (err) {
       // Handle login error
       setError(

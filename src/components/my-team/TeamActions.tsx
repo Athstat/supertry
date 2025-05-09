@@ -330,7 +330,11 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
             handlePlayerSelect(convertedPlayer);
           }}
           onClose={() => setIsSwapping(false)}
+          // For MyTeamScreen, we don't need to pass competition-specific props
+          // Just pass a static roundId (value doesn't matter for MyTeamScreen since we're not using fixtures)
           roundId={1}
+          // We don't pass roundStart, roundEnd, or competitionId intentionally
+          // This signals to PlayerSelectionModal that we're in MyTeamScreen context
         />
       )}
 
