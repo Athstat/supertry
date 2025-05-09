@@ -47,7 +47,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </button>
       <button
         onClick={() => onSort("rating")}
-        className={`w-16 text-left flex items-center justify-start transition ${
+        className={`w-16 text-right flex items-center justify-start transition ${
           sortBy === "rating" ? "text-green-600" : ""
         }`}
       >
