@@ -185,35 +185,37 @@ export function JoinLeagueScreen() {
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
-          <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
-            <Trophy size={24} className="text-primary-500" />
-            Available Leagues
-          </h2>
+        <>
+          {!isLoading && <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
+            <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
+              <Trophy size={24} className="text-primary-500" />
+              Available Leagues
+            </h2>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-4"
-          >
-            {leagues.map((league, index) => (
-              <LeagueCard
-                key={league.id}
-                league={league}
-                onLeagueClick={handleLeagueClick}
-                teamCount={teamCounts[league.id]}
-                isLoading={isLoadingCounts}
-                custom={index}
-                isJoined={userTeams[league.id]}
-              />
-            ))}
-          </motion.div>
-        </div>
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="space-y-4"
+            >
+              {leagues.map((league, index) => (
+                <LeagueCard
+                  key={league.id}
+                  league={league}
+                  onLeagueClick={handleLeagueClick}
+                  teamCount={teamCounts[league.id]}
+                  isLoading={isLoadingCounts}
+                  custom={index}
+                  isJoined={userTeams[league.id]}
+                />
+              ))}
+            </motion.div>
+          </div>}
+        </>
       )}
 
       {/* For Testing purposes */}
-      <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
+      {!isLoading && <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
         <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
           <Trophy size={24} className="text-primary-500" />
           All Leagues
@@ -237,7 +239,7 @@ export function JoinLeagueScreen() {
             />
           ))}
         </motion.div>
-      </div>
+      </div>}
     </div>
 
   );
