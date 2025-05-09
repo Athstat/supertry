@@ -235,9 +235,9 @@ function JoinDeadlineCountdown({ league, onViewLeague }: JoinDeadlineCountdownPr
   ];
 
   return (
-    <div className="flex flex-col text-slate-700 dark:text-white bg-white border border-slate-200 dark:border-slate-800 dark:bg-slate-800/50 rounded-xl p-4 gap-4 sm:gap-6">
+    <div className="flex flex-col text-slate-700 dark:text-white bg-white border border-slate-200 dark:border-slate-800 dark:bg-slate-800/50 rounded-xl p-6 gap-4 sm:gap-6">
       <div className="space-y-2 sm:space-y-4">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
           {league.title}
         </h1>
         <p className=" dark:text-primary-100  text-sm sm:text-base md:text-lg">
