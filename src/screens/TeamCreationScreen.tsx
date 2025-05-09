@@ -1,4 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { requestPushPermissions } from '../utils/bridgeUtils';
 
 // Components
 import { LoadingState } from "../components/team-creation/LoadingState";
@@ -106,6 +107,13 @@ export function TeamCreationScreen() {
       await leagueService.joinLeague(league);
 
       showToast("Team saved successfully!", "success");
+      
+      // Step 3: Request push notification permissions after successful team creation
+      // This is the perfect time to ask for permissions as the user just created a team
+      // and would likely want notifications about their team's performance
+      requestPushPermissions();
+      
+      // Navigate to my-teams page
       navigate("/my-teams");
     } catch (error) {
       console.error("Error saving team:", error);

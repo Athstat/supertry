@@ -39,14 +39,14 @@ export default function UserStatsGrid() {
                     <p>{rank?.rank ? "#" + rank?.rank : "-"}</p>
                 </div>
             </div>
-            <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
+            {/* <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">
                 <div className="text-sm text-gray-600 dark:text-white">
                     Best Rank
                 </div>
                 <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
                 <p>{rank?.rank ? "#" + rank?.rank : "-"}</p>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

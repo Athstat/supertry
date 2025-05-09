@@ -222,7 +222,7 @@ export const athleteService = {
   getAthleteById: async (athleteId: string) => {
     try {
       const uri = getUri(`/api/v1/fantasy-athletes/${athleteId}`);
-      
+
       const res = await fetch(uri, {
         headers: getAuthHeader()
       });
@@ -231,9 +231,26 @@ export const athleteService = {
       return json as IFantasyAthlete;
 
     } catch (error) {
-      
+
       console.log("Error fetching athlete", error);
       return undefined;
+    }
+  },
+
+  getRugbyAthleteById: async (athleteId: string) => {
+    try {
+      const uri = getUri(`/api/v1/unauth/rugby-athletes/${athleteId}`);
+      const res = await fetch(uri);
+
+      const json = (await res.json()) as RugbyPlayer[];
+
+      if (json.length === 0) return undefined;
+
+      return json[0];
+      
+    } catch(error) {
+      console.log("Error fetching rugby athlete ", error);
+      return undefined
     }
   }
 };

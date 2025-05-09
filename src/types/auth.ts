@@ -59,3 +59,10 @@ export type AuthUser = {
   lastName: string;
   username: string;
 }
+
+export interface BridgeUserData {
+  name: string;
+  email: string;
+  user_id: string;
+  onesignal_id?: string;
+}

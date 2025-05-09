@@ -12,7 +12,7 @@ export default function AvailableFilter({ filterAvailable, toogle }: Props) {
         onClick={toogle}
         type="checkbox"
       />
-      <div className="p-0 m-0  h-fit">Show Available Players Only</div>
+      <div className="p-0 m-0  h-fit">Show Roster Players Only</div>
     </div>
   );
 }
