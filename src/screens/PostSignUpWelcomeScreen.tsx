@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader, Trophy, ChevronRight } from "lucide-react";
 import ScrummyLogo from "../components/branding/scrummy_logo";
-import { getLatestOfficialLeague } from "../utils/leaguesUtils";
+import { activeLeaguesFilter, isLeagueOnTheClock } from "../utils/leaguesUtils";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { leagueService } from "../services/leagueService";
 
@@ -15,52 +15,59 @@ export default function PostSignUpWelcomeScreen() {
   const [error, setError] = useState<string | null>(null);
   const [isDebug, setIsDebug] = useState(false);
 
-  // Use a more robust approach to fetch the latest league
+  // Use the same approach as the dashboard HeroSection to get the league that's "on the clock"
   useEffect(() => {
-    const fetchLatestLeague = async () => {
+    const fetchLeagueOnTheClock = async () => {
       try {
         setLoading(true);
-        console.log("Fetching latest league...");
+        console.log("Fetching leagues on the clock...");
 
-        // First try the utility function
-        const league = await getLatestOfficialLeague();
+        // Get all leagues
+        const allLeagues = await leagueService.getAllLeagues();
 
-        if (league) {
-          console.log("Latest league found:", league);
-          setLatestLeague(league);
-        } else {
-          // Fallback: get all leagues and pick the first one
-          console.log("No league from utility, trying fallback...");
-          const allLeagues = await leagueService.getAllLeagues();
+        if (allLeagues && allLeagues.length > 0) {
+          // Filter for active leagues (same as dashboard)
+          const activeLeagues = activeLeaguesFilter(allLeagues);
 
-          if (allLeagues && allLeagues.length > 0) {
-            console.log("Fallback leagues found:", allLeagues.length);
-            const officialLeagues = allLeagues.filter(
-              (l) =>
-                l.type === "official" ||
-                l.title.toLowerCase().includes("official")
+          // Define the same time window as in the HeroSection (2 days)
+          const twoDays = 1000 * 60 * 60 * 24 * 2;
+
+          // Filter for leagues on the clock (same as dashboard)
+          const leaguesOnTheClock = activeLeagues.filter((l) => {
+            return isLeagueOnTheClock(l, twoDays);
+          });
+
+          if (leaguesOnTheClock.length > 0) {
+            // Use the first league on the clock (same as dashboard)
+            console.log("League on the clock found:", leaguesOnTheClock[0]);
+            setLatestLeague(leaguesOnTheClock[0]);
+          } else if (activeLeagues.length > 0) {
+            // Fallback to the first active league
+            console.log(
+              "No league on the clock, using first active league:",
+              activeLeagues[0]
             );
-
-            if (officialLeagues.length > 0) {
-              console.log("Using first official league:", officialLeagues[0]);
-              setLatestLeague(officialLeagues[0]);
-            } else {
-              console.log("Using first league:", allLeagues[0]);
-              setLatestLeague(allLeagues[0]);
-            }
+            setLatestLeague(activeLeagues[0]);
           } else {
-            setError("No leagues available. Please try again later.");
+            // Ultimate fallback: use first league
+            console.log(
+              "No active leagues, using first available league:",
+              allLeagues[0]
+            );
+            setLatestLeague(allLeagues[0]);
           }
+        } else {
+          setError("No leagues available. Please try again later.");
         }
       } catch (err) {
-        console.error("Error fetching latest league:", err);
+        console.error("Error fetching leagues:", err);
         setError("Unable to fetch league information");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchLatestLeague();
+    fetchLeagueOnTheClock();
   }, []);
 
   const handleWatchTutorial = () => {

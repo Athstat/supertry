@@ -285,7 +285,7 @@ export function SignUpScreen() {
               to="/signin"
               className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
             >
-              Sign Innnn
+              Sign In
             </Link>
           </p>
         </div>
