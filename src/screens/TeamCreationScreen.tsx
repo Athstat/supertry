@@ -59,7 +59,6 @@ export function TeamCreationScreen() {
     hideToast,
   } = useTeamCreationState(officialLeagueId);
 
-
   // Handle team submission
   const handleSaveTeam = async () => {
     // Validate team
@@ -127,8 +126,6 @@ export function TeamCreationScreen() {
       );
     }
   };
-
-  
 
   // Show loading state while fetching initial data
   if (isLoading) {

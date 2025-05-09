@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { Position } from '../../types/position';
-import { Player } from '../../types/player';
+import React, { useState } from "react";
+import { Position } from "../../types/position";
+import { Player } from "../../types/player";
 
 // Import components
-import ModalHeader from './player-selection-components/ModalHeader';
-import SearchBar from './player-selection-components/SearchBar';
-import TeamFilter from './TeamFilter';
-import TableHeader from './TableHeader';
-import PlayerList from './player-selection-components/PlayerList';
+import ModalHeader from "./player-selection-components/ModalHeader";
+import SearchBar from "./player-selection-components/SearchBar";
+import TeamFilter from "./TeamFilter";
+import TableHeader from "./TableHeader";
+import PlayerList from "./player-selection-components/PlayerList";
 
 // Import hooks
-import usePlayersFilter from './player-selection-components/usePlayersFilter';
-import useAvailableTeams from './player-selection-components/useAvailableTeams';
-import useModalEffects from './player-selection-components/useModalEffects';
-import AvailableFilter from './AvailableFilter';
 import { useFetch } from '../../hooks/useAsync';
 import { gamesService } from '../../services/gamesService';
 import { LoadingState } from '../ui/LoadingState';
+import usePlayersFilter from "./player-selection-components/usePlayersFilter";
+import useAvailableTeams from "./player-selection-components/useAvailableTeams";
+import useModalEffects from "./player-selection-components/useModalEffects";
+import AvailableFilter from "./AvailableFilter";
 
 interface PlayerSelectionModalProps {
   visible: boolean;
@@ -46,10 +46,12 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   competitionId
 }) => {
   // State for filtering and sorting
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [teamFilter, setTeamFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<'price' | 'rating' | 'attack' | 'defense' | 'kicking'>('rating');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortBy, setSortBy] = useState<
+    "price" | "rating" | "attack" | "defense" | "kicking"
+  >("rating");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [loading, setLoading] = useState(false);
   const [filterAvailable, setFilterAvailable] = useState(false);
   const {data: fixtureData, isLoading: loadingFixtures} = useFetch("games", competitionId, gamesService.getGamesByCompetitionId);
@@ -64,10 +66,11 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     selectedPlayers,
     sortBy,
     sortOrder,
-    filterAvailable
+    filterAvailable,
   });
 
   // Get available teams for filter
+
   const allTeams = useAvailableTeams(players);
   
   // Disable body scrolling when modal is open
@@ -76,7 +79,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   // Helper function to toggle team filter
   const toggleTeamFilter = (teamId: string) => {
     if (teamFilter.includes(teamId)) {
-      setTeamFilter(teamFilter.filter(id => id !== teamId));
+      setTeamFilter(teamFilter.filter((id) => id !== teamId));
     } else {
       setTeamFilter([...teamFilter, teamId]);
     }
@@ -117,39 +120,39 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
       <div className="bg-white dark:bg-dark-800 w-full max-w-4xl sm:mx-auto sm:my-4 sm:rounded-lg shadow-xl h-full sm:h-auto sm:max-h-[calc(100vh-2rem)] flex flex-col rounded-none sm:rounded-lg">
         {/* Modal header */}
         <ModalHeader selectedPosition={selectedPosition} onClose={onClose} />
-        
+
         {/* Search bar */}
-        <SearchBar 
-          searchQuery={searchQuery} 
-          onSearchChange={setSearchQuery} 
+        <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+
+        <AvailableFilter
+          filterAvailable={filterAvailable}
+          toogle={() => setFilterAvailable(!filterAvailable)}
         />
 
-        <AvailableFilter filterAvailable={filterAvailable} toogle={() => setFilterAvailable(!filterAvailable)} />
-        
         {/* Filters section */}
         <TeamFilter
           availableTeams={availableTeams}
           teamFilter={teamFilter}
           toggleTeamFilter={toggleTeamFilter}
         />
-        
+
         {/* Table header */}
         <TableHeader
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSort={(field) => {
             if (sortBy === field) {
-              setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
+              setSortOrder(sortOrder === "desc" ? "asc" : "desc");
             } else {
               setSortBy(field);
-              setSortOrder('desc');
+              setSortOrder("desc");
             }
           }}
         />
-        
+
         {/* Player list */}
         <div className="flex-1 overflow-y-auto">
-          <PlayerList 
+          <PlayerList
             players={sortedPlayers}
             isLoading={loading}
             selectedPosition={selectedPosition}

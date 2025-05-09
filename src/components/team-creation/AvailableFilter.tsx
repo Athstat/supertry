@@ -10,5 +10,5 @@ export default function AvailableFilter({filterAvailable, toogle} : Props) {
         <input onChange={() => {}} id="checkbox_input" className="h-5 w-5" checked={filterAvailable} onClick={toogle} type="checkbox" />
         <label htmlFor="checkbox_input" className="p-0 m-0  h-fit" >Show Confirmed Players Only</label>
     </div>
-  )
+  );
 }
