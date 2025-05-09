@@ -121,7 +121,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
       );
 
       // First try with official_league_id
-      let players = await athleteService.getRugbyAthletesByCompetition(
+      const players = await athleteService.getRugbyAthletesByCompetition(
         team?.official_league_id || ""
       );
 

@@ -24,7 +24,7 @@ export default function FixtureScreen() {
 
   if (!fixtureId) return <ErrorState message="Match was not found" />
 
-  let {data: fetchedFixture, isLoading} = useSWR(["games", fixtureId], async ([, gameId]) =>  await gamesService.getGameById(gameId))
+  const {data: fetchedFixture, isLoading} = useSWR(["games", fixtureId], async ([, gameId]) =>  await gamesService.getGameById(gameId))
   const {data: boxScore, isLoading: loadingBoxScore} = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
   
   if (isLoading) return <LoadingState />
