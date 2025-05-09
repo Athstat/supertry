@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-interface AvailableTeam {
+export interface AvailableTeam {
   id: string;
   name: string;
   logo: string;

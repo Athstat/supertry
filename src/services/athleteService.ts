@@ -1,4 +1,5 @@
 import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
+import { SportAction } from "../types/sports_actions";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 
 // Define the type for each individual breakdown item
@@ -49,7 +50,7 @@ export const actionLabels: Record<string, string> = {
   Tries: "Tries",
   TurnoversConceded: "Turnovers Conceded",
   TurnoversWon: "Turnovers Won",
-  Starts: "Starts",
+  Starts: "Starts"
 };
 
 // Categories for grouping stats in the UI
@@ -142,7 +143,7 @@ export const athleteService = {
   },
 
   // Get detailed player statistics by athlete ID
-  getAthleteStats: async (athleteId: string) => {
+  getAthleteStats: async (athleteId: string, competitionId?: string) => {
     console.log("Fetching stats for athlete ID:", athleteId);
 
     try {
@@ -174,9 +175,41 @@ export const athleteService = {
         throw new Error(`API error: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log("API response data:", data);
-      return processStatsData(data);
+      const json = await response.json() as SportAction[];
+
+      // Filtering logic
+      const filterByCompeition = (action: SportAction, cId: string) => {
+        const { id } = action;
+        const parts = id.split("_");
+
+        if (action.action === "Starts") {
+          return true;
+        }
+
+        if (parts.length < 3) {
+          return false;
+        }
+
+        const [, actionLabel , actionCompId] = parts;
+
+        return actionCompId === cId;
+      }
+
+      console.log("API response data:", json);
+
+      console.log("Before filter ", json)
+
+      const data = competitionId !== undefined ?
+        json.filter(a => filterByCompeition(a, competitionId))
+        : json;
+
+      if (competitionId) {
+        console.log("Competition Id was set ")
+        console.log("After filter", json.filter(a => filterByCompeition(a, competitionId)))
+      }
+
+      return groupSportActions(data);
+
     } catch (error) {
       console.error("Error fetching player statistics:", error);
       // Fall back to mock data in case of any error
@@ -247,8 +280,8 @@ export const athleteService = {
       if (json.length === 0) return undefined;
 
       return json[0];
-      
-    } catch(error) {
+
+    } catch (error) {
       console.log("Error fetching rugby athlete ", error);
       return undefined
     }
@@ -374,7 +407,7 @@ const getMockPlayerStats = () => {
     },
   ];
 
-  return processStatsData(mockRawStats);
+  return groupSportActions(mockRawStats);
 };
 
 /**
@@ -439,7 +472,7 @@ const getMockPowerRankings = (): PowerRankingItem[] => {
 /**
  * Process the raw stats data into a more usable format
  */
-const processStatsData = (rawStats: any[]) => {
+export const groupSportActions = (rawStats: any[]) => {
   // Convert array of actions to an object with action as key
   const statsMap: Record<string, number> = {};
 
@@ -479,6 +512,7 @@ const extractCategoryStats = (
 ) => {
   return categoryActions.reduce((result, action) => {
     if (statsMap[action] !== undefined) {
+
       result.push({
         action,
         label: actionLabels[action] || formatActionName(action),
@@ -486,8 +520,23 @@ const extractCategoryStats = (
         // Format percentage values differently
         displayValue:
           action === "TackleSuccess"
-            ? `${Math.round(statsMap[action])}%`
+            ? statsMap["TacklesMade"] && statsMap["TacklesMissed"] ?
+              `${Math.floor(((statsMap["TacklesMade"]) / (statsMap["TacklesMade"] + statsMap["TacklesMissed"]) * 100))}%` :
+              `${Math.floor(statsMap["TackleSuccess"] * 100)}%`
             : statsMap[action].toString(),
+      });
+    }
+
+    else {
+
+      // If action is null just put 0
+      result.push({
+        action,
+        label: formatActionName(action),
+        value: 0,
+        // Format percentage values differently
+        displayValue:
+          action.endsWith("Success") ? "0%" : "0"
       });
     }
     return result;

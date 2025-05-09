@@ -2,12 +2,12 @@ import { forwardRef} from "react"
 import { RugbyPlayer } from "../../../types/rugbyPlayer"
 import { GroupedStatsGrid } from "../../shared/GroupedStatsGrid"
 import { StatCard } from "../../shared/StatCard"
-import { AthleteSportsActionAggregated, getPlayerAggregatedStat } from "../../../types/sports_actions"
+import { SportAction, getPlayerAggregatedStat } from "../../../types/sports_actions"
 import { PlayCircleIcon, WatchIcon } from "lucide-react"
 
 type Props = {
     player: RugbyPlayer,
-    aggregatedStats: AthleteSportsActionAggregated[]
+    aggregatedStats: SportAction[]
 }
 
 

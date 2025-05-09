@@ -1,10 +1,11 @@
 import { forwardRef } from "react"
 import { RugbyPlayer } from "../../../types/rugbyPlayer"
-import { Calendar, Trophy, Zap } from "lucide-react"
+import { Calendar, Trophy } from "lucide-react"
 import { GroupedStatsGrid } from "../../shared/GroupedStatsGrid"
 import { StatCard } from "../../shared/StatCard"
 import { format } from "date-fns"
 import { calculateAge } from "../../../utils/playerUtils"
+import { CoinsIcon } from "lucide-react"
 
 type Props = {
     player: RugbyPlayer
@@ -38,9 +39,9 @@ export const PlayerProfileOverview = forwardRef<HTMLDivElement, Props>(({ player
                 icon={<Trophy className="text-purple-500" size={20} />}
             />
             <StatCard
-                label="Points"
+                label="Price"
                 value={player.price || 0}
-                icon={<Zap className="text-yellow-500" size={20} />}
+                icon={<CoinsIcon className="text-yellow-500" size={20} />}
             />
         </GroupedStatsGrid>
     )

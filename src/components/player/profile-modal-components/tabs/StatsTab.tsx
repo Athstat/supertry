@@ -8,6 +8,7 @@ interface StatsTabProps {
 }
 
 export const StatsTab: React.FC<StatsTabProps> = ({ player, playerStats, isLoading, error }) => {
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">

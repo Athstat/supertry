@@ -1,4 +1,4 @@
-import { AthleteSportsActionAggregated } from "../types/sports_actions";
+import { SportAction } from "../types/sports_actions";
 import { getAuthHeader } from "../utils/backendUtils";
 import { baseUrl } from "./athleteService";
 
@@ -13,7 +13,7 @@ export const athleteSportActionsService = {
                 }
             );
 
-            return (await res.json()) as AthleteSportsActionAggregated[];
+            return (await res.json()) as SportAction[];
         } catch (error) {
             console.log("Error fetching athlete aggregate sports actions");
             return [];

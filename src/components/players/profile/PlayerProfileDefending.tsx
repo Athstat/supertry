@@ -3,14 +3,14 @@ import { EnhancedStatBar } from '../../shared/EnhancedStatBar'
 import { forwardRef } from 'react'
 import { ExpanedStats } from '../../../screens/PlayerProfileScreen'
 import { RugbyPlayer } from '../../../types/rugbyPlayer'
-import { AthleteSportsActionAggregated, getPlayerAggregatedStat } from '../../../types/sports_actions'
+import { SportAction, getPlayerAggregatedStat } from '../../../types/sports_actions'
 import { StatCard } from '../../shared/StatCard'
 
 type Props = {
     player: RugbyPlayer,
     expandedStats: ExpanedStats,
     toggleStatExpanded: (key: string) => void,
-    aggregatedStats: AthleteSportsActionAggregated[]
+    aggregatedStats: SportAction[]
 }
 
 export const PlayerProfileDefending = forwardRef<HTMLDivElement, Props>(({ player, toggleStatExpanded, expandedStats, aggregatedStats }, ref) => {

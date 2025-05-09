@@ -1,8 +1,8 @@
 import { createContext} from "react";
-import { AthleteSportsActionAggregated } from "../types/sports_actions";
+import { SportAction } from "../types/sports_actions";
 
 type ContextProps = {
-  aggregateStats?: AthleteSportsActionAggregated[],
+  aggregateStats?: SportAction[],
   error?: string
 }
 
