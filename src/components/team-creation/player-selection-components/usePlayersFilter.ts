@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
+import { playerSearchPredicate } from "../../../utils/athleteUtils";
 
 interface UsePlayersFilterProps {
   players: any[];
@@ -131,10 +132,17 @@ export const usePlayersFilter = ({
       if (!matchesPosition) return false;
 
       // Search query matching
+      // const matchesSearch =
+      //   searchQuery === "" ||
+      //   player.player_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      //   player.team_name?.toLowerCase().includes(searchQuery.toLowerCase());
+
       const matchesSearch =
         searchQuery === "" ||
+        playerSearchPredicate(player, searchQuery) ||
         player.player_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         player.team_name?.toLowerCase().includes(searchQuery.toLowerCase());
+
 
       // Team filter matching
       const matchesTeam =
