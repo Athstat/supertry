@@ -92,11 +92,11 @@ function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
   const today = new Date();
   const deadline = new Date(joinDeadline);
 
-  const twoDays = 1000 * 60 * 60 * 24 * 2;
+  const oneDay = 1000 * 60 * 60 * 24 * 1;
   const diff = deadline.valueOf() - today.valueOf();
   const deadlinePassed = diff < 0;
 
-  const showCountDown = !deadlinePassed && diff <= twoDays;
+  const showCountDown = !deadlinePassed && diff <= oneDay;
 
   const {hours, seconds, minutes} = useCountdown(showCountDown ? deadline.valueOf() : 0);
 
