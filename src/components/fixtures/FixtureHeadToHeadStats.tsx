@@ -1,10 +1,10 @@
 import { Shield } from "lucide-react"
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
-import { useState } from "react"
 import TeamLogo from "../team/TeamLogo"
 import { aggregateTeamStats } from "../../utils/boxScoreUtils"
 import { IBoxScore } from "../../types/boxScore"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
     fixture: IFixture,
@@ -21,31 +21,41 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
         {
             label: "Points",
             homeValue: fixture.team_score,
-            awayValue: fixture.opposition_score
+            awayValue: fixture.opposition_score,
+            homeRealVal: fixture.team_score,
+            awayRealVal: fixture.opposition_score
         },
 
         {
             label: "Tries",
             homeValue: homeStats.tries,
-            awayValue: awayStats.tries
+            awayValue: awayStats.tries,
+            homeRealVal: homeStats.tries,
+            awayRealVal: awayStats.tries,
         },
 
         {
-            label: "Conversations",
+            label: "Convertions",
             homeValue: `${homeStats.conversionsScored}/${homeStats.conversionsScored + homeStats.conversionsMissed}`,
-            awayValue: `${awayStats.conversionsScored}/${awayStats.conversionsScored + awayStats.conversionsMissed}`
+            awayValue: `${awayStats.conversionsScored}/${awayStats.conversionsScored + awayStats.conversionsMissed}`,
+            homeRealVal: (homeStats.conversionsScored) / (homeStats.conversionsScored + homeStats.conversionsMissed),
+            awayRealVal: (awayStats.conversionsScored) / (awayStats.conversionsScored + awayStats.conversionsMissed)
         },
 
         {
             label: "Penalties Scored",
-            homeValue: `${homeStats.penaltiesScored}`,
-            awayValue: awayStats.penaltiesScored
+            homeValue: homeStats.penaltiesScored,
+            awayValue: awayStats.penaltiesScored,
+            homeRealVal: homeStats.penaltiesScored,
+            awayRealVal: awayStats.penaltiesScored
         },
 
         {
-            label: "Dop Goals",
+            label: "Drop Goals",
             homeValue: homeStats.dropGoalsScored,
-            awayValue: awayStats.dropGoalsScored
+            awayValue: awayStats.dropGoalsScored,
+            homeRealVal: homeStats.dropGoalsScored,
+            awayRealVal: awayStats.dropGoalsScored
         },
 
         // {
@@ -63,7 +73,9 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
         {
             label: "Lineouts Won",
             homeValue: homeStats.lineOutsWon,
-            awayValue: awayStats.lineOutsWon
+            awayValue: awayStats.lineOutsWon,
+            homeRealVal: homeStats.lineOutsWon,
+            awayRealVal: awayStats.lineOutsWon
         },
 
         // {
@@ -75,35 +87,38 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
         {
             label: "Turnovers Won",
             homeValue: homeStats.turnoversWon,
-            awayValue: awayStats.turnoversWon
+            awayValue: awayStats.turnoversWon,
+            homeRealVal: homeStats.turnoversWon,
+            awayRealVal: awayStats.turnoversWon
         },
 
         {
             label: "Turnovers Conceded",
             homeValue: homeStats.turnoversConceded,
-            awayValue: awayStats.turnoversConceded
+            awayValue: awayStats.turnoversConceded,
+            homeRealVal: homeStats.turnoversConceded,
+            awayRealVal: awayStats.turnoversConceded
         },
 
         {
             label: "Yellow Cards",
             homeValue: homeStats.yellowCards,
-            awayValue: awayStats.yellowCards
+            awayValue: awayStats.yellowCards,
+            homeRealVal: homeStats.yellowCards,
+            awayRealVal: awayStats.yellowCards,
         },
 
         {
             label: "Red Card",
             homeValue: homeStats.redCards,
-            awayValue: awayStats.redCards
+            awayValue: awayStats.redCards,
+            homeRealVal: homeStats.redCards,
+            awayRealVal: awayStats.redCards
         }
 
     ]
 
-    const [showMore, setShowMore] = useState(false);
-
-    const displayLen = showMore === true ? statsArr.length : 4;
-    const displayStats = [...statsArr].slice(0, displayLen);
-
-    const toogleShowMore = () => setShowMore(!showMore);
+    const displayStats = statsArr;
 
     return (
         <TitledCard title="Head to Head" icon={Shield} >
@@ -123,24 +138,14 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
                 </div>
 
                 {displayStats.map((stat, index) => {
-                    return <div key={index} className="flex flex-row " >
-                        <div className="flex flex-1 items-center justify-start" >
-                            {stat.homeValue}
-                        </div>
-                        <div className="flex flex-[3] items-center justify-center text-center " >
-                            <p className="text-slate-700 font-medium dark:text-slate-400" >{stat.label}</p>
-                        </div>
-                        <div className="flex flex-1 items-center justify-end" >
-                            {stat.awayValue}
-                        </div>
-                    </div>
+                    return <HeadToHeadItem stat={stat} key={index} />
                 })}
             </div>
 
-            <div className="mt-5" >
+            {/* <div className="mt-5" >
                 {statsArr.length > 5 && !showMore && <button onClick={toogleShowMore} className="text-blue-400 hover:text-blue-500" >Show more</button>}
                 {statsArr.length > 5 && showMore && <button onClick={toogleShowMore} className="text-blue-400 hover:text-blue-500" >Show less</button>}
-            </div>
+            </div> */}
         </TitledCard>
     )
 }
@@ -149,5 +154,41 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
 type HeadToHeadStat = {
     label?: string,
     homeValue?: number | string,
-    awayValue?: number | string
+    awayValue?: number | string,
+    homeRealVal?: number,
+    awayRealVal?: number,
+    badStat?: boolean
+}
+
+type HeadToHeadProps = {
+    stat: HeadToHeadStat
+}
+
+function HeadToHeadItem ({stat} : HeadToHeadProps) {
+    const {homeRealVal, awayRealVal} = stat;
+
+    const statsNotNull = homeRealVal !== undefined && awayRealVal !== undefined;
+    const homeTeamWonCategory = statsNotNull && (homeRealVal > awayRealVal);
+    const awayTeamWonCategory = statsNotNull && (homeRealVal < awayRealVal);
+
+    return (
+        <div className="flex flex-row " >
+
+            <div className="flex flex-1 items-center justify-start" >
+                <p className={twMerge("h-full rounded-xl w-10 flex flex-col items-center justify-center",
+                    homeTeamWonCategory && "bg-blue-700 text-white"
+                )} >{stat.homeValue}</p>
+            </div>
+
+            <div className="flex flex-[3] items-center justify-center text-center " >
+                <p className="text-slate-700 font-medium dark:text-slate-400" >{stat.label}</p>
+            </div>
+
+            <div className="flex flex-1  items-center justify-end" >
+                <p className={twMerge("h-full rounded-xl w-10 flex flex-col items-center justify-center",
+                    awayTeamWonCategory && "bg-blue-700 text-white"
+                )} >{stat.awayValue}</p>
+            </div>
+        </div>
+    )
 }

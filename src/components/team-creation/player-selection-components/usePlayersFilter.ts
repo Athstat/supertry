@@ -59,7 +59,8 @@ export const usePlayersFilter = ({
       } else if (isMyTeamScreen) {
         // MyTeamScreen path - stricter position matching
         // Extract player position values - use either position or position_class field
-        const playerPosition = player.position || "";
+        
+        // const playerPosition = player.position || "";
         const playerPositionClass = player.position_class || "";
 
         // Check if player's position_class matches one of the 5 rugby positions exactly

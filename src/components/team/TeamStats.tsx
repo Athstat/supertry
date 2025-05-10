@@ -1,4 +1,3 @@
-import React from "react";
 import { Team } from "../../types/team";
 import { Trophy, Award, Calendar } from "lucide-react";
 
