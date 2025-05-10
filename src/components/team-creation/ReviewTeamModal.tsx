@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Player } from "../../types/player";
 import { positionGroups } from "../../data/positionGroups";
-import { teamService } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/teamService";
 import { leagueService } from "../../services/leagueService";
 import { useNavigate } from "react-router-dom";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
@@ -70,7 +70,7 @@ export function ReviewTeamModal({
       // Submit the team to the server
       if (league) {
         // Step 1: Submit the team
-        await teamService.submitTeam(
+        await fantasyTeamService.submitTeam(
           teamName,
           teamAthletes,
           league.official_league_id

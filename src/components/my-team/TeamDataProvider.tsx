@@ -7,7 +7,7 @@ import {
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
-import { teamService } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/teamService";
 import { leagueService } from "../../services/leagueService";
 
 interface TeamDataContextType {
@@ -73,7 +73,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
         console.log("Fetching team data for ID:", teamId);
 
         // First try to fetch team athletes directly
-        const teamAthletes = await teamService.fetchTeamAthletes(
+        const teamAthletes = await fantasyTeamService.fetchTeamAthletes(
           teamId as string
         );
         console.log("Team athletes:", teamAthletes);
@@ -81,7 +81,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
         if (teamAthletes && teamAthletes.length > 0) {
           // If we have athletes, we can fetch the team details
           // Use type assertion to handle the function call
-          const userTeams = await (teamService.fetchUserTeams as any)();
+          const userTeams = await (fantasyTeamService.fetchUserTeams as any)();
           console.log("User teams:", userTeams);
 
           let currentTeam = userTeams.find((t: any) => t.id == teamId);

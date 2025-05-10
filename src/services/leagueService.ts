@@ -1,7 +1,7 @@
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { analytics } from "./anayticsService";
-import { teamService } from "./teamService";
+import { fantasyTeamService } from "./teamService";
 
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
@@ -192,7 +192,7 @@ export const leagueService = {
       //console.log("League for joining: ", league);
 
       // // Fetch the user's latest team
-      const userTeams = await teamService.fetchUserTeams(
+      const userTeams = await fantasyTeamService.fetchUserTeams(
         // league.official_league_id
       );
 
@@ -252,7 +252,7 @@ export const leagueService = {
     try {
       // Try the first approach - look for user teams in the league
       try {
-        const userTeams = await teamService.fetchUserTeams(
+        const userTeams = await fantasyTeamService.fetchUserTeams(
           // leagueId
         );
         // If the user has any teams in this league, they've joined it

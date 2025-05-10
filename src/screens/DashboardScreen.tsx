@@ -5,7 +5,7 @@ import {
   ActiveLeaguesSection,
   HeroSection,
 } from "../components/dashboard";
-import { teamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/teamService";
 import { leagueService } from "../services/leagueService";
 import {
   IFantasyClubTeam,
@@ -36,7 +36,7 @@ export function DashboardScreen() {
       setIsLoadingTeams(true);
       // Get teams directly using fetchUserTeams with default league ID
       const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19"; // Default league ID
-      let userTeams = await teamService.fetchUserTeams(
+      let userTeams = await fantasyTeamService.fetchUserTeams(
         // defaultLeagueId
       );
       // Sort teams by creation date (newest first)
@@ -55,7 +55,7 @@ export function DashboardScreen() {
       const athletesMap = new Map<string, IFantasyTeamAthlete[]>();
 
       for (const team of userTeams) {
-        const athletes = await teamService.fetchTeamAthletes(team.id);
+        const athletes = await fantasyTeamService.fetchTeamAthletes(team.id);
         athletesMap.set(team.id, athletes);
       }
 

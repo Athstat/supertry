@@ -6,7 +6,7 @@ import { LeagueCard } from "../leagues/LeagueCard";
 import { ActiveLeaguesSectionProps } from "./types";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { leagueService } from "../../services/leagueService";
-import { teamService } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/teamService";
 import { activeLeaguesFilter } from "../../utils/leaguesUtils";
 import { format } from "date-fns";
 
@@ -57,7 +57,7 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
 
       try {
         // Fetch all teams for the user
-        const teams = await teamService.fetchUserTeams();
+        const teams = await fantasyTeamService.fetchUserTeams();
 
         // Map of joined league IDs
         leagues.forEach((league) => {

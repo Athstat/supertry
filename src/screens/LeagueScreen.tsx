@@ -6,7 +6,7 @@ import { TabButton } from "../components/shared/TabButton";
 import { TeamStats, LeagueInfo, LeagueFromState } from "../types/league";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
-import { teamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
@@ -254,7 +254,7 @@ export function LeagueScreen() {
 
     try {
       // Fetch team athletes
-      const athletes = await teamService.fetchTeamAthletes(team.id);
+      const athletes = await fantasyTeamService.fetchTeamAthletes(team.id);
       setTeamAthletes(athletes);
     } catch (error) {
       console.error("Failed to fetch team athletes:", error);
@@ -371,7 +371,7 @@ export function LeagueScreen() {
       {!isLoading && !hasJoinedLeague && (
         <button
           onClick={handleJoinLeague}
-          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 text-white font-semibold rounded-xl py-3 shadow-lg"
+          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
         >
           Join This League
         </button>
