@@ -1,32 +1,20 @@
-import { createContext, ReactNode, useContext, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
+import { atom, useAtom } from "jotai";
+import { ScopeProvider } from "jotai-scope";
 import { TabButton } from "../TabButton";
 
-export type TabViewContextProps = {
-    tabKeySearchParam: string
-}
+const currentTabAtom = atom<string>();
 
-const TabViewContext = createContext<TabViewContextProps>({
-    tabKeySearchParam: "tabKey"
-});
+export function useTabView() {
 
-export function useTabView(tabKeySearchParam?: string) {
+    const [currentTabKey, setTabKey] = useAtom(currentTabAtom);
 
-    const context = useContext(TabViewContext);
-    const paramKey = tabKeySearchParam ?? context.tabKeySearchParam;
-
-    const [searchParams, replace] = useSearchParams();
-
-    const currentTabKey = searchParams.get(paramKey);
-
-    const changeTabKey = (tabKey: string) => {
-        searchParams.set(paramKey, tabKey);
-        replace(searchParams);
+    const navigate = (key: string) => {
+        setTabKey(key);
     }
 
-    return { currentTabKey, changeTabKey }
-
+    return { currentTabKey, navigate }
 }
 
 type Props = {
@@ -37,41 +25,55 @@ type Props = {
 
 export default function TabView({ tabKeySearchParam = "tabKey", children, tabHeaderItems }: Props) {
 
-    const [searchParams, replace] = useSearchParams();
-    const enabledTabs = tabHeaderItems.filter(t => t.disabled === false);
-
-    useEffect(() => {
-        if (enabledTabs.length > 0 && !searchParams.has(tabKeySearchParam)) {
-            const firstTab = enabledTabs[0];
-
-            if (firstTab.disabled === false) {   
-                searchParams.set(tabKeySearchParam, firstTab.tabKey);
-                replace(searchParams);
-            }
-
-        }
-
-    }, [tabHeaderItems]);
 
     return (
-        <TabViewContext.Provider value={{ tabKeySearchParam: tabKeySearchParam }} >
-            <div className="w-full flex flex-col" >
+        <ScopeProvider atoms={[currentTabAtom]}>
+            <TabViewInner tabKeySearchParam={tabKeySearchParam} tabHeaderItems={tabHeaderItems}>
+                {children}
+            </TabViewInner>
+        </ScopeProvider>
+    )
+}
 
-                {/* Header */}
-                <div className="flex flex-row w-full h-10">
-                    {enabledTabs.map((item, index) => {
-                        return (
-                            <TabViewButton label={item.label} disabled={item.disabled} tabKey={item.tabKey} key={index} />
-                        )
-                    })}
-                </div>
+type TabInnerProps = Props;
 
-                <div>
-                    {children}
-                </div>
+function TabViewInner({ tabHeaderItems, children }: TabInnerProps) {
 
+    const {currentTabKey, navigate} = useTabView();
+    
+    const enabledTabs = tabHeaderItems.filter((th) => {
+        return th.disabled !== true;
+    });
+
+    useEffect(() => {
+
+        if (currentTabKey === undefined) {
+            const firstTab = enabledTabs.length > 0 ? enabledTabs[0] : undefined;
+            
+            if (firstTab) {
+                navigate(firstTab.tabKey);
+            }
+        }
+
+    }, []);
+
+    return (
+        <div className="w-full flex flex-col" >
+
+            {/* Header */}
+            <div className="flex flex-row w-full h-10">
+                {enabledTabs.map((item, index) => {
+                    return (
+                        <TabViewButton label={item.label} disabled={item.disabled} tabKey={item.tabKey} key={index} />
+                    )
+                })}
             </div>
-        </TabViewContext.Provider>
+
+            <div>
+                {children}
+            </div>
+
+        </div>
     )
 }
 
@@ -106,10 +108,10 @@ export type TabViewHeaderItem = {
 
 function TabViewButton({ label, tabKey, disabled = false }: TabViewHeaderItem) {
 
-    const { currentTabKey, changeTabKey } = useTabView();
+    const { currentTabKey, navigate } = useTabView();
 
     const handleTabClick = (newKey: string) => {
-        changeTabKey(newKey);
+        navigate(newKey);
     }
 
     if (disabled) return <></>
