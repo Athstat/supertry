@@ -22,7 +22,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/my-teams");
+    navigate(-1);
   };
 
   console.log("leagueInfo", leagueInfo);
@@ -41,7 +41,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
           size={20}
           className="group-hover:-translate-x-0.5 transition-transform"
         />
-        <span className="text-sm font-medium">My Teams</span>
+        <span className="text-sm font-medium">Go Back</span>
       </button>
 
       {/* Team Header */}

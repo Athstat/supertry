@@ -15,7 +15,7 @@ interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
   rank?: number;
 }
 
-export function MyTeamsScreen() {
+export function MyTeamsListScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { teamCreated, teamName, leagueId } = location.state || {};
