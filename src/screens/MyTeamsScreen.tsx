@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PlusCircle, Users, Star, Loader } from "lucide-react";
+import { PlusCircle, Users, Star, Loader, Trophy } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { fantasyTeamService } from "../services/teamService";
@@ -7,6 +7,9 @@ import {
   IFantasyClubTeam,
   IFantasyTeamAthlete,
 } from "../types/fantasyTeamAthlete";
+import useSWR from "swr";
+import { leagueService } from "../services/leagueService";
+import { useFetch } from "../hooks/useAsync";
 
 // Extended interface to include UI-specific properties
 interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
@@ -191,76 +194,107 @@ export function MyTeamsListScreen() {
           </button>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
+        <div className="my-6 p-4 sm:p-6">
           <div className="space-y-4">
-            {teams.map((team) => (
-              <motion.div
-                key={team.id}
-                onClick={() => handleTeamClick(team.id)}
-                className="relative flex items-center justify-between p-4 rounded-xl 
-                  bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700
-                  cursor-pointer hover:shadow-md transition-shadow"
-                whileHover={{
-                  scale: 1.02,
-                  transition: { type: "spring", stiffness: 300 },
-                }}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    handleTeamClick(team.id);
-                  }
-                }}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-semibold dark:text-gray-100">
-                        {team.name}
-                      </h3>
-                      <button
-                        onClick={(e) =>
-                          toggleFavorite(team.id, Boolean(team.isFavorite), e)
-                        }
-                        className={`text-gray-400 hover:text-yellow-400 transition-colors ${
-                          team.isFavorite ? "text-yellow-400" : ""
-                        }`}
-                        aria-label={
-                          team.isFavorite
-                            ? "Remove from favorites"
-                            : "Add to favorites"
-                        }
-                      >
-                        {team.isFavorite ? (
-                          <Star size={18} className="fill-current" />
-                        ) : (
-                          <Star size={18} />
-                        )}
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-3 mt-1">
-                      <div className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400">
-                        <Users size={16} className="shrink-0" />
-                        <span>
-                          {teamsWithAthletes.get(team.id)?.length || 0} Players
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <div className="text-lg font-bold text-primary-400">
-                    {team.score?.toLocaleString() || 0}
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            {teams.map((team) => {
+              return <MyTeamCard
+                team={team}
+                teamsWithAthletes={teamsWithAthletes}
+                handleTeamClick={handleTeamClick}
+              />
+            })}
           </div>
         </div>
       )}
     </main>
   );
+}
+
+
+type MyTeamCardProps = {
+  team: ExtendedFantasyClubTeam
+  handleTeamClick: (teamId: string) => void
+  teamsWithAthletes: Map<string, IFantasyTeamAthlete[]>
+}
+
+function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProps) {
+
+  const { data: league, isLoading } = useFetch(
+    "fantasy-leagues",
+    Number.parseInt(team.league_id ?? "0"),
+    leagueService.getLeagueById
+  )
+
+
+
+  return (
+    <motion.div
+      key={team.id}
+      onClick={() => handleTeamClick(team.id)}
+      className="relative flex items-center justify-between p-4 rounded-xl 
+                  bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700
+                  cursor-pointer hover:shadow-md transition-shadow"
+      whileHover={{
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 300 },
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          handleTeamClick(team.id);
+        }
+      }}
+    >
+      <div className="flex items-center gap-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold dark:text-gray-100">
+              {team.name}
+            </h3>
+            {/* <button
+              onClick={(e) =>
+                toggleFavorite(team.id, Boolean(team.isFavorite), e)
+              }
+              className={`text-gray-400 hover:text-yellow-400 transition-colors ${team.isFavorite ? "text-yellow-400" : ""
+                }`}
+              aria-label={
+                team.isFavorite
+                  ? "Remove from favorites"
+                  : "Add to favorites"
+              }
+            >
+              {team.isFavorite ? (
+                <Star size={18} className="fill-current" />
+              ) : (
+                <Star size={18} />
+              )}
+            </button> */}
+          </div>
+
+          {!isLoading && league && <div className="flex gap-1 flex-1 flex-row items-center justify-start" >
+            <Trophy className="text-orange-500 w-3 h-3" />
+            <p className="dark:text-slate-400 text-sm text-slate-700" >{league.title}</p>
+          </div>}
+
+          <div className="flex items-center gap-3 mt-1">
+            <div className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400">
+              <Users size={16} className="shrink-0" />
+              <span>
+                {teamsWithAthletes.get(team.id)?.length || 0} Players
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col items-end gap-1">
+        <div className="text-lg font-bold text-primary-400">
+          {team.score?.toLocaleString() || 0}
+        </div>
+        <div className="text-sm text-gray-400">
+          {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
+        </div>
+      </div>
+    </motion.div>
+  )
 }
