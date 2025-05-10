@@ -265,7 +265,7 @@ function EditTeamButton({team} : EditButtonProps) {
 
   return (
     <div className="w-full z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
-      <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] gap-2 bg-blue-700 hover:bg-blue-800 justify-center" >
+      <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-blue-700 hover:bg-blue-800 justify-center" >
         Edit Team
       </button>
     </div>
