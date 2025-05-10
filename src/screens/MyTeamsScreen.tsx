@@ -121,7 +121,7 @@ export function MyTeamsListScreen() {
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
       <div className="flex flex-col">
-        <h1 className="text-3xl font-bold mb-8 dark:text-gray-100">My Teams</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold mb-8 dark:text-gray-100">My Teams</h1>
       </div>
 
       {/* Success Toast */}
