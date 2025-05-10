@@ -12,8 +12,6 @@ import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { analytics } from "../services/anayticsService";
-import { useCountdown } from "../hooks/useCountdown";
-
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
@@ -380,55 +378,4 @@ export function LeagueScreen() {
       )}
     </div>
   );
-}
-
-
-type CountdownProps = {
-  league: IFantasyLeague
-}
-
-function Countdown({ league }: CountdownProps) {
-
-  const today = new Date();
-  const deadline = new Date(league.join_deadline!);
-  const twoDays = 1000 * 60 * 60 * 24 * 2;
-  const diff = deadline.valueOf() - today.valueOf();
-
-  const showCountdown = diff >= 0 && diff <= twoDays;
-
-  if (!showCountdown) return;
-
-
-  const { days, hours, seconds, minutes } = useCountdown(diff);
-
-  const timeBlocks = [
-    { value: days, label: "Days" },
-    { value: hours, label: "Hours" },
-    { value: minutes, label: "Minutes" },
-    { value: seconds, label: "Seconds" }
-  ];
-
-  return (
-    <div className="flex my-3 p-5 text-slate-700 dark:text-slate-300 dark:text-dark border border-slate-100 dark:border-slate-700  flex-col w-full bg-white rounded-xl dark:bg-slate-700/40 gap-2">
-      
-      <div className="text-lg m-0 p-0 font-bold" >{league.title} Join Dealine</div>
-      <p>Don't miss out on the action. Lock your team in before the deadline</p>
-
-      <div className="grid grid-cols-4 w-full sm:flex sm:flex-row gap-2 sm:gap-8 items-center justify-start">
-        {timeBlocks.map((block) => (
-          <div
-            key={block.label}
-            className=" w-full p-4 items-center justify-center flex flex-col rounded-xl bg-slate-100/50 dark:bg-slate-800/40 backdrop-blur-sm border border-white/10 "
-          >
-            <p className="font-bold text-lg sm:text-xl md:text-2xl">
-              {block.value.toString().padStart(2, "0")}
-            </p>
-            <p className="text-[10px] sm:text-xs text-slate-500 dark:text-primary-100 ">
-              {block.label}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
 }
