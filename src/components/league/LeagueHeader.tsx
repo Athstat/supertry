@@ -40,7 +40,7 @@ export function LeagueHeader({
     if (isFromWelcome) {
       navigate("/welcome");
     } else {
-      navigate("/leagues");
+      navigate(-1);
     }
   };
 
@@ -52,11 +52,11 @@ export function LeagueHeader({
             <button
               onClick={handleBackClick}
               className="flex items-center text-primary-100 hover:text-white mb-2 transition-colors"
-              aria-label={isFromWelcome ? "Back to welcome" : "Back to leagues"}
+              aria-label={isFromWelcome ? "Back to welcome" : "Go Back"}
             >
               <ChevronLeft size={20} />
               <span>
-                {isFromWelcome ? "Back to welcome screen" : "Back to leagues"}
+                {isFromWelcome ? "Back to welcome screen" : "Go Back"}
               </span>
             </button>
             <h1 className="text-2xl md:text-3xl font-bold">

@@ -371,7 +371,7 @@ export function LeagueScreen() {
       {!isLoading && !hasJoinedLeague && (
         <button
           onClick={handleJoinLeague}
-          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 text-white font-semibold rounded-xl py-3 shadow-lg"
+          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
         >
           Join This League
         </button>
