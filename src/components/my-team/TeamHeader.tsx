@@ -108,7 +108,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
               <span className="mr-1.5 text-yellow-500 text-sm font-semibold">
                 pts
               </span>
-              {totalPoints}
+              {Math.floor(totalPoints ?? 0)}
             </div>
           </div>
         </div>
