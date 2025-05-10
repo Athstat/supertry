@@ -236,7 +236,7 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: Standi
           </div>
         </td>
         <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400 relative pr-10">
-          {team.totalPoints}
+          {Math.floor(team.totalPoints ?? 0)}
           <span className="absolute right-4 top-1/2 -translate-y-1/2">
             <ChevronRight className="text-gray-400" />
           </span>

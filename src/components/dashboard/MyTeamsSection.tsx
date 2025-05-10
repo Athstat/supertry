@@ -3,8 +3,6 @@ import { Users, Trophy, Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MyTeamsSectionProps } from "./types";
 import { IFantasyClubTeam, IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import { useFetch } from "../../hooks/useAsync";
-import { leagueService } from "../../services/leagueService";
 
 export const MyTeamsSection: React.FC<MyTeamsSectionProps> = ({
   teams,
@@ -139,7 +137,7 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes, getTeamPoints }:
           Points
         </span>
         <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
-          {getTeamPoints(team.id)}
+          {Math.floor(getTeamPoints(team.id) ?? 0)}
         </span>
       </div>
     </div>
