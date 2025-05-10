@@ -15,7 +15,7 @@ import { Position } from "../types/position";
 import { Player } from "../types/player";
 import { positionGroups } from "../data/positionGroups";
 import { useNavigate, useLocation } from "react-router-dom";
-import { teamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/teamService";
 
 interface ReviewTeamScreenProps {
   teamName: string;
@@ -62,7 +62,7 @@ export function ReviewTeamScreen() {
 
       // Submit the team to the server
       if (league && league.official_league_id) {
-        await teamService.submitTeam(
+        await fantasyTeamService.submitTeam(
           teamName,
           players,
           league.official_league_id

@@ -8,7 +8,7 @@ import { SwapConfirmationModal } from "../team/SwapConfirmationModal";
 import PlayerSelectionModal from "../team-creation/PlayerSelectionModal";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
 import { useTeamData } from "./TeamDataProvider";
-import { teamService } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/teamService";
 import { athleteService } from "../../services/athleteService";
 
 // Define the context type
@@ -188,7 +188,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
       updatedAthletes[playerIndex] = replacementAthlete;
 
       // Send the update to the server
-      await teamService.updateTeamAthletes(updatedAthletes, teamId);
+      await fantasyTeamService.updateTeamAthletes(updatedAthletes, teamId);
 
       // Update local state
       setAthletes(updatedAthletes);

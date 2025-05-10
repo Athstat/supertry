@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PlusCircle, Users, Star, Loader } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { teamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/teamService";
 import {
   IFantasyClubTeam,
   IFantasyTeamAthlete,
@@ -35,7 +35,7 @@ export function MyTeamsScreen() {
       try {
         setIsLoading(true);
         // Use the default league ID as in DashboardScreen
-        const userTeams = await teamService.fetchUserTeams();
+        const userTeams = await fantasyTeamService.fetchUserTeams();
         console.log("userTeams", userTeams);
 
         // Sort teams by creation date (newest first)
@@ -52,7 +52,7 @@ export function MyTeamsScreen() {
 
         for (const team of sortedTeams) {
           try {
-            const athletes = await teamService.fetchTeamAthletes(team.id);
+            const athletes = await fantasyTeamService.fetchTeamAthletes(team.id);
             athletesMap.set(team.id, athletes);
           } catch (err) {
             console.error(`Failed to fetch athletes for team ${team.id}:`, err);

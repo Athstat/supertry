@@ -3,7 +3,7 @@ import {
   IFantasyClubTeam,
 } from "../types/fantasyTeamAthlete";
 
-export const teamService = {
+export const fantasyTeamService = {
   /**
    * Update team athletes for a fantasy team
    */
@@ -195,7 +195,7 @@ export const teamService = {
       }
 
       // Fetch the user's club - use direct reference to the function
-      const club = await teamService.fetchUserClub();
+      const club = await fantasyTeamService.fetchUserClub();
 
       // Throw error if club not found
       if (!club || !club.id) {
