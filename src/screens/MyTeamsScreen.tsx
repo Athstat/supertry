@@ -195,7 +195,7 @@ export function MyTeamsListScreen() {
           </button>
         </div>
       ) : (
-        <div className="my-6 p-4 sm:p-6">
+        <div className="">
           <div className="space-y-4">
             {teams.map((team) => {
               return <MyTeamCard
