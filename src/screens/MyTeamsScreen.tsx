@@ -24,6 +24,7 @@ export function MyTeamsListScreen() {
   const { teamCreated, teamName, leagueId } = location.state || {};
 
   const [teams, setTeams] = useState<ExtendedFantasyClubTeam[]>([]);
+  
   const [teamsWithAthletes, setTeamsWithAthletes] = useState<
     Map<string, IFantasyTeamAthlete[]>
   >(new Map());
