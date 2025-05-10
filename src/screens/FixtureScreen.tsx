@@ -1,11 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IFixture } from "../types/games";
 import TeamLogo from "../components/team/TeamLogo";
 import { format } from "date-fns";
 import { fixtureSumary, summerizeGameStatus } from "../utils/fixtureUtils";
 import { Minus } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
-import { useRouter } from "../hooks/useRoter";
 import FixtureScreenOverview from "../components/fixtures/FixtureScreenOverview";
 import { ErrorState } from "../components/ui/ErrorState";
 import useSWR from "swr";
@@ -19,7 +18,7 @@ import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStat
 
 export default function FixtureScreen() {
 
-  const { push } = useRouter();
+  const navigate = useNavigate();
   const { fixtureId } = useParams();
 
   if (!fixtureId) return <ErrorState message="Match was not found" />
@@ -61,9 +60,9 @@ export default function FixtureScreen() {
 
       <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-800 to-blue-900 dark:from-blue-800 dark:to-blue-950 text-white" >
 
-        <div onClick={() => push("/fixtures")} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
+        <div onClick={() => navigate(-1)} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
           <ArrowLeft />
-          <p>All Matches</p>
+          <p>Go Back</p>
         </div>
 
 

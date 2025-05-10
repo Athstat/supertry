@@ -37,7 +37,7 @@ export default function PlayerBoxScoreSmallCard({children, boxScore: bs, fixture
                 <div className="flex flex-col gap-0" >
 
                     <div>
-                        <p className="font-medium" >{bs.athlete_first_name} {bs.athlete_first_name} {bs.athlete_position ? `· ${fixPosition(bs.athlete_position)}` : ''    }</p>
+                        <p className="font-medium" >{bs.athlete_first_name} {bs.athlete_last_name} {bs.athlete_position ? `· ${fixPosition(bs.athlete_position)}` : ''    }</p>
                     </div>
                     
                     {children}
