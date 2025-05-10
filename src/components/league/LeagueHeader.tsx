@@ -45,7 +45,7 @@ export function LeagueHeader({
   };
 
   return (
-    <div className="bg-gradient-to-r from-primary-700 to-primary-600 text-white">
+    <div className="bg-gradient-to-br from-primary-700 to-primary-800 dark:to-primary-950 text-white">
       <div className="container mx-auto px-4 py-6 max-w-3xl">
         <div className="flex items-center justify-between mb-4">
           <div>
