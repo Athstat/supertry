@@ -8,7 +8,6 @@ interface TeamFormationProps {
 }
 
 export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
-  console.log("players", players);
   // Group players by position
   const positionGroups = {
     "Front Row": players.filter(
@@ -27,62 +26,71 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
   };
 
   return (
-    <div className="relative h-[580px] bg-gradient-to-b from-green-600 to-green-700 rounded-2xl overflow-hidden p-8">
-      <div className="absolute inset-0 flex flex-col justify-between py-10 pl-16 pr-8">
+    <div className="relative h-[580px] bg-green-700 rounded-2xl overflow-hidden">
+
+
+      <div className="grid grid-cols-1 overflow-clip items-center" >
+        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/0 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/0 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/0 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/0 h-20" ></div>
+        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20" ></div>
+      </div>
+
+      <div className="absolute inset-0 flex flex-row items-center justify-center gap-2 flex-wrap">
+
         {/* Front Row - Top */}
-        <div className="flex justify-center -translate-x-10">
-          {positionGroups["Front Row"].map((player) => (
-            <TeamPlayerCard
-              key={player.id}
-              player={player}
-              onClick={() => onPlayerClick(player)}
-            />
-          ))}
-        </div>
+        {positionGroups["Front Row"].map((player) => (
+          <TeamPlayerCard
+            key={player.id}
+            player={player}
+            onClick={() => onPlayerClick(player)}
+            className="w-36 h-48"
+          />
+        ))}
 
         {/* Second Row - Left Side */}
-        <div className="flex justify-start -translate-x-10 -translate-y-10">
-          {positionGroups["Second Row"].map((player) => (
-            <TeamPlayerCard
-              key={player.id}
-              player={player}
-              onClick={() => onPlayerClick(player)}
-            />
-          ))}
-        </div>
+        {positionGroups["Second Row"].map((player) => (
+          <TeamPlayerCard
+            key={player.id}
+            player={player}
+            onClick={() => onPlayerClick(player)}
+            className="w-36 h-48"
+          />
+        ))}
 
         {/* Back Row - Center Left */}
-        <div className="flex justify-center -translate-x-10 -translate-y-20">
-          {positionGroups["Back Row"].map((player) => (
-            <TeamPlayerCard
-              key={player.id}
-              player={player}
-              onClick={() => onPlayerClick(player)}
-            />
-          ))}
-        </div>
+        {positionGroups["Back Row"].map((player) => (
+          <TeamPlayerCard
+            key={player.id}
+            player={player}
+            onClick={() => onPlayerClick(player)}
+            className="w-36 h-48"
+          />
+        ))}
 
-        {/* Halfback - Center Right */}
-        <div className="flex justify-center translate-x-10 -translate-y-20">
-          {positionGroups["Halfback"].map((player) => (
-            <TeamPlayerCard
-              key={player.id}
-              player={player}
-              onClick={() => onPlayerClick(player)}
-            />
-          ))}
-        </div>
+        {positionGroups["Halfback"].map((player) => (
+          <TeamPlayerCard
+            key={player.id}
+            player={player}
+            onClick={() => onPlayerClick(player)}
+            className="w-36 h-48"
+          />
+        ))}
 
         {/* Back - Right Side */}
-        <div className="flex justify-end -translate-y-20">
-          {positionGroups["Back"].map((player) => (
-            <TeamPlayerCard
-              key={player.id}
-              player={player}
-              onClick={() => onPlayerClick(player)}
-            />
-          ))}
-        </div>
+        {positionGroups["Back"].map((player) => (
+          <TeamPlayerCard
+            key={player.id}
+            player={player}
+            onClick={() => onPlayerClick(player)}
+            className="w-36 h-48"
+          />
+        ))}
       </div>
     </div>
   );

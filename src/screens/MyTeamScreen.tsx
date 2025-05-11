@@ -50,7 +50,7 @@ const TeamContent: React.FC<{
 // Main content that uses both TeamData and TeamActions contexts
 const MyTeamContent: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
-  const [activeTab, setActiveTab] = useState<TabType>("edit-team");
+  const [activeTab, setActiveTab] = useState<TabType>("view-pitch");
   const [initialized, setInitialized] = useState(false);
 
   const {
