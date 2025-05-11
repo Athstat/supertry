@@ -32,8 +32,8 @@ export default function UserRankingCard() {
                         <h2 className="text-md lg:text-lg font-bold text-white flex items-center gap-2">
                             Global Leader Board
                         </h2>
-                        {rank && <p className="text-slate-50 text-bse lg:text-md">
-                            Total Points <strong>{totalScore}</strong>
+                        {rank && totalScore && <p className="text-slate-50 text-bse lg:text-md">
+                            Total Points <strong>{Math.floor(totalScore)}</strong>
                         </p>}
 
                         {!rank && <p className='text-slate-200' >You are not yet ranked</p>}

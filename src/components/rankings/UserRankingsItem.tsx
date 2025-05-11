@@ -60,7 +60,7 @@ export default function UserRankingsItem({userRank} : Props) {
                     </div>
                 </div>
                 <div className="text-right font-semibold text-primary-600 dark:text-primary-400">
-                    {userRank.total_score}
+                    {userRank.total_score ? Math.floor(userRank.total_score) : "-"}
                 </div>
             </div>
         </>
