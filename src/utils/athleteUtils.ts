@@ -68,3 +68,13 @@ function nameMatches(input: string, target: string): boolean {
 export function playerSearchPredicate(athlete: IFantasyAthlete, query: string) {
     return nameMatches(athlete.player_name ?? "", query);
 }
+
+export function formatAction(actionName: string) {
+    const displayName = actionName
+    .replace(/([A-Z])/g, " $1")
+    .trim();
+
+    const res = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+    return res
+}

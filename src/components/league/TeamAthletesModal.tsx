@@ -3,7 +3,7 @@ import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { TeamStats } from "../../types/league";
 import { athleteService, PointsBreakdown, PointsBreakdownItem } from "../../services/athleteService";
-import { formatPosition } from "../../utils/athleteUtils";
+import { formatAction, formatPosition } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useFetch } from "../../hooks/useAsync";
 
@@ -151,7 +151,7 @@ export function TeamAthletesModal({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
       onClick={handleOverlayClick}
     >
       <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md max-h-[80vh] flex flex-col">
@@ -205,6 +205,7 @@ export function TeamAthletesModal({
               </div>
             )}
           </div>
+
           <button
             onClick={onClose}
             className="ml-2 p-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
@@ -241,73 +242,9 @@ export function TeamAthletesModal({
           </div>
         ) : selectedAthleteId ? (
           // Points breakdown view
-          <div className="overflow-y-auto flex-1 p-4">
-            {isBreakdownLoading ? (
-              <div className="flex items-center justify-center h-32">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-              </div>
-            ) : pointsBreakdown ? (
-              <div>
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                  {pointsBreakdown.length > 0 ? (
-                    <ul className="space-y-3">
-                      {pointsBreakdown.map((item, index) => {
-                        // Format the action name by adding spaces before capitals and capitalizing first letter
-                        const formattedAction = item.action || "";
-                        const displayName = formattedAction
-                          .replace(/([A-Z])/g, " $1")
-                          .trim();
-                        const capitalizedName =
-                          displayName.charAt(0).toUpperCase() +
-                          displayName.slice(1);
-
-                        // Determine if score is positive or negative for styling
-                        const isPositive = item.score > 0;
-                        const isNegative = item.score < 0;
-
-                        return (
-                          <li
-                            key={index}
-                            className="flex flex-col border-b pb-3 dark:border-gray-600 last:border-0"
-                          >
-                            <div className="flex justify-between items-center w-full">
-                              <div className="flex flex-col">
-                                <div className="flex flex-col sm:flex-row sm:items-center">
-                                  <span className="text-gray-700 dark:text-gray-300 font-medium">
-                                    {capitalizedName}
-                                  </span>
-                                  <span className="text-xs text-gray-400 dark:text-gray-400 italic sm:ml-1">
-                                    (count {item.action_count})
-                                  </span>
-                                </div>
-                              </div>
-                              <span
-                                className={`font-bold ${isPositive
-                                  ? "text-green-600 dark:text-green-400"
-                                  : isNegative
-                                    ? "text-red-600 dark:text-red-400"
-                                    : "dark:text-white"
-                                  }`}
-                              >
-                                {item.score.toFixed(2)} pts
-                              </span>
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  ) : (
-                    <p className="text-center text-gray-500 dark:text-gray-400">
-                      No breakdown data available
-                    </p>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="text-center text-gray-500 dark:text-gray-400">
-                Failed to load points breakdown
-              </div>
-            )}
+          <div className="overflow-y-auto" >
+            {pointsBreakdown.length === 0 && <p className="text-center m-4 bg-slate-100 dark:bg-slate-700 rounded-xl p-4 text-gray-500 dark:text-gray-400">No points breakdown data available</p>}
+            {pointsBreakdown.length > 0 && <PointsBreakdownView points={pointsBreakdown} />}
           </div>
         ) : (
 
@@ -348,12 +285,12 @@ type ListItemProps = {
 function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: ListItemProps) {
 
   const athleteId = athlete.id ?? "fall-back-id";
-  const { data: points, isLoading } = useFetch("points-breakdown", "58430913-ded2-5bee-a3c0-d5d2d9911e66", athleteService.getAthletePointsBreakdown);
+  const { data: points, isLoading } = useFetch("points-breakdown", athlete.id ?? "", athleteService.getAthletePointsBreakdown);
 
   const totalScore: number = points ?
-  points.reduce((currTotal, action) => {
-    return currTotal + action.score;
-  }, 0) : 0;
+    points.reduce((currTotal, action) => {
+      return currTotal + action.score;
+    }, 0) : 0;
 
   console.log("Points Breakdown ", athlete.player_name, points);
 
@@ -364,6 +301,7 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         aria-disabled={isLoading}
         className="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
+
         {/* Athlete Image */}
         <div className="flex-shrink-0">
           {athlete.image_url ? (
@@ -418,4 +356,79 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
     </li>
   )
 
+}
+
+
+
+type PointsBreakdownListItemProps = {
+  item: PointsBreakdownItem
+}
+
+function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
+
+  // Format the action name by adding spaces before capitals and capitalizing first letter
+
+  const displayName = formatAction(item.action ?? "");
+
+  // Determine if score is positive or negative for styling
+  const isPositive = item.score > 0;
+  const isNegative = item.score < 0;
+
+  return (
+    <li
+      className="flex flex-col border-b pb-3 dark:border-gray-600 last:border-0"
+    >
+      <div className="flex justify-between items-center w-full">
+        <div className="flex flex-col">
+          <div className="flex flex-col sm:flex-row sm:items-center">
+            <span className="text-gray-700 dark:text-gray-300 font-medium">
+              {displayName}
+            </span>
+            <span className="text-xs text-gray-400 dark:text-gray-400 italic sm:ml-1">
+              ({item.action_count})
+            </span>
+          </div>
+        </div>
+        <span
+          className={`font-bold ${isPositive
+            ? "text-green-600 dark:text-green-400"
+            : isNegative
+              ? "text-red-600 dark:text-red-400"
+              : "dark:text-white"
+            }`}
+        >
+          {Math.floor(item.action_count ?? 0)} pts
+        </span>
+      </div>
+    </li>
+  );
+}
+
+type PointsBreakDownViewProps = {
+  points: PointsBreakdownItem[]
+}
+
+function PointsBreakdownView({ points }: PointsBreakDownViewProps) {
+
+  const pointsBreakdown = points;
+
+  return (
+    <div className=" flex-1 p-4">
+        
+        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+          {pointsBreakdown.length > 0 ? (
+            <ul className="space-y-3">
+              {pointsBreakdown.map((item, index) => {
+                return <PointsBreakdownListItem item={item} key={index} />
+              })}
+            </ul>
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400">
+              No breakdown data available
+            </p>
+          )}
+        </div>
+
+    </div>
+  )
 }
