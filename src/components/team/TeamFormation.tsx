@@ -26,7 +26,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
   };
 
   return (
-    <div className="relative h-[700px] lg:h-[580px] bg-green-700 rounded-2xl overflow-hidden">
+    <div className="relative h-[700px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
 
 
       <div className="grid grid-cols-1 overflow-clip items-center" >
@@ -41,7 +41,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
         <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20" ></div>
       </div>
 
-      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-6 lg:px-[25%]">
+      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-6 lg:px-[10%]">
 
         {/* Front Row - Top */}
         {positionGroups["Front Row"].map((player) => (
@@ -49,7 +49,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-36 lg:h-48 w-32 h-40"
+            className="lg:w-44 lg:h-56 w-32 h-40"
           />
         ))}
 
@@ -59,7 +59,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-36 lg:h-48 w-32 h-40"
+            className="lg:w-44 lg:h-56 w-32 h-40"
           />
         ))}
 
@@ -69,7 +69,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-36 lg:h-48 w-32 h-40"
+            className="lg:w-44 lg:h-56 w-32 h-40"
           />
         ))}
 
@@ -78,7 +78,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-36 lg:h-48 w-32 h-40"
+            className="lg:w-44 lg:h-56 w-32 h-40"
           />
         ))}
 
@@ -88,7 +88,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-36 lg:h-48 w-32 h-40"
+            className="lg:w-44 lg:h-56 w-32 h-40"
           />
         ))}
       </div>
