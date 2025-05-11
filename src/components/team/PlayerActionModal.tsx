@@ -1,7 +1,7 @@
-import React from "react";
 import { X, Trophy, Users } from "lucide-react";
 import { Player } from "../../types/team";
 import { motion } from "framer-motion";
+import { formatPosition } from "../../utils/athleteUtils";
 
 interface PlayerActionModalProps {
   player: Player;
@@ -66,7 +66,7 @@ export function PlayerActionModal({
                   {player.name}
                 </span>
                 <span className="text-sm font-bold px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full text-gray-800 dark:text-gray-300">
-                  {player.position}
+                  {formatPosition(player.position ?? "")}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">

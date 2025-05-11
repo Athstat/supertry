@@ -41,7 +41,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
         <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20" ></div>
       </div>
 
-      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-6 lg:px-[255%]">
+      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-6 lg:px-[25%]">
 
         {/* Front Row - Top */}
         {positionGroups["Front Row"].map((player) => (
