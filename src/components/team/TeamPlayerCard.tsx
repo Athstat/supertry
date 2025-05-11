@@ -31,7 +31,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
   return (
-    <div className="perspective-1000">
+    <div className="">
       <div
         onClick={onClick}
         className={twMerge(
@@ -76,7 +76,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
           {/* Position and Rating */}
           <div className="flex justify-between items-center text-sm mb-2">
             <span className="text-xs">{formatPosition(player.position ?? "")}</span>
-            <span className="font-medium">PR {statValue(pr)}</span>
+            <span className="text-xs font-medium">PR {statValue(pr)}</span>
           </div>
 
           {/* Stats Grid */}
