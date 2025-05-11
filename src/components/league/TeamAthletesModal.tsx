@@ -1,4 +1,4 @@
-import React, { useState, useEffect, KeyboardEventHandler } from "react";
+import React, { useState, useEffect, KeyboardEventHandler, useContext } from "react";
 import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { TeamStats } from "../../types/league";
@@ -6,6 +6,8 @@ import { athleteService, PointsBreakdown, PointsBreakdownItem } from "../../serv
 import { formatAction, formatPosition } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useFetch } from "../../hooks/useAsync";
+import { FantasyLeagueContext } from "../../contexts/FantasyLeagueContext";
+import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
 
 interface Athlete {
   id: string;
@@ -44,48 +46,6 @@ export function TeamAthletesModal({
   const [pointsBreakdown, setPointsBreakdown] = useState<PointsBreakdownItem[]>(
     []
   );
-  const [isBreakdownLoading, setIsBreakdownLoading] = useState(false);
-  const [athleteScores, setAthleteScores] = useState<AthleteScoresMap>({});
-  const [isLoadingScores, setIsLoadingScores] = useState(false);
-
-  // Load scores for all athletes when modal opens
-  useEffect(() => {
-    const loadAllScores = async () => {
-      setIsLoadingScores(true);
-      const scoresMap: AthleteScoresMap = {};
-
-      try {
-        // Process athletes in sequence to avoid overwhelming the API
-        for (const athlete of athletes) {
-          const athleteId = athlete.athlete_id || athlete.id;
-          try {
-            const data = await athleteService.getAthletePointsBreakdown(
-              athleteId
-            );
-
-            const totalScore = data.reduce((acc, item) => acc + item.score, 0);
-            scoresMap[athleteId] = totalScore;
-
-          } catch (error) {
-            console.error(
-              `Error fetching score for athlete ${athleteId}:`,
-              error
-            );
-            scoresMap[athleteId] = 0; // Default to 0 if there's an error
-          }
-        }
-        setAthleteScores(scoresMap);
-      } catch (error) {
-        console.error("Error loading athlete scores:", error);
-      } finally {
-        setIsLoadingScores(false);
-      }
-    };
-
-    if (athletes.length > 0) {
-      loadAllScores();
-    }
-  }, [athletes]);
 
   const selectedAthlete = athletes.find(
     (athlete) => athlete.id === selectedAthleteId
@@ -223,7 +183,7 @@ export function TeamAthletesModal({
         </div>
 
         {/* Fixed Total Score Header - Only visible when viewing athlete breakdown */}
-        {selectedAthleteId && !isBreakdownLoading && pointsBreakdown && (
+        {selectedAthleteId && pointsBreakdown && (
           <div className="sticky top-0 z-10 p-3 pl-7 pr-7 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
             <div className="flex justify-between items-center">
               <span className="text-lg font-semibold dark:text-white">
@@ -285,14 +245,15 @@ type ListItemProps = {
 function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: ListItemProps) {
 
   const athleteId = athlete.id ?? "fall-back-id";
-  const { data: points, isLoading } = useFetch("points-breakdown", athlete.id ?? "", athleteService.getAthletePointsBreakdown);
+
+  const { data: points, isLoading } = useAthletePointsBreakdown(athlete.tracking_id ?? "default-tracking-id");
 
   const totalScore: number = points ?
     points.reduce((currTotal, action) => {
       return currTotal + action.score;
     }, 0) : 0;
 
-  console.log("Points Breakdown ", athlete.player_name, points);
+  console.log("Points Breakdown 2.0", athlete.player_name, points);
 
   return (
     <li>
@@ -328,6 +289,7 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         <div className="flex-1">
           <div className="font-medium dark:text-white">
             {athlete.player_name}
+            
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
             {formatPosition(athlete.position ?? "")}

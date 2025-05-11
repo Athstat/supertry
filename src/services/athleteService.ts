@@ -132,6 +132,37 @@ export const athleteService = {
     }
   },
 
+  getAthletePointsBreakdownByLeagueAndRound: async (
+    athleteId: string,
+    roundId: number,
+    leagueId: string
+  ): Promise<PointsBreakdownItem[]> => {
+    try {
+      const uri = getUriLocal(
+        `/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/league/${leagueId}/round/${roundId}/athlete/${athleteId}`
+      );
+
+      console.log("Request URL", uri);
+
+      const response = await fetch(uri, {
+        method: "GET",
+        headers: getAuthHeader()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch points breakdown: ${response.status}`);
+      }
+
+      const json =  await response.json();
+
+      return json;
+
+    } catch (error) {
+      console.error("Error fetching athlete points breakdown:", error);
+      throw error;
+    }
+  },
+
   // Get detailed player statistics by athlete ID
   getAthleteStats: async (athleteId: string, competitionId?: string) => {
     console.log("Fetching stats for athlete ID:", athleteId);

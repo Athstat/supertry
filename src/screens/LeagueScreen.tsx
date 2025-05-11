@@ -12,6 +12,7 @@ import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { analytics } from "../services/anayticsService";
+import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
@@ -271,111 +272,105 @@ export function LeagueScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
-      <LeagueHeader
-        leagueInfo={leagueInfo}
-        league={leagueFromState}
-        onOpenSettings={() => setShowSettings(true)}
-        isLoading={isLoading}
-      >
+    <FantasyLeagueProvider league={leagueFromState} >
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
+        <LeagueHeader
+          leagueInfo={leagueInfo}
+          league={leagueFromState}
+          onOpenSettings={() => setShowSettings(true)}
+          isLoading={isLoading}
+        >
+          {!isLoading && !hasJoinedLeague && (
+            <button
+              onClick={handleJoinLeague}
+              className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+            >
+              Join This League
+            </button>
+          )}
+        </LeagueHeader>
+        <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
+      
+          {/* {leagueFromState && <Countdown league={leagueFromState} />} */}
+      
+          {/* Tab Navigation */}
+          <div className="flex overflow-x-auto mb-6 bg-white dark:bg-dark-800 rounded-t-xl shadow-sm">
+            <TabButton
+              active={activeTab === "standings"}
+              onClick={() => setActiveTab("standings")}
+            >
+              Standings
+            </TabButton>
+            <TabButton
+              active={activeTab === "chat"}
+              onClick={() => setActiveTab("chat")}
+            >
+              Chat
+            </TabButton>
+            <TabButton
+              active={activeTab === "fixtures"}
+              onClick={() => setActiveTab("fixtures")}
+            >
+              Fixtures
+            </TabButton>
+          </div>
+          {/* Tab Content */}
+          <div className="space-y-6">
+            {activeTab === "standings" && (
+              <LeagueStandings
+                teams={teams}
+                showJumpButton={showJumpButton}
+                onJumpToTeam={() => {
+                  const userTeamRef = document.querySelector(
+                    '[data-user-team="true"]'
+                  );
+                  if (userTeamRef) {
+                    userTeamRef.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }
+                }}
+                isLoading={isLoading}
+                error={error}
+                onTeamClick={(team) => {
+                  handleTeamClick(team);
+                  viewTeam(team.id);
+                }}
+              />
+            )}
+            {activeTab === "chat" && (
+              <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
+            )}
+            {activeTab === "fixtures" && (
+              <FantasyLeagueFixturesList
+                league={leagueFromState as IFantasyLeague}
+              />
+            )}
+          </div>
+        </div>
+        {showSettings && (
+          <LeagueSettings onClose={() => setShowSettings(false)} />
+        )}
+        {/* Team Athletes Modal */}
+        {selectedTeam && (
+          <TeamAthletesModal
+            team={selectedTeam as TeamStats}
+            athletes={teamAthletes}
+            onClose={handleCloseModal}
+            isLoading={loadingAthletes}
+          />
+        )}
+        {/* Mobile CTA Button */}
         {!isLoading && !hasJoinedLeague && (
           <button
             onClick={handleJoinLeague}
-            className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+            className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
           >
             Join This League
           </button>
         )}
-      </LeagueHeader>
-
-
-      <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
-        
-        {/* {leagueFromState && <Countdown league={leagueFromState} />} */}
-        
-        {/* Tab Navigation */}
-        <div className="flex overflow-x-auto mb-6 bg-white dark:bg-dark-800 rounded-t-xl shadow-sm">
-          <TabButton
-            active={activeTab === "standings"}
-            onClick={() => setActiveTab("standings")}
-          >
-            Standings
-          </TabButton>
-          <TabButton
-            active={activeTab === "chat"}
-            onClick={() => setActiveTab("chat")}
-          >
-            Chat
-          </TabButton>
-          <TabButton
-            active={activeTab === "fixtures"}
-            onClick={() => setActiveTab("fixtures")}
-          >
-            Fixtures
-          </TabButton>
-        </div>
-
-        {/* Tab Content */}
-        <div className="space-y-6">
-          {activeTab === "standings" && (
-            <LeagueStandings
-              teams={teams}
-              showJumpButton={showJumpButton}
-              onJumpToTeam={() => {
-                const userTeamRef = document.querySelector(
-                  '[data-user-team="true"]'
-                );
-                if (userTeamRef) {
-                  userTeamRef.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-                }
-              }}
-              isLoading={isLoading}
-              error={error}
-              onTeamClick={(team) => {
-                handleTeamClick(team);
-                viewTeam(team.id);
-              }}
-            />
-          )}
-
-          {activeTab === "chat" && (
-            <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
-          )}
-
-          {activeTab === "fixtures" && (
-            <FantasyLeagueFixturesList
-              league={leagueFromState as IFantasyLeague}
-            />
-          )}
-        </div>
       </div>
-
-      {showSettings && (
-        <LeagueSettings onClose={() => setShowSettings(false)} />
-      )}
-
-      {/* Team Athletes Modal */}
-      {selectedTeam && (
-        <TeamAthletesModal
-          team={selectedTeam as TeamStats}
-          athletes={teamAthletes}
-          onClose={handleCloseModal}
-          isLoading={loadingAthletes}
-        />
-      )}
-
-      {/* Mobile CTA Button */}
-      {!isLoading && !hasJoinedLeague && (
-        <button
-          onClick={handleJoinLeague}
-          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
-        >
-          Join This League
-        </button>
-      )}
-    </div>
+    </FantasyLeagueProvider>
   );
 }
