@@ -53,7 +53,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
             <img
               src={player.image}
               onError={() => setIamgeError("Image failed to load")}
-              className="w-full h-full object-cover object-top"
+              className="w-full object-scale-down object-top"
             />
           )}
         </div>
