@@ -3,7 +3,9 @@ import { Player } from "../../types/team";
 import { useFetch } from "../../hooks/useAsync";
 import { athleteService } from "../../services/athleteService";
 import { useState } from "react";
-
+import { formatPosition } from "../../utils/athleteUtils";
+import FormIndicator from "../shared/FormIndicator";
+import TeamLogo from "./TeamLogo";
 
 type Props = {
   player: Player,
@@ -11,50 +13,89 @@ type Props = {
   className?: string
 }
 
-export function TeamPlayerCard({ player, onClick, className }: Props) {
+type CardTier = "gold" | "silver" | "bronze"
 
+export function TeamPlayerCard({ player, onClick, className }: Props) {
   const [imageError, setIamgeError] = useState<string>();
-  const { data: playerInfo, isLoading, error } = useFetch("athletes", player.id, athleteService.getRugbyAthleteById);
+  const { data: playerInfo, isLoading } = useFetch("athletes", player.id, athleteService.getRugbyAthleteById);
 
   if (isLoading) return (
-    <div
-      className={twMerge(
-        "group relative  bg-slate-800 animate-pulse rounded-lg flex flex-col transition-transform hover:scale-105 overflow-clip cursor-pointer",
-        className
-      )}
-    >
+    <div className={twMerge("group relative bg-slate-800 animate-pulse rounded-lg flex flex-col h-[280px] w-[200px]", className)} />
+  );
 
-    </div>
-  )
+  if (!playerInfo) return <></>;
 
-  console.log(error);
+  const pr = playerInfo.power_rank_rating ?? 0;
+  const cardTier: CardTier = pr <= 60 ? "bronze" : pr > 60 && pr < 80 ? "silver" : "gold";
 
-  if (!playerInfo) return <></>
+  const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
   return (
-    <div
-      onClick={onClick}
-      className={twMerge(
-        "group relative  bg-red-300 rounded-lg flex flex-col transition-transform hover:scale-105 overflow-clip cursor-pointer",
-        className
-      )}
-    >
+    <div className="perspective-1000">
+      <div
+        onClick={onClick}
+        className={twMerge(
+          "group relative shadow-xl rounded-lg flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer transform-style-3d",
+          cardTier === "gold" && "bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600",
+          cardTier === "silver" && "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600",
+          cardTier === "bronze" && "bg-gradient-to-br from-amber-700 via-amber-800 to-amber-900",
+          className
+        )}
+      >
+        {/* Team Logo */}
+        <div className="absolute top-2 right-2 z-10">
+          <TeamLogo className="w-8 h-8" url={playerInfo.team_logo} />
+        </div>
 
-      {/* Header */}
-      <div className="flex flex-[3] overflow-hidden p-3" >
-        <div >
-          {player.image && !imageError && <img
-            src={player.image}
-            onError={() => setIamgeError("Image failed to load")}
-          />}
+        {/* Player Image */}
+        <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">
+          {player.image && !imageError && (
+            <img
+              src={player.image}
+              onError={() => setIamgeError("Image failed to load")}
+              className="w-full h-full object-cover object-top"
+            />
+          )}
+        </div>
+
+        {/* Player Details */}
+        <div className={twMerge(
+          "p-3  flex-[1] ",
+          cardTier === "gold" && "bg-yellow-500/10",
+          cardTier === "silver" && "bg-gray-500/10",
+          cardTier === "bronze" && "bg-amber-900/10",
+        )}>
+          {/* Player name and form */}
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="text-xs font-bold truncate flex-1">{player.name}</h3>
+            {playerInfo.form && (playerInfo.form === "UP" || playerInfo.form === "DOWN") && (
+              <FormIndicator form={playerInfo.form} />
+            )}
+          </div>
+
+          {/* Position and Rating */}
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="text-xs">{formatPosition(player.position ?? "")}</span>
+            <span className="font-medium">PR {statValue(pr)}</span>
+          </div>
+
+          {/* Stats Grid */}
+          {/* <div className="grid grid-cols-3 gap-1 text-xs">
+            <div className="flex justify-between">
+              <span>ATT</span>
+              <span>{statValue(playerInfo.ball_carrying ?? 0)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>DEF</span>
+              <span>{statValue(playerInfo.tackling ?? 0)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>KCK</span>
+              <span>{statValue(playerInfo.points_kicking ?? 0)}</span>
+            </div>
+          </div> */}
         </div>
       </div>
-
-      {/* Player details */}
-      <div className="flex flex-[2] bg-blue-500" >
-
-      </div>
-
     </div>
   );
 }
