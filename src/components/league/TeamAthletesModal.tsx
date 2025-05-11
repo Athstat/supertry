@@ -1,12 +1,9 @@
-import React, { useState, useEffect, KeyboardEventHandler, useContext } from "react";
+import React, { useState } from "react";
 import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
-import { motion } from "framer-motion";
 import { TeamStats } from "../../types/league";
-import { athleteService, PointsBreakdown, PointsBreakdownItem } from "../../services/athleteService";
+import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction, formatPosition } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
-import { useFetch } from "../../hooks/useAsync";
-import { FantasyLeagueContext } from "../../contexts/FantasyLeagueContext";
 import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
 
 interface Athlete {
@@ -27,11 +24,6 @@ interface TeamAthletesModalProps {
   athletes: Athlete[];
   onClose: () => void;
   isLoading?: boolean;
-}
-
-// Add a new interface for athlete scores map
-interface AthleteScoresMap {
-  [key: string]: number;
 }
 
 export function TeamAthletesModal({
@@ -71,34 +63,6 @@ export function TeamAthletesModal({
     }
   };
 
-  // Add this function to group actions by type and calculate totals
-  const getGroupedActions = (breakdown: PointsBreakdownItem[]) => {
-    if (!breakdown || !breakdown.length) return [];
-
-    const groupedActions = breakdown.reduce((result: any, item) => {
-      const action = item.action || "";
-
-      if (!result[action]) {
-        result[action] = {
-          action: action,
-          action_count: 0,
-          score: 0,
-          instances: [],
-        };
-      }
-
-      result[action].action_count += item.action_count || 1;
-      result[action].score += item.score || 0;
-      result[action].instances.push(item);
-
-      return result;
-    }, {});
-
-    return Object.values(groupedActions);
-  };
-
-
-  // Handle click on the modal overlay (background)
   const handleOverlayClick = (e: React.MouseEvent) => {
     // Only close if the click is directly on the overlay, not on the modal content
     if (e.target === e.currentTarget) {
