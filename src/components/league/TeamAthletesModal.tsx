@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, KeyboardEventHandler } from "react";
 import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { TeamStats } from "../../types/league";
-import { athleteService, PointsBreakdown } from "../../services/athleteService";
+import { athleteService, PointsBreakdown, PointsBreakdownItem } from "../../services/athleteService";
+import { formatPosition } from "../../utils/athleteUtils";
+import { RugbyPlayer } from "../../types/rugbyPlayer";
+import { useFetch } from "../../hooks/useAsync";
 
 interface Athlete {
   id: string;
@@ -15,16 +18,6 @@ interface Athlete {
   price?: number;
   image_url?: string;
   score?: number;
-}
-
-interface PointsBreakdownItem {
-  action: string;
-  action_count: number;
-  score: number;
-  game_id: string;
-  athlete_id: string;
-  category?: string;
-  points?: number;
 }
 
 interface TeamAthletesModalProps {
@@ -69,8 +62,10 @@ export function TeamAthletesModal({
             const data = await athleteService.getAthletePointsBreakdown(
               athleteId
             );
+
             const totalScore = data.reduce((acc, item) => acc + item.score, 0);
             scoresMap[athleteId] = totalScore;
+
           } catch (error) {
             console.error(
               `Error fetching score for athlete ${athleteId}:`,
@@ -93,46 +88,35 @@ export function TeamAthletesModal({
   }, [athletes]);
 
   const selectedAthlete = athletes.find(
-    (athlete) => (athlete.athlete_id || athlete.id) === selectedAthleteId
+    (athlete) => athlete.id === selectedAthleteId
   );
 
-  const handleViewBreakdown = async (athleteId: string) => {
-    console.log("athleteId", athleteId);
+  const handleViewBreakdown = async (athleteId: string, pointsBreakdown: PointsBreakdownItem[]) => {
     if (athleteId === selectedAthleteId) return;
 
     setSelectedAthleteId(athleteId);
-    setIsBreakdownLoading(true);
+    setPointsBreakdown(pointsBreakdown);
 
-    try {
-      const data = await athleteService.getAthletePointsBreakdown(athleteId);
-      console.log("data", data);
-      setPointsBreakdown(data);
-    } catch (error) {
-      console.error("Error fetching points breakdown:", error);
-      setPointsBreakdown(null);
-    } finally {
-      setIsBreakdownLoading(false);
-    }
   };
 
   const handleBackToList = () => {
     setSelectedAthleteId(null);
-    setPointsBreakdown(null);
+    setPointsBreakdown([]);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, athleteId: string) => {
+  const handleKeyDown = (e: React.KeyboardEvent, athleteId: string, pointsBreakDown: PointsBreakdownItem[]) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      handleViewBreakdown(athleteId);
+      handleViewBreakdown(athleteId, pointsBreakDown);
     }
   };
 
   // Add this function to group actions by type and calculate totals
-  const getGroupedActions = (breakdown: any[]) => {
+  const getGroupedActions = (breakdown: PointsBreakdownItem[]) => {
     if (!breakdown || !breakdown.length) return [];
 
     const groupedActions = breakdown.reduce((result: any, item) => {
-      const action = item.action || item.category || "";
+      const action = item.action || "";
 
       if (!result[action]) {
         result[action] = {
@@ -144,7 +128,7 @@ export function TeamAthletesModal({
       }
 
       result[action].action_count += item.action_count || 1;
-      result[action].score += item.score || item.points || 0;
+      result[action].score += item.score || 0;
       result[action].instances.push(item);
 
       return result;
@@ -153,7 +137,6 @@ export function TeamAthletesModal({
     return Object.values(groupedActions);
   };
 
-  console.log("Points breakdown", pointsBreakdown);
 
   // Handle click on the modal overlay (background)
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -162,6 +145,9 @@ export function TeamAthletesModal({
       onClose();
     }
   };
+
+  const totalScore = pointsBreakdown
+    .reduce((acc, item) => acc + item.score, 0);
 
   return (
     <div
@@ -197,12 +183,12 @@ export function TeamAthletesModal({
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     {selectedAthlete.position
                       ? selectedAthlete.position
-                          .split("-")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1)
-                          )
-                          .join(" ")
+                        .split("-")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")
                       : "Athlete"}{" "}
                     • {team.teamName}
                   </p>
@@ -243,10 +229,7 @@ export function TeamAthletesModal({
                 Total Score
               </span>
               <span className="text-2xl font-bold text-green-600 dark:text-green-400">
-                {pointsBreakdown
-                  .reduce((acc, item) => acc + item.score, 0)
-                  .toFixed(2)}{" "}
-                pts
+                {Math.floor(totalScore ?? 0)} pts
               </span>
             </div>
           </div>
@@ -268,7 +251,7 @@ export function TeamAthletesModal({
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                   {pointsBreakdown.length > 0 ? (
                     <ul className="space-y-3">
-                      {getGroupedActions(pointsBreakdown).map((item, index) => {
+                      {pointsBreakdown.map((item, index) => {
                         // Format the action name by adding spaces before capitals and capitalizing first letter
                         const formattedAction = item.action || "";
                         const displayName = formattedAction
@@ -299,13 +282,12 @@ export function TeamAthletesModal({
                                 </div>
                               </div>
                               <span
-                                className={`font-bold ${
-                                  isPositive
-                                    ? "text-green-600 dark:text-green-400"
-                                    : isNegative
+                                className={`font-bold ${isPositive
+                                  ? "text-green-600 dark:text-green-400"
+                                  : isNegative
                                     ? "text-red-600 dark:text-red-400"
                                     : "dark:text-white"
-                                }`}
+                                  }`}
                               >
                                 {item.score.toFixed(2)} pts
                               </span>
@@ -328,6 +310,7 @@ export function TeamAthletesModal({
             )}
           </div>
         ) : (
+
           // Main list view
           <div className="overflow-y-auto flex-1">
             {athletes.length === 0 ? (
@@ -335,82 +318,17 @@ export function TeamAthletesModal({
                 No athletes found
               </div>
             ) : (
+
               <ul className="divide-y dark:divide-gray-700">
-                {athletes.map((athlete) => {
-                  const athleteId = athlete.athlete_id || athlete.id;
+                {athletes.map((athlete, index) => {
                   return (
-                    <li key={athlete.athlete_id || athlete.id}>
-                      <div
-                        onClick={() => handleViewBreakdown(athleteId)}
-                        className="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        {/* Athlete Image */}
-                        <div className="flex-shrink-0">
-                          {athlete.image_url ? (
-                            <img
-                              src={athlete.image_url}
-                              alt={
-                                athlete.name || athlete.player_name || "Athlete"
-                              }
-                              className="w-12 h-12 rounded-full object-cover object-top bg-gray-100 dark:bg-gray-700"
-                              onError={(e) => {
-                                // Fallback if image fails to load
-                                e.currentTarget.src =
-                                  "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
-                              }}
-                            />
-                          ) : (
-                            <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                              <User size={24} className="text-gray-400" />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Athlete Info */}
-                        <div className="flex-1">
-                          <div className="font-medium dark:text-white">
-                            {athlete.name || athlete.player_name}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {athlete.position
-                              ? athlete.position
-                                  .split("-")
-                                  .map(
-                                    (word) =>
-                                      word.charAt(0).toUpperCase() +
-                                      word.slice(1)
-                                  )
-                                  .join(" ")
-                              : "Unknown Position"}
-                          </div>
-                        </div>
-
-                        {/* Athlete Stats with View Details Button */}
-                        <div className="flex items-center gap-2">
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {isLoadingScores
-                              ? "Loading..."
-                              : `${
-                                  athleteScores[athleteId]?.toFixed(2) || "0.00"
-                                } pts`}
-                          </div>
-                          <button
-                            onKeyDown={(e) => handleKeyDown(e, athleteId)}
-                            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                            aria-label={`View points breakdown for ${
-                              athlete.name || athlete.player_name
-                            }`}
-                            tabIndex={0}
-                          >
-                            <ChevronRight
-                              size={20}
-                              className="text-gray-500 dark:text-gray-400"
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  );
+                    <TeamAthleteListItem
+                      athlete={athlete}
+                      key={index}
+                      handleKeyDown={handleKeyDown}
+                      handleViewBreakdown={handleViewBreakdown}
+                    />
+                  )
                 })}
               </ul>
             )}
@@ -419,4 +337,85 @@ export function TeamAthletesModal({
       </div>
     </div>
   );
+}
+
+type ListItemProps = {
+  athlete: RugbyPlayer,
+  handleViewBreakdown: (athleteId: string, pointsBreakDown: PointsBreakdownItem[]) => void,
+  handleKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>, athleteId: string, pointsBreakDown: PointsBreakdownItem[]) => void
+}
+
+function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: ListItemProps) {
+
+  const athleteId = athlete.id ?? "fall-back-id";
+  const { data: points, isLoading } = useFetch("points-breakdown", "58430913-ded2-5bee-a3c0-d5d2d9911e66", athleteService.getAthletePointsBreakdown);
+
+  const totalScore: number = points ?
+  points.reduce((currTotal, action) => {
+    return currTotal + action.score;
+  }, 0) : 0;
+
+  console.log("Points Breakdown ", athlete.player_name, points);
+
+  return (
+    <li>
+      <div
+        onClick={() => handleViewBreakdown(athleteId, points ?? [])}
+        aria-disabled={isLoading}
+        className="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+      >
+        {/* Athlete Image */}
+        <div className="flex-shrink-0">
+          {athlete.image_url ? (
+            <img
+              src={athlete.image_url}
+              alt={
+                athlete.player_name || "Athlete"
+              }
+              className="w-12 h-12 rounded-full object-cover object-top bg-gray-100 dark:bg-gray-700"
+              onError={(e) => {
+                // Fallback if image fails to load
+                e.currentTarget.src =
+                  "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
+              }}
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+              <User size={24} className="text-gray-400" />
+            </div>
+          )}
+        </div>
+
+        {/* Athlete Info */}
+        <div className="flex-1">
+          <div className="font-medium dark:text-white">
+            {athlete.player_name}
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {formatPosition(athlete.position ?? "")}
+          </div>
+        </div>
+
+        {/* Athlete Stats with View Details Button */}
+        <div className="flex items-center gap-2">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {isLoading && <p className="w-4 h-2 animate-pulse" ></p>}
+            {!isLoading && <p>{Math.floor(totalScore)}</p>}
+          </div>
+          <button
+            onKeyDown={(e) => handleKeyDown(e, athleteId, points ?? [])}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            aria-label={`View points breakdown for ${athlete.player_name}`}
+            tabIndex={0}
+          >
+            <ChevronRight
+              size={20}
+              className="text-gray-500 dark:text-gray-400"
+            />
+          </button>
+        </div>
+      </div>
+    </li>
+  )
+
 }
