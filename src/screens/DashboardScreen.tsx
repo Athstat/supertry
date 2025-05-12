@@ -1,72 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  MyTeamsSection,
   ActiveLeaguesSection,
   HeroSection,
 } from "../components/dashboard";
-import { fantasyTeamService } from "../services/teamService";
 import { leagueService } from "../services/leagueService";
-import {
-  IFantasyClubTeam,
-  IFantasyTeamAthlete,
-} from "../types/fantasyTeamAthlete";
 import { IFantasyLeague } from "../types/fantasyLeague";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
-  const [teams, setTeams] = useState<IFantasyClubTeam[]>([]);
-  const [teamsWithAthletes, setTeamsWithAthletes] = useState<
-    Map<string, IFantasyTeamAthlete[]>
-  >(new Map());
   const [leagues, setLeagues] = useState<IFantasyLeague[]>([]);
-  const [isLoadingTeams, setIsLoadingTeams] = useState(true);
   const [isLoadingLeagues, setIsLoadingLeagues] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   // Fetch user's teams and leagues
   useEffect(() => {
-    fetchUserTeams();
     fetchLeagues();
   }, []);
-
-  // Fetch user's teams
-  const fetchUserTeams = async () => {
-    try {
-      setIsLoadingTeams(true);
-      // Get teams directly using fetchUserTeams with default league ID
-      const defaultLeagueId = "d313fbf5-c721-569b-975d-d9ec242a6f19"; // Default league ID
-      let userTeams = await fantasyTeamService.fetchUserTeams(
-        // defaultLeagueId
-      );
-      // Sort teams by creation date (newest first)
-      const sortedTeams = [...userTeams].sort((a, b) => {
-        const dateA = new Date(a.created_at || 0).getTime();
-        const dateB = new Date(b.created_at || 0).getTime();
-        return dateB - dateA; // Descending order (newest first)
-      });
-
-      // Use the sorted teams instead of the original array
-      userTeams = sortedTeams;
-
-      setTeams(userTeams);
-
-      // Fetch athletes for each team
-      const athletesMap = new Map<string, IFantasyTeamAthlete[]>();
-
-      for (const team of userTeams) {
-        const athletes = await fantasyTeamService.fetchTeamAthletes(team.id);
-        athletesMap.set(team.id, athletes);
-      }
-
-      setTeamsWithAthletes(athletesMap);
-    } catch (err) {
-      console.error("Failed to fetch teams:", err);
-      setError("Failed to load your teams. Please try again later.");
-    } finally {
-      setIsLoadingTeams(false);
-    }
-  };
 
   // Fetch available leagues
   const fetchLeagues = async () => {
@@ -85,7 +34,6 @@ export function DashboardScreen() {
       setLeagues(availableLeagues);
     } catch (err) {
       console.error("Failed to fetch leagues:", err);
-      setError("Failed to load leagues. Please try again later.");
     } finally {
       setIsLoadingLeagues(false);
     }

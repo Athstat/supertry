@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Trophy, Loader } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { ActiveLeaguesSectionProps } from "./types";
-import { IFantasyLeague } from "../../types/fantasyLeague";
 import { activeLeaguesFilter } from "../../utils/leaguesUtils";
 import LeagueCardDetailed from "../leagues/LeagueCardDetailed";
 
 export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
   leagues,
-  isLoading,
-  onViewLeague,
+  isLoading
 }) => {
   const activeLeagues = activeLeaguesFilter(leagues);
 

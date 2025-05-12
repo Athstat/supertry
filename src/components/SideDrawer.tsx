@@ -1,5 +1,4 @@
 import {
-  Search,
   X,
   Calendar,
 } from "lucide-react";
@@ -14,7 +13,7 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
   const navigate = useNavigate();
 
   const menuItems = [
-    { icon: Search, label: "Players", path: "/players" },
+    // { icon: Search, label: "Players", path: "/players" },
     { icon: Calendar, label: "Fixtures", path: "/fixtures" },
     // { icon: Settings, label: "Settings", path: "#" },
     // { icon: HelpCircle, label: "Support", path: "#" },

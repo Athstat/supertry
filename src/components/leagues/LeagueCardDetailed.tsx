@@ -1,4 +1,4 @@
-import { Shield, Pencil, Trophy, Users, Calendar, Star, ArrowRight } from "lucide-react"
+import { Shield, Pencil, Trophy, Users, Star, ArrowRight } from "lucide-react"
 import { useFetch } from "../../hooks/useAsync"
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { IFantasyLeague, IFantasyLeagueTeam } from "../../types/fantasyLeague"
