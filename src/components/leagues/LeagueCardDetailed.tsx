@@ -38,7 +38,7 @@ export default function LeagueCardDetailed({ league }: Props) {
     };
 
     return (
-        <div className="bg-white dark:text-white dark:bg-slate-800/50 rounded-2xl shadow-sm transition-all hover:shadow-md">
+        <div className="bg-white dark:text-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm transition-all hover:shadow-md">
             {/* Header Section */}
 
             <div className="p-6 border-gray-100 dark:border-gray-700/50">
@@ -55,10 +55,10 @@ export default function LeagueCardDetailed({ league }: Props) {
                     <div className="flex gap-3 self-stretch md:self-auto">
                         <button
                             onClick={handleLeagueClick}
-                            className="flex-1 md:flex-none px-6 py-2.5 text-md lg:text-base rounded-xl bg-primary-700 hover:bg-primary-800 text-white font-bold transition-colors flex flex-row items-center justify-center gap-2"
+                            className="flex-1 md:flex-none px-6 py-2.5 text-sm rounded-xl bg-primary-600 hover:bg-primary-800 text-white font-bold transition-colors flex flex-row items-center justify-center gap-2"
                         >
                             {teamForLeague ? "View League" : "Join League"}
-                            <ArrowRight />
+                            <ArrowRight className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
@@ -127,7 +127,7 @@ function MyTeamSection({ team, rank }: MyTeamSectionProps) {
                             <Star className="w-4 h-4" />
                             <span className="text-sm">Points</span>
                         </div>
-                        <p className="text-xl font-bold">{team.overall_score || 0}</p>
+                        <p className="text-xl font-bold">{Math.floor(team.overall_score ?? 0)}</p>
                     </div>
                 </div>
             </div>
