@@ -1,6 +1,6 @@
 import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
 import { SportAction } from "../types/sports_actions";
-import { getAuthHeader, getUri, getUriLocal } from "../utils/backendUtils";
+import { getAuthHeader, getUri } from "../utils/backendUtils";
 
 // Define the type for each individual breakdown item
 export interface PointsBreakdownItem {
@@ -114,7 +114,7 @@ export const athleteService = {
     athleteId: string
   ): Promise<PointsBreakdownItem[]> => {
     try {
-      const uri = getUriLocal(`/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`)
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`)
       const response = await fetch(uri, {
         method: "GET",
         headers: getAuthHeader()
@@ -138,7 +138,7 @@ export const athleteService = {
     leagueId: string
   ): Promise<PointsBreakdownItem[]> => {
     try {
-      const uri = getUriLocal(
+      const uri = getUri(
         `/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/league/${leagueId}/round/${roundId}/athlete/${athleteId}`
       );
 
@@ -211,7 +211,7 @@ export const athleteService = {
           return false;
         }
 
-        const [, actionLabel, actionCompId] = parts;
+        const [, , actionCompId] = parts;
 
         return actionCompId === cId;
       }

@@ -93,7 +93,7 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
         />
 
         <StatsRow
-          label="Defenders Deaten"
+          label="Defenders Beaten"
           value={bs.defendersbeaten}
         />
 

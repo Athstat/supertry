@@ -263,7 +263,7 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         {/* Athlete Stats with View Details Button */}
         <div className="flex items-center gap-2">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            {isLoading && <p className="w-4 h-2 animate-pulse" ></p>}
+            {isLoading && <p className="w-4 h-4 rounded-full bg-slate-300 dark:bg-slate-700 animate-pulse" ></p>}
             {!isLoading && <p>{Math.floor(totalScore)}</p>}
           </div>
           <button
