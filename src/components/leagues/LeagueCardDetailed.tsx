@@ -55,7 +55,7 @@ export default function LeagueCardDetailed({ league }: Props) {
                     <div className="flex gap-3 self-stretch md:self-auto">
                         <button
                             onClick={handleLeagueClick}
-                            className="flex-1 md:flex-none px-6 py-2.5 text-lg lg:text-base rounded-xl bg-primary-700 hover:bg-primary-800 text-white font-bold transition-colors flex flex-row items-center justify-center gap-2"
+                            className="flex-1 md:flex-none px-6 py-2.5 text-md lg:text-base rounded-xl bg-primary-700 hover:bg-primary-800 text-white font-bold transition-colors flex flex-row items-center justify-center gap-2"
                         >
                             {teamForLeague ? "View League" : "Join League"}
                             <ArrowRight />
@@ -105,7 +105,7 @@ function MyTeamSection({ team, rank }: MyTeamSectionProps) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Shield className="w-6 h-6 text-blue-500" />
-                        <h3 className="font-semibold text-lg">{team.name}</h3>
+                        <h3 className="font-semibold text-md trucate lg:text-lg">{team.name}</h3>
                     </div>
                     <button onClick={handleClick} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
                         <Pencil className="w-5 h-5" />
