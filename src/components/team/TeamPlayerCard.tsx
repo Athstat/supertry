@@ -21,15 +21,11 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
   const [imageError, setIamgeError] = useState<string>();
   const { data: playerInfo, isLoading } = useFetch("athletes", player.id, athleteService.getRugbyAthleteById);
 
-  if (isLoading) return (
-    <div className={twMerge("group relative bg-slate-800 animate-pulse rounded-lg flex flex-col h-[280px] w-[200px]", className)} />
-  );
-
   const { leagueInfo } = useTeamData();
-  
+
   const { data: pointsBreakDown, isLoading: pointsLoading } = useFetch(
     "points-breakdown",
-    
+
     {
       leagueId: leagueInfo?.official_league_id ?? "fallback-ofid",
       round: leagueInfo?.start_round ?? -1,
@@ -41,6 +37,11 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
       )
     });
 
+  if (isLoading) return (
+    <div className={twMerge("group relative bg-slate-800 animate-pulse rounded-lg flex flex-col h-[280px] w-[200px]", className)} />
+  );
+
+
   if (!playerInfo) return <></>;
 
   const pr = playerInfo.power_rank_rating ?? 0;
@@ -48,7 +49,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
-  const totalPoints = pointsBreakDown ? 
+  const totalPoints = pointsBreakDown ?
     pointsBreakDown.reduce((res, action) => {
       return res + action.score
     }, 0) : 0;
@@ -120,9 +121,15 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
         </div>
       </div>
 
-      <div className=" flex flex-row mt-2 items-center justify-center" >
-          <p className="text-white font-medium" >{totalPoints.toFixed(1)}</p>
-      </div>
+      {!pointsLoading && <div className=" flex flex-row mt-2 items-center justify-center" >
+        <p className="text-white font-medium" >{totalPoints.toFixed(1)}</p>
+      </div>}
+
+      {pointsLoading && <div className=" flex flex-row mt-2 items-center justify-center" >
+        <p className="bg-slate-400/40 rounded-xl w-4 h-4 animate-pulse" ></p>
+      </div>}
+
+
     </div>
   );
 }
