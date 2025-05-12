@@ -128,12 +128,16 @@ export default function PostSignUpWelcomeScreen() {
         <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40 mb-6" />
 
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center">
-          Welcome to Scrummy!
+          Welcome to Scrummy! 🎉 🏉
         </h1>
 
-        <p className="mt-3 text-lg text-gray-600 dark:text-gray-300 text-center">
-          Choose how you'd like to begin your journey.
+        <p className="w-full text-center mt-3 dark:text-slate-200" >
+          You’ve officially joined the scrum! Don’t worry, it’s less bruises and more bragging rights from here.
         </p>
+
+        {/* <p className="mt-3 text-gray-600 dark:text-gray-300 text-center">
+          Choose how you'd like to begin your journey.
+        </p> */}
 
         {error && (
           <div className="mt-4 w-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm">
@@ -143,7 +147,7 @@ export default function PostSignUpWelcomeScreen() {
 
         <div className="w-full mt-8 space-y-4">
           {/* Tutorial Button */}
-          <motion.div
+          {/* <motion.div
             initial="hidden"
             animate="visible"
             variants={{
@@ -180,7 +184,7 @@ export default function PostSignUpWelcomeScreen() {
               </div>
               <ChevronRight size={18} className="text-gray-400" />
             </div>
-          </motion.div>
+          </motion.div> */}
 
           {/* Choose Players Button */}
           <motion.div
@@ -199,15 +203,14 @@ export default function PostSignUpWelcomeScreen() {
                 },
               },
             }}
-            className={`bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 hover:shadow-md transition-shadow ${
-              latestLeague ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
-            }`}
+            className={`bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 hover:shadow-md transition-shadow ${latestLeague ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
+              }`}
             whileHover={
               latestLeague
                 ? {
-                    scale: 1.02,
-                    transition: { type: "spring", stiffness: 300 },
-                  }
+                  scale: 1.02,
+                  transition: { type: "spring", stiffness: 300 },
+                }
                 : {}
             }
             onClick={latestLeague ? handleChoosePlayers : undefined}
@@ -245,15 +248,14 @@ export default function PostSignUpWelcomeScreen() {
                 },
               },
             }}
-            className={`bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 hover:shadow-md transition-shadow ${
-              latestLeague ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
-            }`}
+            className={`bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 hover:shadow-md transition-shadow ${latestLeague ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
+              }`}
             whileHover={
               latestLeague
                 ? {
-                    scale: 1.02,
-                    transition: { type: "spring", stiffness: 300 },
-                  }
+                  scale: 1.02,
+                  transition: { type: "spring", stiffness: 300 },
+                }
                 : {}
             }
             onClick={latestLeague ? handleViewLeaderboard : undefined}
