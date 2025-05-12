@@ -323,7 +323,7 @@ function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
               : "dark:text-white"
             }`}
         >
-          {Math.floor(item.action_count ?? 0)} pts
+          {Math.floor(item.score ?? 0)} pts
         </span>
       </div>
     </li>
