@@ -7,7 +7,7 @@ import {
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
-import { fantasyTeamService } from "../../services/teamService";
+import { fantasyTeamService  } from "../../services/teamService";
 import { leagueService } from "../../services/leagueService";
 
 interface TeamDataContextType {
@@ -186,7 +186,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
               // Create a minimal league object with type casting to avoid TypeScript errors
               leagueData = {
                 id: leagueId,
-                title: teamsInLeague[0]?.league_name || "My League",
+                title: teamsInLeague[0]?.name || "My League",
                 description: "Fantasy Rugby League",
                 current_gameweek: 1,
                 // Add additional required properties with default values
