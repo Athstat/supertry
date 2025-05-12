@@ -8,7 +8,7 @@ import FormIndicator from "../../shared/FormIndicator";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { AvailableTeam } from "./useAvailableTeams";
 import { formatPosition } from "../../../utils/athleteUtils";
-import InsufficientCoinsMessage from "../../team/player_selection_modal/InsufficientCoinsMessage";
+import InsufficientCoinsState from "../player-list/InsufficientCoinsMessage";
 
 interface PlayerListProps {
   players: RugbyPlayer[];
@@ -79,7 +79,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   if (affordablePlayers.length === 0 && countBeforeBudgetFilter > 0) {
     return (
       <div className="py-5 flex flex-row items-center justify-center " >
-        <InsufficientCoinsMessage className="w-[90%] lg:w-[60%]" />
+        <InsufficientCoinsState className="w-[90%] lg:w-[60%]" />
       </div>
     )
   }

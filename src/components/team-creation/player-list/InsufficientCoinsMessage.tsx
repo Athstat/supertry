@@ -5,7 +5,11 @@ type Props = {
     className?: string
 }
 
-export default function InsufficientCoinsMessage({ className }: Props) {
+/** Renders message to display to the user when the number of 
+ * of coins they have left in their budget is not enough to afford
+ * any player
+ */
+export default function InsufficientCoinsState({ className }: Props) {
 
     const message = `No players available within your current budget. Free up some coins and try again.`
 
