@@ -49,7 +49,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-44 lg:h-56 w-32 h-40"
+            className="md:w-44 md:h-56 w-32 h-40"
           />
         ))}
 
@@ -59,7 +59,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-44 lg:h-56 w-32 h-40"
+            className="md:w-44 md:h-56 w-32 h-40"
           />
         ))}
 
@@ -69,7 +69,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-44 lg:h-56 w-32 h-40"
+            className="md:w-44 md:h-56 w-32 h-40"
           />
         ))}
 
@@ -78,7 +78,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-44 lg:h-56 w-32 h-40"
+            className="md:w-44 md:h-56 w-32 h-40"
           />
         ))}
 
@@ -88,7 +88,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
-            className="lg:w-44 lg:h-56 w-32 h-40"
+            className="md:w-44 md:h-56 w-32 h-40"
           />
         ))}
       </div>

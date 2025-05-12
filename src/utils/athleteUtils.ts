@@ -1,3 +1,4 @@
+import { PointsBreakdownItem } from "../services/athleteService";
 import { IFantasyAthlete } from "../types/rugbyPlayer";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
@@ -68,3 +69,38 @@ function nameMatches(input: string, target: string): boolean {
 export function playerSearchPredicate(athlete: IFantasyAthlete, query: string) {
     return nameMatches(athlete.player_name ?? "", query);
 }
+
+export function formatAction(actionName: string) {
+    const displayName = actionName
+    .replace(/([A-Z])/g, " $1")
+    .trim();
+
+    const res = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+    return res
+}
+
+export const getGroupedActions = (breakdown: PointsBreakdownItem[]) => {
+    if (!breakdown || !breakdown.length) return [];
+
+    const groupedActions = breakdown.reduce((result: any, item) => {
+      const action = item.action || "";
+
+      if (!result[action]) {
+        result[action] = {
+          action: action,
+          action_count: 0,
+          score: 0,
+          instances: [],
+        };
+      }
+
+      result[action].action_count += item.action_count || 1;
+      result[action].score += item.score || 0;
+      result[action].instances.push(item);
+
+      return result;
+    }, {});
+
+    return Object.values(groupedActions);
+  };
