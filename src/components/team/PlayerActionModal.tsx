@@ -2,6 +2,9 @@ import { X, Trophy, Users } from "lucide-react";
 import { Player } from "../../types/team";
 import { motion } from "framer-motion";
 import { formatPosition } from "../../utils/athleteUtils";
+import { CircleDollarSign } from "lucide-react";
+import { useFetch } from "../../hooks/useAsync";
+import { athleteService } from "../../services/athleteService";
 
 interface PlayerActionModalProps {
   player: Player;
@@ -16,6 +19,9 @@ export function PlayerActionModal({
   onViewStats,
   onSwapPlayer,
 }: PlayerActionModalProps) {
+
+  const {data: info, isLoading} = useFetch("athletes", player.id, athleteService.getRugbyAthleteById);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -61,22 +67,31 @@ export function PlayerActionModal({
               )}
             </div>
             <div className="flex-1">
+              
               <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold text-lg dark:text-gray-100">
+                <span className="font-semibold w-full text-md dark:text-gray-100">
                   {player.name}
                 </span>
-                <span className="text-sm font-bold px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full text-gray-800 dark:text-gray-300">
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                {!isLoading && info && <span className="text-gray-600 font-semibold w-full dark:text-gray-400">
+                  {info.team_name}
+                </span>}
+
+                {isLoading && <div className="h-2 w-10 rounded-lg bg-slate-300 dark:bg-slate-700 animate-pulse" ></div>}
+                <p className="text-primary-700 dark:text-primary-500 font-bold flex flex-row gap-2 items-center">
+                  <CircleDollarSign className="text-yellow-400 w-5 h-5" /> {player.price}
+                </p>
+              </div>
+
+              <div className="flex flex-col mt-1" >
+                <span className=" text-slate-700 dark:text-slate-400 text-xs ">
                   {formatPosition(player.position ?? "")}
                 </span>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">
-                  {player.team}
-                </span>
-                <span className="text-primary-700 dark:text-primary-500 font-bold flex items-center">
-                  {player.points} pts
-                </span>
-              </div>
+
+
               {player.is_super_sub && (
                 <div className="mt-1 text-xs text-orange-600 dark:text-orange-400 font-medium">
                   Super Sub - Can play any position
