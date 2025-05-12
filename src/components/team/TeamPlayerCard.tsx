@@ -6,6 +6,8 @@ import { useState } from "react";
 import { formatPosition } from "../../utils/athleteUtils";
 import FormIndicator from "../shared/FormIndicator";
 import TeamLogo from "./TeamLogo";
+import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
+import { useTeamData } from "../my-team/TeamDataProvider";
 
 type Props = {
   player: Player,
@@ -23,12 +25,33 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
     <div className={twMerge("group relative bg-slate-800 animate-pulse rounded-lg flex flex-col h-[280px] w-[200px]", className)} />
   );
 
+  const { leagueInfo } = useTeamData();
+  
+  const { data: pointsBreakDown, isLoading: pointsLoading } = useFetch(
+    "points-breakdown",
+    
+    {
+      leagueId: leagueInfo?.official_league_id ?? "fallback-ofid",
+      round: leagueInfo?.start_round ?? -1,
+      trackingId: playerInfo?.tracking_id ?? "fallback-tid"
+    }
+    , async ({ leagueId, round, trackingId }) => {
+      return await athleteService.getAthletePointsBreakdownByLeagueAndRound(
+        trackingId, round, leagueId ?? "fall-back"
+      )
+    });
+
   if (!playerInfo) return <></>;
 
   const pr = playerInfo.power_rank_rating ?? 0;
   const cardTier: CardTier = pr <= 60 ? "bronze" : pr > 60 && pr < 80 ? "silver" : "gold";
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
+
+  const totalPoints = pointsBreakDown ? 
+    pointsBreakDown.reduce((res, action) => {
+      return res + action.score
+    }, 0) : 0;
 
   return (
     <div className="">
@@ -95,6 +118,10 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
             </div>
           </div> */}
         </div>
+      </div>
+
+      <div className=" flex flex-row mt-2 items-center justify-center" >
+          <p className="text-white font-bold" >{totalPoints}</p>
       </div>
     </div>
   );

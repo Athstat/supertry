@@ -13,6 +13,7 @@ import {
   useTeamData,
 } from "../components/my-team/TeamDataProvider";
 import { TeamActions, useTeamActions } from "../components/my-team/TeamActions";
+import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 
 type TabType = "edit-team" | "view-pitch";
 
@@ -28,7 +29,6 @@ const TeamContent: React.FC<{
     handlePositionSelect,
     handleViewStats,
     handleSwapPlayer,
-    fetchingMarketPlayers,
   } = useTeamActions();
 
   return (
@@ -85,39 +85,39 @@ const MyTeamContent: React.FC = () => {
   }
 
   return (
-    <main className="container mx-auto px-4 py-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Team Header */}
-        <TeamHeader
-          team={team}
-          athletesCount={athletes.length}
-          totalPoints={totalPoints}
-          leagueInfo={leagueInfo}
-          fetchingLeague={fetchingLeague}
-        />
-
-        {/* Team Stats */}
-        <TeamStats
-          team={
-            {
-              ...team,
-              totalPoints,
-              players,
-              formation,
-              matchesPlayed,
-              rank: (team as any).rank || 0,
-            } as Team
-          }
-        />
-
-        {/* Team Actions with Tabs Content as children */}
-        {teamId && (
-          <TeamActions teamId={teamId}>
-            <TeamContent activeTab={activeTab} setActiveTab={setActiveTab} />
-          </TeamActions>
-        )}
-      </div>
-    </main>
+    <FantasyLeagueProvider league={leagueInfo ?? undefined} >
+      <main className="container mx-auto px-4 py-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Team Header */}
+          <TeamHeader
+            team={team}
+            athletesCount={athletes.length}
+            totalPoints={totalPoints}
+            leagueInfo={leagueInfo}
+            fetchingLeague={fetchingLeague}
+          />
+          {/* Team Stats */}
+          <TeamStats
+            team={
+              {
+                ...team,
+                totalPoints,
+                players,
+                formation,
+                matchesPlayed,
+                rank: (team as any).rank || 0,
+              } as Team
+            }
+          />
+          {/* Team Actions with Tabs Content as children */}
+          {teamId && (
+            <TeamActions teamId={teamId}>
+              <TeamContent activeTab={activeTab} setActiveTab={setActiveTab} />
+            </TeamActions>
+          )}
+        </div>
+      </main>
+    </FantasyLeagueProvider>
   );
 };
 
