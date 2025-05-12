@@ -121,7 +121,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
       </div>
 
       <div className=" flex flex-row mt-2 items-center justify-center" >
-          <p className="text-white font-medium" >{totalPoints}</p>
+          <p className="text-white font-medium" >{totalPoints.toFixed(1)}</p>
       </div>
     </div>
   );
