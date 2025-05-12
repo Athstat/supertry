@@ -262,7 +262,7 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
             "text-sm text-gray-500 dark:text-gray-400 w-fit rounded-xl",
             isSub && "bg-orange-600 w-fit font-bold px-2 text-white dark:text-white"
           )}>
-            {formatPosition(athlete.position ?? "")} · {isSub ? "Super Sub 🌟" : ""}
+            {formatPosition(athlete.position ?? "")} {isSub ? "· Super Sub 🌟" : ""}
           </div>
         </div>
 
