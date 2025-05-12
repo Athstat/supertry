@@ -154,7 +154,7 @@ export function TeamAthletesModal({
                 Total Score
               </span>
               <span className="text-2xl font-bold text-green-600 dark:text-green-400">
-                {Math.floor(totalScore ?? 0)} pts
+                {totalScore?.toFixed(1) ?? 0} pts
               </span>
             </div>
           </div>
@@ -264,7 +264,7 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         <div className="flex items-center gap-2">
           <div className="text-sm text-gray-500 dark:text-gray-400">
             {isLoading && <p className="w-4 h-4 rounded-full bg-slate-300 dark:bg-slate-700 animate-pulse" ></p>}
-            {!isLoading && <p>{Math.floor(totalScore)}</p>}
+            {!isLoading && <p>{totalScore?.toFixed(1)}</p>}
           </div>
           <button
             onKeyDown={(e) => handleKeyDown(e, athleteId, points ?? [])}
@@ -323,7 +323,7 @@ function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
               : "dark:text-white"
             }`}
         >
-          {Math.floor(item.score ?? 0)} pts
+          {item?.score.toFixed(1) ?? 0} pts
         </span>
       </div>
     </li>
