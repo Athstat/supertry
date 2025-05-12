@@ -8,6 +8,7 @@ import FormIndicator from "../../shared/FormIndicator";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { AvailableTeam } from "./useAvailableTeams";
 import { formatPosition } from "../../../utils/athleteUtils";
+import InsufficientCoinsMessage from "../../team/player_selection_modal/InsufficientCoinsMessage";
 
 interface PlayerListProps {
   players: RugbyPlayer[];
@@ -17,6 +18,7 @@ interface PlayerListProps {
   onClose: () => void;
   roundId?: number;
   availableTeams: AvailableTeam[]
+  remainingBudget: number
 }
 
 export const PlayerList: React.FC<PlayerListProps> = ({
@@ -26,7 +28,8 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   handlePlayerSelect,
   onClose,
   roundId,
-  availableTeams
+  availableTeams,
+  remainingBudget
 }) => {
   // Get the player profile hook
   const { showPlayerProfile } = usePlayerProfile();
@@ -67,11 +70,25 @@ export const PlayerList: React.FC<PlayerListProps> = ({
     return p.team_id && teamIds.includes(p.team_id);
   })
 
+  const countBeforeBudgetFilter = availablePlayers.length;
+  
+  const affordablePlayers = availablePlayers.filter(p => {
+    return remainingBudget >= (p.price ?? 0);
+  });
+
+  if (affordablePlayers.length === 0 && countBeforeBudgetFilter > 0) {
+    return (
+      <div className="py-5 flex flex-row items-center justify-center " >
+        <InsufficientCoinsMessage className="w-[90%] lg:w-[60%]" />
+      </div>
+    )
+  }
+
   return (
     <>
-      {availablePlayers.map((player) => (
+      {affordablePlayers.map((player, index) => (
         <div
-          key={player.tracking_id || player.id || Math.random()}
+          key={index}
           onClick={() => {
             handlePlayerSelect(convertToPlayer(player, selectedPosition));
             onClose(); // Close the modal after selection
