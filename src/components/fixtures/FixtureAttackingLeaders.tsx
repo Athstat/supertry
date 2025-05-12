@@ -53,7 +53,7 @@ export default function FixtureAttackingLeaders({ boxScores, fixture }: Props) {
       </div>
 
       {sortedList.length > 4 && <div className="mt-3" >
-        <p onClick={toogle} className="dark:text-slate-400 text-slate-600" >{showMore ? "Show Less" : "Show More"}</p>
+        <p onClick={toogle} className="text-blue-500 hover:text-blue-600 font-bold cursor-pointer dark:hover:text-blue-400 " >{showMore ? "Show Less" : "Show More"}</p>
       </div>}
 
     </TitledCard>
