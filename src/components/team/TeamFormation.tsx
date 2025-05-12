@@ -25,6 +25,8 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
     Back: players.filter((p) => p.position === "back" && !p.isSubstitute),
   };
 
+  
+
   return (
     <div className="relative h-[550px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
 

@@ -7,6 +7,8 @@ export interface IFantasyTeamAthlete {
   score: number;
 }
 
+
+
 export interface IFantasyTeamSubmission {
   clubId: string;
   leagueId: string;

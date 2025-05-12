@@ -1,3 +1,5 @@
+import { IFantasyTeamAthlete } from "./fantasyTeamAthlete";
+
 export interface IFantasyLeague {
   id: string;
   type: string;
@@ -18,4 +20,21 @@ export interface IFantasyLeague {
   duration_type: string;
   status: string;
   participants_count: number;
+}
+
+
+export type IFantasyLeagueTeam = {
+  id: string,
+  league_id: number,
+  team_id: number,
+  position?: number,
+  position_change?: number,
+  overall_score?: number,
+  is_admin?: boolean,
+  join_date?:Date,
+  name?: string,
+  kc_id: string,
+  first_name: string,
+  last_name: string,
+  athletes : IFantasyTeamAthlete[]
 }

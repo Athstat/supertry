@@ -1,4 +1,4 @@
-import { IFantasyLeague } from "../types/fantasyLeague";
+import { IFantasyLeague, IFantasyLeagueTeam } from "../types/fantasyLeague";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { analytics } from "./anayticsService";
 import { fantasyTeamService } from "./teamService";
@@ -84,7 +84,7 @@ export const leagueService = {
    */
   fetchParticipatingTeams: async (
     leagueId: string | number
-  ): Promise<any[]> => {
+  ): Promise<IFantasyLeagueTeam[]> => {
     try {
       const baseUrl = import.meta.env.PROD
         ? "https://qa-games-app.athstat-next.com"
@@ -288,7 +288,7 @@ export const leagueService = {
       );
 
       // Check if any team belongs to the current user
-      return participatingTeams.some((team) => team.user_id === userId);
+      return participatingTeams.some((team) => team.kc_id === userId);
     } catch (error) {
       console.error(
         `Error checking user status for league ${leagueId}:`,
