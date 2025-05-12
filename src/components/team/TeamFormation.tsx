@@ -28,7 +28,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
   
 
   return (
-    <div className="relative h-[550px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
+    <div className="relative h-[600px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
 
 
       <div className="grid grid-cols-1 overflow-clip items-center" >
