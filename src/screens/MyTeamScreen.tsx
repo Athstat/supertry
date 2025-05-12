@@ -22,6 +22,7 @@ const TeamContent: React.FC<{
   activeTab: TabType;
   setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
 }> = ({ activeTab, setActiveTab }) => {
+  
   const { positionList, players, formation } = useTeamData();
 
   const {
@@ -112,7 +113,10 @@ const MyTeamContent: React.FC = () => {
           {/* Team Actions with Tabs Content as children */}
           {teamId && (
             <TeamActions teamId={teamId}>
-              <TeamContent activeTab={activeTab} setActiveTab={setActiveTab} />
+              <TeamContent 
+                activeTab={activeTab}
+                setActiveTab={setActiveTab} 
+              />
             </TeamActions>
           )}
         </div>
