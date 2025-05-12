@@ -5,6 +5,7 @@ import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction, formatPosition } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
+import { twMerge } from "tailwind-merge";
 
 interface Athlete {
   id: string;
@@ -217,6 +218,8 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
       return currTotal + action.score;
     }, 0) : 0;
 
+  const isSub = !athlete.is_starting;
+
   console.log("Points Breakdown 2.0", athlete.player_name, points);
 
   return (
@@ -253,10 +256,13 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         <div className="flex-1">
           <div className="font-medium dark:text-white">
             {athlete.player_name}
-            
+
           </div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            {formatPosition(athlete.position ?? "")}
+          <div className={twMerge(
+            "text-sm text-gray-500 dark:text-gray-400",
+            isSub && "text-orange-600 font-bold"
+          )}>
+            {formatPosition(athlete.position ?? "")} · {isSub ? "Super Sub" : ""}
           </div>
         </div>
 
@@ -340,20 +346,20 @@ function PointsBreakdownView({ points }: PointsBreakDownViewProps) {
 
   return (
     <div className=" flex-1 p-4">
-        
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          {pointsBreakdown.length > 0 ? (
-            <ul className="space-y-3">
-              {pointsBreakdown.map((item, index) => {
-                return <PointsBreakdownListItem item={item} key={index} />
-              })}
-            </ul>
-          ) : (
-            <p className="text-center text-gray-500 dark:text-gray-400">
-              No breakdown data available
-            </p>
-          )}
-        </div>
+
+      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+        {pointsBreakdown.length > 0 ? (
+          <ul className="space-y-3">
+            {pointsBreakdown.map((item, index) => {
+              return <PointsBreakdownListItem item={item} key={index} />
+            })}
+          </ul>
+        ) : (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            No breakdown data available
+          </p>
+        )}
+      </div>
 
     </div>
   )
