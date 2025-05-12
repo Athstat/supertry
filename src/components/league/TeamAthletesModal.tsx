@@ -260,9 +260,9 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
           </div>
           <div className={twMerge(
             "text-sm text-gray-500 dark:text-gray-400",
-            isSub && "text-orange-600 font-bold"
+            isSub && "text-orange-600 dark:text-orange-600 font-bold"
           )}>
-            {formatPosition(athlete.position ?? "")} · {isSub ? "Super Sub" : ""}
+            {formatPosition(athlete.position ?? "")} · {isSub ? "Super Sub 🌟" : ""}
           </div>
         </div>
 
