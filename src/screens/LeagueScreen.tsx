@@ -108,19 +108,20 @@ export function LeagueScreen() {
 
         if (participatingTeams && participatingTeams.length > 0) {
           // Sort teams by score in descending order
+          
           const sortedTeams = participatingTeams.sort(
-            (a, b) => b.overall_score - a.overall_score
+            (a, b) => (b.overall_score ?? 0) - (a.overall_score ?? 0)
           );
 
           // Map to TeamStats format
           const mappedTeams: TeamStats[] = sortedTeams.map((team, index) => ({
-            id: team.team_id,
+            id:  team.team_id.toString() ?? "",
             rank: index + 1,
             teamName: team.name || `Team ${index + 1}`,
             managerName: team.first_name + " " + team.last_name,
             totalPoints: team.overall_score || 0,
             weeklyPoints: team.overall_score || 0,
-            lastRank: team.last_rank || index + 1,
+            lastRank: index + 1,
             isUserTeam: false, // Will be set below if it matches
           }));
 

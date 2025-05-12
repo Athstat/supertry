@@ -111,7 +111,7 @@ export function LeagueStandings({
         >
           <div className="relative">
             <table className="w-full">
-              <thead className="sticky top-0  bg-gray-50 dark:bg-dark-800 z-50">
+              <thead className="sticky top-0  bg-gray-50 dark:bg-dark-800 z-40">
                 <tr>
                   <th className="py-4 px-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
                     Rank
