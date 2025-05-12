@@ -1,4 +1,4 @@
-import { Shield, Pencil, Trophy, Users, Calendar, Star } from "lucide-react"
+import { Shield, Pencil, Trophy, Users, Calendar, Star, ArrowRight } from "lucide-react"
 import { useFetch } from "../../hooks/useAsync"
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { IFantasyLeague, IFantasyLeagueTeam } from "../../types/fantasyLeague"
@@ -55,15 +55,16 @@ export default function LeagueCardDetailed({ league }: Props) {
                     <div className="flex gap-3 self-stretch md:self-auto">
                         <button
                             onClick={handleLeagueClick}
-                            className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+                            className="flex-1 md:flex-none px-6 py-2.5 text-lg lg:text-base rounded-xl bg-primary-700 hover:bg-primary-800 text-white font-bold transition-colors flex flex-row items-center justify-center gap-2"
                         >
                             {teamForLeague ? "View League" : "Join League"}
+                            <ArrowRight />
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div className="p-6">
+            <div className="px-6 pb-6">
 
                 <div className="grid grid-cols-1 gap-3">
                     {/* My Team Section */}
@@ -72,12 +73,12 @@ export default function LeagueCardDetailed({ league }: Props) {
                     )}
 
                     {/* Fixtures Section */}
-                    <div >
+                    {/* <div >
                         <div className="">
                             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Fixtures</h2>
                             <FixturesSection league={league} />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
@@ -93,14 +94,14 @@ function MyTeamSection({ team, rank }: MyTeamSectionProps) {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/my-team/${team.id}`);
+        navigate(`/my-team/${team.team_id}`);
     }
 
     return (
 
         <div className="cursor-pointer">
 
-            <div className="bg-slate-100 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 space-y-4">
+            <div className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 space-y-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Shield className="w-6 h-6 text-blue-500" />
@@ -111,15 +112,17 @@ function MyTeamSection({ team, rank }: MyTeamSectionProps) {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                <div className="grid grid-cols-2 gap-4">
+                    
+                    <div className=" dark:bg-slate-800 p-3 rounded-lg">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
                             <Trophy className="w-4 h-4" />
                             <span className="text-sm">Rank</span>
                         </div>
                         <p className="text-xl font-bold">#{rank}</p>
                     </div>
-                    <div className="bg-white dark:bg-slate-800 p-3 rounded-lg">
+                    
+                    <div className="dark:bg-slate-800 p-3 rounded-lg">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
                             <Star className="w-4 h-4" />
                             <span className="text-sm">Points</span>
@@ -137,6 +140,8 @@ type FixturesSectionProps = {
 }
 
 function FixturesSection({ league }: FixturesSectionProps) {
+    
+    const navigate = useNavigate();
     const { data, isLoading } = useFetch("fixtures", league.official_league_id, gamesService.getGamesByCompetitionId);
     const fixtures = data ?? [];
 
@@ -152,7 +157,6 @@ function FixturesSection({ league }: FixturesSectionProps) {
 
     if (shortList.length === 0) return null;
 
-    const navigate = useNavigate();
 
     const handleShowMore = () => {
         navigate(`/league/${league.id}`);
@@ -168,7 +172,7 @@ function FixturesSection({ league }: FixturesSectionProps) {
                 const { game_status } = fixtureSumary(fixture);
 
                 return (
-                    <div onClick={() => handleClickfixture(fixture)} key={index} className="bg-slate-100 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 hover:shadow-md transition-all">
+                    <div onClick={() => handleClickfixture(fixture)} key={index} className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 hover:shadow-md transition-all">
                         <div className="flex flex-col gap-4">
 
                             <div className="flex items-center justify-between gap-4">
@@ -200,7 +204,7 @@ function FixturesSection({ league }: FixturesSectionProps) {
             })}
 
             {fixtures.length > 3 &&
-                <div onClick={handleShowMore} className="text-blue-500 dark:hover:text-blue-400 mt-3 w-ful text-center items-center justify-center flex flex-col cursor-pointer" >
+                <div onClick={handleShowMore} className="text-blue-500 dark:hover:text-blue-400 mt-2 w-ful text-center items-center justify-center flex flex-col cursor-pointer" >
                     <p>Show More</p>
                 </div>
             }
