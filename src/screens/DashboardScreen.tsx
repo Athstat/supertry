@@ -98,7 +98,7 @@ export function DashboardScreen() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-6">
+    <main className="flex flex-col mx-auto px-4 py-6 lg:px-[15%]">
       
       {/* Hero Section */}
       
@@ -108,32 +108,14 @@ export function DashboardScreen() {
       />
 
       {/* Dashboard Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* My Teams Section */}
-        <div className="col-span-1 lg:col-span-2">
-          <MyTeamsSection
-            teams={teams}
-            teamsWithAthletes={teamsWithAthletes}
-            isLoading={isLoadingTeams}
-            error={error}
-          />
-        </div>
-
+      <div className="grid gap-6">
         {/* Active Leagues Section */}
-        <div className="col-span-1">
           <ActiveLeaguesSection
             leagues={leagues}
             isLoading={isLoadingLeagues}
             onViewLeague={handleViewLeague}
           />
-        </div>
       </div>
-
-      {/* Upcoming Fixtures
-      <div className="mt-5">
-        <UpcomingFixturesSection
-        />
-      </div> */}
 
     </main>
   );
