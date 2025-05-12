@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
-import { playerSearchPredicate } from "../../../utils/athleteUtils";
+import { athleteSearchPredicate } from "../../../utils/athleteUtils";
 
 interface UsePlayersFilterProps {
   players: any[];
@@ -140,7 +140,7 @@ export const usePlayersFilter = ({
 
       const matchesSearch =
         searchQuery === "" ||
-        playerSearchPredicate(player, searchQuery) ||
+        athleteSearchPredicate(player, searchQuery) ||
         player.player_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         player.team_name?.toLowerCase().includes(searchQuery.toLowerCase());
 

@@ -1,13 +1,13 @@
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
-import { IBoxScore } from "../../types/boxScore"
+import { IBoxScoreItem } from "../../types/boxScore"
 import { rankByKickingStats } from "../../utils/boxScoreUtils"
 import PlayerBoxScoreSmallCard from "../player/PlayerSmallCard"
 import { useState } from "react"
 
 type Props = {
   fixture: IFixture,
-  boxScores: IBoxScore[]
+  boxScores: IBoxScoreItem[]
 }
 
 export default function FixtureKickingLeaders({ boxScores, fixture }: Props) {

@@ -3,12 +3,12 @@ import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import TeamLogo from "../team/TeamLogo"
 import { aggregateTeamStats } from "../../utils/boxScoreUtils"
-import { IBoxScore } from "../../types/boxScore"
+import { IBoxScoreItem } from "../../types/boxScore"
 import { twMerge } from "tailwind-merge"
 
 type Props = {
     fixture: IFixture,
-    boxScore: IBoxScore[]
+    boxScore: IBoxScoreItem[]
 }
 
 

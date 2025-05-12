@@ -1,8 +1,8 @@
 // Sort Players by Offensive Stats
 
-import { IBoxScore } from "../types/boxScore";
+import { IBoxScoreItem } from "../types/boxScore";
 
-export function rankByAttackingStats(stats: IBoxScore[]) {
+export function rankByAttackingStats(stats: IBoxScoreItem[]) {
     
     return stats.sort((a, b) => {
         return attackBias(b) - attackBias(a);
@@ -10,7 +10,7 @@ export function rankByAttackingStats(stats: IBoxScore[]) {
 
 }
 
-export function rankByDefensiveStats(stats: IBoxScore[]) {
+export function rankByDefensiveStats(stats: IBoxScoreItem[]) {
     
     return stats.sort((a, b) => {
         return defenseBias(b) - defenseBias(a);
@@ -18,7 +18,7 @@ export function rankByDefensiveStats(stats: IBoxScore[]) {
 
 }
 
-export function rankByKickingStats(stats: IBoxScore[]) {
+export function rankByKickingStats(stats: IBoxScoreItem[]) {
     
     return stats.sort((a, b) => {
         return defenseBias(b) - defenseBias(a);
@@ -26,7 +26,7 @@ export function rankByKickingStats(stats: IBoxScore[]) {
 
 }
 
-export function rankByDisciplineStats(stats: IBoxScore[]) {
+export function rankByDisciplineStats(stats: IBoxScoreItem[]) {
     
     return stats.sort((a, b) => {
         return defenseBias(b) - defenseBias(a);
@@ -35,7 +35,7 @@ export function rankByDisciplineStats(stats: IBoxScore[]) {
 }
 
 
-export function attackBias(statLine: IBoxScore) {
+export function attackBias(statLine: IBoxScoreItem) {
     let total = 0;
 
     const {tries, passes, carries, points, defendersbeaten} = statLine;
@@ -63,7 +63,7 @@ export function attackBias(statLine: IBoxScore) {
     return total;
 }
 
-export function defenseBias(statLine: IBoxScore) {
+export function defenseBias(statLine: IBoxScoreItem) {
     let total = 0;
 
     const {tacklesmade, tacklesmissed, lineoutswonsteal, retainedkicks, turnoverswon, redcards, yellowcards} = statLine;
@@ -106,7 +106,7 @@ export function defenseBias(statLine: IBoxScore) {
     return total;
 }
 
-export function kickingBias(statLine: IBoxScore) {
+export function kickingBias(statLine: IBoxScoreItem) {
     let total = 0;
 
     const {dropgoalsscored, kicksfromhand, kicksfromhandmetres} = statLine;
@@ -127,7 +127,7 @@ export function kickingBias(statLine: IBoxScore) {
     return total;
 }
 
-export function disciplineBias(statLine: IBoxScore) {
+export function disciplineBias(statLine: IBoxScoreItem) {
     let total = 0;
 
     const {redcards, yellowcards} = statLine;
@@ -143,7 +143,7 @@ export function disciplineBias(statLine: IBoxScore) {
     return total;
 }
 
-export function aggregateTeamStats(teamId: string, boxScore: IBoxScore[]) {
+export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
     let points = 0
     let tries = 0;
     let conversionsScored = 0;

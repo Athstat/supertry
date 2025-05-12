@@ -66,9 +66,15 @@ function nameMatches(input: string, target: string): boolean {
 }
 
 
-export function playerSearchPredicate(athlete: IFantasyAthlete, query: string) {
+export function athleteSearchPredicate(athlete: IFantasyAthlete, query: string) {
     return nameMatches(athlete.player_name ?? "", query);
 }
+
+/** Predicate for searching by human names */
+export function nameSearchPredicate(fullName: string, query: string) {
+    return nameMatches(fullName, query);
+}
+
 
 export function formatAction(actionName: string) {
     const displayName = actionName
