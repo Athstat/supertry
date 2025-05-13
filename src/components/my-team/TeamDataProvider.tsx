@@ -9,6 +9,7 @@ import { Player } from "../../types/team";
 import { Position } from "../../types/position";
 import { fantasyTeamService  } from "../../services/teamService";
 import { leagueService } from "../../services/leagueService";
+import { useFetch } from "../../hooks/useAsync";
 
 interface TeamDataContextType {
   team: IFantasyClubTeam | null;
@@ -58,6 +59,13 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
   const [leagueInfo, setLeagueInfo] = useState<IFantasyLeague | null>(null);
   const [fetchingLeague, setFetchingLeague] = useState(false);
   const [teamBudget, setTeamBudget] = useState<number>(0);
+
+  const {data: league} = useFetch(
+    "fantasy-leagues",
+    Number.parseInt(team?.league_id ?? "0"),
+    leagueService.getLeagueById,
+    [team]
+  );
 
   // Fetch team and athletes if not provided in location state
   useEffect(() => {
@@ -360,7 +368,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
     athletes,
     isLoading,
     error,
-    leagueInfo,
+    leagueInfo: league ?? null,
     fetchingLeague,
     teamBudget,
     teamAny,
