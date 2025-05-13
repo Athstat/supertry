@@ -1,10 +1,10 @@
-import React from "react";
 import { Users, ChevronRight, Loader, Calendar, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { LeagueCardProps } from "../types";
 import { format } from "date-fns";
 import { useCountdown } from "../../../hooks/useCountdown";
 import LeagueLockStatus from "./LeagueLockStatus";
+import { calculateJoinDeadline, isLeagueLocked } from "../../../utils/leaguesUtils";
 
 export function LeagueCard({
   league,
@@ -14,6 +14,10 @@ export function LeagueCard({
   custom = 0,
   isJoined = false,
 }: LeagueCardProps) {
+
+  const isLocked = isLeagueLocked(league.join_deadline); 
+  const adjustedDeadline = calculateJoinDeadline(league);
+
   return (
     <motion.div
       initial="hidden"
@@ -63,8 +67,8 @@ export function LeagueCard({
             </span>
           </div>
 
-          {league.join_deadline && (
-            <JoinDeadlineCountdown  joinDeadline={league.join_deadline} />
+          {!isLocked && adjustedDeadline && (
+            <JoinDeadlineCountdown joinDeadline={adjustedDeadline} />
           )}
 
         </div>
@@ -80,7 +84,7 @@ type JoinDeadlineCountdownProps = {
   joinDeadline: Date
 }
 
-function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
+function JoinDeadlineCountdown({ joinDeadline }: JoinDeadlineCountdownProps) {
 
   // Countdown should start two days before the join deadline
   const today = new Date();
@@ -92,7 +96,7 @@ function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
 
   const showCountDown = !deadlinePassed && diff <= oneDay;
 
-  const {hours, seconds, minutes} = useCountdown(showCountDown ? diff : 0);
+  const { hours, seconds, minutes } = useCountdown(showCountDown ? diff : 0);
 
   return (
     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
@@ -104,7 +108,7 @@ function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
         </strong>}
 
         {showCountDown && <strong>
-          {`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0") }`}
+          {`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`}
         </strong>}
       </span>
     </div>

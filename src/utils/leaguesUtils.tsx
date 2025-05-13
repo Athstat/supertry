@@ -1,4 +1,4 @@
-import { differenceInDays } from "date-fns";
+import { add, differenceInDays } from "date-fns";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { leagueService } from "../services/leagueService";
 
@@ -95,6 +95,23 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   const diff = deadline.valueOf() - now.valueOf();
 
   return diff < thirtyMinutes;
+}
+
+/** Returns the last possible date that users can join a league */
+export function calculateJoinDeadline(league: IFantasyLeague) {
+  
+  if (league.join_deadline) {
+    const deadline = new Date(league.join_deadline);
+    
+    const adjustedDeadline = add(deadline, {
+      hours: 1,
+      minutes: 30
+    });
+
+    return adjustedDeadline;
+  }
+
+  return undefined;
 }
 
 /** Returns a bias that can be used to sort locked leagues and unclocked leagues */
