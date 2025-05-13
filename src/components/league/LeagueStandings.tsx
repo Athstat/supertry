@@ -1,15 +1,15 @@
 import { useRef, useEffect, Ref } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
-import { TeamStats } from "../../types/league";
+import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
 
 interface LeagueStandingsProps {
-  teams: TeamStats[];
+  teams: RankedFantasyTeam[];
   showJumpButton: boolean;
   onJumpToTeam: () => void;
   isLoading?: boolean;
   error?: string | null;
-  onTeamClick?: (team: TeamStats) => void;
+  onTeamClick?: (team: RankedFantasyTeam) => void;
 }
 
 export function LeagueStandings({
@@ -61,14 +61,14 @@ export function LeagueStandings({
 
 
   // Handle team row click
-  const handleTeamClick = (team: TeamStats) => {
+  const handleTeamClick = (team: RankedFantasyTeam) => {
     if (onTeamClick) {
       onTeamClick(team);
     }
   };
 
   // Helper function to check if a team is the user's team
-  const isUserTeamCheck = (team: TeamStats): boolean => {
+  const isUserTeamCheck = (team: RankedFantasyTeam): boolean => {
     return team.isUserTeam === true;
   };
 
@@ -171,9 +171,9 @@ export function LeagueStandings({
 }
 
 type StandingsTableRowProps = {
-  team: TeamStats,
+  team: RankedFantasyTeam,
   userTeamRef: Ref<any>,
-  handleTeamClick: (team: TeamStats) => void,
+  handleTeamClick: (team: RankedFantasyTeam) => void,
   index: number
 }
 
@@ -251,7 +251,7 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: Standi
 }
 
 type EditButtonProps = {
-  team: TeamStats
+  team: RankedFantasyTeam
 }
 
 function EditTeamButton({team} : EditButtonProps) {

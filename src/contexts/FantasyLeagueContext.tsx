@@ -1,18 +1,25 @@
 import { createContext, ReactNode } from "react";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import { RankedFantasyTeam } from "../types/league";
 
-export const FantasyLeagueContext = createContext<IFantasyLeague | undefined>(undefined);
+type ContextProps = {
+  league?: IFantasyLeague,
+  userTeam?: RankedFantasyTeam
+}
+
+export const FantasyLeagueContext = createContext<ContextProps | undefined>(undefined);
 
 type Props = {
     league?: IFantasyLeague,
-    children?: ReactNode
+    children?: ReactNode,
+    userTeam?: RankedFantasyTeam
 }
 
-export default function FantasyLeagueProvider({league, children}: Props) {
+export default function FantasyLeagueProvider({league, children, userTeam}: Props) {
 
 
   return (
-    <FantasyLeagueContext.Provider value={league} >
+    <FantasyLeagueContext.Provider value={{ league, userTeam }} >
         {children}
     </FantasyLeagueContext.Provider>
   )

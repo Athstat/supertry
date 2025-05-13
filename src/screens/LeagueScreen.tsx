@@ -3,7 +3,7 @@ import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { TabButton } from "../components/shared/TabButton";
-import { TeamStats, LeagueInfo, LeagueFromState } from "../types/league";
+import { RankedFantasyTeam, LeagueInfo, LeagueFromState } from "../types/league";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { fantasyTeamService } from "../services/teamService";
@@ -13,6 +13,7 @@ import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { analytics } from "../services/anayticsService";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
+import { authService } from "../services/authService";
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
@@ -28,12 +29,13 @@ export function LeagueScreen() {
     totalTeams: 0,
     prizePool: "$0",
   });
-  const [teams, setTeams] = useState<TeamStats[]>([]);
+  const [teams, setTeams] = useState<RankedFantasyTeam[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTeam, setSelectedTeam] = useState<TeamStats | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
+  const [userTeam, setUserTeam] = useState<RankedFantasyTeam>();
 
   // Get the league ID from URL params
   const { leagueId } = useParams<{ leagueId: string }>();
@@ -41,6 +43,7 @@ export function LeagueScreen() {
   const leagueFromState = location.state?.league;
   const isFromWelcome = location.state?.from === "welcome";
   const navigate = useNavigate();
+  const user = authService.getUserInfo();
 
   // Set league name from state as soon as possible
   useEffect(() => {
@@ -114,7 +117,7 @@ export function LeagueScreen() {
           );
 
           // Map to TeamStats format
-          const mappedTeams: TeamStats[] = sortedTeams.map((team, index) => ({
+          const mappedTeams: RankedFantasyTeam[] = sortedTeams.map((team, index) => ({
             id:  team.team_id.toString() ?? "",
             rank: index + 1,
             teamName: team.name || `Team ${index + 1}`,
@@ -122,27 +125,13 @@ export function LeagueScreen() {
             totalPoints: team.overall_score || 0,
             weeklyPoints: team.overall_score || 0,
             lastRank: index + 1,
-            isUserTeam: false, // Will be set below if it matches
+            isUserTeam: false,
+            userId: team.kc_id // Will be set below if it matches
           }));
-
-          // Get current user's team ID
-          const currentUserTeamId = await getCurrentUserTeamId(
-            participatingTeams
-          );
 
           //console.log("currentUserTeamId", currentUserTeamId);
 
           // Mark user's team and get user's rank
-          let userRank = 0;
-          if (currentUserTeamId) {
-            mappedTeams.forEach((team) => {
-              if (team.id === currentUserTeamId) {
-                team.isUserTeam = true;
-                userRank = team.rank;
-                setHasJoinedLeague(true);
-              }
-            });
-          }
 
           //console.log("mappedTeams", mappedTeams);
 
@@ -159,7 +148,16 @@ export function LeagueScreen() {
 
           setTeams(mappedTeams);
 
-          console.log("leagueFromState", leagueFromState);
+          let userTeamTemp: RankedFantasyTeam | undefined;
+
+          mappedTeams.forEach((t) => {
+            if (user && t.userId === user.id) {
+              userTeamTemp = t;
+            }
+          });
+
+          console.log("User Team Temp ", userTeamTemp);
+          setUserTeam(userTeamTemp);
 
           setLeagueInfo({
             name: leagueFromState.title || "League",
@@ -168,7 +166,7 @@ export function LeagueScreen() {
             totalGameweeks: leagueFromState.total_gameweeks || 0,
             totalTeams: mappedTeams.length,
             prizePool: formatPrizePool(leagueFromState),
-            userRank: userRank || 0,
+            userRank: userTeamTemp?.rank
           });
         }
 
@@ -184,61 +182,9 @@ export function LeagueScreen() {
     fetchLeagueData();
   }, [leagueId, leagueFromState]);
 
-  // Helper function to get current user's team ID
-  const getCurrentUserTeamId = async (
-    participatingTeams: any[]
-  ): Promise<string | null> => {
-    if (!participatingTeams) return null;
-
-    try {
-      // Get user ID from token
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        console.error("No access token found");
-        return null;
-      }
-
-      // Extract user ID from token
-      let userId: string;
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        userId = payload.sub;
-        if (!userId) {
-          console.error("No user ID found in token");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error extracting user ID from token:", error);
-        return null;
-      }
-
-      // Find the team that belongs to this league
-      const teamInLeague = participatingTeams.find(
-        (team) => team.kc_id === userId
-      );
-
-      //console.log("teamInLeague", teamInLeague);
-
-      if (teamInLeague) {
-        // Return team_id instead of id to match what's used in mappedTeams
-        return teamInLeague.team_id;
-      }
-
-      return null;
-    } catch (error) {
-      console.error("Error getting current user team ID:", error);
-      return null;
-    }
-  };
+  
 
   // Helper function to format prize pool
-  const formatPrizePool = (league: any): string => {
-    if (!league) return "$0";
-    if (league.reward_description) return league.reward_description;
-    return league.reward_type === "cash"
-      ? `$${(league.entry_fee || 0) * (league.participants_count || 0)}`
-      : "N/A";
-  };
 
   useEffect(() => {
     const userTeam = teams.find((team) => team.isUserTeam);
@@ -250,7 +196,7 @@ export function LeagueScreen() {
   }, []);
 
   // Handle team click
-  const handleTeamClick = async (team: TeamStats) => {
+  const handleTeamClick = async (team: RankedFantasyTeam) => {
     setSelectedTeam(team);
     setLoadingAthletes(true);
 
@@ -273,7 +219,7 @@ export function LeagueScreen() {
   };
 
   return (
-    <FantasyLeagueProvider league={leagueFromState} >
+    <FantasyLeagueProvider userTeam={userTeam} league={leagueFromState} >
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
         <LeagueHeader
           leagueInfo={leagueInfo}
@@ -281,7 +227,7 @@ export function LeagueScreen() {
           onOpenSettings={() => setShowSettings(true)}
           isLoading={isLoading}
         >
-          {!isLoading && !hasJoinedLeague && (
+          {!isLoading && userTeam === undefined && (
             <button
               onClick={handleJoinLeague}
               className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
@@ -356,7 +302,7 @@ export function LeagueScreen() {
         {/* Team Athletes Modal */}
         {selectedTeam && (
           <TeamAthletesModal
-            team={selectedTeam as TeamStats}
+            team={selectedTeam as RankedFantasyTeam}
             athletes={teamAthletes}
             onClose={handleCloseModal}
             isLoading={loadingAthletes}
