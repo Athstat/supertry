@@ -52,7 +52,7 @@ export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
       {/* League Title Section */}
       <div className="mb-3">
         <h1 className="text-2xl flex flex-row items-center gap-1 sm:text-3xl font-bold mb-1 dark:text-gray-100">
-          <Lock />
+          {isLocked && <Lock />}
           {title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">

@@ -2,6 +2,7 @@ import {
   IFantasyTeamAthlete,
   IFantasyClubTeam,
 } from "../types/fantasyTeamAthlete";
+import { getUri } from "../utils/backendUtils";
 
 export const fantasyTeamService = {
   /**
@@ -12,9 +13,6 @@ export const fantasyTeamService = {
     teamId: string
   ): Promise<any> => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       // Get token for authentication
       const token = localStorage.getItem("access_token");
@@ -25,17 +23,16 @@ export const fantasyTeamService = {
         );
       }
 
-      // Make API request to update team athletes
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ team, teamId }),
-        }
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`);
+
+      const response = await fetch(uri, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ team, teamId }),
+      }
       );
 
       if (!response.ok) {
@@ -57,9 +54,6 @@ export const fantasyTeamService = {
    */
   fetchUserClub: async () => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -83,9 +77,9 @@ export const fantasyTeamService = {
       }
 
       // Make API request to get user's club
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-teams/fantasy-clubs/${userId}`,
-        {
+      const uri = getUri(`/api/v1/fantasy-teams/fantasy-clubs/${userId}`);
+
+      const response = await fetch( uri, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -118,9 +112,6 @@ export const fantasyTeamService = {
    */
   fetchUserTeams: async (): Promise<IFantasyClubTeam[]> => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -144,7 +135,7 @@ export const fantasyTeamService = {
       }
 
       // Construct the URL based on whether leagueId is provided
-      const url = `${baseUrl}/api/v1/fantasy-teams/fantasy-teams-all/${userId}`;
+      const url = getUri(`/api/v1/fantasy-teams/fantasy-teams-all/${userId}`);
 
       // Make API request to get user's teams
       const response = await fetch(url, {
@@ -176,9 +167,6 @@ export const fantasyTeamService = {
     leagueId: string
   ): Promise<IFantasyClubTeam> => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token (or use a default if not available)
       const token = localStorage.getItem("access_token");
@@ -218,9 +206,9 @@ export const fantasyTeamService = {
       console.log("Payload: ", payload);
 
       // Submit the team to the server
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-athletes/fantasy-team-athletes`,
-        {
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes`);
+
+      const response = await fetch( uri, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -250,9 +238,6 @@ export const fantasyTeamService = {
    */
   fetchTeamAthletes: async (teamId: string): Promise<IFantasyTeamAthlete[]> => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       // Get token for authentication
       const token = localStorage.getItem("access_token");
@@ -264,9 +249,9 @@ export const fantasyTeamService = {
       }
 
       // Make API request to get team athletes
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}`,
-        {
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}`);
+
+      const response = await fetch( uri, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

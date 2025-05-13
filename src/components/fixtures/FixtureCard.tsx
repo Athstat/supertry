@@ -35,7 +35,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
 
             <div
                 onClick={toogle}
-                className={twMerge("p-4 flex flex-col text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors", className)}
+                className={twMerge("p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors", className)}
             >
 
                 { showCompetition && competition_name && <div className='w-full items-center justify-center flex flex-row' >

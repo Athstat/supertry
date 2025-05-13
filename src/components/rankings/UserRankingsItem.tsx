@@ -47,7 +47,7 @@ export default function UserRankingsItem({userRank} : Props) {
                                     : "text-gray-700 dark:text-gray-300"
                             }`}
                     >
-                        {userRank.rank}
+                        {userRank.total_score ? userRank.rank : "-"}
                     </span>
                 </div>
                 <div className="w-8">
