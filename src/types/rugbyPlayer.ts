@@ -11,6 +11,7 @@ export interface RugbyPlayer {
   weight?: number;
   date_of_birth?: Date;
   team_logo?: string;
+  is_starting?: boolean
 
   // Stats
   ball_carrying?: number;

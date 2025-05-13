@@ -1,4 +1,5 @@
 import React from "react";
+import { alphabeticalComparator } from "../../utils/stringUtils";
 
 interface Team {
   id: string;
@@ -17,6 +18,11 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
   teamFilter,
   toggleTeamFilter,
 }) => {
+
+  const sortedTeams = availableTeams.sort((a, b) => {
+    return alphabeticalComparator(a.name ?? "", b.name ?? "");
+  });
+
   return (
     <div className="px-6 py-4 border-b dark:border-gray-700">
       {/* Teams filter */}
@@ -31,7 +37,7 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
             className="flex overflow-x-auto py-2 no-scrollbar whitespace-nowrap gap-2 px-6 after:content-[''] after:w-4 after:shrink-0 scroll-smooth"
             style={{ WebkitOverflowScrolling: "touch" }}
           >
-            {availableTeams.map((team) => (
+            {sortedTeams.map((team) => (
               <button
                 key={team.id}
                 onClick={() => toggleTeamFilter(team.id)}

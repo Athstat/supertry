@@ -6,6 +6,7 @@ import { SideDrawer } from "./SideDrawer";
 import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
 
 export function Header() {
+  
   const navigate = useNavigate();
   const location = useLocation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

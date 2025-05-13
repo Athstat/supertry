@@ -1,14 +1,17 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, Ref, useContext } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
-import { TeamStats } from "../../types/league";
+import { RankedFantasyTeam } from "../../types/league";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../../services/authService";
+import { FantasyLeagueContext } from "../../contexts/FantasyLeagueContext";
 
 interface LeagueStandingsProps {
-  teams: TeamStats[];
+  teams: RankedFantasyTeam[];
   showJumpButton: boolean;
   onJumpToTeam: () => void;
   isLoading?: boolean;
   error?: string | null;
-  onTeamClick?: (team: TeamStats) => void;
+  onTeamClick?: (team: RankedFantasyTeam) => void;
 }
 
 export function LeagueStandings({
@@ -27,6 +30,7 @@ export function LeagueStandings({
   const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
 
   //console.log(teams);
+  const user = authService.getUserInfo();
 
   // Scroll to user's team when component mounts or teams change
   useEffect(() => {
@@ -49,86 +53,17 @@ export function LeagueStandings({
     }
   }, [teams]);
 
-  const getRankChange = (currentRank: number, lastRank: number) => {
-    if (currentRank < lastRank) {
-      return <span className="text-green-500">↑</span>;
-    } else if (currentRank > lastRank) {
-      return <span className="text-red-500">↓</span>;
-    }
-    return null;
-  };
-
-  const getRankMedal = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return <span className="text-lg mr-1">🥇</span>;
-      case 2:
-        return <span className="text-lg mr-1">🥈</span>;
-      case 3:
-        return <span className="text-lg mr-1">🥉</span>;
-      default:
-        return null;
-    }
-  };
-
-  const getTeamLabel = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return (
-          <span className="text-xs text-yellow-600 dark:text-yellow-400 font-medium">
-            🏆 Champion
-          </span>
-        );
-      case 2:
-        return (
-          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-            🥈 Runner-up
-          </span>
-        );
-      case 3:
-        return (
-          <span className="text-xs text-amber-600 dark:text-amber-500 font-medium">
-            🥉 Top Contender
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const getRowBackground = (
-    rank: number,
-    index: number,
-    isUserTeam?: boolean
-  ) => {
-    if (isUserTeam === true) {
-      return "bg-primary-50/50 dark:bg-primary-800/40 border-l-4 border-primary-500";
-    }
-
-    switch (rank) {
-      case 1:
-        return "bg-yellow-50/80 dark:bg-yellow-900/20 ";
-      case 2:
-        return "";
-      case 3:
-        return " ";
-      default:
-        return index % 2 === 0
-          ? " border-l-4 border-transparent"
-          : "border-l-4 border-transparent";
-    }
-  };
 
   // Handle team row click
-  const handleTeamClick = (team: TeamStats) => {
+  const handleTeamClick = (team: RankedFantasyTeam) => {
     if (onTeamClick) {
       onTeamClick(team);
     }
   };
 
   // Helper function to check if a team is the user's team
-  const isUserTeamCheck = (team: TeamStats): boolean => {
-    return team.isUserTeam === true;
+  const isUserTeamCheck = (team: RankedFantasyTeam): boolean => {
+    return user ? (team.userId === user.id) : false;
   };
 
   return (
@@ -170,7 +105,7 @@ export function LeagueStandings({
         >
           <div className="relative">
             <table className="w-full">
-              <thead className="sticky top-0  bg-gray-50 dark:bg-dark-800 z-50">
+              <thead className="sticky top-0  bg-gray-50 dark:bg-dark-800 z-40">
                 <tr>
                   <th className="py-4 px-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
                     Rank
@@ -184,76 +119,22 @@ export function LeagueStandings({
                 </tr>
               </thead>
               <tbody>
-                {teams.map((team, index) => (
-                  <tr
-                    key={team.id}
-                    ref={team.isUserTeam ? userTeamRef : null}
-                    data-user-team={team.isUserTeam}
-                    className={`
-                      cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-800
-                      ${getRowBackground(team.rank, index, team.isUserTeam)}
-                    `}
-                    onClick={() => handleTeamClick(team)}
-                    onKeyDown={(e: React.KeyboardEvent) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        handleTeamClick(team);
-                        e.preventDefault();
-                      }
-                    }}
-                    tabIndex={0}
-                    aria-label={`View ${team.teamName} details`}
-                  >
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <div className="flex items-center gap-1">
-                        <span
-                          className={`font-semibold ${
-                            team.rank === 1
-                              ? "text-yellow-500 dark:text-yellow-400"
-                              : team.rank === 2
-                              ? "text-gray-400 dark:text-gray-200"
-                              : team.rank === 3
-                              ? "text-amber-600 dark:text-amber-500"
-                              : "text-gray-900 dark:text-gray-100"
-                          }`}
-                        >
-                          {team.rank}
-                        </span>
-                        {getRankChange(team.rank, team.lastRank)}
-                      </div>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex flex-col">
-                        <div
-                          className={`font-medium ${
-                            team.isUserTeam
-                              ? "text-primary-600 dark:text-primary-400"
-                              : "dark:text-gray-100"
-                          }`}
-                        >
-                          {team.teamName} {team.isUserTeam && "(You)"}
-                        </div>
-                        <div className="flex flex-col gap-0.5 mt-1">
-                          <div className="text-xs text-gray-500 dark:text-gray-400">
-                            {team.managerName}
-                          </div>
-                          {getTeamLabel(team.rank)}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400 relative pr-10">
-                      {team.totalPoints}
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2">
-                        <ChevronRight className="text-gray-400" />
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {teams.map((team, index) => {
+
+                  return <StandingsTableRow
+                    index={index}
+                    team={team}
+                    userTeamRef={userTeamRef}
+                    handleTeamClick={handleTeamClick}
+                  />
+
+                })}
               </tbody>
             </table>
           </div>
         </div>
       )}
-
+{/* 
       {showJumpButton && teams.some(isUserTeamCheck) && (
         <div className="p-3 border-t border-gray-200 dark:border-dark-700">
           <button
@@ -265,26 +146,183 @@ export function LeagueStandings({
             <span>↓</span>
           </button>
         </div>
-      )}
+      )} */}
 
       <style>
         {`
-          @keyframes pulse-subtle {
-            0% {
-              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
-            }
-            70% {
-              box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
-            }
-            100% {
-              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+          @keyframes glow {
+             0%, 100% {
+              box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
             }
           }
-          .animate-pulse-subtle {
-            animation: pulse-subtle 2s infinite;
+          .animate-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
           }
         `}
       </style>
     </div>
   );
 }
+
+type StandingsTableRowProps = {
+  team: RankedFantasyTeam,
+  userTeamRef: Ref<any>,
+  handleTeamClick: (team: RankedFantasyTeam) => void,
+  index: number
+}
+
+function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: StandingsTableRowProps) {
+
+  const user = authService.getUserInfo();
+  const isUserTeam = user ? user.id === team.userId : false;
+
+  return (
+    <>
+      <tr
+        key={team.id}
+        ref={team.isUserTeam ? userTeamRef : null}
+        data-user-team={team.isUserTeam}
+        className={`
+                        cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-800
+                        ${getRowBackground(team.rank, index, team.isUserTeam)}
+                      `}
+        onClick={() => handleTeamClick(team)}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleTeamClick(team);
+            e.preventDefault();
+          }
+        }}
+        tabIndex={0}
+        aria-label={`View ${team.teamName} details`}
+      >
+        <td className="py-4 px-4 whitespace-nowrap">
+          <div className="flex items-center gap-1">
+            <span
+              className={`font-semibold ${team.rank === 1
+                ? "text-yellow-500 dark:text-yellow-400"
+                : team.rank === 2
+                  ? "text-gray-400 dark:text-gray-200"
+                  : team.rank === 3
+                    ? "text-amber-600 dark:text-amber-500"
+                    : "text-gray-900 dark:text-gray-100"
+                }`}
+            >
+              {team.rank}
+            </span>
+            {getRankChange(team.rank, team.lastRank)}
+          </div>
+        </td>
+        <td className="py-4 px-4">
+          <div className="flex flex-col">
+            <div
+              className={`font-medium ${team.isUserTeam
+                ? "text-primary-600 dark:text-primary-400"
+                : "dark:text-gray-100"
+                }`}
+            >
+              {team.teamName} {team.isUserTeam && "(You)"}
+            </div>
+            <div className="flex flex-col gap-0.5 mt-1">
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                {team.managerName}
+              </div>
+              {getTeamLabel(team.rank)}
+            </div>
+          </div>
+        </td>
+        <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400 relative pr-10">
+          {Math.floor(team.totalPoints ?? 0)}
+          <span className="absolute right-4 top-1/2 -translate-y-1/2">
+            <ChevronRight className="text-gray-400" />
+          </span>
+        </td>
+      </tr>
+
+      {isUserTeam &&
+        <EditTeamButton team={team} />
+      }
+    </>
+  )
+}
+
+type EditButtonProps = {
+  team: RankedFantasyTeam
+}
+
+function EditTeamButton({team} : EditButtonProps) {
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    const uri = `/my-team/${team.id}`;
+    navigate(uri, {
+      state: {teamWithRank: team}
+    });
+  }
+
+  return (
+    <div className="w-full z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
+      <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-blue-700 hover:bg-blue-800 justify-center" >
+        Edit Team
+      </button>
+    </div>
+  )
+}
+
+const getRowBackground = (
+  rank: number,
+  index: number,
+  isUserTeam?: boolean
+) => {
+  if (isUserTeam === true) {
+    return "bg-primary-50/50 dark:bg-primary-800/40 border-l-4 border-primary-500";
+  }
+
+  switch (rank) {
+    case 1:
+      return "bg-yellow-50/80 dark:bg-yellow-900/20 ";
+    case 2:
+      return "";
+    case 3:
+      return " ";
+    default:
+      return index % 2 === 0
+        ? " border-l-4 border-transparent"
+        : "border-l-4 border-transparent";
+  }
+};
+
+const getTeamLabel = (rank: number) => {
+  switch (rank) {
+    case 1:
+      return (
+        <span className="text-xs text-yellow-600 dark:text-yellow-400 font-medium">
+          🏆 Champion
+        </span>
+      );
+    case 2:
+      return (
+        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+          🥈 Runner-up
+        </span>
+      );
+    case 3:
+      return (
+        <span className="text-xs text-amber-600 dark:text-amber-500 font-medium">
+          🥉 Top Contender
+        </span>
+      );
+    default:
+      return null;
+  }
+};
+
+const getRankChange = (currentRank: number, lastRank: number) => {
+  if (currentRank < lastRank) {
+    return <span className="text-green-500">↑</span>;
+  } else if (currentRank > lastRank) {
+    return <span className="text-red-500">↓</span>;
+  }
+  return null;
+};

@@ -181,6 +181,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
             onClose={onClose}
             roundId={roundId}
             availableTeams={availableTeams}
+            remainingBudget={remainingBudget}
           />
         </div>
       </div>

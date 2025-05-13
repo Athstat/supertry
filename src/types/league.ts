@@ -1,4 +1,4 @@
-export interface TeamStats {
+export interface RankedFantasyTeam {
   id: string;
   rank: number;
   teamName: string;
@@ -7,6 +7,7 @@ export interface TeamStats {
   weeklyPoints: number;
   lastRank: number;
   isUserTeam?: boolean;
+  userId: string
 }
 
 export interface Fixture {

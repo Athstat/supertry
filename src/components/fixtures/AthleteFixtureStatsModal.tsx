@@ -1,4 +1,4 @@
-import { IBoxScore } from "../../types/boxScore"
+import { IBoxScoreItem } from "../../types/boxScore"
 import { IFixture } from "../../types/games"
 import DialogModal from "../shared/DialogModal"
 import PlayerMugshot from "../shared/PlayerMugshot"
@@ -7,7 +7,7 @@ import { StatCard } from "../shared/StatCard"
 type AthleteStatsModalProps = {
   open?: boolean,
   onClose?: () => void,
-  boxScoreRecord: IBoxScore,
+  boxScoreRecord: IBoxScoreItem,
   fixture: IFixture
 }
 
@@ -93,7 +93,7 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
         />
 
         <StatsRow
-          label="Defenders Deaten"
+          label="Defenders Beaten"
           value={bs.defendersbeaten}
         />
 

@@ -5,6 +5,11 @@ export function getUri(endPoint: string) {
     return `${BACKEND_SERVER_URL}${endPoint}`;
 }
 
+export function getUriLocal(endPoint: string) {
+    return `http://localhost:5005${endPoint}`;
+}
+
+
 export function getAuthHeader() {
     return {
         "Content-Type": "application/json",

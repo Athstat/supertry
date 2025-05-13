@@ -3,7 +3,7 @@ import { SportAction } from "../types/sports_actions";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 
 // Define the type for each individual breakdown item
-export interface BreakdownItem {
+export interface PointsBreakdownItem {
   action: string;
   action_count: number;
   athlete_id: string;
@@ -14,7 +14,7 @@ export interface BreakdownItem {
 
 export interface PointsBreakdown {
   total_points: number;
-  breakdown: BreakdownItem[];
+  breakdown: PointsBreakdownItem[];
 }
 
 // Define the type for power ranking item
@@ -112,30 +112,51 @@ export const athleteService = {
 
   getAthletePointsBreakdown: async (
     athleteId: string
-  ): Promise<PointsBreakdown> => {
+  ): Promise<PointsBreakdownItem[]> => {
     try {
-      const access_token = localStorage.getItem("access_token");
-      //console.log("access_token", access_token);
-
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            ...(localStorage.getItem("access_token") && {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            }),
-          },
-        }
-      );
-      //console.log("response", response);
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`)
+      const response = await fetch(uri, {
+        method: "GET",
+        headers: getAuthHeader()
+      });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch points breakdown: ${response.status}`);
       }
 
       return await response.json();
+
+    } catch (error) {
+      console.error("Error fetching athlete points breakdown:", error);
+      throw error;
+    }
+  },
+
+  getAthletePointsBreakdownByLeagueAndRound: async (
+    athleteId: string,
+    roundId: number,
+    leagueId: string
+  ): Promise<PointsBreakdownItem[]> => {
+    try {
+      const uri = getUri(
+        `/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/league/${leagueId}/round/${roundId}/athlete/${athleteId}`
+      );
+
+      console.log("Request URL", uri);
+
+      const response = await fetch(uri, {
+        method: "GET",
+        headers: getAuthHeader()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch points breakdown: ${response.status}`);
+      }
+
+      const json =  await response.json();
+
+      return json;
+
     } catch (error) {
       console.error("Error fetching athlete points breakdown:", error);
       throw error;
@@ -190,7 +211,7 @@ export const athleteService = {
           return false;
         }
 
-        const [, actionLabel , actionCompId] = parts;
+        const [, , actionCompId] = parts;
 
         return actionCompId === cId;
       }

@@ -1,7 +1,7 @@
-import { IFantasyLeague } from "../types/fantasyLeague";
+import { IFantasyLeague, IFantasyLeagueTeam } from "../types/fantasyLeague";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { analytics } from "./anayticsService";
-import { teamService } from "./teamService";
+import { fantasyTeamService } from "./teamService";
 
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
@@ -84,7 +84,7 @@ export const leagueService = {
    */
   fetchParticipatingTeams: async (
     leagueId: string | number
-  ): Promise<any[]> => {
+  ): Promise<IFantasyLeagueTeam[]> => {
     try {
       const baseUrl = import.meta.env.PROD
         ? "https://qa-games-app.athstat-next.com"
@@ -192,7 +192,7 @@ export const leagueService = {
       //console.log("League for joining: ", league);
 
       // // Fetch the user's latest team
-      const userTeams = await teamService.fetchUserTeams(
+      const userTeams = await fantasyTeamService.fetchUserTeams(
         // league.official_league_id
       );
 
@@ -252,7 +252,7 @@ export const leagueService = {
     try {
       // Try the first approach - look for user teams in the league
       try {
-        const userTeams = await teamService.fetchUserTeams(
+        const userTeams = await fantasyTeamService.fetchUserTeams(
           // leagueId
         );
         // If the user has any teams in this league, they've joined it
@@ -288,7 +288,7 @@ export const leagueService = {
       );
 
       // Check if any team belongs to the current user
-      return participatingTeams.some((team) => team.user_id === userId);
+      return participatingTeams.some((team) => team.kc_id === userId);
     } catch (error) {
       console.error(
         `Error checking user status for league ${leagueId}:`,

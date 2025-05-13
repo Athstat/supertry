@@ -54,8 +54,8 @@ export function WelcomeScreen() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          <p className="mt-3 text-xl text-gray-600 dark:text-gray-300 text-center">
-            Join the Scrum!
+          <p className="mt-3 lg:text-xl text-gray-600 dark:text-gray-300 text-center">
+            You’ve officially joined the scrum! Don’t worry, it’s less bruises and more bragging rights from here.
           </p>
         </motion.div>
 
@@ -63,7 +63,7 @@ export function WelcomeScreen() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
-          className="w-full mt-12"
+          className="w-full mt-12 items-center justify-center flex"
         >
           <motion.button
             whileHover={{
@@ -71,7 +71,7 @@ export function WelcomeScreen() {
               transition: { type: "spring", stiffness: 300 },
             }}
             onClick={handleGetStarted}
-            className="w-full bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg flex items-center justify-center"
+            className="w-[90%] bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg flex items-center justify-center"
           >
             <span>Get Started</span>
             <ChevronRight className="ml-2 h-5 w-5" />

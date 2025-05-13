@@ -1,4 +1,4 @@
-export type IBoxScore = {
+export type IBoxScoreItem = {
     game_id: string,
     athlete_id: string,
     player_type: "Back" | "Forward" | string,

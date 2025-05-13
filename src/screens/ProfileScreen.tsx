@@ -1,28 +1,12 @@
 import { useState } from "react";
 import {
   User,
-  Medal,
-  Bell,
-  Mail,
-  Lock,
-  ChevronRight,
-  Edit2,
   LogOut,
 } from "lucide-react";
-import { FriendsSection } from "../components/profile/FriendsSection";
-import { friends } from "../data/friends";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
 import UserStatsGrid from "../components/profile/UserStatsGrid";
-
-interface Achievement {
-  id: string;
-  name: string;
-  icon: string;
-  description: string;
-  earnedDate: string;
-}
 
 export function ProfileScreen() {
   const [notifications, setNotifications] = useState(true);
@@ -36,46 +20,13 @@ export function ProfileScreen() {
     navigate("/signin");
   };
 
-  const achievements: Achievement[] = [
-    {
-      id: "1",
-      name: "First Victory",
-      icon: "🏆",
-      description: "Won your first league match",
-      earnedDate: "2024-01-15",
-    },
-    {
-      id: "2",
-      name: "Rising Star",
-      icon: "⭐",
-      description: "Reached top 100 in rankings",
-      earnedDate: "2024-02-20",
-    },
-    {
-      id: "3",
-      name: "Team Builder",
-      icon: "👥",
-      description: "Created 5 different teams",
-      earnedDate: "2024-03-01",
-    },
-  ];
-
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-850">
       <div className="container mx-auto px-4 py-6 max-w-2xl">
         {/* Profile Header */}
         <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-start gap-4">
-            <div className="relative">
-              <img
-                src="https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,q_auto,w_720/67338d48953975001dd4b446.png"
-                alt="Profile"
-                className="w-20 h-20 rounded-full object-cover"
-              />
-              <button className="absolute -bottom-1 -right-1 p-1.5 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors">
-                <Edit2 size={14} />
-              </button>
-            </div>
+            
             <div className="flex-1">
               <div className="flex items-start justify-between">
                 <div>

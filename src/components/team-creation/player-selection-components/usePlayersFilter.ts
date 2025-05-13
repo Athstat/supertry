@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
-import { playerSearchPredicate } from "../../../utils/athleteUtils";
+import { athleteSearchPredicate } from "../../../utils/athleteUtils";
 
 interface UsePlayersFilterProps {
   players: any[];
@@ -59,7 +59,8 @@ export const usePlayersFilter = ({
       } else if (isMyTeamScreen) {
         // MyTeamScreen path - stricter position matching
         // Extract player position values - use either position or position_class field
-        const playerPosition = player.position || "";
+        
+        // const playerPosition = player.position || "";
         const playerPositionClass = player.position_class || "";
 
         // Check if player's position_class matches one of the 5 rugby positions exactly
@@ -139,7 +140,7 @@ export const usePlayersFilter = ({
 
       const matchesSearch =
         searchQuery === "" ||
-        playerSearchPredicate(player, searchQuery) ||
+        athleteSearchPredicate(player, searchQuery) ||
         player.player_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         player.team_name?.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -154,7 +155,7 @@ export const usePlayersFilter = ({
       );
 
       // Budget check
-      const isAffordable = player.price <= remainingBudget;
+      // const isAffordable = player.price <= remainingBudget;
 
       // Availability filter check - only apply if filterAvailable is true
       const passedAvailabilityFilter =
@@ -166,7 +167,7 @@ export const usePlayersFilter = ({
         matchesSearch &&
         matchesTeam &&
         !isAlreadySelected &&
-        isAffordable &&
+        // isAffordable &&
         passedAvailabilityFilter
       );
     });

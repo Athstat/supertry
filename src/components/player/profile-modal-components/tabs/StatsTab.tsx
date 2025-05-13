@@ -34,42 +34,42 @@ export const StatsTab: React.FC<StatsTabProps> = ({ player, playerStats, isLoadi
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {player.ball_carrying !== null && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.ball_carrying}</div>
+              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.ball_carrying ?? "N/A"}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Ball Carrying</div>
             </div>
           )}
           
           {player.tackling !== null && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.tackling}</div>
+              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.tackling ?? "N/A"}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Tackling</div>
             </div>
           )}
           
           {player.points_kicking !== null && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.points_kicking}</div>
+              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.points_kicking ?? "N/A"}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Points Kicking</div>
             </div>
           )}
           
           {player.infield_kicking !== null && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.infield_kicking}</div>
+              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.infield_kicking ?? "N/A"}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Infield Kicking</div>
             </div>
           )}
           
           {player.strength !== null && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.strength}</div>
+              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.strength ?? "N/A"}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Strength</div>
             </div>
           )}
           
           {player.playmaking !== null && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.playmaking}</div>
+              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{player.playmaking ?? "N/A"}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">Playmaking</div>
             </div>
           )}
@@ -144,7 +144,7 @@ const StatsCategory: React.FC<StatsCategoryProps> = ({ title, stats }) => {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {stats.map((stat: any) => (
           <div key={stat.action} className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-            <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stat.displayValue}</div>
+            <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{stat.displayValue ?? "N/A"}</div>
             <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
           </div>
         ))}

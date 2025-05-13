@@ -1,4 +1,3 @@
-import React from "react";
 import { Users, Info, ChevronRight } from "lucide-react";
 
 interface LeagueSettingsProps {

@@ -1,6 +1,6 @@
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
-import { IBoxScore } from "../../types/boxScore"
+import { IBoxScoreItem } from "../../types/boxScore"
 import { rankByDefensiveStats } from "../../utils/boxScoreUtils"
 import PlayerBoxScoreSmallCard from "../player/PlayerSmallCard"
 import { Shield } from "lucide-react"
@@ -8,7 +8,7 @@ import { useState } from "react"
 
 type Props = {
   fixture: IFixture,
-  boxScores: IBoxScore[]
+  boxScores: IBoxScoreItem[]
 }
 
 export default function FixtureDefensiveLeaders({ boxScores, fixture }: Props) {
@@ -52,7 +52,7 @@ export default function FixtureDefensiveLeaders({ boxScores, fixture }: Props) {
       </div>
 
       {sortedList.length > 4 && <div className="mt-3" >
-        <p onClick={toogle} className="dark:text-slate-400 text-slate-600" >{showMore ? "Show Less" : "Show More"}</p>
+        <p onClick={toogle} className="text-blue-500 hover:text-blue-600 font-bold cursor-pointer dark:hover:text-blue-400 " >{showMore ? "Show Less" : "Show More"}</p>
       </div>}
 
     </TitledCard>

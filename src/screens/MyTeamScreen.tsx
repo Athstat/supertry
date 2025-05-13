@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Team } from "../types/team";
 import { TeamStats } from "../components/team/TeamStats";
 import { TeamHeader } from "../components/my-team/TeamHeader";
@@ -13,6 +13,8 @@ import {
   useTeamData,
 } from "../components/my-team/TeamDataProvider";
 import { TeamActions, useTeamActions } from "../components/my-team/TeamActions";
+import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
+import { RankedFantasyTeam } from "../types/league";
 
 type TabType = "edit-team" | "view-pitch";
 
@@ -21,6 +23,7 @@ const TeamContent: React.FC<{
   activeTab: TabType;
   setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
 }> = ({ activeTab, setActiveTab }) => {
+  
   const { positionList, players, formation } = useTeamData();
 
   const {
@@ -28,7 +31,6 @@ const TeamContent: React.FC<{
     handlePositionSelect,
     handleViewStats,
     handleSwapPlayer,
-    fetchingMarketPlayers,
   } = useTeamActions();
 
   return (
@@ -50,8 +52,10 @@ const TeamContent: React.FC<{
 // Main content that uses both TeamData and TeamActions contexts
 const MyTeamContent: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
-  const [activeTab, setActiveTab] = useState<TabType>("edit-team");
+  const [activeTab, setActiveTab] = useState<TabType>("view-pitch");
   const [initialized, setInitialized] = useState(false);
+  const {state} = useLocation();
+  const teamWithRank = state?.teamWithRank ? state?.teamWithRank as RankedFantasyTeam : undefined;
 
   const {
     team,
@@ -85,39 +89,43 @@ const MyTeamContent: React.FC = () => {
   }
 
   return (
-    <main className="container mx-auto px-4 py-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Team Header */}
-        <TeamHeader
-          team={team}
-          athletesCount={athletes.length}
-          totalPoints={totalPoints}
-          leagueInfo={leagueInfo}
-          fetchingLeague={fetchingLeague}
-        />
-
-        {/* Team Stats */}
-        <TeamStats
-          team={
-            {
-              ...team,
-              totalPoints,
-              players,
-              formation,
-              matchesPlayed,
-              rank: (team as any).rank || 0,
-            } as Team
-          }
-        />
-
-        {/* Team Actions with Tabs Content as children */}
-        {teamId && (
-          <TeamActions teamId={teamId}>
-            <TeamContent activeTab={activeTab} setActiveTab={setActiveTab} />
-          </TeamActions>
-        )}
-      </div>
-    </main>
+    <FantasyLeagueProvider league={leagueInfo ?? undefined} >
+      <main className="container mx-auto px-4 py-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Team Header */}
+          <TeamHeader
+            team={team}
+            athletesCount={athletes.length}
+            totalPoints={totalPoints}
+            leagueInfo={leagueInfo}
+            fetchingLeague={fetchingLeague}
+            rank={teamWithRank?.rank}
+          />
+          {/* Team Stats */}
+          <TeamStats
+            team={
+              {
+                ...team,
+                totalPoints,
+                players,
+                formation,
+                matchesPlayed,
+                ...(teamWithRank ? {rank: teamWithRank?.rank} : {}),
+              } as Team
+            }
+          />
+          {/* Team Actions with Tabs Content as children */}
+          {teamId && (
+            <TeamActions teamId={teamId}>
+              <TeamContent 
+                activeTab={activeTab}
+                setActiveTab={setActiveTab} 
+              />
+            </TeamActions>
+          )}
+        </div>
+      </main>
+    </FantasyLeagueProvider>
   );
 };
 

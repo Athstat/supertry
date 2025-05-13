@@ -7,7 +7,7 @@ import PostSignUpWelcomeScreen from "./screens/PostSignUpWelcomeScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { JoinLeagueScreen } from "./screens/JoinLeagueScreen";
 import { LeagueScreen } from "./screens/LeagueScreen";
-import { MyTeamsScreen } from "./screens/MyTeamsScreen";
+import { MyTeamsListScreen } from "./screens/MyTeamsScreen";
 import { TeamCreationScreen } from "./screens/TeamCreationScreen";
 import { ReviewTeamScreen } from "./screens/ReviewTeamScreen";
 import { MyTeamScreen } from "./screens/MyTeamScreen";
@@ -126,7 +126,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <MyTeamsScreen />
+              <MyTeamsListScreen />
             </Layout>
           </ProtectedRoute>
         }
