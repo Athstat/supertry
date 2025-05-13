@@ -3,7 +3,7 @@ import { IFantasyLeague } from "../../types/fantasyLeague";
 import { LeagueInfo, RankedFantasyTeam } from "../../types/league";
 import { authService } from "../../services/authService";
 import { useLocation, useParams } from "react-router-dom";
-import { useFetch } from "../../hooks/useAsync";
+import { useFetch } from "../../hooks/useFetch";
 import { leagueService } from "../../services/leagueService";
 
 /** Hook for fetching league information on league screen */

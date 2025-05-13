@@ -9,7 +9,7 @@ import { Player } from "../../types/team";
 import { Position } from "../../types/position";
 import { fantasyTeamService  } from "../../services/teamService";
 import { leagueService } from "../../services/leagueService";
-import { useFetch } from "../../hooks/useAsync";
+import { useFetch } from "../../hooks/useFetch";
 
 interface TeamDataContextType {
   team: IFantasyClubTeam | null;

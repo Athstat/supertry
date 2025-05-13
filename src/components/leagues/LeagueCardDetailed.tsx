@@ -1,5 +1,5 @@
 import { Lock, Users } from "lucide-react"
-import { useFetch } from "../../hooks/useAsync"
+import { useFetch } from "../../hooks/useFetch"
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { IFantasyLeague, IFantasyLeagueTeam } from "../../types/fantasyLeague"
 import { LoadingState } from "../ui/LoadingState"

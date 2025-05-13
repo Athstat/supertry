@@ -2,7 +2,7 @@
 
 import { useLocation, useParams } from "react-router-dom"
 import { IFantasyLeague } from "../../../types/fantasyLeague";
-import { useFetch } from "../../../hooks/useAsync";
+import { useFetch } from "../../../hooks/useFetch";
 import { gamesService } from "../../../services/gamesService";
 import { Info } from "lucide-react";
 

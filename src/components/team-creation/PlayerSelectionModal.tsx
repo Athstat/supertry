@@ -10,7 +10,7 @@ import TableHeader from "./TableHeader";
 import PlayerList from "./player-selection-components/PlayerList";
 
 // Import hooks
-import { useFetch } from "../../hooks/useAsync";
+import { useFetch } from "../../hooks/useFetch";
 import { gamesService } from "../../services/gamesService";
 import { LoadingState } from "../ui/LoadingState";
 import usePlayersFilter from "./player-selection-components/usePlayersFilter";

@@ -4,16 +4,22 @@ import { userRankingsService } from "../../services/userRankingsService";
 import { LoadingState } from "../ui/LoadingState";
 import UserRankingFocusShort from "./UserRankingFocusShort";
 import UserRankingsItem from "./UserRankingsItem";
+import { useFetch } from "../../hooks/useFetch";
 
 export default function UserRankingsLeaderBoard() {
 
-    const {data: rankings, isLoading} = useSWR([1, 15], userRankingsService.getUserRankings);
+    const {data: rankings, isLoading, error} = useFetch(
+        "rankings",[],
+        async () => await userRankingsService.getUserRankings()
+    );
+
+    console.log("Errors ", error);
     
     if (isLoading) return <LoadingState  />
 
-    if (!rankings) return <></>
+    if (!rankings) return;
 
-    let shortList = rankings;
+    let shortList = rankings ?? [];
 
     shortList = shortList.slice(0, 15);
 

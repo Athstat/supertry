@@ -38,7 +38,7 @@ export function useFetch<T, E>(
     cacheGroup: string,
     key: E,
     fetcher: (key: E) => Promise<T>,
-    dependencies: any[]
+    dependencies?: any[]
 ): SWRResponse<T, any> {
     const fetchKey = [key, cacheGroup, dependencies]
     return useSWR<T>(fetchKey, async () => await fetcher(key));

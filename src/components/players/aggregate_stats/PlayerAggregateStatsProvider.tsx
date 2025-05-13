@@ -1,5 +1,5 @@
 import { ReactNode, useCallback } from "react";
-import { useAsync } from "../../../hooks/useAsync";
+import { useAsync } from "../../../hooks/useFetch";
 import { athleteSportActionsService } from "../../../services/athleteSportsActions";
 import { SportAction } from "../../../types/sports_actions";
 import { PlayerAggregateStatsContext } from "../../../contexts/PlayerAggregateStatsContext";
