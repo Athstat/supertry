@@ -1,4 +1,4 @@
-import { Users } from "lucide-react"
+import { Lock, Users } from "lucide-react"
 import { useFetch } from "../../hooks/useAsync"
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { IFantasyLeague, IFantasyLeagueTeam } from "../../types/fantasyLeague"
@@ -8,6 +8,9 @@ import { leagueService } from "../../services/leagueService"
 import { LeagueCardNoTeamPlaceholder } from "./league_dashboard_ui/LeagueCardNoTeamPlaceholder"
 import LeagueCardMyTeamSection from "./league_dashboard_ui/LeagueCardMyTeamSection"
 import LeagueCardFixturesSection from "./league_dashboard_ui/LeagueCardFixturesSection"
+import LeagueTeamsCount from "./league_card_small/LeagueTeamsCount"
+import { isLeagueLocked } from "../../utils/leaguesUtils"
+import LeagueLiveIndicator from "./LeagueLiveIndicator"
 
 type Props = {
     league: IFantasyLeague
@@ -23,6 +26,8 @@ export default function LeagueCardDetailed({ league }: Props) {
     const leagueTeams = data ?? [];
     let teamForLeague: IFantasyLeagueTeam | undefined;
     let teamRank = 0;
+
+    const isLocked = isLeagueLocked(league.join_deadline);
 
     leagueTeams.forEach((t, index) => {
         if (t.kc_id === user.id) {
@@ -52,13 +57,14 @@ export default function LeagueCardDetailed({ league }: Props) {
                 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ">
                     <div className="space-y-2">
-                        <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{league.title}</h1>
+                        <h1 className="text-xl md:text-2xl flex flex-row items-center gap-1 font-bold text-gray-900 dark:text-white">
+                            {isLocked && <Lock className="w-5 h-5" />}
+                            {league.title}
+                        </h1>
                         
-                        <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-300">
-                            <div className="flex items-center gap-2">
-                                <Users className="w-4 h-4" />
-                                <span>{leagueTeams.length} Teams</span>
-                            </div>
+                        <div className="flex flex-row items-center justify-start gap-2" >
+                            <LeagueTeamsCount league={league} />
+                            <LeagueLiveIndicator league={league} />
                         </div>
 
                     </div>
@@ -70,7 +76,7 @@ export default function LeagueCardDetailed({ league }: Props) {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                     {/* My Team Section */}
                     {teamForLeague && (
-                        <LeagueCardMyTeamSection rank={teamRank} team={teamForLeague} />
+                        <LeagueCardMyTeamSection league={league} rank={teamRank} team={teamForLeague} />
                     )}
 
                     {!teamForLeague && (

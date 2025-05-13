@@ -51,6 +51,8 @@ export default function LeagueLiveIndicator({ league, className }: Props) {
 
     }, [data, league]);
 
+    if (isLoading) return ;
+
     if (!isLive && !isLoading) return;
 
     return (
@@ -107,6 +109,8 @@ export function LeagueLiveIndicatorSolid({ league, className }: Props) {
         }
 
     }, [data, league]);
+
+    if (isLoading) return ;
 
     if (!isLive && !isLoading) return;
 

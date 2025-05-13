@@ -1,10 +1,11 @@
 import { Shield, Pencil, Trophy, Star, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
+import { IFantasyLeague, IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 
 type MyTeamSectionProps = {
     team: IFantasyLeagueTeam,
-    rank: number
+    rank: number,
+    league: IFantasyLeague
 }
 
 /** Renders a my team card */
