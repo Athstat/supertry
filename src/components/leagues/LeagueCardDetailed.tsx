@@ -1,4 +1,4 @@
-import { Lock, Users } from "lucide-react"
+import { Lock } from "lucide-react"
 import { useFetch } from "../../hooks/useFetch"
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { IFantasyLeague, IFantasyLeagueTeam } from "../../types/fantasyLeague"

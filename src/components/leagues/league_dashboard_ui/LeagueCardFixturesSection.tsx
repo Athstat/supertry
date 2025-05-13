@@ -47,7 +47,7 @@ export default function LeagueCardFixturesSection({ league }: FixturesSectionPro
                 const { game_status } = fixtureSumary(fixture);
 
                 return (
-                    <div onClick={() => handleClickfixture(fixture)} key={index} className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 hover:shadow-md transition-all">
+                    <div onClick={() => handleClickfixture(fixture)} key={index} className="bg-slate-50 cursor-pointer border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 hover:shadow-md transition-all">
                         <div className="flex flex-col gap-4">
 
                             <div className="flex items-center justify-between gap-4">
