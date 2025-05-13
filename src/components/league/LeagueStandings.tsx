@@ -1,9 +1,8 @@
-import { useRef, useEffect, Ref, useContext } from "react";
+import { useRef, useEffect, Ref } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
-import { FantasyLeagueContext } from "../../contexts/FantasyLeagueContext";
 
 interface LeagueStandingsProps {
   teams: RankedFantasyTeam[];
@@ -16,21 +15,17 @@ interface LeagueStandingsProps {
 
 export function LeagueStandings({
   teams,
-  showJumpButton,
-  onJumpToTeam,
   isLoading = false,
   error = null,
   onTeamClick,
 }: LeagueStandingsProps) {
+  
   const userTeamRef = useRef<HTMLTableRowElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
   const ROW_HEIGHT = 64;
   const HEADER_HEIGHT = 56;
   const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
-
-  //console.log(teams);
-  const user = authService.getUserInfo();
 
   // Scroll to user's team when component mounts or teams change
   useEffect(() => {
@@ -59,11 +54,6 @@ export function LeagueStandings({
     if (onTeamClick) {
       onTeamClick(team);
     }
-  };
-
-  // Helper function to check if a team is the user's team
-  const isUserTeamCheck = (team: RankedFantasyTeam): boolean => {
-    return user ? (team.userId === user.id) : false;
   };
 
   return (

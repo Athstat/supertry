@@ -17,9 +17,8 @@ import { useNavigate } from "react-router-dom";
 type LeagueScreenTabs = "standings" | "chat" | "fixtures";
 
 export function LeagueScreen() {
+  
   const [showSettings, setShowSettings] = useState(false);
-
-  const hasJoinedLeague = false;
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<LeagueScreenTabs>("standings");
