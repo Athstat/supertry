@@ -12,9 +12,9 @@ import { format } from "date-fns"
 import { IFixture } from "../../types/games"
 import PrimaryButton from "../shared/buttons/PrimaryButton"
 import { analytics } from "../../services/anayticsService"
-import { NoMyTeamPlaceholder } from "./league_dashboard_ui/NoMyTeamPlaceholder"
-import MyTeamSection from "./league_dashboard_ui/MyTeamSection"
-import FixturesSection from "./league_dashboard_ui/FxituresSection"
+import { LeagueCardNoTeamPlaceholder } from "./league_dashboard_ui/NoMyTeamPlaceholder"
+import LeagueCardMyTeamSection from "./league_dashboard_ui/MyTeamSection"
+import LeagueCardFixturesSection from "./league_dashboard_ui/FxituresSection"
 
 type Props = {
     league: IFantasyLeague
@@ -65,18 +65,18 @@ export default function LeagueCardDetailed({ league }: Props) {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                     {/* My Team Section */}
                     {teamForLeague && (
-                        <MyTeamSection rank={teamRank} team={teamForLeague} />
+                        <LeagueCardMyTeamSection rank={teamRank} team={teamForLeague} />
                     )}
 
                     {!teamForLeague && (
-                        <NoMyTeamPlaceholder league={league} />
+                        <LeagueCardNoTeamPlaceholder league={league} />
                     )}
 
                     {/* Fixtures Section */}
                     <div >
                         <div className="">
                             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Fixtures</h2>
-                            <FixturesSection league={league} />
+                            <LeagueCardFixturesSection league={league} />
                         </div>
                     </div>
                 </div>

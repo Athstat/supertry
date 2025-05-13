@@ -8,7 +8,7 @@ type MyTeamSectionProps = {
 }
 
 /** Renders a my team card */
-export default function MyTeamSection({ team, rank }: MyTeamSectionProps) {
+export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionProps) {
     const navigate = useNavigate();
 
     const handleClick = () => {

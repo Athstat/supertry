@@ -12,7 +12,7 @@ type FixturesSectionProps = {
     league: IFantasyLeague
 }
 
-export default function FixturesSection({ league }: FixturesSectionProps) {
+export default function LeagueCardFixturesSection({ league }: FixturesSectionProps) {
 
     const navigate = useNavigate();
     const { data, isLoading } = useFetch("fixtures", league.official_league_id, gamesService.getGamesByCompetitionId);

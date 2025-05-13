@@ -9,7 +9,7 @@ type NoTeamPlaceholderProps = {
 }
 
 /** Renders placeholder when there is no 'My Team' */
-export function NoMyTeamPlaceholder({ league }: NoTeamPlaceholderProps) {
+export function LeagueCardNoTeamPlaceholder({ league }: NoTeamPlaceholderProps) {
 
     const navigate = useNavigate();
 
