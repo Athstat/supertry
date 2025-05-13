@@ -34,7 +34,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   isVisible,
   teamName,
   leagueName,
-  onClose,
+  // onClose,
   onGoToLeague,
   onViewTeam,
 }) => {

@@ -155,7 +155,7 @@ export const usePlayersFilter = ({
       );
 
       // Budget check
-      const isAffordable = player.price <= remainingBudget;
+      // const isAffordable = player.price <= remainingBudget;
 
       // Availability filter check - only apply if filterAvailable is true
       const passedAvailabilityFilter =
