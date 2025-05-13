@@ -49,7 +49,7 @@ export default function LeagueLiveIndicator({ league }: Props) {
 
     }, [data, league]);
 
-    if (!isLive) return null;
+    if (!isLive && !isLoading) return;
 
     return (
         <div className="inline-flex items-center gap-1 bg-gradient-to-r from-red-500/10 to-red-400/10 px-2.5 py-0.5 rounded-lg border border-red-500/20">

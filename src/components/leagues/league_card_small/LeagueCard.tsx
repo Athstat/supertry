@@ -6,11 +6,11 @@ import { useCountdown } from "../../../hooks/useCountdown";
 import LeagueLockStatus from "./LeagueLockStatus";
 import { calculateJoinDeadline, isLeagueLocked } from "../../../utils/leaguesUtils";
 import LeagueLiveIndicator from "../LeagueLiveIndicator";
+import LeagueTeamsCount from "./LeagueTeamsCount";
 
 export function LeagueCard({
   league,
   onLeagueClick,
-  teamCount,
   isLoading = false,
   custom = 0,
   isJoined = false,
@@ -60,17 +60,8 @@ export function LeagueCard({
 
           <div className="flex flex-row items-center gap-2" >
 
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-              <Users size={16} />
-              <span>
-                {isLoading ? (
-                  <Loader size={12} className="animate-spin" />
-                ) : (
-                  `${teamCount || 0} teams joined`
-                )}
-              </span>
-              <LeagueLiveIndicator league={league} />
-            </div>
+            <LeagueTeamsCount league={league} />
+            <LeagueLiveIndicator league={league} />
           </div>
 
           {!isLocked && adjustedDeadline && (
