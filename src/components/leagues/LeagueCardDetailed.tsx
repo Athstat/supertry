@@ -39,7 +39,9 @@ export default function LeagueCardDetailed({ league }: Props) {
     });
 
     const handleLeagueClick = () => {
-        navigate(`/league/${league.official_league_id}`, { state: { league } });
+        navigate(`/league/${league.official_league_id}`, { 
+            state: { league } 
+        });
     };
 
     return (
