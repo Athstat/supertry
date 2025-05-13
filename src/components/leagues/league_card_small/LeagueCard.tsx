@@ -1,18 +1,23 @@
-import React from "react";
-import { Users, ChevronRight, Loader, Calendar, Check } from "lucide-react";
+import { ChevronRight, Calendar, Check } from "lucide-react";
 import { motion } from "framer-motion";
-import { LeagueCardProps } from "./types";
+import { LeagueCardProps } from "../types";
 import { format } from "date-fns";
-import { useCountdown } from "../../hooks/useCountdown";
+import { useCountdown } from "../../../hooks/useCountdown";
+import LeagueLockStatus from "./LeagueLockStatus";
+import { calculateJoinDeadline, isLeagueLocked } from "../../../utils/leaguesUtils";
+import LeagueLiveIndicator from "../LeagueLiveIndicator";
+import LeagueTeamsCount from "./LeagueTeamsCount";
 
 export function LeagueCard({
   league,
   onLeagueClick,
-  teamCount,
-  isLoading = false,
   custom = 0,
   isJoined = false,
 }: LeagueCardProps) {
+
+  const isLocked = isLeagueLocked(league.join_deadline);
+  const adjustedDeadline = calculateJoinDeadline(league);
+
   return (
     <motion.div
       initial="hidden"
@@ -46,31 +51,20 @@ export function LeagueCard({
               Joined
             </div>
           )}
-          <div
-            className={`px-2 py-0.5 text-xs rounded-full ${league.is_open
-                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-                : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-              }`}
-          >
-            {league.is_open ? "Open" : "Closed"}
-          </div>
+          <LeagueLockStatus league={league} />
         </div>
       </div>
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-            <Users size={16} />
-            <span>
-              {isLoading ? (
-                <Loader size={12} className="animate-spin" />
-              ) : (
-                `${teamCount || 0} teams joined`
-              )}
-            </span>
+
+          <div className="flex flex-row items-center gap-2" >
+
+            <LeagueTeamsCount league={league} />
+            <LeagueLiveIndicator league={league} />
           </div>
 
-          {league.join_deadline && (
-            <JoinDeadlineCountdown  joinDeadline={league.join_deadline} />
+          {!isLocked && adjustedDeadline && (
+            <JoinDeadlineCountdown joinDeadline={adjustedDeadline} />
           )}
 
         </div>
@@ -86,7 +80,7 @@ type JoinDeadlineCountdownProps = {
   joinDeadline: Date
 }
 
-function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
+function JoinDeadlineCountdown({ joinDeadline }: JoinDeadlineCountdownProps) {
 
   // Countdown should start two days before the join deadline
   const today = new Date();
@@ -98,7 +92,7 @@ function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
 
   const showCountDown = !deadlinePassed && diff <= oneDay;
 
-  const {hours, seconds, minutes} = useCountdown(showCountDown ? diff : 0);
+  const { hours, seconds, minutes } = useCountdown(showCountDown ? diff : 0);
 
   return (
     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
@@ -110,7 +104,7 @@ function JoinDeadlineCountdown({joinDeadline} : JoinDeadlineCountdownProps) {
         </strong>}
 
         {showCountDown && <strong>
-          {`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0") }`}
+          {`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`}
         </strong>}
       </span>
     </div>

@@ -1,4 +1,4 @@
-import { differenceInDays } from "date-fns";
+import { add, differenceInDays } from "date-fns";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { leagueService } from "../services/leagueService";
 
@@ -82,3 +82,40 @@ export function getRankChange(currentRank: number, lastRank: number) {
   }
   return null;
 };
+
+/** Returns true if a league has passed its join dealine and can't have teams added to it */
+export function isLeagueLocked(joinDeadline: Date | null | undefined) {
+  if (!joinDeadline) return false;
+
+  const thirtyMinutes = 1000 * 60 * 30;
+  
+  const now = new Date();
+  const deadline = new Date(joinDeadline);
+
+  const diff = deadline.valueOf() - now.valueOf();
+
+  return diff < thirtyMinutes;
+}
+
+/** Returns the last possible date that users can join a league */
+export function calculateJoinDeadline(league: IFantasyLeague) {
+  
+  if (league.join_deadline) {
+    const deadline = new Date(league.join_deadline);
+    
+    const adjustedDeadline = add(deadline, {
+      hours: 1,
+      minutes: 30
+    });
+
+    return adjustedDeadline;
+  }
+
+  return undefined;
+}
+
+/** Returns a bias that can be used to sort locked leagues and unclocked leagues */
+export function leagueLockBias(a: IFantasyLeague) {
+  const isLocked = isLeagueLocked(a.join_deadline);
+  return isLocked ? 0 : 1;
+}

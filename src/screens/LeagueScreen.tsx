@@ -13,13 +13,14 @@ import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { useFantasyLeague } from "../components/league/useFantasyLeague";
 import { analytics } from "../services/anayticsService";
 import { useNavigate } from "react-router-dom";
+import { isLeagueLocked } from "../utils/leaguesUtils";
+import { Lock } from "lucide-react";
 
 type LeagueScreenTabs = "standings" | "chat" | "fixtures";
 
 export function LeagueScreen() {
-  const [showSettings, setShowSettings] = useState(false);
 
-  const hasJoinedLeague = false;
+  const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<LeagueScreenTabs>("standings");
@@ -82,6 +83,8 @@ export function LeagueScreen() {
     // Navigate to team details page or open a modal
   };
 
+  const isLocked = isLeagueLocked(league?.join_deadline);
+
   return (
     <FantasyLeagueProvider userTeam={userTeam} league={league} >
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
@@ -91,12 +94,22 @@ export function LeagueScreen() {
           onOpenSettings={() => setShowSettings(true)}
           isLoading={isLoading}
         >
-          {!isLoading && userTeam === undefined && (
+          {!isLoading && userTeam === undefined && !isLocked && (
             <button
               onClick={handleJoinLeague}
               className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
             >
               Join This League
+            </button>
+          )}
+
+          {!isLoading && userTeam === undefined && isLocked && (
+            <button
+              disabled
+              className="hidden cursor-not-allowed opacity-70 lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition flex-row items-center justify-center gap-1"
+            >
+              Join This League
+              <Lock className="w-3 h-3" />
             </button>
           )}
         </LeagueHeader>
@@ -127,7 +140,7 @@ export function LeagueScreen() {
           </div>
           {/* Tab Content */}
           <div className="space-y-6">
-            {activeTab === "standings" && (
+            {activeTab === "standings" && league && (
               <LeagueStandings
                 teams={teams}
                 showJumpButton={showJumpButton}
@@ -148,6 +161,7 @@ export function LeagueScreen() {
                   handleTeamClick(team);
                   viewTeam(team.id);
                 }}
+                league={league}
               />
             )}
             {activeTab === "chat" && (
@@ -175,12 +189,22 @@ export function LeagueScreen() {
           />
         )}
         {/* Mobile CTA Button */}
-        {!isLoading && userTeam === undefined && (
+        {!isLoading && userTeam === undefined && league && !isLocked && (
           <button
             onClick={handleJoinLeague}
             className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
           >
             Join This League
+          </button>
+        )}
+
+        {!isLoading && userTeam === undefined && isLocked && (
+          <button
+            disabled
+            className="lg:hidden cursor-not-allowed flex flex-row items-center justify-center gap-2 fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
+          >
+            Join This League
+            <Lock className="w-4 h-4" />
           </button>
         )}
       </div>

@@ -29,7 +29,7 @@ export function useFantasyLeague() {
         currentGameweek: 0,
         totalGameweeks: 0,
         totalTeams: 0,
-        prizePool: "$0",
+        prizePool: "$0"
     });
 
     const user = authService.getUserInfo();
@@ -55,7 +55,8 @@ export function useFantasyLeague() {
             totalGameweeks: league?.total_gameweeks || 0,
             totalTeams: teams?.length ?? 0,
             prizePool: formatPrizePool(league),
-            userRank: userTeamTemp?.rank
+            userRank: userTeamTemp?.rank,
+            joinDeadline: league?.join_deadline
         });
 
         setUserTeam(userTeamTemp);

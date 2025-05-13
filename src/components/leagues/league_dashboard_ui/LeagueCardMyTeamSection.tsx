@@ -1,15 +1,18 @@
-import { Shield, Pencil, Trophy, Star, Users } from "lucide-react";
+import { Shield, Pencil, Trophy, Star, Users, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
+import { IFantasyLeague, IFantasyLeagueTeam } from "../../../types/fantasyLeague";
+import { isLeagueLocked } from "../../../utils/leaguesUtils";
 
 type MyTeamSectionProps = {
     team: IFantasyLeagueTeam,
-    rank: number
+    rank: number,
+    league: IFantasyLeague
 }
 
 /** Renders a my team card */
-export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionProps) {
+export default function LeagueCardMyTeamSection({ team, rank, league }: MyTeamSectionProps) {
     const navigate = useNavigate();
+    const isLocked = isLeagueLocked(league.join_deadline);
 
     const handleClick = () => {
         navigate(`/my-team/${team.team_id}`);
@@ -21,7 +24,7 @@ export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionPro
 
     return (
 
-        <div className="cursor-pointer w-full flex flex-col gap-3 dark:text-white ">
+        <div onClick={handleClick}  className="cursor-pointer w-full flex flex-col gap-3 dark:text-white ">
             <p className="text-xl font-bold" >My Team</p>
 
             <div className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl flex-1 p-4 space-y-4">
@@ -30,9 +33,14 @@ export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionPro
                         <Shield className="w-6 h-6 text-blue-500" />
                         <h3 className="font-semibold text-md trucate lg:text-lg">{team.name}</h3>
                     </div>
-                    <button onClick={handleClick} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+
+                    {!isLocked && <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
                         <Pencil className="w-5 h-5" />
-                    </button>
+                    </button>}
+
+                    {isLocked && <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                        <Lock className="w-5 h-5" />
+                    </button>}
                 </div>
 
                 <div className="text-slate-700 flex flex-row items-center dark:text-slate-400" >
@@ -40,7 +48,7 @@ export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionPro
                         <Users className="w-4 h-4" />
                         <p>Players {team.athletes.length}</p>
                     </div>
-{/* 
+                    {/* 
                     <div className="flex flex-row items-center gap-1" >
                         <CircleDollarSign className="w-4 h-4" />
                         <p>Team Value {totalTeamValue}</p>

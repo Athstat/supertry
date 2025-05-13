@@ -1,10 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Loader } from "lucide-react";
+import { Loader, Lock } from "lucide-react";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
 import { TabButton } from "../shared/TabButton";
 import { TeamFormation } from "../team/TeamFormation";
+import { isLeagueLocked } from "../../utils/leaguesUtils";
+import { IFantasyLeague } from "../../types/fantasyLeague";
 
 interface TeamTabsContentProps {
   activeTab: "edit-team" | "view-pitch";
@@ -19,6 +21,7 @@ interface TeamTabsContentProps {
   fetchingMarketPlayers: boolean;
   handleViewStats: (player: Player) => void;
   handleSwapPlayer: (player: Player) => void;
+  league?: IFantasyLeague
 }
 
 export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
@@ -32,20 +35,36 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
   fetchingMarketPlayers,
   handleViewStats,
   handleSwapPlayer,
+  league
 }) => {
+
+  const isLocked = isLeagueLocked(league?.join_deadline);
+
   return (
     <>
       {/* Tabbed Interface */}
       <div className="mt-8">
         <div className="flex space-x-2 border-b-0">
-          <TabButton
+          
+          {!isLocked && <TabButton
             active={activeTab === "edit-team"}
             onClick={() => setActiveTab("edit-team")}
           >
             <div className="flex items-center gap-1">
               <span>Edit Team</span>
             </div>
-          </TabButton>
+          </TabButton>}
+
+          {isLocked && <TabButton
+            active={activeTab === "edit-team"}
+            onClick={() => {}}
+          >
+            <div className="flex items-center dark:text-slate-600 cursor-not-allowed gap-2 flex-row">
+              <span>Edit Team</span>
+              <Lock className="w-4 h-4" />
+            </div>
+          </TabButton>}
+
           <TabButton
             active={activeTab === "view-pitch"}
             onClick={() => setActiveTab("view-pitch")}
@@ -66,6 +85,7 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
             fetchingMarketPlayers={fetchingMarketPlayers}
             handleViewStats={handleViewStats}
             handleSwapPlayer={handleSwapPlayer}
+            isEditLocked={isLocked}
           />
         ) : (
           <ViewPitchContent
@@ -85,6 +105,7 @@ interface EditTeamViewProps {
   fetchingMarketPlayers: boolean;
   handleViewStats: (player: Player) => void;
   handleSwapPlayer: (player: Player) => void;
+  isEditLocked?: boolean
 }
 
 const EditTeamView: React.FC<EditTeamViewProps> = ({
@@ -93,6 +114,8 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
   fetchingMarketPlayers,
   handleViewStats,
   handleSwapPlayer,
+  isEditLocked
+  
 }) => {
   return (
     <div>
@@ -208,7 +231,8 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                       >
                         View Stats
                       </button>
-                      <button
+
+                      {!isEditLocked && <button
                         onClick={() => {
                           const playerForPosition: Player = {
                             id: position.player?.id || "",
@@ -237,7 +261,15 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                         ) : (
                           "Swap"
                         )}
-                      </button>
+                      </button>}
+
+                      {isEditLocked && <button
+                        className="w-full py-1.5 flex flex-row items-center justify-center gap-1 opacity-45 cursor-not-allowed bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                      >
+                        Swap
+                        <Lock className="w-3 h-3" />
+                      </button>}
+
                     </div>
                   </>
                 ) : (

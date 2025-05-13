@@ -1,9 +1,10 @@
-import { useRef, useEffect, Ref, useContext } from "react";
-import { Trophy, Loader, ChevronRight } from "lucide-react";
+import { useRef, useEffect, Ref } from "react";
+import { Trophy, Loader, ChevronRight, Lock } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
-import { FantasyLeagueContext } from "../../contexts/FantasyLeagueContext";
+import { IFantasyLeague } from "../../types/fantasyLeague";
+import { isLeagueLocked } from "../../utils/leaguesUtils";
 
 interface LeagueStandingsProps {
   teams: RankedFantasyTeam[];
@@ -12,25 +13,23 @@ interface LeagueStandingsProps {
   isLoading?: boolean;
   error?: string | null;
   onTeamClick?: (team: RankedFantasyTeam) => void;
+  league: IFantasyLeague
 }
 
 export function LeagueStandings({
   teams,
-  showJumpButton,
-  onJumpToTeam,
   isLoading = false,
   error = null,
   onTeamClick,
+  league
 }: LeagueStandingsProps) {
+  
   const userTeamRef = useRef<HTMLTableRowElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
   const ROW_HEIGHT = 64;
   const HEADER_HEIGHT = 56;
   const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
-
-  //console.log(teams);
-  const user = authService.getUserInfo();
 
   // Scroll to user's team when component mounts or teams change
   useEffect(() => {
@@ -59,11 +58,6 @@ export function LeagueStandings({
     if (onTeamClick) {
       onTeamClick(team);
     }
-  };
-
-  // Helper function to check if a team is the user's team
-  const isUserTeamCheck = (team: RankedFantasyTeam): boolean => {
-    return user ? (team.userId === user.id) : false;
   };
 
   return (
@@ -126,6 +120,7 @@ export function LeagueStandings({
                     team={team}
                     userTeamRef={userTeamRef}
                     handleTeamClick={handleTeamClick}
+                    league={league}
                   />
 
                 })}
@@ -169,9 +164,10 @@ type StandingsTableRowProps = {
   userTeamRef: Ref<any>,
   handleTeamClick: (team: RankedFantasyTeam) => void,
   index: number
+  league: IFantasyLeague
 }
 
-function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: StandingsTableRowProps) {
+function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }: StandingsTableRowProps) {
 
   const user = authService.getUserInfo();
   const isUserTeam = user ? user.id === team.userId : false;
@@ -240,25 +236,39 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: Standi
       </tr>
 
       {isUserTeam &&
-        <EditTeamButton team={team} />
+        <EditTeamButton team={team} league={league} />
       }
     </>
   )
 }
 
 type EditButtonProps = {
-  team: RankedFantasyTeam
+  team: RankedFantasyTeam,
+  league: IFantasyLeague
 }
 
-function EditTeamButton({team} : EditButtonProps) {
+function EditTeamButton({team, league} : EditButtonProps) {
 
   const navigate = useNavigate();
+  const isLocked = isLeagueLocked(league.join_deadline);
 
   const handleClick = () => {
     const uri = `/my-team/${team.id}`;
     navigate(uri, {
-      state: {teamWithRank: team}
+      state: {teamWithRank: team, league: league}
     });
+  };
+
+  if (isLocked) {
+    return (
+      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
+      
+      <button className="flex cursor-not-allowed font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
+        View Team <Lock className="w-4 h-4" />
+      </button>
+
+    </div>
+    )
   }
 
   return (

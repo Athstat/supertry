@@ -28,6 +28,7 @@ export interface LeagueInfo {
   totalTeams: number;
   prizePool: string;
   userRank?: number;
+  joinDeadline?: Date | null
 }
 
 export type LeagueFromState = {

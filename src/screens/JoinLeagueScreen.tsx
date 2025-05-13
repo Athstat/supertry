@@ -7,7 +7,7 @@ import { IFantasyLeague } from "../types/fantasyLeague";
 import { motion } from "framer-motion";
 
 // Import components
-import { LeagueCard } from "../components/leagues/LeagueCard";
+import { LeagueCard } from "../components/leagues/league_card_small/LeagueCard";
 import { activeLeaguesFilter, isLeagueOnTheClock } from "../utils/leaguesUtils";
 import { epochDiff } from "../utils/dateUtils";
 import { useCountdown } from "../hooks/useCountdown";
