@@ -26,14 +26,18 @@ export function LeagueCardNoTeamPlaceholder({ league }: NoTeamPlaceholderProps) 
     }
 
     return (
-        <div className="flex items-center justify-center w-full py-10 rounded-xl border-[6px] border-slate-400 dark:border-slate-700/40 border-dotted " >
+        <div className="flex items-center justify-center w-full py-10 rounded-xl border-[6px] lg:border-[3px] border-slate-100 dark:border-slate-700/40 border-dotted " >
+            
             <div className="flex flex-col gap-3" >  
                 <p className="text-slate-700 dark:text-slate-400" >You haven't picked your team for {league.title} yet</p>
+                
                 <PrimaryButton onClick={navigateToTeamCreation} className=" gap-1" >
                     Pick Your Team
                     <ArrowRight className="w-4 h-4" />
+                
                 </PrimaryButton>
             </div>
+
         </div>
     )
 }

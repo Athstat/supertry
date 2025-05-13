@@ -43,19 +43,29 @@ export default function LeagueCardDetailed({ league }: Props) {
     };
 
     return (
-        <div className="bg-white dark:text-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm transition-all hover:shadow-md">
+        <div
+            onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                    console.log("Clicked on empty space")
+                }
+            }} 
+            className="bg-white dark:text-white dark:hover:text-slate-50 dark:bg-slate-800/30 dark:hover:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm transition-all hover:shadow-md"
+        >
             {/* Header Section */}
 
-            <div className="p-6 border-gray-100 dark:border-gray-700/50">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div onClick={handleLeagueClick} className="p-6 border-gray-100 dark:border-gray-700/50 cursor-pointer">
+                
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ">
                     <div className="space-y-2">
                         <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{league.title}</h1>
+                        
                         <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-300">
                             <div className="flex items-center gap-2">
                                 <Users className="w-4 h-4" />
                                 <span>{leagueTeams.length} Teams</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

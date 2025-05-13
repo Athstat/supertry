@@ -49,7 +49,7 @@ export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionPro
 
                 <div className="grid grid-cols-2 flex-1 lg:grid-cols-1 gap-4">
 
-                    <div className=" dark:bg-slate-800 p-3 rounded-lg">
+                    <div className=" dark:bg-slate-800 bg-slate-100 p-3 rounded-lg">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
                             <Trophy className="w-4 h-4" />
                             <span className="text-sm">Rank</span>
@@ -57,7 +57,7 @@ export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionPro
                         <p className="text-xl font-bold">#{rank}</p>
                     </div>
 
-                    <div className="dark:bg-slate-800 p-3 rounded-lg">
+                    <div className="dark:bg-slate-800 bg-slate-100 p-3 rounded-lg">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
                             <Star className="w-4 h-4" />
                             <span className="text-sm">Points</span>
