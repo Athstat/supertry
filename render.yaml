@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: supertry-backend
+    runtime: node
+    buildCommand: npm install && npm run compile
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
+    autoDeploy: true
