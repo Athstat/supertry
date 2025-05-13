@@ -119,7 +119,7 @@ const MyTeamContent: React.FC = () => {
           />
           {/* Team Actions with Tabs Content as children */}
           {teamId && (
-            <TeamActions teamId={teamId}>
+            <TeamActions league={leagueInfo ?? undefined} teamId={teamId}>
               <TeamContent 
                 activeTab={activeTab}
                 setActiveTab={setActiveTab} 

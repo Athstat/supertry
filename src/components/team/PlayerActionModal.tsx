@@ -5,12 +5,15 @@ import { formatPosition } from "../../utils/athleteUtils";
 import { CircleDollarSign } from "lucide-react";
 import { useFetch } from "../../hooks/useAsync";
 import { athleteService } from "../../services/athleteService";
+import { IFantasyLeague } from "../../types/fantasyLeague";
+import { isLeagueLocked } from "../../utils/leaguesUtils";
 
 interface PlayerActionModalProps {
   player: Player;
   onClose: () => void;
   onViewStats: (player: Player) => void;
   onSwapPlayer: (player: Player) => void;
+  league?: IFantasyLeague
 }
 
 export function PlayerActionModal({
@@ -18,16 +21,19 @@ export function PlayerActionModal({
   onClose,
   onViewStats,
   onSwapPlayer,
+  league
 }: PlayerActionModalProps) {
 
-  const {data: info, isLoading} = useFetch("athletes", player.id, athleteService.getRugbyAthleteById);
+  const { data: info, isLoading } = useFetch("athletes", player.id, athleteService.getRugbyAthleteById);
+
+  const isSwapLocked = isLeagueLocked(league?.join_deadline);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
       onClick={onClose}
     >
       <motion.div
@@ -67,7 +73,7 @@ export function PlayerActionModal({
               )}
             </div>
             <div className="flex-1">
-              
+
               <div className="flex items-center justify-between mb-1">
                 <span className="font-semibold w-full text-md dark:text-gray-100">
                   {player.name}
@@ -112,7 +118,8 @@ export function PlayerActionModal({
               />
               <span className="font-medium">View Stats</span>
             </button>
-            <button
+
+            {!isSwapLocked && <button
               onClick={() => onSwapPlayer(player)}
               className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-dark-800/40 dark:hover:bg-dark-700/60 transition-colors text-gray-800 dark:text-gray-200"
             >
@@ -121,7 +128,18 @@ export function PlayerActionModal({
                 className="text-primary-600 dark:text-primary-400"
               />
               <span className="font-medium">Swap Player</span>
-            </button>
+            </button>}
+
+            {isSwapLocked && <button
+              className="flex flex-col opacity-30 cursor-not-allowed items-center justify-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-dark-800/40 dark:hover:bg-dark-700/60 transition-colors text-gray-800 dark:text-gray-200"
+            >
+              <Users
+                size={24}
+                className="text-primary-600 dark:text-primary-400"
+              />
+              <span className="font-medium">Swap Player</span>
+            </button>}
+
           </div>
         </div>
       </motion.div>

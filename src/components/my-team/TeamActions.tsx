@@ -10,6 +10,7 @@ import { usePlayerProfile } from "../../hooks/usePlayerProfile";
 import { useTeamData } from "./TeamDataProvider";
 import { fantasyTeamService } from "../../services/teamService";
 import { athleteService } from "../../services/athleteService";
+import { IFantasyLeague } from "../../types/fantasyLeague";
 
 // Define the context type
 interface TeamActionsContextType {
@@ -35,11 +36,13 @@ export const useTeamActions = () => {
 interface TeamActionsProps {
   teamId: string;
   children?: React.ReactNode;
+  league?: IFantasyLeague
 }
 
 export const TeamActions: React.FC<TeamActionsProps> = ({
   teamId,
   children,
+  league
 }) => {
   const { team, teamBudget, athletes, players, setAthletes } = useTeamData();
   const [showActionModal, setShowActionModal] = useState(false);
@@ -263,6 +266,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
             onClose={() => setShowActionModal(false)}
             onViewStats={handleViewStats}
             onSwapPlayer={handleSwapPlayer}
+            league={league}
           />
         )}
       </AnimatePresence>
