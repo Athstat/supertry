@@ -12,6 +12,9 @@ import { format } from "date-fns"
 import { IFixture } from "../../types/games"
 import PrimaryButton from "../shared/buttons/PrimaryButton"
 import { analytics } from "../../services/anayticsService"
+import { NoMyTeamPlaceholder } from "./league_dashboard_ui/NoMyTeamPlaceholder"
+import MyTeamSection from "./league_dashboard_ui/MyTeamSection"
+import FixturesSection from "./league_dashboard_ui/FxituresSection"
 
 type Props = {
     league: IFantasyLeague
@@ -59,14 +62,14 @@ export default function LeagueCardDetailed({ league }: Props) {
 
             <div className="px-6 pb-6">
 
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                     {/* My Team Section */}
                     {teamForLeague && (
                         <MyTeamSection rank={teamRank} team={teamForLeague} />
                     )}
 
                     {!teamForLeague && (
-                        <NoTeamPlaceholder league={league} />
+                        <NoMyTeamPlaceholder league={league} />
                     )}
 
                     {/* Fixtures Section */}
@@ -79,165 +82,5 @@ export default function LeagueCardDetailed({ league }: Props) {
                 </div>
             </div>
         </div>
-    )
-}
-
-type MyTeamSectionProps = {
-    team: IFantasyLeagueTeam,
-    rank: number
-}
-
-function MyTeamSection({ team, rank }: MyTeamSectionProps) {
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate(`/my-team/${team.team_id}`);
-    }
-
-    return (
-
-        <div className="cursor-pointer">
-
-            <div className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 space-y-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <Shield className="w-6 h-6 text-blue-500" />
-                        <h3 className="font-semibold text-md trucate lg:text-lg">{team.name}</h3>
-                    </div>
-                    <button onClick={handleClick} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                        <Pencil className="w-5 h-5" />
-                    </button>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-
-                    <div className=" dark:bg-slate-800 p-3 rounded-lg">
-                        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
-                            <Trophy className="w-4 h-4" />
-                            <span className="text-sm">Rank</span>
-                        </div>
-                        <p className="text-xl font-bold">#{rank}</p>
-                    </div>
-
-                    <div className="dark:bg-slate-800 p-3 rounded-lg">
-                        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
-                            <Star className="w-4 h-4" />
-                            <span className="text-sm">Points</span>
-                        </div>
-                        <p className="text-xl font-bold">{Math.floor(team.overall_score ?? 0)}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-type NoTeamPlaceholderProps = {
-    league: IFantasyLeague
-}
-
-function NoTeamPlaceholder({ league }: Props) {
-
-    const navigate = useNavigate();
-
-    const navigateToTeamCreation = () => {
-
-        analytics.trackTeamCreationStarted(
-            league.id,
-            league.official_league_id
-        );
-
-        navigate(`/${league.official_league_id}/create-team`, {
-            state: { league },
-        });
-    }
-
-    return (
-        <div className="flex items-center justify-center w-full py-10 rounded-xl bg-slate-800/30 " >
-            <div className="flex flex-col gap-3" >  
-                <p className="text-slate-700 dark:text-slate-400" >You haven't picked your team for {league.title} yet</p>
-                <PrimaryButton onClick={navigateToTeamCreation} className=" gap-1" >
-                    Pick Your Team
-                    <ArrowRight className="w-4 h-4" />
-                </PrimaryButton>
-            </div>
-        </div>
-    )
-}
-
-type FixturesSectionProps = {
-    league: IFantasyLeague
-}
-
-function FixturesSection({ league }: FixturesSectionProps) {
-
-    const navigate = useNavigate();
-    const { data, isLoading } = useFetch("fixtures", league.official_league_id, gamesService.getGamesByCompetitionId);
-    const fixtures = data ?? [];
-
-    if (isLoading) return <LoadingState />
-
-    const shortList = fixtures
-        .filter((f) => {
-            const start = league.start_round ?? 0;
-            const end = league.end_round ?? f.round;
-            return f.round >= start && f.round <= end;
-        })
-        .splice(0, 3);
-
-    if (shortList.length === 0) return null;
-
-
-    const handleShowMore = () => {
-        navigate(`/league/${league.id}`);
-    }
-
-    const handleClickfixture = (fixture: IFixture) => {
-        navigate(`/fixtures/${fixture.game_id}`);
-    }
-
-    return (
-        <div className="grid gap-4 grid-cols-1">
-            {shortList.map((fixture, index) => {
-                const { game_status } = fixtureSumary(fixture);
-
-                return (
-                    <div onClick={() => handleClickfixture(fixture)} key={index} className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 hover:shadow-md transition-all">
-                        <div className="flex flex-col gap-4">
-
-                            <div className="flex items-center justify-between gap-4">
-                                <div className="flex items-center gap-4 flex-1">
-                                    <TeamLogo className="w-12 h-12" url={fixture.team_image_url} />
-                                    <div className="min-w-0">
-                                        <p className="">{fixture.team_score}</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col items-center justify-center px-4">
-                                    <span className="text font-medium text-gray-600 dark:text-gray-400">
-                                        {game_status === "completed" ? "Final" :
-                                            fixture.kickoff_time ? format(fixture.kickoff_time, "HH:mm a") : ""}
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center gap-4 flex-1 justify-end">
-                                    <div className="min-w-0 text-right">
-                                        <p className="">{fixture.opposition_score}</p>
-                                    </div>
-
-                                    <TeamLogo className="w-12 h-12" url={fixture.opposition_image_url} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            })}
-
-            {fixtures.length > 3 &&
-                <div onClick={handleShowMore} className="text-blue-500 dark:hover:text-blue-400 mt-2 w-ful text-center items-center justify-center flex flex-col cursor-pointer" >
-                    <p>Show More</p>
-                </div>
-            }
-        </div >
     )
 }
