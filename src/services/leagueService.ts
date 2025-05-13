@@ -6,10 +6,9 @@ import { fantasyTeamService } from "./teamService";
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-      // Use the same base URL pattern as other services
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+      console.log("getting leagues: ", baseUrl);
 
       try {
         const response = await fetch(`${baseUrl}/api/v1/fantasy-leagues`, {
@@ -45,9 +44,9 @@ export const leagueService = {
    */
   getLeagueById: async (leagueId: number): Promise<IFantasyLeague | null> => {
     try {
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+      console.log("getting leagues: ", baseUrl);
 
       const token = localStorage.getItem("access_token");
       if (!token) {
@@ -86,9 +85,9 @@ export const leagueService = {
     leagueId: string | number
   ): Promise<IFantasyLeagueTeam[]> => {
     try {
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       const token = localStorage.getItem("access_token");
       if (!token) {
@@ -127,9 +126,9 @@ export const leagueService = {
     officialLeagueId: string
   ): Promise<IGamesLeagueConfig | null> => {
     try {
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       try {
         const response = await fetch(
@@ -166,7 +165,9 @@ export const leagueService = {
 
   joinLeague: async (league: any): Promise<any> => {
     try {
-      const baseUrl = "https://qa-games-app.athstat-next.com";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -192,9 +193,10 @@ export const leagueService = {
       //console.log("League for joining: ", league);
 
       // // Fetch the user's latest team
-      const userTeams = await fantasyTeamService.fetchUserTeams(
+      const userTeams = await fantasyTeamService
+        .fetchUserTeams
         // league.official_league_id
-      );
+        ();
 
       if (!userTeams || userTeams.length === 0) {
         throw new Error("Could not find your team. Please try again.");
@@ -235,7 +237,11 @@ export const leagueService = {
         );
       }
 
-      analytics.trackTeamCreationCompleted(league.id, latestTeam.id, league.official_league_id);
+      analytics.trackTeamCreationCompleted(
+        league.id,
+        latestTeam.id,
+        league.official_league_id
+      );
 
       return await response.json();
     } catch (error) {
@@ -252,9 +258,10 @@ export const leagueService = {
     try {
       // Try the first approach - look for user teams in the league
       try {
-        const userTeams = await fantasyTeamService.fetchUserTeams(
+        const userTeams = await fantasyTeamService
+          .fetchUserTeams
           // leagueId
-        );
+          ();
         // If the user has any teams in this league, they've joined it
         if (userTeams.length > 0) {
           return true;

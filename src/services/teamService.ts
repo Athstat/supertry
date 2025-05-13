@@ -12,9 +12,9 @@ export const fantasyTeamService = {
     teamId: string
   ): Promise<any> => {
     try {
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       // Get token for authentication
       const token = localStorage.getItem("access_token");
@@ -57,9 +57,9 @@ export const fantasyTeamService = {
    */
   fetchUserClub: async () => {
     try {
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -118,7 +118,9 @@ export const fantasyTeamService = {
    */
   fetchUserTeams: async (): Promise<IFantasyClubTeam[]> => {
     try {
-      const baseUrl = "https://qa-games-app.athstat-next.com";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -174,8 +176,9 @@ export const fantasyTeamService = {
     leagueId: string
   ): Promise<IFantasyClubTeam> => {
     try {
-      // Always use the production URL for this endpoint since it's not available in local dev
-      const baseUrl = "https://qa-games-app.athstat-next.com";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token (or use a default if not available)
       const token = localStorage.getItem("access_token");
@@ -247,9 +250,9 @@ export const fantasyTeamService = {
    */
   fetchTeamAthletes: async (teamId: string): Promise<IFantasyTeamAthlete[]> => {
     try {
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       // Get token for authentication
       const token = localStorage.getItem("access_token");

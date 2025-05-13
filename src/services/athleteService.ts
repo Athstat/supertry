@@ -27,7 +27,8 @@ export interface PowerRankingItem {
   kickoff_time: string;
 }
 
-export const baseUrl = "https://qa-games-app.athstat-next.com";
+export const baseUrl =
+  import.meta.env.VITE_API_BASE_URL || "https://qa-games-app.athstat-next.com";
 
 // Map of action names to human-friendly labels for player stats
 export const actionLabels: Record<string, string> = {
@@ -50,7 +51,7 @@ export const actionLabels: Record<string, string> = {
   Tries: "Tries",
   TurnoversConceded: "Turnovers Conceded",
   TurnoversWon: "Turnovers Won",
-  Starts: "Starts"
+  Starts: "Starts",
 };
 
 // Categories for grouping stats in the UI
@@ -114,10 +115,12 @@ export const athleteService = {
     athleteId: string
   ): Promise<PointsBreakdownItem[]> => {
     try {
-      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`)
+      const uri = getUri(
+        `/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`
+      );
       const response = await fetch(uri, {
         method: "GET",
-        headers: getAuthHeader()
+        headers: getAuthHeader(),
       });
 
       if (!response.ok) {
@@ -125,7 +128,6 @@ export const athleteService = {
       }
 
       return await response.json();
-
     } catch (error) {
       console.error("Error fetching athlete points breakdown:", error);
       throw error;
@@ -146,17 +148,16 @@ export const athleteService = {
 
       const response = await fetch(uri, {
         method: "GET",
-        headers: getAuthHeader()
+        headers: getAuthHeader(),
       });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch points breakdown: ${response.status}`);
       }
 
-      const json =  await response.json();
+      const json = await response.json();
 
       return json;
-
     } catch (error) {
       console.error("Error fetching athlete points breakdown:", error);
       throw error;
@@ -196,7 +197,7 @@ export const athleteService = {
         throw new Error(`API error: ${response.status}`);
       }
 
-      const json = await response.json() as SportAction[];
+      const json = (await response.json()) as SportAction[];
 
       // Filtering logic
       const filterByCompeition = (action: SportAction, cId: string) => {
@@ -214,23 +215,26 @@ export const athleteService = {
         const [, , actionCompId] = parts;
 
         return actionCompId === cId;
-      }
+      };
 
       console.log("API response data:", json);
 
-      console.log("Before filter ", json)
+      console.log("Before filter ", json);
 
-      const data = competitionId !== undefined ?
-        json.filter(a => filterByCompeition(a, competitionId))
-        : json;
+      const data =
+        competitionId !== undefined
+          ? json.filter((a) => filterByCompeition(a, competitionId))
+          : json;
 
       if (competitionId) {
-        console.log("Competition Id was set ")
-        console.log("After filter", json.filter(a => filterByCompeition(a, competitionId)))
+        console.log("Competition Id was set ");
+        console.log(
+          "After filter",
+          json.filter((a) => filterByCompeition(a, competitionId))
+        );
       }
 
       return groupSportActions(data);
-
     } catch (error) {
       console.error("Error fetching player statistics:", error);
       // Fall back to mock data in case of any error
@@ -278,14 +282,12 @@ export const athleteService = {
       const uri = getUri(`/api/v1/fantasy-athletes/${athleteId}`);
 
       const res = await fetch(uri, {
-        headers: getAuthHeader()
+        headers: getAuthHeader(),
       });
 
       const json = await res.json();
       return json as IFantasyAthlete;
-
     } catch (error) {
-
       console.log("Error fetching athlete", error);
       return undefined;
     }
@@ -301,12 +303,11 @@ export const athleteService = {
       if (json.length === 0) return undefined;
 
       return json[0];
-
     } catch (error) {
       console.log("Error fetching rugby athlete ", error);
-      return undefined
+      return undefined;
     }
-  }
+  },
 };
 
 /**
@@ -533,7 +534,6 @@ const extractCategoryStats = (
 ) => {
   return categoryActions.reduce((result, action) => {
     if (statsMap[action] !== undefined) {
-
       result.push({
         action,
         label: actionLabels[action] || formatActionName(action),
@@ -541,23 +541,23 @@ const extractCategoryStats = (
         // Format percentage values differently
         displayValue:
           action === "TackleSuccess"
-            ? statsMap["TacklesMade"] && statsMap["TacklesMissed"] ?
-              `${Math.floor(((statsMap["TacklesMade"]) / (statsMap["TacklesMade"] + statsMap["TacklesMissed"]) * 100))}%` :
-              `${Math.floor(statsMap["TackleSuccess"] * 100)}%`
+            ? statsMap["TacklesMade"] && statsMap["TacklesMissed"]
+              ? `${Math.floor(
+                  (statsMap["TacklesMade"] /
+                    (statsMap["TacklesMade"] + statsMap["TacklesMissed"])) *
+                    100
+                )}%`
+              : `${Math.floor(statsMap["TackleSuccess"] * 100)}%`
             : statsMap[action].toString(),
       });
-    }
-
-    else {
-
+    } else {
       // If action is null just put 0
       result.push({
         action,
         label: formatActionName(action),
         value: 0,
         // Format percentage values differently
-        displayValue:
-          action.endsWith("Success") ? "0%" : "0"
+        displayValue: action.endsWith("Success") ? "0%" : "0",
       });
     }
     return result;

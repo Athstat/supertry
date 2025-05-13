@@ -16,10 +16,9 @@ export const authService = {
    */
   async registerUser(userData: UserRepresentation): Promise<any> {
     try {
-      // Use the full URL in production, relative URL in development
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       const response = await fetch(
         `${baseUrl}/api/v1/unauth/create-keycloak-user/`,
@@ -66,6 +65,7 @@ export const authService = {
         `${KEYCLOAK_URL}/auth/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`;
 
       console.log("Using token URL:", tokenUrl);
+      console.log("client_id: ", import.meta.env.VITE_CLIENT_ID);
 
       const response = await fetch(tokenUrl, {
         method: "POST",
@@ -74,7 +74,7 @@ export const authService = {
         },
         body: new URLSearchParams({
           grant_type: import.meta.env.VITE_GRANT_TYPE || "password",
-          client_id: CLIENT_ID,
+          client_id: import.meta.env.VITE_CLIENT_ID || CLIENT_ID,
           username,
           password,
           scope: import.meta.env.VITE_SCOPE || "openid",
@@ -223,10 +223,9 @@ export const authService = {
    */
   async createGamesUser(userData: UserRepresentation): Promise<any> {
     try {
-      // Use the full URL in production, relative URL in development
-      const baseUrl = import.meta.env.PROD
-        ? "https://qa-games-app.athstat-next.com"
-        : "";
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://qa-games-app.athstat-next.com";
 
       // Create the dbuser object similar to the mobile app
       const dbuser = {
