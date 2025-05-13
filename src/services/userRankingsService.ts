@@ -18,8 +18,8 @@ export const userRankingsService = {
 
             return json as UserRanking[];
         } catch (error) {
-            console.log("Error fetching user rankings", error);
-            return [];
+            console.log("Error fetching user rankings ", error);
+            return undefined;
         }
     },
 
