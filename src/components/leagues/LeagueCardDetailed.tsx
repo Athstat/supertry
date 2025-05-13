@@ -12,9 +12,9 @@ import { format } from "date-fns"
 import { IFixture } from "../../types/games"
 import PrimaryButton from "../shared/buttons/PrimaryButton"
 import { analytics } from "../../services/anayticsService"
-import { LeagueCardNoTeamPlaceholder } from "./league_dashboard_ui/NoMyTeamPlaceholder"
-import LeagueCardMyTeamSection from "./league_dashboard_ui/MyTeamSection"
-import LeagueCardFixturesSection from "./league_dashboard_ui/FxituresSection"
+import { LeagueCardNoTeamPlaceholder } from "./league_dashboard_ui/LeagueCardNoTeamPlaceholder"
+import LeagueCardMyTeamSection from "./league_dashboard_ui/LeagueCardMyTeamSection"
+import LeagueCardFixturesSection from "./league_dashboard_ui/LeagueCardFixturesSection"
 
 type Props = {
     league: IFantasyLeague

@@ -1,4 +1,4 @@
-import { Shield, Pencil, Trophy, Star } from "lucide-react";
+import { Shield, Pencil, Trophy, Star, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 
@@ -15,11 +15,16 @@ export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionPro
         navigate(`/my-team/${team.team_id}`);
     }
 
+    // const totalTeamValue = team.athletes.reduce((prev, a) => {
+    //     return prev += a.purchase_price;
+    // }, 0);
+
     return (
 
-        <div className="cursor-pointer">
-            <p>My Team</p>
-            <div className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl p-4 space-y-4">
+        <div className="cursor-pointer w-full flex flex-col gap-3 dark:text-white ">
+            <p className="text-xl font-bold" >My Team</p>
+
+            <div className="bg-slate-50 border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 hover:dark:bg-slate-800/60 rounded-xl flex-1 p-4 space-y-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Shield className="w-6 h-6 text-blue-500" />
@@ -30,7 +35,19 @@ export default function LeagueCardMyTeamSection({ team, rank }: MyTeamSectionPro
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
+                <div className="text-slate-700 flex flex-row items-center dark:text-slate-400" >
+                    <div className="flex flex-row items-center gap-1" >
+                        <Users className="w-4 h-4" />
+                        <p>Players {team.athletes.length}</p>
+                    </div>
+{/* 
+                    <div className="flex flex-row items-center gap-1" >
+                        <CircleDollarSign className="w-4 h-4" />
+                        <p>Team Value {totalTeamValue}</p>
+                    </div> */}
+                </div>
+
+                <div className="grid grid-cols-2 flex-1 lg:grid-cols-1 gap-4">
 
                     <div className=" dark:bg-slate-800 p-3 rounded-lg">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
