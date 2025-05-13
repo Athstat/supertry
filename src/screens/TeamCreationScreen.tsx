@@ -105,6 +105,8 @@ export function TeamCreationScreen() {
     requestPushPermissions();
   }, []);
 
+  // .....
+
   // Use our centralized team creation state hook
   const {
     // Data

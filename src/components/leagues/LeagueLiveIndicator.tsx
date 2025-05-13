@@ -36,7 +36,7 @@ export default function LeagueLiveIndicator({ league, className }: Props) {
 
             const lastMatch = roundFixtures[roundFixtures.length - 1];
 
-            const lastMatchDate = new Date(lastMatch.kickoff_time ?? new Date());
+            const lastMatchDate = new Date(lastMatch?.kickoff_time ?? new Date());
             const now = new Date();
 
             const diff = now.valueOf() - lastMatchDate.valueOf();
