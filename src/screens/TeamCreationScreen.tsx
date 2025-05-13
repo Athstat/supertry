@@ -19,6 +19,8 @@ import TeamToast from "./team-creation-components/TeamToast";
 import useTeamCreationState from "./team-creation-components/useTeamCreationState";
 import { leagueService } from "../services/leagueService";
 import { URC_COMPETIION_ID } from "../types/constants";
+import { isLeagueLocked } from "../utils/leaguesUtils";
+import { IFantasyLeague } from "../types/fantasyLeague";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -92,10 +94,11 @@ export function TeamCreationScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
-  const league = location.state?.league;
+  const league = location.state?.league ? location.state?.league  as IFantasyLeague : undefined;
 
   // Check if coming from welcome screen
   const isFromWelcome = location.state?.from === "welcome";
+  const isLocked = isLeagueLocked(league?.join_deadline);
   
   useEffect(() => {
     // Request user notification permissions
@@ -231,7 +234,9 @@ export function TeamCreationScreen() {
       selectedPlayersCount={selectedPlayersCount}
       requiredPlayersCount={requiredPlayersCount}
       isFromWelcome={isFromWelcome}
+      isLocked={isLocked}
     >
+
       {/* Position selection grid */}
       <PositionsGrid
         positions={positionList}
@@ -263,7 +268,7 @@ export function TeamCreationScreen() {
           onClose={() => setShowPlayerSelection(false)}
           roundId={parseInt(officialLeagueId || "0")}
           roundStart={league?.start_round ?? 0}
-          roundEnd={league.end_round ?? 0}
+          roundEnd={league?.end_round ?? 0}
           competitionId={officialLeagueId ?? URC_COMPETIION_ID}
         />
       )}
@@ -280,7 +285,7 @@ export function TeamCreationScreen() {
       <SuccessModal
         isVisible={showSuccessModal}
         teamName={teamName}
-        leagueName={league?.title || league?.name || "League"}
+        leagueName={league?.title ?? "League"}
         onClose={() => setShowSuccessModal(false)}
         onGoToLeague={() => {
           setShowSuccessModal(false);

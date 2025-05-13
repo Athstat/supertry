@@ -9,6 +9,7 @@ interface TeamCreationContainerProps {
   requiredPlayersCount: number;
   isFromWelcome?: boolean;
   children: React.ReactNode;
+  isLocked?: boolean
 }
 
 export const TeamCreationContainer: React.FC<TeamCreationContainerProps> = ({
@@ -19,6 +20,7 @@ export const TeamCreationContainer: React.FC<TeamCreationContainerProps> = ({
   requiredPlayersCount,
   isFromWelcome,
   children,
+  isLocked
 }) => {
   return (
     <div className="container mx-auto px-4 max-w-[1024px] pb-4 bg-gray-50 dark:bg-dark-850 min-h-screen">
@@ -30,10 +32,17 @@ export const TeamCreationContainer: React.FC<TeamCreationContainerProps> = ({
         selectedPlayersCount={selectedPlayersCount}
         totalPositions={requiredPlayersCount}
         isFromWelcome={isFromWelcome}
+        isLocked={isLocked}
       />
 
+      {isLocked && 
+        <div className="w-full items-center justify-center p-10 flex" >
+          <p>You can't create a team for {league?.title}, it is now locked</p>
+        </div>
+      }
+
       {/* Main content */}
-      <div className="px-4">{children}</div>
+      { !isLocked && <div className="px-4">{children}</div>}
     </div>
   );
 };

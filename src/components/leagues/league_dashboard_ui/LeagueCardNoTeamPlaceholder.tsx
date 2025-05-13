@@ -35,7 +35,7 @@ export function LeagueCardNoTeamPlaceholder({ league }: NoTeamPlaceholderProps) 
     const isLocked = isLeagueLocked(league.join_deadline);
 
     return (
-        <div className="flex items-center justify-center w-full px-10 text-center lg:px-0 py-10 rounded-xl border-[6px] lg:border-[3px] border-slate-100 dark:border-slate-700/40 border-dotted " >
+        <div className="flex items-center justify-center w-full px-10 text-center  py-10 rounded-xl border-[6px] lg:border-[3px] border-slate-100 dark:border-slate-700/40 border-dotted " >
 
             {!isLocked && <div className="flex flex-col gap-3" >
                 <p className="text-slate-700 dark:text-slate-400" >You haven't picked your team for {league.title} yet</p>
@@ -48,7 +48,7 @@ export function LeagueCardNoTeamPlaceholder({ league }: NoTeamPlaceholderProps) 
             </div>}
 
             {isLocked && <div onClick={navigateToLeague} className="flex flex-col gap-3" >
-                <p className="text-slate-700 cursor-pointer dark:text-slate-400" >{league.title} is now locked and you can't join the league or edit your team </p>
+                <p className="text-slate-700 cursor-pointer dark:text-slate-400" >{league.title} is now locked and you can't join the league or edit a team </p>
             </div>}
 
 

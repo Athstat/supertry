@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronLeft, Users, Star } from "lucide-react";
+import { ChevronLeft, Users, Star, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface TeamCreationHeaderProps {
@@ -10,6 +10,7 @@ interface TeamCreationHeaderProps {
   selectedPlayersCount: number;
   totalPositions: number;
   isFromWelcome?: boolean;
+  isLocked?: boolean
 }
 
 export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
@@ -20,6 +21,7 @@ export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
   selectedPlayersCount,
   totalPositions,
   isFromWelcome,
+  isLocked
 }) => {
   const navigate = useNavigate();
   const isNegativeBudget = currentBudget < 0;
@@ -49,7 +51,8 @@ export const TeamCreationHeader: React.FC<TeamCreationHeaderProps> = ({
 
       {/* League Title Section */}
       <div className="mb-3">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-1 dark:text-gray-100">
+        <h1 className="text-2xl flex flex-row items-center gap-1 sm:text-3xl font-bold mb-1 dark:text-gray-100">
+          <Lock />
           {title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">

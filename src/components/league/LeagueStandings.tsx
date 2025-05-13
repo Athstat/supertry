@@ -1,5 +1,5 @@
 import { useRef, useEffect, Ref } from "react";
-import { Trophy, Loader, ChevronRight, Lock } from "lucide-react";
+import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
@@ -263,8 +263,8 @@ function EditTeamButton({team, league} : EditButtonProps) {
     return (
       <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
       
-      <button className="flex cursor-not-allowed font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
-        View Team <Lock className="w-4 h-4" />
+      <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
+        View Team
       </button>
 
     </div>
