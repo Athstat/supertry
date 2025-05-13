@@ -26,9 +26,6 @@ export default function FixtureSearchResults({ search, boxScore, fixture }: Prop
             </div>}
 
             {searchResults.map((bs, index) => {
-                const teamName = bs.athlete_team_id === fixture.team_id ?
-                    fixture.team_name : fixture.competition_name;
-
                 return (
                     <ResultItem bs={bs} fixture={fixture} key={index} />
                 )

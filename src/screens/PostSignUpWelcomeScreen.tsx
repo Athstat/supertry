@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader, Trophy, ChevronRight } from "lucide-react";
 import ScrummyLogo from "../components/branding/scrummy_logo";
@@ -9,11 +9,10 @@ import { leagueService } from "../services/leagueService";
 
 export default function PostSignUpWelcomeScreen() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [latestLeague, setLatestLeague] = useState<IFantasyLeague | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isDebug, setIsDebug] = useState(false);
+  // const [isDebug, setIsDebug] = useState(false);
 
   // Use the same approach as the dashboard HeroSection to get the league that's "on the clock"
   useEffect(() => {
@@ -70,10 +69,10 @@ export default function PostSignUpWelcomeScreen() {
     fetchLeagueOnTheClock();
   }, []);
 
-  const handleWatchTutorial = () => {
-    // Open YouTube tutorial in a new tab
-    //window.open("https://youtube.com/scrummy-intro", "_blank");
-  };
+  // const handleWatchTutorial = () => {
+  //   // Open YouTube tutorial in a new tab
+  //   //window.open("https://youtube.com/scrummy-intro", "_blank");
+  // };
 
   const handleChoosePlayers = () => {
     if (!latestLeague) {
@@ -110,9 +109,9 @@ export default function PostSignUpWelcomeScreen() {
     });
   };
 
-  const toggleDebug = () => {
-    setIsDebug(!isDebug);
-  };
+  // const toggleDebug = () => {
+  //   setIsDebug(!isDebug);
+  // };
 
   if (loading) {
     return (
