@@ -1,4 +1,4 @@
-import { Users, ChevronRight, Loader, Calendar, Check } from "lucide-react";
+import { ChevronRight, Calendar, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { LeagueCardProps } from "../types";
 import { format } from "date-fns";
@@ -11,7 +11,6 @@ import LeagueTeamsCount from "./LeagueTeamsCount";
 export function LeagueCard({
   league,
   onLeagueClick,
-  isLoading = false,
   custom = 0,
   isJoined = false,
 }: LeagueCardProps) {

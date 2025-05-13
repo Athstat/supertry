@@ -126,7 +126,7 @@ export function LeagueScreen() {
           </div>
           {/* Tab Content */}
           <div className="space-y-6">
-            {activeTab === "standings" && (
+            {activeTab === "standings" && league && (
               <LeagueStandings
                 teams={teams}
                 showJumpButton={showJumpButton}
@@ -147,6 +147,7 @@ export function LeagueScreen() {
                   handleTeamClick(team);
                   viewTeam(team.id);
                 }}
+                league={league}
               />
             )}
             {activeTab === "chat" && (
