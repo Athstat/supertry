@@ -82,3 +82,23 @@ export function getRankChange(currentRank: number, lastRank: number) {
   }
   return null;
 };
+
+/** Returns true if a league has passed its join dealine and can't have teams added to it */
+export function isLeagueLocked(joinDeadline: Date | null | undefined) {
+  if (!joinDeadline) return false;
+
+  const thirtyMinutes = 1000 * 60 * 30;
+  
+  const now = new Date();
+  const deadline = new Date(joinDeadline);
+
+  const diff = deadline.valueOf() - now.valueOf();
+
+  return diff < thirtyMinutes;
+}
+
+/** Returns a bias that can be used to sort locked leagues and unclocked leagues */
+export function leagueLockBias(a: IFantasyLeague) {
+  const isLocked = isLeagueLocked(a.join_deadline);
+  return isLocked ? 0 : 1;
+}

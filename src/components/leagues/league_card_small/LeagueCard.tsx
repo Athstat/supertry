@@ -1,9 +1,10 @@
 import React from "react";
 import { Users, ChevronRight, Loader, Calendar, Check } from "lucide-react";
 import { motion } from "framer-motion";
-import { LeagueCardProps } from "./types";
+import { LeagueCardProps } from "../types";
 import { format } from "date-fns";
-import { useCountdown } from "../../hooks/useCountdown";
+import { useCountdown } from "../../../hooks/useCountdown";
+import LeagueLockStatus from "./LeagueLockStatus";
 
 export function LeagueCard({
   league,
@@ -46,14 +47,7 @@ export function LeagueCard({
               Joined
             </div>
           )}
-          <div
-            className={`px-2 py-0.5 text-xs rounded-full ${league.is_open
-                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-                : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-              }`}
-          >
-            {league.is_open ? "Open" : "Closed"}
-          </div>
+          <LeagueLockStatus league={league} />
         </div>
       </div>
       <div className="flex justify-between items-center">
