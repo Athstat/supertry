@@ -10,7 +10,7 @@ import { StatCard } from "../components/shared/StatCard";
 import { GroupedStatsGrid } from "../components/shared/GroupedStatsGrid";
 import { PlayerProfileSeasonStats } from "../components/players/profile/PlayerProfileSeasonStats";
 import { PlayerProfileOverview } from "../components/players/profile/PlayerProfileOverview";
-import { useFetch } from "../hooks/useAsync";
+import { useFetch } from "../hooks/useFetch";
 import { athleteSportActionsService } from "../services/athleteSportsActions";
 import { PlayerProfileAttack } from "../components/players/profile/PlayerProfileAttack";
 import { PlayerProfileKicking } from "../components/players/profile/PlayerProfileKicking";

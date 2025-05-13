@@ -3,7 +3,7 @@ import { Player } from "../../types/team";
 import { motion } from "framer-motion";
 import { formatPosition } from "../../utils/athleteUtils";
 import { CircleDollarSign } from "lucide-react";
-import { useFetch } from "../../hooks/useAsync";
+import { useFetch } from "../../hooks/useFetch";
 import { athleteService } from "../../services/athleteService";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { isLeagueLocked } from "../../utils/leaguesUtils";

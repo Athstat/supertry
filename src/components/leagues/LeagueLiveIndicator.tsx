@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useFetch } from "../../hooks/useAsync"
+import { useFetch } from "../../hooks/useFetch"
 import { gamesService } from "../../services/gamesService"
 import { IFantasyLeague } from "../../types/fantasyLeague"
 import { getRoundFixtures } from "../../utils/fixtureUtils"

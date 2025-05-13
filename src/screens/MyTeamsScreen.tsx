@@ -9,7 +9,7 @@ import {
 } from "../types/fantasyTeamAthlete";
 import useSWR from "swr";
 import { leagueService } from "../services/leagueService";
-import { useFetch } from "../hooks/useAsync";
+import { useFetch } from "../hooks/useFetch";
 
 // Extended interface to include UI-specific properties
 interface ExtendedFantasyClubTeam extends IFantasyClubTeam {

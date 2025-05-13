@@ -4,7 +4,7 @@ import { userRankingsService } from "../../services/userRankingsService";
 import { LoadingState } from "../ui/LoadingState";
 import UserRankingFocusShort from "./UserRankingFocusShort";
 import UserRankingsItem from "./UserRankingsItem";
-import { useFetch } from "../../hooks/useAsync";
+import { useFetch } from "../../hooks/useFetch";
 
 export default function UserRankingsLeaderBoard() {
 

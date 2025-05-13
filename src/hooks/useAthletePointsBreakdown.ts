@@ -1,6 +1,6 @@
 import { FantasyLeagueContext } from "../contexts/FantasyLeagueContext";
 import { athleteService } from "../services/athleteService";
-import { useFetch } from "./useAsync";
+import { useFetch } from "./useFetch";
 import { useContext } from "react";
 
 export function useAthletePointsBreakdown(trackingId: string) {

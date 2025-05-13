@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { useFetch } from "../../../hooks/useAsync";
+import { useFetch } from "../../../hooks/useFetch";
 import { gamesService } from "../../../services/gamesService";
 import { IFantasyLeague } from "../../../types/fantasyLeague";
 import { IFixture } from "../../../types/games";
