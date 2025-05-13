@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { requestPushPermissions } from "../utils/bridgeUtils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 // Components
@@ -85,6 +85,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 };
 
 export function TeamCreationScreen() {
+
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null);
@@ -95,6 +96,11 @@ export function TeamCreationScreen() {
 
   // Check if coming from welcome screen
   const isFromWelcome = location.state?.from === "welcome";
+  
+  useEffect(() => {
+    // Request user notification permissions
+    requestPushPermissions();
+  }, []);
 
   // Use our centralized team creation state hook
   const {
@@ -114,7 +120,6 @@ export function TeamCreationScreen() {
     setTeamName,
     selectedPlayers,
     handlePositionSelect,
-    handlePlayerSelect,
     handleAddPlayer,
     handleRemovePlayer,
     handleReset,
@@ -191,7 +196,7 @@ export function TeamCreationScreen() {
       await leagueService.joinLeague(league);
 
       // Step 3: Request push notification permissions after successful team creation
-      requestPushPermissions();
+      // requestPushPermissions(); Used to be here
 
       // Show success modal instead of navigating away
       setShowSuccessModal(true);
