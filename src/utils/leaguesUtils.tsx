@@ -88,7 +88,7 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   if (!joinDeadline) return false;
 
   const thirtyMinutes = 1000 * 60 * 30;
-  
+
   const now = new Date();
   const deadline = new Date(joinDeadline);
 
@@ -99,10 +99,10 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
 
 /** Returns the last possible date that users can join a league */
 export function calculateJoinDeadline(league: IFantasyLeague) {
-  
+
   if (league.join_deadline) {
     const deadline = new Date(league.join_deadline);
-    
+
     const adjustedDeadline = add(deadline, {
       hours: 1,
       minutes: 30
