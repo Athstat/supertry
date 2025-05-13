@@ -71,7 +71,9 @@ declare module "lucide-react" {
   export const Menu: CIP;
   export const Pencil: CIP;
   export const Dot: CIP;
-  export const Unlock: CIP
+  export const Unlock: CIP;
+  export const CircleXIcon: CIP;
+  export const PercentIcon: CIP;
 
 }
 

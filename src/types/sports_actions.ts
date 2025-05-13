@@ -1,5 +1,4 @@
 export type SportAction = {
-    id: string,
     athlete_id: string,
     action: PlayerAggregateStatAction
     action_count: number,
