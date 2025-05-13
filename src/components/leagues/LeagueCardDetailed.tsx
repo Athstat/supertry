@@ -1,4 +1,4 @@
-import { Shield, Pencil, Trophy, Users, Star, ArrowRight } from "lucide-react"
+import { Shield, Pencil, Trophy, Users, Star, ArrowRight, ChevronRight } from "lucide-react"
 import { useFetch } from "../../hooks/useAsync"
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { IFantasyLeague, IFantasyLeagueTeam } from "../../types/fantasyLeague"
@@ -10,6 +10,8 @@ import TeamLogo from "../team/TeamLogo"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { format } from "date-fns"
 import { IFixture } from "../../types/games"
+import PrimaryButton from "../shared/buttons/PrimaryButton"
+import { analytics } from "../../services/anayticsService"
 
 type Props = {
     league: IFantasyLeague
@@ -52,15 +54,6 @@ export default function LeagueCardDetailed({ league }: Props) {
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-3 self-stretch md:self-auto">
-                        <button
-                            onClick={handleLeagueClick}
-                            className="flex-1 md:flex-none px-6 py-2.5 text-sm rounded-xl bg-primary-600 hover:bg-primary-800 text-white font-bold transition-colors flex flex-row items-center justify-center gap-2"
-                        >
-                            {teamForLeague ? "View League" : "Join League"}
-                            <ArrowRight className="w-4 h-4" />
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -72,13 +65,17 @@ export default function LeagueCardDetailed({ league }: Props) {
                         <MyTeamSection rank={teamRank} team={teamForLeague} />
                     )}
 
+                    {!teamForLeague && (
+                        <NoTeamPlaceholder league={league} />
+                    )}
+
                     {/* Fixtures Section */}
-                    {/* <div >
+                    <div >
                         <div className="">
                             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Fixtures</h2>
                             <FixturesSection league={league} />
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,7 +110,7 @@ function MyTeamSection({ team, rank }: MyTeamSectionProps) {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                    
+
                     <div className=" dark:bg-slate-800 p-3 rounded-lg">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
                             <Trophy className="w-4 h-4" />
@@ -121,7 +118,7 @@ function MyTeamSection({ team, rank }: MyTeamSectionProps) {
                         </div>
                         <p className="text-xl font-bold">#{rank}</p>
                     </div>
-                    
+
                     <div className="dark:bg-slate-800 p-3 rounded-lg">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
                             <Star className="w-4 h-4" />
@@ -135,12 +132,45 @@ function MyTeamSection({ team, rank }: MyTeamSectionProps) {
     )
 }
 
+type NoTeamPlaceholderProps = {
+    league: IFantasyLeague
+}
+
+function NoTeamPlaceholder({ league }: Props) {
+
+    const navigate = useNavigate();
+
+    const navigateToTeamCreation = () => {
+
+        analytics.trackTeamCreationStarted(
+            league.id,
+            league.official_league_id
+        );
+
+        navigate(`/${league.official_league_id}/create-team`, {
+            state: { league },
+        });
+    }
+
+    return (
+        <div className="flex items-center justify-center w-full py-10 rounded-xl bg-slate-800/30 " >
+            <div className="flex flex-col gap-3" >  
+                <p className="text-slate-700 dark:text-slate-400" >You haven't picked your team for {league.title} yet</p>
+                <PrimaryButton onClick={navigateToTeamCreation} className=" gap-1" >
+                    Pick Your Team
+                    <ArrowRight className="w-4 h-4" />
+                </PrimaryButton>
+            </div>
+        </div>
+    )
+}
+
 type FixturesSectionProps = {
     league: IFantasyLeague
 }
 
 function FixturesSection({ league }: FixturesSectionProps) {
-    
+
     const navigate = useNavigate();
     const { data, isLoading } = useFetch("fixtures", league.official_league_id, gamesService.getGamesByCompetitionId);
     const fixtures = data ?? [];
