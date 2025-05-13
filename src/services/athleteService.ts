@@ -200,20 +200,7 @@ export const athleteService = {
 
       // Filtering logic
       const filterByCompeition = (action: SportAction, cId: string) => {
-        const { id } = action;
-        const parts = id.split("_");
-
-        if (action.action === "Starts") {
-          return true;
-        }
-
-        if (parts.length < 3) {
-          return false;
-        }
-
-        const [, , actionCompId] = parts;
-
-        return actionCompId === cId;
+        return action.season_id === cId;
       }
 
       console.log("API response data:", json);
