@@ -49,12 +49,6 @@ export function LeagueCardNoTeamPlaceholder({ league }: NoTeamPlaceholderProps) 
 
             {isLocked && <div onClick={navigateToLeague} className="flex flex-col gap-3" >
                 <p className="text-slate-700 cursor-pointer dark:text-slate-400" >{league.title} is now locked and you can't join the league or edit your team </p>
-
-                {/* <PrimaryButton onClick={navigateToTeamCreation} className=" gap-1 text-sm lg:base" >
-                    
-                    <ArrowRight className="w-4 h-4" />
-
-                </PrimaryButton> */}
             </div>}
 
 
