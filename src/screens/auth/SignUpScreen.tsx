@@ -27,8 +27,7 @@ export function SignUpScreen() {
     email: "",
     password: "",
     confirmPassword: "",
-    firstName: "",
-    lastName: "",
+    username: "",
     nationality: undefined,
     favoriteTeam: undefined,
   });
@@ -44,8 +43,8 @@ export function SignUpScreen() {
       setError("Passwords do not match");
       return;
     }
-    if (!form.firstName || !form.lastName) {
-      setError("Please provide your first and last name");
+    if (!form.username) {
+      setError("Please provide a username");
       return;
     }
 
@@ -70,10 +69,10 @@ export function SignUpScreen() {
     try {
       // Prepare user data for Keycloak
       const userData: UserRepresentation = {
-        username: form.email,
+        username: form.username,
         email: form.email,
-        firstName: form.firstName,
-        lastName: form.lastName,
+        firstName: form.username, // Using username as firstName for compatibility
+        lastName: "", // Empty lastName for compatibility
         enabled: true,
         emailVerified: false,
         credentials: [
@@ -135,52 +134,28 @@ export function SignUpScreen() {
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         {currentStep === 1 && (
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                >
-                  First Name
-                </label>
-                <div className="relative">
-                  <input
-                    id="firstName"
-                    type="text"
-                    required
-                    className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
-                    value={form.firstName}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        firstName: e.target.value,
-                      }))
-                    }
-                  />
-                  <User className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                >
-                  Last Name
-                </label>
-                <div className="relative">
-                  <input
-                    id="lastName"
-                    type="text"
-                    required
-                    className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
-                    value={form.lastName}
-                    onChange={(e) =>
-                      setForm((prev) => ({ ...prev, lastName: e.target.value }))
-                    }
-                  />
-                  <User className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
-                </div>
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Username
+              </label>
+              <div className="relative">
+                <input
+                  id="username"
+                  type="text"
+                  required
+                  className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
+                  value={form.username}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      username: e.target.value,
+                    }))
+                  }
+                />
+                <User className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
               </div>
             </div>
 

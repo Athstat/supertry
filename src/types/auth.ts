@@ -13,6 +13,7 @@ export interface SignUpForm {
   email: string;
   password: string;
   confirmPassword: string;
+  username?: string;
   firstName?: string;
   lastName?: string;
   nationality?: Country;
@@ -58,7 +59,7 @@ export type AuthUser = {
   firstName: string;
   lastName: string;
   username: string;
-}
+};
 
 export interface BridgeUserData {
   name: string;
