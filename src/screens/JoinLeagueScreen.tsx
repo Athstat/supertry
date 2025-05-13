@@ -147,7 +147,9 @@ export function JoinLeagueScreen() {
 
   const leagues = activeLeaguesFilter(availableLeagues)
 
-  const otherLeagues = availableLeagues;
+  const otherLeagues = availableLeagues
+    .filter(l => l.join_deadline === null);
+
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
       <div className="flex items-center mb-6">
@@ -215,7 +217,7 @@ export function JoinLeagueScreen() {
       )}
 
       {/* For Testing purposes */}
-      {!isLoading && <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
+      {!isLoading && otherLeagues.length > 0 && <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
         <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
           <Trophy size={24} className="text-primary-500" />
           All Leagues
@@ -227,7 +229,7 @@ export function JoinLeagueScreen() {
           animate="visible"
           className="space-y-4"
         >
-          {otherLeagues.filter(l => l.join_deadline === null).map((league, index) => (
+          {otherLeagues.map((league, index) => (
             <LeagueCard
               key={league.id}
               league={league}
