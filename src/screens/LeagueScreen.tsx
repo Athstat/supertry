@@ -3,191 +3,34 @@ import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { TabButton } from "../components/shared/TabButton";
-import { RankedFantasyTeam, LeagueInfo, LeagueFromState } from "../types/league";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { leagueService } from "../services/leagueService";
+import { RankedFantasyTeam, LeagueFromState } from "../types/league";
 import { fantasyTeamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
 import { IFantasyLeague } from "../types/fantasyLeague";
-import { analytics } from "../services/anayticsService";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
-import { authService } from "../services/authService";
+import { useFantasyLeague } from "../components/league/useFantasyLeague";
+import { analytics } from "../services/anayticsService";
+import { useNavigate } from "react-router-dom";
+
+type LeagueScreenTabs = "standings" | "chat" | "fixtures";
+
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
-  const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
+
+  const hasJoinedLeague = false;
   const [showJumpButton, setShowJumpButton] = useState(false);
-  const [activeTab, setActiveTab] = useState<"standings" | "chat" | "fixtures">(
-    "standings"
-  );
-  const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({
-    name: "Loading...",
-    type: "Public",
-    currentGameweek: 0,
-    totalGameweeks: 0,
-    totalTeams: 0,
-    prizePool: "$0",
-  });
-  const [teams, setTeams] = useState<RankedFantasyTeam[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<LeagueScreenTabs>("standings");
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
-  const [userTeam, setUserTeam] = useState<RankedFantasyTeam>();
 
-  // Get the league ID from URL params
-  const { leagueId } = useParams<{ leagueId: string }>();
-  const location = useLocation();
-  const leagueFromState = location.state?.league;
-  const isFromWelcome = location.state?.from === "welcome";
-  const navigate = useNavigate();
-  const user = authService.getUserInfo();
+  const { leagueInfo, userTeam, error, isLoading, league, teams } = useFantasyLeague();
 
-  // Set league name from state as soon as possible
-  useEffect(() => {
-    if (leagueFromState && leagueFromState.title) {
-      console.log("Setting league name from state:", leagueFromState.title);
-      setLeagueInfo((prev) => ({
-        ...prev,
-        name: leagueFromState.title,
-      }));
-    }
-
-    // Log if coming from welcome screen for debugging
-    if (isFromWelcome) {
-      console.log("User navigated from welcome screen");
-    }
-  }, [leagueFromState, isFromWelcome]);
-
-  // Handle joining a league
-  const handleJoinLeague = () => {
-    // Navigate to team creation screen with league details
-    if (leagueFromState && leagueId) {
-      analytics.trackTeamCreationStarted(
-        leagueId,
-        leagueFromState.official_league_id
-      );
-      navigate(`/${leagueFromState.official_league_id}/create-team`, {
-        state: { league: leagueFromState },
-      });
-    } else {
-      console.error("League information is missing");
-    }
-  };
-
-  // Function to view a team's details
-  const viewTeam = (teamId: string) => {
-    console.log("Viewing team:", teamId);
-    // Navigate to team details page or open a modal
-  };
-
-  // Fetch participating teams when component mounts
-  useEffect(() => {
-    const fetchLeagueData = async () => {
-      if (!leagueId) return;
-      if (!leagueFromState) {
-        console.error("League information is missing from state");
-        setError(
-          "League information is missing. Please go back and try again."
-        );
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-
-        console.log("leagueFromState", leagueFromState);
-        console.log("League title:", leagueFromState.title);
-
-        // Fetch participating teams
-        const participatingTeams = await leagueService.fetchParticipatingTeams(
-          leagueFromState.id
-        );
-
-        console.log("participatingTeams", participatingTeams);
-
-        if (participatingTeams && participatingTeams.length > 0) {
-          // Sort teams by score in descending order
-          
-          const sortedTeams = participatingTeams.sort(
-            (a, b) => (b.overall_score ?? 0) - (a.overall_score ?? 0)
-          );
-
-          // Map to TeamStats format
-          const mappedTeams: RankedFantasyTeam[] = sortedTeams.map((team, index) => ({
-            id:  team.team_id.toString() ?? "",
-            rank: index + 1,
-            teamName: team.name || `Team ${index + 1}`,
-            managerName: team.first_name + " " + team.last_name,
-            totalPoints: team.overall_score || 0,
-            weeklyPoints: team.overall_score || 0,
-            lastRank: index + 1,
-            isUserTeam: false,
-            userId: team.kc_id // Will be set below if it matches
-          }));
-
-          //console.log("currentUserTeamId", currentUserTeamId);
-
-          // Mark user's team and get user's rank
-
-          //console.log("mappedTeams", mappedTeams);
-
-          //console.log("Current user team ID:", currentUserTeamId);
-          //console.log(
-          //  "Teams with IDs:",
-          //  mappedTeams.map((team) => ({ id: team.id, name: team.teamName }))
-          //);
-          // Check if any team has isUserTeam set to true
-          //console.log(
-          //  "User team found:",
-          //  mappedTeams.some((team) => team.isUserTeam)
-          //);
-
-          setTeams(mappedTeams);
-
-          let userTeamTemp: RankedFantasyTeam | undefined;
-
-          mappedTeams.forEach((t) => {
-            if (user && t.userId === user.id) {
-              userTeamTemp = t;
-            }
-          });
-
-          console.log("User Team Temp ", userTeamTemp);
-          setUserTeam(userTeamTemp);
-
-          setLeagueInfo({
-            name: leagueFromState.title || "League",
-            type: leagueFromState.is_private ? "Private" : "Public",
-            currentGameweek: leagueFromState.current_gameweek || 0,
-            totalGameweeks: leagueFromState.total_gameweeks || 0,
-            totalTeams: mappedTeams.length,
-            prizePool: formatPrizePool(leagueFromState),
-            userRank: userTeamTemp?.rank
-          });
-        }
-
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch league data:", err);
-        setError("Failed to load league data. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLeagueData();
-  }, [leagueId, leagueFromState]);
-
-  
-
-  // Helper function to format prize pool
 
   useEffect(() => {
-    const userTeam = teams.find((team) => team.isUserTeam);
     setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
   }, []);
 
@@ -218,12 +61,33 @@ export function LeagueScreen() {
     setTeamAthletes([]);
   };
 
+  const handleJoinLeague = () => {
+
+    if (league) {
+      analytics.trackTeamCreationStarted(
+        league.id,
+        league.official_league_id
+      );
+
+      navigate(`/${league.official_league_id}/create-team`, {
+        state: { league },
+      });
+
+    }
+  }
+
+  // Function to view a team's details
+  const viewTeam = (teamId: string) => {
+    console.log("Viewing team:", teamId);
+    // Navigate to team details page or open a modal
+  };
+
   return (
-    <FantasyLeagueProvider userTeam={userTeam} league={leagueFromState} >
+    <FantasyLeagueProvider userTeam={userTeam} league={league} >
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
         <LeagueHeader
           leagueInfo={leagueInfo}
-          league={leagueFromState}
+          league={league}
           onOpenSettings={() => setShowSettings(true)}
           isLoading={isLoading}
         >
@@ -237,9 +101,9 @@ export function LeagueScreen() {
           )}
         </LeagueHeader>
         <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
-      
-          {/* {leagueFromState && <Countdown league={leagueFromState} />} */}
-      
+
+          {/* {league && <Countdown league={league} />} */}
+
           {/* Tab Navigation */}
           <div className="flex overflow-x-auto mb-6 bg-white dark:bg-dark-800 rounded-t-xl shadow-sm">
             <TabButton
@@ -287,11 +151,13 @@ export function LeagueScreen() {
               />
             )}
             {activeTab === "chat" && (
-              <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
+              <>
+                {league && <LeagueGroupChatFeed league={league} />}
+              </>
             )}
             {activeTab === "fixtures" && (
               <FantasyLeagueFixturesList
-                league={leagueFromState as IFantasyLeague}
+                league={league as IFantasyLeague}
               />
             )}
           </div>

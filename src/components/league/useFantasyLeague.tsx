@@ -22,8 +22,15 @@ export function useFantasyLeague() {
 
     const [isLoadingUserTeam, setIsUserTeamLoading] = useState(false);
     const [userTeam, setUserTeam] = useState<RankedFantasyTeam>();
-    const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>();
-    const [error, setError] = useState<string>();
+
+    const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({
+        name: "Loading...",
+        type: "Public",
+        currentGameweek: 0,
+        totalGameweeks: 0,
+        totalTeams: 0,
+        prizePool: "$0",
+    });
 
     const user = authService.getUserInfo();
 
@@ -62,8 +69,8 @@ export function useFantasyLeague() {
         isLoading: isLoadingUserTeam || loadingTeams,
         leagueInfo,
         league,
-        teams,
-        error
+        teams: teams ?? [],
+        error: teamsError
     }
 }
 

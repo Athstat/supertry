@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { getLeagueChatChannelUrl, getLeagueChannelName } from '../../data/messaging/messaging.utils'
-import { LeagueFromState } from '../../types/league'
 import { SEND_BIRD_APP_ID } from '../../data/messaging/send_bird.init';
 import SendbirdProvider from '@sendbird/uikit-react/SendbirdProvider';
 
@@ -9,9 +8,10 @@ import { useOpenChat } from '../../hooks/useOpenChat';
 import { ErrorState } from '../ui/ErrorState';
 import { OpenChannelProvider } from '@sendbird/uikit-react/OpenChannel/context';
 import OpenChannelUI from '@sendbird/uikit-react/OpenChannel/components/OpenChannelUI';
+import { IFantasyLeague } from '../../types/fantasyLeague';
 
 type Props = {
-    league: LeagueFromState
+    league: IFantasyLeague
 }
 
 export default function LeagueGroupChatFeed({ league }: Props) {
