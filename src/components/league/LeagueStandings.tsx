@@ -1,7 +1,9 @@
-import { useRef, useEffect, Ref } from "react";
+import { useRef, useEffect, Ref, useContext } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../../services/authService";
+import { FantasyLeagueContext } from "../../contexts/FantasyLeagueContext";
 
 interface LeagueStandingsProps {
   teams: RankedFantasyTeam[];
@@ -28,6 +30,7 @@ export function LeagueStandings({
   const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
 
   //console.log(teams);
+  const user = authService.getUserInfo();
 
   // Scroll to user's team when component mounts or teams change
   useEffect(() => {
@@ -69,7 +72,7 @@ export function LeagueStandings({
 
   // Helper function to check if a team is the user's team
   const isUserTeamCheck = (team: RankedFantasyTeam): boolean => {
-    return team.isUserTeam === true;
+    return user ? (team.userId === user.id) : false;
   };
 
   return (
@@ -179,6 +182,8 @@ type StandingsTableRowProps = {
 
 function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: StandingsTableRowProps) {
 
+  const user = authService.getUserInfo();
+  const isUserTeam = user ? user.id === team.userId : false;
 
   return (
     <>
@@ -243,7 +248,7 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: Standi
         </td>
       </tr>
 
-      {team.isUserTeam &&
+      {isUserTeam &&
         <EditTeamButton team={team} />
       }
     </>
