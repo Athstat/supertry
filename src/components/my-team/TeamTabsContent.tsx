@@ -85,6 +85,7 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
             fetchingMarketPlayers={fetchingMarketPlayers}
             handleViewStats={handleViewStats}
             handleSwapPlayer={handleSwapPlayer}
+            isEditLocked={isLocked}
           />
         ) : (
           <ViewPitchContent
@@ -104,6 +105,7 @@ interface EditTeamViewProps {
   fetchingMarketPlayers: boolean;
   handleViewStats: (player: Player) => void;
   handleSwapPlayer: (player: Player) => void;
+  isEditLocked?: boolean
 }
 
 const EditTeamView: React.FC<EditTeamViewProps> = ({
@@ -112,6 +114,8 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
   fetchingMarketPlayers,
   handleViewStats,
   handleSwapPlayer,
+  isEditLocked
+  
 }) => {
   return (
     <div>
@@ -227,7 +231,8 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                       >
                         View Stats
                       </button>
-                      <button
+
+                      {!isEditLocked && <button
                         onClick={() => {
                           const playerForPosition: Player = {
                             id: position.player?.id || "",
@@ -256,7 +261,15 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                         ) : (
                           "Swap"
                         )}
-                      </button>
+                      </button>}
+
+                      {isEditLocked && <button
+                        className="w-full py-1.5 flex flex-row items-center justify-center gap-1 opacity-45 cursor-not-allowed bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                      >
+                        Swap
+                        <Lock className="w-3 h-3" />
+                      </button>}
+
                     </div>
                   </>
                 ) : (
