@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
       historyApiFallback: true,
       proxy: {
         "/api/v1": {
-          target: "http://qa-games-app.athstat-next.com",
+          target: "https://athstat-games-server.onrender.com",
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path.replace(/^\/api\/v1/, "/api/v1"),
@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
       port: 4173,
       host: true,
       strictPort: true,
-      allowedHosts: ["supertry.onrender.com", "localhost"],
+      allowedHosts: ["supertry.onrender.com", "localhost", "scrummy-app.ai"],
     },
   };
 });
