@@ -263,8 +263,8 @@ function EditTeamButton({team, league} : EditButtonProps) {
     return (
       <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
       
-      <button className="flex cursor-not-allowed font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-blue-400 dark:bg-blue-500 justify-center" >
-        Edit Team <Lock className="w-4 h-4" />
+      <button className="flex cursor-not-allowed font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
+        View Team <Lock className="w-4 h-4" />
       </button>
 
     </div>
