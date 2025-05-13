@@ -15,6 +15,7 @@ import {
 import { TeamActions, useTeamActions } from "../components/my-team/TeamActions";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { RankedFantasyTeam } from "../types/league";
+import { IFantasyLeague } from "../types/fantasyLeague";
 
 type TabType = "edit-team" | "view-pitch";
 
@@ -22,7 +23,8 @@ type TabType = "edit-team" | "view-pitch";
 const TeamContent: React.FC<{
   activeTab: TabType;
   setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
-}> = ({ activeTab, setActiveTab }) => {
+  league?: IFantasyLeague
+}> = ({ activeTab, setActiveTab, league }) => {
   
   const { positionList, players, formation } = useTeamData();
 
@@ -45,6 +47,7 @@ const TeamContent: React.FC<{
       fetchingMarketPlayers={false} // Always pass false to prevent loading state on buttons
       handleViewStats={handleViewStats}
       handleSwapPlayer={handleSwapPlayer}
+      league={league}
     />
   );
 };
@@ -120,6 +123,7 @@ const MyTeamContent: React.FC = () => {
               <TeamContent 
                 activeTab={activeTab}
                 setActiveTab={setActiveTab} 
+                league={leagueInfo ?? undefined}
               />
             </TeamActions>
           )}

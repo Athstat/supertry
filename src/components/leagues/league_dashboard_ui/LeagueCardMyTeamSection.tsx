@@ -18,7 +18,6 @@ export default function LeagueCardMyTeamSection({ team, rank, league }: MyTeamSe
         navigate(`/my-team/${team.team_id}`);
     }
 
-
     // const totalTeamValue = team.athletes.reduce((prev, a) => {
     //     return prev += a.purchase_price;
     // }, 0);

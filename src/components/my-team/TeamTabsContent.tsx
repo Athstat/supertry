@@ -1,10 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Loader } from "lucide-react";
+import { Loader, Lock } from "lucide-react";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
 import { TabButton } from "../shared/TabButton";
 import { TeamFormation } from "../team/TeamFormation";
+import { isLeagueLocked } from "../../utils/leaguesUtils";
+import { IFantasyLeague } from "../../types/fantasyLeague";
 
 interface TeamTabsContentProps {
   activeTab: "edit-team" | "view-pitch";
@@ -19,6 +21,7 @@ interface TeamTabsContentProps {
   fetchingMarketPlayers: boolean;
   handleViewStats: (player: Player) => void;
   handleSwapPlayer: (player: Player) => void;
+  league?: IFantasyLeague
 }
 
 export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
@@ -32,20 +35,36 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
   fetchingMarketPlayers,
   handleViewStats,
   handleSwapPlayer,
+  league
 }) => {
+
+  const isLocked = isLeagueLocked(league?.join_deadline);
+
   return (
     <>
       {/* Tabbed Interface */}
       <div className="mt-8">
         <div className="flex space-x-2 border-b-0">
-          <TabButton
+          
+          {!isLocked && <TabButton
             active={activeTab === "edit-team"}
             onClick={() => setActiveTab("edit-team")}
           >
             <div className="flex items-center gap-1">
               <span>Edit Team</span>
             </div>
-          </TabButton>
+          </TabButton>}
+
+          {isLocked && <TabButton
+            active={activeTab === "edit-team"}
+            onClick={() => {}}
+          >
+            <div className="flex items-center dark:text-slate-600 cursor-not-allowed gap-2 flex-row">
+              <span>Edit Team</span>
+              <Lock className="w-4 h-4" />
+            </div>
+          </TabButton>}
+
           <TabButton
             active={activeTab === "view-pitch"}
             onClick={() => setActiveTab("view-pitch")}
