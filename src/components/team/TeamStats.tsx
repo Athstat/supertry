@@ -16,6 +16,7 @@ export function TeamStats({ team }: TeamStatsProps) {
       format: (value: number) => value.toFixed(1),
       color: "text-primary-700 dark:text-primary-500",
     },
+
     {
       label: "Average Price",
       value:
@@ -25,6 +26,7 @@ export function TeamStats({ team }: TeamStatsProps) {
       format: (value: number) => value.toFixed(0),
       color: "text-primary-700 dark:text-primary-500",
     },
+    
     {
       label: "Matches Played",
       value: team.matchesPlayed || 0, // Assuming this property exists in team object

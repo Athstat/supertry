@@ -53,15 +53,6 @@ export function LeagueStandings({
     }
   }, [teams]);
 
-  const getRankChange = (currentRank: number, lastRank: number) => {
-    if (currentRank < lastRank) {
-      return <span className="text-green-500">↑</span>;
-    } else if (currentRank > lastRank) {
-      return <span className="text-red-500">↓</span>;
-    }
-    return null;
-  };
-
 
   // Handle team row click
   const handleTeamClick = (team: RankedFantasyTeam) => {
@@ -143,7 +134,7 @@ export function LeagueStandings({
           </div>
         </div>
       )}
-
+{/* 
       {showJumpButton && teams.some(isUserTeamCheck) && (
         <div className="p-3 border-t border-gray-200 dark:border-dark-700">
           <button
@@ -155,7 +146,7 @@ export function LeagueStandings({
             <span>↓</span>
           </button>
         </div>
-      )}
+      )} */}
 
       <style>
         {`
@@ -265,7 +256,9 @@ function EditTeamButton({team} : EditButtonProps) {
 
   const handleClick = () => {
     const uri = `/my-team/${team.id}`;
-    navigate(uri);
+    navigate(uri, {
+      state: {teamWithRank: team}
+    });
   }
 
   return (

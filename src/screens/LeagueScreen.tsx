@@ -3,7 +3,7 @@ import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { TabButton } from "../components/shared/TabButton";
-import { RankedFantasyTeam, LeagueFromState } from "../types/league";
+import { RankedFantasyTeam } from "../types/league";
 import { fantasyTeamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
@@ -175,7 +175,7 @@ export function LeagueScreen() {
           />
         )}
         {/* Mobile CTA Button */}
-        {!isLoading && !hasJoinedLeague && (
+        {!isLoading && userTeam === undefined && (
           <button
             onClick={handleJoinLeague}
             className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
