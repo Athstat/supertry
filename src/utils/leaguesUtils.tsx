@@ -72,3 +72,13 @@ export async function getLatestOfficialLeague(): Promise<IFantasyLeague | null> 
     return null;
   }
 }
+
+/** Renders a component to show the change in rank for a league */
+export function getRankChange(currentRank: number, lastRank: number) {
+  if (currentRank < lastRank) {
+    return <span className="text-green-500" >↑</span>;
+  } else if (currentRank > lastRank) {
+    return <span className="text-red-500" >↓</span>;
+  }
+  return null;
+};

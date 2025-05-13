@@ -1,15 +1,17 @@
-import { useRef, useEffect, Ref } from "react";
+import { useRef, useEffect, Ref, useContext } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
-import { TeamStats } from "../../types/league";
+import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../../services/authService";
+import { FantasyLeagueContext } from "../../contexts/FantasyLeagueContext";
 
 interface LeagueStandingsProps {
-  teams: TeamStats[];
+  teams: RankedFantasyTeam[];
   showJumpButton: boolean;
   onJumpToTeam: () => void;
   isLoading?: boolean;
   error?: string | null;
-  onTeamClick?: (team: TeamStats) => void;
+  onTeamClick?: (team: RankedFantasyTeam) => void;
 }
 
 export function LeagueStandings({
@@ -28,6 +30,7 @@ export function LeagueStandings({
   const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
 
   //console.log(teams);
+  const user = authService.getUserInfo();
 
   // Scroll to user's team when component mounts or teams change
   useEffect(() => {
@@ -50,26 +53,17 @@ export function LeagueStandings({
     }
   }, [teams]);
 
-  const getRankChange = (currentRank: number, lastRank: number) => {
-    if (currentRank < lastRank) {
-      return <span className="text-green-500">↑</span>;
-    } else if (currentRank > lastRank) {
-      return <span className="text-red-500">↓</span>;
-    }
-    return null;
-  };
-
 
   // Handle team row click
-  const handleTeamClick = (team: TeamStats) => {
+  const handleTeamClick = (team: RankedFantasyTeam) => {
     if (onTeamClick) {
       onTeamClick(team);
     }
   };
 
   // Helper function to check if a team is the user's team
-  const isUserTeamCheck = (team: TeamStats): boolean => {
-    return team.isUserTeam === true;
+  const isUserTeamCheck = (team: RankedFantasyTeam): boolean => {
+    return user ? (team.userId === user.id) : false;
   };
 
   return (
@@ -140,7 +134,7 @@ export function LeagueStandings({
           </div>
         </div>
       )}
-
+{/* 
       {showJumpButton && teams.some(isUserTeamCheck) && (
         <div className="p-3 border-t border-gray-200 dark:border-dark-700">
           <button
@@ -152,7 +146,7 @@ export function LeagueStandings({
             <span>↓</span>
           </button>
         </div>
-      )}
+      )} */}
 
       <style>
         {`
@@ -171,14 +165,16 @@ export function LeagueStandings({
 }
 
 type StandingsTableRowProps = {
-  team: TeamStats,
+  team: RankedFantasyTeam,
   userTeamRef: Ref<any>,
-  handleTeamClick: (team: TeamStats) => void,
+  handleTeamClick: (team: RankedFantasyTeam) => void,
   index: number
 }
 
 function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: StandingsTableRowProps) {
 
+  const user = authService.getUserInfo();
+  const isUserTeam = user ? user.id === team.userId : false;
 
   return (
     <>
@@ -243,7 +239,7 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: Standi
         </td>
       </tr>
 
-      {team.isUserTeam &&
+      {isUserTeam &&
         <EditTeamButton team={team} />
       }
     </>
@@ -251,7 +247,7 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: Standi
 }
 
 type EditButtonProps = {
-  team: TeamStats
+  team: RankedFantasyTeam
 }
 
 function EditTeamButton({team} : EditButtonProps) {
@@ -260,7 +256,9 @@ function EditTeamButton({team} : EditButtonProps) {
 
   const handleClick = () => {
     const uri = `/my-team/${team.id}`;
-    navigate(uri);
+    navigate(uri, {
+      state: {teamWithRank: team}
+    });
   }
 
   return (

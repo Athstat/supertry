@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
-import { TeamStats } from "../../types/league";
+import { RankedFantasyTeam } from "../../types/league";
 import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction, formatPosition } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
@@ -21,7 +21,7 @@ interface Athlete {
 }
 
 interface TeamAthletesModalProps {
-  team: TeamStats;
+  team: RankedFantasyTeam;
   athletes: Athlete[];
   onClose: () => void;
   isLoading?: boolean;

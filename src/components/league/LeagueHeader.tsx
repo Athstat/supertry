@@ -17,14 +17,12 @@ interface LeagueHeaderProps {
   leagueInfo: LeagueInfo;
   onOpenSettings: () => void;
   isLoading?: boolean;
-  league: IFantasyLeague;
+  league?: IFantasyLeague;
   children?: ReactNode;
 }
 
 export function LeagueHeader({
   leagueInfo,
-  onOpenSettings,
-  league,
   isLoading = false,
   children,
 }: LeagueHeaderProps) {

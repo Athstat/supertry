@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Team } from "../types/team";
 import { TeamStats } from "../components/team/TeamStats";
 import { TeamHeader } from "../components/my-team/TeamHeader";
@@ -14,6 +14,7 @@ import {
 } from "../components/my-team/TeamDataProvider";
 import { TeamActions, useTeamActions } from "../components/my-team/TeamActions";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
+import { RankedFantasyTeam } from "../types/league";
 
 type TabType = "edit-team" | "view-pitch";
 
@@ -53,6 +54,8 @@ const MyTeamContent: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
   const [activeTab, setActiveTab] = useState<TabType>("view-pitch");
   const [initialized, setInitialized] = useState(false);
+  const {state} = useLocation();
+  const teamWithRank = state?.teamWithRank ? state?.teamWithRank as RankedFantasyTeam : undefined;
 
   const {
     team,
@@ -96,6 +99,7 @@ const MyTeamContent: React.FC = () => {
             totalPoints={totalPoints}
             leagueInfo={leagueInfo}
             fetchingLeague={fetchingLeague}
+            rank={teamWithRank?.rank}
           />
           {/* Team Stats */}
           <TeamStats
@@ -106,7 +110,7 @@ const MyTeamContent: React.FC = () => {
                 players,
                 formation,
                 matchesPlayed,
-                rank: (team as any).rank || 0,
+                ...(teamWithRank ? {rank: teamWithRank?.rank} : {}),
               } as Team
             }
           />

@@ -10,6 +10,7 @@ interface TeamHeaderProps {
   totalPoints: number;
   leagueInfo: IFantasyLeague | null;
   fetchingLeague: boolean;
+  rank?: number
 }
 
 export const TeamHeader: React.FC<TeamHeaderProps> = ({
@@ -18,6 +19,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
   totalPoints,
   leagueInfo,
   fetchingLeague,
+  rank
 }) => {
   const navigate = useNavigate();
 
@@ -53,14 +55,12 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
               {team.name}
             </h1>
             <div className="flex flex-wrap items-center gap-3 mt-2">
-              <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+              { rank && <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
                 <Trophy size={18} className="text-yellow-500 shrink-0" />
                 <span className="whitespace-nowrap">
-                  {(team as any).rank
-                    ? `Rank ${(team as any).rank}`
-                    : "Not ranked yet"}
+                    Rank #{rank}
                 </span>
-              </div>
+              </div>}
               <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
                 <Users
                   size={18}

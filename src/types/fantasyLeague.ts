@@ -20,6 +20,8 @@ export interface IFantasyLeague {
   duration_type: string;
   status: string;
   participants_count: number;
+  total_gameweeks?: number
+  current_gameweek?: number
 }
 
 

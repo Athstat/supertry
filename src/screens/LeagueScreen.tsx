@@ -3,245 +3,34 @@ import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { TabButton } from "../components/shared/TabButton";
-import { TeamStats, LeagueInfo, LeagueFromState } from "../types/league";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { leagueService } from "../services/leagueService";
+import { RankedFantasyTeam } from "../types/league";
 import { fantasyTeamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
 import { IFantasyLeague } from "../types/fantasyLeague";
-import { analytics } from "../services/anayticsService";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
+import { useFantasyLeague } from "../components/league/useFantasyLeague";
+import { analytics } from "../services/anayticsService";
+import { useNavigate } from "react-router-dom";
+
+type LeagueScreenTabs = "standings" | "chat" | "fixtures";
+
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
-  const [hasJoinedLeague, setHasJoinedLeague] = useState(false);
+
+  const hasJoinedLeague = false;
   const [showJumpButton, setShowJumpButton] = useState(false);
-  const [activeTab, setActiveTab] = useState<"standings" | "chat" | "fixtures">(
-    "standings"
-  );
-  const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({
-    name: "Loading...",
-    type: "Public",
-    currentGameweek: 0,
-    totalGameweeks: 0,
-    totalTeams: 0,
-    prizePool: "$0",
-  });
-  const [teams, setTeams] = useState<TeamStats[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedTeam, setSelectedTeam] = useState<TeamStats | null>(null);
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<LeagueScreenTabs>("standings");
+  const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
 
-  // Get the league ID from URL params
-  const { leagueId } = useParams<{ leagueId: string }>();
-  const location = useLocation();
-  const leagueFromState = location.state?.league;
-  const isFromWelcome = location.state?.from === "welcome";
-  const navigate = useNavigate();
+  const { leagueInfo, userTeam, error, isLoading, league, teams } = useFantasyLeague();
 
-  // Set league name from state as soon as possible
-  useEffect(() => {
-    if (leagueFromState && leagueFromState.title) {
-      console.log("Setting league name from state:", leagueFromState.title);
-      setLeagueInfo((prev) => ({
-        ...prev,
-        name: leagueFromState.title,
-      }));
-    }
-
-    // Log if coming from welcome screen for debugging
-    if (isFromWelcome) {
-      console.log("User navigated from welcome screen");
-    }
-  }, [leagueFromState, isFromWelcome]);
-
-  // Handle joining a league
-  const handleJoinLeague = () => {
-    // Navigate to team creation screen with league details
-    if (leagueFromState && leagueId) {
-      analytics.trackTeamCreationStarted(
-        leagueId,
-        leagueFromState.official_league_id
-      );
-      navigate(`/${leagueFromState.official_league_id}/create-team`, {
-        state: { league: leagueFromState },
-      });
-    } else {
-      console.error("League information is missing");
-    }
-  };
-
-  // Function to view a team's details
-  const viewTeam = (teamId: string) => {
-    console.log("Viewing team:", teamId);
-    // Navigate to team details page or open a modal
-  };
-
-  // Fetch participating teams when component mounts
-  useEffect(() => {
-    const fetchLeagueData = async () => {
-      if (!leagueId) return;
-      if (!leagueFromState) {
-        console.error("League information is missing from state");
-        setError(
-          "League information is missing. Please go back and try again."
-        );
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-
-        console.log("leagueFromState", leagueFromState);
-        console.log("League title:", leagueFromState.title);
-
-        // Fetch participating teams
-        const participatingTeams = await leagueService.fetchParticipatingTeams(
-          leagueFromState.id
-        );
-
-        console.log("participatingTeams", participatingTeams);
-
-        if (participatingTeams && participatingTeams.length > 0) {
-          // Sort teams by score in descending order
-          
-          const sortedTeams = participatingTeams.sort(
-            (a, b) => (b.overall_score ?? 0) - (a.overall_score ?? 0)
-          );
-
-          // Map to TeamStats format
-          const mappedTeams: TeamStats[] = sortedTeams.map((team, index) => ({
-            id:  team.team_id.toString() ?? "",
-            rank: index + 1,
-            teamName: team.name || `Team ${index + 1}`,
-            managerName: team.first_name + " " + team.last_name,
-            totalPoints: team.overall_score || 0,
-            weeklyPoints: team.overall_score || 0,
-            lastRank: index + 1,
-            isUserTeam: false, // Will be set below if it matches
-          }));
-
-          // Get current user's team ID
-          const currentUserTeamId = await getCurrentUserTeamId(
-            participatingTeams
-          );
-
-          //console.log("currentUserTeamId", currentUserTeamId);
-
-          // Mark user's team and get user's rank
-          let userRank = 0;
-          if (currentUserTeamId) {
-            mappedTeams.forEach((team) => {
-              if (team.id === currentUserTeamId) {
-                team.isUserTeam = true;
-                userRank = team.rank;
-                setHasJoinedLeague(true);
-              }
-            });
-          }
-
-          //console.log("mappedTeams", mappedTeams);
-
-          //console.log("Current user team ID:", currentUserTeamId);
-          //console.log(
-          //  "Teams with IDs:",
-          //  mappedTeams.map((team) => ({ id: team.id, name: team.teamName }))
-          //);
-          // Check if any team has isUserTeam set to true
-          //console.log(
-          //  "User team found:",
-          //  mappedTeams.some((team) => team.isUserTeam)
-          //);
-
-          setTeams(mappedTeams);
-
-          console.log("leagueFromState", leagueFromState);
-
-          setLeagueInfo({
-            name: leagueFromState.title || "League",
-            type: leagueFromState.is_private ? "Private" : "Public",
-            currentGameweek: leagueFromState.current_gameweek || 0,
-            totalGameweeks: leagueFromState.total_gameweeks || 0,
-            totalTeams: mappedTeams.length,
-            prizePool: formatPrizePool(leagueFromState),
-            userRank: userRank || 0,
-          });
-        }
-
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch league data:", err);
-        setError("Failed to load league data. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLeagueData();
-  }, [leagueId, leagueFromState]);
-
-  // Helper function to get current user's team ID
-  const getCurrentUserTeamId = async (
-    participatingTeams: any[]
-  ): Promise<string | null> => {
-    if (!participatingTeams) return null;
-
-    try {
-      // Get user ID from token
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        console.error("No access token found");
-        return null;
-      }
-
-      // Extract user ID from token
-      let userId: string;
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        userId = payload.sub;
-        if (!userId) {
-          console.error("No user ID found in token");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error extracting user ID from token:", error);
-        return null;
-      }
-
-      // Find the team that belongs to this league
-      const teamInLeague = participatingTeams.find(
-        (team) => team.kc_id === userId
-      );
-
-      //console.log("teamInLeague", teamInLeague);
-
-      if (teamInLeague) {
-        // Return team_id instead of id to match what's used in mappedTeams
-        return teamInLeague.team_id;
-      }
-
-      return null;
-    } catch (error) {
-      console.error("Error getting current user team ID:", error);
-      return null;
-    }
-  };
-
-  // Helper function to format prize pool
-  const formatPrizePool = (league: any): string => {
-    if (!league) return "$0";
-    if (league.reward_description) return league.reward_description;
-    return league.reward_type === "cash"
-      ? `$${(league.entry_fee || 0) * (league.participants_count || 0)}`
-      : "N/A";
-  };
 
   useEffect(() => {
-    const userTeam = teams.find((team) => team.isUserTeam);
     setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
   }, []);
 
@@ -250,7 +39,7 @@ export function LeagueScreen() {
   }, []);
 
   // Handle team click
-  const handleTeamClick = async (team: TeamStats) => {
+  const handleTeamClick = async (team: RankedFantasyTeam) => {
     setSelectedTeam(team);
     setLoadingAthletes(true);
 
@@ -272,16 +61,37 @@ export function LeagueScreen() {
     setTeamAthletes([]);
   };
 
+  const handleJoinLeague = () => {
+
+    if (league) {
+      analytics.trackTeamCreationStarted(
+        league.id,
+        league.official_league_id
+      );
+
+      navigate(`/${league.official_league_id}/create-team`, {
+        state: { league },
+      });
+
+    }
+  }
+
+  // Function to view a team's details
+  const viewTeam = (teamId: string) => {
+    console.log("Viewing team:", teamId);
+    // Navigate to team details page or open a modal
+  };
+
   return (
-    <FantasyLeagueProvider league={leagueFromState} >
+    <FantasyLeagueProvider userTeam={userTeam} league={league} >
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
         <LeagueHeader
           leagueInfo={leagueInfo}
-          league={leagueFromState}
+          league={league}
           onOpenSettings={() => setShowSettings(true)}
           isLoading={isLoading}
         >
-          {!isLoading && !hasJoinedLeague && (
+          {!isLoading && userTeam === undefined && (
             <button
               onClick={handleJoinLeague}
               className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
@@ -291,9 +101,9 @@ export function LeagueScreen() {
           )}
         </LeagueHeader>
         <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
-      
-          {/* {leagueFromState && <Countdown league={leagueFromState} />} */}
-      
+
+          {/* {league && <Countdown league={league} />} */}
+
           {/* Tab Navigation */}
           <div className="flex overflow-x-auto mb-6 bg-white dark:bg-dark-800 rounded-t-xl shadow-sm">
             <TabButton
@@ -341,11 +151,13 @@ export function LeagueScreen() {
               />
             )}
             {activeTab === "chat" && (
-              <LeagueGroupChatFeed league={leagueFromState as LeagueFromState} />
+              <>
+                {league && <LeagueGroupChatFeed league={league} />}
+              </>
             )}
             {activeTab === "fixtures" && (
               <FantasyLeagueFixturesList
-                league={leagueFromState as IFantasyLeague}
+                league={league as IFantasyLeague}
               />
             )}
           </div>
@@ -356,14 +168,14 @@ export function LeagueScreen() {
         {/* Team Athletes Modal */}
         {selectedTeam && (
           <TeamAthletesModal
-            team={selectedTeam as TeamStats}
+            team={selectedTeam as RankedFantasyTeam}
             athletes={teamAthletes}
             onClose={handleCloseModal}
             isLoading={loadingAthletes}
           />
         )}
         {/* Mobile CTA Button */}
-        {!isLoading && !hasJoinedLeague && (
+        {!isLoading && userTeam === undefined && (
           <button
             onClick={handleJoinLeague}
             className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
