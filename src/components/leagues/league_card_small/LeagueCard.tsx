@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useCountdown } from "../../../hooks/useCountdown";
 import LeagueLockStatus from "./LeagueLockStatus";
 import { calculateJoinDeadline, isLeagueLocked } from "../../../utils/leaguesUtils";
+import LeagueLiveIndicator from "../LeagueLiveIndicator";
 
 export function LeagueCard({
   league,
@@ -15,7 +16,7 @@ export function LeagueCard({
   isJoined = false,
 }: LeagueCardProps) {
 
-  const isLocked = isLeagueLocked(league.join_deadline); 
+  const isLocked = isLeagueLocked(league.join_deadline);
   const adjustedDeadline = calculateJoinDeadline(league);
 
   return (
@@ -56,15 +57,20 @@ export function LeagueCard({
       </div>
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-            <Users size={16} />
-            <span>
-              {isLoading ? (
-                <Loader size={12} className="animate-spin" />
-              ) : (
-                `${teamCount || 0} teams joined`
-              )}
-            </span>
+
+          <div className="flex flex-row items-center gap-2" >
+
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <Users size={16} />
+              <span>
+                {isLoading ? (
+                  <Loader size={12} className="animate-spin" />
+                ) : (
+                  `${teamCount || 0} teams joined`
+                )}
+              </span>
+              <LeagueLiveIndicator league={league} />
+            </div>
           </div>
 
           {!isLocked && adjustedDeadline && (

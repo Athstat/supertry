@@ -70,6 +70,7 @@ declare module "lucide-react" {
   export const CircleDollarSign: CIP;
   export const Menu: CIP;
   export const Pencil: CIP;
+  export const Dot: CIP;
 
 }
 

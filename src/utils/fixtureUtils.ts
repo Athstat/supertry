@@ -31,12 +31,12 @@ export function searchFixturesPredicate(fixture: IFixture ,query: string) {
     let match = false;
 
     const phrases = [
-        `${fixture.home_team} vs ${fixture.away_team}`,
-        `${fixture.away_team} vs ${fixture.home_team}`,
+        `${fixture.team_name} vs ${fixture.opposition_team_name}`,
+        `${fixture.opposition_team_name} vs ${fixture.team_name}`,
     ];
 
     phrases.forEach((phrase: string) => {
-        
+
         if (phrase === "") return false;
          
         phrase = phrase.toLowerCase();
@@ -47,8 +47,23 @@ export function searchFixturesPredicate(fixture: IFixture ,query: string) {
     });
 
 
-
-
     return match;
 
 }
+
+/** Filters fixtures to only show those belonging to a certain round
+ * and returns in ascending order of date
+ */
+export function getRoundFixtures(fixtures: IFixture[], start: number, end: number) {
+    const filteredFixtures = fixtures.filter((f) => {
+        return f.round >= start && f.round <= end;
+    }).sort((a, b) => {
+        const aDate = new Date(a.kickoff_time ?? new Date());
+        const bDate = new Date(b.kickoff_time ?? new Date());
+
+        return aDate.valueOf() - bDate.valueOf();
+    });
+
+    return filteredFixtures;
+}
+

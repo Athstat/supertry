@@ -1,0 +1,64 @@
+import { useEffect, useState } from "react"
+import { useFetch } from "../../hooks/useAsync"
+import { gamesService } from "../../services/gamesService"
+import { IFantasyLeague } from "../../types/fantasyLeague"
+import { getRoundFixtures } from "../../utils/fixtureUtils"
+import { isLeagueLocked } from "../../utils/leaguesUtils"
+
+type Props = {
+    league: IFantasyLeague
+}
+
+/** Renders a red dot when a league is live */
+export default function LeagueLiveIndicator({ league }: Props) {
+
+    const [isLive, setLive] = useState(false);
+    const isLocked = isLeagueLocked(league.join_deadline);
+
+    const { data, isLoading } = useFetch(
+        "games",
+        league.official_league_id ?? "",
+        gamesService.getGamesByCompetitionId
+    );
+
+    useEffect(() => {
+        const fixtures = data ?? [];
+
+        if (fixtures.length > 0) {
+
+            const roundFixtures = getRoundFixtures(
+                fixtures,
+                league.start_round ?? 0,
+                league.end_round ?? 0
+            );
+
+            const lastMatch = roundFixtures[roundFixtures.length - 1];
+
+            const lastMatchDate = new Date(lastMatch.kickoff_time ?? new Date());
+            const now = new Date();
+
+            const diff = now.valueOf() - lastMatchDate.valueOf();
+            const threeHours = 1000 * 60 * 60 * 3;
+            // League is live if the diffence between match and now is under 3 hours
+
+            setLive((diff <= threeHours) && isLocked);
+            
+        } else {   
+            setLive(false);
+        }
+
+    }, [data, league]);
+
+    if (!isLive) return null;
+
+    return (
+        <div className="inline-flex items-center gap-1 bg-gradient-to-r from-red-500/10 to-red-400/10 px-2.5 py-0.5 rounded-lg border border-red-500/20">
+            <div className="relative">
+                <div className="relative w-1.5 h-1.5 bg-red-500 rounded-full shadow-sm shadow-red-500/50"/>
+            </div>
+            <span className="text-xs font-semibold bg-gradient-to-r from-red-500 to-red-400 bg-clip-text text-transparent">
+                LIVE
+            </span>
+        </div>
+    );
+}
