@@ -1,8 +1,7 @@
 import { UserRepresentation } from "../types/auth";
+import { getUri } from "../utils/backendUtils";
 import { analytics } from "./anayticsService";
 
-// The API already includes the /api prefix
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID || "athstat-frontend";
 const KEYCLOAK_URL =
   import.meta.env.VITE_AUTH_KEYCLOAK_URL ||
@@ -16,12 +15,9 @@ export const authService = {
    */
   async registerUser(userData: UserRepresentation): Promise<any> {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       const response = await fetch(
-        `${baseUrl}/api/v1/unauth/create-keycloak-user/`,
+        getUri(`/api/v1/unauth/create-keycloak-user/`),
         {
           method: "POST",
           headers: {
@@ -223,9 +219,6 @@ export const authService = {
    */
   async createGamesUser(userData: UserRepresentation): Promise<any> {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       // Create the dbuser object similar to the mobile app
       const dbuser = {
@@ -248,7 +241,7 @@ export const authService = {
       };
 
       const response = await fetch(
-        `${baseUrl}/api/v1/unauth/create-games-user/`,
+        getUri(`/api/v1/unauth/create-games-user/`),
         {
           method: "POST",
           headers: {

@@ -27,9 +27,6 @@ export interface PowerRankingItem {
   kickoff_time: string;
 }
 
-export const baseUrl =
-  import.meta.env.VITE_API_BASE_URL || "https://qa-games-app.athstat-next.com";
-
 // Map of action names to human-friendly labels for player stats
 export const actionLabels: Record<string, string> = {
   Assists: "Assists",
@@ -81,7 +78,7 @@ export const athleteService = {
       // Try to fetch from API first
       try {
         const response = await fetch(
-          `${baseUrl}/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`,
+          getUri(`/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`),
           {
             method: "GET",
             headers: {
@@ -179,7 +176,7 @@ export const athleteService = {
         return getMockPlayerStats();
       }
 
-      const url = `${baseUrl}/api/v1/sports-actions/aggregated/athletes/${athleteId}`;
+      const url = getUri(`/api/v1/sports-actions/aggregated/athletes/${athleteId}`);
       console.log("Fetching from URL:", url);
 
       const response = await fetch(url, {
@@ -201,20 +198,7 @@ export const athleteService = {
 
       // Filtering logic
       const filterByCompeition = (action: SportAction, cId: string) => {
-        const { id } = action;
-        const parts = id.split("_");
-
-        if (action.action === "Starts") {
-          return true;
-        }
-
-        if (parts.length < 3) {
-          return false;
-        }
-
-        const [, , actionCompId] = parts;
-
-        return actionCompId === cId;
+        return action.season_id === cId;
       };
 
       console.log("API response data:", json);
@@ -250,7 +234,7 @@ export const athleteService = {
     console.log("Fetching power rankings for athlete ID:", athleteId);
 
     try {
-      const url = `${baseUrl}/api/v1/unauth/athletes-power-rankings/${athleteId}`;
+      const url = getUri(`/api/v1/unauth/athletes-power-rankings/${athleteId}`);
       console.log("Fetching from URL:", url);
 
       const response = await fetch(url, {

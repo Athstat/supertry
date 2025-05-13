@@ -11,6 +11,9 @@ export default function UserRankingCard() {
 
     const rank = userRank?.rank;
     const totalScore = userRank?.total_score;
+    
+    const unranked = (rank === 1 && totalScore === 0) || totalScore === undefined || rank === undefined;
+    const isRanked = rank !== undefined && totalScore !== undefined;
 
     if (isLoading) return <div className='w-full h-20 bg-slate-100 dark:bg-slate-800 animate-pulse' ></div>
     if (!userRank) return <></>
@@ -32,17 +35,17 @@ export default function UserRankingCard() {
                         <h2 className="text-md lg:text-lg font-bold text-white flex items-center gap-2">
                             Global Leader Board
                         </h2>
-                        {rank && totalScore && <p className="text-slate-50 text-bse lg:text-md">
-                            Total Points <strong>{Math.floor(totalScore)}</strong>
-                        </p>}
 
-                        {!rank && <p className='text-slate-200' >You are not yet ranked</p>}
+                        {isRanked && totalScore ? <p className="text-slate-50 dark:text-white text-bse lg:text-md">
+                            Total Points <strong>{Math.floor(totalScore ?? 0)}</strong>
+                        </p> : <p className='text-slate-200' >You are not yet ranked</p>}
+
                     </div>
                 </div>
                 <div className="text-right">
-                    {rank && <div className="text-2xl lg:text-3xl font-bold text-white">#{rank}</div>}
+                    {isRanked && totalScore ? <div className="text-2xl lg:text-3xl font-bold text-white">#{rank}</div> : ""}
                     {/* { !rank && <div className="text-xl font-bold text-white"></div>} */}
-                    {rank && <div className="text-primary-100">Your Rank</div>}
+                    {isRanked && totalScore ? <div className="text-primary-100">Your Rank</div> : ""}
                 </div>
             </div>
         </div>

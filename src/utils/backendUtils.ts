@@ -1,5 +1,5 @@
 const BACKEND_SERVER_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://qa-games-app.athstat-next.com";
+  import.meta.env.VITE_API_BASE_URL || "https://athstat-games-server.onrender.com";
 
 /** Completes an api url */
 export function getUri(endPoint: string) {
