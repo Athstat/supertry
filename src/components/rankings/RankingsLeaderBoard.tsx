@@ -1,8 +1,7 @@
-import { ArrowUp, ArrowDown } from "lucide-react";
-import useSWR from "swr";
 import { userRankingsService } from "../../services/userRankingsService";
-import { LoadingState } from "../ui/LoadingState";
+import { ArrowUp, ArrowDown } from "lucide-react";
 import UserRankingFocusShort from "./UserRankingFocusShort";
+import { LoadingState } from "../ui/LoadingState";
 import UserRankingsItem from "./UserRankingsItem";
 import { useFetch } from "../../hooks/useFetch";
 
@@ -60,8 +59,7 @@ export default function UserRankingsLeaderBoard() {
             {/* Bottom Section */}
             <div className="mt-6 space-y-4 mb-6">
                 <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-                    Top 5 players will be promoted to Division {0}.
-                    Bottom 5 players will be demoted to Division {0}.
+                    Rankings are refreshed every hour
                 </p>
             </div>
         </div>

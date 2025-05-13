@@ -1,17 +1,17 @@
 import { IFantasyLeague, IFantasyLeagueTeam } from "../types/fantasyLeague";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
+import { getUri } from "../utils/backendUtils";
 import { analytics } from "./anayticsService";
 import { fantasyTeamService } from "./teamService";
 
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-      console.log("getting leagues: ", baseUrl);
+      const uri = getUri(`/api/v1/fantasy-leagues`);
 
       try {
-        const response = await fetch(`${baseUrl}/api/v1/fantasy-leagues`, {
+        const response = await fetch(uri, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const leagueService = {
       }
 
       const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-leagues/${leagueId}`,
+        getUri(`/api/v1/fantasy-leagues/${leagueId}`),
         {
           method: "GET",
           headers: {
@@ -85,9 +85,6 @@ export const leagueService = {
     leagueId: string | number
   ): Promise<IFantasyLeagueTeam[]> => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       const token = localStorage.getItem("access_token");
       if (!token) {
@@ -95,10 +92,10 @@ export const leagueService = {
           "Authentication token is missing. Please log in again."
         );
       }
+      
+      const uri = getUri(`/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`);
 
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`,
-        {
+      const response = await fetch(uri, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -126,14 +123,11 @@ export const leagueService = {
     officialLeagueId: string
   ): Promise<IGamesLeagueConfig | null> => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
+
+      const uri = getUri(`/api/v1/unauth/fantasy-league-config/${officialLeagueId}`);
 
       try {
-        const response = await fetch(
-          `${baseUrl}/api/v1/unauth/fantasy-league-config/${officialLeagueId}`,
-          {
+        const response = await fetch( uri, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -165,9 +159,6 @@ export const leagueService = {
 
   joinLeague: async (league: any): Promise<any> => {
     try {
-      const baseUrl =
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://qa-games-app.athstat-next.com";
 
       // Get user ID from token
       const token = localStorage.getItem("access_token");
@@ -210,12 +201,9 @@ export const leagueService = {
         userTeams[0]
       );
 
-      //console.log("User latestTeam: ", latestTeam);
+      const uri = getUri(`/api/v1/fantasy-leagues/join-league`);
 
-      // Make API request to join the league
-      const response = await fetch(
-        `${baseUrl}/api/v1/fantasy-leagues/join-league`,
-        {
+      const response = await fetch(uri, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -269,11 +257,6 @@ export const leagueService = {
       } catch (error) {
         console.log("First approach failed, trying second approach", error);
       }
-
-      // If first approach fails, try the second approach
-      // const baseUrl = import.meta.env.PROD
-      //   ? "https://qa-games-app.athstat-next.com"
-      //   : "";
 
       // Get token for authentication
       const token = localStorage.getItem("access_token");
