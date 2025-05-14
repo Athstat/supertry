@@ -1,4 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { IFantasyLeagueTeam } from "../types/fantasyLeague";
+import { RankedFantasyTeam } from "../types/league";
 
 export function useRouter() {
     const navigate = useNavigate();
@@ -9,8 +11,18 @@ export function useRouter() {
         forward: () => navigate(1),
         reload: () => {
             const currentURL = `${pathname}${search}${hash}`;
-            navigate(currentURL, { replace: true, state: state});
+            navigate(currentURL, { replace: true, state: state });
         },
-        push: (key: string) => navigate(key)
+        push: (key: string) => navigate(key),
+        navigateToMyTeam: (team: IFantasyLeagueTeam, rankedTeam?: RankedFantasyTeam) => {
+            
+            navigate(`/my-team/${team.team_id}`, {
+                state: {
+                    team,
+                    teamWithRank: rankedTeam
+                },
+            });
+            
+        }
     }
 }
