@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeague, IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { LeagueInfo, RankedFantasyTeam } from "../../types/league";
 import { authService } from "../../services/authService";
 import { useLocation, useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { leagueService } from "../../services/leagueService";
+import { isLeagueLocked } from "../../utils/leaguesUtils";
+import { useAuthUser } from "../../hooks/useAuthUser";
 
 /** Hook for fetching league information on league screen */
-export function useFantasyLeague() {
+export function useFantasyLeague(leagueFromParam?: IFantasyLeague) {
 
     const { state } = useLocation();
     const { leagueId } = useParams();
 
-    const league = state.league ? state.league as IFantasyLeague : undefined;
+    const league = leagueFromParam ?? state.league ? state.league as IFantasyLeague : undefined;
 
     const { data: teams, isLoading: loadingTeams, error: teamsError } = useFetch(
         "participating-teams",
@@ -65,22 +67,25 @@ export function useFantasyLeague() {
 
     }, [leagueId, league, teams]);
 
+    const isLocked = isLeagueLocked(league?.join_deadline);
+
     return {
         userTeam,
         isLoading: isLoadingUserTeam || loadingTeams,
         leagueInfo,
         league,
         teams: teams ?? [],
-        error: teamsError
+        error: teamsError,
+        isLocked
     }
 }
 
 
-async function teamsFetcher(leagueId: string | number): Promise<RankedFantasyTeam[]> {
+export async function teamsFetcher(leagueId: string | number): Promise<RankedFantasyTeam[]> {
     const teams = await leagueService.fetchParticipatingTeams(leagueId);
-    
+
     console.log("Fantasy League teams returned ", teams);
-    
+
     const user = authService.getUserInfo();
 
     return teams.map((team, index) => {
@@ -108,3 +113,39 @@ const formatPrizePool = (league: any): string => {
         ? `$${(league.entry_fee || 0) * (league.participants_count || 0)}`
         : "N/A";
 };
+
+/** Hook that gets the users team in a league */
+export function useUserFantasyTeam(league: IFantasyLeague) {
+    // get teams participating in league
+    // Get user using use auth
+    // get users team
+
+    let userTeam: IFantasyLeagueTeam | undefined;
+    let rankedUserTeam: RankedFantasyTeam | undefined;
+
+    const user = useAuthUser();
+    const { data, isLoading, error } = useFetch("teams", league.id, leagueService.fetchParticipatingTeams);
+
+    const teams = data ?? [];
+
+    teams.forEach((team, index) => {
+
+        if (team.user_id === user.id) {
+            rankedUserTeam = {
+                team_id: team.team_id.toString() ?? "",
+                rank: index + 1,
+                teamName: team.team_name || `Team ${index + 1}`,
+                managerName: team.first_name + " " + team.last_name,
+                totalPoints: team.score || 0,
+                weeklyPoints: team.score || 0,
+                lastRank: index + 1,
+                isUserTeam: user ? user.id === team.user_id : false,
+                userId: team.user_id
+            }
+
+            userTeam = team;
+        }
+    });
+
+    return {isLoading, userTeam, rankedUserTeam, error};
+}
