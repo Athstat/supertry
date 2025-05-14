@@ -33,7 +33,7 @@ export default function LeagueCardFixturesSection({ league }: FixturesSectionPro
 
     const handleShowMore = () => {
         navigate(`/league/${league.official_league_id}`, { 
-            state: { league } 
+            state: { league, initialTab: "fixtures" } 
         });
     }
 
