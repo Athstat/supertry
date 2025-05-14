@@ -7,6 +7,8 @@ export interface Country {
 export interface Team {
   id: string;
   name: string;
+  logo?: string;
+  code?: string
 }
 
 export interface SignUpForm {

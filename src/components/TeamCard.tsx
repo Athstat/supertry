@@ -1,4 +1,3 @@
-import React from "react";
 import { Star, Users } from "lucide-react";
 
 interface TeamCardProps {
@@ -41,7 +40,7 @@ export function TeamCard({
           } focus:outline-none focus:ring-2 focus:ring-yellow-500/50 rounded-full`}
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
-          <Star size={20} fill={isFavorite ? "currentColor" : "none"} />
+          <Star size={20} />
         </button>
       </div>
 

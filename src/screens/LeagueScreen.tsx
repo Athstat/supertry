@@ -46,7 +46,7 @@ export function LeagueScreen() {
 
     try {
       // Fetch team athletes
-      const athletes = await fantasyTeamService.fetchTeamAthletes(team.id);
+      const athletes = await fantasyTeamService.fetchTeamAthletes(team.team_id);
       setTeamAthletes(athletes);
     } catch (error) {
       console.error("Failed to fetch team athletes:", error);
@@ -159,7 +159,7 @@ export function LeagueScreen() {
                 error={error}
                 onTeamClick={(team) => {
                   handleTeamClick(team);
-                  viewTeam(team.id);
+                  viewTeam(team.team_id);
                 }}
                 league={league}
               />

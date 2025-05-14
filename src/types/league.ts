@@ -1,5 +1,5 @@
 export interface RankedFantasyTeam {
-  id: string;
+  team_id: string;
   rank: number;
   teamName: string;
   managerName: string;
