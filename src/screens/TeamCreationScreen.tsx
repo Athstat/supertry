@@ -94,12 +94,12 @@ export function TeamCreationScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
-  const league = location.state?.league ? location.state?.league  as IFantasyLeague : undefined;
+  const league = location.state?.league ? location.state?.league as IFantasyLeague : undefined;
 
   // Check if coming from welcome screen
   const isFromWelcome = location.state?.from === "welcome";
   const isLocked = isLeagueLocked(league?.join_deadline);
-  
+
   useEffect(() => {
     // Request user notification permissions
     requestPushPermissions();
@@ -193,12 +193,12 @@ export function TeamCreationScreen() {
       );
 
       // Store the created team ID for navigation
-      if (result && result.id) {
-        setCreatedTeamId(result.id);
-      }
-
+      console.log("Result from team screation ", result);
+      setCreatedTeamId(result.id);
+      
       // Step 2: Join the league using the recently submitted team
-      await leagueService.joinLeague(league);
+      const joinLeagueRes = await leagueService.joinLeague(league);
+      console.log("Result from join res ", joinLeagueRes);
 
       // Step 3: Request push notification permissions after successful team creation
       // requestPushPermissions(); Used to be here

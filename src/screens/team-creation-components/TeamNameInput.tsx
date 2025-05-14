@@ -21,6 +21,7 @@ export const TeamNameInput: React.FC<TeamNameInputProps> = ({
         onChange={(e) => onTeamNameChange(e.target.value)}
         className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-dark-700 dark:text-gray-100"
         placeholder="Enter your team name"
+        maxLength={25}
       />
     </div>
   );

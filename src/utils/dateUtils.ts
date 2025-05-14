@@ -8,3 +8,13 @@ export function epochDiff(futureDate: Date) {
 
     return diff;
 }
+
+/** Comparator for dates */
+export function dateComparator(a: Date | null | undefined, b: Date | null | undefined) {
+
+    const aDate = new Date(a ?? new Date());
+    const bDate = new Date(b ?? new Date());
+
+    return aDate.valueOf() - bDate.valueOf();
+
+}
