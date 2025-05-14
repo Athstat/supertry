@@ -1,28 +1,18 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Loader, Trophy, ChevronRight } from "lucide-react";
+import { Loader } from "lucide-react";
 import ScrummyLogo from "../components/branding/scrummy_logo";
 import { useFetch } from "../hooks/useFetch";
-import { isLeagueLocked, latestLeagueFetcher } from "../utils/leaguesUtils";
-import LeagueLiveIndicator, { LeagueLiveIndicatorDot, LeagueLiveIndicatorSolid } from "../components/leagues/LeagueLiveIndicator";
+import { latestLeagueFetcher } from "../utils/leaguesUtils";
 import PostSignUpPickYourTeamCard from "../components/auth/post_sign_up/PickYourTeamCard";
 import PostSignUpViewLeaderBoardCard from "../components/auth/post_sign_up/PostSignUpViewLeaderBoardCard";
+import PostSignUpDashboardButton from "../components/auth/post_sign_up/PostSignUpDashboardButton";
+import PostSignUpTutorialButton from "../components/auth/post_sign_up/PostSignUpTutorialButton";
 
 export default function PostSignUpWelcomeScreen() {
 
-  const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
-  const { data: latestLeague, error: latestLeagueError, isLoading: loading } = useFetch("latest-leagues", "", (key: string) => latestLeagueFetcher());
-
-  // const handleWatchTutorial = () => {
-  //   // Open YouTube tutorial in a new tab
-  //   //window.open("https://youtube.com/scrummy-intro", "_blank");
-  // };
-
-  // const toggleDebug = () => {
-  //   setIsDebug(!isDebug);
-  // };
+  const { 
+    data: latestLeague, 
+    isLoading: loading, error 
+  } = useFetch("latest-leagues", "", (_) => latestLeagueFetcher());
 
   if (loading) {
     return (
@@ -56,88 +46,12 @@ export default function PostSignUpWelcomeScreen() {
         )}
 
         <div className="w-full mt-8 space-y-4">
-          {/* Tutorial Button */}
-          {/* <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0, y: 10 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 25,
-                  delay: 0,
-                },
-              },
-            }}
-            className="bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow"
-            whileHover={{
-              scale: 1.02,
-              transition: { type: "spring", stiffness: 300 },
-            }}
-            onClick={handleWatchTutorial}
-          >
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full mr-3">
-                  <ChevronRight
-                    size={20}
-                    className="text-blue-600 dark:text-blue-400"
-                  />
-                </div>
-                <h3 className="font-semibold text-lg dark:text-white">
-                  Watch Tutorial
-                </h3>
-              </div>
-              <ChevronRight size={18} className="text-gray-400" />
-            </div>
-          </motion.div> */}
 
+          <PostSignUpTutorialButton />
           <PostSignUpPickYourTeamCard league={latestLeague} />
           <PostSignUpViewLeaderBoardCard league={latestLeague} />
+          <PostSignUpDashboardButton />
 
-          {/* Dashboard Button */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0, y: 10 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 25,
-                  delay: 0.3,
-                },
-              },
-            }}
-            className="bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow"
-            whileHover={{
-              scale: 1.02,
-              transition: { type: "spring", stiffness: 300 },
-            }}
-            onClick={() => navigate("/dashboard")}
-          >
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-full mr-3">
-                  <ChevronRight
-                    size={20}
-                    className="text-green-600 dark:text-green-400"
-                  />
-                </div>
-                <h3 className="font-semibold dark:text-white">
-                  Go to Dashboard
-                </h3>
-              </div>
-              <ChevronRight size={18} className="text-gray-400" />
-            </div>
-          </motion.div>
         </div>
       </div>
     </div>

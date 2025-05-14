@@ -72,7 +72,7 @@ export default function PostSignUpViewLeaderBoardCard({ league }: Props) {
                             </h3>
 
                             {isLocked && (
-                                <div className="text-slate-600 dark:text-slate-700 flex flex-row items-center gap-1" >
+                                <div className="text-slate-600 dark:text-slate-400 flex flex-row items-center gap-1" >
                                     <LeagueLiveIndicatorDot league={league} />
                                     {league.title}
                                 </div>
