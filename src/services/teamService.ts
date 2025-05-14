@@ -13,7 +13,6 @@ export const fantasyTeamService = {
     teamId: string
   ): Promise<any> => {
     try {
-
       // Get token for authentication
       const token = localStorage.getItem("access_token");
 
@@ -23,7 +22,9 @@ export const fantasyTeamService = {
         );
       }
 
-      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`);
+      const uri = getUri(
+        `/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`
+      );
 
       const response = await fetch(uri, {
         method: "PUT",
@@ -32,8 +33,7 @@ export const fantasyTeamService = {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ team, teamId }),
-      }
-      );
+      });
 
       if (!response.ok) {
         console.error("Failed to update team athletes:", await response.text());
@@ -54,7 +54,6 @@ export const fantasyTeamService = {
    */
   fetchUserClub: async () => {
     try {
-
       // Get user ID from token
       const token = localStorage.getItem("access_token");
 
@@ -79,14 +78,13 @@ export const fantasyTeamService = {
       // Make API request to get user's club
       const uri = getUri(`/api/v1/fantasy-teams/fantasy-clubs/${userId}`);
 
-      const response = await fetch( uri, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(uri, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         console.error("Failed to fetch user club:", await response.text());
@@ -112,7 +110,6 @@ export const fantasyTeamService = {
    */
   fetchUserTeams: async (): Promise<IFantasyClubTeam[]> => {
     try {
-
       // Get user ID from token
       const token = localStorage.getItem("access_token");
 
@@ -133,6 +130,8 @@ export const fantasyTeamService = {
           "Could not determine user identity. Please log in again."
         );
       }
+
+      console.log("userId", userId);
 
       // Construct the URL based on whether leagueId is provided
       const url = getUri(`/api/v1/fantasy-teams/fantasy-teams-all/${userId}`);
@@ -167,7 +166,6 @@ export const fantasyTeamService = {
     leagueId: string
   ): Promise<IFantasyClubTeam> => {
     try {
-
       // Get user ID from token (or use a default if not available)
       const token = localStorage.getItem("access_token");
 
@@ -208,15 +206,14 @@ export const fantasyTeamService = {
       // Submit the team to the server
       const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes`);
 
-      const response = await fetch( uri, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(uri, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -238,7 +235,6 @@ export const fantasyTeamService = {
    */
   fetchTeamAthletes: async (teamId: string): Promise<IFantasyTeamAthlete[]> => {
     try {
-
       // Get token for authentication
       const token = localStorage.getItem("access_token");
 
@@ -249,16 +245,17 @@ export const fantasyTeamService = {
       }
 
       // Make API request to get team athletes
-      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}`);
-
-      const response = await fetch( uri, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const uri = getUri(
+        `/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}`
       );
+
+      const response = await fetch(uri, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         console.error("Failed to fetch team athletes:", await response.text());

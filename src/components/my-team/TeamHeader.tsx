@@ -1,5 +1,5 @@
 import React from "react";
-import { Trophy, Users, Loader, Award, ChevronLeft } from "lucide-react";
+import { Trophy, Users, Loader, Award, ChevronLeft, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IFantasyClubTeam } from "../../types/fantasyTeamAthlete";
 import { IFantasyLeague } from "../../types/fantasyLeague";
@@ -10,7 +10,7 @@ interface TeamHeaderProps {
   totalPoints: number;
   leagueInfo: IFantasyLeague | null;
   fetchingLeague: boolean;
-  rank?: number
+  rank?: number;
 }
 
 export const TeamHeader: React.FC<TeamHeaderProps> = ({
@@ -19,7 +19,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
   totalPoints,
   leagueInfo,
   fetchingLeague,
-  rank
+  rank,
 }) => {
   const navigate = useNavigate();
 
@@ -27,7 +27,9 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
     navigate(-1);
   };
 
-  console.log("leagueInfo", leagueInfo);
+  console.log("rank", rank);
+  console.log("totalPoints", totalPoints);
+  console.log("round_score", team.round_score);
 
   return (
     <>
@@ -46,71 +48,91 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
         <span className="text-sm font-medium">Go Back</span>
       </button>
 
-      {/* Team Header */}
-      <div className="bg-white dark:bg-dark-800/40 rounded-xl p-4 mb-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          {/* Team Name and Stats */}
-          <div className="flex flex-col">
-            <h1 className="text-xl sm:text-2xl font-bold dark:text-gray-100">
-              {team.name}
-            </h1>
-            <div className="flex flex-wrap items-center gap-3 mt-2">
-              { rank && <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-                <Trophy size={18} className="text-yellow-500 shrink-0" />
-                <span className="whitespace-nowrap">
-                    Rank #{rank}
-                </span>
-              </div>}
-              <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-                <Users
-                  size={18}
-                  className="text-primary-700 dark:text-primary-500 shrink-0"
-                />
-                <span className="whitespace-nowrap">
-                  {athletesCount} Players
-                </span>
-              </div>
-              {leagueInfo && (
-                <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-                  <Award size={18} className="text-blue-500 shrink-0" />
-                  <button
-                    onClick={() => {
-                      if (leagueInfo) {
-                        navigate(`/league/${leagueInfo.official_league_id}`, {
-                          state: { league: leagueInfo },
-                        });
-                      }
-                    }}
-                    className="whitespace-nowrap text-blue-600 dark:text-blue-400 hover:underline font-medium"
-                  >
-                    {leagueInfo.title || "League"}
-                  </button>
-                </div>
-              )}
-              {fetchingLeague && !leagueInfo && (
-                <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-                  <Loader
-                    size={16}
-                    className="animate-spin text-blue-500 shrink-0"
+      {/* Hero Team Header */}
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-dark-800/60 dark:to-dark-700/60 rounded-xl p-6 mb-6 shadow-md text-center">
+        {/* Team Name */}
+        <h1 className="text-2xl sm:text-3xl font-bold dark:text-gray-100 mb-4">
+          {team.name}
+        </h1>
+
+        {/* Rank and Score Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-6 mb-4">
+          {/* Rank Badge with Medal */}
+          <div className="relative inline-flex items-center">
+            <div className="absolute inset-0 bg-yellow-400 dark:bg-yellow-500 rounded-full opacity-20 animate-[pulse_2s_ease-in-out_infinite]"></div>
+            <div className="relative flex items-center gap-2 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-dark-700/70 dark:to-dark-700/90 px-4 py-2 rounded-full shadow-sm">
+              <span className="text-xl mr-1">
+                {rank === 1 ? (
+                  "🥇"
+                ) : rank === 2 ? (
+                  "🥈"
+                ) : rank === 3 ? (
+                  "🥉"
+                ) : (
+                  <Trophy
+                    size={22}
+                    className="text-blue-500 dark:text-blue-400 animate-pulse"
                   />
-                  <span className="whitespace-nowrap">Loading league...</span>
-                </div>
-              )}
+                )}
+              </span>
+              <span className="font-bold text-gray-800 dark:text-gray-200">
+                Rank #{rank ?? " –"}
+              </span>
             </div>
           </div>
 
-          {/* Points Display */}
-          <div className="flex items-center justify-between sm:justify-end gap-3 mt-2 sm:mt-0 bg-gray-50 dark:bg-dark-700/40 p-2 sm:p-3 rounded-lg">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Total Game Points
-            </div>
-            <div className="text-xl sm:text-2xl font-bold text-primary-700 dark:text-primary-500 flex items-center">
-              <span className="mr-1.5 text-yellow-500 text-sm font-semibold">
-                pts
+          {/* Round Score Badge */}
+          <div className="relative inline-flex items-center">
+            <div className="absolute inset-0 bg-orange-400 dark:bg-orange-500 rounded-full opacity-10 animate-[pulse_2.5s_ease-in-out_infinite]"></div>
+            <div className="relative flex items-center gap-2 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-dark-700/70 dark:to-dark-700/90 px-4 py-2 rounded-full shadow-sm">
+              <Zap size={22} className="text-orange-500 shrink-0" />
+              <span
+                className="font-bold text-gray-800 dark:text-gray-200"
+                style={{ textShadow: "0 0 8px rgba(255, 153, 0, 0.4)" }}
+              >
+                {Math.floor(team.round_score ?? totalPoints ?? 0)} pts
               </span>
-              {Math.floor(totalPoints ?? 0)}
             </div>
           </div>
+        </div>
+
+        {/* Additional Team Info */}
+        <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-1.5">
+            <Users
+              size={18}
+              className="text-primary-700 dark:text-primary-500 shrink-0"
+            />
+            <span className="whitespace-nowrap">{athletesCount} Players</span>
+          </div>
+
+          {leagueInfo && (
+            <div className="flex items-center gap-1.5">
+              <Award size={18} className="text-blue-500 shrink-0" />
+              <button
+                onClick={() => {
+                  if (leagueInfo) {
+                    navigate(`/league/${leagueInfo.official_league_id}`, {
+                      state: { league: leagueInfo },
+                    });
+                  }
+                }}
+                className="whitespace-nowrap text-blue-600 dark:text-blue-400 hover:underline font-medium"
+              >
+                {leagueInfo.title || "League"}
+              </button>
+            </div>
+          )}
+
+          {fetchingLeague && !leagueInfo && (
+            <div className="flex items-center gap-1.5">
+              <Loader
+                size={16}
+                className="animate-spin text-blue-500 shrink-0"
+              />
+              <span className="whitespace-nowrap">Loading league...</span>
+            </div>
+          )}
         </div>
       </div>
     </>

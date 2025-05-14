@@ -78,7 +78,9 @@ export const athleteService = {
       // Try to fetch from API first
       try {
         const response = await fetch(
-          getUri(`/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`),
+          getUri(
+            `/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`
+          ),
           {
             method: "GET",
             headers: {
@@ -141,8 +143,6 @@ export const athleteService = {
         `/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/league/${leagueId}/round/${roundId}/athlete/${athleteId}`
       );
 
-      console.log("Request URL", uri);
-
       const response = await fetch(uri, {
         method: "GET",
         headers: getAuthHeader(),
@@ -176,7 +176,9 @@ export const athleteService = {
         return getMockPlayerStats();
       }
 
-      const url = getUri(`/api/v1/sports-actions/aggregated/athletes/${athleteId}`);
+      const url = getUri(
+        `/api/v1/sports-actions/aggregated/athletes/${athleteId}`
+      );
       console.log("Fetching from URL:", url);
 
       const response = await fetch(url, {
