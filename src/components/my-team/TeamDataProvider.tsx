@@ -194,7 +194,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
               // Create a minimal league object with type casting to avoid TypeScript errors
               leagueData = {
                 id: leagueId,
-                title: teamsInLeague[0]?.name || "My League",
+                title: teamsInLeague[0]?.team_name || "My League",
                 description: "Fantasy Rugby League",
                 current_gameweek: 1,
                 // Add additional required properties with default values

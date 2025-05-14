@@ -23,7 +23,7 @@ export function LeagueStandings({
   onTeamClick,
   league
 }: LeagueStandingsProps) {
-  
+
   const userTeamRef = useRef<HTMLTableRowElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -129,7 +129,7 @@ export function LeagueStandings({
           </div>
         </div>
       )}
-{/* 
+      {/* 
       {showJumpButton && teams.some(isUserTeamCheck) && (
         <div className="p-3 border-t border-gray-200 dark:border-dark-700">
           <button
@@ -175,7 +175,7 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
   return (
     <>
       <tr
-        key={team.id}
+        key={team.team_id}
         ref={team.isUserTeam ? userTeamRef : null}
         data-user-team={team.isUserTeam}
         className={`
@@ -233,11 +233,11 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
             <ChevronRight className="text-gray-400" />
           </span>
         </td>
-      </tr>
 
-      {isUserTeam &&
-        <EditTeamButton team={team} league={league} />
-      }
+        {isUserTeam &&
+          <EditTeamButton team={team} league={league} />
+        }
+      </tr>
     </>
   )
 }
@@ -247,27 +247,27 @@ type EditButtonProps = {
   league: IFantasyLeague
 }
 
-function EditTeamButton({team, league} : EditButtonProps) {
+function EditTeamButton({ team, league }: EditButtonProps) {
 
   const navigate = useNavigate();
   const isLocked = isLeagueLocked(league.join_deadline);
 
   const handleClick = () => {
-    const uri = `/my-team/${team.id}`;
+    const uri = `/my-team/${team.team_id}`;
     navigate(uri, {
-      state: {teamWithRank: team, league: league}
+      state: { teamWithRank: team, league: league }
     });
   };
 
   if (isLocked) {
     return (
-      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
-      
-      <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
-        View Team
-      </button>
+      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center absolute mb-20 h-12 bottom-0 left-0" >
 
-    </div>
+        <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
+          View Team
+        </button>
+
+      </div>
     )
   }
 

@@ -30,7 +30,7 @@ export default function LeagueCardDetailed({ league }: Props) {
     const isLocked = isLeagueLocked(league.join_deadline);
 
     leagueTeams.forEach((t, index) => {
-        if (t.kc_id === user.id) {
+        if (t.user_id === user.id) {
             teamForLeague = t;
             teamRank = index + 1;
         }

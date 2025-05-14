@@ -26,16 +26,15 @@ export interface IFantasyLeague {
 
 
 export type IFantasyLeagueTeam = {
-  id: string,
+  team_id: string,
   league_id: number,
-  team_id: number,
   position?: number,
   position_change?: number,
-  overall_score?: number,
+  score?: number,
   is_admin?: boolean,
   join_date?:Date,
-  name?: string,
-  kc_id: string,
+  team_name?: string,
+  user_id: string,
   first_name: string,
   last_name: string,
   athletes : IFantasyTeamAthlete[]

@@ -17,7 +17,7 @@ export default function PrimaryButton({ children, className, onClick }: Props) {
     return (
         <button
             className={twMerge(
-                "bg-primary-500 text-white font-semibold px-4 py-2 w-full items-center justify-center flex rounded-xl",
+                "bg-primary-600 text-white font-semibold px-4 py-2 w-full items-center justify-center flex rounded-xl",
                 "hover:bg-primary-600",
                 className
             )}
