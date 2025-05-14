@@ -1,6 +1,7 @@
 import { add, differenceInDays } from "date-fns";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { leagueService } from "../services/leagueService";
+import { dateComparator } from "./dateUtils";
 
 /** Filters to only remain with leagues that seven days away */
 export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
@@ -118,4 +119,34 @@ export function calculateJoinDeadline(league: IFantasyLeague) {
 export function leagueLockBias(a: IFantasyLeague) {
   const isLocked = isLeagueLocked(a.join_deadline);
   return isLocked ? 0 : 1;
+}
+
+/** Gets the latest league for user to create team for */
+export async function latestLeagueFetcher() {
+
+  const leagues = await leagueService.getAllLeagues();
+  
+  const sortedLeagues = leagues
+    .filter(l => {
+      
+      const deadline = calculateJoinDeadline(l);
+
+      if (!deadline) {
+        return false;
+      }
+
+      const now = new Date();
+      const deadlineEpoch = deadline.valueOf();
+
+      const tolleranceDiff = 1000 * 60 * 60 * 24 * 3;
+
+      const pivot = now.valueOf() - tolleranceDiff;
+
+      return deadlineEpoch > pivot;
+
+    })
+    .sort((a, b) => dateComparator(a.join_deadline, b.join_deadline));
+
+    if (sortedLeagues.length === 0) return undefined;
+    return sortedLeagues[0];
 }

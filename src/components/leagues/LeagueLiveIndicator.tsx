@@ -128,3 +128,56 @@ export function LeagueLiveIndicatorSolid({ league, className }: Props) {
         </div>
     );
 }
+
+export function LeagueLiveIndicatorDot({ league, className }: Props) {
+
+    const [isLive, setLive] = useState(false);
+    const isLocked = isLeagueLocked(league.join_deadline);
+
+    const { data, isLoading } = useFetch(
+        "games",
+        league.official_league_id ?? "",
+        gamesService.getGamesByCompetitionId
+    );
+
+    useEffect(() => {
+        const fixtures = data ?? [];
+
+        if (fixtures.length > 0) {
+
+            const roundFixtures = getRoundFixtures(
+                fixtures,
+                league.start_round ?? 0,
+                league.end_round ?? 0
+            );
+
+            const lastMatch = roundFixtures[roundFixtures.length - 1];
+
+            const lastMatchDate = new Date(lastMatch?.kickoff_time ?? new Date());
+            const now = new Date();
+
+            const diff = now.valueOf() - lastMatchDate.valueOf();
+            const threeHours = 1000 * 60 * 60 * 3;
+            // League is live if the diffence between match and now is under 3 hours
+
+            setLive((diff <= threeHours) && isLocked);
+
+        } else {
+            setLive(false);
+        }
+
+    }, [data, league]);
+
+    if (isLoading) return ;
+
+    if (!isLive && !isLoading) return;
+
+    return (
+        <div className={twMerge(
+            "w-[7px] h-[7px] rounded-full animate-pulse bg-red-600 dark:bg-red-500",
+            className
+        )} >
+
+        </div>
+    );
+}
