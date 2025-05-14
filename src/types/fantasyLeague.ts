@@ -26,9 +26,8 @@ export interface IFantasyLeague {
 
 
 export type IFantasyLeagueTeam = {
-  id: string,
+  team_id: string,
   league_id: number,
-  team_id: number,
   position?: number,
   position_change?: number,
   score?: number,

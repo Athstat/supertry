@@ -236,7 +236,7 @@ export function TeamCreationScreen() {
 
     const handleViewTeam = () => {
 
-      const uri = `/my-team/${userTeam.id}`;
+      const uri = `/my-team/${userTeam.team_id}`;
       navigate(uri, {
         state: { teamWithRank: rankedUserTeam, leagueInfo: league, team: userTeam}
       });
