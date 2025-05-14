@@ -9,7 +9,7 @@ import { ErrorState } from "../components/team-creation/ErrorState";
 import PlayerSelectionModal from "../components/team-creation/PlayerSelectionModal";
 import TeamActions from "../components/team-creation/TeamActions";
 import { fantasyTeamService } from "../services/teamService";
-import { Check, Trophy, Users } from "lucide-react";
+import { ArrowRight, Check, Trophy, Users } from "lucide-react";
 
 // Refactored team creation components
 import TeamCreationContainer from "./team-creation-components/TeamCreationContainer";
@@ -21,6 +21,8 @@ import { leagueService } from "../services/leagueService";
 import { URC_COMPETIION_ID } from "../types/constants";
 import { isLeagueLocked } from "../utils/leaguesUtils";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import { useTeamCreationGuard } from "../hooks/useTeamCreationGuard";
+import PrimaryButton from "../components/shared/buttons/PrimaryButton";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -95,10 +97,12 @@ export function TeamCreationScreen() {
   const location = useLocation();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
   const league = location.state?.league ? location.state?.league as IFantasyLeague : undefined;
+  const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } = useTeamCreationGuard(league);
 
   // Check if coming from welcome screen
   const isFromWelcome = location.state?.from === "welcome";
-  const isLocked = isLeagueLocked(league?.join_deadline);
+  const isLocked = isTeamCreationLocked;
+
 
   useEffect(() => {
     // Request user notification permissions
@@ -195,7 +199,7 @@ export function TeamCreationScreen() {
       // Store the created team ID for navigation
       console.log("Result from team screation ", result);
       setCreatedTeamId(result.id);
-      
+
       // Step 2: Join the league using the recently submitted team
       const joinLeagueRes = await leagueService.joinLeague(league);
       console.log("Result from join res ", joinLeagueRes);
@@ -226,6 +230,27 @@ export function TeamCreationScreen() {
   // Show error state if there was an error
   if (error) {
     return <ErrorState error={error} isFromWelcome={isFromWelcome} />;
+  }
+
+  if (userTeam && hasCreatedTeam) {
+
+    const handleViewTeam = () => {
+
+      const uri = `/my-team/${userTeam.id}`;
+      navigate(uri, {
+        state: { teamWithRank: rankedUserTeam, leagueInfo: league, team: userTeam}
+      });
+    }
+
+    return (
+      <div className="w-full h-[70vh] flex flex-col gap-4 items-center justify-center px-10 lg:px-[30%]" >
+        <p className="text-center text-slate-700 dark:text-slate-300" >You have already created a team for {league?.title || " this league"}. You can only create one team for each fantasy league!</p>
+        <PrimaryButton onClick={handleViewTeam} className="flex flex-row items-center gap-1" >
+          View Team
+          <ArrowRight className="w-4 h-4" />
+        </PrimaryButton>
+      </div>
+    )
   }
 
   return (

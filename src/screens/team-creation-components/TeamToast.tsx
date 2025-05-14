@@ -23,14 +23,14 @@ export const TeamToast: React.FC<TeamToastProps> = ({
   
   return (
     <div 
-      className={`fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg ${bgColors[type]}`}
+      className={`fixed bottom-20 gap-2 flex flex-row items-center justify-center right-4 px-6 py-3 rounded-lg shadow-lg ${bgColors[type]}`}
     >
       <p>{message}</p>
       <button 
         onClick={onClose}
-        className="absolute top-1 right-1 text-white opacity-70 hover:opacity-100"
+        className="text-white opacity-70 hover:opacity-100"
       >
-        &times;
+        <p className='text-2xl' >&times;</p>
       </button>
     </div>
   );
