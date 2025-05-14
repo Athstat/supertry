@@ -46,7 +46,7 @@ export default function PostSignUpViewLeaderBoardCard({ league }: Props) {
                         },
                     },
                 }}
-                className={`bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 hover:shadow-md transition-shadow ${league ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
+                className={`bg-white dark:bg-dark-800/50 border border-gray-300 dark:border-slate-700 rounded-xl p-4 hover:shadow-md transition-shadow ${league ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
                     }`}
                 whileHover={
                     league
