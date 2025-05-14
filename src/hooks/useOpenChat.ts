@@ -1,42 +1,39 @@
 import { useEffect, useState } from "react";
-import { AsyncError } from "../services/errors";
-import { authService } from "../services/authService";
 import { connectUserToSendBird, CustomSendBirdInstance } from "../data/messaging/send_bird.init";
 import { createOrGetOpenChannel } from "../data/messaging/open_channel.init";
 import { OpenChannel } from "@sendbird/chat/openChannel";
+import { AuthUser } from "../types/auth";
 
-export function useOpenChat(channelUrl: string, channelName: string) {
-
-    const authUser = authService.getUserInfo();
+/** Connects a user to sendbird and the open channel specified */
+export function useOpenChat(channelUrl: string, channelName: string, authUser: AuthUser) {
+    
     const [sbInstance, setSbInstance] = useState<CustomSendBirdInstance>();
     const [channel, setChannel] = useState<OpenChannel>();
-    const [error, setError] = useState<AsyncError>();
+    const [error, setError] = useState<string>();
+    const [isLoading, setLoading] = useState(false);
 
 
     useEffect(() => {
         const init = async () => {
-            if (!authUser) {
+            setLoading(true);
 
-                setError({ message: "User not authenticated" });
+            const { data: sb, error: sbError } = await connectUserToSendBird(authUser);
+            if (sbError) setError(`Failed to connect to ${channelName}.`);
 
-                return;
-            } else {
-                const { data: sb, error: sbError } = await connectUserToSendBird(authUser);
-                if (sbError) setError(sbError);
+            if (sb) {
+                setSbInstance(sb);
+                const { data: channel, error: channelError } = await createOrGetOpenChannel(channelUrl, channelName, sb);
 
-                if (sb) {
-                    setSbInstance(sb);
-                    const { data: channel, error: channelError } = await createOrGetOpenChannel(channelUrl, channelName, sb);
-
-                    if (channel) setChannel(channel);
-                    else if (channelError) setError(channelError);
-                }
+                if (channel) setChannel(channel);
+                else if (channelError) setError(`Failed to connect to ${channelName}.`);
             }
+
+            setLoading(false);
         }
 
         init();
 
     }, []);
 
-    return { channel, error, sbInstance, authUser };
+    return { channel, error, sbInstance, authUser, isLoading };
 }

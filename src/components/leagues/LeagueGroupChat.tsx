@@ -10,6 +10,7 @@ import { OpenChannelProvider } from '@sendbird/uikit-react/OpenChannel/context';
 import OpenChannelUI from '@sendbird/uikit-react/OpenChannel/components/OpenChannelUI';
 import { IFantasyLeague } from '../../types/fantasyLeague';
 import DelayedView from '../shared/containers/DelayedView';
+import { useAuthUser } from '../../hooks/useAuthUser';
 
 type Props = {
     league: IFantasyLeague
@@ -20,7 +21,9 @@ export default function LeagueGroupChatFeed({ league }: Props) {
     const channelUrl = getLeagueChatChannelUrl(league);
     const channelName = getLeagueChannelName(league);
 
-    const { authUser, sbInstance } = useOpenChat(channelUrl, channelName)
+    const authUser = useAuthUser();
+
+    const { sbInstance } = useOpenChat(channelUrl, channelName, authUser);
 
     useEffect(() => {
         return () => {
