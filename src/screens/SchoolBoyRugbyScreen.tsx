@@ -4,10 +4,11 @@ import { SEND_BIRD_APP_ID } from "../data/messaging/send_bird.init";
 import { useEffect } from "react";
 import { useOpenChat } from "../hooks/useOpenChat";
 import { ErrorState } from "../components/ui/ErrorState";
+import DelayedView from "../components/shared/containers/DelayedView";
 
 export default function SchoolBoyRugbyScreen() {
-  
-  const {authUser, sbInstance} = useOpenChat(SCHOOL_BOY_RUGBY_CHANNEL_URL, SCHOOL_BOY_RUGBY_CHANNEL_NAME)
+
+  const { authUser, sbInstance } = useOpenChat(SCHOOL_BOY_RUGBY_CHANNEL_URL, SCHOOL_BOY_RUGBY_CHANNEL_NAME)
 
   useEffect(() => {
     return () => {
@@ -18,10 +19,12 @@ export default function SchoolBoyRugbyScreen() {
   if (!authUser) return <ErrorState message={"You must be logged in to access the School Boy Rugby Chat"} />
 
   return (
-  <div className='text-white h-[80vh] overflow-hidden'> 
+    <div >
+      <DelayedView className='text-white h-[80vh] overflow-hidden' >
         <SendBirdProvider appId={SEND_BIRD_APP_ID} userId={authUser?.id ?? "0"}>
           <OpenChannel channelUrl={SCHOOL_BOY_RUGBY_CHANNEL_URL} />
         </SendBirdProvider>
+      </DelayedView>
     </div>
   )
 }

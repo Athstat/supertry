@@ -17,9 +17,8 @@ export default function UserRankingsItem({userRank} : Props) {
     const isInPromotionZone = (rank: number) => rank <= 5;
     const isInDemotionZone = (rank: number) => rank >= 11;
 
-    const hasFullName = (ranking: UserRanking) => ranking.first_name && ranking.last_name;
 
-    if (!userRank.first_name && !userRank.last_name) {
+    if (!userRank.first_name) {
         return;
     }
     
@@ -56,7 +55,7 @@ export default function UserRankingsItem({userRank} : Props) {
 
                 <div className="flex-1 ml-3">
                     <div className="font-medium dark:text-gray-100">
-                        <p>{hasFullName(userRank) ? userRank.first_name + " " + userRank.last_name : userRank.email}</p>
+                        <p>{userRank.first_name}</p>
                     </div>
                 </div>
                 <div className="text-right font-semibold text-primary-600 dark:text-primary-400">
