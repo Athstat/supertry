@@ -9,7 +9,6 @@ export async function createOrGetOpenChannel(channelUrl: string, channelName: st
         const exisitingChannel = await getExistingOpenChannel(channelUrl, sb);
         
         if (exisitingChannel) {
-            console.log("Channel already exists: ", exisitingChannel);
             return { data: exisitingChannel };
         }
         
