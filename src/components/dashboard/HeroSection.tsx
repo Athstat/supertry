@@ -4,7 +4,7 @@ import { IFantasyLeague } from "../../types/fantasyLeague";
 import { activeLeaguesFilter, isLeagueOnTheClock } from "../../utils/leaguesUtils";
 import { useCountdown } from "../../hooks/useCountdown";
 import { epochDiff } from "../../utils/dateUtils";
-import { useFantasyLeague, useUserFantasyTeam } from "../league/useFantasyLeague";
+import { useUserFantasyTeam } from "../league/useFantasyLeague";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "../../hooks/useRoter";
 
