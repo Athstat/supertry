@@ -9,6 +9,7 @@ import { ErrorState } from '../ui/ErrorState';
 import { OpenChannelProvider } from '@sendbird/uikit-react/OpenChannel/context';
 import OpenChannelUI from '@sendbird/uikit-react/OpenChannel/components/OpenChannelUI';
 import { IFantasyLeague } from '../../types/fantasyLeague';
+import DelayedView from '../shared/containers/DelayedView';
 
 type Props = {
     league: IFantasyLeague
@@ -31,19 +32,17 @@ export default function LeagueGroupChatFeed({ league }: Props) {
 
 
     return (
-        <div className='' >
 
-            <div className='h-[600px]' >
-                <SendbirdProvider 
-                    appId={SEND_BIRD_APP_ID}
-                    userId={authUser.id}
-                >
-                    <OpenChannelProvider channelUrl={channelUrl}>
-                        <OpenChannelUI />
-                    </OpenChannelProvider>
-                </SendbirdProvider>
-            </div>
-        </div>
+        <DelayedView className='h-[600px]' >
+            <SendbirdProvider
+                appId={SEND_BIRD_APP_ID}
+                userId={authUser.id}
+            >
+                <OpenChannelProvider channelUrl={channelUrl}>
+                    <OpenChannelUI />
+                </OpenChannelProvider>
+            </SendbirdProvider>
+        </DelayedView>
 
     )
 }
