@@ -11,6 +11,9 @@ import { LeagueCard } from "../components/leagues/league_card_small/LeagueCard";
 import { activeLeaguesFilter, isLeagueOnTheClock } from "../utils/leaguesUtils";
 import { epochDiff } from "../utils/dateUtils";
 import { useCountdown } from "../hooks/useCountdown";
+import { useUserFantasyTeam } from "../components/league/useFantasyLeague";
+import { useRouter } from "../hooks/useRoter";
+import { twMerge } from "tailwind-merge";
 
 export function JoinLeagueScreen() {
   const navigate = useNavigate();
@@ -259,6 +262,16 @@ function JoinDeadlineCountdown({ league, onViewLeague }: JoinDeadlineCountdownPr
   const diff = epochDiff(deadline);
 
   const { days, hours, seconds, minutes } = useCountdown(diff);
+  const { userTeam, isLoading, rankedUserTeam } = useUserFantasyTeam(league);
+  const { navigateToMyTeam: navigateToMyTeam } = useRouter();
+
+  const handleCallToAction = () => {
+    if (userTeam) {
+      navigateToMyTeam(userTeam, rankedUserTeam);
+    } else {
+      onViewLeague(league);
+    }
+  }
 
   const timeBlocks = [
     { value: days, label: "Days" },
@@ -296,10 +309,18 @@ function JoinDeadlineCountdown({ league, onViewLeague }: JoinDeadlineCountdownPr
 
       <div className="flex items-center gap-4">
         <button
-          onClick={() => onViewLeague(league)}
-          className="w-full sm:w-auto bg-primary-500 text-primary-50 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center justify-center sm:justify-start gap-2 shadow-lg"
+          onClick={handleCallToAction}
+          className={twMerge(
+            "w-full sm:w-auto bg-primary-500 dark:bg-primary-600 dark:hover:bg-primary-700 text-primary-50 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center justify-center sm:justify-start gap-2 shadow-lg",
+            isLoading && "animate-pulse h-10 opacity-30"
+          )}
         >
-          Pick Your Team <ChevronRight size={20} />
+          {!isLoading && (
+            <>
+              <p>{userTeam ? "View You Team" : "Pick Your Team"}</p>
+              <ChevronRight size={20} />
+            </>
+          )}
         </button>
       </div>
     </div>
