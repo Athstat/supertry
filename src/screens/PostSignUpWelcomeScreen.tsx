@@ -7,6 +7,7 @@ import { useFetch } from "../hooks/useFetch";
 import { isLeagueLocked, latestLeagueFetcher } from "../utils/leaguesUtils";
 import LeagueLiveIndicator, { LeagueLiveIndicatorDot, LeagueLiveIndicatorSolid } from "../components/leagues/LeagueLiveIndicator";
 import PostSignUpPickYourTeamCard from "../components/auth/post_sign_up/PickYourTeamCard";
+import PostSignUpViewLeaderBoardCard from "../components/auth/post_sign_up/PostSignUpViewLeaderBoardCard";
 
 export default function PostSignUpWelcomeScreen() {
 
@@ -18,24 +19,6 @@ export default function PostSignUpWelcomeScreen() {
   //   // Open YouTube tutorial in a new tab
   //   //window.open("https://youtube.com/scrummy-intro", "_blank");
   // };
-
-  const handleViewLeaderboard = () => {
-    if (!latestLeague) {
-      setError("No active league available. Please try again later.");
-      return;
-    }
-
-    console.log("Navigating to leaderboard with league:", latestLeague);
-
-    // Navigate to league screen with league info as state
-    // Include "from" parameter to indicate we're coming from welcome screen
-    navigate(`/league/${latestLeague.official_league_id}`, {
-      state: {
-        league: latestLeague,
-        from: "welcome",
-      },
-    });
-  };
 
   // const toggleDebug = () => {
   //   setIsDebug(!isDebug);
@@ -113,62 +96,8 @@ export default function PostSignUpWelcomeScreen() {
             </div>
           </motion.div> */}
 
-          {/* Choose Players Button */}
           <PostSignUpPickYourTeamCard league={latestLeague} />
-
-          {/* View Leaderboard Button */}
-          {latestLeague && <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0, y: 10 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 25,
-                  delay: 0.2,
-                },
-              },
-            }}
-            className={`bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 rounded-xl p-4 hover:shadow-md transition-shadow ${latestLeague ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
-              }`}
-            whileHover={
-              latestLeague
-                ? {
-                  scale: 1.02,
-                  transition: { type: "spring", stiffness: 300 },
-                }
-                : {}
-            }
-            onClick={latestLeague ? handleViewLeaderboard : undefined}
-          >
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mr-3">
-                  <Trophy
-                    size={20}
-                    className="text-indigo-600 dark:text-indigo-400"
-                  />
-                </div>
-                <div className="flex flex-col" >
-                  <h3 className="font-semibold dark:text-white">
-                    View Leaderboard
-                  </h3>
-
-                  {isLeagueLocked(latestLeague.join_deadline) && (
-                    <div className="text-slate-600 dark:text-slate-700 flex flex-row items-center gap-1" >
-                      <LeagueLiveIndicatorDot league={latestLeague} />
-                      {latestLeague.title}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <ChevronRight size={18} className="text-gray-400" />
-            </div>
-          </motion.div>}
+          <PostSignUpViewLeaderBoardCard league={latestLeague} />
 
           {/* Dashboard Button */}
           <motion.div

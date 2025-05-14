@@ -1,41 +1,26 @@
-import { motion } from "framer-motion"
-import { Trophy, ChevronRight } from "lucide-react"
+import { motion } from "framer-motion";
+import { Trophy, ChevronRight } from "lucide-react";
 import { IFantasyLeague } from "../../../types/fantasyLeague"
-import { isLeagueLocked } from "../../../utils/leaguesUtils"
-import { LeagueLiveIndicatorDot } from "../../leagues/LeagueLiveIndicator"
-import { useNavigate } from "react-router-dom"
+import { LeagueLiveIndicatorDot } from "../../leagues/LeagueLiveIndicator";
+import { useNavigate } from "react-router-dom";
+import { isLeagueLocked } from "../../../utils/leaguesUtils";
 
 type Props = {
     league?: IFantasyLeague
 }
 
-/** Pick your team card on post sign up screen */
-export default function PostSignUpPickYourTeamCard({ league }: Props) {
+export default function PostSignUpViewLeaderBoardCard({ league }: Props) {
 
     if (!league) return;
-
-    const navigate = useNavigate();
     const isLocked = isLeagueLocked(league.join_deadline);
 
+    const navigate = useNavigate();
 
-    const handleChoosePlayers = () => {
+    const handleViewLeaderboard = () => {
 
-
-        /** If deadline has already passed then no need to take to team creation screen take them
-         * to the league's page
-         */
-
-        if (isLocked) {
-            navigate(`/league/${league.official_league_id}`, {
-                state: {
-                    league: league,
-                    from: "welcome"
-                }
-            });
-        }
-
-        // Navigate to team creation with the latest official league ID
-        navigate(`/${league.official_league_id}/create-team`, {
+        // Navigate to league screen with league info as state
+        // Include "from" parameter to indicate we're coming from welcome screen
+        navigate(`/league/${league.official_league_id}`, {
             state: {
                 league: league,
                 from: "welcome",
@@ -45,7 +30,7 @@ export default function PostSignUpPickYourTeamCard({ league }: Props) {
 
     return (
         <>
-            {!isLocked && <motion.div
+            {<motion.div
                 initial="hidden"
                 animate="visible"
                 variants={{
@@ -57,7 +42,7 @@ export default function PostSignUpPickYourTeamCard({ league }: Props) {
                             type: "spring",
                             stiffness: 400,
                             damping: 25,
-                            delay: 0.1,
+                            delay: 0.2,
                         },
                     },
                 }}
@@ -71,27 +56,27 @@ export default function PostSignUpPickYourTeamCard({ league }: Props) {
                         }
                         : {}
                 }
-                onClick={league ? handleChoosePlayers : undefined}
+                onClick={league ? handleViewLeaderboard : undefined}
             >
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                        <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-full mr-3">
+                        <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mr-3">
                             <Trophy
                                 size={20}
-                                className="text-primary-600 dark:text-primary-400"
+                                className="text-indigo-600 dark:text-indigo-400"
                             />
                         </div>
-
                         <div className="flex flex-col" >
                             <h3 className="font-semibold dark:text-white">
-                                Pick Your Team
+                                View Leaderboard
                             </h3>
 
-                            <p className="dark:text-slate-400 text-sm text-slate-600 flex flex-row items-center justify-start gap-1" >
-                                <LeagueLiveIndicatorDot league={league} />
-                                {league.title}
-
-                            </p>
+                            {isLocked && (
+                                <div className="text-slate-600 dark:text-slate-700 flex flex-row items-center gap-1" >
+                                    <LeagueLiveIndicatorDot league={league} />
+                                    {league.title}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <ChevronRight size={18} className="text-gray-400" />
