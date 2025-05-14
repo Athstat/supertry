@@ -172,6 +172,8 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
   const user = authService.getUserInfo();
   const isUserTeam = user ? user.id === team.userId : false;
 
+  console.log(team);
+
   return (
     <>
       <tr

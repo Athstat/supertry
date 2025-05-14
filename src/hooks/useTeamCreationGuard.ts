@@ -39,16 +39,16 @@ export function useTeamCreationGuard(league?: IFantasyLeague) : ResProps {
     let userTeam : IFantasyLeagueTeam | undefined;
 
     participatingTeams
-    .sort((a, b) => (b.overall_score ?? 0) - (a.overall_score ?? 0))
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .forEach((t, index) => {
-        if (t.kc_id === user.id) {
+        if (t.user_id === user.id) {
             rankedUserTeam = {
-                userId: t.kc_id,
-                teamName: t.name ?? "Unkown Team",
+                userId: t.user_id,
+                teamName: t.team_name ?? "Unkown Team",
                 id: t.id,
                 rank: index + 1,
-                totalPoints: t.overall_score ?? 0,
-                weeklyPoints: t.overall_score ?? 0,
+                totalPoints: t.score ?? 0,
+                weeklyPoints: t.score ?? 0,
                 managerName: t.first_name + " " + t.last_name,
                 lastRank: index + 1
             }

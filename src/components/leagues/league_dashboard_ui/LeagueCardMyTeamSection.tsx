@@ -31,7 +31,7 @@ export default function LeagueCardMyTeamSection({ team, rank, league }: MyTeamSe
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Shield className="w-6 h-6 text-blue-500" />
-                        <h3 className="font-semibold text-md trucate lg:text-lg">{team.name}</h3>
+                        <h3 className="font-semibold text-md trucate lg:text-lg">{team.team_name}</h3>
                     </div>
 
                     {!isLocked && <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
@@ -70,7 +70,7 @@ export default function LeagueCardMyTeamSection({ team, rank, league }: MyTeamSe
                             <Star className="w-4 h-4" />
                             <span className="text-sm">Points</span>
                         </div>
-                        <p className="text-xl font-bold">{Math.floor(team.overall_score ?? 0)}</p>
+                        <p className="text-xl font-bold">{Math.floor(team.score ?? 0)}</p>
                     </div>
                 </div>
             </div>

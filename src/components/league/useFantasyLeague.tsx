@@ -78,6 +78,9 @@ export function useFantasyLeague() {
 
 async function teamsFetcher(leagueId: string | number): Promise<RankedFantasyTeam[]> {
     const teams = await leagueService.fetchParticipatingTeams(leagueId);
+    
+    console.log("Fantasy League teams returned ", teams);
+    
     const user = authService.getUserInfo();
 
     return teams.map((team, index) => {
@@ -85,13 +88,13 @@ async function teamsFetcher(leagueId: string | number): Promise<RankedFantasyTea
         const rankedTeam: RankedFantasyTeam = {
             id: team.team_id.toString() ?? "",
             rank: index + 1,
-            teamName: team.name || `Team ${index + 1}`,
+            teamName: team.team_name || `Team ${index + 1}`,
             managerName: team.first_name + " " + team.last_name,
-            totalPoints: team.overall_score || 0,
-            weeklyPoints: team.overall_score || 0,
+            totalPoints: team.score || 0,
+            weeklyPoints: team.score || 0,
             lastRank: index + 1,
-            isUserTeam: user ? user.id === team.kc_id : false,
-            userId: team.kc_id
+            isUserTeam: user ? user.id === team.user_id : false,
+            userId: team.user_id
         }
 
         return rankedTeam;
