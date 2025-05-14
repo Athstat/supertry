@@ -45,7 +45,7 @@ export function useTeamCreationGuard(league?: IFantasyLeague) : ResProps {
             rankedUserTeam = {
                 userId: t.user_id,
                 teamName: t.team_name ?? "Unkown Team",
-                id: t.team_id,
+                team_id: t.team_id,
                 rank: index + 1,
                 totalPoints: t.score ?? 0,
                 weeklyPoints: t.score ?? 0,

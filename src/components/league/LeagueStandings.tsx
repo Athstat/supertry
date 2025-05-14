@@ -177,7 +177,7 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
   return (
     <>
       <tr
-        key={team.id}
+        key={team.team_id}
         ref={team.isUserTeam ? userTeamRef : null}
         data-user-team={team.isUserTeam}
         className={`
@@ -255,7 +255,7 @@ function EditTeamButton({team, league} : EditButtonProps) {
   const isLocked = isLeagueLocked(league.join_deadline);
 
   const handleClick = () => {
-    const uri = `/my-team/${team.id}`;
+    const uri = `/my-team/${team.team_id}`;
     navigate(uri, {
       state: {teamWithRank: team, league: league}
     });

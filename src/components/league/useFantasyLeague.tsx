@@ -86,7 +86,7 @@ async function teamsFetcher(leagueId: string | number): Promise<RankedFantasyTea
     return teams.map((team, index) => {
 
         const rankedTeam: RankedFantasyTeam = {
-            id: team.team_id.toString() ?? "",
+            team_id: team.team_id.toString() ?? "",
             rank: index + 1,
             teamName: team.team_name || `Team ${index + 1}`,
             managerName: team.first_name + " " + team.last_name,
