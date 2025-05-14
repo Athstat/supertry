@@ -12,7 +12,7 @@ import { IFantasyLeague } from "../types/fantasyLeague";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { useFantasyLeague } from "../components/league/useFantasyLeague";
 import { analytics } from "../services/anayticsService";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { isLeagueLocked } from "../utils/leaguesUtils";
 import { Lock } from "lucide-react";
 
@@ -20,10 +20,13 @@ type LeagueScreenTabs = "standings" | "chat" | "fixtures";
 
 export function LeagueScreen() {
 
+  const {state} = useLocation();
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<LeagueScreenTabs>("standings");
+
+  const [activeTab, setActiveTab] = useState<LeagueScreenTabs>( state?.initialTab || "standings");
+  
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
