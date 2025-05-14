@@ -226,7 +226,7 @@ export const fantasyTeamService = {
         );
       }
 
-      return await response.json();
+      return club;
     } catch (error) {
       console.error("Error in teamService.submitTeam:", error);
       throw error;
