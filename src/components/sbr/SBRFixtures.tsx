@@ -5,6 +5,7 @@ import SbrFixtureCard from "./SbrFixtureCard";
 import SbrVotingModal from "./SbrVotingModal";
 import useSWR from "swr";
 import { useState } from "react";
+import { format } from "date-fns";
 
 export default function SBRFixtures() {
 
@@ -13,6 +14,10 @@ export default function SBRFixtures() {
     const fixtures = data ?? [];
     const [showVoting, setShowVoting] = useState(false);
     const toogle = () => setShowVoting(!showVoting);
+
+    const dateStr = fixtures.length > 0 ? 
+        fixtures[0].kickoff_time ? format(fixtures[0].kickoff_time, "EE dd MMMM yyyy") : ""
+        : "";
 
     return (
         <div className="flex flex-col gap-3" >
@@ -30,6 +35,7 @@ export default function SBRFixtures() {
 
             <div>
                 <h1 className="text-xl font-medium" >Fixtures {!isLoading && "- Round 1"}</h1>
+                <p className="text dark:text-slate-400 text-slate-700" >{dateStr}</p>
                 <div>
 
                 </div>
