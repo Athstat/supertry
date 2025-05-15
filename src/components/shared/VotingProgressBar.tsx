@@ -3,10 +3,7 @@ type Props = {
     awayVotes: number
 }
 
-
-
 export default function VotingProgressBar({ homeVotes, awayVotes }: Props) {
-
     const total = homeVotes + awayVotes;
     const homePerc = calculatePerc(homeVotes, total);
     const awayPerc = calculatePerc(awayVotes, total);
@@ -17,31 +14,23 @@ export default function VotingProgressBar({ homeVotes, awayVotes }: Props) {
     if (total === 0) return;
 
     return (
-        <div className="w-full flex flex-col gap-2 " >
-            <div className="flex flex-row  rounded-xl overflow-clip w-full" >
+        <div className="w-full flex flex-col gap-2">
+            <div className="flex flex-row rounded-xl overflow-hidden w-full">
+                {homeBoxes.map((_, index) => (
+                    <div key={index} className="w-[1%] relative h-5 dark:bg-slate-800 bg-slate-900" />
+                ))}
 
-                {homeBoxes.map((_, index) => {
-                    return (
-                        <div key={index} className="w-[1%] relative h-5 bg-red-600" >
-                        </div>
-                    )
-                })}
-
-                {awayBoxes.map((_, index) => {
-                    return (
-                        <div key={index} className="w-[1%] relative h-5 bg-blue-600" >
-                        </div>
-                    )
-                })}
-
+                {awayBoxes.map((_, index) => (
+                    <div key={index} className="w-[1%] relative h-5 bg-primary-700 " />
+                ))}
             </div>
 
-            <div className="w-full flex px-2 flex-row" >
-                <div className="flex-1 items-center justify-start" >
+            <div className="w-full flex px-2 flex-row text-sm text-gray-600 dark:text-gray-300">
+                <div className="flex-1 items-center justify-start">
                     <p>{homeVotes} Vote{homeVotes > 1 ? "s" : ""}</p>
                 </div>
 
-                <div className="flex-1 flex items-center justify-end" >
+                <div className="flex-1 flex items-center justify-end">
                     <p>{awayVotes} Vote{awayVotes > 1 ? "s" : ""}</p>
                 </div>
             </div>

@@ -45,32 +45,30 @@ export default function SbrVotingBallotBox({ fixture, userVote }: Props) {
 
 
     return (
-        <div className="w-full p-4 " >
-
-            <div className="flex flex-row w-full items-center justify-between" >
-
+        <div className="w-full p-4">
+            <div className="flex flex-row w-full items-center justify-between">
                 {/* Home Vote Button */}
-                {<div className="flex flex-row items-center justify-start" >
+                {<div className="flex flex-row items-center justify-start">
                     <button  
                         disabled={hasVotedHome || isVoting}
                         onClick={() => onVote("home_team")}
                         className={twMerge(
-                            "bg-red-600 h-10 hover:bg-red-700 rounded-xl px-10 text-lg",
-                            hasVotedHome && "opacity-30"
+                            "bg-slate-900 dark:bg-slate-800 text-white h-10 hover:bg-slate-950 dark:hover:bg-slate-900 rounded-xl px-10 text-lg font-medium transition-colors",
+                            hasVotedHome && "opacity-50 cursor-not-allowed hover:bg-primary-600 dark:hover:bg-primary-700"
                         )}
                     >
                         {isVoting && isVoitngHome ? <Loader className="w-4 h-4 animate-spin" /> : <p>Vote</p>}
                     </button>
                 </div>}
-                {/* Away Vote Buttton */}
 
-                <div className="flex flex-row items-center justify-end" >
+                {/* Away Vote Button */}
+                <div className="flex flex-row items-center justify-end">
                     <button 
                         disabled={hasVotedAway || isVoting}
                         onClick={() => onVote("away_team")}
                         className={twMerge(
-                            "bg-blue-600 h-10 hover:bg-blue-700 rounded-xl px-10 text-lg ",
-                            hasVotedAway && "opacity-30"
+                            "bg-primary-600 dark:bg-primary-700 text-white h-10 hover:bg-primary-700 dark:hover:bg-primary-800 rounded-xl px-10 text-lg font-medium transition-colors",
+                            hasVotedAway && "opacity-50 cursor-not-allowed hover:bg-primary-600 dark:hover:bg-primary-700"
                         )}
                     >
                         {isVoting && !isVoitngHome ? <Loader className="w-4 h-4 animate-spin" /> : <p>Vote</p>}

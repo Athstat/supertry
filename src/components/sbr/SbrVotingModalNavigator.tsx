@@ -31,8 +31,8 @@ export default function SbrVotingModalNavigator({ currentFixture, onClickNext, f
                                 }
                             }}
                             className={twMerge(
-                                "w-3 h-3 cursor-pointer border dark:border-slate-400 border-slate-600  rounded-full",
-                                isCurrent && "dark:bg-slate-400 bg-slate-600"
+                                "w-3 h-3 cursor-pointer border dark:border-white border-slate-600  rounded-full",
+                                isCurrent && "dark:bg-white bg-slate-600"
 
                             )}>
 
