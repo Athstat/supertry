@@ -1,6 +1,5 @@
 import { ArrowRight } from "lucide-react";
 import { sbrService } from "../../services/sbrService"
-import { ISbrFixture } from "../../types/sbr";
 import { LoadingState } from "../ui/LoadingState";
 import SbrFixtureCard from "./SbrFixtureCard";
 import SbrVotingModal from "./SbrVotingModal";
@@ -8,7 +7,7 @@ import useSWR from "swr";
 
 export default function SBRFixtures() {
 
-    const { data, isLoading, error, mutate } = useSWR("sbr-fixtures", () => sbrService.getAllMatches());
+    const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllMatches());
 
     const fixtures = data ?? [];
 
@@ -47,11 +46,4 @@ export default function SBRFixtures() {
             { fixtures.length > 0 && !isLoading && <SbrVotingModal  fixtures={fixtures}  />}
         </div>
     )
-}
-
-
-function summerizeSbrFixtures (fixtures: ISbrFixture[]) {
-    let firstMatch;
-    let lastMatch;
-    
 }

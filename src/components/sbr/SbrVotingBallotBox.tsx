@@ -71,7 +71,7 @@ export default function SbrVotingBallotBox({ fixture, userVote }: Props) {
                         className={twMerge(
                             "bg-blue-600 h-10 hover:bg-blue-700 rounded-xl px-10 text-lg ",
                             hasVotedAway && "opacity-30"
-                        )} 
+                        )}
                     >
                         {isVoting && !isVoitngHome ? <Loader className="w-4 h-4 animate-spin" /> : <p>Vote</p>}
                     </button>

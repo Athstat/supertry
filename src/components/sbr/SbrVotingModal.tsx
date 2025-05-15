@@ -6,6 +6,7 @@ import { format } from "date-fns"
 import { useFixtureVotes } from "../../hooks/useFxitureVotes"
 import VotingProgressBar from "../shared/VotingProgressBar"
 import SbrVotingBallotBox from "./SbrVotingBallotBox"
+import SbrVotingModalNavigator from "./SbrVotingModalNavigator"
 
 type Props = {
     className?: string,
@@ -13,20 +14,46 @@ type Props = {
     open?: boolean
 }
 
-export default function SbrVotingModal({ className, fixtures, open }: Props) {
+export default function SbrVotingModal({ fixtures, open }: Props) {
 
-    const [currentGame, setCurrentGame] = useState<ISbrFixture | undefined>(() => {
+    const [currIndex, setCurrIndex] = useState<number | undefined>(fixtures.length === 0 ? undefined : 0 );
+    const [currentFixture, setCurrentFixture] = useState<ISbrFixture | undefined>(() => {
         if (fixtures.length !== 0) return fixtures[0]
         else return undefined
     });
 
+    const onChangeFixture = (newCurrent: ISbrFixture) => {
+        setCurrentFixture(newCurrent);
+    }
 
-    console.log("Current Game ", currentGame);
+    const onNext = () => {
+        
+        if (currIndex !== undefined) {
+            if (currIndex < fixtures.length) {
+                setCurrIndex(currIndex + 1);
+                setCurrentFixture(fixtures[currIndex + 1]);
+            } else {
+                setCurrIndex(undefined);
+                setCurrentFixture(undefined);
+            }
+        }
+
+        console.log("Clicked next");
+    }
 
 
     return (
         <DialogModal className="w-full" open={true} title="SBR Week 1 ">
-            {currentGame && <FixtureVotingCard fixture={currentGame} />}
+            {currentFixture && <FixtureVotingCard fixture={currentFixture} />}
+            {currentFixture !== undefined && 
+                <SbrVotingModalNavigator
+                    currentFixture={currentFixture}
+                    onClickNext={onNext}
+                    fixtures={fixtures}
+                    onChange={onChangeFixture}
+                />
+            }
+
         </DialogModal>
     )
 }
