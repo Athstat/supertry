@@ -6,7 +6,7 @@ import LeagueCardDetailed from "../leagues/LeagueCardDetailed";
 
 export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
   leagues,
-  isLoading
+  isLoading,
 }) => {
   const activeLeagues = activeLeaguesFilter(leagues);
 
@@ -28,12 +28,8 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
       ) : (
         <div className="w-full grid grid-cols-1 gap-3 lg:gap-5">
           {activeLeagues.slice(0, 3).map((league, index) => (
-            <LeagueCardDetailed
-              key={index}
-              league={league}
-            />
+            <LeagueCardDetailed key={index} league={league} />
           ))}
-
         </div>
       )}
     </div>
