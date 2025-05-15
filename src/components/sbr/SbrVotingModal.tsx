@@ -3,6 +3,9 @@ import { ISbrFixture } from "../../types/sbr"
 import DialogModal from "../shared/DialogModal"
 import SbrTeamLogo from "./SbrTeamLogo"
 import { format } from "date-fns"
+import { useFetch } from "../../hooks/useFetch"
+import { sbrService } from "../../services/sbrService"
+import { useFixtureVotes } from "../../hooks/useFxitureVotes"
 
 type Props = {
     className?: string,
@@ -17,6 +20,8 @@ export default function SbrVotingModal({ className, fixtures, open }: Props) {
         else return undefined 
     });
 
+
+    console.log("Current Game ", currentGame);
 
     
     return (
@@ -33,8 +38,10 @@ type FixtureVotingCardProps = {
 function FixtureVotingCard({ fixture } : FixtureVotingCardProps) {
     
     const {kickoff_time} = fixture;
-    
-    
+    const {userVote, votes} = useFixtureVotes(fixture);
+
+    console.log("Votes ", votes);
+
     return (
         <div>
             <div className="flex flex-row items-center" >
@@ -53,6 +60,19 @@ function FixtureVotingCard({ fixture } : FixtureVotingCardProps) {
                     <p className="text-md" >{fixture.away_team}</p>
                 </div>
             </div>
+        </div>
+    )
+}
+
+type VotingProgressBarProps = {
+    homeVotes: number,
+    awayVotes: number
+}
+
+function VotingProgressBar({} : VotingProgressBarProps) {
+    return (
+        <div>
+
         </div>
     )
 }

@@ -44,7 +44,7 @@ export default function SBRFixtures() {
                 })}
             </div>
 
-            <SbrVotingModal fixtures={fixtures}  />
+            { fixtures.length > 0 && !isLoading && <SbrVotingModal fixtures={fixtures}  />}
         </div>
     )
 }

@@ -2,7 +2,7 @@
 
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 import { logger } from "./logger";
-import { ISbrFixture } from "../types/sbr";
+import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
 
 export const sbrService = {
     getAllMatches: async () : Promise<ISbrFixture[]> => {
@@ -14,12 +14,28 @@ export const sbrService = {
             });
 
             const json = await res.json() as ISbrFixture[];
-            console.log("Matches SBR ", json);
 
             return json;
         } catch (error) {
             logger.error(error);
             return []
+        }
+    },
+
+    getMatchVotes: async (fixtureId: string) : Promise<ISbrFixtureVote[]> => {
+        try {
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/votes`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            const json = await res.json() ;
+            console.log(json);
+            return json;
+
+        } catch (error) {
+            logger.error(error);
+            return [];
         }
     }
 }
