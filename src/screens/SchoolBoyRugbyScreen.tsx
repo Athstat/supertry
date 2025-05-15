@@ -6,7 +6,7 @@ export default function SchoolBoyRugbyScreen() {
   // const navigate = useNavigate();
 
   // const handleViewChat = () => {
-  //   navigate("/sbr/chat");
+  //   navigate("/sbr/chat"); 
   // }
 
   return (
