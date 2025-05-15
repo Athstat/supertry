@@ -17,5 +17,5 @@ export type ISbrFixture = {
 export type ISbrFixtureVote = {
     user_id: string,
     fixture_id: string,
-    vote_for: "home_team" | "away_team" | string
+    vote_for: "home_team" | "away_team"
 }

@@ -28,9 +28,9 @@ export function useFixtureVotes(fixture: ISbrFixture) {
     })
 
     const awayVotes = votes.filter((v) => {
-        return v.vote_for === "home_votes";
+        return v.vote_for === "away_team";
     })
 
-    return { userVote, votes, homeVotes, awayVotes }
+    return { userVote, votes, homeVotes, awayVotes, isLoading, error }
 
 }

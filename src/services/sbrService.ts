@@ -3,6 +3,7 @@
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 import { logger } from "./logger";
 import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
+import { authService } from "./authService";
 
 export const sbrService = {
     getAllMatches: async () : Promise<ISbrFixture[]> => {
@@ -37,5 +38,45 @@ export const sbrService = {
             logger.error(error);
             return [];
         }
+    },
+
+    postSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
+        
+        try {
+            const user = authService.getUserInfo();
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
+
+            const res = await fetch(uri, {
+                method: "POST",
+                headers: getAuthHeader(),
+                body: JSON.stringify({voteFor, userId: user?.id ?? "fall-back"})
+            });
+
+            return await res.json();
+
+        } catch (error) {
+            logger.error(error);
+        }
+        
+    },
+
+    putSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
+        
+        try {
+            const user = authService.getUserInfo();
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
+
+            const res = await fetch(uri, {
+                method: "PUT",
+                headers: getAuthHeader(),
+                body: JSON.stringify({voteFor, userId: user?.id ?? "fall-back"})
+            });
+
+            return await res.json();
+
+        } catch (error) {
+            logger.error(error);
+        }
+        
     }
 }
