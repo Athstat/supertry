@@ -1,7 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { Home, Trophy, Users, BarChart, User, School2 } from "lucide-react";
 import { useState } from "react";
-import { MdOutlineSports, MdOutlineSportsRugby } from "react-icons/md";
+import { MdOutlineSportsRugby } from "react-icons/md";
 
 export function BottomNav() {
   const { pathname } = useLocation();
@@ -74,7 +74,7 @@ export function BottomNav() {
 
         })}
 
-        <Link
+        {/* <Link
           to={"/sbr"}
           className={`flex flex-col items-center justify-center w-full h-full relative overflow-hidden ${pathname === "/sbr" || pathname.startsWith(`/sbr`)
               ? "text-primary-600 dark:text-primary-400"
@@ -94,7 +94,7 @@ export function BottomNav() {
           )}
           <MdOutlineSportsRugby size={20} />
           <span className="text-xs mt-1">SBR</span>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
