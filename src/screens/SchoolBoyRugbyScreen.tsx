@@ -9,11 +9,10 @@ export default function SchoolBoyRugbyScreen() {
   //   navigate("/sbr/chat"); 
   // }
 
-  
+
 
   return (
     <PageView className="dark:text-white p-5 flex flex-col gap-3" >
-
       <div className="flex flex-row items-center justify-between" >
 
         <div className="flex flex-row items-center gap-2" >
@@ -32,6 +31,7 @@ export default function SchoolBoyRugbyScreen() {
       <div>
         <SBRFixtures />
       </div>
+      <div></div>
     </PageView>
   )
 }
