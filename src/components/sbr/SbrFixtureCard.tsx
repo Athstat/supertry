@@ -15,7 +15,7 @@ export default function SbrFixtureCard({ fixture }: Props) {
             {/* Home Team */}
 
             <div className="flex-1 flex gap-2 flex-col items-center justify-start" >
-                <SbrTeamLogo teamName={fixture.home_team} />
+                <SbrTeamLogo className="lg:w-14 lg:h-14" teamName={fixture.home_team} />
                 <p className="text-xs lg-text-sm truncate" >{fixture.home_team}</p>
             </div>
 
@@ -28,7 +28,7 @@ export default function SbrFixtureCard({ fixture }: Props) {
 
             {/* Away Team */}
             <div className="flex-1 flex gap-2 flex-col items-center justify-end" >
-                <SbrTeamLogo teamName={fixture.away_team} />
+                <SbrTeamLogo className="lg:w-14 lg:h-14" teamName={fixture.away_team} />
                 <p className="text-xs lg-text-sm truncate" >{fixture.away_team}</p>
             </div>
         </div>

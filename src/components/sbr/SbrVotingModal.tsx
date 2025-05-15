@@ -55,7 +55,7 @@ export default function SbrVotingModal({ fixtures, open, onClose }: Props) {
     }
 
     return (
-        <DialogModal onClose={onClose}  className="w-full h-[600px] flex flex-col items-center justify-center" open={open} title="Who you got this week?">
+        <DialogModal onClose={onClose}  className="w-full h-[600px] flex flex-col items-center justify-center" open={open} title="Who you got winning this week?">
             {currentFixture !== undefined && 
             <FixtureVotingCard 
                 fixture={currentFixture} 
