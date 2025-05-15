@@ -14,6 +14,7 @@ import {
 import { authService } from "../../services/authService";
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/anayticsService";
+import { emailValidator } from "../../utils/stringUtils";
 
 export function SignUpScreen() {
   const navigate = useNavigate();
@@ -39,6 +40,12 @@ export function SignUpScreen() {
       setError("Please fill in all fields");
       return;
     }
+
+    if (!emailValidator(form.email)) {
+      setError("Please enter a valid email");
+      return;
+    }
+
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -90,7 +97,14 @@ export function SignUpScreen() {
       };
 
       // Register the user with both Keycloak and games database
-      await authService.createGamesUser(userData);
+      const res = await authService.createGamesUser(userData);
+
+      console.log("Sign Up Res ", res);
+
+      if (res === "User already exists") {
+        setError("An account with this email already exists");
+        return;
+      }
 
       // First login the user to set authentication state
       analytics.trackUserSignUp("Email");
@@ -101,6 +115,7 @@ export function SignUpScreen() {
 
         // Only navigate to welcome screen after successful login
         navigate("/welcome");
+
       } catch (loginErr) {
         console.error("Auto-login failed:", loginErr);
 

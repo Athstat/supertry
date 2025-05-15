@@ -251,6 +251,8 @@ export const authService = {
         }
       );
 
+      console.log("API for creating games user ", response);
+
       // Check if the response is JSON
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
