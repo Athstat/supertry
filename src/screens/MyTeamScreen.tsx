@@ -23,9 +23,8 @@ type TabType = "edit-team" | "view-pitch";
 const TeamContent: React.FC<{
   activeTab: TabType;
   setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
-  league?: IFantasyLeague
+  league?: IFantasyLeague;
 }> = ({ activeTab, setActiveTab, league }) => {
-  
   const { positionList, players, formation } = useTeamData();
 
   const {
@@ -55,10 +54,12 @@ const TeamContent: React.FC<{
 // Main content that uses both TeamData and TeamActions contexts
 const MyTeamContent: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
-  const [activeTab, setActiveTab] = useState<TabType>("view-pitch");
+  const [activeTab, setActiveTab] = useState<TabType>("edit-team");
   const [initialized, setInitialized] = useState(false);
-  const {state} = useLocation();
-  const teamWithRank = state?.teamWithRank ? state?.teamWithRank as RankedFantasyTeam : undefined;
+  const { state } = useLocation();
+  const teamWithRank = state?.teamWithRank
+    ? (state?.teamWithRank as RankedFantasyTeam)
+    : undefined;
 
   const {
     team,
@@ -92,7 +93,7 @@ const MyTeamContent: React.FC = () => {
   }
 
   return (
-    <FantasyLeagueProvider league={leagueInfo ?? undefined} >
+    <FantasyLeagueProvider league={leagueInfo ?? undefined}>
       <main className="container mx-auto px-4 py-6">
         <div className="max-w-4xl mx-auto">
           {/* Team Header */}
@@ -113,16 +114,16 @@ const MyTeamContent: React.FC = () => {
                 players,
                 formation,
                 matchesPlayed,
-                ...(teamWithRank ? {rank: teamWithRank?.rank} : {}),
+                ...(teamWithRank ? { rank: teamWithRank?.rank } : {}),
               } as Team
             }
           />
           {/* Team Actions with Tabs Content as children */}
           {teamId && (
             <TeamActions league={leagueInfo ?? undefined} teamId={teamId}>
-              <TeamContent 
+              <TeamContent
                 activeTab={activeTab}
-                setActiveTab={setActiveTab} 
+                setActiveTab={setActiveTab}
                 league={leagueInfo ?? undefined}
               />
             </TeamActions>

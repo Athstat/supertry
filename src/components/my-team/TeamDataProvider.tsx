@@ -7,7 +7,7 @@ import {
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
-import { fantasyTeamService  } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/teamService";
 import { leagueService } from "../../services/leagueService";
 import { useFetch } from "../../hooks/useFetch";
 
@@ -60,7 +60,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
   const [fetchingLeague, setFetchingLeague] = useState(false);
   const [teamBudget, setTeamBudget] = useState<number>(0);
 
-  const {data: league} = useFetch(
+  const { data: league } = useFetch(
     "fantasy-leagues",
     Number.parseInt(team?.league_id ?? "0"),
     leagueService.getLeagueById,
@@ -78,19 +78,19 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
 
       try {
         setIsLoading(true);
-        console.log("Fetching team data for ID:", teamId);
+        //console.log("Fetching team data for ID:", teamId);
 
         // First try to fetch team athletes directly
         const teamAthletes = await fantasyTeamService.fetchTeamAthletes(
           teamId as string
         );
-        console.log("Team athletes:", teamAthletes);
+        //console.log("Team athletes:", teamAthletes);
 
         if (teamAthletes && teamAthletes.length > 0) {
           // If we have athletes, we can fetch the team details
           // Use type assertion to handle the function call
           const userTeams = await (fantasyTeamService.fetchUserTeams as any)();
-          console.log("User teams:", userTeams);
+          //console.log("User teams:", userTeams);
 
           let currentTeam = userTeams.find((t: any) => t.id == teamId);
 
@@ -144,8 +144,8 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
         (sum, athlete: any) => sum + (athlete.price || 0),
         0
       );
-      // Assume max budget is 200 for now, adjust as needed
-      const maxBudget = 200;
+      // Use the correct max budget of 240 to match what's used in PlayerSelectionModal
+      const maxBudget = 240;
       setTeamBudget(maxBudget - totalTeamValue);
     }
   }, [athletes]);

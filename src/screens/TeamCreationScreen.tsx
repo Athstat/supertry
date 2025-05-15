@@ -199,6 +199,7 @@ export function TeamCreationScreen() {
       // Store the created team ID for navigation
       console.log("Result from team screation ", result);
       setCreatedTeamId(result.id);
+      
       // Step 2: Join the league using the recently submitted team
       const joinLeagueRes = await leagueService.joinLeague(league);
       console.log("Result from join res ", joinLeagueRes);

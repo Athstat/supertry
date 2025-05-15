@@ -59,7 +59,7 @@ export const usePlayersFilter = ({
       } else if (isMyTeamScreen) {
         // MyTeamScreen path - stricter position matching
         // Extract player position values - use either position or position_class field
-        
+
         // const playerPosition = player.position || "";
         const playerPositionClass = player.position_class || "";
 
@@ -144,7 +144,6 @@ export const usePlayersFilter = ({
         player.player_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         player.team_name?.toLowerCase().includes(searchQuery.toLowerCase());
 
-
       // Team filter matching
       const matchesTeam =
         teamFilter.length === 0 || teamFilter.includes(player.team_id);
@@ -155,7 +154,7 @@ export const usePlayersFilter = ({
       );
 
       // Budget check
-      // const isAffordable = player.price <= remainingBudget;
+      const isAffordable = player.price <= remainingBudget;
 
       // Availability filter check - only apply if filterAvailable is true
       const passedAvailabilityFilter =
@@ -167,7 +166,7 @@ export const usePlayersFilter = ({
         matchesSearch &&
         matchesTeam &&
         !isAlreadySelected &&
-        // isAffordable &&
+        isAffordable &&
         passedAvailabilityFilter
       );
     });
