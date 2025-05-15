@@ -11,7 +11,7 @@ export default function SbrFixtureCard({ fixture }: Props) {
     const {kickoff_time} = fixture;
     
     return (
-        <div className="flex flex-row dark:bg-slate-800/40 bg-white rounded-xl border dark:border-slate-800/60 p-4" >
+        <div className="flex flex-row dark:hover:bg-slate-800/70 hover:bg-slate-200 dark:bg-slate-800/40 bg-white rounded-xl border dark:border-slate-800/60 p-4" >
             {/* Home Team */}
 
             <div className="flex-1 flex gap-2 flex-col items-center justify-start" >

@@ -19,7 +19,7 @@ export default function SchoolBoyRugbyScreen() {
 
         <div className="flex flex-row items-center gap-2" >
           <h1 className="text-2xl font-bold lg:text-3xl" >SBR</h1>
-          <SbrContextSwitcher />
+          {/* <SbrContextSwitcher /> */}
         </div>
 
         <button onClick={handleViewChat} className="h-fit w-fit flex flex-row items-center justify-end" >
