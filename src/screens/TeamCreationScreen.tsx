@@ -326,13 +326,7 @@ export function TeamCreationScreen() {
         }}
         onViewTeam={() => {
           setShowSuccessModal(false);
-          // Navigate to the specific team if we have its ID
-          if (createdTeamId) {
-            navigate(`/my-team/${createdTeamId}`);
-          } else {
-            // Fallback to teams list
             navigate("/my-teams");
-          }
         }}
       />
     </TeamCreationContainer>

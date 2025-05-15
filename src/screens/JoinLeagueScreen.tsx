@@ -317,7 +317,7 @@ function JoinDeadlineCountdown({ league, onViewLeague }: JoinDeadlineCountdownPr
         >
           {!isLoading && (
             <>
-              <p>{userTeam ? "View You Team" : "Pick Your Team"}</p>
+              <p>{userTeam ? "View Your Team" : "Pick Your Team"}</p>
               <ChevronRight size={20} />
             </>
           )}
