@@ -103,6 +103,7 @@ export function SignUpScreen() {
 
       if (res === "User already exists") {
         setError("An account with this email already exists");
+        setIsLoading(false);
         return;
       }
 
