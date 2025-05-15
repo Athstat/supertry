@@ -3,18 +3,17 @@ import { sbrService } from "../../services/sbrService"
 import { ISbrFixture, ISbrFixtureVote } from "../../types/sbr"
 import { Loader } from "lucide-react"
 import { mutate } from "swr"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
     userVote?: ISbrFixtureVote,
-    fixture: ISbrFixture,
-    refresh?: () => void
+    fixture: ISbrFixture
 }
 
-export default function SbrVotingBallotBox({ fixture, userVote, refresh }: Props) {
+export default function SbrVotingBallotBox({ fixture, userVote }: Props) {
 
     const [isVoting, setIsVoting] = useState(false);
     const [isVoitngHome, setIsVotingHome] = useState(false);
-    const [reactFixture, setReactFixture] = useState(fixture);
 
     const onVote = async (side: "home_team" | "away_team") => {
         // if user has voted before use put request
@@ -37,7 +36,7 @@ export default function SbrVotingBallotBox({ fixture, userVote, refresh }: Props
         }
 
         setIsVoting(false);
-        
+
         await mutate(() => true);
     }
 
@@ -48,8 +47,6 @@ export default function SbrVotingBallotBox({ fixture, userVote, refresh }: Props
     return (
         <div className="w-full p-4 " >
 
-            <p>User Vote: {userVote?.vote_for}</p>
-
             <div className="flex flex-row w-full items-center justify-between" >
 
                 {/* Home Vote Button */}
@@ -57,7 +54,10 @@ export default function SbrVotingBallotBox({ fixture, userVote, refresh }: Props
                     <button  
                         disabled={hasVotedHome || isVoting}
                         onClick={() => onVote("home_team")}
-                        className="bg-red-600 h-10 hover:bg-red-700 rounded-xl px-10 text-lg"
+                        className={twMerge(
+                            "bg-red-600 h-10 hover:bg-red-700 rounded-xl px-10 text-lg",
+                            hasVotedHome && "opacity-30"
+                        )}
                     >
                         {isVoting && isVoitngHome ? <Loader className="w-4 h-4 animate-spin" /> : <p>Vote</p>}
                     </button>
@@ -68,7 +68,10 @@ export default function SbrVotingBallotBox({ fixture, userVote, refresh }: Props
                     <button 
                         disabled={hasVotedAway || isVoting}
                         onClick={() => onVote("away_team")}
-                        className="bg-blue-600 h-10 hover:bg-blue-700 rounded-xl px-10 text-lg " 
+                        className={twMerge(
+                            "bg-blue-600 h-10 hover:bg-blue-700 rounded-xl px-10 text-lg ",
+                            hasVotedAway && "opacity-30"
+                        )} 
                     >
                         {isVoting && !isVoitngHome ? <Loader className="w-4 h-4 animate-spin" /> : <p>Vote</p>}
                     </button>
