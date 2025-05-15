@@ -1,4 +1,5 @@
 import { Shield } from "lucide-react"
+import { useState } from "react";
 import { twMerge } from "tailwind-merge"
 
 type Props = {
@@ -9,12 +10,14 @@ type Props = {
 export default function SbrTeamLogo({ teamName, className }: Props) {
 
     const logoUrl = teamLogoMapper(teamName || "");
+    const [error, setError] = useState(false);
 
-    if (logoUrl) {
+    if (logoUrl && !error) {
         return (
             <img
                 src={logoUrl}
                 alt={teamName}
+                onError={() => setError(true)}
                 className={twMerge(
                     "w-8 h-8 object-contain",
                     className
