@@ -1,6 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { Home, Trophy, Users, BarChart } from "lucide-react";
 import { useState } from "react";
+import { MdOutlineSportsRugby } from "react-icons/md";
 
 export function BottomNav() {
   const { pathname } = useLocation();
