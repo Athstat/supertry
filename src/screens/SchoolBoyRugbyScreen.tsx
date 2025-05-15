@@ -9,6 +9,8 @@ export default function SchoolBoyRugbyScreen() {
   //   navigate("/sbr/chat"); 
   // }
 
+  
+
   return (
     <PageView className="dark:text-white p-5 flex flex-col gap-3" >
 
