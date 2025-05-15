@@ -22,6 +22,7 @@ import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
+import SBRChatScreen from "./components/sbr/SBRChatScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -215,6 +216,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <SchoolBoyRugbyScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/sbr/chat"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <SBRChatScreen />
             </Layout>
           </ProtectedRoute>
         }

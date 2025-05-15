@@ -1,38 +1,37 @@
-import { OpenChannel, SendBirdProvider } from "@sendbird/uikit-react"
-import { SCHOOL_BOY_RUGBY_CHANNEL_NAME, SCHOOL_BOY_RUGBY_CHANNEL_URL } from "../data/messaging/school_boy_ruby"
-import { SEND_BIRD_APP_ID } from "../data/messaging/send_bird.init";
-import DelayedView from "../components/shared/containers/DelayedView";
-import { useAuthUser } from "../hooks/useAuthUser";
-import { LoadingState } from "../components/ui/LoadingState";
-import { ErrorState } from "../components/ui/ErrorState";
-import { useOpenChat } from "../hooks/useOpenChat";
-import { OpenChannelProvider } from "@sendbird/uikit-react/OpenChannel/context";
-import OpenChannelUI from "@sendbird/uikit-react/OpenChannel/components/OpenChannelUI";
+import PageView from "./PageView";
+import SBRFixtures from "../components/sbr/SBRFixtures";
 
 export default function SchoolBoyRugbyScreen() {
 
-  const authUser = useAuthUser();
+  // const navigate = useNavigate();
 
-  const { isLoading, error } = useOpenChat(
-    SCHOOL_BOY_RUGBY_CHANNEL_URL,
-    SCHOOL_BOY_RUGBY_CHANNEL_NAME,
-    authUser
-  );
+  // const handleViewChat = () => {
+  //   navigate("/sbr/chat"); 
+  // }
 
-  if (isLoading) return <LoadingState />
 
-  if (error) return <ErrorState message={error} />
 
   return (
+    <PageView className="dark:text-white p-5 flex flex-col gap-3" >
+      <div className="flex flex-row items-center justify-between" >
 
-    <DelayedView className='text-white h-[80vh] overflow-hidden' >
+        <div className="flex flex-row items-center gap-2" >
+          <h1 className="text-2xl font-bold lg:text-3xl" >School Boy Rugby</h1>
+          {/* <SbrContextSwitcher /> */}
+        </div>
 
-      <SendBirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
-        <OpenChannelProvider channelUrl={SCHOOL_BOY_RUGBY_CHANNEL_URL}>
-          <OpenChannelUI />
-        </OpenChannelProvider>
-      </SendBirdProvider>
+        {/* <button onClick={handleViewChat} className="h-fit w-fit flex flex-row items-center justify-end" >
+          <MessageCircle 
+            className="hover:text-primary-600 cursor-pointer" 
+          />
+        </button> */}
 
-    </DelayedView>
+      </div>
+
+      <div>
+        <SBRFixtures />
+      </div>
+      <div></div>
+    </PageView>
   )
 }

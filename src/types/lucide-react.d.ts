@@ -74,6 +74,11 @@ declare module "lucide-react" {
   export const Unlock: CIP;
   export const CircleXIcon: CIP;
   export const PercentIcon: CIP;
+  export const BarChart: CIP;
+  export const Home: CIP;
+  export const School2: CIP;
+  export const MessageCircle: CIP;
+  export const CircleCheck: CIP;
 
 }
 

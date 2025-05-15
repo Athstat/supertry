@@ -25,7 +25,11 @@ export function useOpenChat(channelUrl: string, channelName: string, authUser: A
                 const { data: channel, error: channelError } = await createOrGetOpenChannel(channelUrl, channelName, sb);
 
                 if (channel) setChannel(channel);
-                else if (channelError) setError(`Failed to connect to ${channelName}.`);
+                else if (channelError) {
+                    console.log("Sendbird chat error ", channelError);
+                    setError(`Failed to connect to ${channelName}.`)
+                };
+                
             }
 
             setLoading(false);

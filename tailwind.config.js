@@ -46,9 +46,19 @@ export default {
           "0%": { width: "0px", height: "0px", opacity: 0.5 },
           "100%": { width: "500px", height: "500px", opacity: 0 },
         },
+        glow: {
+          '0%, 100%': { boxShadow: '0 0 2px #3b82f6, 0 0 5px #3b82f6' },
+          '50%': { boxShadow: '0 0 2px #3b82f6, 0 0 15px #3b82f6' },
+        },
+
+        shadow: {
+          '0%, 100%': { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.08)' },
+          '50%': { boxShadow: '0 3px 6px rgba(0, 0, 0, 0.12)' },
+        },
       },
       animation: {
         ripple: "ripple 0.6s linear forwards",
+        glow: 'glow 2s ease-in-out infinite'
       },
     },
   },
