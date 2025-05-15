@@ -73,7 +73,7 @@ export default function SbrVotingModal({ fixtures, open, onClose }: Props) {
                 <div className="flex flex-col items-center gap-4">
                     <CircleCheck className="text-primary-500 dark:text-primary-400 w-20 h-20" />
                     <p className="text-gray-700 dark:text-gray-300">Thank you for placing your votes! You are good to go!</p>
-                    <PrimaryButton onClick={onClose}>Done 🗸</PrimaryButton>
+                    <PrimaryButton onClick={onClose}>Done</PrimaryButton>
                     {fixtures.length > 0 && (
                         <button 
                             onClick={onGoBack} 

@@ -22,11 +22,11 @@ export default function SchoolBoyRugbyScreen() {
           {/* <SbrContextSwitcher /> */}
         </div>
 
-        <button onClick={handleViewChat} className="h-fit w-fit flex flex-row items-center justify-end" >
+        {/* <button onClick={handleViewChat} className="h-fit w-fit flex flex-row items-center justify-end" >
           <MessageCircle 
             className="hover:text-primary-600 cursor-pointer" 
           />
-        </button>
+        </button> */}
 
       </div>
 
