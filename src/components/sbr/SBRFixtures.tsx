@@ -4,14 +4,13 @@ import { sbrService } from "../../services/sbrService"
 import { ISbrFixture } from "../../types/sbr";
 import { LoadingState } from "../ui/LoadingState";
 import SbrFixtureCard from "./SbrFixtureCard";
+import SbrVotingModal from "./SbrVotingModal";
 
 export default function SBRFixtures() {
 
     const { data, isLoading, error } = useFetch("sbr-fixtures", [], () => sbrService.getAllMatches());
 
     const fixtures = data ?? [];
-
-    
 
     return (
         <div className="flex flex-col gap-3" >
@@ -44,6 +43,8 @@ export default function SBRFixtures() {
                     />
                 })}
             </div>
+
+            <SbrVotingModal fixtures={fixtures}  />
         </div>
     )
 }
