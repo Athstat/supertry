@@ -22,7 +22,7 @@ export default function SbrFixtureCard({ fixture }: Props) {
             {/* Kick off information */}
 
             <div className="flex-1 flex flex-col items-center justify-center dark:text-slate-400 text-slate-700 " >
-                <p>{kickoff_time ? format(kickoff_time, "hh:mm a") : ""}</p>
+                <p className="text-xs lg:text-base" >{kickoff_time ? format(kickoff_time, "hh:mm a") : ""}</p>
                 {/* <p>{kickoff_time ? format(kickoff_time, "") : ""}</p> */}
             </div>  
 
