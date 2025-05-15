@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Loader, Lock } from "lucide-react";
+import { Coins, Loader, Lock } from "lucide-react";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
 import { TabButton } from "../shared/TabButton";
 import { TeamFormation } from "../team/TeamFormation";
 import { isLeagueLocked } from "../../utils/leaguesUtils";
 import { IFantasyLeague } from "../../types/fantasyLeague";
+import { useTeamData } from "./TeamDataProvider";
+import { leagueService } from "../../services/leagueService";
+import { IGamesLeagueConfig } from "../../types/leagueConfig";
 
 interface TeamTabsContentProps {
   activeTab: "edit-team" | "view-pitch";
@@ -21,7 +24,7 @@ interface TeamTabsContentProps {
   fetchingMarketPlayers: boolean;
   handleViewStats: (player: Player) => void;
   handleSwapPlayer: (player: Player) => void;
-  league?: IFantasyLeague
+  league?: IFantasyLeague;
 }
 
 export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
@@ -35,35 +38,66 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
   fetchingMarketPlayers,
   handleViewStats,
   handleSwapPlayer,
-  league
+  league,
 }) => {
-
   const isLocked = isLeagueLocked(league?.join_deadline);
+  const { team } = useTeamData();
+  console.log("league: ", league?.id);
+
+  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
+    null
+  );
+
+  // Fetch league config on mount
+  useEffect(() => {
+    const fetchLeagueConfig = async () => {
+      if (!league?.id) {
+        return;
+      }
+
+      try {
+        const config = await leagueService.getLeagueConfig(
+          league?.official_league_id
+        );
+        if (config) {
+          setLeagueConfig(config);
+          console.log("League config: ", config);
+        } else {
+          console.log("Failed to load league configuration");
+        }
+      } catch (err) {
+        console.error("Error fetching league config:", err);
+        console.log("An error occurred while loading league configuration");
+      }
+    };
+
+    fetchLeagueConfig();
+  }, [league?.id]);
 
   return (
     <>
       {/* Tabbed Interface */}
       <div className="mt-8">
         <div className="flex space-x-2 border-b-0">
-          
-          {!isLocked && <TabButton
-            active={activeTab === "edit-team"}
-            onClick={() => setActiveTab("edit-team")}
-          >
-            <div className="flex items-center gap-1">
-              <span>Edit Team</span>
-            </div>
-          </TabButton>}
+          {!isLocked && (
+            <TabButton
+              active={activeTab === "edit-team"}
+              onClick={() => setActiveTab("edit-team")}
+            >
+              <div className="flex items-center gap-1">
+                <span>Edit Team</span>
+              </div>
+            </TabButton>
+          )}
 
-          {isLocked && <TabButton
-            active={activeTab === "edit-team"}
-            onClick={() => {}}
-          >
-            <div className="flex items-center dark:text-slate-600 cursor-not-allowed gap-2 flex-row">
-              <span>Edit Team</span>
-              <Lock className="w-4 h-4" />
-            </div>
-          </TabButton>}
+          {isLocked && (
+            <TabButton active={activeTab === "edit-team"} onClick={() => {}}>
+              <div className="flex items-center dark:text-slate-600 cursor-not-allowed gap-2 flex-row">
+                <span>Edit Team</span>
+                <Lock className="w-4 h-4" />
+              </div>
+            </TabButton>
+          )}
 
           <TabButton
             active={activeTab === "view-pitch"}
@@ -86,6 +120,8 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
             handleViewStats={handleViewStats}
             handleSwapPlayer={handleSwapPlayer}
             isEditLocked={isLocked}
+            teamBalance={team?.balance || 0}
+            teamBudget={leagueConfig?.team_budget || 0}
           />
         ) : (
           <ViewPitchContent
@@ -105,7 +141,9 @@ interface EditTeamViewProps {
   fetchingMarketPlayers: boolean;
   handleViewStats: (player: Player) => void;
   handleSwapPlayer: (player: Player) => void;
-  isEditLocked?: boolean
+  isEditLocked?: boolean;
+  teamBudget: number;
+  teamBalance: number;
 }
 
 const EditTeamView: React.FC<EditTeamViewProps> = ({
@@ -114,14 +152,23 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
   fetchingMarketPlayers,
   handleViewStats,
   handleSwapPlayer,
-  isEditLocked
-  
+  isEditLocked,
+  teamBudget,
+  teamBalance,
 }) => {
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
-        Edit Your Team
-      </h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+          Edit Your Team
+        </h2>
+        <div className="flex items-center gap-1">
+          <Coins size={14} className="text-yellow-500 dark:text-yellow-400" />
+          <span className="text-xs font-medium whitespace-nowrap dark:text-gray-400">
+            {teamBalance} / {teamBudget}
+          </span>
+        </div>
+      </div>
 
       {/* Position Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
@@ -232,44 +279,45 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                         View Stats
                       </button>
 
-                      {!isEditLocked && <button
-                        onClick={() => {
-                          const playerForPosition: Player = {
-                            id: position.player?.id || "",
-                            name: position.player?.name || "",
-                            position: position.player?.position || "",
-                            position_class: position.player?.position || "",
-                            team: position.player?.team || "",
-                            points: position.player?.points || 0,
-                            form: position.player?.power_rank_rating || 0,
-                            price: position.player?.price || 0,
-                            is_super_sub: position.isSpecial || false,
-                            is_starting: !position.isSpecial,
-                            image: position.player?.image_url || "",
-                            nextFixture: "",
-                          };
-                          handleSwapPlayer(playerForPosition);
-                        }}
-                        className="w-full py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
-                        disabled={fetchingMarketPlayers}
-                      >
-                        {fetchingMarketPlayers ? (
-                          <span className="flex items-center justify-center">
-                            <Loader size={14} className="animate-spin mr-2" />
-                            Loading...
-                          </span>
-                        ) : (
-                          "Swap"
-                        )}
-                      </button>}
+                      {!isEditLocked && (
+                        <button
+                          onClick={() => {
+                            const playerForPosition: Player = {
+                              id: position.player?.id || "",
+                              name: position.player?.name || "",
+                              position: position.player?.position || "",
+                              position_class: position.player?.position || "",
+                              team: position.player?.team || "",
+                              points: position.player?.points || 0,
+                              form: position.player?.power_rank_rating || 0,
+                              price: position.player?.price || 0,
+                              is_super_sub: position.isSpecial || false,
+                              is_starting: !position.isSpecial,
+                              image: position.player?.image_url || "",
+                              nextFixture: "",
+                            };
+                            handleSwapPlayer(playerForPosition);
+                          }}
+                          className="w-full py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                          disabled={fetchingMarketPlayers}
+                        >
+                          {fetchingMarketPlayers ? (
+                            <span className="flex items-center justify-center">
+                              <Loader size={14} className="animate-spin mr-2" />
+                              Loading...
+                            </span>
+                          ) : (
+                            "Swap"
+                          )}
+                        </button>
+                      )}
 
-                      {isEditLocked && <button
-                        className="w-full py-1.5 flex flex-row items-center justify-center gap-1 opacity-45 cursor-not-allowed bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
-                      >
-                        Swap
-                        <Lock className="w-3 h-3" />
-                      </button>}
-
+                      {isEditLocked && (
+                        <button className="w-full py-1.5 flex flex-row items-center justify-center gap-1 opacity-45 cursor-not-allowed bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors">
+                          Swap
+                          <Lock className="w-3 h-3" />
+                        </button>
+                      )}
                     </div>
                   </>
                 ) : (

@@ -7,7 +7,6 @@ import { fantasyTeamService } from "./teamService";
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-
       const uri = getUri(`/api/v1/fantasy-leagues`);
 
       try {
@@ -85,24 +84,24 @@ export const leagueService = {
     leagueId: string | number
   ): Promise<IFantasyLeagueTeam[]> => {
     try {
-
       const token = localStorage.getItem("access_token");
       if (!token) {
         throw new Error(
           "Authentication token is missing. Please log in again."
         );
       }
-      
-      const uri = getUri(`/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`);
+
+      const uri = getUri(
+        `/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`
+      );
 
       const response = await fetch(uri, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         console.error(
@@ -123,20 +122,20 @@ export const leagueService = {
     officialLeagueId: string
   ): Promise<IGamesLeagueConfig | null> => {
     try {
-
-      const uri = getUri(`/api/v1/unauth/fantasy-league-config/${officialLeagueId}`);
+      const uri = getUri(
+        `/api/v1/unauth/fantasy-league-config/${officialLeagueId}`
+      );
 
       try {
-        const response = await fetch( uri, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              ...(localStorage.getItem("access_token") && {
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-              }),
-            },
-          }
-        );
+        const response = await fetch(uri, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(localStorage.getItem("access_token") && {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            }),
+          },
+        });
 
         if (response.ok) {
           return await response.json();
@@ -159,7 +158,6 @@ export const leagueService = {
 
   joinLeague: async (league: any): Promise<any> => {
     try {
-
       // Get user ID from token
       const token = localStorage.getItem("access_token");
 
@@ -204,18 +202,17 @@ export const leagueService = {
       const uri = getUri(`/api/v1/fantasy-leagues/join-league`);
 
       const response = await fetch(uri, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            team: latestTeam,
-            league: league,
-            user_id: userId,
-          }),
-        }
-      );
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          team: latestTeam,
+          league: league,
+          user_id: userId,
+        }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();

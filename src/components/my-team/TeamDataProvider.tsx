@@ -144,8 +144,8 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
         (sum, athlete: any) => sum + (athlete.price || 0),
         0
       );
-      // Assume max budget is 200 for now, adjust as needed
-      const maxBudget = 200;
+      // Use the correct max budget of 240 to match what's used in PlayerSelectionModal
+      const maxBudget = 240;
       setTeamBudget(maxBudget - totalTeamValue);
     }
   }, [athletes]);

@@ -48,20 +48,21 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
         <span className="text-sm font-medium">Go Back</span>
       </button>
 
-      {/* Hero Team Header */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-dark-800/60 dark:to-dark-700/60 rounded-xl p-6 mb-6 shadow-md text-center">
+      {/* Team Header */}
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-dark-800/60 dark:to-dark-700/60 rounded-xl p-4 mb-6 shadow-md">
         {/* Team Name */}
-        <h1 className="text-2xl sm:text-3xl font-bold dark:text-gray-100 mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold dark:text-gray-100 mb-2">
           {team.name}
         </h1>
 
-        {/* Rank and Score Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-6 mb-4">
-          {/* Rank Badge with Medal */}
-          <div className="relative inline-flex items-center">
-            <div className="absolute inset-0 bg-yellow-400 dark:bg-yellow-500 rounded-full opacity-20 animate-[pulse_2s_ease-in-out_infinite]"></div>
-            <div className="relative flex items-center gap-2 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-dark-700/70 dark:to-dark-700/90 px-4 py-2 rounded-full shadow-sm">
-              <span className="text-xl mr-1">
+        {/* First Row: Rank Badge */}
+        <div className="flex flex-wrap items-center gap-4 mb-2"></div>
+
+        {/* Second Row: Points, Player Count, League Info */}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="inline-flex items-center">
+            <div className="flex items-center gap-1.5 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-dark-700/70 dark:to-dark-700/90 px-3 py-1.5 rounded-full shadow-sm">
+              <span className="text-base mr-0.5">
                 {rank === 1 ? (
                   "🥇"
                 ) : rank === 2 ? (
@@ -70,45 +71,39 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
                   "🥉"
                 ) : (
                   <Trophy
-                    size={22}
-                    className="text-blue-500 dark:text-blue-400 animate-pulse"
+                    size={18}
+                    className="text-blue-500 dark:text-blue-400"
                   />
                 )}
               </span>
-              <span className="font-bold text-gray-800 dark:text-gray-200">
+              <span className="font-medium text-sm text-gray-800 dark:text-gray-200">
                 Rank #{rank ?? " –"}
               </span>
             </div>
           </div>
-
-          {/* Round Score Badge */}
-          <div className="relative inline-flex items-center">
-            <div className="absolute inset-0 bg-orange-400 dark:bg-orange-500 rounded-full opacity-10 animate-[pulse_2.5s_ease-in-out_infinite]"></div>
-            <div className="relative flex items-center gap-2 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-dark-700/70 dark:to-dark-700/90 px-4 py-2 rounded-full shadow-sm">
-              <Zap size={22} className="text-orange-500 shrink-0" />
-              <span
-                className="font-bold text-gray-800 dark:text-gray-200"
-                style={{ textShadow: "0 0 8px rgba(255, 153, 0, 0.4)" }}
-              >
+          {/* Points Badge */}
+          <div className="inline-flex items-center">
+            <div className="flex items-center gap-1.5 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-dark-700/70 dark:to-dark-700/90 px-3 py-1.5 rounded-full shadow-sm">
+              <Zap size={18} className="text-orange-500 shrink-0" />
+              <span className="font-medium text-sm text-gray-800 dark:text-gray-200">
                 {Math.floor(team.round_score ?? totalPoints ?? 0)} pts
               </span>
             </div>
           </div>
-        </div>
 
-        {/* Additional Team Info */}
-        <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-          <div className="flex items-center gap-1.5">
+          {/* Player Count */}
+          <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
             <Users
-              size={18}
+              size={16}
               className="text-primary-700 dark:text-primary-500 shrink-0"
             />
             <span className="whitespace-nowrap">{athletesCount} Players</span>
           </div>
 
+          {/* League Info */}
           {leagueInfo && (
-            <div className="flex items-center gap-1.5">
-              <Award size={18} className="text-blue-500 shrink-0" />
+            <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+              <Award size={16} className="text-blue-500 shrink-0" />
               <button
                 onClick={() => {
                   if (leagueInfo) {
@@ -124,8 +119,9 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
             </div>
           )}
 
+          {/* Loading League */}
           {fetchingLeague && !leagueInfo && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
               <Loader
                 size={16}
                 className="animate-spin text-blue-500 shrink-0"

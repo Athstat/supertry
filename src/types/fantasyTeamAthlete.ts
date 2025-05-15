@@ -25,4 +25,5 @@ export interface IFantasyClubTeam {
   athletes: IFantasyTeamAthlete[];
   round_score?: number; // Current round score for the team
   rank?: number; // Team's rank in the league
+  balance?: number; // Team's available budget
 }
