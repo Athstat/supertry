@@ -77,6 +77,7 @@ declare module "lucide-react" {
   export const BarChart: CIP;
   export const Home: CIP;
   export const School2: CIP;
+  export const MessageCircle: CIP;
 
 }
 
