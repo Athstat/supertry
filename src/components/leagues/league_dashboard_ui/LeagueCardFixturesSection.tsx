@@ -112,8 +112,11 @@ export default function LeagueCardFixturesSection({
                           className="w-10 h-10"
                           url={fixture.team_image_url}
                         />
-                        <div className="min-w-0 flex flex-col">
-                          <p className="text-sm font-medium truncate">
+                        <div className="min-w-0 flex flex-col max-w-[90px] sm:max-w-none">
+                          <p
+                            className="text-sm font-medium truncate"
+                            title={fixture.team_name}
+                          >
                             {fixture.team_name}
                           </p>
                           <p className="text-sm">
@@ -125,7 +128,7 @@ export default function LeagueCardFixturesSection({
                       </div>
 
                       <div className="flex flex-col items-center justify-center px-2">
-                        <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                        <span className="text-xs text-center font-medium text-gray-600 dark:text-gray-400">
                           {game_status === "completed"
                             ? "Final"
                             : fixture.kickoff_time
@@ -135,8 +138,11 @@ export default function LeagueCardFixturesSection({
                       </div>
 
                       <div className="flex items-center gap-2 flex-1 justify-end">
-                        <div className="min-w-0 flex flex-col items-end">
-                          <p className="text-sm font-medium truncate">
+                        <div className="min-w-0 flex flex-col items-end max-w-[90px] sm:max-w-none w-full">
+                          <p
+                            className="text-sm font-medium truncate text-right w-full"
+                            title={fixture.opposition_team_name}
+                          >
                             {fixture.opposition_team_name}
                           </p>
                           <p className="text-sm">
