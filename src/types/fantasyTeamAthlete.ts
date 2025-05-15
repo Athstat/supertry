@@ -7,8 +7,6 @@ export interface IFantasyTeamAthlete {
   score: number;
 }
 
-
-
 export interface IFantasyTeamSubmission {
   clubId: string;
   leagueId: string;
@@ -25,4 +23,7 @@ export interface IFantasyClubTeam {
   created_at: Date;
   updated_at: Date;
   athletes: IFantasyTeamAthlete[];
+  round_score?: number; // Current round score for the team
+  rank?: number; // Team's rank in the league
+  balance?: number; // Team's available budget
 }

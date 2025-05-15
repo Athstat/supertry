@@ -36,13 +36,13 @@ export const useTeamActions = () => {
 interface TeamActionsProps {
   teamId: string;
   children?: React.ReactNode;
-  league?: IFantasyLeague
+  league?: IFantasyLeague;
 }
 
 export const TeamActions: React.FC<TeamActionsProps> = ({
   teamId,
   children,
-  league
+  league,
 }) => {
   const { team, teamBudget, athletes, players, setAthletes } = useTeamData();
   const [showActionModal, setShowActionModal] = useState(false);
@@ -300,6 +300,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
           }}
           players={marketPlayers}
           remainingBudget={
+            // Ensure we're using the correct player price when calculating the available budget
             selectedPlayer ? teamBudget + selectedPlayer.price : teamBudget
           }
           // Filter out the currently selected player to allow selecting new players
