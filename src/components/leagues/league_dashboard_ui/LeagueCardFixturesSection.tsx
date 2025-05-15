@@ -103,60 +103,60 @@ export default function LeagueCardFixturesSection({
                   initial="initial"
                   whileHover="hover"
                   whileTap="tap"
-                  className="bg-slate-50 cursor-pointer border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 rounded-xl p-4 shadow-sm"
+                  className="bg-slate-50 cursor-pointer border border-slate-200 dark:border-slate-800 dark:bg-slate-800/40 rounded-xl p-2 py-3 shadow-sm"
                 >
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 flex-1">
-                        <TeamLogo
-                          className="w-10 h-10"
-                          url={fixture.team_image_url}
-                        />
-                        <div className="min-w-0 flex flex-col max-w-[90px] sm:max-w-none">
-                          <p
-                            className="text-sm font-medium truncate"
-                            title={fixture.team_name}
-                          >
-                            {fixture.team_name}
-                          </p>
-                          <p className="text-sm">
-                            {fixture.team_score !== null
-                              ? fixture.team_score
-                              : "-"}
-                          </p>
-                        </div>
+                  <div className="flex items-center justify-between">
+                    {/* Home team */}
+                    <div className="flex items-center space-x-2 flex-shrink-0 w-[40%]">
+                      <TeamLogo
+                        className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0"
+                        url={fixture.team_image_url}
+                      />
+                      <div className="flex flex-col min-w-0 overflow-hidden">
+                        <p
+                          className="text-xs md:text-sm font-medium truncate w-full"
+                          title={fixture.team_name}
+                        >
+                          {fixture.team_name}
+                        </p>
+                        <p className="text-xs md:text-sm font-bold">
+                          {fixture.team_score !== null
+                            ? fixture.team_score
+                            : "-"}
+                        </p>
                       </div>
+                    </div>
 
-                      <div className="flex flex-col items-center justify-center px-2">
-                        <span className="text-xs text-center font-medium text-gray-600 dark:text-gray-400">
-                          {game_status === "completed"
-                            ? "Final"
-                            : fixture.kickoff_time
-                            ? format(new Date(fixture.kickoff_time), "h:mm a")
-                            : ""}
-                        </span>
+                    {/* Match time/status */}
+                    <div className="flex flex-col items-center justify-center flex-shrink-0 w-[20%]">
+                      <span className="text-xs text-center font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                        {game_status === "completed"
+                          ? "Final"
+                          : fixture.kickoff_time
+                          ? format(new Date(fixture.kickoff_time), "h:mm a")
+                          : ""}
+                      </span>
+                    </div>
+
+                    {/* Away team */}
+                    <div className="flex items-center space-x-2 justify-end flex-shrink-0 w-[40%]">
+                      <div className="flex flex-col items-end min-w-0 overflow-hidden">
+                        <p
+                          className="text-xs md:text-sm font-medium truncate text-right w-full"
+                          title={fixture.opposition_team_name}
+                        >
+                          {fixture.opposition_team_name}
+                        </p>
+                        <p className="text-xs md:text-sm font-bold">
+                          {fixture.opposition_score !== null
+                            ? fixture.opposition_score
+                            : "-"}
+                        </p>
                       </div>
-
-                      <div className="flex items-center gap-2 flex-1 justify-end">
-                        <div className="min-w-0 flex flex-col items-end max-w-[90px] sm:max-w-none w-full">
-                          <p
-                            className="text-sm font-medium truncate text-right w-full"
-                            title={fixture.opposition_team_name}
-                          >
-                            {fixture.opposition_team_name}
-                          </p>
-                          <p className="text-sm">
-                            {fixture.opposition_score !== null
-                              ? fixture.opposition_score
-                              : "-"}
-                          </p>
-                        </div>
-
-                        <TeamLogo
-                          className="w-10 h-10"
-                          url={fixture.opposition_image_url}
-                        />
-                      </div>
+                      <TeamLogo
+                        className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0"
+                        url={fixture.opposition_image_url}
+                      />
                     </div>
                   </div>
                 </motion.div>

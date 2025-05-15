@@ -23,7 +23,10 @@ export default function LeagueCardMyTeamSection({
   const isLocked = isLeagueLocked(league.join_deadline);
 
   const handleClick = () => {
-    navigate(`/my-team/${team.team_id}`);
+    console.log("Clicked on my team card");
+    navigate(`/league/${league.official_league_id}`, {
+      state: { league },
+    });
   };
 
   // const totalTeamValue = team.athletes.reduce((prev, a) => {
@@ -64,13 +67,19 @@ export default function LeagueCardMyTeamSection({
           </div>
 
           {!isLocked && (
-            <button className="p-2 hover:bg-primary-900 dark:hover:bg-primary-900/30 rounded-lg transition-colors">
+            <button
+              onClick={() => navigate(`/my-team/${team.team_id}`)}
+              className="p-2 hover:bg-primary-900 dark:hover:bg-primary-900/30 rounded-lg transition-colors"
+            >
               <Pencil className="w-5 h-5 text-white" />
             </button>
           )}
 
           {isLocked && (
-            <button className="p-2 hover:bg-primary-800 dark:hover:bg-primary-900/30 rounded-lg transition-colors">
+            <button
+              onClick={() => navigate(`/my-team/${team.team_id}`)}
+              className="p-2 hover:bg-primary-800 dark:hover:bg-primary-900/30 rounded-lg transition-colors"
+            >
               <Lock className="w-5 h-5 text-white" />
             </button>
           )}
