@@ -104,7 +104,7 @@ function FixtureVotingCard({ fixture }: FixtureVotingCardProps) {
         <div className="w-[100%] flex flex-col items-center gap-3 justify-center">
             <div className="flex flex-row w-full items-center">
                 <div className="items-center justify-center text-center flex flex-col flex-1 gap-2">
-                    <SbrTeamLogo className="w-20 h-20" />
+                    <SbrTeamLogo teamName={fixture.home_team} className="w-20 h-20" />
                     <p className="text-md font-medium text-gray-800 dark:text-gray-200">{fixture.home_team}</p>
                 </div>
 
@@ -114,7 +114,7 @@ function FixtureVotingCard({ fixture }: FixtureVotingCardProps) {
                 </div>
 
                 <div className="items-center justify-center text-center flex flex-col flex-1 gap-2">
-                    <SbrTeamLogo className="w-20 h-20" />
+                    <SbrTeamLogo teamName={fixture.away_team} className="w-20 h-20" />
                     <p className="text-md font-medium text-gray-800 dark:text-gray-200">{fixture.away_team}</p>
                 </div>
             </div>
