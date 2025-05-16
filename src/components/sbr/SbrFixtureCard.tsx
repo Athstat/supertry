@@ -1,6 +1,6 @@
 import { format } from "date-fns"
 import { ISbrFixture } from "../../types/sbr"
-import SbrTeamLogo from "./SbrTeamLogo"
+import SbrTeamLogo from "./fixtures/SbrTeamLogo"
 import { twMerge } from "tailwind-merge"
 import { getCountryEmojiFlag } from "../../utils/svrUtils"
 

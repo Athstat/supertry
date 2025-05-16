@@ -95,3 +95,20 @@ export function getRoundFixtures(fixtures: IFixture[], start: number, end: numbe
     return filteredFixtures;
 }
 
+
+
+export function calculatePerc(val: number, total: number) {
+
+    if (val === 0 || total === 0) return 0;
+    return Math.floor((val / total) * 100);
+}
+
+export function createEmptyArray<T>(size: number, initVal: T): T[] {
+    const arr: T[] = [];
+
+    for (let x = 0; x < size; x++) {
+        arr.push(initVal);
+    }
+
+    return arr;
+}

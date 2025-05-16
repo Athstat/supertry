@@ -11,6 +11,8 @@ import OpenChannelUI from '@sendbird/uikit-react/OpenChannel/components/OpenChan
 import { IFantasyLeague } from '../../types/fantasyLeague';
 import DelayedView from '../shared/containers/DelayedView';
 import { useAuthUser } from '../../hooks/useAuthUser';
+import { useTheme } from '../../contexts/ThemeContext';
+import { TypingIndicatorType } from '@sendbird/uikit-react';
 
 type Props = {
     league: IFantasyLeague
@@ -22,6 +24,7 @@ export default function LeagueGroupChatFeed({ league }: Props) {
     const channelName = getLeagueChannelName(league);
 
     const authUser = useAuthUser();
+    const { theme } = useTheme();
 
     const { sbInstance } = useOpenChat(channelUrl, channelName, authUser);
 
@@ -40,6 +43,27 @@ export default function LeagueGroupChatFeed({ league }: Props) {
             <SendbirdProvider
                 appId={SEND_BIRD_APP_ID}
                 userId={authUser.id}
+                theme={theme}
+                uikitOptions={{
+                    groupChannel: {
+                        // Below controls the toggling of the typing indicator in the group channel. The default is `true`.
+                        enableTypingIndicator: true,
+                        enableReactions: true,
+                        enableReactionsSupergroup: true,
+                        // Below turns on both bubble and text typing indicators. Default is `Text` only.
+                        typingIndicatorTypes: new Set([TypingIndicatorType.Bubble, TypingIndicatorType.Text]),
+                    },
+
+                    openChannel: {
+                        enableOgtag: true,
+                        input: {
+                            camera: {
+                                enablePhoto: true,
+                                enableVideo: true
+                            }
+                        }
+                    }
+                }}
             >
                 <OpenChannelProvider channelUrl={channelUrl}>
                     <OpenChannelUI />
