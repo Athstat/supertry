@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { searchFixturesPredicate } from "../utils/fixtureUtils";
 import { useSectionNavigation } from "../hooks/useSectionNavigation";
 import { format } from "date-fns";
+import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -91,77 +92,23 @@ export default function FixtureListScreen() {
                     />
                 </div> */}
 
-        <div className=" grid grid-cols-1 gap-3 ">
-          {pastFixtures.map((fixture, index) => {
-            if (searchFixturesPredicate(fixture, search)) {
-              return (
-                <FixtureCard
-                  showLogos
-                  showCompetition
-                  className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white  hover:bg-slate-50 rounded-xl"
-                  fixture={fixture}
-                  key={index}
-                />
-              );
-            }
-          })}
-        </div>
+        <GroupedFixturesList 
+          fixtures={pastFixtures}
+          search={search}
+        />
 
         <section id={sectionId} className="w-full h-10"></section>
         <h2 className="text-xl font-bold">Upcoming Fixtures</h2>
 
-        <div className="grid grid-cols-1 gap-3">
-          {(() => {
-            // Group fixtures by day
-            const fixturesByDay: Record<string, IFixture[]> = {};
-
-            upcomingFixtures.forEach((fixture) => {
-              if (
-                fixture.kickoff_time &&
-                searchFixturesPredicate(fixture, search)
-              ) {
-                const dayKey = format(
-                  new Date(fixture.kickoff_time),
-                  "yyyy-MM-dd"
-                );
-                if (!fixturesByDay[dayKey]) {
-                  fixturesByDay[dayKey] = [];
-                }
-                fixturesByDay[dayKey].push(fixture);
-              }
-            });
-
-            // Get sorted day keys
-            const sortedDays = Object.keys(fixturesByDay).sort();
-
-            return sortedDays.map((dayKey) => (
-              <div key={dayKey} className="mb-4">
-                {/* Day header */}
-                <div className="px-4 py-2 mb-3 bg-gray-100 dark:bg-gray-800 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
-                  {format(new Date(dayKey), "EEEE, MMMM d, yyyy")}
-                </div>
-
-                {/* Fixtures for this day */}
-                <div className="grid grid-cols-1 gap-3">
-                  {fixturesByDay[dayKey].map((fixture, index) => (
-                    <FixtureCard
-                      showLogos
-                      showCompetition
-                      className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white hover:bg-slate-50 rounded-xl"
-                      fixture={fixture}
-                      key={index}
-                    />
-                  ))}
-                </div>
-              </div>
-            ));
-          })()}
-        </div>
+        <GroupedFixturesList 
+          fixtures={upcomingFixtures}
+          search={search}
+        />
       </div>
 
       <div
         onClick={() => scrollToSection(sectionId)}
-        className="bg-primary-500 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full bottom-0 mb-20 mr-3 right-0 fixed"
+        className="bg-primary-600 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full bottom-0 mb-20 mr-3 right-0 fixed"
       >
         <ChevronDown />
       </div>
