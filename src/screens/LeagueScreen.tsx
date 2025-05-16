@@ -19,20 +19,23 @@ import { Lock } from "lucide-react";
 type LeagueScreenTabs = "standings" | "chat" | "fixtures";
 
 export function LeagueScreen() {
-
-  const {state} = useLocation();
+  const { state } = useLocation();
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<LeagueScreenTabs>( state?.initialTab || "standings");
-  
-  const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
+  const [activeTab, setActiveTab] = useState<LeagueScreenTabs>(
+    state?.initialTab || "standings"
+  );
+
+  const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(
+    null
+  );
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
 
-  const { leagueInfo, userTeam, error, isLoading, league, teams } = useFantasyLeague();
-
+  const { leagueInfo, userTeam, error, isLoading, league, teams } =
+    useFantasyLeague();
 
   useEffect(() => {
     setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
@@ -66,19 +69,14 @@ export function LeagueScreen() {
   };
 
   const handleJoinLeague = () => {
-
     if (league) {
-      analytics.trackTeamCreationStarted(
-        league.id,
-        league.official_league_id
-      );
+      analytics.trackTeamCreationStarted(league.id, league.official_league_id);
 
       navigate(`/${league.official_league_id}/create-team`, {
         state: { league },
       });
-
     }
-  }
+  };
 
   // Function to view a team's details
   const viewTeam = (teamId: string) => {
@@ -89,7 +87,7 @@ export function LeagueScreen() {
   const isLocked = isLeagueLocked(league?.join_deadline);
 
   return (
-    <FantasyLeagueProvider userTeam={userTeam} league={league} >
+    <FantasyLeagueProvider userTeam={userTeam} league={league}>
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
         <LeagueHeader
           leagueInfo={leagueInfo}
@@ -97,27 +95,54 @@ export function LeagueScreen() {
           onOpenSettings={() => setShowSettings(true)}
           isLoading={isLoading}
         >
-          {!isLoading && userTeam === undefined && !isLocked && (
-            <button
-              onClick={handleJoinLeague}
-              className="hidden lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
-            >
-              Join This League
-            </button>
-          )}
+          <div className="flex gap-2">
+            {!isLoading && userTeam && !isLocked && (
+              <button
+                onClick={() => {
+                  navigate(`/my-team/${userTeam.team_id}`, {
+                    state: { teamWithRank: userTeam, league: league },
+                  });
+                }}
+                className="flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+              >
+                Edit Team
+              </button>
+            )}
 
-          {!isLoading && userTeam === undefined && isLocked && (
-            <button
-              disabled
-              className="hidden cursor-not-allowed opacity-70 lg:flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition flex-row items-center justify-center gap-1"
-            >
-              Join This League
-              <Lock className="w-3 h-3" />
-            </button>
-          )}
+            {!isLoading && userTeam && isLocked && (
+              <button
+                onClick={() => {
+                  navigate(`/my-team/${userTeam.team_id}`, {
+                    state: { teamWithRank: userTeam, league: league },
+                  });
+                }}
+                className="flex bg-white text-blue-600 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+              >
+                View Team
+              </button>
+            )}
+
+            {!isLoading && userTeam === undefined && !isLocked && (
+              <button
+                onClick={handleJoinLeague}
+                className="hidden lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+              >
+                Join This League
+              </button>
+            )}
+
+            {!isLoading && userTeam === undefined && isLocked && (
+              <button
+                disabled
+                className="hidden cursor-not-allowed opacity-70 lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition flex-row items-center justify-center gap-1"
+              >
+                Join This League
+                <Lock className="w-3 h-3" />
+              </button>
+            )}
+          </div>
         </LeagueHeader>
         <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
-
           {/* {league && <Countdown league={league} />} */}
 
           {/* Tab Navigation */}
@@ -168,14 +193,10 @@ export function LeagueScreen() {
               />
             )}
             {activeTab === "chat" && (
-              <>
-                {league && <LeagueGroupChatFeed league={league} />}
-              </>
+              <>{league && <LeagueGroupChatFeed league={league} />}</>
             )}
             {activeTab === "fixtures" && (
-              <FantasyLeagueFixturesList
-                league={league as IFantasyLeague}
-              />
+              <FantasyLeagueFixturesList league={league as IFantasyLeague} />
             )}
           </div>
         </div>
@@ -191,11 +212,12 @@ export function LeagueScreen() {
             isLoading={loadingAthletes}
           />
         )}
-        {/* Mobile CTA Button */}
+        {/* Mobile CTA Button - Only for Join This League */}
+
         {!isLoading && userTeam === undefined && league && !isLocked && (
           <button
             onClick={handleJoinLeague}
-            className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
+            className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 text-white font-semibold rounded-xl py-3 shadow-lg"
           >
             Join This League
           </button>

@@ -13,7 +13,7 @@ interface LeagueStandingsProps {
   isLoading?: boolean;
   error?: string | null;
   onTeamClick?: (team: RankedFantasyTeam) => void;
-  league: IFantasyLeague
+  league: IFantasyLeague;
 }
 
 export function LeagueStandings({
@@ -21,9 +21,8 @@ export function LeagueStandings({
   isLoading = false,
   error = null,
   onTeamClick,
-  league
+  league,
 }: LeagueStandingsProps) {
-
   const userTeamRef = useRef<HTMLTableRowElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +50,6 @@ export function LeagueStandings({
       }, 300);
     }
   }, [teams]);
-
 
   // Handle team row click
   const handleTeamClick = (team: RankedFantasyTeam) => {
@@ -114,15 +112,15 @@ export function LeagueStandings({
               </thead>
               <tbody>
                 {teams.map((team, index) => {
-
-                  return <StandingsTableRow
-                    index={index}
-                    team={team}
-                    userTeamRef={userTeamRef}
-                    handleTeamClick={handleTeamClick}
-                    league={league}
-                  />
-
+                  return (
+                    <StandingsTableRow
+                      index={index}
+                      team={team}
+                      userTeamRef={userTeamRef}
+                      handleTeamClick={handleTeamClick}
+                      league={league}
+                    />
+                  );
                 })}
               </tbody>
             </table>
@@ -160,15 +158,20 @@ export function LeagueStandings({
 }
 
 type StandingsTableRowProps = {
-  team: RankedFantasyTeam,
-  userTeamRef: Ref<any>,
-  handleTeamClick: (team: RankedFantasyTeam) => void,
-  index: number
-  league: IFantasyLeague
-}
+  team: RankedFantasyTeam;
+  userTeamRef: Ref<any>;
+  handleTeamClick: (team: RankedFantasyTeam) => void;
+  index: number;
+  league: IFantasyLeague;
+};
 
-function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }: StandingsTableRowProps) {
-
+function StandingsTableRow({
+  team,
+  userTeamRef,
+  handleTeamClick,
+  index,
+  league,
+}: StandingsTableRowProps) {
   const user = authService.getUserInfo();
   const isUserTeam = user ? user.id === team.userId : false;
 
@@ -195,14 +198,15 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
         <td className="py-4 px-4 whitespace-nowrap">
           <div className="flex items-center gap-1">
             <span
-              className={`font-semibold ${team.rank === 1
-                ? "text-yellow-500 dark:text-yellow-400"
-                : team.rank === 2
+              className={`font-semibold ${
+                team.rank === 1
+                  ? "text-yellow-500 dark:text-yellow-400"
+                  : team.rank === 2
                   ? "text-gray-400 dark:text-gray-200"
                   : team.rank === 3
-                    ? "text-amber-600 dark:text-amber-500"
-                    : "text-gray-900 dark:text-gray-100"
-                }`}
+                  ? "text-amber-600 dark:text-amber-500"
+                  : "text-gray-900 dark:text-gray-100"
+              }`}
             >
               {team.rank}
             </span>
@@ -212,10 +216,11 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
         <td className="py-4 px-4">
           <div className="flex flex-col">
             <div
-              className={`font-medium ${team.isUserTeam
-                ? "text-primary-600 dark:text-primary-400"
-                : "dark:text-gray-100"
-                }`}
+              className={`font-medium ${
+                team.isUserTeam
+                  ? "text-primary-600 dark:text-primary-400"
+                  : "dark:text-gray-100"
+              }`}
             >
               {team.teamName} {team.isUserTeam && "(You)"}
             </div>
@@ -233,51 +238,50 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
             <ChevronRight className="text-gray-400" />
           </span>
         </td>
-
-        {isUserTeam &&
-          <EditTeamButton team={team} league={league} />
-        }
       </tr>
     </>
-  )
+  );
 }
 
 type EditButtonProps = {
-  team: RankedFantasyTeam,
-  league: IFantasyLeague
-}
+  team: RankedFantasyTeam;
+  league: IFantasyLeague;
+};
 
 function EditTeamButton({ team, league }: EditButtonProps) {
-
   const navigate = useNavigate();
   const isLocked = isLeagueLocked(league.join_deadline);
 
   const handleClick = () => {
     const uri = `/my-team/${team.team_id}`;
     navigate(uri, {
-      state: { teamWithRank: team, league: league }
+      state: { teamWithRank: team, league: league },
     });
   };
 
   if (isLocked) {
     return (
-      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center absolute mb-20 h-12 bottom-0 left-0" >
-
-        <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
+      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center absolute mb-20 h-12 bottom-0 left-0">
+        <button
+          onClick={handleClick}
+          className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center"
+        >
           View Team
         </button>
-
       </div>
-    )
+    );
   }
 
   return (
-    <div className="w-full z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
-      <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-blue-700 hover:bg-blue-800 justify-center" >
+    <div className="w-full z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0">
+      <button
+        onClick={handleClick}
+        className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 justify-center"
+      >
         Edit Team
       </button>
     </div>
-  )
+  );
 }
 
 const getRowBackground = (
