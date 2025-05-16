@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { sbrService } from "../../services/sbrService"
-import { ISbrFixture, ISbrFixtureVote } from "../../types/sbr"
+import { sbrService } from "../../../services/sbrService"
+import { ISbrFixture, ISbrFixtureVote } from "../../../types/sbr"
 import { Check, Loader } from "lucide-react"
 import { mutate } from "swr"
 import { twMerge } from "tailwind-merge"

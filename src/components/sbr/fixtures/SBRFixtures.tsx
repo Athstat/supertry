@@ -1,12 +1,12 @@
 import { ChevronRight } from "lucide-react";
-import { sbrService } from "../../services/sbrService"
-import { LoadingState } from "../ui/LoadingState";
-import SbrVotingModal from "./SbrVotingModal";
+import { sbrService } from "../../../services/sbrService"
+import { LoadingState } from "../../ui/LoadingState";
+import SbrVotingModal from "../voting/SbrVotingModal";
 import useSWR from "swr";
 import { useState } from "react";
 import { format } from "date-fns";
-import BlueGradientCard from "../shared/BlueGradientCard";
-import GroupedSbrFixturesList from "./fixtures/GroupSbrFixtureList";
+import BlueGradientCard from "../../shared/BlueGradientCard";
+import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 
 export default function SBRFixtures() {
 

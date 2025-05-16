@@ -1,5 +1,5 @@
 import PageView from "./PageView";
-import SBRFixtures from "../components/sbr/SBRFixtures";
+import SBRFixtures from "../components/sbr/fixtures/SBRFixtures";
 import { useNavigate } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
 
