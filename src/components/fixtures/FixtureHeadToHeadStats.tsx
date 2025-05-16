@@ -2,7 +2,7 @@ import { Shield } from "lucide-react"
 import { IFixture } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import TeamLogo from "../team/TeamLogo"
-import { aggregateTeamStats } from "../../utils/boxScoreUtils"
+import { aggregateTeamStats, convertionsPercVal, convertionsStr } from "../../utils/boxScoreUtils"
 import { IBoxScoreItem } from "../../types/boxScore"
 import { twMerge } from "tailwind-merge"
 
@@ -15,7 +15,7 @@ type Props = {
 export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
 
     const homeStats = aggregateTeamStats(fixture.team_id, boxScore)
-    const awayStats = aggregateTeamStats(fixture.opposition_team_id, boxScore)
+    const awayStats = aggregateTeamStats(fixture.opposition_team_id, boxScore);
 
     const statsArr: HeadToHeadStat[] = [
         {
@@ -36,10 +36,10 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
 
         {
             label: "Convertions",
-            homeValue: `${homeStats.conversionsScored}/${homeStats.conversionsScored + homeStats.conversionsMissed}`,
-            awayValue: `${awayStats.conversionsScored}/${awayStats.conversionsScored + awayStats.conversionsMissed}`,
-            homeRealVal: (homeStats.conversionsScored) / (homeStats.conversionsScored + homeStats.conversionsMissed),
-            awayRealVal: (awayStats.conversionsScored) / (awayStats.conversionsScored + awayStats.conversionsMissed)
+            homeValue: convertionsStr(homeStats.convertionsScored, homeStats.convertionsMissed),
+            awayValue: convertionsStr(awayStats.convertionsScored, awayStats.convertionsMissed),
+            homeRealVal: convertionsPercVal(homeStats.convertionsScored, homeStats.convertionsMissed),
+            awayRealVal: convertionsPercVal(awayStats.convertionsScored, awayStats.convertionsMissed)
         },
 
         {

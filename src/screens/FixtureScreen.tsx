@@ -15,6 +15,8 @@ import { boxScoreService } from "../services/boxScoreService";
 import { FixtureScreenHeader } from "../components/fixtures/FixtureScreenHeader";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
+import BlueGradientCard from "../components/shared/BlueGradientCard";
+import PageView from "./PageView";
 
 export default function FixtureScreen() {
 
@@ -23,9 +25,9 @@ export default function FixtureScreen() {
 
   if (!fixtureId) return <ErrorState message="Match was not found" />
 
-  const {data: fetchedFixture, isLoading} = useSWR(["games", fixtureId], async ([, gameId]) =>  await gamesService.getGameById(gameId))
-  const {data: boxScore, isLoading: loadingBoxScore} = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
-  
+  const { data: fetchedFixture, isLoading } = useSWR(["games", fixtureId], async ([, gameId]) => await gamesService.getGameById(gameId))
+  const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
+
   if (isLoading) return <LoadingState />
 
   if (!fetchedFixture) return <ErrorState message="Failed to load match information" />
@@ -54,19 +56,25 @@ export default function FixtureScreen() {
 
   ]
 
+  console.log("Box Score ", boxScore?.filter(b => {
+    return b.athlete_team_id === "fff2a41e-e2d9-53e2-a84c-4cdffd5f1e98";
+  }).map((b) => {
+    return {missed: b.conversionsmissed, scored: b.conversionsscored, teamId: b.athlete_team_id}
+  }));
+
 
   return (
     <div className="dark:text-white flex flex-col" >
 
-      <div className="p-4 w-full h-56 bg-gradient-to-br  from-blue-800 to-blue-900 dark:from-blue-800 dark:to-blue-950 text-white" >
+      <BlueGradientCard className="p-4 w-full rounded-none h-56 bg-gradient-to-br lg:px-[15%] " >
 
-        <div onClick={() => navigate(-1)} className="flex mb-5 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
+        <div onClick={() => navigate(-1)} className="flex mb-5 lg:px-4 cursor-pointer w-full hover:text-blue-500 flex-row items-center justify-start" >
           <ArrowLeft />
           <p>Go Back</p>
         </div>
 
 
-        <div className="flex flex-row h-max items-center justify-center w-full" >
+        <div className="flex flex-row h-max items-center justify-center w-full " >
 
           <div className="flex flex-1 flex-col items-center justify-start gap-3" >
             <TeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " url={fixture.team_image_url} />
@@ -80,33 +88,36 @@ export default function FixtureScreen() {
           </div>
 
           <div className="flex flex-1 flex-col items-center gap-3 justify-end" >
-          <TeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " url={fixture.opposition_image_url} />
-          <TeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " url={fixture.opposition_image_url} />
+            <TeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " url={fixture.opposition_image_url} />
+            <TeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " url={fixture.opposition_image_url} />
             <p className="text text-wrap text-center" >{fixture.opposition_team_name}</p>
           </div>
 
         </div>
 
-      </div>
+      </BlueGradientCard>
 
       {/* {boxScore && <FixtureScreenTab />} */}
       <FixtureScreenHeader fixture={fixture} />
 
-      { !loadingBoxScore &&  <TabView tabHeaderItems={tabItems}  >
+      {!loadingBoxScore &&
 
-        <TabViewPage className="flex flex-col p-4 gap-5" tabKey="athletes-stats" >
-          {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
-        </TabViewPage>
-
-        <TabViewPage className="flex flex-col p-4 gap-5" tabKey="kick-off" >
-          <FixtureScreenOverview fixture={fixture} />
-        </TabViewPage>
-
-        <TabViewPage className="flex flex-col p-4 gap-5" tabKey="team-stats" >
-          {boxScore && <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />}
-        </TabViewPage>
-      
-      </TabView>}
+        (
+          <PageView>
+            <TabView tabHeaderItems={tabItems}  >
+              <TabViewPage className="flex flex-col p-4 gap-5" tabKey="athletes-stats" >
+                {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
+              </TabViewPage>
+              <TabViewPage className="flex flex-col p-4 gap-5" tabKey="kick-off" >
+                <FixtureScreenOverview fixture={fixture} />
+              </TabViewPage>
+              <TabViewPage className="flex flex-col p-4 gap-5" tabKey="team-stats" >
+                {boxScore && <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />}
+              </TabViewPage>
+            </TabView>
+          </PageView>
+        )
+      }
 
       <div className="flex flex-col p-4 gap-5" >
 
