@@ -24,9 +24,9 @@ export function summerizeGameStatus(fixture: IFixture) {
     return "";
 }
 
-export function searchFixturesPredicate(fixture: IFixture ,query: string) {
+export function searchFixturesPredicate(fixture: IFixture ,query: string | undefined) {
 
-    if (query === "") return true;
+    if (query === "" || query === undefined) return true;
 
     let match = false;
 

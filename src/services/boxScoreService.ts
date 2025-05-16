@@ -11,7 +11,10 @@ export const boxScoreService = {
             });
             
 
-            return (await res.json()) as IBoxScoreItem[];
+
+            const json = (await res.json()) as IBoxScoreItem[];
+            // console.log("Box Score ", json);
+            return json;
             
         } catch (error) {
             console.log(error);
