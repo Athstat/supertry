@@ -36,10 +36,10 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore }: Props) {
 
         {
             label: "Convertions",
-            homeValue: `${homeStats.conversionsScored}/${homeStats.conversionsScored + homeStats.conversionsMissed}`,
-            awayValue: `${awayStats.conversionsScored}/${awayStats.conversionsScored + awayStats.conversionsMissed}`,
-            homeRealVal: (homeStats.conversionsScored) / (homeStats.conversionsScored + homeStats.conversionsMissed),
-            awayRealVal: (awayStats.conversionsScored) / (awayStats.conversionsScored + awayStats.conversionsMissed)
+            homeValue: `${homeStats.convertionsScored}/${homeStats.convertionsScored + homeStats.convertionsMissed}`,
+            awayValue: `${awayStats.convertionsScored}/${awayStats.convertionsScored + awayStats.convertionsMissed}`,
+            homeRealVal: (homeStats.convertionsScored) / (homeStats.convertionsScored + homeStats.convertionsMissed),
+            awayRealVal: (awayStats.convertionsScored) / (awayStats.convertionsScored + awayStats.convertionsMissed)
         },
 
         {

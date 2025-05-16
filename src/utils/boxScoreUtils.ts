@@ -146,8 +146,8 @@ export function disciplineBias(statLine: IBoxScoreItem) {
 export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
     let points = 0
     let tries = 0;
-    let conversionsScored = 0;
-    let conversionsMissed = 0;
+    let convertionsScored = 0;
+    let convertionsMissed = 0;
     let penaltiesScored = 0;
     let penaltiesConceded = 0;
     let dropGoalsScored = 0;
@@ -163,8 +163,8 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
     .forEach((bs) => {
         points += bs.points;
         tries += bs.tries;
-        conversionsScored += bs.conversionsscored;
-        conversionsMissed += bs.conversionsmissed;
+        convertionsScored += bs.convertionsScored;
+        convertionsMissed += bs.convertionsMissed;
         penaltiesConceded += bs.penaltiesconceded;
         penaltiesScored +=bs.penaltygoalsscored;
         dropGoalsScored += bs.dropgoalsscored;
@@ -179,8 +179,8 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
     return {
         points,
         tries,
-        conversionsScored,
-        conversionsMissed,
+        convertionsScored,
+        convertionsMissed,
         penaltiesScored,
         penaltiesConceded,
         dropGoalsScored,
