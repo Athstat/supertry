@@ -10,7 +10,7 @@ export default function SBRChatScreen() {
     return (
         <PageView className='py-1 flex flex-col gap-2 ' >
 
-            <div onClick={back} className='flex cursor-pointer flex-row items-center gap-1' >
+            <div onClick={back} className='flex cursor-pointer flex-row items-center gap-1 px-2' >
                 <ArrowLeft className='w-4 h-4'  />
                 <p>Go Back</p>
             </div>
