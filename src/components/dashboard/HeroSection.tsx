@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import {
   activeLeaguesFilter,
+  calculateJoinDeadline,
   isLeagueOnTheClock,
 } from "../../utils/leaguesUtils";
 import { useCountdown } from "../../hooks/useCountdown";
@@ -68,7 +69,9 @@ function JoinDeadlineCountdown({
   league,
   onViewLeague,
 }: JoinDeadlineCountdownProps) {
-  const deadline = new Date(league.join_deadline!);
+  const deadline = calculateJoinDeadline(league);
+  if (!deadline) return;
+
   const diff = epochDiff(deadline);
 
   const { days, hours, seconds, minutes } = useCountdown(diff);

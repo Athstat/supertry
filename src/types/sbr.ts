@@ -11,7 +11,8 @@ export type ISbrFixture = {
     voting?: boolean,
     season?: string,
     home_votes: number,
-    away_votes: number
+    away_votes: number,
+    country?: string,
 }
 
 export type ISbrFixtureVote = {
