@@ -53,7 +53,7 @@ export function SummaryItem({ fixture }: SummaryItemProps) {
     if (total === 0 || !userVote) return;
 
     return (
-        <div className="p-3 border w-full grid grid-cols-1 gap-2 rounded-xl border-slate-200 bg-white dark:bg-slate-800/50 dark:border-slate-800/50" >
+        <div className="p-3 border w-full grid grid-cols-1 gap-2 rounded-xl border-slate-200 bg-slate-100 dark:bg-slate-800/50 dark:border-slate-800/50" >
 
             {/* Team Row */}
             <div className="flex flex-row text-xs items-center justify-start gap-1" >
