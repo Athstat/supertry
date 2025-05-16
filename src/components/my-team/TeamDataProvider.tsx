@@ -78,7 +78,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
 
       try {
         setIsLoading(true);
-        //console.log("Fetching team data for ID:", teamId);
+        console.log("Fetching team data for ID:", teamId);
 
         // First try to fetch team athletes directly
         const teamAthletes = await fantasyTeamService.fetchTeamAthletes(
@@ -115,6 +115,8 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
               matches_played: 0,
             } as IFantasyClubTeam;
           }
+
+          console.log("Current team: ", currentTeam);
 
           if (currentTeam) {
             setTeam(currentTeam);

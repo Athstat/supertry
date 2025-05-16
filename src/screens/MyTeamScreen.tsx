@@ -26,7 +26,7 @@ const TeamContent: React.FC<{
   league?: IFantasyLeague;
 }> = ({ activeTab, setActiveTab, league }) => {
   const { positionList, players, formation } = useTeamData();
-
+  console.log("Players: ", players);
   const {
     handlePlayerClick,
     handlePositionSelect,
