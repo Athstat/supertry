@@ -73,9 +73,9 @@ function teamLogoMapper(teamName: string): string | undefined {
     case 'Hillcrest College':
         return '/sbr_logos/hilcrest.webp';
     case 'Wise Owl Marondera':
-        return 'public/sbr_logos/wise_owl.webp';
+        return '/sbr_logos/wise_owl.webp';
     case 'Churchill Boys High':
-        return 'public/sbr_logos/church_hill.webp';
+        return '/sbr_logos/church_hill.webp';
     default:
       return undefined;
   }
