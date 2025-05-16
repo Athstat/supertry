@@ -15,6 +15,7 @@ import { searchFixturesPredicate } from "../utils/fixtureUtils";
 import { useSectionNavigation } from "../hooks/useSectionNavigation";
 import { format } from "date-fns";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
+import PageView from "./PageView";
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -76,7 +77,7 @@ export default function FixtureListScreen() {
     .splice(0, 20);
 
   return (
-    <div className="dark:text-white  p-4 flex flex-col items-center justify-start">
+    <PageView className="dark:text-white  p-4 flex flex-col items-center justify-start">
       <div className="flex flex-col gap-5 w-full lg:w-3/4">
         <div className="flex flex-row items-center justify-start gap-2 ">
           <Calendar className="" />
@@ -112,7 +113,7 @@ export default function FixtureListScreen() {
       >
         <ChevronDown />
       </div>
-    </div>
+    </PageView>
   );
 }
 
