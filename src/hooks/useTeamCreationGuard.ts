@@ -1,7 +1,7 @@
 import { leagueService } from "../services/leagueService";
 import { IFantasyLeague, IFantasyLeagueTeam } from "../types/fantasyLeague";
 import { RankedFantasyTeam } from "../types/league";
-import { isLeagueLocked } from "../utils/leaguesUtils";
+import { calculateJoinDeadline, isLeagueLocked } from "../utils/leaguesUtils";
 import { useAuthUser } from "./useAuthUser";
 import { useFetch } from "./useFetch";
 

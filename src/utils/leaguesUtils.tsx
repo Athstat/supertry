@@ -88,14 +88,16 @@ export function getRankChange(currentRank: number, lastRank: number) {
 export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   if (!joinDeadline) return false;
 
-  const thirtyMinutes = 1000 * 60 * 30;
 
   const now = new Date();
   const deadline = new Date(joinDeadline);
 
-  const diff = deadline.valueOf() - now.valueOf();
+  const softDeadline = add(deadline, {
+    hours: 1,
+    minutes: 30
+  });
 
-  return diff < thirtyMinutes;
+  return now.valueOf() > softDeadline.valueOf();
 }
 
 /** Returns the last possible date that users can join a league */

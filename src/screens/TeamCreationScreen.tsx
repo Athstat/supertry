@@ -19,7 +19,6 @@ import TeamToast from "./team-creation-components/TeamToast";
 import useTeamCreationState from "./team-creation-components/useTeamCreationState";
 import { leagueService } from "../services/leagueService";
 import { URC_COMPETIION_ID } from "../types/constants";
-import { isLeagueLocked } from "../utils/leaguesUtils";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { useTeamCreationGuard } from "../hooks/useTeamCreationGuard";
 import PrimaryButton from "../components/shared/buttons/PrimaryButton";
