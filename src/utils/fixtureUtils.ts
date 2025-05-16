@@ -1,4 +1,5 @@
 import { IFixture } from "../types/games";
+import { ISbrFixture } from "../types/sbr";
 
 export function fixtureSumary(fixture: IFixture) {
     const { team_score, kickoff_time, game_status, opposition_score } = fixture;
@@ -33,6 +34,33 @@ export function searchFixturesPredicate(fixture: IFixture ,query: string | undef
     const phrases = [
         `${fixture.team_name} vs ${fixture.opposition_team_name}`,
         `${fixture.opposition_team_name} vs ${fixture.team_name}`,
+    ];
+
+    phrases.forEach((phrase: string) => {
+
+        if (phrase === "") return false;
+         
+        phrase = phrase.toLowerCase();
+
+        const flag = phrase.startsWith(query);
+
+        match = match || flag;
+    });
+
+
+    return match;
+
+}
+
+export function searchSbrFixturesPredicate(fixture: ISbrFixture ,query: string | undefined) {
+
+    if (query === "" || query === undefined) return true;
+
+    let match = false;
+
+    const phrases = [
+        `${fixture.home_team} vs ${fixture.away_team}`,
+        `${fixture.away_team} vs ${fixture.home_team}`,
     ];
 
     phrases.forEach((phrase: string) => {
