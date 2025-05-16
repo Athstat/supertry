@@ -10,6 +10,7 @@ import SbrVotingModalNavigator from "./SbrVotingModalNavigator"
 import { CircleCheck } from "lucide-react"
 import PrimaryButton from "../shared/buttons/PrimaryButton"
 import { LoadingState } from "../ui/LoadingState"
+import { getCountryEmojiFlag } from "../../utils/svrUtils"
 
 type Props = {
     className?: string,
@@ -102,6 +103,11 @@ function FixtureVotingCard({ fixture }: FixtureVotingCardProps) {
 
     return (
         <div className="w-[100%] flex flex-col items-center gap-3 justify-center">
+            
+            <div>
+                <p>{fixture.season} {getCountryEmojiFlag(fixture.country ?? "")}</p>
+            </div>
+            
             <div className="flex flex-row w-full items-center">
                 <div className="items-center justify-center text-center flex flex-col flex-1 gap-2">
                     <SbrTeamLogo teamName={fixture.home_team} className="w-20 h-20" />
@@ -109,7 +115,8 @@ function FixtureVotingCard({ fixture }: FixtureVotingCardProps) {
                 </div>
 
                 <div className="flex-1 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-                    <p>{kickoff_time && format(kickoff_time, "hh:mm a")}</p>
+                    {/* <p>{kickoff_time && format(kickoff_time, "hh:mm a")}</p> */}
+                    <p className="" >VS</p>
                     <p>{kickoff_time && format(kickoff_time, "EE dd MMM")}</p>
                 </div>
 

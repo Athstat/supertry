@@ -1,23 +1,23 @@
 import { format } from "date-fns";
-import { IFixture } from "../../types/games";
-import { searchFixturesPredicate } from "../../utils/fixtureUtils";
-import FixtureCard from "./FixtureCard";
+import { ISbrFixture } from "../../../types/sbr";
+import { searchSbrFixturesPredicate } from "../../../utils/fixtureUtils";
+import SbrFixtureCard from "../SbrFixtureCard";
 
 type Props = {
-    fixtures: IFixture[],
+    fixtures: ISbrFixture[],
     search?: string
 }
 
 /** Groups Fixtures into dates and renders them by date */
-export default function GroupedFixturesList({ fixtures, search }: Props) {
+export default function GroupedSbrFixturesList({ fixtures, search }: Props) {
 
     // Group fixtures by day
-    const fixturesByDay: Record<string, IFixture[]> = {};
+    const fixturesByDay: Record<string, ISbrFixture[]> = {};
 
     fixtures.forEach((fixture) => {
         if (
             fixture.kickoff_time &&
-            searchFixturesPredicate(fixture, search)
+            searchSbrFixturesPredicate(fixture, search)
         ) {
             const dayKey = format(
                 new Date(fixture.kickoff_time),
@@ -37,7 +37,6 @@ export default function GroupedFixturesList({ fixtures, search }: Props) {
         <div className="grid grid-cols-1 gap-3">
             {(() => {
 
-
                 return sortedDays.map((dayKey) => (
                     <div key={dayKey} className="mb-4">
                         {/* Day header */}
@@ -48,7 +47,7 @@ export default function GroupedFixturesList({ fixtures, search }: Props) {
                         {/* Fixtures for this day */}
                         <div className="grid grid-cols-1 gap-3">
                             {fixturesByDay[dayKey].map((fixture, index) => (
-                                <FixtureCard
+                                <SbrFixtureCard
                                     showLogos
                                     showCompetition
                                     className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white hover:bg-slate-50 rounded-xl"

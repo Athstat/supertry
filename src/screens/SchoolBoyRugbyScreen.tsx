@@ -1,13 +1,15 @@
 import PageView from "./PageView";
 import SBRFixtures from "../components/sbr/SBRFixtures";
+import { useNavigate } from "react-router-dom";
+import { MessageCircle } from "lucide-react";
 
 export default function SchoolBoyRugbyScreen() {
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const handleViewChat = () => {
-  //   navigate("/sbr/chat"); 
-  // }
+  const handleViewChat = () => {
+    navigate("/sbr/chat"); 
+  }
 
 
 
@@ -20,18 +22,19 @@ export default function SchoolBoyRugbyScreen() {
           {/* <SbrContextSwitcher /> */}
         </div>
 
-        {/* <button onClick={handleViewChat} className="h-fit w-fit flex flex-row items-center justify-end" >
+        <button onClick={handleViewChat} className="h-fit w-fit flex flex-row items-center justify-end" >
           <MessageCircle 
             className="hover:text-primary-600 cursor-pointer" 
           />
-        </button> */}
+        </button>
 
       </div>
-
+      
       <div>
         <SBRFixtures />
       </div>
-      <div></div>
+
+
     </PageView>
   )
 }
