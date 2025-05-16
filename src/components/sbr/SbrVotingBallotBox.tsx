@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { sbrService } from "../../services/sbrService"
 import { ISbrFixture, ISbrFixtureVote } from "../../types/sbr"
-import { Loader } from "lucide-react"
+import { Check, Loader } from "lucide-react"
 import { mutate } from "swr"
 import { twMerge } from "tailwind-merge"
 
@@ -53,11 +53,18 @@ export default function SbrVotingBallotBox({ fixture, userVote }: Props) {
                         disabled={hasVotedHome || isVoting}
                         onClick={() => onVote("home_team")}
                         className={twMerge(
-                            "bg-slate-900 dark:bg-slate-800 text-white h-10 hover:bg-slate-950 dark:hover:bg-slate-900 rounded-xl px-10 text-lg font-medium transition-colors",
-                            hasVotedHome && "opacity-50 cursor-not-allowed hover:bg-primary-600 dark:hover:bg-primary-700"
+                            "bg-slate-900 dark:bg-slate-800 text-white h-10 hover:bg-slate-950 dark:hover:bg-slate-900 rounded-xl px-6 text-lg font-medium transition-colors flex items-center gap-1",
+                            hasVotedHome && ""
                         )}
                     >
-                        {isVoting && isVoitngHome ? <Loader className="w-4 h-4 animate-spin" /> : <p>Vote</p>}
+                        {isVoting && isVoitngHome ? (
+                            <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <>
+                                {hasVotedHome && <Check className="w-4 h-4" />}
+                                <span>{hasVotedHome ? 'Voted' : 'Vote'}</span>
+                            </>
+                        )}
                     </button>
                 </div>}
 
@@ -67,11 +74,18 @@ export default function SbrVotingBallotBox({ fixture, userVote }: Props) {
                         disabled={hasVotedAway || isVoting}
                         onClick={() => onVote("away_team")}
                         className={twMerge(
-                            "bg-primary-600 dark:bg-primary-700 text-white h-10 hover:bg-primary-700 dark:hover:bg-primary-800 rounded-xl px-10 text-lg font-medium transition-colors",
-                            hasVotedAway && "opacity-50 cursor-not-allowed hover:bg-primary-600 dark:hover:bg-primary-700"
+                            "bg-primary-600 dark:bg-primary-700 text-white h-10 hover:bg-primary-700 dark:hover:bg-primary-800 rounded-xl px-6 text-lg font-medium transition-colors flex items-center gap-1",
+                            hasVotedAway && ""
                         )}
                     >
-                        {isVoting && !isVoitngHome ? <Loader className="w-4 h-4 animate-spin" /> : <p>Vote</p>}
+                        {isVoting && !isVoitngHome ? (
+                            <Loader className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <>
+                                {hasVotedAway && <Check className="w-4 h-4" />}
+                                <span>{hasVotedAway ? 'Voted' : 'Vote'}</span>
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
