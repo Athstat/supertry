@@ -1,16 +1,17 @@
 import { useState } from "react"
-import { ISbrFixture } from "../../types/sbr"
-import DialogModal from "../shared/DialogModal"
-import SbrTeamLogo from "./SbrTeamLogo"
+import { ISbrFixture } from "../../../types/sbr"
+import DialogModal from "../../shared/DialogModal"
+import SbrTeamLogo from "../fixtures/SbrTeamLogo"
 import { format } from "date-fns"
-import { useFixtureVotes } from "../../hooks/useFxitureVotes"
-import VotingProgressBar from "../shared/VotingProgressBar"
+import { useFixtureVotes } from "../../../hooks/useFxitureVotes"
+import VotingProgressBar from "../../shared/VotingProgressBar"
 import SbrVotingBallotBox from "./SbrVotingBallotBox"
-import SbrVotingModalNavigator from "./SbrVotingModalNavigator"
 import { CircleCheck } from "lucide-react"
-import PrimaryButton from "../shared/buttons/PrimaryButton"
-import { LoadingState } from "../ui/LoadingState"
-import { getCountryEmojiFlag } from "../../utils/svrUtils"
+import PrimaryButton from "../../shared/buttons/PrimaryButton"
+import { LoadingState } from "../../ui/LoadingState"
+import { getCountryEmojiFlag } from "../../../utils/svrUtils"
+import SbrVotingModalNavigator from "./SbrVotingModalNavigator"
+import SbrPersonalVotingSummary from "./SbrPersonalVotingSummary"
 
 type Props = {
     className?: string,
@@ -56,7 +57,7 @@ export default function SbrVotingModal({ fixtures, open, onClose }: Props) {
     }
 
     return (
-        <DialogModal onClose={onClose}  className="w-full h-[600px] flex flex-col items-center justify-center" open={open} title="Who you got winning this week?">
+        <DialogModal onClose={onClose}  className="w-full flex flex-col items-center justify-center" open={open} title="Who you got winning this week?">
             {currentFixture !== undefined && 
             <FixtureVotingCard 
                 fixture={currentFixture} 
@@ -70,19 +71,26 @@ export default function SbrVotingModal({ fixtures, open, onClose }: Props) {
                 />
             }
 
-            {currentFixture === undefined && (
-                <div className="flex flex-col items-center gap-4">
+            {(currentFixture === undefined) &&  (
+
+                <div className="flex flex-col items-center gap-5 h-full">
+                    
+                    
                     <CircleCheck className="text-primary-500 dark:text-primary-400 w-20 h-20" />
                     <p className="text-gray-700 dark:text-gray-300">Thank you for placing your votes! You are good to go!</p>
                     <PrimaryButton onClick={onClose}>Done</PrimaryButton>
                     {fixtures.length > 0 && (
+                        
+                        
                         <button 
-                            onClick={onGoBack} 
-                            className="w-full px-4 py-2 rounded-xl font-semibold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-dark-800/40 hover:bg-gray-200 dark:hover:bg-dark-700 transition-colors"
+                        onClick={onGoBack} 
+                        className="w-full px-4 py-2 rounded-xl font-semibold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-dark-800/40 hover:bg-gray-200 dark:hover:bg-dark-700 transition-colors"
                         >
                             Go Back
                         </button>
                     )}
+
+                    <SbrPersonalVotingSummary fixtures={fixtures} />
                 </div>
             )}
 
