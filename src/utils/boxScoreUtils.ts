@@ -163,8 +163,8 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
     .forEach((bs) => {
         points += bs.points;
         tries += bs.tries;
-        convertionsScored += bs.convertionsScored;
-        convertionsMissed += bs.convertionsMissed;
+        convertionsScored += bs.conversionsscored;
+        convertionsMissed += bs.conversionsmissed;
         penaltiesConceded += bs.penaltiesconceded;
         penaltiesScored +=bs.penaltygoalsscored;
         dropGoalsScored += bs.dropgoalsscored;
@@ -191,4 +191,35 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
         redCards,
         yellowCards
     }
+}
+
+export function convertionsStr(made: number, missed: number) {
+
+    if (Number.isNaN(made) || Number.isNaN(missed)) {
+        return "-"
+    }
+
+    const total = made + missed;
+
+    if (total === 0) {
+        return "0/0";
+    }
+
+    return `${made}/${total}`;
+}
+
+/** Calculates the convertions percentage value out of 100 */
+export function convertionsPercVal(made: number, missed: number) {
+
+    if (Number.isNaN(made) || Number.isNaN(missed)) {
+        return 0;
+    }
+
+    const total = made + missed;
+
+    if (total === 0) {
+        return 0;
+    }
+
+    return (made/total) * 100;
 }
