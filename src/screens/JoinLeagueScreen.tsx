@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 // Import components
 import { LeagueCard } from "../components/leagues/league_card_small/LeagueCard";
-import { activeLeaguesFilter, isLeagueOnTheClock } from "../utils/leaguesUtils";
+import { activeLeaguesFilter, calculateJoinDeadline, isLeagueOnTheClock } from "../utils/leaguesUtils";
 import { epochDiff } from "../utils/dateUtils";
 import { useCountdown } from "../hooks/useCountdown";
 import { useUserFantasyTeam } from "../components/league/useFantasyLeague";
@@ -258,7 +258,10 @@ type JoinDeadlineCountdownProps = {
 
 function JoinDeadlineCountdown({ league, onViewLeague }: JoinDeadlineCountdownProps) {
 
-  const deadline = new Date(league.join_deadline!);
+  const deadline = calculateJoinDeadline(league);
+
+  if (!deadline) return;
+
   const diff = epochDiff(deadline);
 
   const { days, hours, seconds, minutes } = useCountdown(diff);
