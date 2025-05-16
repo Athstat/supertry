@@ -56,6 +56,12 @@ export default function FixtureScreen() {
 
   ]
 
+  console.log("Box Score ", boxScore?.filter(b => {
+    return b.athlete_team_id === "fff2a41e-e2d9-53e2-a84c-4cdffd5f1e98";
+  }).map((b) => {
+    return {missed: b.conversionsmissed, scored: b.conversionsscored, teamId: b.athlete_team_id}
+  }));
+
 
   return (
     <div className="dark:text-white flex flex-col" >

@@ -168,7 +168,7 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
         penaltiesConceded += bs.penaltiesconceded;
         penaltiesScored +=bs.penaltygoalsscored;
         dropGoalsScored += bs.dropgoalsscored;
-        kicksAtGoal += bs.trykicks;
+        // kicksAtGoal += bs.trykicks;
         lineOutsWon += bs.lineoutswon;
         turnoversWon += bs.turnoverswon;
         turnoversConceded += bs.turnoversconceded;
