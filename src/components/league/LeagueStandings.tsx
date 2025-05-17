@@ -31,25 +31,25 @@ export function LeagueStandings({
   const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
 
   // Scroll to user's team when component mounts or teams change
-  useEffect(() => {
-    if (
-      userTeamRef.current &&
-      tableRef.current &&
-      teams.some((team) => team.isUserTeam)
-    ) {
-      // Add a small delay to ensure the table is fully rendered
-      setTimeout(() => {
-        const userTeamPosition =
-          userTeamRef.current && userTeamRef.current.offsetTop - HEADER_HEIGHT;
-        if (userTeamPosition) {
-          tableRef.current?.scrollTo({
-            top: userTeamPosition,
-            behavior: "smooth",
-          });
-        }
-      }, 300);
-    }
-  }, [teams]);
+  // useEffect(() => {
+  //   if (
+  //     userTeamRef.current &&
+  //     tableRef.current &&
+  //     teams.some((team) => team.isUserTeam)
+  //   ) {
+  //     // Add a small delay to ensure the table is fully rendered
+  //     setTimeout(() => {
+  //       const userTeamPosition =
+  //         userTeamRef.current && userTeamRef.current.offsetTop - HEADER_HEIGHT;
+  //       if (userTeamPosition) {
+  //         tableRef.current?.scrollTo({
+  //           top: userTeamPosition,
+  //           behavior: "smooth",
+  //         });
+  //       }
+  //     }, 300);
+  //   }
+  // }, [teams]);
 
   // Handle team row click
   const handleTeamClick = (team: RankedFantasyTeam) => {
@@ -105,23 +105,36 @@ export function LeagueStandings({
                   <th className="py-4 px-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
                     Team
                   </th>
-                  <th className="py-4 px-4 text-right text-sm font-semibold text-gray-600 dark:text-gray-400">
+                  <th className="py-4 px-4 text-right text-sm font-semibold text-gray-600 dark:text-gray-400 whitespace-nowrap">
                     Total Points
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {teams.map((team, index) => {
-                  return (
-                    <StandingsTableRow
-                      index={index}
-                      team={team}
-                      userTeamRef={userTeamRef}
-                      handleTeamClick={handleTeamClick}
-                      league={league}
-                    />
-                  );
-                })}
+                {[...teams]
+                  .sort((a, b) => {
+                    // If both teams have ranks, sort normally
+                    if (a.rank && b.rank) {
+                      return a.rank - b.rank;
+                    }
+                    // Push teams without ranks to the bottom
+                    if (!a.rank) return 1;
+                    if (!b.rank) return -1;
+                    // Fallback sorting
+                    return 0;
+                  })
+                  .map((team, index) => {
+                    return (
+                      <StandingsTableRow
+                        key={team.team_id}
+                        index={index}
+                        team={team}
+                        userTeamRef={userTeamRef}
+                        handleTeamClick={handleTeamClick}
+                        league={league}
+                      />
+                    );
+                  })}
               </tbody>
             </table>
           </div>
@@ -196,9 +209,9 @@ function StandingsTableRow({
         aria-label={`View ${team.teamName} details`}
       >
         <td className="py-4 px-4 whitespace-nowrap">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center">
             <span
-              className={`font-semibold ${
+              className={`font-semibold w-5 text-center ${
                 team.rank === 1
                   ? "text-yellow-500 dark:text-yellow-400"
                   : team.rank === 2
@@ -210,7 +223,9 @@ function StandingsTableRow({
             >
               {team.rank}
             </span>
-            {getRankChange(team.rank, team.lastRank)}
+            <span className="w-4 flex justify-center">
+              {getRankChange(team.rank, team.lastRank)}
+            </span>
           </div>
         </td>
         <td className="py-4 px-4">
@@ -233,7 +248,7 @@ function StandingsTableRow({
           </div>
         </td>
         <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400 relative pr-10">
-          {team.overall_score.toFixed(0)}
+          {team.overall_score.toFixed(1)}
           <span className="absolute right-4 top-1/2 -translate-y-1/2">
             <ChevronRight className="text-gray-400" />
           </span>
