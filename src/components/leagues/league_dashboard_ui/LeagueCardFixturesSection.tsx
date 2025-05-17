@@ -33,6 +33,7 @@ export default function LeagueCardFixturesSection({
       const end = league.end_round ?? f.round;
       return f.round >= start && f.round <= end;
     })
+    .filter(f => f.game_status !== "completed")
     .sort((a, b) =>
       a.kickoff_time && b.kickoff_time
         ? new Date(a.kickoff_time).valueOf() -
