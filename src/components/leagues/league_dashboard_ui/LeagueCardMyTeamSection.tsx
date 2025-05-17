@@ -121,7 +121,7 @@ export default function LeagueCardMyTeamSection({
             <div className="flex items-center gap-1.5 bg-gradient-to-r from-white to-gray-200 via-gray-50 px-3 py-1.5 rounded-full shadow-sm">
               <Zap size={18} className="text-orange-500 shrink-0" />
               <span className="font-medium text-sm text-primary-800">
-                {Math.floor(team.score ?? 0)} pts
+                {Math.floor(team.overall_score ?? 0)} pts
               </span>
             </div>
           </div>
