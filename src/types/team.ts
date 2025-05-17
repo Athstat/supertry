@@ -1,4 +1,5 @@
 export interface Player {
+  team_name: any;
   id: string;
   name: string;
   position: string;

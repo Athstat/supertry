@@ -1,4 +1,5 @@
 import React from "react";
+import StarRating from "../StarRating";
 
 interface StatsTabProps {
   player: any;
@@ -42,67 +43,70 @@ export const StatsTab: React.FC<StatsTabProps> = ({
           Player Ratings
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {player.ball_carrying !== null && (
-            <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
-                {player.ball_carrying ? `${player.ball_carrying}/5` : "N/A"}
+          {player.ball_carrying !== null &&
+            player.ball_carrying !== undefined && (
+              <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                <div className="flex flex-col items-center justify-center">
+                  <StarRating rating={player.ball_carrying} />
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  Ball Carrying
+                </div>
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
-                Ball Carrying
-              </div>
-            </div>
-          )}
+            )}
 
-          {player.tackling !== null && (
+          {player.tackling !== null && player.tackling !== undefined && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
-                {player.tackling ? `${player.tackling}/5` : "N/A"}
+              <div className="flex flex-col items-center justify-center">
+                <StarRating rating={player.tackling} />
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 Tackling
               </div>
             </div>
           )}
 
-          {player.points_kicking !== null && (
-            <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
-                {player.points_kicking ? `${player.points_kicking}/5` : "N/A"}
+          {player.points_kicking !== null &&
+            player.points_kicking !== undefined && (
+              <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                <div className="flex flex-col items-center justify-center">
+                  <StarRating rating={player.points_kicking} />
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  Points Kicking
+                </div>
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
-                Points Kicking
-              </div>
-            </div>
-          )}
+            )}
 
-          {player.infield_kicking !== null && (
-            <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
-                {player.infield_kicking ? `${player.infield_kicking}/5` : "N/A"}
+          {player.infield_kicking !== null &&
+            player.infield_kicking !== undefined && (
+              <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
+                <div className="flex flex-col items-center justify-center">
+                  <StarRating rating={player.infield_kicking} />
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  Infield Kicking
+                </div>
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
-                Infield Kicking
-              </div>
-            </div>
-          )}
+            )}
 
-          {player.strength !== null && (
+          {player.strength !== null && player.strength !== undefined && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
-                {player.strength ? `${player.strength}/5` : "N/A"}
+              <div className="flex flex-col items-center justify-center">
+                <StarRating rating={player.strength} />
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 Strength
               </div>
             </div>
           )}
 
-          {player.playmaking !== null && (
+          {player.playmaking !== null && player.playmaking !== undefined && (
             <div className="text-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg">
-              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
-                {player.playmaking ? `${player.playmaking}/5` : "N/A"}
+              <div className="flex flex-col items-center justify-center">
+                <StarRating rating={player.playmaking} />
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 Playmaking
               </div>
             </div>
