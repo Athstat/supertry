@@ -230,7 +230,7 @@ function TeamAthleteListItem({
   handleViewBreakdown,
   handleKeyDown,
 }: ListItemProps) {
-  const athleteId = athlete.tracking_id ?? "fall-back-id";
+  const athleteId = athlete.id ?? "fall-back-id";
 
   const { data: points, isLoading } = useAthletePointsBreakdown(
     athlete.tracking_id ?? "default-tracking-id"
