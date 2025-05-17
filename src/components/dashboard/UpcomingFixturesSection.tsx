@@ -34,6 +34,9 @@ export default function UpcomingFixturesSection() {
           new Date(b.kickoff_time).valueOf()
         : 0
     )
+    .filter(f => {
+      return f.game_status !== "completed"
+    })
     .slice(0, 5); // Show up to 5 fixtures instead of just 3
 
   // Group fixtures by day
@@ -53,7 +56,7 @@ export default function UpcomingFixturesSection() {
   const sortedDays = Object.keys(fixturesByDay).sort();
 
   return (
-    <TitledCard icon={Calendar} title="Upcoming Matches">
+    <TitledCard icon={Calendar} title="Fixtures">
       <div className="grid grid-cols-1 gap-2">
         {sortedDays.map((dayKey) => (
           <div key={dayKey} className="mb-2">
