@@ -60,6 +60,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
   const { showPlayerProfile } = usePlayerProfile();
 
   const handlePlayerClick = (player: Player) => {
+    console.log("Player clicked:", player);
     setSelectedPlayer(player);
     setShowActionModal(true);
   };
@@ -72,17 +73,17 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
     const playerForProfile = {
       tracking_id: player.id,
       player_name: player.name,
-      team_name: player.team,
+      team_name: player.team_name,
       position_class: player.position,
       price: player.price,
       power_rank_rating: player.form,
       image_url: player.image,
-      ball_carrying: 7,
-      tackling: 6,
-      points_kicking: 5,
+      ball_carrying: player.ball_carrying,
+      tackling: player.tackling,
+      points_kicking: player.points_kicking,
     };
 
-    showPlayerProfile(playerForProfile);
+    showPlayerProfile(player);
   };
 
   const handleSwapPlayer = async (player: Player) => {

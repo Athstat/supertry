@@ -42,7 +42,6 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
 }) => {
   const isLocked = isLeagueLocked(league?.join_deadline);
   const { team } = useTeamData();
-  console.log("league: ", league?.id);
 
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
     null
@@ -91,8 +90,11 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
           )}
 
           {isLocked && (
-            <TabButton active={activeTab === "edit-team"} onClick={() => {}}>
-              <div className="flex items-center dark:text-slate-600 cursor-not-allowed gap-2 flex-row">
+            <TabButton
+              active={activeTab === "edit-team"}
+              onClick={() => setActiveTab("edit-team")}
+            >
+              <div className="flex items-center dark:text-slate-600 gap-2 flex-row">
                 <span>Edit Team</span>
                 <Lock className="w-4 h-4" />
               </div>
@@ -220,7 +222,13 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                             : "text-gray-800 dark:text-white"
                         }`}
                       >
-                        {position.name}
+                        {position.name
+                          .split("-")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1)
+                          )
+                          .join(" ")}
                       </h3>
                       {(position.isSpecial ||
                         (index === positionList.length - 1 &&
@@ -233,23 +241,19 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
 
                     {/* Player name */}
                     <p className="text-xs text-center font-medium mb-1 text-gray-900 dark:text-gray-300">
-                      {position.player.name}
+                      {position.player.player_name}
                     </p>
 
                     {/* Team & price */}
                     <div className="flex justify-between w-full text-xs mb-3">
                       <span className="text-gray-500 dark:text-gray-400">
-                        {position.player.team}
+                        {position.player.team_name}
                       </span>
                       <span className="font-bold dark:text-gray-200 flex items-center">
-                        <svg
-                          className="w-3.5 h-3.5 mr-1 text-yellow-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M10 2a8 8 0 100 16 8 8 0 000-16z" />
-                        </svg>
+                        <Coins
+                          size={14}
+                          className="text-yellow-500 dark:text-yellow-400 mr-1"
+                        />
                         {position.player.price}
                       </span>
                     </div>
@@ -258,21 +262,7 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                     <div className="w-full flex flex-col gap-2">
                       <button
                         onClick={() => {
-                          const playerForPosition: Player = {
-                            id: position.player?.id || "",
-                            name: position.player?.name || "",
-                            position: position.player?.position || "",
-                            position_class: position.player?.position || "",
-                            team: position.player?.team || "",
-                            points: position.player?.points || 0,
-                            form: position.player?.power_rank_rating || 0,
-                            price: position.player?.price || 0,
-                            is_super_sub: position.isSpecial || false,
-                            is_starting: !position.isSpecial,
-                            image: position.player?.image_url || "",
-                            nextFixture: "",
-                          };
-                          handleViewStats(playerForPosition);
+                          handleViewStats(position.player);
                         }}
                         className="w-full py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md text-xs font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
                       >
@@ -372,6 +362,7 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
   formation,
   handlePlayerClick,
 }) => {
+  //console.log("PlayersField: ", players);
   return (
     <>
       {/* Team Formation - View Pitch Tab */}
@@ -380,7 +371,7 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
           Team Formation
         </h2>
         <TeamFormation
-          players={players.filter((player) => !player.isSubstitute)}
+          players={players.filter((player) => player.is_starting)}
           formation={formation}
           onPlayerClick={handlePlayerClick}
         />
@@ -411,9 +402,9 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
                   animate={{ opacity: 1 }}
                 >
                   <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-orange-300 dark:border-orange-600">
-                    {player.image ? (
+                    {player.image_url ? (
                       <img
-                        src={player.image}
+                        src={player.image_url}
                         alt={player.name}
                         className="w-full h-full object-cover"
                       />
