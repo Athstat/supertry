@@ -182,9 +182,9 @@ function StandingsTableRow({
         ref={team.isUserTeam ? userTeamRef : null}
         data-user-team={team.isUserTeam}
         className={`
-                        cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-800
-                        ${getRowBackground(team.rank, index, team.isUserTeam)}
-                      `}
+          cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-800
+          ${getRowBackground(team.rank, index, team.isUserTeam)}
+        `}
         onClick={() => handleTeamClick(team)}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -233,7 +233,7 @@ function StandingsTableRow({
           </div>
         </td>
         <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400 relative pr-10">
-          {Math.floor(team.totalPoints ?? 0)}
+          {team.overall_score.toFixed(0)}
           <span className="absolute right-4 top-1/2 -translate-y-1/2">
             <ChevronRight className="text-gray-400" />
           </span>

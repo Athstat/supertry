@@ -44,12 +44,14 @@ export function TeamAthletesModal({
     (athlete) => athlete.id === selectedAthleteId
   );
 
-  const handleViewBreakdown = async (athleteId: string, pointsBreakdown: PointsBreakdownItem[]) => {
+  const handleViewBreakdown = async (
+    athleteId: string,
+    pointsBreakdown: PointsBreakdownItem[]
+  ) => {
     if (athleteId === selectedAthleteId) return;
 
     setSelectedAthleteId(athleteId);
     setPointsBreakdown(pointsBreakdown);
-
   };
 
   const handleBackToList = () => {
@@ -57,7 +59,11 @@ export function TeamAthletesModal({
     setPointsBreakdown([]);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, athleteId: string, pointsBreakDown: PointsBreakdownItem[]) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent,
+    athleteId: string,
+    pointsBreakDown: PointsBreakdownItem[]
+  ) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       handleViewBreakdown(athleteId, pointsBreakDown);
@@ -71,8 +77,9 @@ export function TeamAthletesModal({
     }
   };
 
-  const totalScore = pointsBreakdown
-    .reduce((acc, item) => acc + item.score, 0);
+  const totalScore = pointsBreakdown.reduce((acc, item) => acc + item.score, 0);
+
+  //console.log("Points Breakdown", pointsBreakdown);
 
   return (
     <div
@@ -108,12 +115,12 @@ export function TeamAthletesModal({
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     {selectedAthlete.position
                       ? selectedAthlete.position
-                        .split("-")
-                        .map(
-                          (word) =>
-                            word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")
+                          .split("-")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1)
+                          )
+                          .join(" ")
                       : "Athlete"}{" "}
                     • {team.teamName}
                   </p>
@@ -167,12 +174,17 @@ export function TeamAthletesModal({
           </div>
         ) : selectedAthleteId ? (
           // Points breakdown view
-          <div className="overflow-y-auto" >
-            {pointsBreakdown.length === 0 && <p className="text-center m-4 bg-slate-100 dark:bg-slate-700 rounded-xl p-4 text-gray-500 dark:text-gray-400">No points breakdown data available</p>}
-            {pointsBreakdown.length > 0 && <PointsBreakdownView points={pointsBreakdown} />}
+          <div className="overflow-y-auto">
+            {pointsBreakdown.length === 0 && (
+              <p className="text-center m-4 bg-slate-100 dark:bg-slate-700 rounded-xl p-4 text-gray-500 dark:text-gray-400">
+                No points breakdown data available
+              </p>
+            )}
+            {pointsBreakdown.length > 0 && (
+              <PointsBreakdownView points={pointsBreakdown} />
+            )}
           </div>
         ) : (
-
           // Main list view
           <div className="overflow-y-auto flex-1">
             {athletes.length === 0 ? (
@@ -180,7 +192,6 @@ export function TeamAthletesModal({
                 No athletes found
               </div>
             ) : (
-
               <ul className="divide-y dark:divide-gray-700">
                 {athletes.map((athlete, index) => {
                   return (
@@ -190,7 +201,7 @@ export function TeamAthletesModal({
                       handleKeyDown={handleKeyDown}
                       handleViewBreakdown={handleViewBreakdown}
                     />
-                  )
+                  );
                 })}
               </ul>
             )}
@@ -202,21 +213,34 @@ export function TeamAthletesModal({
 }
 
 type ListItemProps = {
-  athlete: RugbyPlayer,
-  handleViewBreakdown: (athleteId: string, pointsBreakDown: PointsBreakdownItem[]) => void,
-  handleKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>, athleteId: string, pointsBreakDown: PointsBreakdownItem[]) => void
-}
+  athlete: RugbyPlayer;
+  handleViewBreakdown: (
+    athleteId: string,
+    pointsBreakDown: PointsBreakdownItem[]
+  ) => void;
+  handleKeyDown: (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    athleteId: string,
+    pointsBreakDown: PointsBreakdownItem[]
+  ) => void;
+};
 
-function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: ListItemProps) {
-
+function TeamAthleteListItem({
+  athlete,
+  handleViewBreakdown,
+  handleKeyDown,
+}: ListItemProps) {
   const athleteId = athlete.id ?? "fall-back-id";
 
-  const { data: points, isLoading } = useAthletePointsBreakdown(athlete.tracking_id ?? "default-tracking-id");
+  const { data: points, isLoading } = useAthletePointsBreakdown(
+    athlete.tracking_id ?? "default-tracking-id"
+  );
 
-  const totalScore: number = points ?
-    points.reduce((currTotal, action) => {
-      return currTotal + action.score;
-    }, 0) : 0;
+  const totalScore: number = points
+    ? points.reduce((currTotal, action) => {
+        return currTotal + action.score;
+      }, 0)
+    : 0;
 
   const isSub = !athlete.is_starting;
 
@@ -229,15 +253,12 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         aria-disabled={isLoading}
         className="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
-
         {/* Athlete Image */}
         <div className="flex-shrink-0">
           {athlete.image_url ? (
             <img
               src={athlete.image_url}
-              alt={
-                athlete.player_name || "Athlete"
-              }
+              alt={athlete.player_name || "Athlete"}
               className="w-12 h-12 rounded-full object-cover object-top bg-gray-100 dark:bg-gray-700"
               onError={(e) => {
                 // Fallback if image fails to load
@@ -256,20 +277,25 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         <div className="flex-1">
           <div className="font-medium dark:text-white">
             {athlete.player_name}
-
           </div>
-          <div className={twMerge(
-            "text-sm text-gray-500 dark:text-gray-400 w-fit rounded-xl",
-            isSub && "bg-orange-600 w-fit font-bold px-2 text-white dark:text-white"
-          )}>
-            {formatPosition(athlete.position ?? "")} {isSub ? "· Super Sub 🌟" : ""}
+          <div
+            className={twMerge(
+              "text-sm text-gray-500 dark:text-gray-400 w-fit rounded-xl",
+              isSub &&
+                "bg-orange-600 w-fit font-bold px-2 text-white dark:text-white"
+            )}
+          >
+            {formatPosition(athlete.position ?? "")}{" "}
+            {isSub ? "· Super Sub 🌟" : ""}
           </div>
         </div>
 
         {/* Athlete Stats with View Details Button */}
         <div className="flex items-center gap-2">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            {isLoading && <p className="w-4 h-4 rounded-full bg-slate-300 dark:bg-slate-700 animate-pulse" ></p>}
+            {isLoading && (
+              <p className="w-4 h-4 rounded-full bg-slate-300 dark:bg-slate-700 animate-pulse"></p>
+            )}
             {!isLoading && <p>{totalScore?.toFixed(1)}</p>}
           </div>
           <button
@@ -286,18 +312,14 @@ function TeamAthleteListItem({ athlete, handleViewBreakdown, handleKeyDown }: Li
         </div>
       </div>
     </li>
-  )
-
+  );
 }
-
-
 
 type PointsBreakdownListItemProps = {
-  item: PointsBreakdownItem
-}
+  item: PointsBreakdownItem;
+};
 
 function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
-
   // Format the action name by adding spaces before capitals and capitalizing first letter
 
   const displayName = formatAction(item.action ?? "");
@@ -307,9 +329,7 @@ function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
   const isNegative = item.score < 0;
 
   return (
-    <li
-      className="flex flex-col border-b pb-3 dark:border-gray-600 last:border-0"
-    >
+    <li className="flex flex-col border-b pb-3 dark:border-gray-600 last:border-0">
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col">
           <div className="flex flex-col sm:flex-row sm:items-center">
@@ -322,12 +342,13 @@ function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
           </div>
         </div>
         <span
-          className={`font-bold ${isPositive
-            ? "text-green-600 dark:text-green-400"
-            : isNegative
+          className={`font-bold ${
+            isPositive
+              ? "text-green-600 dark:text-green-400"
+              : isNegative
               ? "text-red-600 dark:text-red-400"
               : "dark:text-white"
-            }`}
+          }`}
         >
           {item?.score.toFixed(1) ?? 0} pts
         </span>
@@ -337,21 +358,19 @@ function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
 }
 
 type PointsBreakDownViewProps = {
-  points: PointsBreakdownItem[]
-}
+  points: PointsBreakdownItem[];
+};
 
 function PointsBreakdownView({ points }: PointsBreakDownViewProps) {
-
   const pointsBreakdown = points;
 
   return (
     <div className=" flex-1 p-4">
-
       <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
         {pointsBreakdown.length > 0 ? (
           <ul className="space-y-3">
             {pointsBreakdown.map((item, index) => {
-              return <PointsBreakdownListItem item={item} key={index} />
+              return <PointsBreakdownListItem item={item} key={index} />;
             })}
           </ul>
         ) : (
@@ -360,7 +379,6 @@ function PointsBreakdownView({ points }: PointsBreakDownViewProps) {
           </p>
         )}
       </div>
-
     </div>
-  )
+  );
 }
