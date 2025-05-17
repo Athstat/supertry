@@ -163,7 +163,6 @@ export const athleteService = {
 
   // Get detailed player statistics by athlete ID
   getAthleteStats: async (athleteId: string, competitionId?: string) => {
-    console.log("Fetching stats for athlete ID:", athleteId);
 
     try {
       // Try to get token from localStorage
@@ -203,9 +202,7 @@ export const athleteService = {
         return action.season_id === cId;
       };
 
-      console.log("API response data:", json);
-
-      console.log("Before filter ", json);
+      console.log("API response data: for athlete before filter ", json);
 
       const data =
         competitionId !== undefined

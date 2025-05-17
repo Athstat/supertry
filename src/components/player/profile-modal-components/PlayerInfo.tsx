@@ -10,7 +10,7 @@ export const PlayerInfo: React.FC<PlayerInfoProps> = ({ player }) => {
 
   return (
     <>
-      <div className="px-6 py-4 sticky top-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="px-6 py-4 z-50 sticky top-0 bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-gray-700">
         
         <div className='flex flex-row items-center gap-2' >
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{player.player_name}</h2>

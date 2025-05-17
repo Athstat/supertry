@@ -3,6 +3,7 @@ import { athleteService } from '../../../services/athleteService';
 import { useLocation } from 'react-router-dom';
 
 export const usePlayerStats = (player: any, isOpen: boolean) => {
+  
   const [playerStats, setPlayerStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -18,15 +19,15 @@ export const usePlayerStats = (player: any, isOpen: boolean) => {
       }
 
       // Log all available IDs to help debug
-      console.log('Player object:', player);
-      console.log('Available IDs:', {
-        id: player.id,
-        tracking_id: player.tracking_id,
-        athlete_id: player.athlete_id
-      });
+      // console.log('Player object:', player);
+      // console.log('Available IDs:', {
+      //   id: player.id,
+      //   tracking_id: player.tracking_id,
+      //   athlete_id: player.athlete_id
+      // });
 
       // Use the first available ID in this priority order
-      const athleteId = player.id || player.tracking_id || player.athlete_id;
+      const athleteId = player.tracking_id || player.athlete_id || player.id;
 
       if (!athleteId) {
         console.warn('No valid ID found for player:', player.player_name);
@@ -35,10 +36,14 @@ export const usePlayerStats = (player: any, isOpen: boolean) => {
 
       setIsLoading(true);
       try {
-        console.log('Calling athleteService.getAthleteStats with ID:', athleteId);
+        // console.log('Calling athleteService.getAthleteStats with ID:', athleteId);
+
         const stats = await athleteService.getAthleteStats(athleteId, competitionId);
-        console.log('Fetched player stats:', stats);
+
+        // console.log('Fetched player stats:', stats);
+
         setPlayerStats(stats);
+
       } catch (err) {
         console.error('Error fetching player statistics:', err);
         setError('Failed to load player statistics');
