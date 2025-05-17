@@ -1,4 +1,4 @@
-import { useRef, useEffect, Ref } from "react";
+import { useRef, Ref } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
