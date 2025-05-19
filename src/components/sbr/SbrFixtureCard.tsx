@@ -2,7 +2,6 @@ import { format } from "date-fns"
 import { ISbrFixture } from "../../types/sbr"
 import SbrTeamLogo from "./fixtures/SbrTeamLogo"
 import { twMerge } from "tailwind-merge"
-import { getCountryEmojiFlag } from "../../utils/svrUtils"
 
 type Props = {
     fixture: ISbrFixture,
@@ -14,7 +13,8 @@ type Props = {
 
 export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, showKickOffTime }: Props) {
 
-    const { kickoff_time } = fixture;
+    const { home_score, away_score } = fixture;
+    const hasScores = home_score !== undefined && away_score !== undefined;
 
     return (
         <div
@@ -34,18 +34,23 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 {/* Home Team */}
                 <div className="flex-1 flex gap-2 flex-col items-center justify-start" >
                     {showLogos && <SbrTeamLogo className="lg:w-14 lg:h-14" teamName={fixture.home_team} />}
-                    <p className="text-xs lg-text-sm truncate" >{fixture.home_team}</p>
+                    <p className="text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team}</p>
+                    <p className="text-slate-700 dark:text-slate-400" >{home_score}</p>
                 </div>
                 {/* Kick off information */}
                 <div className="flex-1 flex flex-col items-center justify-center dark:text-slate-400 text-slate-700 " >
-                    {showKickOffTime && <p className="text-xs lg:text-base" >{kickoff_time ? format(kickoff_time, "hh:mm a") : ""}</p>}
-                    {/* <p>{kickoff_time ? format(kickoff_time, "") : ""}</p> */}
-                    <p className="text-sm" >VS</p>
+                    {!hasScores && <p className="text-sm" >VS</p>}
+                    {hasScores && (
+                        <div className="flex w-full flex-row items-center justify-center gap-1" >
+                            <div>Final</div>
+                        </div>
+                    )}
                 </div>
                 {/* Away Team */}
-                <div className="flex-1 flex gap-2 flex-col items-center justify-end" >
+                <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >
                     {showLogos && <SbrTeamLogo className="lg:w-14 lg:h-14" teamName={fixture.away_team} />}
-                    <p className="text-xs lg-text-sm truncate" >{fixture.away_team}</p>
+                    <p className="text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team}</p>
+                    <p className="text-slate-700 dark:text-slate-400" >{away_score}</p>
                 </div>
             </div>
         </div>
