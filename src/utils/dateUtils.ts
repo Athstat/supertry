@@ -49,7 +49,7 @@ export function getMonthIndex(month: string) {
 export function getLastAndNext3Years() {
     const now = new Date();
     const thisYear = now.getFullYear();
-    const years: number[] = []
+    let years: number[] = [];
 
     for (let x = 1; x <= 3; x++) {
         years.push(thisYear - x);
@@ -60,7 +60,9 @@ export function getLastAndNext3Years() {
         years.push(thisYear + x);
     }
 
-    return years.sort((a, b) => a - b);
+    years = [thisYear, ...years.sort((a, b) => a - b)];
+
+    return years;
 }
 
 export function getWeeksInMonthArr(year: number, month: number) {
@@ -112,4 +114,8 @@ export function isWeeksSame(week1: Date[], week2: Date[]) {
     const week2Str = weekHash(week2);
 
     return week1Str === week2Str;
+}
+
+export function getCurrentYear() {
+    return new Date().getFullYear();
 }
