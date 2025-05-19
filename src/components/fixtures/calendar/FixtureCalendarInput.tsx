@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
-import { getLastAndNext3Years, getWeeksInMonthArr, isWeeksSame, Month, monthsOfYear, weekHash } from "../../../utils/dateUtils";
-import { format, getWeek, getWeeksInMonth } from "date-fns";
+import { useState } from "react"
+import { getLastAndNext3Years, getWeeksInMonthArr, isWeeksSame, monthsOfYear } from "../../../utils/dateUtils";
+import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { useAtom } from "jotai";
 import { fixturesDateRangeAtom } from "./fixtures_calendar.atoms";
+import { XIcon } from "lucide-react";
 
 type Props = {
     open?: boolean
@@ -29,7 +30,17 @@ export default function FixtureCalendarInput({ open }: Props) {
     return (
         <div className="fixed mt-16 w-[100%] flex flex-col items-center justify-center"  >
             <div className="bg-white border border-slate-200 dark:border-slate-800 shadow-md shadow-black/50 gap-3 flex flex-col dark:bg-black rounded-xl p-4 w-[90%] lg:w-[75%]" >
-                Calendar
+                <div className="flex flex-row items-center justify-between" >
+
+                    <h1>
+                        Calendar
+                    </h1>
+
+                    <button className="hover:text-slate-600 dark:hover:text-slate-400" >
+                        <XIcon />
+                    </button>
+                
+                </div>
 
                 <div className="flex gap-2 flex-row items-center justify-between" >
 

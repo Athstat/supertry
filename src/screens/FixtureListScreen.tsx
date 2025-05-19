@@ -8,14 +8,14 @@ import {
   URC_COMPETIION_ID,
 } from "../types/constants";
 import { LoadingState } from "../components/ui/LoadingState";
-import { ErrorState } from "../components/ui/ErrorState";
 import { useEffect, useState } from "react";
 import { useSectionNavigation } from "../hooks/useSectionNavigation";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 import PageView from "./PageView";
 import FixtureListScreenHeader from "../components/fixtures/FixtureListScreenHeader";
-import { ScopeProvider } from "jotai-scope";
 import { fixturesDateRangeAtom } from "../components/fixtures/calendar/fixtures_calendar.atoms";
+import { useAtomValue } from "jotai";
+import { filterFixturesByDateRange, filterPastFixtures, filterUpcomingFixtures } from "../utils/fixtureUtils";
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -24,8 +24,9 @@ const competitionIds = [
 ];
 
 export default function FixtureListScreen() {
-  const { data: fixtures, error, isLoading } = useSWR(competitionIds, fetcher);
+  const { data, error, isLoading } = useSWR(competitionIds, fetcher);
   const [search, setSearch] = useState("");
+  const selectedDateRange = useAtomValue(fixturesDateRangeAtom);
 
   const sectionId = "upcoming_matches";
   const { scrollToSection } = useSectionNavigation(["upcoming_matches"]);
@@ -35,51 +36,17 @@ export default function FixtureListScreen() {
   }, []);
 
   if (isLoading) return <LoadingState message="Loading Fixtures" />;
-  if (!fixtures) return <ErrorState message={error} />;
 
-  const dateNow = new Date();
+  const fixtures = data ?? [];
+  const fixturesInRange = selectedDateRange ? 
+    filterFixturesByDateRange(fixtures, selectedDateRange)
+    : fixtures;
 
-  const pastFixtures = fixtures
-    .filter((f) => {
-      if (f.kickoff_time) {
-        return (
-          f.game_status === "complete" ||
-          new Date(f.kickoff_time).valueOf() < dateNow.valueOf()
-        );
-      }
-
-      return false;
-    })
-    .sort((a, b) =>
-      a.kickoff_time && b.kickoff_time
-        ? new Date(a.kickoff_time).valueOf() -
-          new Date(b.kickoff_time).valueOf()
-        : 0
-    )
-    .reverse()
-    .splice(0, 30)
-    .reverse();
-
-  const upcomingFixtures = fixtures
-    .filter((f) => {
-      if (f.kickoff_time) {
-        return new Date(f.kickoff_time).valueOf() > dateNow.valueOf();
-      }
-
-      return false;
-    })
-    .sort((a, b) =>
-      a.kickoff_time && b.kickoff_time
-        ? new Date(a.kickoff_time).valueOf() -
-          new Date(b.kickoff_time).valueOf()
-        : 0
-    )
-    .splice(0, 20);
+  const pastFixtures = filterPastFixtures(fixturesInRange, 30);
+  const upcomingFixtures = filterUpcomingFixtures(fixturesInRange);
 
   return (
     <PageView className="dark:text-white  p-4 flex flex-col items-center justify-start">
-      
-      <ScopeProvider atoms={[fixturesDateRangeAtom]} >
         <FixtureListScreenHeader />
         
         <div className="flex flex-col gap-5 w-full lg:w-3/4">
@@ -113,7 +80,6 @@ export default function FixtureListScreen() {
         >
           <ChevronDown />
         </div>
-      </ScopeProvider>
     </PageView>
   );
 }
