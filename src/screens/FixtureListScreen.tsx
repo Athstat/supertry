@@ -56,7 +56,7 @@ export default function FixtureListScreen() {
           <h1 className="font-bold text-xl lg:text-2xl">Fixtures</h1>
         </div>
 
-        <NoFixturesMessage />
+        { fixturesInRange.length === 0 && <NoFixturesMessage />}
 
         {pastFixtures.length > 0 && <GroupedFixturesList
           fixtures={pastFixtures}
@@ -92,7 +92,8 @@ function NoFixturesMessage() {
   }
 
   return (
-    <div className="w-full p-5 flex flex-col items-center gap-5 text-slate-700 dark:text-slate-400" >
+    <div className="w-full p-5  mt-10 flex flex-col items-center gap-5 text-slate-700 dark:text-slate-400" >
+      
       <FileX2 className="w-20 h-20" />
       <p>No fixtures were found</p>
 
