@@ -15,7 +15,8 @@ import PageView from "./PageView";
 import { fixturesDateRangeAtom } from "../components/fixtures/calendar/fixtures_calendar.atoms";
 import { useAtomValue } from "jotai";
 import { filterFixturesByDateRange, filterPastFixtures, filterUpcomingFixtures } from "../utils/fixtureUtils";
-import FixtureListScreenCalendar from "../components/fixtures/calendar/FixtureCalendarInput";
+import FixtureListScreenCalendar from "../components/fixtures/calendar/FixtureListScreenCalendar";
+import FixturesListScreenActionBar from "../components/fixtures/fixtures_list/FixtureListScreenActionBar";
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -29,10 +30,7 @@ export default function FixtureListScreen() {
   const selectedDateRange = useAtomValue(fixturesDateRangeAtom);
 
   const sectionId = "upcoming_matches";
-  const { scrollToSection } = useSectionNavigation(["upcoming_matches"]);
-
-  const [showCalendar, setShowCalendar] = useState(false);
-  const toggleCalendar = () => setShowCalendar(!showCalendar);
+  const { scrollToSection } = useSectionNavigation([sectionId]);
 
   useEffect(() => {
     scrollToSection(sectionId);
@@ -51,7 +49,7 @@ export default function FixtureListScreen() {
   return (
     <PageView className="dark:text-white  p-4 flex flex-col items-center justify-start">
 
-      <div className="flex flex-col gap-5 w-full lg:w-3/4">
+      <div className="flex flex-col gap-2 w-full lg:w-3/4">
 
         <div className="flex flex-row items-center justify-start gap-2 ">
           <Calendar className="" />
@@ -71,27 +69,9 @@ export default function FixtureListScreen() {
           search={search}
         />
       </div>
-      
-      <div
-        className="items-center gap-2 flex-col text-white justify-center flex rounded-full bottom-0 mb-20 mr-3 right-0 fixed"
-      >
 
-        <div
-          onClick={() => scrollToSection(sectionId)}
-          className="bg-primary-600 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full"
-        >
-          <ChevronDown />
-        </div>
+      <FixturesListScreenActionBar />
 
-        <div
-          onClick={toggleCalendar}
-          className="bg-primary-600 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full"
-        >
-          <Calendar />
-        </div>
-
-      </div>
-      <FixtureListScreenCalendar open={showCalendar} onClose={toggleCalendar} />
     </PageView>
   );
 }

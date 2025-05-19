@@ -12,6 +12,9 @@ type Props = {
     onClose?: () => void
 }
 
+/** Renders a clickable calendar that allows the user to select which week they want to 
+ * view fixtures for!
+ */
 export default function FixtureListScreenCalendar({ open, onClose }: Props) {
 
     const [monthIndex, setMonthIndex] = useAtom(fixturesSelectedMonthIndexAtom);
