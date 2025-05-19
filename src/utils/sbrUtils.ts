@@ -35,5 +35,5 @@ export function sbrFxitureSummary(fixture: ISbrFixture) {
     const awayTeamWon = hasScores ?
         away_score > home_score : false;
 
-    return {homeTeamWon, awayTeamWon, home_score, away_score}
+    return {homeTeamWon, awayTeamWon, home_score, away_score, hasScores}
 }

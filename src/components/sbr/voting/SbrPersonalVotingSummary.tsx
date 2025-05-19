@@ -1,9 +1,9 @@
-import { useFetch } from "../../../hooks/useFetch"
+import { CircleCheck, XIcon } from "lucide-react"
 import { useFixtureVotes } from "../../../hooks/useFxitureVotes"
-import { sbrService } from "../../../services/sbrService"
 import { ISbrFixture } from "../../../types/sbr"
-import { calculatePerc, createEmptyArray } from "../../../utils/fixtureUtils"
-import SbrTeamLogo from "../fixtures/SbrTeamLogo"
+import { calculatePerc } from "../../../utils/fixtureUtils"
+import { sbrFxitureSummary } from "../../../utils/sbrUtils"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
     fixtures: ISbrFixture[]
@@ -11,7 +11,6 @@ type Props = {
 
 export default function SbrPersonalVotingSummary({ fixtures }: Props) {
 
-    
 
     return (
         <div className="w-full flex flex-col gap-3" >
@@ -50,6 +49,10 @@ export function SummaryItem({ fixture }: SummaryItemProps) {
     const homePerc = calculatePerc(homeVotes, total);
     const awayPerc = calculatePerc(awayVotes, total);
 
+    const votedHomeTeam = userVote?.vote_for === "home_team";
+    const votedAwayTeam = userVote?.vote_for === "away_team";
+    const { homeTeamWon, awayTeamWon, hasScores, home_score, away_score } = sbrFxitureSummary(fixture);
+
     if (total === 0 || !userVote) return;
 
     return (
@@ -62,7 +65,14 @@ export function SummaryItem({ fixture }: SummaryItemProps) {
                     <p className="truncate" >{fixture.home_team}</p>
                 </div>
                 <div className="flex-1 items-center justify-center flex flex-col" >
-                    <p>VS</p>
+                    {!hasScores && <p>VS</p>}
+                    {hasScores && (
+                        <div className="flex flex-row items-center justify-center gap-3 w-full" >
+                            <p className={twMerge(homeTeamWon && "font-bold")} >{home_score}</p>
+                            <p>-</p>
+                            <p className={twMerge(awayTeamWon && "font-bold")} >{away_score}</p>
+                        </div>
+                    )}
                 </div>
                 <div className="flex-1 flex items-center justify-end overflow-hidden w-max" >
                     {/* <SbrTeamLogo className="w-5 h-5" teamName={fixture.home_team} /> */}
@@ -85,19 +95,35 @@ export function SummaryItem({ fixture }: SummaryItemProps) {
 
             <div className="flex text-xs flex-row items-center" >
                 <div className="flex-1 flex gap-1 flex-row items-center justify-start" >
-                    {userVote.vote_for === "home_team" && (
-                        <div className="px-2 text-xs rounded-xl bg-slate-white dark:bg-slate-700" >
+                    {userVote.vote_for === "home_team" && !hasScores && (
+                        <div className="px-2 text-xs rounded-xl bg-slate-300 dark:bg-slate-700" >
                             <p>You</p>
                         </div>
+                    )}
+
+                    {votedHomeTeam && homeTeamWon && hasScores && (
+                        <CorrectIndicator />
+                    )}
+
+                    {votedHomeTeam && awayTeamWon && hasScores && (
+                        <WrongIndicator />
                     )}
                     <p className="dark:text-slate-400 text-slate-700" >{homeVotes} Votes</p>
                 </div>
 
                 <div className="flex-1 flex gap-1 flex-row items-center justify-end" >
-                    {userVote.vote_for === "away_team" && (
-                        <div className="px-2 text-xs rounded-xl bg-slate-white dark:bg-primary-700" >
+                    {userVote.vote_for === "away_team" && !hasScores && (
+                        <div className="px-2 text-xs rounded-xl bg-slate-300 dark:bg-primary-700" >
                             <p>You</p>
                         </div>
+                    )}
+
+                    {votedAwayTeam && awayTeamWon && hasScores && (
+                        <CorrectIndicator />
+                    )}
+
+                    {votedAwayTeam && homeTeamWon && hasScores && (
+                        <WrongIndicator />
                     )}
                     <p className="dark:text-slate-400 text-slate-700" >{awayVotes} Votes</p>
                 </div>
@@ -107,3 +133,25 @@ export function SummaryItem({ fixture }: SummaryItemProps) {
     )
 }
 
+
+function CorrectIndicator() {
+    return (
+        <>
+            <div className="px-2 text-xs text-white gap-1 rounded-xl bg-green-500 flex flex-row items-center justify-center  " >
+                <p>Correct</p>
+                <CircleCheck className="w-3 h-3" />
+            </div>
+        </>
+    )
+}
+
+function WrongIndicator() {
+    return (
+        <>
+            <div className="px-2 text-xs text-white gap-1 bg-red-500 flex flex-row items-center rounded-xl bg-green-red" >
+                <p>Wrong</p>
+                <XIcon className="w-3 h-3" />
+            </div>
+        </>
+    )
+}
