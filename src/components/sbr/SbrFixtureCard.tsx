@@ -1,7 +1,6 @@
-import { format } from "date-fns"
-import { ISbrFixture } from "../../types/sbr"
-import SbrTeamLogo from "./fixtures/SbrTeamLogo"
-import { twMerge } from "tailwind-merge"
+import { ISbrFixture } from "../../types/sbr";
+import SbrTeamLogo from "./fixtures/SbrTeamLogo";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
     fixture: ISbrFixture,
@@ -14,7 +13,7 @@ type Props = {
 export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, showKickOffTime }: Props) {
 
     const { home_score, away_score } = fixture;
-    const hasScores = home_score !== undefined && away_score !== undefined;
+    const hasScores = home_score !== null && away_score !== null;
 
     return (
         <div
