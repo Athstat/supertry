@@ -24,7 +24,7 @@ import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
 import SBRChatScreen from "./components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
-import { fixturesDateRangeAtom, fixturesSelectedMonth } from "./components/fixtures/calendar/fixtures_calendar.atoms";
+import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -250,7 +250,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <ScopeProvider atoms={[fixturesDateRangeAtom, fixturesSelectedMonth]} >
+              <ScopeProvider atoms={[fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom]} >
                 <FixtureListScreen />
               </ScopeProvider>
             </Layout>

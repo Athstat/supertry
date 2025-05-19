@@ -28,13 +28,23 @@ export const monthsOfYear: Month[] = [
 , "July", "August", "September", "October", "November", "December"
 ];
 
+/** Gets a months name by its index, e.g `monthIndex : 0` would return `'January'` */
 export function getMonthByIndex(monthIndex: number) {
-    if (monthIndex > 11) {
-        throw new Error("Month index can't be greater than 11");
+    if (monthIndex > 11 || monthIndex < 0) {
+        return "";
     }
 
     return monthsOfYear[monthIndex];
 } 
+
+/** Returns the index of a month, `January` being `0` and `December` being `11` */
+export function getMonthIndex(month: string) {
+    const monthIndex = monthsOfYear.findIndex((m) => {
+        return m === month;
+    });
+
+    return monthIndex;
+}
 
 export function getLastAndNext3Years() {
     const now = new Date();
