@@ -24,3 +24,16 @@ export function hasSbrRoundPassed(fixtures: ISbrFixture[]) {
 
     return false;
 }
+
+export function sbrFxitureSummary(fixture: ISbrFixture) {
+
+    const {home_score, away_score} = fixture;
+    const hasScores = home_score !== null && away_score !== null && home_score !== undefined && away_score !== undefined;
+    const homeTeamWon = hasScores ?
+        home_score > away_score : false;
+
+    const awayTeamWon = hasScores ?
+        away_score > home_score : false;
+
+    return {homeTeamWon, awayTeamWon, home_score, away_score}
+}
