@@ -9,13 +9,11 @@ import {
 } from "../types/constants";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
-import FixtureCard from "../components/fixtures/FixtureCard";
 import { useEffect, useState } from "react";
-import { searchFixturesPredicate } from "../utils/fixtureUtils";
 import { useSectionNavigation } from "../hooks/useSectionNavigation";
-import { format } from "date-fns";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 import PageView from "./PageView";
+import FixtureListScreenHeader from "../components/fixtures/FixtureListScreenHeader";
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -78,11 +76,16 @@ export default function FixtureListScreen() {
 
   return (
     <PageView className="dark:text-white  p-4 flex flex-col items-center justify-start">
+      
+      <FixtureListScreenHeader />
+      
       <div className="flex flex-col gap-5 w-full lg:w-3/4">
+        
         <div className="flex flex-row items-center justify-start gap-2 ">
           <Calendar className="" />
           <h1 className="font-bold text-xl lg:text-2xl">Fixtures</h1>
         </div>
+
 
         {/* <div className="flex flex-row w-full" >
                     <input
