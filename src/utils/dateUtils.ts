@@ -1,5 +1,4 @@
 import { eachDayOfInterval, endOfWeek, format, lastDayOfMonth, startOfWeek } from "date-fns";
-import { motion } from "framer-motion";
 
 /** Returns the difference in epoch between a future date and today */
 export function epochDiff(futureDate: Date) {
@@ -22,7 +21,7 @@ export function dateComparator(a: Date | null | undefined, b: Date | null | unde
 }
 
 export type Month = "January" | "February" | "March" | "April" | "May" | "June"
-    | "July" | "August" | "September" | "October" | "November" | "December";
+    | "July" | "August" | "September" | "October" | "November" | "December" | string;
 
 export const monthsOfYear: Month[] = [
     "January", "February", "March", "April", "May", "June"
@@ -101,9 +100,6 @@ export function weekHash(week: Date[]) {
 export function isWeeksSame(week1: Date[], week2: Date[]) {
     const week1Str = weekHash(week1);
     const week2Str = weekHash(week2);
-    
-    console.log("Week Hash for 1 ", week1Str);
-    console.log("Week Hash for 2 ", week2Str);
 
     return week1Str === week2Str;
 }

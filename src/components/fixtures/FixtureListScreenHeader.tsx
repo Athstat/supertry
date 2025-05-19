@@ -2,7 +2,6 @@ import { Calendar } from "lucide-react";
 import { useSticky } from "../../hooks/useSticky"
 import { Sticky } from "../shared/Sticky";
 import { useState } from "react";
-import FixtureCalendarInput from "./calendar/FixtureCalendarInput";
 
 /** Renders the fixture screen header for filtering and searching matches */
 export default function FixtureListScreenHeader() {
@@ -14,7 +13,7 @@ export default function FixtureListScreenHeader() {
     return (
         <>
             <div ref={sentinelRef} ></div>
-            <Sticky className="bg-white dark:bg-black/90 p-4 flex flex-row" >
+            <Sticky className="bg-white p-4 flex flex-row" >
                 <div>
                 </div>
                 <div className="flex-1 items-center justify-end flex flex-row" >
@@ -24,10 +23,7 @@ export default function FixtureListScreenHeader() {
                 </div>
             </Sticky>
 
-            <FixtureCalendarInput
-                open={showCalendar}
-                onClose={toggle}
-            />
+
         </>
     )
 }

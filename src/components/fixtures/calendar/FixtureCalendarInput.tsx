@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { getLastAndNext3Years, getWeeksInMonthArr, isWeeksSame, monthsOfYear } from "../../../utils/dateUtils";
+import { getLastAndNext3Years, getWeeksInMonthArr, isWeeksSame, Month, monthsOfYear } from "../../../utils/dateUtils";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { useAtom } from "jotai";
@@ -11,12 +11,11 @@ type Props = {
     onClose?: () => void
 }
 
-export default function FixtureCalendarInput({ open, onClose }: Props) {
+export default function FixtureListScreenCalendar({ open, onClose }: Props) {
 
     const now = new Date();
     const [month, setMonth] = useState<number>(new Date().getMonth());
     const [year, setYear] = useState<number>(new Date().getFullYear());
-    const [dateRange, setDateRange] = useState<[number, number]>();
     const [selectedWeek, setSelectedWeek] = useAtom(fixturesDateRangeAtom);
 
     const years = getLastAndNext3Years().filter(y => y !== year);
@@ -26,39 +25,69 @@ export default function FixtureCalendarInput({ open, onClose }: Props) {
         setSelectedWeek(week);
     }
 
+    const onClearFilter = () => {
+        setSelectedWeek(undefined);
+    }
+
     if (!open) return;
 
     return (
-        <div className="fixed mt-16 w-[100%] flex flex-col items-center justify-center"  >
-            <div className="bg-white border border-slate-200 dark:border-slate-800 shadow-md shadow-black/50 gap-3 flex flex-col dark:bg-black rounded-xl p-4 w-[90%] lg:w-[75%]" >
+        <div className="fixed top-0 left-0 w-[100%] h-screen overflow-hidden bg-black/60 flex flex-col items-center justify-center"  >
+            <div className="bg-white border border-slate-200 dark:border-slate-800 gap-3 flex flex-col dark:bg-slate-900 rounded-xl p-4 w-[90%] lg:w-[75%]" >
                 <div className="flex flex-row items-center justify-between" >
 
                     <h1>
                         Calendar
                     </h1>
 
-                    <button
-                        onClick={onClose}
-                        className="hover:text-slate-600 dark:hover:text-slate-400"
-                    >
-                        <XIcon />
-                    </button>
+                    <div className="flex flex-row gap-2 items-center justify-end" >
+
+                        { selectedWeek && <button onClick={onClearFilter} className="flex bg-slate-200 dark:bg-slate-800 border-slate-300 px-2 py-1 rounded-xl border dark:border-slate-700/40 flex-row text-sm items-center justify-center gap-2" >
+                            <p>Clear Filter</p>
+                            <XIcon className="w-4 h-4" />
+                        </button>}
+                        
+                        <button
+                            onClick={onClose}
+                            className="hover:text-slate-600 dark:hover:text-slate-400"
+                        >
+                            <XIcon />
+                        </button>
+                    </div>
 
                 </div>
 
                 <div className="flex gap-2 flex-row items-center justify-between" >
 
-                    <select className="dark:bg-black border-slate-100 dark:border-slate-800 w-full border rounded-xl px-3 py-1" >
+                    <select
+                        onChange={(e) => {
+                            const monthIndex = monthsOfYear.findIndex(
+                                (m) => m === e.target.value
+                            );
+
+                            console.log(monthIndex);
+
+                            setMonth(monthIndex);
+                        }}
+                        className="dark:bg-slate-900 border-slate-100 dark:border-slate-800 w-full border rounded-xl px-3 py-2"
+                    >
+                        {month && month >= 0 && month < 12 && <option>{monthsOfYear[month]}</option>}
                         {monthsOfYear.map((m, index) => {
                             return <option key={index} value={m} >{m}</option>
                         })}
+
                     </select>
 
-                    <select className="dark:bg-black w-full border-slate-100 dark:border-slate-800 border rounded-xl px-3 py-1" >
+                    <select
+                        onChange={(e) => setYear(Number.parseInt(e.target.value))}
+                        className="dark:bg-slate-900 border-slate-100 dark:border-slate-800 w-full border rounded-xl px-3 py-2"
+                    >
+
                         {<option value={year} >{year}</option>}
                         {years.map((m, index) => {
                             return <option key={index} value={m} >{m}</option>
                         })}
+
                     </select>
                 </div>
 
@@ -96,7 +125,7 @@ export function FixtureCalendarWeek({
         if (onSelectWeek) {
             if (isCurrent) {
                 onSelectWeek(undefined);
-            } else {   
+            } else {
                 onSelectWeek(week);
             }
         }
@@ -108,7 +137,7 @@ export function FixtureCalendarWeek({
             className={twMerge(
                 "border-2 border-slate-100 gap-2 p-3 items-center justify-center rounded-xl flex flex-row dark:border-slate-800",
                 "hover:bg-slate-100 dark:hover:bg-slate-800/50",
-                isCurrent && "border-blue-500 dark:border-blue-600 font-bold bg-slate-100 dark:bg-slate-900 "
+                isCurrent && "border-blue-500 dark:border-blue-600 font-bold bg-slate-100 dark:bg-slate-800 "
             )}
 
         >
