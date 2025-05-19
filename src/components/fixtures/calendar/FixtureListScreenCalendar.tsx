@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { getLastAndNext3Years, getMonthByIndex, getMonthIndex, getWeeksInMonthArr, isWeeksSame, monthsOfYear } from "../../../utils/dateUtils";
+import { getCurrentYear, getLastAndNext3Years, getMonthByIndex, getMonthIndex, getWeeksInMonthArr, isWeeksSame, monthsOfYear } from "../../../utils/dateUtils";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { useAtom, useAtomValue } from "jotai";
@@ -21,7 +21,7 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [selectedWeek, setSelectedWeek] = useAtom(fixturesDateRangeAtom);
 
-    const years = getLastAndNext3Years().filter(y => y !== year);
+    const years = getLastAndNext3Years();
     const weeks = getWeeksInMonthArr(year, monthIndex);
 
     const onSelectWeek = (week?: Date[]) => {
@@ -81,8 +81,6 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
                         onChange={(e) => setYear(Number.parseInt(e.target.value))}
                         className="dark:bg-slate-900 border-slate-100 dark:border-slate-800 w-full border rounded-xl px-3 py-2"
                     >
-
-                        {<option value={year} >{year}</option>}
 
                         {years.map((m, index) => {
                             return <option key={index} value={m} >{m}</option>
