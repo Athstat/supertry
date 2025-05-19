@@ -1,4 +1,4 @@
-import { Calendar, ChevronDown } from "lucide-react";
+import { Calendar, ChevronDown, XIcon } from "lucide-react";
 import useSWR from "swr";
 import { IFixture } from "../types/games";
 import { gamesService } from "../services/gamesService";
@@ -13,10 +13,10 @@ import { useSectionNavigation } from "../hooks/useSectionNavigation";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 import PageView from "./PageView";
 import { fixturesDateRangeAtom } from "../components/fixtures/calendar/fixtures_calendar.atoms";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { filterFixturesByDateRange, filterPastFixtures, filterUpcomingFixtures } from "../utils/fixtureUtils";
-import FixtureListScreenCalendar from "../components/fixtures/calendar/FixtureListScreenCalendar";
 import FixturesListScreenActionBar from "../components/fixtures/fixtures_list/FixtureListScreenActionBar";
+import { FileX2 } from "lucide-react";
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -26,7 +26,7 @@ const competitionIds = [
 
 export default function FixtureListScreen() {
   const { data, isLoading } = useSWR(competitionIds, fetcher);
-  const [search ] = useState("");
+  const [search] = useState("");
   const selectedDateRange = useAtomValue(fixturesDateRangeAtom);
 
   const sectionId = "upcoming_matches";
@@ -56,24 +56,52 @@ export default function FixtureListScreen() {
           <h1 className="font-bold text-xl lg:text-2xl">Fixtures</h1>
         </div>
 
-        <GroupedFixturesList
+        <NoFixturesMessage />
+
+        {pastFixtures.length > 0 && <GroupedFixturesList
           fixtures={pastFixtures}
           search={search}
-        />
+        />}
 
-        <section id={sectionId} className="w-full h-10"></section>
 
-        <h2 className="text-xl font-bold">Upcoming Fixtures</h2>
-        <GroupedFixturesList
-          fixtures={upcomingFixtures}
-          search={search}
-        />
+        {upcomingFixtures.length > 0 && <>
+          <section id={sectionId} className="w-full h-10"></section>
+
+          <h2 className="text-xl font-bold">Upcoming Fixtures</h2>
+
+          <GroupedFixturesList
+            fixtures={upcomingFixtures}
+            search={search}
+          />
+        </>}
+
       </div>
 
       <FixturesListScreenActionBar />
 
     </PageView>
   );
+}
+
+function NoFixturesMessage() {
+
+  const [selectedDateRange, setSelectedDateRange] = useAtom(fixturesDateRangeAtom);
+
+  const onClearFilter = () => {
+    setSelectedDateRange(undefined);
+  }
+
+  return (
+    <div className="w-full p-5 flex flex-col items-center gap-5 text-slate-700 dark:text-slate-400" >
+      <FileX2 className="w-20 h-20" />
+      <p>No fixtures were found</p>
+
+      {selectedDateRange && <button onClick={onClearFilter} className="bg-slate-200 dark:bg-slate-800 rounded-xl px-2 py-1 flex flex-row items-center justify-center gap-1 hover:bg-slate-300 dark:hover:bg-slate-700" >
+        Clear Filters
+        <XIcon  className="w-4 h-4" />
+        </button>}
+    </div>
+  )
 }
 
 async function fetcher(competitionIds: string[]) {
