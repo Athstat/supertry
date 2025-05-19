@@ -12,7 +12,6 @@ export default function SchoolBoyRugbyScreen() {
   }
 
 
-
   return (
     <PageView className="dark:text-white p-5 flex flex-col gap-3" >
       <div className="flex flex-row items-center justify-between" >
