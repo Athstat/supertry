@@ -24,8 +24,8 @@ const competitionIds = [
 ];
 
 export default function FixtureListScreen() {
-  const { data, error, isLoading } = useSWR(competitionIds, fetcher);
-  const [search, setSearch] = useState("");
+  const { data, isLoading } = useSWR(competitionIds, fetcher);
+  const [search ] = useState("");
   const selectedDateRange = useAtomValue(fixturesDateRangeAtom);
 
   const sectionId = "upcoming_matches";
@@ -50,7 +50,6 @@ export default function FixtureListScreen() {
 
   return (
     <PageView className="dark:text-white  p-4 flex flex-col items-center justify-start">
-      {/* <FixtureListScreenHeader /> */}
 
       <div className="flex flex-col gap-5 w-full lg:w-3/4">
 
@@ -58,25 +57,21 @@ export default function FixtureListScreen() {
           <Calendar className="" />
           <h1 className="font-bold text-xl lg:text-2xl">Fixtures</h1>
         </div>
-        {/* <div className="flex flex-row w-full" >
-                      <input
-                          placeholder="Search Fixtures..."
-                          className="bg-gray-800 outline-none p-3 flex-1 rounded-xl"
-                          value={search}
-                          onChange={(e) => setSearch(e.target.value)}
-                      />
-                  </div> */}
+
         <GroupedFixturesList
           fixtures={pastFixtures}
           search={search}
         />
+
         <section id={sectionId} className="w-full h-10"></section>
+
         <h2 className="text-xl font-bold">Upcoming Fixtures</h2>
         <GroupedFixturesList
           fixtures={upcomingFixtures}
           search={search}
         />
       </div>
+      
       <div
         className="items-center gap-2 flex-col text-white justify-center flex rounded-full bottom-0 mb-20 mr-3 right-0 fixed"
       >

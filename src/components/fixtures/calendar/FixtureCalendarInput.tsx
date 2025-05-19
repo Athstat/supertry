@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { getLastAndNext3Years, getWeeksInMonthArr, isWeeksSame, Month, monthsOfYear } from "../../../utils/dateUtils";
+import { getLastAndNext3Years, getMonthByIndex, getMonthIndex, getWeeksInMonthArr, isWeeksSame, monthsOfYear } from "../../../utils/dateUtils";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
-import { useAtom } from "jotai";
-import { fixturesDateRangeAtom } from "./fixtures_calendar.atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./fixtures_calendar.atoms";
 import { XIcon } from "lucide-react";
+import ClearFixturesCalendarFilterButton from "./ClearFixturesCalendarFilterButton";
 
 type Props = {
     open?: boolean,
@@ -13,13 +14,12 @@ type Props = {
 
 export default function FixtureListScreenCalendar({ open, onClose }: Props) {
 
-    const now = new Date();
-    const [month, setMonth] = useState<number>(new Date().getMonth());
+    const [monthIndex, setMonthIndex] = useAtom(fixturesSelectedMonthIndexAtom);
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [selectedWeek, setSelectedWeek] = useAtom(fixturesDateRangeAtom);
 
     const years = getLastAndNext3Years().filter(y => y !== year);
-    const weeks = getWeeksInMonthArr(year, month);
+    const weeks = getWeeksInMonthArr(year, monthIndex);
 
     const onSelectWeek = (week?: Date[]) => {
         setSelectedWeek(week);
@@ -27,6 +27,11 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
 
     const onClearFilter = () => {
         setSelectedWeek(undefined);
+    }
+
+    const onChangeMonth = (newMonth: string) => {
+        const monthIndex = getMonthIndex(newMonth);
+        setMonthIndex(monthIndex);
     }
 
     if (!open) return;
@@ -37,16 +42,13 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
                 <div className="flex flex-row items-center justify-between" >
 
                     <h1>
-                        Calendar
+                        Calendar {monthIndex}
                     </h1>
 
                     <div className="flex flex-row gap-2 items-center justify-end" >
 
-                        { selectedWeek && <button onClick={onClearFilter} className="flex bg-slate-200 dark:bg-slate-800 border-slate-300 px-2 py-1 rounded-xl border dark:border-slate-700/40 flex-row text-sm items-center justify-center gap-2" >
-                            <p>Clear Filter</p>
-                            <XIcon className="w-4 h-4" />
-                        </button>}
-                        
+                        {selectedWeek && <ClearFixturesCalendarFilterButton onClearFilter={onClearFilter} />}
+
                         <button
                             onClick={onClose}
                             className="hover:text-slate-600 dark:hover:text-slate-400"
@@ -60,18 +62,11 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
                 <div className="flex gap-2 flex-row items-center justify-between" >
 
                     <select
-                        onChange={(e) => {
-                            const monthIndex = monthsOfYear.findIndex(
-                                (m) => m === e.target.value
-                            );
-
-                            console.log(monthIndex);
-
-                            setMonth(monthIndex);
-                        }}
+                        onChange={(e) => onChangeMonth(e.target.value ?? "")}
                         className="dark:bg-slate-900 border-slate-100 dark:border-slate-800 w-full border rounded-xl px-3 py-2"
                     >
-                        {month && month >= 0 && month < 12 && <option>{monthsOfYear[month]}</option>}
+                        {monthIndex && <option>{getMonthByIndex(monthIndex)}</option>}
+
                         {monthsOfYear.map((m, index) => {
                             return <option key={index} value={m} >{m}</option>
                         })}
@@ -84,6 +79,7 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
                     >
 
                         {<option value={year} >{year}</option>}
+
                         {years.map((m, index) => {
                             return <option key={index} value={m} >{m}</option>
                         })}
@@ -96,10 +92,7 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
                         return <FixtureCalendarWeek
                             week={week}
                             key={index}
-                            year={year}
-                            month={month}
                             onSelectWeek={onSelectWeek}
-                            isCurrent={selectedWeek !== undefined && isWeeksSame(week, selectedWeek)}
                         />
                     })}
                 </div>
@@ -111,15 +104,16 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
 
 type WeekProps = {
     week: Date[],
-    year: number,
-    month: number,
-    onSelectWeek: (week?: Date[]) => void,
-    isCurrent?: boolean
+    onSelectWeek: (week?: Date[]) => void
 }
 
 export function FixtureCalendarWeek({
-    week, month, onSelectWeek, isCurrent
+    week, onSelectWeek
 }: WeekProps) {
+    
+    const selectedWeek = useAtomValue(fixturesDateRangeAtom);
+    const monthIndex = useAtomValue(fixturesSelectedMonthIndexAtom);
+    const isCurrent = selectedWeek !== undefined && isWeeksSame(week, selectedWeek);
 
     const handleClick = () => {
         if (onSelectWeek) {
@@ -144,7 +138,7 @@ export function FixtureCalendarWeek({
 
             {week.map((day, index) => {
 
-                const isInMonth = day.getMonth() === month;
+                const isInMonth = day.getMonth() === monthIndex;
 
                 return (
                     <div
@@ -161,3 +155,4 @@ export function FixtureCalendarWeek({
         </div>
     )
 }
+
