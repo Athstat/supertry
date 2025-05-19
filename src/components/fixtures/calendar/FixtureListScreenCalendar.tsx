@@ -41,11 +41,12 @@ export default function FixtureListScreenCalendar({ open, onClose }: Props) {
 
     return (
         <div className="fixed top-0 left-0 w-[100%] h-screen overflow-hidden bg-black/60 flex flex-col items-center justify-center"  >
-            <div className="bg-white border border-slate-200 dark:border-slate-800 gap-3 flex flex-col dark:bg-slate-900 rounded-xl p-4 w-[90%] lg:w-[75%]" >
+            
+            <div className="bg-white border border-slate-200 dark:border-slate-800 gap-3 flex flex-col dark:bg-slate-900 rounded-xl p-4 w-[90%] lg:w-[50%]" >
                 <div className="flex flex-row items-center justify-between" >
 
                     <h1>
-                        Calendar {monthIndex}
+                        Calendar
                     </h1>
 
                     <div className="flex flex-row gap-2 items-center justify-end" >

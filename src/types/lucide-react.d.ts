@@ -81,6 +81,7 @@ declare module "lucide-react" {
   export const CircleCheck: CIP;
   export const XIcon: CIP;
   export const FileX2: CIP;
+  export const ChevronUp: CIP;
 
 }
 
