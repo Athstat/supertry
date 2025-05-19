@@ -1,3 +1,4 @@
+import { endOfDay, startOfDay } from "date-fns";
 import { IFixture } from "../types/games";
 import { ISbrFixture } from "../types/sbr";
 
@@ -111,4 +112,75 @@ export function createEmptyArray<T>(size: number, initVal: T): T[] {
     }
 
     return arr;
+}
+
+export function filterPastFixtures(fixtures: IFixture[], limit?: number) {
+    
+    const dateNow = new Date();
+    
+    return fixtures.filter((f) => {
+      if (f.kickoff_time) {
+        return (
+          f.game_status === "complete" ||
+          new Date(f.kickoff_time).valueOf() < dateNow.valueOf()
+        );
+      }
+
+      return false;
+    })
+    .sort((a, b) =>
+      a.kickoff_time && b.kickoff_time
+        ? new Date(a.kickoff_time).valueOf() -
+          new Date(b.kickoff_time).valueOf()
+        : 0
+    )
+    .reverse()
+    .splice(0, limit ?? 30)
+    .reverse();
+
+}
+
+
+export function filterUpcomingFixtures(fixtures: IFixture[], limit?: number) {
+    
+    const dateNow = new Date();
+    
+    return fixtures.filter((f) => {
+      if (f.kickoff_time) {
+        return new Date(f.kickoff_time).valueOf() > dateNow.valueOf();
+      }
+
+      return false;
+    })
+    .sort((a, b) =>
+      a.kickoff_time && b.kickoff_time
+        ? new Date(a.kickoff_time).valueOf() -
+          new Date(b.kickoff_time).valueOf()
+        : 0
+    )
+    .splice(0, limit ?? 20);
+}
+
+/** Filters fixtures and returns fixtures that are with in a date range */
+export function filterFixturesByDateRange(fixtures: IFixture[], dateRange: Date[]) {
+    if (dateRange.length < 1) {
+        return [];
+    }
+
+    const firstDate = startOfDay(new Date(dateRange[0]));
+    const firstEpoch = firstDate.valueOf();
+    const lastDate = endOfDay(new Date(dateRange[dateRange.length - 1]));
+    const lastEpoch = lastDate.valueOf();
+
+    return fixtures.filter((f) => {
+        if (f.kickoff_time) {
+            const kickOff = new Date(f.kickoff_time);
+            const kickOffEpoch = kickOff.valueOf();
+
+            return kickOffEpoch >= firstEpoch &&  kickOffEpoch <= lastEpoch;
+        }
+
+        return false;
+    })
+
 }
