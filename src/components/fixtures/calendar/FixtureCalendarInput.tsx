@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getLastAndNext3Years, getWeeksInMonthArr, Month, monthsOfYear } from "../../../utils/dateUtils";
+import { getLastAndNext3Years, getWeeksInMonthArr, isWeeksSame, Month, monthsOfYear, weekHash } from "../../../utils/dateUtils";
 import { format, getWeek, getWeeksInMonth } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
@@ -13,9 +13,14 @@ export default function FixtureCalendarInput({ open }: Props) {
     const [month, setMonth] = useState<number>(new Date().getMonth());
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [dateRange, setDateRange] = useState<[number, number]>();
+    const [selectedWeek, setSelectedWeek] = useState<Date[]>();
 
     const years = getLastAndNext3Years().filter(y => y !== year);
     const weeks = getWeeksInMonthArr(year, month);
+
+    const onSelectWeek = (week: Date[]) => {
+        setSelectedWeek(week);
+    }
 
     if (!true) return;
 
@@ -27,8 +32,8 @@ export default function FixtureCalendarInput({ open }: Props) {
                 <div className="flex gap-2 flex-row items-center justify-between" >
 
                     <select className="dark:bg-black border-slate-100 dark:border-slate-800 w-full border rounded-xl px-3 py-1" >
-                        {monthsOfYear.map((m) => {
-                            return <option value={m} >{m}</option>
+                        {monthsOfYear.map((m, index) => {
+                            return <option key={index} value={m} >{m}</option>
                         })}
                     </select>
 
@@ -47,6 +52,8 @@ export default function FixtureCalendarInput({ open }: Props) {
                             key={index}
                             year={year}
                             month={month}
+                            onSelectWeek={onSelectWeek}
+                            isCurrent={selectedWeek !== undefined && isWeeksSame(week, selectedWeek)}
                         />
                     })}
                 </div>
@@ -59,16 +66,32 @@ export default function FixtureCalendarInput({ open }: Props) {
 type WeekProps = {
     week: Date[],
     year: number,
-    month: number
+    month: number,
+    onSelectWeek: (week: Date[]) => void,
+    isCurrent?: boolean
 }
 
-export function FixtureCalendarWeek({ week, month }: WeekProps) {
+export function FixtureCalendarWeek({
+    week, month, onSelectWeek, isCurrent
+}: WeekProps) {
 
-
+    const handleClick = () => {
+        if (onSelectWeek) {
+            onSelectWeek(week);
+        }
+    }
 
     return (
-        <div className="border border-slate-100 gap-2 p-3 items-center justify-center rounded-xl flex flex-row dark:border-slate-800" >
+        <div
+            onClick={handleClick}
+            className={twMerge(
+                "border border-slate-100 gap-2 p-3 items-center justify-center rounded-xl flex flex-row dark:border-slate-800",
+                "hover:bg-slate-200 dark:hover:bg-slate-800/50",
+                isCurrent && "border-blue-500 dark:border-blue-600"
+            )} 
             
+            >
+
             {week.map((day, index) => {
 
                 const isInMonth = day.getMonth() === month;

@@ -1,4 +1,4 @@
-import { eachDayOfInterval, endOfWeek, lastDayOfMonth, startOfWeek } from "date-fns";
+import { eachDayOfInterval, endOfWeek, format, lastDayOfMonth, startOfWeek } from "date-fns";
 import { motion } from "framer-motion";
 
 /** Returns the difference in epoch between a future date and today */
@@ -85,4 +85,25 @@ export function getWeeksInMonthArr(year: number, month: number) {
     }
 
     return weeks;
+}
+
+export function weekHash(week: Date[]) {
+    let digest = "";
+
+    week.forEach((day) => {
+        const dayOb = new Date(day);
+        digest += `${dayOb.getFullYear()}-${dayOb.getMonth()}-${format(dayOb, "dd")};`
+    });
+
+    return digest;
+}
+
+export function isWeeksSame(week1: Date[], week2: Date[]) {
+    const week1Str = weekHash(week1);
+    const week2Str = weekHash(week2);
+    
+    console.log("Week Hash for 1 ", week1Str);
+    console.log("Week Hash for 2 ", week2Str);
+
+    return week1Str === week2Str;
 }
