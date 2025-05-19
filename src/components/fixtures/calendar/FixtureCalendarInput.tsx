@@ -7,10 +7,11 @@ import { fixturesDateRangeAtom } from "./fixtures_calendar.atoms";
 import { XIcon } from "lucide-react";
 
 type Props = {
-    open?: boolean
+    open?: boolean,
+    onClose?: () => void
 }
 
-export default function FixtureCalendarInput({ open }: Props) {
+export default function FixtureCalendarInput({ open, onClose }: Props) {
 
     const now = new Date();
     const [month, setMonth] = useState<number>(new Date().getMonth());
@@ -21,11 +22,11 @@ export default function FixtureCalendarInput({ open }: Props) {
     const years = getLastAndNext3Years().filter(y => y !== year);
     const weeks = getWeeksInMonthArr(year, month);
 
-    const onSelectWeek = (week: Date[]) => {
+    const onSelectWeek = (week?: Date[]) => {
         setSelectedWeek(week);
     }
 
-    if (!true) return;
+    if (!open) return;
 
     return (
         <div className="fixed mt-16 w-[100%] flex flex-col items-center justify-center"  >
@@ -36,10 +37,13 @@ export default function FixtureCalendarInput({ open }: Props) {
                         Calendar
                     </h1>
 
-                    <button className="hover:text-slate-600 dark:hover:text-slate-400" >
+                    <button
+                        onClick={onClose}
+                        className="hover:text-slate-600 dark:hover:text-slate-400"
+                    >
                         <XIcon />
                     </button>
-                
+
                 </div>
 
                 <div className="flex gap-2 flex-row items-center justify-between" >
@@ -80,7 +84,7 @@ type WeekProps = {
     week: Date[],
     year: number,
     month: number,
-    onSelectWeek: (week: Date[]) => void,
+    onSelectWeek: (week?: Date[]) => void,
     isCurrent?: boolean
 }
 
@@ -90,7 +94,11 @@ export function FixtureCalendarWeek({
 
     const handleClick = () => {
         if (onSelectWeek) {
-            onSelectWeek(week);
+            if (isCurrent) {
+                onSelectWeek(undefined);
+            } else {   
+                onSelectWeek(week);
+            }
         }
     }
 
@@ -101,9 +109,9 @@ export function FixtureCalendarWeek({
                 "border-2 border-slate-100 gap-2 p-3 items-center justify-center rounded-xl flex flex-row dark:border-slate-800",
                 "hover:bg-slate-100 dark:hover:bg-slate-800/50",
                 isCurrent && "border-blue-500 dark:border-blue-600 font-bold bg-slate-100 dark:bg-slate-900 "
-            )} 
-            
-            >
+            )}
+
+        >
 
             {week.map((day, index) => {
 

@@ -24,7 +24,10 @@ export default function FixtureListScreenHeader() {
                 </div>
             </Sticky>
 
-            <FixtureCalendarInput open={showCalendar} />
+            <FixtureCalendarInput
+                open={showCalendar}
+                onClose={toggle}
+            />
         </>
     )
 }
