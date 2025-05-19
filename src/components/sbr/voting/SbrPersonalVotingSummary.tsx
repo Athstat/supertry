@@ -14,7 +14,7 @@ export default function SbrPersonalVotingSummary({ fixtures }: Props) {
 
     return (
         <div className="w-full flex flex-col gap-3" >
-            <h1 className="text-md font-bold" >Your Voting Summary 👀</h1>
+            <h1 className="text-md font-bold" >Your Predictions 👀</h1>
             <div className="grid grid-cols-1 gap-1" >
                 {fixtures.map((fixture, index) => {
                     return <SummaryItem

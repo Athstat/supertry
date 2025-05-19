@@ -94,11 +94,8 @@ export default function SbrVotingBallotBox({ fixture, userVote }: Props) {
     )
 }
 
-
+/** Renders when the user git a prediction correct or not */
 export function SbrVotingBallotBoxResults({ fixture, userVote }: Props) {
-
-    const [isVoting, setIsVoting] = useState(false);
-    const [isVoitngHome, setIsVotingHome] = useState(false);
 
     const hasVotedHome = userVote?.vote_for === "home_team";
     const hasVotedAway = userVote?.vote_for === "away_team";
