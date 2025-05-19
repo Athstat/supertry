@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { getLastAndNext3Years, getWeeksInMonthArr, isWeeksSame, Month, monthsOfYear, weekHash } from "../../../utils/dateUtils";
 import { format, getWeek, getWeeksInMonth } from "date-fns";
 import { twMerge } from "tailwind-merge";
+import { useAtom } from "jotai";
+import { fixturesDateRangeAtom } from "./fixtures_calendar.atoms";
 
 type Props = {
     open?: boolean
@@ -13,7 +15,7 @@ export default function FixtureCalendarInput({ open }: Props) {
     const [month, setMonth] = useState<number>(new Date().getMonth());
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [dateRange, setDateRange] = useState<[number, number]>();
-    const [selectedWeek, setSelectedWeek] = useState<Date[]>();
+    const [selectedWeek, setSelectedWeek] = useAtom(fixturesDateRangeAtom);
 
     const years = getLastAndNext3Years().filter(y => y !== year);
     const weeks = getWeeksInMonthArr(year, month);
@@ -26,8 +28,8 @@ export default function FixtureCalendarInput({ open }: Props) {
 
     return (
         <div className="fixed mt-16 w-[100%] flex flex-col items-center justify-center"  >
-            <div className="bg-slate-100 gap-3 flex flex-col dark:bg-black rounded-xl p-4 w-[90%] lg:w-[75%]" >
-                Fixture Calendar Input
+            <div className="bg-white border border-slate-200 shadow-md shadow-black/50 gap-3 flex flex-col dark:bg-black rounded-xl p-4 w-[90%] lg:w-[75%]" >
+                Calendar
 
                 <div className="flex gap-2 flex-row items-center justify-between" >
 
@@ -85,9 +87,9 @@ export function FixtureCalendarWeek({
         <div
             onClick={handleClick}
             className={twMerge(
-                "border border-slate-100 gap-2 p-3 items-center justify-center rounded-xl flex flex-row dark:border-slate-800",
-                "hover:bg-slate-200 dark:hover:bg-slate-800/50",
-                isCurrent && "border-blue-500 dark:border-blue-600"
+                "border-2 border-slate-100 gap-2 p-3 items-center justify-center rounded-xl flex flex-row dark:border-slate-800",
+                "hover:bg-slate-100 dark:hover:bg-slate-800/50",
+                isCurrent && "border-blue-500 dark:border-blue-600 font-bold"
             )} 
             
             >
@@ -101,7 +103,7 @@ export function FixtureCalendarWeek({
                         key={index}
                         className={twMerge(
                             "flex-1 flex flex-row items-center justify-center ",
-                            !isInMonth && "dark:text-slate-700 text-slate-700"
+                            !isInMonth && "dark:text-slate-700 text-slate-400"
                         )}
                     >
                         {format(day, "d")}
