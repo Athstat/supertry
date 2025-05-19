@@ -28,7 +28,7 @@ export default function FixtureCalendarInput({ open }: Props) {
 
     return (
         <div className="fixed mt-16 w-[100%] flex flex-col items-center justify-center"  >
-            <div className="bg-white border border-slate-200 shadow-md shadow-black/50 gap-3 flex flex-col dark:bg-black rounded-xl p-4 w-[90%] lg:w-[75%]" >
+            <div className="bg-white border border-slate-200 dark:border-slate-800 shadow-md shadow-black/50 gap-3 flex flex-col dark:bg-black rounded-xl p-4 w-[90%] lg:w-[75%]" >
                 Calendar
 
                 <div className="flex gap-2 flex-row items-center justify-between" >
@@ -89,7 +89,7 @@ export function FixtureCalendarWeek({
             className={twMerge(
                 "border-2 border-slate-100 gap-2 p-3 items-center justify-center rounded-xl flex flex-row dark:border-slate-800",
                 "hover:bg-slate-100 dark:hover:bg-slate-800/50",
-                isCurrent && "border-blue-500 dark:border-blue-600 font-bold"
+                isCurrent && "border-blue-500 dark:border-blue-600 font-bold bg-slate-100 dark:bg-slate-900 "
             )} 
             
             >

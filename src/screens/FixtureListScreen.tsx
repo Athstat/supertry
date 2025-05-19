@@ -14,6 +14,8 @@ import { useSectionNavigation } from "../hooks/useSectionNavigation";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 import PageView from "./PageView";
 import FixtureListScreenHeader from "../components/fixtures/FixtureListScreenHeader";
+import { ScopeProvider } from "jotai-scope";
+import { fixturesDateRangeAtom } from "../components/fixtures/calendar/fixtures_calendar.atoms";
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -77,45 +79,41 @@ export default function FixtureListScreen() {
   return (
     <PageView className="dark:text-white  p-4 flex flex-col items-center justify-start">
       
-      <FixtureListScreenHeader />
-      
-      <div className="flex flex-col gap-5 w-full lg:w-3/4">
+      <ScopeProvider atoms={[fixturesDateRangeAtom]} >
+        <FixtureListScreenHeader />
         
-        <div className="flex flex-row items-center justify-start gap-2 ">
-          <Calendar className="" />
-          <h1 className="font-bold text-xl lg:text-2xl">Fixtures</h1>
+        <div className="flex flex-col gap-5 w-full lg:w-3/4">
+        
+          <div className="flex flex-row items-center justify-start gap-2 ">
+            <Calendar className="" />
+            <h1 className="font-bold text-xl lg:text-2xl">Fixtures</h1>
+          </div>
+          {/* <div className="flex flex-row w-full" >
+                      <input
+                          placeholder="Search Fixtures..."
+                          className="bg-gray-800 outline-none p-3 flex-1 rounded-xl"
+                          value={search}
+                          onChange={(e) => setSearch(e.target.value)}
+                      />
+                  </div> */}
+          <GroupedFixturesList
+            fixtures={pastFixtures}
+            search={search}
+          />
+          <section id={sectionId} className="w-full h-10"></section>
+          <h2 className="text-xl font-bold">Upcoming Fixtures</h2>
+          <GroupedFixturesList
+            fixtures={upcomingFixtures}
+            search={search}
+          />
         </div>
-
-
-        {/* <div className="flex flex-row w-full" >
-                    <input
-                        placeholder="Search Fixtures..."
-                        className="bg-gray-800 outline-none p-3 flex-1 rounded-xl"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div> */}
-
-        <GroupedFixturesList 
-          fixtures={pastFixtures}
-          search={search}
-        />
-
-        <section id={sectionId} className="w-full h-10"></section>
-        <h2 className="text-xl font-bold">Upcoming Fixtures</h2>
-
-        <GroupedFixturesList 
-          fixtures={upcomingFixtures}
-          search={search}
-        />
-      </div>
-
-      <div
-        onClick={() => scrollToSection(sectionId)}
-        className="bg-primary-600 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full bottom-0 mb-20 mr-3 right-0 fixed"
-      >
-        <ChevronDown />
-      </div>
+        <div
+          onClick={() => scrollToSection(sectionId)}
+          className="bg-primary-600 hover:bg-primary-600 items-center text-white justify-center flex w-10 h-10 rounded-full bottom-0 mb-20 mr-3 right-0 fixed"
+        >
+          <ChevronDown />
+        </div>
+      </ScopeProvider>
     </PageView>
   );
 }
