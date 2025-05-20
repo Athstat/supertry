@@ -23,7 +23,7 @@ export function useFantasyLeague(leagueFromParam?: IFantasyLeague) {
     isLoading: loadingTeams,
     error: teamsError,
   } = useFetch(
-    "participating-teams",
+    "participating-teams-hook",
     league?.id ?? "fall-back-id",
     teamsFetcher
   );
@@ -91,7 +91,7 @@ export async function teamsFetcher(
 ): Promise<RankedFantasyTeam[]> {
   const teams = await leagueService.fetchParticipatingTeams(leagueId);
 
-  //console.log("Fantasy League teams returned ", teams);
+  console.log("Fantasy League teams returned ", teams);
 
   const user = authService.getUserInfo();
 

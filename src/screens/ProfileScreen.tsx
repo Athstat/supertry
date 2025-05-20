@@ -2,6 +2,8 @@ import { useState } from "react";
 import {
   User,
   LogOut,
+  Shield,
+  ChevronRight,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +12,14 @@ import UserStatsGrid from "../components/profile/UserStatsGrid";
 
 export function ProfileScreen() {
   const [notifications, setNotifications] = useState(true);
+  const navigate = useNavigate();
+
+  const handleGoToMyTeams = ( ) => {
+    navigate("/my-teams");
+  }
 
   const userInfo = useAuthUser();
   const { logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
@@ -115,6 +121,16 @@ export function ProfileScreen() {
               <ChevronRight size={20} className="text-gray-400" />
             </button>
             */}
+
+            {/* User Teams */}
+            <button onClick={handleGoToMyTeams} className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors">
+              <div className="flex items-center gap-3">
+                <Shield size={20} className="text-gray-500" />
+                <span className="font-medium dark:text-gray-100">My Teams</span>
+              </div>
+              <ChevronRight size={20} className="text-gray-400" />
+            </button>
+           
 
             {/* Notifications - Commented out
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl">
