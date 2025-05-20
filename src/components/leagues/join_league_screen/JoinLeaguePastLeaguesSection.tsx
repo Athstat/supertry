@@ -60,7 +60,7 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Pro
                         onLeagueClick={handleLeagueClick}
                         custom={index}
                         isJoined={userTeams[league.id]}
-                        // hideIfNoTeamsJoined
+                        hideIfNoTeamsJoined
                     />
                 ))}
             </motion.div>
