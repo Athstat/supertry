@@ -13,6 +13,9 @@ export interface Player {
   isSubstitute?: boolean;
   is_super_sub?: boolean;
   image: string;
+  image_url?: string;
+  athlete_id: string;
+  player_name: string;
 }
 
 export interface Team {
