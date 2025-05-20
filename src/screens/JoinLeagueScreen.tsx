@@ -18,20 +18,19 @@ import JoinLeagueDeadlineCountdown from "../components/leagues/JoinLeagueDeadlin
 import { ActiveLeaguesSection } from "../components/dashboard";
 import JoinLeagueActiveLeaguesSection from "../components/leagues/join_league_screen/JoinLeagueActiveLeaguesSection";
 import JoinLeaguePastLeaguesSection from "../components/leagues/join_league_screen/JoinLeaguePastLeaguesSection";
+import JoinLeagueUpcomingLeaguesSection from "../components/leagues/join_league_screen/JoinLeagueUpcomingLeaguesSection";
+import { useFetch } from "../hooks/useFetch";
 
 export function JoinLeagueScreen() {
   const navigate = useNavigate();
-  const [availableLeagues, setAvailableLeagues] = useState<IFantasyLeague[]>(
-    []
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [teamCounts, setTeamCounts] = useState<Record<string, number>>({});
-  const [isLoadingCounts, setIsLoadingCounts] = useState(false);
+  const {data, isLoading, error} = useFetch("fantasy-leagues", [], () => leagueService.getAllLeagues());
+
+  const leagues = data ?? [];
+
   const [userTeams, setUserTeams] = useState<Record<string, boolean>>({});
   const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(false);
 
-  const activeLeagues = activeLeaguesFilter(availableLeagues);
+  const activeLeagues = activeLeaguesFilter(leagues);
 
   let leagueOnTheClock: IFantasyLeague | undefined;
   const twoDays = 1000 * 60 * 60 * 24 * 2;
@@ -56,63 +55,10 @@ export function JoinLeagueScreen() {
     },
   };
 
-  // Fetch available leagues
-  useEffect(() => {
-    const fetchLeagues = async () => {
-      try {
-        setIsLoading(true);
-        const leagues = await leagueService.getAllLeagues();
-
-        // Filter leagues based on is_open status
-        // const available = leagues.filter(
-        //   (league) => league.is_open && !league.has_ended
-        // );
-
-
-
-        setAvailableLeagues(leagues);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch leagues:", err);
-        setError("Failed to load leagues. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLeagues();
-  }, []);
-
-  // Fetch team counts for each league
-  useEffect(() => {
-    const fetchTeamCounts = async () => {
-      if (availableLeagues.length === 0) return;
-
-      setIsLoadingCounts(true);
-      const counts: Record<string, number> = {};
-
-      try {
-        // Fetch team counts for each league
-        for (const league of availableLeagues) {
-          const teams = await leagueService.fetchParticipatingTeams(league.id);
-          counts[league.id] = teams.length;
-        }
-
-        setTeamCounts(counts);
-      } catch (error) {
-        console.error("Failed to fetch team counts:", error);
-      } finally {
-        setIsLoadingCounts(false);
-      }
-    };
-
-    fetchTeamCounts();
-  }, [availableLeagues]);
-
   // Fetch user's teams to check which leagues they've joined
   useEffect(() => {
     const fetchUserTeams = async () => {
-      if (availableLeagues.length === 0) return;
+      if (leagues.length === 0) return;
 
       setIsLoadingUserTeams(true);
       const joinedLeagues: Record<string, boolean> = {};
@@ -122,7 +68,7 @@ export function JoinLeagueScreen() {
         const teams = await fantasyTeamService.fetchUserTeams();
 
         // Map of joined league IDs
-        availableLeagues.forEach((league) => {
+        leagues.forEach((league) => {
           // Check if any team's league_id matches the current league's id
           const hasJoined = teams.some((team) => team.league_id === league.id);
           joinedLeagues[league.id] = hasJoined;
@@ -137,7 +83,7 @@ export function JoinLeagueScreen() {
     };
 
     fetchUserTeams();
-  }, [availableLeagues]);
+  }, [leagues]);
 
   // Scroll to top on mount
   useEffect(() => {
@@ -150,11 +96,6 @@ export function JoinLeagueScreen() {
       state: { league },
     });
   };
-
-  const leagues = availableLeagues;
-
-  const otherLeagues = availableLeagues
-    .filter(l => l.join_deadline === null);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
@@ -194,7 +135,7 @@ export function JoinLeagueScreen() {
         </div>
       ) : (
         <>
-          {!isLoading && 
+          {!isLoading &&
             <JoinLeagueActiveLeaguesSection
               leagues={leagues}
               userTeams={userTeams}
@@ -203,37 +144,20 @@ export function JoinLeagueScreen() {
         </>
       )}
 
-      {!isLoading && 
-        <JoinLeaguePastLeaguesSection 
+      {!isLoading &&
+        <JoinLeagueUpcomingLeaguesSection
           leagues={leagues}
           userTeams={userTeams}
         />
       }
 
-      {/* For Testing purposes */}
-      {!isLoading && otherLeagues.length > 0 && <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
-        <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
-          <Trophy size={24} className="text-primary-500" />
-          All Leagues
-        </h2>
+      {!isLoading &&
+        <JoinLeaguePastLeaguesSection
+          leagues={leagues}
+          userTeams={userTeams}
+        />
+      }
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="space-y-4"
-        >
-          {otherLeagues.map((league, index) => (
-            <LeagueCard
-              key={league.id}
-              league={league}
-              onLeagueClick={handleLeagueClick}
-              custom={index}
-              isJoined={userTeams[league.id]}
-            />
-          ))}
-        </motion.div>
-      </div>}
     </div>
 
   );
