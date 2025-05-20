@@ -2,9 +2,8 @@ import { ChevronRight, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import {
-  activeLeaguesFilter,
   calculateJoinDeadline,
-  isLeagueOnTheClock,
+  leaguesOnClockFilter,
 } from "../../utils/leaguesUtils";
 import { useCountdown } from "../../hooks/useCountdown";
 import { epochDiff } from "../../utils/dateUtils";
@@ -19,18 +18,8 @@ type Props = {
 
 export function HeroSection({ availableLeagues, onViewLeague }: Props) {
   const navigate = useNavigate();
-  const activeLeagues = activeLeaguesFilter(availableLeagues);
-
-  let leagueOnTheClock: IFantasyLeague | undefined;
-  const twoDays = 1000 * 60 * 60 * 24 * 2;
-
-  const leaguesOnTheClock = activeLeagues.filter((l) => {
-    return isLeagueOnTheClock(l, twoDays);
-  });
-
-  if (leaguesOnTheClock.length > 0) {
-    leagueOnTheClock = leaguesOnTheClock[0];
-  }
+  const {firstLeagueOnClock: leagueOnTheClock} = 
+    leaguesOnClockFilter(availableLeagues);
 
   return (
     <div className="bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 rounded-2xl p-4 mb-6 text-white">

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom"
 import { leagueService } from "../../services/leagueService"
 import { LeagueCardNoTeamPlaceholder } from "./league_dashboard_ui/LeagueCardNoTeamPlaceholder"
 import LeagueCardMyTeamSection from "./league_dashboard_ui/LeagueCardMyTeamSection"
-import LeagueCardFixturesSection from "./league_dashboard_ui/LeagueCardFixturesSection"
 import LeagueTeamsCount from "./league_card_small/LeagueTeamsCount"
 import { isLeagueLocked } from "../../utils/leaguesUtils"
 import LeagueLiveIndicator from "./LeagueLiveIndicator"
@@ -73,7 +72,7 @@ export default function LeagueCardDetailed({ league }: Props) {
 
             <div className="px-6 pb-6">
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 lg:gap-5">
                     {/* My Team Section */}
                     {teamForLeague && (
                         <LeagueCardMyTeamSection league={league} rank={teamRank} team={teamForLeague} />
@@ -84,12 +83,12 @@ export default function LeagueCardDetailed({ league }: Props) {
                     )}
 
                     {/* Fixtures Section */}
-                    <div >
+                    {/* <div >
                         <div className="">
                             <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Fixtures</h2>
                             <LeagueCardFixturesSection league={league} />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
