@@ -187,6 +187,12 @@ export function pastLeaguesFilter(leagues: IFantasyLeague[]) {
   return leagues.filter((l) => {
     return l.has_ended === true;
   })
+  .sort((a, b) => {
+      const aDeadline = new Date(a.join_deadline ?? 0);
+      const bDeadline = new Date(b.join_deadline ?? 0);
+
+      return bDeadline.valueOf() - aDeadline.valueOf();
+    });
 }
 
 /** Filters leagues and returns leagues that are on the clock (7 days away) */

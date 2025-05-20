@@ -33,7 +33,7 @@ export function LeagueCard({
 
   const teams = data ?? [];
 
-  if (isLoading) {
+  if (isLoading && hideIfNoTeamsJoined) {
     return (
       <div className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 border border-gray-100 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow h-20 w-full animate-pulse" >
 

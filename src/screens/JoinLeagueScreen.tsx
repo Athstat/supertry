@@ -5,7 +5,7 @@ import { leagueService } from "../services/leagueService";
 import { fantasyTeamService } from "../services/teamService";
 import { IFantasyLeague } from "../types/fantasyLeague";
 
-import { activeLeaguesFilter, isLeagueOnTheClock, leaguesOnClockFilter } from "../utils/leaguesUtils";
+import { leaguesOnClockFilter } from "../utils/leaguesUtils";
 import JoinLeagueDeadlineCountdown from "../components/leagues/JoinLeagueDeadlineContdown";
 import JoinLeagueActiveLeaguesSection from "../components/leagues/join_league_screen/JoinLeagueActiveLeaguesSection";
 import JoinLeaguePastLeaguesSection from "../components/leagues/join_league_screen/JoinLeaguePastLeaguesSection";

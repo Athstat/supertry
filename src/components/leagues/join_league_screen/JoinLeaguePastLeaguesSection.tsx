@@ -28,6 +28,9 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Pro
     };
 
     const handleLeagueClick = (league: IFantasyLeague) => {
+        
+        console.log("League here ", league);
+
         navigate(`/league/${league.official_league_id}`, {
             state: { league },
         });
@@ -57,7 +60,7 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Pro
                         onLeagueClick={handleLeagueClick}
                         custom={index}
                         isJoined={userTeams[league.id]}
-                        hideIfNoTeamsJoined
+                        // hideIfNoTeamsJoined
                     />
                 ))}
             </motion.div>
