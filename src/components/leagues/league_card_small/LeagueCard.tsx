@@ -1,19 +1,27 @@
 import { ChevronRight, Calendar, Check } from "lucide-react";
 import { motion } from "framer-motion";
-import { LeagueCardProps } from "../types";
 import { format } from "date-fns";
 import { useCountdown } from "../../../hooks/useCountdown";
 import LeagueLockStatus from "./LeagueLockStatus";
 import { calculateJoinDeadline, isLeagueLocked } from "../../../utils/leaguesUtils";
 import LeagueLiveIndicator from "../LeagueLiveIndicator";
 import LeagueTeamsCount from "./LeagueTeamsCount";
+import { IFantasyLeague } from "../../../types/fantasyLeague";
+
+type Props = {
+  league: IFantasyLeague;
+  onLeagueClick: (league: IFantasyLeague) => void;
+  custom?: number;
+  isJoined?: boolean;
+}
+
 
 export function LeagueCard({
   league,
   onLeagueClick,
   custom = 0,
   isJoined = false,
-}: LeagueCardProps) {
+}: Props) {
 
   const isLocked = isLeagueLocked(league.join_deadline);
   const adjustedDeadline = calculateJoinDeadline(league);
