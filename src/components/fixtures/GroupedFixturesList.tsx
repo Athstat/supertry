@@ -54,6 +54,7 @@ export default function GroupedFixturesList({ fixtures, search }: Props) {
                                     className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white hover:bg-slate-50 rounded-xl"
                                     fixture={fixture}
                                     key={index}
+                                    showVenue
                                 />
                             ))}
                         </div>
