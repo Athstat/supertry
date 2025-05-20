@@ -17,6 +17,7 @@ import { twMerge } from "tailwind-merge";
 import JoinLeagueDeadlineCountdown from "../components/leagues/JoinLeagueDeadlineContdown";
 import { ActiveLeaguesSection } from "../components/dashboard";
 import JoinLeagueActiveLeaguesSection from "../components/leagues/join_league_screen/JoinLeagueActiveLeaguesSection";
+import JoinLeaguePastLeaguesSection from "../components/leagues/join_league_screen/JoinLeaguePastLeaguesSection";
 
 export function JoinLeagueScreen() {
   const navigate = useNavigate();
@@ -201,6 +202,13 @@ export function JoinLeagueScreen() {
           }
         </>
       )}
+
+      {!isLoading && 
+        <JoinLeaguePastLeaguesSection 
+          leagues={leagues}
+          userTeams={userTeams}
+        />
+      }
 
       {/* For Testing purposes */}
       {!isLoading && otherLeagues.length > 0 && <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">

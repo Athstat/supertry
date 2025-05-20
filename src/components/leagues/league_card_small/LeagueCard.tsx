@@ -7,12 +7,15 @@ import { calculateJoinDeadline, isLeagueLocked } from "../../../utils/leaguesUti
 import LeagueLiveIndicator from "../LeagueLiveIndicator";
 import LeagueTeamsCount from "./LeagueTeamsCount";
 import { IFantasyLeague } from "../../../types/fantasyLeague";
+import { useFetch } from "../../../hooks/useFetch";
+import { leagueService } from "../../../services/leagueService";
 
 type Props = {
   league: IFantasyLeague;
   onLeagueClick: (league: IFantasyLeague) => void;
   custom?: number;
   isJoined?: boolean;
+  hideIfNoTeamsJoined?: boolean
 }
 
 
@@ -21,10 +24,26 @@ export function LeagueCard({
   onLeagueClick,
   custom = 0,
   isJoined = false,
+  hideIfNoTeamsJoined
 }: Props) {
 
   const isLocked = isLeagueLocked(league.join_deadline);
   const adjustedDeadline = calculateJoinDeadline(league);
+  const {data, isLoading} = useFetch("participating-teams", league.id, leagueService.fetchParticipatingTeams);
+
+  const teams = data ?? [];
+
+  // if (isLoading) {
+  //   return (
+  //     <div className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 border border-gray-100 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow h-14 w-full animate-pulse" >
+
+  //     </div>
+  //   )
+  // }
+
+  if (teams.length === 0 && hideIfNoTeamsJoined) {
+    return;
+  }
 
   return (
     <motion.div
