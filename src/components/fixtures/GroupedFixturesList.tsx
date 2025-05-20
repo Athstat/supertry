@@ -5,11 +5,12 @@ import FixtureCard from "./FixtureCard";
 
 type Props = {
     fixtures: IFixture[],
-    search?: string
+    search?: string,
+    generateMessage?: (fixture: IFixture) => string
 }
 
 /** Groups Fixtures into dates and renders them by date */
-export default function GroupedFixturesList({ fixtures, search }: Props) {
+export default function GroupedFixturesList({ fixtures, search, generateMessage }: Props) {
 
     // Group fixtures by day
     const fixturesByDay: Record<string, IFixture[]> = {};
@@ -48,6 +49,7 @@ export default function GroupedFixturesList({ fixtures, search }: Props) {
                         {/* Fixtures for this day */}
                         <div className="grid grid-cols-1 gap-3">
                             {fixturesByDay[dayKey].map((fixture, index) => (
+
                                 <FixtureCard
                                     showLogos
                                     showCompetition
@@ -55,6 +57,7 @@ export default function GroupedFixturesList({ fixtures, search }: Props) {
                                     fixture={fixture}
                                     key={index}
                                     showVenue
+                                    message={generateMessage ? generateMessage(fixture) : undefined}
                                 />
                             ))}
                         </div>

@@ -7,15 +7,17 @@ import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
 import { fixtureSumary } from '../../utils/fixtureUtils';
+import { Info } from 'lucide-react';
 type Props = {
     fixture: IFixture,
     className?: string,
     showCompetition?: boolean,
     showLogos?: boolean,
-    showVenue?: boolean
+    showVenue?: boolean,
+    message?: string
 }
 
-export default function FixtureCard({ fixture, className, showCompetition, showLogos, showVenue }: Props) {
+export default function FixtureCard({ fixture, className, showCompetition, showLogos, showVenue, message }: Props) {
 
 
     const { team_score,competition_name ,kickoff_time, round, game_status, opposition_score, venue } = fixture;
@@ -103,7 +105,13 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                         </div>
                     </div>
 
+
                 </div>
+
+                {message && <div className='bg-yellow-100  dark:bg-yellow-900/40 border border-yellow-300 dark:border-yellow-900 mt-2 rounded-xl px-3 py-1 text-yellow-700 dark:text-yellow-600 flex flex-row items-center gap-1' >
+                    <Info className='w-4 h-4' />
+                    <p className='text-sm truncate' >{message ?? "You have 3 players playing in this match"}</p>
+                </div>}
 
             </div>
             <FixtureCardModal

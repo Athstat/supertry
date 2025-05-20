@@ -5,6 +5,11 @@ export interface IFantasyTeamAthlete {
   is_starting: boolean;
   slot: number;
   score: number;
+  team_id: number;
+  team_name: string,
+  team_logo: string,
+  athlete_team_id: string,
+  player_name?: string
 }
 
 export interface IFantasyTeamSubmission {

@@ -196,7 +196,10 @@ export function LeagueScreen() {
               <>{league && <LeagueGroupChatFeed league={league} />}</>
             )}
             {activeTab === "fixtures" && (
-              <FantasyLeagueFixturesList league={league as IFantasyLeague} />
+              <FantasyLeagueFixturesList 
+                userTeam={userTeam}
+                league={league as IFantasyLeague} 
+              />
             )}
           </div>
         </div>
