@@ -23,7 +23,7 @@ export default function JoinLeagueDeadlineCountdown({ league, onViewLeague }: Pr
 
   const { days, hours, seconds, minutes } = useCountdown(diff);
   const { userTeam, isLoading, rankedUserTeam } = useUserFantasyTeam(league);
-  const { navigateToMyTeam: navigateToMyTeam } = useRouter();
+  const { navigateToMyTeam: navigateToMyTeam, navigateToLeagueScreen } = useRouter();
 
   const handleCallToAction = () => {
     if (userTeam) {
@@ -41,8 +41,11 @@ export default function JoinLeagueDeadlineCountdown({ league, onViewLeague }: Pr
   ];
 
   return (
-    <div className="flex flex-col text-slate-700 dark:text-white bg-white border border-slate-200 dark:border-slate-800 dark:bg-slate-800/50 rounded-xl p-6 gap-4 sm:gap-6">
-      <div className="space-y-2 sm:space-y-4">
+    <div className="flex flex-col text-slate-700 dark:text-white bg-white hover:bg-slate-50 border border-slate-200 dark:border-slate-800 dark:hover:bg-slate-800/30 dark:bg-slate-800/50 rounded-xl p-6 gap-4 sm:gap-6">
+      <div 
+        onClick={() => navigateToLeagueScreen(league)} 
+        className="space-y-2 sm:space-y-4 cursor-pointer"
+      >
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
           {league.title}
         </h1>

@@ -11,13 +11,14 @@ type Props = {
     fixture: IFixture,
     className?: string,
     showCompetition?: boolean,
-    showLogos?: boolean
+    showLogos?: boolean,
+    showVenue?: boolean
 }
 
-export default function FixtureCard({ fixture, className, showCompetition, showLogos }: Props) {
+export default function FixtureCard({ fixture, className, showCompetition, showLogos, showVenue }: Props) {
 
 
-    const { team_score,competition_name ,kickoff_time, round, game_status, opposition_score } = fixture;
+    const { team_score,competition_name ,kickoff_time, round, game_status, opposition_score, venue } = fixture;
 
     const matchFinal = game_status === "completed" && team_score && opposition_score;
 
@@ -35,11 +36,12 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
 
             <div
                 onClick={toogle}
-                className={twMerge("p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors", className)}
+                className={twMerge("p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800 transition-colors", className)}
             >
 
-                { showCompetition && competition_name && <div className='w-full items-center justify-center flex flex-row' >
-                    <p className='text-xs text-gray-600 dark:text-slate-400' >{competition_name}, Week {round}</p>
+                {<div className='w-full items-center justify-center flex flex-col' >
+                    {showCompetition && competition_name && <p className='text-xs text-gray-600 dark:text-slate-400' >{competition_name}, Week {round}</p>}
+                    {showVenue && <p className='text-xs text-gray-600 dark:text-slate-400' >{venue}</p>}
                 </div>}
 
                 <div className='flex flex-row' >

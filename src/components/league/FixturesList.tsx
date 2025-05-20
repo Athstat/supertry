@@ -70,7 +70,12 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
             {/* Fixtures for this day */}
             <div className="divide-y divide-gray-200 dark:divide-slate-800/50 px-3">
               {fixturesByDay[dayKey].map((fixture, index) => (
-                <FixtureCard showLogos fixture={fixture} key={index} />
+                <FixtureCard 
+                  showLogos 
+                  fixture={fixture} 
+                  key={index}
+                  showVenue
+                />
               ))}
             </div>
           </div>
