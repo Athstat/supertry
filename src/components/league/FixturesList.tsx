@@ -76,6 +76,10 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
       return `One of your player, ${onePlayer.player_name} is playing in this match`;
     }
 
+    if (count === 6) {
+      return "All of your players are playing in this match";
+    }
+
     if (count > 1) {
       return `${count} of your players are playing in this match`;
     }
