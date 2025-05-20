@@ -162,15 +162,17 @@ export async function latestLeagueFetcher() {
 export function upcomingLeaguesFilter(leagues: IFantasyLeague[]) {
   return leagues
     .filter((l) => {
+
       if (!l.join_deadline) {
         return false;
       }
 
       const today = new Date();
       const deadline = new Date(l.join_deadline);
-      const daysDiff = differenceInDays(deadline, today);
+      const diffEpoch = deadline.valueOf() - today.valueOf();
+      const sevenDayEpoch = 1000 * 60 * 60 * 24 * 7;
 
-      return daysDiff > 7;
+      return diffEpoch > sevenDayEpoch;
     })
     .sort((a, b) => {
       const aDeadline = new Date(a.join_deadline ?? 0);
