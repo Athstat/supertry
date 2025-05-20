@@ -188,3 +188,21 @@ export function pastLeaguesFilter(leagues: IFantasyLeague[]) {
     return l.has_ended === true;
   })
 }
+
+/** Filters leagues and returns leagues that are on the clock (7 days away) */
+export function leaguesOnClockFilter(leagues: IFantasyLeague[]) {
+  const activeLeagues = activeLeaguesFilter(leagues);
+
+  let leagueOnTheClock: IFantasyLeague | undefined;
+  const sevenDays = 1000 * 60 * 60 * 24 * 7;
+
+  const leaguesOnTheClock = activeLeagues.filter((l) => {
+    return (isLeagueOnTheClock(l, sevenDays));
+  });
+
+    if (leaguesOnTheClock.length > 0) {
+    leagueOnTheClock = leaguesOnTheClock[0];
+  }
+
+  return {leaguesOnTheClock, firstLeagueOnClock: leagueOnTheClock};
+}

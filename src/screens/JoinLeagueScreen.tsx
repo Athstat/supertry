@@ -1,25 +1,17 @@
 import { useState, useEffect } from "react";
-import { Trophy, Loader, ChevronRight } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { fantasyTeamService } from "../services/teamService";
 import { IFantasyLeague } from "../types/fantasyLeague";
-import { motion } from "framer-motion";
 
-// Import components
-import { LeagueCard } from "../components/leagues/league_card_small/LeagueCard";
-import { activeLeaguesFilter, calculateJoinDeadline, isLeagueOnTheClock } from "../utils/leaguesUtils";
-import { epochDiff } from "../utils/dateUtils";
-import { useCountdown } from "../hooks/useCountdown";
-import { useUserFantasyTeam } from "../components/league/useFantasyLeague";
-import { useRouter } from "../hooks/useRoter";
-import { twMerge } from "tailwind-merge";
+import { activeLeaguesFilter, isLeagueOnTheClock, leaguesOnClockFilter } from "../utils/leaguesUtils";
 import JoinLeagueDeadlineCountdown from "../components/leagues/JoinLeagueDeadlineContdown";
-import { ActiveLeaguesSection } from "../components/dashboard";
 import JoinLeagueActiveLeaguesSection from "../components/leagues/join_league_screen/JoinLeagueActiveLeaguesSection";
 import JoinLeaguePastLeaguesSection from "../components/leagues/join_league_screen/JoinLeaguePastLeaguesSection";
 import JoinLeagueUpcomingLeaguesSection from "../components/leagues/join_league_screen/JoinLeagueUpcomingLeaguesSection";
 import { useFetch } from "../hooks/useFetch";
+import { LoadingState } from "../components/ui/LoadingState";
 
 export function JoinLeagueScreen() {
   const navigate = useNavigate();
@@ -30,30 +22,7 @@ export function JoinLeagueScreen() {
   const [userTeams, setUserTeams] = useState<Record<string, boolean>>({});
   const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(false);
 
-  const activeLeagues = activeLeaguesFilter(leagues);
-
-  let leagueOnTheClock: IFantasyLeague | undefined;
-  const twoDays = 1000 * 60 * 60 * 24 * 2;
-
-  const leaguesOnTheClock = activeLeagues.filter((l) => {
-    return (isLeagueOnTheClock(l, twoDays));
-  });
-
-  if (leaguesOnTheClock.length > 0) {
-    leagueOnTheClock = leaguesOnTheClock[0];
-  }
-
-  // Container animation
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.1,
-      },
-    },
-  };
+  const {firstLeagueOnClock: leagueOnTheClock} = leaguesOnClockFilter(leagues);
 
   // Fetch user's teams to check which leagues they've joined
   useEffect(() => {
@@ -96,6 +65,10 @@ export function JoinLeagueScreen() {
       state: { league },
     });
   };
+
+  if (isLoadingUserTeams) {
+    return <LoadingState />
+  }
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
