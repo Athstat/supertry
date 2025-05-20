@@ -1,21 +1,26 @@
-import { Trophy } from "lucide-react"
+import { useNavigate } from "react-router-dom";
 import { IFantasyLeague } from "../../../types/fantasyLeague"
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Trophy } from "lucide-react";
 import { LeagueCard } from "../league_card_small/LeagueCard";
-import { pastLeaguesFilter } from "../../../utils/leaguesUtils";
+import { upcomingLeaguesFilter } from "../../../utils/leaguesUtils";
 
 type Props = {
     leagues: IFantasyLeague[],
     userTeams: Record<string, boolean>
 }
 
-export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Props) {
-
+export default function JoinLeagueUpcomingLeaguesSection({ leagues, userTeams }: Props) {
     const navigate = useNavigate();
-    const pastLeagues = pastLeaguesFilter(leagues);
 
-    // Container animation
+    const handleLeagueClick = (league: IFantasyLeague) => {
+        navigate(`/league/${league.official_league_id}`, {
+            state: { league },
+        });
+    };
+
+    const upcomingLeages = upcomingLeaguesFilter(leagues).splice(0, 3);
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -27,13 +32,7 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Pro
         },
     };
 
-    const handleLeagueClick = (league: IFantasyLeague) => {
-        navigate(`/league/${league.official_league_id}`, {
-            state: { league },
-        });
-    };
-
-    if (pastLeagues.length === 0) {
+    if (upcomingLeages.length === 0) {
         return;
     }
 
@@ -41,7 +40,7 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Pro
         <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
             <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
                 <Trophy size={24} className="text-primary-500" />
-                Past Leagues
+                Upcoming Leagues
             </h2>
 
             <motion.div
@@ -50,17 +49,17 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Pro
                 animate="visible"
                 className="space-y-4"
             >
-                {pastLeagues.map((league, index) => (
+                {upcomingLeages.map((league, index) => (
                     <LeagueCard
                         key={league.id}
                         league={league}
                         onLeagueClick={handleLeagueClick}
                         custom={index}
                         isJoined={userTeams[league.id]}
-                        hideIfNoTeamsJoined
                     />
                 ))}
             </motion.div>
         </div>
     )
+
 }
