@@ -31,7 +31,7 @@ export default function AthletesAvailabilityWarning({ league, athletes }: Props)
 
     if (unAvailableAthletes.length === 0) return;
 
-    let messageStr = league.has_ended ? "The following players were not confirmed to have been available: " : "The following players have not yet been confirm to be available: "  ;
+    let messageStr = league.has_ended ? "The following players were not confirmed to have been available: " : "The following players have not yet been confirmed to be available: "  ;
     let secondPart = "";
 
     for (let x = 0; x < unAvailableAthletes.length; x++) {

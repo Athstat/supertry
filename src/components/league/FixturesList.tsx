@@ -65,6 +65,9 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
       return isPlaying;
     });
 
+    const singularTense = !league.has_ended ? "is playing" : "played"
+    const pluralTense = !league.has_ended ? "are playing" : "played";
+
     const count = playersParticipating.length;
 
     if (count === 0) {
@@ -73,15 +76,15 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
 
     if (count === 1) {
       const onePlayer = playersParticipating[0];
-      return `One of your player, ${onePlayer.player_name} is playing in this match`;
+      return `One of your players, ${onePlayer.player_name}, ${singularTense} in this match`;
     }
 
     if (count === 6) {
-      return "All of your players are playing in this match";
+      return `All of your players ${pluralTense} in this match`;
     }
 
     if (count > 1) {
-      return `${count} of your players are playing in this match`;
+      return `${count} of your players ${pluralTense} in this match`;
     }
   }
 
