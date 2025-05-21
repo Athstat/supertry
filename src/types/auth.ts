@@ -1,3 +1,5 @@
+import { GameUpdatesPreference } from "./notifications";
+
 export interface Country {
   code: string;
   name: string;
@@ -68,4 +70,19 @@ export interface BridgeUserData {
   email: string;
   user_id: string;
   onesignal_id?: string;
+}
+
+
+export type DatabaseUser = {
+  kc_id: string,
+  email: string,
+  first_name?: string,
+  last_name?: string,
+  us_state?: string,
+  verification_state?: string,
+  athcoin_balance?: string,
+  geolocation_allowed?: boolean,
+  device_id?: string,
+  pref_payout?: string,
+  game_updates_preference: GameUpdatesPreference
 }
