@@ -64,7 +64,7 @@ function TabViewInner({ tabHeaderItems, children }: TabInnerProps) {
             <div className="flex flex-row w-full h-10">
                 {enabledTabs.map((item, index) => {
                     return (
-                        <TabViewButton label={item.label} disabled={item.disabled} tabKey={item.tabKey} key={index} />
+                        <TabViewButton className={item.className} label={item.label} disabled={item.disabled} tabKey={item.tabKey} key={index} />
                     )
                 })}
             </div>
@@ -103,10 +103,11 @@ export function TabViewPage({ children, tabKey, className }: TabViewPageProps) {
 export type TabViewHeaderItem = {
     label?: string,
     tabKey: string,
-    disabled?: boolean
+    disabled?: boolean,
+    className?: string
 }
 
-function TabViewButton({ label, tabKey, disabled = false }: TabViewHeaderItem) {
+function TabViewButton({ label, tabKey, disabled = false, className }: TabViewHeaderItem) {
 
     const { currentTabKey, navigate } = useTabView();
 
@@ -120,6 +121,7 @@ function TabViewButton({ label, tabKey, disabled = false }: TabViewHeaderItem) {
         <TabButton
             active={currentTabKey === tabKey}
             onClick={() => handleTabClick(tabKey)}
+            className={className}
         >
             {label}
         </TabButton>

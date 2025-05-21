@@ -284,7 +284,10 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                               is_super_sub: position.isSpecial || false,
                               is_starting: !position.isSpecial,
                               image: position.player?.image_url || "",
+                              team_name: position.player.team_name,
                               nextFixture: "",
+                              athlete_id: position.player.tracking_id,
+                              player_name: position.player.player_name
                             };
                             handleSwapPlayer(playerForPosition);
                           }}

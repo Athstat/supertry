@@ -1,5 +1,6 @@
-import { IFixture, IFullFixture } from "../types/games";
+import { IFixture, IFullFixture, IRosterItem } from "../types/games";
 import { getAuthHeader, getUri } from "../utils/backendUtils"
+import { logger } from "./logger";
 
 
 /** Games Service */
@@ -62,8 +63,25 @@ export const gamesService = {
 
             return json;
         } catch(error) {
-            console.log("Error getting games ", error);
+            logger.error("Error getting games " + error);
             return [];
         }
-    }
+    },
+
+    /** Gets roster items for a single game */
+    getGameRostersById: async (gameId: string) : Promise<IRosterItem[]> => {
+        try {
+            const uri = getUri(`/api/v1/games/${gameId}/rosters`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            const json = await res.json();
+            return json;
+
+        } catch (error) {
+            logger.error("Failed to get game rosters " + error);
+            return [];
+        }
+    } 
 }

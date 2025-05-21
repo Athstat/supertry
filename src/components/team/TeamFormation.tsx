@@ -1,5 +1,6 @@
 import { Player } from "../../types/team";
-import { TeamPlayerCard } from "./TeamPlayerCard";
+import RugbyPitch from "../shared/RugbyPitch";
+import { AthleteFantasyCard } from "./TeamPlayerCard";
 
 interface TeamFormationProps {
   players: Player[];
@@ -8,8 +9,7 @@ interface TeamFormationProps {
 }
 
 export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
-  console.log("Players for formation: ", players);
-  // Group players by position
+
   const positionGroups = {
     "Front Row": players.filter(
       (p) => p.position_class === "front-row" && p.is_starting
@@ -26,29 +26,17 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
     Back: players.filter((p) => p.position_class === "back" && p.is_starting),
   };
 
-  console.log("PositionGroups: ", positionGroups);
 
   return (
     <div className="relative h-[650px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
-      <div className="grid grid-cols-1 overflow-clip items-center">
-        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/0 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/0 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/0 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/0 h-20"></div>
-        <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20"></div>
-      </div>
+      <RugbyPitch />
 
       <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-6 lg:px-[10%]">
         {/* Front Row - Top */}
         {positionGroups["Front Row"].map(
           (player) => (
-            console.log("PlayerFront: ", player),
             (
-              <TeamPlayerCard
+              <AthleteFantasyCard
                 key={player.id}
                 player={player}
                 onClick={() => onPlayerClick(player)}
@@ -60,7 +48,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
 
         {/* Second Row - Left Side */}
         {positionGroups["Second Row"].map((player) => (
-          <TeamPlayerCard
+          <AthleteFantasyCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
@@ -70,7 +58,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
 
         {/* Back Row - Center Left */}
         {positionGroups["Back Row"].map((player) => (
-          <TeamPlayerCard
+          <AthleteFantasyCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
@@ -79,7 +67,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
         ))}
 
         {positionGroups["Halfback"].map((player) => (
-          <TeamPlayerCard
+          <AthleteFantasyCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
@@ -89,7 +77,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
 
         {/* Back - Right Side */}
         {positionGroups["Back"].map((player) => (
-          <TeamPlayerCard
+          <AthleteFantasyCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
