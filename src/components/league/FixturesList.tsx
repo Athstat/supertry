@@ -7,12 +7,16 @@ import FixtureCard from "../fixtures/FixtureCard";
 import { IFixture } from "../../types/games";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
+import { RankedFantasyTeam } from "../../types/league";
+import { useFetch } from "../../hooks/useFetch";
+import { fantasyTeamService } from "../../services/teamService";
 
 interface FixturesListProps {
   league: IFantasyLeague;
+  userTeam?: RankedFantasyTeam
 }
 
-export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
+export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProps) {
   const competitionId = league.official_league_id;
 
   const {
@@ -20,8 +24,10 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
     error,
     isLoading,
   } = useSWR(competitionId, gamesService.getGamesByCompetitionId);
+  const {data, isLoading: isLoadingUserTeamAthletes} = 
+    useFetch("user-team-athletes", userTeam?.team_id ?? "fall-back", fantasyTeamService.fetchTeamAthletes);
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading || isLoadingUserTeamAthletes) return <LoadingSpinner />;
 
   if (error) return <ErrorState message={"Error fetching matches"} />;
 
@@ -49,6 +55,38 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
 
   // Get sorted day keys
   const sortedDays = Object.keys(fixturesByDay).sort();
+  const userTeamAthletes = data ?? [];
+
+  console.log("Team athletes ", userTeamAthletes);
+
+  const generateFixtureMessage = (fixture: IFixture) => {
+    const playersParticipating = userTeamAthletes.filter((a) => {
+      const isPlaying = fixture.team_id === a.athlete_team_id || fixture.opposition_team_id === a.athlete_team_id;
+      return isPlaying;
+    });
+
+    const singularTense = !league.has_ended ? "is playing" : "played"
+    const pluralTense = !league.has_ended ? "are playing" : "played";
+
+    const count = playersParticipating.length;
+
+    if (count === 0) {
+      return undefined
+    }
+
+    if (count === 1) {
+      const onePlayer = playersParticipating[0];
+      return `One of your players, ${onePlayer.player_name}, ${singularTense} in this match`;
+    }
+
+    if (count === 6) {
+      return `All of your players ${pluralTense} in this match`;
+    }
+
+    if (count > 1) {
+      return `${count} of your players ${pluralTense} in this match`;
+    }
+  }
 
   return (
     <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm">
@@ -70,7 +108,13 @@ export function FantasyLeagueFixturesList({ league }: FixturesListProps) {
             {/* Fixtures for this day */}
             <div className="divide-y divide-gray-200 dark:divide-slate-800/50 px-3">
               {fixturesByDay[dayKey].map((fixture, index) => (
-                <FixtureCard showLogos fixture={fixture} key={index} />
+                <FixtureCard 
+                  showLogos 
+                  fixture={fixture} 
+                  key={index}
+                  showVenue
+                  message={generateFixtureMessage(fixture)}
+                />
               ))}
             </div>
           </div>

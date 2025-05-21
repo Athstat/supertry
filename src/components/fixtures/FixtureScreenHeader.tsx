@@ -19,7 +19,7 @@ export function FixtureScreenHeader({ fixture }: Props) {
             <div ref={sentinelRef} />
             {isSticky && <Sticky className={""}  >
                 
-                <div className="flex z-30 flex-row w-full items-center shadow-lg shadow-black/10 dark:shadow-black justify-center py-2 lg:px-[15%] bg-white dark:bg-black/40 h-16" >
+                <div className="flex z-30 flex-row w-full items-center shadow-lg shadow-black/10 dark:shadow-black justify-center py-2 lg:px-[15%] bg-white dark:bg-black/40 h-16 px-4" >
                     
                     <div className="flex-1 flex flex-row items-center justify-between "  >
                         <TeamLogo className="h-10 w-10" url={fixture.team_image_url} />

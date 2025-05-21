@@ -1,4 +1,4 @@
-import { Calendar, ChevronDown, XIcon } from "lucide-react";
+import { Calendar, XIcon } from "lucide-react";
 import useSWR from "swr";
 import { IFixture } from "../types/games";
 import { gamesService } from "../services/gamesService";
@@ -24,10 +24,13 @@ const competitionIds = [
   URC_COMPETIION_ID,
 ];
 
+
+
 export default function FixtureListScreen() {
   const { data, isLoading } = useSWR(competitionIds, fetcher);
   const [search] = useState("");
   const selectedDateRange = useAtomValue(fixturesDateRangeAtom);
+
 
   const sectionId = "upcoming_matches";
   const { scrollToSection } = useSectionNavigation([sectionId]);

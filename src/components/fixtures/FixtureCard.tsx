@@ -7,17 +7,21 @@ import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
 import { fixtureSumary } from '../../utils/fixtureUtils';
+import { Info } from 'lucide-react';
+import WarningCard from '../shared/WarningCard';
 type Props = {
     fixture: IFixture,
     className?: string,
     showCompetition?: boolean,
-    showLogos?: boolean
+    showLogos?: boolean,
+    showVenue?: boolean,
+    message?: string
 }
 
-export default function FixtureCard({ fixture, className, showCompetition, showLogos }: Props) {
+export default function FixtureCard({ fixture, className, showCompetition, showLogos, showVenue, message }: Props) {
 
 
-    const { team_score,competition_name ,kickoff_time, round, game_status, opposition_score } = fixture;
+    const { team_score, competition_name, kickoff_time, round, game_status, opposition_score, venue } = fixture;
 
     const matchFinal = game_status === "completed" && team_score && opposition_score;
 
@@ -27,7 +31,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
     const [showModal, setShowModal] = useState(false);
     const toogle = () => setShowModal(!showModal);
 
-    const {gameKickedOff} = fixtureSumary(fixture);
+    const { gameKickedOff } = fixtureSumary(fixture);
 
 
     return (
@@ -35,11 +39,12 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
 
             <div
                 onClick={toogle}
-                className={twMerge("p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-3 dark:hover:bg-dark-800 transition-colors", className)}
+                className={twMerge("p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800 transition-colors", className)}
             >
 
-                { showCompetition && competition_name && <div className='w-full items-center justify-center flex flex-row' >
-                    <p className='text-xs text-gray-600 dark:text-slate-400' >{competition_name}, Week {round}</p>
+                {<div className='w-full items-center justify-center flex flex-col' >
+                    {showCompetition && competition_name && <p className='text-xs text-gray-600 dark:text-slate-400' >{competition_name}, Week {round}</p>}
+                    {showVenue && <p className='text-xs text-gray-600 dark:text-slate-400' >{venue}</p>}
                 </div>}
 
                 <div className='flex flex-row' >
@@ -50,7 +55,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                         <div className='flex flex-row gap-2 items-center w-full justify-start' >
                             <div className='flex flex-col gap-4 items-center w-full justify-start' >
                                 {showLogos && <TeamLogo url={fixture.team_image_url} className='w-10 h-10' />}
-                                 
+
                                 <p className={twMerge(
                                     'text-sm w-fit text-center',
                                     awayTeamWon && ""
@@ -90,8 +95,8 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                             ) : null}
 
                             <div className='flex flex-col gap-4 items-center w-full justify-end' >
-                            {showLogos && <TeamLogo url={fixture.opposition_team_image_url ?? fixture.opposition_image_url} className='w-10 h-10' />}
-                                
+                                {showLogos && <TeamLogo url={fixture.opposition_team_image_url ?? fixture.opposition_image_url} className='w-10 h-10' />}
+
                                 <p className={twMerge(
                                     'text-sm w-fit text-wrap text-center',
                                     awayTeamWon && ""
@@ -101,7 +106,15 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
                         </div>
                     </div>
 
+
                 </div>
+
+                {message &&
+                    (<WarningCard>
+                        <Info className='w-4 h-4' />
+                        <p className='text-sm truncate' >{message ?? "You have 3 players playing in this match"}</p>
+                    </WarningCard>)
+                }
 
             </div>
             <FixtureCardModal
@@ -127,7 +140,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
     const { kickoff_time } = fixture;
 
-    const {gameKickedOff} = fixtureSumary(fixture);
+    const { gameKickedOff } = fixtureSumary(fixture);
 
 
     const goToFullMatchDetails = () => {
@@ -160,7 +173,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
                 </div>
 
                 <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
-                    <TeamLogo className='w-20 h-20' url={fixture.opposition_team_image_url ??  fixture.opposition_image_url} />
+                    <TeamLogo className='w-20 h-20' url={fixture.opposition_team_image_url ?? fixture.opposition_image_url} />
                     <p className='dark:text-white text-wrap text-center' >{fixture.opposition_team_name}</p>
                 </div>
             </div>

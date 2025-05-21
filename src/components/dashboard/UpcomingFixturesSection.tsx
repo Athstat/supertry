@@ -73,6 +73,8 @@ export default function UpcomingFixturesSection() {
                   className=""
                   fixture={fixture}
                   key={index}
+                  showCompetition
+                  showVenue
                 />
               ))}
             </div>
