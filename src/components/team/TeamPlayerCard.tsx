@@ -6,8 +6,8 @@ import { useState } from "react";
 import { formatPosition } from "../../utils/athleteUtils";
 import FormIndicator from "../shared/FormIndicator";
 import TeamLogo from "./TeamLogo";
-import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
 import { useTeamData } from "../my-team/TeamDataProvider";
+import { Info } from "lucide-react";
 
 type Props = {
   player: Player;
@@ -17,8 +17,12 @@ type Props = {
 
 type CardTier = "gold" | "silver" | "bronze";
 
-export function TeamPlayerCard({ player, onClick, className }: Props) {
+/** Renders a athlete fantasy card that is either gold, silver or 
+ * bronze depending on the power ranking of the player */
+
+export function AthleteFantasyCard({ player, onClick, className }: Props) {
   const [imageError, setIamgeError] = useState<string>();
+
   const { data: playerInfo, isLoading } = useFetch(
     "athletes",
     player.athlete_id,
@@ -68,6 +72,8 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
       }, 0)
     : 0;
 
+  const isAvailable = playerInfo.available;
+
   return (
     <div className="">
       <div
@@ -83,6 +89,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
           className
         )}
       >
+       {!isAvailable && <div className="top-0 left-0 absolute w-full h-full bg-black/30 z-10" ></div>}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-10">
           <TeamLogo className="w-8 h-8" url={playerInfo.team_logo} />
@@ -121,10 +128,10 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
 
           {/* Position and Rating */}
           <div className="flex justify-between items-center text-sm mb-2">
-            <span className="text-xs">
+            <div className="text-xs truncate">
               {formatPosition(player.position_class ?? "")}
-            </span>
-            <span className="text-xs font-medium">PR {statValue(pr)}</span>
+            </div>
+            <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">PR {statValue(pr)}</div>
           </div>
 
           {/* Stats Grid */}
@@ -146,8 +153,11 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
       </div>
 
       {!pointsLoading && (
-        <div className=" flex flex-row mt-2 items-center justify-center">
+        <div className=" flex flex-row mt-2 gap-1 items-center justify-center">
           <p className="text-white font-medium">{totalPoints.toFixed(1)}</p>
+          {!isAvailable && <div>
+              <Info className="w-4 h-4 text-yellow-50" />
+            </div>}
         </div>
       )}
 
@@ -156,6 +166,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
           <p className="bg-slate-400/40 rounded-xl w-4 h-4 animate-pulse"></p>
         </div>
       )}
+      
     </div>
   );
 }

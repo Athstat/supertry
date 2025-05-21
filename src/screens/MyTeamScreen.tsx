@@ -16,6 +16,7 @@ import { TeamActions, useTeamActions } from "../components/my-team/TeamActions";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { RankedFantasyTeam } from "../types/league";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import AthletesAvailabilityWarning from "../components/team/AthletesAvailabilityWarning";
 
 type TabType = "edit-team" | "view-pitch";
 
@@ -97,7 +98,8 @@ const MyTeamContent: React.FC = () => {
   return (
     <FantasyLeagueProvider league={leagueInfo ?? undefined}>
       <main className="container mx-auto px-4 py-6">
-        <div className="max-w-4xl mx-auto">
+        
+        <div className="max-w-4xl mx-auto flex flex-col gap-4">
           {/* Team Header */}
           <TeamHeader
             team={team}
@@ -120,6 +122,13 @@ const MyTeamContent: React.FC = () => {
               } as Team
             }
           />
+
+          {leagueInfo && <AthletesAvailabilityWarning 
+            team={team}
+            league={leagueInfo}
+            athletes={athletes}
+          />}
+
           {/* Team Actions with Tabs Content as children */}
           {teamId && (
             <TeamActions league={leagueInfo ?? undefined} teamId={teamId}>

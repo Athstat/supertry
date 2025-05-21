@@ -17,6 +17,8 @@ import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/ta
 import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
 import BlueGradientCard from "../components/shared/BlueGradientCard";
 import PageView from "./PageView";
+import { useFetch } from "../hooks/useFetch";
+import FixtureRosters from "../components/fixtures/FixtureRosters";
 
 export default function FixtureScreen() {
 
@@ -25,8 +27,11 @@ export default function FixtureScreen() {
 
   if (!fixtureId) return <ErrorState message="Match was not found" />
 
-  const { data: fetchedFixture, isLoading } = useSWR(["games", fixtureId], async ([, gameId]) => await gamesService.getGameById(gameId))
+  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(["games", fixtureId], async ([, gameId]) => await gamesService.getGameById(gameId))
   const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
+  const {data: rosters, isLoading: loadingRosters } = useFetch("rosters", fixtureId, gamesService.getGameRostersById);
+
+  const isLoading = loadingFixture || loadingBoxScore || loadingRosters;
 
   if (isLoading) return <LoadingState />
 
@@ -52,15 +57,15 @@ export default function FixtureScreen() {
       label: "Kick Off",
       tabKey: "kick-off",
       disabled: false
+    },
+
+    {
+      label: "Team Rosters",
+      tabKey: "rosters",
+      disabled: !rosters || rosters.length === 0
     }
 
   ]
-
-  console.log("Box Score ", boxScore?.filter(b => {
-    return b.athlete_team_id === "fff2a41e-e2d9-53e2-a84c-4cdffd5f1e98";
-  }).map((b) => {
-    return {missed: b.conversionsmissed, scored: b.conversionsscored, teamId: b.athlete_team_id}
-  }));
 
 
   return (
@@ -114,6 +119,11 @@ export default function FixtureScreen() {
               <TabViewPage className="flex flex-col p-4 gap-5" tabKey="team-stats" >
                 {boxScore && <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />}
               </TabViewPage>
+
+              <TabViewPage tabKey="rosters" >
+                {rosters && <FixtureRosters  rosters={rosters} fixture={fixture} />}
+              </TabViewPage>
+
             </TabView>
           </PageView>
         )
