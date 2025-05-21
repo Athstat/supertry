@@ -1,4 +1,6 @@
 import { IFixture, IRosterItem } from "../../types/games"
+import { formatPosition } from "../../utils/athleteUtils"
+import PlayerMugshot from "../shared/PlayerMugshot"
 import TabView, { TabViewHeaderItem, TabViewPage } from "../shared/tabs/TabView"
 import { FixtureRosterList } from "./FixtureRosterList"
 
