@@ -23,6 +23,7 @@ import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
 import SBRChatScreen from "./components/sbr/SBRChatScreen";
+import RouteErrorBoundary from "./components/RouteErrorBoundary";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -33,7 +34,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-// Protected route component
+// Protected route component with error boundary
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
@@ -43,7 +44,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/signin" />;
   }
 
-  return <>{children}</>;
+  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
 };
 
 // Auth route component - redirects to dashboard if already authenticated
@@ -56,7 +57,7 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/dashboard" />;
   }
 
-  return <>{children}</>;
+  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
 };
 
 const AppRoutes = () => {
