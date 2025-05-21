@@ -50,7 +50,7 @@ export default function PlayerListItem({
                 onClick={handleClickPlayer}
                 className={twMerge(
                     "flex items-center px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-700 cursor-pointer transition",
-                    cannotAfford && "opacity-50 bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60"
+                    cannotAfford && "opacity-40 bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700"
                 )}
             >
                 {/* Player image/initials - hidden on mobile */}
