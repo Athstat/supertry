@@ -21,14 +21,15 @@ export default function SettingsModal({ children, icon, title, className, width,
     if (!open) return;
 
     return (
-        <div className="top-0 left-0 bg-black/40 fixed w-full h-screen overflow-hidden flex flex-col items-center justify-center " >
+        <div className="top-0 left-0 bg-black/40 fixed w-full h-screen flex flex-col items-center justify-center z-[60]" >
 
-            <div className="w-[90%] h-[70%] bg-black rounded-xl" >
+            <div className="w-[90%] lg:w-[45%] h-[70%] bg-black rounded-xl" >
                 <div className={twMerge(
-                    "w-full h-full bg-white dark:bg-dark-800/50  p-5 rounded-xl",
+                    "w-full h-full bg-white dark:bg-dark-800/50  flex-1 p-5 rounded-xl overflow-hidden",
                     width && `w-[${width}]`,
                     height && `w-[${height}]`,
                 )} >
+                    
                     <div className="w-full dark:text-white flex flex-row items-center justify-between" >
                         <div className="flex flex-row items-center gap-2" >
                             {icon && <Icon />}
@@ -40,9 +41,10 @@ export default function SettingsModal({ children, icon, title, className, width,
                         </button>
                     </div>
 
-                    <div className={twMerge("w-full", className)} >
+                    <div className={twMerge("w-full h-full mt-4", className)} >
                         {children}
                     </div>
+
                 </div>
             </div>
         </div>
