@@ -166,7 +166,7 @@ export const usePlayersFilter = ({
         matchesSearch &&
         matchesTeam &&
         !isAlreadySelected &&
-        isAffordable &&
+        // isAffordable &&
         passedAvailabilityFilter
       );
     });
