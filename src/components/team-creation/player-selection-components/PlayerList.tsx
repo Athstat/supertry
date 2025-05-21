@@ -1,14 +1,9 @@
 import React from "react";
 import { usePlayerProfile } from "../../../hooks/usePlayerProfile";
-import renderStatDots from "./renderStatDots";
-import { convertToPlayer } from "./PlayerConverter";
 import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
-import FormIndicator from "../../shared/FormIndicator";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { AvailableTeam } from "./useAvailableTeams";
-import { formatPosition } from "../../../utils/athleteUtils";
-import InsufficientCoinsState from "../player-list/InsufficientCoinsMessage";
 import PlayerListItem from "./PlayerListItem";
 
 interface PlayerListProps {
@@ -67,18 +62,25 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   }
 
   const teamIds = availableTeams.map(t => t.id);
+  
+  /** Bias is used to sort affordable players first
+   * and unaffordable players last
+   */
+  const affordabilityBias = (a: RugbyPlayer) => {
+    if (!a.price) return -1;
+    if (a.price > remainingBudget)  {
+      return 1;
+    }
+
+    return 0;
+  }
+  
   const availablePlayers = players.filter(p => {
     return p.team_id && teamIds.includes(p.team_id);
-  })
+  }).sort((a, b) => {
+    return affordabilityBias(a) - affordabilityBias(b);
+  });
 
-
-  // if (affordablePlayers.length === 0 && countBeforeBudgetFilter > 0) {
-  //   return (
-  //     <div className="py-5 flex flex-row items-center justify-center " >
-  //       <InsufficientCoinsState className="w-[90%] lg:w-[60%]" />
-  //     </div>
-  //   )
-  // }
 
   return (
     <>
