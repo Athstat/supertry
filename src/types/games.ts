@@ -31,3 +31,44 @@ export type IFixture = {
 export type GameStatus = string | "completed" | "in_progress" | "not_started";
 
 export type IFullFixture = any;
+
+/** Represents a single record of an athlete in a teams roster for a 
+ * certain game thats being played
+ */
+
+export type IRosterItem = {
+    player_number: number,
+    is_captain?: boolean,
+    is_substitute: boolean,
+    game_id: string,
+    team_id: string,
+    athlete_id: string,
+    position: string,
+    source_id: string,
+    tracking_id: string,
+    player_name?: string,
+    nick_name?: string,
+    birth_country?: string,
+    date_of_birth?: Date,
+    isactive?: boolean,
+    athstat_firstname?: string,
+    athstat_lastname?: string,
+    athstat_middleinitial?: string,
+    general_comments?: string,
+    age?: number,
+    height?: number,
+    weight?: number,
+    hidden?: boolean,
+    gender?: "M" | "F",
+    price?: number,
+    power_rank_rating?: number,
+    position_class?: string,
+    data_source?: string,
+    image_url?: string,
+    nationality?: string,
+    birth_place?: string,
+    form?: string,
+    available?: boolean,
+    team_image_url?: string,
+    team_name?: string
+  }
