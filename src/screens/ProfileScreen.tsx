@@ -4,11 +4,13 @@ import {
   LogOut,
   Shield,
   ChevronRight,
+  Bell,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
 import UserStatsGrid from "../components/profile/UserStatsGrid";
+import UserNotificationsSettings from "../components/settings/UserNotificationsSettings";
 
 export function ProfileScreen() {
   const [notifications, setNotifications] = useState(true);
@@ -122,8 +124,10 @@ export function ProfileScreen() {
             </button>
             */}
 
+            <UserNotificationsSettings />
+
             {/* User Teams */}
-            <button onClick={handleGoToMyTeams} className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors">
+            <button onClick={handleGoToMyTeams} className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-800 transition-colors">
               <div className="flex items-center gap-3">
                 <Shield size={20} className="text-gray-500" />
                 <span className="font-medium dark:text-gray-100">My Teams</span>
