@@ -1,12 +1,6 @@
-import { Shield, Swords } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Shield} from 'lucide-react';
 
 export default function SbrScreenHeader() {
-
-    const navigate = useNavigate();
-    const handleViewChat = () => {
-        navigate("/sbr/chat");
-    }
 
     return (
         <div className="flex flex-row items-center justify-between" >

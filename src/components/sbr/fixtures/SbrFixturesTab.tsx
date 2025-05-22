@@ -5,6 +5,7 @@ import { sbrService } from "../../../services/sbrService";
 import useSWR from "swr";
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { twMerge } from "tailwind-merge";
+import { LoadingState } from "../../ui/LoadingState";
 
 /** Renders all the Sbr Fixtures */
 export default function SbrAllFixturesTab({ }) {
@@ -49,6 +50,8 @@ export default function SbrAllFixturesTab({ }) {
             setWeek(week + 1)
         }
     }
+
+    if (isLoading) return <LoadingState />
 
     return (
         <div className="flex flex-col gap-4" >
