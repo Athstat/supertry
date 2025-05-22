@@ -40,7 +40,7 @@ export default function SbrTeamLogo({ teamName, className }: Props) {
 
 function teamLogoMapper(teamName: string): string | undefined {
   switch (teamName) {
-    case 'CBC':
+    case 'Christian Brothers College':
       return '/sbr_logos/christian-brothers-college-bulawayo.png.png';
     case 'Falcon College':
       return '/sbr_logos/falcon-college.png.png';
