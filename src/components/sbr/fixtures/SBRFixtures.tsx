@@ -14,12 +14,6 @@ export default function SBRFixtures({fixtures} : Props) {
     return (
         <div className="flex flex-col gap-5" >
 
-            {fixtures.length > 0 &&
-                <SbrFixturesHero 
-                    fixtures={fixtures}
-                />
-            }
-
             <div>
                 <h1 className="text-xl font-medium" >Week {currentRound} Fixtures </h1>
             </div>
