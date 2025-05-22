@@ -22,7 +22,7 @@ import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
-import SBRChatScreen from "./components/sbr/SBRChatScreen";
+import SbrChatTab from "./components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
 import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
@@ -229,7 +229,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SBRChatScreen />
+              <SbrChatTab />
             </Layout>
           </ProtectedRoute>
         }
