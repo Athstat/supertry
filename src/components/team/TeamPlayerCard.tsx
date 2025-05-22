@@ -15,7 +15,7 @@ type Props = {
   className?: string;
 };
 
-type CardTier = "gold" | "silver" | "bronze";
+type CardTier = "gold" | "silver" | "bronze" | "blue";
 
 /** Renders a athlete fantasy card that is either gold, silver or 
  * bronze depending on the power ranking of the player */
@@ -62,14 +62,16 @@ export function AthleteFantasyCard({ player, onClick, className }: Props) {
 
   const pr = playerInfo.power_rank_rating ?? 0;
   const cardTier: CardTier =
-    pr <= 60 ? "bronze" : pr > 60 && pr < 80 ? "silver" : "gold";
+    pr <= 60 ? "bronze"
+      : pr > 60 && pr < 80 ? "silver"
+        : pr >= 90 ? "blue" : "gold";
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
   const totalPoints = pointsBreakDown
     ? pointsBreakDown.reduce((res, action) => {
-        return res + action.score;
-      }, 0)
+      return res + action.score;
+    }, 0)
     : 0;
 
   const isAvailable = playerInfo.available;
@@ -77,19 +79,21 @@ export function AthleteFantasyCard({ player, onClick, className }: Props) {
   return (
     <div className="">
       <div
-        //onClick={onClick}
+        onClick={onClick}
         className={twMerge(
           "group relative shadow-xl rounded-lg flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden transform-style-3d",
           cardTier === "gold" &&
-            "bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600",
+          "bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600",
           cardTier === "silver" &&
-            "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600",
+          "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600",
           cardTier === "bronze" &&
-            "bg-gradient-to-br from-amber-700 via-amber-800 to-amber-900",
+          "bg-gradient-to-br from-amber-700 via-amber-800 to-amber-900",
+          cardTier === "blue" &&
+          "bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white",
           className
         )}
       >
-       {!isAvailable && <div className="top-0 left-0 absolute w-full h-full bg-black/30 z-10" ></div>}
+        {!isAvailable && <div className="top-0 left-0 absolute w-full h-full bg-black/30 z-10" ></div>}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-10">
           <TeamLogo className="w-8 h-8" url={playerInfo.team_logo} />
@@ -112,7 +116,8 @@ export function AthleteFantasyCard({ player, onClick, className }: Props) {
             "p-3  flex-[1] ",
             cardTier === "gold" && "bg-yellow-500/10",
             cardTier === "silver" && "bg-gray-500/10",
-            cardTier === "bronze" && "bg-amber-900/10"
+            cardTier === "bronze" && "bg-amber-900/10",
+            cardTier === "blue" && "bg-blue-900/10",
           )}
         >
           {/* Player name and form */}
@@ -156,8 +161,8 @@ export function AthleteFantasyCard({ player, onClick, className }: Props) {
         <div className=" flex flex-row mt-2 gap-1 items-center justify-center">
           <p className="text-white font-medium">{totalPoints.toFixed(1)}</p>
           {!isAvailable && <div>
-              <Info className="w-4 h-4 text-yellow-50" />
-            </div>}
+            <Info className="w-4 h-4 text-yellow-50" />
+          </div>}
         </div>
       )}
 
@@ -166,7 +171,7 @@ export function AthleteFantasyCard({ player, onClick, className }: Props) {
           <p className="bg-slate-400/40 rounded-xl w-4 h-4 animate-pulse"></p>
         </div>
       )}
-      
+
     </div>
   );
 }
