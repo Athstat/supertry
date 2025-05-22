@@ -1,34 +1,28 @@
-import { sbrService } from "../../../services/sbrService"
-import { LoadingState } from "../../ui/LoadingState";
-import useSWR from "swr";
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
-import { useSbrContext } from "../../../contexts/SBRContext";
 import SbrFixturesHero from "./SbrFixturesHero";
+import { ISbrFixture } from "../../../types/sbr";
+import { useSbrContext } from "../../../contexts/SBRContext";
 
-export default function SBRFixtures() {
+type Props = {
+    fixtures: ISbrFixture[]
+}
+
+export default function SBRFixtures({fixtures} : Props) {
 
     const {currentRound} = useSbrContext();
-    const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllMatches());
-
-
-    const fixtures = (data ?? []).filter(f => {
-        return f.round === currentRound
-    });
 
     return (
         <div className="flex flex-col gap-5" >
 
-            {fixtures.length > 0 && !isLoading &&
+            {fixtures.length > 0 &&
                 <SbrFixturesHero 
                     fixtures={fixtures}
                 />
             }
 
             <div>
-                <h1 className="text-xl font-medium" >{"Zim & SA Schools Fixtures"}</h1>
+                <h1 className="text-xl font-medium" >Week {currentRound} Fixtures </h1>
             </div>
-
-            {isLoading && <LoadingState />}
 
             <GroupedSbrFixturesList
                 fixtures={fixtures}
