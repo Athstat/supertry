@@ -61,7 +61,7 @@ function TabViewInner({ tabHeaderItems, children }: TabInnerProps) {
         <div className="w-full flex flex-col gap-5" >
 
             {/* Header */}
-            <div className="flex flex-row w-full h-10">
+            <div className="flex flex-row w-full h-10 overflow-x-auto">
                 {enabledTabs.map((item, index) => {
                     return (
                         <TabViewButton className={item.className} label={item.label} disabled={item.disabled} tabKey={item.tabKey} key={index} />
