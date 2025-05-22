@@ -1,11 +1,12 @@
-type Props = {
-}
+import { Sparkles } from "lucide-react";
+
 
 export default function SbrPredictionsTab() {
   return (
     <div className="" >
-        <div>
-            <h1 className="text-xl font-bold" >Leaderboard</h1>
+        <div className="flex flex-row items-center gap-2" >
+            <Sparkles />
+            <h1 className="text-xl font-bold" >Predictions</h1>
         </div>
 
         <div className="flex flex-col items-center justify-center p-5" >

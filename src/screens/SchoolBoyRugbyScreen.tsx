@@ -1,5 +1,5 @@
 import PageView from "./PageView";
-import SBRFixtures from "../components/sbr/fixtures/SBRFixtures";
+import SbrCurrentWeekFixtures from "../components/sbr/fixtures/SBRFixtures";
 import SbrProvider from "../contexts/SbrContext";
 import SbrScreenHeader from "../components/sbr/SbrScreenHeader";
 import useSWR from "swr";
@@ -8,6 +8,7 @@ import SbrFixturesHero from "../components/sbr/fixtures/SbrFixturesHero";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import SchoolBoyRugbyChat from "../components/sbr/SchoolBoyRugbyChat";
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
+import AllSbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 
 export default function SchoolBoyRugbyScreen() {
 
@@ -55,17 +56,21 @@ export default function SchoolBoyRugbyScreen() {
           />
         }
 
-        <TabView  tabHeaderItems={tabItems} >
+        <TabView tabHeaderItems={tabItems} >
           <TabViewPage tabKey="current-week" >
-            {!isLoading && <SBRFixtures fixtures={currentRoundFixtures} />}
+            {!isLoading && <SbrCurrentWeekFixtures fixtures={currentRoundFixtures} />}
           </TabViewPage>
 
           <TabViewPage tabKey="predictions" >
             {!isLoading && <SbrPredictionsTab />}
           </TabViewPage>
-          
+
           <TabViewPage tabKey="chat" >
             {!isLoading && <SchoolBoyRugbyChat />}
+          </TabViewPage>
+
+          <TabViewPage tabKey="fixtures" >
+            {!isLoading && <AllSbrFixturesTab />}
           </TabViewPage>
 
         </TabView>
