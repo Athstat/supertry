@@ -3,7 +3,7 @@ import { ISbrFixture } from "../../../types/sbr"
 import BlueGradientCard from "../../shared/BlueGradientCard"
 import { hasSbrRoundPassed } from "../../../utils/sbrUtils"
 import { Fragment, useState } from "react"
-import SbrVotingModal from "../voting/SbrVotingModal"
+import SbrVotingModal from "../predictions/SbrVotingModal"
 import { useSbrContext } from "../../../contexts/SBRContext"
 
 type Props = {
