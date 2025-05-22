@@ -4,7 +4,7 @@ import BlueGradientCard from "../../shared/BlueGradientCard"
 import { hasSbrRoundPassed } from "../../../utils/sbrUtils"
 import { Fragment, useState } from "react"
 import SbrVotingModal from "../predictions/SbrVotingModal"
-import { useSbrContext } from "../../../contexts/SBRContext"
+import { useSbrContext } from "../../../contexts/SbrContext"
 
 type Props = {
     fixtures: ISbrFixture[]
