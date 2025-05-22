@@ -83,6 +83,8 @@ declare module "lucide-react" {
   export const FileX2: CIP;
   export const ChevronUp: CIP;
   export const LoaderCircle: CIP;
+  export const Sparkles: CIP;
+  export const Swords: CIP;
 
 }
 
