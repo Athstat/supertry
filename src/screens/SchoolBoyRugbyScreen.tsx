@@ -6,11 +6,11 @@ import { MessageCircle } from "lucide-react";
 export default function SchoolBoyRugbyScreen() {
 
   const navigate = useNavigate();
+  const currentRound = 2;
 
   const handleViewChat = () => {
     navigate("/sbr/chat");
   }
-
 
   return (
     <PageView className="dark:text-white p-5 flex flex-col gap-3" >
