@@ -200,10 +200,10 @@ export function leaguesOnClockFilter(leagues: IFantasyLeague[]) {
   const activeLeagues = activeLeaguesFilter(leagues);
 
   let leagueOnTheClock: IFantasyLeague | undefined;
-  const sevenDays = 1000 * 60 * 60 * 24 * 7;
+  const threeDays = 1000 * 60 * 60 * 24 * 3;
 
   const leaguesOnTheClock = activeLeagues.filter((l) => {
-    return (isLeagueOnTheClock(l, sevenDays));
+    return (isLeagueOnTheClock(l, threeDays));
   });
 
     if (leaguesOnTheClock.length > 0) {
