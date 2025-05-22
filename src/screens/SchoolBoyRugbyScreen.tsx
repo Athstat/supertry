@@ -10,12 +10,8 @@ export default function SchoolBoyRugbyScreen() {
   return (
     <SbrProvider currentRound={currentRound} >
       <PageView className="dark:text-white p-5 flex flex-col gap-3" >
-        
         <SbrScreenHeader />
-
-        <div>
-          <SBRFixtures />
-        </div>
+        <SBRFixtures />
       </PageView>
     </SbrProvider>
   )
