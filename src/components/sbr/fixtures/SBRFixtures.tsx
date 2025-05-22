@@ -4,16 +4,21 @@ import { LoadingState } from "../../ui/LoadingState";
 import SbrVotingModal from "../voting/SbrVotingModal";
 import useSWR from "swr";
 import { useState } from "react";
-import { format } from "date-fns";
 import BlueGradientCard from "../../shared/BlueGradientCard";
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { hasSbrRoundPassed } from "../../../utils/sbrUtils";
+import { useSbrContext } from "../../../contexts/SBRContext";
 
 export default function SBRFixtures() {
 
+    const {currentRound} = useSbrContext();
     const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllMatches());
 
-    const fixtures = data ?? [];
+
+    const fixtures = (data ?? []).filter(f => {
+        return f.round === currentRound
+    });
+
     const [showVoting, setShowVoting] = useState(false);
     const toogle = () => setShowVoting(!showVoting);
 
