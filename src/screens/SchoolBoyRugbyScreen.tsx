@@ -5,6 +5,8 @@ import SbrScreenHeader from "../components/sbr/SbrScreenHeader";
 import useSWR from "swr";
 import { sbrService } from "../services/sbrService";
 import SbrFixturesHero from "../components/sbr/fixtures/SbrFixturesHero";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
+import SchoolBoyRugbyChat from "../components/sbr/SchoolBoyRugbyChat";
 
 export default function SchoolBoyRugbyScreen() {
 
@@ -16,6 +18,32 @@ export default function SchoolBoyRugbyScreen() {
     return f.round === currentRound
   });
 
+  const tabItems: TabViewHeaderItem[] = [
+    {
+      label: `SBR Week ${currentRound}`,
+      tabKey: "current-week",
+      className: "flex-1"
+    },
+
+    {
+      label: "Predictions",
+      tabKey: "predictions",
+      className: "flex-1"
+    },
+
+    {
+      label: "Fixtures",
+      tabKey: "fixtures",
+      className: "flex-1"
+    },
+
+    {
+      label: "Chat",
+      tabKey: "chat",
+      className: "flex-1"
+    }
+  ]
+
   return (
     <SbrProvider currentRound={currentRound} >
       <PageView className="dark:text-white p-5 flex flex-col gap-3" >
@@ -26,9 +54,20 @@ export default function SchoolBoyRugbyScreen() {
           />
         }
 
-        
+        <TabView  tabHeaderItems={tabItems} >
+          <TabViewPage tabKey="current-week" >
+            {!isLoading && <SBRFixtures fixtures={currentRoundFixtures} />}
+          </TabViewPage>
 
-        {!isLoading && <SBRFixtures fixtures={currentRoundFixtures} />}
+          <TabViewPage tabKey="predictions" >
+            {!isLoading && <SBRFixtures fixtures={currentRoundFixtures} />}
+          </TabViewPage>
+          
+          <TabViewPage tabKey="chat" >
+            {!isLoading && <SchoolBoyRugbyChat />}
+          </TabViewPage>
+
+        </TabView>
       </PageView>
     </SbrProvider>
   )

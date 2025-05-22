@@ -58,7 +58,7 @@ function TabViewInner({ tabHeaderItems, children }: TabInnerProps) {
     }, []);
 
     return (
-        <div className="w-full flex flex-col" >
+        <div className="w-full flex flex-col gap-5" >
 
             {/* Header */}
             <div className="flex flex-row w-full h-10">
