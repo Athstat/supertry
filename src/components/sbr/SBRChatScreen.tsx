@@ -1,18 +1,18 @@
-import { ArrowLeft } from 'lucide-react'
+import { Users } from 'lucide-react'
 import PageView from '../../screens/PageView'
 import SchoolBoyRugbyChat from './SchoolBoyRugbyChat'
 import { useRouter } from '../../hooks/useRoter'
 
-export default function SBRChatScreen() {
+export default function SbrChatTab() {
 
     const {back} = useRouter();
 
     return (
-        <PageView className='py-1 flex flex-col gap-2 ' >
+        <PageView className='flex flex-col gap-4 ' >
 
             <div onClick={back} className='flex cursor-pointer flex-row items-center gap-1 px-2' >
-                <ArrowLeft className='w-4 h-4'  />
-                <p>Go Back</p>
+                <Users className=''  />
+                <p className='text-lg font-bold' >Chat</p>
             </div>
 
             {/* <div className='flex flex-row items-center gap-2' >

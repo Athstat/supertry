@@ -6,9 +6,9 @@ import useSWR from "swr";
 import { sbrService } from "../services/sbrService";
 import SbrFixturesHero from "../components/sbr/fixtures/SbrFixturesHero";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
-import SchoolBoyRugbyChat from "../components/sbr/SchoolBoyRugbyChat";
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
-import AllSbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
+import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
+import SbrChatTab from "../components/sbr/SBRChatScreen";
 
 export default function SchoolBoyRugbyScreen() {
 
@@ -66,11 +66,11 @@ export default function SchoolBoyRugbyScreen() {
           </TabViewPage>
 
           <TabViewPage tabKey="chat" >
-            {!isLoading && <SchoolBoyRugbyChat />}
+            {!isLoading && <SbrChatTab />}
           </TabViewPage>
 
           <TabViewPage tabKey="fixtures" >
-            {!isLoading && <AllSbrFixturesTab />}
+            {!isLoading && <SbrAllFixturesTab />}
           </TabViewPage>
 
         </TabView>
