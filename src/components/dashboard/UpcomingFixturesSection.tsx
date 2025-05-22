@@ -56,7 +56,7 @@ export default function UpcomingFixturesSection() {
   const sortedDays = Object.keys(fixturesByDay).sort();
 
   return (
-    <TitledCard icon={Calendar} title="Fixtures">
+    <TitledCard icon={Calendar} title="Upcoming Fixtures">
       <div className="grid grid-cols-1 gap-2">
         {sortedDays.map((dayKey) => (
           <div key={dayKey} className="mb-2">

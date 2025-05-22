@@ -1,5 +1,6 @@
+import { Coins } from "lucide-react";
 import { Team } from "../../types/team";
-import { Trophy, Award, Calendar } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 interface TeamStatsProps {
   team: Team;
@@ -20,20 +21,10 @@ export function TeamStats({ team }: TeamStatsProps) {
     },
 
     {
-      label: "Average Price",
-      value:
-        team.players.reduce((acc, player) => acc + player.price, 0) /
-        team.players.length,
-      icon: Award,
+      label: "Team Value",
+      value: team.players.reduce((prev, player) => prev + player.price, 0),
+      icon: Coins,
       format: (value: number) => value.toFixed(0),
-      color: "text-primary-700 dark:text-primary-500",
-    },
-
-    {
-      label: "Matches Played",
-      value: team.matchesPlayed || 0, // Assuming this property exists in team object
-      icon: Calendar,
-      format: (value: number) => value.toString(),
       color: "text-primary-700 dark:text-primary-500",
     },
   ];
