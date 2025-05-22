@@ -1,7 +1,6 @@
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
-import SbrFixturesHero from "./SbrFixturesHero";
 import { ISbrFixture } from "../../../types/sbr";
-import { useSbrContext } from "../../../contexts/SBRContext";
+import { useSbrContext } from "../../../contexts/SbrContext";
 
 type Props = {
     fixtures: ISbrFixture[]

@@ -1,6 +1,6 @@
 import PageView from "./PageView";
 import SBRFixtures from "../components/sbr/fixtures/SBRFixtures";
-import SbrProvider from "../contexts/SBRContext";
+import SbrProvider from "../contexts/SbrContext";
 import SbrScreenHeader from "../components/sbr/SbrScreenHeader";
 import useSWR from "swr";
 import { sbrService } from "../services/sbrService";
