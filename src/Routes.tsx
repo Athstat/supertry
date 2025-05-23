@@ -18,7 +18,7 @@ import { PlayerProfileScreen } from "./screens/PlayerProfileScreen";
 import { useAuth } from "./contexts/AuthContext";
 import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
-import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
+import SbrScreen from "./screens/SbrScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
@@ -218,7 +218,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SchoolBoyRugbyScreen />
+              <SbrScreen />
             </Layout>
           </ProtectedRoute>
         }

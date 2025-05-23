@@ -10,7 +10,7 @@ import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
 import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
 
-export default function SchoolBoyRugbyScreen() {
+export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllMatches());
 

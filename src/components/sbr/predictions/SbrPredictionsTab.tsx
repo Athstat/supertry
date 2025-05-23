@@ -1,4 +1,4 @@
-import { CircleCheck, Sparkles, Target, Trophy } from "lucide-react";
+import { CircleCheck, Sparkles, Trophy } from "lucide-react";
 import { sbrService } from "../../../services/sbrService";
 import useSWR from "swr";
 import { LoadingState } from "../../ui/LoadingState";
