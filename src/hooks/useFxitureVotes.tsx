@@ -10,7 +10,7 @@ export function useFixtureVotes(fixture: ISbrFixture) {
     const { data, isLoading, error } = useFetch(
         "fixture-votes",
         fixture.fixture_id,
-        sbrService.getMatchVotes
+        sbrService.getFixtureVotes
     );
 
     const votes = data ?? [];

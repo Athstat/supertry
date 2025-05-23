@@ -10,9 +10,9 @@ import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
 import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
 
-export default function SchoolBoyRugbyScreen() {
+export default function SbrScreen() {
 
-  const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllMatches());
+  const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
 
   const currentRound = 2;
 
@@ -26,7 +26,6 @@ export default function SchoolBoyRugbyScreen() {
       tabKey: "current-week",
       className: "flex-1"
     },
-
     {
       label: "Predictions",
       tabKey: "predictions",

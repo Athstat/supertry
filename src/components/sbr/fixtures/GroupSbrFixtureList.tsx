@@ -16,16 +16,17 @@ export default function GroupedSbrFixturesList({ fixtures, search }: Props) {
 
     fixtures.forEach((fixture) => {
         if (
-            fixture.kickoff_time &&
             searchSbrFixturesPredicate(fixture, search)
         ) {
-            const dayKey = format(
+            const dayKey = fixture.kickoff_time ? format(
                 new Date(fixture.kickoff_time),
-                "yyyy-MM-dd"
-            );
+                "yyyy-MM-dd" 
+            ) : "Date not confirmed";
+
             if (!fixturesByDay[dayKey]) {
                 fixturesByDay[dayKey] = [];
             }
+
             fixturesByDay[dayKey].push(fixture);
         }
     });
@@ -38,10 +39,11 @@ export default function GroupedSbrFixturesList({ fixtures, search }: Props) {
             {(() => {
 
                 return sortedDays.map((dayKey) => (
+                    
                     <div key={dayKey} className="mb-4">
                         {/* Day header */}
                         <div className="px-4 py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
-                            {format(new Date(dayKey), "EEEE, MMMM d, yyyy")}
+                            {dayKey !== "Date not confirmed" ? format(new Date(dayKey), "EEEE, MMMM d, yyyy") : "Date Not Confirmed"}
                         </div>
 
                         {/* Fixtures for this day */}

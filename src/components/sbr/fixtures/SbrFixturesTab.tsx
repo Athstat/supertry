@@ -95,6 +95,6 @@ export default function SbrAllFixturesTab({ }) {
 }
 
 async function fetcher() {
-    const res = await sbrService.getAllMatches();
+    const res = await sbrService.getAllFixtures();
     return res;
 }
