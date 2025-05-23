@@ -1,4 +1,4 @@
-import { CircleCheck, Sparkles, Trophy } from "lucide-react";
+import { CircleCheck, Info, Sparkles, Trophy } from "lucide-react";
 import { sbrService } from "../../../services/sbrService";
 import useSWR from "swr";
 import { LoadingState } from "../../ui/LoadingState";
@@ -26,13 +26,24 @@ export default function SbrPredictionsTab() {
         <h1 className="text-xl font-bold" >Predictions</h1>
       </div>
 
-      <h1 className="text-lg font-medium" >Predictions Summary</h1>
-      {loadingUserRank && <div className="w-full h-20 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" >
-      </div>}
+      <h1 className="text-lg font-medium " >Predictions Summary</h1>
 
-      {!loadingUserRank && userRank && 
+      {loadingUserRank &&
+        <div className="w-full h-20 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" >
+
+        </div>
+      }
+
+      {!loadingUserRank && userRank &&
         <UserPredictionsRankCard userRank={userRank} />
       }
+
+      <div className="bg-yellow-100 dark:bg-yellow-800/40 border text-yellow-700 dark:text-yellow-700 text-sm flex flex-row items-center gap-2 border-yellow-200 dark:border-yellow-700 rounded-xl p-4" >
+        <div className="w-fit" >
+          <Info className="" />
+        </div>
+        Your predictions summary is based of completed fixtures and doesn't include pending or upcoming fixtures.
+      </div>
 
       <h1 className="text-lg font-medium mt-5" >Leaderboard - Top 15</h1>
       <SbrPredictionsTabLeaderboard />
