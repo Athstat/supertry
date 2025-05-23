@@ -38,14 +38,14 @@ export default function SbrFixtureScreen() {
             tabKey: "team-stats",
             disabled: !hasBoxscore,
         },
-        
+
         {
             label: "Kick Off",
             tabKey: "kick-off"
         }
     ];
 
-    const {kickoff_time} = fixture;
+    const { kickoff_time } = fixture;
     const { hasScores } = sbrFxitureSummary(fixture);
 
     return (
@@ -87,7 +87,7 @@ export default function SbrFixtureScreen() {
                         <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
                     {<TabViewPage className="px-5" tabKey="team-stats">
-                        {hasBoxscore && <SbrFixtureTeamStats 
+                        {hasBoxscore && <SbrFixtureTeamStats
                             fixture={fixture}
                             boxscore={boxscore}
                         />}
@@ -107,6 +107,14 @@ type Props = {
 function KickOffInformation({ fixture }: Props) {
 
     const { kickoff_time } = fixture;
+
+    if (!kickoff_time) {
+        return (
+            <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >
+               <p className='font-bold' >VS</p>
+            </div>
+        )
+    }
 
     return (
         <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >

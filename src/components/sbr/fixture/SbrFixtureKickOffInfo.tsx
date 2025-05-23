@@ -6,9 +6,22 @@ type Props = {
     fixture: ISbrFixture
 }
 
-export default function SbrFixtureKickOffInfo({fixture} : Props) {
-    
+export default function SbrFixtureKickOffInfo({ fixture }: Props) {
+
     const { kickoff_time } = fixture;
+
+    if (!kickoff_time) {
+        return (
+            <div>
+                <div className="flex flex-col gap-3 bg-white dark:bg-slate-800/40 p-5 rounded-xl" >
+
+                    <h1 className="text-xl font-bold" >Kick Off</h1>
+
+                    <p className="dark:text-slate-400 text-slate-700" >Kick off time for this game is not available</p>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div>
