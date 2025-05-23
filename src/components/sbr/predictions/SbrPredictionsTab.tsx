@@ -1,58 +1,49 @@
-import { CircleCheck, Sparkles, Trophy } from "lucide-react";
+import { CircleCheck, Info, Sparkles} from "lucide-react";
 import { sbrService } from "../../../services/sbrService";
-import useSWR from "swr";
-import { LoadingState } from "../../ui/LoadingState";
 import { useFetch } from "../../../hooks/useFetch";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import { UserPredictionsRanking } from "../../../types/sbr";
 import { BowArrow } from "lucide-react";
 import { XCircle } from "lucide-react";
 import { Percent } from "lucide-react";
+import SbrPredictionsTabLeaderboard from "./SbrPredictionsTabLeaderboard";
 
 
 export default function SbrPredictionsTab() {
 
   const user = useAuthUser();
-  const { data, isLoading: loadingRankings } = useSWR("predictions-rankings", sbrService.getPredictionsRanking);
-  const rankings = (data ?? []).slice(0, 15);
 
   const { data: userRank, isLoading: loadingUserRank } = useFetch("user-predictions-ranking", user.id, sbrService.getUserPredictionsRanking)
 
   return (
     <div className="flex flex-col gap-3" >
-      <div className="flex flex-row items-center gap-2" >
+      <div className="flex flex-row items-center gap-2 mb-5" >
         <Sparkles />
         <h1 className="text-xl font-bold" >Predictions</h1>
       </div>
 
-      {loadingUserRank && <div className="w-full h-20 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" >
-      </div>}
+      <h1 className="text-lg font-medium " >Predictions Summary</h1>
 
-      {!loadingUserRank && userRank && <UserPredictionsRankCard userRank={userRank} />}
+      {loadingUserRank &&
+        <div className="w-full h-20 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" >
 
-      <h2 className="text-lg font-bold" >Leaderboard - Top 15</h2>
-      {/* {JSON.stringify(data)} */}
-      {loadingRankings && <LoadingState />}
-      {!loadingRankings && <div className="grid grid-cols-1 gap-3" >
-        {rankings.map((u) => {
-          return (
-            <div className="flex flex-row items-center gap-3 bg-white dark:bg-slate-800/40 p-4 rounded-xl " >
-              <div className="font-bold text-blue-500 dark:text-blue-400" >
-                <p>{u.user_rank}</p>
-              </div>
+        </div>
+      }
 
-              <div>
-                <p>{u.first_name}</p>
-                <div className="flex flex-row items-center gap-2 text-slate-700 text-xs dark:text-slate-400" >
-                  <p>Accuracy {Math.floor(u.predictions_perc * 100)}%</p>
-                  <p>Correct {u.correct_predictions}</p>
-                  <p>Wrong {u.wrong_predictions}</p>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>}
+      {!loadingUserRank && userRank &&
+        <UserPredictionsRankCard userRank={userRank} />
+      }
+
+      <div className="bg-yellow-100 dark:bg-yellow-800/40 border text-yellow-700 dark:text-yellow-700 text-sm flex flex-row items-center gap-2 border-yellow-200 dark:border-yellow-700 rounded-xl p-4" >
+        <div className="w-fit" >
+          <Info className="" />
+        </div>
+        Your predictions summary is based of completed fixtures and doesn't include pending or upcoming fixtures.
+      </div>
+
+      <h1 className="text-lg font-medium mt-5" >Leaderboard - Top 15</h1>
+      <SbrPredictionsTabLeaderboard />
+
     </div>
   )
 }
@@ -69,10 +60,10 @@ function UserPredictionsRankCard({ userRank }: UserRankProps) {
       </div>
 
       <div className="flex flex-col text-slate-700 dark:text-slate-300" >
-        <div className="flex flex-row items-center gap-2 w-fit" >
+        {/* <div className="flex flex-row items-center gap-2 w-fit" >
           <Trophy className="w-4 h-4 text-amber-500" />
           <p>Rank <strong>#{userRank.user_rank}</strong></p>
-        </div>
+        </div> */}
 
         <div className="flex flex-row items-center gap-2 w-fit" >
           <BowArrow className="w-4 h-4 text-amber-500" />

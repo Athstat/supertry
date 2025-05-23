@@ -118,7 +118,7 @@ function KickOffInformation({ fixture }: Props) {
 
     return (
         <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >
-            {kickoff_time && <p className='font-bold' >{format(kickoff_time, "h:mm a")}</p>}
+            {<p className='font-bold' >VS</p>}
             {kickoff_time && <p className='dark:text-slate-300 text-slate-200' >{format(kickoff_time, "dd MMM yyyy")}</p>}
         </div>
     )
