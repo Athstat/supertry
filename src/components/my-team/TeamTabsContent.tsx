@@ -11,6 +11,7 @@ import { useTeamData } from "./TeamDataProvider";
 import { leagueService } from "../../services/leagueService";
 import { IGamesLeagueConfig } from "../../types/leagueConfig";
 import TeamSubstituteCard from "./TeamSubstituteCard";
+import { MyTeamPitchView } from "./MyTeamPitchView";
 
 interface TeamTabsContentProps {
   activeTab: "edit-team" | "view-pitch";
@@ -127,7 +128,7 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
             teamBudget={leagueConfig?.team_budget || 0}
           />
         ) : (
-          <ViewPitchContent
+          <MyTeamPitchView
             players={players}
             formation={formation}
             handlePlayerClick={handlePlayerClick}
@@ -352,56 +353,5 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
         ))}
       </div>
     </div>
-  );
-};
-
-interface ViewPitchContentProps {
-  players: Player[];
-  formation: string;
-  handlePlayerClick: (player: Player) => void;
-}
-
-const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
-  players,
-  formation,
-  handlePlayerClick,
-}) => {
-  console.log("Players in my team ", players);
-  return (
-    <>
-      {/* Team Formation - View Pitch Tab */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
-          Team Formation
-        </h2>
-        <TeamFormation
-          players={players.filter((player) => player.is_starting)}
-          formation={formation}
-          onPlayerClick={handlePlayerClick}
-        />
-      </div>
-
-      {/* Super Substitute */}
-      {players.some((player) => !player.is_starting) && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100 flex items-center">
-            <span>Super Substitute</span>
-            <span className="ml-2 text-orange-500 text-sm bg-orange-100 dark:bg-orange-900/20 px-2 py-0.5 rounded-full">
-              Special
-            </span>
-          </h2>
-          <div className="bg-orange-50 dark:bg-orange-900/10 rounded-xl p-4 border-2 border-orange-200 dark:border-orange-800/30 max-w-md">
-            {players
-              .filter((player) => !player.is_starting)
-              .map((player) => (
-                <TeamSubstituteCard 
-                  player={player}
-                  handlePlayerClick={handlePlayerClick}
-                />
-              ))}
-          </div>
-        </div>
-      )}
-    </>
   );
 };
