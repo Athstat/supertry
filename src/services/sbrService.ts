@@ -6,7 +6,7 @@ import { ISbrFixture, ISbrFixtureVote, UserPredictionsRanking } from "../types/s
 import { authService } from "./authService";
 
 export const sbrService = {
-    getAllMatches: async () : Promise<ISbrFixture[]> => {
+    getAllMatches: async (): Promise<ISbrFixture[]> => {
         try {
             const uri = getUri(`/api/v1/sbr/fixtures`);
 
@@ -23,14 +23,14 @@ export const sbrService = {
         }
     },
 
-    getMatchVotes: async (fixtureId: string) : Promise<ISbrFixtureVote[]> => {
+    getMatchVotes: async (fixtureId: string): Promise<ISbrFixtureVote[]> => {
         try {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/votes`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
 
-            const json = await res.json() ;
+            const json = await res.json();
             console.log(json);
             return json;
 
@@ -41,7 +41,7 @@ export const sbrService = {
     },
 
     postSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
-        
+
         try {
             const user = authService.getUserInfo();
             const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
@@ -49,7 +49,7 @@ export const sbrService = {
             const res = await fetch(uri, {
                 method: "POST",
                 headers: getAuthHeader(),
-                body: JSON.stringify({voteFor, userId: user?.id ?? "fall-back"})
+                body: JSON.stringify({ voteFor, userId: user?.id ?? "fall-back" })
             });
 
             return await res.json();
@@ -57,11 +57,11 @@ export const sbrService = {
         } catch (error) {
             logger.error(error);
         }
-        
+
     },
 
     putSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
-        
+
         try {
             const user = authService.getUserInfo();
             const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
@@ -69,7 +69,7 @@ export const sbrService = {
             const res = await fetch(uri, {
                 method: "PUT",
                 headers: getAuthHeader(),
-                body: JSON.stringify({voteFor, userId: user?.id ?? "fall-back"})
+                body: JSON.stringify({ voteFor, userId: user?.id ?? "fall-back" })
             });
 
             return await res.json();
@@ -77,10 +77,10 @@ export const sbrService = {
         } catch (error) {
             logger.error(error);
         }
-        
+
     },
 
-    getPredictionsLeaderboard: async () : Promise<UserPredictionsRanking[]> => {
+    getPredictionsRanking: async (): Promise<UserPredictionsRanking[]> => {
         try {
 
             const uri = getUri(`/api/v1/sbr/predictions/rankings`);
@@ -94,6 +94,22 @@ export const sbrService = {
         } catch (error) {
             logger.error("Error fetching predictions leaderboard " + error);
             return [];
+        }
+    },
+
+    getUserPredictionsRanking: async (userId: string) : Promise<UserPredictionsRanking | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/sbr/predictions/rankings/${userId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            const json = await res.json();
+            return json;
+
+        } catch (error) {
+            logger.error("Error fetching predictions leaderboard " + error);
+            return undefined;
         }
     }
 }

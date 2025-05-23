@@ -22,16 +22,16 @@ export default function SchoolBoyRugbyScreen() {
 
   const tabItems: TabViewHeaderItem[] = [
     {
+      label: "Predictions",
+      tabKey: "predictions",
+      className: "flex-1"
+    },
+    {
       label: `SBR Week ${currentRound}`,
       tabKey: "current-week",
       className: "flex-1"
     },
 
-    {
-      label: "Predictions",
-      tabKey: "predictions",
-      className: "flex-1"
-    },
 
     {
       label: "Fixtures",
