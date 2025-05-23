@@ -62,8 +62,8 @@ export function AthleteFantasyCard({ player, onClick, className }: Props) {
 
   const pr = playerInfo.power_rank_rating ?? 0;
   const cardTier: CardTier =
-    pr <= 60 ? "bronze"
-      : pr > 60 && pr < 80 ? "silver"
+    pr <= 69 ? "bronze"
+      : pr > 70 && pr < 80 ? "silver"
         : pr >= 90 ? "blue" : "gold";
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
@@ -83,11 +83,11 @@ export function AthleteFantasyCard({ player, onClick, className }: Props) {
         className={twMerge(
           "group relative shadow-xl rounded-lg flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden transform-style-3d",
           cardTier === "gold" &&
-          "bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600",
+          "bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ",
           cardTier === "silver" &&
           "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600",
           cardTier === "bronze" &&
-          "bg-gradient-to-br from-amber-700 via-amber-800 to-amber-900",
+          "bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white",
           cardTier === "blue" &&
           "bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white",
           className
