@@ -8,6 +8,7 @@ import { UserPredictionsRanking } from "../../../types/sbr";
 import { BowArrow } from "lucide-react";
 import { XCircle } from "lucide-react";
 import { Percent } from "lucide-react";
+import SbrPredictionsTabLeaderboard from "./SbrPredictionsTabLeaderboard";
 
 
 export default function SbrPredictionsTab() {
@@ -28,31 +29,12 @@ export default function SbrPredictionsTab() {
       {loadingUserRank && <div className="w-full h-20 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" >
       </div>}
 
-      {!loadingUserRank && userRank && <UserPredictionsRankCard userRank={userRank} />}
+      {!loadingUserRank && userRank && 
+        <UserPredictionsRankCard userRank={userRank} />
+      }
 
-      <h2 className="text-lg font-bold" >Leaderboard - Top 15</h2>
-      {/* {JSON.stringify(data)} */}
-      {loadingRankings && <LoadingState />}
-      {!loadingRankings && <div className="grid grid-cols-1 gap-3" >
-        {rankings.map((u) => {
-          return (
-            <div className="flex flex-row items-center gap-3 bg-white dark:bg-slate-800/40 p-4 rounded-xl " >
-              <div className="font-bold text-blue-500 dark:text-blue-400" >
-                <p>{u.user_rank}</p>
-              </div>
-
-              <div>
-                <p>{u.first_name}</p>
-                <div className="flex flex-row items-center gap-2 text-slate-700 text-xs dark:text-slate-400" >
-                  <p>Accuracy {Math.floor(u.predictions_perc * 100)}%</p>
-                  <p>Correct {u.correct_predictions}</p>
-                  <p>Wrong {u.wrong_predictions}</p>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>}
+      <SbrPredictionsTabLeaderboard />
+      
     </div>
   )
 }
