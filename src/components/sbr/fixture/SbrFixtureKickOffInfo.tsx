@@ -29,10 +29,10 @@ export default function SbrFixtureKickOffInfo({ fixture }: Props) {
 
                 <h1 className="text-xl font-bold" >Kick Off</h1>
 
-                <div className="flex flex-row items-center mt-3 gap-2" >
+                {/* <div className="flex flex-row items-center mt-3 gap-2" >
                     <Watch className="text-blue-500" />
                     {kickoff_time && <p>{format(kickoff_time, "hh:mm a")}</p>}
-                </div>
+                </div> */}
 
                 <div className="flex flex-row items-center gap-2" >
                     <Calendar className="text-blue-500" />
