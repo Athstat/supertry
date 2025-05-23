@@ -123,11 +123,13 @@ const MyTeamContent: React.FC = () => {
             }
           />
 
-          {leagueInfo && <AthletesAvailabilityWarning 
-            team={team}
-            league={leagueInfo}
-            athletes={athletes}
-          />}
+          {leagueInfo && 
+            <AthletesAvailabilityWarning 
+              team={team}
+              league={leagueInfo}
+              athletes={athletes}
+            />
+          }
 
           {/* Team Actions with Tabs Content as children */}
           {teamId && (

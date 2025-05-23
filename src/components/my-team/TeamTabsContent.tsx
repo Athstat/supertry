@@ -10,6 +10,7 @@ import { IFantasyLeague } from "../../types/fantasyLeague";
 import { useTeamData } from "./TeamDataProvider";
 import { leagueService } from "../../services/leagueService";
 import { IGamesLeagueConfig } from "../../types/leagueConfig";
+import TeamSubstituteCard from "./TeamSubstituteCard";
 
 interface TeamTabsContentProps {
   activeTab: "edit-team" | "view-pitch";
@@ -365,7 +366,7 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
   formation,
   handlePlayerClick,
 }) => {
-  //console.log("PlayersField: ", players);
+  console.log("Players in my team ", players);
   return (
     <>
       {/* Team Formation - View Pitch Tab */}
@@ -381,7 +382,7 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
       </div>
 
       {/* Super Substitute */}
-      {players.some((player) => player.isSubstitute) && (
+      {players.some((player) => !player.is_starting) && (
         <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100 flex items-center">
             <span>Super Substitute</span>
@@ -391,62 +392,12 @@ const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
           </h2>
           <div className="bg-orange-50 dark:bg-orange-900/10 rounded-xl p-4 border-2 border-orange-200 dark:border-orange-800/30 max-w-md">
             {players
-              .filter((player) => player.isSubstitute)
+              .filter((player) => !player.is_starting)
               .map((player) => (
-                <motion.div
-                  key={player.id}
-                  className="flex items-center gap-4 cursor-pointer rounded-lg p-2"
-                  onClick={() => handlePlayerClick(player)}
-                  whileHover={{
-                    scale: 1.02,
-                    transition: { type: "spring", stiffness: 300 },
-                  }}
-                  initial={{ opacity: 0.9 }}
-                  animate={{ opacity: 1 }}
-                >
-                  <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-orange-300 dark:border-orange-600">
-                    {player.image_url ? (
-                      <img
-                        src={player.image_url}
-                        alt={player.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-2xl font-bold text-gray-500 dark:text-gray-400">
-                        {player.name.charAt(0)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-semibold text-lg text-gray-900 dark:text-gray-100">
-                        {player.name}
-                      </span>
-                      <span className="text-sm font-bold px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full text-gray-800 dark:text-gray-300">
-                        {player.position}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {player.team}
-                      </span>
-                      <span className="text-primary-700 dark:text-primary-500 font-bold flex items-center">
-                        <svg
-                          className="w-3.5 h-3.5 mr-1 text-yellow-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM5.94 7.13a1 1 0 011.95-.26c.112.84.234 1.677.357 2.514.234-.705.469-1.412.704-2.119a1 1 0 011.857.737 1 1 0 01.027.063c.234.705.469 1.412.704 2.119.121-.84.242-1.678.351-2.516a1 1 0 011.954.262c-.16 1.192-.32 2.383-.48 3.575 0 .004-.003.005-.005.006l-.008.032-.006.025-.008.028-.008.03-.01.03a1 1 0 01-1.092.698.986.986 0 01-.599-.28l-.01-.008a.997.997 0 01-.29-.423c-.272-.818-.543-1.635-.815-2.453-.272.818-.544 1.635-.816 2.453a1 1 0 01-1.953-.331c-.156-1.167-.312-2.334-.468-3.502a1 1 0 01.744-1.114z" />
-                        </svg>
-                        {player.points}
-                      </span>
-                    </div>
-                    <div className="mt-2 text-xs text-orange-600 dark:text-orange-400 font-medium">
-                      Can substitute for any position
-                    </div>
-                  </div>
-                </motion.div>
+                <TeamSubstituteCard 
+                  player={player}
+                  handlePlayerClick={handlePlayerClick}
+                />
               ))}
           </div>
         </div>

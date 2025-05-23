@@ -20,7 +20,7 @@ export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
       const deadline = new Date(l.join_deadline);
       const daysDiff = differenceInDays(deadline, today);
 
-      return daysDiff <= 7;
+      return daysDiff <= 5;
     })
     .sort((a, b) => {
       const aDeadline = new Date(a.join_deadline ?? 0);
@@ -170,9 +170,9 @@ export function upcomingLeaguesFilter(leagues: IFantasyLeague[]) {
       const today = new Date();
       const deadline = new Date(l.join_deadline);
       const diffEpoch = deadline.valueOf() - today.valueOf();
-      const sevenDayEpoch = 1000 * 60 * 60 * 24 * 7;
+      const fiveDayEpoch = 1000 * 60 * 60 * 24 * 5;
 
-      return diffEpoch > sevenDayEpoch;
+      return diffEpoch > fiveDayEpoch;
     })
     .sort((a, b) => {
       const aDeadline = new Date(a.join_deadline ?? 0);
@@ -200,10 +200,10 @@ export function leaguesOnClockFilter(leagues: IFantasyLeague[]) {
   const activeLeagues = activeLeaguesFilter(leagues);
 
   let leagueOnTheClock: IFantasyLeague | undefined;
-  const sevenDays = 1000 * 60 * 60 * 24 * 7;
+  const threeDays = 1000 * 60 * 60 * 24 * 3;
 
   const leaguesOnTheClock = activeLeagues.filter((l) => {
-    return (isLeagueOnTheClock(l, sevenDays));
+    return (isLeagueOnTheClock(l, threeDays));
   });
 
     if (leaguesOnTheClock.length > 0) {

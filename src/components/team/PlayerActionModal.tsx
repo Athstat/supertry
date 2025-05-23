@@ -24,7 +24,8 @@ export function PlayerActionModal({
   league
 }: PlayerActionModalProps) {
 
-  const { data: info, isLoading } = useFetch("athletes", player.id, athleteService.getRugbyAthleteById);
+  const { data: info, isLoading } = useFetch("athletes-info", player.tracking_id ?? "fall-back", athleteService.getRugbyAthleteById);
+  console.log(info);
 
   const isSwapLocked = isLeagueLocked(league?.join_deadline);
 
@@ -60,15 +61,15 @@ export function PlayerActionModal({
           {/* Player Info */}
           <div className="flex items-center gap-4 mb-6 p-3 bg-gray-50 dark:bg-dark-800/40 rounded-lg">
             <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-primary-300 dark:border-primary-700">
-              {player.image ? (
+              {player.image_url ? (
                 <img
-                  src={player.image}
-                  alt={player.name}
+                  src={player.image_url}
+                  alt={player.player_name}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <span className="text-2xl font-bold text-gray-500 dark:text-gray-400">
-                  {player.name.charAt(0)}
+                  {player.player_name.charAt(0)}
                 </span>
               )}
             </div>
@@ -76,7 +77,7 @@ export function PlayerActionModal({
 
               <div className="flex items-center justify-between mb-1">
                 <span className="font-semibold w-full text-md dark:text-gray-100">
-                  {player.name}
+                  {player.player_name}
                 </span>
               </div>
 

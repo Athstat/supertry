@@ -16,6 +16,7 @@ export interface Player {
   image_url?: string;
   athlete_id: string;
   player_name: string;
+  tracking_id?: string;
 }
 
 export interface Team {

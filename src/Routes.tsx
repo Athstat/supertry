@@ -18,7 +18,7 @@ import { PlayerProfileScreen } from "./screens/PlayerProfileScreen";
 import { useAuth } from "./contexts/AuthContext";
 import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
-import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
+import SbrScreen from "./screens/SbrScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
@@ -26,6 +26,7 @@ import SbrChatTab from "./components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
 import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
+import SbrFixtureScreen from "./screens/SbrFixtureScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -218,7 +219,18 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SchoolBoyRugbyScreen />
+              <SbrScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+       <Route
+        path="/sbr/fixtures/:fixtureId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <SbrFixtureScreen />
             </Layout>
           </ProtectedRoute>
         }
