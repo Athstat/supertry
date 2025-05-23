@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Watch, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { ISbrFixture } from "../../../types/sbr";
 
 type Props = {

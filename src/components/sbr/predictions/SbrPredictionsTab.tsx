@@ -1,7 +1,5 @@
-import { CircleCheck, Info, Sparkles, Trophy } from "lucide-react";
+import { CircleCheck, Info, Sparkles} from "lucide-react";
 import { sbrService } from "../../../services/sbrService";
-import useSWR from "swr";
-import { LoadingState } from "../../ui/LoadingState";
 import { useFetch } from "../../../hooks/useFetch";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import { UserPredictionsRanking } from "../../../types/sbr";
@@ -14,8 +12,6 @@ import SbrPredictionsTabLeaderboard from "./SbrPredictionsTabLeaderboard";
 export default function SbrPredictionsTab() {
 
   const user = useAuthUser();
-  const { data, isLoading: loadingRankings } = useSWR("predictions-rankings", sbrService.getPredictionsRanking);
-  const rankings = (data ?? []).slice(0, 15);
 
   const { data: userRank, isLoading: loadingUserRank } = useFetch("user-predictions-ranking", user.id, sbrService.getUserPredictionsRanking)
 
