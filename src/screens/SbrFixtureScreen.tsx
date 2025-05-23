@@ -12,6 +12,7 @@ import { sbrFxitureSummary } from "../utils/sbrUtils";
 import { ISbrFixture } from "../types/sbr";
 import { format } from "date-fns";
 import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
+import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
 
 export default function SbrFixtureScreen() {
 
@@ -21,20 +22,21 @@ export default function SbrFixtureScreen() {
 
     const navigate = useNavigate();
     const { data: fixture, isLoading: loadingFixture } = useFetch("sbr-fixture", fixtureId, sbrService.getFixtureById)
-    const { data: boxscore, isLoading: loadingBoxscore } = useFetch("sbr-fixture", fixtureId, sbrService.getFixtureBoxscoreById)
+    const { data: boxscore, isLoading: loadingBoxscore } = useFetch("sbr-fixture-boxscore", fixtureId, sbrService.getFixtureBoxscoreById)
 
     const isLoading = loadingBoxscore || loadingFixture;
 
     if (isLoading) return <LoadingState />
 
     if (!fixture) return <ErrorState message="Fixture was not found" />
-    const hasBoxscore = boxscore !== undefined && boxscore.length > 0;
+    console.log("Fixture Boxscore ", boxscore)
+    const hasBoxscore = boxscore && boxscore.length > 0;
 
     const tabHeaderItems: TabViewHeaderItem[] = [
         {
             label: "Team Stats",
             tabKey: "team-stats",
-            disabled: hasBoxscore,
+            disabled: !hasBoxscore,
         },
         
         {
@@ -84,7 +86,11 @@ export default function SbrFixtureScreen() {
                     <TabViewPage className="px-5" tabKey="kick-off">
                         <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
-                    {hasBoxscore && <TabViewPage tabKey="team-stats">
+                    {<TabViewPage className="px-5" tabKey="team-stats">
+                        {hasBoxscore && <SbrFixtureTeamStats 
+                            fixture={fixture}
+                            boxscore={boxscore}
+                        />}
 
                     </TabViewPage>}
                 </TabView>
