@@ -12,7 +12,7 @@ import SbrChatTab from "../components/sbr/SBRChatScreen";
 
 export default function SbrScreen() {
 
-  const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllMatches());
+  const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
 
   const currentRound = 2;
 
@@ -22,16 +22,15 @@ export default function SbrScreen() {
 
   const tabItems: TabViewHeaderItem[] = [
     {
-      label: "Predictions",
-      tabKey: "predictions",
-      className: "flex-1"
-    },
-    {
       label: `SBR Week ${currentRound}`,
       tabKey: "current-week",
       className: "flex-1"
     },
-
+    {
+      label: "Predictions",
+      tabKey: "predictions",
+      className: "flex-1"
+    },
 
     {
       label: "Fixtures",

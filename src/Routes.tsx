@@ -26,6 +26,7 @@ import SbrChatTab from "./components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
 import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
+import SbrFixtureScreen from "./screens/SbrFixtureScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -219,6 +220,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <SbrScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+       <Route
+        path="/sbr/fixtures/:fixtureId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <SbrFixtureScreen />
             </Layout>
           </ProtectedRoute>
         }

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { ISbrFixture } from "../../types/sbr";
 import SbrTeamLogo from "./fixtures/SbrTeamLogo";
 import { twMerge } from "tailwind-merge";
@@ -15,8 +16,14 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
     const { home_score, away_score } = fixture;
     const hasScores = home_score !== null && away_score !== null;
 
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate(`/sbr/fixtures/${fixture.fixture_id}`);
+    }
+
     return (
         <div
+            onClick={handleClick}
             className={twMerge(
                 " dark:hover:bg-slate-800/70 hover:bg-slate-200 dark:bg-slate-800/40 bg-white rounded-xl border dark:border-slate-800/60 p-4",
                 className

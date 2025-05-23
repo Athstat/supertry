@@ -6,7 +6,7 @@ import { ISbrFixture, ISbrFixtureVote, UserPredictionsRanking } from "../types/s
 import { authService } from "./authService";
 
 export const sbrService = {
-    getAllMatches: async (): Promise<ISbrFixture[]> => {
+    getAllFixtures: async (): Promise<ISbrFixture[]> => {
         try {
             const uri = getUri(`/api/v1/sbr/fixtures`);
 
@@ -23,7 +23,7 @@ export const sbrService = {
         }
     },
 
-    getMatchVotes: async (fixtureId: string): Promise<ISbrFixtureVote[]> => {
+    getFixtureVotes: async (fixtureId: string): Promise<ISbrFixtureVote[]> => {
         try {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/votes`);
             const res = await fetch(uri, {
@@ -110,6 +110,23 @@ export const sbrService = {
         } catch (error) {
             logger.error("Error fetching predictions leaderboard " + error);
             return undefined;
+        }
+    },
+
+    getFixtureById: async (fixtureId: string) : Promise<ISbrFixture | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            const json = await res.json();
+            return json;
+            
+        } catch (error) {
+            logger.error(error);
+            return undefined
         }
     }
 }
