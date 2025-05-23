@@ -18,7 +18,7 @@ export type ISbrFixture = {
 export type ISbrBoxscoreItem = {
     action: string,
     count: number,
-    team: number
+    team_id: number
 }
 
 export type ISbrFixtureVote = {
