@@ -20,3 +20,14 @@ export type ISbrFixtureVote = {
     fixture_id: string,
     vote_for: "home_team" | "away_team"
 }
+
+export type UserPredictionsRanking = {
+    kc_id: string,
+    first_name: string,
+    email: string,
+    predictions_made: string,
+    correct_predictions: string,
+    wrong_predictions: string,
+    predictions_perc: number,
+    user_rank: string
+}

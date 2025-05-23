@@ -2,7 +2,7 @@
 
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 import { logger } from "./logger";
-import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
+import { ISbrFixture, ISbrFixtureVote, UserPredictionsRanking } from "../types/sbr";
 import { authService } from "./authService";
 
 export const sbrService = {
@@ -78,5 +78,22 @@ export const sbrService = {
             logger.error(error);
         }
         
+    },
+
+    getPredictionsLeaderboard: async () : Promise<UserPredictionsRanking[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/sbr/predictions/rankings`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            const json = await res.json();
+            return json;
+
+        } catch (error) {
+            logger.error("Error fetching predictions leaderboard " + error);
+            return [];
+        }
     }
 }
