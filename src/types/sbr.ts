@@ -15,6 +15,12 @@ export type ISbrFixture = {
     country?: string,
 }
 
+export type ISbrBoxscoreItem = {
+    action: string,
+    count: number,
+    team: number
+}
+
 export type ISbrFixtureVote = {
     user_id: string,
     fixture_id: string,

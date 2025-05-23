@@ -11,6 +11,7 @@ import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/ta
 import { sbrFxitureSummary } from "../utils/sbrUtils";
 import { ISbrFixture } from "../types/sbr";
 import { format } from "date-fns";
+import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
 
 export default function SbrFixtureScreen() {
 
@@ -19,19 +20,21 @@ export default function SbrFixtureScreen() {
     if (!fixtureId) return <ErrorState message="Fixture was not found" />
 
     const navigate = useNavigate();
-    const { data, isLoading } = useFetch("sbr-fixture", fixtureId, sbrService.getFixtureById)
+    const { data: fixture, isLoading: loadingFixture } = useFetch("sbr-fixture", fixtureId, sbrService.getFixtureById)
+    const { data: boxscore, isLoading: loadingBoxscore } = useFetch("sbr-fixture", fixtureId, sbrService.getFixtureBoxscoreById)
+
+    const isLoading = loadingBoxscore || loadingFixture;
 
     if (isLoading) return <LoadingState />
 
-    if (!data) return <ErrorState message="Fixture was not found" />
-
-    const fixture = data;
+    if (!fixture) return <ErrorState message="Fixture was not found" />
+    const hasBoxscore = boxscore !== undefined && boxscore.length > 0;
 
     const tabHeaderItems: TabViewHeaderItem[] = [
         {
             label: "Team Stats",
             tabKey: "team-stats",
-            disabled: true
+            disabled: hasBoxscore,
         },
         
         {
@@ -79,23 +82,11 @@ export default function SbrFixtureScreen() {
             <PageView>
                 <TabView tabHeaderItems={tabHeaderItems}>
                     <TabViewPage className="px-5" tabKey="kick-off">
-                        <div>
-                            <div className="flex flex-col gap-3 bg-white dark:bg-slate-800/40 p-5 rounded-xl" >
-                                
-                                <h1 className="text-xl font-bold" >Kick Off</h1>
-                                
-                                <div className="flex flex-row items-center mt-3 gap-2" >
-                                    <Watch className="text-blue-500" />
-                                    {kickoff_time && <p>{format(kickoff_time, "hh:mm a")}</p>}
-                                </div>
-
-                                <div className="flex flex-row items-center gap-2" >
-                                    <Calendar className="text-blue-500" />
-                                    {kickoff_time && <p>{format(kickoff_time, "EEEE dd MMMM yyyy")}</p>}
-                                </div>
-                            </div>
-                        </div>
+                        <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
+                    {hasBoxscore && <TabViewPage tabKey="team-stats">
+
+                    </TabViewPage>}
                 </TabView>
             </PageView>
         </div>

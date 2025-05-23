@@ -2,7 +2,7 @@
 
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 import { logger } from "./logger";
-import { ISbrFixture, ISbrFixtureVote, UserPredictionsRanking } from "../types/sbr";
+import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureVote, UserPredictionsRanking } from "../types/sbr";
 import { authService } from "./authService";
 
 export const sbrService = {
@@ -125,8 +125,25 @@ export const sbrService = {
             return json;
             
         } catch (error) {
-            logger.error(error);
+            logger.error("Error getting a fixture by id " + error);
             return undefined
+        }
+    },
+
+    getFixtureBoxscoreById: async (fixtureId: string) : Promise<ISbrBoxscoreItem[]> => {
+        try {
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/boxscore`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            const json = await res.json();
+            return json;
+            
+        } catch (error) {
+            logger.error("Error getting sbr fixture boxscore " + error);
+            return [];
         }
     }
 }
