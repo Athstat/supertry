@@ -246,6 +246,37 @@ export async function requestPushPermissions(): Promise<boolean> {
 }
 
 /**
+ * Request push permissions with explicit user data (for signup scenarios)
+ * @param userId The user's Keycloak ID
+ * @param email The user's email address
+ */
+export async function requestPushPermissionsWithUserData(userId: string, email: string): Promise<boolean> {
+  try {
+    // Check if we already have a OneSignal ID
+    const existingOneSignalId = localStorage.getItem("onesignal_id");
+    if (existingOneSignalId) {
+      console.log("Already have OneSignal ID:", existingOneSignalId);
+      return true; // Already have permissions
+    }
+    
+    // Request push permissions with explicit user data
+    console.log(`Requesting push permissions for user ${userId}`);
+    const result = await requestPushPermission(userId, email);
+    
+    if (result.granted) {
+      console.log(`Push permissions granted with OneSignal ID: ${result.onesignal_id}`);
+      return true;
+    } else {
+      console.log("Push permissions not granted");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error requesting push permissions:", error);
+    return false;
+  }
+}
+
+/**
  * Request push permissions after login (non-blocking)
  * This function runs in the background and doesn't block the UI
  */
@@ -266,4 +297,29 @@ export function requestPushPermissionsAfterLogin(): void {
       console.error("Error setting up push permissions after login:", error);
     }
   }, 1000); // Wait 1 second after login to request permissions
+}
+
+/**
+ * Request push permissions after signup with explicit user data (non-blocking)
+ * This function works even when the user isn't authenticated yet
+ * @param userId The user's Keycloak ID
+ * @param email The user's email address
+ */
+export function requestPushPermissionsAfterSignup(userId: string, email: string): void {
+  // Only run if bridge is available (in mobile app)
+  if (!isBridgeAvailable()) {
+    return;
+  }
+
+  // Run asynchronously without blocking
+  setTimeout(async () => {
+    try {
+      const success = await requestPushPermissionsWithUserData(userId, email);
+      if (success) {
+        console.log("Push permissions setup completed after signup");
+      }
+    } catch (error) {
+      console.error("Error setting up push permissions after signup:", error);
+    }
+  }, 1000); // Wait 1 second after signup to request permissions
 }
