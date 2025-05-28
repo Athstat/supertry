@@ -244,3 +244,26 @@ export async function requestPushPermissions(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Request push permissions after login (non-blocking)
+ * This function runs in the background and doesn't block the UI
+ */
+export function requestPushPermissionsAfterLogin(): void {
+  // Only run if bridge is available (in mobile app)
+  if (!isBridgeAvailable()) {
+    return;
+  }
+
+  // Run asynchronously without blocking
+  setTimeout(async () => {
+    try {
+      const success = await requestPushPermissions();
+      if (success) {
+        console.log("Push permissions setup completed after login");
+      }
+    } catch (error) {
+      console.error("Error setting up push permissions after login:", error);
+    }
+  }, 1000); // Wait 1 second after login to request permissions
+}

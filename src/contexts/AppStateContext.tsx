@@ -44,7 +44,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // Function to refresh all critical app state
   const refreshAppState = useCallback(async () => {
     try {
-      console.log('AppStateManager: Refreshing app state...');
+      //console.log('AppStateManager: Refreshing app state...');
       setAppStateStatus('refreshing');
       
       // First refresh authentication session
@@ -62,9 +62,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       recoveryAttemptsRef.current = 0;
       
       setAppStateStatus('idle');
-      console.log('AppStateManager: App state refresh completed successfully');
+      //console.log('AppStateManager: App state refresh completed successfully');
     } catch (error) {
-      console.error('AppStateManager: Error refreshing app state:', error);
+      //console.error('AppStateManager: Error refreshing app state:', error);
       setAppStateStatus('error');
       
       // Even if there's an error, we should still update the last active time
@@ -90,8 +90,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       const lastActive = lastActiveTime || 0;
       const inactiveDuration = currentTime - lastActive;
       
-      console.log(`AppStateManager: Visibility changed to ${isNowVisible ? 'visible' : 'hidden'}`);
-      console.log(`AppStateManager: Inactive duration: ${inactiveDuration}ms`);
+      //console.log(`AppStateManager: Visibility changed to ${isNowVisible ? 'visible' : 'hidden'}`);
+      //console.log(`AppStateManager: Inactive duration: ${inactiveDuration}ms`);
       
       setIsActive(isNowVisible);
       
