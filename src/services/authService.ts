@@ -1,6 +1,7 @@
 import { UserRepresentation } from "../types/auth";
 import { getUri } from "../utils/backendUtils";
 import { analytics } from "./anayticsService";
+import { isBridgeAvailable, requestPushPermission } from "../utils/bridgeUtils";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID || "athstat-frontend";
 const KEYCLOAK_URL =
@@ -43,7 +44,35 @@ export const authService = {
         throw new Error(errorData || "Registration failed");
       }
 
-      return await response.json();
+      const registrationResult = await response.json();
+
+      // After successful registration, try to sync OneSignal if in mobile app
+      // Note: This assumes the user is automatically logged in after registration
+      // If not, the sync will happen on their first login
+      try {
+        if (isBridgeAvailable() && registrationResult.success) {
+          console.log("Attempting to sync OneSignal after registration");
+          
+          // If tokens are returned with registration, store them and sync
+          if (registrationResult.access_token && registrationResult.refresh_token) {
+            localStorage.setItem("access_token", registrationResult.access_token);
+            localStorage.setItem("refresh_token", registrationResult.refresh_token);
+            
+            const userInfo = this.getUserInfo();
+            if (userInfo && userInfo.id) {
+              const result = await requestPushPermission(userInfo.id, userInfo.email);
+              if (result.granted && result.onesignal_id) {
+                console.log(`OneSignal synced after registration: ${result.onesignal_id}`);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error syncing OneSignal after registration:", error);
+        // Don't fail registration if OneSignal sync fails
+      }
+
+      return registrationResult;
     } catch (error) {
       console.error("Registration error:", error);
       throw error;
@@ -97,6 +126,29 @@ export const authService = {
       localStorage.setItem("refresh_token", data.refresh_token);
 
       analytics.trackUserSignIn("Email");
+
+      // Update OneSignal device ID if running in mobile app
+      try {
+        if (isBridgeAvailable()) {
+          console.log("Updating OneSignal device ID after login");
+          
+          // Get user info from the token
+          const userInfo = this.getUserInfo();
+          if (userInfo && userInfo.id) {
+            // Request push permission which will update OneSignal with the user ID
+            const result = await requestPushPermission(userInfo.id, userInfo.email);
+            
+            if (result.granted && result.onesignal_id) {
+              console.log(`OneSignal device ID updated successfully: ${result.onesignal_id}`);
+            } else {
+              console.log("OneSignal device ID update not completed");
+            }
+          }
+        }
+      } catch (error) {
+        // Don't fail the login if OneSignal sync fails
+        console.error("Error updating OneSignal device ID:", error);
+      }
 
       return data;
     } catch (error) {
