@@ -43,7 +43,7 @@ export function DashboardScreen() {
     <main className="flex flex-col mx-auto px-4 py-6 lg:px-[15%]">
       {/* Hero Section */}
 
-      <HeroSection availableLeagues={leagues} onViewLeague={handleViewLeague} />
+      {/* <HeroSection availableLeagues={leagues} onViewLeague={handleViewLeague} /> */}
 
       {/* Dashboard Grid */}
       <div className="grid gap-6">
