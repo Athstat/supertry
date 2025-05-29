@@ -17,6 +17,7 @@ import { Users } from "lucide-react";
 import PlayersScreenProvider from "../contexts/PlayersScreenContext";
 import PlayersCompareButton from "../components/player/PlayerScreenCompareButton";
 import { twMerge } from "tailwind-merge";
+import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
 
 type SortTab = "all" | "trending" | "top" | "new";
 // type SortOption = "points" | "name" | "position" | "club";
@@ -227,6 +228,9 @@ export const PlayersScreen = () => {
             />
           </div>
         </div>
+
+        {<PlayerCompareStatus />}
+
         {/* Loading State - for initial load */}
         {isLoading && <LoadingState message="Loading..." />}
         {/* Sorting Loading State */}
