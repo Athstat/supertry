@@ -14,6 +14,9 @@ import { EmptyState } from "../components/players/EmptyState";
 import { PlayerGameCard } from "../components/player/PlayerGameCard";
 import PageView from "./PageView";
 import { Users } from "lucide-react";
+import PlayersScreenProvider from "../contexts/PlayersScreenContext";
+import PlayersCompareButton from "../components/player/PlayerScreenCompareButton";
+import { twMerge } from "tailwind-merge";
 
 type SortTab = "all" | "trending" | "top" | "new";
 // type SortOption = "points" | "name" | "position" | "club";
@@ -33,8 +36,15 @@ export const PlayersScreen = () => {
   const [positionFilter, setPositionFilter] = useState<string>("");
   const [teamFilter, setTeamFilter] = useState<string>("");
 
+  const [isComparing, setIsComparing] = useState(false);
+  const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
+  const toggleCompareMode = () => setIsComparing(!isComparing);
+
   // Handle player selection
   const handlePlayerClick = (player: RugbyPlayer) => {
+
+
+
     navigate(`/players/${player.tracking_id || player.id}`, {
       state: { player },
     });
@@ -177,77 +187,80 @@ export const PlayersScreen = () => {
   ]);
 
   return (
-    <PageView className="px-5 flex flex-col gap-3">
-      {/* Search and Filter Header */}
-
-      <div className="flex flex-row gap-2 items-center" >
-        <Users />
-        <h1 className="text-2xl font-bold" >Players</h1>
-      </div>
-
-      <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
-
-      <div className="flex flex-col gap-1">
-        
-        <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
-        
-        <div className="flex flex-row gap-2">
-          
-          <PlayerFilters
-            positionFilter={positionFilter}
-            teamFilter={teamFilter}
-            availablePositions={positions}
-            availableTeams={teams}
-            onPositionFilter={handlePositionFilter}
-            onTeamFilter={handleTeamFilter}
-            onClearFilters={clearFilters}
-          />
-
-          <PlayerSort
-            sortField={sortField}
-            sortDirection={sortDirection}
-            onSort={handleSortByField}
-          />
+    <PlayersScreenProvider 
+      isComparing={isComparing}
+      selectedPlayers={selectedPlayers}
+    >
+      <PageView className="px-5 flex flex-col gap-3">
+      
+        {/* Search and Filter Header */}
+        <div className="flex flex-row gap-2 items-center" >
+          <Users />
+          <h1 className="text-2xl font-bold" >Players</h1>
         </div>
-      </div>
-
-      {/* Loading State - for initial load */}
-      {isLoading && <LoadingState message="Loading..." />}
-
-      {/* Sorting Loading State */}
-      {isSorting && !isLoading && <LoadingState message="Loading..." />}
-
-      {/* Error State */}
-      {error && !isLoading && !isSorting && (
-        <ErrorState message={error} onRetry={refreshAthletes} />
-      )}
-
-      {/* Empty State */}
-      {!isLoading &&
-        !error &&
-        !isSorting &&
-        filteredPlayers.length === 0 &&
-        athletes.length > 0 && (
-          <EmptyState
-            searchQuery={searchQuery}
-            onClearSearch={() => handleSearch("")}
-          />
-        )}
-
-      {/* Player Grid */}
-      {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredPlayers.map((player, index) => (
-            <PlayerGameCard
-              key={index}
-              player={player}
-              onClick={() => handlePlayerClick(player)}
-              className="h-[250px] lg:h-[300px]"
+        <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
+        <div className="flex flex-col gap-1">
+      
+          <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
+      
+          <div className="flex flex-row gap-2">
+      
+            <PlayerFilters
+              positionFilter={positionFilter}
+              teamFilter={teamFilter}
+              availablePositions={positions}
+              availableTeams={teams}
+              onPositionFilter={handlePositionFilter}
+              onTeamFilter={handleTeamFilter}
+              onClearFilters={clearFilters}
             />
-          ))}
+
+            <PlayerSort
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onSort={handleSortByField}
+            />
+
+            <PlayersCompareButton
+              className={twMerge(isComparing && "bg-gradient-to-r from-primary-600 to-blue-700")}
+              onClick={toggleCompareMode}
+            />
+          </div>
         </div>
-      )}
-    </PageView>
+        {/* Loading State - for initial load */}
+        {isLoading && <LoadingState message="Loading..." />}
+        {/* Sorting Loading State */}
+        {isSorting && !isLoading && <LoadingState message="Loading..." />}
+        {/* Error State */}
+        {error && !isLoading && !isSorting && (
+          <ErrorState message={error} onRetry={refreshAthletes} />
+        )}
+        {/* Empty State */}
+        {!isLoading &&
+          !error &&
+          !isSorting &&
+          filteredPlayers.length === 0 &&
+          athletes.length > 0 && (
+            <EmptyState
+              searchQuery={searchQuery}
+              onClearSearch={() => handleSearch("")}
+            />
+          )}
+        {/* Player Grid */}
+        {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredPlayers.map((player, index) => (
+              <PlayerGameCard
+                key={index}
+                player={player}
+                onClick={() => handlePlayerClick(player)}
+                className="h-[250px] lg:h-[300px]"
+              />
+            ))}
+          </div>
+        )}
+      </PageView>
+    </PlayersScreenProvider>
   );
 };
 
