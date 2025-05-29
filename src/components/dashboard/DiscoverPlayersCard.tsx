@@ -7,6 +7,7 @@ import { PlayerGameCard } from "../player/PlayerGameCard"
 import { useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { AnimatePresence } from "framer-motion"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
 
@@ -14,8 +15,10 @@ type Props = {
 
 export default function DiscoverPlayersCard() {
 
-    const { data, isLoading, error } = useFetch("players-no-cache", URC_COMPETIION_ID, topThreePlayersFetcher);
+    const { data, isLoading } = useFetch("players-no-cache", URC_COMPETIION_ID, topThreePlayersFetcher);
     const [isHovering, setHovering] = useState(false);
+
+    const navigate = useNavigate();
 
     if (isLoading) {
         return <RoundedCard className="p-10 animate-pulse" >
@@ -25,14 +28,19 @@ export default function DiscoverPlayersCard() {
 
     const players = data ?? [];
 
+    const handleClick = () => {
+        navigate("/players");
+    }
+
     return (
         <div
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
+            onClick={handleClick}
         >
             <AnimatePresence>
 
-                <RoundedCard className="relative overflow-hidden" >
+                <RoundedCard className="relative overflow-hidden cursor-pointer" >
 
                     <div className="absolute inset-0 bg-blue-500 hover:bg-blue-600 flex flex-row items-start justify-end" >
                         {players.map((player) => {
