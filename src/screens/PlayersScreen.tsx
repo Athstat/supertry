@@ -177,7 +177,7 @@ export const PlayersScreen = () => {
   ]);
 
   return (
-    <PageView className="p-5 flex flex-col gap-3">
+    <PageView className="px-5 flex flex-col gap-3">
       {/* Search and Filter Header */}
 
       <div className="flex flex-row gap-2 items-center" >
