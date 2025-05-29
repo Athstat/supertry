@@ -18,6 +18,7 @@ import PlayersScreenProvider from "../contexts/PlayersScreenContext";
 import PlayersCompareButton from "../components/player/PlayerScreenCompareButton";
 import { twMerge } from "tailwind-merge";
 import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
+import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
 
 type SortTab = "all" | "trending" | "top" | "new";
 // type SortOption = "points" | "name" | "position" | "club";
@@ -292,6 +293,13 @@ export const PlayersScreen = () => {
             ))}
           </div>
         )}
+
+        <PlayerCompareModal 
+          selectedPlayers={selectedPlayers} 
+          open={selectedPlayers.length >= 2 && isComparing}
+          onClose={toggleCompareMode}
+        />
+
       </PageView>
     </PlayersScreenProvider>
   );

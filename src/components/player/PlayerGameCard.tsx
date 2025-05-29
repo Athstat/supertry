@@ -10,6 +10,7 @@ type Props = {
   player: RugbyPlayer;
   onClick?: () => void;
   className?: string;
+  blockGlow?: boolean
 };
 
 type CardTier = "gold" | "silver" | "bronze" | "blue";
@@ -19,12 +20,12 @@ type CardTier = "gold" | "silver" | "bronze" | "blue";
  * 
  * does not rely on team context */
 
-export function PlayerGameCard({ player, onClick, className }: Props) {
+export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
 
   const context = useContext(PlayersScreenContext);
   const shouldGlow = (context?.selectedPlayers.filter((p) => {
     return p.tracking_id === player.tracking_id;
-  }) ?? []).length > 0 && context?.isComparing;
+  }) ?? []).length > 0 && context?.isComparing && !blockGlow;
 
 
   const [imageError, setIamgeError] = useState<string>();
