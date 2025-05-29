@@ -11,6 +11,7 @@ import { useTeamData } from "./TeamDataProvider";
 import { fantasyTeamService } from "../../services/teamService";
 import { athleteService } from "../../services/athleteService";
 import { IFantasyLeague } from "../../types/fantasyLeague";
+import { RugbyPlayerShort } from "../../types/rugbyPlayer";
 
 // Define the context type
 interface TeamActionsContextType {
@@ -66,22 +67,22 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
   };
 
   const handleViewStats = (player: Player) => {
-    // Open the player profile modal
-    console.log("View stats for player:", player);
+
     setShowActionModal(false);
+    
     // Convert to the format expected by the profile modal
-    const playerForProfile = {
-      tracking_id: player.id,
-      player_name: player.name,
-      team_name: player.team_name,
-      position_class: player.position,
-      price: player.price,
-      power_rank_rating: player.form,
-      image_url: player.image,
-      ball_carrying: player.ball_carrying,
-      tackling: player.tackling,
-      points_kicking: player.points_kicking,
-    };
+    // const playerForProfile = {
+    //   tracking_id: player.id,
+    //   player_name: player.name,
+    //   team_name: player.team_name,
+    //   position_class: player.position,
+    //   price: player.price,
+    //   power_rank_rating: player.form,
+    //   image_url: player.image,
+    //   ball_carrying: player.ball_carrying,
+    //   tackling: player.tackling,
+    //   points_kicking: player.points_kicking,
+    // };
 
     showPlayerProfile(player);
   };
@@ -107,6 +108,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
     }
 
     setPositionToSwap(newPositionToSwap);
+
     console.log(
       "Position to swap set to:",
       newPositionToSwap,
@@ -240,6 +242,10 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
       is_starting: !position.isSpecial,
       image: position.player?.image_url || "",
       nextFixture: "",
+      athlete_id: position.player.id,
+      team_name: position.player.team,
+      tracking_id: position.player.id,
+      player_name: position.player.name
     };
 
     handlePlayerClick(playerForPosition);
@@ -261,6 +267,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
 
       {/* Player Action Modal */}
       <AnimatePresence>
+        
         {showActionModal && selectedPlayer && (
           <PlayerActionModal
             player={selectedPlayer}
@@ -270,6 +277,7 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
             league={league}
           />
         )}
+
       </AnimatePresence>
 
       {/* Loading indicator when fetching market players but not yet showing modal */}
@@ -317,7 +325,9 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
               image_url: p.image,
               power_rank_rating: p.form,
             }))}
-          handlePlayerSelect={(p: any) => {
+          handlePlayerSelect={(p: RugbyPlayerShort) => {
+
+            console.log("Some player we are fetching what type is this? ", p)
             // Convert from player.ts Player type to team.ts Player type
             const convertedPlayer: Player = {
               id: p.id,
@@ -332,13 +342,19 @@ export const TeamActions: React.FC<TeamActionsProps> = ({
               is_starting: true,
               is_super_sub: false,
               nextFixture: "",
+              team_name: p.team,
+              athlete_id: p.id,
+              player_name: p.name
             };
             handlePlayerSelect(convertedPlayer);
           }}
+          competitionId={league?.official_league_id ?? team?.official_league_id}
           onClose={() => setIsSwapping(false)}
           // For MyTeamScreen, we don't need to pass competition-specific props
           // Just pass a static roundId (value doesn't matter for MyTeamScreen since we're not using fixtures)
-          roundId={1}
+          roundId={league?.start_round ?? 1}
+          roundStart={league?.start_round ?? undefined}
+          roundEnd={league?.end_round ?? undefined}
           // We don't pass roundStart, roundEnd, or competitionId intentionally
           // This signals to PlayerSelectionModal that we're in MyTeamScreen context
         />
