@@ -9,10 +9,6 @@ import { twMerge } from "tailwind-merge"
 import { AnimatePresence } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 
-type Props = {
-
-}
-
 export default function DiscoverPlayersCard() {
 
     const { data, isLoading } = useFetch("players-no-cache", URC_COMPETIION_ID, topThreePlayersFetcher);
