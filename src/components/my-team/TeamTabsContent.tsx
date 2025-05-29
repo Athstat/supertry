@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Coins, Loader, Lock } from "lucide-react";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
 import { TabButton } from "../shared/TabButton";
-import { TeamFormation } from "../team/TeamFormation";
 import { isLeagueLocked } from "../../utils/leaguesUtils";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { useTeamData } from "./TeamDataProvider";
 import { leagueService } from "../../services/leagueService";
 import { IGamesLeagueConfig } from "../../types/leagueConfig";
-import TeamSubstituteCard from "./TeamSubstituteCard";
 import { MyTeamPitchView } from "./MyTeamPitchView";
 
 interface TeamTabsContentProps {
