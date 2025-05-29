@@ -4,14 +4,16 @@ import { PlayerForm, RugbyPlayer } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 
 // Components
-import { PlayerCard } from "../components/players/PlayerCard";
 import { PlayerSearch } from "../components/players/PlayerSearch";
-import { PlayerTabs } from "../components/players/PlayerTabs";
+import { PlayerScreenTabs } from "../components/players/PlayerTabs";
 import { PlayerFilters } from "../components/players/PlayerFilters";
 import { PlayerSort } from "../components/players/PlayerSort";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/players/EmptyState";
+import { PlayerGameCard } from "../components/player/PlayerGameCard";
+import PageView from "./PageView";
+import { Users } from "lucide-react";
 
 type SortTab = "all" | "trending" | "top" | "new";
 // type SortOption = "points" | "name" | "position" | "club";
@@ -175,12 +177,22 @@ export const PlayersScreen = () => {
   ]);
 
   return (
-    <main className="container mx-auto px-4 py-6 max-w-7xl">
+    <PageView className="p-5 flex flex-col gap-3">
       {/* Search and Filter Header */}
-      <div className="space-y-4 mb-6">
-        <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
-        <PlayerTabs activeTab={activeTab} onTabChange={handleTabChange} />
-        <div className="flex gap-2">
+
+      <div className="flex flex-row gap-2 items-center" >
+        <Users />
+        <h1 className="text-2xl font-bold" >Players</h1>
+      </div>
+
+      <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
+
+      <div className="flex flex-col gap-1">
+        
+        <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
+        
+        <div className="flex flex-row gap-2">
+          
           <PlayerFilters
             positionFilter={positionFilter}
             teamFilter={teamFilter}
@@ -190,6 +202,7 @@ export const PlayersScreen = () => {
             onTeamFilter={handleTeamFilter}
             onClearFilters={clearFilters}
           />
+
           <PlayerSort
             sortField={sortField}
             sortDirection={sortDirection}
@@ -225,15 +238,16 @@ export const PlayersScreen = () => {
       {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredPlayers.map((player, index) => (
-            <PlayerCard
+            <PlayerGameCard
               key={index}
               player={player}
               onClick={() => handlePlayerClick(player)}
+              className="h-[250px] lg:h-[300px]"
             />
           ))}
         </div>
       )}
-    </main>
+    </PageView>
   );
 };
 
