@@ -1,6 +1,6 @@
 import { Player } from "../../types/team";
 import RugbyPitch from "../shared/RugbyPitch";
-import { AthleteFantasyCard } from "./TeamPlayerCard";
+import { TeamPlayerCard } from "./TeamPlayerCard";
 
 interface TeamFormationProps {
   players: Player[];
@@ -36,7 +36,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
         {positionGroups["Front Row"].map(
           (player) => (
             (
-              <AthleteFantasyCard
+              <TeamPlayerCard
                 key={player.id}
                 player={player}
                 onClick={() => onPlayerClick(player)}
@@ -48,7 +48,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
 
         {/* Second Row - Left Side */}
         {positionGroups["Second Row"].map((player) => (
-          <AthleteFantasyCard
+          <TeamPlayerCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
@@ -58,7 +58,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
 
         {/* Back Row - Center Left */}
         {positionGroups["Back Row"].map((player) => (
-          <AthleteFantasyCard
+          <TeamPlayerCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
@@ -67,7 +67,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
         ))}
 
         {positionGroups["Halfback"].map((player) => (
-          <AthleteFantasyCard
+          <TeamPlayerCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
@@ -77,7 +77,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
 
         {/* Back - Right Side */}
         {positionGroups["Back"].map((player) => (
-          <AthleteFantasyCard
+          <TeamPlayerCard
             key={player.id}
             player={player}
             onClick={() => onPlayerClick(player)}
