@@ -44,12 +44,37 @@ export const PlayersScreen = () => {
   // Handle player selection
   const handlePlayerClick = (player: RugbyPlayer) => {
 
+    if (isComparing) {
 
+      const isSelectedAlready = selectedPlayers.find((p) => {
+        return p.tracking_id === player.tracking_id;
+      });
 
-    navigate(`/players/${player.tracking_id || player.id}`, {
-      state: { player },
-    });
+      if (isSelectedAlready) {
+
+        const newList = selectedPlayers.filter((p) => {
+          return p.tracking_id !== player.tracking_id
+        });
+
+        setSelectedPlayers(newList);
+
+      } else {
+        setSelectedPlayers([...selectedPlayers, player]);
+      }
+    } else {
+      navigate(`/players/${player.tracking_id || player.id}`, {
+        state: { player },
+      });
+    }
   };
+
+  const onRemovePlayerFromSelectedPlayers = (player: RugbyPlayer) => {
+    const newList = selectedPlayers.filter((p) => {
+      return p.tracking_id !== player.tracking_id
+    });
+
+    setSelectedPlayers(newList);
+  }
 
   // Handle search filtering
   const handleSearch = (query: string) => {
@@ -188,12 +213,12 @@ export const PlayersScreen = () => {
   ]);
 
   return (
-    <PlayersScreenProvider 
+    <PlayersScreenProvider
       isComparing={isComparing}
       selectedPlayers={selectedPlayers}
     >
       <PageView className="px-5 flex flex-col gap-3">
-      
+
         {/* Search and Filter Header */}
         <div className="flex flex-row gap-2 items-center" >
           <Users />
@@ -201,11 +226,11 @@ export const PlayersScreen = () => {
         </div>
         <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
         <div className="flex flex-col gap-1">
-      
+
           <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
-      
+
           <div className="flex flex-row gap-2">
-      
+
             <PlayerFilters
               positionFilter={positionFilter}
               teamFilter={teamFilter}
@@ -229,7 +254,11 @@ export const PlayersScreen = () => {
           </div>
         </div>
 
-        {<PlayerCompareStatus />}
+        {
+          <PlayerCompareStatus
+            onRemovePlayer={onRemovePlayerFromSelectedPlayers}
+          />
+        }
 
         {/* Loading State - for initial load */}
         {isLoading && <LoadingState message="Loading..." />}

@@ -1,9 +1,10 @@
 import { twMerge } from "tailwind-merge";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { formatPosition } from "../../utils/athleteUtils";
 import FormIndicator from "../shared/FormIndicator";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import TeamLogo from "../team/TeamLogo";
+import { PlayersScreenContext } from "../../contexts/PlayersScreenContext";
 
 type Props = {
   player: RugbyPlayer;
@@ -19,6 +20,13 @@ type CardTier = "gold" | "silver" | "bronze" | "blue";
  * does not rely on team context */
 
 export function PlayerGameCard({ player, onClick, className }: Props) {
+
+  const context = useContext(PlayersScreenContext);
+  const shouldGlow = (context?.selectedPlayers.filter((p) => {
+    return p.tracking_id === player.tracking_id;
+  }) ?? []).length > 0 && context?.isComparing;
+
+
   const [imageError, setIamgeError] = useState<string>();
 
   const pr = player.power_rank_rating ?? 0;
@@ -45,9 +53,10 @@ export function PlayerGameCard({ player, onClick, className }: Props) {
           "bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white",
           cardTier === "blue" &&
           "bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white",
+          shouldGlow && "animate-glow border border-yellow-500",          
           className
         )}
-        
+
       >
         {!isAvailable && <div className="top-0 left-0 absolute w-full h-full bg-black/50 z-10" ></div>}
         {/* Team Logo */}
