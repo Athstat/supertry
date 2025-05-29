@@ -16,8 +16,6 @@ export function MyTeamScreenTabView({ activeTab, setActiveTab, league }: Props) 
 
   const { positionList, players, formation } = useTeamData();
 
-  console.log("Players: ", players);
-
   const {
     handlePlayerClick,
     handlePositionSelect,

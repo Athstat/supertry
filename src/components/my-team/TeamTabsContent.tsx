@@ -9,6 +9,7 @@ import { useTeamData } from "./TeamDataProvider";
 import { leagueService } from "../../services/leagueService";
 import { IGamesLeagueConfig } from "../../types/leagueConfig";
 import { MyTeamPitchView } from "./MyTeamPitchView";
+import { useLeagueConfig } from "../../hooks/useLeagueConfig";
 
 interface TeamTabsContentProps {
   activeTab: "edit-team" | "view-pitch";
@@ -42,39 +43,14 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
   const isLocked = isLeagueLocked(league?.join_deadline);
   const { team } = useTeamData();
 
-  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
-    null
-  );
+  const leagueConfig = useLeagueConfig(league);
 
-  // Fetch league config on mount
-  useEffect(() => {
-    const fetchLeagueConfig = async () => {
-      if (!league?.id) {
-        return;
-      }
-
-      try {
-        const config = await leagueService.getLeagueConfig(
-          league?.official_league_id
-        );
-        if (config) {
-          setLeagueConfig(config);
-          console.log("League config: ", config);
-        } else {
-          console.log("Failed to load league configuration");
-        }
-      } catch (err) {
-        console.error("Error fetching league config:", err);
-        console.log("An error occurred while loading league configuration");
-      }
-    };
-
-    fetchLeagueConfig();
-  }, [league?.id]);
+  console.log("League config ", leagueConfig);
 
   return (
     <>
       {/* Tabbed Interface */}
+      
       <div className="mt-8">
         <div className="flex space-x-2 border-b-0">
           {!isLocked && (
@@ -110,6 +86,7 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
           </TabButton>
         </div>
       </div>
+      
 
       {/* Tab Content */}
       <div className="mt-6">
