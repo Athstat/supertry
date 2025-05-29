@@ -45,6 +45,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   roundEnd,
   competitionId,
 }) => {
+
   // State for filtering and sorting
   const [searchQuery, setSearchQuery] = useState("");
   const [teamFilter, setTeamFilter] = useState<string[]>([]);
@@ -54,13 +55,11 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [loading, setLoading] = useState(false);
   const [filterAvailable, setFilterAvailable] = useState(false);
+  
   // Only fetch fixtures if competitionId is provided (TeamCreationScreen)
   const { data: fixtureData, isLoading: loadingFixtures } = competitionId
     ? useFetch("games", competitionId, gamesService.getGamesByCompetitionId)
     : { data: null, isLoading: false };
-
-  // Determine if we're in MyTeamScreen context
-  const isMyTeamContext = !competitionId;
 
   // Get filtered and sorted players
   const { sortedPlayers, filteredCount } = usePlayersFilter({
@@ -92,27 +91,34 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   };
 
   // Skip fixture loading for MyTeamScreen
-  if (loadingFixtures && !isMyTeamContext) return <LoadingState />;
+  if (loadingFixtures) return <LoadingState />;
 
   // For MyTeamScreen, use all available teams
   // For TeamCreationScreen, filter teams by fixtures
   let availableTeams = allTeams;
 
-  if (!isMyTeamContext && fixtureData) {
+  if (fixtureData) {
+
     const fixtures = fixtureData ?? [];
     const roundFixtures = fixtures.filter((f) => {
+
       // Only filter by round if we have start/end values
       if (roundStart !== undefined && roundEnd !== undefined) {
         const start = Math.min(roundStart, roundEnd);
         const end = Math.max(roundStart, roundEnd);
         return f.round >= start && f.round <= end;
       }
+      
       return true;
     });
+
+    console.log("All fixtures ", fixtures.length);
+    console.log("Round fixtures ", roundFixtures.length);
 
     const participatingTeamsId = new Set<string>();
 
     roundFixtures.forEach((rf) => {
+      
       if (!participatingTeamsId.has(rf.team_id)) {
         participatingTeamsId.add(rf.team_id);
       }
