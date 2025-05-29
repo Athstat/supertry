@@ -18,11 +18,15 @@ import { PlayerProfileScreen } from "./screens/PlayerProfileScreen";
 import { useAuth } from "./contexts/AuthContext";
 import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
-import SchoolBoyRugbyScreen from "./screens/SchoolBoyRugbyScreen";
+import SbrScreen from "./screens/SbrScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
-import SBRChatScreen from "./components/sbr/SBRChatScreen";
+import SbrChatTab from "./components/sbr/SBRChatScreen";
+import { ScopeProvider } from "jotai-scope";
+import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
+import RouteErrorBoundary from "./components/RouteErrorBoundary";
+import SbrFixtureScreen from "./screens/SbrFixtureScreen";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -33,7 +37,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-// Protected route component
+// Protected route component with error boundary
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
@@ -43,7 +47,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/signin" />;
   }
 
-  return <>{children}</>;
+  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
 };
 
 // Auth route component - redirects to dashboard if already authenticated
@@ -56,7 +60,7 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/dashboard" />;
   }
 
-  return <>{children}</>;
+  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
 };
 
 const AppRoutes = () => {
@@ -215,7 +219,18 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SchoolBoyRugbyScreen />
+              <SbrScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+       <Route
+        path="/sbr/fixtures/:fixtureId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <SbrFixtureScreen />
             </Layout>
           </ProtectedRoute>
         }
@@ -226,7 +241,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SBRChatScreen />
+              <SbrChatTab />
             </Layout>
           </ProtectedRoute>
         }
@@ -248,7 +263,9 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <FixtureListScreen />
+              <ScopeProvider atoms={[fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom]} >
+                <FixtureListScreen />
+              </ScopeProvider>
             </Layout>
           </ProtectedRoute>
         }

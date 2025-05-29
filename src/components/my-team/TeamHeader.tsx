@@ -35,9 +35,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
     navigate(-1);
   };
 
-  console.log("rank", rank);
-  console.log("totalPoints", totalPoints);
-  console.log("round_score", team.round_score);
+  console.log("Team on edit screen ", team);
 
   return (
     <>
@@ -85,7 +83,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
                 )}
               </span>
               <span className="font-medium text-sm text-gray-800">
-                Rank #{rank ?? " –"}
+                Rank #{team.rank ?? " –"}
               </span>
             </div>
           </div>
@@ -94,7 +92,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
             <div className="flex items-center gap-1.5 bg-gradient-to-r from-white to-gray-200 via-gray-50 px-3 py-1.5 rounded-full shadow-sm">
               <Zap size={18} className="text-orange-500 shrink-0" />
               <span className="font-medium text-sm text-gray-800">
-                {Math.floor(team.round_score ?? totalPoints ?? 0)} pts
+                {totalPoints ?  Math.floor(totalPoints) : "-"} pts
               </span>
             </div>
           </div>

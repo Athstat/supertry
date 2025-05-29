@@ -1,6 +1,7 @@
-import { UserRepresentation } from "../types/auth";
-import { getUri } from "../utils/backendUtils";
+import { DatabaseUser, UserRepresentation } from "../types/auth";
+import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { analytics } from "./anayticsService";
+import { logger } from "./logger";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID || "athstat-frontend";
 const KEYCLOAK_URL =
@@ -206,7 +207,7 @@ export const authService = {
         id: payload.sub || "",
         firstName: payload.given_name || "",
         lastName: payload.family_name || "",
-        username: payload.preferred_username || "",
+        username: payload.preferred_username || ""
       };
     } catch (error) {
       console.error("Error getting user info:", error);
@@ -294,4 +295,22 @@ export const authService = {
       throw error;
     }
   },
+
+  getUserById: async (userId: string) : Promise<DatabaseUser | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/users/${userId}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      const json = await res.json();
+      console.log("User from get user by id ", json);
+
+      return json;
+
+    } catch (error) {
+      logger.error("Error fetching user by id " + error);
+      return undefined;
+    }
+  }
 };

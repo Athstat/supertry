@@ -37,7 +37,7 @@ export function WelcomeScreen() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md flex flex-col items-center"
       >
-        <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40 mb-6" />
+        <ScrummyLogo className="w-60 h-60 md:w-60 md:h-60 -mb-5" />
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -55,7 +55,8 @@ export function WelcomeScreen() {
           transition={{ delay: 0.5, duration: 0.6 }}
         >
           <p className="mt-3 lg:text-xl text-gray-600 dark:text-gray-300 text-center">
-            You’ve officially joined the scrum! Don’t worry, it’s less bruises and more bragging rights from here.
+            You’ve officially joined the scrum! Don’t worry, it’s less bruises
+            and more bragging rights from here.
           </p>
         </motion.div>
 

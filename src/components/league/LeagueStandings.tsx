@@ -1,4 +1,4 @@
-import { useRef, useEffect, Ref } from "react";
+import { useRef, Ref } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ interface LeagueStandingsProps {
   isLoading?: boolean;
   error?: string | null;
   onTeamClick?: (team: RankedFantasyTeam) => void;
-  league: IFantasyLeague
+  league: IFantasyLeague;
 }
 
 export function LeagueStandings({
@@ -21,9 +21,8 @@ export function LeagueStandings({
   isLoading = false,
   error = null,
   onTeamClick,
-  league
+  league,
 }: LeagueStandingsProps) {
-
   const userTeamRef = useRef<HTMLTableRowElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -32,26 +31,25 @@ export function LeagueStandings({
   const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
 
   // Scroll to user's team when component mounts or teams change
-  useEffect(() => {
-    if (
-      userTeamRef.current &&
-      tableRef.current &&
-      teams.some((team) => team.isUserTeam)
-    ) {
-      // Add a small delay to ensure the table is fully rendered
-      setTimeout(() => {
-        const userTeamPosition =
-          userTeamRef.current && userTeamRef.current.offsetTop - HEADER_HEIGHT;
-        if (userTeamPosition) {
-          tableRef.current?.scrollTo({
-            top: userTeamPosition,
-            behavior: "smooth",
-          });
-        }
-      }, 300);
-    }
-  }, [teams]);
-
+  // useEffect(() => {
+  //   if (
+  //     userTeamRef.current &&
+  //     tableRef.current &&
+  //     teams.some((team) => team.isUserTeam)
+  //   ) {
+  //     // Add a small delay to ensure the table is fully rendered
+  //     setTimeout(() => {
+  //       const userTeamPosition =
+  //         userTeamRef.current && userTeamRef.current.offsetTop - HEADER_HEIGHT;
+  //       if (userTeamPosition) {
+  //         tableRef.current?.scrollTo({
+  //           top: userTeamPosition,
+  //           behavior: "smooth",
+  //         });
+  //       }
+  //     }, 300);
+  //   }
+  // }, [teams]);
 
   // Handle team row click
   const handleTeamClick = (team: RankedFantasyTeam) => {
@@ -107,23 +105,36 @@ export function LeagueStandings({
                   <th className="py-4 px-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
                     Team
                   </th>
-                  <th className="py-4 px-4 text-right text-sm font-semibold text-gray-600 dark:text-gray-400">
+                  <th className="py-4 px-4 text-right text-sm font-semibold text-gray-600 dark:text-gray-400 whitespace-nowrap">
                     Total Points
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {teams.map((team, index) => {
-
-                  return <StandingsTableRow
-                    index={index}
-                    team={team}
-                    userTeamRef={userTeamRef}
-                    handleTeamClick={handleTeamClick}
-                    league={league}
-                  />
-
-                })}
+                {[...teams]
+                  .sort((a, b) => {
+                    // If both teams have ranks, sort normally
+                    if (a.rank && b.rank) {
+                      return a.rank - b.rank;
+                    }
+                    // Push teams without ranks to the bottom
+                    if (!a.rank) return 1;
+                    if (!b.rank) return -1;
+                    // Fallback sorting
+                    return 0;
+                  })
+                  .map((team, index) => {
+                    return (
+                      <StandingsTableRow
+                        key={team.team_id}
+                        index={index}
+                        team={team}
+                        userTeamRef={userTeamRef}
+                        handleTeamClick={handleTeamClick}
+                        league={league}
+                      />
+                    );
+                  })}
               </tbody>
             </table>
           </div>
@@ -160,15 +171,20 @@ export function LeagueStandings({
 }
 
 type StandingsTableRowProps = {
-  team: RankedFantasyTeam,
-  userTeamRef: Ref<any>,
-  handleTeamClick: (team: RankedFantasyTeam) => void,
-  index: number
-  league: IFantasyLeague
-}
+  team: RankedFantasyTeam;
+  userTeamRef: Ref<any>;
+  handleTeamClick: (team: RankedFantasyTeam) => void;
+  index: number;
+  league: IFantasyLeague;
+};
 
-function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }: StandingsTableRowProps) {
-
+function StandingsTableRow({
+  team,
+  userTeamRef,
+  handleTeamClick,
+  index,
+  league,
+}: StandingsTableRowProps) {
   const user = authService.getUserInfo();
   const isUserTeam = user ? user.id === team.userId : false;
 
@@ -179,9 +195,9 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
         ref={team.isUserTeam ? userTeamRef : null}
         data-user-team={team.isUserTeam}
         className={`
-                        cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-800
-                        ${getRowBackground(team.rank, index, team.isUserTeam)}
-                      `}
+          cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-800
+          ${getRowBackground(team.rank, index, team.isUserTeam)}
+        `}
         onClick={() => handleTeamClick(team)}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -193,29 +209,33 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
         aria-label={`View ${team.teamName} details`}
       >
         <td className="py-4 px-4 whitespace-nowrap">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center">
             <span
-              className={`font-semibold ${team.rank === 1
-                ? "text-yellow-500 dark:text-yellow-400"
-                : team.rank === 2
+              className={`font-semibold w-5 text-center ${
+                team.rank === 1
+                  ? "text-yellow-500 dark:text-yellow-400"
+                  : team.rank === 2
                   ? "text-gray-400 dark:text-gray-200"
                   : team.rank === 3
-                    ? "text-amber-600 dark:text-amber-500"
-                    : "text-gray-900 dark:text-gray-100"
-                }`}
+                  ? "text-amber-600 dark:text-amber-500"
+                  : "text-gray-900 dark:text-gray-100"
+              }`}
             >
               {team.rank}
             </span>
-            {getRankChange(team.rank, team.lastRank)}
+            <span className="w-4 flex justify-center">
+              {getRankChange(team.rank, team.lastRank)}
+            </span>
           </div>
         </td>
         <td className="py-4 px-4">
           <div className="flex flex-col">
             <div
-              className={`font-medium ${team.isUserTeam
-                ? "text-primary-600 dark:text-primary-400"
-                : "dark:text-gray-100"
-                }`}
+              className={`font-medium ${
+                team.isUserTeam
+                  ? "text-primary-600 dark:text-primary-400"
+                  : "dark:text-gray-100"
+              }`}
             >
               {team.teamName} {team.isUserTeam && "(You)"}
             </div>
@@ -228,56 +248,55 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index, league }
           </div>
         </td>
         <td className="py-4 px-4 text-right font-bold text-primary-600 dark:text-primary-400 relative pr-10">
-          {Math.floor(team.totalPoints ?? 0)}
+          {team.overall_score.toFixed(1)}
           <span className="absolute right-4 top-1/2 -translate-y-1/2">
             <ChevronRight className="text-gray-400" />
           </span>
         </td>
-
-        {isUserTeam &&
-          <EditTeamButton team={team} league={league} />
-        }
       </tr>
     </>
-  )
+  );
 }
 
 type EditButtonProps = {
-  team: RankedFantasyTeam,
-  league: IFantasyLeague
-}
+  team: RankedFantasyTeam;
+  league: IFantasyLeague;
+};
 
 function EditTeamButton({ team, league }: EditButtonProps) {
-
   const navigate = useNavigate();
   const isLocked = isLeagueLocked(league.join_deadline);
 
   const handleClick = () => {
     const uri = `/my-team/${team.team_id}`;
     navigate(uri, {
-      state: { teamWithRank: team, league: league }
+      state: { teamWithRank: team, league: league },
     });
   };
 
   if (isLocked) {
     return (
-      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center absolute mb-20 h-12 bottom-0 left-0" >
-
-        <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center" >
+      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center absolute mb-20 h-12 bottom-0 left-0">
+        <button
+          onClick={handleClick}
+          className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center"
+        >
           View Team
         </button>
-
       </div>
-    )
+    );
   }
 
   return (
-    <div className="w-full z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0" >
-      <button onClick={handleClick} className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-blue-700 hover:bg-blue-800 justify-center" >
+    <div className="w-full z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0">
+      <button
+        onClick={handleClick}
+        className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 justify-center"
+      >
         Edit Team
       </button>
     </div>
-  )
+  );
 }
 
 const getRowBackground = (

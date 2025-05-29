@@ -1,37 +1,29 @@
 import { IFantasyLeague, IFantasyLeagueTeam } from "../types/fantasyLeague";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
-import { getUri } from "../utils/backendUtils";
+import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { analytics } from "./anayticsService";
 import { fantasyTeamService } from "./teamService";
 
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-      const uri = getUri(`/api/v1/fantasy-leagues`);
-
-      try {
+      
+        const uri = getUri(`/api/v1/fantasy-leagues`);
         const response = await fetch(uri, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Add authorization if needed
-            ...(localStorage.getItem("access_token") && {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            }),
-          },
+          headers: getAuthHeader()
         });
 
         if (response.ok) {
-          return await response.json();
+
+          const json = await response.json();
+          return json;
+
         } else {
           console.error("Failed to fetch leagues:", await response.text());
           throw new Error("Failed to fetch leagues");
         }
-      } catch (apiError) {
-        console.error("API fetch error:", apiError);
-        // Return empty array if API fetch fails
-        return [];
-      }
+
     } catch (error) {
       console.error("Error in leagueService:", error);
       return [];

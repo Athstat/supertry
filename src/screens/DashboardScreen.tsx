@@ -22,12 +22,10 @@ export function DashboardScreen() {
       const allLeagues = await leagueService.getAllLeagues();
 
       // Filter leagues based on is_open status (same as JoinLeagueScreen)
-      const availableLeagues = allLeagues.filter((league) => {
-        const hasLeagueEnded = league.is_open && !league.has_ended;
-        return hasLeagueEnded;
-      });
+      const availableLeagues = allLeagues;
 
       setLeagues(availableLeagues);
+
     } catch (err) {
       console.error("Failed to fetch leagues:", err);
     } finally {

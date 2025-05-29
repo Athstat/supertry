@@ -40,7 +40,7 @@ export default function SbrTeamLogo({ teamName, className }: Props) {
 
 function teamLogoMapper(teamName: string): string | undefined {
   switch (teamName) {
-    case 'CBC':
+    case 'Christian Brothers College':
       return '/sbr_logos/christian-brothers-college-bulawayo.png.png';
     case 'Falcon College':
       return '/sbr_logos/falcon-college.png.png';
@@ -73,9 +73,29 @@ function teamLogoMapper(teamName: string): string | undefined {
     case 'Hillcrest College':
         return '/sbr_logos/hilcrest.webp';
     case 'Wise Owl Marondera':
-        return 'public/sbr_logos/wise_owl.webp';
+        return '/sbr_logos/wise_owl.webp';
     case 'Churchill Boys High':
-        return 'public/sbr_logos/church_hill.webp';
+        return '/sbr_logos/church_hill.webp';
+    case 'Maritzburg College':
+      return '/sbr_logos/maritzburg.webp'
+    case "Westville Boy's High School":
+      return '/sbr_logos/westville.webp'
+    case "Michaelhouse":
+      return '/sbr_logos/michaelhouse.webp'
+    case "Northwood School":
+      return '/sbr_logos/northwood.webp'
+    case "Hilton College":
+      return '/sbr_logos/hilton_college.webp'
+    case "Glenwood High School":
+      return '/sbr_logos/glenwood.webp'
+    case "Kearsney College":
+      return '/sbr_logos/kearseny.webp'
+    case "Durban High School":
+      return '/sbr_logos/durban_high.webp'
+    case "Dundee High School":
+      return '/sbr_logos/dundee.webp'
+    case "Greytown High School":
+      return '/sbr_logos/greytown.webp'
     default:
       return undefined;
   }

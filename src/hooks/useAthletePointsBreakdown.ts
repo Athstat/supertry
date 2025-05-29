@@ -10,8 +10,8 @@ export function useAthletePointsBreakdown(trackingId: string) {
     return useFetch(
         "points-breakdown",
         {
-            leagueId: league?.official_league_id,
-            round: league?.start_round ?? -1,
+            leagueId: league?.league?.official_league_id,
+            round: league?.league?.start_round ?? -1,
             trackingId
         }
         , async ({ leagueId, round, trackingId }) => {

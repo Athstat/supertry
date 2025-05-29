@@ -1,6 +1,8 @@
 import {
   X,
   Calendar,
+  Users,
+  Shield,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +16,7 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
 
   const menuItems = [
     // { icon: Search, label: "Players", path: "/players" },
+    // { icon: Shield, label: "My Teams", path: "/my-teams" },
     { icon: Calendar, label: "Fixtures", path: "/fixtures" },
     // { icon: Settings, label: "Settings", path: "#" },
     // { icon: HelpCircle, label: "Support", path: "#" },

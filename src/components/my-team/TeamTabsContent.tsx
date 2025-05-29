@@ -10,6 +10,8 @@ import { IFantasyLeague } from "../../types/fantasyLeague";
 import { useTeamData } from "./TeamDataProvider";
 import { leagueService } from "../../services/leagueService";
 import { IGamesLeagueConfig } from "../../types/leagueConfig";
+import TeamSubstituteCard from "./TeamSubstituteCard";
+import { MyTeamPitchView } from "./MyTeamPitchView";
 
 interface TeamTabsContentProps {
   activeTab: "edit-team" | "view-pitch";
@@ -42,7 +44,6 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
 }) => {
   const isLocked = isLeagueLocked(league?.join_deadline);
   const { team } = useTeamData();
-  console.log("league: ", league?.id);
 
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
     null
@@ -91,8 +92,11 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
           )}
 
           {isLocked && (
-            <TabButton active={activeTab === "edit-team"} onClick={() => {}}>
-              <div className="flex items-center dark:text-slate-600 cursor-not-allowed gap-2 flex-row">
+            <TabButton
+              active={activeTab === "edit-team"}
+              onClick={() => setActiveTab("edit-team")}
+            >
+              <div className="flex items-center dark:text-slate-600 gap-2 flex-row">
                 <span>Edit Team</span>
                 <Lock className="w-4 h-4" />
               </div>
@@ -124,7 +128,7 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
             teamBudget={leagueConfig?.team_budget || 0}
           />
         ) : (
-          <ViewPitchContent
+          <MyTeamPitchView
             players={players}
             formation={formation}
             handlePlayerClick={handlePlayerClick}
@@ -220,7 +224,13 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                             : "text-gray-800 dark:text-white"
                         }`}
                       >
-                        {position.name}
+                        {position.name
+                          .split("-")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1)
+                          )
+                          .join(" ")}
                       </h3>
                       {(position.isSpecial ||
                         (index === positionList.length - 1 &&
@@ -233,23 +243,19 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
 
                     {/* Player name */}
                     <p className="text-xs text-center font-medium mb-1 text-gray-900 dark:text-gray-300">
-                      {position.player.name}
+                      {position.player.player_name}
                     </p>
 
                     {/* Team & price */}
                     <div className="flex justify-between w-full text-xs mb-3">
                       <span className="text-gray-500 dark:text-gray-400">
-                        {position.player.team}
+                        {position.player.team_name}
                       </span>
                       <span className="font-bold dark:text-gray-200 flex items-center">
-                        <svg
-                          className="w-3.5 h-3.5 mr-1 text-yellow-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M10 2a8 8 0 100 16 8 8 0 000-16z" />
-                        </svg>
+                        <Coins
+                          size={14}
+                          className="text-yellow-500 dark:text-yellow-400 mr-1"
+                        />
                         {position.player.price}
                       </span>
                     </div>
@@ -258,21 +264,7 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                     <div className="w-full flex flex-col gap-2">
                       <button
                         onClick={() => {
-                          const playerForPosition: Player = {
-                            id: position.player?.id || "",
-                            name: position.player?.name || "",
-                            position: position.player?.position || "",
-                            position_class: position.player?.position || "",
-                            team: position.player?.team || "",
-                            points: position.player?.points || 0,
-                            form: position.player?.power_rank_rating || 0,
-                            price: position.player?.price || 0,
-                            is_super_sub: position.isSpecial || false,
-                            is_starting: !position.isSpecial,
-                            image: position.player?.image_url || "",
-                            nextFixture: "",
-                          };
-                          handleViewStats(playerForPosition);
+                          handleViewStats(position.player);
                         }}
                         className="w-full py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md text-xs font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
                       >
@@ -294,7 +286,10 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
                               is_super_sub: position.isSpecial || false,
                               is_starting: !position.isSpecial,
                               image: position.player?.image_url || "",
+                              team_name: position.player.team_name,
                               nextFixture: "",
+                              athlete_id: position.player.tracking_id,
+                              player_name: position.player.player_name
                             };
                             handleSwapPlayer(playerForPosition);
                           }}
@@ -358,105 +353,5 @@ const EditTeamView: React.FC<EditTeamViewProps> = ({
         ))}
       </div>
     </div>
-  );
-};
-
-interface ViewPitchContentProps {
-  players: Player[];
-  formation: string;
-  handlePlayerClick: (player: Player) => void;
-}
-
-const ViewPitchContent: React.FC<ViewPitchContentProps> = ({
-  players,
-  formation,
-  handlePlayerClick,
-}) => {
-  return (
-    <>
-      {/* Team Formation - View Pitch Tab */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
-          Team Formation
-        </h2>
-        <TeamFormation
-          players={players.filter((player) => !player.isSubstitute)}
-          formation={formation}
-          onPlayerClick={handlePlayerClick}
-        />
-      </div>
-
-      {/* Super Substitute */}
-      {players.some((player) => player.isSubstitute) && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100 flex items-center">
-            <span>Super Substitute</span>
-            <span className="ml-2 text-orange-500 text-sm bg-orange-100 dark:bg-orange-900/20 px-2 py-0.5 rounded-full">
-              Special
-            </span>
-          </h2>
-          <div className="bg-orange-50 dark:bg-orange-900/10 rounded-xl p-4 border-2 border-orange-200 dark:border-orange-800/30 max-w-md">
-            {players
-              .filter((player) => player.isSubstitute)
-              .map((player) => (
-                <motion.div
-                  key={player.id}
-                  className="flex items-center gap-4 cursor-pointer rounded-lg p-2"
-                  onClick={() => handlePlayerClick(player)}
-                  whileHover={{
-                    scale: 1.02,
-                    transition: { type: "spring", stiffness: 300 },
-                  }}
-                  initial={{ opacity: 0.9 }}
-                  animate={{ opacity: 1 }}
-                >
-                  <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-orange-300 dark:border-orange-600">
-                    {player.image ? (
-                      <img
-                        src={player.image}
-                        alt={player.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-2xl font-bold text-gray-500 dark:text-gray-400">
-                        {player.name.charAt(0)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-semibold text-lg text-gray-900 dark:text-gray-100">
-                        {player.name}
-                      </span>
-                      <span className="text-sm font-bold px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full text-gray-800 dark:text-gray-300">
-                        {player.position}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {player.team}
-                      </span>
-                      <span className="text-primary-700 dark:text-primary-500 font-bold flex items-center">
-                        <svg
-                          className="w-3.5 h-3.5 mr-1 text-yellow-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM5.94 7.13a1 1 0 011.95-.26c.112.84.234 1.677.357 2.514.234-.705.469-1.412.704-2.119a1 1 0 011.857.737 1 1 0 01.027.063c.234.705.469 1.412.704 2.119.121-.84.242-1.678.351-2.516a1 1 0 011.954.262c-.16 1.192-.32 2.383-.48 3.575 0 .004-.003.005-.005.006l-.008.032-.006.025-.008.028-.008.03-.01.03a1 1 0 01-1.092.698.986.986 0 01-.599-.28l-.01-.008a.997.997 0 01-.29-.423c-.272-.818-.543-1.635-.815-2.453-.272.818-.544 1.635-.816 2.453a1 1 0 01-1.953-.331c-.156-1.167-.312-2.334-.468-3.502a1 1 0 01.744-1.114z" />
-                        </svg>
-                        {player.points}
-                      </span>
-                    </div>
-                    <div className="mt-2 text-xs text-orange-600 dark:text-orange-400 font-medium">
-                      Can substitute for any position
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-          </div>
-        </div>
-      )}
-    </>
   );
 };

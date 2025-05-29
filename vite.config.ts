@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
       port: 4173,
       host: true,
       strictPort: true,
-      allowedHosts: ["supertry.onrender.com", "localhost", "scrummy-app.ai"],
+      allowedHosts: ["supertry.onrender.com", "localhost", "scrummy-app.ai", "scrummy-qa.onrender.com"],
     },
   };
 });

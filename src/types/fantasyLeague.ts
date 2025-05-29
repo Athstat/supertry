@@ -20,22 +20,23 @@ export interface IFantasyLeague {
   duration_type: string;
   status: string;
   participants_count: number;
-  total_gameweeks?: number
-  current_gameweek?: number
+  total_gameweeks?: number;
+  current_gameweek?: number;
 }
-
 
 export type IFantasyLeagueTeam = {
-  team_id: string,
-  league_id: number,
-  position?: number,
-  position_change?: number,
-  score?: number,
-  is_admin?: boolean,
-  join_date?:Date,
-  team_name?: string,
-  user_id: string,
-  first_name: string,
-  last_name: string,
-  athletes : IFantasyTeamAthlete[]
-}
+  rank: number;
+  overall_score: number;
+  team_id: string;
+  league_id: number;
+  position?: number;
+  position_change?: number;
+  score?: number;
+  is_admin?: boolean;
+  join_date?: Date;
+  team_name?: string;
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  athletes: IFantasyTeamAthlete[];
+};

@@ -23,7 +23,7 @@ export function useFantasyLeague(leagueFromParam?: IFantasyLeague) {
     isLoading: loadingTeams,
     error: teamsError,
   } = useFetch(
-    "participating-teams",
+    "participating-teams-hook",
     league?.id ?? "fall-back-id",
     teamsFetcher
   );
@@ -98,12 +98,12 @@ export async function teamsFetcher(
   return teams.map((team, index) => {
     const rankedTeam: RankedFantasyTeam = {
       team_id: team.team_id.toString() ?? "",
-      rank: index + 1,
+      rank: team.rank,
       teamName: team.team_name || `Team ${index + 1}`,
       managerName: team.first_name + " " + team.last_name,
-      totalPoints: team.score || 0,
-      weeklyPoints: team.score || 0,
-      lastRank: index + 1,
+      overall_score: team.overall_score,
+      weeklyPoints: team.overall_score,
+      lastRank: team.rank, // TODO: update this
       isUserTeam: user ? user.id === team.user_id : false,
       userId: team.user_id,
     };
@@ -142,12 +142,12 @@ export function useUserFantasyTeam(league: IFantasyLeague) {
     if (team.user_id === user.id) {
       rankedUserTeam = {
         team_id: team.team_id.toString() ?? "",
-        rank: index + 1,
+        rank: team.rank,
         teamName: team.team_name || `Team ${index + 1}`,
         managerName: team.first_name + " " + team.last_name,
-        totalPoints: team.score || 0,
-        weeklyPoints: team.score || 0,
-        lastRank: index + 1,
+        overall_score: team.overall_score,
+        weeklyPoints: team.overall_score,
+        lastRank: team.rank, // TODO: update this
         isUserTeam: user ? user.id === team.user_id : false,
         userId: team.user_id,
       };

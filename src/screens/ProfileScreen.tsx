@@ -2,23 +2,47 @@ import { useState } from "react";
 import {
   User,
   LogOut,
+  Shield,
+  ChevronRight,
+  Bell,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
 import UserStatsGrid from "../components/profile/UserStatsGrid";
+import UserNotificationsSettings from "../components/settings/UserNotificationsSettings";
+import { useFetch } from "../hooks/useFetch";
+import { authService } from "../services/authService";
+import { LoadingState } from "../components/ui/LoadingState";
+import { ErrorState } from "../components/ui/ErrorState";
 
 export function ProfileScreen() {
-  const [notifications, setNotifications] = useState(true);
+  
+  const navigate = useNavigate();
 
   const userInfo = useAuthUser();
   const { logout } = useAuth();
-  const navigate = useNavigate();
+
+  const { data: databaseUser, isLoading } = useFetch(
+    "database-user",
+    userInfo.id ?? 'fallback',
+    authService.getUserById
+  );
+
+  const handleGoToMyTeams = () => {
+    navigate("/my-teams");
+  }
 
   const handleLogout = () => {
     logout();
     navigate("/signin");
   };
+
+  if (isLoading) return <LoadingState />
+
+  if (!databaseUser) return (
+    <ErrorState message="Error retrieving your user profile" />
+  )
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-dark-850">
@@ -26,7 +50,7 @@ export function ProfileScreen() {
         {/* Profile Header */}
         <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm p-6 mb-6">
           <div className="flex items-start gap-4">
-            
+
             <div className="flex-1">
               <div className="flex items-start justify-between">
                 <div>
@@ -115,6 +139,20 @@ export function ProfileScreen() {
               <ChevronRight size={20} className="text-gray-400" />
             </button>
             */}
+
+            <UserNotificationsSettings 
+              databaseUser={databaseUser}
+            />
+
+            {/* User Teams */}
+            <button onClick={handleGoToMyTeams} className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-800 transition-colors">
+              <div className="flex items-center gap-3">
+                <Shield size={20} className="text-gray-500" />
+                <span className="font-medium dark:text-gray-100">My Teams</span>
+              </div>
+              <ChevronRight size={20} className="text-gray-400" />
+            </button>
+
 
             {/* Notifications - Commented out
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl">

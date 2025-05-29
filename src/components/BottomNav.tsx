@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { Home, Trophy, Users, BarChart } from "lucide-react";
+import { Home, Trophy, Users, BarChart, Calendar } from "lucide-react";
 import { useState } from "react";
 import { MdOutlineSportsRugby } from "react-icons/md";
 
@@ -33,6 +33,7 @@ export function BottomNav() {
     { id: "home", path: "/dashboard", icon: Home, label: "Home" },
     { id: "leagues", path: "/leagues", icon: Trophy, label: "Leagues" },
     // { id: "players", path: "/players", icon: User, label: "Players" },
+    // { id: "fixtures", path: "/fixtures", icon: Calendar, label: "Fixtures" },
     { id: "my-teams", path: "/my-teams", icon: Users, label: "My Teams" },
     { id: "rankings", path: "/rankings", icon: BarChart, label: "Rankings" }
   ];

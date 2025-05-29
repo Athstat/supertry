@@ -1,7 +1,7 @@
-import React from "react";
 import { X, Users } from "lucide-react";
 import { Player } from "../../types/team";
 import { motion } from "framer-motion";
+import { formatPosition } from "../../utils/athleteUtils";
 
 interface SwapConfirmationModalProps {
   currentPlayer: Player;
@@ -68,22 +68,22 @@ export function SwapConfirmationModal({
                 <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center overflow-hidden border-2 border-red-300 dark:border-red-700 mb-2">
                   {currentPlayer.image ? (
                     <img
-                      src={currentPlayer.image}
-                      alt={currentPlayer.name}
+                      src={currentPlayer.image_url}
+                      alt={currentPlayer.player_name}
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
-                      {currentPlayer.name.charAt(0)}
+                      {currentPlayer.player_name.charAt(0)}
                     </span>
                   )}
                 </div>
                 <span className="font-semibold text-sm dark:text-gray-100 text-center">
-                  {currentPlayer.name}
+                  {currentPlayer.player_name}
                 </span>
-                <span className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
-                  {currentPlayer.position}
-                </span>
+                {currentPlayer.position && <span className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
+                  {formatPosition(currentPlayer.position)}
+                </span>}
                 <span className="text-xs font-medium text-primary-700 dark:text-primary-500 text-center flex items-center justify-center gap-1">
                   <svg viewBox="0 0 24 24" fill="#FFD700" className="w-3 h-3">
                     <circle cx="12" cy="12" r="10" fill="#FFD700" />
@@ -115,9 +115,9 @@ export function SwapConfirmationModal({
                 <span className="font-semibold text-sm dark:text-gray-100 text-center">
                   {newPlayer.name}
                 </span>
-                <span className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
-                  {newPlayer.position}
-                </span>
+                {newPlayer.position && <span className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
+                  {formatPosition(newPlayer.position)}
+                </span>}
                 <span className="text-xs font-medium text-primary-700 dark:text-primary-500 text-center flex items-center justify-center gap-1">
                   <svg viewBox="0 0 24 24" fill="#FFD700" className="w-3 h-3">
                     <circle cx="12" cy="12" r="10" fill="#FFD700" />

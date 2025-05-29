@@ -79,6 +79,15 @@ declare module "lucide-react" {
   export const School2: CIP;
   export const MessageCircle: CIP;
   export const CircleCheck: CIP;
+  export const XIcon: CIP;
+  export const FileX2: CIP;
+  export const ChevronUp: CIP;
+  export const LoaderCircle: CIP;
+  export const Sparkles: CIP;
+  export const Swords: CIP;
+  export const Percent: CIP;
+  export const XCircle: CIP;
+  export const BowArrow: CIP;
 
 }
 

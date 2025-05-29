@@ -9,6 +9,7 @@ import { useAuthUser } from '../../hooks/useAuthUser'
 import { useOpenChat } from '../../hooks/useOpenChat'
 import { ErrorState } from '../ui/ErrorState'
 import { LoadingState } from '../ui/LoadingState'
+import { useTheme } from '../../contexts/ThemeContext'
 
 type Props = {
     className?: string
@@ -25,6 +26,8 @@ export default function SchoolBoyRugbyChat({ className }: Props) {
         authUser
     );
 
+    const {theme} = useTheme();
+
     if (isLoading) return <LoadingState />
 
     if (error) return <ErrorState message={error} />
@@ -35,7 +38,7 @@ export default function SchoolBoyRugbyChat({ className }: Props) {
             className
         )} >
 
-            <SendBirdProvider appId={SEND_BIRD_APP_ID} userId={authUser.id}>
+            <SendBirdProvider theme={theme} appId={SEND_BIRD_APP_ID} userId={authUser.id}>
                 <OpenChannelProvider channelUrl={SCHOOL_BOY_RUGBY_CHANNEL_URL}>
                     <OpenChannelUI />
                 </OpenChannelProvider>

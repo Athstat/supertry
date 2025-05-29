@@ -37,3 +37,7 @@ td, th {
   padding: 5px;
   padding-left: 10px;
 }
+
+html {
+  scroll-behavior: smooth;
+}

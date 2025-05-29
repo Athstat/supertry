@@ -2,8 +2,8 @@ import { ChevronRight, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import {
-  activeLeaguesFilter,
-  isLeagueOnTheClock,
+  calculateJoinDeadline,
+  leaguesOnClockFilter,
 } from "../../utils/leaguesUtils";
 import { useCountdown } from "../../hooks/useCountdown";
 import { epochDiff } from "../../utils/dateUtils";
@@ -18,21 +18,11 @@ type Props = {
 
 export function HeroSection({ availableLeagues, onViewLeague }: Props) {
   const navigate = useNavigate();
-  const activeLeagues = activeLeaguesFilter(availableLeagues);
-
-  let leagueOnTheClock: IFantasyLeague | undefined;
-  const twoDays = 1000 * 60 * 60 * 24 * 2;
-
-  const leaguesOnTheClock = activeLeagues.filter((l) => {
-    return isLeagueOnTheClock(l, twoDays);
-  });
-
-  if (leaguesOnTheClock.length > 0) {
-    leagueOnTheClock = leaguesOnTheClock[0];
-  }
+  const {firstLeagueOnClock: leagueOnTheClock} = 
+    leaguesOnClockFilter(availableLeagues);
 
   return (
-    <div className="bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 rounded-2xl p-4 mb-6 text-white">
+    <div className="bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800  hover:from-primary-600 hover:to-primary-800 rounded-2xl p-4 mb-6 text-white  transition-all ease-in delay-300">
       {!leagueOnTheClock && (
         <div className="space-y-4 p-3">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
@@ -68,13 +58,15 @@ function JoinDeadlineCountdown({
   league,
   onViewLeague,
 }: JoinDeadlineCountdownProps) {
-  const deadline = new Date(league.join_deadline!);
+  const deadline = calculateJoinDeadline(league);
+  if (!deadline) return;
+
   const diff = epochDiff(deadline);
 
   const { days, hours, seconds, minutes } = useCountdown(diff);
 
   const { userTeam, isLoading, rankedUserTeam } = useUserFantasyTeam(league);
-  const { navigateToMyTeam: navigateToMyTeam } = useRouter();
+  const { navigateToMyTeam: navigateToMyTeam, navigateToLeagueScreen } = useRouter();
 
   const handleCallToAction = () => {
     if (userTeam) {
@@ -83,6 +75,10 @@ function JoinDeadlineCountdown({
       onViewLeague(league);
     }
   };
+
+  const handleClickCard = () => {
+    navigateToLeagueScreen(league);
+  }
 
   const timeBlocks = [
     { value: days, label: "Days" },
@@ -93,7 +89,7 @@ function JoinDeadlineCountdown({
 
   return (
     <div className="flex flex-col p-4 gap-4 sm:gap-6">
-      <div className="space-y-2 sm:space-y-4">
+      <div onClick={handleClickCard} className="space-y-2 sm:space-y-4 cursor-pointer">
         <h1 className="text-xl flex flex-row items-center gap-1 sm:text-2xl md:text-3xl font-bold tracking-tight">
           <Trophy />
           {league.title}

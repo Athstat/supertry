@@ -78,13 +78,13 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
 
       try {
         setIsLoading(true);
-        //console.log("Fetching team data for ID:", teamId);
+        console.log("Fetching team data for ID:", teamId);
 
         // First try to fetch team athletes directly
         const teamAthletes = await fantasyTeamService.fetchTeamAthletes(
           teamId as string
         );
-        //console.log("Team athletes:", teamAthletes);
+        console.log("Team athletes:", teamAthletes);
 
         if (teamAthletes && teamAthletes.length > 0) {
           // If we have athletes, we can fetch the team details
@@ -115,6 +115,8 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
               matches_played: 0,
             } as IFantasyClubTeam;
           }
+
+          console.log("Current team: ", currentTeam);
 
           if (currentTeam) {
             setTeam(currentTeam);
@@ -241,6 +243,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
       .forEach((athlete) => {
         // Handle the TypeScript type issues with any assertions where needed
         const athleteAny = athlete as any;
+        //console.log("athleteAny", athleteAny);
 
         positions.push({
           id: athlete.athlete_id || "",
@@ -250,16 +253,7 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
             .toUpperCase(),
           x: "0",
           y: "0",
-          player: {
-            id: athleteAny.athlete_id || "",
-            name: athleteAny.player_name || "Unknown Player",
-            team: athleteAny.athlete?.team?.name || "Unknown Team",
-            position: athleteAny.position_class || "Unknown Position",
-            price: athleteAny.price || 0,
-            points: athleteAny.score || 0,
-            power_rank_rating: athleteAny.power_rank_rating || 0,
-            image_url: athleteAny.image_url,
-          },
+          player: athleteAny,
         });
       });
 
@@ -316,7 +310,13 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
     });
   };
 
-  const players = useMemo(() => convertToPlayerFormat(athletes), [athletes]);
+  //const players = useMemo(athletes, [athletes]);
+
+  const [players, setPlayers] = useState<Player[]>([]);
+
+  useEffect(() => {
+    setPlayers(athletes);
+  }, [athletes]);
 
   // Determine formation based on positions for rugby
   const determineFormation = (players: Player[]): string => {

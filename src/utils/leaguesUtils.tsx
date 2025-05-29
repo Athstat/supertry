@@ -7,6 +7,11 @@ import { dateComparator } from "./dateUtils";
 export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
   return leagues
     .filter((l) => {
+
+      if (!l.is_open && l.has_ended) {
+        return false;
+      }
+
       if (!l.join_deadline) {
         return false;
       }
@@ -88,14 +93,16 @@ export function getRankChange(currentRank: number, lastRank: number) {
 export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   if (!joinDeadline) return false;
 
-  const thirtyMinutes = 1000 * 60 * 30;
 
   const now = new Date();
   const deadline = new Date(joinDeadline);
 
-  const diff = deadline.valueOf() - now.valueOf();
+  const softDeadline = add(deadline, {
+    hours: 1,
+    minutes: 30
+  });
 
-  return diff < thirtyMinutes;
+  return now.valueOf() > softDeadline.valueOf();
 }
 
 /** Returns the last possible date that users can join a league */
@@ -149,4 +156,59 @@ export async function latestLeagueFetcher() {
 
     if (sortedLeagues.length === 0) return undefined;
     return sortedLeagues[0];
+}
+
+/** Upcoming Leagues Filter, returns leagues that are more than 7 days away */
+export function upcomingLeaguesFilter(leagues: IFantasyLeague[]) {
+  return leagues
+    .filter((l) => {
+
+      if (!l.join_deadline) {
+        return false;
+      }
+
+      const today = new Date();
+      const deadline = new Date(l.join_deadline);
+      const diffEpoch = deadline.valueOf() - today.valueOf();
+      const fiveDayEpoch = 1000 * 60 * 60 * 24 * 5;
+
+      return diffEpoch > fiveDayEpoch;
+    })
+    .sort((a, b) => {
+      const aDeadline = new Date(a.join_deadline ?? 0);
+      const bDealine = new Date(b.join_deadline ?? 0);
+
+      return aDeadline.valueOf() - bDealine.valueOf();
+    });
+}
+
+/** Returns a list of leagues that have ended */
+export function pastLeaguesFilter(leagues: IFantasyLeague[]) {
+  return leagues.filter((l) => {
+    return l.has_ended === true;
+  })
+  .sort((a, b) => {
+      const aDeadline = new Date(a.join_deadline ?? 0);
+      const bDeadline = new Date(b.join_deadline ?? 0);
+
+      return bDeadline.valueOf() - aDeadline.valueOf();
+    });
+}
+
+/** Filters leagues and returns leagues that are on the clock (7 days away) */
+export function leaguesOnClockFilter(leagues: IFantasyLeague[]) {
+  const activeLeagues = activeLeaguesFilter(leagues);
+
+  let leagueOnTheClock: IFantasyLeague | undefined;
+  const threeDays = 1000 * 60 * 60 * 24 * 3;
+
+  const leaguesOnTheClock = activeLeagues.filter((l) => {
+    return (isLeagueOnTheClock(l, threeDays));
+  });
+
+    if (leaguesOnTheClock.length > 0) {
+    leagueOnTheClock = leaguesOnTheClock[0];
+  }
+
+  return {leaguesOnTheClock, firstLeagueOnClock: leagueOnTheClock};
 }
