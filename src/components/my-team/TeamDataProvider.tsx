@@ -40,6 +40,7 @@ interface TeamDataProviderProps {
 export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
   children,
 }) => {
+  
   const location = useLocation();
   const { teamId } = useParams<{ teamId: string }>();
   const { team: locationTeam, athletes: locationAthletes } =

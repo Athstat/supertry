@@ -3,63 +3,31 @@ import { useLocation, useParams } from "react-router-dom";
 import { Team } from "../types/team";
 import { TeamStats } from "../components/team/TeamStats";
 import { TeamHeader } from "../components/my-team/TeamHeader";
-import { TeamTabsContent } from "../components/my-team/TeamTabsContent";
-import {
-  TeamLoading,
-  TeamError,
-} from "../components/my-team/TeamLoadingAndError";
-import {
-  TeamDataProvider,
-  useTeamData,
-} from "../components/my-team/TeamDataProvider";
-import { TeamActions, useTeamActions } from "../components/my-team/TeamActions";
+import { TeamLoading, TeamError } from "../components/my-team/TeamLoadingAndError";
+import { TeamDataProvider, useTeamData } from "../components/my-team/TeamDataProvider";
+import { TeamActions } from "../components/my-team/TeamActions";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { RankedFantasyTeam } from "../types/league";
-import { IFantasyLeague } from "../types/fantasyLeague";
 import AthletesAvailabilityWarning from "../components/team/AthletesAvailabilityWarning";
+import { MyTeamScreenTabType, MyTeamScreenTabView } from "../components/my-team/MyTeamScreenTabView";
 
-type TabType = "edit-team" | "view-pitch";
-
-// TeamContent component - needs to be inside the TeamActions context
-const TeamContent: React.FC<{
-  activeTab: TabType;
-  setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
-  league?: IFantasyLeague;
-}> = ({ activeTab, setActiveTab, league }) => {
-  const { positionList, players, formation } = useTeamData();
-
-  console.log("Players: ", players);
-
-  const {
-    handlePlayerClick,
-    handlePositionSelect,
-    handleViewStats,
-    handleSwapPlayer,
-  } = useTeamActions();
-
+export function MyTeamScreen() {
   return (
-    <TeamTabsContent
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-      positionList={positionList}
-      players={players}
-      formation={formation}
-      handlePositionSelect={handlePositionSelect}
-      handlePlayerClick={handlePlayerClick}
-      fetchingMarketPlayers={false} // Always pass false to prevent loading state on buttons
-      handleViewStats={handleViewStats}
-      handleSwapPlayer={handleSwapPlayer}
-      league={league}
-    />
+    <TeamDataProvider>
+      <MyTeamScreenContent />
+    </TeamDataProvider>
   );
-};
+}
 
-// Main content that uses both TeamData and TeamActions contexts
-const MyTeamContent: React.FC = () => {
+
+/** Actual consumer content on my screen that consumes data from team data provider */
+function MyTeamScreenContent() {
+
   const { teamId } = useParams<{ teamId: string }>();
-  const [activeTab, setActiveTab] = useState<TabType>("edit-team");
+  const [activeTab, setActiveTab] = useState<MyTeamScreenTabType>("view-pitch");
   const [initialized, setInitialized] = useState(false);
   const { state } = useLocation();
+
   const teamWithRank = state?.teamWithRank
     ? (state?.teamWithRank as RankedFantasyTeam)
     : undefined;
@@ -83,11 +51,7 @@ const MyTeamContent: React.FC = () => {
   }, []);
 
   // Don't render anything on initial load to prevent flicker
-  if (!initialized) {
-    return null;
-  }
-
-  if (isLoading) {
+  if (!initialized || isLoading) {
     return <TeamLoading isFullScreen={false} />;
   }
 
@@ -98,7 +62,7 @@ const MyTeamContent: React.FC = () => {
   return (
     <FantasyLeagueProvider league={leagueInfo ?? undefined}>
       <main className="container mx-auto px-4 py-6">
-        
+
         <div className="max-w-4xl mx-auto flex flex-col gap-4">
           {/* Team Header */}
           <TeamHeader
@@ -123,8 +87,8 @@ const MyTeamContent: React.FC = () => {
             }
           />
 
-          {leagueInfo && 
-            <AthletesAvailabilityWarning 
+          {leagueInfo &&
+            <AthletesAvailabilityWarning
               team={team}
               league={leagueInfo}
               athletes={athletes}
@@ -134,11 +98,13 @@ const MyTeamContent: React.FC = () => {
           {/* Team Actions with Tabs Content as children */}
           {teamId && (
             <TeamActions league={leagueInfo ?? undefined} teamId={teamId}>
-              <TeamContent
+
+              <MyTeamScreenTabView
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 league={leagueInfo ?? undefined}
               />
+
             </TeamActions>
           )}
         </div>
@@ -146,11 +112,3 @@ const MyTeamContent: React.FC = () => {
     </FantasyLeagueProvider>
   );
 };
-
-export function MyTeamScreen() {
-  return (
-    <TeamDataProvider>
-      <MyTeamContent />
-    </TeamDataProvider>
-  );
-}
