@@ -10,7 +10,6 @@ import { epochDiff } from "../../utils/dateUtils";
 import { useUserFantasyTeam } from "../league/useFantasyLeague";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "../../hooks/useRoter";
-import Experimental from "../shared/ab_testing/Experimental";
 
 type Props = {
   availableLeagues: IFantasyLeague[];

@@ -15,6 +15,8 @@ import { analytics } from "../services/anayticsService";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isLeagueLocked } from "../utils/leaguesUtils";
 import { Lock } from "lucide-react";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
+import PageView from "./PageView";
 
 type LeagueScreenTabs = "standings" | "chat" | "fixtures";
 
@@ -23,10 +25,6 @@ export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
-
-  const [activeTab, setActiveTab] = useState<LeagueScreenTabs>(
-    state?.initialTab || "standings"
-  );
 
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(
     null
@@ -86,6 +84,35 @@ export function LeagueScreen() {
 
   const isLocked = isLeagueLocked(league?.join_deadline);
 
+  const tabItems: TabViewHeaderItem[] = [
+    {
+      label: "Standings",
+      tabKey: "standings"
+    },
+
+    {
+      label: "Chat",
+      tabKey: "chat"
+    },
+
+    {
+      label: "Fixtures",
+      tabKey: "fixtures"
+    }
+  ]
+
+  const onJumpToTeam = () => {
+    const userTeamRef = document.querySelector(
+      '[data-user-team="true"]'
+    );
+    if (userTeamRef) {
+      userTeamRef.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }
+
   return (
     <FantasyLeagueProvider userTeam={userTeam} league={league}>
       <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
@@ -142,47 +169,17 @@ export function LeagueScreen() {
             )}
           </div>
         </LeagueHeader>
-        <div className="container mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 max-w-3xl">
-          {/* {league && <Countdown league={league} />} */}
 
-          {/* Tab Navigation */}
-          <div className="flex overflow-x-auto mb-6 bg-white dark:bg-dark-800 rounded-t-xl shadow-sm">
-            <TabButton
-              active={activeTab === "standings"}
-              onClick={() => setActiveTab("standings")}
-            >
-              Standings
-            </TabButton>
-            <TabButton
-              active={activeTab === "chat"}
-              onClick={() => setActiveTab("chat")}
-            >
-              Chat
-            </TabButton>
-            <TabButton
-              active={activeTab === "fixtures"}
-              onClick={() => setActiveTab("fixtures")}
-            >
-              Fixtures
-            </TabButton>
-          </div>
-          {/* Tab Content */}
-          <div className="space-y-6">
-            {activeTab === "standings" && league && (
+        <PageView className="p-4" >
+
+          {league && <TabView  tabHeaderItems={tabItems}>
+
+            <TabViewPage tabKey="standings" >
+
               <LeagueStandings
                 teams={teams}
                 showJumpButton={showJumpButton}
-                onJumpToTeam={() => {
-                  const userTeamRef = document.querySelector(
-                    '[data-user-team="true"]'
-                  );
-                  if (userTeamRef) {
-                    userTeamRef.scrollIntoView({
-                      behavior: "smooth",
-                      block: "center",
-                    });
-                  }
-                }}
+                onJumpToTeam={onJumpToTeam}
                 isLoading={isLoading}
                 error={error}
                 onTeamClick={(team) => {
@@ -191,51 +188,57 @@ export function LeagueScreen() {
                 }}
                 league={league}
               />
-            )}
-            {activeTab === "chat" && (
-              <>{league && <LeagueGroupChatFeed league={league} />}</>
-            )}
-            {activeTab === "fixtures" && (
-              <FantasyLeagueFixturesList 
+            </TabViewPage>
+
+            <TabViewPage tabKey="chat" >
+              <LeagueGroupChatFeed league={league} />
+            </TabViewPage>
+
+            <TabViewPage tabKey="fixtures" >
+              <FantasyLeagueFixturesList
                 userTeam={userTeam}
-                league={league as IFantasyLeague} 
+                league={league as IFantasyLeague}
               />
-            )}
-          </div>
-        </div>
-        {showSettings && (
-          <LeagueSettings onClose={() => setShowSettings(false)} />
-        )}
-        {/* Team Athletes Modal */}
-        {selectedTeam && (
-          <TeamAthletesModal
-            team={selectedTeam as RankedFantasyTeam}
-            athletes={teamAthletes}
-            onClose={handleCloseModal}
-            isLoading={loadingAthletes}
-          />
-        )}
-        {/* Mobile CTA Button - Only for Join This League */}
+            </TabViewPage>
 
-        {!isLoading && userTeam === undefined && league && !isLocked && (
-          <button
-            onClick={handleJoinLeague}
-            className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 text-white font-semibold rounded-xl py-3 shadow-lg"
-          >
-            Join This League
-          </button>
-        )}
+          </TabView>}
+        </PageView>
 
-        {!isLoading && userTeam === undefined && isLocked && (
-          <button
-            disabled
-            className="lg:hidden cursor-not-allowed flex flex-row items-center justify-center gap-2 fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
-          >
-            Join This League
-            <Lock className="w-4 h-4" />
-          </button>
-        )}
       </div>
-    </FantasyLeagueProvider>
+
+      {showSettings && (
+        <LeagueSettings onClose={() => setShowSettings(false)} />
+      )}
+
+      {/* Team Athletes Modal */}
+      {selectedTeam && (
+        <TeamAthletesModal
+          team={selectedTeam as RankedFantasyTeam}
+          athletes={teamAthletes}
+          onClose={handleCloseModal}
+          isLoading={loadingAthletes}
+        />
+      )}
+      {/* Mobile CTA Button - Only for Join This League */}
+
+      {!isLoading && userTeam === undefined && league && !isLocked && (
+        <button
+          onClick={handleJoinLeague}
+          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 text-white font-semibold rounded-xl py-3 shadow-lg"
+        >
+          Join This League
+        </button>
+      )}
+
+      {!isLoading && userTeam === undefined && isLocked && (
+        <button
+          disabled
+          className="lg:hidden cursor-not-allowed flex flex-row items-center justify-center gap-2 fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
+        >
+          Join This League
+          <Lock className="w-4 h-4" />
+        </button>
+      )}
+    </FantasyLeagueProvider >
   );
 }
