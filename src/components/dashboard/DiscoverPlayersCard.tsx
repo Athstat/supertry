@@ -45,7 +45,7 @@ export default function DiscoverPlayersCard() {
                     </div>
 
                     <div className={twMerge(
-                        "absolute z-10 inset-0 bg-gradient-to-r from-blue-600 to-blue-800/80 transition-all duration-500 ease-in-out",
+                        "absolute z-10 inset-0 bg-gradient-to-r from-primary-800 to-blue-900/80 transition-all duration-500 ease-in-out",
                         isHovering && "from-blue-700 to-blue-800/80"
                     )} >
 
