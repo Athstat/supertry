@@ -26,16 +26,16 @@ export default function TeamAthletesModalPitchView({ athletes, handleKeyDown, ha
                     No athletes found
                 </div>
             ) : (
-                <div className="relative h-full">
+                <div className="relative h-full  ">
                     {/* Rugby pitch background */}
                     <div className="absolute inset-0 w-full h-full bg-green-700" >
-                        <RugbyPitch count={4} />
+                        <RugbyPitch count={100} />
                     </div>
 
                     {/* Athletes overlay */}
-                    <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center" >
+                    <div className="absolute overflow-y-auto inset-0 w-full h-full flex flex-col items-center justify-center  md:px-6" >
 
-                        <div className="grid grid-cols-3 gap-4 p-4" >
+                        <div className="grid grid-cols-3 lg:grid-cols-3 gap-4 p-4" >
                             {athletes.map((athlete, index) => (
                                 <TeamAthleteListItem
                                     athlete={athlete}
@@ -90,7 +90,7 @@ function TeamAthleteListItem({
         >
             <PlayerGameCard
                 player={athlete}
-                className="h-[170px]"
+                className="h-[170px] md:h-[230px]"
             />
 
             <div className="text-white gap-2 flex flex-row items-center justify-center" >

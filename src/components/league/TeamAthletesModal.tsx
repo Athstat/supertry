@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, ChevronLeft } from "lucide-react";
+import { X, ChevronLeft, Trophy, Dot } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction } from "../../utils/athleteUtils";
@@ -74,10 +74,10 @@ export function TeamAthletesModal({
       className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md h-[90vh] overflow-clip flex flex-col">
-        
+      <div className="bg-white dark:bg-gray-800 rounded-xl w-[90%] lg:w-[50%] h-[90vh] overflow-clip flex flex-col">
+
         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
-          
+
           <div className="flex-1">
             {selectedAthleteId && selectedAthlete ? (
               <div className="flex items-center">
@@ -118,12 +118,23 @@ export function TeamAthletesModal({
               </div>
             ) : (
               <div>
-                <h2 className="text-lg font-semibold dark:text-white">
-                  {team.teamName}
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Managed by {team.managerName}
-                </p>
+                <div className="text-lg flex flex-row items-center gap-1 font-semibold dark:text-white">
+                  <p>{team.teamName}</p>
+                </div>
+                <div className="flex flex-row items-center text-sm text-gray-500 dark:text-gray-400" >
+
+                  {team.rank &&
+                    <>
+                      <Trophy className="w-3.5 h-3.5 mr-1" />
+                      <p>Rank <strong>{team.rank}</strong> </p>
+                      <Dot />
+                    </>
+                  }
+
+                  <p className="">
+                    Managed by {team.managerName}
+                  </p>
+                </div>
               </div>
             )}
           </div>
