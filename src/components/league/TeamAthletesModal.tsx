@@ -7,6 +7,8 @@ import { RugbyPlayer } from "../../types/rugbyPlayer";
 import TeamAthletesModalListView from "./TeamAthletesModalListView";
 import Experimental from "../shared/ab_testing/Experimental";
 import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
+import { getEnvironment } from "../../utils/envUtils";
+import { twMerge } from "tailwind-merge";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
@@ -66,15 +68,18 @@ export function TeamAthletesModal({
   };
 
   const totalScore = pointsBreakdown.reduce((acc, item) => acc + item.score, 0);
-
   //console.log("Points Breakdown", pointsBreakdown);
+  const isStable = getEnvironment() === "production";
 
   return (
     <div
       className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[90vh] overflow-clip flex flex-col">
+      <div className={twMerge(
+        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[90vh] overflow-clip flex flex-col",
+        !isStable && "max-h-none h-[90vh]"
+      )}>
 
         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
 

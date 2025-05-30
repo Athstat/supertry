@@ -29,7 +29,7 @@ export default function TeamAthletesModalPitchView({ athletes, handleKeyDown, ha
                 <div className="relative h-full  ">
                     {/* Rugby pitch background */}
                     <div className="absolute inset-0 w-full h-full bg-green-700" >
-                        <RugbyPitch count={100} />
+                        <RugbyPitch count={4} />
                     </div>
 
                     {/* Athletes overlay */}
