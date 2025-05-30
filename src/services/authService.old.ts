@@ -10,36 +10,6 @@ const KEYCLOAK_URL =
 const KEYCLOAK_REALM =
   import.meta.env.VITE_AUTH_KEYCLOAK_REALM || "athstat-games";
 
-// Helper function to create a timeout promise
-function createTimeoutPromise<T>(timeoutMs: number, operation: string): Promise<T> {
-  return new Promise<T>((_, reject) => {
-    setTimeout(() => {
-      reject(new Error(`${operation} timeout after ${timeoutMs}ms`));
-    }, timeoutMs);
-  });
-}
-
-// Helper function to fetch with timeout
-async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number = 10000): Promise<Response> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error: any) {
-    clearTimeout(timeoutId);
-    if (error.name === 'AbortError') {
-      throw new Error(`Request timeout after ${timeoutMs}ms`);
-    }
-    throw error;
-  }
-}
-
 export const authService = {
   /**
    * Create and login a guest user based on device ID
@@ -140,7 +110,7 @@ export const authService = {
         newPassword: newPassword
       };
 
-      const response = await fetchWithTimeout(
+      const response = await fetch(
         getUri(`/api/v1/auth/claim-guest-account/`),
         {
           method: "POST",
@@ -149,8 +119,7 @@ export const authService = {
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`
           },
           body: JSON.stringify(updateData),
-        },
-        10000
+        }
       );
 
       if (!response.ok) {
@@ -180,7 +149,7 @@ export const authService = {
   async registerUser(userData: UserRepresentation): Promise<any> {
     try {
 
-      const response = await fetchWithTimeout(
+      const response = await fetch(
         getUri(`/api/v1/unauth/create-keycloak-user/`),
         {
           method: "POST",
@@ -188,8 +157,7 @@ export const authService = {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
-        },
-        10000
+        }
       );
 
       // Check if the response is JSON
@@ -229,7 +197,7 @@ export const authService = {
       console.log("[login] Using token URL:", tokenUrl);
       console.log("[login] client_id: ", import.meta.env.VITE_CLIENT_ID);
 
-      const response = await fetchWithTimeout(tokenUrl, {
+      const response = await fetch(tokenUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -241,7 +209,7 @@ export const authService = {
           password,
           scope: import.meta.env.VITE_SCOPE || "openid",
         }),
-      }, 10000);
+      });
 
       console.log("[login] Response status:", response.status);
 
@@ -313,7 +281,7 @@ export const authService = {
         import.meta.env.VITE_KEYCLOAK_TOKEN_URL ||
         `${KEYCLOAK_URL}/auth/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`;
 
-      const response = await fetchWithTimeout(tokenUrl, {
+      const response = await fetch(tokenUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -323,7 +291,7 @@ export const authService = {
           client_id: CLIENT_ID,
           refresh_token: refreshToken,
         }),
-      }, 10000);
+      });
 
       if (!response.ok) {
         // If refresh fails, clear tokens
@@ -420,13 +388,13 @@ export const authService = {
       const apiUrl = getUri(`/api/v1/unauth/create-games-user/`);
       console.log("[createGamesUser] API URL:", apiUrl);
 
-      const response = await fetchWithTimeout(apiUrl, {
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-      }, 15000); // Increased timeout to 15 seconds for user creation
+      });
 
       console.log("[createGamesUser] Response status:", response.status);
       console.log("[createGamesUser] Response headers:", response.headers);
@@ -470,12 +438,8 @@ export const authService = {
       const result = await response.json();
       console.log("[createGamesUser] Success response:", result);
       return result;
-    } catch (error: any) {
+    } catch (error) {
       console.error("[createGamesUser] Registration error:", error);
-      // If it's a timeout error, provide a more user-friendly message
-      if (error.message && error.message.includes('timeout')) {
-        throw new Error("The server is taking too long to respond. Please try again.");
-      }
       throw error;
     }
   },

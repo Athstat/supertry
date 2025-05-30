@@ -3,7 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { WelcomeScreen } from "./screens/auth/WelcomeScreen";
 import { SignUpScreen } from "./screens/auth/SignUpScreen";
 import { SignInScreen } from "./screens/auth/SignInScreen";
+import { AuthChoiceScreen } from "./screens/auth/AuthChoiceScreen";
 import PostSignUpWelcomeScreen from "./screens/PostSignUpWelcomeScreen";
+import { CompleteProfileScreen } from "./screens/CompleteProfileScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { JoinLeagueScreen } from "./screens/JoinLeagueScreen";
 import { LeagueScreen } from "./screens/LeagueScreen";
@@ -87,6 +89,14 @@ const AppRoutes = () => {
         element={
           <AuthRoute>
             <SignInScreen />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/auth-choice"
+        element={
+          <AuthRoute>
+            <AuthChoiceScreen />
           </AuthRoute>
         }
       />
@@ -273,10 +283,20 @@ const AppRoutes = () => {
 
       {/* Post-Sign-Up Welcome Screen */}
       <Route
-        path="/welcome"
+        path="/post-signup-welcome"
         element={
           <ProtectedRoute>
             <PostSignUpWelcomeScreen />
+          </ProtectedRoute>
+        }
+      />
+      
+      {/* Complete Profile Screen */}
+      <Route
+        path="/complete-profile"
+        element={
+          <ProtectedRoute>
+            <CompleteProfileScreen />
           </ProtectedRoute>
         }
       />
