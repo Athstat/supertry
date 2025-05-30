@@ -7,6 +7,7 @@ import PageView from "./PageView";
 import { Home } from "lucide-react";
 import DiscoverPlayersCard from "../components/dashboard/DiscoverPlayersCard";
 import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
+import Experimental from "../components/shared/ab_testing/Experimental";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -51,7 +52,9 @@ export function DashboardScreen() {
         <h1 className="font-bold text-2xl" >Home</h1>
       </div>
 
-      <DiscoverPlayersCard />
+      <Experimental>
+        <DiscoverPlayersCard />
+      </Experimental>
 
       {/* <HeroSection 
         availableLeagues={leagues}

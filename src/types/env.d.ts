@@ -9,6 +9,7 @@ interface ImportMetaEnv {
   readonly VITE_GRANT_TYPE: string;
   readonly VITE_SCOPE: string;
   readonly VITE_SEND_BIRD_APP_ID: string;
+  readonly VITE_APP_ENV: "production" | "qa" | "development";
   // more env variables...
 }
 
