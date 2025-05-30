@@ -97,11 +97,12 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
         </h2>
       </div>
 
-      <div className="divide-y divide-gray-300 dark:divide-slate-800/50">
+      <div className="">
         {sortedDays.map((dayKey) => (
           <div key={dayKey}>
+            
             {/* Day header */}
-            <div className="px-4 py-2 bg-gray-100 dark:bg-dark-700/70 font-medium text-gray-800 dark:text-gray-200">
+            <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800/40 border border-slate-100 dark:border-slate-800 font-medium text-gray-800 dark:text-gray-200">
               {format(new Date(dayKey), "EEEE, MMMM d, yyyy")}
             </div>
 
@@ -113,6 +114,7 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
                   fixture={fixture} 
                   key={index}
                   showVenue
+                  hideDate
                   message={generateFixtureMessage(fixture)}
                 />
               ))}

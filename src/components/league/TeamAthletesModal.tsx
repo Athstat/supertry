@@ -1,28 +1,18 @@
 import React, { useState } from "react";
-import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
+import { X, ChevronLeft, Trophy, Dot } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { PointsBreakdownItem } from "../../services/athleteService";
-import { formatAction, formatPosition } from "../../utils/athleteUtils";
+import { formatAction } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
-import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
+import TeamAthletesModalListView from "./TeamAthletesModalListView";
+import Experimental from "../shared/ab_testing/Experimental";
+import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
+import { getEnvironment } from "../../utils/envUtils";
 import { twMerge } from "tailwind-merge";
-
-interface Athlete {
-  id: string;
-  athlete_id?: string;
-  name: string;
-  position: string;
-  player_name?: string;
-  team_name?: string;
-  power_rank_rating?: number;
-  price?: number;
-  image_url?: string;
-  score?: number;
-}
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
-  athletes: Athlete[];
+  athletes: RugbyPlayer[];
   onClose: () => void;
   isLoading?: boolean;
 }
@@ -78,16 +68,21 @@ export function TeamAthletesModal({
   };
 
   const totalScore = pointsBreakdown.reduce((acc, item) => acc + item.score, 0);
-
   //console.log("Points Breakdown", pointsBreakdown);
+  const isStable = getEnvironment() === "production";
 
   return (
     <div
       className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md max-h-[80vh] flex flex-col">
+      <div className={twMerge(
+        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[75vh] lg:max-h-[90vh] overflow-clip flex flex-col",
+        !isStable && "max-h-none h-[90vh] lg:h-[90vh]"
+      )}>
+
         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
+
           <div className="flex-1">
             {selectedAthleteId && selectedAthlete ? (
               <div className="flex items-center">
@@ -110,17 +105,17 @@ export function TeamAthletesModal({
                 </button>
                 <div>
                   <h2 className="text-xl font-semibold dark:text-white">
-                    {selectedAthlete.name || selectedAthlete.player_name}
+                    {selectedAthlete.player_name}
                   </h2>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     {selectedAthlete.position
                       ? selectedAthlete.position
-                          .split("-")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1)
-                          )
-                          .join(" ")
+                        .split("-")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")
                       : "Athlete"}{" "}
                     • {team.teamName}
                   </p>
@@ -128,12 +123,23 @@ export function TeamAthletesModal({
               </div>
             ) : (
               <div>
-                <h2 className="text-lg font-semibold dark:text-white">
-                  {team.teamName}
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Managed by {team.managerName}
-                </p>
+                <div className="text-lg flex flex-row items-center gap-1 font-semibold dark:text-white">
+                  <p>{team.teamName}</p>
+                </div>
+                <div className="flex flex-row items-center text-sm text-gray-500 dark:text-gray-400" >
+
+                  {team.rank &&
+                    <>
+                      <Trophy className="w-3.5 h-3.5 mr-1" />
+                      <p>Rank <strong>{team.rank}</strong> </p>
+                      <Dot />
+                    </>
+                  }
+
+                  <p className="">
+                    Managed by {team.managerName}
+                  </p>
+                </div>
               </div>
             )}
           </div>
@@ -174,7 +180,7 @@ export function TeamAthletesModal({
           </div>
         ) : selectedAthleteId ? (
           // Points breakdown view
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto min-h-[60vh]">
             {pointsBreakdown.length === 0 && (
               <p className="text-center m-4 bg-slate-100 dark:bg-slate-700 rounded-xl p-4 text-gray-500 dark:text-gray-400">
                 No points breakdown data available
@@ -186,25 +192,26 @@ export function TeamAthletesModal({
           </div>
         ) : (
           // Main list view
-          <div className="overflow-y-auto flex-1">
-            {athletes.length === 0 ? (
-              <div className="p-4 text-center text-gray-500 dark:text-gray-400">
-                No athletes found
-              </div>
-            ) : (
-              <ul className="divide-y dark:divide-gray-700">
-                {athletes.map((athlete, index) => {
-                  return (
-                    <TeamAthleteListItem
-                      athlete={athlete}
-                      key={index}
-                      handleKeyDown={handleKeyDown}
-                      handleViewBreakdown={handleViewBreakdown}
-                    />
-                  );
-                })}
-              </ul>
-            )}
+          <div className="w-full h-full" >
+
+            <Experimental
+              placeholder={
+                <TeamAthletesModalListView
+                  athletes={athletes}
+                  handleKeyDown={handleKeyDown}
+                  handleViewBreakdown={handleViewBreakdown}
+                />
+              }
+            >
+              <TeamAthletesModalPitchView
+                athletes={athletes}
+                handleKeyDown={handleKeyDown}
+                handleViewBreakdown={handleViewBreakdown}
+              />
+            </Experimental>
+
+
+
           </div>
         )}
       </div>
@@ -212,108 +219,6 @@ export function TeamAthletesModal({
   );
 }
 
-type ListItemProps = {
-  athlete: RugbyPlayer;
-  handleViewBreakdown: (
-    athleteId: string,
-    pointsBreakDown: PointsBreakdownItem[]
-  ) => void;
-  handleKeyDown: (
-    e: React.KeyboardEvent<HTMLButtonElement>,
-    athleteId: string,
-    pointsBreakDown: PointsBreakdownItem[]
-  ) => void;
-};
-
-function TeamAthleteListItem({
-  athlete,
-  handleViewBreakdown,
-  handleKeyDown,
-}: ListItemProps) {
-  const athleteId = athlete.id ?? "fall-back-id";
-
-  const { data: points, isLoading } = useAthletePointsBreakdown(
-    athlete.tracking_id ?? "default-tracking-id"
-  );
-
-  const totalScore: number = points
-    ? points.reduce((currTotal, action) => {
-        return currTotal + action.score;
-      }, 0)
-    : 0;
-
-  const isSub = !athlete.is_starting;
-
-  console.log("Points Breakdown 2.0", athlete.player_name, points);
-
-  return (
-    <li>
-      <div
-        onClick={() => handleViewBreakdown(athleteId, points ?? [])}
-        aria-disabled={isLoading}
-        className="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-      >
-        {/* Athlete Image */}
-        <div className="flex-shrink-0">
-          {athlete.image_url ? (
-            <img
-              src={athlete.image_url}
-              alt={athlete.player_name || "Athlete"}
-              className="w-12 h-12 rounded-full object-cover object-top bg-gray-100 dark:bg-gray-700"
-              onError={(e) => {
-                // Fallback if image fails to load
-                e.currentTarget.src =
-                  "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
-              }}
-            />
-          ) : (
-            <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-              <User size={24} className="text-gray-400" />
-            </div>
-          )}
-        </div>
-
-        {/* Athlete Info */}
-        <div className="flex-1">
-          <div className="font-medium dark:text-white">
-            {athlete.player_name}
-          </div>
-          <div
-            className={twMerge(
-              "text-sm text-gray-500 dark:text-gray-400 w-fit rounded-xl",
-              isSub &&
-                "bg-orange-600 w-fit font-bold px-2 text-white dark:text-white"
-            )}
-          >
-            {formatPosition(athlete.position ?? "")}{" "}
-            {isSub ? "· Super Sub 🌟" : ""}
-          </div>
-        </div>
-
-        {/* Athlete Stats with View Details Button */}
-        <div className="flex items-center gap-2">
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            {isLoading && (
-              <p className="w-4 h-4 rounded-full bg-slate-300 dark:bg-slate-700 animate-pulse"></p>
-            )}
-            {!isLoading && <p>{totalScore?.toFixed(1)}</p>}
-          </div>
-          <button
-            onKeyDown={(e) => handleKeyDown(e, athleteId, points ?? [])}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label={`View points breakdown for ${athlete.player_name}`}
-            tabIndex={0}
-          >
-            <ChevronRight
-              size={20}
-              className="text-gray-500 dark:text-gray-400"
-            />
-          </button>
-        </div>
-      </div>
-    </li>
-  );
-}
 
 type PointsBreakdownListItemProps = {
   item: PointsBreakdownItem;
@@ -342,13 +247,12 @@ function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
           </div>
         </div>
         <span
-          className={`font-bold ${
-            isPositive
-              ? "text-green-600 dark:text-green-400"
-              : isNegative
+          className={`font-bold ${isPositive
+            ? "text-green-600 dark:text-green-400"
+            : isNegative
               ? "text-red-600 dark:text-red-400"
               : "dark:text-white"
-          }`}
+            }`}
         >
           {item?.score.toFixed(1) ?? 0} pts
         </span>

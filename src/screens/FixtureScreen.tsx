@@ -107,16 +107,20 @@ export default function FixtureScreen() {
 
       {!loadingBoxScore &&
 
+
         (
-          <PageView>
+          <PageView className="p-4" >
             <TabView tabHeaderItems={tabItems}  >
-              <TabViewPage className="flex flex-col p-4 gap-5" tabKey="athletes-stats" >
+              
+              <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats" >
                 {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
               </TabViewPage>
-              <TabViewPage className="flex flex-col p-4 gap-5" tabKey="kick-off" >
+
+              <TabViewPage className="flex flex-col gap-5" tabKey="kick-off" >
                 <FixtureScreenOverview fixture={fixture} />
               </TabViewPage>
-              <TabViewPage className="flex flex-col p-4 gap-5" tabKey="team-stats" >
+
+              <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >
                 {boxScore && <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />}
               </TabViewPage>
 
@@ -125,6 +129,7 @@ export default function FixtureScreen() {
               </TabViewPage>
 
             </TabView>
+
           </PageView>
         )
       }

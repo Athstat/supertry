@@ -50,7 +50,7 @@ export const PlayerSort = ({
 
       {/* Sort Options Dropdown */}
       {showSortOptions && (
-        <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-dark-800 rounded-lg shadow-lg z-10 border dark:border-dark-700">
+        <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-dark-800 rounded-lg shadow-lg z-10 border dark:border-slate-700">
           <div className="p-2">
             <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 px-2">
               Sort by

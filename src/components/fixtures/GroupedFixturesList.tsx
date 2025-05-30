@@ -57,6 +57,7 @@ export default function GroupedFixturesList({ fixtures, search, generateMessage 
                                     fixture={fixture}
                                     key={index}
                                     showVenue
+                                    hideDate
                                     message={generateMessage ? generateMessage(fixture) : undefined}
                                 />
                             ))}
