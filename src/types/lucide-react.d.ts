@@ -88,6 +88,7 @@ declare module "lucide-react" {
   export const Percent: CIP;
   export const XCircle: CIP;
   export const BowArrow: CIP;
+  export const AlertCircle: CIP;
 
 }
 

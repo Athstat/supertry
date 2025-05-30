@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
 import { LeagueSettings } from "../components/league/LeagueSettings";
-import { TabButton } from "../components/shared/TabButton";
 import { RankedFantasyTeam } from "../types/league";
 import { fantasyTeamService } from "../services/teamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
@@ -12,16 +11,16 @@ import { IFantasyLeague } from "../types/fantasyLeague";
 import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { useFantasyLeague } from "../components/league/useFantasyLeague";
 import { analytics } from "../services/anayticsService";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { isLeagueLocked } from "../utils/leaguesUtils";
 import { Lock } from "lucide-react";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import PageView from "./PageView";
+import { ErrorState } from "../components/ui/ErrorState";
 
-type LeagueScreenTabs = "standings" | "chat" | "fixtures";
 
 export function LeagueScreen() {
-  const { state } = useLocation();
+
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
@@ -202,6 +201,12 @@ export function LeagueScreen() {
             </TabViewPage>
 
           </TabView>}
+
+          {!league && (
+            <ErrorState 
+              error="Error Loading League Data" 
+            />
+          )}
         </PageView>
 
       </div>
