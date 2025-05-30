@@ -49,7 +49,9 @@ export async function getDeviceId(): Promise<string> {
       
       const deviceId = await Promise.race([deviceIdPromise, timeoutPromise]);
       console.log('[getDeviceId] Got device ID from mobile app:', deviceId);
-      return deviceId;
+      
+      // Ensure the device ID is valid for backend
+      return formatDeviceId(deviceId);
     } catch (error) {
       console.error('[getDeviceId] Error getting device ID from bridge:', error);
       console.log('[getDeviceId] Falling back to web browser device ID');
@@ -68,13 +70,50 @@ export async function getDeviceId(): Promise<string> {
       deviceId = `web_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
     }
     
+    // Format and store the device ID
+    deviceId = formatDeviceId(deviceId);
     localStorage.setItem('device_id', deviceId);
     console.log('[getDeviceId] Generated new device ID for web:', deviceId);
   } else {
     console.log('[getDeviceId] Retrieved existing device ID for web:', deviceId);
+    
+    // Format the existing device ID just to be safe
+    const formattedId = formatDeviceId(deviceId);
+    if (formattedId !== deviceId) {
+      console.log('[getDeviceId] Reformatting existing device ID:', deviceId, '->', formattedId);
+      localStorage.setItem('device_id', formattedId);
+      deviceId = formattedId;
+    }
   }
   
   return deviceId;
+}
+
+/**
+ * Format a device ID to ensure it's acceptable to the backend
+ * @param id The raw device ID
+ * @returns string A formatted device ID that should pass validation
+ */
+export function formatDeviceId(id: string): string {
+  if (!id) return 'fallback_' + Date.now();
+  
+  // Remove any characters that aren't alphanumeric, dash, or underscore
+  let formatted = id.replace(/[^a-zA-Z0-9\-_]/g, '');
+  
+  // Ensure it starts with a letter or number
+  if (!/^[a-zA-Z0-9]/.test(formatted)) {
+    formatted = 'id_' + formatted;
+  }
+  
+  // Limit length to avoid issues
+  formatted = formatted.substring(0, 64);
+  
+  // If the formatting removed too much, use a fallback
+  if (formatted.length < 8) {
+    formatted = 'device_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+  }
+  
+  return formatted;
 }
 
 /**

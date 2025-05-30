@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Loader } from "lucide-react";
@@ -15,6 +15,14 @@ export function CompleteProfileScreen() {
   const [errors, setErrors] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [currentUserInfo, setCurrentUserInfo] = useState<any>(null);
+  
+  // Get current user info when component mounts
+  useEffect(() => {
+    const userInfo = authService.getUserInfo();
+    setCurrentUserInfo(userInfo);
+    console.log("Current user info:", userInfo);
+  }, []);
 
   const validateForm = () => {
     const newErrors: any = {};
@@ -56,25 +64,43 @@ export function CompleteProfileScreen() {
       return;
     }
 
-    setIsSubmitting(true);
+    //setIsSubmitting(true);
     setSubmitError("");
 
-    try {
-      await authService.claimGuestAccount(
-        formData.username,
-        formData.email,
-        formData.password
-      );
+    // try {
+    //   console.log("Starting account claim process...");
+    //   console.log("Submitting with username:", formData.username);
       
-      // Navigate to dashboard after successful claim
-      navigate("/dashboard");
-    } catch (error: any) {
-      console.error("Error claiming account:", error);
-      setSubmitError(
-        error.message || "Failed to complete profile. Please try again."
-      );
-      setIsSubmitting(false);
-    }
+    //   // Get tokens from localStorage for debugging
+    //   const tokens = {
+    //     access_token: localStorage.getItem("access_token"),
+    //     refresh_token: localStorage.getItem("refresh_token"),
+    //   };
+    //   console.log("Current tokens:", tokens);
+      
+    //   await authService.claimGuestAccount(
+    //     formData.username,
+    //     formData.email,
+    //     formData.password
+    //   );
+      
+    //   // Show success message (could also use a toast notification here)
+    //   console.log("Profile completed successfully!");
+      
+    //   // Navigate to dashboard after successful claim
+    //   navigate("/dashboard");
+    // } catch (error: any) {
+    //   console.error("Error claiming account:", error);
+    //   // Format the error message for better display
+    //   let errorMessage = error.message || "Failed to complete profile. Please try again.";
+      
+    //   if (errorMessage.includes("string did not match")) {
+    //     errorMessage = "Your username contains invalid characters. Use only letters, numbers, and underscores.";
+    //   }
+      
+    //   setSubmitError(errorMessage);
+    //   setIsSubmitting(false);
+    // }
   };
 
   const handleInputChange = (field: string, value: string) => {

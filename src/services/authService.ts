@@ -1,7 +1,7 @@
 import { UserRepresentation } from "../types/auth";
 import { getUri } from "../utils/backendUtils";
 import { analytics } from "./anayticsService";
-import { getDeviceId, generateGuestUsername, isGuestEmail } from "../utils/deviceIdUtils";
+import { getDeviceId, generateGuestUsername, isGuestEmail, getDeviceIdFromEmail } from "../utils/deviceIdUtils";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID || "athstat-frontend";
 const KEYCLOAK_URL =
@@ -128,7 +128,30 @@ export const authService = {
         throw new Error("Not a guest account or not logged in");
       }
 
-      const deviceId = await getDeviceId();
+      console.log("[claimGuestAccount] Current user info:", userInfo);
+
+      // Use the device ID from the current guest email if possible
+      let deviceId = getDeviceIdFromEmail(userInfo.email);
+      if (!deviceId) {
+        // Fallback to getDeviceId (handles both web and mobile)
+        deviceId = await getDeviceId();
+      }
+      
+      console.log("[claimGuestAccount] Using device ID:", deviceId);
+      
+      // Validate inputs to match backend expectations
+      if (!/^[a-zA-Z0-9_]{3,30}$/.test(newUsername)) {
+        throw new Error("Username must be 3-30 characters and contain only letters, numbers, and underscores");
+      }
+      
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+        throw new Error("Please enter a valid email address");
+      }
+      
+      if (newPassword.length < 6) {
+        throw new Error("Password must be at least 6 characters");
+      }
+      
       const guestEmail = `${deviceId}@devices.scrummy-app.ai`;
       
       // Update user data
@@ -139,6 +162,8 @@ export const authService = {
         newUsername: newUsername,
         newPassword: newPassword
       };
+
+      console.log("[claimGuestAccount] Request payload:", JSON.stringify(updateData, null, 2));
 
       const response = await fetchWithTimeout(
         getUri(`/api/v1/auth/claim-guest-account/`),
@@ -153,12 +178,28 @@ export const authService = {
         10000
       );
 
+      // Get response body as text first for debugging
+      const responseText = await response.text();
+      console.log("[claimGuestAccount] Response status:", response.status);
+      console.log("[claimGuestAccount] Response body:", responseText);
+      
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to claim account");
+        let errorMessage = "Failed to claim account";
+        try {
+          // Try to parse the response as JSON
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.message || errorData.error || errorData.detail || errorMessage;
+        } catch (e) {
+          // If it's not valid JSON, use the raw text if available
+          if (responseText) {
+            errorMessage = responseText;
+          }
+        }
+        throw new Error(errorMessage);
       }
 
-      const result = await response.json();
+      // Parse the response text as JSON
+      const result = responseText ? JSON.parse(responseText) : {};
       
       // Clear guest account flag
       localStorage.removeItem("is_guest_account");
