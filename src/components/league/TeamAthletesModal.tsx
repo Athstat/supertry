@@ -74,7 +74,7 @@ export function TeamAthletesModal({
       className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] h-[90vh] overflow-clip flex flex-col">
+      <div className="bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[90vh] overflow-clip flex flex-col">
 
         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
 
