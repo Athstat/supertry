@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { RugbyPlayer } from "../types/rugbyPlayer";
 import { athleteService } from "../services/athleteService";
+import { URC_COMPETIION_ID } from "../types/constants";
 
 // Default competition ID
 const DEFAULT_COMPETITION_ID = "d313fbf5-c721-569b-975d-d9ec242a6f19";
@@ -42,7 +43,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsLoading(true);
       setError(null);
       const data = await athleteService.getRugbyAthletesByCompetition(
-        DEFAULT_COMPETITION_ID
+        URC_COMPETIION_ID
       );
       setAthletes(data);
       setLastFetchTime(now);

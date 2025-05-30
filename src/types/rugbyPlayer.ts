@@ -12,6 +12,7 @@ export interface RugbyPlayer {
   date_of_birth?: Date;
   team_logo?: string;
   is_starting?: boolean
+  kicking?: number;
 
   // Stats
   ball_carrying?: number;
@@ -27,6 +28,9 @@ export interface RugbyPlayer {
   infield_kicking?: number;
   tactical_kicking?: number;
   goal_kicking?: number;
+  scoring: number;
+  defence: number;
+  attacking: number;
 
   // UI display stats
   tries?: number;
