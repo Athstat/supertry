@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ActiveLeaguesSection, HeroSection } from "../components/dashboard";
-import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
 import { leagueService } from "../services/leagueService";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import PageView from "./PageView";
+import { Home } from "lucide-react";
 import DiscoverPlayersCard from "../components/dashboard/DiscoverPlayersCard";
+import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
+import Experimental from "../components/shared/ab_testing/Experimental";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -41,27 +44,36 @@ export function DashboardScreen() {
   };
 
   return (
-    <main className="flex flex-col dark:text-white mx-auto px-4 py-6 lg:px-[15%]">
-      {/* Hero Section */}
+    <PageView className="flex flex-col space-y-6 p-4">
 
-      {/* <HeroSection availableLeagues={leagues} onViewLeague={handleViewLeague} /> */}
 
-      <div className="mb-6" >
+      <div className="flex flex-row items-center gap-2" >
+        <Home />
+        <h1 className="font-bold text-2xl" >Home</h1>
+      </div>
+
+      <Experimental
+        placeholder={
+          <HeroSection
+            availableLeagues={leagues}
+            onViewLeague={handleViewLeague}
+          />
+        }
+      >
         <DiscoverPlayersCard />
-      </div>
+      </Experimental>
 
-      {/* Dashboard Grid */}
-      <div className="grid gap-6">
-        {/* Active Leagues Section */}
-        <ActiveLeaguesSection
-          leagues={leagues}
-          isLoading={isLoadingLeagues}
-          onViewLeague={handleViewLeague}
-        />
 
-        {/* Upcoming Fixtures Section */}
-        <UpcomingFixturesSection />
-      </div>
-    </main>
+
+      <ActiveLeaguesSection
+        leagues={leagues}
+        isLoading={isLoadingLeagues}
+        onViewLeague={handleViewLeague}
+      />
+
+
+      <UpcomingFixturesSection />
+
+    </PageView>
   );
 }

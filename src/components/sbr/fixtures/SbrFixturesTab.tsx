@@ -6,9 +6,14 @@ import useSWR from "swr";
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { twMerge } from "tailwind-merge";
 import { LoadingState } from "../../ui/LoadingState";
+import { ISbrFixture } from "../../../types/sbr";
+
+type Props = {
+    fixtures: ISbrFixture[]
+}
 
 /** Renders all the Sbr Fixtures */
-export default function SbrAllFixturesTab({ }) {
+export default function SbrAllFixturesTab({ fixtures } : Props) {
 
     const { data, isLoading } = useSWR("sbr-fixtures", fetcher);
 
@@ -28,10 +33,6 @@ export default function SbrAllFixturesTab({ }) {
         if (f.round < minRound) {
             minRound = f.round
         }
-    });
-
-    const weekFixtures = allFixtures.filter(f => {
-        return f.round === week;
     });
 
     const canMoveLeft = week > minRound;
@@ -88,16 +89,10 @@ export default function SbrAllFixturesTab({ }) {
                 
             </div>
 
-            { currentRound !== 0 && <GroupedSbrFixturesList
-                fixtures={weekFixtures}
+            {<GroupedSbrFixturesList
+                fixtures={fixtures}
             />}
 
-
-            {currentRound === 0 && (
-                <div className="h-fit mt-10 w-full overflow-hidden flex flex-col items-center justify-start" >
-                    <p className="text-slate-500" >All caught up, no fixtures this week</p>
-                </div>
-            )}
         </div>
     )
 }
