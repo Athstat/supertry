@@ -8,16 +8,18 @@ import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/ta
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
 import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
+import { getWeekGames } from "../utils/sbrUtils";
 
 export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
 
   const currentRound = 0;
+  const weekGames = getWeekGames(data ?? []);
 
-  const currentRoundFixtures = (data ?? []).filter(f => {
-    return f.round === currentRound
-  });
+  console.log(data);
+
+  const currentRoundFixtures = weekGames;
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -41,7 +43,9 @@ export default function SbrScreen() {
   return (
     <SbrProvider currentRound={currentRound} >
       <PageView className="dark:text-white p-5 flex flex-col gap-4" >
+        
         <SbrScreenHeader />
+        
         {currentRoundFixtures.length > 0 &&
           <SbrFixturesHero
             fixtures={currentRoundFixtures}
@@ -62,7 +66,7 @@ export default function SbrScreen() {
           </TabViewPage>
 
           <TabViewPage tabKey="fixtures" >
-            {!isLoading && <SbrAllFixturesTab />}
+            {!isLoading && <SbrAllFixturesTab fixtures={weekGames} />}
           </TabViewPage>
 
         </TabView>
