@@ -41,6 +41,12 @@ export const PlayersScreen = () => {
   const [isComparing, setIsComparing] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
   const toggleCompareMode = () => setIsComparing(!isComparing);
+  const clearSelections = () => setSelectedPlayers([]);
+
+  const onClear = () => {
+    clearSelections();
+    // toggleCompareMode();
+  }
 
   // Handle player selection
   const handlePlayerClick = (player: RugbyPlayer) => {
@@ -297,7 +303,7 @@ export const PlayersScreen = () => {
         <PlayerCompareModal 
           selectedPlayers={selectedPlayers} 
           open={selectedPlayers.length >= 2 && isComparing}
-          onClose={toggleCompareMode}
+          onClose={onClear}
         />
 
       </PageView>
