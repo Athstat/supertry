@@ -15,6 +15,7 @@ import { authService } from "../../services/authService";
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/anayticsService";
 import { emailValidator } from "../../utils/stringUtils";
+import { requestPushPermissionsAfterLogin } from "../../utils/bridgeUtils";
 
 export function SignUpScreen() {
   const navigate = useNavigate();
@@ -119,6 +120,9 @@ export function SignUpScreen() {
 
       } catch (loginErr) {
         console.error("Auto-login failed:", loginErr);
+
+        // Even if auto-login fails, request push permissions since user is registered
+        requestPushPermissionsAfterLogin();
 
         // Set authenticated state manually to avoid redirect to signin
         setIsLoading(false);
