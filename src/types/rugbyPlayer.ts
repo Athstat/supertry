@@ -89,3 +89,20 @@ export type IFantasyAthlete = {
 }
 
 export type PlayerForm = "UP" | "DOWN" | "NEUTRAL";
+
+export type RugbyPlayerShort = {
+  id: string,
+  name: string,
+  team: string,
+  position: string,
+  price: number,
+  points: number,
+  image_url?: string,
+  power_rank_rating?: number,
+  points_kicking?: number,
+  tackling?: number,
+  infield_kicking?: number,
+  strength?: number,
+  playmaking?: number,
+  ball_carrying?: number
+}

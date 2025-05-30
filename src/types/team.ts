@@ -17,6 +17,9 @@ export interface Player {
   athlete_id: string;
   player_name: string;
   tracking_id?: string;
+  ball_carrying?: number;
+  tackling?: number;
+  points_kicking?: number
 }
 
 export interface Team {
