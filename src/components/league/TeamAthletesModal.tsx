@@ -77,8 +77,8 @@ export function TeamAthletesModal({
       onClick={handleOverlayClick}
     >
       <div className={twMerge(
-        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[90vh] overflow-clip flex flex-col",
-        !isStable && "max-h-none h-[90vh]"
+        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[75vh] lg:max-h-[90vh] overflow-clip flex flex-col",
+        !isStable && "max-h-none h-[90vh] lg:h-[90vh]"
       )}>
 
         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">

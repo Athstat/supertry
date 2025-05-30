@@ -90,7 +90,8 @@ export function TabViewPage({ children, tabKey, className }: TabViewPageProps) {
     const isCurrent = currentTabKey === tabKey;
 
     return (
-        <div className={twMerge("flex flex-col", !isCurrent && "hidden",  className)} >
+        <div className={twMerge("flex flex-col", className, !isCurrent && "hidden")} >
+            {/* {currentTabKey} === {tabKey} */}
             {children}
         </div>
     )
