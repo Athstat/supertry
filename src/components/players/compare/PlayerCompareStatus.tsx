@@ -8,10 +8,11 @@ import { Sticky } from "../../shared/Sticky";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 
 type Props = {
-    onRemovePlayer: (player: RugbyPlayer) => void
+    onRemovePlayer: (player: RugbyPlayer) => void,
+    onStopComparing?: () => void,
 }
 
-export default function PlayerCompareStatus({ onRemovePlayer }: Props) {
+export default function PlayerCompareStatus({ onRemovePlayer, onStopComparing }: Props) {
 
     const context = useContext(PlayersScreenContext);
 
@@ -41,7 +42,7 @@ export default function PlayerCompareStatus({ onRemovePlayer }: Props) {
                                 <div
                                     key={p.tracking_id}
                                     onClick={() => onRemovePlayer(p)}
-                                    className="px-3 py-1 text-xs bg-yellow-700 text-yellow-400 rounded-xl flex flex-row items-center gap-0.5"
+                                    className="px-3 py-1 text-xs bg-yellow-700 hover:bg-yellow-600 cursor-pointer text-yellow-400 rounded-xl flex flex-row items-center gap-0.5"
                                 >
                                     {p.player_name}
                                     <X className="w-4 h-4" />
@@ -56,19 +57,19 @@ export default function PlayerCompareStatus({ onRemovePlayer }: Props) {
             )}
 
 
-            {isSticky && (
+            {isSticky && isComparing && (
                 <Sticky className="" >
                     <div className="z-10 bottom-20 fixed px-4 py-2  flex flex-col gap-1 w-full left-0" >
-                        
-                        <div className="flex bg-slate-200 gap-2 flex-row px-4 py-4 dark:bg-slate-800 w-full  rounded-xl" >
-                            
-                            <p>Currently selected { }</p>
+
+                        <div className="flex bg-slate-200 gap-2 flex-row flex-wrap px-4 py-4 dark:bg-slate-800/95 w-full  rounded-xl" >
+
+                            <p>Click on a player's card to select them for comparison</p>
                             {selectedPlayers.map((p) => {
                                 return (
                                     <div
                                         key={p.tracking_id}
                                         onClick={() => onRemovePlayer(p)}
-                                        className="px-3 py-1 text-xs bg-yellow-700 text-yellow-400 rounded-xl flex flex-row items-center gap-0.5"
+                                        className="px-3 py-1 text-xs bg-yellow-700 hover:bg-yellow-600 cursor-pointer text-yellow-400 rounded-xl flex flex-row items-center gap-0.5"
                                     >
                                         {p.player_name}
                                         <X className="w-3 h-3" />
@@ -78,9 +79,9 @@ export default function PlayerCompareStatus({ onRemovePlayer }: Props) {
                             })}
                         </div>
 
-                        {selectedPlayers.length > 0 && (
+                        {isComparing && (
                             <div>
-                                <PrimaryButton>Stop Comparing</PrimaryButton>
+                                <PrimaryButton onClick={onStopComparing} >Stop Comparing</PrimaryButton>
                             </div>
                         )}
                     </div>

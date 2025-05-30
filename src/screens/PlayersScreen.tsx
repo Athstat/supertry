@@ -48,6 +48,11 @@ export const PlayersScreen = () => {
     // toggleCompareMode();
   }
 
+  const onStopComparing = () => {
+    clearSelections();
+    setIsComparing(false);
+  }
+
   // Handle player selection
   const handlePlayerClick = (player: RugbyPlayer) => {
 
@@ -264,6 +269,7 @@ export const PlayersScreen = () => {
         {
           <PlayerCompareStatus
             onRemovePlayer={onRemovePlayerFromSelectedPlayers}
+            onStopComparing={onStopComparing}
           />
         }
 

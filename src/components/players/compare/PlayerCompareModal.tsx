@@ -62,7 +62,7 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
             <div className="bg-slate-200 flex-[3] py-1 dark:bg-slate-600 rounded-md text-sm px-2" >{label}</div>
             <div className={twMerge(
                 "bg-slate-300 flex-1 py-1 text-center items-center dark:bg-slate-700 rounded-md text-sm px-1",
-                isGreen && "bg-green-500 dark:bg-green-700"
+                isGreen && "bg-green-500 dark:bg-green-700 text-white"
             )} >{value ?? "-"}</div>
         </div>
     )
@@ -86,7 +86,7 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
         <div className="flex flex-col gap-2" >
 
             <div className="flex flex-row items-center justify-end" >
-                <button onClick={handleRemove} className=" flex w-fit flex-row px-2 hover:bg-red-600 rounded-xl gap-1 cursor-pointer items-center bg-red-500 dark:bg-red-600 dark:hover:bg-red-700" >
+                <button onClick={handleRemove} className=" flex w-fit text-sm text-white flex-row px-2 hover:bg-red-600 rounded-xl gap-1 cursor-pointer items-center bg-red-500 dark:bg-red-600 dark:hover:bg-red-700" >
                     Remove
                     <X className="w-4 h-4" />
                 </button>
