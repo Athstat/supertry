@@ -8,6 +8,7 @@ import TitledCard from "../shared/TitledCard";
 import { Calendar } from "lucide-react";
 import FixtureCard from "../fixtures/FixtureCard";
 import { useRouter } from "../../hooks/useRoter";
+import GroupedFixturesList from "../fixtures/GroupedFixturesList";
 
 export default function UpcomingFixturesSection() {
   const today = new Date();
@@ -31,7 +32,7 @@ export default function UpcomingFixturesSection() {
     .sort((a, b) =>
       a.kickoff_time && b.kickoff_time
         ? new Date(a.kickoff_time).valueOf() -
-          new Date(b.kickoff_time).valueOf()
+        new Date(b.kickoff_time).valueOf()
         : 0
     )
     .filter(f => {
@@ -39,47 +40,26 @@ export default function UpcomingFixturesSection() {
     })
     .slice(0, 5); // Show up to 5 fixtures instead of just 3
 
-  // Group fixtures by day
-  const fixturesByDay: Record<string, IFixture[]> = {};
-
-  sortedFixtures.forEach((fixture) => {
-    if (fixture.kickoff_time) {
-      const dayKey = format(new Date(fixture.kickoff_time), "yyyy-MM-dd");
-      if (!fixturesByDay[dayKey]) {
-        fixturesByDay[dayKey] = [];
-      }
-      fixturesByDay[dayKey].push(fixture);
-    }
-  });
-
-  // Get sorted day keys
-  const sortedDays = Object.keys(fixturesByDay).sort();
 
   return (
-    <TitledCard icon={Calendar} title="Upcoming Fixtures">
-      <div className="grid grid-cols-1 gap-2">
-        {sortedDays.map((dayKey) => (
-          <div key={dayKey} className="mb-2">
-            {/* Day header */}
-            <div className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1 px-1">
-              {format(new Date(dayKey), "EEEE, MMMM d")}
-            </div>
+    <div className="dark:text-white flex flex-col gap-3" >
 
-            {/* Fixtures for this day */}
-            <div className="grid grid-cols-1 gap-2 divide-y dark:divide-slate-800 divide-slate-200">
-              {fixturesByDay[dayKey].map((fixture, index) => (
-                <FixtureCard
-                  showLogos
-                  className=""
-                  fixture={fixture}
-                  key={index}
-                  showCompetition
-                  showVenue
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="flex flex-row items-center justify-between gap-2" >
+        <div className="flex flex-row items-center gap-2" >
+          <Calendar className="text-primary-500" />
+          <p className="text-xl font-bold" >Upcoming Fixtures</p>
+        </div>
+
+        <button
+          onClick={() => push("/fixtures#upcoming-matches")}
+          className="text-blue-500"
+        >
+          View All Fixtures
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 gap-2">
+        <GroupedFixturesList fixtures={sortedFixtures} />
       </div>
 
       <div className="w-full flex items-center justify-center">
@@ -90,7 +70,7 @@ export default function UpcomingFixturesSection() {
           View All Fixtures
         </button>
       </div>
-    </TitledCard>
+    </div>
   );
 }
 
