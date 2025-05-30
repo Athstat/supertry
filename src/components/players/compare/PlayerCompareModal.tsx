@@ -4,6 +4,8 @@ import { formatPosition } from "../../../utils/athleteUtils";
 import { PlayerGameCard } from "../../player/PlayerGameCard";
 import DialogModal from "../../shared/DialogModal";
 import { twMerge } from "tailwind-merge";
+import { useFetch } from "../../../hooks/useFetch";
+import { athleteService } from "../../../services/athleteService";
 
 type Props = {
     selectedPlayers: RugbyPlayer[],
@@ -57,13 +59,16 @@ type StatLabelProp = {
 }
 
 function StatLabel({ label, value, isGreen }: StatLabelProp) {
+
+    const hasVal = value !== undefined;
+
     return (
         <div className="flex flex-row items-center gap-1" >
             <div className="bg-slate-200 flex-[3] py-1 dark:bg-slate-600 rounded-md text-sm px-2" >{label}</div>
             <div className={twMerge(
                 "bg-slate-300 flex-1 py-1 text-center items-center dark:bg-slate-700 rounded-md text-sm px-1",
                 isGreen && "bg-green-500 dark:bg-green-700 text-white"
-            )} >{value ?? "-"}</div>
+            )} >{hasVal ? value : "-"}</div>
         </div>
     )
 }
@@ -81,7 +86,18 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
             onRemove(player);
         }
     }
-    
+
+    const { data: stats, isLoading: loadingStats } = useFetch("player-stats", player.tracking_id ?? "fallback", athleteService.getRugbyAthleteById);
+    const { data: comparingStats, isLoading: loadingComparingStats } = useFetch("player-stats", comparingPlayer?.tracking_id ?? "fallback", athleteService.getRugbyAthleteById);
+
+    const isLoading = loadingComparingStats || loadingStats;
+
+    if (isLoading) return (
+        <div className="w-full h-[400px] bg-slate-200 dark:bg-slate-800 animate-pulse" >
+
+        </div>
+    )
+
     return (
         <div className="flex flex-col gap-2" >
 
@@ -93,10 +109,12 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
             </div>
 
             <PlayerGameCard className="h-[200px] lg:h-[300px]" blockGlow player={player} />
+
             <div>
                 <p className="font-bold truncate" >{player.player_name}</p>
-                <div className="flex flex-row text-slate-700 dark:text-slate-400" >
-                    {player.position && <p className="" >{formatPosition(player.position)}</p>}
+
+                <div className="flex text-sm flex-row text-slate-700 dark:text-slate-400" >
+                    {player.position && <p className="truncate" >{formatPosition(player.position)}</p>}
                     <Dot className="" />
                     <p className="truncate" >{player.team_name}</p>
                 </div>
@@ -104,6 +122,8 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
             </div>
 
             <div className="flex flex-col gap-1" >
+
+                <p className="mt-2" >General</p>
 
                 <StatLabel
                     label="Power Rating"
@@ -117,10 +137,32 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                     isGreen={(player.price ?? 0) > (comparingPlayer?.price ?? 0)}
                 />
 
+                <p className="mt-2" >Attacking</p>
                 <StatLabel
-                    label="Playmaking"
-                    value={player.playmaking}
-                    isGreen={(player.playmaking ?? 0) > (comparingPlayer?.playmaking ?? 0)}
+                    label="Attacking"
+                    value={stats?.attacking}
+                    isGreen={(stats?.attacking ?? 0) > (comparingStats?.attacking ?? 0)}
+                />
+
+                <StatLabel
+                    label="Scoring"
+                    value={stats?.scoring}
+                    isGreen={(stats?.scoring ?? 0) > (comparingStats?.scoring ?? 0)}
+                />
+
+                <StatLabel
+                    label="Ball Carying"
+                    value={player.ball_carrying}
+                    isGreen={(player.ball_carrying ?? 0) > (comparingPlayer?.ball_carrying ?? 0)}
+                />
+
+
+                <p className="mt-2" >Defense</p>
+
+                <StatLabel
+                    label="Defence"
+                    value={stats?.defence}
+                    isGreen={(stats?.defence ?? 0) > (comparingStats?.defence ?? 0)}
                 />
 
                 <StatLabel
@@ -130,22 +172,25 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                 />
 
                 <StatLabel
-                    label="Ball Carying"
-                    value={player.ball_carrying}
-                    isGreen={(player.ball_carrying ?? 0) > (comparingPlayer?.ball_carrying ?? 0)}
-                />
-
-                <StatLabel
-                    label="Tacking"
+                    label="Tackling"
                     value={player.tackling}
                     isGreen={(player.tackling ?? 0) > (comparingPlayer?.tackling ?? 0)}
                 />
 
-                {/* <StatLabel
-                    label="Dicipline"
-                    value={player.discipline}
-                    isGreen={(player.discipline ?? 0) > (comparingPlayer?.discipline ?? 0)}
-                /> */}
+                <p className="mt-2" >Kicking</p>
+
+                <StatLabel
+                    label="Kicking"
+                    value={stats?.kicking}
+                    isGreen={(stats?.kicking ?? 0) > (comparingStats?.kicking ?? 0)}
+                />
+
+                <StatLabel
+                    label="Infield Kicking"
+                    value={stats?.infield_kicking}
+                    isGreen={(stats?.infield_kicking ?? 0) > (comparingStats?.infield_kicking ?? 0)}
+                />
+
 
             </div>
         </div>

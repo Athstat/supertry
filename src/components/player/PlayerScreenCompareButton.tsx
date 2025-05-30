@@ -37,7 +37,7 @@ export default function PlayersCompareButton({ className, onClick }: Props) {
 
                         <PrimaryButton
                             onClick={onClick}
-                            className="animate-glow  flex flex-row items-center from-primary-500 to-blue-700 bg-gradient-to-r gap-1 w-[90%] "
+                            className="animate-glow  flex flex-row items-center from-primary-500 to-blue-700 bg-gradient-to-r gap-1 w-[90%] lg:w-[40%]"
                         >
                             <Sparkles className="w-4 h-4 " />
                             Compare

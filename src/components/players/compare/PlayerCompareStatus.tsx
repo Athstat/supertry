@@ -59,9 +59,9 @@ export default function PlayerCompareStatus({ onRemovePlayer, onStopComparing }:
 
             {isSticky && isComparing && (
                 <Sticky className="" >
-                    <div className="z-10 bottom-20 fixed px-4 py-2  flex flex-col gap-1 w-full left-0" >
+                    <div className="z-10 bottom-20 fixed py-2  flex flex-col gap-1 w-full items-center justify-center left-0" >
 
-                        <div className="flex bg-slate-200 gap-2 flex-row flex-wrap px-4 py-4 dark:bg-slate-800/95 w-full  rounded-xl" >
+                        <div className="flex bg-slate-200 gap-2 flex-row flex-wrap px-4 py-4 dark:bg-slate-800/95 rounded-xl w-[90%] lg:w-[50%]" >
 
                             <p>Click on a player's card to select them for comparison</p>
                             {selectedPlayers.map((p) => {
@@ -80,9 +80,9 @@ export default function PlayerCompareStatus({ onRemovePlayer, onStopComparing }:
                         </div>
 
                         {isComparing && (
-                            <div>
-                                <PrimaryButton onClick={onStopComparing} >Stop Comparing</PrimaryButton>
-                            </div>
+
+                            <PrimaryButton className="w-[90%] lg:w-[50%]" onClick={onStopComparing} >Stop Comparing</PrimaryButton>
+
                         )}
                     </div>
                 </Sticky>
