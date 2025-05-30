@@ -15,10 +15,11 @@ type Props = {
     showCompetition?: boolean,
     showLogos?: boolean,
     showVenue?: boolean,
-    message?: string
+    message?: string,
+    hideDate?: boolean
 }
 
-export default function FixtureCard({ fixture, className, showCompetition, showLogos, showVenue, message }: Props) {
+export default function FixtureCard({ fixture, className, showCompetition, showLogos, showVenue, message, hideDate }: Props) {
 
 
     const { team_score, competition_name, kickoff_time, round, game_status, opposition_score, venue } = fixture;
@@ -77,7 +78,7 @@ export default function FixtureCard({ fixture, className, showCompetition, showL
 
                     <div className='flex-1 text-slate-700 dark:text-slate-400 flex flex-col items-center text-center justify-center' >
                         {/* <p className='text-xs' >{fixture.venue}</p> */}
-                        {kickoff_time && <p className='text-xs' >{format(kickoff_time, "dd, MMM yyyy")}</p>}
+                        {!hideDate && kickoff_time && <p className='text-xs' >{format(kickoff_time, "dd, MMM yyyy")}</p>}
                         {kickoff_time && <p className='text-sm font-semibold' >{format(kickoff_time, "h:mm a")}</p>}
                     </div>
 
