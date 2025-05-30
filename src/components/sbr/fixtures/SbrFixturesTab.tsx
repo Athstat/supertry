@@ -62,7 +62,7 @@ export default function SbrAllFixturesTab({ }) {
                     <h1 className="text-xl font-bold" >Fixtures</h1>
                 </div>
 
-                <div className="flex flex-row items-center" >
+                {currentRound !== 0 && <div className="flex flex-row items-center" >
                     <p className="text-lg font-semibold mr-3" >Week {week}</p>
 
                     <button
@@ -84,12 +84,20 @@ export default function SbrAllFixturesTab({ }) {
                     >
                         <ChevronRight className="w-7" />
                     </button>
-                </div>
+                </div>}
+                
             </div>
 
-            <GroupedSbrFixturesList
+            { currentRound !== 0 && <GroupedSbrFixturesList
                 fixtures={weekFixtures}
-            />
+            />}
+
+
+            {currentRound === 0 && (
+                <div className="h-fit mt-10 w-full overflow-hidden flex flex-col items-center justify-start" >
+                    <p className="text-slate-500" >All caught up, no fixtures this week</p>
+                </div>
+            )}
         </div>
     )
 }

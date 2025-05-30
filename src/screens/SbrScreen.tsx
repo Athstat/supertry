@@ -14,7 +14,7 @@ export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
 
-  const currentRound = 2;
+  const currentRound = 0;
 
   const currentRoundFixtures = (data ?? []).filter(f => {
     return f.round === currentRound
@@ -22,19 +22,13 @@ export default function SbrScreen() {
 
   const tabItems: TabViewHeaderItem[] = [
     {
-      label: `SBR Week ${currentRound}`,
-      tabKey: "current-week",
+      label: `Fixtures`,
+      tabKey: "fixtures",
       className: "flex-1"
     },
     {
       label: "Predictions",
       tabKey: "predictions",
-      className: "flex-1"
-    },
-
-    {
-      label: "Fixtures",
-      tabKey: "fixtures",
       className: "flex-1"
     },
 
@@ -56,9 +50,9 @@ export default function SbrScreen() {
         }
 
         <TabView tabHeaderItems={tabItems} >
-          <TabViewPage tabKey="current-week" >
+          {/* <TabViewPage tabKey="current-week" >
             {!isLoading && <SbrCurrentWeekFixtures fixtures={currentRoundFixtures} />}
-          </TabViewPage>
+          </TabViewPage> */}
 
           <TabViewPage tabKey="predictions" >
             {!isLoading && <SbrPredictionsTab />}
