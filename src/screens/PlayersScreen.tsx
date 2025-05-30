@@ -4,14 +4,21 @@ import { PlayerForm, RugbyPlayer } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 
 // Components
-import { PlayerCard } from "../components/players/PlayerCard";
 import { PlayerSearch } from "../components/players/PlayerSearch";
-import { PlayerTabs } from "../components/players/PlayerTabs";
+import { PlayerScreenTabs } from "../components/players/PlayerTabs";
 import { PlayerFilters } from "../components/players/PlayerFilters";
 import { PlayerSort } from "../components/players/PlayerSort";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/players/EmptyState";
+import { PlayerGameCard } from "../components/player/PlayerGameCard";
+import PageView from "./PageView";
+import { Users } from "lucide-react";
+import PlayersScreenProvider from "../contexts/PlayersScreenContext";
+import PlayersCompareButton from "../components/player/PlayerScreenCompareButton";
+import { twMerge } from "tailwind-merge";
+import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
+import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
 
 type SortTab = "all" | "trending" | "top" | "new";
 // type SortOption = "points" | "name" | "position" | "club";
@@ -31,12 +38,55 @@ export const PlayersScreen = () => {
   const [positionFilter, setPositionFilter] = useState<string>("");
   const [teamFilter, setTeamFilter] = useState<string>("");
 
+  const [isComparing, setIsComparing] = useState(false);
+  const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
+  const toggleCompareMode = () => setIsComparing(!isComparing);
+  const clearSelections = () => setSelectedPlayers([]);
+
+  const onClear = () => {
+    clearSelections();
+    // toggleCompareMode();
+  }
+
+  const onStopComparing = () => {
+    clearSelections();
+    setIsComparing(false);
+  }
+
   // Handle player selection
   const handlePlayerClick = (player: RugbyPlayer) => {
-    navigate(`/players/${player.tracking_id || player.id}`, {
-      state: { player },
-    });
+
+    if (isComparing) {
+
+      const isSelectedAlready = selectedPlayers.find((p) => {
+        return p.tracking_id === player.tracking_id;
+      });
+
+      if (isSelectedAlready) {
+
+        const newList = selectedPlayers.filter((p) => {
+          return p.tracking_id !== player.tracking_id
+        });
+
+        setSelectedPlayers(newList);
+
+      } else {
+        setSelectedPlayers([...selectedPlayers, player]);
+      }
+    } else {
+      navigate(`/players/${player.tracking_id || player.id}`, {
+        state: { player },
+      });
+    }
   };
+
+  const onRemovePlayerFromSelectedPlayers = (player: RugbyPlayer) => {
+    const newList = selectedPlayers.filter((p) => {
+      return p.tracking_id !== player.tracking_id
+    });
+
+    setSelectedPlayers(newList);
+  }
 
   // Handle search filtering
   const handleSearch = (query: string) => {
@@ -175,65 +225,96 @@ export const PlayersScreen = () => {
   ]);
 
   return (
-    <main className="container mx-auto px-4 py-6 max-w-7xl">
-      {/* Search and Filter Header */}
-      <div className="space-y-4 mb-6">
-        <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
-        <PlayerTabs activeTab={activeTab} onTabChange={handleTabChange} />
-        <div className="flex gap-2">
-          <PlayerFilters
-            positionFilter={positionFilter}
-            teamFilter={teamFilter}
-            availablePositions={positions}
-            availableTeams={teams}
-            onPositionFilter={handlePositionFilter}
-            onTeamFilter={handleTeamFilter}
-            onClearFilters={clearFilters}
-          />
-          <PlayerSort
-            sortField={sortField}
-            sortDirection={sortDirection}
-            onSort={handleSortByField}
-          />
+    <PlayersScreenProvider
+      isComparing={isComparing}
+      selectedPlayers={selectedPlayers}
+    >
+      <PageView className="px-5 flex flex-col gap-3">
+
+        {/* Search and Filter Header */}
+        <div className="flex flex-row gap-2 items-center" >
+          <Users />
+          <h1 className="text-2xl font-bold" >Players</h1>
         </div>
-      </div>
+        <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
+        <div className="flex flex-col gap-1">
 
-      {/* Loading State - for initial load */}
-      {isLoading && <LoadingState message="Loading..." />}
+          <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-      {/* Sorting Loading State */}
-      {isSorting && !isLoading && <LoadingState message="Loading..." />}
+          <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
 
-      {/* Error State */}
-      {error && !isLoading && !isSorting && (
-        <ErrorState message={error} onRetry={refreshAthletes} />
-      )}
+            <PlayerFilters
+              positionFilter={positionFilter}
+              teamFilter={teamFilter}
+              availablePositions={positions}
+              availableTeams={teams}
+              onPositionFilter={handlePositionFilter}
+              onTeamFilter={handleTeamFilter}
+              onClearFilters={clearFilters}
+            />
 
-      {/* Empty State */}
-      {!isLoading &&
-        !error &&
-        !isSorting &&
-        filteredPlayers.length === 0 &&
-        athletes.length > 0 && (
-          <EmptyState
-            searchQuery={searchQuery}
-            onClearSearch={() => handleSearch("")}
+            <PlayerSort
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onSort={handleSortByField}
+            />
+
+            <PlayersCompareButton
+              className={twMerge(isComparing && "bg-gradient-to-r from-primary-600 to-blue-700")}
+              onClick={toggleCompareMode}
+            />
+          </div>
+        </div>
+
+        {
+          <PlayerCompareStatus
+            onRemovePlayer={onRemovePlayerFromSelectedPlayers}
+            onStopComparing={onStopComparing}
           />
+        }
+
+        {/* Loading State - for initial load */}
+        {isLoading && <LoadingState message="Loading..." />}
+        {/* Sorting Loading State */}
+        {isSorting && !isLoading && <LoadingState message="Loading..." />}
+        {/* Error State */}
+        {error && !isLoading && !isSorting && (
+          <ErrorState message={error} onRetry={refreshAthletes} />
+        )}
+        {/* Empty State */}
+        {!isLoading &&
+          !error &&
+          !isSorting &&
+          filteredPlayers.length === 0 &&
+          athletes.length > 0 && (
+            <EmptyState
+              searchQuery={searchQuery}
+              onClearSearch={() => handleSearch("")}
+            />
+          )}
+        {/* Player Grid */}
+        {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredPlayers.map((player, index) => (
+              <PlayerGameCard
+                key={index}
+                player={player}
+                onClick={() => handlePlayerClick(player)}
+                className="h-[250px] lg:h-[300px]"
+              />
+            ))}
+          </div>
         )}
 
-      {/* Player Grid */}
-      {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredPlayers.map((player, index) => (
-            <PlayerCard
-              key={index}
-              player={player}
-              onClick={() => handlePlayerClick(player)}
-            />
-          ))}
-        </div>
-      )}
-    </main>
+        <PlayerCompareModal 
+          selectedPlayers={selectedPlayers} 
+          open={selectedPlayers.length >= 2 && isComparing}
+          onClose={onClear}
+          onRemove={onRemovePlayerFromSelectedPlayers}
+        />
+
+      </PageView>
+    </PlayersScreenProvider>
   );
 };
 

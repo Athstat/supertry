@@ -1,12 +1,10 @@
-import { addDays, eachDayOfInterval, format } from "date-fns";
+import { addDays, eachDayOfInterval } from "date-fns";
 import { gamesService } from "../../services/gamesService";
 import { IFixture } from "../../types/games";
 import useSWR from "swr";
 import { LoadingState } from "../ui/LoadingState";
 import { ErrorState } from "../ui/ErrorState";
-import TitledCard from "../shared/TitledCard";
 import { Calendar } from "lucide-react";
-import FixtureCard from "../fixtures/FixtureCard";
 import { useRouter } from "../../hooks/useRoter";
 import GroupedFixturesList from "../fixtures/GroupedFixturesList";
 
