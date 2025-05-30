@@ -1,4 +1,4 @@
-import { useRef, Ref } from "react";
+import { useRef, Ref, useEffect } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import { authService } from "../../services/authService";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { isLeagueLocked } from "../../utils/leaguesUtils";
 import RoundedCard from "../shared/RoundedCard";
+import { useFetch } from "../../hooks/useFetch";
+import { fantasyTeamService } from "../../services/teamService";
 
 interface LeagueStandingsProps {
   teams: RankedFantasyTeam[];
@@ -23,34 +25,19 @@ export function LeagueStandings({
   error = null,
   onTeamClick,
   league,
+  onJumpToTeam
 }: LeagueStandingsProps) {
+
   const userTeamRef = useRef<HTMLTableRowElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
-  const ROW_HEIGHT = 64;
-  const HEADER_HEIGHT = 56;
-  const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
+  useEffect(() => {
+    onJumpToTeam();
+  }, [teams])
 
-  // Scroll to user's team when component mounts or teams change
-  // useEffect(() => {
-  //   if (
-  //     userTeamRef.current &&
-  //     tableRef.current &&
-  //     teams.some((team) => team.isUserTeam)
-  //   ) {
-  //     // Add a small delay to ensure the table is fully rendered
-  //     setTimeout(() => {
-  //       const userTeamPosition =
-  //         userTeamRef.current && userTeamRef.current.offsetTop - HEADER_HEIGHT;
-  //       if (userTeamPosition) {
-  //         tableRef.current?.scrollTo({
-  //           top: userTeamPosition,
-  //           behavior: "smooth",
-  //         });
-  //       }
-  //     }, 300);
-  //   }
-  // }, [teams]);
+  // const ROW_HEIGHT = 64;
+  // const HEADER_HEIGHT = 56;
+  // const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
 
   // Handle team row click
   const handleTeamClick = (team: RankedFantasyTeam) => {
@@ -180,15 +167,9 @@ type StandingsTableRowProps = {
   league: IFantasyLeague;
 };
 
-function StandingsTableRow({
-  team,
-  userTeamRef,
-  handleTeamClick,
-  index,
-  league,
-}: StandingsTableRowProps) {
-  const user = authService.getUserInfo();
-  const isUserTeam = user ? user.id === team.userId : false;
+function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: StandingsTableRowProps) {
+
+  // const {} = useFetch("fantasy-league-team", team.team_id, t)
 
   return (
     <>
@@ -223,7 +204,7 @@ function StandingsTableRow({
                   : "text-gray-900 dark:text-gray-100"
               }`}
             >
-              {team.rank}
+              {team.rank ?? "-"}
             </span>
             <span className="w-4 flex justify-center">
               {getRankChange(team.rank, team.lastRank)}
@@ -257,47 +238,6 @@ function StandingsTableRow({
         </td>
       </tr>
     </>
-  );
-}
-
-type EditButtonProps = {
-  team: RankedFantasyTeam;
-  league: IFantasyLeague;
-};
-
-function EditTeamButton({ team, league }: EditButtonProps) {
-  const navigate = useNavigate();
-  const isLocked = isLeagueLocked(league.join_deadline);
-
-  const handleClick = () => {
-    const uri = `/my-team/${team.team_id}`;
-    navigate(uri, {
-      state: { teamWithRank: team, league: league },
-    });
-  };
-
-  if (isLocked) {
-    return (
-      <div className="w-full cursor-not-allowed z-50 flex flex-col items-center justify-center absolute mb-20 h-12 bottom-0 left-0">
-        <button
-          onClick={handleClick}
-          className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-primary-700 justify-center"
-        >
-          View Team
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-full z-50 flex flex-col items-center justify-center fixed mb-20 h-12 bottom-0 left-0">
-      <button
-        onClick={handleClick}
-        className="flex font-medium h-full rounded-xl text-white flex-row items-center w-[90%] lg:w-1/3 gap-2 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 justify-center"
-      >
-        Edit Team
-      </button>
-    </div>
   );
 }
 
