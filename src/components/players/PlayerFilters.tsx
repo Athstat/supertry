@@ -23,18 +23,20 @@ export const PlayerFilters = ({
   const [showFilters, setShowFilters] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="">
       <button
         onClick={() => setShowFilters(!showFilters)}
         className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
       >
         <Filter size={20} />
         Filters
+
         {(positionFilter || teamFilter) && (
           <span className="inline-flex items-center justify-center w-5 h-5 ml-1 text-xs font-medium text-white bg-primary-600 rounded-full">
             {(positionFilter ? 1 : 0) + (teamFilter ? 1 : 0)}
           </span>
         )}
+        
         <ChevronDown
           size={20}
           className={`transform transition-transform ${
@@ -45,7 +47,7 @@ export const PlayerFilters = ({
 
       {/* Filters Dropdown */}
       {showFilters && (
-        <div className="absolute left-0 mt-2 w-80 bg-white dark:bg-dark-800 rounded-lg shadow-lg z-10 border dark:border-dark-700 p-4">
+        <div className=" absolute left-0 mt-2 w-80 bg-white dark:bg-dark-800 rounded-lg shadow-lg z-30 border dark:border-slate-700 p-4">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium text-gray-900 dark:text-gray-100">
               Filters
@@ -103,6 +105,7 @@ export const PlayerFilters = ({
           </div>
         </div>
       )}
+      
     </div>
   );
 };

@@ -241,7 +241,7 @@ export const PlayersScreen = () => {
 
           <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-          <div className="flex flex-row overflow-x-auto gap-2">
+          <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
 
             <PlayerFilters
               positionFilter={positionFilter}

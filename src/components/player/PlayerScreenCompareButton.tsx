@@ -23,7 +23,8 @@ export default function PlayersCompareButton({ className, onClick }: Props) {
             <button
                 onClick={onClick}
                 className={twMerge(
-                    "flex items-center text-white gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 hover:bg-gray-200 dark:hover:bg-dark-800 rounded-lg font-medium",
+                    "flex items-center dark:text-white text-slate-700 gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 hover:bg-gray-200 dark:hover:bg-dark-800 rounded-lg font-medium",
+                    isComparing && "text-white",
                     className
                 )}
             >
