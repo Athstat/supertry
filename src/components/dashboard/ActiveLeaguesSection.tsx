@@ -1,5 +1,5 @@
 import React from "react";
-import { Trophy, Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import { ActiveLeaguesSectionProps } from "./types";
 import { activeLeaguesFilter, upcomingLeaguesFilter } from "../../utils/leaguesUtils";
 import LeagueCardDetailed from "../leagues/LeagueCardDetailed";

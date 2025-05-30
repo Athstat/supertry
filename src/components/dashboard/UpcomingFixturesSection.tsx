@@ -7,6 +7,7 @@ import { ErrorState } from "../ui/ErrorState";
 import { Calendar } from "lucide-react";
 import { useRouter } from "../../hooks/useRoter";
 import GroupedFixturesList from "../fixtures/GroupedFixturesList";
+import RoundedCard from "../shared/RoundedCard";
 
 export default function UpcomingFixturesSection() {
   const today = new Date();
@@ -40,7 +41,7 @@ export default function UpcomingFixturesSection() {
 
 
   return (
-    <div className="dark:text-white flex flex-col gap-3" >
+    <RoundedCard className="p-6 flex flex-col gap-4" >
 
       <div className="flex flex-row items-center justify-between gap-2" >
         <div className="flex flex-row items-center gap-2" >
@@ -68,7 +69,7 @@ export default function UpcomingFixturesSection() {
           View All Fixtures
         </button>
       </div>
-    </div>
+    </RoundedCard>
   );
 }
 

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ActiveLeaguesSection, HeroSection } from "../components/dashboard";
-import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
+import { ActiveLeaguesSection } from "../components/dashboard";
 import { leagueService } from "../services/leagueService";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import PageView from "./PageView";
 import { Home } from "lucide-react";
+import DiscoverPlayersCard from "../components/dashboard/DiscoverPlayersCard";
+import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -42,13 +43,15 @@ export function DashboardScreen() {
   };
 
   return (
-    <PageView className="flex flex-col space-y-6 px-4">
+    <PageView className="flex flex-col space-y-6 p-4">
 
 
       <div className="flex flex-row items-center gap-2" >
         <Home />
         <h1 className="font-bold text-2xl" >Home</h1>
       </div>
+
+      <DiscoverPlayersCard />
 
       {/* <HeroSection 
         availableLeagues={leagues}
@@ -62,7 +65,7 @@ export function DashboardScreen() {
       />
 
 
-      {/* <UpcomingFixturesSection /> */}
+      <UpcomingFixturesSection />
 
     </PageView>
   );
