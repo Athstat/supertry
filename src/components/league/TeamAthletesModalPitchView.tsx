@@ -94,11 +94,11 @@ function TeamAthleteListItem({
             />
 
             <div className="text-white gap-2 flex flex-row items-center justify-center" >
-                {isSub && <p className="bg-yellow-800 text-white flex flex-row items-center gap-1 text-sm px-2 rounded-xl" >
+                {isSub && <p className="bg-yellow-800 text-xs text-white flex flex-row items-center gap-1 md:text-sm px-2 rounded-xl" >
                     Sub
                     <ArrowUpDown className="w-2.5 h-2.5" />
                 </p>}
-                <p className="font-bold" >{totalScore}</p>
+                <p className="font-bold text-sm" >{totalScore}</p>
             </div>
         </div>
     );
