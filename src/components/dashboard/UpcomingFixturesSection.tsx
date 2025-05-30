@@ -75,6 +75,7 @@ export default function UpcomingFixturesSection() {
                   key={index}
                   showCompetition
                   showVenue
+                  hideDate
                 />
               ))}
             </div>

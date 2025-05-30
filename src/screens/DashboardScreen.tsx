@@ -4,6 +4,7 @@ import { ActiveLeaguesSection, HeroSection } from "../components/dashboard";
 import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
 import { leagueService } from "../services/leagueService";
 import { IFantasyLeague } from "../types/fantasyLeague";
+import DiscoverPlayersCard from "../components/dashboard/DiscoverPlayersCard";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -40,10 +41,14 @@ export function DashboardScreen() {
   };
 
   return (
-    <main className="flex flex-col mx-auto px-4 py-6 lg:px-[15%]">
+    <main className="flex flex-col dark:text-white mx-auto px-4 py-6 lg:px-[15%]">
       {/* Hero Section */}
 
-      <HeroSection availableLeagues={leagues} onViewLeague={handleViewLeague} />
+      {/* <HeroSection availableLeagues={leagues} onViewLeague={handleViewLeague} /> */}
+
+      <div className="mb-6" >
+        <DiscoverPlayersCard />
+      </div>
 
       {/* Dashboard Grid */}
       <div className="grid gap-6">
