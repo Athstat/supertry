@@ -1,4 +1,4 @@
-import { Dot } from "lucide-react";
+import { Dot, X } from "lucide-react";
 import { RugbyPlayer } from "../../../types/rugbyPlayer"
 import { formatPosition } from "../../../utils/athleteUtils";
 import { PlayerGameCard } from "../../player/PlayerGameCard";
@@ -8,10 +8,11 @@ import { twMerge } from "tailwind-merge";
 type Props = {
     selectedPlayers: RugbyPlayer[],
     open?: boolean,
-    onClose?: () => void
+    onClose?: () => void,
+    onRemove: (player: RugbyPlayer) => void
 }
 
-export default function PlayerCompareModal({ selectedPlayers, open, onClose }: Props) {
+export default function PlayerCompareModal({ selectedPlayers, open, onClose, onRemove }: Props) {
 
     if (open === false || selectedPlayers.length < 2) return;
 
@@ -33,11 +34,13 @@ export default function PlayerCompareModal({ selectedPlayers, open, onClose }: P
                 <PlayersCompareItem
                     player={player1}
                     comparingPlayer={player2}
+                    onRemove={onRemove}
                 />
 
                 <PlayersCompareItem
                     player={player2}
                     comparingPlayer={player1}
+                    onRemove={onRemove}
                 />
 
             </div>
@@ -67,15 +70,28 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
 
 type ItemProps = {
     player: RugbyPlayer,
-    comparingPlayer?: RugbyPlayer
+    comparingPlayer?: RugbyPlayer,
+    onRemove?: (player: RugbyPlayer) => void
 }
 
-function PlayersCompareItem({ player, comparingPlayer }: ItemProps) {
-    
-    console.log("Player Object ", player);
+function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
+
+    const handleRemove = () => {
+        if (onRemove) {
+            onRemove(player);
+        }
+    }
     
     return (
         <div className="flex flex-col gap-2" >
+
+            <div className="flex flex-row items-center justify-end" >
+                <button onClick={handleRemove} className=" flex w-fit flex-row px-2 hover:bg-red-600 rounded-xl gap-1 cursor-pointer items-center bg-red-500 dark:bg-red-600 dark:hover:bg-red-700" >
+                    Remove
+                    <X className="w-4 h-4" />
+                </button>
+            </div>
+
             <PlayerGameCard className="h-[200px] lg:h-[300px]" blockGlow player={player} />
             <div>
                 <p className="font-bold truncate" >{player.player_name}</p>
@@ -125,11 +141,11 @@ function PlayersCompareItem({ player, comparingPlayer }: ItemProps) {
                     isGreen={(player.tackling ?? 0) > (comparingPlayer?.tackling ?? 0)}
                 />
 
-                <StatLabel
+                {/* <StatLabel
                     label="Dicipline"
                     value={player.discipline}
                     isGreen={(player.discipline ?? 0) > (comparingPlayer?.discipline ?? 0)}
-                />
+                /> */}
 
             </div>
         </div>

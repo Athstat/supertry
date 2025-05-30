@@ -304,6 +304,7 @@ export const PlayersScreen = () => {
           selectedPlayers={selectedPlayers} 
           open={selectedPlayers.length >= 2 && isComparing}
           onClose={onClear}
+          onRemove={onRemovePlayerFromSelectedPlayers}
         />
 
       </PageView>
