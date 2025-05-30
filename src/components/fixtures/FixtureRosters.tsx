@@ -1,6 +1,4 @@
 import { IFixture, IRosterItem } from "../../types/games"
-import { formatPosition } from "../../utils/athleteUtils"
-import PlayerMugshot from "../shared/PlayerMugshot"
 import TabView, { TabViewHeaderItem, TabViewPage } from "../shared/tabs/TabView"
 import { FixtureRosterList } from "./FixtureRosterList"
 
@@ -35,7 +33,7 @@ export default function FixtureRosters({ rosters, fixture }: Props) {
     })
 
     return (
-        <div className="flex flex-col p-4" >
+        <div className="flex flex-col" >
             <TabView tabHeaderItems={tabs}>
                 
                 <TabViewPage className="p-4" tabKey="home-team">

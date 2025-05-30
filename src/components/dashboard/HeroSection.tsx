@@ -18,33 +18,39 @@ type Props = {
 
 export function HeroSection({ availableLeagues, onViewLeague }: Props) {
   const navigate = useNavigate();
-  const {firstLeagueOnClock: leagueOnTheClock} = 
+  const { firstLeagueOnClock: leagueOnTheClock } =
     leaguesOnClockFilter(availableLeagues);
 
   return (
     <div className="bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800  hover:from-primary-600 hover:to-primary-800 rounded-2xl p-4 mb-6 text-white  transition-all ease-in delay-300">
       {!leagueOnTheClock && (
-        <div className="space-y-4 p-3">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+        <div className="flex flex-col gap-2 p-3">
+          
+          <h1 className="text-xl font-bold">
             Weekly Rugby Fantasy Leagues
           </h1>
-          <p className="text-sm sm:text-base md:text-lg opacity-90">
+
+          <p className="text-md opacity-90">
             Create your dream team and compete in weekly leagues
           </p>
+
           <button
             onClick={() => navigate("/leagues")}
-            className="bg-white text-primary-600 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
+            className="bg-white w-fit text-primary-600 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
           >
-            Join Weekly League <ChevronRight size={20} />
+            Join A Weekly League <ChevronRight size={20} />
           </button>
+
         </div>
       )}
+
       {leagueOnTheClock && (
         <JoinDeadlineCountdown
           onViewLeague={onViewLeague}
           league={leagueOnTheClock}
         />
       )}
+
     </div>
   );
 }
@@ -90,17 +96,25 @@ function JoinDeadlineCountdown({
   return (
     <div className="flex flex-col p-4 gap-4 sm:gap-6">
       <div onClick={handleClickCard} className="space-y-2 sm:space-y-4 cursor-pointer">
-        <h1 className="text-xl flex flex-row items-center gap-1 sm:text-2xl md:text-3xl font-bold tracking-tight">
+        
+        <h1 className="text-xl flex flex-row items-center gap-1  font-bold tracking-tight">
           <Trophy />
           {league.title}
         </h1>
-        <p className="text-primary-100 text-sm sm:text-base md:text-lg">
+
+        {/* <p className="text-primary-100 text-sm sm:text-base md:text-lg">
           Don't miss out on the action. {league.title} starts soon, make sure
           your team is in!
+        </p> */}
+
+        <p className="text-primary-100 text-sm sm:text-base md:text-lg" >
+          Don't miss out on the action. {league.title} starts in <strong>{hours}:{minutes}:{seconds}</strong>
         </p>
+
+
       </div>
 
-      <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
+      {/* <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
         {timeBlocks.map((block) => (
           <div
             key={block.label}
@@ -114,7 +128,7 @@ function JoinDeadlineCountdown({
             </p>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <div className="flex items-center gap-4">
         <button

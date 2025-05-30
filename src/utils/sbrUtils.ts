@@ -1,3 +1,4 @@
+import { endOfWeek, isWithinInterval, startOfWeek } from "date-fns";
 import { ISbrFixture } from "../types/sbr";
 
 /** Returns true if all the fixtures passed to the funciton have
@@ -27,7 +28,7 @@ export function hasSbrRoundPassed(fixtures: ISbrFixture[]) {
 
 export function sbrFxitureSummary(fixture: ISbrFixture) {
 
-    const {home_score, away_score} = fixture;
+    const { home_score, away_score } = fixture;
     const hasScores = home_score !== null && away_score !== null && home_score !== undefined && away_score !== undefined;
     const homeTeamWon = hasScores ?
         home_score > away_score : false;
@@ -35,5 +36,43 @@ export function sbrFxitureSummary(fixture: ISbrFixture) {
     const awayTeamWon = hasScores ?
         away_score > home_score : false;
 
-    return {homeTeamWon, awayTeamWon, home_score, away_score, hasScores}
+    return { homeTeamWon, awayTeamWon, home_score, away_score, hasScores }
+}
+
+export function getSbrSeasons(fixtures: ISbrFixture[]) {
+    const seasons: string[] = [];
+
+    fixtures.forEach((f) => {
+        if (f.season) {
+
+            if (!seasons.includes(f.season)) {
+                seasons.push(f.season);
+            }
+        }
+    });
+
+    return seasons;
+}
+
+export function getWeekGames(fixtures: ISbrFixture[]) {
+    const today = new Date();
+    const weeekStart = startOfWeek(today);
+    const weekEnd = endOfWeek(today);
+
+    const weekGames = fixtures.filter((f) => {
+        if (f.kickoff_time) {
+            
+            const kickoff = new Date(f.kickoff_time) 
+            
+            return isWithinInterval(kickoff, {
+                start: weeekStart,
+                end: weekEnd
+            });
+        }
+
+        return false;
+    });
+
+    return weekGames;
+
 }
