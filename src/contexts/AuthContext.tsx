@@ -7,6 +7,7 @@ import {
   useCallback,
 } from "react";
 import { authService } from "../services/authService";
+import { requestPushPermissionsAfterLogin } from "../utils/bridgeUtils";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -84,6 +85,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await authService.login(username, password);
       setIsAuthenticated(true);
+      
+      // Request push permissions after successful login (non-blocking)
+      requestPushPermissionsAfterLogin();
+      
       return result;
     } catch (error) {
       console.error("Login failed:", error);
