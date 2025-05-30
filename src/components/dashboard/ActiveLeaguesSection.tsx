@@ -15,10 +15,10 @@ export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
 
   return (
     <div className="w-full ">
-      <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
+      {/* <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
         <Trophy size={24} className="text-primary-500" />
         {activeLeagues.length > 0 ? "Active Leagues" : "Upcoming Leagues"}
-      </h2>
+      </h2> */}
 
       {isLoading ? (
         <div className="flex justify-center py-8">
