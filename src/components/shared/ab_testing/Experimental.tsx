@@ -2,18 +2,21 @@ import { ReactNode } from "react"
 import { getEnvironment } from "../../../utils/envUtils"
 
 type Props = {
-    children?: ReactNode
+    children?: ReactNode,
+    placeholder?: ReactNode
 }
 /** Only Renders its children in qa or development environments */
-export default function Experimental({children} : Props) {
+export default function Experimental({children, placeholder} : Props) {
 
     const environment = getEnvironment();
 
-    if (environment === "production") return;
+    if (environment === "production") {
+        return <>{placeholder}</>
+    };
 
     return (
-        <div>
+        <>
             {children}
-        </div>
+        </>
     )
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ActiveLeaguesSection } from "../components/dashboard";
+import { ActiveLeaguesSection, HeroSection } from "../components/dashboard";
 import { leagueService } from "../services/leagueService";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import PageView from "./PageView";
@@ -52,15 +52,19 @@ export function DashboardScreen() {
         <h1 className="font-bold text-2xl" >Home</h1>
       </div>
 
-      <Experimental>
+      <Experimental
+        placeholder={
+          <HeroSection
+            availableLeagues={leagues}
+            onViewLeague={handleViewLeague}
+          />
+        }
+      >
         <DiscoverPlayersCard />
       </Experimental>
 
-      {/* <HeroSection 
-        availableLeagues={leagues}
-        onViewLeague={handleViewLeague} 
-      /> */}
-      
+
+
       <ActiveLeaguesSection
         leagues={leagues}
         isLoading={isLoadingLeagues}

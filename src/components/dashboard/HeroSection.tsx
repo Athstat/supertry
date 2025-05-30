@@ -10,6 +10,7 @@ import { epochDiff } from "../../utils/dateUtils";
 import { useUserFantasyTeam } from "../league/useFantasyLeague";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "../../hooks/useRoter";
+import Experimental from "../shared/ab_testing/Experimental";
 
 type Props = {
   availableLeagues: IFantasyLeague[];
@@ -18,7 +19,7 @@ type Props = {
 
 export function HeroSection({ availableLeagues, onViewLeague }: Props) {
   const navigate = useNavigate();
-  const {firstLeagueOnClock: leagueOnTheClock} = 
+  const { firstLeagueOnClock: leagueOnTheClock } =
     leaguesOnClockFilter(availableLeagues);
 
   return (
@@ -90,17 +91,25 @@ function JoinDeadlineCountdown({
   return (
     <div className="flex flex-col p-4 gap-4 sm:gap-6">
       <div onClick={handleClickCard} className="space-y-2 sm:space-y-4 cursor-pointer">
+        
         <h1 className="text-xl flex flex-row items-center gap-1 sm:text-2xl md:text-3xl font-bold tracking-tight">
           <Trophy />
           {league.title}
         </h1>
-        <p className="text-primary-100 text-sm sm:text-base md:text-lg">
+
+        {/* <p className="text-primary-100 text-sm sm:text-base md:text-lg">
           Don't miss out on the action. {league.title} starts soon, make sure
           your team is in!
+        </p> */}
+
+        <p className="text-primary-100 text-sm sm:text-base md:text-lg" >
+          Don't miss out on the action. {league.title} starts in <strong>{hours}:{minutes}:{seconds}</strong>
         </p>
+
+
       </div>
 
-      <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
+      {/* <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
         {timeBlocks.map((block) => (
           <div
             key={block.label}
@@ -114,7 +123,7 @@ function JoinDeadlineCountdown({
             </p>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <div className="flex items-center gap-4">
         <button
