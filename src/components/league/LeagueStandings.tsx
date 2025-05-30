@@ -32,7 +32,7 @@ export function LeagueStandings({
   const tableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    onJumpToTeam();
+    // onJumpToTeam();
   }, [teams])
 
   // const ROW_HEIGHT = 64;
