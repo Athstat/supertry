@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { isLeagueLocked } from "../../utils/leaguesUtils";
+import RoundedCard from "../shared/RoundedCard";
 
 interface LeagueStandingsProps {
   teams: RankedFantasyTeam[];
@@ -59,8 +60,9 @@ export function LeagueStandings({
   };
 
   return (
-    <div className="bg-white dark:bg-dark-800/40 rounded-xl shadow-sm dark:shadow-dark-sm overflow-hidden">
-      <div className="p-4 sticky top-0 bg-white dark:bg-dark-800/40 z-10">
+    <RoundedCard className="shadow-sm">
+      
+      <div className="p-6 sticky top-0 bg-white dark:bg-dark-800/20 z-10">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold flex items-center gap-2 dark:text-gray-100">
             <Trophy size={24} className="text-primary-500" />
@@ -92,8 +94,8 @@ export function LeagueStandings({
       ) : (
         <div
           ref={tableRef}
-          className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-600 scrollbar-track-gray-100 dark:scrollbar-track-dark-800 relative"
-          style={{ maxHeight: `${TABLE_HEIGHT}px` }}
+          className=" scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dark-600 scrollbar-track-gray-100 dark:scrollbar-track-dark-800 relative"
+          
         >
           <div className="relative">
             <table className="w-full">
@@ -166,7 +168,7 @@ export function LeagueStandings({
           }
         `}
       </style>
-    </div>
+    </RoundedCard>
   );
 }
 
