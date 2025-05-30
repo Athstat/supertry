@@ -175,7 +175,7 @@ export function TeamAthletesModal({
           </div>
         ) : selectedAthleteId ? (
           // Points breakdown view
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto min-h-[60vh]">
             {pointsBreakdown.length === 0 && (
               <p className="text-center m-4 bg-slate-100 dark:bg-slate-700 rounded-xl p-4 text-gray-500 dark:text-gray-400">
                 No points breakdown data available
