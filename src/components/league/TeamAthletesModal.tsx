@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { X, User, ChevronRight, ChevronLeft } from "lucide-react";
+import { X, ChevronLeft } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { PointsBreakdownItem } from "../../services/athleteService";
-import { formatAction, formatPosition } from "../../utils/athleteUtils";
+import { formatAction } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
-import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
-import { twMerge } from "tailwind-merge";
 import TeamAthletesModalListView from "./TeamAthletesModalListView";
+import Experimental from "../shared/ab_testing/Experimental";
+import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
@@ -74,8 +74,10 @@ export function TeamAthletesModal({
       className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md max-h-[80vh] flex flex-col">
+      <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md h-[90vh] overflow-clip flex flex-col">
+        
         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
+          
           <div className="flex-1">
             {selectedAthleteId && selectedAthlete ? (
               <div className="flex items-center">
@@ -103,12 +105,12 @@ export function TeamAthletesModal({
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     {selectedAthlete.position
                       ? selectedAthlete.position
-                          .split("-")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1)
-                          )
-                          .join(" ")
+                        .split("-")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")
                       : "Athlete"}{" "}
                     • {team.teamName}
                   </p>
@@ -174,13 +176,25 @@ export function TeamAthletesModal({
           </div>
         ) : (
           // Main list view
-          <div>
+          <div className="w-full h-full" >
 
-            <TeamAthletesModalListView 
-              athletes={athletes}
-              handleKeyDown={handleKeyDown}
-              handleViewBreakdown={handleViewBreakdown}
-            />
+            <Experimental
+              placeholder={
+                <TeamAthletesModalListView
+                  athletes={athletes}
+                  handleKeyDown={handleKeyDown}
+                  handleViewBreakdown={handleViewBreakdown}
+                />
+              }
+            >
+              <TeamAthletesModalPitchView
+                athletes={athletes}
+                handleKeyDown={handleKeyDown}
+                handleViewBreakdown={handleViewBreakdown}
+              />
+            </Experimental>
+
+
 
           </div>
         )}
@@ -217,13 +231,12 @@ function PointsBreakdownListItem({ item }: PointsBreakdownListItemProps) {
           </div>
         </div>
         <span
-          className={`font-bold ${
-            isPositive
-              ? "text-green-600 dark:text-green-400"
-              : isNegative
+          className={`font-bold ${isPositive
+            ? "text-green-600 dark:text-green-400"
+            : isNegative
               ? "text-red-600 dark:text-red-400"
               : "dark:text-white"
-          }`}
+            }`}
         >
           {item?.score.toFixed(1) ?? 0} pts
         </span>
