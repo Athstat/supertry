@@ -38,11 +38,11 @@ export default function FixtureRosters({ rosters, fixture }: Props) {
         <div className="flex flex-col p-4" >
             <TabView tabHeaderItems={tabs}>
                 
-                <TabViewPage className="p-4" tabKey="home-team">
+                <TabViewPage className="" tabKey="home-team">
                     <FixtureRosterList roster={homeRoster} />
                 </TabViewPage>
 
-                <TabViewPage className="p-4" tabKey="away-team">
+                <TabViewPage className="" tabKey="away-team">
                     <FixtureRosterList roster={awayRoster} />
                 </TabViewPage>
 

@@ -40,7 +40,7 @@ export default function SbrScreen() {
 
   return (
     <SbrProvider currentRound={currentRound} >
-      <PageView className="dark:text-white p-5 flex flex-col gap-3" >
+      <PageView className="dark:text-white p-5 flex flex-col gap-4" >
         <SbrScreenHeader />
         {currentRoundFixtures.length > 0 &&
           <SbrFixturesHero
