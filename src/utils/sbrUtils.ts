@@ -1,4 +1,4 @@
-import { endOfWeek, isWithinInterval, startOfWeek } from "date-fns";
+import { isWithinInterval } from "date-fns";
 import { ISbrFixture } from "../types/sbr";
 import { getNextDayOfWeek, getPreviousDayOfWeek } from "./dateUtils";
 

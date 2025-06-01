@@ -15,6 +15,18 @@ export default function SbrAllFixturesTab({ fixtures }: Props) {
     const { currentRound } = useSbrContext();
     const [ country ] = useQueryState('fs',{ init: 'south-africa'});
 
+    const filteredFixtures = fixtures.filter((f) => {
+        if (country) {
+            if (country === "south-africa") {
+                return f.season === 'Sharks Schools 2025';
+            } else {
+                return f.season === 'CBZ Schools 2025';
+            }
+        }
+
+        return true;
+    })
+
     // const allFixtures = data ?? [];
 
     // let maxRound = week;
@@ -62,7 +74,7 @@ export default function SbrAllFixturesTab({ fixtures }: Props) {
 
     return (
         <div className="flex flex-col gap-4" >
-            
+
             <PillBar
                 items={pills}
                 searchParam="fs"
@@ -102,7 +114,7 @@ export default function SbrAllFixturesTab({ fixtures }: Props) {
             </div>
 
             {<GroupedSbrFixturesList
-                fixtures={fixtures}
+                fixtures={filteredFixtures}
             />}
 
         </div>
