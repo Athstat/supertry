@@ -1,5 +1,6 @@
 import { endOfWeek, isWithinInterval, startOfWeek } from "date-fns";
 import { ISbrFixture } from "../types/sbr";
+import { getNextDayOfWeek, getPreviousDayOfWeek } from "./dateUtils";
 
 /** Returns true if all the fixtures passed to the funciton have
  * passed
@@ -54,10 +55,26 @@ export function getSbrSeasons(fixtures: ISbrFixture[]) {
     return seasons;
 }
 
+function getNextWednesdayIfNotWednesday(pivot: Date) {
+    if (pivot.getDay() === 3) {
+        return pivot;
+    }
+    return getNextDayOfWeek(pivot, 'Wednesday');
+}
+
+function getLastThursdayIfNotThruday(pivot: Date) {
+    
+    if (pivot.getDay() === 4) {
+        return pivot;
+    }
+
+    return getPreviousDayOfWeek(pivot, 'Thursday');
+}
+
 export function getWeekGames(fixtures: ISbrFixture[]) {
     const today = new Date();
-    const weeekStart = startOfWeek(today);
-    const weekEnd = endOfWeek(today);
+    const weeekStart = getLastThursdayIfNotThruday(today);
+    const weekEnd = getNextWednesdayIfNotWednesday(today);
 
     const weekGames = fixtures.filter((f) => {
         if (f.kickoff_time) {
