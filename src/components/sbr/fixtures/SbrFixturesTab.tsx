@@ -1,19 +1,23 @@
-import { Calendar } from "lucide-react"
-import { useSbrContext } from "../../../contexts/SbrContext";
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { ISbrFixture } from "../../../types/sbr";
 import PillBar, { PillBarItems } from "../../shared/bars/PillTabBar";
 import { useQueryState } from "../../../hooks/useQueryState";
+import { safeTransformStringToDate } from "../../../utils/dateUtils";
+import { addDays, format, subDays } from "date-fns";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
     fixtures: ISbrFixture[]
 }
 
 /** Renders all the Sbr Fixtures */
-export default function SbrAllFixturesTab({ fixtures }: Props) {
+export default function SbrFixturesTab({ fixtures }: Props) {
 
-    const { currentRound } = useSbrContext();
-    const [ country ] = useQueryState('fs',{ init: 'south-africa'});
+    const [country] = useQueryState('fs', { init: 'south-africa' });
+    const [pivotDateStr, setPivotDateStr] = useQueryState('pivot');
+
+    const pivotDate = safeTransformStringToDate(pivotDateStr);
 
     const filteredFixtures = fixtures.filter((f) => {
         if (country) {
@@ -27,37 +31,22 @@ export default function SbrAllFixturesTab({ fixtures }: Props) {
         return true;
     })
 
-    // const allFixtures = data ?? [];
+    const onMoveLeft = () => {
 
-    // let maxRound = week;
-    // let minRound = week;
+        if (pivotDate) {
+            const prevPivot = subDays(pivotDate, 7);
+            setPivotDateStr(format(prevPivot, 'yyyy-MM-dd'));
+        }
 
-    // allFixtures.forEach(f => {
-    //     if (f.round > maxRound) {
-    //         maxRound = f.round
-    //     }
+    }
 
-    //     if (f.round < minRound) {
-    //         minRound = f.round
-    //     }
-    // });
+    const onMoveRight = () => {
 
-    // const canMoveLeft = week > minRound;
-    // const canMoveRight = week < maxRound
-
-    // const onMoveLeft = () => {
-
-    //     if (canMoveLeft) {
-    //         setWeek(week - 1)
-    //     }
-    // }
-
-    // const onMoveRight = () => {
-
-    //     if (canMoveRight) {
-    //         setWeek(week + 1)
-    //     }
-    // }
+        if (pivotDate) {
+            const nextPivot = addDays(pivotDate, 7);
+            setPivotDateStr(format(nextPivot, 'yyyy-MM-dd'));
+        }
+    }
 
 
     const pills: PillBarItems[] = [
@@ -87,28 +76,28 @@ export default function SbrAllFixturesTab({ fixtures }: Props) {
                     <h1 className="text-xl font-bold" >Fixtures</h1>
                 </div>
 
-                {currentRound !== 0 && <div className="flex flex-row items-center" >
+                { <div className="flex flex-row items-center" >
                     {/* <p className="text-lg font-semibold mr-3" >Week {week}</p> */}
-                    {/* 
+                    
                     <button
                         onClick={onMoveLeft}
                         className={twMerge(
                             "bg-slate-300 mr-1 text-slate-500 dark:text-slate-300 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-l-lg",
-                            !canMoveLeft && "opacity-50"
+                            !pivotDate && "opacity-50"
                         )}
                     >
                         <ChevronLeft className="w-7" />
-                    </button> */}
+                    </button>
 
-                    {/* <button
+                    <button
                         onClick={onMoveRight}
                         className={twMerge(
                             "bg-slate-300 mr-1 text-slate-500 dark:text-slate-300 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-r-lg",
-                            !canMoveRight && "opacity-50"
+                            !pivotDate && "opacity-50"
                         )}
                     >
                         <ChevronRight className="w-7" />
-                    </button> */}
+                    </button>
                 </div>}
 
             </div>

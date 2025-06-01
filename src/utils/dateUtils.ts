@@ -189,3 +189,7 @@ export function safeTransformStringToDate(dateStr: string | undefined | null) {
 
     return undefined
 }
+
+export function dateToYYYYMMDDStr(date: Date) {
+    return format(date, 'yyy-MM-dd');
+}

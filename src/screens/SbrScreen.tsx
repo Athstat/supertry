@@ -6,17 +6,18 @@ import { sbrService } from "../services/sbrService";
 import SbrFixturesHero from "../components/sbr/fixtures/SbrFixturesHero";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
-import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
+import SbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
 import { getWeekGames } from "../utils/sbrUtils";
 import { LoadingState } from "../components/ui/LoadingState";
-import { useQueryValue } from "../hooks/useQueryState";
-import { safeTransformStringToDate } from "../utils/dateUtils";
+import { useQueryState } from "../hooks/useQueryState";
+import { dateToYYYYMMDDStr, safeTransformStringToDate } from "../utils/dateUtils";
 
 export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
-  const pivotDateStr = useQueryValue('pivot');
+  const today = new Date();
+  const [pivotDateStr] = useQueryState('pivot', {init: dateToYYYYMMDDStr(today)});
   const pivotDate = safeTransformStringToDate(pivotDateStr);
 
   if (isLoading) return <LoadingState />
@@ -71,7 +72,7 @@ export default function SbrScreen() {
           </TabViewPage>
 
           <TabViewPage tabKey="fixtures" >
-            {!isLoading && <SbrAllFixturesTab fixtures={weekGames} />}
+            {!isLoading && <SbrFixturesTab fixtures={weekGames} />}
           </TabViewPage>
 
         </TabView>
