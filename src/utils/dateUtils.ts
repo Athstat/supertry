@@ -1,4 +1,4 @@
-import { add, addDays } from "date-fns";
+import { add, addDays, subDays } from "date-fns";
 import { eachDayOfInterval, endOfWeek, format, lastDayOfMonth, nextDay, startOfWeek } from "date-fns";
 
 /** Returns the difference in epoch between a future date and today */
@@ -125,7 +125,7 @@ export type DayOfWeek = 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursda
     | 'Friday' | 'Friday' | 'Saturday';
 
 /** Return the date of the next day of the week from that date */
-export function getNextDayOfTheWeek(pivot: Date, dayOfWeek: DayOfWeek) {
+export function getNextDayOfWeek(pivot: Date, dayOfWeek: DayOfWeek) {
 
     const daysArr: DayOfWeek[] = [
         'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'
@@ -144,5 +144,27 @@ export function getNextDayOfTheWeek(pivot: Date, dayOfWeek: DayOfWeek) {
     }
 
     return addDays(pivot, diff);
+
+}
+
+export function getPreviousDayOfWeek(pivot: Date, dayOfWeek: DayOfWeek) {
+
+    const daysArr: DayOfWeek[] = [
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'
+        , 'Friday' , 'Saturday'
+    ];
+
+    const pivotDayOfWeekIndex = pivot.getDay();
+    const prevIndex = daysArr.findIndex((d) => d === dayOfWeek);
+
+    let diff: number;
+
+    if (pivotDayOfWeekIndex > prevIndex) {
+        diff = pivotDayOfWeekIndex - prevIndex;
+    } else {
+        diff = (7 - prevIndex) + pivotDayOfWeekIndex;
+    }
+
+    return subDays(pivot, diff);
 
 }
