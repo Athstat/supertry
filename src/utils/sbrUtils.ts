@@ -71,8 +71,9 @@ function getLastThursdayIfNotThruday(pivot: Date) {
     return getPreviousDayOfWeek(pivot, 'Thursday');
 }
 
-export function getWeekGames(fixtures: ISbrFixture[]) {
-    const today = new Date();
+export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
+    
+    const today = pivot ? new Date(pivot) : new Date() ;
     const weeekStart = getLastThursdayIfNotThruday(today);
     const weekEnd = getNextWednesdayIfNotWednesday(today);
 
@@ -90,6 +91,6 @@ export function getWeekGames(fixtures: ISbrFixture[]) {
         return false;
     });
 
-    return weekGames;
+    return {weekGames, weeekStart, weekEnd};
 
 }

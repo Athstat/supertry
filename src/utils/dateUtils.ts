@@ -1,5 +1,5 @@
-import { add, addDays, subDays } from "date-fns";
-import { eachDayOfInterval, endOfWeek, format, lastDayOfMonth, nextDay, startOfWeek } from "date-fns";
+import { addDays, subDays } from "date-fns";
+import { eachDayOfInterval, endOfWeek, format, lastDayOfMonth, startOfWeek } from "date-fns";
 
 /** Returns the difference in epoch between a future date and today */
 export function epochDiff(futureDate: Date) {
@@ -167,4 +167,25 @@ export function getPreviousDayOfWeek(pivot: Date, dayOfWeek: DayOfWeek) {
 
     return subDays(pivot, diff);
 
+}
+
+/** Changes a string into a date. Usefull in situations were there
+ * is nto gaurentee that the string is a valid date. 
+ * 
+ * If the string is a valid date then a date object is returned else undefined
+ * is returned
+ */
+export function safeTransformStringToDate(dateStr: string | undefined | null) {
+    if (dateStr) {
+        try {
+
+            const newDate = new Date(dateStr);
+            return newDate;
+
+        } catch (error) {
+            console.log(`Error when trasnforming ${dateStr} to Date object`, error)
+        }
+    }
+
+    return undefined
 }

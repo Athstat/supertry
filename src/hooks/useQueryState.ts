@@ -54,5 +54,7 @@ export function useQueryState(key: string, options?: Options) {
 export function useQueryValue(key: string) {
     const[searchParams] = useSearchParams();
     const value = searchParams.get(key);
+
     return value;
+
 }

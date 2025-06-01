@@ -10,15 +10,19 @@ import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
 import { getWeekGames } from "../utils/sbrUtils";
 import { LoadingState } from "../components/ui/LoadingState";
+import { useQueryValue } from "../hooks/useQueryState";
+import { safeTransformStringToDate } from "../utils/dateUtils";
 
 export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
+  const pivotDateStr = useQueryValue('pivot');
+  const pivotDate = safeTransformStringToDate(pivotDateStr);
 
   if (isLoading) return <LoadingState />
 
   const currentRound = 0;
-  const weekGames = getWeekGames(data ?? []);
+  const {weekGames} = getWeekGames(data ?? [], pivotDate);
 
   const currentRoundFixtures = weekGames;
 
