@@ -9,15 +9,16 @@ import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
 import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
 import { getWeekGames } from "../utils/sbrUtils";
+import { LoadingState } from "../components/ui/LoadingState";
 
 export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
 
+  if (isLoading) return <LoadingState />
+
   const currentRound = 0;
   const weekGames = getWeekGames(data ?? []);
-
-  console.log(data);
 
   const currentRoundFixtures = weekGames;
 

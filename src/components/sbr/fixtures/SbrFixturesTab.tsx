@@ -1,61 +1,74 @@
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
-import { useState } from "react"
+import { Calendar } from "lucide-react"
 import { useSbrContext } from "../../../contexts/SbrContext";
-import { sbrService } from "../../../services/sbrService";
-import useSWR from "swr";
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
-import { twMerge } from "tailwind-merge";
-import { LoadingState } from "../../ui/LoadingState";
 import { ISbrFixture } from "../../../types/sbr";
+import PillBar, { PillBarItems } from "../../shared/bars/PillTabBar";
+import { useQueryState } from "../../../hooks/useQueryState";
 
 type Props = {
     fixtures: ISbrFixture[]
 }
 
 /** Renders all the Sbr Fixtures */
-export default function SbrAllFixturesTab({ fixtures } : Props) {
-
-    const { data, isLoading } = useSWR("sbr-fixtures", fetcher);
+export default function SbrAllFixturesTab({ fixtures }: Props) {
 
     const { currentRound } = useSbrContext();
-    const [week, setWeek] = useState(currentRound);
+    const [ country ] = useQueryState('fs',{ init: 'south-africa'});
 
-    const allFixtures = data ?? [];
+    // const allFixtures = data ?? [];
 
-    let maxRound = week;
-    let minRound = week;
+    // let maxRound = week;
+    // let minRound = week;
 
-    allFixtures.forEach(f => {
-        if (f.round > maxRound) {
-            maxRound = f.round
+    // allFixtures.forEach(f => {
+    //     if (f.round > maxRound) {
+    //         maxRound = f.round
+    //     }
+
+    //     if (f.round < minRound) {
+    //         minRound = f.round
+    //     }
+    // });
+
+    // const canMoveLeft = week > minRound;
+    // const canMoveRight = week < maxRound
+
+    // const onMoveLeft = () => {
+
+    //     if (canMoveLeft) {
+    //         setWeek(week - 1)
+    //     }
+    // }
+
+    // const onMoveRight = () => {
+
+    //     if (canMoveRight) {
+    //         setWeek(week + 1)
+    //     }
+    // }
+
+
+    const pills: PillBarItems[] = [
+        {
+            label: "South Africa",
+            key: "south-africa"
+        },
+
+        {
+            label: "Zimbabwe",
+            key: "zimbabwe"
         }
-
-        if (f.round < minRound) {
-            minRound = f.round
-        }
-    });
-
-    const canMoveLeft = week > minRound;
-    const canMoveRight = week < maxRound
-
-    const onMoveLeft = () => {
-
-        if (canMoveLeft) {
-            setWeek(week - 1)
-        }
-    }
-
-    const onMoveRight = () => {
-
-        if (canMoveRight) {
-            setWeek(week + 1)
-        }
-    }
-
-    if (isLoading) return <LoadingState />
+    ]
 
     return (
         <div className="flex flex-col gap-4" >
+
+            Search Param value: {country}
+            <PillBar
+                items={pills}
+                searchParam="fs"
+            />
+
             <div className="flex flex-row items-center justify-between" >
 
                 <div className="flex flex-row items-center gap-1" >
@@ -64,8 +77,8 @@ export default function SbrAllFixturesTab({ fixtures } : Props) {
                 </div>
 
                 {currentRound !== 0 && <div className="flex flex-row items-center" >
-                    <p className="text-lg font-semibold mr-3" >Week {week}</p>
-
+                    {/* <p className="text-lg font-semibold mr-3" >Week {week}</p> */}
+                    {/* 
                     <button
                         onClick={onMoveLeft}
                         className={twMerge(
@@ -74,9 +87,9 @@ export default function SbrAllFixturesTab({ fixtures } : Props) {
                         )}
                     >
                         <ChevronLeft className="w-7" />
-                    </button>
+                    </button> */}
 
-                    <button
+                    {/* <button
                         onClick={onMoveRight}
                         className={twMerge(
                             "bg-slate-300 mr-1 text-slate-500 dark:text-slate-300 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-r-lg",
@@ -84,9 +97,9 @@ export default function SbrAllFixturesTab({ fixtures } : Props) {
                         )}
                     >
                         <ChevronRight className="w-7" />
-                    </button>
+                    </button> */}
                 </div>}
-                
+
             </div>
 
             {<GroupedSbrFixturesList
@@ -95,9 +108,4 @@ export default function SbrAllFixturesTab({ fixtures } : Props) {
 
         </div>
     )
-}
-
-async function fetcher() {
-    const res = await sbrService.getAllFixtures();
-    return res;
 }
