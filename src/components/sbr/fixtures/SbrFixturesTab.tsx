@@ -3,22 +3,24 @@ import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { ISbrFixture } from "../../../types/sbr";
 import PillBar, { PillBarItems } from "../../shared/bars/PillTabBar";
 import { useQueryState } from "../../../hooks/useQueryState";
-import { safeTransformStringToDate } from "../../../utils/dateUtils";
-import { addDays, format, subDays } from "date-fns";
+import { dateToStrWithoutTime, safeTransformStringToDate } from "../../../utils/dateUtils";
+import { addDays, format, isSameDay, subDays } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
-    fixtures: ISbrFixture[]
+    fixtures: ISbrFixture[],
+    weekStart?: Date,
+    weekEnd?: Date
 }
 
 /** Renders all the Sbr Fixtures */
-export default function SbrFixturesTab({ fixtures }: Props) {
+export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) {
 
     const [country] = useQueryState('fs', { init: 'south-africa' });
     const [pivotDateStr, setPivotDateStr] = useQueryState('pivot');
 
     const pivotDate = safeTransformStringToDate(pivotDateStr);
-
+    
     const filteredFixtures = fixtures.filter((f) => {
         if (country) {
             if (country === "south-africa") {
@@ -27,25 +29,49 @@ export default function SbrFixturesTab({ fixtures }: Props) {
                 return f.season === 'CBZ Schools 2025';
             }
         }
-
+        
         return true;
-    })
+    });
+
+    const firstDate = filteredFixtures.length > 0 ? 
+        filteredFixtures[0].kickoff_time : undefined;
+
+    const lastDate = filteredFixtures.length > 0? 
+        filteredFixtures[filteredFixtures.length - 1].kickoff_time : undefined;
 
     const onMoveLeft = () => {
 
         if (pivotDate) {
             const prevPivot = subDays(pivotDate, 7);
-            setPivotDateStr(format(prevPivot, 'yyyy-MM-dd'));
+            setPivotDateStr(dateToStrWithoutTime(prevPivot));
         }
 
+    }
+
+    const onMoveToToday = () => {
+        setPivotDateStr(dateToStrWithoutTime(new Date()));
     }
 
     const onMoveRight = () => {
 
         if (pivotDate) {
             const nextPivot = addDays(pivotDate, 7);
-            setPivotDateStr(format(nextPivot, 'yyyy-MM-dd'));
+            setPivotDateStr(dateToStrWithoutTime(nextPivot));
         }
+    }
+
+    const getDateMessage = (pivot: Date) => {
+
+        if (weekEnd && weekStart) {
+            
+            if (isSameDay(weekEnd, weekStart)) {
+                return `${format(weekEnd, 'EEEE dd MMMM yyyy')}`
+            }
+
+            return `${format(weekStart, 'EEEE dd MMMM yyyy')} - ${format(weekEnd, 'EEEE dd MMMM yyyy')}`;
+        }
+
+        return undefined;
     }
 
 
@@ -76,9 +102,9 @@ export default function SbrFixturesTab({ fixtures }: Props) {
                     <h1 className="text-xl font-bold" >Fixtures</h1>
                 </div>
 
-                { <div className="flex flex-row items-center" >
+                {<div className="flex flex-row items-center" >
                     {/* <p className="text-lg font-semibold mr-3" >Week {week}</p> */}
-                    
+
                     <button
                         onClick={onMoveLeft}
                         className={twMerge(
@@ -87,6 +113,16 @@ export default function SbrFixturesTab({ fixtures }: Props) {
                         )}
                     >
                         <ChevronLeft className="w-7" />
+                    </button>
+
+                    <button
+                        onClick={onMoveToToday}
+                        className={twMerge(
+                            "bg-slate-300 mr-1 px-2 text-slate-500 dark:text-slate-300 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 ",
+                            !pivotDate && "opacity-50"
+                        )}
+                    >
+                        Today
                     </button>
 
                     <button
@@ -101,6 +137,8 @@ export default function SbrFixturesTab({ fixtures }: Props) {
                 </div>}
 
             </div>
+
+            {pivotDate && <p>{getDateMessage(pivotDate)}</p>}
 
             {<GroupedSbrFixturesList
                 fixtures={filteredFixtures}

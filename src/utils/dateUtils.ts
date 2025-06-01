@@ -190,6 +190,6 @@ export function safeTransformStringToDate(dateStr: string | undefined | null) {
     return undefined
 }
 
-export function dateToYYYYMMDDStr(date: Date) {
+export function dateToStrWithoutTime(date: Date) {
     return format(date, 'yyy-MM-dd');
 }

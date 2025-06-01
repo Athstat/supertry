@@ -55,14 +55,14 @@ export function getSbrSeasons(fixtures: ISbrFixture[]) {
     return seasons;
 }
 
-function getNextWednesdayIfNotWednesday(pivot: Date) {
+export function getNextWednesdayIfNotWednesday(pivot: Date) {
     if (pivot.getDay() === 3) {
         return pivot;
     }
     return getNextDayOfWeek(pivot, 'Wednesday');
 }
 
-function getLastThursdayIfNotThruday(pivot: Date) {
+export function getLastThursdayIfNotThruday(pivot: Date) {
     
     if (pivot.getDay() === 4) {
         return pivot;

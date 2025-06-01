@@ -11,19 +11,19 @@ import SbrChatTab from "../components/sbr/SBRChatScreen";
 import { getWeekGames } from "../utils/sbrUtils";
 import { LoadingState } from "../components/ui/LoadingState";
 import { useQueryState } from "../hooks/useQueryState";
-import { dateToYYYYMMDDStr, safeTransformStringToDate } from "../utils/dateUtils";
+import { dateToStrWithoutTime, safeTransformStringToDate } from "../utils/dateUtils";
 
 export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
   const today = new Date();
-  const [pivotDateStr] = useQueryState('pivot', {init: dateToYYYYMMDDStr(today)});
+  const [pivotDateStr] = useQueryState('pivot', {init: dateToStrWithoutTime(today)});
   const pivotDate = safeTransformStringToDate(pivotDateStr);
 
   if (isLoading) return <LoadingState />
 
   const currentRound = 0;
-  const {weekGames} = getWeekGames(data ?? [], pivotDate);
+  const {weekGames, weeekStart, weekEnd} = getWeekGames(data ?? [], pivotDate);
 
   const currentRoundFixtures = weekGames;
 
@@ -72,7 +72,12 @@ export default function SbrScreen() {
           </TabViewPage>
 
           <TabViewPage tabKey="fixtures" >
-            {!isLoading && <SbrFixturesTab fixtures={weekGames} />}
+            {!isLoading && <SbrFixturesTab 
+              fixtures={weekGames}
+              weekEnd={weekEnd}
+              weekStart={weeekStart}
+
+            />}
           </TabViewPage>
 
         </TabView>
