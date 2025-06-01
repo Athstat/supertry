@@ -62,8 +62,7 @@ export default function SbrAllFixturesTab({ fixtures }: Props) {
 
     return (
         <div className="flex flex-col gap-4" >
-
-            Search Param value: {country}
+            
             <PillBar
                 items={pills}
                 searchParam="fs"

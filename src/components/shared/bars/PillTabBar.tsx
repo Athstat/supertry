@@ -24,14 +24,14 @@ export default function PillBar({ items = [], searchParam }: Props) {
     }
 
     return (
-        <div className="flex flex-row items-center gap-2" >
+        <div className="flex flex-row overflow-y-auto items-center gap-2" >
             {items.map((i, index) => {
                 return (
                     <button
                         key={index}
                         onClick={() => onClickPill(i.key)}
                         className={twMerge(
-                            "bg-slate-100 border border-slate-200 rounded-full px-2 text-slate-700",
+                            "bg-slate-100 border border-slate-200 rounded-full px-3 py-0.5 text-slate-700",
                             "dark:bg-slate-800/60 dark:border-slate-700 dark:text-slate-500 dark:hover:bg-slate-700/80",
                             "cursor-pointer hover:bg-slate-200",
                             curr === i.key && "bg-blue-500 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-700 text-white dark:text-white dark:border-blue-500 border-blue-400"
