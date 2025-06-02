@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Loader } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { authService } from "../../services/authService";
 import ScrummyLogo from "../../components/branding/scrummy_logo";
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, checkAuth } = useAuth();
+  const [isCreatingGuest, setIsCreatingGuest] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -25,8 +28,41 @@ export function WelcomeScreen() {
     );
   }
 
-  const handleGetStarted = () => {
-    navigate("/signup");
+  const handleGetStarted = async () => {
+    console.log("Starting guest account creation...");
+    setIsCreatingGuest(true);
+    setError(null);
+    
+    try {
+      // Create and login guest user
+      console.log("Calling authService.createGuestUser()...");
+      const loginResult = await authService.createGuestUser();
+      
+      console.log("Guest user created and logged in successfully", loginResult);
+      
+      // The createGuestUser method already logs in the user and sets tokens
+      // Now we need to update the auth context
+      console.log("Updating auth state...");
+      const authUpdated = await checkAuth();
+      
+      console.log("Auth check result:", authUpdated);
+      
+      // At this point, the user should be authenticated
+      // Navigate directly since the useEffect will handle the navigation
+      // but we'll do it explicitly here to avoid any race conditions
+      if (authUpdated || localStorage.getItem("access_token")) {
+        console.log("Navigating to post-signup welcome...");
+        navigate("/welcome");
+      } else {
+        throw new Error("Failed to authenticate after guest account creation");
+      }
+    } catch (err: any) {
+      console.error("Error creating guest account:", err);
+      console.error("Error message:", err.message);
+      console.error("Error stack:", err.stack);
+      setError(err.message || "Failed to get started. Please try again.");
+      setIsCreatingGuest(false);
+    }
   };
 
   return (
@@ -55,7 +91,7 @@ export function WelcomeScreen() {
           transition={{ delay: 0.5, duration: 0.6 }}
         >
           <p className="mt-3 lg:text-xl text-gray-600 dark:text-gray-300 text-center">
-            You’ve officially joined the scrum! Don’t worry, it’s less bruises
+            You've officially joined the scrum! Don't worry, it's less bruises
             and more bragging rights from here.
           </p>
         </motion.div>
@@ -64,19 +100,58 @@ export function WelcomeScreen() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
-          className="w-full mt-12 items-center justify-center flex"
+          className="w-full mt-12 items-center justify-center flex flex-col"
         >
           <motion.button
-            whileHover={{
-              scale: 1.05,
-              transition: { type: "spring", stiffness: 300 },
-            }}
+            whileHover={
+              !isCreatingGuest
+                ? {
+                    scale: 1.05,
+                    transition: { type: "spring", stiffness: 300 },
+                  }
+                : {}
+            }
             onClick={handleGetStarted}
-            className="w-[90%] bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg flex items-center justify-center"
+            className="w-[90%] bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg flex items-center justify-center disabled:opacity-75 disabled:cursor-not-allowed"
+            {...(isCreatingGuest ? { disabled: true } : {})}
           >
-            <span>Get Started</span>
-            <ChevronRight className="ml-2 h-5 w-5" />
+            {isCreatingGuest ? (
+              <>
+                <Loader className="mr-2 h-5 w-5 animate-spin" />
+                <span>Getting Started...</span>
+              </>
+            ) : (
+              <>
+                <span>Get Started</span>
+                <ChevronRight className="ml-2 h-5 w-5" />
+              </>
+            )}
           </motion.button>
+          
+          {error && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mt-4 text-red-500 text-sm text-center"
+            >
+              {error}
+            </motion.div>
+          )}
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9, duration: 0.6 }}
+            className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center"
+          >
+            Already have an account?{" "}
+            <button
+              onClick={() => navigate("/signin")}
+              className="text-primary-600 hover:underline font-medium"
+            >
+              Sign In
+            </button>
+          </motion.div>
         </motion.div>
       </motion.div>
     </div>
