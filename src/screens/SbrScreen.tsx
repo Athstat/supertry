@@ -6,20 +6,24 @@ import { sbrService } from "../services/sbrService";
 import SbrFixturesHero from "../components/sbr/fixtures/SbrFixturesHero";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
-import SbrAllFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
+import SbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
 import { getWeekGames } from "../utils/sbrUtils";
+import { LoadingState } from "../components/ui/LoadingState";
+import { useQueryState } from "../hooks/useQueryState";
+import { dateToStrWithoutTime, safeTransformStringToDate } from "../utils/dateUtils";
 
 export default function SbrScreen() {
 
   const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
+  const today = new Date();
+  const [pivotDateStr] = useQueryState('pivot', {init: dateToStrWithoutTime(today)});
+  const pivotDate = safeTransformStringToDate(pivotDateStr);
+
+  if (isLoading) return <LoadingState />
 
   const currentRound = 0;
-  const weekGames = getWeekGames(data ?? []);
-
-  console.log(data);
-
-  const currentRoundFixtures = weekGames;
+  const {weekGames, weeekStart, weekEnd} = getWeekGames(data ?? [], pivotDate);
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -46,11 +50,11 @@ export default function SbrScreen() {
         
         <SbrScreenHeader />
         
-        {currentRoundFixtures.length > 0 &&
+        {/* {currentRoundFixtures.length > 0 &&
           <SbrFixturesHero
             fixtures={currentRoundFixtures}
           />
-        }
+        } */}
 
         <TabView tabHeaderItems={tabItems} >
           {/* <TabViewPage tabKey="current-week" >
@@ -66,7 +70,12 @@ export default function SbrScreen() {
           </TabViewPage>
 
           <TabViewPage tabKey="fixtures" >
-            {!isLoading && <SbrAllFixturesTab fixtures={weekGames} />}
+            {!isLoading && <SbrFixturesTab 
+              fixtures={weekGames}
+              weekEnd={weekEnd}
+              weekStart={weeekStart}
+
+            />}
           </TabViewPage>
 
         </TabView>

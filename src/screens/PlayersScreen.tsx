@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { PlayerForm, RugbyPlayer } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 
@@ -19,6 +18,7 @@ import PlayersCompareButton from "../components/player/PlayerScreenCompareButton
 import { twMerge } from "tailwind-merge";
 import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
 import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
+import PlayerProfileModal from "../components/player/PlayerProfileModal";
 
 type SortTab = "all" | "trending" | "top" | "new";
 // type SortOption = "points" | "name" | "position" | "club";
@@ -26,7 +26,7 @@ type SortDirection = "asc" | "desc";
 type SortField = "power_rank_rating" | "player_name" | "form";
 
 export const PlayersScreen = () => {
-  const navigate = useNavigate();
+
   const { athletes, error, isLoading, refreshAthletes, positions, teams } =
     useAthletes();
   const [activeTab, setActiveTab] = useState<SortTab>("all");
@@ -42,6 +42,14 @@ export const PlayersScreen = () => {
   const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
   const toggleCompareMode = () => setIsComparing(!isComparing);
   const clearSelections = () => setSelectedPlayers([]);
+
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
+  const [showPlayerModal, setShowPlayerModal] = useState(false);
+  
+  const handleClosePlayerModal = () => {
+    setPlayerModalPlayer(undefined);
+    setShowPlayerModal(false);
+  }
 
   const onClear = () => {
     clearSelections();
@@ -74,9 +82,10 @@ export const PlayersScreen = () => {
         setSelectedPlayers([...selectedPlayers, player]);
       }
     } else {
-      navigate(`/players/${player.tracking_id || player.id}`, {
-        state: { player },
-      });
+      
+      setPlayerModalPlayer(player);
+      setShowPlayerModal(true);
+
     }
   };
 
@@ -229,7 +238,7 @@ export const PlayersScreen = () => {
       isComparing={isComparing}
       selectedPlayers={selectedPlayers}
     >
-      <PageView className="px-5 flex flex-col gap-3">
+      <PageView className="px-5 flex flex-col gap-3 md:w-[80%] lg:w-[60%]">
 
         {/* Search and Filter Header */}
         <div className="flex flex-row gap-2 items-center" >
@@ -294,7 +303,7 @@ export const PlayersScreen = () => {
           )}
         {/* Player Grid */}
         {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {filteredPlayers.map((player, index) => (
               <PlayerGameCard
                 key={index}
@@ -313,7 +322,16 @@ export const PlayersScreen = () => {
           onRemove={onRemovePlayerFromSelectedPlayers}
         />
 
+        {playerModalPlayer && <PlayerProfileModal
+          onClose={handleClosePlayerModal}
+          player={playerModalPlayer}
+          isOpen={playerModalPlayer !== undefined && showPlayerModal}
+          
+        />}
+
       </PageView>
+
+
     </PlayersScreenProvider>
   );
 };

@@ -8,7 +8,6 @@ import { XCircle } from "lucide-react";
 import { Percent } from "lucide-react";
 import SbrPredictionsTabLeaderboard from "./SbrPredictionsTabLeaderboard";
 
-
 export default function SbrPredictionsTab() {
 
   const user = useAuthUser();

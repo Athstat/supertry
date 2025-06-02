@@ -6,6 +6,7 @@ import DialogModal from "../../shared/DialogModal";
 import { twMerge } from "tailwind-merge";
 import { useFetch } from "../../../hooks/useFetch";
 import { athleteService } from "../../../services/athleteService";
+import { getPlayerAggregatedStat } from "../../../types/sports_actions";
 
 type Props = {
     selectedPlayers: RugbyPlayer[],
@@ -54,21 +55,22 @@ export default function PlayerCompareModal({ selectedPlayers, open, onClose, onR
 
 type StatLabelProp = {
     label?: string,
-    value?: string | number,
+    value?: number,
     isGreen?: boolean
 }
 
 function StatLabel({ label, value, isGreen }: StatLabelProp) {
 
     const hasVal = value !== undefined;
+    const valueFixed = value?.toFixed(1);
 
     return (
         <div className="flex flex-row items-center gap-1" >
-            <div className="bg-slate-200 flex-[3] py-1 dark:bg-slate-600 rounded-md text-sm px-2" >{label}</div>
+            <div className="bg-slate-200 flex-[3] py-1 dark:bg-slate-700 rounded-md text-sm px-2" >{label}</div>
             <div className={twMerge(
-                "bg-slate-300 flex-1 py-1 text-center items-center dark:bg-slate-700 rounded-md text-sm px-1",
-                isGreen && "bg-green-500 dark:bg-green-700 text-white"
-            )} >{hasVal ? value : "-"}</div>
+                "bg-slate-300 flex-1 py-1 text-center items-center dark:bg-slate-700/70 rounded-md text-sm px-1",
+                isGreen && "from-primary-500 bg-gradient-to-r to-blue-700 text-white"
+            )} >{hasVal ? valueFixed?.endsWith(".0") ? value : valueFixed : "-"}</div>
         </div>
     )
 }
@@ -88,9 +90,18 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
     }
 
     const { data: stats, isLoading: loadingStats } = useFetch("player-stats", player.tracking_id ?? "fallback", athleteService.getRugbyAthleteById);
+    const { data: actions, isLoading: loadingActions } = useFetch("player-actions", player.tracking_id ?? "fallback", athleteService.getAthleteStatsRaw);
+
+    const { data: compareActions, isLoading: loadingCompareActions } = useFetch("player-actions", comparingPlayer?.tracking_id ?? "fallback", athleteService.getAthleteStatsRaw);
     const { data: comparingStats, isLoading: loadingComparingStats } = useFetch("player-stats", comparingPlayer?.tracking_id ?? "fallback", athleteService.getRugbyAthleteById);
 
-    const isLoading = loadingComparingStats || loadingStats;
+    const isLoading = loadingComparingStats || loadingStats || loadingCompareActions || loadingActions;
+
+    const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
+    const compareTries = getPlayerAggregatedStat("Tries", compareActions)?.action_count;
+
+    const minutesPlayed = getPlayerAggregatedStat("MinutesPlayed", actions)?.action_count
+    const compareMinutesPlayed = getPlayerAggregatedStat("MinutesPlayed", compareActions)?.action_count;
 
     if (isLoading) return (
         <div className="w-full h-[400px] bg-slate-200 dark:bg-slate-800 animate-pulse" >
@@ -102,7 +113,7 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
         <div className="flex flex-col gap-2" >
 
             <div className="flex flex-row items-center justify-end" >
-                <button onClick={handleRemove} className=" flex w-fit text-sm text-white flex-row px-2 hover:bg-red-600 rounded-xl gap-1 cursor-pointer items-center bg-red-500 dark:bg-red-600 dark:hover:bg-red-700" >
+                <button onClick={handleRemove} className=" flex w-fit text-sm dark:text-white flex-row px-2rounded-xl gap-1 cursor-pointer items-center dark:bg-slate-700/70 bg-slate-100 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 border dark:border-slate-600 px-2 rounded-xl py-0.5" >
                     Remove
                     <X className="w-4 h-4" />
                 </button>
@@ -137,6 +148,12 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                     isGreen={(player.price ?? 0) > (comparingPlayer?.price ?? 0)}
                 />
 
+                <StatLabel
+                    label="Minutes Played"
+                    value={minutesPlayed}
+                    isGreen={(minutesPlayed ?? 0) > (compareMinutesPlayed ?? 0)}
+                />
+
                 <p className="mt-2" >Attacking</p>
                 <StatLabel
                     label="Attacking"
@@ -148,6 +165,12 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                     label="Scoring"
                     value={stats?.scoring}
                     isGreen={(stats?.scoring ?? 0) > (comparingStats?.scoring ?? 0)}
+                />
+
+                <StatLabel
+                    label="Tries"
+                    value={tries}
+                    isGreen={(tries ?? 0) > (compareTries ?? 0)}
                 />
 
                 <StatLabel
@@ -183,6 +206,12 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                     label="Kicking"
                     value={stats?.kicking}
                     isGreen={(stats?.kicking ?? 0) > (comparingStats?.kicking ?? 0)}
+                />
+
+                <StatLabel
+                    label="Points Kicking"
+                    value={stats?.points_kicking}
+                    isGreen={(stats?.points_kicking ?? 0) > (comparingStats?.points_kicking ?? 0)}
                 />
 
                 <StatLabel
