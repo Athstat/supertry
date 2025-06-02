@@ -21,7 +21,7 @@ export function ProfileScreen() {
               Total Points
             </div>
             <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-              {userStats.totalPoints}
+              {Math.floor(userStats.totalPoints)}
             </div>
           </div>
           <div className="bg-gray-50 dark:bg-dark-800/40 rounded-xl p-4">

@@ -3,7 +3,7 @@ import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
 import { useAuthUser } from "./useAuthUser";
 import { useFetch } from "./useFetch";
 
-export function useFixtureVotes(fixture: ISbrFixture) {
+export function useSbrFixtureVotes(fixture: ISbrFixture) {
 
     const user = useAuthUser();
 
@@ -25,11 +25,11 @@ export function useFixtureVotes(fixture: ISbrFixture) {
 
     const homeVotes = votes.filter((v) => {
         return v.vote_for === "home_team";
-    })
+    });
 
     const awayVotes = votes.filter((v) => {
         return v.vote_for === "away_team";
-    })
+    });
 
     return { userVote, votes, homeVotes, awayVotes, isLoading, error }
 

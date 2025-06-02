@@ -3,7 +3,7 @@ import { ISbrFixture } from "../../../types/sbr"
 import DialogModal from "../../shared/DialogModal"
 import SbrTeamLogo from "../fixtures/SbrTeamLogo"
 import { format } from "date-fns"
-import { useFixtureVotes } from "../../../hooks/useFxitureVotes"
+import { useSbrFixtureVotes } from "../../../hooks/useFxitureVotes"
 import VotingProgressBar from "../../shared/VotingProgressBar"
 import SbrVotingBallotBox, { SbrVotingBallotBoxResults } from "./SbrVotingBallotBox"
 import { CircleCheck } from "lucide-react"
@@ -106,7 +106,7 @@ type FixtureVotingCardProps = {
 function FixtureVotingCard({ fixture }: FixtureVotingCardProps) {
 
     const { kickoff_time, home_score, away_score } = fixture;
-    const { userVote, votes, homeVotes, awayVotes, isLoading } = useFixtureVotes(fixture);
+    const { userVote, votes, homeVotes, awayVotes, isLoading } = useSbrFixtureVotes(fixture);
     const hasScores = home_score !== null && away_score !== null && home_score !== undefined && away_score !== undefined;
     const homeTeamWon = hasScores ?
         home_score > away_score : false;
