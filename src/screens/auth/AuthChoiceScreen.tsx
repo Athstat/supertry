@@ -1,9 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ScrummyLogo from "../../components/branding/scrummy_logo";
+import { useState } from "react";
+import { authService } from "../../services/authService";
 
 export function AuthChoiceScreen() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGuestLogin = async () => {
+    try {
+      setIsLoading(true);
+      await authService.createGuestUser();
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Guest login failed:", error);
+      // If guest login fails, still navigate to welcome as fallback
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-dark-850 px-4">
@@ -38,6 +54,7 @@ export function AuthChoiceScreen() {
           <button
             onClick={() => navigate("/signup")}
             className="w-full bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-primary-700 transition-colors"
+            disabled={isLoading}
           >
             Create Account
           </button>
@@ -45,14 +62,19 @@ export function AuthChoiceScreen() {
           <button
             onClick={() => navigate("/signin")}
             className="w-full bg-green-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-green-700 transition-colors"
+            disabled={isLoading}
           >
             Login
           </button>
 
           <button
-            onClick={() => navigate("/welcome")}
-            className="w-full text-gray-600 dark:text-gray-400 px-6 py-3 rounded-xl font-medium hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors"
+            onClick={handleGuestLogin}
+            className="w-full text-gray-600 dark:text-gray-400 px-6 py-3 rounded-xl font-medium hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors flex justify-center items-center"
+            disabled={isLoading}
           >
+            {isLoading ? (
+              <span className="inline-block w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mr-2"></span>
+            ) : null}
             Continue without an account
           </button>
         </motion.div>

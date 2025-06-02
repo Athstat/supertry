@@ -2,6 +2,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { requestPushPermissions } from "../utils/bridgeUtils";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
+import { authService } from "../services/authService";
 
 // Components
 import { LoadingState } from "../components/team-creation/LoadingState";
@@ -89,26 +91,32 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 };
 
 export function TeamCreationScreen() {
-
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
   const league = location.state?.league ? location.state?.league as IFantasyLeague : undefined;
   const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } = useTeamCreationGuard(league);
+  const [isGuest, setIsGuest] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>(null);
 
   // Check if coming from welcome screen
   const isFromWelcome = location.state?.from === "welcome";
   const isLocked = isTeamCreationLocked;
 
-
   useEffect(() => {
     requestPushPermissions();
-  }, []);
-
-  // .....
+    
+    // Check if user is a guest and get user info
+    if (isAuthenticated) {
+      const info = authService.getUserInfo();
+      setUserInfo(info);
+      setIsGuest(authService.isGuestAccount());
+    }
+  }, [isAuthenticated]);
 
   // Use our centralized team creation state hook
   const {
@@ -149,6 +157,14 @@ export function TeamCreationScreen() {
     .map((a) => {
       return {tracking_id: a.id}
     });
+
+  // Set the team name to username for non-guest users
+  useEffect(() => {
+    // If not a guest and we have user info, use the username as the team name
+    if (!isGuest && userInfo?.username && teamName === '') {
+      setTeamName(userInfo.username);
+    }
+  }, [isGuest, userInfo, teamName, setTeamName]);
 
   // Handle team submission
   const handleSaveTeam = async () => {
@@ -193,7 +209,14 @@ export function TeamCreationScreen() {
             purchase_date: new Date(),
             is_starting: !isSuperSub,
             slot: index + 1,
-            is_super_sub: isSuperSub
+            is_super_sub: isSuperSub,
+            score: player.points || 0,            
+            // Add missing properties required by IFantasyTeamAthlete interface
+            team_id: 0, // This will be set by the backend
+            team_name: teamName,
+            team_logo: "", // This will be set by the backend
+            athlete_team_id: player.team || "", // Use team property instead of team_id
+            player_name: player.name || "" // Use name as player_name
           };
         }
       );
@@ -284,8 +307,10 @@ export function TeamCreationScreen() {
         onPlayerRemove={handleRemovePlayer}
       />
 
-      {/* Team name input */}
-      <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />
+      {/* Team name input - only show for guest users */}
+      {isGuest && (
+        <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />
+      )}
 
       {/* Team action buttons */}
       <TeamActions
