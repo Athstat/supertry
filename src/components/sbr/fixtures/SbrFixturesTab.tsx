@@ -33,12 +33,6 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
         return true;
     });
 
-    const firstDate = filteredFixtures.length > 0 ? 
-        filteredFixtures[0].kickoff_time : undefined;
-
-    const lastDate = filteredFixtures.length > 0? 
-        filteredFixtures[filteredFixtures.length - 1].kickoff_time : undefined;
-
     const onMoveLeft = () => {
 
         if (pivotDate) {
@@ -62,13 +56,13 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
 
     const getDateMessage = (pivot: Date) => {
 
-        if (weekEnd && weekStart) {
+        if (weekEnd && weekStart && !isSameDay(pivot, new Date())) {
             
             if (isSameDay(weekEnd, weekStart)) {
-                return `${format(weekEnd, 'EEEE dd MMMM yyyy')}`
+                return `${format(weekEnd, 'EEE dd MMM yyyy')}`
             }
 
-            return `${format(weekStart, 'EEEE dd MMMM yyyy')} - ${format(weekEnd, 'EEEE dd MMMM yyyy')}`;
+            return `${format(weekStart, 'EEE dd MMM yyyy')} - ${format(weekEnd, 'EEE dd MMM yyyy')}`;
         }
 
         return undefined;

@@ -52,11 +52,11 @@ export default function SbrScreen() {
         
         <SbrScreenHeader />
         
-        {currentRoundFixtures.length > 0 &&
+        {/* {currentRoundFixtures.length > 0 &&
           <SbrFixturesHero
             fixtures={currentRoundFixtures}
           />
-        }
+        } */}
 
         <TabView tabHeaderItems={tabItems} >
           {/* <TabViewPage tabKey="current-week" >
