@@ -1,13 +1,9 @@
 import { useRef, Ref, useEffect } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
-import { useNavigate } from "react-router-dom";
-import { authService } from "../../services/authService";
 import { IFantasyLeague } from "../../types/fantasyLeague";
-import { isLeagueLocked } from "../../utils/leaguesUtils";
 import RoundedCard from "../shared/RoundedCard";
-import { useFetch } from "../../hooks/useFetch";
-import { fantasyTeamService } from "../../services/teamService";
+import { isEmail } from "../../utils/stringUtils";
 
 interface LeagueStandingsProps {
   teams: RankedFantasyTeam[];
@@ -24,8 +20,7 @@ export function LeagueStandings({
   isLoading = false,
   error = null,
   onTeamClick,
-  league,
-  onJumpToTeam
+  league
 }: LeagueStandingsProps) {
 
   const userTeamRef = useRef<HTMLTableRowElement>(null);
@@ -170,6 +165,8 @@ type StandingsTableRowProps = {
 function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: StandingsTableRowProps) {
 
   // const {} = useFetch("fantasy-league-team", team.team_id, t)
+  const {managerName} = team;
+  const username = isEmail(managerName) === true ? "" : managerName;
 
   return (
     <>
@@ -223,9 +220,11 @@ function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: Standi
               {team.teamName} {team.isUserTeam && "(You)"}
             </div>
             <div className="flex flex-col gap-0.5 mt-1">
-              <div className="text-xs text-gray-500 dark:text-gray-400">
-                {team.managerName}
-              </div>
+              
+              {<div className="text-xs text-gray-500 dark:text-gray-400">
+                {username}
+              </div>}
+
               {getTeamLabel(team.rank)}
             </div>
           </div>
