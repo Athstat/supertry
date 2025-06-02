@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { getSbrVotingSummary, sbrFxitureSummary } from "../../utils/sbrUtils";
 import { useSbrFixtureVotes } from "../../hooks/useFxitureVotes";
 import { Check, User, X } from "lucide-react";
+import { Fragment } from "react/jsx-runtime";
 
 type Props = {
     fixture: ISbrFixture,
@@ -29,6 +30,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
 
     const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFxitureSummary(fixture);
     const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, userVote)
+    const hasUserVoted = votedAwayTeam || votedHomeTeam;
 
     return (
         <div
@@ -69,27 +71,30 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                     <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && away_score ? away_score : "-"}</p>
                 </div>
             </div>
-
+            
             <div className="flex mt-6 flex-col w-full gap-3 items-center justify-center" >
                 {/* Home Team Voting Station */}
+                
+                {/* Post Match Voting Results */}
 
-                <VotingOptionBar
-                    hasUserVoted={votedHomeTeam}
-                    voteCount={homeVotes.length}
-                    votePercentage={homePerc}
-                    title={`${home_team} Win`}
-                    isGreen={votedHomeTeam && gameCompleted && homeTeamWon}
-                    isRed={votedHomeTeam && gameCompleted && awayTeamWon}
-                />
-
-                <VotingOptionBar
-                    hasUserVoted={votedAwayTeam}
-                    voteCount={awayVotes.length}
-                    votePercentage={awayPerc}
-                    title={`${away_team} Win`}
-                    isGreen={votedAwayTeam && gameCompleted && awayTeamWon}
-                    isRed={votedAwayTeam && gameCompleted && homeTeamWon}
-                />
+                {(hasUserVoted || hasKickedOff) && <Fragment>
+                    <VotingOptionBar
+                        hasUserVoted={votedHomeTeam}
+                        voteCount={homeVotes.length}
+                        votePercentage={homePerc}
+                        title={`${home_team} Win`}
+                        isGreen={votedHomeTeam && gameCompleted && homeTeamWon}
+                        isRed={votedHomeTeam && gameCompleted && awayTeamWon}
+                    />
+                    <VotingOptionBar
+                        hasUserVoted={votedAwayTeam}
+                        voteCount={awayVotes.length}
+                        votePercentage={awayPerc}
+                        title={`${away_team} Win`}
+                        isGreen={votedAwayTeam && gameCompleted && awayTeamWon}
+                        isRed={votedAwayTeam && gameCompleted && homeTeamWon}
+                    />
+                </Fragment>}
 
             </div>
         </div>

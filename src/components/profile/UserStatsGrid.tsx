@@ -18,7 +18,7 @@ export default function UserStatsGrid() {
                     Total Points
                 </div>
                 <div className="text-xl font-bold text-primary-700 dark:text-primary-500">
-                    {rank?.total_score ? rank.total_score : "0"}
+                    {rank?.total_score ? rank.total_score.toFixed(0) : "0"}
                 </div>
             </div>
 
