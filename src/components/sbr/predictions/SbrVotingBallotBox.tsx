@@ -48,6 +48,7 @@ export default function SbrVotingBallotBox({ fixture, userVote }: Props) {
     return (
         <div className="w-full p-4">
             <div className="flex flex-row w-full items-center justify-between">
+                
                 {/* Home Vote Button */}
                 {<div className="flex flex-row items-center justify-start">
                     <button

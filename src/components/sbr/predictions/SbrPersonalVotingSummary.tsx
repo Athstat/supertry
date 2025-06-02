@@ -1,5 +1,5 @@
 import { CircleCheck, XIcon } from "lucide-react"
-import { useFixtureVotes } from "../../../hooks/useFxitureVotes"
+import { useSbrFixtureVotes } from "../../../hooks/useFxitureVotes"
 import { ISbrFixture } from "../../../types/sbr"
 import { calculatePerc } from "../../../utils/fixtureUtils"
 import { sbrFxitureSummary } from "../../../utils/sbrUtils"
@@ -33,7 +33,7 @@ type SummaryItemProps = {
 
 export function SummaryItem({ fixture }: SummaryItemProps) {
 
-    const { userVote, isLoading } = useFixtureVotes(fixture);
+    const { userVote, isLoading } = useSbrFixtureVotes(fixture);
 
     if (isLoading) {
         return (

@@ -3,8 +3,6 @@ import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { ISbrFixture } from "../../../types/sbr";
 import PillBar, { PillBarItems } from "../../shared/bars/PillTabBar";
 import { useQueryState } from "../../../hooks/useQueryState";
-import { dateToStrWithoutTime, safeTransformStringToDate } from "../../../utils/dateUtils";
-import { addDays, format, isSameDay, subDays } from "date-fns";
 import { formatPosition } from "../../../utils/athleteUtils";
 
 type Props = {
@@ -14,12 +12,12 @@ type Props = {
 }
 
 /** Renders all the Sbr Fixtures */
-export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) {
+export default function SbrFixturesTab({ fixtures }: Props) {
 
     const [country, setCoutry] = useQueryState('fs', { init: 'all' });
-    const [pivotDateStr, setPivotDateStr] = useQueryState('pivot');
+    // const [pivotDateStr, setPivotDateStr] = useQueryState('pivot');
 
-    const pivotDate = safeTransformStringToDate(pivotDateStr);
+    // const pivotDate = safeTransformStringToDate(pivotDateStr);
     const countryFilterIsSet = country && country !== "all";
     const clearCountryFilter = () => {
         setCoutry("all");
@@ -39,48 +37,48 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
         return true;
     });
 
-    const fixturesLen = filteredFixtures.length;
+    // const fixturesLen = filteredFixtures.length;
 
-    const firstDate = fixturesLen > 0 ?
-        filteredFixtures[0].kickoff_time : undefined;
+    // const firstDate = fixturesLen > 0 ?
+    //     filteredFixtures[0].kickoff_time : undefined;
 
-    const lastDate = fixturesLen > 0 ?
-        filteredFixtures[fixturesLen - 1].kickoff_time : undefined;
+    // const lastDate = fixturesLen > 0 ?
+    //     filteredFixtures[fixturesLen - 1].kickoff_time : undefined;
 
-    const onMoveLeft = () => {
+    // const onMoveLeft = () => {
 
-        if (pivotDate) {
-            const prevPivot = subDays(pivotDate, 7);
-            setPivotDateStr(dateToStrWithoutTime(prevPivot));
-        }
+    //     if (pivotDate) {
+    //         const prevPivot = subDays(pivotDate, 7);
+    //         setPivotDateStr(dateToStrWithoutTime(prevPivot));
+    //     }
 
-    }
+    // }
 
-    const onMoveToToday = () => {
-        setPivotDateStr(dateToStrWithoutTime(new Date()));
-    }
+    // const onMoveToToday = () => {
+    //     setPivotDateStr(dateToStrWithoutTime(new Date()));
+    // }
 
-    const onMoveRight = () => {
+    // const onMoveRight = () => {
 
-        if (pivotDate) {
-            const nextPivot = addDays(pivotDate, 7);
-            setPivotDateStr(dateToStrWithoutTime(nextPivot));
-        }
-    }
+    //     if (pivotDate) {
+    //         const nextPivot = addDays(pivotDate, 7);
+    //         setPivotDateStr(dateToStrWithoutTime(nextPivot));
+    //     }
+    // }
 
-    const getDateMessage = () => {
+    // const getDateMessage = () => {
 
-        if (firstDate && lastDate) {
+    //     if (firstDate && lastDate) {
 
-            if (isSameDay(lastDate, firstDate)) {
-                return `Week of ${format(firstDate, 'EEE dd MMM yyyy')}`
-            }
+    //         if (isSameDay(lastDate, firstDate)) {
+    //             return `Week of ${format(firstDate, 'EEE dd MMM yyyy')}`
+    //         }
 
-            return `Week of ${format(firstDate, 'EEE dd MMM yyyy')} - ${format(lastDate, 'EEE dd MMM yyyy')}`;
-        }
+    //         return `Week of ${format(firstDate, 'EEE dd MMM yyyy')} - ${format(lastDate, 'EEE dd MMM yyyy')}`;
+    //     }
 
-        return undefined;
-    }
+    //     return undefined;
+    // }
 
 
     const pills: PillBarItems[] = [

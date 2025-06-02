@@ -4,7 +4,7 @@ import { useFetch } from "../hooks/useFetch";
 import { sbrService } from "../services/sbrService";
 import { ErrorState } from "../components/ui/ErrorState";
 import { LoadingState } from "../components/ui/LoadingState";
-import { ArrowLeft, Calendar, Minus, Watch } from "lucide-react";
+import { ArrowLeft, Minus } from "lucide-react";
 import BlueGradientCard from "../components/shared/BlueGradientCard";
 import SbrTeamLogo from "../components/sbr/fixtures/SbrTeamLogo";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
@@ -44,8 +44,7 @@ export default function SbrFixtureScreen() {
             tabKey: "kick-off"
         }
     ];
-
-    const { kickoff_time } = fixture;
+    
     const { hasScores } = sbrFxitureSummary(fixture);
 
     return (
@@ -81,12 +80,12 @@ export default function SbrFixtureScreen() {
 
             </BlueGradientCard>
 
-            <PageView>
+            <PageView className="p-4" >
                 <TabView tabHeaderItems={tabHeaderItems}>
-                    <TabViewPage className="px-5" tabKey="kick-off">
+                    <TabViewPage className="" tabKey="kick-off">
                         <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
-                    {<TabViewPage className="px-5" tabKey="team-stats">
+                    {<TabViewPage className="" tabKey="team-stats">
                         {hasBoxscore && <SbrFixtureTeamStats
                             fixture={fixture}
                             boxscore={boxscore}
