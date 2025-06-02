@@ -12,7 +12,12 @@ type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineout
     "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" | "RetainedKicks"
 
 /** Helper function to get a stat */
-export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregatedStats: SportAction[]) => {
+export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregatedStats?: SportAction[]) => {
+    
+    if (!aggregatedStats) {
+        return undefined;
+    }
+    
     const filteredList = aggregatedStats.filter(stat => {
         return stat.action.toLowerCase() === key.toLowerCase();
     });

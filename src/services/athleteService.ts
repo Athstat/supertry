@@ -1,6 +1,7 @@
 import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
 import { SportAction } from "../types/sports_actions";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
+import { logger } from "./logger";
 
 // Define the type for each individual breakdown item
 export interface PointsBreakdownItem {
@@ -223,6 +224,38 @@ export const athleteService = {
       // Fall back to mock data in case of any error
       console.warn("Falling back to mock data due to error");
       return getMockPlayerStats();
+    }
+  },
+
+  // Get detailed player statistics by athlete ID
+  getAthleteStatsRaw: async (athleteId: string, competitionId?: string) => {
+
+    try {
+
+      const url = getUri(`/api/v1/sports-actions/aggregated/athletes/${athleteId}`);
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: getAuthHeader()
+      });
+
+      const json = (await response.json()) as SportAction[];
+
+      // Filtering logic
+      const filterByCompeition = (action: SportAction, cId: string) => {
+        return action.season_id === cId;
+      };
+
+      const data =
+        competitionId !== undefined
+          ? json.filter((a) => filterByCompeition(a, competitionId))
+          : json;
+
+      return data;
+
+    } catch (error) {
+      logger.error("Error fetching player statistics:", error);
+      return []
     }
   },
 

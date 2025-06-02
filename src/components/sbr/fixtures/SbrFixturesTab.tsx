@@ -56,7 +56,7 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
         }
     }
 
-    const getDateMessage = (pivot: Date) => {
+    const getDateMessage = () => {
 
         if (weekEnd && weekStart) {
 
@@ -140,7 +140,7 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
 
             </div>
 
-            {pivotDate && <p className="dark:text-slate-300 text-slate-700 font-medium" >{getDateMessage(pivotDate)}</p>}
+            {pivotDate && <p className="dark:text-slate-300 text-slate-700 font-medium" >{getDateMessage()}</p>}
 
             {<GroupedSbrFixturesList
                 fixtures={filteredFixtures}

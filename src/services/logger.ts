@@ -3,9 +3,9 @@
 import { analytics } from "./anayticsService";
 
 
-function error(message: any) {
+function error(message?: any, ...optionalParams: any[]) {
     
-    console.log("Error: ", message);
+    console.log("Error: ", message, optionalParams);
     
     analytics.track("Error_Thrown", {
         message: message
