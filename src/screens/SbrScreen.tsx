@@ -3,7 +3,6 @@ import SbrProvider from "../contexts/SbrContext";
 import SbrScreenHeader from "../components/sbr/SbrScreenHeader";
 import useSWR from "swr";
 import { sbrService } from "../services/sbrService";
-import SbrFixturesHero from "../components/sbr/fixtures/SbrFixturesHero";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
 import SbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
