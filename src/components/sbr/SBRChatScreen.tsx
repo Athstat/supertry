@@ -1,11 +1,10 @@
-import { Users } from 'lucide-react'
-import PageView from '../../screens/PageView'
-import SchoolBoyRugbyChat from './SchoolBoyRugbyChat'
+import { Users } from 'lucide-react';
+import SchoolBoyRugbyChat from './SchoolBoyRugbyChat';
 
 export default function SbrChatTab() {
 
     return (
-        <PageView className='flex flex-col gap-4 ' >
+        <div className='flex flex-col gap-4 '>
 
             <div  className='flex flex-row items-center gap-1 px-2' >
                 <Users className=''  />
@@ -17,6 +16,6 @@ export default function SbrChatTab() {
                 <h1 className='text-2xl font-bold' >SBR Chat</h1>
             </div> */}
             <SchoolBoyRugbyChat />
-        </PageView>
+        </div>
     )
 }
