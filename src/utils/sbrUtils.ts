@@ -49,7 +49,7 @@ export function sbrFxitureSummary(fixture: ISbrFixture) {
         const kickOffEpoch = kickOffLocal.valueOf();
         const nowEpoch = now.valueOf();
 
-        hasKickedOff = kickOffEpoch >= nowEpoch;
+        hasKickedOff = nowEpoch >= kickOffEpoch;
     }
 
     return { homeTeamWon, awayTeamWon, home_score, away_score, hasScores, hasKickedOff }
