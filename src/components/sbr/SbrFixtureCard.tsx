@@ -78,7 +78,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
         <div
             // onClick={handleClick}
             className={twMerge(
-                "   dark:bg-slate-800/40 cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
+                "dark:bg-slate-800/40 cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
                 className
             )}
         >

@@ -52,7 +52,7 @@ export default function GroupedSbrFixturesList({ fixtures, search }: Props) {
                                 <SbrFixtureCard
                                     showLogos
                                     showCompetition
-                                    className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white hover:bg-slate-50 rounded-xl"
+                                    className="  border border-gray-300 dark:border-gray-700 bg-white  rounded-xl"
                                     fixture={fixture}
                                     key={index}
                                 />
