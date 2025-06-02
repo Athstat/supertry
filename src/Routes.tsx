@@ -3,7 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { WelcomeScreen } from "./screens/auth/WelcomeScreen";
 import { SignUpScreen } from "./screens/auth/SignUpScreen";
 import { SignInScreen } from "./screens/auth/SignInScreen";
+import { AuthChoiceScreen } from "./screens/auth/AuthChoiceScreen";
 import PostSignUpWelcomeScreen from "./screens/PostSignUpWelcomeScreen";
+import { CompleteProfileScreen } from "./screens/CompleteProfileScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { JoinLeagueScreen } from "./screens/JoinLeagueScreen";
 import { LeagueScreen } from "./screens/LeagueScreen";
@@ -22,7 +24,7 @@ import SbrScreen from "./screens/SbrScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
-import SbrChatTab from "./components/sbr/SBRChatScreen";
+import SBRChatScreen from "./components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
 import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
@@ -88,6 +90,14 @@ const AppRoutes = () => {
         element={
           <AuthRoute>
             <SignInScreen />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/auth-choice"
+        element={
+          <AuthRoute>
+            <AuthChoiceScreen />
           </AuthRoute>
         }
       />
@@ -241,7 +251,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SbrChatTab />
+              <SBRChatScreen />
             </Layout>
           </ProtectedRoute>
         }
@@ -285,10 +295,20 @@ const AppRoutes = () => {
 
       {/* Post-Sign-Up Welcome Screen */}
       <Route
-        path="/welcome"
+        path="/post-signup-welcome"
         element={
           <ProtectedRoute>
             <PostSignUpWelcomeScreen />
+          </ProtectedRoute>
+        }
+      />
+      
+      {/* Complete Profile Screen */}
+      <Route
+        path="/complete-profile"
+        element={
+          <ProtectedRoute>
+            <CompleteProfileScreen />
           </ProtectedRoute>
         }
       />

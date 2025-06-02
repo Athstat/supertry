@@ -52,7 +52,7 @@ export function WelcomeScreen() {
       // but we'll do it explicitly here to avoid any race conditions
       if (authUpdated || localStorage.getItem("access_token")) {
         console.log("Navigating to post-signup welcome...");
-        navigate("/welcome");
+        navigate("/post-signup-welcome");
       } else {
         throw new Error("Failed to authenticate after guest account creation");
       }
