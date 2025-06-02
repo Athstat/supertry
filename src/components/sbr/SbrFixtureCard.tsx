@@ -11,7 +11,7 @@ type Props = {
     showKickOffTime?: boolean
 }
 
-export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, showKickOffTime }: Props) {
+export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className }: Props) {
 
     const { home_score, away_score } = fixture;
     const hasScores = home_score !== null && away_score !== null;
@@ -47,6 +47,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 </div>
                 {/* Kick off information */}
                 <div className="flex-1 flex flex-col items-center justify-center dark:text-slate-400 text-slate-700 " >
+                    
                     {!hasScores && fixture.status !== "completed" && <p className="text-sm" >VS</p>}
                     {fixture.status === "completed" && (
                         <div className="flex w-full flex-row items-center justify-center gap-1" >
