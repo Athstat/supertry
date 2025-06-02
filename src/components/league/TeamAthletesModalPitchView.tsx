@@ -33,9 +33,9 @@ export default function TeamAthletesModalPitchView({ athletes, handleKeyDown, ha
                     </div>
 
                     {/* Athletes overlay */}
-                    <div className="absolute overflow-y-auto inset-0 w-full h-full flex flex-col lg:items-center lg:justify-center  md:px-6" >
+                    <div className="absolute overflow-y-auto inset-0 w-full h-full flex flex-col items-center justify-center  md:px-6" >
 
-                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4" >
+                        <div className="grid grid-cols-3 lg:grid-cols-3 gap-4 p-4" >
                             {athletes.map((athlete, index) => (
                                 <TeamAthleteListItem
                                     athlete={athlete}
@@ -98,7 +98,7 @@ function TeamAthleteListItem({
                     Sub
                     <ArrowUpDown className="w-2.5 h-2.5" />
                 </p>}
-                <p className="font-bold text-sm" >{totalScore}</p>
+                {<p className="font-bold text-sm" >{totalScore.toFixed(1)}</p>}
             </div>
         </div>
     );
