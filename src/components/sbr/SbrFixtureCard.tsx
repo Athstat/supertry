@@ -3,12 +3,8 @@ import { ISbrFixture } from "../../types/sbr";
 import SbrTeamLogo from "./fixtures/SbrTeamLogo";
 import { twMerge } from "tailwind-merge";
 import { getSbrVotingSummary, sbrFxitureSummary } from "../../utils/sbrUtils";
-import SbrPersonalVotingSummary from "./predictions/SbrPersonalVotingSummary";
-import { useFetch } from "../../hooks/useFetch";
-import { authService } from "../../services/authService";
-import { sbrService } from "../../services/sbrService";
 import { useSbrFixtureVotes } from "../../hooks/useFxitureVotes";
-import { Check } from "lucide-react";
+import { Check, User, X } from "lucide-react";
 
 type Props = {
     fixture: ISbrFixture,
@@ -20,7 +16,7 @@ type Props = {
 
 export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className }: Props) {
 
-    const { homeVotes, awayVotes, votes, userVote } = useSbrFixtureVotes(fixture);
+    const { homeVotes, awayVotes, userVote } = useSbrFixtureVotes(fixture);
     const { home_score, away_score, home_team, away_team } = fixture;
     const hasScores = home_score !== null && away_score !== null;
 
@@ -31,7 +27,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
 
     const gameCompleted = fixture.status === "completed";
 
-    const { hasKickedOff } = sbrFxitureSummary(fixture);
+    const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFxitureSummary(fixture);
     const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, userVote)
 
     return (
@@ -74,42 +70,86 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 </div>
             </div>
 
-            <div className="flex flex-col w-full items-center justify-center" >
+            <div className="flex mt-6 flex-col w-full gap-3 items-center justify-center" >
                 {/* Home Team Voting Station */}
 
-                <div className="w-full flex flex-col gap-1" >
+                <VotingOptionBar
+                    hasUserVoted={votedHomeTeam}
+                    voteCount={homeVotes.length}
+                    votePercentage={homePerc}
+                    title={`${home_team} Win`}
+                    isGreen={votedHomeTeam && gameCompleted && homeTeamWon}
+                    isRed={votedHomeTeam && gameCompleted && awayTeamWon}
+                />
 
-                    <div className="w-full flex text-slate-500 dark:text-slate-400 flex-row items-center justify-between" >
-                        <p className="text-xs" >{home_team} Win</p>
-                        <p className="text-xs " >Vote{homeVotes.length > 0 ? "s" : ""} {homeVotes.length}</p>
-                    </div>
+                <VotingOptionBar
+                    hasUserVoted={votedAwayTeam}
+                    voteCount={awayVotes.length}
+                    votePercentage={awayPerc}
+                    title={`${away_team} Win`}
+                    isGreen={votedAwayTeam && gameCompleted && awayTeamWon}
+                    isRed={votedAwayTeam && gameCompleted && homeTeamWon}
+                />
 
-                    <div className="flex flex-row gap-1 rounded-xl w-[100%]">
-                        {/* Voting Circle */}
-                        <div className="w-5 h-5 border rounded-xl border-slate-400 dark:border-slate-500" >
-                            {votedHomeTeam && (
-                                <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r text-white bg-primary-500 rounded-xl " >
-                                    <Check className="w-3 h-3" />
-                                </div>
-                            )}
+            </div>
+        </div>
+    )
+}
+
+type VotingOptionBarProps = {
+    isGreen?: boolean,
+    isRed?: boolean,
+    title?: string,
+    voteCount?: number,
+    hasUserVoted?: boolean,
+    votePercentage?: number
+}
+
+function VotingOptionBar({ isGreen, isRed, title, voteCount = 0, hasUserVoted, votePercentage }: VotingOptionBarProps) {
+    return (
+        <div className="w-full flex flex-col items-center justify-center gap-1" >
+
+            <div className="w-full flex text-slate-500 dark:text-slate-400 flex-row items-center justify-between" >
+                <p className="text-xs" >{title}</p>
+                <p className="text-xs " >Vote{voteCount > 0 ? "s" : ""} {voteCount}</p>
+            </div>
+
+            <div className="flex flex-row gap-1 rounded-xl w-[100%]">
+                {/* Voting Circle */}
+                <div className={twMerge(
+                    "w-5 h-5 border rounded-xl border-slate-400 dark:border-slate-500",
+                    (hasUserVoted) && "border-none"
+                )} >
+
+                    {hasUserVoted && (
+                        <div className={twMerge(
+                            "w-full h-full flex flex-col items-center justify-center bg-gradient-to-r text-white bg-blue-500 rounded-xl ",
+                            isGreen && "bg-green-400",
+                            isRed && "bg-red-400"
+                        )} >
+                            <User className="w-3 h-3" />
                         </div>
+                    )}
 
-                        <div
-                            style={{
-                                width: `${homePerc}%`
-                            }}
-                            className={twMerge(
-                                "rounded-xl h-5 text-slate-700 dark:text-slate-400 text-xs text-center flex flex-row items-center justify-center bg-slate-300",
-                                votedHomeTeam && "bg-gradient-to-r text-white from-primary-500 to-blue-700"
-                            )}
-                        >
-                            {homeVotes.length} Votes
-                        </div>
-                    </div>
+                </div>
 
-                    <div className="w-4 h-4" >
+                <div
+                    style={{
+                        width: `${votePercentage}%`
+                    }}
+                    className={twMerge(
+                        "rounded-xl h-5 text-slate-700  dark:text-slate-400 text-[9px] lg:text-[10px] text-center flex flex-row items-center justify-center bg-slate-300 dark:bg-slate-700",
+                        hasUserVoted && "bg-gradient-to-r text-white dark:text-white from-blue-600 to-blue-700",
+                        isGreen && "bg-gradient-to-r from-green-400 to-green-400",
+                        isRed && "bg-gradient-to-r from-red-400 to-red-400 ",
+                    )}
+                >
+                    {/* <p className="truncate" >{voteCount} Votes</p> */}
+                </div>
 
-                    </div>
+                <div className=" h-5  flex flex-row items-center justify-center" >
+                    {isGreen && <Check className="w-3 h-3" />}
+                    {isRed && <X className="w-3 h-3" />}
                 </div>
             </div>
         </div>
