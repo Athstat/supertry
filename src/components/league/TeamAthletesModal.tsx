@@ -9,6 +9,7 @@ import Experimental from "../shared/ab_testing/Experimental";
 import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
 import { getEnvironment } from "../../utils/envUtils";
 import { twMerge } from "tailwind-merge";
+import { isEmail } from "../../utils/stringUtils";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
@@ -70,6 +71,7 @@ export function TeamAthletesModal({
   const totalScore = pointsBreakdown.reduce((acc, item) => acc + item.score, 0);
   //console.log("Points Breakdown", pointsBreakdown);
   const isStable = getEnvironment() === "production";
+  const userNameIsEmail = isEmail(team.managerName);
 
   return (
     <div
@@ -137,7 +139,7 @@ export function TeamAthletesModal({
                   }
 
                   <p className="">
-                    Managed by {team.managerName}
+                   { userNameIsEmail ? team.teamName : `Managed by ${team.managerName}`}
                   </p>
                 </div>
               </div>
