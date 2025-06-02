@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { PlayerForm, RugbyPlayer } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 
@@ -27,7 +26,7 @@ type SortDirection = "asc" | "desc";
 type SortField = "power_rank_rating" | "player_name" | "form";
 
 export const PlayersScreen = () => {
-  const navigate = useNavigate();
+
   const { athletes, error, isLoading, refreshAthletes, positions, teams } =
     useAthletes();
   const [activeTab, setActiveTab] = useState<SortTab>("all");
@@ -239,7 +238,7 @@ export const PlayersScreen = () => {
       isComparing={isComparing}
       selectedPlayers={selectedPlayers}
     >
-      <PageView className="px-5 flex flex-col gap-3">
+      <PageView className="px-5 flex flex-col gap-3 md:w-[80%] lg:w-[60%]">
 
         {/* Search and Filter Header */}
         <div className="flex flex-row gap-2 items-center" >
@@ -304,7 +303,7 @@ export const PlayersScreen = () => {
           )}
         {/* Player Grid */}
         {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {filteredPlayers.map((player, index) => (
               <PlayerGameCard
                 key={index}
