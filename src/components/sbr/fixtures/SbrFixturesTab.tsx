@@ -1,4 +1,4 @@
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
+import { Calendar, ChevronLeft, ChevronRight, FileX2 } from "lucide-react"
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { ISbrFixture } from "../../../types/sbr";
 import PillBar, { PillBarItems } from "../../shared/bars/PillTabBar";
@@ -16,20 +16,22 @@ type Props = {
 /** Renders all the Sbr Fixtures */
 export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) {
 
-    const [country] = useQueryState('fs', { init: 'south-africa' });
+    const [country] = useQueryState('fs', { init: 'all' });
     const [pivotDateStr, setPivotDateStr] = useQueryState('pivot');
 
     const pivotDate = safeTransformStringToDate(pivotDateStr);
-    
+
     const filteredFixtures = fixtures.filter((f) => {
         if (country) {
+            if (country === "all") return true;
+
             if (country === "south-africa") {
                 return f.season === 'Sharks Schools 2025';
             } else {
                 return f.season === 'CBZ Schools 2025';
             }
         }
-        
+
         return true;
     });
 
@@ -56,8 +58,8 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
 
     const getDateMessage = (pivot: Date) => {
 
-        if (weekEnd && weekStart && !isSameDay(pivot, new Date())) {
-            
+        if (weekEnd && weekStart) {
+
             if (isSameDay(weekEnd, weekStart)) {
                 return `${format(weekEnd, 'EEE dd MMM yyyy')}`
             }
@@ -70,6 +72,12 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
 
 
     const pills: PillBarItems[] = [
+
+        {
+            label: "All",
+            key: "all"
+        },
+
         {
             label: "South Africa",
             key: "south-africa"
@@ -132,11 +140,18 @@ export default function SbrFixturesTab({ fixtures, weekEnd, weekStart }: Props) 
 
             </div>
 
-            {pivotDate && <p>{getDateMessage(pivotDate)}</p>}
+            {pivotDate && <p className="dark:text-slate-300 text-slate-700 font-medium" >{getDateMessage(pivotDate)}</p>}
 
             {<GroupedSbrFixturesList
                 fixtures={filteredFixtures}
             />}
+
+            {filteredFixtures.length === 0 && (
+                <div className="p-4 w-full flex gap-4 text-slate-700 dark:text-slate-400 flex-col items-center justify-center" >
+                    <FileX2 className="w-20 h-20" />
+                    <p>No fixtures we found for this week</p>
+                </div>
+            )}
 
         </div>
     )

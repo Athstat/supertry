@@ -25,8 +25,6 @@ export default function SbrScreen() {
   const currentRound = 0;
   const {weekGames, weeekStart, weekEnd} = getWeekGames(data ?? [], pivotDate);
 
-  const currentRoundFixtures = weekGames;
-
   const tabItems: TabViewHeaderItem[] = [
     {
       label: `Fixtures`,
