@@ -19,6 +19,7 @@ import PlayersCompareButton from "../components/player/PlayerScreenCompareButton
 import { twMerge } from "tailwind-merge";
 import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
 import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
+import PlayerProfileModal from "../components/player/PlayerProfileModal";
 
 type SortTab = "all" | "trending" | "top" | "new";
 // type SortOption = "points" | "name" | "position" | "club";
@@ -42,6 +43,14 @@ export const PlayersScreen = () => {
   const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
   const toggleCompareMode = () => setIsComparing(!isComparing);
   const clearSelections = () => setSelectedPlayers([]);
+
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
+  const [showPlayerModal, setShowPlayerModal] = useState(false);
+  
+  const handleClosePlayerModal = () => {
+    setPlayerModalPlayer(undefined);
+    setShowPlayerModal(false);
+  }
 
   const onClear = () => {
     clearSelections();
@@ -74,9 +83,10 @@ export const PlayersScreen = () => {
         setSelectedPlayers([...selectedPlayers, player]);
       }
     } else {
-      navigate(`/players/${player.tracking_id || player.id}`, {
-        state: { player },
-      });
+      
+      setPlayerModalPlayer(player);
+      setShowPlayerModal(true);
+
     }
   };
 
@@ -313,7 +323,16 @@ export const PlayersScreen = () => {
           onRemove={onRemovePlayerFromSelectedPlayers}
         />
 
+        {playerModalPlayer && <PlayerProfileModal
+          onClose={handleClosePlayerModal}
+          player={playerModalPlayer}
+          isOpen={playerModalPlayer !== undefined && showPlayerModal}
+          
+        />}
+
       </PageView>
+
+
     </PlayersScreenProvider>
   );
 };
