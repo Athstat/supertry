@@ -1,13 +1,8 @@
-import React, { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { Team } from "../types/team";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { TeamStats } from "../components/team/TeamStats";
 import { TeamHeader } from "../components/my-team/TeamHeader";
-import { TeamLoading, TeamError } from "../components/my-team/TeamLoadingAndError";
-import { TeamDataProvider, useTeamData } from "../components/my-team/TeamDataProvider";
-import { TeamActions } from "../components/my-team/TeamActions";
-import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
-import { RankedFantasyTeam } from "../types/league";
+import { TeamDataProvider } from "../components/my-team/TeamDataProvider";
 import AthletesAvailabilityWarning from "../components/team/AthletesAvailabilityWarning";
 import { MyTeamScreenTabType, MyTeamScreenTabView } from "../components/my-team/MyTeamScreenTabView";
 import { ErrorState } from "../components/ui/ErrorState";
@@ -31,8 +26,6 @@ export function MyTeamScreen() {
 /** Actual consumer content on my screen that consumes data from team data provider */
 function MyTeamScreenContent() {
 
-  const team = useAtomValue(fantasyTeamAtom);
-  const { teamId } = useParams<{ teamId: string }>();
   const [activeTab, setActiveTab] = useState<MyTeamScreenTabType>("view-pitch");
 
   return (
@@ -41,24 +34,15 @@ function MyTeamScreenContent() {
       <div className="max-w-4xl mx-auto flex flex-col gap-4">
         <TeamHeader />
         <TeamStats />
-        <AthletesAvailabilityWarning
-          team={team}
-          league={leagueInfo}
-          athletes={athletes}
+        <AthletesAvailabilityWarning />
+
+        <MyTeamScreenTabView
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
         />
 
-        {/* Team Actions with Tabs Content as children */}
-        {teamId && (
-          <TeamActions league={leagueInfo ?? undefined} teamId={teamId}>
+        {/* <TeamActions/> */}
 
-            <MyTeamScreenTabView
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              league={leagueInfo ?? undefined}
-            />
-
-          </TeamActions>
-        )}
       </div>
     </main>
   );

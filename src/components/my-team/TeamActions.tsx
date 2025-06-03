@@ -35,15 +35,10 @@ export const useTeamActions = () => {
 };
 
 interface TeamActionsProps {
-  teamId: string;
-  children?: React.ReactNode;
-  league?: IFantasyLeague;
 }
 
 export const TeamActions: React.FC<TeamActionsProps> = ({
-  teamId,
-  children,
-  league,
+
 }) => {
   const { team, teamBudget, athletes, players, setAthletes } = useTeamData();
   const [showActionModal, setShowActionModal] = useState(false);

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import {
   IFantasyClubTeam,
@@ -13,7 +13,6 @@ import { fantasyTeamValueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom, fantasy
 import { LoadingState } from "../ui/LoadingState";
 import { calculateFantasyTeamValue } from "../../utils/athleteUtils";
 import { ErrorState } from "../ui/ErrorState";
-import { useScrollToCordnates } from "../../hooks/useScrollTo";
 import { ScopeProvider } from "jotai-scope";
 
 interface TeamDataContextType {
@@ -32,16 +31,13 @@ export const TeamDataContext = React.createContext<
   TeamDataContextType | undefined
 >(undefined);
 
-interface TeamDataProviderProps {
+interface Props {
   children: React.ReactNode;
   teamId: string
 }
 
 /** Fetches data needed by the any screen showing a fantasy teams information */
-export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
-  children,
-  teamId
-}) => {
+export function TeamDataProvider({ children, teamId}: Props) {
 
   const [, setFantasyTeamValue] = useAtom(fantasyTeamValueAtom);
   const [, setFantasyTeam] = useAtom(fantasyTeamAtom);
@@ -51,25 +47,33 @@ export const TeamDataProvider: React.FC<TeamDataProviderProps> = ({
   // Step 1: Fetching Data
   const { data: athletes, isLoading: loadingAthletes, error: athletesError } = useFetch("team-athletes", teamId, fantasyTeamService.fetchTeamAthletes);
   const { data: team, isLoading: loadingTeam, error: teamError } = useFetch("fantasy-team", teamId, (teamId) => fantasyTeamService.getUserTeamById(teamId));
-  const { data: league, isLoading: loadingLeague, error: leagueError } = useFetch("fantasy-leagues", team?.league_id ?? 0, leagueService.getLeagueById);
+  const { data: league, isLoading: loadingLeague, error: leagueError } = useFetch("fantasy-league", team?.league_id ?? 0, leagueService.getLeagueById);
 
   const isLoading = loadingAthletes || loadingTeam || loadingLeague;
   const error = athletesError || teamError || leagueError;
-
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error="Failed to fetch team" message={error} />
 
   const calculatedTeamValue = useMemo(() => {
     return calculateFantasyTeamValue(athletes);
   }, [athletes]);
 
-  // Step 2: Set up shared state atoms
-  setFantasyTeam(team);
-  setFantasyLeague(league);
-  setFantasyTeamAthletes(athletes ?? []);
-  setFantasyTeamValue(calculatedTeamValue);
+  useEffect(() => {
 
-  useScrollToCordnates(0, 0);
+    if (team) setFantasyTeam(team);
+    if (league) setFantasyLeague(league);
+
+    setFantasyTeamAthletes(athletes ?? []);
+    setFantasyTeamValue(calculatedTeamValue);
+
+    console.log("Team ", team);
+    console.log("League ", league);
+    console.log("Athletes ", athletes);
+
+  }, [team, athletes, league]);
+
+  // useScrollToCordnates(0, 0);
+
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState error="Failed to fetch team" message={error} />
 
   // Convert athletes to position format for the Edit Team view
   // const positionList = useMemo(() => {

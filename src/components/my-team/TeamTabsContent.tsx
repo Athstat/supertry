@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { Coins, Loader, Lock } from "lucide-react";
 import { Player } from "../../types/team";
 import { Position } from "../../types/position";
@@ -6,8 +5,6 @@ import { TabButton } from "../shared/TabButton";
 import { isLeagueLocked } from "../../utils/leaguesUtils";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { useTeamData } from "./TeamDataProvider";
-import { leagueService } from "../../services/leagueService";
-import { IGamesLeagueConfig } from "../../types/leagueConfig";
 import { MyTeamPitchView } from "./MyTeamPitchView";
 import { useLeagueConfig } from "../../hooks/useLeagueConfig";
 

@@ -36,6 +36,8 @@ export const leagueService = {
   getLeagueById: async (leagueId: number): Promise<IFantasyLeague | undefined> => {
     try {
 
+      if (leagueId == 0) return undefined;
+      
       const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}`);
       
       const response = await fetch(uri, {
