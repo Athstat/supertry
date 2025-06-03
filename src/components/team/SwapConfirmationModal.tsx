@@ -1,21 +1,24 @@
 import { X, Users } from "lucide-react";
-import { Player } from "../../types/team";
 import { motion } from "framer-motion";
 import { formatPosition } from "../../utils/athleteUtils";
+import { useAtomValue } from "jotai";
+import { playerToSwapInAtom, playerToSwapOutAtom } from "../../state/playerSwap.atoms";
 
 interface SwapConfirmationModalProps {
-  currentPlayer: Player;
-  newPlayer: Player;
   onClose: () => void;
   onConfirm: () => void;
 }
 
 export function SwapConfirmationModal({
-  currentPlayer,
-  newPlayer,
   onClose,
   onConfirm,
 }: SwapConfirmationModalProps) {
+
+  const newPlayer = useAtomValue(playerToSwapInAtom);
+  const currentPlayer = useAtomValue(playerToSwapOutAtom);
+
+  if (!newPlayer || !currentPlayer) return;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -52,8 +55,8 @@ export function SwapConfirmationModal({
             />
             <p className="text-sm text-amber-800 dark:text-amber-300">
               This action will replace{" "}
-              <span className="font-semibold">{currentPlayer.name}</span> with{" "}
-              <span className="font-semibold">{newPlayer.name}</span> in your
+              <span className="font-semibold">{currentPlayer.player_name}</span> with{" "}
+              <span className="font-semibold">{newPlayer.player_name}</span> in your
               team lineup.
             </p>
           </div>
@@ -66,7 +69,7 @@ export function SwapConfirmationModal({
               </h4>
               <div className="flex flex-col items-center">
                 <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center overflow-hidden border-2 border-red-300 dark:border-red-700 mb-2">
-                  {currentPlayer.image ? (
+                  {currentPlayer.image_url ? (
                     <img
                       src={currentPlayer.image_url}
                       alt={currentPlayer.player_name}
@@ -100,20 +103,20 @@ export function SwapConfirmationModal({
               </h4>
               <div className="flex flex-col items-center">
                 <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-dark-700 flex items-center justify-center overflow-hidden border-2 border-green-300 dark:border-green-700 mb-2">
-                  {newPlayer.image ? (
+                  {newPlayer.image_url ? (
                     <img
-                      src={newPlayer.image}
-                      alt={newPlayer.name}
+                      src={newPlayer.image_url}
+                      alt={newPlayer.player_name}
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
-                      {newPlayer.name.charAt(0)}
+                      {newPlayer.player_name?.charAt(0)}
                     </span>
                   )}
                 </div>
                 <span className="font-semibold text-sm dark:text-gray-100 text-center">
-                  {newPlayer.name}
+                  {newPlayer.player_name}
                 </span>
                 {newPlayer.position && <span className="text-xs text-gray-600 dark:text-gray-400 text-center mb-1">
                   {formatPosition(newPlayer.position)}
@@ -129,7 +132,7 @@ export function SwapConfirmationModal({
           </div>
 
           {/* Price Change */}
-          <div className="flex items-center justify-center mb-6">
+          {newPlayer.price && currentPlayer.purchase_price && <div className="flex items-center justify-center mb-6">
             <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800 rounded-full">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -137,22 +140,22 @@ export function SwapConfirmationModal({
                 </span>
                 <span
                   className={`text-sm font-medium flex items-center gap-1 ${
-                    newPlayer.price > currentPlayer.price
+                    newPlayer.price > currentPlayer.purchase_price
                       ? "text-green-600 dark:text-green-400"
-                      : newPlayer.price < currentPlayer.price
+                      : newPlayer.price < currentPlayer.purchase_price
                       ? "text-red-600 dark:text-red-400"
                       : "text-gray-600 dark:text-gray-400"
                   }`}
                 >
-                  {newPlayer.price > currentPlayer.price && "+"}
-                  {newPlayer.price - currentPlayer.price}
+                  {newPlayer.price > currentPlayer.purchase_price && "+"}
+                  {newPlayer.price - currentPlayer.purchase_price}
                   <svg viewBox="0 0 24 24" fill="#FFD700" className="w-3 h-3">
                     <circle cx="12" cy="12" r="10" fill="#FFD700" />
                   </svg>
                 </span>
               </div>
             </div>
-          </div>
+          </div>}
 
           {/* Action Buttons */}
           <div className="flex gap-3">

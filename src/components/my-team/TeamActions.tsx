@@ -290,29 +290,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
           players={marketPlayers}
           remainingBudget={remainingTeamBudget}
           selectedPlayers={athletes}
-          handlePlayerSelect={(p: RugbyPlayerShort) => {
-
-            console.log("Some player we are fetching what type is this? ", p)
-            // Convert from player.ts Player type to team.ts Player type
-            const convertedPlayer: Player = {
-              id: p.id,
-              name: p.name,
-              team: p.team,
-              position: p.position,
-              position_class: p.position,
-              points: p.points,
-              price: p.price,
-              form: p.power_rank_rating || 0,
-              image: p.image_url || "",
-              is_starting: true,
-              is_super_sub: false,
-              nextFixture: "",
-              team_name: p.team,
-              athlete_id: p.id,
-              player_name: p.name
-            };
-            handlePlayerListModalSelect(convertedPlayer);
-          }}
+          handlePlayerSelect={handlePlayerListModalSelect}
           competitionId={league?.official_league_id ?? team?.official_league_id}
           onClose={() => setIsSwapping(false)}
           // For MyTeamScreen, we don't need to pass competition-specific props
@@ -327,10 +305,8 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
 
       {/* Confirmation Modal */}
       <AnimatePresence>
-        {showSwapModal && selectedPlayer && newPlayer && (
+        {showSwapModal && playerToSwapIn && playerToSwapOut && (
           <SwapConfirmationModal
-            currentPlayer={selectedPlayer}
-            newPlayer={newPlayer}
             onClose={cancelSwap}
             onConfirm={handleConfirmSwap}
           />

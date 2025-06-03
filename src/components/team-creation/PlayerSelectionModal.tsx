@@ -18,6 +18,7 @@ import useAvailableTeams from "./player-selection-components/useAvailableTeams";
 import useModalEffects from "./player-selection-components/useModalEffects";
 import AvailableFilter from "./AvailableFilter";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { RugbyPlayer } from "../../types/rugbyPlayer";
 
 interface PlayerSelectionModalProps {
   visible: boolean;
@@ -25,7 +26,7 @@ interface PlayerSelectionModalProps {
   players: any[];
   remainingBudget: number;
   selectedPlayers: IFantasyTeamAthlete[];
-  handlePlayerSelect: (player: Player) => void;
+  handlePlayerSelect: (player: RugbyPlayer) => void;
   onClose: () => void;
   roundId: number;
   roundStart?: number;
