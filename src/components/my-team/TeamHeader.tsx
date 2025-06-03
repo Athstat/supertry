@@ -2,7 +2,7 @@ import React from "react";
 import { Trophy, Users, Award, ChevronLeft,Zap, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
-import { fantasyLeagueAtom, fantasyTeamAthletesAtom, fantasyTeamAtom } from "./my_team.atoms";
+import { fantasyLeagueAtom, fantasyTeamAthletesAtom, fantasyTeamAtom, fantasyTeamPointsAtom } from "./my_team.atoms";
 
 interface TeamHeaderProps {
 
@@ -16,10 +16,13 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
   const team = useAtomValue(fantasyTeamAtom);
   const athletes = useAtomValue(fantasyTeamAthletesAtom);
   const league = useAtomValue(fantasyLeagueAtom);
+  const totalPoints = useAtomValue(fantasyTeamPointsAtom);
+
+  console.log("From the Team Header Component ", team, athletes, league);
 
   if (!team) return;
 
-  const { rank, round_score } = team;
+  const { rank } = team;
 
   const handleBack = () => {
     navigate(-1);
@@ -88,7 +91,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
             <div className="flex items-center gap-1.5 bg-gradient-to-r from-white to-gray-200 via-gray-50 px-3 py-1.5 rounded-full shadow-sm">
               <Zap size={18} className="text-orange-500 shrink-0" />
               <span className="font-medium text-sm text-gray-800">
-                {round_score ? Math.floor(round_score) : "-"} pts
+                {Math.floor(totalPoints)} pts
               </span>
             </div>
           </div>

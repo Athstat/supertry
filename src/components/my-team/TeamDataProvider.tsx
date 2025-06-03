@@ -13,7 +13,7 @@ import { fantasyTeamValueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom, fantasy
 import { LoadingState } from "../ui/LoadingState";
 import { calculateFantasyTeamValue } from "../../utils/athleteUtils";
 import { ErrorState } from "../ui/ErrorState";
-import { ScopeProvider } from "jotai-scope";
+
 
 interface TeamDataContextType {
   team: IFantasyClubTeam | undefined;
@@ -127,12 +127,11 @@ export function TeamDataProvider({ children, teamId}: Props) {
   //   return positions;
   // }, [athletes]);
 
-  const atoms = [fantasyLeagueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom, fantasyTeamValueAtom];
 
   return (
-    <ScopeProvider atoms={atoms}>
+    <>
       {children}
-    </ScopeProvider>
+    </>
   );
 };
 

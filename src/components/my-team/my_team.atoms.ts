@@ -8,3 +8,10 @@ export const remainingTeamBudgetAtom = atom((get) => MAX_TEAM_BUDGET - get(fanta
 export const fantasyTeamAthletesAtom = atom<IFantasyTeamAthlete[]>([]);
 export const fantasyTeamAtom = atom<IFantasyClubTeam>();
 export const fantasyLeagueAtom = atom<IFantasyLeague>();
+
+export const fantasyTeamPointsAtom = atom((get) => {
+    const athletes = get(fantasyTeamAthletesAtom);
+    return athletes.reduce((sum, a) => {
+        return sum + (a.score ?? 0);
+    }, 0)
+})
