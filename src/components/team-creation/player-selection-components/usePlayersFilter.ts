@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
 import { athleteSearchPredicate } from "../../../utils/athleteUtils";
+import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 
 interface UsePlayersFilterProps {
   players: any[];
@@ -9,7 +9,7 @@ interface UsePlayersFilterProps {
   searchQuery: string;
   teamFilter: string[];
   remainingBudget: number;
-  selectedPlayers: Player[];
+  selectedPlayers: IFantasyTeamAthlete[];
   sortBy: "price" | "rating" | "attack" | "defense" | "kicking";
   sortOrder: "asc" | "desc";
   filterAvailable: boolean;
@@ -152,9 +152,6 @@ export const usePlayersFilter = ({
       const isAlreadySelected = selectedPlayers.some(
         (p) => p.id === player.id || p.id === player.tracking_id
       );
-
-      // Budget check
-      const isAffordable = player.price <= remainingBudget;
 
       // Availability filter check - only apply if filterAvailable is true
       const passedAvailabilityFilter =

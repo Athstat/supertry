@@ -17,13 +17,14 @@ import usePlayersFilter from "./player-selection-components/usePlayersFilter";
 import useAvailableTeams from "./player-selection-components/useAvailableTeams";
 import useModalEffects from "./player-selection-components/useModalEffects";
 import AvailableFilter from "./AvailableFilter";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 
 interface PlayerSelectionModalProps {
   visible: boolean;
   selectedPosition: Position;
   players: any[];
   remainingBudget: number;
-  selectedPlayers: Player[];
+  selectedPlayers: IFantasyTeamAthlete[];
   handlePlayerSelect: (player: Player) => void;
   onClose: () => void;
   roundId: number;
@@ -53,7 +54,6 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     "price" | "rating" | "attack" | "defense" | "kicking"
   >("rating");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [loading, setLoading] = useState(false);
   const [filterAvailable, setFilterAvailable] = useState(false);
   
   // Only fetch fixtures if competitionId is provided (TeamCreationScreen)
@@ -62,7 +62,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     : { data: null, isLoading: false };
 
   // Get filtered and sorted players
-  const { sortedPlayers, filteredCount } = usePlayersFilter({
+  const { sortedPlayers } = usePlayersFilter({
     players,
     selectedPosition,
     searchQuery,
@@ -140,7 +140,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex sm:items-center sm:justify-center overflow-y-auto">
-      <div className="bg-white dark:bg-dark-800 w-full max-w-4xl sm:mx-auto sm:my-4 sm:rounded-lg shadow-xl h-full sm:h-auto sm:max-h-[calc(100vh-2rem)] flex flex-col rounded-none sm:rounded-lg">
+      <div className="bg-white dark:bg-dark-800 w-full max-w-4xl sm:mx-auto sm:my-4 shadow-xl h-full sm:h-auto sm:max-h-[calc(100vh-2rem)] flex flex-col rounded-none sm:rounded-lg">
         {/* Modal header */}
         <ModalHeader selectedPosition={selectedPosition} onClose={onClose} />
 
@@ -181,7 +181,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
         <div className="flex-1 overflow-y-auto">
           <PlayerList
             players={sortedPlayers}
-            isLoading={loading}
+            isLoading={false}
             selectedPosition={selectedPosition}
             handlePlayerSelect={handlePlayerSelect}
             onClose={onClose}

@@ -1,6 +1,7 @@
 import {
   IFantasyTeamAthlete,
   IFantasyClubTeam,
+  IUpdateFantasyTeamItem,
 } from "../types/fantasyTeamAthlete";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { authService } from "./authService";
@@ -10,29 +11,17 @@ export const fantasyTeamService = {
    * Update team athletes for a fantasy team
    */
   updateTeamAthletes: async (
-    team: IFantasyTeamAthlete[],
+    team: IUpdateFantasyTeamItem[],
     teamId: string
   ): Promise<any> => {
     try {
-      // Get token for authentication
-      const token = localStorage.getItem("access_token");
 
-      if (!token) {
-        throw new Error(
-          "Authentication token is missing. Please log in again."
-        );
-      }
 
-      const uri = getUri(
-        `/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`
-      );
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`);
 
       const response = await fetch(uri, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeader(),
         body: JSON.stringify({ team, teamId }),
       });
 

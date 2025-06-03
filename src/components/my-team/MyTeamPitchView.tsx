@@ -2,6 +2,7 @@ import { useAtomValue } from "jotai";
 import { TeamFormation } from "../team/TeamFormation";
 import TeamSubstituteCard from "./TeamSubstituteCard";
 import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
+import { useMyTeamScreenActions } from "./TeamActions";
 
 interface ViewPitchContentProps {
 }
@@ -9,10 +10,8 @@ interface ViewPitchContentProps {
 /** Renders Team Pitch view */
 export const MyTeamPitchView: React.FC<ViewPitchContentProps> = ({}) => {
   
+  const {handlePlayerClick} = useMyTeamScreenActions();
   const players = useAtomValue(fantasyTeamAthletesAtom);
-  const handlePlayerClick = () => {
-
-  }
 
   return (
     <>

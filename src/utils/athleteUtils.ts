@@ -118,7 +118,7 @@ export function calculateAveragePr(players: IFantasyTeamAthlete[]): number {
 
     const totalPR = players.reduce((sum, player) => {
         return sum + (player.power_rank_rating || 0)
-    },0);
+    }, 0);
 
     const playersLen = players.length
     const ave = totalPR / playersLen;
@@ -135,4 +135,18 @@ export function calculateFantasyTeamValue(athletes?: IFantasyTeamAthlete[]) {
     }
 
     return 0;
+}
+
+export function convertPositionNameToPositionObject(positionToSwap: string) {
+
+    return {
+        id: positionToSwap === "any" ? "any" : positionToSwap,
+        name: positionToSwap === "any" ? "Any Position" : positionToSwap,
+        shortName:
+            positionToSwap === "any"
+                ? "ANY"
+                : positionToSwap.substring(0, 2).toUpperCase(),
+        x: "0",
+        y: "0",
+    }
 }

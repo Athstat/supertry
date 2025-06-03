@@ -9,6 +9,7 @@ import { ErrorState } from "../components/ui/ErrorState";
 import { ScopeProvider } from "jotai-scope";
 import { fantasyLeagueAtom, fantasyLeagueLockedAtom } from "../state/fantasyLeague.atoms";
 import { fantasyTeamAtom, fantasyTeamAthletesAtom, fantasyTeamValueAtom, fantasyTeamPointsAtom } from "../state/myTeam.atoms";
+import { playerToSwapInAtom, positionToSwapAtom } from "../state/playerSwap.atoms";
 
 export function MyTeamScreen() {
 
@@ -17,9 +18,10 @@ export function MyTeamScreen() {
 
   const atoms = [
     fantasyLeagueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom,
-    fantasyTeamValueAtom, fantasyTeamPointsAtom, fantasyLeagueLockedAtom
+    fantasyTeamValueAtom, fantasyTeamPointsAtom, fantasyLeagueLockedAtom,
+    playerToSwapInAtom, playerToSwapInAtom, positionToSwapAtom
   ];
-
+  
   return (
     <ScopeProvider atoms={atoms}>
       <TeamDataProvider teamId={teamId}>

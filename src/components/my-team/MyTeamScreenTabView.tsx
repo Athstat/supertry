@@ -1,10 +1,11 @@
 import { useAtomValue } from "jotai";
-import { fantasyLeagueAtom, fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
+import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { TabButton } from "../shared/TabButton";
 import { EditFantasyTeamView } from "./EditFantasyTeamView";
 import { Lock } from "lucide-react";
 import { MyTeamPitchView } from "./MyTeamPitchView";
+import { MyTeamScreenActionsProvider } from "./TeamActions";
 export type MyTeamScreenTabType = "edit-team" | "view-pitch";
 
 type Props = {
@@ -14,14 +15,13 @@ type Props = {
 }
 
 /** Renders My Team Screen Tab View Area */
-export function MyTeamScreenTabView({activeTab, setActiveTab}: Props) {
-  const league = useAtomValue(fantasyLeagueAtom);
+export function MyTeamScreenTabView({ activeTab, setActiveTab }: Props) {
   const isEditLocked = useAtomValue(fantasyLeagueLockedAtom);
 
   return (
     <>
       {/* Tabbed Interface */}
-      
+
       <div className="mt-8">
         <div className="flex space-x-2 border-b-0">
           {!isEditLocked && (
@@ -57,17 +57,21 @@ export function MyTeamScreenTabView({activeTab, setActiveTab}: Props) {
           </TabButton>
         </div>
       </div>
-      
+
 
       {/* Tab Content */}
-      <div className="mt-6">
-        {activeTab === "edit-team" ? (
-          <EditFantasyTeamView/>
-        ) : (
-          <MyTeamPitchView
-          />
-        )}
-      </div>
+      <MyTeamScreenActionsProvider>
+        
+        <div className="mt-6">
+          {activeTab === "edit-team" ? (
+            <EditFantasyTeamView />
+          ) : (
+            <MyTeamPitchView
+            />
+          )}
+        </div>
+        
+      </MyTeamScreenActionsProvider>
     </>
   )
 };
