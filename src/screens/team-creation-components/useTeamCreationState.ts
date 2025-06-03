@@ -5,8 +5,10 @@ import { leagueService } from "../../services/leagueService";
 import { athleteService } from "../../services/athleteService";
 import { Position } from "../../types/position";
 import { Player } from "../../types/player";
+import { RugbyPlayer } from "../../types/rugbyPlayer";
 
 export const useTeamCreationState = (officialLeagueId: string | undefined) => {
+  
   // League and players data states
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
     null
@@ -145,7 +147,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   };
 
   // Override handleAddPlayer to also close the modal
-  const enhancedHandleAddPlayer = (player: Player) => {
+  const enhancedHandleAddPlayer = (player: RugbyPlayer) => {
     handleAddPlayer(player);
     setShowPlayerSelection(false); // Close the modal after player is added
   };

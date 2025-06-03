@@ -12,7 +12,7 @@ import { athleteService } from "../../services/athleteService";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useAtom, useAtomValue } from "jotai";
 import { fantasyTeamAthletesAtom, fantasyTeamAtom, remainingTeamBudgetAtom } from "../../state/myTeam.atoms";
-import { IFantasyTeamAthlete, IUpdateFantasyTeamItem } from "../../types/fantasyTeamAthlete";
+import { IFantasyTeamAthlete, IUpdateFantasyTeamAthleteItem } from "../../types/fantasyTeamAthlete";
 import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 import { playerToSwapInAtom, playerToSwapOutAtom, positionToSwapAtom } from "../../state/playerSwap.atoms";
 import { useFetch } from "../../hooks/useFetch";
@@ -148,7 +148,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
 
       setTeamUpdating(true);
 
-      const updatedTeamAthletes: IUpdateFantasyTeamItem[] = athletes.map((a) => {
+      const updatedTeamAthletes: IUpdateFantasyTeamAthleteItem[] = athletes.map((a) => {
         return {
           team_id: teamId,
           athlete_id: a.tracking_id ?? "fall-back",
@@ -174,7 +174,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
       // Create an update fantasy team item that the api can
       // understand
 
-      const replacementAthlete: IUpdateFantasyTeamItem = {
+      const replacementAthlete: IUpdateFantasyTeamAthleteItem = {
         team_id: teamId,
         athlete_id: playerToSwapIn.tracking_id ?? "fall-back",
         purchase_price: playerToSwapIn.price ?? 0,

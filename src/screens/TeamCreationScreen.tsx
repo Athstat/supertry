@@ -22,6 +22,7 @@ import { URC_COMPETIION_ID } from "../types/constants";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { useTeamCreationGuard } from "../hooks/useTeamCreationGuard";
 import PrimaryButton from "../components/shared/buttons/PrimaryButton";
+import { ICreateFantasyTeamAthleteItem } from "../types/fantasyTeamAthlete";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -104,7 +105,6 @@ export function TeamCreationScreen() {
 
 
   useEffect(() => {
-    // Request user notification permissions
     requestPushPermissions();
   }, []);
 
@@ -145,6 +145,11 @@ export function TeamCreationScreen() {
     hideToast,
   } = useTeamCreationState(officialLeagueId);
 
+  const selectedPlayersArr = Object.values(selectedPlayers)
+    .map((a) => {
+      return {tracking_id: a.id}
+    });
+
   // Handle team submission
   const handleSaveTeam = async () => {
     setIsSaving(true);
@@ -168,19 +173,20 @@ export function TeamCreationScreen() {
 
     try {
       // Convert selected players to the required format for API (IFantasyTeamAthlete)
-      const teamAthletes = Object.values(selectedPlayers).map(
+      const teamAthletes: ICreateFantasyTeamAthleteItem[] = Object.values(selectedPlayers).map(
         (player, index) => {
           // Check if this player is in the Super Sub position
           const position = positionList.find(
             (pos) => pos.player && pos.player.id === player.id
           );
+
           const isSuperSub = position?.isSpecial || false;
 
           return {
             athlete_id: player.id,
             purchase_price: player.price,
             purchase_date: new Date(),
-            is_starting: !isSuperSub, // Super Sub is not a starting player
+            is_starting: !isSuperSub,
             slot: index + 1,
             score: player.points || 0,
             is_super_sub: isSuperSub,
@@ -289,7 +295,7 @@ export function TeamCreationScreen() {
           selectedPosition={selectedPosition}
           players={allPlayers}
           remainingBudget={remainingBudget}
-          selectedPlayers={Object.values(selectedPlayers)}
+          selectedPlayers={selectedPlayersArr}
           handlePlayerSelect={handleAddPlayer}
           onClose={() => setShowPlayerSelection(false)}
           roundId={parseInt(officialLeagueId || "0")}

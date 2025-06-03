@@ -12,9 +12,11 @@ export function useTeamCreation(
   ) => void,
   serverPlayers: RugbyPlayer[] = []
 ) {
+  
   const [selectedPlayers, setSelectedPlayers] = useState<
-    Record<string, Player>
+    Record<string, RugbyPlayer>
   >({});
+
   const [isFavorite, setIsFavorite] = useState(false);
   const [teamName, setTeamName] = useState("");
   const [selectedPosition, setSelectedPosition] = useState<Position | null>(
@@ -51,7 +53,7 @@ export function useTeamCreation(
   }, []);
 
   const handleAddPlayer = useCallback(
-    (player: Player) => {
+    (player: RugbyPlayer) => {
       if (selectedPosition) {
         setSelectedPlayers((prev) => ({
           ...prev,

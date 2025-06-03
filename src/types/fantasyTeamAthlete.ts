@@ -64,9 +64,20 @@ export interface IFantasyClubTeam {
 }
 
 
-export type IUpdateFantasyTeamItem = {
+
+export type IUpdateFantasyTeamAthleteItem = {
   id?: string;
   team_id: string;
+  athlete_id: string;
+  purchase_price: number;
+  purchase_date: Date;
+  is_starting: boolean;
+  slot: number;
+  score: number;
+}
+
+export type ICreateFantasyTeamAthleteItem = {
+  id?: string;
   athlete_id: string;
   purchase_price: number;
   purchase_date: Date;
