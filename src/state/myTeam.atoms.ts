@@ -1,13 +1,12 @@
 import { atom } from "jotai";
-import { MAX_TEAM_BUDGET } from "../../types/constants";
-import { IFantasyClubTeam, IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { MAX_TEAM_BUDGET } from "../types/constants";
+import { IFantasyTeamAthlete, IFantasyClubTeam } from "../types/fantasyTeamAthlete";
 
 export const fantasyTeamValueAtom = atom<number>(0);
 export const remainingTeamBudgetAtom = atom((get) => MAX_TEAM_BUDGET - get(fantasyTeamValueAtom))
 export const fantasyTeamAthletesAtom = atom<IFantasyTeamAthlete[]>([]);
 export const fantasyTeamAtom = atom<IFantasyClubTeam>();
-export const fantasyLeagueAtom = atom<IFantasyLeague>();
+
 
 export const fantasyTeamPointsAtom = atom((get) => {
     const athletes = get(fantasyTeamAthletesAtom);

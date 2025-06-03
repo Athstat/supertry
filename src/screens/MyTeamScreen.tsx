@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FantasyTeamStats } from "../components/team/FantasyTeamStats";
-import { TeamHeader } from "../components/my-team/TeamHeader";
+import { FantasyTeamHeader } from "../components/my-team/TeamHeader";
 import { TeamDataProvider } from "../components/my-team/TeamDataProvider";
 import AthletesAvailabilityWarning from "../components/team/AthletesAvailabilityWarning";
 import { MyTeamScreenTabType, MyTeamScreenTabView } from "../components/my-team/MyTeamScreenTabView";
 import { ErrorState } from "../components/ui/ErrorState";
 import { ScopeProvider } from "jotai-scope";
-import { fantasyLeagueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom, fantasyTeamValueAtom, fantasyTeamPointsAtom } from "../components/my-team/my_team.atoms";
+import { fantasyLeagueAtom, fantasyLeagueLockedAtom } from "../state/fantasyLeague.atoms";
+import { fantasyTeamAtom, fantasyTeamAthletesAtom, fantasyTeamValueAtom, fantasyTeamPointsAtom } from "../state/myTeam.atoms";
 
 export function MyTeamScreen() {
 
@@ -16,7 +17,7 @@ export function MyTeamScreen() {
 
   const atoms = [
     fantasyLeagueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom,
-    fantasyTeamValueAtom, fantasyTeamPointsAtom
+    fantasyTeamValueAtom, fantasyTeamPointsAtom, fantasyLeagueLockedAtom
   ];
 
   return (
@@ -38,7 +39,7 @@ function MyTeamScreenContent() {
     <main className="container mx-auto px-4 py-6">
 
       <div className="max-w-4xl mx-auto flex flex-col gap-4">
-        <TeamHeader />
+        <FantasyTeamHeader />
         <FantasyTeamStats />
         <AthletesAvailabilityWarning />
 

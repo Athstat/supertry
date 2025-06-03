@@ -1,8 +1,8 @@
 import { Coins, Trophy } from "lucide-react";
 import { useAtomValue } from "jotai";
-import { fantasyTeamAthletesAtom, fantasyTeamValueAtom, remainingTeamBudgetAtom } from "../my-team/my_team.atoms";
 import { useMemo } from "react";
 import { calculateAveragePr } from "../../utils/athleteUtils";
+import { fantasyTeamValueAtom, remainingTeamBudgetAtom, fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
 
 type Props = {
 
@@ -10,8 +10,7 @@ type Props = {
 
 export function FantasyTeamStats({ }: Props) {
 
-  // const team = useAtomValue(fantasyTeamAtom);
-  // const athletes = useAtomValue(fantasyTeamAthletesAtom);
+
   const teamValue = useAtomValue(fantasyTeamValueAtom);
   const remainingBudget = useAtomValue(remainingTeamBudgetAtom);
   const athletes = useAtomValue(fantasyTeamAthletesAtom);

@@ -9,10 +9,11 @@ import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { leagueService } from "../../services/leagueService";
 import { useFetch } from "../../hooks/useFetch";
 import { useAtom } from "jotai";
-import { fantasyTeamValueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom, fantasyLeagueAtom } from "./my_team.atoms";
 import { LoadingState } from "../ui/LoadingState";
 import { calculateFantasyTeamValue } from "../../utils/athleteUtils";
 import { ErrorState } from "../ui/ErrorState";
+import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
+import { fantasyTeamValueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
 
 
 interface TeamDataContextType {

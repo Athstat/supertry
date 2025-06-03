@@ -4,7 +4,8 @@ import WarningCard from "../shared/WarningCard"
 import { useFetch } from "../../hooks/useFetch";
 import { Info } from "lucide-react";
 import { useAtomValue } from "jotai";
-import { fantasyLeagueAtom, fantasyTeamAthletesAtom } from "../my-team/my_team.atoms";
+import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
+import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
 
 type Props = {
 
@@ -14,6 +15,7 @@ export default function AthletesAvailabilityWarning({}: Props) {
     
     const league = useAtomValue(fantasyLeagueAtom);
     const athletes = useAtomValue(fantasyTeamAthletesAtom);
+    
     const athleteIds = athletes.map((a) => a.athlete_id);
 
     const leagueEnded = league?.has_ended;
