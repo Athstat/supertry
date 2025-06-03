@@ -4,6 +4,7 @@ import { IFantasyLeague } from "../../types/fantasyLeague";
 import { TabButton } from "../shared/TabButton";
 import { EditFantasyTeamView } from "./EditFantasyTeamView";
 import { Lock } from "lucide-react";
+import { MyTeamPitchView } from "./MyTeamPitchView";
 export type MyTeamScreenTabType = "edit-team" | "view-pitch";
 
 type Props = {
@@ -63,10 +64,8 @@ export function MyTeamScreenTabView({activeTab, setActiveTab}: Props) {
         {activeTab === "edit-team" ? (
           <EditFantasyTeamView/>
         ) : (
-          // <MyTeamPitchView
-          // />
-
-          <></>
+          <MyTeamPitchView
+          />
         )}
       </div>
     </>
