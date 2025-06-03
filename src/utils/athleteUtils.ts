@@ -1,6 +1,6 @@
 import { PointsBreakdownItem } from "../services/athleteService";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
-import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
+import { IFantasyAthlete } from "../types/rugbyPlayer";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -113,15 +113,17 @@ export const getGroupedActions = (breakdown: PointsBreakdownItem[]) => {
 };
 
 
-export function calculateAveragePr(players: RugbyPlayer[]): number {
+export function calculateAveragePr(players: IFantasyTeamAthlete[]): number {
     if (!players.length) return 0;
 
-    const totalPR = players.reduce(
-        (sum, player) => sum + (player.power_rank_rating || 0),
-        0
-    );
+    const totalPR = players.reduce((sum, player) => {
+        return sum + (player.power_rank_rating || 0)
+    },0);
 
-    return totalPR / players.length;
+    const playersLen = players.length
+    const ave = totalPR / playersLen;
+
+    return ave;
 };
 
 /** Calucates and returns the total value of a fantasy team by purchase price */

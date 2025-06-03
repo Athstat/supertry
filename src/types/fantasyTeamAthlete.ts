@@ -9,7 +9,8 @@ export interface IFantasyTeamAthlete {
   team_name: string,
   team_logo: string,
   athlete_team_id: string,
-  player_name?: string
+  player_name?: string,
+  power_rank_rating: number
 }
 
 export interface IFantasyTeamSubmission {
