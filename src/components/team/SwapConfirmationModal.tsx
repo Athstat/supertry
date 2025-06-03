@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { formatPosition } from "../../utils/athleteUtils";
 import { useAtomValue } from "jotai";
 import { playerToSwapInAtom, playerToSwapOutAtom } from "../../state/playerSwap.atoms";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
 import { twMerge } from "tailwind-merge";
 
 interface SwapConfirmationModalProps {

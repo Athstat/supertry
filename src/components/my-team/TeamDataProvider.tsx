@@ -7,7 +7,6 @@ import {
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { leagueService } from "../../services/leagueService";
-import { useFetch } from "../../hooks/useFetch";
 import { useAtom } from "jotai";
 import { LoadingState } from "../ui/LoadingState";
 import { calculateFantasyTeamValue } from "../../utils/athleteUtils";
@@ -48,8 +47,8 @@ export function TeamDataProvider({ children, teamId}: Props) {
 
   // Step 1: Fetching Data
   const { data: athletes, isLoading: loadingAthletes, error: athletesError } = useSWR(`team-athletes/${teamId}`, () => fantasyTeamService.fetchTeamAthletes(teamId));
-  const { data: team, isLoading: loadingTeam, error: teamError } = useFetch("fantasy-team", teamId, (teamId) => fantasyTeamService.getUserTeamById(teamId));
-  const { data: league, isLoading: loadingLeague, error: leagueError } = useFetch("fantasy-league", team?.league_id ?? 0, leagueService.getLeagueById);
+  const { data: team, isLoading: loadingTeam, error: teamError } = useSWR(`fantasy-team/${teamId}`, () => fantasyTeamService.getUserTeamById(teamId));
+  const { data: league, isLoading: loadingLeague, error: leagueError } = useSWR(`fantasy-league/${team?.league_id}`, () => leagueService.getLeagueById(team?.league_id ?? 0));
 
   const isLoading = loadingAthletes || loadingTeam || loadingLeague;
   const error = athletesError || teamError || leagueError;
