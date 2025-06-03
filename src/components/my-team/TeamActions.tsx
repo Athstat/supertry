@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext, ReactNode } from "react";
+import { useState, createContext, useContext, ReactNode } from "react";
 import { Loader } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { Player } from "../../types/team";
@@ -9,14 +9,14 @@ import PlayerSelectionModal from "../team-creation/PlayerSelectionModal";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
 import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { athleteService } from "../../services/athleteService";
-import { IFantasyAthlete, RugbyPlayer, RugbyPlayerShort } from "../../types/rugbyPlayer";
+import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useAtom, useAtomValue } from "jotai";
 import { fantasyTeamAthletesAtom, fantasyTeamAtom, remainingTeamBudgetAtom } from "../../state/myTeam.atoms";
 import { IFantasyTeamAthlete, IUpdateFantasyTeamItem } from "../../types/fantasyTeamAthlete";
 import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 import { playerToSwapInAtom, playerToSwapOutAtom, positionToSwapAtom } from "../../state/playerSwap.atoms";
 import { useFetch } from "../../hooks/useFetch";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import { convertPositionNameToPositionObject } from "../../utils/athleteUtils";
 
 // Define the context type
@@ -47,10 +47,11 @@ type Props = {
 export function MyTeamScreenActionsProvider({ children }: Props) {
 
   const team = useAtomValue(fantasyTeamAtom);
-  const teamBudget = useAtomValue(remainingTeamBudgetAtom);
-  const [athletes, setAthletes] = useAtom(fantasyTeamAthletesAtom);
+  const [athletes] = useAtom(fantasyTeamAthletesAtom);
   const league = useAtomValue(fantasyLeagueAtom);
   const remainingTeamBudget = useAtomValue(remainingTeamBudgetAtom);
+
+  const { mutate } = useSWRConfig()
 
   const { data: marketPlayersData, isLoading: loadingMarketPlayers } =
     useFetch("market-players", league?.official_league_id ?? "fall-back", athleteService.getRugbyAthletesByCompetition);
@@ -59,7 +60,6 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
 
   const [showActionModal, setShowActionModal] = useState(false);
   const [showSwapModal, setShowSwapModal] = useState(false);
-  const [showStatsModal, setShowStatsModal] = useState(false);
 
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
@@ -142,7 +142,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
     if (cannotSwap) return;
 
     try {
-      
+
       setTeamUpdating(true);
 
       const updatedTeamAthletes: IUpdateFantasyTeamItem[] = athletes.map((a) => {
@@ -186,7 +186,8 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
       // Send the update to the server
       await fantasyTeamService.updateTeamAthletes(updatedTeamAthletes, teamId);
 
-      mutate((key?: any) => key === 'team-athletes');
+      console.log("Whats the team id ", team.id);
+      await mutate(`team-athletes/${team.id}`);
 
       // Reset UI state
       setShowSwapModal(false);
@@ -208,7 +209,6 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
   const closeAllModals = () => {
     setShowActionModal(false);
     setShowSwapModal(false);
-    setShowStatsModal(false);
     setIsSwapping(false);
     setSelectedPlayer(undefined);
     setPlayerToSwapOut(undefined);
@@ -288,7 +288,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
           visible={isSwapping}
           selectedPosition={convertPositionNameToPositionObject(positionToSwap)}
           players={marketPlayers}
-          remainingBudget={remainingTeamBudget}
+          remainingBudget={remainingTeamBudget + (playerToSwapOut?.purchase_price ?? 0)}
           selectedPlayers={athletes}
           handlePlayerSelect={handlePlayerListModalSelect}
           competitionId={league?.official_league_id ?? team?.official_league_id}
@@ -309,6 +309,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
           <SwapConfirmationModal
             onClose={cancelSwap}
             onConfirm={handleConfirmSwap}
+            isUpdating={teamUpdating}
           />
         )}
       </AnimatePresence>

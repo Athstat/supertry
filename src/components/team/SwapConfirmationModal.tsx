@@ -3,15 +3,19 @@ import { motion } from "framer-motion";
 import { formatPosition } from "../../utils/athleteUtils";
 import { useAtomValue } from "jotai";
 import { playerToSwapInAtom, playerToSwapOutAtom } from "../../state/playerSwap.atoms";
+import PrimaryButton from "../shared/buttons/PrimaryButton";
+import { twMerge } from "tailwind-merge";
 
 interface SwapConfirmationModalProps {
   onClose: () => void;
   onConfirm: () => void;
+  isUpdating?: boolean
 }
 
 export function SwapConfirmationModal({
   onClose,
   onConfirm,
+  isUpdating
 }: SwapConfirmationModalProps) {
 
   const newPlayer = useAtomValue(playerToSwapInAtom);
@@ -167,7 +171,11 @@ export function SwapConfirmationModal({
             </button>
             <button
               onClick={onConfirm}
-              className="flex-1 py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 flex items-center justify-center gap-2"
+              disabled={isUpdating}
+              className={twMerge(
+                "flex-1 py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 flex items-center justify-center gap-2",
+                isUpdating && "opacity-50 animate-pulse"
+              )}
             >
               <X size={18} className="transform rotate-45" />
               <span>Confirm Swap</span>

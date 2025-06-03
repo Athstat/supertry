@@ -14,6 +14,7 @@ import { calculateFantasyTeamValue } from "../../utils/athleteUtils";
 import { ErrorState } from "../ui/ErrorState";
 import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 import { fantasyTeamValueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
+import useSWR from "swr";
 
 
 interface TeamDataContextType {
@@ -46,7 +47,7 @@ export function TeamDataProvider({ children, teamId}: Props) {
   const [, setFantasyLeague] = useAtom(fantasyLeagueAtom);
 
   // Step 1: Fetching Data
-  const { data: athletes, isLoading: loadingAthletes, error: athletesError } = useFetch("team-athletes", teamId, fantasyTeamService.fetchTeamAthletes);
+  const { data: athletes, isLoading: loadingAthletes, error: athletesError } = useSWR(`team-athletes/${teamId}`, () => fantasyTeamService.fetchTeamAthletes(teamId));
   const { data: team, isLoading: loadingTeam, error: teamError } = useFetch("fantasy-team", teamId, (teamId) => fantasyTeamService.getUserTeamById(teamId));
   const { data: league, isLoading: loadingLeague, error: leagueError } = useFetch("fantasy-league", team?.league_id ?? 0, leagueService.getLeagueById);
 
