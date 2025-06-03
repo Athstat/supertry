@@ -274,7 +274,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
       </AnimatePresence>
 
       {/* Loading indicator when fetching market players but not yet showing modal */}
-      {loadingMarketPlayers && !isSwapping && (
+      {loadingMarketPlayers && isSwapping && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-dark-800 p-6 rounded-lg shadow-lg flex flex-col items-center">
             <Loader size={32} className="text-primary-500 animate-spin mb-4" />
@@ -286,7 +286,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
       )}
 
       {/* Player Selection Modal for Swapping */}
-      {isSwapping && selectedPlayer && (
+      {isSwapping && selectedPlayer && !loadingMarketPlayers && (
         <PlayerSelectionModal
           visible={isSwapping}
           selectedPosition={convertPositionNameToPositionObject(positionToSwap)}
