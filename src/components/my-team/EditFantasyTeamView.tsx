@@ -13,10 +13,11 @@ import { formatPosition } from "../../utils/athleteUtils";
 type Props = {
 }
 
-export function EditTeamView({ }: Props) {
+export function EditFantasyTeamView({ }: Props) {
 
   const remainingBudget = useAtomValue(remainingTeamBudgetAtom);
   const athletes = useAtomValue(fantasyTeamAthletesAtom);
+
 
   const positionList = useMemo(() => {
     if (!athletes?.length) return [];
@@ -26,8 +27,11 @@ export function EditTeamView({ }: Props) {
     // Add regular position players (non-super sub)
 
     athletes
-      .filter((athlete) => !athlete.is_super_sub)
-      .forEach((athlete) => {
+      .forEach((athlete, index) => {
+
+        if (index === 1) {
+          console.log("This is an athlete object ", athlete);
+        }
 
         positions.push({
           id: athlete.athlete_id || "",
@@ -40,21 +44,6 @@ export function EditTeamView({ }: Props) {
           player: athlete,
         });
       });
-
-    // Add super sub at the end
-    const superSub = athletes.find((athlete: any) => athlete.is_super_sub);
-    
-    if (superSub) {
-      positions.push({
-        id: superSub.athlete_id || "",
-        name: "Super Sub",
-        shortName: "SS",
-        x: "0",
-        y: "0",
-        isSpecial: true,
-        player: superSub
-      });
-    }
 
     return positions;
   }, [athletes]);
@@ -74,33 +63,36 @@ export function EditTeamView({ }: Props) {
       </div>
 
       {/* Position Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
-        {positionList.map((position, index) => (
-          <div key={position.id}>
-            {/* Custom player card for My Team screen */}
-            <div
-              className={`bg-white dark:bg-dark-800 rounded-lg shadow-md p-4 transition hover:shadow-lg border ${position.isSpecial ||
-                (index === positionList.length - 1 &&
-                  position.name.toLowerCase().includes("second-row"))
-                ? "border-orange-200 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/10"
-                : "border-gray-100 dark:border-gray-700"
-                }`}
-            >
-              <div className="flex flex-col items-center">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4">
+        
+        {positionList.map((position, index) => {
+          const { player } = position;
+          const isSub = !player?.is_starting || index === positionList.length - 1;
 
-                {position.player ? (
-                  <EditTeamViewPlayerCard 
-                    player={position.player}
-                    position={position}
-                    index={index}
-                  />
-                ) : (
-                  <AddPlayerCard position={position} />
-                )}
-              </div>
+          return (
+
+            <div
+              key={index}
+              className={twMerge(
+                "bg-white dark:bg-dark-800 rounded-lg shadow-md p-4 transition hover:shadow-lg border h-[290px] flex flex-col items-center justify-center w-full",
+                isSub && "border-orange-200 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/10",
+                !isSub && "border-gray-100 dark:border-gray-700"
+              )}
+            >
+
+              {position.player ?
+                <EditTeamViewPlayerCard
+                  player={position.player}
+                  position={position}
+                  index={index}
+                />
+                :
+                <AddPlayerCard position={position} />
+              }
+
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );
@@ -114,11 +106,11 @@ type PlayerCardProps = {
   index: number
 }
 
-export function EditTeamViewPlayerCard({ onSwapOutPlayer , onViewStats, player, index, position }: PlayerCardProps) {
+export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, position }: PlayerCardProps) {
 
   const isEditLocked = useAtomValue(fantasyLeagueLockedAtom);
   const { is_starting, image_url, player_name, team_name, purchase_price } = player;
-  const isSub = index === 5;
+  const isSub = !is_starting;
 
   const handleViewStats = () => {
     if (onViewStats) {

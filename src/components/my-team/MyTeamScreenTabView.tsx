@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai";
 import { fantasyLeagueAtom, fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { TabButton } from "../shared/TabButton";
-import { EditTeamView } from "./TeamTabsContent";
+import { EditFantasyTeamView } from "./EditFantasyTeamView";
 import { Lock } from "lucide-react";
 export type MyTeamScreenTabType = "edit-team" | "view-pitch";
 
@@ -61,7 +61,7 @@ export function MyTeamScreenTabView({activeTab, setActiveTab}: Props) {
       {/* Tab Content */}
       <div className="mt-6">
         {activeTab === "edit-team" ? (
-          <EditTeamView/>
+          <EditFantasyTeamView/>
         ) : (
           // <MyTeamPitchView
           // />
