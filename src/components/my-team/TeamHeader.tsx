@@ -1,41 +1,37 @@
 import React from "react";
-import {
-  Trophy,
-  Users,
-  Loader,
-  Award,
-  ChevronLeft,
-  Zap,
-  ChevronRight,
-} from "lucide-react";
+import { Trophy, Users, Award, ChevronLeft,Zap, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { IFantasyClubTeam } from "../../types/fantasyTeamAthlete";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { useAtomValue } from "jotai";
+import { fantasyLeagueAtom, fantasyTeamAthletesAtom, fantasyTeamAtom } from "./my_team.atoms";
 
 interface TeamHeaderProps {
-  team: IFantasyClubTeam;
-  athletesCount: number;
-  totalPoints: number;
-  leagueInfo: IFantasyLeague | null;
-  fetchingLeague: boolean;
-  rank?: number;
+
 }
 
 export const TeamHeader: React.FC<TeamHeaderProps> = ({
-  team,
-  athletesCount,
-  totalPoints,
-  leagueInfo,
-  fetchingLeague,
-  rank,
+
 }) => {
+
   const navigate = useNavigate();
+  const team = useAtomValue(fantasyTeamAtom);
+  const athletes = useAtomValue(fantasyTeamAthletesAtom);
+  const league = useAtomValue(fantasyLeagueAtom);
+
+  if (!team) return;
+
+  const { rank, round_score } = team;
 
   const handleBack = () => {
     navigate(-1);
   };
 
-  console.log("Team on edit screen ", team);
+  const navigateToLeaguePage = () => {
+    if (league) {
+      navigate(`/league/${league.official_league_id}`, {
+        state: { league: league },
+      });
+    }
+  }
 
   return (
     <>
@@ -58,7 +54,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
       <div className="bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 rounded-xl p-4 mb-6 shadow-md">
         {/* Team Name */}
         <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">
-          {team.name}
+          {team?.name}
         </h1>
 
         {/* First Row: Rank Badge */}
@@ -83,7 +79,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
                 )}
               </span>
               <span className="font-medium text-sm text-gray-800">
-                Rank #{team.rank ?? " –"}
+                Rank #{rank ?? "-"}
               </span>
             </div>
           </div>
@@ -92,7 +88,7 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
             <div className="flex items-center gap-1.5 bg-gradient-to-r from-white to-gray-200 via-gray-50 px-3 py-1.5 rounded-full shadow-sm">
               <Zap size={18} className="text-orange-500 shrink-0" />
               <span className="font-medium text-sm text-gray-800">
-                {totalPoints ?  Math.floor(totalPoints) : "-"} pts
+                {round_score ? Math.floor(round_score) : "-"} pts
               </span>
             </div>
           </div>
@@ -100,41 +96,26 @@ export const TeamHeader: React.FC<TeamHeaderProps> = ({
           {/* Player Count */}
           <div className="flex items-center gap-1.5 text-sm text-white">
             <Users size={16} className="text-white shrink-0" />
-            <span className="whitespace-nowrap">{athletesCount} Players</span>
+            <span className="whitespace-nowrap">{athletes.length} Players</span>
           </div>
 
           {/* League Info */}
-          {leagueInfo && (
+          {league && (
+
             <div className="flex items-center gap-1.5 text-sm text-white">
               <Award size={16} className="text-white shrink-0" />
               <button
-                onClick={() => {
-                  if (leagueInfo) {
-                    navigate(`/league/${leagueInfo.official_league_id}`, {
-                      state: { league: leagueInfo },
-                    });
-                  }
-                }}
+                onClick={navigateToLeaguePage}
                 className="whitespace-nowrap text-white hover:underline font-medium flex group"
               >
-                <span>{leagueInfo.title || "League"}</span>
+                <span>{league.title || "League"}</span>
                 <ChevronRight
                   size={20}
                   className="group-hover:translate-x-0.5 transition-transform ml-1"
                 />
               </button>
             </div>
-          )}
 
-          {/* Loading League */}
-          {fetchingLeague && !leagueInfo && (
-            <div className="flex items-center gap-1.5 text-sm text-white">
-              <Loader
-                size={16}
-                className="animate-spin text-blue-500 shrink-0"
-              />
-              <span className="whitespace-nowrap">Loading league...</span>
-            </div>
           )}
         </div>
       </div>

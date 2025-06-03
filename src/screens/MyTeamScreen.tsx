@@ -10,22 +10,20 @@ import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { RankedFantasyTeam } from "../types/league";
 import AthletesAvailabilityWarning from "../components/team/AthletesAvailabilityWarning";
 import { MyTeamScreenTabType, MyTeamScreenTabView } from "../components/my-team/MyTeamScreenTabView";
-import { ScopeProvider } from "jotai-scope";
-import { fantasyTeamValueAtom } from "../components/my-team/my_team.atoms";
 import { ErrorState } from "../components/ui/ErrorState";
+import { useAtomValue } from "jotai";
+import { fantasyTeamAtom } from "../components/my-team/my_team.atoms";
 
 export function MyTeamScreen() {
 
-    const { teamId } = useParams<{ teamId: string }>();
-    if (!teamId) return <ErrorState error="Error Fetching Team" message="We could not find this team" />
+  const { teamId } = useParams<{ teamId: string }>();
+  if (!teamId) return <ErrorState error="Error Fetching Team" message="We could not find this team" />
 
   return (
 
-    <ScopeProvider atoms={[fantasyTeamValueAtom]} >
-      <TeamDataProvider teamId={teamId}>
-        <MyTeamScreenContent />
-      </TeamDataProvider>
-    </ScopeProvider>
+    <TeamDataProvider teamId={teamId}>
+      <MyTeamScreenContent />
+    </TeamDataProvider>
   );
 }
 
@@ -33,93 +31,51 @@ export function MyTeamScreen() {
 /** Actual consumer content on my screen that consumes data from team data provider */
 function MyTeamScreenContent() {
 
+  const team = useAtomValue(fantasyTeamAtom);
   const { teamId } = useParams<{ teamId: string }>();
   const [activeTab, setActiveTab] = useState<MyTeamScreenTabType>("view-pitch");
-  const [initialized, setInitialized] = useState(false);
-  const { state } = useLocation();
-
-  
-  const teamWithRank = state?.teamWithRank
-  ? (state?.teamWithRank as RankedFantasyTeam)
-  : undefined;
-  
-  const {
-    team,
-    athletes,
-    isLoading,
-    error,
-    leagueInfo,
-    fetchingLeague,
-    totalPoints,
-    matchesPlayed,
-    players,
-    formation,
-  } = useTeamData();
-
-  // Set initialized to true after first render when we know loading state
-  React.useEffect(() => {
-    setInitialized(true);
-  }, []);
-
-  // Don't render anything on initial load to prevent flicker
-  if (!initialized || isLoading) {
-    return <TeamLoading isFullScreen={false} />;
-  }
-
-  if (error || !team) {
-    return <TeamError error={error || "Team not found"} />;
-  }
 
   return (
-    <FantasyLeagueProvider league={leagueInfo ?? undefined}>
-      <main className="container mx-auto px-4 py-6">
+    <main className="container mx-auto px-4 py-6">
 
-        <div className="max-w-4xl mx-auto flex flex-col gap-4">
-          {/* Team Header */}
-          <TeamHeader
-            team={team}
-            athletesCount={athletes.length}
-            totalPoints={totalPoints}
-            leagueInfo={leagueInfo}
-            fetchingLeague={fetchingLeague}
-            rank={teamWithRank?.rank}
-          />
-          {/* Team Stats */}
-          <TeamStats
-            team={
-              {
-                ...team,
-                totalPoints,
-                players,
-                formation,
-                matchesPlayed,
-                ...(teamWithRank ? { rank: teamWithRank?.rank } : {}),
-              } as Team
-            }
-          />
-
-          {leagueInfo &&
-            <AthletesAvailabilityWarning
-              team={team}
-              league={leagueInfo}
-              athletes={athletes}
-            />
+      <div className="max-w-4xl mx-auto flex flex-col gap-4">
+        {/* Team Header */}
+        <TeamHeader/>
+        {/* Team Stats */}
+        <TeamStats
+          team={
+            {
+              ...team,
+              totalPoints,
+              players,
+              formation,
+              matchesPlayed,
+              ...(teamWithRank ? { rank: teamWithRank?.rank } : {}),
+            } as Team
           }
+        />
 
-          {/* Team Actions with Tabs Content as children */}
-          {teamId && (
-            <TeamActions league={leagueInfo ?? undefined} teamId={teamId}>
+        {leagueInfo &&
+          <AthletesAvailabilityWarning
+            team={team}
+            league={leagueInfo}
+            athletes={athletes}
+          />
+        }
 
-              <MyTeamScreenTabView
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                league={leagueInfo ?? undefined}
-              />
+        {/* Team Actions with Tabs Content as children */}
+        {teamId && (
+          <TeamActions league={leagueInfo ?? undefined} teamId={teamId}>
 
-            </TeamActions> 
-          )}
-        </div>
-      </main>
-    </FantasyLeagueProvider>
+            <MyTeamScreenTabView
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              league={leagueInfo ?? undefined}
+            />
+
+          </TeamActions>
+        )}
+      </div>
+    </main>
   );
 };
