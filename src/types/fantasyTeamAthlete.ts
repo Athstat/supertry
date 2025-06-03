@@ -74,3 +74,7 @@ export type IUpdateFantasyTeamItem = {
   slot: number;
   score: number;
 }
+
+export type AthleteWithTrackingId = {
+  tracking_id?: string
+}

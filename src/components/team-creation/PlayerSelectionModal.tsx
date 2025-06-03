@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Position } from "../../types/position";
-import { Player } from "../../types/player";
 
 // Import components
 import ModalHeader from "./player-selection-components/ModalHeader";
@@ -17,7 +16,7 @@ import usePlayersFilter from "./player-selection-components/usePlayersFilter";
 import useAvailableTeams from "./player-selection-components/useAvailableTeams";
 import useModalEffects from "./player-selection-components/useModalEffects";
 import AvailableFilter from "./AvailableFilter";
-import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { AthleteWithTrackingId } from "../../types/fantasyTeamAthlete";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 
 interface PlayerSelectionModalProps {
@@ -25,7 +24,7 @@ interface PlayerSelectionModalProps {
   selectedPosition: Position;
   players: any[];
   remainingBudget: number;
-  selectedPlayers: IFantasyTeamAthlete[];
+  selectedPlayers: AthleteWithTrackingId[];
   handlePlayerSelect: (player: RugbyPlayer) => void;
   onClose: () => void;
   roundId: number;

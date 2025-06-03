@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Position } from "../../../types/position";
 import { athleteSearchPredicate } from "../../../utils/athleteUtils";
-import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
+import { AthleteWithTrackingId } from "../../../types/fantasyTeamAthlete";
 
 interface UsePlayersFilterProps {
   players: any[];
@@ -9,7 +9,7 @@ interface UsePlayersFilterProps {
   searchQuery: string;
   teamFilter: string[];
   remainingBudget: number;
-  selectedPlayers: IFantasyTeamAthlete[];
+  selectedPlayers: AthleteWithTrackingId[];
   sortBy: "price" | "rating" | "attack" | "defense" | "kicking";
   sortOrder: "asc" | "desc";
   filterAvailable: boolean;
