@@ -4,10 +4,11 @@ import { fantasyTeamAthletesAtom, fantasyTeamValueAtom, remainingTeamBudgetAtom 
 import { useMemo } from "react";
 import { calculateAveragePr } from "../../utils/athleteUtils";
 
-interface TeamStatsProps {
+type Props = {
+
 }
 
-export function TeamStats({ }: TeamStatsProps) {
+export function FantasyTeamStats({ }: Props) {
 
   // const team = useAtomValue(fantasyTeamAtom);
   // const athletes = useAtomValue(fantasyTeamAthletesAtom);
@@ -45,7 +46,6 @@ export function TeamStats({ }: TeamStatsProps) {
     }
 
   ];
-
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">

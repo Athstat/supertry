@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { TeamStats } from "../components/team/TeamStats";
+import { FantasyTeamStats } from "../components/team/FantasyTeamStats";
 import { TeamHeader } from "../components/my-team/TeamHeader";
 import { TeamDataProvider } from "../components/my-team/TeamDataProvider";
 import AthletesAvailabilityWarning from "../components/team/AthletesAvailabilityWarning";
@@ -39,7 +39,7 @@ function MyTeamScreenContent() {
 
       <div className="max-w-4xl mx-auto flex flex-col gap-4">
         <TeamHeader />
-        <TeamStats />
+        <FantasyTeamStats />
         <AthletesAvailabilityWarning />
 
         <MyTeamScreenTabView
