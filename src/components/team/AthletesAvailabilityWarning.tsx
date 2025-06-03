@@ -2,27 +2,26 @@ import { athleteService } from "../../services/athleteService";
 import { RugbyPlayer } from "../../types/rugbyPlayer"
 import WarningCard from "../shared/WarningCard"
 import { useFetch } from "../../hooks/useFetch";
-import { IFantasyLeague } from "../../types/fantasyLeague";
 import { Info } from "lucide-react";
+import { useAtomValue } from "jotai";
+import { fantasyLeagueAtom, fantasyTeamAthletesAtom } from "../my-team/my_team.atoms";
 
 type Props = {
-    athletes: any[],
-    team: any,
-    league: IFantasyLeague
+
 }
 
-export default function AthletesAvailabilityWarning({ league, athletes }: Props) {
+export default function AthletesAvailabilityWarning({}: Props) {
+    
+    const league = useAtomValue(fantasyLeagueAtom);
+    const athletes = useAtomValue(fantasyTeamAthletesAtom);
     const athleteIds = athletes.map((a) => a.athlete_id);
 
-    const {data, isLoading} = useFetch(
-        "team-athletes-refetch",
-        athleteIds,
-        fetcher
-    );
+    const leagueEnded = league?.has_ended;
+
+    const {data, isLoading} = useFetch("team-athletes-refetch", athleteIds, fetcher);
 
     if (isLoading) return;
-
-    if (league.has_ended) return;
+    if (leagueEnded) return;
 
     const teamAthletes = data ?? [];
     const unAvailableAthletes = teamAthletes.filter(a => {
@@ -31,7 +30,7 @@ export default function AthletesAvailabilityWarning({ league, athletes }: Props)
 
     if (unAvailableAthletes.length === 0) return;
 
-    let messageStr = league.has_ended ? "The following players were not confirmed to have been available: " : "The following players have not yet been confirmed to be available: "  ;
+    let messageStr = leagueEnded ? "The following players were not confirmed to have been available: " : "The following players have not yet been confirmed to be available: "  ;
     let secondPart = "";
 
     for (let x = 0; x < unAvailableAthletes.length; x++) {

@@ -1,33 +1,26 @@
 import { Coins } from "lucide-react";
-import { Team } from "../../types/team";
-import { Trophy } from "lucide-react";
+import { useAtomValue } from "jotai";
+import { fantasyTeamValueAtom } from "../my-team/my_team.atoms";
 
 interface TeamStatsProps {
-  team: Team;
 }
 
-export function TeamStats({ team }: TeamStatsProps) {
+export function TeamStats({}: TeamStatsProps) {
+  
+  // const team = useAtomValue(fantasyTeamAtom);
+  // const athletes = useAtomValue(fantasyTeamAthletesAtom);
+  const teamValue = useAtomValue(fantasyTeamValueAtom);
+
   const stats = [
     {
-      label: "Average PR",
-      value:
-        team.players.reduce(
-          (acc, player) => acc + player.power_rank_rating,
-          0
-        ) / team.players.length,
-      icon: Trophy,
-      format: (value: number) => value.toFixed(1),
-      color: "text-primary-700 dark:text-primary-500",
-    },
-
-    {
       label: "Team Value",
-      value: team.players.reduce((prev, player) => prev + player.price, 0),
+      value: teamValue,
       icon: Coins,
       format: (value: number) => value.toFixed(0),
       color: "text-primary-700 dark:text-primary-500",
     },
   ];
+  
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">

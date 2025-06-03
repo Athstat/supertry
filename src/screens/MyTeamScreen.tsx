@@ -39,29 +39,13 @@ function MyTeamScreenContent() {
     <main className="container mx-auto px-4 py-6">
 
       <div className="max-w-4xl mx-auto flex flex-col gap-4">
-        {/* Team Header */}
-        <TeamHeader/>
-        {/* Team Stats */}
-        <TeamStats
-          team={
-            {
-              ...team,
-              totalPoints,
-              players,
-              formation,
-              matchesPlayed,
-              ...(teamWithRank ? { rank: teamWithRank?.rank } : {}),
-            } as Team
-          }
+        <TeamHeader />
+        <TeamStats />
+        <AthletesAvailabilityWarning
+          team={team}
+          league={leagueInfo}
+          athletes={athletes}
         />
-
-        {leagueInfo &&
-          <AthletesAvailabilityWarning
-            team={team}
-            league={leagueInfo}
-            athletes={athletes}
-          />
-        }
 
         {/* Team Actions with Tabs Content as children */}
         {teamId && (
