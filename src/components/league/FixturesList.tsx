@@ -9,7 +9,7 @@ import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { RankedFantasyTeam } from "../../types/league";
 import { useFetch } from "../../hooks/useFetch";
-import { fantasyTeamService } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/fantasyTeamService";
 
 interface FixturesListProps {
   league: IFantasyLeague;

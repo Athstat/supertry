@@ -8,7 +8,7 @@ import { LoadingState } from "../components/team-creation/LoadingState";
 import { ErrorState } from "../components/team-creation/ErrorState";
 import PlayerSelectionModal from "../components/team-creation/PlayerSelectionModal";
 import TeamActions from "../components/team-creation/TeamActions";
-import { fantasyTeamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/fantasyTeamService";
 import { ArrowRight, Check, Trophy, Users } from "lucide-react";
 
 // Refactored team creation components
