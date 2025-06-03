@@ -1,5 +1,6 @@
 import { PointsBreakdownItem } from "../services/athleteService";
-import { IFantasyAthlete } from "../types/rugbyPlayer";
+import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
+import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -78,8 +79,8 @@ export function nameSearchPredicate(fullName: string, query: string) {
 
 export function formatAction(actionName: string) {
     const displayName = actionName
-    .replace(/([A-Z])/g, " $1")
-    .trim();
+        .replace(/([A-Z])/g, " $1")
+        .trim();
 
     const res = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
@@ -90,23 +91,46 @@ export const getGroupedActions = (breakdown: PointsBreakdownItem[]) => {
     if (!breakdown || !breakdown.length) return [];
 
     const groupedActions = breakdown.reduce((result: any, item) => {
-      const action = item.action || "";
+        const action = item.action || "";
 
-      if (!result[action]) {
-        result[action] = {
-          action: action,
-          action_count: 0,
-          score: 0,
-          instances: [],
-        };
-      }
+        if (!result[action]) {
+            result[action] = {
+                action: action,
+                action_count: 0,
+                score: 0,
+                instances: [],
+            };
+        }
 
-      result[action].action_count += item.action_count || 1;
-      result[action].score += item.score || 0;
-      result[action].instances.push(item);
+        result[action].action_count += item.action_count || 1;
+        result[action].score += item.score || 0;
+        result[action].instances.push(item);
 
-      return result;
+        return result;
     }, {});
 
     return Object.values(groupedActions);
-  };
+};
+
+
+export function calculateAveragePr(players: RugbyPlayer[]): number {
+    if (!players.length) return 0;
+
+    const totalPR = players.reduce(
+        (sum, player) => sum + (player.power_rank_rating || 0),
+        0
+    );
+
+    return totalPR / players.length;
+};
+
+/** Calucates and returns the total value of a fantasy team by purchase price */
+export function calculateFantasyTeamValue(athletes?: IFantasyTeamAthlete[]) {
+    if (athletes) {
+        return athletes.reduce((sum, a) => {
+            return sum + (a.purchase_price || 0);
+        }, 0);
+    }
+
+    return 0;
+}

@@ -3,7 +3,7 @@ import { LeagueHeader } from "../components/league/LeagueHeader";
 import { LeagueStandings } from "../components/league/LeagueStandings";
 import { LeagueSettings } from "../components/league/LeagueSettings";
 import { RankedFantasyTeam } from "../types/league";
-import { fantasyTeamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/fantasyTeamService";
 import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
 import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
 import { FantasyLeagueFixturesList } from "../components/league/FixturesList";

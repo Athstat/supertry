@@ -10,12 +10,22 @@ import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
 import { RankedFantasyTeam } from "../types/league";
 import AthletesAvailabilityWarning from "../components/team/AthletesAvailabilityWarning";
 import { MyTeamScreenTabType, MyTeamScreenTabView } from "../components/my-team/MyTeamScreenTabView";
+import { ScopeProvider } from "jotai-scope";
+import { fantasyTeamValueAtom } from "../components/my-team/my_team.atoms";
+import { ErrorState } from "../components/ui/ErrorState";
 
 export function MyTeamScreen() {
+
+    const { teamId } = useParams<{ teamId: string }>();
+    if (!teamId) return <ErrorState error="Error Fetching Team" message="We could not find this team" />
+
   return (
-    <TeamDataProvider>
-      <MyTeamScreenContent />
-    </TeamDataProvider>
+
+    <ScopeProvider atoms={[fantasyTeamValueAtom]} >
+      <TeamDataProvider teamId={teamId}>
+        <MyTeamScreenContent />
+      </TeamDataProvider>
+    </ScopeProvider>
   );
 }
 
@@ -28,10 +38,11 @@ function MyTeamScreenContent() {
   const [initialized, setInitialized] = useState(false);
   const { state } = useLocation();
 
+  
   const teamWithRank = state?.teamWithRank
-    ? (state?.teamWithRank as RankedFantasyTeam)
-    : undefined;
-
+  ? (state?.teamWithRank as RankedFantasyTeam)
+  : undefined;
+  
   const {
     team,
     athletes,
@@ -105,7 +116,7 @@ function MyTeamScreenContent() {
                 league={leagueInfo ?? undefined}
               />
 
-            </TeamActions>
+            </TeamActions> 
           )}
         </div>
       </main>

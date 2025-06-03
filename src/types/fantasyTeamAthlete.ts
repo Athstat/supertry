@@ -23,7 +23,7 @@ export interface IFantasyClubTeam {
   id: string;
   name: string;
   club_id: string;
-  league_id: string;
+  league_id: number;
   official_league_id?: string; // Add the official_league_id field that exists on the team object
   created_at: Date;
   updated_at: Date;

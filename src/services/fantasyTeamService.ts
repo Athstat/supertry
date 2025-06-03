@@ -2,7 +2,8 @@ import {
   IFantasyTeamAthlete,
   IFantasyClubTeam,
 } from "../types/fantasyTeamAthlete";
-import { getUri } from "../utils/backendUtils";
+import { getAuthHeader, getUri } from "../utils/backendUtils";
+import { authService } from "./authService";
 
 export const fantasyTeamService = {
   /**
@@ -108,50 +109,21 @@ export const fantasyTeamService = {
   /**
    * Fetch all teams for the current user
    */
-  fetchUserTeams: async (): Promise<IFantasyClubTeam[]> => {
+  fetchUserTeams: async (id?: string): Promise<IFantasyClubTeam[]> => {
     try {
-      // Get user ID from token
-      const token = localStorage.getItem("access_token");
 
-      if (!token) {
-        throw new Error(
-          "Authentication token is missing. Please log in again."
-        );
-      }
-
-      // Extract user ID from token
-      let userId = "default-user-id";
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        userId = payload.sub || userId;
-      } catch (error) {
-        console.error("Error extracting user ID from token:", error);
-        throw new Error(
-          "Could not determine user identity. Please log in again."
-        );
-      }
-
-      console.log("userId", userId);
-
-      // Construct the URL based on whether leagueId is provided
+      let userId = id || authService.getUserInfo()?.id || "default-user-id";
       const url = getUri(`/api/v1/fantasy-teams/fantasy-teams-all/${userId}`);
 
-      // Make API request to get user's teams
       const response = await fetch(url, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeader()
       });
 
-      if (!response.ok) {
-        console.error("Failed to fetch user teams:", await response.text());
-        return [];
-      }
-
       return await response.json();
+
     } catch (error) {
+
       console.error("Error fetching user teams:", error);
       return [];
     }
@@ -268,4 +240,19 @@ export const fantasyTeamService = {
       return [];
     }
   },
+
+  /** Gets a users team by its id and user id */
+  getUserTeamById: async (teamId: string, userId?: string) => {
+    try {
+
+      const userTeams = await fantasyTeamService.fetchUserTeams(userId);
+      let currentTeam = userTeams.find((t) => t.id == teamId);
+
+      return currentTeam;
+
+    } catch (error) {
+      console.log("Error fetching user team");
+      return undefined;
+    }
+  }
 };

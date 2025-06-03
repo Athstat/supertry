@@ -8,7 +8,7 @@ import { SwapConfirmationModal } from "../team/SwapConfirmationModal";
 import PlayerSelectionModal from "../team-creation/PlayerSelectionModal";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
 import { useTeamData } from "./TeamDataProvider";
-import { fantasyTeamService } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { athleteService } from "../../services/athleteService";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import { RugbyPlayerShort } from "../../types/rugbyPlayer";

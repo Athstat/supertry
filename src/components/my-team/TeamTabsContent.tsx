@@ -40,12 +40,11 @@ export const TeamTabsContent: React.FC<TeamTabsContentProps> = ({
   handleSwapPlayer,
   league,
 }) => {
+  
   const isLocked = isLeagueLocked(league?.join_deadline);
   const { team } = useTeamData();
 
   const leagueConfig = useLeagueConfig(league);
-
-  console.log("League config ", leagueConfig);
 
   return (
     <>
