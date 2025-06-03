@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
-import { fantasyTeamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/fantasyTeamService";
 import { IFantasyLeague } from "../types/fantasyLeague";
 
 import { leaguesOnClockFilter } from "../utils/leaguesUtils";

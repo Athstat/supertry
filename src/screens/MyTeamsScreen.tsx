@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PlusCircle, Users, Loader, Trophy } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { fantasyTeamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/fantasyTeamService";
 import {
   IFantasyClubTeam,
   IFantasyTeamAthlete,

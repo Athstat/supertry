@@ -1,20 +1,28 @@
-import { Coins } from "lucide-react";
-import { Team } from "../../types/team";
-import { Trophy } from "lucide-react";
+import { Coins, Trophy } from "lucide-react";
+import { useAtomValue } from "jotai";
+import { useMemo } from "react";
+import { calculateAveragePr } from "../../utils/athleteUtils";
+import { fantasyTeamValueAtom, remainingTeamBudgetAtom, fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
 
-interface TeamStatsProps {
-  team: Team;
+type Props = {
+
 }
 
-export function TeamStats({ team }: TeamStatsProps) {
+export function FantasyTeamStats({ }: Props) {
+
+
+  const teamValue = useAtomValue(fantasyTeamValueAtom);
+  const remainingBudget = useAtomValue(remainingTeamBudgetAtom);
+  const athletes = useAtomValue(fantasyTeamAthletesAtom);
+
+  const avaragePr = useMemo(() => {
+    return calculateAveragePr(athletes);
+  }, [athletes]);
+
   const stats = [
     {
-      label: "Average PR",
-      value:
-        team.players.reduce(
-          (acc, player) => acc + player.power_rank_rating,
-          0
-        ) / team.players.length,
+      label: "Avarage PR",
+      value: avaragePr,
       icon: Trophy,
       format: (value: number) => value.toFixed(1),
       color: "text-primary-700 dark:text-primary-500",
@@ -22,11 +30,20 @@ export function TeamStats({ team }: TeamStatsProps) {
 
     {
       label: "Team Value",
-      value: team.players.reduce((prev, player) => prev + player.price, 0),
+      value: teamValue,
       icon: Coins,
       format: (value: number) => value.toFixed(0),
       color: "text-primary-700 dark:text-primary-500",
     },
+
+    {
+      label: "Remaining Budget",
+      value: remainingBudget,
+      icon: Coins,
+      format: (value: number) => value.toFixed(0),
+      color: "text-primary-700 dark:text-primary-500",
+    }
+
   ];
 
   return (
