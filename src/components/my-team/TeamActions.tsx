@@ -293,13 +293,9 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
           handlePlayerSelect={handlePlayerListModalSelect}
           competitionId={league?.official_league_id ?? team?.official_league_id}
           onClose={() => setIsSwapping(false)}
-          // For MyTeamScreen, we don't need to pass competition-specific props
-          // Just pass a static roundId (value doesn't matter for MyTeamScreen since we're not using fixtures)
           roundId={league?.start_round ?? 1}
           roundStart={league?.start_round ?? undefined}
           roundEnd={league?.end_round ?? undefined}
-        // We don't pass roundStart, roundEnd, or competitionId intentionally
-        // This signals to PlayerSelectionModal that we're in MyTeamScreen context
         />
       )}
 
