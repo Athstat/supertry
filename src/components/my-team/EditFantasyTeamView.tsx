@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 import PlayerMugshotPlayerHolder from "../player/PlayerMugshotPlayerHolder";
 import { formatPosition } from "../../utils/athleteUtils";
+import { useMyTeamScreenActions } from "./TeamActions";
 
 type Props = {
 }
@@ -18,6 +19,7 @@ export function EditFantasyTeamView({ }: Props) {
   const remainingBudget = useAtomValue(remainingTeamBudgetAtom);
   const athletes = useAtomValue(fantasyTeamAthletesAtom);
 
+  const { handleViewStats, handleSwapPlayer } = useMyTeamScreenActions();
 
   const positionList = useMemo(() => {
     if (!athletes?.length) return [];
@@ -27,25 +29,41 @@ export function EditFantasyTeamView({ }: Props) {
     // Add regular position players (non-super sub)
 
     athletes
-      .forEach((athlete, index) => {
+      .forEach((athlete) => {
 
-        if (index === 1) {
-          console.log("This is an athlete object ", athlete);
+        if (athlete.is_starting) {
+          positions.push({
+            id: athlete.athlete_id || "",
+            name: athlete.position_class || "Unknown Position",
+            shortName: (athlete.position_class || "")
+              .substring(0, 2)
+              .toUpperCase(),
+            x: "0",
+            y: "0",
+            player: athlete,
+          });
         }
+      });
 
-        positions.push({
-          id: athlete.athlete_id || "",
-          name: athlete.position_class || "Unknown Position",
-          shortName: (athlete.position_class || "")
-            .substring(0, 2)
-            .toUpperCase(),
-          x: "0",
-          y: "0",
-          player: athlete,
-        });
+    // Add Substitute at the back
+    athletes
+      .forEach((athlete) => {
+        if (!athlete.is_starting) {
+          positions.push({
+            id: athlete.athlete_id || "",
+            name: athlete.position_class || "Unknown Position",
+            shortName: (athlete.position_class || "")
+              .substring(0, 2)
+              .toUpperCase(),
+            x: "0",
+            y: "0",
+            player: athlete,
+          });
+        };
       });
 
     return positions;
+
   }, [athletes]);
 
   return (
@@ -64,10 +82,10 @@ export function EditFantasyTeamView({ }: Props) {
 
       {/* Position Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4">
-        
+
         {positionList.map((position, index) => {
           const { player } = position;
-          const isSub = !player?.is_starting || index === positionList.length - 1;
+          const isSub = !player?.is_starting;
 
           return (
 
@@ -85,6 +103,8 @@ export function EditFantasyTeamView({ }: Props) {
                   player={position.player}
                   position={position}
                   index={index}
+                  onSwapOutPlayer={handleSwapPlayer}
+                  onViewStats={handleViewStats}
                 />
                 :
                 <AddPlayerCard position={position} />
@@ -99,8 +119,8 @@ export function EditFantasyTeamView({ }: Props) {
 };
 
 type PlayerCardProps = {
-  onSwapOutPlayer?: (player: IFantasyTeamAthlete) => {},
-  onViewStats?: (player: IFantasyTeamAthlete) => {},
+  onSwapOutPlayer?: (player: IFantasyTeamAthlete) => void,
+  onViewStats?: (player: IFantasyTeamAthlete) => void,
   player: IFantasyTeamAthlete,
   position: FantasyTeamPosition
   index: number

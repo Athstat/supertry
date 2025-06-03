@@ -84,7 +84,8 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
     showPlayerProfile(player);
   };
 
-  const handleSwapPlayer = async (playerToBeReplaced: IFantasyTeamAthlete) => {
+  /** Starts player swap flow */
+  const handleStartPlayerSwap = async (playerToBeReplaced: IFantasyTeamAthlete) => {
 
     setPlayerToSwapOut(playerToBeReplaced);
     const isSub = !playerToBeReplaced.is_starting;
@@ -134,6 +135,8 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
 
   };
 
+  console.log(athletes);
+
   const handleConfirmSwap = async () => {
     const teamId = team?.id;
     const cannotSwap = !playerToSwapIn || !playerToSwapIn.price || !teamId
@@ -160,7 +163,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
       /** Index to place swap player */
       const swapIndex = athletes.findIndex(
         (a) =>
-          a.tracking_id === playerToSwapOut.tracking_id || a.id === playerToSwapOut.id
+          a.id === playerToSwapOut.id
       );
 
       if (swapIndex === -1) {
@@ -246,7 +249,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
     handlePlayerClick,
     handlePositionSelect,
     handleViewStats: handleTeamAthleteViewStats,
-    handleSwapPlayer,
+    handleSwapPlayer: handleStartPlayerSwap,
     fetchingMarketPlayers: loadingMarketPlayers,
   };
 
@@ -263,7 +266,7 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
             player={selectedPlayer}
             onClose={() => setShowActionModal(false)}
             onViewStats={handleTeamAthleteViewStats}
-            onSwapPlayer={handleSwapPlayer}
+            onSwapPlayer={handleStartPlayerSwap}
             league={league}
           />
         )}
