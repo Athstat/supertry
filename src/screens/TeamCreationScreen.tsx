@@ -239,11 +239,11 @@ export function TeamCreationScreen() {
       console.log("Result from join res ", joinLeagueRes);
 
       // update users username on db
-      if (isGuest) {
-        await authService.updateUserInfo(userInfo.id, {
-          username: teamName
-        });
-      }
+      // if (isGuest) {
+      //   await authService.updateUserInfo(userInfo.id, {
+      //     username: teamName
+      //   });
+      // }
 
       // Step 3: Request push notification permissions after successful team creation
       // requestPushPermissions(); Used to be here
