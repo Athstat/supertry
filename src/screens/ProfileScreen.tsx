@@ -43,7 +43,7 @@ export function ProfileScreen() {
       if (isGuestAccount) {
         navigate("/auth-choice");
       } else {
-        navigate("/signin");
+        navigate("/auth-choice");
       }
     } catch (error) {
       console.error("Error logging out:", error);

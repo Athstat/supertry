@@ -47,7 +47,7 @@ export function AuthChoiceScreen() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md flex flex-col items-center"
       >
-        <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40 mb-8" />
+        <ScrummyLogo className="w-60 h-60 md:w-60 md:h-60 -mb-5" />
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -58,8 +58,9 @@ export function AuthChoiceScreen() {
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Welcome to Scrummy
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Your teams, your scores
+          <p className="mt-3 lg:text-xl text-gray-600 dark:text-gray-300 text-center">
+            You've officially joined the scrum! Don't worry, it's less bruises
+            and more bragging rights from here.
           </p>
         </motion.div>
 
@@ -67,11 +68,11 @@ export function AuthChoiceScreen() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="w-full space-y-3"
+          className="w-full space-y-3 flex flex-col items-center"
         >
           <button
             onClick={() => navigate("/signup")}
-            className="w-full bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-primary-700 transition-colors"
+            className="w-[90%] bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-primary-700 transition-colors"
             disabled={isLoading}
           >
             Create Account
@@ -79,7 +80,7 @@ export function AuthChoiceScreen() {
 
           <button
             onClick={() => navigate("/signin")}
-            className="w-full bg-green-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-green-700 transition-colors"
+            className="w-[90%] bg-green-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-green-700 transition-colors"
             disabled={isLoading}
           >
             Login
