@@ -5,6 +5,7 @@ import { ChevronRight, Loader } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { authService } from "../../services/authService";
 import ScrummyLogo from "../../components/branding/scrummy_logo";
+import { markFirstVisitCompleted } from "../../utils/firstVisitUtils";
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -47,9 +48,10 @@ export function WelcomeScreen() {
       
       console.log("Auth check result:", authUpdated);
       
-      // At this point, the user should be authenticated
-      // Navigate directly since the useEffect will handle the navigation
-      // but we'll do it explicitly here to avoid any race conditions
+      // Store that this was the first visit completed
+      markFirstVisitCompleted();
+      
+      // Navigate to post-signup-welcome
       if (authUpdated || localStorage.getItem("access_token")) {
         console.log("Navigating to post-signup welcome...");
         navigate("/post-signup-welcome");

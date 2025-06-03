@@ -170,8 +170,8 @@ export function TeamCreationScreen() {
   const handleSaveTeam = async () => {
     setIsSaving(true);
     // Validate team
-    if (teamName.trim() === "") {
-      showToast("Please enter a team name", "error");
+    if (isGuest && teamName.trim() === "") {
+      showToast("Please enter a club name", "error");
       return;
     }
     if (selectedPlayersCount !== requiredPlayersCount) {
@@ -237,6 +237,13 @@ export function TeamCreationScreen() {
       // Step 2: Join the league using the recently submitted team
       const joinLeagueRes = await leagueService.joinLeague(league);
       console.log("Result from join res ", joinLeagueRes);
+
+      // update users username on db
+      if (isGuest) {
+        await authService.updateUserInfo(userInfo.id, {
+          username: teamName
+        });
+      }
 
       // Step 3: Request push notification permissions after successful team creation
       // requestPushPermissions(); Used to be here

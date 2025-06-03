@@ -3,19 +3,37 @@ import { motion } from "framer-motion";
 import ScrummyLogo from "../../components/branding/scrummy_logo";
 import { useState } from "react";
 import { authService } from "../../services/authService";
+import { useAuth } from "../../contexts/AuthContext";
+import { isFirstVisitCompleted, markFirstVisitCompleted } from "../../utils/firstVisitUtils";
 
 export function AuthChoiceScreen() {
   const navigate = useNavigate();
+  const { checkAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGuestLogin = async () => {
     try {
       setIsLoading(true);
       await authService.createGuestUser();
-      navigate("/dashboard");
+      
+      // Update auth context
+      await checkAuth();
+      
+      // Check if this is the first completed visit
+      const firstVisitCompleted = isFirstVisitCompleted();
+      
+      // Navigate to appropriate screen
+      if (firstVisitCompleted) {
+        navigate("/dashboard");
+      } else {
+        // Mark first visit as completed since we're creating a guest account
+        markFirstVisitCompleted();
+        navigate("/post-signup-welcome");
+      }
     } catch (error) {
       console.error("Guest login failed:", error);
-      // If guest login fails, still navigate to welcome as fallback
+      // If guest login fails, still navigate to dashboard as fallback
+      navigate("/dashboard");
     } finally {
       setIsLoading(false);
     }
