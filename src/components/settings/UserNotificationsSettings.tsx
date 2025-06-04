@@ -22,7 +22,7 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
 
     return (
         <div>
-            <button onClick={handleClick} className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-800 transition-colors">
+            <button onClick={handleClick} className="w-full bg-white dark:bg-dark-800 rounded-lg shadow-sm overflow-hidden px-6 py-4 flex items-center space-x-3 transition-colors disabled:opacity-50">
                 <div className="flex items-center gap-3">
                     <Bell size={20} className="text-gray-500" />
                     <span className="font-medium dark:text-gray-100">Notifications</span>

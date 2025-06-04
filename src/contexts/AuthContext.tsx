@@ -7,7 +7,7 @@ import {
   useCallback,
 } from "react";
 import { authService } from "../services/authService";
-import { requestPushPermissionsAfterLogin } from "../utils/bridgeUtils";
+import { requestPushPermissionsAfterLogin, logoutFromBridge } from "../utils/bridgeUtils";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -15,6 +15,7 @@ interface AuthContextType {
   logout: () => void;
   loading: boolean;
   refreshSession: () => Promise<boolean>;
+  checkAuth: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -97,13 +98,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     try {
+      // First, set authentication state to false to prevent components from accessing user data
+      setIsAuthenticated(false);
+      
+      // Clear OneSignal external ID in the mobile app (if running in WebView)
+      // This is non-blocking to prevent UI issues
+      logoutFromBridge().catch(error => {
+        console.error("Bridge logout error:", error);
+      });
+      
+      // Finally, clear auth data in the web app
       authService.logout();
     } catch (error) {
       console.error("Logout error:", error);
-    } finally {
-      setIsAuthenticated(false);
     }
   };
 
@@ -113,7 +122,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login, 
       logout, 
       loading,
-      refreshSession 
+      refreshSession,
+      checkAuth 
     }}>
       {children}
     </AuthContext.Provider>
