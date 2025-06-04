@@ -1,6 +1,6 @@
 import { isWithinInterval, startOfDay } from "date-fns";
 import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
-import { getNextDayOfWeek, getPreviousDayOfWeek } from "./dateUtils";
+import { getLastWednesdayIfNotWednesday, getNextDayOfWeek, getNextTuesdayIfNotTuesday, getPreviousDayOfWeek } from "./dateUtils";
 import { calculatePerc } from "./fixtureUtils";
 
 /** Returns true if all the fixtures passed to the funciton have
@@ -68,22 +68,6 @@ export function getSbrSeasons(fixtures: ISbrFixture[]) {
     });
 
     return seasons;
-}
-
-export function getNextTuesdayIfNotTuesday(pivot: Date) {
-    if (pivot.getDay() === 2) {
-        return pivot;
-    }
-    return getNextDayOfWeek(pivot, 'Tuesday');
-}
-
-export function getLastWednesdayIfNotWednesday(pivot: Date) {
-
-    if (pivot.getDay() === 3) {
-        return pivot;
-    }
-
-    return getPreviousDayOfWeek(pivot, 'Wednesday');
 }
 
 export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {

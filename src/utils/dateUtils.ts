@@ -193,3 +193,19 @@ export function safeTransformStringToDate(dateStr: string | undefined | null) {
 export function dateToStrWithoutTime(date: Date) {
     return format(date, 'yyy-MM-dd');
 }
+
+export function getNextTuesdayIfNotTuesday(pivot: Date) {
+    if (pivot.getDay() === 2) {
+        return pivot;
+    }
+    return getNextDayOfWeek(pivot, 'Tuesday');
+}
+
+export function getLastWednesdayIfNotWednesday(pivot: Date) {
+
+    if (pivot.getDay() === 3) {
+        return pivot;
+    }
+
+    return getPreviousDayOfWeek(pivot, 'Wednesday');
+}
