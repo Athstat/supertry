@@ -15,7 +15,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({ player, onClose }) => 
           alt={player.player_name}
           className="w-full h-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
       </div>
       
       {/* Close button */}
