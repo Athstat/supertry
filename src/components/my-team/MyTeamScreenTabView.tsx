@@ -5,7 +5,7 @@ import { TabButton } from "../shared/TabButton";
 import { EditFantasyTeamView } from "./EditFantasyTeamView";
 import { Lock } from "lucide-react";
 import { MyTeamPitchView } from "./MyTeamPitchView";
-import { MyTeamScreenActionsProvider } from "./TeamActions";
+import { MyTeamScreenActionsProvider } from "./MyTeamActions";
 export type MyTeamScreenTabType = "edit-team" | "view-pitch";
 
 type Props = {

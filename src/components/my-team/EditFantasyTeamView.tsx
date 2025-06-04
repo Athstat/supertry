@@ -9,7 +9,7 @@ import { useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 import PlayerMugshotPlayerHolder from "../player/PlayerMugshotPlayerHolder";
 import { formatPosition } from "../../utils/athleteUtils";
-import { useMyTeamScreenActions } from "./TeamActions";
+import { useMyTeamScreenActions } from "./MyTeamActions";
 
 type Props = {
 }

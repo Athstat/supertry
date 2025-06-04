@@ -1,7 +1,8 @@
 import React from "react";
+import { TeamCreationPositionSlot } from "../../types/position";
 
 interface PositionCardProps {
-  position: any;
+  position: TeamCreationPositionSlot;
   selected: boolean;
   onPress: () => void;
   onRemove?: (positionId: string) => void;
@@ -15,6 +16,7 @@ const PositionCard: React.FC<PositionCardProps> = ({
 }) => {
   const hasPlayer = position.player !== undefined;
   const isSuperSub = position.isSpecial;
+
 
   return (
     <div
@@ -34,12 +36,12 @@ const PositionCard: React.FC<PositionCardProps> = ({
                 {position.player.image_url ? (
                   <img
                     src={position.player.image_url}
-                    alt={position.player.name}
+                    alt={position.player.player_name}
                     className="w-14 h-14 rounded-full object-cover"
                   />
                 ) : (
                   <span className="text-white font-semibold text-lg">
-                    {position.player.name.charAt(0)}
+                    {position.player.player_name?.charAt(0) ?? ""}
                   </span>
                 )}
               </div>
@@ -52,11 +54,11 @@ const PositionCard: React.FC<PositionCardProps> = ({
               {position.name}
             </h3>
             <p className="text-xs text-center font-medium mb-1 dark:text-gray-300">
-              {position.player.name}
+              {position.player.player_name}
             </p>
             <div className="flex justify-between w-full text-xs mb-3">
               <span className="text-gray-500 dark:text-gray-400">
-                {position.player.team}
+                {position.player.team_name}
               </span>
               <span className="font-bold dark:text-gray-200 flex items-center">
                 <svg

@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai";
 import { TeamFormation } from "../team/TeamFormation";
 import TeamSubstituteCard from "./TeamSubstituteCard";
 import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
-import { useMyTeamScreenActions } from "./TeamActions";
+import { useMyTeamScreenActions } from "./MyTeamActions";
 
 interface ViewPitchContentProps {
 }

@@ -1,6 +1,7 @@
 import { IFantasyTeamAthlete } from "./fantasyTeamAthlete";
+import { RugbyPlayer } from "./rugbyPlayer";
 
-export interface Position {
+export type BasePositionType = {
   id: string;
   name: string;
   shortName: string;
@@ -8,7 +9,14 @@ export interface Position {
   y: string;
   positionClass?: string;
   isSpecial?: boolean;
+}
+
+export type Position = BasePositionType & {
   player?: IFantasyTeamAthlete;
+}
+
+export type TeamCreationPositionSlot = BasePositionType & {
+  player?: RugbyPlayer;
 }
 
 export interface FantasyTeamPosition {
