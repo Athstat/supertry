@@ -81,17 +81,17 @@ export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
       {
         label: "Power Ranking",
         data: data.map((item) => item.updated_power_ranking),
-        borderColor: "#10b981", // Green color
+        borderColor: "#3b82f6", // Blue color
         backgroundColor: (context: any) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-          gradient.addColorStop(0, "rgba(16, 185, 129, 0.3)");
-          gradient.addColorStop(1, "rgba(16, 185, 129, 0)");
+          gradient.addColorStop(0, "rgba(59, 130, 246, 0.3)");
+          gradient.addColorStop(1, "rgba(59, 130, 246, 0)");
           return gradient;
         },
         fill: true,
         tension: 0.4,
-        pointBackgroundColor: "#10b981",
+        pointBackgroundColor: "#3b82f6",
         pointBorderColor: isDarkMode ? "#18181b" : "#ffffff",
         pointBorderWidth: 2,
         pointRadius: 5,
@@ -139,7 +139,7 @@ export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
           : "rgba(255, 255, 255, 0.8)",
         titleColor: isDarkMode ? "#ffffff" : "#000000",
         bodyColor: isDarkMode ? "#e5e5e5" : "#333333",
-        borderColor: "#10b981",
+        borderColor: "#3b82f6",
         borderWidth: 1,
         padding: 12,
         cornerRadius: 6,

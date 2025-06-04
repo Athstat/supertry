@@ -129,7 +129,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
             >
                 {/* Home Team Voting Station */}
 
-               {!hasUserVoted && !hasKickedOff && <div className="flex flex-col w-full gap-2 items-center text-sm justify-center text-slate-700 dark:text-slate-400" >
+                {!hasUserVoted && !hasKickedOff && <div className="flex flex-col w-full gap-2 items-center text-sm justify-center text-slate-700 dark:text-slate-400" >
                     <p>Who you got winning?</p>
 
                     <button onClick={handleClickHomeVoteBar} className="border dark:border-slate-700 w-full px-2 rounded-xl bg-slate-200 py-2 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
@@ -142,9 +142,51 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
 
                 </div>}
 
+                {hasKickedOff && <div className="flex flex-col w-full gap-2 items-center text-sm justify-center text-slate-700 dark:text-slate-200" >
+                    <p>{hasScores ? 'Results' : 'Predictions'}</p>
+
+                    <button className={twMerge(
+                        "border dark:border-slate-700 w-full px-4 rounded-xl py-2 flex items-center justify-between",
+                        hasScores ? (
+                            homeTeamWon ? "bg-green-200 dark:bg-green-900/40 dark:border-green-900" : 
+                            awayTeamWon ? "bg-red-200 dark:bg-red-900/40 dark:border-red-900/60" : 
+                            "bg-slate-200 dark:bg-slate-800"
+                        ) : "bg-slate-200 dark:bg-slate-800"
+                    )} >
+                        <span className="flex-1 text-left">{home_team} Win - {homeVotes.length} Votes</span>
+                        <span className="flex items-center gap-1">
+                            {votedHomeTeam && <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
+                            {hasScores && homeTeamWon && '✓'}
+                        </span>
+                    </button>
+
+                    <button className={twMerge(
+                        "border dark:border-slate-700 w-full px-4 rounded-xl py-2 flex items-center justify-between",
+                        hasScores ? (
+                            awayTeamWon ? "bg-green-200 dark:bg-green-900/40 dark:border-green-900" : 
+                            homeTeamWon ? "bg-red-200 dark:bg-red-900/40 dark:border-red-900/60" : 
+                            "bg-slate-200 dark:bg-slate-800"
+                        ) : "bg-slate-200 dark:bg-slate-800"
+                    )} >
+                        <span className="flex-1 text-left">{away_team} Win - {awayVotes.length} Votes</span>
+                        <span className="flex items-center gap-1">
+                            {votedAwayTeam && <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
+                            {hasScores && awayTeamWon && '✓'}
+                        </span>
+                    </button>
+
+                    {hasScores && (
+                        <p className="text-xs mt-1">
+                            {homeTeamWon ? `${home_team} won ${home_score}-${away_score}` : 
+                             awayTeamWon ? `${away_team} won ${away_score}-${home_score}` : 
+                             `Match drawn ${home_score}-${away_score}`}
+                        </p>
+                    )}
+                </div>}
+
                 {/* Post Match Voting Results */}
 
-                {(hasUserVoted || hasKickedOff) && <Fragment>
+                {(hasUserVoted && !hasKickedOff) && <Fragment>
                     <VotingOptionBar
                         hasUserVoted={votedHomeTeam}
                         voteCount={homeVotes.length}

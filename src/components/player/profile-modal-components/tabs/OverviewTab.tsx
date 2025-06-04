@@ -12,7 +12,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
 
       <div className='rounded-xl bg-slate-50 dark:bg-slate-800/40 border dark:border-slate-700' >
         <div className='p-3 border-b dark:border-slate-700' >
-          <p className='text-lg font-medium' >About</p>
+          <p className='text-lg dark:text-white font-medium' >About</p>
         </div>
 
         <div className='p-3' >

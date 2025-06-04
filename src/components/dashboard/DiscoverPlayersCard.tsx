@@ -39,8 +39,8 @@ export default function DiscoverPlayersCard() {
                 <RoundedCard className="relative overflow-hidden cursor-pointer" >
 
                     <div className="absolute inset-0 bg-blue-500 hover:bg-blue-600 flex flex-row items-start justify-end" >
-                        {players.map((player) => {
-                            return <PlayerGameCard className="w-[150px] h-[100]" player={player} />
+                        {players.map((player, index) => {
+                            return <PlayerGameCard key={index} className="w-[150px] h-[100]" player={player} />
                         })}
                     </div>
 

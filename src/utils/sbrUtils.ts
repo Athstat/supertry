@@ -1,4 +1,4 @@
-import { isWithinInterval } from "date-fns";
+import { isWithinInterval, startOfDay } from "date-fns";
 import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
 import { getNextDayOfWeek, getPreviousDayOfWeek } from "./dateUtils";
 import { calculatePerc } from "./fixtureUtils";
@@ -90,7 +90,7 @@ export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
 
     const today = pivot ? new Date(pivot) : new Date();
     const weeekStart = getLastThursdayIfNotThruday(today);
-    const weekEnd = getNextWednesdayIfNotWednesday(today);
+    const weekEnd = startOfDay(getNextWednesdayIfNotWednesday(today));
 
     const weekGames = fixtures.filter((f) => {
         if (f.kickoff_time) {
