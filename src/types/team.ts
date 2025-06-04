@@ -19,7 +19,8 @@ export interface Player {
   tracking_id?: string;
   ball_carrying?: number;
   tackling?: number;
-  points_kicking?: number
+  points_kicking?: number;
+  team_logo?: string
 }
 
 export interface Team {

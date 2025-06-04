@@ -84,7 +84,7 @@ export function PlayerActionModal({
 
               <div className="flex items-center justify-between text-sm">
                 {!isLoading && info && <span className="text-gray-600 font-semibold w-full dark:text-gray-400">
-                  {info.team_name}
+                  {player.team_name}
                 </span>}
 
                 {isLoading && <div className="h-2 w-10 rounded-lg bg-slate-300 dark:bg-slate-700 animate-pulse" ></div>}
