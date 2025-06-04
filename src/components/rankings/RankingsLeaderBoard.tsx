@@ -24,7 +24,7 @@ export default function UserRankingsLeaderBoard() {
 
     return (
         <div>
-            <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm overflow-hidden">
+            <div className="rounded-2xl shadow-sm overflow-hidden">
                 <div className="">
                     {shortList.map((user, index) => (
 

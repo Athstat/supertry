@@ -2,6 +2,7 @@ import { Trophy } from 'lucide-react'
 import { useAuthUser } from '../../hooks/useAuthUser';
 import useSWR from 'swr';
 import { userRankingsService } from '../../services/userRankingsService';
+import BlueGradientCard from '../shared/BlueGradientCard';
 
 
 export default function UserRankingCard() {
@@ -12,14 +13,14 @@ export default function UserRankingCard() {
     const rank = userRank?.rank;
     const totalScore = userRank?.total_score;
     
-    const unranked = (rank === 1 && totalScore === 0) || totalScore === undefined || rank === undefined;
+    // const unranked = (rank === 1 && totalScore === 0) || totalScore === undefined || rank === undefined;
     const isRanked = rank !== undefined && totalScore !== undefined;
 
     if (isLoading) return <div className='w-full h-20 bg-slate-100 dark:bg-slate-800 animate-pulse' ></div>
     if (!userRank) return <></>
 
     return (
-        <div className="bg-gradient-to-br from-primary-600 dark:from-primary-800 via-primary-800 to-primary-900 rounded-2xl shadow-sm p-6 mb-6 relative overflow-hidden">
+        <BlueGradientCard className=" rounded-2xl shadow-sm p-6 mb-6 relative overflow-hidden">
             {/* Background decorative elements */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white blur-2xl" />
@@ -48,6 +49,6 @@ export default function UserRankingCard() {
                     {isRanked && totalScore ? <div className="text-primary-100">Your Rank</div> : ""}
                 </div>
             </div>
-        </div>
+        </BlueGradientCard>
     )
 }
