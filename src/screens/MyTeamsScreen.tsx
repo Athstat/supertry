@@ -20,7 +20,7 @@ interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
 export function MyTeamsListScreen() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { teamCreated, teamName, leagueId } = location.state || {};
+  const { teamCreated, teamName } = location.state || {};
 
   const [teams, setTeams] = useState<ExtendedFantasyClubTeam[]>([]);
   
@@ -102,20 +102,20 @@ export function MyTeamsListScreen() {
     });
   };
 
-  const toggleFavorite = async (
-    teamId: string,
-    isFavorite: boolean,
-    e: React.MouseEvent
-  ) => {
-    e.stopPropagation();
-    // In a real app, you would call an API to update the favorite status
-    // For now, we'll just update the local state
-    setTeams(
-      teams.map((team) =>
-        team.id === teamId ? { ...team, isFavorite: !isFavorite } : team
-      )
-    );
-  };
+  // const toggleFavorite = async (
+  //   teamId: string,
+  //   isFavorite: boolean,
+  //   e: React.MouseEvent
+  // ) => {
+  //   e.stopPropagation();
+  //   // In a real app, you would call an API to update the favorite status
+  //   // For now, we'll just update the local state
+  //   setTeams(
+  //     teams.map((team) =>
+  //       team.id === teamId ? { ...team, isFavorite: !isFavorite } : team
+  //     )
+  //   );
+  // };
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
