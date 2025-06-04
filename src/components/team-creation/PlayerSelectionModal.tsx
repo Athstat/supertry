@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Position } from "../../types/position";
+import { BasePositionType, Position } from "../../types/position";
 
 // Import components
 import ModalHeader from "./player-selection-components/ModalHeader";
@@ -21,8 +21,8 @@ import { RugbyPlayer } from "../../types/rugbyPlayer";
 
 interface PlayerSelectionModalProps {
   visible: boolean;
-  selectedPosition: Position;
-  players: any[];
+  selectedPosition: BasePositionType;
+  players: RugbyPlayer[];
   remainingBudget: number;
   selectedPlayers: AthleteWithTrackingId[];
   handlePlayerSelect: (player: RugbyPlayer) => void;

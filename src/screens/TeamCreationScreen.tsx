@@ -22,6 +22,7 @@ import { URC_COMPETIION_ID } from "../types/constants";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { useTeamCreationGuard } from "../hooks/useTeamCreationGuard";
 import PrimaryButton from "../components/shared/buttons/PrimaryButton";
+import { ICreateFantasyTeamAthleteItem } from "../types/fantasyTeamAthlete";
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -104,7 +105,6 @@ export function TeamCreationScreen() {
 
 
   useEffect(() => {
-    // Request user notification permissions
     requestPushPermissions();
   }, []);
 
@@ -145,6 +145,11 @@ export function TeamCreationScreen() {
     hideToast,
   } = useTeamCreationState(officialLeagueId);
 
+  const selectedPlayersArr = Object.values(selectedPlayers)
+    .map((a) => {
+      return {tracking_id: a.id}
+    });
+
   // Handle team submission
   const handleSaveTeam = async () => {
     setIsSaving(true);
@@ -168,25 +173,32 @@ export function TeamCreationScreen() {
 
     try {
       // Convert selected players to the required format for API (IFantasyTeamAthlete)
-      const teamAthletes = Object.values(selectedPlayers).map(
+      const teamAthletes: ICreateFantasyTeamAthleteItem[] = Object.values(selectedPlayers).map(
         (player, index) => {
           // Check if this player is in the Super Sub position
+
+
           const position = positionList.find(
-            (pos) => pos.player && pos.player.id === player.id
+            (pos) => pos.player && pos.player.tracking_id === player.tracking_id
           );
+
+          console.log("The position we found ", position);
+
           const isSuperSub = position?.isSpecial || false;
 
           return {
-            athlete_id: player.id,
-            purchase_price: player.price,
+            athlete_id: player.tracking_id ?? "",
+            id: player.id,
+            purchase_price: player.price ?? 0,
             purchase_date: new Date(),
-            is_starting: !isSuperSub, // Super Sub is not a starting player
+            is_starting: !isSuperSub,
             slot: index + 1,
-            score: player.points || 0,
-            is_super_sub: isSuperSub,
+            is_super_sub: isSuperSub
           };
         }
       );
+
+      console.log("Team Athletes ", teamAthletes);
 
       // Submit the team using the team service
       const result = await fantasyTeamService.submitTeam(
@@ -266,6 +278,7 @@ export function TeamCreationScreen() {
       {/* Position selection grid */}
       <PositionsGrid
         positions={positionList}
+        selectedPlayers={selectedPlayers}
         selectedPosition={selectedPosition}
         onPositionSelect={handlePositionSelect}
         onPlayerRemove={handleRemovePlayer}
@@ -280,6 +293,7 @@ export function TeamCreationScreen() {
         isLoading={isSaving}
         onReset={handleReset}
         onSave={handleSaveTeam}
+
       />
 
       {/* Player selection modal */}
@@ -289,7 +303,7 @@ export function TeamCreationScreen() {
           selectedPosition={selectedPosition}
           players={allPlayers}
           remainingBudget={remainingBudget}
-          selectedPlayers={Object.values(selectedPlayers)}
+          selectedPlayers={selectedPlayersArr}
           handlePlayerSelect={handleAddPlayer}
           onClose={() => setShowPlayerSelection(false)}
           roundId={parseInt(officialLeagueId || "0")}

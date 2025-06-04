@@ -1,9 +1,11 @@
 import {
   IFantasyTeamAthlete,
   IFantasyClubTeam,
-  IUpdateFantasyTeamItem,
+  IUpdateFantasyTeamAthleteItem,
+  ICreateFantasyTeamAthleteItem,
 } from "../types/fantasyTeamAthlete";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
+import { athleteService } from "./athleteService";
 import { authService } from "./authService";
 
 export const fantasyTeamService = {
@@ -11,7 +13,7 @@ export const fantasyTeamService = {
    * Update team athletes for a fantasy team
    */
   updateTeamAthletes: async (
-    team: IUpdateFantasyTeamItem[],
+    team: IUpdateFantasyTeamAthleteItem[],
     teamId: string
   ): Promise<any> => {
     try {
@@ -123,28 +125,11 @@ export const fantasyTeamService = {
    */
   submitTeam: async (
     teamName: string,
-    teamAthletes: IFantasyTeamAthlete[],
+    teamAthletes: ICreateFantasyTeamAthleteItem[],
     leagueId: string
   ): Promise<IFantasyClubTeam> => {
     try {
-      // Get user ID from token (or use a default if not available)
-      const token = localStorage.getItem("access_token");
 
-      if (!token) {
-        throw new Error(
-          "Authentication token is missing. Please log in again."
-        );
-      }
-
-      let userId = "default-user-id";
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        userId = payload.sub || userId;
-      } catch (error) {
-        console.error("Error extracting user ID from token:", error);
-      }
-
-      // Fetch the user's club - use direct reference to the function
       const club = await fantasyTeamService.fetchUserClub();
 
       // Throw error if club not found
@@ -169,10 +154,7 @@ export const fantasyTeamService = {
 
       const response = await fetch(uri, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeader(),
         body: JSON.stringify(payload),
       });
 

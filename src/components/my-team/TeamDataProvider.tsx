@@ -62,7 +62,10 @@ export function TeamDataProvider({ children, teamId}: Props) {
     if (team) setFantasyTeam(team);
     if (league) setFantasyLeague(league);
 
-    setFantasyTeamAthletes(athletes ?? []);
+    const sortedTeamAthletes = (athletes ?? []).sort((a, b) => {
+      return a.slot - b.slot;
+    });
+    setFantasyTeamAthletes(sortedTeamAthletes);
     setFantasyTeamValue(calculatedTeamValue);
 
     console.log("Team ", team);
