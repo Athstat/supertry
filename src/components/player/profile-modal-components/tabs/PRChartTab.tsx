@@ -34,9 +34,10 @@ interface PRChartTabProps {
 export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
+
   const { data, isLoading, error } = usePowerRankings(player.athlete_id);
 
-  console.log("playerPR", player);
+  console.log("playerPR", data);
 
   // Format dates for display on X-axis
   const formatDate = (dateString: string) => {

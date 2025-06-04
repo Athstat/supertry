@@ -40,16 +40,16 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
           {/* Player Name and Position */}
           <PlayerInfo player={player} />
 
+          {/* <div className="p-4">
+            <PlayerStatsContextInfo />
+          </div> */}
+
           {/* Tabs Navigation */}
-          <TabsNavigation
+          {/* <TabsNavigation
             tabs={tabs}
             activeTab={activeTab}
             onTabChange={setActiveTab}
-          />
-
-          <div className="p-4">
-            <PlayerStatsContextInfo />
-          </div>
+          /> */}
 
           {/* Tab Content - scrollable */}
           <div className="flex-1 ">
