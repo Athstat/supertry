@@ -131,7 +131,7 @@ export function LeagueScreen() {
                 }}
                 className="flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
               >
-                Edit Team
+                Edit My Team
               </button>
             )}
 

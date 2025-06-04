@@ -147,11 +147,20 @@ export function TeamCreationScreen() {
     requiredPlayersCount,
     isTeamComplete,
 
+    // Captain selection
+    captainId,
+    setCaptainId,
+
     // Toast
     toast,
     showToast,
     hideToast,
   } = useTeamCreationState(officialLeagueId);
+
+  // Debug captain state changes
+  useEffect(() => {
+    console.log("Captain ID changed:", captainId);
+  }, [captainId]);
 
   const selectedPlayersArr = Object.values(selectedPlayers)
     .map((a) => {
@@ -192,8 +201,6 @@ export function TeamCreationScreen() {
       const teamAthletes: ICreateFantasyTeamAthleteItem[] = Object.values(selectedPlayers).map(
         (player, index) => {
           // Check if this player is in the Super Sub position
-
-
           const position = positionList.find(
             (pos) => pos.player && pos.player.tracking_id === player.tracking_id
           );
@@ -201,6 +208,7 @@ export function TeamCreationScreen() {
           console.log("The position we found ", position);
 
           const isSuperSub = position?.isSpecial || false;
+          const isPlayerCaptain = captainId === player.id;
 
           return {
             athlete_id: player.tracking_id ?? "",
@@ -210,13 +218,14 @@ export function TeamCreationScreen() {
             is_starting: !isSuperSub,
             slot: index + 1,
             is_super_sub: isSuperSub,
-            score: player.points || 0,            
+            score: player.scoring || 0,            
             // Add missing properties required by IFantasyTeamAthlete interface
             team_id: 0, // This will be set by the backend
             team_name: teamName,
             team_logo: "", // This will be set by the backend
-            athlete_team_id: player.team || "", // Use team property instead of team_id
-            player_name: player.name || "" // Use name as player_name
+            athlete_team_id: player.team_id || "", // Use team_id property
+            player_name: player.player_name || "", // Use player_name property
+            is_captain: isPlayerCaptain
           };
         }
       );
@@ -312,6 +321,8 @@ export function TeamCreationScreen() {
         selectedPosition={selectedPosition}
         onPositionSelect={handlePositionSelect}
         onPlayerRemove={handleRemovePlayer}
+        captainId={captainId}
+        setCaptainId={setCaptainId}
       />
 
       {/* Team name input - only show for guest users */}

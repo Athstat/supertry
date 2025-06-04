@@ -414,8 +414,6 @@ export const authService = {
       // Decode the JWT token to get user info
       const payload = JSON.parse(atob(token.split(".")[1]));
 
-      console.log("[getUserInfo] Payload:", payload);
-
       return {
         email: payload.email || "",
         id: payload.sub || "",
