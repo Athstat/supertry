@@ -90,6 +90,7 @@ declare module "lucide-react" {
   export const BowArrow: CIP;
   export const AlertCircle: CIP;
   export const ArrowUpDown: CIP;
+  export const UserCircle: CIP;
 
 }
 

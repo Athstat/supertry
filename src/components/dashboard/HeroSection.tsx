@@ -10,6 +10,7 @@ import { epochDiff } from "../../utils/dateUtils";
 import { useUserFantasyTeam } from "../league/useFantasyLeague";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "../../hooks/useRoter";
+import BlueGradientCard from "../shared/BlueGradientCard";
 
 type Props = {
   availableLeagues: IFantasyLeague[];
@@ -22,7 +23,7 @@ export function HeroSection({ availableLeagues, onViewLeague }: Props) {
     leaguesOnClockFilter(availableLeagues);
 
   return (
-    <div className="bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800  hover:from-primary-600 hover:to-primary-800 rounded-2xl p-4 mb-6 text-white  transition-all ease-in delay-300">
+    <BlueGradientCard className="rounded-2xl p-4 mb-6 text-white  transition-all ease-in delay-300">
       {!leagueOnTheClock && (
         <div className="flex flex-col gap-2 p-3">
           
@@ -51,7 +52,7 @@ export function HeroSection({ availableLeagues, onViewLeague }: Props) {
         />
       )}
 
-    </div>
+    </BlueGradientCard>
   );
 }
 

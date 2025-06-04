@@ -20,7 +20,7 @@ interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
 export function MyTeamsListScreen() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { teamCreated, teamName, leagueId } = location.state || {};
+  const { teamCreated, teamName } = location.state || {};
 
   const [teams, setTeams] = useState<ExtendedFantasyClubTeam[]>([]);
   
@@ -102,20 +102,20 @@ export function MyTeamsListScreen() {
     });
   };
 
-  const toggleFavorite = async (
-    teamId: string,
-    isFavorite: boolean,
-    e: React.MouseEvent
-  ) => {
-    e.stopPropagation();
-    // In a real app, you would call an API to update the favorite status
-    // For now, we'll just update the local state
-    setTeams(
-      teams.map((team) =>
-        team.id === teamId ? { ...team, isFavorite: !isFavorite } : team
-      )
-    );
-  };
+  // const toggleFavorite = async (
+  //   teamId: string,
+  //   isFavorite: boolean,
+  //   e: React.MouseEvent
+  // ) => {
+  //   e.stopPropagation();
+  //   // In a real app, you would call an API to update the favorite status
+  //   // For now, we'll just update the local state
+  //   setTeams(
+  //     teams.map((team) =>
+  //       team.id === teamId ? { ...team, isFavorite: !isFavorite } : team
+  //     )
+  //   );
+  // };
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
@@ -226,6 +226,7 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
   )
 
 
+  console.log("Here is the team ", team);
 
   return (
     <motion.div
@@ -289,7 +290,7 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
       </div>
       <div className="flex flex-col items-end gap-1">
         <div className="text-lg font-bold text-primary-400">
-          {team.score?.toLocaleString() || 0}
+          {/* {team} */}
         </div>
         <div className="text-sm text-gray-400">
           {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}

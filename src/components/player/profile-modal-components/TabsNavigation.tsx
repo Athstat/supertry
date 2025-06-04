@@ -20,7 +20,7 @@ export const TabsNavigation: React.FC<TabsNavigationProps> = ({
             className={`
               flex-1 py-3 px-4 text-sm font-medium text-center border-b-2 relative
               ${activeTab === index
-                ? 'text-green-600 dark:text-green-500 border-green-600 dark:border-green-500'
+                ? 'text-primary-600 dark:text-primary-500 border-primary-600 dark:border-primary-500'
                 : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'}
             `}
             onClick={() => onTabChange(index)}

@@ -1,4 +1,4 @@
-import {getNextDayOfWeek, getPreviousDayOfWeek} from "../../src/utils/dateUtils";
+import {getNextDayOfWeek, getNextTuesdayIfNotTuesday, getPreviousDayOfWeek} from "../../src/utils/dateUtils";
 
 test('next day of the week date, when next day is ahead of pivot', () => {
     const pivot = new Date('2025-06-01'); // Sunday 01 June 2025
@@ -47,4 +47,25 @@ test('get prev day of the week date, when prev date is just a day behind pivot o
     const expected = new Date('2025-06-03'); // Tuesday 03 June 2025
 
     expect(getPreviousDayOfWeek(pivot, 'Tuesday')).toStrictEqual(expected);
+});
+
+test('get next tuesday when today is a pivot is a tuesday', () => {
+    const pivot = new Date('2025-06-03'); // Tuesday 3 June 2025
+    const expected = new Date('2025-06-03'); // Tuesday 3 June 2025
+
+    expect(getNextTuesdayIfNotTuesday(pivot)).toStrictEqual(expected);
+});
+
+test('get next tuesday when today is not a tuesday and is a wednesday', () => {
+    const pivot = new Date('2025-05-21'); // Wedneday 21 May 2025
+    const expected = new Date('2025-05-27'); // Tuesday 27 May 2025
+
+    expect(getNextTuesdayIfNotTuesday(pivot)).toStrictEqual(expected);
+});
+
+test('get next tuesday when today is not a tuesday and is a moday', () => {
+    const pivot = new Date('2025-05-19'); // Moday 19 May 2025
+    const expected = new Date('2025-05-20'); // Tuesday 20 May 2025
+
+    expect(getNextTuesdayIfNotTuesday(pivot)).toStrictEqual(expected);
 });

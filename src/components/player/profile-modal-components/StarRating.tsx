@@ -40,8 +40,8 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, maxRating = 5 }) => {
           size={20}
           className={`transition-all duration-300 transform ${
             index < animatedRating
-              ? "text-yellow-500 fill-current scale-110"
-              : "text-gray-300"
+              ? " text-yellow-500 fill-current scale-110"
+              : " text-gray-300 dark:text-gray-400"
           } ${
             index < animatedRating
               ? `animate-[star-pop_300ms_ease-out_${index * 150}ms]`
