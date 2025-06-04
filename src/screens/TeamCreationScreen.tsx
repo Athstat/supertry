@@ -176,23 +176,29 @@ export function TeamCreationScreen() {
       const teamAthletes: ICreateFantasyTeamAthleteItem[] = Object.values(selectedPlayers).map(
         (player, index) => {
           // Check if this player is in the Super Sub position
+
+
           const position = positionList.find(
-            (pos) => pos.player && pos.player.id === player.id
+            (pos) => pos.player && pos.player.tracking_id === player.tracking_id
           );
+
+          console.log("The position we found ", position);
 
           const isSuperSub = position?.isSpecial || false;
 
           return {
-            athlete_id: player.id,
-            purchase_price: player.price,
+            athlete_id: player.tracking_id ?? "",
+            id: player.id,
+            purchase_price: player.price ?? 0,
             purchase_date: new Date(),
             is_starting: !isSuperSub,
             slot: index + 1,
-            score: player.points || 0,
-            is_super_sub: isSuperSub,
+            is_super_sub: isSuperSub
           };
         }
       );
+
+      console.log("Team Athletes ", teamAthletes);
 
       // Submit the team using the team service
       const result = await fantasyTeamService.submitTeam(
@@ -272,6 +278,7 @@ export function TeamCreationScreen() {
       {/* Position selection grid */}
       <PositionsGrid
         positions={positionList}
+        selectedPlayers={selectedPlayers}
         selectedPosition={selectedPosition}
         onPositionSelect={handlePositionSelect}
         onPlayerRemove={handleRemovePlayer}
@@ -286,6 +293,7 @@ export function TeamCreationScreen() {
         isLoading={isSaving}
         onReset={handleReset}
         onSave={handleSaveTeam}
+
       />
 
       {/* Player selection modal */}

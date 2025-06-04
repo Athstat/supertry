@@ -83,7 +83,6 @@ export type ICreateFantasyTeamAthleteItem = {
   purchase_date: Date;
   is_starting: boolean;
   slot: number;
-  score: number;
 }
 
 export type AthleteWithTrackingId = {

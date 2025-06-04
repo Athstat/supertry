@@ -1,12 +1,11 @@
 import { useState, useCallback, useEffect } from "react";
-import { Player } from "../types/player";
-import { Position } from "../types/position";
+import { Position, TeamCreationPositionSlot } from "../types/position";
 import { RugbyPlayer } from "../types/rugbyPlayer";
 
 export function useTeamCreation(
   budget: number,
   onComplete: (
-    players: Record<string, Player>,
+    players: Record<string, RugbyPlayer>,
     teamName: string,
     isFavorite: boolean
   ) => void,
@@ -19,16 +18,20 @@ export function useTeamCreation(
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [teamName, setTeamName] = useState("");
-  const [selectedPosition, setSelectedPosition] = useState<Position | null>(
+  const [selectedPosition, setSelectedPosition] = useState<TeamCreationPositionSlot | null>(
     null
   );
   const [showPlayerList, setShowPlayerList] = useState(false);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
+
   const [selectedPlayerForModal, setSelectedPlayerForModal] =
-    useState<Player | null>(null);
+    useState<RugbyPlayer | null>(null);
+
   const [searchQuery, setSearchQuery] = useState("");
+  
   const [availablePlayers, setAvailablePlayers] =
     useState<RugbyPlayer[]>(serverPlayers);
+
   const [currentBudget, setCurrentBudget] = useState(budget);
 
   // Update current budget whenever selected players change
@@ -40,13 +43,13 @@ export function useTeamCreation(
     setCurrentBudget(budget - usedBudget);
   }, [selectedPlayers, budget]);
 
-  const handlePositionClick = useCallback((position: Position) => {
+  const handlePositionClick = useCallback((position: TeamCreationPositionSlot) => {
     setSelectedPosition(position);
     setShowPlayerList(true);
     setSearchQuery("");
   }, []);
 
-  const handlePlayerSelect = useCallback((player: Player) => {
+  const handlePlayerSelect = useCallback((player: RugbyPlayer) => {
     setSelectedPlayerForModal(player);
     //setShowPlayerList(false);
     setShowPlayerModal(true);
@@ -59,6 +62,11 @@ export function useTeamCreation(
           ...prev,
           [selectedPosition.id]: player,
         }));
+
+        // update selected positions so that the player
+        // is tied to that position
+        
+
         setShowPlayerModal(false);
         setSelectedPosition(null);
       }
