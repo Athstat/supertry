@@ -10,6 +10,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { authService } from "../services/authService";
+import UserNotificationsSettings from "../components/settings/UserNotificationsSettings";
+import { useFetch } from "../hooks/useFetch";
+import { useAuthUser } from "../hooks/useAuthUser";
+
 
 
 export function ProfileScreen() {
@@ -19,21 +23,26 @@ export function ProfileScreen() {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  useEffect(() => {
-    const info = authService.getUserInfo();
-    setUserInfo(info);
-    setIsGuestAccount(authService.isGuestAccount());
-  }, []);
+  //const userInfo = useAuthUser();
+
+  // useEffect(() => {
+  //   const info = authService.getUserInfo();
+  //   setUserInfo(info);
+  //   setIsGuestAccount(authService.isGuestAccount());
+  // }, []);
 
   useEffect(() => {
     const fetchUserFromDB = async () => {
-      const user = await authService.getUserFromDB(userInfo?.id);
+      const info = await authService.getUserInfo();
+      setIsGuestAccount(authService.isGuestAccount());
+      if (!info) return;
+      const user = await authService.getUserFromDB(info.id);
       console.log("[ProfileScreen] User:", user);
       setUserInfo(user);
     };
     console.log("[ProfileScreen] Fetching user from DB");
     fetchUserFromDB();
-  }, [userInfo]);
+  }, []);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -55,7 +64,13 @@ export function ProfileScreen() {
     navigate("/complete-profile");
   };
 
-  //console.log("userInfo", userInfo);
+  // const { data: databaseUser, isLoading } = useFetch(
+  //   "database-user",
+  //   userInfo.id ?? 'fallback',
+  //   authService.getUserById
+  // );
+
+  // console.log("databaseUser", databaseUser);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-dark-850">
@@ -120,24 +135,7 @@ export function ProfileScreen() {
             </motion.div>
           )}
 
-          {/* Settings Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: isGuestAccount ? 0.2 : 0.1 }}
-            className="bg-white dark:bg-dark-800 rounded-lg shadow-sm overflow-hidden"
-          >
-            <button
-              onClick={() => navigate("/settings")}
-              className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                <span className="text-gray-900 dark:text-white">Settings</span>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-            </button>
-          </motion.div>
+          {userInfo && <UserNotificationsSettings databaseUser={userInfo} />}
 
           {/* Logout Button */}
           <motion.div
