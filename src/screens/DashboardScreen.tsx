@@ -52,17 +52,11 @@ export function DashboardScreen() {
         <h1 className="font-bold text-2xl" >Home</h1>
       </div>
 
-      <Experimental
-        placeholder={
-          <HeroSection
-            availableLeagues={leagues}
-            onViewLeague={handleViewLeague}
-          />
-        }
-      >
-        <DiscoverPlayersCard />
-      </Experimental>
-
+      <HeroSection
+        availableLeagues={leagues}
+        onViewLeague={handleViewLeague}
+      />
+      <DiscoverPlayersCard />
 
 
       <ActiveLeaguesSection
