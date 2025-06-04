@@ -70,27 +70,27 @@ export function getSbrSeasons(fixtures: ISbrFixture[]) {
     return seasons;
 }
 
-export function getNextWednesdayIfNotWednesday(pivot: Date) {
+export function getNextTuesdayIfNotTuesday(pivot: Date) {
+    if (pivot.getDay() === 2) {
+        return pivot;
+    }
+    return getNextDayOfWeek(pivot, 'Tuesday');
+}
+
+export function getLastWednesdayIfNotWednesday(pivot: Date) {
+
     if (pivot.getDay() === 3) {
         return pivot;
     }
-    return getNextDayOfWeek(pivot, 'Wednesday');
-}
 
-export function getLastThursdayIfNotThruday(pivot: Date) {
-
-    if (pivot.getDay() === 4) {
-        return pivot;
-    }
-
-    return getPreviousDayOfWeek(pivot, 'Thursday');
+    return getPreviousDayOfWeek(pivot, 'Wednesday');
 }
 
 export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
 
     const today = pivot ? new Date(pivot) : new Date();
-    const weeekStart = getLastThursdayIfNotThruday(today);
-    const weekEnd = startOfDay(getNextWednesdayIfNotWednesday(today));
+    const weeekStart = getLastWednesdayIfNotWednesday(today);
+    const weekEnd = startOfDay(getNextTuesdayIfNotTuesday(today));
 
     const weekGames = fixtures.filter((f) => {
         if (f.kickoff_time) {
