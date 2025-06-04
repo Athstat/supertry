@@ -25,8 +25,8 @@ export default function UserRankingsItem({userRank} : Props) {
     return (
         <>
             <div
-                className={`flex items-center p-4 ${isCurrentUser(userRank.user_id)
-                    ? "bg-primary-50 dark:bg-primary-600/10"
+                className={`flex items-center border dark:border-slate-700 rounded-xl bg-slate-100 border-slate-300 dark:bg-slate-800/40 p-4 my-2 ${isCurrentUser(userRank.user_id)
+                    ? " bg-blue-200 border-blue-300 dark:bg-primary-900/40"
                     : "hover:bg-gray-50 dark:hover:bg-gray-700/10"
                     } ${isInPromotionZone(userRank.rank)
                         ? "border-l-4 !border-l-green-500"

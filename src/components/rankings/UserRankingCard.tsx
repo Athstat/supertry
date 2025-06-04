@@ -19,7 +19,7 @@ export default function UserRankingCard() {
     if (!userRank) return <></>
 
     return (
-        <div className="bg-gradient-to-br from-primary-600 dark:from-primary-800 via-primary-800 to-primary-900 rounded-2xl shadow-sm p-6 mb-6 relative overflow-hidden">
+        <div className="bg-gradient-to-r from-primary-500 dark:from-primary-600 dark:to-blue-900 to-blue-700 rounded-2xl shadow-sm p-6 mb-6 relative overflow-hidden">
             {/* Background decorative elements */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white blur-2xl" />
