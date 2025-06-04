@@ -109,7 +109,11 @@ function JoinDeadlineCountdown({
         </p> */}
 
         <p className="text-primary-100 text-sm sm:text-base md:text-lg" >
-          Don't miss out on the action. {league.title} starts in <strong>{hours}:{minutes}:{seconds}</strong>
+          Don't miss out on the action. {league.title} starts 
+            {days > 1 ? 
+              <>{" "}in {days} {days > 1 ? "days" : "day"}</> 
+              : <>{" "}in <strong>{hours}:{minutes}:{seconds}</strong></>
+            }
         </p>
 
 
