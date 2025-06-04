@@ -7,7 +7,6 @@ import PageView from "./PageView";
 import { Home } from "lucide-react";
 import DiscoverPlayersCard from "../components/dashboard/DiscoverPlayersCard";
 import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
-import Experimental from "../components/shared/ab_testing/Experimental";
 
 export function DashboardScreen() {
   const navigate = useNavigate();
