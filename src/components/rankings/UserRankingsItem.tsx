@@ -1,4 +1,3 @@
-import { User } from "lucide-react";
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { UserRanking } from "../../types/userRanking"
 import { UserCircle } from "lucide-react";
