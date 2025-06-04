@@ -226,6 +226,7 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
   )
 
 
+  console.log("Here is the team ", team);
 
   return (
     <motion.div
@@ -289,7 +290,7 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
       </div>
       <div className="flex flex-col items-end gap-1">
         <div className="text-lg font-bold text-primary-400">
-          {team.score?.toLocaleString() || 0}
+          {/* {team} */}
         </div>
         <div className="text-sm text-gray-400">
           {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
