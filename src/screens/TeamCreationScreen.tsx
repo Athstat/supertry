@@ -175,7 +175,7 @@ export function TeamCreationScreen() {
     }
   }, [isGuest, userInfo, teamName, setTeamName]);
 
-  console.log("userInfo", userInfo.firstName);
+  //console.log("userInfo", userInfo.firstName);
 
   // Handle team submission
   const handleSaveTeam = async () => {

@@ -39,7 +39,9 @@ export type IFantasyTeamAthlete = {
   strength?: number,
   playmaking?: number,
   ball_carrying?: number,
-  total_points?: number
+  total_points?: number,
+  is_captain?: boolean,
+  is_super_sub?: boolean
 }
 
 export interface IFantasyTeamSubmission {
