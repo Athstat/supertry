@@ -171,13 +171,15 @@ export function TeamCreationScreen() {
   useEffect(() => {
     // If not a guest and we have user info, use the username as the team name
     if (!isGuest && userInfo?.username && teamName === '') {
-      setTeamName(userInfo.username);
+      setTeamName(userInfo.firstName); //need to make this more clear
     }
   }, [isGuest, userInfo, teamName, setTeamName]);
 
+  console.log("userInfo", userInfo.firstName);
+
   // Handle team submission
   const handleSaveTeam = async () => {
-    setIsSaving(true);
+    
     // Validate team
     if (isGuest && teamName.trim() === "") {
       showToast("Please enter a club name", "error");
@@ -191,10 +193,18 @@ export function TeamCreationScreen() {
       showToast("You have exceeded the budget", "error");
       return;
     }
+
+    if (captainId === null) {
+      showToast("Please select a captain", "error");
+      return;
+    }
+
     if (!officialLeagueId) {
       showToast("League ID is required", "error");
       return;
     }
+
+    setIsSaving(true);
 
     try {
       // Convert selected players to the required format for API (IFantasyTeamAthlete)
@@ -208,7 +218,7 @@ export function TeamCreationScreen() {
           console.log("The position we found ", position);
 
           const isSuperSub = position?.isSpecial || false;
-          const isPlayerCaptain = captainId === player.id;
+          const isPlayerCaptain = captainId === player.tracking_id;
 
           return {
             athlete_id: player.tracking_id ?? "",
