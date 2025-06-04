@@ -123,7 +123,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
 
             {!isLoading && <div
                 className={twMerge(
-                    "flex mt-6 flex-col w-full gap-3 items-center justify-center",
+                    "flex mt-6 flex-col w-full gap-0 items-center justify-center",
                     isVoting && "animate-pulse opacity-60 cursor-progress"
                 )}
             >
