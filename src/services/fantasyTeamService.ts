@@ -5,7 +5,6 @@ import {
   ICreateFantasyTeamAthleteItem,
 } from "../types/fantasyTeamAthlete";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
-import { athleteService } from "./athleteService";
 import { authService } from "./authService";
 
 export const fantasyTeamService = {
