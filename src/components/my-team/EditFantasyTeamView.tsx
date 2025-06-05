@@ -193,13 +193,13 @@ export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, p
   return (
     <>
       {/* Player image with captain badge */}
-      <div className="w-16 h-16 mb-2 relative">
+      <div className="w-16 h-16 mb-2 relative border-red">
         <div
           className={twMerge(
             "w-16 h-16 rounded-full flex items-center justify-center overflow-hidden",
             isSub ? "bg-gray-300 border-2 border-orange-300 dark:border-orange-600"
               : "bg-gray-300",
-            isCaptain && "border-2 border-yellow-400"
+            isCaptain && "border-2 border-yellow-400 dark:border-yellow-500 ring-2 ring-yellow-400/30 dark:ring-yellow-500/30"
           )}
         >
           {image_url ? (
