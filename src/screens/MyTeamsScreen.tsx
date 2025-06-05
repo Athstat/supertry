@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PlusCircle, Users, Loader, Trophy, ChevronRight, Zap } from "lucide-react";
+import { PlusCircle, Users, Loader, Trophy, ChevronRight, Zap, Shield } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { fantasyTeamService } from "../services/fantasyTeamService";
@@ -12,13 +12,6 @@ import { useFetch } from "../hooks/useFetch";
 import useSWR from "swr";
 import PillTag from "../components/shared/PillTap";
 import PlayerMugshot from "../components/shared/PlayerMugshot";
-
-// Extended interface to include UI-specific properties
-interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
-  isFavorite?: boolean;
-  score?: number;
-  rank?: number;
-}
 
 export function MyTeamsListScreen() {
   const navigate = useNavigate();
@@ -64,25 +57,11 @@ export function MyTeamsListScreen() {
     window.scrollTo(0, 0);
   }, []);
 
-  // const toggleFavorite = async (
-  //   teamId: string,
-  //   isFavorite: boolean,
-  //   e: React.MouseEvent
-  // ) => {
-  //   e.stopPropagation();
-  //   // In a real app, you would call an API to update the favorite status
-  //   // For now, we'll just update the local state
-  //   setTeams(
-  //     teams.map((team) =>
-  //       team.id === teamId ? { ...team, isFavorite: !isFavorite } : team
-  //     )
-  //   );
-  // };
-
   return (
-    <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
-      <div className="flex flex-col">
-        <h1 className="text-2xl lg:text-3xl font-bold mb-8 dark:text-gray-100">My Teams</h1>
+    <main className="container mx-auto px-4 flex flex-col gap-8 sm:px-6 py-6 max-w-3xl">
+      <div className="flex flex-row items-center gap-2 dark:text-gray-100">
+        <Shield />
+        <h1 className="text-2xl lg:text-3xl font-bold">My Teams</h1>
       </div>
 
       {/* Success Toast */}
@@ -235,10 +214,10 @@ function MyTeamCard({ team }: MyTeamCardProps) {
         }
 
 
-        <PillTag className="text-sm flex flex-row items-center gap-1.5 text-gray-400">
+        {totalPoints ? (<PillTag className="text-sm flex flex-row items-center gap-1.5 text-gray-400">
           <Zap size={16} />
-          {totalPoints ? `Points ${totalPoints.toFixed(0)}` : null}
-        </PillTag>
+          Points {totalPoints.toFixed(0)}
+        </PillTag>) : null}
 
         <PillTag className="text-sm flex flex-row items-center gap-1.5 text-gray-400">
           <Trophy size={16} />
@@ -253,8 +232,9 @@ function MyTeamCard({ team }: MyTeamCardProps) {
           {/* {team} */}
         </div>
 
-      </div>
+      </div>  
 
+      {loadingAthletes && <div className="w-14 h-full rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" ></div>}
       {teamAthletes && <MyTeamAthletesRow athletes={teamAthletes} />}
     </motion.div>
   )
