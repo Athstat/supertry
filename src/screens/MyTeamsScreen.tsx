@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PlusCircle, Users, Loader, Trophy, ChevronRight, Zap, Shield } from "lucide-react";
+import { PlusCircle, Users, Loader, Trophy, Zap, Shield } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { fantasyTeamService } from "../services/fantasyTeamService";
@@ -156,7 +156,7 @@ type MyTeamCardProps = {
 
 function MyTeamCard({ team }: MyTeamCardProps) {
 
-  const { data: league, isLoading } = useFetch(
+  const { data: league } = useFetch(
     "fantasy-leagues",
     team.league_id ?? 0,
     leagueService.getLeagueById
@@ -252,9 +252,9 @@ function MyTeamAthletesRow({ athletes }: AthletesRowProps) {
       {/* <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-slate-800/0 to-transparent"></div> */}
 
       <div className="overflow-x-auto whitespace-nowrap scroll-smooth space-x-4 flex">
-        {athletes.map((a, index) => {
+        {athletes.map((a) => {
           return (
-            <div className="items-center flex flex-col gap-1" >
+            <div key={a.tracking_id} className="items-center flex flex-col gap-1" >
               <PlayerMugshot url={a.image_url} />
               {/* <p className="text-xs truncate dark:text-slate-400" >{a.score?.toFixed(1)}</p> */}
             </div>
