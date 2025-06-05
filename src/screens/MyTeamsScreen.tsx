@@ -221,7 +221,7 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
 
   const { data: league, isLoading } = useFetch(
     "fantasy-leagues",
-    Number.parseInt(team.league_id ?? "0"),
+    team.league_id ?? 0,
     leagueService.getLeagueById
   )
 
