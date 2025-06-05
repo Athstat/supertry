@@ -24,7 +24,7 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
     error,
     isLoading,
   } = useSWR(competitionId, gamesService.getGamesByCompetitionId);
-  const {data, isLoading: isLoadingUserTeamAthletes} = 
+  const { data, isLoading: isLoadingUserTeamAthletes } =
     useFetch("user-team-athletes", userTeam?.team_id ?? "fall-back", fantasyTeamService.fetchTeamAthletes);
 
   if (isLoading || isLoadingUserTeamAthletes) return <LoadingSpinner />;
@@ -98,29 +98,38 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
       </div>
 
       <div className="">
-        {sortedDays.map((dayKey) => (
-          <div key={dayKey}>
-            
-            {/* Day header */}
-            <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800/40 border border-slate-100 dark:border-slate-800 font-medium text-gray-800 dark:text-gray-200">
-              {format(new Date(dayKey), "EEEE, MMMM d, yyyy")}
-            </div>
 
-            {/* Fixtures for this day */}
-            <div className="divide-y divide-gray-200 dark:divide-slate-800/50 px-3">
-              {fixturesByDay[dayKey].map((fixture, index) => (
-                <FixtureCard 
-                  showLogos 
-                  fixture={fixture} 
-                  key={index}
-                  showVenue
-                  hideDate
-                  message={generateFixtureMessage(fixture)}
-                />
-              ))}
+
+        {sortedDays.map((dayKey) => {
+
+          const dayFixtures = fixturesByDay[dayKey];
+          const firstKickOff = dayFixtures.length > 0 ? dayFixtures[0]?.kickoff_time : undefined;
+          const dayDate = firstKickOff ? new Date(firstKickOff) : new Date(dayKey);
+
+          return (
+            <div key={dayKey}>
+
+              {/* Day header */}
+              <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800/40 border border-slate-100 dark:border-slate-800 font-medium text-gray-800 dark:text-gray-200">
+                {format(new Date(dayDate), "EEEE, MMMM d, yyyy")}
+              </div>
+
+              {/* Fixtures for this day */}
+              <div className="divide-y divide-gray-200 dark:divide-slate-800/50 px-3">
+                {fixturesByDay[dayKey].map((fixture, index) => (
+                  <FixtureCard
+                    showLogos
+                    fixture={fixture}
+                    key={index}
+                    showVenue
+                    hideDate
+                    message={generateFixtureMessage(fixture)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );
