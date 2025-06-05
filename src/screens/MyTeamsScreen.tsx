@@ -10,6 +10,7 @@ import {
 import { leagueService } from "../services/leagueService";
 import { useFetch } from "../hooks/useFetch";
 import useSWR from "swr";
+import PillTag from "../components/shared/PillTap";
 
 // Extended interface to include UI-specific properties
 interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
@@ -170,7 +171,7 @@ export function MyTeamsListScreen() {
 
 
 type MyTeamCardProps = {
-  team: ExtendedFantasyClubTeam
+  team: IFantasyClubTeam
 }
 
 function MyTeamCard({ team }: MyTeamCardProps) {
@@ -184,7 +185,7 @@ function MyTeamCard({ team }: MyTeamCardProps) {
   const navigate = useNavigate();
   const { data: teamAthletes, isLoading: loadingAthletes } = useSWR(`fantasy-team-athletes/${team.id}`, () => fantasyTeamService.fetchTeamAthletes(team.id));
 
-    const handleTeamClick = (teamId: string) => {
+  const handleTeamClick = (teamId: string) => {
     const athletes = teamAthletes ?? [];
 
     navigate(`/my-team/${teamId}`, {
@@ -199,7 +200,7 @@ function MyTeamCard({ team }: MyTeamCardProps) {
     <motion.div
       key={team.id}
       onClick={() => handleTeamClick(team.id)}
-      className="relative flex flex-col justify-between p-4 rounded-xl 
+      className="relative flex flex-col justify-between p-4 rounded-xl gap-2
                   bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700
                   cursor-pointer hover:shadow-md transition-shadow"
       whileHover={{
@@ -214,36 +215,39 @@ function MyTeamCard({ team }: MyTeamCardProps) {
         }
       }}
     >
-      <div className="flex items-center gap-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold dark:text-gray-100">
-              {team.name}
-            </h3>
-          </div>
 
-          {!isLoading && league && <div className="flex gap-1 flex-1 flex-row items-center justify-start" >
+      <h3 className="text-lg font-semibold dark:text-gray-100">
+        {team.name}
+      </h3>
+
+      <div className="flex flex-row items-center flex-wrap gap-2" >
+
+        {league ?
+          (<PillTag className="flex gap-1 flex-row items-center justify-start" >
             <Trophy className="text-orange-500 w-3 h-3" />
             <p className="dark:text-slate-400 text-sm text-slate-700" >{league.title}</p>
-          </div>}
+          </PillTag>) : null
+        }
 
-          <div className="flex items-center gap-3 mt-1">
-            <div className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400">
-              <Users size={16} className="shrink-0" />
-              <span>
-                {teamAthletes?.length || 0} Players
-              </span>
-            </div>
-          </div>
-        </div>
+        <PillTag className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+          <Users size={16} className="shrink-0" />
+          <span>
+            {teamAthletes?.length || 0} Players
+          </span>
+        </PillTag>
+
+        <PillTag className="text-sm text-gray-400">
+          {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
+        </PillTag>
+
       </div>
+
+
       <div className="flex flex-col items-end gap-1">
         <div className="text-lg font-bold text-primary-400">
           {/* {team} */}
         </div>
-        <div className="text-sm text-gray-400">
-          {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
-        </div>
+
       </div>
 
       {teamAthletes && <MyTeamAthletesRow athletes={teamAthletes} />}
