@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, ChevronLeft, Trophy, Dot } from "lucide-react";
+import { X, ChevronLeft, Trophy, Dot, Lock } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction } from "../../utils/athleteUtils";
@@ -10,6 +10,8 @@ import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
 import { getEnvironment } from "../../utils/envUtils";
 import { twMerge } from "tailwind-merge";
 import { isEmail } from "../../utils/stringUtils";
+import { useAtomValue } from "jotai";
+import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
@@ -24,6 +26,8 @@ export function TeamAthletesModal({
   onClose,
   isLoading = false,
 }: TeamAthletesModalProps) {
+
+  const isLeagueLocked = useAtomValue(fantasyLeagueLockedAtom);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
     null
   );
@@ -139,7 +143,7 @@ export function TeamAthletesModal({
                   }
 
                   <p className="">
-                   { userNameIsEmail ? team.teamName : `Managed by ${team.managerName}`}
+                    {userNameIsEmail ? team.teamName : `Managed by ${team.managerName}`}
                   </p>
                 </div>
               </div>
@@ -196,22 +200,27 @@ export function TeamAthletesModal({
           // Main list view
           <div className="w-full h-full" >
 
-            <Experimental
-              placeholder={
-                <TeamAthletesModalListView
+            {!isLeagueLocked ?
+              <NoPeekingView />
+              :
+
+              <Experimental
+                placeholder={
+                  <TeamAthletesModalListView
+                    athletes={athletes}
+                    handleKeyDown={handleKeyDown}
+                    handleViewBreakdown={handleViewBreakdown}
+                  />
+                }
+              >
+                <TeamAthletesModalPitchView
                   athletes={athletes}
                   handleKeyDown={handleKeyDown}
                   handleViewBreakdown={handleViewBreakdown}
                 />
-              }
-            >
-              <TeamAthletesModalPitchView
-                athletes={athletes}
-                handleKeyDown={handleKeyDown}
-                handleViewBreakdown={handleViewBreakdown}
-              />
-            </Experimental>
+              </Experimental>
 
+            }
 
 
           </div>
@@ -287,4 +296,13 @@ function PointsBreakdownView({ points }: PointsBreakDownViewProps) {
       </div>
     </div>
   );
+}
+
+function NoPeekingView() {
+  return (
+    <div className="w-full h-full flex flex-col items-center text-center gap-4 justify-center text-slate-700 dark:text-slate-400 px-5" >
+      <Lock className="w-14 h-14" />
+      <p className="font text-md" >No peeking! You'll be able to see this team once join dealine has passed.</p>
+    </div>
+  )
 }

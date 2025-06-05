@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { IFantasyLeague } from "../types/fantasyLeague";
+import { IFantasyLeague, IFantasyLeagueTeam } from "../types/fantasyLeague";
 import { isLeagueLocked } from "../utils/leaguesUtils";
 
 /** Fantasy League Atom */
@@ -10,3 +10,5 @@ export const fantasyLeagueLockedAtom = atom((get) => {
     const league = get(fantasyLeagueAtom);
     return isLeagueLocked(league?.join_deadline);
 });
+
+export const userFantasyTeamAtom = atom<IFantasyLeagueTeam>();

@@ -1,6 +1,8 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useEffect } from "react";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { RankedFantasyTeam } from "../types/league";
+import { useAtomValue, useSetAtom } from "jotai";
+import { fantasyLeagueAtom } from "../state/fantasyLeague.atoms";
 
 type ContextProps = {
   league?: IFantasyLeague,
@@ -16,6 +18,12 @@ type Props = {
 }
 
 export default function FantasyLeagueProvider({league, children, userTeam}: Props) {
+
+  const setFantasyLeague = useSetAtom(fantasyLeagueAtom);
+
+  useEffect(() => {
+    if (league) setFantasyLeague(league);
+  }, [league]);
 
 
   return (
