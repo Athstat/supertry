@@ -12,6 +12,7 @@ import { useFetch } from "../hooks/useFetch";
 import useSWR from "swr";
 import PillTag from "../components/shared/PillTap";
 import PlayerMugshot from "../components/shared/PlayerMugshot";
+import PlayerMugshotPlayerHolder from "../components/player/PlayerMugshotPlayerHolder";
 
 export function MyTeamsListScreen() {
   const navigate = useNavigate();
@@ -185,7 +186,7 @@ function MyTeamCard({ team }: MyTeamCardProps) {
       key={team.id}
       onClick={() => handleTeamClick(team.id)}
       className="relative flex flex-col justify-between p-4 rounded-xl gap-2
-                  bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700
+                  bg-gray-50 dark:bg-dark-800/40 hover:dark:bg-slate-800/60 border border-gray-100 dark:border-gray-700
                   cursor-pointer hover:shadow-md transition-shadow"
       whileHover={{
         scale: 1.02,
@@ -255,7 +256,11 @@ function MyTeamAthletesRow({ athletes }: AthletesRowProps) {
         {athletes.map((a) => {
           return (
             <div key={a.tracking_id} className="items-center flex flex-col gap-1" >
-              <PlayerMugshot url={a.image_url} />
+              <PlayerMugshot 
+                playerPr={a.power_rank_rating}
+                showPrBackground
+                url={a.image_url} 
+              />
               {/* <p className="text-xs truncate dark:text-slate-400" >{a.score?.toFixed(1)}</p> */}
             </div>
           )
