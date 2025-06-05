@@ -9,6 +9,7 @@ import {
 } from "../types/fantasyTeamAthlete";
 import { leagueService } from "../services/leagueService";
 import { useFetch } from "../hooks/useFetch";
+import useSWR from "swr";
 
 // Extended interface to include UI-specific properties
 interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
@@ -22,58 +23,30 @@ export function MyTeamsListScreen() {
   const location = useLocation();
   const { teamCreated, teamName } = location.state || {};
 
-  const [teams, setTeams] = useState<ExtendedFantasyClubTeam[]>([]);
-  
-  const [teamsWithAthletes, setTeamsWithAthletes] = useState<
-    Map<string, IFantasyTeamAthlete[]>
-  >(new Map());
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: userTeamsData, isLoading, error } = useSWR("user-fantasy-teams", () => fantasyTeamService.fetchUserTeams());
+
+  const userTeams = (userTeamsData ?? [])
+    .sort((a, b) => {
+      const dateA = new Date(a.created_at || 0).getTime();
+      const dateB = new Date(b.created_at || 0).getTime();
+      return dateB - dateA; // Descending order (newest first)
+    });
+
   const [showSuccessToast, setShowSuccessToast] = useState(
     Boolean(teamCreated)
   );
 
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        setIsLoading(true);
-        // Use the default league ID as in DashboardScreen
-        const userTeams = await fantasyTeamService.fetchUserTeams();
-        console.log("userTeams", userTeams);
 
-        // Sort teams by creation date (newest first)
-        const sortedTeams = [...userTeams].sort((a, b) => {
-          const dateA = new Date(a.created_at || 0).getTime();
-          const dateB = new Date(b.created_at || 0).getTime();
-          return dateB - dateA; // Descending order (newest first)
-        });
 
-        setTeams(sortedTeams);
+    // const sortedTeams = [...(userTeams)].sort((a, b) => {
+    //   const dateA = new Date(a.created_at || 0).getTime();
+    //   const dateB = new Date(b.created_at || 0).getTime();
+    //   return dateB - dateA; // Descending order (newest first)
+    // });
 
-        // Fetch athletes for each team
-        const athletesMap = new Map<string, IFantasyTeamAthlete[]>();
+    // setTeams(sortedTeams);
 
-        for (const team of sortedTeams) {
-          try {
-            const athletes = await fantasyTeamService.fetchTeamAthletes(team.id);
-            athletesMap.set(team.id, athletes);
-          } catch (err) {
-            console.error(`Failed to fetch athletes for team ${team.id}:`, err);
-            athletesMap.set(team.id, []);
-          }
-        }
-
-        setTeamsWithAthletes(athletesMap);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch teams:", err);
-        setError("Failed to load your teams. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTeams();
 
     // Auto-hide success toast after 5 seconds
     if (showSuccessToast) {
@@ -88,19 +61,6 @@ export function MyTeamsListScreen() {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const handleTeamClick = (teamId: string) => {
-    // Pass the team and its athletes to the MyTeamScreen
-    const team = teams.find((t) => t.id === teamId);
-    const athletes = teamsWithAthletes.get(teamId) || [];
-
-    navigate(`/my-team/${teamId}`, {
-      state: {
-        team,
-        athletes,
-      },
-    });
-  };
 
   // const toggleFavorite = async (
   //   teamId: string,
@@ -174,7 +134,7 @@ export function MyTeamsListScreen() {
         <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-4 rounded-lg">
           {error}
         </div>
-      ) : teams.length === 0 ? (
+      ) : userTeams.length === 0 ? (
         <div className="text-center py-12">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
             <Users className="w-8 h-8 text-gray-500 dark:text-gray-400" />
@@ -196,11 +156,9 @@ export function MyTeamsListScreen() {
       ) : (
         <div className="">
           <div className="space-y-4">
-            {teams.map((team) => {
+            {userTeams.map((team) => {
               return <MyTeamCard
                 team={team}
-                teamsWithAthletes={teamsWithAthletes}
-                handleTeamClick={handleTeamClick}
               />
             })}
           </div>
@@ -213,11 +171,9 @@ export function MyTeamsListScreen() {
 
 type MyTeamCardProps = {
   team: ExtendedFantasyClubTeam
-  handleTeamClick: (teamId: string) => void
-  teamsWithAthletes: Map<string, IFantasyTeamAthlete[]>
 }
 
-function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProps) {
+function MyTeamCard({ team }: MyTeamCardProps) {
 
   const { data: league, isLoading } = useFetch(
     "fantasy-leagues",
@@ -225,14 +181,25 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
     leagueService.getLeagueById
   )
 
+  const navigate = useNavigate();
+  const { data: teamAthletes, isLoading: loadingAthletes } = useSWR(`fantasy-team-athletes/${team.id}`, () => fantasyTeamService.fetchTeamAthletes(team.id));
 
-  console.log("Here is the team ", team);
+    const handleTeamClick = (teamId: string) => {
+    const athletes = teamAthletes ?? [];
+
+    navigate(`/my-team/${teamId}`, {
+      state: {
+        team,
+        athletes,
+      },
+    });
+  };
 
   return (
     <motion.div
       key={team.id}
       onClick={() => handleTeamClick(team.id)}
-      className="relative flex items-center justify-between p-4 rounded-xl 
+      className="relative flex flex-col justify-between p-4 rounded-xl 
                   bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700
                   cursor-pointer hover:shadow-md transition-shadow"
       whileHover={{
@@ -253,24 +220,6 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
             <h3 className="text-lg font-semibold dark:text-gray-100">
               {team.name}
             </h3>
-            {/* <button
-              onClick={(e) =>
-                toggleFavorite(team.id, Boolean(team.isFavorite), e)
-              }
-              className={`text-gray-400 hover:text-yellow-400 transition-colors ${team.isFavorite ? "text-yellow-400" : ""
-                }`}
-              aria-label={
-                team.isFavorite
-                  ? "Remove from favorites"
-                  : "Add to favorites"
-              }
-            >
-              {team.isFavorite ? (
-                <Star size={18} className="fill-current" />
-              ) : (
-                <Star size={18} />
-              )}
-            </button> */}
           </div>
 
           {!isLoading && league && <div className="flex gap-1 flex-1 flex-row items-center justify-start" >
@@ -282,7 +231,7 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
             <div className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400">
               <Users size={16} className="shrink-0" />
               <span>
-                {teamsWithAthletes.get(team.id)?.length || 0} Players
+                {teamAthletes?.length || 0} Players
               </span>
             </div>
           </div>
@@ -296,6 +245,20 @@ function MyTeamCard({ team, handleTeamClick, teamsWithAthletes }: MyTeamCardProp
           {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
         </div>
       </div>
+
+      {teamAthletes && <MyTeamAthletesRow athletes={teamAthletes} />}
     </motion.div>
+  )
+}
+
+type AthletesRowProps = {
+  athletes: IFantasyTeamAthlete[]
+}
+
+function MyTeamAthletesRow({ athletes }: AthletesRowProps) {
+  return (
+    <div>
+      <p>Some Players: { }</p>
+    </div>
   )
 }
