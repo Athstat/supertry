@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PlusCircle, Users, Loader, Trophy } from "lucide-react";
+import { PlusCircle, Users, Loader, Trophy, ChevronRight, Zap } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { fantasyTeamService } from "../services/fantasyTeamService";
@@ -11,6 +11,7 @@ import { leagueService } from "../services/leagueService";
 import { useFetch } from "../hooks/useFetch";
 import useSWR from "swr";
 import PillTag from "../components/shared/PillTap";
+import PlayerMugshot from "../components/shared/PlayerMugshot";
 
 // Extended interface to include UI-specific properties
 interface ExtendedFantasyClubTeam extends IFantasyClubTeam {
@@ -196,6 +197,10 @@ function MyTeamCard({ team }: MyTeamCardProps) {
     });
   };
 
+  const totalPoints = teamAthletes?.reduce((sum, a) => {
+    return sum + (a.score ?? 0);
+  }, 0) || 0;
+
   return (
     <motion.div
       key={team.id}
@@ -216,7 +221,7 @@ function MyTeamCard({ team }: MyTeamCardProps) {
       }}
     >
 
-      <h3 className="text-lg font-semibold dark:text-gray-100">
+      <h3 className="text-xl font-semibold dark:text-gray-100">
         {team.name}
       </h3>
 
@@ -229,14 +234,14 @@ function MyTeamCard({ team }: MyTeamCardProps) {
           </PillTag>) : null
         }
 
-        <PillTag className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-          <Users size={16} className="shrink-0" />
-          <span>
-            {teamAthletes?.length || 0} Players
-          </span>
+
+        <PillTag className="text-sm flex flex-row items-center gap-1.5 text-gray-400">
+          <Zap size={16} />
+          {totalPoints ? `Points ${totalPoints.toFixed(0)}` : null}
         </PillTag>
 
-        <PillTag className="text-sm text-gray-400">
+        <PillTag className="text-sm flex flex-row items-center gap-1.5 text-gray-400">
+          <Trophy size={16} />
           {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
         </PillTag>
 
@@ -256,13 +261,32 @@ function MyTeamCard({ team }: MyTeamCardProps) {
 }
 
 type AthletesRowProps = {
-  athletes: IFantasyTeamAthlete[]
+  athletes: IFantasyTeamAthlete[],
+  handleClick?: () => void
 }
 
 function MyTeamAthletesRow({ athletes }: AthletesRowProps) {
   return (
-    <div>
-      <p>Some Players: { }</p>
+    <div className="relative overflow-hidden">
+      {/* <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-slate-800/40 to-transparent"></div> */}
+      {/* <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-slate-800/0 to-transparent"></div> */}
+
+      <div className="overflow-x-auto whitespace-nowrap scroll-smooth space-x-4 flex">
+        {athletes.map((a, index) => {
+          return (
+            <div className="items-center flex flex-col gap-1" >
+              <PlayerMugshot url={a.image_url} />
+              {/* <p className="text-xs truncate dark:text-slate-400" >{a.score?.toFixed(1)}</p> */}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* <div>
+        <ChevronRight className="dark:text-primary-500" />
+      </div> */}
     </div>
+
+
   )
 }

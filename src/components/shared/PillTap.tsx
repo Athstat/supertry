@@ -6,6 +6,7 @@ type Props = {
     className?: string
 }
 
+/** Renders a pill tag component */
 export default function PillTag({children, className} : Props) {
   return (
     <div className={twMerge(
