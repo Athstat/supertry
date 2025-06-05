@@ -12,9 +12,13 @@ import { LoadingState } from "../ui/LoadingState";
 import { calculateFantasyTeamValue } from "../../utils/athleteUtils";
 import { ErrorState } from "../ui/ErrorState";
 import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
-import { fantasyTeamValueAtom, fantasyTeamAtom, fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
+import { 
+  fantasyTeamValueAtom, 
+  fantasyTeamAtom, 
+  fantasyTeamAthletesAtom, 
+  teamCaptainIdAtom 
+} from "../../state/myTeam.atoms";
 import useSWR from "swr";
-
 
 interface TeamDataContextType {
   team: IFantasyClubTeam | undefined;
@@ -44,6 +48,7 @@ export function TeamDataProvider({ children, teamId}: Props) {
   const [, setFantasyTeam] = useAtom(fantasyTeamAtom);
   const [, setFantasyTeamAthletes] = useAtom(fantasyTeamAthletesAtom);
   const [, setFantasyLeague] = useAtom(fantasyLeagueAtom);
+  const [, setTeamCaptainId] = useAtom(teamCaptainIdAtom);
 
   // Step 1: Fetching Data
   const { data: athletes, isLoading: loadingAthletes, error: athletesError } = useSWR(`team-athletes/${teamId}`, () => fantasyTeamService.fetchTeamAthletes(teamId));
@@ -68,9 +73,14 @@ export function TeamDataProvider({ children, teamId}: Props) {
     setFantasyTeamAthletes(sortedTeamAthletes);
     setFantasyTeamValue(calculatedTeamValue);
 
+    // Find and set the team captain
+    const captain = sortedTeamAthletes.find(athlete => athlete.is_captain);
+    setTeamCaptainId(captain?.tracking_id || null);
+
     console.log("Team ", team);
     console.log("League ", league);
     console.log("Athletes ", athletes);
+    console.log("Team Captain", captain?.player_name, captain?.tracking_id);
 
   }, [team, athletes, league]);
 

@@ -6,6 +6,7 @@ export const fantasyTeamValueAtom = atom<number>(0);
 export const remainingTeamBudgetAtom = atom((get) => MAX_TEAM_BUDGET - get(fantasyTeamValueAtom))
 export const fantasyTeamAthletesAtom = atom<IFantasyTeamAthlete[]>([]);
 export const fantasyTeamAtom = atom<IFantasyClubTeam>();
+export const teamCaptainIdAtom = atom<string | null>(null);
 
 export const fantasyTeamPointsAtom = atom((get) => {
     const athletes = get(fantasyTeamAthletesAtom);

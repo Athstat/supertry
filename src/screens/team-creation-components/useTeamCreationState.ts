@@ -24,6 +24,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   const [selectedPosition, setSelectedPosition] = useState<TeamCreationPositionSlot | null>(
     null
   );
+  const [captainId, setCaptainId] = useState<string | null>(null);
 
   // Toast state
   const [toast, setToast] = useState<{
@@ -267,6 +268,10 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
     selectedPlayersCount,
     requiredPlayersCount,
     isTeamComplete,
+
+    // Captain selection
+    captainId,
+    setCaptainId,
 
     // Toast
     toast,

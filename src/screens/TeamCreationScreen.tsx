@@ -147,11 +147,20 @@ export function TeamCreationScreen() {
     requiredPlayersCount,
     isTeamComplete,
 
+    // Captain selection
+    captainId,
+    setCaptainId,
+
     // Toast
     toast,
     showToast,
     hideToast,
   } = useTeamCreationState(officialLeagueId);
+
+  // Debug captain state changes
+  useEffect(() => {
+    console.log("Captain ID changed:", captainId);
+  }, [captainId]);
 
   const selectedPlayersArr = Object.values(selectedPlayers)
     .map((a) => {
@@ -162,13 +171,15 @@ export function TeamCreationScreen() {
   useEffect(() => {
     // If not a guest and we have user info, use the username as the team name
     if (!isGuest && userInfo?.username && teamName === '') {
-      setTeamName(userInfo.username);
+      setTeamName(userInfo.firstName); //need to make this more clear
     }
   }, [isGuest, userInfo, teamName, setTeamName]);
 
+  //console.log("userInfo", userInfo.firstName);
+
   // Handle team submission
   const handleSaveTeam = async () => {
-    setIsSaving(true);
+    
     // Validate team
     if (isGuest && teamName.trim() === "") {
       showToast("Please enter a club name", "error");
@@ -182,18 +193,24 @@ export function TeamCreationScreen() {
       showToast("You have exceeded the budget", "error");
       return;
     }
+
+    if (captainId === null) {
+      showToast("Please select a captain", "error");
+      return;
+    }
+
     if (!officialLeagueId) {
       showToast("League ID is required", "error");
       return;
     }
+
+    setIsSaving(true);
 
     try {
       // Convert selected players to the required format for API (IFantasyTeamAthlete)
       const teamAthletes: ICreateFantasyTeamAthleteItem[] = Object.values(selectedPlayers).map(
         (player, index) => {
           // Check if this player is in the Super Sub position
-
-
           const position = positionList.find(
             (pos) => pos.player && pos.player.tracking_id === player.tracking_id
           );
@@ -201,6 +218,7 @@ export function TeamCreationScreen() {
           console.log("The position we found ", position);
 
           const isSuperSub = position?.isSpecial || false;
+          const isPlayerCaptain = captainId === player.tracking_id;
 
           return {
             athlete_id: player.tracking_id ?? "",
@@ -210,13 +228,14 @@ export function TeamCreationScreen() {
             is_starting: !isSuperSub,
             slot: index + 1,
             is_super_sub: isSuperSub,
-            score: player.points || 0,            
+            score: player.scoring || 0,            
             // Add missing properties required by IFantasyTeamAthlete interface
             team_id: 0, // This will be set by the backend
             team_name: teamName,
             team_logo: "", // This will be set by the backend
-            athlete_team_id: player.team || "", // Use team property instead of team_id
-            player_name: player.name || "" // Use name as player_name
+            athlete_team_id: player.team_id || "", // Use team_id property
+            player_name: player.player_name || "", // Use player_name property
+            is_captain: isPlayerCaptain
           };
         }
       );
@@ -312,6 +331,8 @@ export function TeamCreationScreen() {
         selectedPosition={selectedPosition}
         onPositionSelect={handlePositionSelect}
         onPlayerRemove={handleRemovePlayer}
+        captainId={captainId}
+        setCaptainId={setCaptainId}
       />
 
       {/* Team name input - only show for guest users */}
