@@ -60,7 +60,7 @@ export function MyTeamsListCard({ team }: Props) {
       }}
     >
 
-      <h3 className="text-xl font-semibold dark:text-gray-100">
+      <h3 className="text-lg md:text-xl font-semibold dark:text-gray-100">
         {team.name}
       </h3>
 
@@ -69,17 +69,17 @@ export function MyTeamsListCard({ team }: Props) {
         {league ?
           (<PillTag className="flex gap-1 flex-row items-center justify-start" >
             <Trophy className="text-orange-500 w-3 h-3" />
-            <p className="dark:text-slate-400 text-sm text-slate-700" >{league.title}</p>
+            <p className="dark:text-slate-400 text-xs md:text-sm text-slate-700" >{league.title}</p>
           </PillTag>) : null
         }
 
 
-        {totalPoints ? (<PillTag className="text-sm flex flex-row items-center gap-1.5 text-gray-400">
+        {totalPoints ? (<PillTag className="text-xs md:text-sm flex flex-row items-center gap-1.5 text-gray-400">
           <Zap size={16} />
-          Points {totalPoints.toFixed(0)}
+          <p className="" >Points {totalPoints.toFixed(0)}</p>
         </PillTag>) : null}
 
-        <PillTag className="text-sm flex flex-row items-center gap-1.5 text-gray-400">
+        <PillTag className="text-xs md:text-sm flex flex-row items-center gap-1.5 text-gray-400">
           <Trophy size={16} />
           {team.rank ? `Rank #${team.rank}` : "Not ranked yet"}
         </PillTag>
