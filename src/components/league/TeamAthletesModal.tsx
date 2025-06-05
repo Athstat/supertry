@@ -12,6 +12,7 @@ import { twMerge } from "tailwind-merge";
 import { isEmail } from "../../utils/stringUtils";
 import { useAtomValue } from "jotai";
 import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
+import { authService } from "../../services/authService";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
@@ -28,6 +29,8 @@ export function TeamAthletesModal({
 }: TeamAthletesModalProps) {
 
   const isLeagueLocked = useAtomValue(fantasyLeagueLockedAtom);
+  const user = authService.getUserInfo();
+
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
     null
   );
@@ -76,6 +79,9 @@ export function TeamAthletesModal({
   //console.log("Points Breakdown", pointsBreakdown);
   const isStable = getEnvironment() === "production";
   const userNameIsEmail = isEmail(team.managerName);
+
+  const isUsersTeam = user ? user.id === team.userId : false;
+  const canPeek = isLeagueLocked || isUsersTeam;
 
   return (
     <div
@@ -199,10 +205,7 @@ export function TeamAthletesModal({
         ) : (
           // Main list view
           <div className="w-full h-full" >
-
-            {!isLeagueLocked ?
-              <NoPeekingView />
-              :
+            {canPeek ?
 
               <Experimental
                 placeholder={
@@ -219,7 +222,7 @@ export function TeamAthletesModal({
                   handleViewBreakdown={handleViewBreakdown}
                 />
               </Experimental>
-
+              : <NoPeekingView />
             }
 
 

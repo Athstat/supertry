@@ -18,7 +18,7 @@ import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/ta
 import PageView from "./PageView";
 import { ErrorState } from "../components/ui/ErrorState";
 import { ScopeProvider } from "jotai-scope";
-import { fantasyLeagueAtom, fantasyLeagueLockedAtom } from "../state/fantasyLeague.atoms";
+import { fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom } from "../state/fantasyLeague.atoms";
 
 
 export function LeagueScreen() {
@@ -114,7 +114,7 @@ export function LeagueScreen() {
     }
   }
 
-  const atoms = [fantasyLeagueAtom, fantasyLeagueLockedAtom];
+  const atoms = [fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom];
 
   return (
     <ScopeProvider atoms={atoms}>
