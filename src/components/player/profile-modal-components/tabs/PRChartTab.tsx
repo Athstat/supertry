@@ -35,7 +35,7 @@ export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
 
-  const { data, isLoading, error } = usePowerRankings(player.athlete_id);
+  const { data, isLoading, error } = usePowerRankings(player.tracking_id);
 
   console.log("playerPR", data);
 
