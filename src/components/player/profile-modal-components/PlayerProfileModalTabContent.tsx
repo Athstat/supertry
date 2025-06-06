@@ -1,4 +1,5 @@
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
+import PlayerMatchsPRList from './PlayerMatchsPRList';
 import OverviewTab from './tabs/OverviewTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
@@ -78,6 +79,7 @@ export function PlayerProfileModalTabContent({player, playerStats, isLoading,err
         <TabViewPage tabKey='power-ranking'>
           <PowerRankingTab player={player} />
           <PowerRankingChartTab player={player} />
+          <PlayerMatchsPRList player={player} />
         </TabViewPage>
 
       </TabView>

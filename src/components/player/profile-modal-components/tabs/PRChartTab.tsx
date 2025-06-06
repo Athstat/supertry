@@ -1,4 +1,3 @@
-import React from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -37,8 +36,6 @@ export function PowerRankingChartTab ({ player }: Props) {
   const isDarkMode = theme === "dark";
 
   const { data, isLoading, error } = usePowerRankings(player.tracking_id);
-
-  console.log("player PR Data", data);
 
   // Format dates for display on X-axis
   const formatDate = (dateString: string) => {
