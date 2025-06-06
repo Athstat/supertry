@@ -24,7 +24,7 @@ export default function PlayerMatchsPRList({ player }: Props) {
 
     if (isLoading) return <LoadingState />
 
-    if (matchesPR.length === 0) {
+    if (matchesPR.length === 0 && !matchesPR) {
         return <></>
     }
 
@@ -85,7 +85,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
 
     return (
-        <RoundedCard className="p-4 flex flex-col gap-2" >
+        <RoundedCard className="p-4 flex flex-col gap-2 bg-slate-50" >
 
             <div className="flex flex-row items-center justify-between" >
                 <div className="flex flex-row items-center gap-2" >
@@ -97,7 +97,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
                             (<p className="dark:text-slate-400 text-sm text-slate-700" >D {team_score} - {opposition_score}</p>) :
                             <p className={twMerge(
                                 "text-sm",
-                                athleteTeamWon ? "dark:text-primary-500" : "dark:text-red-500"
+                                athleteTeamWon ? "dark:text-primary-500 text-primary-600" : "dark:text-red-500 text-red-600"
                             )} >{athleteTeamWon ? "W" : "L"} {team_score} - {opposition_score}</p>
                         }
                     </div>
