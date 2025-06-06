@@ -35,7 +35,7 @@ export function MyTeamScreen() {
 /** Actual consumer content on my screen that consumes data from team data provider */
 function MyTeamScreenContent() {
 
-  const [activeTab, setActiveTab] = useState<MyTeamScreenTabType>("view-pitch");
+  const [activeTab, setActiveTab] = useState<MyTeamScreenTabType>("edit-team");
 
   return (
     <main className="container mx-auto px-4 py-6">

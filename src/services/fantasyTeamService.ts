@@ -224,5 +224,44 @@ export const fantasyTeamService = {
       console.log("Error fetching user team");
       return undefined;
     }
+  },
+
+  /**
+   * Update a player as team captain
+   * @param teamId The ID of the team
+   * @param playerId The tracking_id of the player to set as captain
+   */
+  updateTeamCaptain: async (teamId: string, playerId: string): Promise<any> => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-captain`);
+
+      // Validate that we have a playerId - a team must always have a captain
+      if (!playerId) {
+        throw new Error("Captain ID is required - a team must always have a captain");
+      }
+
+      console.log('Updating team captain:', { teamId, captainId: playerId });
+      
+      const response = await fetch(uri, {
+        method: "PUT",
+        headers: getAuthHeader(),
+        body: JSON.stringify({ 
+          teamId, 
+          captainId: playerId // This is the tracking_id from the frontend
+        }),
+      });
+
+      if (!response.ok) {
+        console.error("Failed to update team captain:", await response.text());
+        throw new Error(
+          `Failed to update captain: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error updating team captain:", error);
+      throw error;
+    }
   }
 };

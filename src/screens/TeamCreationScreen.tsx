@@ -2,6 +2,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { requestPushPermissions } from "../utils/bridgeUtils";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
+import { authService } from "../services/authService";
 
 // Components
 import { LoadingState } from "../components/team-creation/LoadingState";
@@ -89,26 +91,32 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 };
 
 export function TeamCreationScreen() {
-
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
   const league = location.state?.league ? location.state?.league as IFantasyLeague : undefined;
   const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } = useTeamCreationGuard(league);
+  const [isGuest, setIsGuest] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>(null);
 
   // Check if coming from welcome screen
   const isFromWelcome = location.state?.from === "welcome";
   const isLocked = isTeamCreationLocked;
 
-
   useEffect(() => {
     requestPushPermissions();
-  }, []);
-
-  // .....
+    
+    // Check if user is a guest and get user info
+    if (isAuthenticated) {
+      const info = authService.getUserInfo();
+      setUserInfo(info);
+      setIsGuest(authService.isGuestAccount());
+    }
+  }, [isAuthenticated]);
 
   // Use our centralized team creation state hook
   const {
@@ -139,23 +147,42 @@ export function TeamCreationScreen() {
     requiredPlayersCount,
     isTeamComplete,
 
+    // Captain selection
+    captainId,
+    setCaptainId,
+
     // Toast
     toast,
     showToast,
     hideToast,
   } = useTeamCreationState(officialLeagueId);
 
+  // Debug captain state changes
+  useEffect(() => {
+    console.log("Captain ID changed:", captainId);
+  }, [captainId]);
+
   const selectedPlayersArr = Object.values(selectedPlayers)
     .map((a) => {
       return {tracking_id: a.id}
     });
 
+  // Set the team name to username for non-guest users
+  useEffect(() => {
+    // If not a guest and we have user info, use the username as the team name
+    if (!isGuest && userInfo?.username && teamName === '') {
+      setTeamName(userInfo.firstName); //need to make this more clear
+    }
+  }, [isGuest, userInfo, teamName, setTeamName]);
+
+  //console.log("userInfo", userInfo.firstName);
+
   // Handle team submission
   const handleSaveTeam = async () => {
-    setIsSaving(true);
+    
     // Validate team
-    if (teamName.trim() === "") {
-      showToast("Please enter a team name", "error");
+    if (isGuest && teamName.trim() === "") {
+      showToast("Please enter a club name", "error");
       return;
     }
     if (selectedPlayersCount !== requiredPlayersCount) {
@@ -166,18 +193,24 @@ export function TeamCreationScreen() {
       showToast("You have exceeded the budget", "error");
       return;
     }
+
+    if (captainId === null) {
+      showToast("Please select a captain", "error");
+      return;
+    }
+
     if (!officialLeagueId) {
       showToast("League ID is required", "error");
       return;
     }
+
+    setIsSaving(true);
 
     try {
       // Convert selected players to the required format for API (IFantasyTeamAthlete)
       const teamAthletes: ICreateFantasyTeamAthleteItem[] = Object.values(selectedPlayers).map(
         (player, index) => {
           // Check if this player is in the Super Sub position
-
-
           const position = positionList.find(
             (pos) => pos.player && pos.player.tracking_id === player.tracking_id
           );
@@ -185,6 +218,7 @@ export function TeamCreationScreen() {
           console.log("The position we found ", position);
 
           const isSuperSub = position?.isSpecial || false;
+          const isPlayerCaptain = captainId === player.tracking_id;
 
           return {
             athlete_id: player.tracking_id ?? "",
@@ -193,7 +227,15 @@ export function TeamCreationScreen() {
             purchase_date: new Date(),
             is_starting: !isSuperSub,
             slot: index + 1,
-            is_super_sub: isSuperSub
+            is_super_sub: isSuperSub,
+            score: player.scoring || 0,            
+            // Add missing properties required by IFantasyTeamAthlete interface
+            team_id: 0, // This will be set by the backend
+            team_name: teamName,
+            team_logo: "", // This will be set by the backend
+            athlete_team_id: player.team_id || "", // Use team_id property
+            player_name: player.player_name || "", // Use player_name property
+            is_captain: isPlayerCaptain
           };
         }
       );
@@ -214,6 +256,13 @@ export function TeamCreationScreen() {
       // Step 2: Join the league using the recently submitted team
       const joinLeagueRes = await leagueService.joinLeague(league);
       console.log("Result from join res ", joinLeagueRes);
+
+      // update users username on db
+      // if (isGuest) {
+      //   await authService.updateUserInfo(userInfo.id, {
+      //     username: teamName
+      //   });
+      // }
 
       // Step 3: Request push notification permissions after successful team creation
       // requestPushPermissions(); Used to be here
@@ -282,10 +331,14 @@ export function TeamCreationScreen() {
         selectedPosition={selectedPosition}
         onPositionSelect={handlePositionSelect}
         onPlayerRemove={handleRemovePlayer}
+        captainId={captainId}
+        setCaptainId={setCaptainId}
       />
 
-      {/* Team name input */}
-      <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />
+      {/* Team name input - only show for guest users */}
+      {isGuest && (
+        <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />
+      )}
 
       {/* Team action buttons */}
       <TeamActions

@@ -8,7 +8,9 @@ interface PositionsGridProps {
   selectedPosition: TeamCreationPositionSlot | null;
   onPositionSelect: (position: TeamCreationPositionSlot) => void;
   onPlayerRemove: (positionId: string) => void;
-  selectedPlayers: Record<string, RugbyPlayer>
+  selectedPlayers: Record<string, RugbyPlayer>;
+  captainId?: string | null;
+  setCaptainId?: (id: string | null) => void;
 }
 
 export const PositionsGrid: React.FC<PositionsGridProps> = ({
@@ -16,7 +18,9 @@ export const PositionsGrid: React.FC<PositionsGridProps> = ({
   selectedPosition,
   onPositionSelect,
   onPlayerRemove,
-  selectedPlayers
+  selectedPlayers,
+  captainId,
+  setCaptainId
 }) => {
 
   return (
@@ -34,6 +38,8 @@ export const PositionsGrid: React.FC<PositionsGridProps> = ({
             selected={selectedPosition?.id === position.id}
             onPress={() => onPositionSelect(position)}
             onRemove={onPlayerRemove}
+            captainId={captainId}
+            setCaptainId={setCaptainId}
           />
         )
       })}

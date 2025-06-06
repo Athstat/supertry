@@ -27,6 +27,29 @@ declare global {
           onesignal_id?: string;
         };
       }>;
+      getDeviceId(): Promise<string>;
+    };
+    // Also support lowercase version (as injected by mobile app)
+    scrummyBridge?: {
+      requestPushPermission(userData?: any): Promise<{
+        granted: boolean;
+        onesignal_id?: string;
+      }>;
+      login(
+        tokens: { accessToken: string; refreshToken: string },
+        userData: BridgeUserData
+      ): Promise<{ success: boolean }>;
+      logout(): Promise<{ success: boolean }>;
+      getAuthStatus(): Promise<{
+        isAuthenticated: boolean;
+        userData?: {
+          name?: string;
+          email?: string;
+          user_id?: string;
+          onesignal_id?: string;
+        };
+      }>;
+      getDeviceId(): Promise<string>;
     };
   }
 }

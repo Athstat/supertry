@@ -1,15 +1,16 @@
-import { useAtomValue } from "jotai";
-import { fantasyTeamAthletesAtom, remainingTeamBudgetAtom } from "../../state/myTeam.atoms";
+import { useAtomValue, useAtom } from "jotai";
+import { fantasyTeamAthletesAtom, remainingTeamBudgetAtom, teamCaptainIdAtom, fantasyTeamAtom } from "../../state/myTeam.atoms";
 import { MAX_TEAM_BUDGET } from "../../types/constants";
-import { Coins, Lock } from "lucide-react";
+import { Coins, Lock, Award } from "lucide-react";
 import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { FantasyTeamPosition, Position } from "../../types/position";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import PlayerMugshotPlayerHolder from "../player/PlayerMugshotPlayerHolder";
 import { formatPosition } from "../../utils/athleteUtils";
 import { useMyTeamScreenActions } from "./MyTeamActions";
+import { fantasyTeamService } from "../../services/fantasyTeamService";
 
 type Props = {
 }
@@ -131,6 +132,11 @@ export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, p
   const isEditLocked = useAtomValue(fantasyLeagueLockedAtom);
   const { is_starting, image_url, player_name, team_name, purchase_price } = player;
   const isSub = !is_starting;
+  const [captainId, setCaptainId] = useAtom(teamCaptainIdAtom);
+  const team = useAtomValue(fantasyTeamAtom);
+  const [isUpdating, setIsUpdating] = useState(false);
+  
+  const isCaptain = player.tracking_id === captainId;
 
   const handleViewStats = () => {
     if (onViewStats) {
@@ -143,16 +149,57 @@ export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, p
       onSwapOutPlayer(player);
     }
   }
+
+  const handleToggleCaptain = async () => {
+    if (isEditLocked || isUpdating || !team?.id) return;
+    
+    // If this player is already captain, do nothing
+    if (isCaptain) {
+      return;
+    }
+    
+    try {
+      setIsUpdating(true);
+      
+      // Set this player as captain
+      console.log("Setting captain:", player.player_name, player.tracking_id);
+      
+      // Make sure we have the tracking_id
+      if (!player.tracking_id) {
+        console.error("Missing tracking_id for player:", player);
+        setIsUpdating(false);
+        return;
+      }
+      
+      console.log("Player tracking_id:", player.tracking_id);
+      console.log("Team ID:", team.id);
+      
+      try {
+        const result = await fantasyTeamService.updateTeamCaptain(team.id, player.tracking_id);
+        console.log("API Response (set captain):", result);
+        // Update UI state
+        setCaptainId(player.tracking_id);
+      } catch (apiError) {
+        console.error("API Error (set captain):", apiError);
+        throw apiError;
+      }
+    } catch (error) {
+      console.error("Error updating captain:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <>
-      {/* Player image */}
-      <div className="w-16 h-16 mb-2">
+      {/* Player image with captain badge */}
+      <div className="w-16 h-16 mb-2 relative border-red">
         <div
-
           className={twMerge(
             "w-16 h-16 rounded-full flex items-center justify-center overflow-hidden",
             isSub ? "bg-gray-300 border-2 border-orange-300 dark:border-orange-600"
-              : "bg-gray-300"
+              : "bg-gray-300",
+            isCaptain && "border-2 border-yellow-400 dark:border-yellow-500 ring-2 ring-yellow-400/30 dark:ring-yellow-500/30"
           )}
         >
           {image_url ? (
@@ -184,6 +231,13 @@ export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, p
             Super Sub
           </span>
         )}
+        
+        {isCaptain && (
+          <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 px-2 py-0.5 rounded-full mb-1 flex items-center">
+            <Award className="w-3 h-3 mr-1" />
+            Team Captain
+          </span>
+        )}
       </div>
 
       {/* Player name */}
@@ -205,7 +259,7 @@ export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, p
         </span>
       </div>
 
-      {/* Action buttons - now properly placed */}
+      {/* Action buttons */}
       <div className="w-full flex flex-col gap-2">
         <button
           onClick={handleViewStats}
@@ -215,12 +269,30 @@ export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, p
         </button>
 
         {!isEditLocked && (
-          <button
-            onClick={handleSwapOutPlayer}
-            className="w-full py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
-          >
-            Swap
-          </button>
+          <>
+            <button
+              onClick={handleSwapOutPlayer}
+              className="w-full py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+            >
+              Swap
+            </button>
+            
+            <button
+              onClick={handleToggleCaptain}
+              disabled={isUpdating || isCaptain}
+              className={twMerge(
+                "w-full py-1.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center",
+                isCaptain 
+                  ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-200 dark:hover:bg-yellow-900/50" 
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
+                isUpdating && "opacity-75 cursor-wait",
+                isCaptain && "cursor-not-allowed opacity-70"
+              )}
+            >
+              <Award className="w-3.5 h-3.5 mr-1.5" />
+              {isCaptain ? "Team Captain" : "Make Captain"}
+            </button>
+          </>
         )}
 
         {isEditLocked && (
@@ -231,7 +303,6 @@ export function EditTeamViewPlayerCard({ onSwapOutPlayer, onViewStats, player, p
         )}
       </div>
     </>
-
   )
 }
 
