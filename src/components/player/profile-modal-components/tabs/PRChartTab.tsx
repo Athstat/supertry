@@ -172,7 +172,7 @@ export function PowerRankingChartTab ({ player }: Props) {
   };
 
   return (
-    <div className="p-4 h-96">
+    <div className="p-4 h-52">
       <Line data={chartData} options={chartOptions} />
     </div>
   );
