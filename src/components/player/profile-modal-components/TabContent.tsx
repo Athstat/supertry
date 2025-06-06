@@ -1,26 +1,18 @@
-import React from 'react';
+import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import OverviewTab from './tabs/OverviewTab';
-import StatsTab from './tabs/StatsTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
 import PRChartTab from './tabs/PRChartTab';
-import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
-import PlayerStatsContextInfo from './PlayerStatsContextInfo';
+import StatsTab from './tabs/StatsTab';
 
-interface TabContentProps {
-  activeTab: number;
+
+type Props = {
   player: any;
   playerStats: any;
   isLoading: boolean;
   error: string;
 }
 
-export const TabContent: React.FC<TabContentProps> = ({
-  activeTab,
-  player,
-  playerStats,
-  isLoading,
-  error
-}) => {
+export function TabContent({player, playerStats, isLoading,error}: Props) {
   // switch (activeTab) {
   //   case 0: // Overview
   //     return <OverviewTab player={player} />;
