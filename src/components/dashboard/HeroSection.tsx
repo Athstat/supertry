@@ -87,12 +87,6 @@ function JoinDeadlineCountdown({
     navigateToLeagueScreen(league);
   }
 
-  const timeBlocks = [
-    { value: days, label: "Days" },
-    { value: hours, label: "Hours" },
-    { value: minutes, label: "Minutes" },
-    { value: seconds, label: "Seconds" },
-  ];
 
   return (
     <div className="flex flex-col p-4 gap-4 sm:gap-6">
@@ -110,7 +104,7 @@ function JoinDeadlineCountdown({
 
         <p className="text-primary-100 text-sm sm:text-base md:text-lg" >
           Don't miss out on the action. {league.title} starts 
-            {days > 1 ? 
+            {days >= 1 ? 
               <>{" "}in {days} {days > 1 ? "days" : "day"}</> 
               : <>{" "}in <strong>{hours}:{minutes}:{seconds}</strong></>
             }
