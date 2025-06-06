@@ -1,197 +1,238 @@
-import { useState } from "react";
-import {
-  User,
-  LogOut,
-  Shield,
-  ChevronRight,
-  Bell,
-} from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { useAuthUser } from "../hooks/useAuthUser";
-import UserStatsGrid from "../components/profile/UserStatsGrid";
-import UserNotificationsSettings from "../components/settings/UserNotificationsSettings";
-import { useFetch } from "../hooks/useFetch";
-import { authService } from "../services/authService";
-import { LoadingState } from "../components/ui/LoadingState";
-import { ErrorState } from "../components/ui/ErrorState";
+import { User, LogOut, Shield, ChevronRight, Settings, X } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { authService } from '../services/authService';
+import UserNotificationsSettings from '../components/settings/UserNotificationsSettings';
+import { useFetch } from '../hooks/useFetch';
+import { useAuthUser } from '../hooks/useAuthUser';
 
 export function ProfileScreen() {
-  
   const navigate = useNavigate();
-
-  const userInfo = useAuthUser();
   const { logout } = useAuth();
+  const [isGuestAccount, setIsGuestAccount] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showFinalDeleteConfirmation, setShowFinalDeleteConfirmation] = useState(false);
 
-  const { data: databaseUser, isLoading } = useFetch(
-    "database-user",
-    userInfo.id ?? 'fallback',
-    authService.getUserById
-  );
+  //const userInfo = useAuthUser();
 
-  const handleGoToMyTeams = () => {
-    navigate("/my-teams");
-  }
+  // useEffect(() => {
+  //   const info = authService.getUserInfo();
+  //   setUserInfo(info);
+  //   setIsGuestAccount(authService.isGuestAccount());
+  // }, []);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/signin");
+  useEffect(() => {
+    const fetchUserFromDB = async () => {
+      const info = await authService.getUserInfo();
+      setIsGuestAccount(authService.isGuestAccount());
+      if (!info) return;
+      const user = await authService.getUserFromDB(info.id);
+      console.log('[ProfileScreen] User:', user);
+      setUserInfo(user);
+    };
+    console.log('[ProfileScreen] Fetching user from DB');
+    fetchUserFromDB();
+  }, []);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      // For guest accounts, navigate to welcome screen with signin/create account options
+      if (isGuestAccount) {
+        navigate('/auth-choice');
+      } else {
+        navigate('/auth-choice');
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+      setIsLoggingOut(false);
+    }
   };
 
-  if (isLoading) return <LoadingState />
+  const handleDeleteAccount = () => {
+    setShowDeleteConfirmation(true);
+  };
 
-  if (!databaseUser) return (
-    <ErrorState message="Error retrieving your user profile" />
-  )
+  const confirmDelete = () => {
+    setShowDeleteConfirmation(false);
+    setShowFinalDeleteConfirmation(true);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(false);
+    setShowFinalDeleteConfirmation(false);
+  };
+
+  const finalConfirmDelete = async () => {
+    console.log('Deleting account confirmed');
+    setShowFinalDeleteConfirmation(false);
+    // Here you would call your API to initiate account deletion
+    // Then log the user out
+    await handleLogout();
+  };
+
+  const handleCompleteProfile = () => {
+    navigate('/complete-profile');
+  };
+
+  // const { data: databaseUser, isLoading } = useFetch(
+  //   "database-user",
+  //   userInfo.id ?? 'fallback',
+  //   authService.getUserById
+  // );
+
+  // console.log("databaseUser", databaseUser);
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-dark-850">
-      <div className="container mx-auto px-4 py-6 max-w-2xl">
-        {/* Profile Header */}
-        <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm p-6 mb-6">
-          <div className="flex items-start gap-4">
-
-            <div className="flex-1">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h1 className="text-xl font-bold dark:text-gray-100">
-                    {userInfo
-                      ? `${userInfo.firstName} ${userInfo.lastName}`
-                      : "Loading..."}
-                  </h1>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {userInfo?.username || ""}
-                  </p>
-                  {/* <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                    {userInfo?.email || ""}
-                  </p> */}
-                </div>
-                {/* <button className="px-4 py-2 bg-primary-600 dark:bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">
-                  Edit Profile
-                </button> */}
-              </div>
+    <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
+      <div className="flex flex-col mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold dark:text-white">Profile</h1>
+      </div>
+      <div className="space-y-4">
+        {/* User Info Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm"
+        >
+          <div className="flex items-center space-x-4">
+            <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
+              <User className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {userInfo?.username || 'Guest User'}
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {isGuestAccount ? 'Guest Account' : userInfo?.email}
+              </p>
             </div>
           </div>
+        </motion.div>
 
-          {/* Stats Grid */}
-          <UserStatsGrid />
-        </div>
-
-        {/* Friends Section - Commented out
-        <FriendsSection
-          friends={friends}
-          followingCount={142}
-          followersCount={98}
-        /> */}
-
-        {/* Achievements - Commented out
-        <div className="bg-white dark:bg-gray-800/40 rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 dark:text-gray-100">
-            <Medal size={20} className="text-primary-600" />
-            Achievements
-          </h2>
-          <div className="space-y-4">
-            {achievements.map((achievement) => (
-              <div
-                key={achievement.id}
-                className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl"
-              >
-                <div className="text-2xl">{achievement.icon}</div>
-                <div className="flex-1">
-                  <h3 className="font-semibold dark:text-gray-100">
-                    {achievement.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {achievement.description}
-                  </p>
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(achievement.earnedDate).toLocaleDateString()}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
-
-        {/* Settings */}
-        <div className="bg-white dark:bg-dark-800/40 rounded-2xl shadow-sm p-6">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 dark:text-gray-100">
-            <User size={20} className="text-primary-600" />
-            Settings
-          </h2>
-          <div className="space-y-4">
-            {/* Email - Commented out
-            <button className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors">
-              <div className="flex items-center gap-3">
-                <Mail size={20} className="text-gray-500" />
-                <span className="font-medium dark:text-gray-100">Email</span>
-              </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </button>
-            */}
-
-            {/* Password - Commented out
-            <button className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors">
-              <div className="flex items-center gap-3">
-                <Lock size={20} className="text-gray-500" />
-                <span className="font-medium dark:text-gray-100">Password</span>
-              </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </button>
-            */}
-
-            <UserNotificationsSettings 
-              databaseUser={databaseUser}
-            />
-
-            {/* User Teams */}
-            <button onClick={handleGoToMyTeams} className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-800 transition-colors">
-              <div className="flex items-center gap-3">
-                <Shield size={20} className="text-gray-500" />
-                <span className="font-medium dark:text-gray-100">My Teams</span>
-              </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </button>
-
-
-            {/* Notifications - Commented out
-            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-800/40 rounded-xl">
-              <div className="flex items-center gap-3">
-                <Bell size={20} className="text-gray-500" />
-                <span className="font-medium dark:text-gray-100">
-                  Notifications
-                </span>
-              </div>
-              <button
-                onClick={() => setNotifications(!notifications)}
-                className={`w-12 h-6 rounded-full transition-colors ${
-                  notifications
-                    ? "bg-primary-600"
-                    : "bg-gray-300 dark:bg-dark-600"
-                }`}
-              >
-                <div
-                  className={`w-5 h-5 rounded-full bg-white transform transition-transform ${
-                    notifications ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
-              </button>
-            </div>
-            */}
-
+        {/* Complete Profile Card for Guest Users */}
+        {isGuestAccount && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm"
+          >
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Welcome to Scrummy!
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Enhance your experience by creating a full account.
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+              Adding your email will allow you to access your teams across all your devices and keep
+              them secure.
+            </p>
             <button
-              onClick={handleLogout}
-              className="w-full flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+              onClick={handleCompleteProfile}
+              className="w-full bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center hover:bg-primary-700 transition-colors"
             >
-              <div className="flex items-center gap-3">
-                <LogOut size={20} className="text-red-500" />
-                <span className="font-medium text-red-600 dark:text-red-400">
-                  Logout
-                </span>
-              </div>
+              Complete Your Profile
+              <ChevronRight className="ml-2 h-5 w-5" />
             </button>
+          </motion.div>
+        )}
+
+        {userInfo && <UserNotificationsSettings databaseUser={userInfo} />}
+
+        {/* Logout Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: isGuestAccount ? 0.3 : 0.2,
+          }}
+          className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden"
+        >
+          <button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="w-full px-6 py-4 flex items-center justify-center space-x-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors disabled:opacity-50"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
+          </button>
+        </motion.div>
+
+        {/* Delete Account Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: isGuestAccount ? 0.3 : 0.2,
+          }}
+          className="pt-2 flex items-center justify-center"
+        >
+          <button
+            onClick={handleDeleteAccount}
+            className="flex items-center justify-center text-gray-500 dark:text-gray-400 hover:underline"
+          >
+            <span className="font-medium">Delete Account</span>
+          </button>
+        </motion.div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirmation && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+            <div className="bg-white dark:bg-dark-800 rounded-lg p-6 max-w-sm w-full">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Do you really want to delete your account?
+              </h3>
+              <div className="flex space-x-3">
+                <button
+                  onClick={cancelDelete}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300"
+                >
+                  No, cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg"
+                >
+                  Yes, delete
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Final Delete Confirmation Modal */}
+        {showFinalDeleteConfirmation && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white dark:bg-dark-800 rounded-lg p-6 max-w-sm w-full">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                Permanent account deletion
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                This process can't be undone. It'll take 24-48 hours to complete.
+              </p>
+              <div className="flex flex-col">
+                <button
+                  onClick={cancelDelete}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={finalConfirmDelete}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg mt-2"
+                >
+                  Delete permanently
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

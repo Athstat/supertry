@@ -10,7 +10,7 @@ interface PlayerListProps {
   players: RugbyPlayer[];
   isLoading: boolean;
   selectedPosition: Position;
-  handlePlayerSelect: (player: Player) => void;
+  handlePlayerSelect: (player: RugbyPlayer) => void;
   onClose: () => void;
   roundId?: number;
   availableTeams: AvailableTeam[]

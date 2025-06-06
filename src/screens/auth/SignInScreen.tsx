@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Mail } from "lucide-react";
+import { Eye, EyeOff, Mail, User } from "lucide-react";
 import { AuthLayout } from "../../components/auth/AuthLayout";
 import { useAuth } from "../../contexts/AuthContext";
+import { getDeviceId } from "../../utils/deviceIdUtils";
 
 export function SignInScreen() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export function SignInScreen() {
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGuestLoading, setIsGuestLoading] = useState(false);
 
   // Display environment variables for debugging (can be removed in production)
   // console.debug("Environment variables:", {
@@ -41,6 +43,40 @@ export function SignInScreen() {
       );
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    setError(null);
+    setIsGuestLoading(true);
+
+    try {
+      // Get the device ID which is used as the guest identifier
+      const deviceId = await getDeviceId();
+      
+      // Construct guest email - this matches the format in authService.createGuestUser
+      const guestEmail = `${deviceId}@devices.scrummy-app.ai`;
+      const guestPassword = deviceId;
+
+      console.log("Attempting to sign in with guest credentials");
+      
+      // Login with guest credentials
+      await login(guestEmail, guestPassword);
+      
+      // Set the guest account flag in localStorage if it's not already set
+      localStorage.setItem("is_guest_account", "true");
+      
+      // Navigate to dashboard
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Guest login error:", err);
+      setError(
+        err instanceof Error 
+          ? "Guest account not found or error signing in. Try creating a new account."
+          : "Failed to sign in as guest. Please try again."
+      );
+    } finally {
+      setIsGuestLoading(false);
     }
   };
 
@@ -123,6 +159,28 @@ export function SignInScreen() {
           className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isLoading ? "Signing in..." : "Sign in"}
+        </button>
+        
+        <div className="relative flex items-center justify-center">
+          <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
+          <div className="text-sm px-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-dark-850">or</div>
+          <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
+        </div>
+        
+        <button
+          type="button"
+          onClick={handleGuestLogin}
+          disabled={isGuestLoading}
+          className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-dark-800/40 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          {isGuestLoading ? (
+            "Signing in as guest..."
+          ) : (
+            <>
+              <User className="mr-2 h-5 w-5" />
+              <span>Continue as Guest</span>
+            </>
+          )}
         </button>
 
         <div className="text-center">

@@ -1,8 +1,11 @@
+import { useAtomValue } from "jotai";
+import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 import { IFantasyLeague } from "../../types/fantasyLeague";
-import { useTeamActions } from "./TeamActions";
-import { useTeamData } from "./TeamDataProvider";
-import { TeamTabsContent } from "./TeamTabsContent";
-
+import { TabButton } from "../shared/TabButton";
+import { EditFantasyTeamView } from "./EditFantasyTeamView";
+import { Lock } from "lucide-react";
+import { MyTeamPitchView } from "./MyTeamPitchView";
+import { MyTeamScreenActionsProvider } from "./MyTeamActions";
 export type MyTeamScreenTabType = "edit-team" | "view-pitch";
 
 type Props = {
@@ -12,30 +15,63 @@ type Props = {
 }
 
 /** Renders My Team Screen Tab View Area */
-export function MyTeamScreenTabView({ activeTab, setActiveTab, league }: Props) {
-
-  const { positionList, players, formation } = useTeamData();
-
-  const {
-    handlePlayerClick,
-    handlePositionSelect,
-    handleViewStats,
-    handleSwapPlayer,
-  } = useTeamActions();
+export function MyTeamScreenTabView({ activeTab, setActiveTab }: Props) {
+  const isEditLocked = useAtomValue(fantasyLeagueLockedAtom);
 
   return (
-    <TeamTabsContent
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-      positionList={positionList}
-      players={players}
-      formation={formation}
-      handlePositionSelect={handlePositionSelect}
-      handlePlayerClick={handlePlayerClick}
-      fetchingMarketPlayers={false} // Always pass false to prevent loading state on buttons
-      handleViewStats={handleViewStats}
-      handleSwapPlayer={handleSwapPlayer}
-      league={league}
-    />
-  );
+    <>
+      {/* Tabbed Interface */}
+
+      <div className="mt-8">
+        <div className="flex space-x-2 border-b-0">
+          {!isEditLocked && (
+            <TabButton
+              active={activeTab === "edit-team"}
+              onClick={() => setActiveTab("edit-team")}
+            >
+              <div className="flex items-center gap-1">
+                <span>Edit Team</span>
+              </div>
+            </TabButton>
+          )}
+
+          {isEditLocked && (
+            <TabButton
+              active={activeTab === "edit-team"}
+              onClick={() => setActiveTab("edit-team")}
+            >
+              <div className="flex items-center dark:text-slate-600 gap-2 flex-row">
+                <span>Edit Team</span>
+                <Lock className="w-4 h-4" />
+              </div>
+            </TabButton>
+          )}
+
+          <TabButton
+            active={activeTab === "view-pitch"}
+            onClick={() => setActiveTab("view-pitch")}
+          >
+            <div className="flex items-center gap-1">
+              <span>View Pitch</span>
+            </div>
+          </TabButton>
+        </div>
+      </div>
+
+
+      {/* Tab Content */}
+      <MyTeamScreenActionsProvider>
+        
+        <div className="mt-6">
+          {activeTab === "edit-team" ? (
+            <EditFantasyTeamView />
+          ) : (
+            <MyTeamPitchView
+            />
+          )}
+        </div>
+        
+      </MyTeamScreenActionsProvider>
+    </>
+  )
 };

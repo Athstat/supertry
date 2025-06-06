@@ -1,11 +1,10 @@
-import { Player } from "../../types/team";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import RugbyPitch from "../shared/RugbyPitch";
 import { TeamPlayerCard } from "./TeamPlayerCard";
 
 interface TeamFormationProps {
-  players: Player[];
-  formation: string;
-  onPlayerClick: (player: Player) => void;
+  players: IFantasyTeamAthlete[];
+  onPlayerClick: (player: IFantasyTeamAthlete) => void;
 }
 
 export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {

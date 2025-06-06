@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { WelcomeScreen } from "./screens/auth/WelcomeScreen";
 import { SignUpScreen } from "./screens/auth/SignUpScreen";
 import { SignInScreen } from "./screens/auth/SignInScreen";
+import { AuthChoiceScreen } from "./screens/auth/AuthChoiceScreen";
 import PostSignUpWelcomeScreen from "./screens/PostSignUpWelcomeScreen";
+import { CompleteProfileScreen } from "./screens/CompleteProfileScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { JoinLeagueScreen } from "./screens/JoinLeagueScreen";
 import { LeagueScreen } from "./screens/LeagueScreen";
@@ -22,11 +24,12 @@ import SbrScreen from "./screens/SbrScreen";
 import FixtureScreen from "./screens/FixtureScreen";
 import FixtureListScreen from "./screens/FixtureListScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
-import SbrChatTab from "./components/sbr/SBRChatScreen";
+import SBRChatScreen from "./components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
 import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
 import SbrFixtureScreen from "./screens/SbrFixtureScreen";
+import { isFirstAppVisit, markAppVisited } from "./utils/firstVisitUtils";
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -63,17 +66,43 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
 };
 
+// First Visit handler component
+const FirstVisitHandler = () => {
+  const { isAuthenticated, loading } = useAuth();
+  const [hasVisitedBefore, setHasVisitedBefore] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Check if user has visited the app before
+    const firstVisit = isFirstAppVisit();
+    setHasVisitedBefore(!firstVisit);
+
+    // If this is the first visit, mark it
+    if (firstVisit) {
+      markAppVisited();
+    }
+  }, []);
+
+  if (loading || hasVisitedBefore === null) return <div>Loading...</div>;
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  // First-time visitors see WelcomeScreen, returning visitors see AuthChoiceScreen
+  return (
+    <RouteErrorBoundary>
+      {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />}
+    </RouteErrorBoundary>
+  );
+};
+
 const AppRoutes = () => {
   return (
     <Routes>
       {/* Auth routes */}
       <Route
         path="/"
-        element={
-          <AuthRoute>
-            <WelcomeScreen />
-          </AuthRoute>
-        }
+        element={<FirstVisitHandler />}
       />
       <Route
         path="/signup"
@@ -88,6 +117,14 @@ const AppRoutes = () => {
         element={
           <AuthRoute>
             <SignInScreen />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/auth-choice"
+        element={
+          <AuthRoute>
+            <AuthChoiceScreen />
           </AuthRoute>
         }
       />
@@ -241,7 +278,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SbrChatTab />
+              <SBRChatScreen />
             </Layout>
           </ProtectedRoute>
         }
@@ -285,10 +322,20 @@ const AppRoutes = () => {
 
       {/* Post-Sign-Up Welcome Screen */}
       <Route
-        path="/welcome"
+        path="/post-signup-welcome"
         element={
           <ProtectedRoute>
             <PostSignUpWelcomeScreen />
+          </ProtectedRoute>
+        }
+      />
+      
+      {/* Complete Profile Screen */}
+      <Route
+        path="/complete-profile"
+        element={
+          <ProtectedRoute>
+            <CompleteProfileScreen />
           </ProtectedRoute>
         }
       />
