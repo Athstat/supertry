@@ -14,7 +14,7 @@ export type SingleMatchPowerRanking = {
     team_score?: number,
     opposition_score?: number,
     venue?: string,
-    kickoff_time?: string,
+    kickoff_time?: Date,
     competition_name?: string,
     team_id?: string,
     opposition_team_id?: string,
