@@ -3,9 +3,9 @@ import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger"
 
 export const powerRankingsService = {
-    getPastMatchsPowerRankings: async (athleteId: string) => {
+    getPastMatchsPowerRankings: async (athleteId: string, limit?: number) => {
         try {
-            const uri = getUri(`/api/v1/athletes/${athleteId}/power-rankings/matches`);
+            const uri = getUri(`/api/v1/athletes/${athleteId}/power-rankings/matches?limit=${limit || 10}`);
             
             const res = await fetch(uri, {
                 headers: getAuthHeader()

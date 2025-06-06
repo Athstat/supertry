@@ -17,7 +17,7 @@ type Props = {
 export default function PlayerMatchsPRList({ player }: Props) {
 
     const { data, isLoading } = useSWR(`player-matches-pr/${player.tracking_id}`,
-        () => powerRankingsService.getPastMatchsPowerRankings(player.tracking_id ?? "")
+        () => powerRankingsService.getPastMatchsPowerRankings(player.tracking_id ?? "", 10)
     );
 
     const matchesPR: any[] = data ?? [];
