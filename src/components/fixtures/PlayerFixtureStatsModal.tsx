@@ -60,10 +60,10 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
           value={bs.athlete_match_power_ranking?.toFixed(1)}
         />
 
-        <StatCard
+        {/* <StatCard
           label="Points"
           value={bs.points}
-        />
+        /> */}
 
       </div>
 
@@ -71,10 +71,10 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
 
         <p className="text-lg font-bold" >Attacking Stats</p>
 
-        <StatsRow
+        {/* <StatsRow
           label="Points"
           value={bs.points}
-        />
+        /> */}
 
         <StatsRow
           label="Tries"
