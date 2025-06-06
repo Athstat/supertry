@@ -87,13 +87,6 @@ function JoinDeadlineCountdown({
     navigateToLeagueScreen(league);
   }
 
-  const timeBlocks = [
-    { value: days, label: "Days" },
-    { value: hours, label: "Hours" },
-    { value: minutes, label: "Minutes" },
-    { value: seconds, label: "Seconds" },
-  ];
-
   return (
     <div className="flex flex-col p-4 gap-4 sm:gap-6">
       <div onClick={handleClickCard} className="space-y-2 sm:space-y-4 cursor-pointer">
