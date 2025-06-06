@@ -1,7 +1,7 @@
 import ModalHeader from "./profile-modal-components/ModalHeader";
 import PlayerStats from "./profile-modal-components/PlayerStats";
 import PlayerInfo from "./profile-modal-components/PlayerInfo";
-import TabContent from "./profile-modal-components/TabContent";
+import PlayerProfileModalTabContent from "./profile-modal-components/PlayerProfileModalTabContent";
 import usePlayerStats from "./profile-modal-components/usePlayerStats";
 
 interface Props {
@@ -44,7 +44,7 @@ export function PlayerProfileModal ({player, isOpen, onClose}: Props) {
 
           {/* Tab Content - scrollable */}
           <div className="flex-1 ">
-            <TabContent
+            <PlayerProfileModalTabContent
               player={player}
               playerStats={playerStats}
               isLoading={isLoading}

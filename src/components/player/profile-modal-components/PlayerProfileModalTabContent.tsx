@@ -12,7 +12,7 @@ type Props = {
   error: string;
 }
 
-export function TabContent({player, playerStats, isLoading,error}: Props) {
+export function PlayerProfileModalTabContent({player, playerStats, isLoading,error}: Props) {
   
   // switch (activeTab) {
   //   case 0: // Overview
@@ -85,4 +85,4 @@ export function TabContent({player, playerStats, isLoading,error}: Props) {
   )
 };
 
-export default TabContent;
+export default PlayerProfileModalTabContent;
