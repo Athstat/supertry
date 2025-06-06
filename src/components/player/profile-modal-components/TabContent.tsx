@@ -1,7 +1,7 @@
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import OverviewTab from './tabs/OverviewTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
-import PRChartTab from './tabs/PRChartTab';
+import PowerRankingChartTab from './tabs/PRChartTab';
 import StatsTab from './tabs/StatsTab';
 
 
@@ -13,6 +13,7 @@ type Props = {
 }
 
 export function TabContent({player, playerStats, isLoading,error}: Props) {
+  
   // switch (activeTab) {
   //   case 0: // Overview
   //     return <OverviewTab player={player} />;
@@ -76,7 +77,7 @@ export function TabContent({player, playerStats, isLoading,error}: Props) {
 
         <TabViewPage tabKey='power-ranking'>
           <PowerRankingTab player={player} />
-          <PRChartTab player={player} />
+          <PowerRankingChartTab player={player} />
         </TabViewPage>
 
       </TabView>

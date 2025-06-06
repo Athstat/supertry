@@ -27,17 +27,18 @@ ChartJS.register(
   Filler
 );
 
-interface PRChartTabProps {
+type Props = {
   player: any;
 }
 
-export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
+export function PowerRankingChartTab ({ player }: Props) {
+  
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
 
   const { data, isLoading, error } = usePowerRankings(player.athlete_id);
 
-  console.log("playerPR", data);
+  console.log("player PR Data", data);
 
   // Format dates for display on X-axis
   const formatDate = (dateString: string) => {
@@ -177,4 +178,4 @@ export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
   );
 };
 
-export default PRChartTab;
+export default PowerRankingChartTab;
