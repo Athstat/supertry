@@ -89,7 +89,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
             <div className="flex flex-row items-center justify-between" >
                 <div className="flex flex-row items-center gap-2" >
-
+                    
                     <TeamLogo className="w-10 h-10" url={oppositionImageUrl} />
                     <div>
                         <p className="" >vs {oppositionTeamName}</p>

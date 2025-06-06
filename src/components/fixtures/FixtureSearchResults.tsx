@@ -3,7 +3,7 @@ import { IBoxScoreItem } from "../../types/boxScore"
 import { IFixture } from "../../types/games";
 import { formatPosition } from "../../utils/athleteUtils";
 import PlayerMugshot from "../shared/PlayerMugshot";
-import PlayerFixtureStatsModal from "./AthleteFixtureStatsModal";
+import PlayerFixtureStatsModal from "./PlayerFixtureStatsModal";
 
 type Props = {
     search: string,

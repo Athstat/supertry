@@ -56,12 +56,16 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
         />
 
         <StatCard
+          label="Power Ranking"
+          value={bs.athlete_match_power_ranking?.toFixed(1)}
+        />
+
+        <StatCard
           label="Points"
           value={bs.points}
         />
 
       </div>
-
 
       <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
 
