@@ -108,7 +108,7 @@ export function ProfileScreen() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm"
+          className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
         >
           {isLoading ? (
             <LoadingState message="Loading profile..." />
@@ -135,7 +135,7 @@ export function ProfileScreen() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm"
+            className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
           >
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Welcome to Scrummy!
@@ -166,7 +166,7 @@ export function ProfileScreen() {
           transition={{
             delay: isGuestAccount ? 0.3 : 0.2,
           }}
-          className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden"
+          className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden"
         >
           <button
             onClick={handleLogout}

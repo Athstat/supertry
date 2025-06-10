@@ -1,27 +1,35 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ArrowRight, User, Flag } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowRight, User } from 'lucide-react';
+import { motion, MotionProps } from 'framer-motion';
 import { AuthLayout } from '../../components/auth/AuthLayout';
-import { CountrySelect } from '../../components/auth/CountrySelect';
-import { TeamSelect } from '../../components/auth/TeamSelect';
-import {
-  SignUpForm,
-  Country,
-  Team,
-  UserRepresentation,
-  CredentialRepresentation,
-} from '../../types/auth';
+import { SignUpForm, UserRepresentation } from '../../types/auth';
 import { authService } from '../../services/authService';
 import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/anayticsService';
 import { emailValidator } from '../../utils/stringUtils';
 import { requestPushPermissionsAfterLogin } from '../../utils/bridgeUtils';
 
+// Button animation variants
+const buttonVariants = {
+  initial: { scale: 1 },
+  hover: {
+    scale: 1.01,
+    transition: { type: 'linear', stiffness: 400, damping: 10 },
+  },
+  tap: { scale: 0.98 },
+};
+
+// Create a typed motion button component
+const MotionButton = motion.button as React.ComponentType<
+  MotionProps & React.ButtonHTMLAttributes<HTMLButtonElement>
+>;
+
 export function SignUpScreen() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1); // Keeping this for compatibility
+  const [currentStep] = useState(1); // Keeping this for compatibility
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -208,13 +216,17 @@ export function SignUpScreen() {
                   onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))}
                   minLength={8}
                 />
-                <button
+                <MotionButton
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  variants={buttonVariants}
+                  initial="initial"
+                  whileHover="hover"
+                  whileTap="tap"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
+                </MotionButton>
               </div>
             </div>
 
@@ -244,15 +256,19 @@ export function SignUpScreen() {
               </div>
             </div>
 
-            <button
+            <MotionButton
               type="button"
               onClick={handleNext}
               disabled={isLoading}
-              className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-primary-700 to-primary-600 via-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-600 hover:via-primary-650 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              variants={buttonVariants}
+              initial="initial"
+              whileHover="hover"
+              whileTap="tap"
             >
               {isLoading ? 'Creating Account...' : 'Complete Sign Up'}
               {!isLoading && <ArrowRight size={20} />}
-            </button>
+            </MotionButton>
           </div>
         )}
         {/* Steps 2 and 3 removed - country and team selection no longer needed */}
