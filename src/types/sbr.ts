@@ -73,3 +73,8 @@ export type INewSbrMotmVoteReq = {
     teamId: string,
     athleteId: string
 }
+
+export type IEditSbrMotmVoteReq = {
+    teamId: string,
+    athleteId: string
+}

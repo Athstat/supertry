@@ -11,5 +11,10 @@ export const hasUserSubmittedSbrMotmAtom = atom<boolean>((get) => {
     return userVote !== undefined;
 });
 
+/** Atom holding a boolean value representing whether an network request is being
+ * made to send a fetch post req to update the users vote
+ */
+export const isSendingSbrMotmVoteAtom = atom<boolean>(false);
+
 export const sbrFixtureMotmVotesAtom = atom<ISbrMotmVote[]>([]);
 export const sbrFixtureMotmCandidatesAtom = atom<ISbrFixtureRosterItem[]>([]);

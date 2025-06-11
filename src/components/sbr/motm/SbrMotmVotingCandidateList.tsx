@@ -1,9 +1,12 @@
-import { useAtomValue } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { ISbrFixtureRosterItem } from "../../../types/sbr"
-import PrimaryButton from "../../shared/buttons/PrimaryButton"
 import SecondaryText from "../../shared/SecondaryText"
-import { hasUserSubmittedSbrMotmAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms"
-import { Check } from "lucide-react"
+import { hasUserSubmittedSbrMotmAtom, isSendingSbrMotmVoteAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms"
+import { sbrMotmService } from "../../../services/sbrMotmService"
+import { mutate } from "swr"
+import { swrFetchKeys } from "../../../utils/swrKeys"
+import { useState } from "react"
+import { Loader } from "lucide-react"
 
 type Props = {
     roster: ISbrFixtureRosterItem[]
@@ -34,11 +37,39 @@ type ItemProps = {
 export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
     const userVote = useAtomValue(userSbrMotmVoteAtom);
+    const [isSendingVote, setIsSendingVote] = useAtom(isSendingSbrMotmVoteAtom);
+    const [isLoading, setIsLoading] = useState(false);
 
     const hasUserVoted = useAtomValue(hasUserSubmittedSbrMotmAtom);
     const hasUserVotedForCandidated = userVote && userVote.athlete_id === candidate.athlete_id;
 
-    const canVote = !hasUserVotedForCandidated;
+
+    const canVote = !isSendingVote && !hasUserVotedForCandidated;
+
+    const onVote = async () => {
+        setIsSendingVote(true);
+        setIsLoading(true);
+
+        if (hasUserVoted) {
+            await sbrMotmService.changeMotmVote(
+                candidate.fixture_id,
+                candidate.athlete_id,
+                candidate.team_id
+            );
+        } else {
+            await sbrMotmService.postMotmVote(
+                candidate.fixture_id,
+                candidate.athlete_id,
+                candidate.team_id
+            );
+        }
+
+        // Revalidate user vote cache
+
+        mutate(swrFetchKeys.getSbrUserMotmVoteKey(candidate.fixture_id));
+        setIsSendingVote(false);
+        setIsLoading(false);
+    }
 
     return (
 
@@ -55,8 +86,9 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
             <div className="w-[40%] flex flex-row items-center justify-end" >
 
-                {canVote && <div className="border hover:bg-slate-100 hover:dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
-                </div>}
+                {canVote && <button onClick={onVote} className="border hover:bg-slate-100 hover:dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
+                    {isLoading && <Loader className="text-slate-700 dark:text-slate-400 w-4 h-4 animate-spin" />}
+                </button>}
 
                 {hasUserVotedForCandidated && <div className="border bg-gradient-to-br from-primary-500 to-primary-700 border-slate-300 dark:border-primary-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
                     ✓

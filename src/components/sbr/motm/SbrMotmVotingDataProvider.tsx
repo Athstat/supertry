@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { sbrMotmService } from "../../../services/sbrMotmService";
 import { sbrService } from "../../../services/sbrService";
 import { LoadingState } from "../../ui/LoadingState";
+import { swrFetchKeys } from "../../../utils/swrKeys";
 
 type Props = {
     children?: ReactNode,
@@ -26,7 +27,7 @@ export default function SbrMotmVotingDataProvider({ children, fixture }: Props) 
     const rostersFetchKey = `sbr-fixture-rosters/${fixtureId}`;
     const { data: rosters, isLoading: loadingRosters } = useSWR(rostersFetchKey, () => sbrService.getFixtureRosters(fixtureId));
 
-    const userVoteFetchKey = `user-sbr-fixture-motm-vote/${fixtureId}`;
+    const userVoteFetchKey = swrFetchKeys.getSbrUserMotmVoteKey(fixtureId);
     const { data: userVote, isLoading: loadingUserVote } = useSWR(userVoteFetchKey, () => sbrMotmService.getUserVote(fixtureId));
 
     const isLoading = loadingUserVote || loadingRosters;
