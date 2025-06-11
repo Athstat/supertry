@@ -1,10 +1,11 @@
-import useSWR from "swr"
 import { ISbrFixture } from "../../../types/sbr"
-import { sbrService } from "../../../services/sbrService";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../shared/tabs/TabView";
 import SecondaryText from "../../shared/SecondaryText";
-import { sbrMotmService } from "../../../services/sbrMotmService";
 import { SbrMotmVotingCandidateList } from "./SbrMotmVotingCandidateList";
+import { useAtomValue } from "jotai";
+import { hasUserSubmittedSbrMotmAtom, sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms";
+import { ScopeProvider } from "jotai-scope";
+import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
 
 type Props = {
     fixture: ISbrFixture
@@ -12,16 +13,31 @@ type Props = {
 
 export default function SbrMotmVotingBox({ fixture }: Props) {
 
+
+    const atoms = [
+        sbrFixtureMotmCandidatesAtom, hasUserSubmittedSbrMotmAtom, 
+        userSbrMotmVoteAtom, sbrFixtureMotmVotesAtom
+    ]
+
+    return (
+        <ScopeProvider atoms={atoms} >
+            <SbrMotmVotingDataProvider fixture={fixture} >
+                <SbrMotmVotingBoxContent fixture={fixture} />
+            </SbrMotmVotingDataProvider>
+        </ScopeProvider>
+    )
+}
+
+type ContentProps = {
+    fixture: ISbrFixture
+}
+
+export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
     // get team rosters
     // get votes
-    const fixtureId = fixture.fixture_id;
 
-    const rostersFetchKey = `sbr-fixture-rosters/${fixtureId}`;
-    const { data: rosters, isLoading: loadingRosters } = useSWR(rostersFetchKey, () => sbrService.getFixtureRosters(fixtureId));
-    
-    const userVoteFetchKey = `user-sbr-fixture-motm-vote/${fixtureId}`;
-    const {data: userVote, isLoading: loadingUserVote} = useSWR(userVoteFetchKey, () => sbrMotmService.getUserVote(fixtureId));
-    
+
+    const candidates = useAtomValue(sbrFixtureMotmCandidatesAtom);
 
     const tabItems: TabViewHeaderItem[] = [
         {
@@ -29,29 +45,27 @@ export default function SbrMotmVotingBox({ fixture }: Props) {
             tabKey: 'home_team',
             className: "flex-1 text-xs md:text-sm"
         },
-        
+
         {
             label: `${fixture.away_team}`,
             tabKey: 'away_team',
             className: "flex-1 text-xs md:text-sm"
         }
     ]
-    
-    if (!rosters || rosters.length === 0) return (
+
+    if (candidates.length === 0) return (
         <>
-            {!loadingRosters && <div className="text-slate-700 dark:text-slate-400 text-center items-center justify-center flex flex-col p-3 text-sm md:text-sm" >
+            {<div className="text-slate-700 dark:text-slate-400 text-center items-center justify-center flex flex-col p-3 text-sm md:text-sm" >
                 <p>Rosters are not yet available for this match</p>
             </div>}
         </>
     )
-    
-    const hasUserVoted = userVote !== undefined;
 
-    const homeRoster = rosters.filter((r) => {
+    const homeCandidates = candidates.filter((r) => {
         return r.team_id === fixture.home_team_id
     });
 
-    const awayRoster = rosters.filter((r) => {
+    const awayCandidates = candidates.filter((r) => {
         return r.team_id === fixture.away_team_id
     });
 
@@ -62,18 +76,18 @@ export default function SbrMotmVotingBox({ fixture }: Props) {
             </div>
 
             <SecondaryText className="mb-2" >Vote for the player who was your Top Dawg of the Match 😤</SecondaryText>
-            
+
             <TabView tabHeaderItems={tabItems} >
                 <TabViewPage tabKey="home_team" >
 
                     <SbrMotmVotingCandidateList
-                        roster={homeRoster}
+                        roster={homeCandidates}
                     />
                 </TabViewPage>
 
                 <TabViewPage tabKey="away_team" >
                     <SbrMotmVotingCandidateList
-                        roster={awayRoster}
+                        roster={awayCandidates}
                     />
                 </TabViewPage>
 
