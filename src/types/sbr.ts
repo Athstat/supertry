@@ -13,7 +13,9 @@ export type ISbrFixture = {
     home_votes: number,
     away_votes: number,
     country?: string,
-    is_feature_game?: boolean
+    is_feature_game?: boolean,
+    home_team_id?: string,
+    away_team_id?: string
 }
 
 export type ISbrBoxscoreItem = {
@@ -37,4 +39,18 @@ export type UserPredictionsRanking = {
     wrong_predictions: string,
     predictions_perc: number,
     user_rank: string
+}
+
+/** Represents a single item in an sbr fixture roster */
+export type ISbrFixtureRosterItem = {
+    fixture_id: string,
+    team_id: string,
+    athlete_id: string,
+    position?: string,
+    jersey_number?: number,
+    is_captain?: boolean,
+    is_substitute?: boolean,
+    team_name?: string,
+    athlete_first_name?: string,
+    athlete_last_name?: string
 }

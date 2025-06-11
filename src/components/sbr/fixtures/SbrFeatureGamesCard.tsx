@@ -61,11 +61,32 @@ type ModalProps = {
 
 function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
 
+    const maxIndex = games.length - 1;
     const [index, setIndex] = useState(0);
+
     const currentGame = games[index];
 
-    const {hasKickedOff, hasScores} = sbrFixtureSummary(currentGame);
+    const { hasKickedOff, hasScores } = sbrFixtureSummary(currentGame);
     const showScores = hasScores;
+
+    const canMoveNext = index < maxIndex;
+    const canMovePrev = index > 0;
+
+    const handleMoveNextFixture = () => {
+        if (!canMoveNext) {
+            return;
+        }
+
+        setIndex(prev => prev + 1);
+    }
+
+    const handleMovePrevFixture = () => {
+        if (!canMovePrev) {
+            return;
+        }
+
+        setIndex(prev => prev - 1);
+    }
 
     return (
         <>
@@ -73,39 +94,37 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
                 open={open}
                 onClose={onClose}
                 title="Feature Games"
-                className="flex flex-col h-full"
-                hw="h-screen lg:w-1/2"
+                className="flex flex-col gap-4 overflow-hidden h-full"
+                hw="h-full max-h-[95vh] lg:w-1/2"
             >
-                <div className="h-[85%]" >
-                    <div>
-                        <div className="flex flex-row w-full items-center" >
+                <div className="h-[85%] overflow-y-auto flex flex-col gap-1" >
+                    <div className="flex flex-row w-full items-center" >
 
-                            <div className="flex flex-col w-1/3 items-center" >
-                                <SbrTeamLogo className="h-12 w-12" teamName={currentGame.home_team} />
-                                <p className="text-[12px] md:text-base" >{currentGame.home_team}</p>
-                                <p>{hasScores ? currentGame.home_score : "-"}</p>
-                            </div>
-
-                            <div className="w-1/3 flex flex-col items-center justify-center" >
-                                <p className="" >VS</p>
-                            </div>
-
-
-                            <div className="flex flex-col w-1/3 items-center" >
-                                <SbrTeamLogo className="h-12 w-12" teamName={currentGame.away_team} />
-                                <p className="text-[12px] md:text-base" >{currentGame.away_team}</p>
-                                <p>{hasScores ? currentGame.home_score : "-"}</p>
-                            </div>
+                        <div className="flex flex-col w-1/3 items-center" >
+                            <SbrTeamLogo className="h-12 w-12" teamName={currentGame.home_team} />
+                            <p className="text-[12px] md:text-base" >{currentGame.home_team}</p>
+                            <p>{hasScores ? currentGame.home_score : "-"}</p>
                         </div>
 
-                        <SbrFixturePredictionBox preVotingCols="two" fixture={currentGame} />
-                        <SbrMotmVotingBox fixture={currentGame} />
+                        <div className="w-1/3 flex flex-col items-center justify-center" >
+                            <p className="" >VS</p>
+                        </div>
+
+
+                        <div className="flex flex-col w-1/3 items-center" >
+                            <SbrTeamLogo className="h-12 w-12" teamName={currentGame.away_team} />
+                            <p className="text-[12px] md:text-base" >{currentGame.away_team}</p>
+                            <p>{hasScores ? currentGame.home_score : "-"}</p>
+                        </div>
                     </div>
+
+                    <SbrFixturePredictionBox preVotingCols="two" fixture={currentGame} />
+                    <SbrMotmVotingBox fixture={currentGame} />
                 </div>
 
                 <div className="h-[15%] flex flex-col gap-2 items-center " >
-                    <PrimaryButton>Next Match</PrimaryButton>
-                    <PrimaryButton>Previous Match</PrimaryButton>
+                    <PrimaryButton onClick={handleMoveNextFixture} disbabled={!canMoveNext} >Next Match</PrimaryButton>
+                    <PrimaryButton onClick={handleMovePrevFixture} disbabled={!canMovePrev} >Previous Match</PrimaryButton>
                 </div>
             </DialogModal>
         </>

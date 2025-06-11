@@ -102,7 +102,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
 
                 </div>}
 
-                {hasKickedOff && <div className="flex flex-col w-full gap-2 items-center text-sm justify-center text-slate-700 dark:text-slate-200" >
+                {hasKickedOff && <div className="flex flex-col w-full text-xs md:text-sm  gap-2 items-center justify-center text-slate-700 dark:text-slate-200" >
                     <p>{hasScores ? 'Results' : 'Predictions'}</p>
 
                     <button className={twMerge(
