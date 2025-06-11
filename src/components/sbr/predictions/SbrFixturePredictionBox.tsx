@@ -67,6 +67,14 @@ export default function SbrFixturePredictionBox({ fixture, hide }: Props) {
 
     return (
         <div>
+
+            {isLoading && (
+                <div className="w-full h-20 bg-slate-200 dark:bg-slate-800/40 animate-pulse rounded-xl" >
+
+                </div>
+            )}
+
+
             {!isLoading && !hide && <div
                 className={twMerge(
                     "flex mt-6 flex-col w-full gap-0 items-center justify-center",
