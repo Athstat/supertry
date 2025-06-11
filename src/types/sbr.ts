@@ -54,3 +54,16 @@ export type ISbrFixtureRosterItem = {
     athlete_first_name?: string,
     athlete_last_name?: string
 }
+
+export type ISbrMotmVote = {
+    fixture_id: string,
+    athlete_id: string,
+    team_id: string,
+    user_id: string,
+    created_at?: Date,
+    athlete_first_name?: string,
+    athlete_last_name?: string,
+    team_name?: string,
+    user_email?: string,
+    username?: string
+}
