@@ -95,6 +95,8 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
                                 <p>{hasScores ? currentGame.home_score : "-"}</p>
                             </div>
                         </div>
+
+                        
                     </div>
                 </div>
 
