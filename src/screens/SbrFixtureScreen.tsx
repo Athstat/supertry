@@ -8,7 +8,7 @@ import { ArrowLeft, Minus } from "lucide-react";
 import BlueGradientCard from "../components/shared/BlueGradientCard";
 import SbrTeamLogo from "../components/sbr/fixtures/SbrTeamLogo";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
-import { sbrFxitureSummary } from "../utils/sbrUtils";
+import { sbrFixtureSummary } from "../utils/sbrUtils";
 import { ISbrFixture } from "../types/sbr";
 import { format } from "date-fns";
 import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
@@ -45,7 +45,7 @@ export default function SbrFixtureScreen() {
         }
     ];
     
-    const { hasScores } = sbrFxitureSummary(fixture);
+    const { hasScores } = sbrFixtureSummary(fixture);
 
     return (
         <div>

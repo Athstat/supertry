@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ISbrFixture } from "../../types/sbr";
 import SbrTeamLogo from "./fixtures/SbrTeamLogo";
 import { twMerge } from "tailwind-merge";
-import { getSbrVotingSummary, sbrFxitureSummary } from "../../utils/sbrUtils";
+import { getSbrVotingSummary, sbrFixtureSummary } from "../../utils/sbrUtils";
 import { useSbrFixtureVotes } from "../../hooks/useFxitureVotes";
 import { Fragment } from "react/jsx-runtime";
 import { useState } from "react";
@@ -70,7 +70,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
 
     const gameCompleted = fixture.status === "completed";
 
-    const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFxitureSummary(fixture);
+    const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFixtureSummary(fixture);
     const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, userVote)
 
     const hasUserVoted = votedAwayTeam || votedHomeTeam;

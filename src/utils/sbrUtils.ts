@@ -28,7 +28,7 @@ export function hasSbrRoundPassed(fixtures: ISbrFixture[]) {
     return false;
 }
 
-export function sbrFxitureSummary(fixture: ISbrFixture) {
+export function sbrFixtureSummary(fixture: ISbrFixture) {
 
     const { home_score, away_score } = fixture;
     const hasScores = home_score !== null && away_score !== null && home_score !== undefined && away_score !== undefined;
