@@ -97,7 +97,7 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
                 className="flex flex-col gap-4 overflow-hidden h-full"
                 hw="h-full max-h-[95vh] lg:w-1/2"
             >
-                <div className="h-[85%] overflow-y-auto flex flex-col gap-1" >
+                <div className="h-[85%] overflow-y-auto flex flex-col gap-4" >
                     <div className="flex flex-row w-full items-center" >
 
                         <div className="flex flex-col w-1/3 items-center" >

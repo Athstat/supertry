@@ -2,6 +2,8 @@ import useSWR from "swr"
 import { ISbrFixture, ISbrFixtureRosterItem } from "../../../types/sbr"
 import { sbrService } from "../../../services/sbrService";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../shared/tabs/TabView";
+import SecondaryText from "../../shared/SecondaryText";
+import PrimaryButton from "../../shared/buttons/PrimaryButton";
 
 type Props = {
     fixture: ISbrFixture
@@ -20,13 +22,13 @@ export default function SbrMotmVotingBox({ fixture }: Props) {
         {
             label: `${fixture.home_team}`,
             tabKey: 'home_team',
-            className: "flex-1"
+            className: "flex-1 text-xs md:text-sm"
         },
 
         {
             label: `${fixture.away_team}`,
             tabKey: 'away_team',
-            className: "flex-1"
+            className: "flex-1 text-xs md:text-sm"
         }
     ]
 
@@ -47,7 +49,13 @@ export default function SbrMotmVotingBox({ fixture }: Props) {
     });
 
     return (
-        <div>
+        <div className="flex flex-col gap gap-1" >
+            <div className="flex flex-row items-center gap-1" >
+                <h2 className="text-md font-semibold" >Top Dawg Of The Match</h2>
+            </div>
+
+            <SecondaryText className="mb-2" >Vote for the player who was your Top Dawg of the Match 😤</SecondaryText>
+            
             <TabView tabHeaderItems={tabItems} >
                 <TabViewPage tabKey="home_team" >
 
@@ -90,8 +98,24 @@ type VotingCandidateListItemProps = {
 
 function SbrMotmVotingCandidateListItem({ candidate }: VotingCandidateListItemProps) {
     return (
-        <div>
-            <p>{candidate.athlete_first_name}</p>
+
+        <div className="flex gap-3 p-2 flex-row items-center" >
+
+            <div className="w-[10%]" >
+                <p>{candidate.jersey_number || "-"}</p>
+            </div>
+
+            <div className="flex  w-[50%] flex-col items-start" >
+                <p>{candidate.athlete_first_name}</p>
+                <SecondaryText className="text-xs md:text-sm" >{candidate.position ?? ""}</SecondaryText>
+            </div>
+
+            <div className="w-[40%] flex flex-row items-center justify-end" >
+                <PrimaryButton className="text-xs w-fit py-1 px-2.5" >
+                    Vote
+                </PrimaryButton>
+            </div>
         </div>
+
     )
 }
