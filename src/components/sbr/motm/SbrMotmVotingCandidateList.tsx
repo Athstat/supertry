@@ -1,6 +1,9 @@
+import { useAtomValue } from "jotai"
 import { ISbrFixtureRosterItem } from "../../../types/sbr"
 import PrimaryButton from "../../shared/buttons/PrimaryButton"
 import SecondaryText from "../../shared/SecondaryText"
+import { hasUserSubmittedSbrMotmAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms"
+import { Check } from "lucide-react"
 
 type Props = {
     roster: ISbrFixtureRosterItem[]
@@ -25,6 +28,14 @@ type ItemProps = {
 }
 
 export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
+    
+    const userVote = useAtomValue(userSbrMotmVoteAtom);
+
+    const hasUserVoted = useAtomValue(hasUserSubmittedSbrMotmAtom);
+    const hasUserVotedForCandidated = userVote && userVote.athlete_id === candidate.athlete_id;
+
+    const canVote = !hasUserVotedForCandidated;
+
     return (
 
         <div className="flex gap-3 p-2 flex-row items-center" >
@@ -39,9 +50,15 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
             </div>
 
             <div className="w-[40%] flex flex-row items-center justify-end" >
-                <PrimaryButton className="text-xs w-fit py-1 px-2.5" >
+                {canVote && <PrimaryButton className="text-xs w-fit py-1 px-2.5" >
                     Vote
-                </PrimaryButton>
+                </PrimaryButton>}
+
+                {hasUserVotedForCandidated && (
+                    <div>
+                        <p><Check className="text-green-500" /></p>
+                    </div>
+                )}
             </div>
         </div>
 

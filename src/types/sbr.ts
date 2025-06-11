@@ -67,3 +67,9 @@ export type ISbrMotmVote = {
     user_email?: string,
     username?: string
 }
+
+export type INewSbrMotmVoteReq = {
+    userId: string,
+    teamId: string,
+    athleteId: string
+}
