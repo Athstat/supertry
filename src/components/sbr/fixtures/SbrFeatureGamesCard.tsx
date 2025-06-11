@@ -1,6 +1,5 @@
 import { useAtomValue } from "jotai"
 import { sbrWeekFeatureGamesAtom } from "../../../state/sbrFixtures.atoms"
-import BlueGradientCard from "../../shared/BlueGradientCard";
 import SbrFixtureCard from "../SbrFixtureCard";
 import { Swords } from "lucide-react";
 import RoundedCard from "../../shared/RoundedCard";
