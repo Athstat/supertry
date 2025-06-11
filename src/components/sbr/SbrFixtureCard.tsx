@@ -15,10 +15,11 @@ type Props = {
     showLogos?: boolean,
     showCompetition?: boolean,
     className?: string,
-    showKickOffTime?: boolean
+    showKickOffTime?: boolean,
+    hideVoting?: boolean
 }
 
-export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className }: Props) {
+export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, hideVoting }: Props) {
 
     const { homeVotes, awayVotes, userVote, isLoading } = useSbrFixtureVotes(fixture);
     const { home_score, away_score, home_team, away_team } = fixture;
@@ -93,8 +94,8 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
             >
                 {/* Home Team */}
                 <div className="flex-1 flex gap-2 flex-col items-center justify-start" >
-                    {showLogos && <SbrTeamLogo className="lg:w-14 lg:h-14" teamName={fixture.home_team} />}
-                    <p className="text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team}</p>
+                    {showLogos && <SbrTeamLogo className="w-14 h-14 lg:w-14 lg:h-14" teamName={fixture.home_team} />}
+                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team}</p>
                     <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && home_score ? home_score : "-"}</p>
                 </div>
                 {/* Kick off information */}
@@ -109,8 +110,8 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 </div>
                 {/* Away Team */}
                 <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >
-                    {showLogos && <SbrTeamLogo className="lg:w-14 lg:h-14" teamName={fixture.away_team} />}
-                    <p className="text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team}</p>
+                    {showLogos && <SbrTeamLogo className="w-14 h-14 lg:w-14 lg:h-14" teamName={fixture.away_team} />}
+                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team}</p>
                     <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && away_score ? away_score : "-"}</p>
                 </div>
             </div>
@@ -121,7 +122,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 </div>
             )}
 
-            {!isLoading && <div
+            {!isLoading && !hideVoting && <div
                 className={twMerge(
                     "flex mt-6 flex-col w-full gap-0 items-center justify-center",
                     isVoting && "animate-pulse opacity-60 cursor-progress"

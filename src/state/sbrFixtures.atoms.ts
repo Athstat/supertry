@@ -35,7 +35,7 @@ export const sbrWeekFixturesAtom = atom<ISbrFixture[]>((get) => {
 export const sbrWeekFeatureGamesAtom = atom<ISbrFixture[]>((get) => {
     const fixtures = get(sbrWeekFixturesAtom);
     return fixtures.filter((f) => {
-        return f.is_feature_match === true;
+        return f.is_feature_game === true;
     })
 });
 

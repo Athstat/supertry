@@ -1,7 +1,3 @@
-
-/** Fetches data needed by the sbr screen and makes it available
- * through global shared atoms*/
-
 import useSWR from "swr";
 import { useSetAtom } from "jotai"
 import { ReactNode, useEffect } from "react";
@@ -15,13 +11,9 @@ type Props = {
     children?: ReactNode
 }
 
+/** Fetches data needed by the sbr screen and 
+ * makes it available through global shared atoms*/
 export default function SbrScreenDataProvider({ children }: Props) {
-
-    // get all the fixtures as an atom
-    // save the week start and week end as atoms
-
-    // use the week start and end to filter the matches
-    // set all of these related fixture atoms
 
     const { data: allFixtures, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
     
