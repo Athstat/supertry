@@ -13,6 +13,7 @@ export type ISbrFixture = {
     home_votes: number,
     away_votes: number,
     country?: string,
+    is_feature_match?: boolean
 }
 
 export type ISbrBoxscoreItem = {

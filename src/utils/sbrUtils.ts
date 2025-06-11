@@ -1,6 +1,6 @@
 import { isWithinInterval, startOfDay } from "date-fns";
 import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
-import { getLastWednesdayIfNotWednesday, getNextTuesdayIfNotTuesday,} from "./dateUtils";
+import { getLastWednesdayIfNotWednesday, getNextTuesdayIfNotTuesday, } from "./dateUtils";
 import { calculatePerc } from "./fixtureUtils";
 
 /** Returns true if all the fixtures passed to the funciton have
@@ -70,11 +70,8 @@ export function getSbrSeasons(fixtures: ISbrFixture[]) {
     return seasons;
 }
 
-export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
-
-    const today = pivot ? new Date(pivot) : new Date();
-    const weeekStart = getLastWednesdayIfNotWednesday(today);
-    const weekEnd = startOfDay(getNextTuesdayIfNotTuesday(today));
+/** Gets  */
+export function filterSbrFixturesByDateRange(fixtures: ISbrFixture[], weekStart: Date, weekEnd: Date) {
 
     const weekGames = fixtures.filter((f) => {
         if (f.kickoff_time) {
@@ -82,7 +79,7 @@ export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
             const kickoff = new Date(f.kickoff_time)
 
             return isWithinInterval(kickoff, {
-                start: weeekStart,
+                start: weekStart,
                 end: weekEnd
             });
         }
@@ -90,12 +87,12 @@ export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
         return false;
     });
 
-    return { weekGames, weeekStart, weekEnd };
+    return weekGames
 
 }
 
 export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixtureVote) {
-    
+
     const homeVotes = Number.parseInt(fixture.home_votes.toString());
     const awayVotes = Number.parseInt(fixture.away_votes.toString());
     const total = homeVotes + awayVotes;
@@ -110,7 +107,7 @@ export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixture
         awayPerc,
         votedAwayTeam,
         votedHomeTeam,
-        homeVotes, 
+        homeVotes,
         awayVotes
     }
 }

@@ -1,28 +1,33 @@
 import PageView from "./PageView";
-import SbrProvider from "../contexts/SbrContext";
 import SbrScreenHeader from "../components/sbr/SbrScreenHeader";
-import useSWR from "swr";
-import { sbrService } from "../services/sbrService";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
 import SbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
-import { getWeekGames } from "../utils/sbrUtils";
-import { LoadingState } from "../components/ui/LoadingState";
-import { useQueryState } from "../hooks/useQueryState";
-import { dateToStrWithoutTime, safeTransformStringToDate } from "../utils/dateUtils";
+import { ScopeProvider } from "jotai-scope";
+import { allSbrWeekFixturesAtom, sbrFixturesPivotDateAtom, sbrFixturesWeekEndAtom, sbrFixturesWeekStartAtom, sbrWeekFeatureGamesAtom, sbrWeekFixturesAtom } from "../state/sbrFixtures.atoms";
+import SbrScreenDataProvider from "../components/sbr/SbrScreenDataProvider";
+import { useAtomValue } from "jotai";
 
 export default function SbrScreen() {
 
-  const { data, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
-  const today = new Date();
-  const [pivotDateStr] = useQueryState('pivot', {init: dateToStrWithoutTime(today)});
-  const pivotDate = safeTransformStringToDate(pivotDateStr);
+  const atoms = [sbrFixturesPivotDateAtom, sbrFixturesWeekEndAtom, sbrFixturesWeekStartAtom,
+    allSbrWeekFixturesAtom, sbrWeekFixturesAtom, sbrWeekFeatureGamesAtom
+  ]
 
-  if (isLoading) return <LoadingState />
+  return (
+    <ScopeProvider atoms={atoms} >
+      <SbrScreenDataProvider>
+        <SbrScreenContent />
+      </SbrScreenDataProvider>
+    </ScopeProvider>
+  )
+}
 
-  const currentRound = 0;
-  const {weekGames, weeekStart, weekEnd} = getWeekGames(data ?? [], pivotDate);
+
+function SbrScreenContent() {
+
+  const weekGames = useAtomValue(sbrWeekFixturesAtom);
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -44,41 +49,34 @@ export default function SbrScreen() {
   ]
 
   return (
-    <SbrProvider currentRound={currentRound} >
-      <PageView className="dark:text-white p-5 flex flex-col gap-4" >
-        
-        <SbrScreenHeader />
-        
-        {/* {currentRoundFixtures.length > 0 &&
+    <PageView className="dark:text-white p-5 flex flex-col gap-4" >
+
+      <SbrScreenHeader />
+
+      {/* {currentRoundFixtures.length > 0 &&
           <SbrFixturesHero
-            fixtures={currentRoundFixtures}
+          fixtures={currentRoundFixtures}
           />
-        } */}
+          } */}
 
-        <TabView tabHeaderItems={tabItems} >
-          {/* <TabViewPage tabKey="current-week" >
+      <TabView tabHeaderItems={tabItems} >
+        {/* <TabViewPage tabKey="current-week" >
             {!isLoading && <SbrCurrentWeekFixtures fixtures={currentRoundFixtures} />}
-          </TabViewPage> */}
+            </TabViewPage> */}
 
-          <TabViewPage tabKey="predictions" >
-            {!isLoading && <SbrPredictionsTab />}
-          </TabViewPage>
+        <TabViewPage tabKey="predictions" >
+          <SbrPredictionsTab />
+        </TabViewPage>
 
-          <TabViewPage tabKey="chat" >
-            {!isLoading && <SbrChatTab />}
-          </TabViewPage>
+        <TabViewPage tabKey="chat" >
+          <SbrChatTab />
+        </TabViewPage>
 
-          <TabViewPage tabKey="fixtures" >
-            {!isLoading && <SbrFixturesTab 
-              fixtures={weekGames}
-              weekEnd={weekEnd}
-              weekStart={weeekStart}
+        <TabViewPage tabKey="fixtures" >
+          <SbrFixturesTab fixtures={weekGames}/>
+        </TabViewPage>
 
-            />}
-          </TabViewPage>
-
-        </TabView>
-      </PageView>
-    </SbrProvider>
+      </TabView>
+    </PageView>
   )
 }
