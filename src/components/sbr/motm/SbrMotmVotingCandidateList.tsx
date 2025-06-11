@@ -13,12 +13,16 @@ type Props = {
 export function SbrMotmVotingCandidateList({ roster }: Props) {
     return (
         <div>
-            {roster.map((r) => {
-                return <SbrMotmVotingCandidateListItem
-                    candidate={r}
-                    key={r.athlete_id}
-                />
-            })}
+            {roster
+                .sort((a, b) => {
+                    return (a.jersey_number ?? 0) - (b.jersey_number ?? 0)
+                })
+                .map((r) => {
+                    return <SbrMotmVotingCandidateListItem
+                        candidate={r}
+                        key={r.athlete_id}
+                    />
+                })}
         </div>
     )
 }
@@ -28,7 +32,7 @@ type ItemProps = {
 }
 
 export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
-    
+
     const userVote = useAtomValue(userSbrMotmVoteAtom);
 
     const hasUserVoted = useAtomValue(hasUserSubmittedSbrMotmAtom);
@@ -50,15 +54,14 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
             </div>
 
             <div className="w-[40%] flex flex-row items-center justify-end" >
-                {canVote && <PrimaryButton className="text-xs w-fit py-1 px-2.5" >
-                    Vote
-                </PrimaryButton>}
 
-                {hasUserVotedForCandidated && (
-                    <div>
-                        <p><Check className="text-green-500" /></p>
-                    </div>
-                )}
+                {canVote && <div className="border hover:bg-slate-100 hover:dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
+                </div>}
+
+                {hasUserVotedForCandidated && <div className="border bg-gradient-to-br from-primary-500 to-primary-700 border-slate-300 dark:border-primary-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
+                    ✓
+                </div>}
+
             </div>
         </div>
 
