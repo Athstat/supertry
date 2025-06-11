@@ -9,6 +9,8 @@ import { ISbrFixture } from "../../../types/sbr";
 import DialogModal from "../../shared/DialogModal";
 import SbrTeamLogo from "./SbrTeamLogo";
 import { sbrFixtureSummary } from "../../../utils/sbrUtils";
+import SbrFixturePredictionBox from "../predictions/SbrFixturePredictionBox";
+import SbrMotmVotingBox from "../motm/SbrMotmVotingBox";
 
 /** Renders a card of the feature games for a specific week */
 export default function SbrFeatureGamesCard() {
@@ -79,8 +81,8 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
                         <div className="flex flex-row w-full items-center" >
 
                             <div className="flex flex-col w-1/3 items-center" >
-                                <SbrTeamLogo className="h-14 w-14" teamName={currentGame.home_team} />
-                                <p className="text-[15px] md:text-base" >{currentGame.home_team}</p>
+                                <SbrTeamLogo className="h-12 w-12" teamName={currentGame.home_team} />
+                                <p className="text-[12px] md:text-base" >{currentGame.home_team}</p>
                                 <p>{hasScores ? currentGame.home_score : "-"}</p>
                             </div>
 
@@ -90,13 +92,14 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
 
 
                             <div className="flex flex-col w-1/3 items-center" >
-                                <SbrTeamLogo className="h-14 w-14" teamName={currentGame.away_team} />
-                                <p className="text-[15px] md:text-base" >{currentGame.away_team}</p>
+                                <SbrTeamLogo className="h-12 w-12" teamName={currentGame.away_team} />
+                                <p className="text-[12px] md:text-base" >{currentGame.away_team}</p>
                                 <p>{hasScores ? currentGame.home_score : "-"}</p>
                             </div>
                         </div>
 
-                        
+                        <SbrFixturePredictionBox preVotingCols="two" fixture={currentGame} />
+                        <SbrMotmVotingBox fixture={currentGame} />
                     </div>
                 </div>
 
