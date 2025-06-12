@@ -80,10 +80,10 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
         </>
     )
 
-    if (candidates.length === 0 && !hasKickedOff) return (
+    if (candidates.length > 0 && !hasKickedOff) return (
         <>
             <LockedViewCard message={
-                `Not just yet! Top Dawg Of the match voting starts at kickoff (${format(kickoff, "HH:mm")} on ${format(kickoff, "EEEE dd MMMM yyyy")})`
+                `Not just yet! Top Dawg Of The Match voting starts at kickoff (${format(kickoff, "HH:mm")} on ${format(kickoff, "EEEE dd MMMM yyyy")})`
             } />
         </>
     )

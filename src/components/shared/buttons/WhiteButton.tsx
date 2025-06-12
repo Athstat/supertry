@@ -21,7 +21,7 @@ export default function WhiteButton({ children, className, onClick, disbabled }:
             disbabled={disbabled}
             onClick={handleOnClick}
             className={twMerge(
-                "bg-gradient-to-r font-semibold from-white border-slate-100 to-gray-200 via-gray-50 text-primary-800",
+                "bg-gradient-to-r border font-semibold from-white border-slate-300 to-gray-50 via-gray-50 text-primary-800",
                 className
             )}
         >

@@ -6,11 +6,11 @@ import { useState } from "react";
 import { ISbrFixture } from "../../../types/sbr";
 import DialogModal from "../../shared/DialogModal";
 import SbrTeamLogo from "./SbrTeamLogo";
-import { sbrFixtureSummary } from "../../../utils/sbrUtils";
+import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrFixturePredictionBox from "../predictions/SbrFixturePredictionBox";
 import SbrMotmVotingBox from "../motm/SbrMotmVotingBox";
-import BlueGradientCard from "../../shared/BlueGradientCard";
-import WhiteButton from "../../shared/buttons/WhiteButton";
+import RoundedCard from "../../shared/RoundedCard";
+import SecondaryText from "../../shared/SecondaryText";
 
 /** Renders a card of the feature games for a specific week */
 export default function SbrFeatureGamesCard() {
@@ -21,20 +21,28 @@ export default function SbrFeatureGamesCard() {
     const [show, setShow] = useState(false);
     const toggle = () => setShow(!show);
 
+    const fixturesVotingEndedCount = featureGames.reduce((prev, f) => {
+        const hasVotingEnded = hasMotmVotingEnded(f.kickoff_time);
+        return prev + (hasVotingEnded ? 1 : 0);
+    }, 0);
+
+    const hasVotingEndedForAll = fixturesVotingEndedCount === featureGames.length;
+
     if (isFeatureGamesEmpty) {
         return null;
     }
 
+
     return (
-        <BlueGradientCard className="flex flex-col gap-4 p-4" >
+        <RoundedCard className="flex flex-col gap-4 p-4" >
 
             <div className="flex flex-row items-center gap-2" >
                 <Swords />
                 <h1 className="text-lg font-bold" >Feature Games</h1>
             </div>
-            <p className="text-white" >Predict who will win and vote for your <strong>Top Dawg Of the Game</strong> on this weeks feature games!</p>
+            <SecondaryText className="" >Predict who will win and vote for your <strong>Top Dawg Of the Game</strong> on this weeks feature games!</SecondaryText>
 
-            <div className="flex flex-row items-center gap-4" >
+            <div className="flex flex-row items-center gap-4 my-2" >
                 {featureGames.map((g ) => {
                     return (
 
@@ -42,6 +50,7 @@ export default function SbrFeatureGamesCard() {
                             {/* <div key={index} className="flex bg-slate-100/40 dark:bg-slate-700/40 w-14 h-14 p-1 rounded-full flex-row items-center justify-center gap-2" > */}
                                 <SbrTeamLogo key={g.home_team_id} teamName={g.home_team} />
                             {/* </div> */}
+                            <p>vs</p>
                             {/* <div key={index} className="flex bg-slate-100/40 dark:bg-slate-700/40 w-14 h-14 p-1 rounded-full flex-row items-center justify-center gap-2" > */}
                                 <SbrTeamLogo key={g.away_votes} teamName={g.away_team} />
                             {/* </div> */}
@@ -50,11 +59,11 @@ export default function SbrFeatureGamesCard() {
                 })}
             </div>
 
-            <WhiteButton onClick={toggle} >Predict & Vote!</WhiteButton>
+            <PrimaryButton onClick={toggle} >{hasVotingEndedForAll ? "View Results" : "Predict & Vote"}</PrimaryButton>
 
             <SbrFeatureGamesModal open={show} onClose={toggle} games={featureGames} />
 
-        </BlueGradientCard>
+        </RoundedCard>
     )
 }
 
