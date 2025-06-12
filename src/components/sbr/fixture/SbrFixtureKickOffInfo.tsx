@@ -7,7 +7,7 @@ import { useState } from "react";
 import { mutate } from "swr";
 import { useSbrFixtureVotes } from "../../../hooks/useFxitureVotes";
 import { sbrService } from "../../../services/sbrService";
-import { sbrFxitureSummary, getSbrVotingSummary } from "../../../utils/sbrUtils";
+import { sbrFixtureSummary, getSbrVotingSummary } from "../../../utils/sbrUtils";
 import { VotingOptionBar } from "../../shared/bars/VotingOptionBar";
 
 type Props = {
@@ -59,7 +59,7 @@ export default function SbrFixtureKickOffInfo({ fixture }: Props) {
 
     const gameCompleted = fixture.status === "completed";
 
-    const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFxitureSummary(fixture);
+    const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFixtureSummary(fixture);
     const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, userVote)
 
     const hasUserVoted = votedAwayTeam || votedHomeTeam;

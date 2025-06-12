@@ -85,11 +85,11 @@ export function TeamAthletesModal({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 z-[60] flex flex-col items-center justify-center"
       onClick={handleOverlayClick}
     >
       <div className={twMerge(
-        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[75vh] lg:max-h-[90vh] overflow-clip flex flex-col",
+        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[95%] lg:w-[50%] max-h-[75vh] lg:max-h-[90vh] overflow-clip flex flex-col",
         !isStable && "max-h-none h-[90vh] lg:h-[90vh]"
       )}>
 

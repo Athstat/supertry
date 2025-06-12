@@ -1,4 +1,4 @@
-import { Shield, Pencil, Trophy, Star, Users, Lock, Zap } from "lucide-react";
+import { Shield, Pencil, Trophy, Users, Lock, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -47,7 +47,7 @@ export default function LeagueCardMyTeamSection({
 
   return (
     <div className="cursor-pointer w-full flex flex-col gap-3 dark:text-white">
-      <p className="text-xl font-bold">My Team</p>
+      <p className="text-md font-bold">My Team</p>
 
       <motion.div
         onClick={handleClick}

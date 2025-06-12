@@ -134,7 +134,7 @@ export function LeagueScreen() {
                       state: { teamWithRank: userTeam, league: league },
                     });
                   }}
-                  className="flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+                  className="flex text-sm md:text-base bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
                 >
                   Edit Team
                 </button>

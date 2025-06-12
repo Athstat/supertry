@@ -47,7 +47,7 @@ export default function GroupedSbrFixturesList({ fixtures, search }: Props) {
                     return (
                         <div key={dayKey} className="mb-4">
                             {/* Day header */}
-                            <div className="px-4 py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
+                            <div className="px-4 text-sm lg:text-base py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
                                 {dayKey !== "Date not confirmed" ? format(dayDate, "EEEE, MMMM d, yyyy") : "Date Not Confirmed"}
                             </div>
 
