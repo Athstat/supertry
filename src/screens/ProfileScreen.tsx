@@ -7,6 +7,7 @@ import { authService } from '../services/authService';
 import UserNotificationsSettings from '../components/settings/UserNotificationsSettings';
 import { useFetch } from '../hooks/useFetch';
 import { useAuthUser } from '../hooks/useAuthUser';
+import { LoadingState } from '../components/ui/LoadingState';
 
 export function ProfileScreen() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export function ProfileScreen() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showFinalDeleteConfirmation, setShowFinalDeleteConfirmation] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   //const userInfo = useAuthUser();
 
@@ -27,12 +29,20 @@ export function ProfileScreen() {
 
   useEffect(() => {
     const fetchUserFromDB = async () => {
-      const info = await authService.getUserInfo();
-      setIsGuestAccount(authService.isGuestAccount());
-      if (!info) return;
-      const user = await authService.getUserFromDB(info.id);
-      console.log('[ProfileScreen] User:', user);
-      setUserInfo(user);
+      setIsLoading(true);
+      try {
+        const info = await authService.getUserInfo();
+        if (!info) return;
+        //console.log('[ProfileScreen] User info:', info);
+        setIsGuestAccount(authService.isGuestAccount());
+        const user = await authService.getUserFromDB(info.id);
+        console.log('[ProfileScreen] User:', user);
+        setUserInfo(user);
+      } catch (error) {
+        console.error('[ProfileScreen] Error fetching user:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     console.log('[ProfileScreen] Fetching user from DB');
     fetchUserFromDB();
@@ -98,21 +108,25 @@ export function ProfileScreen() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm"
+          className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
         >
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
-              <User className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+          {isLoading ? (
+            <LoadingState message="Loading profile..." />
+          ) : (
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
+                <User className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {userInfo?.username || 'Guest User'}
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {isGuestAccount ? 'Guest Account' : userInfo?.email}
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {userInfo?.username || 'Guest User'}
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {isGuestAccount ? 'Guest Account' : userInfo?.email}
-              </p>
-            </div>
-          </div>
+          )}
         </motion.div>
 
         {/* Complete Profile Card for Guest Users */}
@@ -121,7 +135,7 @@ export function ProfileScreen() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm"
+            className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
           >
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Welcome to Scrummy!
@@ -152,7 +166,7 @@ export function ProfileScreen() {
           transition={{
             delay: isGuestAccount ? 0.3 : 0.2,
           }}
-          className="bg-gray-50 dark:bg-dark-800/60 border border-gray-100 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden"
+          className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden"
         >
           <button
             onClick={handleLogout}
