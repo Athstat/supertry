@@ -3,5 +3,9 @@
 export const swrFetchKeys = {
     getSbrUserMotmVoteKey: (fixtureId: string) => {
         return `user-sbr-fixture-motm-vote/${fixtureId}`;
+    },
+
+    getAllFixtureMotmVotesKey: (fixtureId: string) => {
+        return `sbr-fixture-motm-votes/${fixtureId}`;
     }
 }

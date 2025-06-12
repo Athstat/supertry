@@ -65,7 +65,7 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
         // Revalidate user vote cache
         
-        const fetchKey = swrFetchKeys.getSbrUserMotmVoteKey(candidate.fixture_id);
+        const fetchKey = swrFetchKeys.getAllFixtureMotmVotesKey(candidate.fixture_id);
         await mutate(fetchKey);
 
         setIsSendingVote(false);
@@ -82,7 +82,9 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
             <div className="flex  w-[50%] flex-col items-start" >
                 <p>{candidate.athlete_first_name}</p>
-                <SecondaryText className="text-xs md:text-sm" >{candidate.position ?? ""}</SecondaryText>
+                <SecondaryText className="text-xs md:text-sm" >
+                    {candidate.position ?? ""}
+                </SecondaryText>
             </div>
 
             <div className="w-[40%] flex flex-row items-center justify-end" >

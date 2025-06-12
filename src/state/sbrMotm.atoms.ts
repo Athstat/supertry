@@ -2,8 +2,20 @@
 
 import { atom } from "jotai";
 import { ISbrFixtureRosterItem, ISbrMotmVote } from "../types/sbr";
+import { authService } from "../services/authService";
 
-export const userSbrMotmVoteAtom = atom<ISbrMotmVote>();
+export const sbrFixtureMotmVotesAtom = atom<ISbrMotmVote[]>([]);
+
+export const userSbrMotmVoteAtom = atom<ISbrMotmVote | undefined>((get) => {
+    const allVotes = get(sbrFixtureMotmVotesAtom);
+
+    const userId = authService.getUserInfo()?.id;
+    const userVote = allVotes.find((v) => {
+        return v.user_id === userId;
+    })
+
+    return userVote;
+});
 
 /** Atom holding a boolean value representing whether the user voted (true) or not (false) */
 export const hasUserSubmittedSbrMotmAtom = atom<boolean>((get) => {
@@ -16,5 +28,4 @@ export const hasUserSubmittedSbrMotmAtom = atom<boolean>((get) => {
  */
 export const isSendingSbrMotmVoteAtom = atom<boolean>(false);
 
-export const sbrFixtureMotmVotesAtom = atom<ISbrMotmVote[]>([]);
 export const sbrFixtureMotmCandidatesAtom = atom<ISbrFixtureRosterItem[]>([]);
