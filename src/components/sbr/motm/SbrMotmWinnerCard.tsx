@@ -6,7 +6,7 @@ import SecondaryText from "../../shared/SecondaryText";
 import BlueGradientCard from "../../shared/BlueGradientCard";
 
 /** Renders the winner of the SBR Motm Voting for a given fixture  */
-export default function SbrMotmWinnerCard() {
+export default function SbrTopDawgOfTheMatchCard() {
 
   const votes = useAtomValue(sbrFixtureMotmVotesAtom);
   const candidates = useAtomValue(sbrFixtureMotmCandidatesAtom);
@@ -46,7 +46,7 @@ export default function SbrMotmWinnerCard() {
       </div>
 
       {/* Main Content */}
-      <div className="mt-4 flex flex-col items-center space-y-4">
+      <div className="mt-2 flex flex-col items-center space-y-2">
         {/* Trophy Icon */}
         <div className="relative">
           <div className="absolute -inset-1 bg-primary-500/30 rounded-full blur"></div>
@@ -55,16 +55,16 @@ export default function SbrMotmWinnerCard() {
 
         {/* Title */}
         <div className="text-center">
-          <h2 className="text-xl font-bold text-primary-200 mb-1">Top Dawg Of the Match</h2>
+          <h2 className="text font-bold text-primary-200">Top Dawg Of the Match</h2>
           {/* <div className="h-0.5 w-16 mx-auto bg-gradient-to-r from-transparent via-primary-500/50 to-transparent"></div> */}
         </div>
 
         {/* Winner Info */}
         <div className="text-center space-y-3">
-          <h3 className="text-2xl font-bold text-white">
+          <h3 className="text-2xl font-semibold text-white">
             {winner.athlete_first_name} {winner.athlete_last_name}
           </h3>
-          <SecondaryText className="text-lg text-primary-200 dark:text-primary-200">{winner.team_name} · {winner.position}</SecondaryText>
+          <SecondaryText className="text-sm text-primary-200 dark:text-primary-200">{winner.team_name} · {winner.position}</SecondaryText>
         </div>
 
       </div>

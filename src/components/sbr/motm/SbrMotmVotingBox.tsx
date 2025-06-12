@@ -9,7 +9,7 @@ import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
 import NoContentCard from "../../shared/NoContentMessage";
 import { hasMotmVotingEnded } from "../../../utils/sbrUtils";
-import SbrMotmWinnerCard from "./SbrMotmWinnerCard";
+import SbrTopDawgOfTheMatchCard from "./SbrMotmWinnerCard";
 
 type Props = {
     fixture: ISbrFixture
@@ -69,13 +69,15 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
 
     if (candidates.length === 0) return (
         <>
-            <NoContentCard message="Top Dawg Of The Match voting is not available for this game" />
+            <NoContentCard message={
+                `Top Dawg Of The Match voting ${hasVotingEnded ? "was" : "is"} not available for this game`
+            } />
         </>
     )
 
     if (hasVotingEnded) {
         return (
-            <SbrMotmWinnerCard />
+            <SbrTopDawgOfTheMatchCard />
         )
     }
 
