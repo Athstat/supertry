@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai"
 import { ISbrFixtureRosterItem } from "../../../types/sbr"
 import SecondaryText from "../../shared/SecondaryText"
-import { hasUserSubmittedSbrMotmAtom, isSendingSbrMotmVoteAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms"
+import { hasUserSubmittedSbrMotmAtom, isSendingSbrMotmVoteAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms"
 import { sbrMotmService } from "../../../services/sbrMotmService"
 import { mutate } from "swr"
 import { swrFetchKeys } from "../../../utils/swrKeys"
@@ -39,6 +39,13 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
     const userVote = useAtomValue(userSbrMotmVoteAtom);
     const [, setIsSendingVote] = useAtom(isSendingSbrMotmVoteAtom);
     const [isLoading, setIsLoading] = useState(false);
+
+    const allVotes = useAtomValue(sbrFixtureMotmVotesAtom);
+
+    const candidateVoteTally = allVotes.reduce((sum, v) => {
+        const isForCandidate = v.athlete_id === candidate.athlete_id;
+        return isForCandidate ? (sum + 1) : sum;
+    }, 0);
 
     const hasUserVoted = useAtomValue(hasUserSubmittedSbrMotmAtom);
     const hasUserVotedForCandidated = userVote && userVote.athlete_id === candidate.athlete_id;
@@ -81,9 +88,10 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
             </div>
 
             <div className="flex  w-[50%] flex-col items-start" >
-                <p>{candidate.athlete_first_name}</p>
-                <SecondaryText className="text-xs md:text-sm" >
-                    {candidate.position ?? ""}
+                <p>{candidate.athlete_first_name} {candidate.athlete_last_name}</p>
+                <SecondaryText className="text-xs md:text-sm flex flex-col gap-1" >
+                    {!hasUserVoted ? candidate.position ?? "" : null}
+                    {hasUserVoted && <p className="" >{candidateVoteTally} { candidateVoteTally === 1 ? "Vote" : "Votes"}</p>}
                 </SecondaryText>
             </div>
 
