@@ -1,3 +1,4 @@
+import { error } from "console";
 import { IEditSbrMotmVoteReq, INewSbrMotmVoteReq, ISbrMotmVote } from "../types/sbr";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { authService } from "./authService";
@@ -13,12 +14,16 @@ export const sbrMotmService = {
                 headers: getAuthHeader()
             });
 
-            const json = (await res.json()) as ISbrMotmVote;
-            return json;
+            if (res.ok) {
+                const json = (await res.json()) as ISbrMotmVote;
+                return json;
+            }
+
         } catch (error) {
             logger.error('Error fetching user vote ', error);
-            return undefined;
         }
+        
+        return undefined;
     },
 
     postMotmVote: async (fixtureId: string, athleteId: string, teamId: string) => {
@@ -70,5 +75,24 @@ export const sbrMotmService = {
             logger.error('Error creating an sbr motm vote', error);
             return undefined;
         }
+    },
+
+    /** Gets all the Motm votes that have been made for a fixture */
+    getFixtureMotmVotes: async (fixtureId: string) => {
+        try {
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/motm/votes`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as ISbrMotmVote[];
+            }
+
+        } catch (error) {
+            logger.error('Error fetching motm votes for fixture', error);
+        }
+
+        return undefined;
     }
 }

@@ -31,11 +31,11 @@ export default function DialogModal({ children, onClose, title, open, className,
 
                 <div
                     className={twMerge(
-                        "bg-white dark:bg-gray-800/70 border dark:border-slate-700 w-full h-full  rounded-lg p-6 shadow-xl overflow-y-auto flex flex-col"
+                        "bg-white dark:bg-gray-800/70 border border-slate-300 dark:border-slate-700 w-full h-full  rounded-lg p-6 shadow-xl overflow-y-auto flex flex-col"
                     )}
                 >
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-md lg:text-xl font-bold truncate dark:text-gray-100">{title}</h2>
+                        <h2 className="text-md lg:text-xl font-bold text-gray-900 truncate dark:text-gray-100">{title}</h2>
                         <button
                             onClick={handleOnClose}
                             className="p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-full text-gray-600 dark:text-gray-400"

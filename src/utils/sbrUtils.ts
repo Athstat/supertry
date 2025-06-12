@@ -1,6 +1,5 @@
-import { isWithinInterval, startOfDay } from "date-fns";
-import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
-import { getLastWednesdayIfNotWednesday, getNextTuesdayIfNotTuesday, } from "./dateUtils";
+import { isWithinInterval } from "date-fns";
+import { ISbrFixture, ISbrFixtureVote, ISbrMotmVote } from "../types/sbr";
 import { calculatePerc } from "./fixtureUtils";
 
 /** Returns true if all the fixtures passed to the funciton have
@@ -110,4 +109,46 @@ export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixture
         homeVotes,
         awayVotes
     }
+}
+
+/** Returns true if motm voting has ended based on the given kick off time */
+export function hasMotmVotingEnded(kickOffTime?: Date, now?: Date) {
+    if (!kickOffTime) {
+        return false;
+    }
+
+    kickOffTime = new Date(kickOffTime);
+    now = now ? new Date(now) : new Date();
+
+    // Voting window is two hours
+    const votingWindow = 1000 * 60 * 60 * 2;
+    const votingExpectedEndEpoch = kickOffTime.valueOf() + votingWindow;
+    const nowEpoch = now.valueOf();
+
+    return nowEpoch >= votingExpectedEndEpoch;
+}
+
+/** Returns the total number of votes that an athlete recieved from a list of votes */
+export function getSbrAthleteMotmVoteTally(votes: ISbrMotmVote[], athleteId: string) {
+    const res = votes.reduce((sum, v) => {
+        const isCandidate = v.athlete_id === athleteId;
+        return isCandidate ? (sum + 1) : sum;
+    }, 0);
+
+    return res;
+}
+
+export function hasMotmVotingStarted(kickoff?: Date, now?: Date) {
+    if (!kickoff) {
+        return true;
+    }
+
+    kickoff = new Date(kickoff);
+    now = now ? new Date(now) : new Date();
+
+    const kickoffEpoch = kickoff.valueOf();
+    const nowEpoch = now.valueOf();
+
+    return nowEpoch >= kickoffEpoch;
+
 }

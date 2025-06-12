@@ -41,21 +41,14 @@ export default function UpcomingFixturesSection() {
 
 
   return (
-    <RoundedCard className="p-6 flex flex-col gap-4" >
+    <RoundedCard className="p-4 lg:p-6 flex flex-col gap-4" >
 
       <div className="flex flex-row items-center justify-between gap-2" >
         
         <div className="flex flex-row items-center gap-2" >
           <Calendar className="text-primary-500" />
-          <p className="text-xl font-bold" >Upcoming Fixtures</p>
+          <p className="text-lg lg:text-xl font-bold" >Upcoming Fixtures</p>
         </div>
-
-        <button
-          onClick={() => push("/fixtures#upcoming-matches")}
-          className="text-blue-500"
-        >
-          View All Fixtures
-        </button>
         
       </div>
 

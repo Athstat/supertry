@@ -7,6 +7,11 @@ import { hasUserSubmittedSbrMotmAtom, sbrFixtureMotmCandidatesAtom, sbrFixtureMo
 import { ScopeProvider } from "jotai-scope";
 import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
+import NoContentCard from "../../shared/NoContentMessage";
+import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
+import SbrTopDawgOfTheMatchCard from "./SbrMotmWinnerCard";
+import { LockedViewCard } from "../../shared/ViewLockedCard";
+import { format } from "date-fns";
 
 type Props = {
     fixture: ISbrFixture
@@ -37,8 +42,12 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
     // get team rosters
     // get votes
 
-
+    const kickoff = fixture.kickoff_time;
+    const {hasKickedOff} = sbrFixtureSummary(fixture);
     const candidates = useAtomValue(sbrFixtureMotmCandidatesAtom);
+    const hasVotingEnded = hasMotmVotingEnded(fixture.kickoff_time);
+
+    if (!kickoff) return undefined;
 
     const tabItems: TabViewHeaderItem[] = [
         {
@@ -61,6 +70,30 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
     const awayCandidates = candidates.filter((r) => {
         return r.team_id === fixture.away_team_id
     });
+
+
+    if (candidates.length === 0) return (
+        <>
+            <NoContentCard message={
+                `Top Dawg Of The Match voting ${hasVotingEnded ? "was" : "is"} not available for this game`
+            } />
+        </>
+    )
+
+    if (candidates.length > 0 && !hasKickedOff) return (
+        <>
+            <LockedViewCard message={
+                `Not just yet! Top Dawg Of The Match voting starts at kickoff (${format(kickoff, "HH:mm")} on ${format(kickoff, "EEEE dd MMMM yyyy")})`
+            } />
+        </>
+    )
+
+    if (hasVotingEnded) {
+        return (
+            <SbrTopDawgOfTheMatchCard />
+        )
+    }
+
 
     return (
         <div className="flex flex-col gap gap-1" >

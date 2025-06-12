@@ -33,23 +33,23 @@ function SbrScreenContent() {
     {
       label: `Fixtures`,
       tabKey: "fixtures",
-      className: "flex-1"
+      className: "flex-1 text-sm lg:text-base"
     },
-    {
-      label: "Predictions",
-      tabKey: "predictions",
-      className: "flex-1"
-    },
+    // {
+    //   label: "Predictions",
+    //   tabKey: "predictions",
+    //   className: "flex-1"
+    // },
 
     {
       label: "Chat",
       tabKey: "chat",
-      className: "flex-1"
+      className: "flex-1 text-sm lg:text-base"
     }
   ]
 
   return (
-    <PageView className="dark:text-white p-5 flex flex-col gap-4" >
+    <PageView className="dark:text-white p-2 md:p-6 flex flex-col gap-4" >
 
       <SbrScreenHeader />
 
