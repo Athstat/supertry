@@ -1,6 +1,5 @@
-import { isWithinInterval, startOfDay } from "date-fns";
+import { isWithinInterval } from "date-fns";
 import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
-import { getLastWednesdayIfNotWednesday, getNextTuesdayIfNotTuesday, } from "./dateUtils";
 import { calculatePerc } from "./fixtureUtils";
 
 /** Returns true if all the fixtures passed to the funciton have

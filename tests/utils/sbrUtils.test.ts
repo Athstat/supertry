@@ -55,3 +55,10 @@ test('hasMotmVotingEnded returns false when less than 2 hours after kick off', (
 
     expect(hasMotmVotingEnded(kickoff2, now2)).toStrictEqual(false);
 });
+
+test('hasMotmVotingEnded returns false when kickoff is undefined', () => {
+    const now = new Date();
+    expect(hasMotmVotingEnded(undefined, now)).toStrictEqual(false);
+    expect(hasMotmVotingEnded(undefined, undefined)).toStrictEqual(false);
+    expect(hasMotmVotingEnded()).toStrictEqual(false);
+});
