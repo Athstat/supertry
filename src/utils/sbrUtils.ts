@@ -111,3 +111,20 @@ export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixture
         awayVotes
     }
 }
+
+/** Returns true if motm voting has ended based on the given kick off time */
+export function hasMotmVotingEnded(kickOffTime?: Date, now?: Date) {
+    if (!kickOffTime) {
+        return false;
+    }
+
+    kickOffTime = new Date(kickOffTime);
+    now = now ? new Date(now) : new Date();
+
+    // Voting window is two hours
+    const votingWindow = 1000 * 60 * 60 * 2;
+    const votingExpectedEndEpoch = kickOffTime.valueOf() + votingWindow;
+    const nowEpoch = now.valueOf();
+
+    return nowEpoch >= votingExpectedEndEpoch;
+}

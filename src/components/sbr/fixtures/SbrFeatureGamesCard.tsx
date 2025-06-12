@@ -119,7 +119,7 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
                         <div className="flex flex-col w-1/3 items-center" >
                             <SbrTeamLogo className="h-14 w-12" teamName={currentGame.away_team} />
                             <p className="text-[12px] md:text-base" >{currentGame.away_team}</p>
-                            <p>{hasScores ? currentGame.home_score : "-"}</p>
+                            <p>{hasScores ? currentGame.away_score : "-"}</p>
                         </div>
                     </div>
 
