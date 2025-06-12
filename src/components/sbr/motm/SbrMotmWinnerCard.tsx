@@ -41,7 +41,7 @@ export default function SbrTopDawgOfTheMatchCard() {
   return (
     <BlueGradientCard className="relative mt-4 w-full from-primary-500 via-primary-600 to-primary-700 dark:from-primary-600 dark:via-primary-700 dark:to-primary-900 max-w-md mx-auto p-6 bg-gradient-to-br rounded-xl border border-primary-500 shadow-xl hover:shadow-primary-500/10 transition-all duration-300">
       {/* Trophy Badge */}
-      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
+      <div className="absolute -top-4 text-center text-xs left-1/2 -translate-x-1/2 bg-primary-500 text-white px-4 py-1 rounded-full lg:text-sm font-semibold shadow-lg">
         The Fan's Match MVP
       </div>
 
@@ -64,7 +64,7 @@ export default function SbrTopDawgOfTheMatchCard() {
           <h3 className="text-2xl font-semibold text-white">
             {winner.athlete_first_name} {winner.athlete_last_name}
           </h3>
-          <SecondaryText className="text-sm text-primary-200 dark:text-primary-200">{winner.team_name} · {winner.position}</SecondaryText>
+          <SecondaryText className="text-sm text-primary-200 dark:text-primary-200">{winner.team_name}</SecondaryText>
         </div>
 
       </div>

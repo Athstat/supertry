@@ -115,7 +115,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
                     )} >
                         <span className="flex-1 text-left">{home_team} Win - {homeVotes.length} Votes</span>
                         <span className="flex items-center gap-1">
-                            {votedHomeTeam && <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
+                            {votedHomeTeam && <span className="text-[8px] lg:text-sm bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
                             {hasScores && homeTeamWon && '✓'}
                         </span>
                     </button>
@@ -130,7 +130,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
                     )} >
                         <span className="flex-1 text-left">{away_team} Win - {awayVotes.length} Votes</span>
                         <span className="flex items-center gap-1">
-                            {votedAwayTeam && <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
+                            {votedAwayTeam && <span className="text-[8px] lg:text-sm bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
                             {hasScores && awayTeamWon && '✓'}
                         </span>
                     </button>

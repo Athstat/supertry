@@ -37,10 +37,10 @@ export default function SbrFeatureGamesCard() {
         <RoundedCard className="flex flex-col gap-4 p-4" >
 
             <div className="flex flex-row items-center gap-2" >
-                <Swords />
-                <h1 className="text-lg font-bold" >Feature Games</h1>
+                <Swords className="w-5 h-5" />
+                <h1 className="text-md lg:text-lg font-bold" >Feature Games</h1>
             </div>
-            <SecondaryText className="" >Predict who will win and vote for your <strong>Top Dawg Of the Game</strong> on this weeks feature games!</SecondaryText>
+            <SecondaryText className="text-sm lg:text-base" >Predict who will win and vote for your <strong>Top Dawg Of the Game</strong> on this weeks feature games!</SecondaryText>
 
             <div className="flex flex-row items-center gap-4 my-2" >
                 {featureGames.map((g ) => {
@@ -59,7 +59,7 @@ export default function SbrFeatureGamesCard() {
                 })}
             </div>
 
-            <PrimaryButton onClick={toggle} >{hasVotingEndedForAll ? "View Results" : "Predict & Vote"}</PrimaryButton>
+            <PrimaryButton  onClick={toggle} >{hasVotingEndedForAll ? "View Results" : "Predict & Vote"}</PrimaryButton>
 
             <SbrFeatureGamesModal open={show} onClose={toggle} games={featureGames} />
 
