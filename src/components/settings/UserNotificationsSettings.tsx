@@ -1,5 +1,4 @@
 import { Bell, ChevronRight, LoaderCircle } from 'lucide-react';
-import SettingsModal from './SettingsModal';
 import { useEffect, useState } from 'react';
 import { GameUpdatesPreference, gameUpdatesPreferenceOptions } from '../../types/notifications';
 import { formatPosition } from '../../utils/athleteUtils';
