@@ -32,7 +32,7 @@ export default function SbrFeatureGamesCard() {
                 <Swords />
                 <h1 className="text-lg font-bold" >Feature Games</h1>
             </div>
-            <p className="text-slate-300" >Predict matchups, vote for your <strong>Top Dawg Of the Game</strong> and more on this weeks feature games!</p>
+            <p className="text-white" >Predict who will win and vote for your <strong>Top Dawg Of the Game</strong> on this weeks feature games!</p>
 
             <div className="flex flex-row items-center gap-4" >
                 {featureGames.map((g ) => {

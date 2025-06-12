@@ -1,5 +1,5 @@
 import { isWithinInterval } from "date-fns";
-import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
+import { ISbrFixture, ISbrFixtureVote, ISbrMotmVote } from "../types/sbr";
 import { calculatePerc } from "./fixtureUtils";
 
 /** Returns true if all the fixtures passed to the funciton have
@@ -126,4 +126,14 @@ export function hasMotmVotingEnded(kickOffTime?: Date, now?: Date) {
     const nowEpoch = now.valueOf();
 
     return nowEpoch >= votingExpectedEndEpoch;
+}
+
+/** Returns the total number of votes that an athlete recieved from a list of votes */
+export function getSbrAthleteMotmVoteTally(votes: ISbrMotmVote[], athleteId: string) {
+    const res = votes.reduce((sum, v) => {
+        const isCandidate = v.athlete_id === athleteId;
+        return isCandidate ? (sum + 1) : sum;
+    }, 0);
+
+    return res;
 }

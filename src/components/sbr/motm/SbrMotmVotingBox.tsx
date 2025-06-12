@@ -8,6 +8,8 @@ import { ScopeProvider } from "jotai-scope";
 import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
 import NoContentCard from "../../shared/NoContentMessage";
+import { hasMotmVotingEnded } from "../../../utils/sbrUtils";
+import SbrMotmWinnerCard from "./SbrMotmWinnerCard";
 
 type Props = {
     fixture: ISbrFixture
@@ -40,6 +42,7 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
 
 
     const candidates = useAtomValue(sbrFixtureMotmCandidatesAtom);
+    const hasVotingEnded = hasMotmVotingEnded(fixture.kickoff_time);
 
     const tabItems: TabViewHeaderItem[] = [
         {
@@ -69,6 +72,12 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
             <NoContentCard message="Top Dawg Of The Match voting is not available for this game" />
         </>
     )
+
+    if (hasVotingEnded) {
+        return (
+            <SbrMotmWinnerCard />
+        )
+    }
 
 
     return (
