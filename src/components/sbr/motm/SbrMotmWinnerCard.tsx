@@ -1,6 +1,5 @@
-import { useAtom, useAtomValue } from "jotai"
+import { useAtomValue } from "jotai"
 import { sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom } from "../../../state/sbrMotm.atoms";
-import { useMemo } from "react";
 import { getSbrAthleteMotmVoteTally } from "../../../utils/sbrUtils";
 import { Trophy } from "lucide-react";
 import SecondaryText from "../../shared/SecondaryText";
@@ -38,8 +37,6 @@ export default function SbrMotmWinnerCard() {
   });
 
   if (!winner) return undefined;
-
-  const candidateVoteTally = getVoteTally(winner.athlete_id);
 
   return (
     <BlueGradientCard className="relative mt-4 w-full from-primary-500 via-primary-600 to-primary-700 dark:from-primary-600 dark:via-primary-700 dark:to-primary-900 max-w-md mx-auto p-6 bg-gradient-to-br rounded-xl border border-primary-500 shadow-xl hover:shadow-primary-500/10 transition-all duration-300">
