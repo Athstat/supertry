@@ -49,7 +49,7 @@ export default function GroupedFixturesList({ fixtures, search, generateMessage 
                         <div key={dayKey} className="mb-4">
                             {/* Day header */}
 
-                            <div className="px-4 py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
+                            <div className="px-4 text-sm lg:text-base py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
                                 {format(dayDate, "EEEE, MMMM d, yyyy")}
                             </div>
 

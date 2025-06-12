@@ -47,7 +47,7 @@ export default function UpcomingFixturesSection() {
         
         <div className="flex flex-row items-center gap-2" >
           <Calendar className="text-primary-500" />
-          <p className="text-xl font-bold" >Upcoming Fixtures</p>
+          <p className="text-lg lg:text-xl font-bold" >Upcoming Fixtures</p>
         </div>
         
       </div>

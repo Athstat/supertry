@@ -31,7 +31,7 @@ export default function DialogModal({ children, onClose, title, open, className,
 
                 <div
                     className={twMerge(
-                        "bg-white dark:bg-gray-800/70 border dark:border-slate-700 w-full h-full  rounded-lg p-6 shadow-xl overflow-y-auto flex flex-col"
+                        "bg-white dark:bg-gray-800/70 border border-slate-300 dark:border-slate-700 w-full h-full  rounded-lg p-6 shadow-xl overflow-y-auto flex flex-col"
                     )}
                 >
                     <div className="flex items-center justify-between mb-4">
