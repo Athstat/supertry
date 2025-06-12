@@ -8,8 +8,10 @@ import { ScopeProvider } from "jotai-scope";
 import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
 import NoContentCard from "../../shared/NoContentMessage";
-import { hasMotmVotingEnded } from "../../../utils/sbrUtils";
+import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrTopDawgOfTheMatchCard from "./SbrMotmWinnerCard";
+import { LockedViewCard } from "../../shared/ViewLockedCard";
+import { format } from "date-fns";
 
 type Props = {
     fixture: ISbrFixture
@@ -40,9 +42,12 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
     // get team rosters
     // get votes
 
-
+    const kickoff = fixture.kickoff_time;
+    const {hasKickedOff} = sbrFixtureSummary(fixture);
     const candidates = useAtomValue(sbrFixtureMotmCandidatesAtom);
     const hasVotingEnded = hasMotmVotingEnded(fixture.kickoff_time);
+
+    if (!kickoff) return undefined;
 
     const tabItems: TabViewHeaderItem[] = [
         {
@@ -71,6 +76,14 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
         <>
             <NoContentCard message={
                 `Top Dawg Of The Match voting ${hasVotingEnded ? "was" : "is"} not available for this game`
+            } />
+        </>
+    )
+
+    if (candidates.length === 0 && !hasKickedOff) return (
+        <>
+            <LockedViewCard message={
+                `Not just yet! Top Dawg Of the match voting starts at kickoff (${format(kickoff, "HH:mm")} on ${format(kickoff, "EEEE dd MMMM yyyy")})`
             } />
         </>
     )

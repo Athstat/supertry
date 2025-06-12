@@ -1,4 +1,3 @@
-import { FileX2 } from "lucide-react"
 import { twMerge } from "tailwind-merge";
 
 type Props = {
@@ -15,7 +14,7 @@ export default function NoContentCard({ message, icon, className}: Props) {
 
     return (
         <div className={twMerge(
-            "w-full text-slate-500 dark:text-slate-400 text-sm p-4 py-6 flex flex-col gap-2 items-center justify-center ",
+            "w-full h-full text-slate-500 dark:text-slate-400 text-sm p-4 py-6 flex flex-col gap-2 items-center justify-center ",
             className
         )} >
             

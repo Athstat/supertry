@@ -137,3 +137,18 @@ export function getSbrAthleteMotmVoteTally(votes: ISbrMotmVote[], athleteId: str
 
     return res;
 }
+
+// export function hasMotmVotingStarted(kickoff?: Date, now?: Date) {
+//     if (!kickoff) {
+//         return true;
+//     }
+
+//     kickoff = new Date(kickoff);
+//     now = now ? new Date(now) : new Date();
+
+//     const kickoffEpoch = kickoff.valueOf();
+//     const nowEpoch = now.valueOf();
+
+//     return nowEpoch > kickoffEpoch;
+
+// }
