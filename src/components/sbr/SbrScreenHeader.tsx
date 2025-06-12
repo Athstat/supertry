@@ -5,7 +5,7 @@ import Experimental from '../shared/ab_testing/Experimental';
 export default function SbrScreenHeader() {
 
     return (
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-3" >
 
             <div className="flex flex-row items-center gap-2" >
                 <Shield />
@@ -16,7 +16,7 @@ export default function SbrScreenHeader() {
             <Experimental>
                 <SbrFeatureGamesCard />
             </Experimental>
-            
+
         </div>
     )
 }

@@ -1,8 +1,6 @@
 import { useAtomValue } from "jotai"
 import { sbrWeekFeatureGamesAtom } from "../../../state/sbrFixtures.atoms"
-import SbrFixtureCard from "../SbrFixtureCard";
 import { Swords } from "lucide-react";
-import RoundedCard from "../../shared/RoundedCard";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { useState } from "react";
 import { ISbrFixture } from "../../../types/sbr";
@@ -11,6 +9,8 @@ import SbrTeamLogo from "./SbrTeamLogo";
 import { sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrFixturePredictionBox from "../predictions/SbrFixturePredictionBox";
 import SbrMotmVotingBox from "../motm/SbrMotmVotingBox";
+import BlueGradientCard from "../../shared/BlueGradientCard";
+import WhiteButton from "../../shared/buttons/WhiteButton";
 
 /** Renders a card of the feature games for a specific week */
 export default function SbrFeatureGamesCard() {
@@ -26,7 +26,7 @@ export default function SbrFeatureGamesCard() {
     }
 
     return (
-        <RoundedCard className="flex flex-col gap-3 p-4" >
+        <BlueGradientCard className="flex flex-col gap-4 p-4" >
 
             <div className="flex flex-row items-center gap-2" >
                 <Swords />
@@ -34,22 +34,27 @@ export default function SbrFeatureGamesCard() {
             </div>
             <p className="text-slate-300" >Predict matchups, vote for your <strong>Top Dawg Of the Game</strong> and more on this weeks feature games!</p>
 
-            <div className="grid grid-cols-1 gap-3" >
-                {featureGames.map((g, index) => {
-                    return <SbrFixtureCard
-                        hideVoting
-                        showLogos
-                        fixture={g}
-                        key={index}
-                    />
+            <div className="flex flex-row items-center gap-4" >
+                {featureGames.map((g ) => {
+                    return (
+
+                        <>
+                            {/* <div key={index} className="flex bg-slate-100/40 dark:bg-slate-700/40 w-14 h-14 p-1 rounded-full flex-row items-center justify-center gap-2" > */}
+                                <SbrTeamLogo key={g.home_team_id} teamName={g.home_team} />
+                            {/* </div> */}
+                            {/* <div key={index} className="flex bg-slate-100/40 dark:bg-slate-700/40 w-14 h-14 p-1 rounded-full flex-row items-center justify-center gap-2" > */}
+                                <SbrTeamLogo key={g.away_votes} teamName={g.away_team} />
+                            {/* </div> */}
+                        </>
+                    )
                 })}
             </div>
 
-            <PrimaryButton onClick={toggle} >Predict & Vote!</PrimaryButton>
+            <WhiteButton onClick={toggle} >Predict & Vote!</WhiteButton>
 
             <SbrFeatureGamesModal open={show} onClose={toggle} games={featureGames} />
 
-        </RoundedCard>
+        </BlueGradientCard>
     )
 }
 
@@ -97,11 +102,11 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
                 className="flex flex-col gap-4 overflow-hidden h-full"
                 hw="h-full max-h-[95vh] lg:w-1/2"
             >
-                <div className="h-[85%] overflow-y-auto flex flex-col gap-4" >
+                <div className="h-[85%] text-black dark:text-white overflow-y-auto flex flex-col gap-4" >
                     <div className="flex flex-row w-full items-center" >
 
                         <div className="flex flex-col w-1/3 items-center" >
-                            <SbrTeamLogo className="h-12 w-12" teamName={currentGame.home_team} />
+                            <SbrTeamLogo className="h-14 w-12" teamName={currentGame.home_team} />
                             <p className="text-[12px] md:text-base" >{currentGame.home_team}</p>
                             <p>{hasScores ? currentGame.home_score : "-"}</p>
                         </div>
@@ -112,13 +117,13 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
 
 
                         <div className="flex flex-col w-1/3 items-center" >
-                            <SbrTeamLogo className="h-12 w-12" teamName={currentGame.away_team} />
+                            <SbrTeamLogo className="h-14 w-12" teamName={currentGame.away_team} />
                             <p className="text-[12px] md:text-base" >{currentGame.away_team}</p>
                             <p>{hasScores ? currentGame.home_score : "-"}</p>
                         </div>
                     </div>
 
-                    <SbrFixturePredictionBox preVotingCols="two" fixture={currentGame} />
+                    <SbrFixturePredictionBox preVotingCols="one" fixture={currentGame} />
                     <SbrMotmVotingBox fixture={currentGame} />
                 </div>
 

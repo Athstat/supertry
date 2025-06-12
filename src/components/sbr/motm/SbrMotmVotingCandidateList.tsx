@@ -47,7 +47,7 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
         setIsSendingVote(true);
         setIsLoading(true);
 
-        console.log("Is Voting Yey!");
+        console.log("Has the user voted??? ", userVote);
 
         if (hasUserVoted) {
             await sbrMotmService.changeMotmVote(
@@ -91,7 +91,7 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
                     {isLoading && <Loader className="text-slate-700 dark:text-slate-400 w-4 h-4 animate-spin" />}
                 </button>}
 
-                {hasUserVotedForCandidated && <div className="border bg-gradient-to-br from-primary-500 to-primary-700 border-slate-300 dark:border-primary-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
+                {hasUserVotedForCandidated && <div className="border bg-gradient-to-br text-white from-primary-500 to-primary-700 border-slate-300 dark:border-primary-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
                     ✓
                 </div>}
 

@@ -7,6 +7,7 @@ import { hasUserSubmittedSbrMotmAtom, sbrFixtureMotmCandidatesAtom, sbrFixtureMo
 import { ScopeProvider } from "jotai-scope";
 import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
+import NoContentCard from "../../shared/NoContentMessage";
 
 type Props = {
     fixture: ISbrFixture
@@ -61,6 +62,14 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
     const awayCandidates = candidates.filter((r) => {
         return r.team_id === fixture.away_team_id
     });
+
+
+    if (candidates.length === 0) return (
+        <>
+            <NoContentCard message="Top Dawg Of The Match voting is not available for this game" />
+        </>
+    )
+
 
     return (
         <div className="flex flex-col gap gap-1" >

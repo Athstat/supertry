@@ -13,12 +13,16 @@ export const sbrMotmService = {
                 headers: getAuthHeader()
             });
 
-            const json = (await res.json()) as ISbrMotmVote;
-            return json;
+            if (res.ok) {
+                const json = (await res.json()) as ISbrMotmVote;
+                return json;
+            }
+
         } catch (error) {
             logger.error('Error fetching user vote ', error);
-            return undefined;
         }
+        
+        return undefined;
     },
 
     postMotmVote: async (fixtureId: string, athleteId: string, teamId: string) => {
