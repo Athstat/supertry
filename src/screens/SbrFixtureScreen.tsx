@@ -13,6 +13,7 @@ import { ISbrFixture } from "../types/sbr";
 import { format } from "date-fns";
 import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
 import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
+import SbrMotmVotingBox from "../components/sbr/motm/SbrMotmVotingBox";
 
 export default function SbrFixtureScreen() {
 
@@ -42,9 +43,14 @@ export default function SbrFixtureScreen() {
         {
             label: "Kick Off",
             tabKey: "kick-off"
+        },
+
+        {
+            label: "Top Dawg",
+            tabKey: "motm"
         }
     ];
-    
+
     const { hasScores } = sbrFixtureSummary(fixture);
 
     return (
@@ -92,6 +98,10 @@ export default function SbrFixtureScreen() {
                         />}
 
                     </TabViewPage>}
+
+                    <TabViewPage tabKey="motm" >
+                        <SbrMotmVotingBox fixture={fixture} />
+                    </TabViewPage>
                 </TabView>
             </PageView>
         </div>
@@ -110,7 +120,7 @@ function KickOffInformation({ fixture }: Props) {
     if (!kickoff_time) {
         return (
             <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >
-               <p className='font-bold' >VS</p>
+                <p className='font-bold' >VS</p>
             </div>
         )
     }

@@ -49,7 +49,7 @@ function SbrScreenContent() {
   ]
 
   return (
-    <PageView className="dark:text-white p-2 flex flex-col gap-4" >
+    <PageView className="dark:text-white p-2 md:p-6 flex flex-col gap-4" >
 
       <SbrScreenHeader />
 
