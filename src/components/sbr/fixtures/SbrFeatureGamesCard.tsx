@@ -45,9 +45,9 @@ export default function SbrFeatureGamesCard() {
                 })}
             </div>
 
-            <PrimaryButton>Predict & Vote!</PrimaryButton>
+            <PrimaryButton onClick={toggle} >Predict & Vote!</PrimaryButton>
 
-            <SbrFeatureGamesModal open={true} onClose={toggle} games={featureGames} />
+            <SbrFeatureGamesModal open={show} onClose={toggle} games={featureGames} />
 
         </RoundedCard>
     )

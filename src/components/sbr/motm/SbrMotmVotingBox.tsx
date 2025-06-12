@@ -6,6 +6,7 @@ import { useAtomValue } from "jotai";
 import { hasUserSubmittedSbrMotmAtom, sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms";
 import { ScopeProvider } from "jotai-scope";
 import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
+import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
 
 type Props = {
     fixture: ISbrFixture
@@ -16,7 +17,7 @@ export default function SbrMotmVotingBox({ fixture }: Props) {
 
     const atoms = [
         sbrFixtureMotmCandidatesAtom, hasUserSubmittedSbrMotmAtom, 
-        userSbrMotmVoteAtom, sbrFixtureMotmVotesAtom
+        userSbrMotmVoteAtom, sbrFixtureMotmVotesAtom, currentSbrFixtureAtom
     ]
 
     return (
@@ -52,14 +53,6 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
             className: "flex-1 text-xs md:text-sm"
         }
     ]
-
-    if (candidates.length === 0) return (
-        <>
-            {<div className="text-slate-700 dark:text-slate-400 text-center items-center justify-center flex flex-col p-3 text-sm md:text-sm" >
-                <p>Rosters are not yet available for this match</p>
-            </div>}
-        </>
-    )
 
     const homeCandidates = candidates.filter((r) => {
         return r.team_id === fixture.home_team_id

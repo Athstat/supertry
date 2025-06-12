@@ -37,18 +37,17 @@ type ItemProps = {
 export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
     const userVote = useAtomValue(userSbrMotmVoteAtom);
-    const [isSendingVote, setIsSendingVote] = useAtom(isSendingSbrMotmVoteAtom);
+    const [, setIsSendingVote] = useAtom(isSendingSbrMotmVoteAtom);
     const [isLoading, setIsLoading] = useState(false);
 
     const hasUserVoted = useAtomValue(hasUserSubmittedSbrMotmAtom);
     const hasUserVotedForCandidated = userVote && userVote.athlete_id === candidate.athlete_id;
 
-
-    const canVote = !isSendingVote && !hasUserVotedForCandidated;
-
     const onVote = async () => {
         setIsSendingVote(true);
         setIsLoading(true);
+
+        console.log("Is Voting Yey!");
 
         if (hasUserVoted) {
             await sbrMotmService.changeMotmVote(
@@ -65,8 +64,10 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
         }
 
         // Revalidate user vote cache
+        
+        const fetchKey = swrFetchKeys.getSbrUserMotmVoteKey(candidate.fixture_id);
+        await mutate(fetchKey);
 
-        mutate(swrFetchKeys.getSbrUserMotmVoteKey(candidate.fixture_id));
         setIsSendingVote(false);
         setIsLoading(false);
     }
@@ -86,7 +87,7 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
             <div className="w-[40%] flex flex-row items-center justify-end" >
 
-                {canVote && <button onClick={onVote} className="border hover:bg-slate-100 hover:dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
+                {!hasUserVotedForCandidated && <button onClick={onVote} className="border hover:bg-slate-100 hover:dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center" >
                     {isLoading && <Loader className="text-slate-700 dark:text-slate-400 w-4 h-4 animate-spin" />}
                 </button>}
 

@@ -7,6 +7,7 @@ import { sbrMotmService } from "../../../services/sbrMotmService";
 import { sbrService } from "../../../services/sbrService";
 import { LoadingState } from "../../ui/LoadingState";
 import { swrFetchKeys } from "../../../utils/swrKeys";
+import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
 
 type Props = {
     children?: ReactNode,
@@ -21,6 +22,7 @@ export default function SbrMotmVotingDataProvider({ children, fixture }: Props) 
 
     const setUserVote = useSetAtom(userSbrMotmVoteAtom);
     const setVotingCandiates = useSetAtom(sbrFixtureMotmCandidatesAtom)
+    const setFixture = useSetAtom(currentSbrFixtureAtom);
 
     const fixtureId = fixture.fixture_id;
 
@@ -33,9 +35,10 @@ export default function SbrMotmVotingDataProvider({ children, fixture }: Props) 
     const isLoading = loadingUserVote || loadingRosters;
 
     useEffect(() => {
-        if (rosters) setVotingCandiates(rosters);
+        if (rosters !== undefined) setVotingCandiates(rosters);
         if (userVote) setUserVote(userVote);
-    }, [fixture]);
+        if (fixture) setFixture(fixture);
+    }, [fixture, rosters, userVote]);
 
     if (isLoading) return <LoadingState />
 

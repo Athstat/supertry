@@ -31,7 +31,6 @@ export const sbrService = {
             });
 
             const json = await res.json();
-            console.log(json);
             return json;
 
         } catch (error) {

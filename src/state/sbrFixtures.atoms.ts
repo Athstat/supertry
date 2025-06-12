@@ -39,6 +39,4 @@ export const sbrWeekFeatureGamesAtom = atom<ISbrFixture[]>((get) => {
     })
 });
 
-
-
-
+export const currentSbrFixtureAtom = atom<ISbrFixture>();

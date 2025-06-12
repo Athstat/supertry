@@ -34,7 +34,8 @@ export const sbrMotmService = {
 
             const res = await fetch(uri, {
                 headers: getAuthHeader(),
-                body: JSON.stringify(reqBody)
+                body: JSON.stringify(reqBody),
+                method: "POST"
             });
 
             const json = (await res.json()) as ISbrMotmVote;
@@ -58,7 +59,8 @@ export const sbrMotmService = {
 
             const res = await fetch(uri, {
                 headers: getAuthHeader(),
-                body: JSON.stringify(reqBody)
+                body: JSON.stringify(reqBody),
+                method: "PUT"
             });
 
             const json = (await res.json()) as ISbrMotmVote;
