@@ -1,5 +1,5 @@
 import { PointsBreakdownItem } from "../services/athleteService";
-import { IFantasyAthlete } from "../types/rugbyPlayer";
+import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -78,8 +78,8 @@ export function nameSearchPredicate(fullName: string, query: string) {
 
 export function formatAction(actionName: string) {
     const displayName = actionName
-    .replace(/([A-Z])/g, " $1")
-    .trim();
+        .replace(/([A-Z])/g, " $1")
+        .trim();
 
     const res = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
@@ -90,23 +90,50 @@ export const getGroupedActions = (breakdown: PointsBreakdownItem[]) => {
     if (!breakdown || !breakdown.length) return [];
 
     const groupedActions = breakdown.reduce((result: any, item) => {
-      const action = item.action || "";
+        const action = item.action || "";
 
-      if (!result[action]) {
-        result[action] = {
-          action: action,
-          action_count: 0,
-          score: 0,
-          instances: [],
-        };
-      }
+        if (!result[action]) {
+            result[action] = {
+                action: action,
+                action_count: 0,
+                score: 0,
+                instances: [],
+            };
+        }
 
-      result[action].action_count += item.action_count || 1;
-      result[action].score += item.score || 0;
-      result[action].instances.push(item);
+        result[action].action_count += item.action_count || 1;
+        result[action].score += item.score || 0;
+        result[action].instances.push(item);
 
-      return result;
+        return result;
     }, {});
 
     return Object.values(groupedActions);
-  };
+};
+
+/** Extracts unique positions from a list of athletes */
+export function extractUniqueAthletePositions(athletes: RugbyPlayer[]) {
+    const extractedPositions = [
+        ...new Set(
+            athletes.map((player) => {
+                const position = player.position_class || "";
+                return position.charAt(0).toUpperCase() + position.slice(1);
+            })
+        ),
+    ]
+        .filter(Boolean)
+        .sort();
+
+    return extractedPositions;
+}
+
+/** Extracts unique teams from a list of athletes */
+export function extractUniqueAthleteTeams(athletes: RugbyPlayer[]) {
+    const extractedTeams = [
+        ...new Set(athletes.map((player) => player.team_name ?? "Unkown Team")),
+    ]
+        .filter(Boolean)
+        .sort();
+
+    return extractedTeams;
+}

@@ -243,7 +243,7 @@ export const PlayersScreen = () => {
         {/* Search and Filter Header */}
         <div className="flex flex-row gap-2 items-center" >
           <Users />
-          <h1 className="text-2xl font-bold" >Players</h1>
+          <h1 className="text-lg lg:text-2xl font-bold" >Players</h1>
         </div>
         <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
         <div className="flex flex-col gap-1">
@@ -290,6 +290,8 @@ export const PlayersScreen = () => {
         {error && !isLoading && !isSorting && (
           <ErrorState message={error} onRetry={refreshAthletes} />
         )}
+
+
         {/* Empty State */}
         {!isLoading &&
           !error &&
@@ -301,17 +303,25 @@ export const PlayersScreen = () => {
               onClearSearch={() => handleSearch("")}
             />
           )}
+
+      
         {/* Player Grid */}
         {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-4">
             {filteredPlayers.map((player, index) => (
               <PlayerGameCard
                 key={index}
                 player={player}
                 onClick={() => handlePlayerClick(player)}
-                className="h-[250px] lg:h-[300px]"
+                className="h-[150px] lg:h-[300px]"
               />
             ))}
+          </div>
+        )}
+
+        {!isLoading && !error && !isSorting && filteredPlayers.length === 0 && (
+          <div className="w-full p-6 items-center justify-center flex flex-col" >
+            <p className="text-slate-500 dark:text-slate-400" >No players were found</p>
           </div>
         )}
 

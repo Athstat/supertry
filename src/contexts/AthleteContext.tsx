@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, ReactNode, useMemo } from "react";
 import { RugbyPlayer } from "../types/rugbyPlayer";
 import { athleteService } from "../services/athleteService";
-import { URC_COMPETIION_ID } from "../types/constants";
+import useSWR from "swr";
+import { extractUniqueAthletePositions, extractUniqueAthleteTeams } from "../utils/athleteUtils";
 
-// Default competition ID
-const DEFAULT_COMPETITION_ID = "d313fbf5-c721-569b-975d-d9ec242a6f19";
 
 interface AthleteContextType {
   athletes: RugbyPlayer[];
@@ -18,70 +17,25 @@ interface AthleteContextType {
 
 const AthleteContext = createContext<AthleteContextType | undefined>(undefined);
 
-export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [athletes, setAthletes] = useState<RugbyPlayer[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [positions, setPositions] = useState<string[]>([]);
-  const [teams, setTeams] = useState<string[]>([]);
-  const [lastFetchTime, setLastFetchTime] = useState<number | null>(null);
+type ProviderProps = {
+  children?: ReactNode
+}
 
-  const fetchAthletes = async (forceRefresh = false) => {
-    // Skip fetching if we already have data and it's not a forced refresh
-    const now = Date.now();
-    const cacheExpired = lastFetchTime
-      ? now - lastFetchTime > 5 * 60 * 1000
-      : true;
+export function AthleteProvider({ children}: ProviderProps) {
 
-    if (athletes.length > 0 && !forceRefresh && !cacheExpired) {
-      return; // Use cached athletes
-    }
+  const fetchKey = `supported-athletes`;
+  const {data: athletesFetch, isLoading, error} = useSWR(fetchKey, () => athletesFetcher());
+  const athletes = athletesFetch ?? [];
 
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await athleteService.getRugbyAthletesByCompetition(
-        URC_COMPETIION_ID
-      );
-      setAthletes(data);
-      setLastFetchTime(now);
+  const positions = useMemo(() => {
+    return extractUniqueAthletePositions(athletes);
+  }, [athletes]); 
 
-      // Extract unique positions and teams for filters
-      const extractedPositions = [
-        ...new Set(
-          data.map((player) => {
-            const position = player.position_class || "";
-            return position.charAt(0).toUpperCase() + position.slice(1);
-          })
-        ),
-      ]
-        .filter(Boolean)
-        .sort();
+  const teams = useMemo(() => {
+    return extractUniqueAthleteTeams(athletes);
+  }, [athletes]);
 
-      const extractedTeams = [
-        ...new Set(data.map((player) => player.team_name)),
-      ]
-        .filter(Boolean)
-        .sort();
-
-      setPositions(extractedPositions);
-      setTeams(extractedTeams);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load athletes");
-      console.error("Error fetching athletes:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Initial fetch on mount
-  useEffect(() => {
-    fetchAthletes();
-  }, []);
-
-  const refreshAthletes = () => fetchAthletes(true);
+  const refreshAthletes = async () => {};
 
   const getAthleteById = (id: string) => {
     return athletes.find(
@@ -106,10 +60,26 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useAthletes = () => {
+export const useAthletes = (includeMock?: boolean) => {
   const context = useContext(AthleteContext);
   if (context === undefined) {
     throw new Error("useAthletes must be used within an AthleteProvider");
   }
-  return context;
+
+  let athletes = context.athletes;
+
+  if (includeMock && athletes.length === 0) {
+    athletes = athleteService.getMockRugbyPlayers();
+  }
+
+  return {...context, athletes};
 };
+
+
+async function athletesFetcher() {
+  const athletes = await athleteService.getSupportedPlayers();
+
+  return athletes.sort((a, b) => {
+    return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0)
+  })
+}

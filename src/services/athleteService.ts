@@ -1,7 +1,10 @@
+import { URC_COMPETIION_ID } from "../types/constants";
 import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
 import { SportAction } from "../types/sports_actions";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
+import { processResJson } from "../utils/httpUtils";
 import { logger } from "./logger";
+import {rugbyPlayers as mockRugbyPlayers} from "../data/rugbyPlayers";
 
 // Define the type for each individual breakdown item
 export interface PointsBreakdownItem {
@@ -324,6 +327,30 @@ export const athleteService = {
       return undefined;
     }
   },
+
+  getSupportedPlayers: async (): Promise<RugbyPlayer[]> => {
+    try {
+
+      const competitionId = URC_COMPETIION_ID;
+      const uri = getUri(`/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`);
+
+      const response = await fetch(uri, {
+          method: "GET",
+          headers: getAuthHeader()
+        }
+      );
+
+      return processResJson(response, []);
+
+    } catch (error) {
+      console.log('Error fetching athletes ', error);
+      return [];
+    }
+  },
+
+  getMockRugbyPlayers: () => {
+    return mockRugbyPlayers;
+  }
 };
 
 /**
@@ -559,10 +586,10 @@ const extractCategoryStats = (
           action === "TackleSuccess"
             ? statsMap["TacklesMade"] && statsMap["TacklesMissed"]
               ? `${Math.floor(
-                  (statsMap["TacklesMade"] /
-                    (statsMap["TacklesMade"] + statsMap["TacklesMissed"])) *
-                    100
-                )}%`
+                (statsMap["TacklesMade"] /
+                  (statsMap["TacklesMade"] + statsMap["TacklesMissed"])) *
+                100
+              )}%`
               : `${Math.floor(statsMap["TackleSuccess"] * 100)}%`
             : statsMap[action].toString(),
       });
