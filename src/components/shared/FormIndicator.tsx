@@ -6,16 +6,17 @@ export type FormType = "UP" | "DOWN" | "NEUTRAL";
 
 type Props = {
     form: FormType,
-    className?: string
+    className?: string,
+    size?: number
 }
 
-export default function FormIndicator({ form, className }: Props) {
+export default function FormIndicator({ form, className, size = 15 }: Props) {
 
     return (
         <>
-            {form === "UP" && <FlameIcon size={15} className={twMerge('text-green-500', className)} />}
-            {form === "DOWN" && <ArrowDownRightIcon size={15} className={twMerge('text-red-500', className)} />}
-            {form === "NEUTRAL" && <MinusIcon size={15} className={twMerge('text-slate-500', className)} />}
+            {form === "UP" && <FlameIcon size={size} className={twMerge('text-green-500 hidden', className)} />}
+            {form === "DOWN" && <ArrowDownRightIcon size={size} className={twMerge('text-red-500', className)} />}
+            {form === "NEUTRAL" && <MinusIcon size={size} className={twMerge('text-slate-500', className)} />}
         </>
     )
 }

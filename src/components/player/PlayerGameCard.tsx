@@ -62,7 +62,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         {!isAvailable && <div className="top-0 left-0 absolute w-full h-full bg-black/50 z-10" ></div>}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo className="w-8 h-8" url={player.team_logo} />
+          <TeamLogo className="w-5 h-5 lg:w-8 lg:h-8" url={player.team_logo} />
         </div>
 
         {/* Player Image */}
@@ -87,22 +87,25 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
           )}
         >
           {/* Player name and form */}
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-xs font-bold truncate flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="text-[10px] lg:text-xs font-bold truncate flex-1">
               {player.player_name}
             </h3>
             {player.form &&
               (player.form === "UP" || player.form === "DOWN") && (
-                <FormIndicator form={player.form} />
+                <>
+                  <FormIndicator size={10} className="lg:hidden" form={player.form} />
+                  <FormIndicator size={15} className="hidden lg:block" form={player.form} />
+                </>
               )}
           </div>
 
           {/* Position and Rating */}
-          <div className="flex justify-between items-center text-sm mb-2">
-            <div className="text-xs truncate">
+          <div className="flex justify-between items-center text-sm">
+            <div className="text-[10px] truncate">
               {formatPosition(player.position_class ?? "")}
             </div>
-            <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">PR {statValue(pr)}</div>
+            <div className="text-[8px] lg:text-xs  font-medium flex flex-row items-center justify-end text-nowrap">PR {statValue(pr)}</div>
           </div>
 
           {/* Stats Grid */}

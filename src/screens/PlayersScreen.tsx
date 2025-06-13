@@ -39,6 +39,7 @@ export const PlayersScreen = () => {
   const [teamFilter, setTeamFilter] = useState<string>("");
 
   const [isComparing, setIsComparing] = useState(false);
+
   const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
   const toggleCompareMode = () => setIsComparing(!isComparing);
   const clearSelections = () => setSelectedPlayers([]);
@@ -307,13 +308,13 @@ export const PlayersScreen = () => {
       
         {/* Player Grid */}
         {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
             {filteredPlayers.map((player, index) => (
               <PlayerGameCard
                 key={index}
                 player={player}
                 onClick={() => handlePlayerClick(player)}
-                className="h-[150px] lg:h-[300px]"
+                className="h-[160px] lg:h-[250px]"
               />
             ))}
           </div>
