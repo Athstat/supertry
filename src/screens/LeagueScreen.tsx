@@ -1,38 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { LeagueHeader } from "../components/league/LeagueHeader";
-import { LeagueStandings } from "../components/league/LeagueStandings";
-import { LeagueSettings } from "../components/league/LeagueSettings";
-import { RankedFantasyTeam } from "../types/league";
-import { fantasyTeamService } from "../services/fantasyTeamService";
-import { TeamAthletesModal } from "../components/league/TeamAthletesModal";
-import LeagueGroupChatFeed from "../components/leagues/LeagueGroupChat";
-import { FantasyLeagueFixturesList } from "../components/league/FixturesList";
-import { IFantasyLeague } from "../types/fantasyLeague";
-import FantasyLeagueProvider from "../contexts/FantasyLeagueContext";
-import { useFantasyLeague } from "../components/league/useFantasyLeague";
-import { analytics } from "../services/anayticsService";
-import { useNavigate } from "react-router-dom";
-import { isLeagueLocked } from "../utils/leaguesUtils";
-import { Lock } from "lucide-react";
-import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
-import PageView from "./PageView";
-import { ErrorState } from "../components/ui/ErrorState";
-
+import React, { useState, useEffect } from 'react';
+import { LeagueHeader } from '../components/league/LeagueHeader';
+import { LeagueStandings } from '../components/league/LeagueStandings';
+import { LeagueSettings } from '../components/league/LeagueSettings';
+import { RankedFantasyTeam } from '../types/league';
+import { fantasyTeamService } from '../services/fantasyTeamService';
+import { TeamAthletesModal } from '../components/league/TeamAthletesModal';
+import LeagueGroupChatFeed from '../components/leagues/LeagueGroupChat';
+import { FantasyLeagueFixturesList } from '../components/league/FixturesList';
+import { IFantasyLeague } from '../types/fantasyLeague';
+import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
+import { useFantasyLeague } from '../components/league/useFantasyLeague';
+import { analytics } from '../services/anayticsService';
+import { useNavigate } from 'react-router-dom';
+import { isLeagueLocked } from '../utils/leaguesUtils';
+import { Lock } from 'lucide-react';
+import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
+import PageView from './PageView';
+import { ErrorState } from '../components/ui/ErrorState';
+import LeaguePredictionsTab from '../components/league/LeaguePredictionsTab';
 
 export function LeagueScreen() {
-
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
 
-  const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(
-    null
-  );
+  const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
 
-  const { leagueInfo, userTeam, error, isLoading, league, teams } =
-    useFantasyLeague();
+  const { leagueInfo, userTeam, error, isLoading, league, teams } = useFantasyLeague();
 
   useEffect(() => {
     setShowJumpButton(Boolean(userTeam?.rank && userTeam.rank > 5));
@@ -52,7 +48,7 @@ export function LeagueScreen() {
       const athletes = await fantasyTeamService.fetchTeamAthletes(team.team_id);
       setTeamAthletes(athletes);
     } catch (error) {
-      console.error("Failed to fetch team athletes:", error);
+      console.error('Failed to fetch team athletes:', error);
       // You can set an error state here if needed
     } finally {
       setLoadingAthletes(false);
@@ -77,7 +73,7 @@ export function LeagueScreen() {
 
   // Function to view a team's details
   const viewTeam = (teamId: string) => {
-    console.log("Viewing team:", teamId);
+    console.log('Viewing team:', teamId);
     // Navigate to team details page or open a modal
   };
 
@@ -85,32 +81,35 @@ export function LeagueScreen() {
 
   const tabItems: TabViewHeaderItem[] = [
     {
-      label: "Standings",
-      tabKey: "standings"
+      label: 'Standings',
+      tabKey: 'standings',
     },
 
     {
-      label: "Chat",
-      tabKey: "chat"
+      label: 'Chat',
+      tabKey: 'chat',
     },
 
     {
-      label: "Fixtures",
-      tabKey: "fixtures"
-    }
-  ]
+      label: 'Fixtures',
+      tabKey: 'fixtures',
+    },
+
+    {
+      label: 'Predictions',
+      tabKey: 'predictions',
+    },
+  ];
 
   const onJumpToTeam = () => {
-    const userTeamRef = document.querySelector(
-      '[data-user-team="true"]'
-    );
+    const userTeamRef = document.querySelector('[data-user-team="true"]');
     if (userTeamRef) {
       userTeamRef.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
+        behavior: 'smooth',
+        block: 'center',
       });
     }
-  }
+  };
 
   return (
     <FantasyLeagueProvider userTeam={userTeam} league={league}>
@@ -169,51 +168,43 @@ export function LeagueScreen() {
           </div>
         </LeagueHeader>
 
-        <PageView className="p-4" >
+        <PageView className="p-4">
+          {league && (
+            <TabView tabHeaderItems={tabItems}>
+              <TabViewPage tabKey="standings">
+                <LeagueStandings
+                  teams={teams}
+                  showJumpButton={showJumpButton}
+                  onJumpToTeam={onJumpToTeam}
+                  isLoading={isLoading}
+                  error={error}
+                  onTeamClick={team => {
+                    handleTeamClick(team);
+                    viewTeam(team.team_id);
+                  }}
+                  league={league}
+                />
+              </TabViewPage>
 
-          {league && <TabView  tabHeaderItems={tabItems}>
+              <TabViewPage tabKey="chat">
+                <LeagueGroupChatFeed league={league} />
+              </TabViewPage>
 
-            <TabViewPage tabKey="standings" >
+              <TabViewPage tabKey="fixtures">
+                <FantasyLeagueFixturesList userTeam={userTeam} league={league as IFantasyLeague} />
+              </TabViewPage>
 
-              <LeagueStandings
-                teams={teams}
-                showJumpButton={showJumpButton}
-                onJumpToTeam={onJumpToTeam}
-                isLoading={isLoading}
-                error={error}
-                onTeamClick={(team) => {
-                  handleTeamClick(team);
-                  viewTeam(team.team_id);
-                }}
-                league={league}
-              />
-            </TabViewPage>
-
-            <TabViewPage tabKey="chat" >
-              <LeagueGroupChatFeed league={league} />
-            </TabViewPage>
-
-            <TabViewPage tabKey="fixtures" >
-              <FantasyLeagueFixturesList
-                userTeam={userTeam}
-                league={league as IFantasyLeague}
-              />
-            </TabViewPage>
-
-          </TabView>}
-
-          {!league && (
-            <ErrorState 
-              error="Error Loading League Data" 
-            />
+              <TabViewPage tabKey="predictions">
+                <LeaguePredictionsTab />
+              </TabViewPage>
+            </TabView>
           )}
-        </PageView>
 
+          {!league && <ErrorState error="Error Loading League Data" />}
+        </PageView>
       </div>
 
-      {showSettings && (
-        <LeagueSettings onClose={() => setShowSettings(false)} />
-      )}
+      {showSettings && <LeagueSettings onClose={() => setShowSettings(false)} />}
 
       {/* Team Athletes Modal */}
       {selectedTeam && (
@@ -244,6 +235,6 @@ export function LeagueScreen() {
           <Lock className="w-4 h-4" />
         </button>
       )}
-    </FantasyLeagueProvider >
+    </FantasyLeagueProvider>
   );
 }
