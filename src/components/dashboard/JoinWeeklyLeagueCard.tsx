@@ -3,7 +3,7 @@ import { Users, Calendar, Award } from 'lucide-react';
 
 const JoinWeeklyLeagueCard = () => {
   return (
-    <div className="rounded-xl overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+    <div className="rounded-xl overflow-hidden bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white">
       <div className="p-6">
         <h2 className="text-xl font-bold mb-1">Weekly Rugby Fantasy Leagues</h2>
         <p className="text-sm text-blue-100 mb-4">
@@ -22,15 +22,9 @@ const JoinWeeklyLeagueCard = () => {
             <Calendar className="w-4 h-4 mr-2 text-blue-200" />
             <span className="text-sm font-medium">2 days left</span>
           </div>
-
-          {/* Prize */}
-          <div className="flex items-center">
-            <Award className="w-4 h-4 mr-2 text-blue-200" />
-            <span className="text-sm font-medium">R5,000 prize</span>
-          </div>
         </div>
 
-        <button className="w-full bg-white text-blue-600 font-medium py-3 px-4 rounded-md hover:bg-blue-50 transition-colors">
+        <button className="w-full bg-white text-primary-800 font-medium py-3 px-4 rounded-md hover:bg-blue-50 transition-colors">
           Join A Weekly League →
         </button>
       </div>
