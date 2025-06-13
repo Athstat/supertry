@@ -80,8 +80,7 @@ function SbrFeatureGamesModal({ games, open, onClose }: ModalProps) {
 
     const currentGame = games[index];
 
-    const { hasKickedOff, hasScores } = sbrFixtureSummary(currentGame);
-    const showScores = hasScores;
+    const { hasScores } = sbrFixtureSummary(currentGame);
 
     const canMoveNext = index < maxIndex;
     const canMovePrev = index > 0;
