@@ -87,6 +87,7 @@ function JoinDeadlineCountdown({
     navigateToLeagueScreen(league);
   }
 
+
   return (
     <div className="flex flex-col p-4 gap-4 sm:gap-6">
       <div onClick={handleClickCard} className="space-y-2 sm:space-y-4 cursor-pointer">
