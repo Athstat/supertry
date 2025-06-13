@@ -96,6 +96,12 @@ function teamLogoMapper(teamName: string): string | undefined {
       return '/sbr_logos/dundee.webp'
     case "Greytown High School":
       return '/sbr_logos/greytown.webp'
+    case 'Midlands Christian College':
+      return '/sbr_logos/midlands-christian-college.png.png';
+    case 'Milton high school':
+        return '/sbr_logos/milton_high_logo.webp'
+    case 'Eaglesvale High School':
+      return '/sbr_logos/eaglesvale_logo.webp';
     default:
       return undefined;
   }
