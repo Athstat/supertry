@@ -26,9 +26,9 @@ export const PlayerFilters = ({
     <div className="">
       <button
         onClick={() => setShowFilters(!showFilters)}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
+        className="flex text-xs md:text-sm lg:text-base items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
       >
-        <Filter size={20} />
+        <Filter className="w-4 h-4 lg:w-6 lg:h-6" />
         Filters
 
         {(positionFilter || teamFilter) && (
@@ -38,8 +38,7 @@ export const PlayerFilters = ({
         )}
         
         <ChevronDown
-          size={20}
-          className={`transform transition-transform ${
+          className={`transform w-4 h-4 lg:w-6 lg:h-6 transition-transform ${
             showFilters ? "rotate-180" : ""
           }`}
         />

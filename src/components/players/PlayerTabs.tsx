@@ -8,7 +8,7 @@ interface PlayerTabsProps {
 export const PlayerScreenTabs = ({ activeTab, onTabChange }: PlayerTabsProps) => {
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2">
+    <div className="flex text-xs md:text-sm lg:text-base gap-2">
 
       <TabBarItem
         label="All Players"

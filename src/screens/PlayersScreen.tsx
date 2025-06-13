@@ -46,7 +46,7 @@ export const PlayersScreen = () => {
 
   const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
-  
+
   const handleClosePlayerModal = () => {
     setPlayerModalPlayer(undefined);
     setShowPlayerModal(false);
@@ -83,7 +83,7 @@ export const PlayersScreen = () => {
         setSelectedPlayers([...selectedPlayers, player]);
       }
     } else {
-      
+
       setPlayerModalPlayer(player);
       setShowPlayerModal(true);
 
@@ -239,7 +239,7 @@ export const PlayersScreen = () => {
       isComparing={isComparing}
       selectedPlayers={selectedPlayers}
     >
-      <PageView className="px-5 flex flex-col gap-3 md:w-[80%] lg:w-[60%]">
+      <PageView className="px-2 flex flex-col gap-3 md:w-[80%] lg:w-[60%]">
 
         {/* Search and Filter Header */}
         <div className="flex flex-row gap-2 items-center" >
@@ -247,12 +247,10 @@ export const PlayersScreen = () => {
           <h1 className="text-lg lg:text-2xl font-bold" >Players</h1>
         </div>
         <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col flex-wrap gap-2">
 
           <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
-
-          <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
-
+          <div className="flex flex-row items-center flex-wrap gap-2" >
             <PlayerFilters
               positionFilter={positionFilter}
               teamFilter={teamFilter}
@@ -273,6 +271,7 @@ export const PlayersScreen = () => {
               className={twMerge(isComparing && "bg-gradient-to-r from-primary-600 to-blue-700")}
               onClick={toggleCompareMode}
             />
+
           </div>
         </div>
 
@@ -305,16 +304,16 @@ export const PlayersScreen = () => {
             />
           )}
 
-      
+
         {/* Player Grid */}
         {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
-          <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
             {filteredPlayers.map((player, index) => (
               <PlayerGameCard
                 key={index}
                 player={player}
                 onClick={() => handlePlayerClick(player)}
-                className="h-[160px] lg:h-[250px]"
+                className="h-[150px] lg:h-[250px]"
               />
             ))}
           </div>
@@ -326,8 +325,8 @@ export const PlayersScreen = () => {
           </div>
         )}
 
-        <PlayerCompareModal 
-          selectedPlayers={selectedPlayers} 
+        <PlayerCompareModal
+          selectedPlayers={selectedPlayers}
           open={selectedPlayers.length >= 2 && isComparing}
           onClose={onClear}
           onRemove={onRemovePlayerFromSelectedPlayers}
@@ -337,7 +336,7 @@ export const PlayersScreen = () => {
           onClose={handleClosePlayerModal}
           player={playerModalPlayer}
           isOpen={playerModalPlayer !== undefined && showPlayerModal}
-          
+
         />}
 
       </PageView>

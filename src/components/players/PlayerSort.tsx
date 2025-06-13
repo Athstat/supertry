@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 type SortField = "power_rank_rating" | "player_name" | "form";
@@ -21,28 +21,12 @@ export const PlayerSort = ({
     <div className="relative">
       <button
         onClick={() => setShowSortOptions(!showSortOptions)}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
+        className="flex text-xs md:text-sm lg:text-base items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m3 16 4 4 4-4" />
-          <path d="M7 20V4" />
-          <path d="m21 8-4-4-4 4" />
-          <path d="M17 4v16" />
-        </svg>
+        <ArrowUpDown className="w-4 h-4 lg:w-6 lg:h-6" />
         Sort
         <ChevronDown
-          size={20}
-          className={`transform transition-transform ${
+          className={`transform w-4 h-4 lg:w-6 lg:h-6 transition-transform ${
             showSortOptions ? "rotate-180" : ""
           }`}
         />
