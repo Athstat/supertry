@@ -30,9 +30,9 @@ export function VotingOptionBar({ isGreen, isRed, title, voteCount = 0, disable,
             onClick={handleClick}
         >
 
-            <div className="w-full flex text-slate-500 dark:text-slate-400 flex-row items-center justify-between" >
-                <p className="text-xs" >{title}</p>
-                <p className="text-xs " >Vote{voteCount > 0 ? "s" : ""} {voteCount}</p>
+            <div className="w-full flex text-sm text-slate-500 dark:text-slate-400 flex-row items-center justify-between" >
+                <p className="" >{title}</p>
+                <p className="" >Vote{voteCount > 0 ? "s" : ""} {voteCount}</p>
             </div>
 
             <div className="flex flex-row gap-1 rounded-xl w-[100%]">

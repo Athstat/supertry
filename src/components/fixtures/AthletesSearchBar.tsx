@@ -19,7 +19,7 @@ export default function AthletesSearchBar({ value, onChange, className, placehol
     return (
         <div className={
             twMerge(
-                "w-full h-14 bg-white border dark:text-slate-400 text-slate-700 border-slate-100 dark:border-slate-800/40 dark:bg-slate-800/40 rounded-xl p-3 flex flex-row items-center gap-2",
+                "w-full h-14 bg-white border dark:text-slate-400 text-slate-700 border-slate-300 dark:border-slate-700 dark:bg-slate-800/40 rounded-xl p-3 flex flex-row items-center gap-2",
                 className
             )
         } >

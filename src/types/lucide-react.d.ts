@@ -91,6 +91,7 @@ declare module "lucide-react" {
   export const AlertCircle: CIP;
   export const ArrowUpDown: CIP;
   export const UserCircle: CIP;
+  export const ChartNoAxesColumn: CIP;
 
 }
 

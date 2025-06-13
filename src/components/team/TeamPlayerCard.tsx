@@ -1,16 +1,17 @@
 import { twMerge } from "tailwind-merge";
-import { Player } from "../../types/team";
 import { useFetch } from "../../hooks/useFetch";
 import { athleteService } from "../../services/athleteService";
 import { useState } from "react";
 import { formatPosition } from "../../utils/athleteUtils";
 import FormIndicator from "../shared/FormIndicator";
 import TeamLogo from "./TeamLogo";
-import { useTeamData } from "../my-team/TeamDataProvider";
 import { Info } from "lucide-react";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { useAtomValue } from "jotai";
+import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 
 type Props = {
-  player: Player;
+  player: IFantasyTeamAthlete;
   onClick: () => void;
   className?: string;
 };
@@ -25,18 +26,18 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
 
   const { data: playerInfo, isLoading } = useFetch(
     "athletes",
-    player.athlete_id,
+    player.tracking_id,
     athleteService.getRugbyAthleteById
   );
 
-  const { leagueInfo } = useTeamData();
+  const league = useAtomValue(fantasyLeagueAtom);
 
   const { data: pointsBreakDown, isLoading: pointsLoading } = useFetch(
     "points-breakdown",
 
     {
-      leagueId: leagueInfo?.official_league_id ?? "fallback-ofid",
-      round: leagueInfo?.start_round ?? -1,
+      leagueId: league?.official_league_id ?? "fallback-ofid",
+      round: league?.start_round ?? -1,
       trackingId: playerInfo?.tracking_id ?? "fallback-tid",
     },
     async ({ leagueId, round, trackingId }) => {

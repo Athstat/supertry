@@ -3,15 +3,17 @@ import { IGamesLeagueConfig } from "../../types/leagueConfig";
 import { useTeamCreation } from "../../hooks/useTeamCreation";
 import { leagueService } from "../../services/leagueService";
 import { athleteService } from "../../services/athleteService";
-import { Position } from "../../types/position";
-import { Player } from "../../types/player";
+import { TeamCreationPositionSlot } from "../../types/position";
+import { RugbyPlayer } from "../../types/rugbyPlayer";
+import { MAX_TEAM_BUDGET } from "../../types/constants";
 
 export const useTeamCreationState = (officialLeagueId: string | undefined) => {
+  
   // League and players data states
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
     null
   );
-  const [allPlayers, setAllPlayers] = useState<any[]>([]);
+  const [allPlayers, setAllPlayers] = useState<RugbyPlayer[]>([]);
   const [positionList, setPositionList] = useState<any[]>([]);
 
   // UI states
@@ -19,9 +21,10 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   const [loadingPlayers, setLoadingPlayers] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPlayerSelection, setShowPlayerSelection] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState<Position | null>(
+  const [selectedPosition, setSelectedPosition] = useState<TeamCreationPositionSlot | null>(
     null
   );
+  const [captainId, setCaptainId] = useState<string | null>(null);
 
   // Toast state
   const [toast, setToast] = useState<{
@@ -36,7 +39,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
 
   // Get the useTeamCreation hook
   const teamCreationHook = useTeamCreation(
-    leagueConfig?.team_budget || 1000,
+    leagueConfig?.team_budget || MAX_TEAM_BUDGET,
     (players, teamName, isFavorite) => {
       console.log("Team creation complete", players, teamName, isFavorite);
       // Navigation is handled in the parent component
@@ -135,7 +138,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   };
 
   // Handle position selection
-  const handlePositionSelect = (position: Position) => {
+  const handlePositionSelect = (position: TeamCreationPositionSlot) => {
     // Set the position in the hook first
     handlePositionClick(position);
 
@@ -145,7 +148,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   };
 
   // Override handleAddPlayer to also close the modal
-  const enhancedHandleAddPlayer = (player: Player) => {
+  const enhancedHandleAddPlayer = (player: RugbyPlayer) => {
     handleAddPlayer(player);
     setShowPlayerSelection(false); // Close the modal after player is added
   };
@@ -265,6 +268,10 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
     selectedPlayersCount,
     requiredPlayersCount,
     isTeamComplete,
+
+    // Captain selection
+    captainId,
+    setCaptainId,
 
     // Toast
     toast,

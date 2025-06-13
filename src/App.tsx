@@ -8,9 +8,11 @@ import { AppStateProvider } from "./contexts/AppStateContext";
 import ErrorBoundary, { FallbackProps } from "./components/ErrorBoundary";
 import AppErrorFallback from "./components/AppErrorFallback";
 import { useState } from "react";
+import { FirstVisitDebug } from "./components/debug/FirstVisitDebug";
 
 function App() {
   const [error, setError] = useState<Error | null>(null);
+  const isDevelopment = import.meta.env.MODE === 'development';
 
   return (
     <ThemeProvider>
