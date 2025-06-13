@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Player } from "../../types/team"
+
 import { formatPosition } from "../../utils/athleteUtils"
 import SimpleCoinIcon from "../shared/SimpleCoinIcon"
 import { useFetch } from "../../hooks/useFetch"
@@ -7,10 +7,11 @@ import { athleteService } from "../../services/athleteService"
 import { LoadingState } from "../ui/LoadingState"
 import { twMerge } from "tailwind-merge"
 import { Info } from "lucide-react"
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete"
 
 type Props = {
-    player: Player,
-    handlePlayerClick: (player: Player) => void
+    player: IFantasyTeamAthlete,
+    handlePlayerClick: (player: IFantasyTeamAthlete) => void
 }
 
 export default function TeamSubstituteCard({player, handlePlayerClick} : Props) {

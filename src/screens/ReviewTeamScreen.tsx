@@ -15,7 +15,7 @@ import { Position } from "../types/position";
 import { Player } from "../types/player";
 import { positionGroups } from "../data/positionGroups";
 import { useNavigate, useLocation } from "react-router-dom";
-import { fantasyTeamService } from "../services/teamService";
+import { fantasyTeamService } from "../services/fantasyTeamService";
 
 interface ReviewTeamScreenProps {
   teamName: string;

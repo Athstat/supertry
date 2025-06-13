@@ -7,18 +7,14 @@ import { formatPosition } from "../../../utils/athleteUtils";
 
 type Props = {
     fixtures: ISbrFixture[],
-    weekStart?: Date,
-    weekEnd?: Date
 }
 
 /** Renders all the Sbr Fixtures */
 export default function SbrFixturesTab({ fixtures }: Props) {
 
     const [country, setCoutry] = useQueryState('fs', { init: 'all' });
-    // const [pivotDateStr, setPivotDateStr] = useQueryState('pivot');
-
-    // const pivotDate = safeTransformStringToDate(pivotDateStr);
     const countryFilterIsSet = country && country !== "all";
+    
     const clearCountryFilter = () => {
         setCoutry("all");
     }
