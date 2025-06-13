@@ -75,6 +75,7 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
     )
 }
 
+
 type ItemProps = {
     player: RugbyPlayer,
     comparingPlayer?: RugbyPlayer,
@@ -102,6 +103,12 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
 
     const minutesPlayed = getPlayerAggregatedStat("MinutesPlayed", actions)?.action_count
     const compareMinutesPlayed = getPlayerAggregatedStat("MinutesPlayed", compareActions)?.action_count;
+
+    const tacklesMade = getPlayerAggregatedStat('TacklesMade', actions)?.action_count;
+    const compareTacklesMade = getPlayerAggregatedStat('TacklesMade', compareActions)?.action_count;
+
+    const tackleSuccess = getPlayerAggregatedStat('TackleSuccess', actions)?.action_count;
+    const compareTackleSuccess = getPlayerAggregatedStat('TackleSuccess', compareActions)?.action_count;
 
     if (isLoading) return (
         <div className="w-full h-[400px] bg-slate-200 dark:bg-slate-800 animate-pulse" >
@@ -198,6 +205,18 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                     label="Tackling"
                     value={player.tackling}
                     isGreen={(player.tackling ?? 0) > (comparingPlayer?.tackling ?? 0)}
+                />
+
+                <StatLabel
+                    label="Tackles Made"
+                    value={tacklesMade}
+                    isGreen={(tacklesMade ?? 0) > (compareTacklesMade ?? 0)}
+                />
+
+                <StatLabel
+                    label="Tackle Success"
+                    value={tackleSuccess}
+                    isGreen={(tackleSuccess ?? 0) > (compareTackleSuccess ?? 0)}
                 />
 
                 <p className="mt-2" >Kicking</p>
