@@ -10,8 +10,7 @@ import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
 import NoContentCard from "../../shared/NoContentMessage";
 import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrTopDawgOfTheMatchCard from "./SbrMotmWinnerCard";
-import { LockedViewCard } from "../../shared/ViewLockedCard";
-import { format } from "date-fns";
+import SbrFixtureTeamRosters from "../rosters/SbrFixtureTeamLineups";
 
 type Props = {
     fixture: ISbrFixture
@@ -70,21 +69,19 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
     const awayCandidates = candidates.filter((r) => {
         return r.team_id === fixture.away_team_id
     });
-
+    
 
     if (candidates.length === 0) return (
         <>
             <NoContentCard message={
-                `Top Dawg Of The Match voting ${hasVotingEnded ? "was" : "is"} not available for this game`
+                `Team Rosters ${hasVotingEnded ? "were not" : "are not yet"} available for this game`
             } />
         </>
     )
 
     if (candidates.length > 0 && !hasKickedOff) return (
         <>
-            <LockedViewCard message={
-                `Not just yet! Top Dawg Of The Match voting starts at kickoff (${format(kickoff, "HH:mm")} on ${format(kickoff, "EEEE dd MMMM yyyy")})`
-            } />
+            <SbrFixtureTeamRosters fixture={fixture} homeLineup={homeCandidates} awayLineup={awayCandidates} />
         </>
     )
 

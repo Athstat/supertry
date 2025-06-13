@@ -83,7 +83,7 @@ export function SbrMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
         <div className="flex gap-3 p-2 flex-row items-center" >
 
-            <div className="w-[10%]" >
+            <div className="border dark:border-slate-700 bg-slate-100 dark:bg-slate-800 w-10 h-10 items-center justify-center flex flex-col rounded-xl" >
                 <p>{candidate.jersey_number || "-"}</p>
             </div>
 
