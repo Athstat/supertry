@@ -110,6 +110,20 @@ function teamLogoMapper(teamName: string): string | undefined {
         return 'sharks_schools_logo.png';
       case 'Blue Bulls Schools':
         return 'blue_bulls_schools_logo.png';
+      case 'Benard Mizeki College':
+        return 'bernard_muzeki_logo.png';
+      case 'Mutare Boys High':
+        return 'mutare_boys_high_logo.jpeg';
+      case 'Petra College':
+        return 'petra_college_logo.png'
+      case 'Allan Wilson':
+        return 'allan_wilson_logo.png'
+      case 'St Stithians College':
+        return 'st_stithians_logo.png'
+      case 'Hillcrest High School (SA)':
+        return 'hilcrest_high_school_sa.png'
+      case 'Howick High School':
+        return 'howick_logo.png';
       default:
         return undefined;
     }
