@@ -1,4 +1,3 @@
-import React from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -27,17 +26,16 @@ ChartJS.register(
   Filler
 );
 
-interface PRChartTabProps {
+type Props = {
   player: any;
 }
 
-export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
+export function PowerRankingChartTab ({ player }: Props) {
+  
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
 
   const { data, isLoading, error } = usePowerRankings(player.tracking_id);
-
-  console.log("playerPR", data);
 
   // Format dates for display on X-axis
   const formatDate = (dateString: string) => {
@@ -171,10 +169,10 @@ export const PRChartTab: React.FC<PRChartTabProps> = ({ player }) => {
   };
 
   return (
-    <div className="p-4 h-96">
+    <div className="p-4 h-52">
       <Line data={chartData} options={chartOptions} />
     </div>
   );
 };
 
-export default PRChartTab;
+export default PowerRankingChartTab;

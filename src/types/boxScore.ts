@@ -35,5 +35,6 @@ export type IBoxScoreItem = {
     athlete_position: string,
     athlete_team_id: string,
     athlete_first_name: string,
-    athlete_last_name: string
+    athlete_last_name: string,
+    athlete_match_power_ranking?: number
 }

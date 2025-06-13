@@ -39,6 +39,8 @@ export default function FixtureAttackingLeaders({ boxScores, fixture }: Props) {
               fixture={fixture}
             >
               <div className="flex flex-row w-full text-slate-600 dark:text-slate-400 text-xs lg:text-sm gap-2 items-center justify-start" >
+                
+                {bs.athlete_match_power_ranking !== 0 && <p>PR {bs.athlete_match_power_ranking?.toFixed(1)}</p>}
                 {bs.points !== 0 && <p>Points {bs.points}</p>}
                 {bs.tries !== 0 && <p> Tries {bs.tries}</p>}
                 {bs.carries !== 0 && <p>Carries {bs.carries}</p>}

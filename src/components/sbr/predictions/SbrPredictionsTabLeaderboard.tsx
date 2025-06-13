@@ -24,7 +24,7 @@ export default function SbrPredictionsTabLeaderboard() {
                 {!loadingRankings && <div className="grid grid-cols-1 gap-3" >
                     {rankings.map((u, index) => {
                         return (
-                            <div className="flex flex-row items-center gap-3 bg-white dark:bg-slate-800/40 p-4 rounded-xl " >
+                            <div key={index} className="flex flex-row items-center gap-3 bg-white dark:bg-slate-800/40 p-4 rounded-xl " >
                                 <div className="font-bold text-blue-500 dark:text-blue-400" >
                                     <p>{index + 1}</p>
                                 </div>

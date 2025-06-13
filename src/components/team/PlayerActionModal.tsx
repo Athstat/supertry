@@ -1,18 +1,19 @@
 import { X, Trophy, Users } from "lucide-react";
-import { Player } from "../../types/team";
 import { motion } from "framer-motion";
 import { formatPosition } from "../../utils/athleteUtils";
 import { CircleDollarSign } from "lucide-react";
 import { useFetch } from "../../hooks/useFetch";
 import { athleteService } from "../../services/athleteService";
 import { IFantasyLeague } from "../../types/fantasyLeague";
-import { isLeagueLocked } from "../../utils/leaguesUtils";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { useAtomValue } from "jotai";
+import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 
-interface PlayerActionModalProps {
-  player: Player;
+type PlayerActionModalProps = {
+  player: IFantasyTeamAthlete;
   onClose: () => void;
-  onViewStats: (player: Player) => void;
-  onSwapPlayer: (player: Player) => void;
+  onViewStats: (player: IFantasyTeamAthlete) => void;
+  onSwapPlayer: (player: IFantasyTeamAthlete) => void;
   league?: IFantasyLeague
 }
 
@@ -20,14 +21,14 @@ export function PlayerActionModal({
   player,
   onClose,
   onViewStats,
-  onSwapPlayer,
-  league
+  onSwapPlayer
 }: PlayerActionModalProps) {
 
   const { data: info, isLoading } = useFetch("athletes-info", player.tracking_id ?? "fall-back", athleteService.getRugbyAthleteById);
   console.log(info);
 
-  const isSwapLocked = isLeagueLocked(league?.join_deadline);
+  const isSwapLocked = useAtomValue(fantasyLeagueLockedAtom);
+  const isSub = !player.is_starting;
 
   return (
     <motion.div
@@ -99,7 +100,7 @@ export function PlayerActionModal({
               </div>
 
 
-              {player.is_super_sub && (
+              {isSub && (
                 <div className="mt-1 text-xs text-orange-600 dark:text-orange-400 font-medium">
                   Super Sub - Can play any position
                 </div>

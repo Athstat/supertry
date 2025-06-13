@@ -14,7 +14,7 @@ export function StatCard({ label, value, icon, valueClassName}: StatCardProps) {
   if (value === null || value === undefined) return <></>
   
   return (
-    <div className="bg-gray-50 dark:bg-dark-700/50 rounded-lg p-4 transition-all duration-300 hover:shadow-md">
+    <div className="bg-gray-50 dark:bg-dark-800/60 border dark:border-slate-700 rounded-lg p-4 transition-all duration-300 hover:shadow-md">
       <div className="flex items-center gap-2 mb-2">
         {icon}
         <span className="text-sm font-medium text-gray-600 dark:text-gray-400">

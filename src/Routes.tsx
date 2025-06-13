@@ -1,32 +1,40 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { WelcomeScreen } from "./screens/auth/WelcomeScreen";
-import { SignUpScreen } from "./screens/auth/SignUpScreen";
-import { SignInScreen } from "./screens/auth/SignInScreen";
-import PostSignUpWelcomeScreen from "./screens/PostSignUpWelcomeScreen";
-import { DashboardScreen } from "./screens/DashboardScreen";
-import { JoinLeagueScreen } from "./screens/JoinLeagueScreen";
-import { LeagueScreen } from "./screens/LeagueScreen";
-import { MyTeamsListScreen } from "./screens/MyTeamsScreen";
-import { TeamCreationScreen } from "./screens/TeamCreationScreen";
-import { ReviewTeamScreen } from "./screens/ReviewTeamScreen";
-import { MyTeamScreen } from "./screens/MyTeamScreen";
-import { ProfileScreen } from "./screens/ProfileScreen";
-import { RankingsScreen } from "./screens/RankingsScreen";
-import { PlayersScreen } from "./screens/PlayersScreen";
-import { PlayerProfileScreen } from "./screens/PlayerProfileScreen";
-import { useAuth } from "./contexts/AuthContext";
-import { Header } from "./components/Header";
-import { BottomNav } from "./components/BottomNav";
-import SbrScreen from "./screens/SbrScreen";
-import FixtureScreen from "./screens/FixtureScreen";
-import FixtureListScreen from "./screens/FixtureListScreen";
-import InviteFriendsScreen from "./screens/InviteFriendsScreen";
-import SbrChatTab from "./components/sbr/SBRChatScreen";
-import { ScopeProvider } from "jotai-scope";
-import { fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom } from "./components/fixtures/calendar/fixtures_calendar.atoms";
-import RouteErrorBoundary from "./components/RouteErrorBoundary";
-import SbrFixtureScreen from "./screens/SbrFixtureScreen";
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { WelcomeScreen } from './screens/auth/WelcomeScreen';
+import { SignUpScreen } from './screens/auth/SignUpScreen';
+import { SignInScreen } from './screens/auth/SignInScreen';
+import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
+import { ForgotPasswordScreen } from './screens/auth/ForgotPasswordScreen';
+import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
+import PostSignUpWelcomeScreen from './screens/PostSignUpWelcomeScreen';
+import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
+import { DashboardScreen } from './screens/DashboardScreen';
+import { JoinLeagueScreen } from './screens/JoinLeagueScreen';
+import { LeagueScreen } from './screens/LeagueScreen';
+import { MyTeamsListScreen } from './screens/MyTeamsScreen';
+import { TeamCreationScreen } from './screens/TeamCreationScreen';
+import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
+import { MyTeamScreen } from './screens/MyTeamScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
+import { RankingsScreen } from './screens/RankingsScreen';
+import { PlayersScreen } from './screens/PlayersScreen';
+import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
+import { useAuth } from './contexts/AuthContext';
+import { Header } from './components/Header';
+import { BottomNav } from './components/BottomNav';
+import SbrScreen from './screens/SbrScreen';
+import FixtureScreen from './screens/FixtureScreen';
+import FixtureListScreen from './screens/FixtureListScreen';
+import InviteFriendsScreen from './screens/InviteFriendsScreen';
+import SBRChatScreen from './components/sbr/SBRChatScreen';
+import { ScopeProvider } from 'jotai-scope';
+import {
+  fixturesDateRangeAtom,
+  fixturesSelectedMonthIndexAtom,
+} from './components/fixtures/calendar/fixtures_calendar.atoms';
+import RouteErrorBoundary from './components/RouteErrorBoundary';
+import SbrFixtureScreen from './screens/SbrFixtureScreen';
+import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -63,18 +71,41 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
 };
 
+// First Visit handler component
+const FirstVisitHandler = () => {
+  const { isAuthenticated, loading } = useAuth();
+  const [hasVisitedBefore, setHasVisitedBefore] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Check if user has visited the app before
+    const firstVisit = isFirstAppVisit();
+    setHasVisitedBefore(!firstVisit);
+
+    // If this is the first visit, mark it
+    if (firstVisit) {
+      markAppVisited();
+    }
+  }, []);
+
+  if (loading || hasVisitedBefore === null) return <div>Loading...</div>;
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  // First-time visitors see WelcomeScreen, returning visitors see AuthChoiceScreen
+  return (
+    <RouteErrorBoundary>
+      {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />}
+    </RouteErrorBoundary>
+  );
+};
+
 const AppRoutes = () => {
   return (
     <Routes>
       {/* Auth routes */}
-      <Route
-        path="/"
-        element={
-          <AuthRoute>
-            <WelcomeScreen />
-          </AuthRoute>
-        }
-      />
+      <Route path="/" element={<FirstVisitHandler />} />
       <Route
         path="/signup"
         element={
@@ -88,6 +119,30 @@ const AppRoutes = () => {
         element={
           <AuthRoute>
             <SignInScreen />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/forgot-password"
+        element={
+          <AuthRoute>
+            <ForgotPasswordScreen />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <AuthRoute>
+            <ResetPasswordScreen />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/auth-choice"
+        element={
+          <AuthRoute>
+            <AuthChoiceScreen />
           </AuthRoute>
         }
       />
@@ -225,7 +280,7 @@ const AppRoutes = () => {
         }
       />
 
-       <Route
+      <Route
         path="/sbr/fixtures/:fixtureId"
         element={
           <ProtectedRoute>
@@ -241,7 +296,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <SbrChatTab />
+              <SBRChatScreen />
             </Layout>
           </ProtectedRoute>
         }
@@ -263,7 +318,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <ScopeProvider atoms={[fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom]} >
+              <ScopeProvider atoms={[fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom]}>
                 <FixtureListScreen />
               </ScopeProvider>
             </Layout>
@@ -285,10 +340,20 @@ const AppRoutes = () => {
 
       {/* Post-Sign-Up Welcome Screen */}
       <Route
-        path="/welcome"
+        path="/post-signup-welcome"
         element={
           <ProtectedRoute>
             <PostSignUpWelcomeScreen />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Complete Profile Screen */}
+      <Route
+        path="/complete-profile"
+        element={
+          <ProtectedRoute>
+            <CompleteProfileScreen />
           </ProtectedRoute>
         }
       />

@@ -1,26 +1,20 @@
-import React from 'react';
-import OverviewTab from './tabs/OverviewTab';
-import StatsTab from './tabs/StatsTab';
-import PowerRankingTab from './tabs/PowerRankingTab';
-import PRChartTab from './tabs/PRChartTab';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
-import PlayerStatsContextInfo from './PlayerStatsContextInfo';
+import PlayerMatchsPRList from './PlayerMatchsPRList';
+import OverviewTab from './tabs/OverviewTab';
+import PowerRankingTab from './tabs/PowerRankingTab';
+import PowerRankingChartTab from './tabs/PRChartTab';
+import StatsTab from './tabs/StatsTab';
 
-interface TabContentProps {
-  activeTab: number;
+
+type Props = {
   player: any;
   playerStats: any;
   isLoading: boolean;
   error: string;
 }
 
-export const TabContent: React.FC<TabContentProps> = ({
-  activeTab,
-  player,
-  playerStats,
-  isLoading,
-  error
-}) => {
+export function PlayerProfileModalTabContent({player, playerStats, isLoading,error}: Props) {
+  
   // switch (activeTab) {
   //   case 0: // Overview
   //     return <OverviewTab player={player} />;
@@ -84,7 +78,8 @@ export const TabContent: React.FC<TabContentProps> = ({
 
         <TabViewPage tabKey='power-ranking'>
           <PowerRankingTab player={player} />
-          <PRChartTab player={player} />
+          <PowerRankingChartTab player={player} />
+          <PlayerMatchsPRList player={player} />
         </TabViewPage>
 
       </TabView>
@@ -92,4 +87,4 @@ export const TabContent: React.FC<TabContentProps> = ({
   )
 };
 
-export default TabContent;
+export default PlayerProfileModalTabContent;

@@ -2,6 +2,7 @@ import { IBoxScoreItem } from "../../types/boxScore"
 import { IFixture } from "../../types/games"
 import DialogModal from "../shared/DialogModal"
 import PlayerMugshot from "../shared/PlayerMugshot"
+import RoundedCard from "../shared/RoundedCard"
 import { StatCard } from "../shared/StatCard"
 
 type AthleteStatsModalProps = {
@@ -56,21 +57,25 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
         />
 
         <StatCard
+          label="Power Ranking"
+          value={bs.athlete_match_power_ranking?.toFixed(1)}
+        />
+
+        {/* <StatCard
           label="Points"
           value={bs.points}
-        />
+        /> */}
 
       </div>
 
-
-      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+      <RoundedCard className="grid bg-slate-100  rounded-xl dark:bg-slate-800/60  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
 
         <p className="text-lg font-bold" >Attacking Stats</p>
 
-        <StatsRow
+        {/* <StatsRow
           label="Points"
           value={bs.points}
-        />
+        /> */}
 
         <StatsRow
           label="Tries"
@@ -107,9 +112,9 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
           value={bs.turnoversconceded}
         />
 
-      </div>
+      </RoundedCard>
 
-      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+      <RoundedCard className="grid bg-slate-100 dark:bg-slate-800/60 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
 
         <p className="text-lg font-bold" >Defensive Stats</p>
 
@@ -143,9 +148,9 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
           value={bs.penaltiesconceded}
         />
 
-      </div>
+      </RoundedCard>
 
-      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+      <RoundedCard className="grid bg-slate-100 dark:bg-slate-800/60 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
 
         <p className="text-lg font-bold" >Kicking Stats</p>
 
@@ -159,9 +164,9 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
           value={bs.kicksfromhandmetres}
         />
 
-      </div>
+      </RoundedCard>
 
-      <div className="grid bg-slate-100 dark:bg-slate-800 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
+      <RoundedCard className="grid bg-slate-100 dark:bg-slate-800/60 rounded-xl  p-4 dark:border-slate-600 border-slate-300 grid-cols-1 gap-1" >
 
         <p className="text-lg font-bold" >Descipline Stats</p>
 
@@ -175,7 +180,7 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
           value={bs.yellowcards}
         />
 
-      </div>
+      </RoundedCard>
 
 
     </DialogModal >

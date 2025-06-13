@@ -2,7 +2,7 @@ import { CircleCheck, XIcon } from "lucide-react"
 import { useSbrFixtureVotes } from "../../../hooks/useFxitureVotes"
 import { ISbrFixture } from "../../../types/sbr"
 import { calculatePerc } from "../../../utils/fixtureUtils"
-import { sbrFxitureSummary } from "../../../utils/sbrUtils"
+import { sbrFixtureSummary } from "../../../utils/sbrUtils"
 import { twMerge } from "tailwind-merge"
 
 type Props = {
@@ -51,7 +51,7 @@ export function SummaryItem({ fixture }: SummaryItemProps) {
 
     const votedHomeTeam = userVote?.vote_for === "home_team";
     const votedAwayTeam = userVote?.vote_for === "away_team";
-    const { homeTeamWon, awayTeamWon, hasScores, home_score, away_score } = sbrFxitureSummary(fixture);
+    const { homeTeamWon, awayTeamWon, hasScores, home_score, away_score } = sbrFixtureSummary(fixture);
 
     if (total === 0 || !userVote) return;
 

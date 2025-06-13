@@ -190,10 +190,12 @@ export function safeTransformStringToDate(dateStr: string | undefined | null) {
     return undefined
 }
 
-export function dateToStrWithoutTime(date: Date) {
+export function dateToStrWithoutTime(date?: Date) {
+    date = date ? date : new Date();
     return format(date, 'yyy-MM-dd');
 }
 
+/** Returns today's date if today is a tuesday else returns the next tuesday */
 export function getNextTuesdayIfNotTuesday(pivot: Date) {
     if (pivot.getDay() === 2) {
         return pivot;
@@ -201,6 +203,8 @@ export function getNextTuesdayIfNotTuesday(pivot: Date) {
     return getNextDayOfWeek(pivot, 'Tuesday');
 }
 
+/** If today is a wednesday will return last 
+ * wedneday but if today is a wednesday will return today */
 export function getLastWednesdayIfNotWednesday(pivot: Date) {
 
     if (pivot.getDay() === 3) {

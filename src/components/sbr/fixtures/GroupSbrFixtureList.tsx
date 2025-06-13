@@ -20,7 +20,7 @@ export default function GroupedSbrFixturesList({ fixtures, search }: Props) {
         ) {
             const dayKey = fixture.kickoff_time ? format(
                 new Date(fixture.kickoff_time),
-                "yyyy-MM-dd" 
+                "yyyy-MM-dd"
             ) : "Date not confirmed";
 
             if (!fixturesByDay[dayKey]) {
@@ -38,28 +38,34 @@ export default function GroupedSbrFixturesList({ fixtures, search }: Props) {
         <div className="grid grid-cols-1 gap-3">
             {(() => {
 
-                return sortedDays.map((dayKey) => (
-                    
-                    <div key={dayKey} className="mb-4">
-                        {/* Day header */}
-                        <div className="px-4 py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
-                            {dayKey !== "Date not confirmed" ? format(new Date(dayKey), "EEEE, MMMM d, yyyy") : "Date Not Confirmed"}
-                        </div>
+                return sortedDays.map((dayKey) => {
 
-                        {/* Fixtures for this day */}
-                        <div className="grid grid-cols-1 gap-3">
-                            {fixturesByDay[dayKey].map((fixture, index) => (
-                                <SbrFixtureCard
-                                    showLogos
-                                    showCompetition
-                                    className="  border border-gray-300 dark:border-gray-700 bg-white  rounded-xl"
-                                    fixture={fixture}
-                                    key={index}
-                                />
-                            ))}
+                    const dayFixtures = fixturesByDay[dayKey];
+                    const firstKickOff = dayFixtures.length > 0 ? dayFixtures[0]?.kickoff_time : undefined;
+                    const dayDate = firstKickOff ? new Date(firstKickOff) : new Date(dayKey);
+
+                    return (
+                        <div key={dayKey} className="mb-4">
+                            {/* Day header */}
+                            <div className="px-4 text-sm lg:text-base py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
+                                {dayKey !== "Date not confirmed" ? format(dayDate, "EEEE, MMMM d, yyyy") : "Date Not Confirmed"}
+                            </div>
+
+                            {/* Fixtures for this day */}
+                            <div className="grid grid-cols-1 gap-3">
+                                {fixturesByDay[dayKey].map((fixture, index) => (
+                                    <SbrFixtureCard
+                                        showLogos
+                                        showCompetition
+                                        className="  border border-gray-300 dark:border-gray-700 bg-white  rounded-xl"
+                                        fixture={fixture}
+                                        key={index}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ));
+                    )
+                });
             })()}
         </div>
     )

@@ -1,5 +1,6 @@
 import { PointsBreakdownItem } from "../services/athleteService";
 import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
+import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -136,4 +137,42 @@ export function extractUniqueAthleteTeams(athletes: RugbyPlayer[]) {
         .sort();
 
     return extractedTeams;
+}
+
+export function calculateAveragePr(players: IFantasyTeamAthlete[]): number {
+    if (!players.length) return 0;
+
+    const totalPR = players.reduce((sum, player) => {
+        return sum + (player.power_rank_rating || 0)
+    }, 0);
+
+    const playersLen = players.length
+    const ave = totalPR / playersLen;
+
+    return ave;
+};
+
+/** Calucates and returns the total value of a fantasy team by purchase price */
+export function calculateFantasyTeamValue(athletes?: IFantasyTeamAthlete[]) {
+    if (athletes) {
+        return athletes.reduce((sum, a) => {
+            return sum + (a.purchase_price || 0);
+        }, 0);
+    }
+
+    return 0;
+}
+
+export function convertPositionNameToPositionObject(positionToSwap: string) {
+
+    return {
+        id: positionToSwap === "any" ? "any" : positionToSwap,
+        name: positionToSwap === "any" ? "Any Position" : positionToSwap,
+        shortName:
+            positionToSwap === "any"
+                ? "ANY"
+                : positionToSwap.substring(0, 2).toUpperCase(),
+        x: "0",
+        y: "0",
+    }
 }

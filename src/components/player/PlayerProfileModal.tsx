@@ -1,28 +1,19 @@
-import React, { useState } from "react";
 import ModalHeader from "./profile-modal-components/ModalHeader";
 import PlayerStats from "./profile-modal-components/PlayerStats";
 import PlayerInfo from "./profile-modal-components/PlayerInfo";
-import TabsNavigation from "./profile-modal-components/TabsNavigation";
-import TabContent from "./profile-modal-components/TabContent";
+import PlayerProfileModalTabContent from "./profile-modal-components/PlayerProfileModalTabContent";
 import usePlayerStats from "./profile-modal-components/usePlayerStats";
-import PlayerStatsContextInfo from "./profile-modal-components/PlayerStatsContextInfo";
 
-interface PlayerProfileModalProps {
+interface Props {
   player: any;
   isOpen: boolean;
   onClose: () => void;
   roundId?: string;
 }
 
-export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
-  player,
-  isOpen,
-  onClose,
-}) => {
-  const [activeTab, setActiveTab] = useState<number>(1); // Default to Stats tab (index 1)
-  const { playerStats, isLoading, error } = usePlayerStats(player, isOpen);
+export function PlayerProfileModal ({player, isOpen, onClose}: Props) {
 
-  const tabs = ["Overview", "Stats", "Power Ranking", "PR Chart"];
+  const { playerStats, isLoading, error } = usePlayerStats(player, isOpen);
 
   if (!isOpen) return null;
 
@@ -53,8 +44,7 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
 
           {/* Tab Content - scrollable */}
           <div className="flex-1 ">
-            <TabContent
-              activeTab={activeTab}
+            <PlayerProfileModalTabContent
               player={player}
               playerStats={playerStats}
               isLoading={isLoading}

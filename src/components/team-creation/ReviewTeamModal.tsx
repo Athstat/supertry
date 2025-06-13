@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Player } from "../../types/player";
 import { positionGroups } from "../../data/positionGroups";
-import { fantasyTeamService } from "../../services/teamService";
+import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { leagueService } from "../../services/leagueService";
 import { useNavigate } from "react-router-dom";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";

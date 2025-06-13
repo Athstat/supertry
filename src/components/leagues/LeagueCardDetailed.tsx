@@ -52,11 +52,11 @@ export default function LeagueCardDetailed({ league }: Props) {
         >
             {/* Header Section */}
 
-            <div onClick={handleLeagueClick} className="p-6 border-gray-100 dark:border-gray-700/50 cursor-pointer">
+            <div onClick={handleLeagueClick} className="p-4 lg:p-6 border-gray-100 dark:border-gray-700/50 cursor-pointer">
                 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ">
                     <div className="space-y-2">
-                        <h1 className="text-xl md:text-2xl flex flex-row items-center gap-1 font-bold text-gray-900 dark:text-white">
+                        <h1 className="text-lg md:text-2xl flex flex-row items-center gap-1 font-bold text-gray-900 dark:text-white">
                             {isLocked && <Lock className="w-5 h-5" />}
                             {league.title}
                         </h1>
@@ -70,7 +70,7 @@ export default function LeagueCardDetailed({ league }: Props) {
                 </div>
             </div>
 
-            <div className="px-6 pb-6">
+            <div className="px-4 lg:px-6 pb-4 lg:pb-6">
 
                 <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 lg:gap-5">
                     {/* My Team Section */}

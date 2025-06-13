@@ -1,30 +1,28 @@
-import { Player } from "../../types/team";
+import { useAtomValue } from "jotai";
 import { TeamFormation } from "../team/TeamFormation";
 import TeamSubstituteCard from "./TeamSubstituteCard";
+import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
+import { useMyTeamScreenActions } from "./MyTeamActions";
 
 interface ViewPitchContentProps {
-  players: Player[];
-  formation: string;
-  handlePlayerClick: (player: Player) => void;
 }
 
 /** Renders Team Pitch view */
-export const MyTeamPitchView: React.FC<ViewPitchContentProps> = ({
-  players,
-  formation,
-  handlePlayerClick,
-}) => {
+export const MyTeamPitchView: React.FC<ViewPitchContentProps> = ({}) => {
+  
+  const {handlePlayerClick} = useMyTeamScreenActions();
+  const players = useAtomValue(fantasyTeamAthletesAtom);
+
   return (
     <>
-
       <div>
+        
         <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
           Team Formation
         </h2>
 
         <TeamFormation
           players={players.filter((player) => player.is_starting)}
-          formation={formation}
           onPlayerClick={handlePlayerClick}
         />
       </div>

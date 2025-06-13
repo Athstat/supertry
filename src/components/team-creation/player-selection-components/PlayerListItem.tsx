@@ -1,17 +1,15 @@
 import { twMerge } from "tailwind-merge";
-import { Player } from "../../../types/player";
 import { Position } from "../../../types/position";
 import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { formatPosition } from "../../../utils/athleteUtils";
 import FormIndicator from "../../shared/FormIndicator";
-import convertToPlayer from "./PlayerConverter";
 import renderStatDots from "./renderStatDots";
 import { useState } from "react";
 import { WarningPopup } from "../../shared/WarningPopup";
 
 type Props = {
     index?: number,
-    handlePlayerSelect: (player: Player) => void,
+    handlePlayerSelect: (player: RugbyPlayer) => void,
     selectedPosition: Position,
     player: RugbyPlayer,
     onClose: () => void,
@@ -39,7 +37,7 @@ export default function PlayerListItem({
         if (cannotAfford) {
             setShowWarning(true);
         } else {
-            handlePlayerSelect(convertToPlayer(player, selectedPosition));
+            handlePlayerSelect(player);
             onClose();
         }
     }

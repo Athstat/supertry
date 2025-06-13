@@ -4,7 +4,7 @@ import { ISbrFixture, ISbrFixtureVote } from "../../../types/sbr"
 import { Check, CircleCheck, Loader, XIcon } from "lucide-react"
 import { mutate } from "swr"
 import { twMerge } from "tailwind-merge"
-import { sbrFxitureSummary } from "../../../utils/sbrUtils"
+import { sbrFixtureSummary } from "../../../utils/sbrUtils"
 
 type Props = {
     userVote?: ISbrFixtureVote,
@@ -101,7 +101,7 @@ export function SbrVotingBallotBoxResults({ fixture, userVote }: Props) {
     const hasVotedHome = userVote?.vote_for === "home_team";
     const hasVotedAway = userVote?.vote_for === "away_team";
 
-    const { homeTeamWon, awayTeamWon } = sbrFxitureSummary(fixture);
+    const { homeTeamWon, awayTeamWon } = sbrFixtureSummary(fixture);
 
 
     return (

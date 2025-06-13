@@ -55,6 +55,7 @@ export function DashboardScreen() {
         availableLeagues={leagues}
         onViewLeague={handleViewLeague}
       />
+      
       <DiscoverPlayersCard />
 
 
