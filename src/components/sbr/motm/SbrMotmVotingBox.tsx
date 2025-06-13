@@ -12,6 +12,7 @@ import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrTopDawgOfTheMatchCard from "./SbrMotmWinnerCard";
 import { LockedViewCard } from "../../shared/ViewLockedCard";
 import { format } from "date-fns";
+import SbrFixtureTeamRosters from "../rosters/SbrFixtureTeamLineups";
 
 type Props = {
     fixture: ISbrFixture
@@ -82,9 +83,7 @@ export function SbrMotmVotingBoxContent({fixture} : ContentProps) {
 
     if (candidates.length > 0 && !hasKickedOff) return (
         <>
-            <LockedViewCard message={
-                `Not just yet! Top Dawg Of The Match voting starts at kickoff (${format(kickoff, "HH:mm")} on ${format(kickoff, "EEEE dd MMMM yyyy")})`
-            } />
+            <SbrFixtureTeamRosters fixture={fixture} homeLineup={homeCandidates} awayLineup={awayCandidates} />
         </>
     )
 
