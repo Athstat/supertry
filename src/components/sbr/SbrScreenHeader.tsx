@@ -1,6 +1,5 @@
-import { Shield} from 'lucide-react';
+import { Shield } from 'lucide-react';
 import SbrFeatureGamesCard from './fixtures/SbrFeatureGamesCard';
-import Experimental from '../shared/ab_testing/Experimental';
 
 export default function SbrScreenHeader() {
 
@@ -13,9 +12,8 @@ export default function SbrScreenHeader() {
                 <h1 className="text-xl font-bold lg:text-2xl" >School Boy Rugby</h1>
             </div>
 
-            <Experimental>
-                <SbrFeatureGamesCard />
-            </Experimental>
+
+            <SbrFeatureGamesCard />
 
         </div>
     )
