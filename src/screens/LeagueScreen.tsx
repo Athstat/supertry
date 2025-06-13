@@ -11,7 +11,7 @@ import { IFantasyLeague } from '../types/fantasyLeague';
 import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
 import { useFantasyLeague } from '../components/league/useFantasyLeague';
 import { analytics } from '../services/anayticsService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { isLeagueLocked } from '../utils/leaguesUtils';
 import { Lock } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
@@ -23,6 +23,10 @@ export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const initialTabKey = searchParams.get('tab') || 'standings';
+  console.log('initialTabKey', initialTabKey);
 
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
@@ -170,7 +174,11 @@ export function LeagueScreen() {
 
         <PageView className="p-4">
           {league && (
-            <TabView tabHeaderItems={tabItems}>
+            <TabView
+              tabHeaderItems={tabItems}
+              tabKeySearchParam="tab"
+              initialTabKey={initialTabKey}
+            >
               <TabViewPage tabKey="standings">
                 <LeagueStandings
                   teams={teams}
