@@ -47,7 +47,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 <div className="flex-1 flex gap-2 flex-col items-center justify-start" >
                     {showLogos && <SbrTeamLogo className="w-14 h-14 lg:w-14 lg:h-14" teamName={fixture.home_team} />}
                     <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team}</p>
-                    <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && home_score ? home_score : "-"}</p>
+                    <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && home_score !== undefined ? home_score : "-"}</p>
                 </div>
                 {/* Kick off information */}
                 <div className="flex-1 flex flex-col items-center justify-center dark:text-slate-400 text-slate-700 " >
@@ -63,7 +63,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >
                     {showLogos && <SbrTeamLogo className="w-14 h-14 lg:w-14 lg:h-14" teamName={fixture.away_team} />}
                     <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team}</p>
-                    <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && away_score ? away_score : "-"}</p>
+                    <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && away_score !== undefined ? away_score : "-"}</p>
                 </div>
             </div>
 
