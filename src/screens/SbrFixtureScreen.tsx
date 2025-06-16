@@ -15,6 +15,7 @@ import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "..
 import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "../components/sbr/fixture/SbrFixtureDataProvider";
 import { useAtomValue } from "jotai";
+import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
 
 export default function SbrFixtureScreen() {
 
@@ -105,7 +106,10 @@ function SbrFixtureScreenContent() {
                     <TabViewPage className="" tabKey="kick-off">
                         <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
-                    {<TabViewPage className="" tabKey="team-stats">
+                    {<TabViewPage className="space-y-6" tabKey="team-stats">
+
+                        <SbrFixtureTimeline />
+                        
                         {hasBoxscore && <SbrFixtureTeamStats
                             fixture={fixture}
                             boxscore={boxscore}
