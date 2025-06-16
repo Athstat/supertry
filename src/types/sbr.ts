@@ -78,3 +78,13 @@ export type IEditSbrMotmVoteReq = {
     teamId: string,
     athleteId: string
 }
+
+export type ISbrFixtureEvent = {
+    event_name: string,
+    fixture_id: string,
+    team_id: number,
+    team_scrummy_id?: string,
+    event_timestamp: number,
+    x_position?: number
+    y_position?: number
+}

@@ -7,5 +7,17 @@ export const swrFetchKeys = {
 
     getAllFixtureMotmVotesKey: (fixtureId: string) => {
         return `sbr-fixture-motm-votes/${fixtureId}`;
+    },
+
+    getSbrFixtureKey: (fixtureId: string) => {
+        return `sbr-fixture/${fixtureId}`;
+    },
+
+    getSbrFixtureEventsKey: (fixtureId: string) => {
+        return `sbr-fixture-events/${fixtureId}`;
+    },
+
+    getSbrFixtureBoxscoreKey: (fixtureId: string) => {
+        return `sbr-fixture-boxscore/${fixtureId}`;
     }
 }

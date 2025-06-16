@@ -16,7 +16,7 @@ type Props = {
 export default function SbrScreenDataProvider({ children }: Props) {
 
     const { data: allFixtures, isLoading } = useSWR("sbr-fixtures", () => sbrService.getAllFixtures());
-    
+
     const [pivotDateStr] = useQueryState('pivot', { init: dateToStrWithoutTime() });
     const pivotDate = safeTransformStringToDate(pivotDateStr);
 

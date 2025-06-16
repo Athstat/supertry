@@ -1,9 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import PageView from "./PageView";
-import { useFetch } from "../hooks/useFetch";
-import { sbrService } from "../services/sbrService";
 import { ErrorState } from "../components/ui/ErrorState";
-import { LoadingState } from "../components/ui/LoadingState";
 import { ArrowLeft, Minus } from "lucide-react";
 import BlueGradientCard from "../components/shared/BlueGradientCard";
 import SbrTeamLogo from "../components/sbr/fixtures/SbrTeamLogo";
@@ -14,6 +11,10 @@ import { format } from "date-fns";
 import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
 import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
 import SbrMotmVotingBox from "../components/sbr/motm/SbrMotmVotingBox";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../state/sbrFixtureScreen.atoms";
+import { ScopeProvider } from "jotai-scope";
+import SbrFixtureDataProvider from "../components/sbr/fixture/SbrFixtureDataProvider";
+import { useAtomValue } from "jotai";
 
 export default function SbrFixtureScreen() {
 
@@ -21,16 +22,29 @@ export default function SbrFixtureScreen() {
 
     if (!fixtureId) return <ErrorState message="Fixture was not found" />
 
+    const atoms = [
+        sbrFixtureAtom, sbrFixtureEventsAtom, sbrFixtureBoxscoreAtom
+    ]
+
+    return (
+        <ScopeProvider atoms={atoms}>
+            <SbrFixtureDataProvider fixtureId={fixtureId}>
+                <SbrFixtureScreenContent />
+            </SbrFixtureDataProvider>
+        </ScopeProvider>
+    )
+}
+
+
+function SbrFixtureScreenContent() {
+
+    const fixture = useAtomValue(sbrFixtureAtom);
+    const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
+
     const navigate = useNavigate();
-    const { data: fixture, isLoading: loadingFixture } = useFetch("sbr-fixture", fixtureId, sbrService.getFixtureById)
-    const { data: boxscore, isLoading: loadingBoxscore } = useFetch("sbr-fixture-boxscore", fixtureId, sbrService.getFixtureBoxscoreById)
 
-    const isLoading = loadingBoxscore || loadingFixture;
-
-    if (isLoading) return <LoadingState />
-
-    if (!fixture) return <ErrorState message="Fixture was not found" />
-    console.log("Fixture Boxscore ", boxscore)
+    if (!fixture) return;
+    
     const hasBoxscore = boxscore && boxscore.length > 0;
 
     const tabHeaderItems: TabViewHeaderItem[] = [
@@ -107,7 +121,6 @@ export default function SbrFixtureScreen() {
         </div>
     )
 }
-
 
 type Props = {
     fixture: ISbrFixture
