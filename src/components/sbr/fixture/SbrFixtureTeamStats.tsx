@@ -1,23 +1,35 @@
 import { Shield } from "lucide-react"
-import { ISbrBoxscoreItem, ISbrFixture } from "../../../types/sbr"
+import { ISbrBoxscoreItem } from "../../../types/sbr"
 import TitledCard from "../../shared/TitledCard"
 import SbrTeamLogo from "../fixtures/SbrTeamLogo"
 import { twMerge } from "tailwind-merge"
+import { useAtomValue } from "jotai"
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom } from "../../../state/sbrFixtureScreen.atoms"
+import { sumMultipleSbrBoxscoreActions } from "../../../utils/sbrUtils"
 
-type Props = {
-  fixture: ISbrFixture,
-  boxscore: ISbrBoxscoreItem[]
-}
+export default function SbrFixtureTeamStats() {
 
-export default function SbrFixtureTeamStats({ fixture, boxscore }: Props) {
-
-
+  const fixture = useAtomValue(sbrFixtureAtom);
+  const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
   const record: Record<string, SbrAggregateStat> = {};
-  const aggregated = aggregateStats(boxscore);
+  const aggregated = aggregateSbrBoxscoreStats(boxscore);
+
+  if (!fixture) return;
 
   aggregated.forEach((b) => {
     record[b.action] = b;
   });
+
+  const homePenaltyCount = sumMultipleSbrBoxscoreActions(
+    boxscore, penaltyActions, 2
+  )
+
+  const awayPenaltyCount = sumMultipleSbrBoxscoreActions(
+    boxscore, penaltyActions, 1
+  )
+
+  console.log("Away Penalty Count: ", awayPenaltyCount);
+  console.log("Home Penalty Count: ", homePenaltyCount);
 
   const statsArr: HeadToHeadStat[] = [
     {
@@ -54,11 +66,12 @@ export default function SbrFixtureTeamStats({ fixture, boxscore }: Props) {
 
     {
       label: "Penalty Kick Scored",
-      homeValue: record["Penalty Kick Scored"]?.homeCount,
-      awayValue: record["Penalty Kick Scored"]?.awayCount,
+      homeValue: `${record["Penalty Kick Scored"]?.homeCount}/${record["Option: Kick At Goal"]?.homeCount}`,
+      awayValue: `${record["Penalty Kick Scored"]?.awayCount}/${record["Option: Kick At Goal"]?.awayCount}`,
       homeRealVal: record["Penalty Kick Scored"]?.homeCount,
       awayRealVal: record["Penalty Kick Scored"]?.awayCount,
     },
+
 
     {
       label: "Interceptions",
@@ -74,6 +87,14 @@ export default function SbrFixtureTeamStats({ fixture, boxscore }: Props) {
       awayValue: record["Lineout"]?.awayCount,
       homeRealVal: record["Lineout"]?.homeCount,
       awayRealVal: record["Lineout"]?.awayCount,
+    },
+
+    {
+      label: "Lineouts Won",
+      homeValue: record["Lineout Won"]?.homeCount,
+      awayValue: record["Lineout Won"]?.awayCount,
+      homeRealVal: record["Lineout Won"]?.homeCount,
+      awayRealVal: record["Lineout Won"]?.awayCount,
     },
 
     {
@@ -106,21 +127,22 @@ export default function SbrFixtureTeamStats({ fixture, boxscore }: Props) {
       homeRealVal: record["Red Card"]?.homeCount,
       awayRealVal: record["Red Card"]?.awayCount,
     },
-    // {
-    //   label: "Convertions",
-    //   homeValue: convertionsStr(homeStats.convertionsScored, homeStats.convertionsMissed),
-    //   awayValue: convertionsStr(awayStats.convertionsScored, awayStats.convertionsMissed),
-    //   homeRealVal: convertionsPercVal(homeStats.convertionsScored, homeStats.convertionsMissed),
-    //   awayRealVal: convertionsPercVal(awayStats.convertionsScored, awayStats.convertionsMissed)
-    // },
 
-    // {
-    //   label: "Penalties Scored",
-    //   homeValue: homeStats.penaltiesScored,
-    //   awayValue: awayStats.penaltiesScored,
-    //   homeRealVal: homeStats.penaltiesScored,
-    //   awayRealVal: awayStats.penaltiesScored
-    // },
+    {
+      label: "Turn Overs",
+      homeValue: record["Turn Over"]?.homeCount,
+      awayValue: record["Turn Over"]?.awayCount,
+      homeRealVal: record["Turn Over"]?.homeCount,
+      awayRealVal: record["Turn Over"]?.awayCount
+    },
+
+    {
+      label: "Penalties Conceded",
+      homeValue: homePenaltyCount,
+      awayValue: awayPenaltyCount,
+      homeRealVal: homePenaltyCount,
+      awayRealVal: awayPenaltyCount
+    },
 
     // {
     //   label: "Drop Goals",
@@ -273,7 +295,7 @@ export type SbrAggregateStat = {
   awayCount: number
 }
 
-export function aggregateStats(data: ISbrBoxscoreItem[]) {
+export function aggregateSbrBoxscoreStats(data: ISbrBoxscoreItem[]) {
   const events = new Set<string>();
   const record: SbrAggregateStat[] = [];
 
@@ -303,3 +325,11 @@ export function aggregateStats(data: ISbrBoxscoreItem[]) {
 
   return record;
 }
+
+const penaltyActions = [
+  "Penalty For Dangerous Tackle", "Penalty For Offside",
+  "Penalty For Not Releasing Ball", "Penalty For Not Releasign Player",
+  "Penalty For Violent/Foul Play", "Penalty",
+  "Penalty For Offside At Kick", "Penalty For Ruck Offence",
+  "Penalty For Lineout"
+];

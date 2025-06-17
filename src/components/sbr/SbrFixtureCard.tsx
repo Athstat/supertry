@@ -3,6 +3,12 @@ import { ISbrFixture } from "../../types/sbr";
 import SbrTeamLogo from "./fixtures/SbrTeamLogo";
 import { twMerge } from "tailwind-merge";
 import SbrFixturePredictionBox from "./predictions/SbrFixturePredictionBox";
+import { useAtomValue } from "jotai";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../../state/sbrFixtureScreen.atoms";
+import { ScopeProvider } from "jotai-scope";
+import SbrFixtureDataProvider from "./fixture/SbrFixtureDataProvider";
+import { Sparkles } from "lucide-react";
+import WarningCard from "../shared/WarningCard";
 
 type Props = {
     fixture: ISbrFixture,
@@ -13,12 +19,45 @@ type Props = {
     hideVoting?: boolean
 }
 
-export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, hideVoting }: Props) {
+export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, hideVoting, showKickOffTime }: Props) {
 
-    const { home_score, away_score} = fixture;
-    const hasScores = home_score !== null && away_score !== null;
+    const atoms = [sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom];
+
+    return (
+        <ScopeProvider atoms={atoms}>
+            <SbrFixtureDataProvider fixtureId={fixture.fixture_id}>
+                <SbrFixtureCardContent
+                    showCompetition={showCompetition}
+                    showKickOffTime={showKickOffTime}
+                    showLogos={showLogos}
+                    className={className}
+                    hideVoting={hideVoting}
+                />
+            </SbrFixtureDataProvider>
+        </ScopeProvider>
+    )
+}
+
+type ContentProps = {
+    showLogos?: boolean,
+    showCompetition?: boolean,
+    className?: string,
+    showKickOffTime?: boolean,
+    hideVoting?: boolean
+}
+
+function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, className }: ContentProps) {
 
     const navigate = useNavigate();
+    const fixture = useAtomValue(sbrFixtureAtom);
+    const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
+
+    const hasBoxscoreData = boxscore.length > 0;
+
+    if (!fixture) return;
+
+    const { home_score, away_score } = fixture;
+    const hasScores = home_score !== null && away_score !== null;
 
     const handleClick = () => {
         navigate(`/sbr/fixtures/${fixture.fixture_id}`);
@@ -26,11 +65,12 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
 
     const gameCompleted = fixture.status === "completed";
 
+
     return (
         <div
             // onClick={handleClick}
             className={twMerge(
-                "dark:bg-slate-800/40 cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
+                "dark:bg-slate-800/40 gap-2 flex flex-col cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
                 className
             )}
         >
@@ -38,6 +78,14 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
             <div className="text-center w-full flex flex-col items-center justify-center text-xs text-slate-700 dark:text-slate-400" >
                 {showCompetition && fixture.season && <p>{fixture.season}</p>}
             </div>
+
+            {hasBoxscoreData &&
+                <WarningCard className="flex flex-row items-center justify-center" >
+                    <Sparkles className="w-4 h-4" />
+                    <p>Stats are available for this game</p>
+                </WarningCard>
+
+            }
 
             <div
                 onClick={handleClick}
@@ -67,11 +115,10 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
                 </div>
             </div>
 
-            <SbrFixturePredictionBox 
+            <SbrFixturePredictionBox
                 fixture={fixture}
-                hide={hideVoting} 
+                hide={hideVoting}
             />
         </div>
     )
 }
-
