@@ -66,11 +66,12 @@ export default function SbrFixtureTeamStats() {
 
     {
       label: "Penalty Kick Scored",
-      homeValue: record["Penalty Kick Scored"]?.homeCount,
-      awayValue: record["Penalty Kick Scored"]?.awayCount,
+      homeValue: `${record["Penalty Kick Scored"]?.homeCount}/${record["Option: Kick At Goal"]?.homeCount}`,
+      awayValue: `${record["Penalty Kick Scored"]?.awayCount}/${record["Option: Kick At Goal"]?.awayCount}`,
       homeRealVal: record["Penalty Kick Scored"]?.homeCount,
       awayRealVal: record["Penalty Kick Scored"]?.awayCount,
     },
+
 
     {
       label: "Interceptions",
