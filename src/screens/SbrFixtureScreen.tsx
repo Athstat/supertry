@@ -1,18 +1,21 @@
 import { useNavigate, useParams } from "react-router-dom";
 import PageView from "./PageView";
-import { useFetch } from "../hooks/useFetch";
-import { sbrService } from "../services/sbrService";
 import { ErrorState } from "../components/ui/ErrorState";
-import { LoadingState } from "../components/ui/LoadingState";
 import { ArrowLeft, Minus } from "lucide-react";
 import BlueGradientCard from "../components/shared/BlueGradientCard";
 import SbrTeamLogo from "../components/sbr/fixtures/SbrTeamLogo";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
-import { sbrFxitureSummary } from "../utils/sbrUtils";
+import { sbrFixtureSummary } from "../utils/sbrUtils";
 import { ISbrFixture } from "../types/sbr";
 import { format } from "date-fns";
 import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
 import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
+import SbrMotmVotingBox from "../components/sbr/motm/SbrMotmVotingBox";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../state/sbrFixtureScreen.atoms";
+import { ScopeProvider } from "jotai-scope";
+import SbrFixtureDataProvider from "../components/sbr/fixture/SbrFixtureDataProvider";
+import { useAtomValue } from "jotai";
+import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
 
 export default function SbrFixtureScreen() {
 
@@ -20,19 +23,40 @@ export default function SbrFixtureScreen() {
 
     if (!fixtureId) return <ErrorState message="Fixture was not found" />
 
+    const atoms = [
+        sbrFixtureAtom, sbrFixtureEventsAtom, sbrFixtureBoxscoreAtom
+    ]
+
+    return (
+        <ScopeProvider atoms={atoms}>
+            <SbrFixtureDataProvider fixtureId={fixtureId}>
+                <SbrFixtureScreenContent />
+            </SbrFixtureDataProvider>
+        </ScopeProvider>
+    )
+}
+
+
+function SbrFixtureScreenContent() {
+
+    const fixture = useAtomValue(sbrFixtureAtom);
+    const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
+    const events = useAtomValue(sbrFixtureEventsAtom);
+
     const navigate = useNavigate();
-    const { data: fixture, isLoading: loadingFixture } = useFetch("sbr-fixture", fixtureId, sbrService.getFixtureById)
-    const { data: boxscore, isLoading: loadingBoxscore } = useFetch("sbr-fixture-boxscore", fixtureId, sbrService.getFixtureBoxscoreById)
 
-    const isLoading = loadingBoxscore || loadingFixture;
+    if (!fixture) return;
 
-    if (isLoading) return <LoadingState />
-
-    if (!fixture) return <ErrorState message="Fixture was not found" />
-    console.log("Fixture Boxscore ", boxscore)
     const hasBoxscore = boxscore && boxscore.length > 0;
+    const hasTimeline = events.length > 0;
 
     const tabHeaderItems: TabViewHeaderItem[] = [
+
+        {
+            label: "Timeline",
+            tabKey: "timeline",
+            disabled: !hasTimeline,
+        },
         {
             label: "Team Stats",
             tabKey: "team-stats",
@@ -42,10 +66,15 @@ export default function SbrFixtureScreen() {
         {
             label: "Kick Off",
             tabKey: "kick-off"
+        },
+
+        {
+            label: "Top Dawg",
+            tabKey: "motm"
         }
     ];
-    
-    const { hasScores } = sbrFxitureSummary(fixture);
+
+    const { hasScores } = sbrFixtureSummary(fixture);
 
     return (
         <div>
@@ -82,22 +111,27 @@ export default function SbrFixtureScreen() {
 
             <PageView className="p-4" >
                 <TabView tabHeaderItems={tabHeaderItems}>
+                    
                     <TabViewPage className="" tabKey="kick-off">
                         <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
-                    {<TabViewPage className="" tabKey="team-stats">
-                        {hasBoxscore && <SbrFixtureTeamStats
-                            fixture={fixture}
-                            boxscore={boxscore}
-                        />}
 
-                    </TabViewPage>}
+                    <TabViewPage tabKey="team-stats">
+                        <SbrFixtureTeamStats/>
+                    </TabViewPage>
+
+                    <TabViewPage tabKey="timeline">
+                        <SbrFixtureTimeline />
+                    </TabViewPage>
+
+                    <TabViewPage tabKey="motm" >
+                        <SbrMotmVotingBox fixture={fixture} />
+                    </TabViewPage>
                 </TabView>
             </PageView>
         </div>
     )
 }
-
 
 type Props = {
     fixture: ISbrFixture
@@ -110,7 +144,7 @@ function KickOffInformation({ fixture }: Props) {
     if (!kickoff_time) {
         return (
             <div className='flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center' >
-               <p className='font-bold' >VS</p>
+                <p className='font-bold' >VS</p>
             </div>
         )
     }

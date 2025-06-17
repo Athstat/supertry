@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react'
 import PlayerMugshot from '../shared/PlayerMugshot'
 import { IBoxScoreItem } from '../../types/boxScore'
-import PlayerFixtureStatsModal from '../fixtures/AthleteFixtureStatsModal'
+import PlayerFixtureStatsModal from '../fixtures/PlayerFixtureStatsModal'
 import { IFixture } from '../../types/games'
 
 type Props = {

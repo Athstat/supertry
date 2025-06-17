@@ -1,11 +1,11 @@
 import { Bell, ChevronRight, LoaderCircle } from 'lucide-react';
-import SettingsModal from './SettingsModal';
 import { useEffect, useState } from 'react';
 import { GameUpdatesPreference, gameUpdatesPreferenceOptions } from '../../types/notifications';
 import { formatPosition } from '../../utils/athleteUtils';
 import { DatabaseUser } from '../../types/auth';
 import { notificationService } from '../../services/notificationsService';
 import { mutate } from 'swr';
+import DialogModal from '../shared/DialogModal';
 
 type Props = {
   databaseUser: DatabaseUser;
@@ -32,10 +32,9 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
         <ChevronRight size={20} className="text-gray-400" />
       </button>
 
-      <SettingsModal
+      <DialogModal
         onClose={toggle}
         title="Notifications"
-        icon={Bell}
         open={show}
         className="overflow-hidden"
       >
@@ -50,7 +49,7 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
                         </button>
                     </div> */}
         </div>
-      </SettingsModal>
+      </DialogModal>
     </div>
   );
 }

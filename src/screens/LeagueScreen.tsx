@@ -115,51 +115,7 @@ export function LeagueScreen() {
     }
   };
 
-  return (
-    <FantasyLeagueProvider userTeam={userTeam} league={league}>
-      <div className="min-h-screen bg-gray-50 dark:bg-dark-850">
-        <LeagueHeader
-          leagueInfo={leagueInfo}
-          league={league}
-          onOpenSettings={() => setShowSettings(true)}
-          isLoading={isLoading}
-        >
-          <div className="flex gap-2">
-            {!isLoading && userTeam && !isLocked && (
-              <button
-                onClick={() => {
-                  navigate(`/my-team/${userTeam.team_id}`, {
-                    state: { teamWithRank: userTeam, league: league },
-                  });
-                }}
-                className="flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
-              >
-                Edit My Team
-              </button>
-            )}
-
-            {!isLoading && userTeam && isLocked && (
-              <button
-                onClick={() => {
-                  navigate(`/my-team/${userTeam.team_id}`, {
-                    state: { teamWithRank: userTeam, league: league },
-                  });
-                }}
-                className="flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
-              >
-                View Team
-              </button>
-            )}
-
-            {!isLoading && userTeam === undefined && !isLocked && (
-              <button
-                onClick={handleJoinLeague}
-                className="hidden lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
-              >
-                Join This League
-              </button>
-            )}
-
+  const atoms = [fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom];
             {!isLoading && userTeam === undefined && isLocked && (
               <button
                 disabled
@@ -244,5 +200,6 @@ export function LeagueScreen() {
         </button>
       )}
     </FantasyLeagueProvider>
+
   );
 }

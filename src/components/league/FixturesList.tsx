@@ -115,9 +115,10 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
               {fixturesByDay[dayKey].map((fixture, index) => (
                 <LeaguePredictionFixtureCard fixture={fixture} key={index} />
               ))}
+
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );

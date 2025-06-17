@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, ChevronLeft, Trophy, Dot } from "lucide-react";
+import { X, ChevronLeft, Trophy, Dot, Lock } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
 import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction } from "../../utils/athleteUtils";
@@ -10,6 +10,9 @@ import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
 import { getEnvironment } from "../../utils/envUtils";
 import { twMerge } from "tailwind-merge";
 import { isEmail } from "../../utils/stringUtils";
+import { useAtomValue } from "jotai";
+import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
+import { authService } from "../../services/authService";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
@@ -24,6 +27,10 @@ export function TeamAthletesModal({
   onClose,
   isLoading = false,
 }: TeamAthletesModalProps) {
+
+  const isLeagueLocked = useAtomValue(fantasyLeagueLockedAtom);
+  const user = authService.getUserInfo();
+
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(
     null
   );
@@ -73,13 +80,16 @@ export function TeamAthletesModal({
   const isStable = getEnvironment() === "production";
   const userNameIsEmail = isEmail(team.managerName);
 
+  const isUsersTeam = user ? user.id === team.userId : false;
+  const canPeek = isLeagueLocked || isUsersTeam;
+
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 z-[60] flex flex-col items-center justify-center"
       onClick={handleOverlayClick}
     >
       <div className={twMerge(
-        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[90%] lg:w-[50%] max-h-[75vh] lg:max-h-[90vh] overflow-clip flex flex-col",
+        "bg-white dark:bg-gray-800 border border-slate-100 dark:border-slate-700 rounded-xl w-[95%] lg:w-[50%] max-h-[75vh] lg:max-h-[90vh] overflow-clip flex flex-col",
         !isStable && "max-h-none h-[90vh] lg:h-[90vh]"
       )}>
 
@@ -139,7 +149,7 @@ export function TeamAthletesModal({
                   }
 
                   <p className="">
-                   { userNameIsEmail ? team.teamName : `Managed by ${team.managerName}`}
+                    {userNameIsEmail ? team.teamName : `Managed by ${team.managerName}`}
                   </p>
                 </div>
               </div>
@@ -195,23 +205,25 @@ export function TeamAthletesModal({
         ) : (
           // Main list view
           <div className="w-full h-full" >
+            {canPeek ?
 
-            <Experimental
-              placeholder={
-                <TeamAthletesModalListView
+              <Experimental
+                placeholder={
+                  <TeamAthletesModalListView
+                    athletes={athletes}
+                    handleKeyDown={handleKeyDown}
+                    handleViewBreakdown={handleViewBreakdown}
+                  />
+                }
+              >
+                <TeamAthletesModalPitchView
                   athletes={athletes}
                   handleKeyDown={handleKeyDown}
                   handleViewBreakdown={handleViewBreakdown}
                 />
-              }
-            >
-              <TeamAthletesModalPitchView
-                athletes={athletes}
-                handleKeyDown={handleKeyDown}
-                handleViewBreakdown={handleViewBreakdown}
-              />
-            </Experimental>
-
+              </Experimental>
+              : <NoPeekingView />
+            }
 
 
           </div>
@@ -287,4 +299,13 @@ function PointsBreakdownView({ points }: PointsBreakDownViewProps) {
       </div>
     </div>
   );
+}
+
+function NoPeekingView() {
+  return (
+    <div className="w-full h-full flex flex-col items-center text-center gap-4 justify-center text-slate-700 dark:text-slate-400 px-5" >
+      <Lock className="w-14 h-14" />
+      <p className="font text-md" >No peeking! You'll be able to see this team once join dealine has passed.</p>
+    </div>
+  )
 }

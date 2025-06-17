@@ -1,6 +1,5 @@
-import { isWithinInterval, startOfDay } from "date-fns";
-import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
-import { getLastWednesdayIfNotWednesday, getNextTuesdayIfNotTuesday,} from "./dateUtils";
+import { isWithinInterval } from "date-fns";
+import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureVote, ISbrMotmVote } from "../types/sbr";
 import { calculatePerc } from "./fixtureUtils";
 
 /** Returns true if all the fixtures passed to the funciton have
@@ -28,7 +27,7 @@ export function hasSbrRoundPassed(fixtures: ISbrFixture[]) {
     return false;
 }
 
-export function sbrFxitureSummary(fixture: ISbrFixture) {
+export function sbrFixtureSummary(fixture: ISbrFixture) {
 
     const { home_score, away_score } = fixture;
     const hasScores = home_score !== null && away_score !== null && home_score !== undefined && away_score !== undefined;
@@ -70,11 +69,8 @@ export function getSbrSeasons(fixtures: ISbrFixture[]) {
     return seasons;
 }
 
-export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
-
-    const today = pivot ? new Date(pivot) : new Date();
-    const weeekStart = getLastWednesdayIfNotWednesday(today);
-    const weekEnd = startOfDay(getNextTuesdayIfNotTuesday(today));
+/** Gets  */
+export function filterSbrFixturesByDateRange(fixtures: ISbrFixture[], weekStart: Date, weekEnd: Date) {
 
     const weekGames = fixtures.filter((f) => {
         if (f.kickoff_time) {
@@ -82,7 +78,7 @@ export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
             const kickoff = new Date(f.kickoff_time)
 
             return isWithinInterval(kickoff, {
-                start: weeekStart,
+                start: weekStart,
                 end: weekEnd
             });
         }
@@ -90,12 +86,12 @@ export function getWeekGames(fixtures: ISbrFixture[], pivot?: Date) {
         return false;
     });
 
-    return { weekGames, weeekStart, weekEnd };
+    return weekGames
 
 }
 
 export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixtureVote) {
-    
+
     const homeVotes = Number.parseInt(fixture.home_votes.toString());
     const awayVotes = Number.parseInt(fixture.away_votes.toString());
     const total = homeVotes + awayVotes;
@@ -110,7 +106,63 @@ export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixture
         awayPerc,
         votedAwayTeam,
         votedHomeTeam,
-        homeVotes, 
+        homeVotes,
         awayVotes
     }
+}
+
+/** Returns true if motm voting has ended based on the given kick off time */
+export function hasMotmVotingEnded(kickOffTime?: Date, now?: Date) {
+    if (!kickOffTime) {
+        return false;
+    }
+
+    kickOffTime = new Date(kickOffTime);
+    now = now ? new Date(now) : new Date();
+
+    // Voting window is two hours
+    const votingWindow = 1000 * 60 * 60 * 2;
+    const votingExpectedEndEpoch = kickOffTime.valueOf() + votingWindow;
+    const nowEpoch = now.valueOf();
+
+    return nowEpoch >= votingExpectedEndEpoch;
+}
+
+/** Returns the total number of votes that an athlete recieved from a list of votes */
+export function getSbrAthleteMotmVoteTally(votes: ISbrMotmVote[], athleteId: string) {
+    const res = votes.reduce((sum, v) => {
+        const isCandidate = v.athlete_id === athleteId;
+        return isCandidate ? (sum + 1) : sum;
+    }, 0);
+
+    return res;
+}
+
+export function hasMotmVotingStarted(kickoff?: Date, now?: Date) {
+    if (!kickoff) {
+        return true;
+    }
+
+    kickoff = new Date(kickoff);
+    now = now ? new Date(now) : new Date();
+
+    const kickoffEpoch = kickoff.valueOf();
+    const nowEpoch = now.valueOf();
+
+    return nowEpoch >= kickoffEpoch;
+
+}
+
+/** Counts instances of a related group of sbr actions */
+export function sumMultipleSbrBoxscoreActions(boxscore: ISbrBoxscoreItem[], targetActions: string[], side: 1 | 2) {
+    return boxscore.reduce((sum, bx) => {
+        
+        console.log(bx);
+        if (bx.team_id === side && targetActions.includes(bx.action)) {
+            return sum + bx.count;
+        }
+        
+        return sum;
+
+    }, 0);
 }
