@@ -41,14 +41,22 @@ function SbrFixtureScreenContent() {
 
     const fixture = useAtomValue(sbrFixtureAtom);
     const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
+    const events = useAtomValue(sbrFixtureEventsAtom);
 
     const navigate = useNavigate();
 
     if (!fixture) return;
-    
+
     const hasBoxscore = boxscore && boxscore.length > 0;
+    const hasTimeline = events.length > 0;
 
     const tabHeaderItems: TabViewHeaderItem[] = [
+
+        {
+            label: "Timeline",
+            tabKey: "timeline",
+            disabled: !hasTimeline,
+        },
         {
             label: "Team Stats",
             tabKey: "team-stats",
@@ -103,19 +111,18 @@ function SbrFixtureScreenContent() {
 
             <PageView className="p-4" >
                 <TabView tabHeaderItems={tabHeaderItems}>
+                    
                     <TabViewPage className="" tabKey="kick-off">
                         <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
-                    {<TabViewPage className="space-y-6" tabKey="team-stats">
 
+                    <TabViewPage tabKey="team-stats">
+                        <SbrFixtureTeamStats/>
+                    </TabViewPage>
+
+                    <TabViewPage tabKey="timeline">
                         <SbrFixtureTimeline />
-                        
-                        {hasBoxscore && <SbrFixtureTeamStats
-                            fixture={fixture}
-                            boxscore={boxscore}
-                        />}
-
-                    </TabViewPage>}
+                    </TabViewPage>
 
                     <TabViewPage tabKey="motm" >
                         <SbrMotmVotingBox fixture={fixture} />
