@@ -39,7 +39,20 @@ const MyWeekPanel = () => {
   }
 
   if (!activeLeague || !leagueTeams) {
-    return null;
+    return (
+      <div className="rounded-xl overflow-hidden bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white flex flex-col items-center justify-center p-6">
+        <h2 className="text-xl font-bold mb-2">No Active League</h2>
+        <p className="mb-4 text-center text-slate-300">
+          Join a league to start competing and track your team's performance
+        </p>
+        <button
+          className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors"
+          onClick={() => navigate('/leagues')}
+        >
+          Browse Leagues
+        </button>
+      </div>
+    );
   }
 
   // Find user's team and rank
