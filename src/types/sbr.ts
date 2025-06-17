@@ -78,3 +78,28 @@ export type IEditSbrMotmVoteReq = {
     teamId: string,
     athleteId: string
 }
+
+export type ISbrFixtureEvent = {
+    event_name: string,
+    fixture_id: string,
+    team_id: number,
+    team_scrummy_id?: string,
+    event_timestamp: number,
+    x_position?: number
+    y_position?: number
+}
+
+export type SbrFixtureEventType = 'Kick-Off'| 'Catch'| 'Kick'| 'Ball In Touch'| 'Lineout'|
+       'Lineout Won'| 'Kick Directly To Touch Outside 22'| 'Try'|
+       'Kick At Goal Position'| 'Conversion'| 'Knock On'| 'Advantage'|
+       'Advantage Over'| 'Penalty For Dangerous Tackle'|
+       'Option: Kick At Goal'| 'Penalty Kick Scored'|
+       'Penalty For Offside'| 'Option: Kick'| 'Kick To Touch'|
+       'Penalty For Offside At Kick'| 'Penalty For Not Releasing Ball'|
+       'Scrum'| 'Scrum Won'| 'Penalty For Ruck Offence'| 'Turn Over'|
+       'Conversion Missed'| 'Kick-Off Not 10 Meters'| 'Option: Scrum'|
+       'Kick Missed'| '22 Drop-Out'| 'Penalty For Not Releasign Player'|
+       'Option: Tap And Go'| 'Kick 50-22'| 'Penalty For Lineout'|
+       'Half-Time'| 'Kick To Touch From Inside 22'| 'Penalty'|
+       'Penalty For Violent/Foul Play'| 'Yellow Card'| 'Maul Formed'|
+       'Maul Incomplete'| 'Full-Time'

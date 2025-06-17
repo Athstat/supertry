@@ -1,5 +1,5 @@
 import { isWithinInterval } from "date-fns";
-import { ISbrFixture, ISbrFixtureVote, ISbrMotmVote } from "../types/sbr";
+import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureVote, ISbrMotmVote } from "../types/sbr";
 import { calculatePerc } from "./fixtureUtils";
 
 /** Returns true if all the fixtures passed to the funciton have
@@ -151,4 +151,18 @@ export function hasMotmVotingStarted(kickoff?: Date, now?: Date) {
 
     return nowEpoch >= kickoffEpoch;
 
+}
+
+/** Counts instances of a related group of sbr actions */
+export function sumMultipleSbrBoxscoreActions(boxscore: ISbrBoxscoreItem[], targetActions: string[], side: 1 | 2) {
+    return boxscore.reduce((sum, bx) => {
+        
+        console.log(bx);
+        if (bx.team_id === side && targetActions.includes(bx.action)) {
+            return sum + bx.count;
+        }
+        
+        return sum;
+
+    }, 0);
 }
