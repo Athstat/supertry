@@ -30,10 +30,15 @@ function useGlobalSwipeBack() {
       const dx = endX - startX;
       const dy = Math.abs(endY - startY);
 
-      if (dx > threshold && dy < 50) {
-        // Left-to-right swipe detected
-        window.history.back();
-        console.log('swipe back');
+      // Only process horizontal swipes (ignore diagonal)
+      if (dy < 50) {
+        if (dx > threshold) {
+          // Left-to-right swipe detected (go back)
+          window.history.back();
+        } else if (dx < -threshold) {
+          // Right-to-left swipe detected (go forward)
+          window.history.forward();
+        }
       }
       startX = null;
       startY = null;
