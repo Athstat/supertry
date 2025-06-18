@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ActiveLeaguesSection, HeroSection } from "../components/dashboard";
-import { leagueService } from "../services/leagueService";
-import { IFantasyLeague } from "../types/fantasyLeague";
-import PageView from "./PageView";
-import { Home } from "lucide-react";
-import DiscoverPlayersCard from "../components/dashboard/DiscoverPlayersCard";
-import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { leagueService } from '../services/leagueService';
+import { IFantasyLeague } from '../types/fantasyLeague';
+import PageView from './PageView';
+import MyWeekPanel from '../components/dashboard/MyWeekPanel';
+import ActionList from '../components/dashboard/ActionList';
+import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
+import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
+import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
+import JoinWeeklyLeagueCard from '../components/dashboard/JoinWeeklyLeagueCard';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -28,9 +30,8 @@ export function DashboardScreen() {
       const availableLeagues = allLeagues;
 
       setLeagues(availableLeagues);
-
     } catch (err) {
-      console.error("Failed to fetch leagues:", err);
+      console.error('Failed to fetch leagues:', err);
     } finally {
       setIsLoadingLeagues(false);
     }
@@ -44,30 +45,12 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-
-
-      <div className="flex flex-row items-center gap-2" >
-        <Home />
-        <h1 className="font-bold text-2xl" >Home</h1>
-      </div>
-
-      <HeroSection
-        availableLeagues={leagues}
-        onViewLeague={handleViewLeague}
-      />
-      
-      <DiscoverPlayersCard />
-
-
-      <ActiveLeaguesSection
-        leagues={leagues}
-        isLoading={isLoadingLeagues}
-        onViewLeague={handleViewLeague}
-      />
-
-
+      <JoinWeeklyLeagueCard />
+      <ActionList />
       <UpcomingFixturesSection />
-
+      <FeaturedPlayersCarousel />
+      <ComparePlayersPanel />
+      <MyWeekPanel />
     </PageView>
   );
 }
