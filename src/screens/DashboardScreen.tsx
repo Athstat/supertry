@@ -45,12 +45,12 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-      <MyWeekPanel />
+      <JoinWeeklyLeagueCard />
       <ActionList />
       <UpcomingFixturesSection />
       <FeaturedPlayersCarousel />
       <ComparePlayersPanel />
-      <JoinWeeklyLeagueCard />
+      <MyWeekPanel />
     </PageView>
   );
 }
