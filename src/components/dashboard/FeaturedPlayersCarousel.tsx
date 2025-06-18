@@ -16,14 +16,17 @@ const FeaturedPlayersCarousel = () => {
     const fetchPlayers = async () => {
       try {
         const leagues = await leagueService.getAllLeagues();
-        const activeLeague = activeLeaguesFilter(leagues)[0];
-        if (!activeLeague) {
-          console.error('No active league found');
-          setLoading(false);
-          return;
-        }
+        // const activeLeague = activeLeaguesFilter(leagues)[0];
+        // if (!activeLeague) {
+        //   console.error('No active league found');
+        //   setLoading(false);
+        //   return;
+        // }
+        // const athletes = await athleteService.getRugbyAthletesByCompetition(
+        //   activeLeague.official_league_id.toString()
+        // );
         const athletes = await athleteService.getRugbyAthletesByCompetition(
-          activeLeague.official_league_id.toString()
+          leagues[0].official_league_id.toString()
         );
         setPlayers(athletes);
       } catch (error) {
