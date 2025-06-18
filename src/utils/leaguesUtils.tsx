@@ -7,7 +7,6 @@ import { dateComparator } from './dateUtils';
 export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
   return leagues
     .filter(l => {
-      console.log('l', l);
       if (!l.is_open && l.has_ended) {
         return false;
       }
@@ -19,8 +18,6 @@ export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
       const today = new Date();
       const deadline = new Date(l.join_deadline);
       const daysDiff = differenceInDays(deadline, today);
-
-      console.log('daysDiff', daysDiff);
 
       return daysDiff <= 14;
     })
