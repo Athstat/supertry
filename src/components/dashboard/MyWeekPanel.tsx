@@ -46,7 +46,7 @@ const MyWeekPanel = () => {
           Join a league to start competing and track your team's performance
         </p>
         <button
-          className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors"
+          className="w-full bg-white text-primary-800 font-medium py-3 px-4 rounded-md hover:bg-blue-50 transition-colors"
           onClick={() => navigate('/leagues')}
         >
           Browse Leagues

@@ -79,38 +79,48 @@ export default function UpcomingFixturesSection() {
 
                 <div className="flex justify-between items-center mb-4">
                   {/* Home Team */}
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center min-w-0 w-28">
                     <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                       <TeamLogo url={fixture.team_image_url} className="w-10 h-10" />
                     </div>
-                    <p className="text-sm font-medium">{fixture.team_name}</p>
+                    <p
+                      className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden"
+                      title={fixture.team_name}
+                    >
+                      {fixture.team_name}
+                    </p>
                     <p className="text-xs text-gray-400">Home</p>
                   </div>
 
-                  {/* Match Info */}
-                  <div className="text-center">
+                  {/* Match Info (centered) */}
+                  <div className="flex flex-col items-center flex-shrink-0 mx-4 min-w-[90px]">
                     {fixture.kickoff_time && (
                       <>
-                        <p className="text-sm text-gray-300">
+                        <p className="text-sm text-gray-300 text-center">
                           {format(new Date(fixture.kickoff_time), 'E, d MMM')}
                         </p>
-                        <p className="text-xl font-bold my-1">
+                        <p className="text-xl font-bold my-1 text-center">
                           {format(new Date(fixture.kickoff_time), 'HH:mm')}
                         </p>
-                        <p className="text-xs text-gray-400">vs</p>
+                        <p className="text-xs text-gray-400 text-center">vs</p>
                       </>
                     )}
                   </div>
 
                   {/* Away Team */}
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center min-w-0 w-28">
                     <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                       <TeamLogo
                         url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
                         className="w-10 h-10"
                       />
                     </div>
-                    <p className="text-sm font-medium">{fixture.opposition_team_name}</p>
+                    <p
+                      className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden"
+                      title={fixture.opposition_team_name}
+                    >
+                      {fixture.opposition_team_name}
+                    </p>
                     <p className="text-xs text-gray-400">Away</p>
                   </div>
                 </div>

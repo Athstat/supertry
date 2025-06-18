@@ -115,7 +115,25 @@ export function LeagueScreen() {
     }
   };
 
-  const atoms = [fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom];
+  return (
+    <FantasyLeagueProvider>
+      <div className="min-h-screen bg-gray-50">
+        <LeagueHeader
+          leagueInfo={leagueInfo}
+          onOpenSettings={() => setShowSettings(true)}
+          isLoading={isLoading}
+          league={league}
+        >
+          <div className="flex items-center gap-2">
+            {!isLoading && userTeam === undefined && league && !isLocked && (
+              <button
+                onClick={handleJoinLeague}
+                className="hidden lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+              >
+                Join This League
+              </button>
+            )}
+
             {!isLoading && userTeam === undefined && isLocked && (
               <button
                 disabled
@@ -200,6 +218,5 @@ export function LeagueScreen() {
         </button>
       )}
     </FantasyLeagueProvider>
-
   );
 }

@@ -17,6 +17,25 @@ interface FixturesListProps {
   userTeam?: RankedFantasyTeam;
 }
 
+const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => {
+  return fixtures
+    .filter(f => {
+      const start_round = league.start_round;
+      const end_round = league.end_round;
+
+      if (start_round && end_round) {
+        return f.round >= start_round && f.round <= end_round;
+      }
+
+      return true;
+    })
+    .sort(
+      (a, b) =>
+        new Date(a.kickoff_time ?? new Date()).valueOf() -
+        new Date(b.kickoff_time ?? new Date()).valueOf()
+    );
+};
+
 export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProps) {
   const competitionId = league.official_league_id;
 
@@ -47,7 +66,7 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
   // Group fixtures by day
   const fixturesByDay: Record<string, IFixture[]> = {};
 
-  fixtures.forEach(fixture => {
+  fixtures.forEach((fixture: IFixture) => {
     if (fixture.kickoff_time) {
       const dayKey = format(new Date(fixture.kickoff_time), 'yyyy-MM-dd');
       if (!fixturesByDay[dayKey]) {
@@ -102,7 +121,7 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
         </h2>
       </div>
 
-      <div className="">
+      <div>
         {sortedDays.map(dayKey => (
           <div key={dayKey}>
             {/* Day header */}
@@ -115,30 +134,10 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
               {fixturesByDay[dayKey].map((fixture, index) => (
                 <LeaguePredictionFixtureCard fixture={fixture} key={index} />
               ))}
-
             </div>
-          )
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );
 }
-
-const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => {
-  return fixtures
-    .filter(f => {
-      const start_round = league.start_round;
-      const end_round = league.end_round;
-
-      if (start_round && end_round) {
-        return f.round >= start_round && f.round <= end_round;
-      }
-
-      return true;
-    })
-    .sort(
-      (a, b) =>
-        new Date(a.kickoff_time ?? new Date()).valueOf() -
-        new Date(b.kickoff_time ?? new Date()).valueOf()
-    );
-};
