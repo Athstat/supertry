@@ -7,6 +7,7 @@ import { twMerge } from "tailwind-merge";
 import { useFetch } from "../../../hooks/useFetch";
 import { athleteService } from "../../../services/athleteService";
 import { getPlayerAggregatedStat } from "../../../types/sports_actions";
+import SecondaryText from "../../shared/SecondaryText";
 
 type Props = {
     selectedPlayers: RugbyPlayer[],
@@ -100,6 +101,32 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
     const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
     const compareTries = getPlayerAggregatedStat("Tries", compareActions)?.action_count;
 
+    const assits = getPlayerAggregatedStat("Assists", actions)?.action_count;
+    const compareAssits = getPlayerAggregatedStat("Assists", compareActions)?.action_count;
+
+    const passes = getPlayerAggregatedStat("Passes", actions)?.action_count;
+    const comparePasses = getPlayerAggregatedStat("Passes", compareActions)?.action_count;
+
+    const tacklesMade = getPlayerAggregatedStat("TacklesMade", actions)?.action_count;
+    const compareTacklesMade = getPlayerAggregatedStat("TacklesMade", compareActions)?.action_count;
+
+    const tackleSuccess = getPlayerAggregatedStat("TackleSuccess", actions)?.action_count;
+    const compareTackleSuccess = getPlayerAggregatedStat("TackleSuccess", compareActions)?.action_count;
+
+    const turnoversWon = getPlayerAggregatedStat("TurnoversWon", actions)?.action_count;
+    const compareTurnoversWon = getPlayerAggregatedStat("TurnoversWon", compareActions)?.action_count;
+
+    const turnovers = getPlayerAggregatedStat("TurnoversConceded", actions)?.action_count;
+    const compareTurnovers = getPlayerAggregatedStat("TurnoversConceded", compareActions)?.action_count;
+
+
+    const kicksFromHand = getPlayerAggregatedStat("KicksFromHand", actions)?.action_count;
+    const compareKicksFromHand = getPlayerAggregatedStat("KicksFromHand", compareActions)?.action_count;
+
+    const kicksFromHandMetres = getPlayerAggregatedStat("KicksFromHandMetres", actions)?.action_count;
+    const compareKicksFromHandMetres = getPlayerAggregatedStat("KicksFromHandMetres", compareActions)?.action_count;
+
+
     const minutesPlayed = getPlayerAggregatedStat("MinutesPlayed", actions)?.action_count
     const compareMinutesPlayed = getPlayerAggregatedStat("MinutesPlayed", compareActions)?.action_count;
 
@@ -134,7 +161,7 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
 
             <div className="flex flex-col gap-1" >
 
-                <p className="mt-2" >General</p>
+                <SecondaryText className="mt-2" >General</SecondaryText>
 
                 <StatLabel
                     label="Power Rating"
@@ -154,9 +181,9 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                     isGreen={(minutesPlayed ?? 0) > (compareMinutesPlayed ?? 0)}
                 />
 
-                <p className="mt-2" >Attacking</p>
+                <SecondaryText className="mt-2" >Attacking</SecondaryText>
                 <StatLabel
-                    label="Attacking"
+                    label="Attacking Rating"
                     value={stats?.attacking}
                     isGreen={(stats?.attacking ?? 0) > (comparingStats?.attacking ?? 0)}
                 />
@@ -174,13 +201,31 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                 />
 
                 <StatLabel
+                    label="Assits"
+                    value={assits}
+                    isGreen={(assits ?? 0) > (compareAssits ?? 0)}
+                />
+
+                <StatLabel
+                    label="Turnovers"
+                    value={turnovers}
+                    isGreen={(turnovers ?? 0) > (compareTurnovers ?? 0)}
+                />
+
+                <StatLabel
+                    label="Passes"
+                    value={passes}
+                    isGreen={(passes ?? 0) > (comparePasses ?? 0)}
+                />
+
+                <StatLabel
                     label="Ball Carying"
                     value={player.ball_carrying}
                     isGreen={(player.ball_carrying ?? 0) > (comparingPlayer?.ball_carrying ?? 0)}
                 />
 
 
-                <p className="mt-2" >Defense</p>
+                <SecondaryText className="mt-2" >Defense</SecondaryText>
 
                 <StatLabel
                     label="Defence"
@@ -195,17 +240,41 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
                 />
 
                 <StatLabel
-                    label="Tackling"
-                    value={player.tackling}
-                    isGreen={(player.tackling ?? 0) > (comparingPlayer?.tackling ?? 0)}
+                    label="Tackles Made"
+                    value={tacklesMade}
+                    isGreen={(tacklesMade ?? 0) > (compareTacklesMade ?? 0)}
                 />
 
-                <p className="mt-2" >Kicking</p>
+                <StatLabel
+                    label="Tackles Sucess"
+                    value={tackleSuccess ? (tackleSuccess * 100) : undefined}
+                    isGreen={(tackleSuccess ?? 0) > (compareTackleSuccess ?? 0)}
+                />
+
+                <StatLabel
+                    label="Turnovers Won"
+                    value={turnoversWon}
+                    isGreen={(turnoversWon ?? 0) > (compareTurnoversWon ?? 0)}
+                />
+
+                <SecondaryText className="mt-2" >Kicking</SecondaryText>
 
                 <StatLabel
                     label="Kicking"
                     value={stats?.kicking}
                     isGreen={(stats?.kicking ?? 0) > (comparingStats?.kicking ?? 0)}
+                />
+
+                <StatLabel
+                    label="Kicks From Hand"
+                    value={kicksFromHand}
+                    isGreen={(kicksFromHand ?? 0) > (compareKicksFromHand ?? 0)}
+                />
+
+                <StatLabel
+                    label="Metres"
+                    value={kicksFromHandMetres}
+                    isGreen={(kicksFromHandMetres ?? 0) > (compareKicksFromHandMetres ?? 0)}
                 />
 
                 <StatLabel
