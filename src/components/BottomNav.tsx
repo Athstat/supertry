@@ -1,7 +1,6 @@
 import { useLocation, Link } from 'react-router-dom';
 import { Home, Trophy, Users, BarChart, Calendar } from 'lucide-react';
 import { useState } from 'react';
-import { MdOutlineSportsRugby } from 'react-icons/md';
 
 export function BottomNav() {
   const { pathname } = useLocation();
@@ -71,26 +70,26 @@ export function BottomNav() {
         })}
 
         <Link
-          to={'/sbr'}
+          to={'/fixtures'}
           className={`flex flex-col items-center justify-center w-full h-full relative overflow-hidden ${
-            pathname === '/sbr' || pathname.startsWith(`/sbr`)
+            pathname === '/fixtures' || pathname.startsWith(`/fixtures`)
               ? 'text-primary-600 dark:text-primary-400'
               : 'text-gray-500 dark:text-gray-400'
           }`}
-          onClick={e => handleRipple('sbr', e)}
+          onClick={e => handleRipple('fixtures', e)}
         >
-          {rippleMap['sbr'] && (
+          {rippleMap['fixtures'] && (
             <span
               className="absolute bg-gray-200 dark:bg-gray-700 rounded-full animate-ripple"
               style={{
-                left: rippleMap['sbr'].x,
-                top: rippleMap['sbr'].y,
+                left: rippleMap['fixtures'].x,
+                top: rippleMap['fixtures'].y,
                 transform: 'translate(-50%, -50%)',
               }}
             />
           )}
-          <MdOutlineSportsRugby size={20} />
-          <span className="text-xs mt-1">SBR</span>
+          <Calendar size={20} />
+          <span className="text-xs mt-1">Fixtures</span>
         </Link>
       </div>
     </div>
