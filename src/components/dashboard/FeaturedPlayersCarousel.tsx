@@ -6,6 +6,7 @@ import { RugbyPlayer } from '../../types/rugbyPlayer';
 import { leagueService } from '../../services/leagueService';
 import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 import { PlayerGameCard } from '../player/PlayerGameCard';
+import PlayerProfileModal from '../player/PlayerProfileModal';
 
 type TabType = 'top-picks' | 'hot-streak' | 'by-position';
 
@@ -14,6 +15,18 @@ const FeaturedPlayersCarousel = () => {
   const [activeTab, setActiveTab] = useState<TabType>('top-picks');
   const [players, setPlayers] = useState<RugbyPlayer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
+  const [showPlayerModal, setShowPlayerModal] = useState(false);
+
+  const handleClosePlayerModal = () => {
+    setPlayerModalPlayer(undefined);
+    setShowPlayerModal(false);
+  };
+
+  const handlePlayerClick = (player: RugbyPlayer) => {
+    setPlayerModalPlayer(player);
+    setShowPlayerModal(true);
+  };
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -100,6 +113,7 @@ const FeaturedPlayersCarousel = () => {
               <div key={player.id} className="pl-1 flex-shrink-0">
                 <PlayerGameCard
                   player={player}
+                  onClick={() => handlePlayerClick(player)}
                   className="w-[140px] sm:w-[160px] h-[200px] sm:h-[220px]"
                   blockGlow={true}
                 />
@@ -107,6 +121,14 @@ const FeaturedPlayersCarousel = () => {
             ))}
           </div>
         </>
+      )}
+
+      {playerModalPlayer && (
+        <PlayerProfileModal
+          onClose={handleClosePlayerModal}
+          player={playerModalPlayer}
+          isOpen={playerModalPlayer !== undefined && showPlayerModal}
+        />
       )}
     </div>
   );
