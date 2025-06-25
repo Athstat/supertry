@@ -40,13 +40,13 @@ const MyWeekPanel = () => {
 
   if (!activeLeague || !leagueTeams) {
     return (
-      <div className="rounded-xl overflow-hidden bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white flex flex-col items-center justify-center p-6">
+      <div className="rounded-xl overflow-hidden bg-gradient-to-br from-primary-900 to-primary-700 via-primary-800 text-white flex flex-col items-center justify-center p-6">
         <h2 className="text-xl font-bold mb-2">No Active League</h2>
         <p className="mb-4 text-center text-slate-300">
           Join a league to start competing and track your team's performance
         </p>
         <button
-          className="w-full bg-white text-primary-800 font-medium py-3 px-4 rounded-md hover:bg-blue-50 transition-colors"
+          className="w-full bg-white text-primary-800 font-medium py-3 px-4 rounded-lg hover:bg-blue-50 transition-colors"
           onClick={() => navigate('/leagues')}
         >
           Browse Leagues
