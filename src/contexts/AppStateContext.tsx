@@ -3,7 +3,11 @@ import { useAuth } from './AuthContext';
 import { useAthletes } from './AthleteContext';
 import { analytics } from '../services/anayticsService';
 import { useLocation } from 'react-router-dom';
-import { isAppStateValid, attemptStateRecovery, registerRecoveryListener } from '../utils/appStateUtils';
+import {
+  isAppStateValid,
+  attemptStateRecovery,
+  registerRecoveryListener,
+} from '../utils/appStateUtils';
 
 interface AppStateContextType {
   isActive: boolean;
@@ -27,11 +31,11 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [lastActiveTime, setLastActiveTime] = useState<number | null>(Date.now());
   const [appStateStatus, setAppStateStatus] = useState<'idle' | 'refreshing' | 'error'>('idle');
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
-  
+
   const { refreshSession } = useAuth();
   const { refreshAthletes } = useAthletes();
   const location = useLocation();
-  
+
   // Keep track of recovery attempts to prevent infinite loops
   const recoveryAttemptsRef = useRef<number>(0);
   const lastRecoveryTimeRef = useRef<number>(0);
@@ -46,37 +50,37 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     try {
       //console.log('AppStateManager: Refreshing app state...');
       setAppStateStatus('refreshing');
-      
+
       // First refresh authentication session
       const authRefreshed = await refreshSession();
       console.log('AppStateManager: Auth session refresh result:', authRefreshed);
-      
+
       // Then refresh data regardless of auth result
       // This ensures we at least try to get fresh data
       await refreshAthletes();
-      
+
       // Track the current page to ensure analytics are working
       analytics.trackPageVisit(location.pathname);
-      
+
       // Reset recovery attempts counter on successful refresh
       recoveryAttemptsRef.current = 0;
-      
+
       setAppStateStatus('idle');
       //console.log('AppStateManager: App state refresh completed successfully');
     } catch (error) {
       //console.error('AppStateManager: Error refreshing app state:', error);
       setAppStateStatus('error');
-      
+
       // Even if there's an error, we should still update the last active time
       // to prevent continuous refresh attempts
       setLastActiveTime(Date.now());
-      
+
       // If we've had multiple failures, try a more aggressive recovery
       if (recoveryAttemptsRef.current >= 2) {
         console.log('AppStateManager: Multiple refresh failures, attempting state recovery');
         await attemptStateRecovery();
       }
-      
+
       // Increment recovery attempts
       recoveryAttemptsRef.current += 1;
     }
@@ -89,16 +93,16 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       const currentTime = Date.now();
       const lastActive = lastActiveTime || 0;
       const inactiveDuration = currentTime - lastActive;
-      
+
       //console.log(`AppStateManager: Visibility changed to ${isNowVisible ? 'visible' : 'hidden'}`);
       //console.log(`AppStateManager: Inactive duration: ${inactiveDuration}ms`);
-      
+
       setIsActive(isNowVisible);
-      
+
       if (isNowVisible) {
         // Update last active time
         setLastActiveTime(currentTime);
-        
+
         // If the app has been inactive for a long time, refresh all state
         if (inactiveDuration > INACTIVITY_THRESHOLD) {
           console.log('AppStateManager: Long inactivity detected, performing full state refresh');
@@ -106,7 +110,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         } else {
           // Even for shorter inactivity periods, check if the app state is valid
           if (!isAppStateValid()) {
-            console.log('AppStateManager: Invalid app state detected after becoming visible, refreshing');
+            console.log(
+              'AppStateManager: Invalid app state detected after becoming visible, refreshing'
+            );
             await refreshAppState();
           }
         }
@@ -116,12 +122,22 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
+    // Handle app refresh events from mobile app
+    const handleAppRefresh = async (event: Event) => {
+      const customEvent = event as CustomEvent;
+      console.log('AppStateManager: Received app refresh event:', customEvent.detail);
+      await refreshAppState();
+    };
+
     // Register visibility change event listener
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+
+    // Register app refresh event listener
+    window.addEventListener('appRefresh', handleAppRefresh);
+
     // Initial check
     handleVisibilityChange();
-    
+
     // Periodic health check when the app is visible
     const healthCheckInterval = setInterval(() => {
       if (document.visibilityState === 'visible' && appStateStatus !== 'refreshing') {
@@ -136,9 +152,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         }
       }
     }, HEALTH_CHECK_INTERVAL);
-    
+
     // Listen for recovery attempts
-    const removeRecoveryListener = registerRecoveryListener((event) => {
+    const removeRecoveryListener = registerRecoveryListener(event => {
       const now = Date.now();
       // Prevent too frequent recovery attempts (at most once per minute)
       if (now - lastRecoveryTimeRef.current > 60000) {
@@ -148,9 +164,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         forceRefresh();
       }
     });
-    
+
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('appRefresh', handleAppRefresh);
       clearInterval(healthCheckInterval);
       removeRecoveryListener();
     };
@@ -164,13 +181,15 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   }, [refreshTrigger]);
 
   return (
-    <AppStateContext.Provider value={{ 
-      isActive, 
-      lastActiveTime, 
-      refreshAppState,
-      appStateStatus,
-      forceRefresh
-    }}>
+    <AppStateContext.Provider
+      value={{
+        isActive,
+        lastActiveTime,
+        refreshAppState,
+        appStateStatus,
+        forceRefresh,
+      }}
+    >
       {/* Key prop forces re-mount of children when refreshTrigger changes */}
       <div key={`app-state-${refreshTrigger}`} className="app-state-container">
         {children}

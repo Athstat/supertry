@@ -25,6 +25,7 @@ import { BottomNav } from './components/BottomNav';
 import SbrScreen from './screens/SbrScreen';
 import FixtureScreen from './screens/FixtureScreen';
 import FixtureListScreen from './screens/FixtureListScreen';
+import FixturesScreen from './screens/FixturesScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
 import { ScopeProvider } from 'jotai-scope';
@@ -318,9 +319,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <ScopeProvider atoms={[fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom]}>
-                <FixtureListScreen />
-              </ScopeProvider>
+              <FixturesScreen />
             </Layout>
           </ProtectedRoute>
         }

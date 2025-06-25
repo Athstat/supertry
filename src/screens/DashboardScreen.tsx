@@ -46,7 +46,7 @@ export function DashboardScreen() {
   return (
     <PageView className="flex flex-col space-y-6 p-4">
       <JoinWeeklyLeagueCard />
-      <ActionList />
+      {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <FeaturedPlayersCarousel />
       <ComparePlayersPanel />

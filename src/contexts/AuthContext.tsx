@@ -14,13 +14,75 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Type declaration for scrummyAuthStatus injected by mobile app
+declare global {
+  interface Window {
+    scrummyAuthStatus?: {
+      isAuthenticated: boolean;
+      tokens?: {
+        accessToken: string;
+        refreshToken: string;
+      };
+      userData?: {
+        name?: string;
+        email?: string;
+        user_id?: string;
+        external_id?: string;
+      };
+    };
+    onScrummyAuthStatusReady?: (status: any) => void;
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Function to restore authentication from mobile app's scrummyAuthStatus
+  const restoreAuthFromMobileApp = useCallback(async () => {
+    try {
+      // Check if we have authentication status from the mobile app
+      if (window.scrummyAuthStatus && window.scrummyAuthStatus.isAuthenticated) {
+        console.log(
+          'AuthContext: Found authentication status from mobile app:',
+          window.scrummyAuthStatus
+        );
+
+        const { tokens, userData } = window.scrummyAuthStatus;
+
+        if (tokens && tokens.accessToken && tokens.refreshToken) {
+          // Store the tokens in the web app's localStorage
+          localStorage.setItem('access_token', tokens.accessToken);
+          localStorage.setItem('refresh_token', tokens.refreshToken);
+
+          // Store user data if available
+          if (userData) {
+            localStorage.setItem('user_data', JSON.stringify(userData));
+          }
+
+          console.log('AuthContext: Successfully restored authentication from mobile app');
+          setIsAuthenticated(true);
+          return true;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error('AuthContext: Error restoring auth from mobile app:', error);
+      return false;
+    }
+  }, []);
+
   // Create a memoized function to check authentication status
   const checkAuth = useCallback(async () => {
     try {
+      // First, try to restore authentication from mobile app
+      const restoredFromMobile = await restoreAuthFromMobileApp();
+
+      if (restoredFromMobile) {
+        setLoading(false);
+        return true;
+      }
+
       const authenticated = authService.isAuthenticated();
 
       // If not authenticated but we have a refresh token, try to refresh
@@ -39,12 +101,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [restoreAuthFromMobileApp]);
 
   // Initial authentication check
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // Listen for authentication status updates from mobile app
+  useEffect(() => {
+    // Set up the listener for when mobile app provides auth status
+    window.onScrummyAuthStatusReady = async status => {
+      console.log('AuthContext: Received auth status from mobile app:', status);
+
+      if (status && status.isAuthenticated) {
+        const { tokens, userData } = status;
+
+        if (tokens && tokens.accessToken && tokens.refreshToken) {
+          // Store the tokens in the web app's localStorage
+          localStorage.setItem('access_token', tokens.accessToken);
+          localStorage.setItem('refresh_token', tokens.refreshToken);
+
+          // Store user data if available
+          if (userData) {
+            localStorage.setItem('user_data', JSON.stringify(userData));
+          }
+
+          console.log(
+            'AuthContext: Successfully restored authentication from mobile app via callback'
+          );
+          setIsAuthenticated(true);
+        }
+      } else {
+        console.log('AuthContext: Mobile app indicates user is not authenticated');
+        setIsAuthenticated(false);
+      }
+    };
+
+    // Cleanup function
+    return () => {
+      window.onScrummyAuthStatusReady = undefined;
+    };
+  }, []);
 
   // Add periodic token validation for long-running sessions
   // Note: Visibility change handling is now managed by AppStateContext
