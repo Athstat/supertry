@@ -33,7 +33,7 @@ export function ProfileScreen() {
       try {
         const info = await authService.getUserInfo();
         if (!info) return;
-        //console.log('[ProfileScreen] User info:', info);
+        console.log('[ProfileScreen] User info:', info);
         setIsGuestAccount(authService.isGuestAccount());
         const user = await authService.getUserFromDB(info.id);
         console.log('[ProfileScreen] User:', user);
