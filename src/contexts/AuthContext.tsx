@@ -1,6 +1,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
-import { requestPushPermissionsAfterLogin, logoutFromBridge } from '../utils/bridgeUtils';
+import {
+  requestPushPermissionsAfterLogin,
+  logoutFromBridge,
+  loginWithBridge,
+} from '../utils/bridgeUtils';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -181,6 +185,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await authService.login(username, password);
       setIsAuthenticated(true);
+
+      // Notify the mobile app bridge about successful login
+      try {
+        const userInfo = authService.getUserInfo();
+        if (userInfo) {
+          const tokens = {
+            accessToken: localStorage.getItem('access_token') || '',
+            refreshToken: localStorage.getItem('refresh_token') || '',
+          };
+          const userData = {
+            name:
+              `${userInfo.firstName || ''} ${userInfo.lastName || ''}`.trim() ||
+              userInfo.username ||
+              '',
+            email: userInfo.email || '',
+            user_id: userInfo.id || '',
+            onesignal_id: localStorage.getItem('onesignal_id') || undefined,
+          };
+
+          console.log('AuthContext: Notifying mobile app bridge about login...');
+          const bridgeResult = await loginWithBridge(tokens, userData);
+          console.log('AuthContext: Mobile app bridge login result:', bridgeResult);
+        }
+      } catch (bridgeError) {
+        console.error('AuthContext: Error notifying mobile app bridge:', bridgeError);
+        // Don't fail the login if bridge communication fails
+      }
 
       // Request push permissions after successful login (non-blocking)
       requestPushPermissionsAfterLogin();
