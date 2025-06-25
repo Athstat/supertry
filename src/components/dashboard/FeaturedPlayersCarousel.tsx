@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Star, BarChart, Zap } from 'lucide-react';
+import { Users, Loader } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { athleteService } from '../../services/athleteService';
 import { RugbyPlayer } from '../../types/rugbyPlayer';
 import { leagueService } from '../../services/leagueService';
 import { activeLeaguesFilter } from '../../utils/leaguesUtils';
+import { PlayerGameCard } from '../player/PlayerGameCard';
+import PlayerProfileModal from '../player/PlayerProfileModal';
 
 type TabType = 'top-picks' | 'hot-streak' | 'by-position';
 
 const FeaturedPlayersCarousel = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('top-picks');
   const [players, setPlayers] = useState<RugbyPlayer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
+  const [showPlayerModal, setShowPlayerModal] = useState(false);
+
+  const handleClosePlayerModal = () => {
+    setPlayerModalPlayer(undefined);
+    setShowPlayerModal(false);
+  };
+
+  const handlePlayerClick = (player: RugbyPlayer) => {
+    setPlayerModalPlayer(player);
+    setShowPlayerModal(true);
+  };
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -38,97 +54,82 @@ const FeaturedPlayersCarousel = () => {
     fetchPlayers();
   }, []);
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'hot':
-        return <Star className="w-4 h-4 text-yellow-500" />;
-      case 'trending':
-        return <BarChart className="w-4 h-4 text-blue-400" />;
-      case 'explosive':
-        return <Zap className="w-4 h-4 text-yellow-400" />;
-      default:
-        return null;
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-48">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
   return (
-    <div>
+    <div className="w-full">
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-base font-medium">FEATURED PLAYERS</h3>
-        <button className="text-sm text-primary-700">View All</button>
-      </div>
-
-      {/* Filter tabs */}
-      <div className="flex space-x-2 mb-4 overflow-x-auto">
-        <button
-          className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-            activeTab === 'top-picks'
-              ? 'bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('top-picks')}
-        >
-          Top Picks
-        </button>
-        <button
-          className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-            activeTab === 'hot-streak'
-              ? 'bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('hot-streak')}
-        >
-          Hot Streak
-        </button>
-        <button
-          className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-            activeTab === 'by-position'
-              ? 'bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('by-position')}
-        >
-          By Position
+        <h3 className="text-base font-medium flex items-center gap-2">
+          <Users className="w-4 h-4 text-primary-700" />
+          FEATURED PLAYERS
+        </h3>
+        <button onClick={() => navigate('/players')} className="text-sm text-primary-700">
+          View All
         </button>
       </div>
 
-      {/* Player cards carousel */}
-      <div className="flex space-x-4 overflow-x-auto pb-2">
-        {players.slice(0, 4).map(player => (
-          <div key={player.id} className="min-w-[150px] rounded-lg bg-gray-800 p-4 flex flex-col">
-            <div className="flex justify-between items-start mb-2">
-              <span className="text-xs font-semibold bg-gray-700 px-1.5 py-0.5 rounded text-gray-300">
-                {player.position || player.position_class}
-              </span>
-              {getStatusIcon('hot')}
-            </div>
+      {loading ? (
+        <div className="flex justify-center items-center flex-col py-12">
+          <Loader className="w-8 h-8 text-primary-500 animate-spin" />
+          <span className="mt-3 text-gray-600 dark:text-gray-400">Loading...</span>
+        </div>
+      ) : (
+        <>
+          {/* Filter tabs */}
+          <div className="flex space-x-2 mb-4 overflow-x-auto px-4 sm:px-0 -mx-4 sm:mx-0">
+            <button
+              className={`px-3 py-1.5 sm:px-4 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
+                activeTab === 'top-picks'
+                  ? 'bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+              onClick={() => setActiveTab('top-picks')}
+            >
+              Top Picks
+            </button>
+            <button
+              className={`px-3 py-1.5 sm:px-4 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
+                activeTab === 'hot-streak'
+                  ? 'bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+              onClick={() => setActiveTab('hot-streak')}
+            >
+              Hot Streak
+            </button>
+            <button
+              className={`px-3 py-1.5 sm:px-4 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
+                activeTab === 'by-position'
+                  ? 'bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+              onClick={() => setActiveTab('by-position')}
+            >
+              By Position
+            </button>
+          </div>
 
-            <div className="flex-1 flex flex-col items-center justify-center my-2">
-              <div className="w-14 h-14 bg-gray-700 rounded-full mb-2">
-                <img
-                  src={player.image_url}
-                  alt={player.player_name}
-                  className="w-full h-full object-cover rounded-full"
+          {/* Player cards carousel */}
+          <div className="flex space-x-3 overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
+            {players.slice(0, 5).map(player => (
+              <div key={player.id} className="pl-1 flex-shrink-0">
+                <PlayerGameCard
+                  player={player}
+                  onClick={() => handlePlayerClick(player)}
+                  className="w-[140px] sm:w-[160px] h-[200px] sm:h-[220px]"
+                  blockGlow={true}
                 />
               </div>
-              <h4 className="text-white font-bold whitespace-nowrap">{player.player_name}</h4>
-              <p className="text-gray-400 text-sm">{player.team_name}</p>
-            </div>
-
-            <div className="text-center">
-              <span className="text-2xl font-bold text-white">{player.power_rank_rating || 0}</span>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
+
+      {playerModalPlayer && (
+        <PlayerProfileModal
+          onClose={handleClosePlayerModal}
+          player={playerModalPlayer}
+          isOpen={playerModalPlayer !== undefined && showPlayerModal}
+        />
+      )}
     </div>
   );
 };

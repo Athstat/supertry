@@ -78,7 +78,7 @@ const JoinWeeklyLeagueCard = () => {
         </div>
 
         <button
-          className="w-full bg-white text-primary-800 font-medium py-3 px-4 rounded-md hover:bg-blue-50 transition-colors"
+          className="w-full bg-white text-primary-800 font-medium py-3 px-4 rounded-lg hover:bg-blue-50 transition-colors"
           onClick={() => navigate('/leagues')}
         >
           Join A Weekly League →
