@@ -26,13 +26,7 @@ export default function LeagueGroupChatFeed({ league }: Props) {
     const authUser = useAuthUser();
     const { theme } = useTheme();
 
-    const { sbInstance } = useOpenChat(channelUrl, channelName, authUser);
-
-    useEffect(() => {
-        return () => {
-            if (sbInstance) sbInstance.disconnect();
-        }
-    }, []);
+    useOpenChat(channelUrl, channelName, authUser);
 
     if (!authUser) return <ErrorState message={"You must be logged in to access the School Boy Rugby Chat"} />
 
