@@ -5,8 +5,8 @@ import { OpenChannel } from "@sendbird/chat/openChannel";
 import { AuthUser } from "../types/auth";
 
 /** Connects a user to sendbird and the open channel specified */
-export function useOpenChat(channelUrl: string, channelName: string, authUser: AuthUser) {
-    
+export function useOpenChat(channelUrl: string, channelName: string, authUser?: AuthUser) {
+
     const [sbInstance, setSbInstance] = useState<CustomSendBirdInstance>();
     const [channel, setChannel] = useState<OpenChannel>();
     const [error, setError] = useState<string>();
@@ -16,6 +16,11 @@ export function useOpenChat(channelUrl: string, channelName: string, authUser: A
     useEffect(() => {
         const init = async () => {
             setLoading(true);
+
+            if (!authUser) {
+                setError('Only logged in users can participate in chats')
+                return;
+            }
 
             const { data: sb, error: sbError } = await connectUserToSendBird(authUser);
             if (sbError) setError(`Failed to connect to ${channelName}.`);
@@ -29,7 +34,7 @@ export function useOpenChat(channelUrl: string, channelName: string, authUser: A
                     console.log("Sendbird chat error ", channelError);
                     setError(`Failed to connect to ${channelName}.`)
                 };
-                
+
             }
 
             setLoading(false);
@@ -37,7 +42,12 @@ export function useOpenChat(channelUrl: string, channelName: string, authUser: A
 
         init();
 
+        return () => {
+            if (sbInstance) sbInstance.disconnect();
+        }
+
     }, []);
+
 
     return { channel, error, sbInstance, authUser, isLoading };
 }

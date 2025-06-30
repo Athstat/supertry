@@ -33,11 +33,8 @@ export async function createOrGetOpenChannel(channelUrl: string, channelName: st
 export async function getExistingOpenChannel(channelUrl: string, sb: CustomSendBirdInstance) : Promise<OpenChannel | undefined> {
     
     try {
-        
         return await sb.openChannel.getChannel(channelUrl);
-        
-    } catch (SendBirdError) {
-        console.log("Error getting open channel: ", SendBirdError);
+    } catch (error) {
         return undefined;
     }
 
