@@ -19,6 +19,7 @@ import BlueGradientCard from "../components/shared/BlueGradientCard";
 import PageView from "./PageView";
 import { useFetch } from "../hooks/useFetch";
 import FixtureRosters from "../components/fixtures/FixtureRosters";
+import GameHighlightsCard from "../components/video/GameHighlightsCard";
 
 export default function FixtureScreen() {
 
@@ -113,6 +114,7 @@ export default function FixtureScreen() {
             <TabView tabHeaderItems={tabItems}  >
               
               <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats" >
+                <GameHighlightsCard link={fixture.highlights_link} />
                 {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
               </TabViewPage>
 

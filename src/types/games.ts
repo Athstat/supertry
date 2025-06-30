@@ -26,6 +26,7 @@ export type IFixture = {
     opposition_team_name?: string,
     opposition_image_url?: string,
     opposition_team_image_url?: string,
+    highlights_link: string
 }
 
 export type GameStatus = string | "completed" | "in_progress" | "not_started";
