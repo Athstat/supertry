@@ -46,7 +46,7 @@ export function useOpenChat(channelUrl: string, channelName: string, authUser?: 
             if (sbInstance) sbInstance.disconnect();
         }
 
-    }, []);
+    }, [channelUrl, channelName]);
 
 
     return { channel, error, sbInstance, authUser, isLoading };

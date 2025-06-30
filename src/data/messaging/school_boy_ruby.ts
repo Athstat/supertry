@@ -11,7 +11,7 @@ export const SCHOOL_BOY_RUGBY_CHANNEL_NAME =
 
 
 export function getSbrFixtureChannelUrl(fixture: ISbrFixture) {
-    const url = `sendbird_sbr_fixture_channel_${fixture.fixture_id}`;
+    const url = `sendbird_sbr_fixture_channel_${fixture.fixture_id}_${fixture.round}`;
     return replaceDashesWithUnderscrolls(url);
 }
 
