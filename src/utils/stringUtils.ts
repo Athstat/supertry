@@ -43,3 +43,7 @@ export function renderIfNotEmail(str: string) {
 
     return str;
 }
+
+export function replaceDashesWithUnderscrolls(inStr: string) {
+    return String(inStr).replace(/-/g, '_');
+}

@@ -1,4 +1,4 @@
-import { emailValidator } from "../../src/utils/stringUtils";
+import { emailValidator, replaceDashesWithUnderscrolls } from "../../src/utils/stringUtils";
 
 test('test email validator returns true for romeogweshe168@gmail.com', () => {
     
@@ -39,3 +39,9 @@ test('test email validator returns true for tadiwa@email.com with whitespace', (
 
     expect(actual).toEqual(true);
 });
+
+test('test replaceDasheWithUnderscrolls returns hello_world_yes- when given hello-world-yes-', () => {
+    const word = 'hello-world-yes-';
+
+    expect(replaceDashesWithUnderscrolls(word)).toStrictEqual('hello_world_yes_')
+})
