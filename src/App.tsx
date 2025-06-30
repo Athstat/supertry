@@ -9,6 +9,7 @@ import ErrorBoundary, { FallbackProps } from "./components/ErrorBoundary";
 import AppErrorFallback from "./components/AppErrorFallback";
 import { useState } from "react";
 import { FirstVisitDebug } from "./components/debug/FirstVisitDebug";
+import ChatProvider from "./contexts/ChatContext";
 
 function App() {
   const [error, setError] = useState<Error | null>(null);
@@ -17,22 +18,24 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <AthleteProvider>
-          <PlayerProfileProvider>
-            <AppStateProvider>
-              <ErrorBoundary
-                onError={(err, errorInfo) => {
-                  console.error("Root level error caught:", err, errorInfo);
-                  setError(err);
-                }}
-                fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
-              >
-                <PageVisitsTracker />
-                <AppRoutes />
-              </ErrorBoundary>
-            </AppStateProvider>
-          </PlayerProfileProvider>
-        </AthleteProvider>
+        <ChatProvider>
+          <AthleteProvider>
+            <PlayerProfileProvider>
+              <AppStateProvider>
+                <ErrorBoundary
+                  onError={(err, errorInfo) => {
+                    console.error("Root level error caught:", err, errorInfo);
+                    setError(err);
+                  }}
+                  fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
+                >
+                  <PageVisitsTracker />
+                  <AppRoutes />
+                </ErrorBoundary>
+              </AppStateProvider>
+            </PlayerProfileProvider>
+          </AthleteProvider>
+        </ChatProvider>
       </AuthProvider>
     </ThemeProvider>
   );
