@@ -20,6 +20,7 @@ import PageView from "./PageView";
 import { useFetch } from "../hooks/useFetch";
 import FixtureRosters from "../components/fixtures/FixtureRosters";
 import FixtureChat from "../components/fixtures/FixtureChat";
+import GameHighlightsCard from "../components/video/GameHighlightsCard";
 
 export default function FixtureScreen() {
 
@@ -120,11 +121,13 @@ export default function FixtureScreen() {
             <TabView tabHeaderItems={tabItems}  >
 
               <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats" >
+                <GameHighlightsCard link={fixture.highlights_link} />
                 {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
               </TabViewPage>
 
               <TabViewPage className="flex flex-col gap-5" tabKey="kick-off" >
                 <FixtureScreenOverview fixture={fixture} />
+                <GameHighlightsCard link={fixture.highlights_link} />
               </TabViewPage>
 
               <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >
