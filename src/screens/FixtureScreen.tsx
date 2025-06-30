@@ -19,6 +19,7 @@ import BlueGradientCard from "../components/shared/BlueGradientCard";
 import PageView from "./PageView";
 import { useFetch } from "../hooks/useFetch";
 import FixtureRosters from "../components/fixtures/FixtureRosters";
+import FixtureChat from "../components/fixtures/FixtureChat";
 
 export default function FixtureScreen() {
 
@@ -29,7 +30,7 @@ export default function FixtureScreen() {
 
   const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(["games", fixtureId], async ([, gameId]) => await gamesService.getGameById(gameId))
   const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
-  const {data: rosters, isLoading: loadingRosters } = useFetch("rosters", fixtureId, gamesService.getGameRostersById);
+  const { data: rosters, isLoading: loadingRosters } = useFetch("rosters", fixtureId, gamesService.getGameRostersById);
 
   const isLoading = loadingFixture || loadingBoxScore || loadingRosters;
 
@@ -56,6 +57,12 @@ export default function FixtureScreen() {
     {
       label: "Kick Off",
       tabKey: "kick-off",
+      disabled: false
+    },
+
+    {
+      label: "Chat",
+      tabKey: "chat",
       disabled: false
     },
 
@@ -111,7 +118,7 @@ export default function FixtureScreen() {
         (
           <PageView className="p-4" >
             <TabView tabHeaderItems={tabItems}  >
-              
+
               <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats" >
                 {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
               </TabViewPage>
@@ -125,7 +132,11 @@ export default function FixtureScreen() {
               </TabViewPage>
 
               <TabViewPage tabKey="rosters" >
-                {rosters && <FixtureRosters  rosters={rosters} fixture={fixture} />}
+                {rosters && <FixtureRosters rosters={rosters} fixture={fixture} />}
+              </TabViewPage>
+
+              <TabViewPage tabKey="chat" >
+                {rosters && <FixtureChat fixture={fixture} />}
               </TabViewPage>
 
             </TabView>

@@ -16,6 +16,7 @@ import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "../components/sbr/fixture/SbrFixtureDataProvider";
 import { useAtomValue } from "jotai";
 import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
+import SbrFixtureChat from "../components/sbr/fixture/SbrFixtureChat";
 
 export default function SbrFixtureScreen() {
 
@@ -69,6 +70,11 @@ function SbrFixtureScreenContent() {
         },
 
         {
+            label: "Chat",
+            tabKey: "chat"
+        },
+
+        {
             label: "Top Dawg",
             tabKey: "motm"
         }
@@ -111,13 +117,13 @@ function SbrFixtureScreenContent() {
 
             <PageView className="p-4" >
                 <TabView tabHeaderItems={tabHeaderItems}>
-                    
+
                     <TabViewPage className="" tabKey="kick-off">
                         <SbrFixtureKickOffInfo fixture={fixture} />
                     </TabViewPage>
 
                     <TabViewPage tabKey="team-stats">
-                        <SbrFixtureTeamStats/>
+                        <SbrFixtureTeamStats />
                     </TabViewPage>
 
                     <TabViewPage tabKey="timeline">
@@ -126,6 +132,10 @@ function SbrFixtureScreenContent() {
 
                     <TabViewPage tabKey="motm" >
                         <SbrMotmVotingBox fixture={fixture} />
+                    </TabViewPage>
+
+                    <TabViewPage tabKey="chat" >
+                        <SbrFixtureChat fixture={fixture} />
                     </TabViewPage>
                 </TabView>
             </PageView>
