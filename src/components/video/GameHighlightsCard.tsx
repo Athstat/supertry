@@ -1,5 +1,4 @@
 import YoutubeIFrame from "./YoutubeIFrame"
-import { PlayCircle } from "lucide-react";
 
 type Props = {
     link?: string
@@ -12,10 +11,10 @@ export default function GameHighlightsCard({ link }: Props) {
 
     return (
         <div className="flex flex-col gap-2" >
-            <div className="flex bg-blue-500 border border-blue-400 dark:bg-blue-500 text-sm w-fit px-2 py-0.5 rounded-xl flex-row items-center gap-1" >
+            {/* <div className="flex bg-blue-500 border border-blue-400 dark:bg-blue-700 text-white text-sm w-fit px-2 py-0.5 rounded-xl flex-row items-center gap-1" >
                 <PlayCircle className='w-4 h-4' />
                 Game Highlights
-            </div>
+            </div> */}
             <YoutubeIFrame link={link} />
         </div>
     )
