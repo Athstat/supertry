@@ -120,6 +120,7 @@ export default function FixtureScreen() {
 
               <TabViewPage className="flex flex-col gap-5" tabKey="kick-off" >
                 <FixtureScreenOverview fixture={fixture} />
+                <GameHighlightsCard link={fixture.highlights_link} />
               </TabViewPage>
 
               <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >

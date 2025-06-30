@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { fixtureSumary } from '../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
+import GameHighlightsCard from '../video/GameHighlightsCard';
 type Props = {
     fixture: IFixture,
     className?: string,
@@ -179,6 +180,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
             <div className='flex flex-row items-center justify-center p-3' >
                 <button onClick={goToFullMatchDetails} className='underline text-blue-400 dark:text-blue-200 hover:text-blue-500' >View Full Match Details</button>
+            </div>
+            
+            <div>
+                
+                <GameHighlightsCard link={fixture.highlights_link} />
             </div>
 
         </DialogModal>
