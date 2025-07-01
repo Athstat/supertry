@@ -3,8 +3,9 @@ import { ISeason } from '../../types/games'
 import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms } from '../../state/season.atoms'
 import { ReactNode, useEffect } from 'react'
 import useSWR from 'swr'
-import { getSeasonAthletes, getSeasonFixtures, getSeasonTeams } from '../../services/seasonsService'
+import { seasonService } from '../../services/seasonsService'
 import { LoadingState } from '../ui/LoadingState'
+import { gamesService } from '../../services/gamesService'
 
 type Props = {
     season: ISeason,
@@ -22,9 +23,9 @@ export default function SeasonDataProvider({season, children}: Props) {
     const seasonTeamsKey = `seasons-teams/${season.id}`;
     const seasonAthletesKey = `seasons-athletes/${season.id}`;
     const seasonFixutesKey = `seasons-fixtures/${season.id}`;
-    const {data: teams, isLoading: loadingTeams} = useSWR(seasonTeamsKey, () => getSeasonTeams(season.id));
-    const {data: fixtures, isLoading: loadingFixtures} = useSWR(seasonFixutesKey, () => getSeasonFixtures(season.id));
-    const {data: athletes, isLoading: loadingAthletes} = useSWR(seasonAthletesKey, () => getSeasonAthletes(season.id));
+    const {data: teams, isLoading: loadingTeams} = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(season.id));
+    const {data: fixtures, isLoading: loadingFixtures} = useSWR(seasonFixutesKey, () => gamesService.getGamesByCompetitionId(season.id));
+    const {data: athletes, isLoading: loadingAthletes} = useSWR(seasonAthletesKey, () => seasonService.getSeasonAthletes(season.id));
 
     const isLoading = loadingTeams || loadingAthletes || loadingFixtures;
 

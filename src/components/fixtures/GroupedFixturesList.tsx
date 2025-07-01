@@ -6,11 +6,12 @@ import FixtureCard from "./FixtureCard";
 type Props = {
     fixtures: IFixture[],
     search?: string,
-    generateMessage?: (fixture: IFixture) => string
+    generateMessage?: (fixture: IFixture) => string,
+    descendingOrder?: boolean
 }
 
 /** Groups Fixtures into dates and renders them by date */
-export default function GroupedFixturesList({ fixtures, search, generateMessage }: Props) {
+export default function GroupedFixturesList({ fixtures, search, generateMessage, descendingOrder }: Props) {
 
     // Group fixtures by day
     const fixturesByDay: Record<string, IFixture[]> = {};
@@ -32,7 +33,10 @@ export default function GroupedFixturesList({ fixtures, search, generateMessage 
     });
 
     // Get sorted day keys
-    const sortedDays = Object.keys(fixturesByDay).sort();
+    const sortedDays = Object.keys(fixturesByDay).sort((a, b) => {
+        if (descendingOrder) return new Date(b).valueOf() - new Date(a).valueOf()
+        return new Date(a).valueOf() - new Date(b).valueOf()
+    });
 
     return (
         <div className="grid grid-cols-1 gap-3">
