@@ -9,7 +9,8 @@ import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms 
 import { ScopeProvider } from "jotai-scope";
 import { TopicPageView } from "./PageView";
 import TeamCard from "../components/teams/TeamCard";
-import { Shield } from "lucide-react";
+import { Shield, Users } from "lucide-react";
+import { PlayerGameCard } from "../components/player/PlayerGameCard";
 
 export default function SeasonScreen() {
 
@@ -41,6 +42,7 @@ function SeasonScreenContent() {
 
     const season = useAtomValue(seasonAtom);
     const teams = useAtomValue(seasonTeamsAtoms);
+    const athletes = useAtomValue(seasonAthletesAtoms);
 
     const card = [
         {
@@ -57,7 +59,7 @@ function SeasonScreenContent() {
             description="Crunching heart stopping stuff"
             statsCards={card}
             className="p-4 flex flex-col gap-4"
-        >   
+        >
 
             <div className="flex flex-row items-center gap-2" >
                 <Shield />
@@ -69,6 +71,18 @@ function SeasonScreenContent() {
                     return <TeamCard className="flex-1 min-w-36 h-full" team={t} key={index} />
                 })}
             </div>
+
+            <div className="flex flex-row items-center gap-2" >
+                <Users />
+                <h1 className="text-lg font-bold" >Top Athletes</h1>
+            </div>
+
+            <div className="flex flex-row items-center gap-2 overflow-x-auto" >
+                {athletes.map((a, index) => {
+                    return <PlayerGameCard className="h-[170px] w-[130px]" player={a} key={index} />
+                })}
+            </div>
+
         </TopicPageView>
     )
 }

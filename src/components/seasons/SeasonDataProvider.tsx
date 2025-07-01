@@ -20,9 +20,11 @@ export default function SeasonDataProvider({season, children}: Props) {
     const setSeasonAthletes = useSetAtom(seasonAthletesAtoms);
 
     const seasonTeamsKey = `seasons-teams/${season.id}`;
+    const seasonAthletesKey = `seasons-athletes/${season.id}`;
+    const seasonFixutesKey = `seasons-fixtures/${season.id}`;
     const {data: teams, isLoading: loadingTeams} = useSWR(seasonTeamsKey, () => getSeasonTeams(season.id));
-    const {data: fixtures, isLoading: loadingFixtures} = useSWR(seasonTeamsKey, () => getSeasonFixtures(season.id));
-    const {data: athletes, isLoading: loadingAthletes} = useSWR(seasonTeamsKey, () => getSeasonAthletes(season.id));
+    const {data: fixtures, isLoading: loadingFixtures} = useSWR(seasonFixutesKey, () => getSeasonFixtures(season.id));
+    const {data: athletes, isLoading: loadingAthletes} = useSWR(seasonAthletesKey, () => getSeasonAthletes(season.id));
 
     const isLoading = loadingTeams || loadingAthletes || loadingFixtures;
 
@@ -30,7 +32,7 @@ export default function SeasonDataProvider({season, children}: Props) {
         if (season) setSeason(season);
         if (teams) setSeasonTeams(teams);
         if (fixtures) setSeasonFixtures(fixtures);
-        if (athletes) setSeasonAthletes
+        if (athletes) setSeasonAthletes(athletes);
     }, [season, teams, athletes, fixtures]);
 
     if (isLoading) return <LoadingState />
