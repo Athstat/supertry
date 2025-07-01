@@ -10,6 +10,7 @@ import AppErrorFallback from './components/AppErrorFallback';
 import { useState, useEffect } from 'react';
 import { FirstVisitDebug } from './components/debug/FirstVisitDebug';
 import { BrowserRouter } from 'react-router-dom';
+import ChatProvider from './contexts/ChatContext';
 
 function useGlobalSwipeBack() {
   useEffect(() => {
@@ -66,22 +67,24 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <AthleteProvider>
-          <PlayerProfileProvider>
-            <AppStateProvider>
-              <ErrorBoundary
-                onError={(err, errorInfo) => {
-                  console.error('Root level error caught:', err, errorInfo);
-                  setError(err);
-                }}
-                fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
-              >
-                <PageVisitsTracker />
-                <AppRoutes />
-              </ErrorBoundary>
-            </AppStateProvider>
-          </PlayerProfileProvider>
-        </AthleteProvider>
+        <ChatProvider>
+          <AthleteProvider>
+            <PlayerProfileProvider>
+              <AppStateProvider>
+                <ErrorBoundary
+                  onError={(err, errorInfo) => {
+                    console.error("Root level error caught:", err, errorInfo);
+                    setError(err);
+                  }}
+                  fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
+                >
+                  <PageVisitsTracker />
+                  <AppRoutes />
+                </ErrorBoundary>
+              </AppStateProvider>
+            </PlayerProfileProvider>
+          </AthleteProvider>
+        </ChatProvider>
       </AuthProvider>
     </ThemeProvider>
   );

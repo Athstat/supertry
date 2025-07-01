@@ -23,6 +23,7 @@ export function FixtureRosterList({ roster }: RosterListProps) {
             <h1 className="text-lg font-bold" >Starters</h1>
             {starters.map((starter) => {
                 return <FixtureRosterListItem 
+                    key={starter.athlete_id}
                     player={starter}
                 />
             })}
@@ -31,6 +32,7 @@ export function FixtureRosterList({ roster }: RosterListProps) {
 
             {benchers.map((bencher) => {
                 return <FixtureRosterListItem 
+                    key={bencher.athlete_id}
                     player={bencher}
                 />
             })}
