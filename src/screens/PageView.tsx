@@ -26,17 +26,18 @@ export default function PageView({ children, className }: Props) {
 
 type TopicPageViewProps = Props & {
     title?: string,
-    description?: string
+    description?: string,
+    statsCards?: { title: string, value: string | number }[]
 }
 
-export function TopicPageView({ children, title, description }: TopicPageViewProps) {
-    
+export function TopicPageView({ children, title, description, statsCards, className }: TopicPageViewProps) {
+
     const navigate = useNavigate();
 
     const handleGoBack = () => {
         navigate(-1)
-    }   
-    
+    }
+
     return (
         <div>
             <BlueGradientCard className="rounded-none p-4 min-h-32 items-start justify-center flex flex-col gap-2" >
@@ -50,9 +51,22 @@ export function TopicPageView({ children, title, description }: TopicPageViewPro
                     </span>
                 </button>
                 <p className="text-xl font-extrabold" >{title}</p>
+
+                {statsCards && <div className="grid grid-cols-2 w-full gap-2" >
+                    {statsCards.map((card, index) => {
+                        return (
+                            <div key={index} className="bg-white/10 rounded-lg p-4 w-full">
+                                <div className="text-sm text-primary-100">{card.title}</div>
+                                <div className="text-xl font-bold">
+                                    {card.value}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>}
             </BlueGradientCard>
 
-            <PageView>
+            <PageView className={className} >
                 {children}
             </PageView>
         </div>

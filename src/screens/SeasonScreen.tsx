@@ -5,7 +5,7 @@ import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import SeasonDataProvider from "../components/seasons/SeasonDataProvider";
 import { useAtomValue } from "jotai";
-import { seasonAtom } from "../state/season.atoms";
+import { seasonAtom, seasonTeamsAtoms } from "../state/season.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { TopicPageView } from "./PageView";
 
@@ -35,6 +35,14 @@ export default function SeasonScreen() {
 function SeasonScreenContent() {
 
     const season = useAtomValue(seasonAtom);
+    const teams = useAtomValue(seasonTeamsAtoms);
+
+    const card = [
+        {
+            title: 'Teams',
+            value: teams.length
+        }
+    ]
 
     if (!season) return <ErrorState error="Season was not found" />
 
@@ -42,8 +50,14 @@ function SeasonScreenContent() {
         <TopicPageView
             title={season.name}
             description="Crunching heart stopping stuff"
+            statsCards={card}
+            className="p-4"
         >
-
+            {teams.map((t, index) => {
+                return <div key={index} >
+                    {t.athstat_name}
+                </div>
+            })}
         </TopicPageView>
     )
 }

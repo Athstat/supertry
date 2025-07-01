@@ -79,9 +79,25 @@ export type ISeason = {
     start_date: Date,
     end_date: Date,
     games_supported: boolean,
-    hidden: boolean,
-    data_source: string,
+    hidden?: boolean,
+    data_source?: string,
     competition_id: string,
     source_id: number,
     web_supported: boolean
+}
+
+export type ITeam = {
+    athstat_id: string,
+    source_id: string,
+    athstat_name: string,
+    data_source: string,
+    source_abbreviation?: string,
+    athstat_abbreviation?: string,
+    possible_names?: string,
+    sport_id: string,
+    organization_id: string,
+    hidden: boolean,
+    on_dark_image_url?: string | null,
+    on_light_image_url?: string | null,
+    image_url?: string
 }

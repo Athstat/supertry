@@ -1,10 +1,10 @@
 /** Seasons Service */
 
-import { ISeason } from "../types/games";
+import { ISeason, ITeam } from "../types/games";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger";
 
-export async function getAllSupportedSeasons() : Promise<ISeason[]> {
+export async function getAllSupportedSeasons(): Promise<ISeason[]> {
     try {
 
         const uri = getUri(`/api/v1/entities/seasons`);
@@ -23,7 +23,7 @@ export async function getAllSupportedSeasons() : Promise<ISeason[]> {
     return []
 }
 
-export async function getSeasonsById(seasonId: string) : Promise<ISeason | undefined> {
+export async function getSeasonsById(seasonId: string): Promise<ISeason | undefined> {
     try {
 
         const uri = getUri(`/api/v1/entities/seasons/${seasonId}`);
@@ -40,4 +40,24 @@ export async function getSeasonsById(seasonId: string) : Promise<ISeason | undef
     }
 
     return undefined
+}
+
+
+export async function getSeasonTeams(seasonId: string): Promise<ITeam[]> {
+    try {
+
+        const uri = getUri(`/api/v1/entities/seasons/${seasonId}/teams`);
+        const res = await fetch(uri, {
+            headers: getAuthHeader()
+        });
+
+        if (res.ok) {
+            return (await res.json()) as ITeam[]
+        }
+
+    } catch (error) {
+        logger.error('Error fetching season ', error);
+    }
+
+    return []
 }
