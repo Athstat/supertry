@@ -9,7 +9,11 @@ import NoContentCard from "../components/shared/NoContentMessage";
 /** Renders Competition Screen */
 export default function CompetitionsScreen() {
 
-    const {data: seasons, isLoading} = useSWR('seasons', () => getAllSupportedSeasons());
+    let { data: seasons, isLoading } = useSWR('seasons', () => getAllSupportedSeasons());
+
+    if (isLoading) return <LoadingState />
+
+    seasons = seasons ?? [];
 
     return (
         <PageView className="p-4 flex flex-col gap-4" >
@@ -18,25 +22,25 @@ export default function CompetitionsScreen() {
                 <p className="text-xl font-bold" >Competitions</p>
             </div>
 
-            {isLoading && <LoadingState />}
-            {seasons && !isLoading && (
+            {seasons && (
                 <div className="flex flex-col gap-2" >
                     {seasons.map((s, index) => {
-                        return <SeasonCard 
+                        return <SeasonCard
                             season={s}
                             key={index}
                         />
-                    } )}
+                    })}
                 </div>
             )}
 
-            {(!seasons || seasons?.length === 0) && !isLoading && (
+            {seasons.length === 0 && (
                 <div>
-                    <NoContentCard 
+                    <NoContentCard
                         message="No competitions were found"
                     />
                 </div>
             )}
+
         </PageView>
     )
 }

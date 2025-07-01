@@ -36,6 +36,7 @@ import RouteErrorBoundary from './components/RouteErrorBoundary';
 import SbrFixtureScreen from './screens/SbrFixtureScreen';
 import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
+import SeasonScreen from './screens/SeasonScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -365,6 +366,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <CompetitionsScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/seasons/:seasonId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <SeasonScreen />
             </Layout>
           </ProtectedRoute>
         }

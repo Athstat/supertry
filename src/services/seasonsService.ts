@@ -22,3 +22,22 @@ export async function getAllSupportedSeasons() : Promise<ISeason[]> {
 
     return []
 }
+
+export async function getSeasonsById(seasonId: string) : Promise<ISeason | undefined> {
+    try {
+
+        const uri = getUri(`/api/v1/entities/seasons/${seasonId}`);
+        const res = await fetch(uri, {
+            headers: getAuthHeader()
+        });
+
+        if (res.ok) {
+            return (await res.json()) as ISeason
+        }
+
+    } catch (error) {
+        logger.error('Error fetching season ', error);
+    }
+
+    return undefined
+}
