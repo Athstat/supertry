@@ -1,8 +1,6 @@
 import {
   X,
   Calendar,
-  Users,
-  Shield,
   Trophy,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
