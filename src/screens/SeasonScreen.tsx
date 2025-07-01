@@ -5,7 +5,7 @@ import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
 import SeasonDataProvider from "../components/seasons/SeasonDataProvider";
 import { useAtomValue } from "jotai";
-import { seasonAtom, seasonTeamsAtoms } from "../state/season.atoms";
+import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms } from "../state/season.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { TopicPageView } from "./PageView";
 
@@ -19,7 +19,10 @@ export default function SeasonScreen() {
 
     if (!season) return <ErrorState error="Season was not found" />
 
-    const atoms = [seasonAtom]
+    const atoms = [
+        seasonAtom, seasonTeamsAtoms,
+        seasonFixtutesAtoms, seasonAthletesAtoms
+    ]
 
     return (
         <ScopeProvider atoms={atoms} >

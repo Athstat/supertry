@@ -31,7 +31,7 @@ type TopicPageViewProps = Props & {
     statsCards?: { title: string, value: string | number }[]
 }
 
-export function TopicPageView({ children, title, description, statsCards, className }: TopicPageViewProps) {
+export function TopicPageView({ children, title, statsCards, className }: TopicPageViewProps) {
 
     const navigate = useNavigate();
 
@@ -64,7 +64,7 @@ export function TopicPageView({ children, title, description, statsCards, classN
                             />
                         )
                     })}
-                    
+
                 </div>}
             </BlueGradientCard>
 

@@ -1,9 +1,9 @@
 import { useSetAtom } from 'jotai'
 import { ISeason } from '../../types/games'
-import { seasonAtom, seasonTeamsAtoms } from '../../state/season.atoms'
+import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms } from '../../state/season.atoms'
 import { ReactNode, useEffect } from 'react'
 import useSWR from 'swr'
-import { getSeasonTeams } from '../../services/seasonsService'
+import { getSeasonAthletes, getSeasonFixtures, getSeasonTeams } from '../../services/seasonsService'
 import { LoadingState } from '../ui/LoadingState'
 
 type Props = {
@@ -15,17 +15,23 @@ type Props = {
 export default function SeasonDataProvider({season, children}: Props) {
 
     const setSeason = useSetAtom(seasonAtom);
-    const setSeasonTeams = useSetAtom(seasonTeamsAtoms)
+    const setSeasonTeams = useSetAtom(seasonTeamsAtoms);
+    const setSeasonFixtures = useSetAtom(seasonFixtutesAtoms);
+    const setSeasonAthletes = useSetAtom(seasonAthletesAtoms);
 
     const seasonTeamsKey = `seasons-teams/${season.id}`;
     const {data: teams, isLoading: loadingTeams} = useSWR(seasonTeamsKey, () => getSeasonTeams(season.id));
+    const {data: fixtures, isLoading: loadingFixtures} = useSWR(seasonTeamsKey, () => getSeasonFixtures(season.id));
+    const {data: athletes, isLoading: loadingAthletes} = useSWR(seasonTeamsKey, () => getSeasonAthletes(season.id));
 
-    const isLoading = loadingTeams;
+    const isLoading = loadingTeams || loadingAthletes || loadingFixtures;
 
     useEffect(() => {
         if (season) setSeason(season);
         if (teams) setSeasonTeams(teams);
-    }, [season]);
+        if (fixtures) setSeasonFixtures(fixtures);
+        if (athletes) setSeasonAthletes
+    }, [season, teams, athletes, fixtures]);
 
     if (isLoading) return <LoadingState />
 
