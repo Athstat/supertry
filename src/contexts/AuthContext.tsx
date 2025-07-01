@@ -47,10 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Check if we have authentication status from the mobile app
       if (window.scrummyAuthStatus && window.scrummyAuthStatus.isAuthenticated) {
-        console.log(
-          'AuthContext: Found authentication status from mobile app:',
-          window.scrummyAuthStatus
-        );
+        // console.log(
+        //   'AuthContext: Found authentication status from mobile app:',
+        //   window.scrummyAuthStatus
+        // );
 
         const { tokens, userData } = window.scrummyAuthStatus;
 
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Set up the listener for when mobile app provides auth status
     window.onScrummyAuthStatusReady = async status => {
-      console.log('AuthContext: Received auth status from mobile app:', status);
+      //console.log('AuthContext: Received auth status from mobile app:', status);
 
       if (status && status.isAuthenticated) {
         const { tokens, userData } = status;

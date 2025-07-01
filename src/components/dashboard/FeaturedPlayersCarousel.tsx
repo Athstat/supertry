@@ -110,7 +110,7 @@ const FeaturedPlayersCarousel = () => {
           {/* Player cards carousel */}
           <div className="flex space-x-3 overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
             {players.slice(0, 5).map(player => (
-              <div key={player.id} className="pl-1 flex-shrink-0">
+              <div key={player.tracking_id} className="pl-1 flex-shrink-0">
                 <PlayerGameCard
                   player={player}
                   onClick={() => handlePlayerClick(player)}
