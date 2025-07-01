@@ -1,0 +1,24 @@
+/** Seasons Service */
+
+import { ISeason } from "../types/games";
+import { getAuthHeader, getUri } from "../utils/backendUtils";
+import { logger } from "./logger";
+
+export async function getAllSupportedSeasons() : Promise<ISeason[]> {
+    try {
+
+        const uri = getUri(`/api/v1/entities/seasons`);
+        const res = await fetch(uri, {
+            headers: getAuthHeader()
+        });
+
+        if (res.ok) {
+            return (await res.json()) as ISeason[]
+        }
+
+    } catch (error) {
+        logger.error('Error fetching season ', error);
+    }
+
+    return []
+}

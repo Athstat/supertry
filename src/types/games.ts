@@ -71,4 +71,17 @@ export type IRosterItem = {
     available?: boolean,
     team_image_url?: string,
     team_name?: string
-  }
+}
+
+export type ISeason = {
+    id: string,
+    name: string,
+    start_date: Date,
+    end_date: Date,
+    games_supported: boolean,
+    hidden: boolean,
+    data_source: string,
+    competition_id: string,
+    source_id: number,
+    web_supported: boolean
+}
