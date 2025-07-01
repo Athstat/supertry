@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 import BlueGradientCard from "../components/shared/BlueGradientCard"
 import { useNavigate } from "react-router-dom"
 import { ChevronLeft } from "lucide-react"
+import TransparentStatCard from "../components/shared/TransparentStatCard"
 
 type Props = {
     children?: ReactNode,
@@ -53,16 +54,17 @@ export function TopicPageView({ children, title, description, statsCards, classN
                 <p className="text-xl font-extrabold" >{title}</p>
 
                 {statsCards && <div className="grid grid-cols-2 w-full gap-2" >
+                    
                     {statsCards.map((card, index) => {
                         return (
-                            <div key={index} className="bg-white/10 rounded-lg p-4 w-full">
-                                <div className="text-sm text-primary-100">{card.title}</div>
-                                <div className="text-xl font-bold">
-                                    {card.value}
-                                </div>
-                            </div>
+                            <TransparentStatCard 
+                                label={card.title}
+                                value={card.value}
+                                key={index}
+                            />
                         )
                     })}
+                    
                 </div>}
             </BlueGradientCard>
 
