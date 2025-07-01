@@ -27,13 +27,6 @@ const MyWeekPanel = () => {
       activeLeague ? leagueService.fetchParticipatingTeams(activeLeague.id) : Promise.resolve([])
   );
 
-  // Debug output
-  console.log('MyWeekPanel debug:');
-  console.log('user.id:', user?.id);
-  console.log('leagues:', leagues);
-  console.log('activeLeague:', activeLeague);
-  console.log('leagueTeams:', leagueTeams);
-
   if (isLoadingLeagues || isLoadingTeams) {
     return <LoadingState />;
   }

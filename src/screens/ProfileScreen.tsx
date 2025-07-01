@@ -33,10 +33,10 @@ export function ProfileScreen() {
       try {
         const info = await authService.getUserInfo();
         if (!info) return;
-        console.log('[ProfileScreen] User info:', info);
+        //console.log('[ProfileScreen] User info:', info);
         setIsGuestAccount(authService.isGuestAccount());
         const user = await authService.getUserFromDB(info.id);
-        console.log('[ProfileScreen] User:', user);
+        //console.log('[ProfileScreen] User:', user);
         setUserInfo(user);
       } catch (error) {
         console.error('[ProfileScreen] Error fetching user:', error);
@@ -44,22 +44,19 @@ export function ProfileScreen() {
         setIsLoading(false);
       }
     };
-    console.log('[ProfileScreen] Fetching user from DB');
+    //console.log('[ProfileScreen] Fetching user from DB');
     fetchUserFromDB();
   }, []);
 
   const handleLogout = async () => {
+    console.log('[ProfileScreen] Logging out');
     setIsLoggingOut(true);
     try {
       await logout();
-      // For guest accounts, navigate to welcome screen with signin/create account options
-      if (isGuestAccount) {
-        navigate('/auth-choice');
-      } else {
-        navigate('/auth-choice');
-      }
+      // Don't navigate - ProtectedRoute will automatically redirect when isAuthenticated changes
     } catch (error) {
       console.error('Error logging out:', error);
+    } finally {
       setIsLoggingOut(false);
     }
   };

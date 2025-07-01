@@ -2,12 +2,15 @@
  * ScrummyBridge utility functions
  * Provides helper functions for working with the ScrummyBridge
  */
-import { BridgeUserData } from "../types/auth";
-import { authService } from "../services/authService";
+import { BridgeUserData } from '../types/auth';
+import { authService } from '../services/authService';
 
 // Type declaration for the ScrummyBridge
 declare global {
   interface Window {
+    ReactNativeWebView?: {
+      postMessage(message: string): void;
+    };
     ScrummyBridge?: {
       requestPushPermission(userData?: any): Promise<{
         granted: boolean;
@@ -28,6 +31,19 @@ declare global {
         };
       }>;
       getDeviceId(): Promise<string>;
+      initializeAuth(): Promise<{
+        isAuthenticated: boolean;
+        tokens?: {
+          accessToken: string;
+          refreshToken: string;
+        };
+        userData?: {
+          name?: string;
+          email?: string;
+          user_id?: string;
+          external_id?: string;
+        };
+      }>;
     };
     // Also support lowercase version (as injected by mobile app)
     scrummyBridge?: {
@@ -50,6 +66,19 @@ declare global {
         };
       }>;
       getDeviceId(): Promise<string>;
+      initializeAuth(): Promise<{
+        isAuthenticated: boolean;
+        tokens?: {
+          accessToken: string;
+          refreshToken: string;
+        };
+        userData?: {
+          name?: string;
+          email?: string;
+          user_id?: string;
+          external_id?: string;
+        };
+      }>;
     };
   }
 }
@@ -58,7 +87,7 @@ declare global {
  * Check if the ScrummyBridge is available
  */
 export function isBridgeAvailable(): boolean {
-  return typeof window !== "undefined" && !!window.ScrummyBridge;
+  return typeof window !== 'undefined' && !!(window.ScrummyBridge || window.scrummyBridge);
 }
 
 /**
@@ -67,14 +96,14 @@ export function isBridgeAvailable(): boolean {
  * @param email Optional user email to associate with push notifications
  */
 export async function requestPushPermission(
-  userId: string, 
+  userId: string,
   email?: string
 ): Promise<{
   granted: boolean;
   onesignal_id?: string;
 }> {
   if (!isBridgeAvailable()) {
-    console.error("ScrummyBridge not available");
+    console.error('ScrummyBridge not available');
     return { granted: false };
   }
 
@@ -82,26 +111,34 @@ export async function requestPushPermission(
     // Create user data object to send to the native app
     const userData = {
       user_id: userId,
-      email: email
+      email: email,
     };
-    
+
     // Request push permission with user data
-    const result = await window.ScrummyBridge!.requestPushPermission(userData);
-    
+    const bridge = getBridge();
+    const result = await bridge!.requestPushPermission(userData);
+
     if (result.granted && result.onesignal_id) {
-      console.log("Push notifications enabled, OneSignal ID:", result.onesignal_id);
-      
+      console.log('Push notifications enabled, OneSignal ID:', result.onesignal_id);
+
       // Store OneSignal ID in localStorage for future reference
-      localStorage.setItem("onesignal_id", result.onesignal_id);
+      localStorage.setItem('onesignal_id', result.onesignal_id);
       return result;
     } else {
-      console.log("Push notifications not enabled");
+      console.log('Push notifications not enabled');
       return { granted: false };
     }
   } catch (error) {
-    console.error("Error requesting push permissions:", error);
+    console.error('Error requesting push permissions:', error);
     return { granted: false };
   }
+}
+
+/**
+ * Get the available bridge object (either uppercase or lowercase)
+ */
+function getBridge() {
+  return window.ScrummyBridge || window.scrummyBridge;
 }
 
 /**
@@ -116,10 +153,11 @@ export async function loginWithBridge(
   }
 
   try {
-    const result = await window.ScrummyBridge!.login(tokens, userData);
+    const bridge = getBridge();
+    const result = await bridge!.login(tokens, userData);
     return result.success;
   } catch (error) {
-    console.error("Error logging in with bridge:", error);
+    console.error('Error logging in with bridge:', error);
     return false;
   }
 }
@@ -133,10 +171,11 @@ export async function logoutFromBridge(): Promise<boolean> {
   }
 
   try {
-    const result = await window.ScrummyBridge!.logout();
+    const bridge = getBridge();
+    const result = await bridge!.logout();
     return result.success;
   } catch (error) {
-    console.error("Error logging out from bridge:", error);
+    console.error('Error logging out from bridge:', error);
     return false;
   }
 }
@@ -158,9 +197,10 @@ export async function getAuthStatus(): Promise<{
   }
 
   try {
-    return await window.ScrummyBridge!.getAuthStatus();
+    const bridge = getBridge();
+    return await bridge!.getAuthStatus();
   } catch (error) {
-    console.error("Error getting auth status:", error);
+    console.error('Error getting auth status:', error);
     return { isAuthenticated: false };
   }
 }
@@ -169,8 +209,8 @@ export async function getAuthStatus(): Promise<{
  * Listen for messages from the bridge
  * @returns A cleanup function to remove the event listener
  */
-export function listenForBridgeMessages(callback: (message: any) => void): (() => void) {
-  if (typeof window === "undefined") {
+export function listenForBridgeMessages(callback: (message: any) => void): () => void {
+  if (typeof window === 'undefined') {
     // Return a no-op cleanup function
     return () => {};
   }
@@ -184,11 +224,11 @@ export function listenForBridgeMessages(callback: (message: any) => void): (() =
     }
   };
 
-  window.addEventListener("message", handler);
+  window.addEventListener('message', handler);
 
   // Return a cleanup function
   return () => {
-    window.removeEventListener("message", handler);
+    window.removeEventListener('message', handler);
   };
 }
 
@@ -210,21 +250,20 @@ export function createBridgeUserData(
   const userData: BridgeUserData = {
     name,
     email,
-    user_id: userId || "unknown" // Ensure we have a non-empty string
+    user_id: userId || 'unknown', // Ensure we have a non-empty string
   };
 
   // Only add the onesignal_id property if it's a non-null, non-empty string
-  if (oneSignalId && oneSignalId.trim() !== "") {
+  if (oneSignalId && oneSignalId.trim() !== '') {
     userData.onesignal_id = oneSignalId;
   }
 
   return userData;
 }
 
-
 /**
  * Simple function to request push notification permissions
- * 
+ *
  * This simplified implementation follows best practices:
  * 1. Check for existing OneSignal ID in localStorage first
  * 2. Get user info securely from the auth service
@@ -235,35 +274,32 @@ export function createBridgeUserData(
 export async function requestPushPermissions(): Promise<boolean> {
   try {
     // Check if we already have a OneSignal ID
-    const existingOneSignalId = localStorage.getItem("onesignal_id");
+    const existingOneSignalId = localStorage.getItem('onesignal_id');
     if (existingOneSignalId) {
-      console.log("Already have OneSignal ID:", existingOneSignalId);
+      console.log('Already have OneSignal ID:', existingOneSignalId);
       return true; // Already have permissions
     }
-    
+
     // Get current user info
     const userInfo = authService.getUserInfo();
     if (!userInfo || !userInfo.id) {
-      console.error("User info not available");
+      console.error('User info not available');
       return false;
     }
-    
+
     // Request push permissions with user ID and email
     console.log(`Requesting push permissions for user ${userInfo.id}`);
-    const result = await requestPushPermission(
-      userInfo.id,
-      userInfo.email
-    );
-    
+    const result = await requestPushPermission(userInfo.id, userInfo.email);
+
     if (result.granted) {
       console.log(`Push permissions granted with OneSignal ID: ${result.onesignal_id}`);
       return true;
     } else {
-      console.log("Push permissions not granted");
+      console.log('Push permissions not granted');
       return false;
     }
   } catch (error) {
-    console.error("Error requesting push permissions:", error);
+    console.error('Error requesting push permissions:', error);
     return false;
   }
 }
@@ -273,28 +309,31 @@ export async function requestPushPermissions(): Promise<boolean> {
  * @param userId The user's Keycloak ID
  * @param email The user's email address
  */
-export async function requestPushPermissionsWithUserData(userId: string, email: string): Promise<boolean> {
+export async function requestPushPermissionsWithUserData(
+  userId: string,
+  email: string
+): Promise<boolean> {
   try {
     // Check if we already have a OneSignal ID
-    const existingOneSignalId = localStorage.getItem("onesignal_id");
+    const existingOneSignalId = localStorage.getItem('onesignal_id');
     if (existingOneSignalId) {
-      console.log("Already have OneSignal ID:", existingOneSignalId);
+      console.log('Already have OneSignal ID:', existingOneSignalId);
       return true; // Already have permissions
     }
-    
+
     // Request push permissions with explicit user data
     console.log(`Requesting push permissions for user ${userId}`);
     const result = await requestPushPermission(userId, email);
-    
+
     if (result.granted) {
       console.log(`Push permissions granted with OneSignal ID: ${result.onesignal_id}`);
       return true;
     } else {
-      console.log("Push permissions not granted");
+      console.log('Push permissions not granted');
       return false;
     }
   } catch (error) {
-    console.error("Error requesting push permissions:", error);
+    console.error('Error requesting push permissions:', error);
     return false;
   }
 }
@@ -314,10 +353,10 @@ export function requestPushPermissionsAfterLogin(): void {
     try {
       const success = await requestPushPermissions();
       if (success) {
-        console.log("Push permissions setup completed after login");
+        console.log('Push permissions setup completed after login');
       }
     } catch (error) {
-      console.error("Error setting up push permissions after login:", error);
+      console.error('Error setting up push permissions after login:', error);
     }
   }, 1000); // Wait 1 second after login to request permissions
 }
@@ -339,10 +378,25 @@ export function requestPushPermissionsAfterSignup(userId: string, email: string)
     try {
       const success = await requestPushPermissionsWithUserData(userId, email);
       if (success) {
-        console.log("Push permissions setup completed after signup");
+        console.log('Push permissions setup completed after signup');
       }
     } catch (error) {
-      console.error("Error setting up push permissions after signup:", error);
+      console.error('Error setting up push permissions after signup:', error);
     }
   }, 1000); // Wait 1 second after signup to request permissions
+}
+
+/**
+ * Request navigation in the mobile app WebView
+ * @param url The URL to navigate to
+ */
+export function requestNavigation(url: string): void {
+  if (typeof window !== 'undefined' && window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        type: 'NAVIGATE',
+        payload: { url },
+      })
+    );
+  }
 }
