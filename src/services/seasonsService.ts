@@ -55,7 +55,8 @@ export const seasonService = {
             });
             
             if (res.ok) {
-                return (await res.json()) as ITeam[]
+                const arr = (await res.json()) as ITeam[];
+                return arr.filter(t => t.athstat_name !== 'TBC')
             }
             
         } catch (error) {

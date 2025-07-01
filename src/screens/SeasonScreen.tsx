@@ -10,7 +10,6 @@ import { TopicPageView } from "./PageView";
 import TeamCard from "../components/teams/TeamCard";
 import { Calendar, Shield, Users } from "lucide-react";
 import { PlayerGameCard } from "../components/player/PlayerGameCard";
-import FixtureCard from "../components/fixtures/FixtureCard";
 import { seasonService } from "../services/seasonsService";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 
@@ -51,6 +50,11 @@ function SeasonScreenContent() {
         {
             title: 'Teams',
             value: teams.length
+        },
+
+        {
+            title: 'Fixutes',
+            value: fixtures.length
         }
     ]
 
