@@ -3,11 +3,11 @@ import useSWR from "swr";
 import { getSeasonsById } from "../services/seasonsService";
 import { LoadingState } from "../components/ui/LoadingState";
 import { ErrorState } from "../components/ui/ErrorState";
-import PageView from "./PageView";
 import SeasonDataProvider from "../components/seasons/SeasonDataProvider";
 import { useAtomValue } from "jotai";
 import { seasonAtom } from "../state/season.atoms";
 import { ScopeProvider } from "jotai-scope";
+import { TopicPageView } from "./PageView";
 
 export default function SeasonScreen() {
 
@@ -39,8 +39,11 @@ function SeasonScreenContent() {
     if (!season) return <ErrorState error="Season was not found" />
 
     return (
-        <div>
+        <TopicPageView
+            title={season.name}
+            description="Crunching heart stopping stuff"
+        >
 
-        </div>
+        </TopicPageView>
     )
 }
