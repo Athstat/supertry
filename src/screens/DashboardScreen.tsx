@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ActiveLeaguesSection, HeroSection } from "../components/dashboard";
-import { leagueService } from "../services/leagueService";
-import { IFantasyLeague } from "../types/fantasyLeague";
-import PageView from "./PageView";
-import { Home } from "lucide-react";
-import DiscoverPlayersCard from "../components/dashboard/DiscoverPlayersCard";
-import UpcomingFixturesSection from "../components/dashboard/UpcomingFixturesSection";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ActiveLeaguesSection, HeroSection } from '../components/dashboard';
+import { leagueService } from '../services/leagueService';
+import { IFantasyLeague } from '../types/fantasyLeague';
+import PageView from './PageView';
+import { Home } from 'lucide-react';
+import DiscoverPlayersCard from '../components/dashboard/DiscoverPlayersCard';
+import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -25,12 +25,11 @@ export function DashboardScreen() {
       const allLeagues = await leagueService.getAllLeagues();
 
       // Filter leagues based on is_open status (same as JoinLeagueScreen)
-      const availableLeagues = allLeagues;
+      const availableLeagues = allLeagues.filter(league => league.is_open === true);
 
       setLeagues(availableLeagues);
-
     } catch (err) {
-      console.error("Failed to fetch leagues:", err);
+      console.error('Failed to fetch leagues:', err);
     } finally {
       setIsLoadingLeagues(false);
     }
@@ -44,20 +43,14 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-
-
-      <div className="flex flex-row items-center gap-2" >
+      <div className="flex flex-row items-center gap-2">
         <Home />
-        <h1 className="font-bold text-2xl" >Home</h1>
+        <h1 className="font-bold text-2xl">Home</h1>
       </div>
 
-      <HeroSection
-        availableLeagues={leagues}
-        onViewLeague={handleViewLeague}
-      />
-      
-      <DiscoverPlayersCard />
+      <HeroSection availableLeagues={leagues} onViewLeague={handleViewLeague} />
 
+      <DiscoverPlayersCard />
 
       <ActiveLeaguesSection
         leagues={leagues}
@@ -65,9 +58,7 @@ export function DashboardScreen() {
         onViewLeague={handleViewLeague}
       />
 
-
       <UpcomingFixturesSection />
-
     </PageView>
   );
 }

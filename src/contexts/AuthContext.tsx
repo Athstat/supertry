@@ -1,6 +1,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
-import { requestPushPermissionsAfterLogin, logoutFromBridge } from '../utils/bridgeUtils';
+import {
+  requestPushPermissionsAfterLogin,
+  logoutFromBridge,
+  loginWithBridge,
+} from '../utils/bridgeUtils';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -27,7 +31,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!authenticated && localStorage.getItem('refresh_token')) {
         const refreshed = await authService.refreshToken();
         setIsAuthenticated(refreshed);
+
+        // If refresh was successful, sync with mobile app
+        if (refreshed) {
+          const userInfo = authService.getUserInfo();
+          const accessToken = localStorage.getItem('access_token');
+          const refreshToken = localStorage.getItem('refresh_token');
+
+          if (userInfo && accessToken && refreshToken) {
+            const tokens = { accessToken, refreshToken };
+            const userData = {
+              name: `${userInfo.firstName} ${userInfo.lastName}`.trim() || userInfo.username,
+              email: userInfo.email,
+              user_id: userInfo.id,
+            };
+
+            loginWithBridge(tokens, userData).catch(error => {
+              console.error('Failed to sync auth status with mobile app:', error);
+            });
+          }
+        }
+
         return refreshed;
+      }
+
+      // If already authenticated, sync with mobile app
+      if (authenticated) {
+        const userInfo = authService.getUserInfo();
+        const accessToken = localStorage.getItem('access_token');
+        const refreshToken = localStorage.getItem('refresh_token');
+
+        if (userInfo && accessToken && refreshToken) {
+          const tokens = { accessToken, refreshToken };
+          const userData = {
+            name: `${userInfo.firstName} ${userInfo.lastName}`.trim() || userInfo.username,
+            email: userInfo.email,
+            user_id: userInfo.id,
+          };
+
+          loginWithBridge(tokens, userData).catch(error => {
+            console.error('Failed to sync existing auth status with mobile app:', error);
+          });
+        }
       }
 
       setIsAuthenticated(authenticated);
@@ -71,6 +116,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const refreshed = await authService.refreshToken();
       console.log('AuthContext: Session refresh result:', refreshed);
       setIsAuthenticated(refreshed);
+
+      // If refresh was successful, update the mobile app auth status
+      if (refreshed) {
+        const userInfo = authService.getUserInfo();
+        const accessToken = localStorage.getItem('access_token');
+        const refreshToken = localStorage.getItem('refresh_token');
+
+        if (userInfo && accessToken && refreshToken) {
+          const tokens = { accessToken, refreshToken };
+          const userData = {
+            name: `${userInfo.firstName} ${userInfo.lastName}`.trim() || userInfo.username,
+            email: userInfo.email,
+            user_id: userInfo.id,
+          };
+
+          // Update mobile app auth status (non-blocking)
+          loginWithBridge(tokens, userData).catch(error => {
+            console.error('Failed to sync refreshed session with mobile app:', error);
+          });
+        }
+      }
+
       return refreshed;
     } catch (error) {
       console.error('AuthContext: Session refresh failed:', error);
@@ -83,6 +150,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await authService.login(username, password);
       setIsAuthenticated(true);
+
+      // Get user info for the bridge
+      const userInfo = authService.getUserInfo();
+      if (userInfo) {
+        // Notify the mobile app about successful login
+        const tokens = {
+          accessToken: result.access_token,
+          refreshToken: result.refresh_token,
+        };
+        const userData = {
+          name: `${userInfo.firstName} ${userInfo.lastName}`.trim() || userInfo.username,
+          email: userInfo.email,
+          user_id: userInfo.id,
+        };
+
+        // Send login data to the bridge (non-blocking)
+        loginWithBridge(tokens, userData).catch(error => {
+          console.error('Failed to sync login with mobile app:', error);
+        });
+      }
 
       // Request push permissions after successful login (non-blocking)
       requestPushPermissionsAfterLogin();
