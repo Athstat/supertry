@@ -10,7 +10,6 @@ import { useQueryState } from "../../hooks/useQueryState";
 import NoContentCard from "../shared/NoContentMessage";
 import MatchSeasonFilterBar from "./MatcheSeasonFilterBar";
 
-
 export default function ProMatchCenter() {
 
     const key = 'pro-fixtures';

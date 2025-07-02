@@ -121,3 +121,9 @@ export type ITeamAction = {
   action: ITeamActionName,
   action_count?: number
 }
+
+
+export type SeasonFilterBarItem = {
+  name: string,
+  id: string
+}

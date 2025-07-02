@@ -1,8 +1,9 @@
 import { twMerge } from 'tailwind-merge'
 import RoundedCard from '../shared/RoundedCard'
+import { SeasonFilterBarItem } from '../../types/games'
 
 type Props = {
-    seasons: {name: string, id: string}[],
+    seasons: SeasonFilterBarItem[],
     onChange?: (newVal: string) => void,
     value?: string
 }
