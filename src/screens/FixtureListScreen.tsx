@@ -23,9 +23,9 @@ import FixturesListScreenActionBar from '../components/fixtures/fixtures_list/Fi
 import { FileX2 } from 'lucide-react';
 
 const competitionIds = [
-  // ERPC_COMPETITION_ID,
-  // INVESTEC_CHAMPIONSHIP_CUP,
-  // URC_COMPETIION_ID,
+  ERPC_COMPETITION_ID,
+  INVESTEC_CHAMPIONSHIP_CUP,
+  URC_COMPETIION_ID,
   'test-1',
 ];
 
