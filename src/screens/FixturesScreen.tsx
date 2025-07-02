@@ -50,7 +50,7 @@ export default function FixturesScreen() {
   ];
 
   return (
-    <PageView className="dark:text-white p-2 md:p-6 flex flex-col gap-4">
+    <PageView className="dark:text-white p-4 md:p-6 flex flex-col gap-4">
 
       <div className='flex flex-row justify-between' >
         <div className='flex flex-row items-center gap-2' >

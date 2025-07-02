@@ -9,6 +9,7 @@ import { ArrowRight } from "lucide-react";
 import RoundedCard from "../shared/RoundedCard";
 import { useQueryState } from "../../hooks/useQueryState";
 import { twMerge } from "tailwind-merge";
+import NoContentCard from "../shared/NoContentMessage";
 
 
 export default function ProMatchCenter() {
@@ -33,7 +34,7 @@ export default function ProMatchCenter() {
     });
 
     const filteredFixtures = fixtures.filter((f) => {
-        if (!currCompetiton || currCompetiton === 'all') {return true}
+        if (!currCompetiton || currCompetiton === 'all') { return true }
         return f.league_id === currCompetiton;
     })
 
@@ -48,6 +49,16 @@ export default function ProMatchCenter() {
         return false;
     });
 
+    const upcomingFixtures = filteredFixtures.filter((f) => {
+        const kickoff = f.kickoff_time
+
+        if (kickoff) {
+            const now = subHours(new Date(), 2).valueOf();
+            return now < new Date(kickoff).valueOf();
+        }
+
+        return false;
+    });
 
     return (
         <div className="flex flex-col gap-4" >
@@ -82,7 +93,28 @@ export default function ProMatchCenter() {
 
             <div className="flex flex-col gap-4" >
                 <div className="flex flex-row items-center justify-between" >
-                    <p>Past Fixtures</p>
+                    <p className="font-semibold text-lg" >Upcoming Fixtures</p>
+                    <ArrowRight />
+                </div>
+
+                <div className="flex flex-row items-center gap-3 overflow-x-auto" >
+                    {upcomingFixtures.map((fixture, index) => {
+                        return <FixtureCard
+                            fixture={fixture}
+                            key={index}
+                            showLogos
+                            className="rounded-xl border min-w-96 h-full dark:border-slate-700 flex-1"
+                        />
+                    })}
+                </div>
+
+                {upcomingFixtures.length === 0 && <NoContentCard message="There are no upcoming fixtures" />}
+
+            </div>
+
+            <div className="flex flex-col gap-4" >
+                <div className="flex flex-row items-center justify-between" >
+                    <p className="font-semibold text-lg" >Past Fixtures</p>
                     <ArrowRight />
                 </div>
 
