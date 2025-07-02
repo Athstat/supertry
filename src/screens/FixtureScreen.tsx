@@ -31,9 +31,11 @@ export default function FixtureScreen() {
 
   const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(`fixture/${fixtureId}`, () => gamesService.getGameById(fixtureId));
   const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
+  const { data: teamActions, isLoading: loadingTeamActions } = useSWR(["teamActions", fixtureId], () => gamesService.getGameTeamActions(fixtureId));
+
   const { data: rosters, isLoading: loadingRosters } = useFetch("rosters", fixtureId, gamesService.getGameRostersById);
 
-  const isLoading = loadingFixture || loadingBoxScore || loadingRosters;
+  const isLoading = loadingFixture || loadingBoxScore || loadingRosters || loadingTeamActions;
 
   if (isLoading) return <LoadingState />
 
@@ -44,14 +46,13 @@ export default function FixtureScreen() {
 
   const tabItems: TabViewHeaderItem[] = [
     {
-      label: "Athlete Stats",
-      tabKey: "athletes-stats",
-      disabled: !boxScore || boxScore.length === 0
-    },
-
-    {
       label: "Team Stats",
       tabKey: "team-stats",
+      disabled: !boxScore || boxScore.length === 0
+    },
+    {
+      label: "Athlete Stats",
+      tabKey: "athletes-stats",
       disabled: !boxScore || boxScore.length === 0
     },
 
@@ -131,7 +132,7 @@ export default function FixtureScreen() {
               </TabViewPage>
 
               <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >
-                {boxScore && <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />}
+                {boxScore && teamActions && <FixtureHeadToHeadStats teamActions={teamActions} boxScore={boxScore} fixture={fixture} />}
               </TabViewPage>
 
               <TabViewPage tabKey="rosters" >
