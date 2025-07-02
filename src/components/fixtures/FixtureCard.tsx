@@ -93,7 +93,7 @@ export default function FixtureCard({
       <div
         onClick={toogle}
         className={twMerge(
-          'p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800 dark:bg-slate-800/40 transition-colors',
+          'p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
           className,
         )}
       >
