@@ -1,7 +1,7 @@
 import { Trophy } from "lucide-react";
 import PageView from "./PageView";
 import useSWR from "swr";
-import { getAllSupportedSeasons } from "../services/seasonsService";
+import { seasonService } from "../services/seasonsService";
 import { LoadingState } from "../components/ui/LoadingState";
 import SeasonCard from "../components/seasons/SeasonCard";
 import NoContentCard from "../components/shared/NoContentMessage";
@@ -9,7 +9,7 @@ import NoContentCard from "../components/shared/NoContentMessage";
 /** Renders Competition Screen */
 export default function CompetitionsScreen() {
 
-    let { data: seasons, isLoading } = useSWR('seasons', () => getAllSupportedSeasons());
+    let { data: seasons, isLoading } = useSWR('seasons', () => seasonService.getAllSupportedSeasons());
 
     if (isLoading) return <LoadingState />
 

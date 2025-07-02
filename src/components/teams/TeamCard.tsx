@@ -8,7 +8,7 @@ type Props = {
     team: ITeam
 }
 
-export default function TeamCard({team, className} : Props) {
+export default function ProTeamCard({team, className} : Props) {
   return (
     <RoundedCard className={twMerge(
         "p-4 flex flex-col items-center dark:bg-slate-800/60 justify-center gap-2",
