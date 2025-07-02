@@ -7,12 +7,12 @@ import { useAtomValue } from "jotai";
 import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms } from "../state/season.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { TopicPageView } from "./PageView";
-import ProTeamCard from "../components/teams/TeamCard";
-import { Calendar, Shield, Users } from "lucide-react";
+import { Calendar, Users } from "lucide-react";
 import { PlayerGameCard } from "../components/player/PlayerGameCard";
 import { seasonService } from "../services/seasonsService";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 import SeasonScreenTeamList from "../components/seasons/SeasonScreenTeamList";
+import SeasonScreenAthleteList from "../components/seasons/SeasonScreenAthleteList";
 
 export default function SeasonScreen() {
 
@@ -22,7 +22,7 @@ export default function SeasonScreen() {
 
     if (isLoading) return <LoadingState />
 
-    if (!season) return <ErrorState error="Season was not found" />
+    if (!season) return <ErrorState error="Season was not found hahahahaah" />
 
     const atoms = [
         seasonAtom, seasonTeamsAtoms,
@@ -59,7 +59,7 @@ function SeasonScreenContent() {
         }
     ]
 
-    if (!season) return <ErrorState error="Season was not found" />
+    if (!season) return;
 
     return (
         <TopicPageView
@@ -73,16 +73,9 @@ function SeasonScreenContent() {
                 teams={teams}
             />
 
-            <div className="flex flex-row items-center gap-2" >
-                <Users />
-                <h1 className="text-lg font-bold" >Top Athletes</h1>
-            </div>
-
-            <div className="flex flex-row items-center gap-2 overflow-x-auto" >
-                {athletes.map((a, index) => {
-                    return <PlayerGameCard className="h-[170px] w-[130px]" player={a} key={index} />
-                })}
-            </div>
+            <SeasonScreenAthleteList 
+                athletes={athletes}
+            />
 
             <div className="flex flex-row items-center gap-2" >
                 <Calendar />
