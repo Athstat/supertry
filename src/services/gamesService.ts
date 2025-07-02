@@ -35,11 +35,13 @@ export const gamesService = {
     }
   },
 
-  getGameById: async (gameId: string): Promise<IFullFixture | undefined> => {
-    const uri = getUri(`/api/v1/games/${gameId}`);
-
-    try {
-      const res = await fetch(uri, {});
+    getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {
+        const uri = getUri(`/api/v1/games/${gameId}`);
+        
+        try {
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
 
       return (await res.json()) as IFixture;
     } catch (err) {

@@ -48,38 +48,67 @@ export type IGameVote = {
  */
 
 export type IRosterItem = {
-  player_number: number;
-  is_captain?: boolean;
-  is_substitute: boolean;
-  game_id: string;
-  team_id: string;
-  athlete_id: string;
-  position: string;
-  source_id: string;
-  tracking_id: string;
-  player_name?: string;
-  nick_name?: string;
-  birth_country?: string;
-  date_of_birth?: Date;
-  isactive?: boolean;
-  athstat_firstname?: string;
-  athstat_lastname?: string;
-  athstat_middleinitial?: string;
-  general_comments?: string;
-  age?: number;
-  height?: number;
-  weight?: number;
-  hidden?: boolean;
-  gender?: 'M' | 'F';
-  price?: number;
-  power_rank_rating?: number;
-  position_class?: string;
-  data_source?: string;
-  image_url?: string;
-  nationality?: string;
-  birth_place?: string;
-  form?: string;
-  available?: boolean;
-  team_image_url?: string;
-  team_name?: string;
-};
+    player_number: number,
+    is_captain?: boolean,
+    is_substitute: boolean,
+    game_id: string,
+    team_id: string,
+    athlete_id: string,
+    position: string,
+    source_id: string,
+    tracking_id: string,
+    player_name?: string,
+    nick_name?: string,
+    birth_country?: string,
+    date_of_birth?: Date,
+    isactive?: boolean,
+    athstat_firstname?: string,
+    athstat_lastname?: string,
+    athstat_middleinitial?: string,
+    general_comments?: string,
+    age?: number,
+    height?: number,
+    weight?: number,
+    hidden?: boolean,
+    gender?: "M" | "F",
+    price?: number,
+    power_rank_rating?: number,
+    position_class?: string,
+    data_source?: string,
+    image_url?: string,
+    nationality?: string,
+    birth_place?: string,
+    form?: string,
+    available?: boolean,
+    team_image_url?: string,
+    team_name?: string
+}
+
+export type ISeason = {
+    id: string,
+    name: string,
+    start_date: Date,
+    end_date: Date,
+    games_supported: boolean,
+    hidden?: boolean,
+    data_source?: string,
+    competition_id: string,
+    source_id: number,
+    web_supported: boolean
+}
+
+export type ITeam = {
+    athstat_id: string,
+    source_id: string,
+    athstat_name: string,
+    data_source: string,
+    source_abbreviation?: string,
+    athstat_abbreviation?: string,
+    possible_names?: string,
+    sport_id: string,
+    organization_id: string,
+    hidden: boolean,
+    on_dark_image_url?: string | null,
+    on_light_image_url?: string | null,
+    image_url?: string
+}

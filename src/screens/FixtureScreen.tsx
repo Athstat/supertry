@@ -29,7 +29,7 @@ export default function FixtureScreen() {
 
   if (!fixtureId) return <ErrorState message="Match was not found" />
 
-  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(["games", fixtureId], async ([, gameId]) => await gamesService.getGameById(gameId))
+  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(`fixture/${fixtureId}`, () => gamesService.getGameById(fixtureId));
   const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
   const { data: rosters, isLoading: loadingRosters } = useFetch("rosters", fixtureId, gamesService.getGameRostersById);
 
@@ -37,7 +37,7 @@ export default function FixtureScreen() {
 
   if (isLoading) return <LoadingState />
 
-  if (!fetchedFixture) return <ErrorState message="Failed to load match information" />
+  if (!fetchedFixture) return <ErrorState message="Failed to load match information, so match doesn't exist???" />
 
   const fixture = fetchedFixture as IFixture;
   const { gameKickedOff } = fixtureSumary(fixture);
