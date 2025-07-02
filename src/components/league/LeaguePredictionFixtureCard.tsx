@@ -4,6 +4,9 @@ import { twMerge } from 'tailwind-merge';
 import { format } from 'date-fns';
 import { IFixture } from '../../types/games';
 import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
+import { useGameVotes } from '../../hooks/useGameVotes';
+import { gamesService } from '../../services/gamesService';
+import { mutate } from 'swr';
 
 type Props = {
   fixture: IFixture;
@@ -30,35 +33,38 @@ export default function LeaguePredictionFixtureCard({ fixture }: Props) {
   const homeTeamWon = hasScores && team_score > opposition_score;
   const awayTeamWon = hasScores && team_score < opposition_score;
 
-  // User prediction state
-  const [userVote, setUserVote] = useState<string | null>(null);
+  // Use the real voting hook
+  const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture);
   const [isVoting, setIsVoting] = useState(false);
-
-  // Mock vote data
-  const [homeVotes, setHomeVotes] = useState<string[]>([]);
-  const [awayVotes, setAwayVotes] = useState<string[]>([]);
 
   // Calculate voting percentages
   const totalVotes = homeVotes.length + awayVotes.length;
   const homePerc = totalVotes === 0 ? 0 : Math.round((homeVotes.length / totalVotes) * 100);
   const awayPerc = totalVotes === 0 ? 0 : Math.round((awayVotes.length / totalVotes) * 100);
 
-  const votedHomeTeam = userVote === team_name;
-  const votedAwayTeam = userVote === opposition_team_name;
+  const votedHomeTeam = userVote?.vote_for === 'home_team';
+  const votedAwayTeam = userVote?.vote_for === 'away_team';
   const hasUserVoted = votedHomeTeam || votedAwayTeam;
 
-  const handleVote = (team: string) => {
+  const handleVote = async (voteFor: 'home_team' | 'away_team') => {
     if (hasKickedOff) return;
+
     setIsVoting(true);
-    setTimeout(() => {
-      setUserVote(team);
-      if (team === team_name) {
-        setHomeVotes([...homeVotes, 'user']);
+
+    try {
+      if (!userVote) {
+        await gamesService.postGameVote(fixture.game_id, voteFor);
       } else {
-        setAwayVotes([...awayVotes, 'user']);
+        await gamesService.putGameVote(fixture.game_id, voteFor);
       }
+
+      // Refresh the votes data
+      await mutate(`game-votes-${fixture.game_id}`);
+    } catch (error) {
+      console.error('Error voting:', error);
+    } finally {
       setIsVoting(false);
-    }, 500);
+    }
   };
 
   return (
@@ -104,13 +110,13 @@ export default function LeaguePredictionFixtureCard({ fixture }: Props) {
           <div className="flex flex-col w-full gap-2 items-center text-sm justify-center text-slate-700 dark:text-slate-400">
             <p>Who you got winning?</p>
             <button
-              onClick={() => handleVote(team_name || '')}
+              onClick={() => handleVote('home_team')}
               className="border dark:border-slate-700 w-full px-2 rounded-xl bg-slate-200 py-2 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
             >
               {team_name}
             </button>
             <button
-              onClick={() => handleVote(opposition_team_name || '')}
+              onClick={() => handleVote('away_team')}
               className="border dark:border-slate-700 w-full px-2 rounded-xl bg-slate-200 py-2 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
             >
               {opposition_team_name}
@@ -125,7 +131,7 @@ export default function LeaguePredictionFixtureCard({ fixture }: Props) {
               voteCount={homeVotes.length}
               votePercentage={homePerc}
               title={`${team_name} Win`}
-              onClick={() => handleVote(team_name || '')}
+              onClick={() => handleVote('home_team')}
               isGreen={votedHomeTeam && gameCompleted && homeTeamWon}
               isRed={votedHomeTeam && gameCompleted && awayTeamWon}
               disable={isVoting}
@@ -135,7 +141,7 @@ export default function LeaguePredictionFixtureCard({ fixture }: Props) {
               voteCount={awayVotes.length}
               votePercentage={awayPerc}
               title={`${opposition_team_name} Win`}
-              onClick={() => handleVote(opposition_team_name || '')}
+              onClick={() => handleVote('away_team')}
               isGreen={votedAwayTeam && gameCompleted && awayTeamWon}
               isRed={votedAwayTeam && gameCompleted && homeTeamWon}
               disable={isVoting}

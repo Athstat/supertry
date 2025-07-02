@@ -50,8 +50,7 @@ export function SignInScreen() {
       // Use the login method from AuthContext
       await login(form.email, form.password);
 
-      // If login is successful, redirect to dashboard
-      navigate('/dashboard');
+      // Don't navigate - AuthRoute will automatically redirect when isAuthenticated changes
     } catch (err) {
       // Handle login error
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
@@ -80,8 +79,7 @@ export function SignInScreen() {
       // Set the guest account flag in localStorage if it's not already set
       localStorage.setItem('is_guest_account', 'true');
 
-      // Navigate to dashboard
-      navigate('/dashboard');
+      // Don't navigate - AuthRoute will automatically redirect when isAuthenticated changes
     } catch (err) {
       console.error('Guest login error:', err);
       setError(
