@@ -13,10 +13,18 @@ export default function SbrMatchCenter() {
     }
 
     fixtures = fixtures ?? [];
+    const seasons: string[] = [];
+    fixtures.forEach((f) => {
+        if (f.season && !seasons.includes(f.season)) {
+            seasons.push(f.season);
+        } 
+    }) 
 
     return (
-        <div className='flex flex-col gap-2' >
+        <div className='flex flex-col gap-4' >
             <h1 className='font-bold text-lg' >Sbr Games</h1>
+
+            
 
             <div className='flex flex-col gap-2' >
                 {fixtures.map((fixture, index) => {
