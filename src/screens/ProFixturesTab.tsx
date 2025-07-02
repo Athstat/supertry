@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, FileX2, XIcon } from 'lucide-react';
 import useSWR from 'swr';
 import { IFixture } from '../types/games';
@@ -17,10 +17,16 @@ import {
   filterUpcomingFixtures,
 } from '../utils/fixtureUtils';
 import FixturesListScreenActionBar from '../components/fixtures/fixtures_list/FixtureListScreenActionBar';
-import LeaguePredictionFixtureCard from '../components/league/LeaguePredictionFixtureCard';
+import FixtureCard from '../components/fixtures/FixtureCard';
 import { format } from 'date-fns';
+import { twMerge } from 'tailwind-merge';
 
-const competitionIds = [ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID];
+const competitionIds = [
+  ERPC_COMPETITION_ID,
+  INVESTEC_CHAMPIONSHIP_CUP,
+  URC_COMPETIION_ID,
+  'test-1',
+];
 
 async function fetcher(competitionIds: string[]) {
   let matches: IFixture[] = [];
@@ -43,6 +49,7 @@ export default function ProFixturesTab() {
   const { data, isLoading } = useSWR(competitionIds, fetcher);
   const selectedDateRange = useAtomValue(fixturesDateRangeAtom);
   const [, setSelectedDateRange] = useAtom(fixturesDateRangeAtom);
+  const [activeFilter, setActiveFilter] = useState<'upcoming' | 'past'>('upcoming');
 
   if (isLoading) return <LoadingState message="Loading Fixtures" />;
 
@@ -53,6 +60,9 @@ export default function ProFixturesTab() {
 
   const pastFixtures = filterPastFixtures(fixturesInRange, 30);
   const upcomingFixtures = filterUpcomingFixtures(fixturesInRange);
+
+  // Get fixtures based on active filter
+  const displayFixtures = activeFilter === 'past' ? pastFixtures : upcomingFixtures;
 
   // Group fixtures by day
   const groupFixturesByDay = (fixtures: IFixture[]) => {
@@ -77,28 +87,48 @@ export default function ProFixturesTab() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-row items-center justify-start gap-2">
-        <Calendar className="" />
-        <h1 className="font-bold text-xl lg:text-2xl">Professional Fixtures</h1>
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-start gap-2">
+          <Calendar className="" />
+          <h1 className="font-bold text-xl lg:text-2xl">Professional Fixtures</h1>
+        </div>
+
+        {/* Filter Tabs */}
+        <div className="flex flex-row gap-2">
+          <button
+            onClick={() => setActiveFilter('upcoming')}
+            className={twMerge(
+              'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+              activeFilter === 'upcoming'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            )}
+          >
+            Upcoming
+          </button>
+          <button
+            onClick={() => setActiveFilter('past')}
+            className={twMerge(
+              'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+              activeFilter === 'past'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            )}
+          >
+            Past
+          </button>
+        </div>
       </div>
 
-      {fixturesInRange.length === 0 && (
-        <NoFixturesMessage selectedDateRange={selectedDateRange} onClearFilter={onClearFilter} />
+      {displayFixtures.length === 0 && (
+        <NoFixturesMessage
+          selectedDateRange={selectedDateRange}
+          onClearFilter={onClearFilter}
+          activeFilter={activeFilter}
+        />
       )}
 
-      {pastFixtures.length > 0 && (
-        <>
-          <h2 className="text-lg font-semibold">Past Fixtures</h2>
-          <GroupedFixturesList fixtures={pastFixtures} />
-        </>
-      )}
-
-      {upcomingFixtures.length > 0 && (
-        <>
-          <h2 className="text-lg font-semibold">Upcoming Fixtures</h2>
-          <GroupedFixturesList fixtures={upcomingFixtures} />
-        </>
-      )}
+      {displayFixtures.length > 0 && <GroupedFixturesList fixtures={displayFixtures} />}
 
       <FixturesListScreenActionBar />
     </div>
@@ -118,7 +148,13 @@ function GroupedFixturesList({ fixtures }: { fixtures: IFixture[] }) {
           </div>
           <div className="flex flex-col gap-2">
             {fixturesByDay[dayKey].map((fixture, index) => (
-              <LeaguePredictionFixtureCard fixture={fixture} key={index} />
+              <FixtureCard
+                fixture={fixture}
+                key={index}
+                showLogos={true}
+                showCompetition={true}
+                className="border border-gray-200 dark:border-gray-700 rounded-lg"
+              />
             ))}
           </div>
         </div>
@@ -146,14 +182,16 @@ function GroupedFixturesList({ fixtures }: { fixtures: IFixture[] }) {
 function NoFixturesMessage({
   selectedDateRange,
   onClearFilter,
+  activeFilter,
 }: {
   selectedDateRange: any;
   onClearFilter: () => void;
+  activeFilter?: 'upcoming' | 'past';
 }) {
   return (
     <div className="w-full p-5 mt-10 flex flex-col items-center gap-5 text-slate-700 dark:text-slate-400">
       <FileX2 className="w-20 h-20" />
-      <p>No fixtures were found</p>
+      <p>No {activeFilter} fixtures were found</p>
 
       {selectedDateRange && (
         <button

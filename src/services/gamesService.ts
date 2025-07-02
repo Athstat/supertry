@@ -1,87 +1,130 @@
-import { IFixture, IFullFixture, IRosterItem } from "../types/games";
-import { getAuthHeader, getUri } from "../utils/backendUtils"
-import { logger } from "./logger";
-
+import { IFixture, IFullFixture, IGameVote, IRosterItem } from '../types/games';
+import { getAuthHeader, getUri } from '../utils/backendUtils';
+import { logger } from './logger';
+import { authService } from './authService';
 
 /** Games Service */
 export const gamesService = {
+  getUpcomingGamesByCompetitionId: async (competitionId: string): Promise<IFixture[]> => {
+    const uri = getUri(`/api/v1/entities/games-upcoming/${competitionId}`);
 
-    getUpcomingGamesByCompetitionId: async (competitionId: string) : Promise<IFixture[]> => {
-        const uri = getUri(`/api/v1/entities/games-upcoming/${competitionId}`);
-        
-        try {
-            const res = await fetch(uri, {
-                headers: getAuthHeader()
-            });
+    try {
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
 
-            return await res.json() as IFixture[];
+      return (await res.json()) as IFixture[];
+    } catch (err) {
+      console.log('Error fetching games', err);
+      return [];
+    }
+  },
 
-        } catch (err) {
-            console.log("Error fetching games", err)
-            return [];
-        }
-    },
+  getGamesByCompetitionId: async (competitionId: string): Promise<IFixture[]> => {
+    const uri = getUri(`/api/v1/games/leagues/${competitionId}`);
 
-    getGamesByCompetitionId: async (competitionId: string) : Promise<IFixture[]> => {
-        const uri = getUri(`/api/v1/games/leagues/${competitionId}`);
-        
-        try {
-            const res = await fetch(uri, {
-                headers: getAuthHeader()
-            });
+    try {
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
 
-            return await res.json() as IFixture[];
+      return (await res.json()) as IFixture[];
+    } catch (err) {
+      console.log('Error fetching games', err);
+      return [];
+    }
+  },
 
-        } catch (err) {
-            console.log("Error fetching games", err)
-            return [];
-        }
+  getGameById: async (gameId: string): Promise<IFullFixture | undefined> => {
+    const uri = getUri(`/api/v1/games/${gameId}`);
 
-    },
+    try {
+      const res = await fetch(uri, {});
 
-    getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {
-        const uri = getUri(`/api/v1/games/${gameId}`);
-        
-        try {
-            const res = await fetch(uri, {
-            });
+      return (await res.json()) as IFixture;
+    } catch (err) {
+      console.log('Error fetching games', err);
+      return undefined;
+    }
+  },
 
-            return await res.json() as IFixture;
+  getGamesByDate: async (date: Date) => {
+    try {
+      const uri = getUri(`/api/v1/unauth/matches-all/${date.toISOString()}`);
+      const res = await fetch(uri);
 
-        } catch (err) {
-            console.log("Error fetching games", err)
-            return undefined;
-        }
-    },
+      const json = (await res.json()) as IFixture[];
 
-    getGamesByDate: async (date: Date) => {
-        try {
-            const uri = getUri(`/api/v1/unauth/matches-all/${date.toISOString()}`);
-            const res = await fetch(uri);
+      return json;
+    } catch (error) {
+      logger.error('Error getting games ' + error);
+      return [];
+    }
+  },
 
-            const json = (await res.json()) as IFixture[];
+  /** Gets roster items for a single game */
+  getGameRostersById: async (gameId: string): Promise<IRosterItem[]> => {
+    try {
+      const uri = getUri(`/api/v1/games/${gameId}/rosters`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
 
-            return json;
-        } catch(error) {
-            logger.error("Error getting games " + error);
-            return [];
-        }
-    },
+      const json = await res.json();
+      return json;
+    } catch (error) {
+      logger.error('Failed to get game rosters ' + error);
+      return [];
+    }
+  },
 
-    /** Gets roster items for a single game */
-    getGameRostersById: async (gameId: string) : Promise<IRosterItem[]> => {
-        try {
-            const uri = getUri(`/api/v1/games/${gameId}/rosters`);
-            const res = await fetch(uri, {
-                headers: getAuthHeader()
-            });
+  // Voting methods
+  getGameVotes: async (gameId: string): Promise<IGameVote[]> => {
+    try {
+      const uri = getUri(`/api/v1/games/${gameId}/votes`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
 
-            const json = await res.json();
-            return json;
+      const json = await res.json();
+      return json;
+    } catch (error) {
+      logger.error(error);
+      return [];
+    }
+  },
 
-        } catch (error) {
-            logger.error("Failed to get game rosters " + error);
-            return [];
-        }
-    } 
-}
+  postGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team') => {
+    try {
+      const user = authService.getUserInfo();
+      const uri = getUri(`/api/v1/games/${gameId}/votes`);
+
+      const res = await fetch(uri, {
+        method: 'POST',
+        headers: getAuthHeader(),
+        body: JSON.stringify({ voteFor, userId: user?.id ?? 'fall-back' }),
+      });
+
+      return await res.json();
+    } catch (error) {
+      logger.error(error);
+    }
+  },
+
+  putGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team') => {
+    try {
+      const user = authService.getUserInfo();
+      const uri = getUri(`/api/v1/games/${gameId}/votes`);
+
+      const res = await fetch(uri, {
+        method: 'PUT',
+        headers: getAuthHeader(),
+        body: JSON.stringify({ voteFor, userId: user?.id ?? 'fall-back' }),
+      });
+
+      return await res.json();
+    } catch (error) {
+      logger.error(error);
+    }
+  },
+};
