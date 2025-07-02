@@ -13,6 +13,7 @@ import { seasonService } from "../services/seasonsService";
 import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 import SeasonScreenTeamList from "../components/seasons/SeasonScreenTeamList";
 import SeasonScreenAthleteList from "../components/seasons/SeasonScreenAthleteList";
+import SeasonScreenFixturesList from "../components/seasons/SeasonScreenFixturesList";
 
 export default function SeasonScreen() {
 
@@ -77,17 +78,9 @@ function SeasonScreenContent() {
                 athletes={athletes}
             />
 
-            <div className="flex flex-row items-center gap-2" >
-                <Calendar />
-                <h1 className="text-lg font-bold" >Fixtures</h1>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2" >
-                <GroupedFixturesList
-                    descendingOrder
-                    fixtures={fixtures}
-                />
-            </div>
+            <SeasonScreenFixturesList 
+                fixtures={fixtures}
+            />
 
         </TopicPageView>
     )

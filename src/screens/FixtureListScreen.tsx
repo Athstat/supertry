@@ -22,6 +22,7 @@ const competitionIds = [
   ERPC_COMPETITION_ID,
   INVESTEC_CHAMPIONSHIP_CUP,
   URC_COMPETIION_ID,
+  'test-1'
 ];
 
 
