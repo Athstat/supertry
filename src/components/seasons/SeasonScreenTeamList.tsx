@@ -1,6 +1,7 @@
 import { Shield } from "lucide-react"
 import { ITeam } from "../../types/games"
 import ProTeamCard from "../teams/TeamCard"
+import NoContentCard from "../shared/NoContentMessage"
 
 type Props = {
     teams: ITeam[]
@@ -21,6 +22,12 @@ export default function SeasonScreenTeamList({ teams }: Props) {
                     return <ProTeamCard className="flex-1 min-w-36 h-full" team={t} key={index} />
                 })}
             </div>
+
+            {teams.length === 0 && (
+                <NoContentCard 
+                    message="No teams were found"
+                />
+            )}
         </>
     )
 }

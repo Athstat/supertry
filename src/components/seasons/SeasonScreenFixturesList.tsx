@@ -3,6 +3,7 @@ import { IFixture } from "../../types/games"
 import GroupedFixturesList from "../fixtures/GroupedFixturesList"
 import PillBar, { PillBarItems } from "../shared/bars/PillTabBar"
 import { useQueryState } from "../../hooks/useQueryState"
+import NoContentCard from "../shared/NoContentMessage"
 
 type Props = {
     fixtures: IFixture[]
@@ -65,6 +66,12 @@ export default function SeasonScreenFixturesList({ fixtures }: Props) {
                     fixtures={filteredFixtures}
                 />
             </div>
+
+            {fixtures.length === 0 && (
+                <NoContentCard
+                    message="No Fixutes were found"
+                />
+            )}
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import { Users } from "lucide-react"
 import { RugbyPlayer } from "../../types/rugbyPlayer"
 import { PlayerGameCard } from "../player/PlayerGameCard"
+import NoContentCard from "../shared/NoContentMessage"
 
 type Props = {
     athletes: RugbyPlayer[]
@@ -21,6 +22,12 @@ export default function SeasonScreenAthleteList({ athletes }: Props) {
                     return <PlayerGameCard className="h-[170px] w-[130px]" player={a} key={index} />
                 })}
             </div>
+
+            {athletes.length === 0 && (
+                <NoContentCard 
+                    message="No Athletes were found"
+                />
+            )}
         </div>
     )
 }
