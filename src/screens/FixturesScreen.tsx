@@ -18,6 +18,9 @@ import SbrScreenDataProvider from '../components/sbr/SbrScreenDataProvider';
 import SbrFixturesTab from '../components/sbr/fixtures/SbrFixturesTab';
 import { useAtomValue } from 'jotai';
 import ProFixturesTab from './ProFixturesTab';
+import { Calendar } from 'lucide-react';
+import ToggleSwitch from '../components/shared/buttons/ToggleSwitch';
+import { useQueryState } from '../hooks/useQueryState';
 
 export default function FixturesScreen() {
   const sbrAtoms = [
@@ -28,6 +31,8 @@ export default function FixturesScreen() {
     sbrWeekFixturesAtom,
     sbrWeekFeatureGamesAtom,
   ];
+
+  const [fixtureContext, setFixtureContext] = useQueryState('sc', {init: 'Pros'})
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -44,7 +49,26 @@ export default function FixturesScreen() {
 
   return (
     <PageView className="dark:text-white p-2 md:p-6 flex flex-col gap-4">
+      
+      <div className='flex flex-row justify-between' >
+        <div className='flex flex-row items-center gap-2' >
+          <Calendar />
+          <p className='font-bold text-xl' >Match Center</p>
+        </div>
+
+        <div>
+          <ToggleSwitch 
+            option1='Pros'
+            option2='Sbr' 
+            value={fixtureContext}
+            onChange={setFixtureContext}
+          />
+        </div>
+      </div>
+      
       <div className="w-full lg:w-3/4 mx-auto">
+      
+
         <TabView tabHeaderItems={tabItems}>
           <TabViewPage tabKey="professional">
             <ScopeProvider atoms={[fixturesDateRangeAtom, fixturesSelectedMonthIndexAtom]}>
