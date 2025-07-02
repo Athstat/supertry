@@ -1,4 +1,4 @@
-import { IFixture, IFullFixture, IGameVote, IRosterItem } from '../types/games';
+import { IFixture, IFullFixture, IGameVote, IRosterItem, ITeamAction } from '../types/games';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 import { authService } from './authService';
@@ -129,4 +129,24 @@ export const gamesService = {
       logger.error(error);
     }
   },
+
+  getGameTeamActions: async (gameId: string) : Promise<ITeamAction[]> => {
+    try {
+        
+        const uri = getUri(`/api/v1/games/${gameId}/team-actions`);
+        
+        const res = await fetch(uri, {
+            headers: getAuthHeader()
+        });
+
+        if (res.ok) {
+            return (await res.json()) as ITeamAction[]
+        }
+        
+    } catch (err) {
+        logger.error('Error loading team actions ', err);
+    }
+
+    return [];
+  }
 };
