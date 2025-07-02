@@ -2,7 +2,6 @@ import { Shield } from "lucide-react"
 import { IFixture, ITeamAction } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import TeamLogo from "../team/TeamLogo"
-import { aggregateTeamStats, convertionsPercVal, convertionsStr } from "../../utils/boxScoreUtils"
 import { IBoxScoreItem } from "../../types/boxScore"
 import { twMerge } from "tailwind-merge"
 import { TeamActionsParser, TeamHeadtoHeadItem } from "../../utils/teamActionsUtils"
@@ -14,7 +13,7 @@ type Props = {
 }
 
 
-export default function FixtureHeadToHeadStats({ fixture, boxScore, teamActions }: Props) {
+export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) {
 
     const taParser = new TeamActionsParser(teamActions, fixture.team_id, fixture.opposition_team_id);
 
@@ -40,8 +39,10 @@ export default function FixtureHeadToHeadStats({ fixture, boxScore, teamActions 
                 <HeadToHeadItem stat={taParser.getConversionsRate()} />
                 <HeadToHeadItem stat={taParser.getPenaltyGoalsScored()} />
                 <HeadToHeadItem stat={taParser.getPenaltiesConceded()} />
+                <HeadToHeadItem stat={taParser.getPassesMade()} />
                 <HeadToHeadItem stat={taParser.getTurnoversWon()} />
                 <HeadToHeadItem stat={taParser.getTurnoversConceded()} />
+                <HeadToHeadItem stat={taParser.getTacklesMade()} />
 
             </div>
 
@@ -59,9 +60,11 @@ type HeadToHeadProps = {
 }
 
 function HeadToHeadItem ({stat} : HeadToHeadProps) {
-    const {homeValue, awayValue, winner, action} = stat;
+    const {homeValue, awayValue, winner, action, hide} = stat;
     const homeTeamWonCategory = winner === 'home';
     const awayTeamWonCategory = winner === 'away';
+
+    if (hide) return;
 
     return (
         <div className="flex flex-row " >

@@ -5,7 +5,8 @@ export type TeamHeadtoHeadItem = {
     action: string
     homeValue?: number | string,
     awayValue?: number | string,
-    winner?: 'home' | 'away'
+    winner?: 'home' | 'away',
+    hide?: boolean
 }
 
 /** Class that assits with team action stats */
@@ -32,14 +33,14 @@ export class TeamActionsParser {
         return [home, away];
     }
 
-    public getTries(): TeamHeadtoHeadItem{
+    public getTries(): TeamHeadtoHeadItem {
         const [home, away] = this.getForHomeAndAway("Tries")
 
         return {
             action: 'Tries',
             homeValue: home,
             awayValue: away,
-            winner: this.calculateWinner(home, away) 
+            winner: this.calculateWinner(home, away)
         }
     }
 
@@ -144,17 +145,39 @@ export class TeamActionsParser {
         }
     }
 
-    getPenaltiesConceded() : TeamHeadtoHeadItem {
+    getPenaltiesConceded(): TeamHeadtoHeadItem {
         const [home, away] = this.getForHomeAndAway('PenaltiesConceded');
         return {
             action: 'Penalties Conceded',
             homeValue: home,
             awayValue: away,
             winner: this.calculateWinner(home, away)
-        }       
+        }
     }
 
-    private calculateWinner(home: number | undefined, away: number | undefined) : 'home' | 'away' | undefined {
+    getPassesMade(): TeamHeadtoHeadItem {
+        const [home, away] = this.getForHomeAndAway('Passes');
+        return {
+            action: 'Passes',
+            homeValue: home,
+            awayValue: away,
+            winner: this.calculateWinner(home, away),
+            hide: home === undefined && away === undefined
+        }
+    }
+
+    getTacklesMade(): TeamHeadtoHeadItem {
+        const [home, away] = this.getForHomeAndAway('TacklesMade');
+        return {
+            action: 'Tackles Made',
+            homeValue: home,
+            awayValue: away,
+            winner: this.calculateWinner(home, away),
+            hide: home === undefined && away === undefined
+        }
+    }
+
+    private calculateWinner(home: number | undefined, away: number | undefined): 'home' | 'away' | undefined {
         if (home !== undefined && away !== undefined) {
             if (home > away) {
                 return 'home'
