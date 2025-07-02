@@ -1,39 +1,49 @@
 export type IFixture = {
-    game_id: string,
-    team_score?: number,
-    opposition_score?: number,
-    venue?: string,
-    kickoff_time?: Date,
-    competition_name?: string,
-    team_id: string,
-    opposition_team_id: string,
-    is_knockout?: boolean,
-    is_league_managed?: boolean,
-    location?: string,
-    extra_info?: string,
-    hidden?: boolean,
-    league_id: string,
-    network?: string,
-    game_status?: GameStatus,
-    game_clock?: string,
-    result?: string,
-    source_id?: string,
-    data_source?: string,
-    is_test?: boolean,
-    round: number,
-    team_name: string,
-    team_image_url?: string,
-    opposition_team_name?: string,
-    opposition_image_url?: string,
-    opposition_team_image_url?: string,
-    highlights_link?: string
+  game_id: string;
+  team_score?: number;
+  opposition_score?: number;
+  venue?: string;
+  kickoff_time?: Date;
+  competition_name?: string;
+  team_id: string;
+  opposition_team_id: string;
+  is_knockout?: boolean;
+  is_league_managed?: boolean;
+  location?: string;
+  extra_info?: string;
+  hidden?: boolean;
+  league_id: string;
+  network?: string;
+  game_status?: GameStatus;
+  game_clock?: string;
+  result?: string;
+  source_id?: string;
+  data_source?: string;
+  is_test?: boolean;
+  round: number;
+  team_name: string;
+  team_image_url?: string;
+  opposition_team_name?: string;
+  opposition_image_url?: string;
+  opposition_team_image_url?: string;
+  highlights_link?: string
 }
 
-export type GameStatus = string | "completed" | "in_progress" | "not_started";
+export type GameStatus = string | 'completed' | 'in_progress' | 'not_started';
 
 export type IFullFixture = any;
 
-/** Represents a single record of an athlete in a teams roster for a 
+export type IGameVote = {
+  id: number;
+  game_id: string;
+  user_id: string;
+  vote_for: 'home_team' | 'away_team';
+  created_at: string;
+  updated_at: string;
+  user_name?: string;
+};
+
+/** Represents a single record of an athlete in a teams roster for a
  * certain game thats being played
  */
 
@@ -72,4 +82,33 @@ export type IRosterItem = {
     available?: boolean,
     team_image_url?: string,
     team_name?: string
-  }
+}
+
+export type ISeason = {
+    id: string,
+    name: string,
+    start_date: Date,
+    end_date: Date,
+    games_supported: boolean,
+    hidden?: boolean,
+    data_source?: string,
+    competition_id: string,
+    source_id: number,
+    web_supported: boolean
+}
+
+export type ITeam = {
+    athstat_id: string,
+    source_id: string,
+    athstat_name: string,
+    data_source: string,
+    source_abbreviation?: string,
+    athstat_abbreviation?: string,
+    possible_names?: string,
+    sport_id: string,
+    organization_id: string,
+    hidden: boolean,
+    on_dark_image_url?: string | null,
+    on_light_image_url?: string | null,
+    image_url?: string
+}
