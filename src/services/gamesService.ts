@@ -44,6 +44,7 @@ export const gamesService = {
         
         try {
             const res = await fetch(uri, {
+                headers: getAuthHeader()
             });
 
             return await res.json() as IFixture;
