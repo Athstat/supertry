@@ -3,7 +3,7 @@ import RoundedCard from '../shared/RoundedCard'
 
 type Props = {
     seasons: {name: string, id: string}[],
-    onChange?: (newVal?: string) => void,
+    onChange?: (newVal: string) => void,
     value?: string
 }
 
