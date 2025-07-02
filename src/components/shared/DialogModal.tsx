@@ -23,7 +23,7 @@ export default function DialogModal({ children, onClose, title, open, className,
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-60 z-[200] flex items-center justify-center ">
+        <div className="fixed inset-0 bg-black bg-opacity-60 z-[200] flex flex-col items-center justify-center ">
             <div className={twMerge(
                 "bg-black w-[95%] md:w-[80%] lg:w-2/3 max-h-[90vh] my-4 rounded-lg",
                 hw
@@ -43,7 +43,8 @@ export default function DialogModal({ children, onClose, title, open, className,
                             <X size={20} />
                         </button>
                     </div>
-                    {/* Tabs */}
+
+                    
                     <div className={twMerge("", className)}>
                         {children}
                     </div>

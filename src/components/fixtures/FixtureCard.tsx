@@ -12,6 +12,7 @@ import { useGameVotes } from '../../hooks/useGameVotes';
 import { gamesService } from '../../services/gamesService';
 import { mutate } from 'swr';
 import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
+import GameHighlightsCard from '../video/GameHighlightsCard';
 type Props = {
   fixture: IFixture;
   className?: string;
@@ -312,6 +313,41 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
       </div>
     </DialogModal>
   );
+
+            <div className='flex p-2 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700 text-xs text-wrap text-center rounded-xl bg-slate-100 dark:bg-slate-800 flex-row items-center justify-center' >
+                <p>{fixture.competition_name} 𐄁 {fixture.venue}</p>
+            </div>
+
+            <div className='flex flex-row items-center justify-center dark:text-white' >
+
+                <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
+                    <TeamLogo className='w-20 h-20' url={fixture.team_image_url} />
+                    <p className='text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center' >{fixture.team_name}</p>
+                </div>
+
+                <div className='flex flex-1 flex-row' >
+                    {!gameKickedOff && <KickOffInformation fixture={fixture} />}
+                    {gameKickedOff && <MatchResultsInformation fixture={fixture} />}
+                </div>
+
+                <div className='flex flex-1 gap-5 flex-col items-center justify-center' >
+                    <TeamLogo className='w-20 h-20' url={fixture.opposition_team_image_url ?? fixture.opposition_image_url} />
+                    <p className='text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center' >{fixture.opposition_team_name}</p>
+                </div>
+            </div>
+
+            <div className='flex flex-row items-center justify-center p-3' >
+                <button onClick={goToFullMatchDetails} className='underline text-blue-400 dark:text-blue-200 hover:text-blue-500' >View Full Match Details</button>
+            </div>
+            
+            <div>
+                
+                <GameHighlightsCard link={fixture.highlights_link} />
+            </div>
+
+        </DialogModal>
+    )
+
 }
 
 function KickOffInformation({ fixture }: Props) {
