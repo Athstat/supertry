@@ -1,4 +1,3 @@
-import React from 'react'
 import useSWR from 'swr'
 import { sbrService } from '../../services/sbrService';
 import { LoadingState } from '../ui/LoadingState';

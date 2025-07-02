@@ -11,7 +11,7 @@ import WarningCard from '../shared/WarningCard';
 import { useGameVotes } from '../../hooks/useGameVotes';
 import { gamesService } from '../../services/gamesService';
 import { mutate } from 'swr';
-import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
+import { VotingOptionBar, VotingOptionsResults } from '../shared/bars/VotingOptionBar';
 import GameHighlightsCard from '../video/GameHighlightsCard';
 type Props = {
   fixture: IFixture;
@@ -55,7 +55,7 @@ export default function FixtureCard({
   const { gameKickedOff } = fixtureSumary(fixture);
 
   // Voting functionality
-  const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture);
+  const { homeVotes, awayVotes, userVote} = useGameVotes(fixture);
   const [isVoting, setIsVoting] = useState(false);
 
   // Calculate voting percentages
@@ -216,8 +216,21 @@ export default function FixtureCard({
             </div>
           )}
 
+          {gameKickedOff && (
+            <VotingOptionsResults 
+              homeTeam={fixture.team_name}
+              awayTeam={fixture.opposition_team_name}
+              hasScores={fixture.game_status === 'completed'}
+              homeTeamWon={homeTeamWon}
+              awayTeamWon={awayTeamWon}
+              homeScore={fixture.team_score}
+              awayScore={fixture.opposition_score}
+
+            />
+          )}
+
           {/* Show voting bars after user has voted or after kickoff */}
-          {(hasUserVoted || gameKickedOff) && (
+          {(hasUserVoted || !gameKickedOff) && (
             <>
               <VotingOptionBar
                 hasUserVoted={votedHomeTeam}
