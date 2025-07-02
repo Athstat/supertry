@@ -19,11 +19,12 @@ export default function SbrMatchCenter() {
         <div className='flex flex-col gap-2' >
             <h1 className='font-bold text-lg' >Sbr Games</h1>
 
-            <div>
+            <div className='flex flex-col gap-2' >
                 {fixtures.map((fixture, index) => {
                     return <SbrFixtureCard 
                         fixture={fixture}
                         key={index}
+                        showLogos
                     />
                 })}
             </div>
