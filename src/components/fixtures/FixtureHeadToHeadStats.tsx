@@ -2,13 +2,11 @@ import { Shield } from "lucide-react"
 import { IFixture, ITeamAction } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import TeamLogo from "../team/TeamLogo"
-import { IBoxScoreItem } from "../../types/boxScore"
 import { twMerge } from "tailwind-merge"
 import { TeamActionsParser, TeamHeadtoHeadItem } from "../../utils/teamActionsUtils"
 
 type Props = {
     fixture: IFixture,
-    boxScore: IBoxScoreItem[],
     teamActions: ITeamAction[]
 }
 
@@ -33,23 +31,29 @@ export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) 
                         <TeamLogo className="w-6 h-6" url={fixture.opposition_image_url} />
                     </div>
                 </div>
-            
+
+                <HeadToHeadItem stat={{
+                    action: 'Points',
+                    homeValue: fixture.team_score,
+                    awayValue: fixture.opposition_score,
+                    winner: taParser.calculateWinner(fixture.team_score, fixture.opposition_score)
+                }} />
+
                 <HeadToHeadItem stat={taParser.getTries()} />
                 <HeadToHeadItem stat={taParser.getDropGoalsScored()} />
                 <HeadToHeadItem stat={taParser.getConversionsRate()} />
                 <HeadToHeadItem stat={taParser.getPenaltyGoalsScored()} />
                 <HeadToHeadItem stat={taParser.getPenaltiesConceded()} />
                 <HeadToHeadItem stat={taParser.getPassesMade()} />
+                <HeadToHeadItem stat={taParser.getScrumsWon()} />
+                <HeadToHeadItem stat={taParser.getMaulsFormed()} />
                 <HeadToHeadItem stat={taParser.getTurnoversWon()} />
                 <HeadToHeadItem stat={taParser.getTurnoversConceded()} />
                 <HeadToHeadItem stat={taParser.getTacklesMade()} />
+                <HeadToHeadItem stat={taParser.getYellowCards()} />
+                <HeadToHeadItem stat={taParser.getRedCards()} />
 
             </div>
-
-            {/* <div className="mt-5" >
-                {statsArr.length > 5 && !showMore && <button onClick={toogleShowMore} className="text-blue-400 hover:text-blue-500" >Show more</button>}
-                {statsArr.length > 5 && showMore && <button onClick={toogleShowMore} className="text-blue-400 hover:text-blue-500" >Show less</button>}
-            </div> */}
         </TitledCard>
     )
 }

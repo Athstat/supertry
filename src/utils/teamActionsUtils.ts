@@ -54,7 +54,11 @@ export class TeamActionsParser {
         return {
             action: "Conversion",
             homeValue: homeRate,
-            awayValue: awayRate
+            awayValue: awayRate,
+            winner: this.calculateWinner(
+                homeMade && homeMissed ? (homeMade)/(homeMade + homeMissed) : undefined,
+                awayMade && awayMissed ? (awayMade)/(awayMade + awayMissed) : undefined,
+            )
         }
     }
 
@@ -63,8 +67,8 @@ export class TeamActionsParser {
 
         return {
             action: "Penalty Goals",
-            homeValue: homeMade,
-            awayValue: awayMade,
+            homeValue: homeMade ?? 0,
+            awayValue: awayMade ?? 0,
             winner: this.calculateWinner(homeMade, awayMade)
         }
     }
@@ -74,8 +78,8 @@ export class TeamActionsParser {
 
         return {
             action: "Drop Goals",
-            homeValue: home,
-            awayValue: away,
+            homeValue: home ?? 0,
+            awayValue: away ?? 0,
             winner: this.calculateWinner(home, away)
         }
     }
@@ -111,8 +115,9 @@ export class TeamActionsParser {
         const [home, away] = this.getForHomeAndAway('YellowCards');
         return {
             action: 'Yellow Cards',
-            homeValue: home,
-            awayValue: away
+            homeValue: home ?? 0,
+            awayValue: away ?? 0,
+            winner: this.calculateWinner(home ?? 0, away ?? 0)
         }
     }
 
@@ -120,8 +125,9 @@ export class TeamActionsParser {
         const [home, away] = this.getForHomeAndAway('RedCards');
         return {
             action: 'Red Cards',
-            homeValue: home,
-            awayValue: away
+            homeValue: home ?? 0,
+            awayValue: away ?? 0,
+            winner: this.calculateWinner(home ?? 0, away ?? 0)
         }
     }
 
@@ -141,17 +147,20 @@ export class TeamActionsParser {
             action: 'Turnovers Won',
             homeValue: home,
             awayValue: away,
-            winner: this.calculateWinner(home, away)
+            winner: this.calculateWinner(home, away),
+            hide: home === undefined && away === undefined
         }
     }
 
     getPenaltiesConceded(): TeamHeadtoHeadItem {
         const [home, away] = this.getForHomeAndAway('PenaltiesConceded');
+
         return {
             action: 'Penalties Conceded',
             homeValue: home,
             awayValue: away,
-            winner: this.calculateWinner(home, away)
+            winner: this.calculateWinner(home, away),
+            hide: home === undefined && away === undefined
         }
     }
 
@@ -177,7 +186,31 @@ export class TeamActionsParser {
         }
     }
 
-    private calculateWinner(home: number | undefined, away: number | undefined): 'home' | 'away' | undefined {
+    getScrumsWon(): TeamHeadtoHeadItem {
+        const [home, away] = this.getForHomeAndAway('ScrumsWon');
+        return {
+            action: 'Scrums Won',
+            homeValue: home,
+            awayValue: away,
+            winner: this.calculateWinner(home, away),
+            hide: home === undefined && away === undefined
+        }
+    } 
+    
+    getMaulsFormed(): TeamHeadtoHeadItem {
+        const [home, away] = this.getForHomeAndAway('Mauls');
+        return {
+            action: 'Mauls',
+            homeValue: home,
+            awayValue: away,
+            winner: this.calculateWinner(home, away),
+            hide: home === undefined && away === undefined
+        }
+    }
+
+
+
+    public calculateWinner(home: number | undefined, away: number | undefined): 'home' | 'away' | undefined {
         if (home !== undefined && away !== undefined) {
             if (home > away) {
                 return 'home'
