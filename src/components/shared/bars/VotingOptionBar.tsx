@@ -24,15 +24,15 @@ export function VotingOptionBar({ isGreen, isRed, title, voteCount = 0, disable,
     return (
         <div
             className={twMerge(
-                "w-full hover:bg-slate-100 dark:hover:bg-slate-800/80 px-3 py-2 rounded-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer text-xs",
+                "w-full hover:bg-slate-100 dark:hover:bg-slate-800/80 px-3 py-2 rounded-lg flex flex-col items-center justify-center gap-1.5 cursor-pointer text-xs",
                 className
             )}
             onClick={handleClick}
         >
 
             <div className="w-full flex text-sm text-slate-500 dark:text-slate-400 flex-row items-center justify-between" >
-                <p className="" >{title}</p>
-                <p className="" >Vote{voteCount > 0 ? "s" : ""} {voteCount}</p>
+                <p className="text-xs" >{title}</p>
+                <p className="text-xs" >Vote{voteCount > 0 ? "s" : ""} {voteCount}</p>
             </div>
 
             <div className="flex flex-row gap-1 rounded-xl w-[100%]">
@@ -128,7 +128,7 @@ export function VotingOptionsResults({hasScores, votedAwayTeam, votedHomeTeam, a
             </button>
 
             {hasScores && (
-                <p className="text-xs mt-1">
+                <p className="text-[8px] lg:text-xs mt-1">
                     {homeTeamWon ? `${homeTeam} won ${homeScore}-${awayScore}` :
                         awayTeamWon ? `${awayTeam} won ${awayScore}-${homeScore}` :
                             `Match drawn ${hasScores}-${awayScore}`}

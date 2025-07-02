@@ -2,7 +2,7 @@ import { Fragment } from 'react/jsx-runtime';
 import { twMerge } from 'tailwind-merge';
 import { useSbrFixtureVotes } from '../../../hooks/useFxitureVotes';
 import { ISbrFixture } from '../../../types/sbr'
-import { VotingOptionBar } from '../../shared/bars/VotingOptionBar';
+import { VotingOptionBar, VotingOptionsResults } from '../../shared/bars/VotingOptionBar';
 import { useState } from 'react';
 import { mutate } from 'swr';
 import { sbrService } from '../../../services/sbrService';
@@ -67,7 +67,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
     const hasUserVoted = votedAwayTeam || votedHomeTeam;
 
     return (
-        <div>
+        <div className='' >
 
             {isLoading && (
                 <div className="w-full h-20 bg-slate-200 dark:bg-slate-800/40 animate-pulse rounded-xl" >
@@ -78,7 +78,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
 
             {!isLoading && !hide && <div
                 className={twMerge(
-                    "flex mt-6 flex-col w-full gap-0 items-center justify-center",
+                    "flex flex-col w-full gap-0 items-center justify-center",
                     isVoting && "animate-pulse opacity-60 cursor-progress"
                 )}
             >
@@ -102,47 +102,21 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
 
                 </div>}
 
-                {hasKickedOff && <div className="flex flex-col w-full text-xs md:text-sm  gap-2 items-center justify-center text-slate-700 dark:text-slate-200" >
-                    <p>{hasScores ? 'Results' : 'Predictions'}</p>
-
-                    <button className={twMerge(
-                        "border dark:border-slate-700 w-full px-4 rounded-xl py-2 flex items-center justify-between",
-                        hasScores ? (
-                            homeTeamWon ? "bg-green-200 dark:bg-green-900/40 dark:border-green-900" :
-                                awayTeamWon ? "bg-red-200 dark:bg-red-900/40 dark:border-red-900/60" :
-                                    "bg-slate-200 dark:bg-slate-800"
-                        ) : "bg-slate-200 dark:bg-slate-800"
-                    )} >
-                        <span className="flex-1 text-left">{home_team} Win - {homeVotes.length} Votes</span>
-                        <span className="flex items-center gap-1">
-                            {votedHomeTeam && <span className="text-[8px] lg:text-sm bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
-                            {hasScores && homeTeamWon && '✓'}
-                        </span>
-                    </button>
-
-                    <button className={twMerge(
-                        "border dark:border-slate-700 w-full px-4 rounded-xl py-2 flex items-center justify-between",
-                        hasScores ? (
-                            awayTeamWon ? "bg-green-200 dark:bg-green-900/40 dark:border-green-900" :
-                                homeTeamWon ? "bg-red-200 dark:bg-red-900/40 dark:border-red-900/60" :
-                                    "bg-slate-200 dark:bg-slate-800"
-                        ) : "bg-slate-200 dark:bg-slate-800"
-                    )} >
-                        <span className="flex-1 text-left">{away_team} Win - {awayVotes.length} Votes</span>
-                        <span className="flex items-center gap-1">
-                            {votedAwayTeam && <span className="text-[8px] lg:text-sm bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
-                            {hasScores && awayTeamWon && '✓'}
-                        </span>
-                    </button>
-
-                    {hasScores && (
-                        <p className="text-xs mt-1">
-                            {homeTeamWon ? `${home_team} won ${home_score}-${away_score}` :
-                                awayTeamWon ? `${away_team} won ${away_score}-${home_score}` :
-                                    `Match drawn ${home_score}-${away_score}`}
-                        </p>
-                    )}
-                </div>}
+                {hasKickedOff && (
+                    <VotingOptionsResults 
+                        homeTeam={home_team}
+                        awayTeam={away_team}
+                        homeTeamWon={homeTeamWon}
+                        awayTeamWon={awayTeamWon}
+                        homeScore={home_score}
+                        awayScore={away_score}
+                        votedHomeTeam={votedHomeTeam}
+                        votedAwayTeam={votedAwayTeam}
+                        homeVotes={homeVotes.length}
+                        awayVotes={awayVotes.length}
+                        hasScores={hasScores}
+                    />
+                )}
 
                 {/* Post Match Voting Results */}
 
