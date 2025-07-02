@@ -8,6 +8,8 @@ import { AppStateProvider } from './contexts/AppStateContext';
 import ErrorBoundary, { FallbackProps } from './components/ErrorBoundary';
 import AppErrorFallback from './components/AppErrorFallback';
 import { useState, useEffect } from 'react';
+import { FirstVisitDebug } from './components/debug/FirstVisitDebug';
+import { BrowserRouter } from 'react-router-dom';
 import ChatProvider from './contexts/ChatContext';
 
 function useGlobalSwipeBack() {
@@ -58,6 +60,9 @@ function App() {
   useGlobalSwipeBack();
   const [error, setError] = useState<Error | null>(null);
   const isDevelopment = import.meta.env.MODE === 'development';
+
+  // Removed visibility change handler that was causing double reloads
+  // Auth redirects are now handled by AuthContext and route guards
 
   return (
     <ThemeProvider>

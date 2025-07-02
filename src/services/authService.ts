@@ -448,8 +448,8 @@ export const authService = {
   },
 
   async getUserFromDB(id: string): Promise<any> {
-    console.log('[getUserFromDB] Fetching user from DB');
-    console.log('[getUserFromDB] ID:', id);
+    //console.log('[getUserFromDB] Fetching user from DB');
+    //console.log('[getUserFromDB] ID:', id);
 
     const response = await fetchWithTimeout(
       getUri(`/api/v1/users/${id}`),
