@@ -98,7 +98,6 @@ export default function SbrMatchCenter() {
             <div className='flex flex-col gap-4' >
                 <div className='flex flex-row items-center justify-between' >
                     <p className='font-semibold text-lg' >Past Fixtures</p>
-                    <ArrowRight />
                 </div>
 
                 <div className='flex flex-col gap-2 max-h-62 overflow-y-hidden overflow-x-auto ' >
@@ -108,6 +107,7 @@ export default function SbrMatchCenter() {
                             key={index}
                             showLogos
                             className='min-w-[350px] max-h-[300px]'
+                            showKickOffTime
                         />
                     })}
                 </div>

@@ -9,6 +9,7 @@ import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "./fixture/SbrFixtureDataProvider";
 import { Sparkles } from "lucide-react";
 import WarningCard from "../shared/WarningCard";
+import { format } from "date-fns";
 
 type Props = {
     fixture: ISbrFixture,
@@ -46,7 +47,7 @@ type ContentProps = {
     hideVoting?: boolean
 }
 
-function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, className }: ContentProps) {
+function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, className, showKickOffTime }: ContentProps) {
 
     const navigate = useNavigate();
     const fixture = useAtomValue(sbrFixtureAtom);
@@ -106,6 +107,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
                             <div>Final</div>
                         </div>
                     )}
+                    {showKickOffTime && fixture.kickoff_time && <p className="text-xs" >{format(fixture.kickoff_time, 'dd MMMM yyyy')}</p>}
                 </div>
                 {/* Away Team */}
                 <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >

@@ -95,13 +95,13 @@ export default function ProMatchCenter() {
                     <ArrowRight />
                 </div>
 
-                <div className="flex flex-row items-center gap-3 overflow-x-auto" >
+                <div className="flex flex-col items-center gap-3 w-full" >
                     {pastFixtures.map((fixture, index) => {
                         return <FixtureCard
                             fixture={fixture}
                             key={index}
                             showLogos
-                            className="rounded-xl border min-w-96 h-full dark:border-slate-700 flex-1"
+                            className="rounded-xl border w-full h-full dark:border-slate-700 flex-1"
                         />
                     })}
                 </div>
