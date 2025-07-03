@@ -56,20 +56,20 @@ export default function UpcomingFixturesSection() {
   return (
     <div>
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-base font-medium flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-primary-700" />
+        <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
+          <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           UPCOMING FIXTURES
         </h3>
         <button
           onClick={() => push('/fixtures#upcoming-matches')}
-          className="text-sm text-primary-700"
+          className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
         >
           View All
         </button>
       </div>
 
       {sortedFixtures.length === 0 ? (
-        <div className="text-gray-500 text-center py-6">
+        <div className="text-gray-500 dark:text-gray-400 text-center py-6">
           No upcoming fixtures in the next 7 days.
         </div>
       ) : (
@@ -82,65 +82,69 @@ export default function UpcomingFixturesSection() {
             return (
               <div
                 key={index}
-                className="min-w-[280px] bg-gray-900 rounded-xl overflow-hidden text-white"
+                className="min-w-[280px] bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-gray-800"
               >
                 <div className="p-4">
-                  <div className="text-center mb-3 text-sm text-gray-300">
+                  <div className="text-center mb-3 text-sm text-gray-700 dark:text-gray-300">
                     {fixture.competition_name && <p>{fixture.competition_name} Semi Finals</p>}
-                    {fixture.venue && <p className="text-xs mt-1">{fixture.venue}</p>}
+                    {fixture.venue && (
+                      <p className="text-xs mt-1 text-gray-600 dark:text-gray-400">
+                        {fixture.venue}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex justify-between items-center mb-4">
                     {/* Home Team */}
                     <div className="flex flex-col items-center min-w-0 w-28">
-                      <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                         <TeamLogo url={fixture.team_image_url} className="w-10 h-10" />
                       </div>
                       <p
-                        className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden"
+                        className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
                         title={fixture.team_name}
                       >
                         {fixture.team_name}
                       </p>
-                      <p className="text-xs text-gray-400">Home</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>
                     </div>
 
                     {/* Match Info (centered) */}
                     <div className="flex flex-col items-center flex-shrink-0 mx-4 min-w-[90px]">
                       {fixture.kickoff_time && (
                         <>
-                          <p className="text-sm text-gray-300 text-center">
+                          <p className="text-sm text-gray-700 dark:text-gray-300 text-center">
                             {format(new Date(fixture.kickoff_time), 'E, d MMM')}
                           </p>
-                          <p className="text-xl font-bold my-1 text-center">
+                          <p className="text-xl font-bold my-1 text-center text-gray-900 dark:text-white">
                             {format(new Date(fixture.kickoff_time), 'HH:mm')}
                           </p>
-                          <p className="text-xs text-gray-400 text-center">vs</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 text-center">vs</p>
                         </>
                       )}
                     </div>
 
                     {/* Away Team */}
                     <div className="flex flex-col items-center min-w-0 w-28">
-                      <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                         <TeamLogo
                           url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
                           className="w-10 h-10"
                         />
                       </div>
                       <p
-                        className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden"
+                        className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
                         title={fixture.opposition_team_name}
                       >
                         {fixture.opposition_team_name}
                       </p>
-                      <p className="text-xs text-gray-400">Away</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>
                     </div>
                   </div>
 
                   <div className="flex space-x-2">
                     <button
-                      className="flex-1 bg-gradient-to-r from-white to-gray-200 via-gray-50 text-primary-800 py-2 rounded-md text-sm font-medium"
+                      className="flex-1 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
                       onClick={() => {
                         setSelectedFixture(fixture);
                         setShowPredictModal(true);
@@ -149,7 +153,7 @@ export default function UpcomingFixturesSection() {
                       Predict
                     </button>
                     <button
-                      className="flex-1 bg-gray-800 text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2"
+                      className="flex-1 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
                       onClick={() => push(`/fixtures/${fixture.game_id}#chat`)}
                     >
                       <span>Chat</span>

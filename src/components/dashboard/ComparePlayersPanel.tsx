@@ -49,27 +49,27 @@ const ComparePlayersPanel = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-base font-medium flex items-center gap-2">
-          <BarChart className="w-4 h-4 text-primary-700" />
+        <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
+          <BarChart className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           COMPARE PLAYERS
         </h3>
         <button
           onClick={() => navigate('/players?tab=compare')}
-          className="text-sm text-primary-700"
+          className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
         >
           View All
         </button>
       </div>
 
-      <div className="rounded-xl bg-gray-900 text-white overflow-hidden">
+      <div className="rounded-xl bg-white dark:bg-gray-900 overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-gray-800">
         <div className="p-4">
           {/* Player Search */}
           <div className="mb-4">
             <PlayerSearch searchQuery={searchQuery} onSearch={setSearchQuery} />
           </div>
 
-          <div className="mb-4 p-3 bg-gray-800 rounded-lg">
-            <p className="text-sm text-gray-300 mb-2">
+          <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
               {selectedPlayers.length === 0
                 ? 'Select two players to compare'
                 : `Selected ${selectedPlayers.length}/2 players`}
@@ -79,12 +79,14 @@ const ComparePlayersPanel = () => {
                 {selectedPlayers.map(player => (
                   <div
                     key={player.tracking_id}
-                    className="flex items-center gap-2 bg-gray-700 px-3 py-1 rounded-full"
+                    className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full"
                   >
-                    <span className="text-sm">{player.player_name}</span>
+                    <span className="text-sm text-gray-900 dark:text-white">
+                      {player.player_name}
+                    </span>
                     <button
                       onClick={() => onRemovePlayerFromSelectedPlayers(player)}
-                      className="text-gray-400 hover:text-white"
+                      className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-lg font-bold"
                     >
                       ×
                     </button>
@@ -102,9 +104,9 @@ const ComparePlayersPanel = () => {
                 onClick={() => handlePlayerClick(player)}
                 className={twMerge(
                   'h-[200px] cursor-pointer transition-all',
-                  'hover:ring-2 hover:ring-primary-500',
+                  'hover:ring-2 hover:ring-primary-500 dark:hover:ring-primary-400',
                   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
-                    'ring-2 ring-primary-500'
+                    'ring-2 ring-primary-500 dark:ring-primary-400'
                 )}
               />
             ))}
