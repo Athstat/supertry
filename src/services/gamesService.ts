@@ -148,5 +148,20 @@ export const gamesService = {
     }
 
     return [];
-  }
+  },
+
+  getAllSupportedGames: async (): Promise<IFixture[]> => {
+    const uri = getUri(`/api/v1/games`);
+
+    try {
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
+
+      return (await res.json()) as IFixture[];
+    } catch (err) {
+      console.log('Error fetching games', err);
+      return [];
+    }
+  },
 };

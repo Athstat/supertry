@@ -93,6 +93,7 @@ declare module "lucide-react" {
   export const UserCircle: CIP;
   export const ChartNoAxesColumn: CIP;
   export const PlayCircle: CIP;
-
+  export const Minimize2: CIP;
+  export const Maximize2: CIP;
 }
 

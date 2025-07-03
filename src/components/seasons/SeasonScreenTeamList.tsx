@@ -10,6 +10,7 @@ type Props = {
 /** renders out a list of teams */
 export default function SeasonScreenTeamList({ teams }: Props) {
 
+
     return (
         <>
             <div className="flex flex-row items-center gap-2" >
