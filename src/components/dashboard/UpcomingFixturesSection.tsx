@@ -230,7 +230,10 @@ function PredictionModal({
 
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
-          <TeamLogo className="w-20 h-20" url={fixture.team_image_url} />
+          <TeamLogo 
+            className="w-20 h-20" url={fixture.team_image_url} 
+            teamName={fixture.team_name}
+          />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
             {fixture.team_name}
           </p>
@@ -253,6 +256,7 @@ function PredictionModal({
           <TeamLogo
             className="w-20 h-20"
             url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
+            teamName={fixture.opposition_team_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
             {fixture.opposition_team_name}
