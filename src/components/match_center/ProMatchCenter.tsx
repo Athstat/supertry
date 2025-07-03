@@ -124,6 +124,7 @@ export default function ProMatchCenter() {
                                 "rounded-xl border min-w-96 max-h-[250px] min-h-[250px] dark:border-slate-700 flex-1",
                                 focus === 'upcoming' && 'w-full'
                             )}
+                            showCompetition
                         />
                     })}
                 </div>
@@ -143,6 +144,7 @@ export default function ProMatchCenter() {
                             fixture={fixture}
                             key={index}
                             showLogos
+                            showCompetition
                             className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
                         />
                     })}

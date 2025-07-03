@@ -88,6 +88,8 @@ export default function FixtureCard({
     }
   };
 
+  const isTbdGame = fixture.team_name === 'TBD' || fixture.opposition_team_name === 'TBD';
+
   return (
     <>
       <div
@@ -192,7 +194,7 @@ export default function FixtureCard({
         )}
 
         {/* Voting Section */}
-        <div
+        { !isTbdGame && <div
           className={twMerge(
             'flex mt-4 flex-col w-full gap-1 items-center justify-center',
             isVoting && 'animate-pulse opacity-60 cursor-progress'
@@ -261,7 +263,7 @@ export default function FixtureCard({
               />
             </>
           )}
-        </div>
+        </div>}
       </div>
       <FixtureCardModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
