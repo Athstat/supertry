@@ -62,8 +62,10 @@ function teamLogoMapper(teamName: string): string | undefined {
       case 'Peterhouse Boys':
         return 'peterhouse.png.png';
       case 'Prince Edward School':
+      case 'Prince Edward 2nd':
         return 'prince-edwards.png.png';
       case 'St George’s College':
+      case 'St George’s 3rd':
         return 'st-georges.png.png';
       case "St John's College":
         return 'st-johns-college.png.png';
@@ -74,6 +76,7 @@ function teamLogoMapper(teamName: string): string | undefined {
       case 'Rydings College':
         return 'rydings.webp';
 
+      case 'Hillcrest College (ZIM)':
       case 'Hillcrest College':
         return 'hilcrest.webp';
       case 'Wise Owl Marondera':

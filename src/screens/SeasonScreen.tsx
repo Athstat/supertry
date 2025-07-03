@@ -7,10 +7,7 @@ import { useAtomValue } from "jotai";
 import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms } from "../state/season.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { TopicPageView } from "./PageView";
-import { Calendar, Users } from "lucide-react";
-import { PlayerGameCard } from "../components/player/PlayerGameCard";
 import { seasonService } from "../services/seasonsService";
-import GroupedFixturesList from "../components/fixtures/GroupedFixturesList";
 import SeasonScreenTeamList from "../components/seasons/SeasonScreenTeamList";
 import SeasonScreenAthleteList from "../components/seasons/SeasonScreenAthleteList";
 import SeasonScreenFixturesList from "../components/seasons/SeasonScreenFixturesList";
@@ -44,9 +41,12 @@ export default function SeasonScreen() {
 function SeasonScreenContent() {
 
     const season = useAtomValue(seasonAtom);
-    const teams = useAtomValue(seasonTeamsAtoms);
+    let teams = useAtomValue(seasonTeamsAtoms);
     const athletes = useAtomValue(seasonAthletesAtoms);
     const fixtures = useAtomValue(seasonFixtutesAtoms);
+
+    teams = teams.filter(t => t.athstat_name !== 'TBD')
+
 
     const card = [
         {

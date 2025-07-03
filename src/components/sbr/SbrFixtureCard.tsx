@@ -9,6 +9,7 @@ import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "./fixture/SbrFixtureDataProvider";
 import { Sparkles } from "lucide-react";
 import WarningCard from "../shared/WarningCard";
+import { format } from "date-fns";
 
 type Props = {
     fixture: ISbrFixture,
@@ -46,7 +47,7 @@ type ContentProps = {
     hideVoting?: boolean
 }
 
-function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, className }: ContentProps) {
+function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, className, showKickOffTime }: ContentProps) {
 
     const navigate = useNavigate();
     const fixture = useAtomValue(sbrFixtureAtom);
@@ -82,7 +83,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
             {hasBoxscoreData &&
                 <WarningCard className="flex flex-row items-center justify-center" >
                     <Sparkles className="w-4 h-4" />
-                    <p>Stats are available for this game</p>
+                    <p className="text-xs" >Stats are available for this game</p>
                 </WarningCard>
 
             }
@@ -93,25 +94,26 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
             >
                 {/* Home Team */}
                 <div className="flex-1 flex gap-2 flex-col items-center justify-start" >
-                    {showLogos && <SbrTeamLogo className="w-14 h-14 lg:w-14 lg:h-14" teamName={fixture.home_team} />}
+                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.home_team} />}
                     <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team}</p>
-                    <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && home_score !== undefined ? home_score : "-"}</p>
+                    <p className="text-slate-700 text-xs dark:text-slate-400" >{gameCompleted && home_score !== undefined ? home_score : "-"}</p>
                 </div>
                 {/* Kick off information */}
                 <div className="flex-1 flex flex-col items-center justify-center dark:text-slate-400 text-slate-700 " >
 
                     {!hasScores && fixture.status !== "completed" && <p className="text-sm" >VS</p>}
                     {fixture.status === "completed" && (
-                        <div className="flex w-full flex-row items-center justify-center gap-1" >
+                        <div className="flex w-full text-xs flex-row items-center justify-center gap-1" >
                             <div>Final</div>
                         </div>
                     )}
+                    {showKickOffTime && fixture.kickoff_time && <p className="text-xs" >{format(fixture.kickoff_time, 'dd MMMM yyyy')}</p>}
                 </div>
                 {/* Away Team */}
                 <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >
-                    {showLogos && <SbrTeamLogo className="w-14 h-14 lg:w-14 lg:h-14" teamName={fixture.away_team} />}
+                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.away_team} />}
                     <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team}</p>
-                    <p className="text-slate-700 dark:text-slate-400" >{gameCompleted && away_score !== undefined ? away_score : "-"}</p>
+                    <p className="text-slate-700 text-xs dark:text-slate-400" >{gameCompleted && away_score !== undefined ? away_score : "-"}</p>
                 </div>
             </div>
 

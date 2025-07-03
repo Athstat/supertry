@@ -41,7 +41,9 @@ export default function SbrFixtureDataProvider({ fixtureId, children }: Props) {
     }, [fixture, events, boxscore]);
 
     if (isLoading) {
-        return <LoadingState />
+        return <div className="min-w-[350px] w-full bg-white rounded-xl dark:bg-slate-700/50 animate-pulse h-[250px]" >
+
+        </div>
     }
 
     if (error) {

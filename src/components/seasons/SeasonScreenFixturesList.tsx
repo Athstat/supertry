@@ -43,6 +43,12 @@ export default function SeasonScreenFixturesList({ fixtures }: Props) {
         }
 
         return false
+
+    }).sort((a, b) => {
+        const aE = new Date(a.kickoff_time ?? new Date());
+        const bE = new Date(b.kickoff_time ?? new Date());
+
+        return bE.valueOf() - aE.valueOf();
     });
 
     return (
@@ -62,7 +68,6 @@ export default function SeasonScreenFixturesList({ fixtures }: Props) {
 
             <div className="grid grid-cols-1 gap-2" >
                 <GroupedFixturesList
-                    descendingOrder
                     fixtures={filteredFixtures}
                 />
             </div>
