@@ -16,6 +16,10 @@ export default function MatchSeasonFilterBar({onChange, seasons, value} : Props)
             onChange(val);
         }
     }
+
+    seasons = seasons.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+    })
     
     return (
         <div className="flex flex-row items-center overflow-y-auto gap-2" >

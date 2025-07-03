@@ -55,7 +55,7 @@ export default function FixtureCard({
   const { gameKickedOff } = fixtureSumary(fixture);
 
   // Voting functionality
-  const { homeVotes, awayVotes, userVote} = useGameVotes(fixture);
+  const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
   const [isVoting, setIsVoting] = useState(false);
 
   // Calculate voting percentages
@@ -114,7 +114,12 @@ export default function FixtureCard({
           <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
             <div className="flex flex-row gap-2 items-center w-full justify-start">
               <div className="flex flex-col gap-4 items-center w-full justify-start">
-                {showLogos && <TeamLogo url={fixture.team_image_url} className="w-10 h-10" />}
+                {showLogos && <TeamLogo
+                  url={fixture.team_image_url}
+                  teamName={fixture.team_name}
+                  className="w-10 h-10"
+                />
+                }
 
                 <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
                   {fixture.team_name}
@@ -161,6 +166,7 @@ export default function FixtureCard({
                 {showLogos && (
                   <TeamLogo
                     url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
+                    teamName={fixture.opposition_team_name}
                     className="w-10 h-10"
                   />
                 )}
@@ -217,7 +223,7 @@ export default function FixtureCard({
           )}
 
           {gameKickedOff && (
-            <VotingOptionsResults 
+            <VotingOptionsResults
               homeTeam={fixture.team_name}
               awayTeam={fixture.opposition_team_name}
               hasScores={fixture.game_status === 'completed'}
@@ -295,7 +301,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
-          <TeamLogo className="w-20 h-20" url={fixture.team_image_url} />
+          <TeamLogo 
+            className="w-20 h-20"
+            url={fixture.team_image_url}
+            teamName={fixture.team_name}
+          />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
             {fixture.team_name}
           </p>
@@ -309,6 +319,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
             className="w-20 h-20"
+            teamName={fixture.opposition_team_name}
             url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
