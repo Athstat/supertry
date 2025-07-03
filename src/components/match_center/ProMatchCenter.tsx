@@ -116,7 +116,6 @@ export default function ProMatchCenter() {
             <div className="flex flex-col gap-4" >
                 <div className="flex flex-row items-center justify-between" >
                     <p className="font-semibold text-lg" >Past Fixtures</p>
-                    <ArrowRight />
                 </div>
 
                 <div className="flex flex-col items-center gap-3 w-full" >
