@@ -5,12 +5,13 @@ import { AFRICA_CUP, ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETI
 import { LoadingState } from "../ui/LoadingState";
 import FixtureCard from "../fixtures/FixtureCard";
 import { subHours } from "date-fns";
-import { ArrowRight } from "lucide-react";
 import { useQueryState } from "../../hooks/useQueryState";
 import NoContentCard from "../shared/NoContentMessage";
 import MatchSeasonFilterBar from "./MatcheSeasonFilterBar";
 import MatchCenterSearchBar from "./MatchCenterSearchBar";
 import { searchProFixturePredicate } from "../../utils/fixtureUtils";
+import { twMerge } from "tailwind-merge";
+import { Maximize2, Minimize2 } from "lucide-react";
 
 export default function ProMatchCenter() {
 
@@ -19,6 +20,17 @@ export default function ProMatchCenter() {
 
     const [season, setSeason] = useQueryState('pcid', { init: 'all' });
     const [search, setSearch] = useQueryState('proq');
+    const [focus, setFocus] = useQueryState('focus');
+
+    const toggleFocus = () => {
+
+        if (focus === 'upcoming') {
+            setFocus('');
+            return;
+        }
+
+        setFocus('upcoming')
+    }
 
     if (isLoading) {
         return <LoadingState />
@@ -95,16 +107,25 @@ export default function ProMatchCenter() {
             <div className="flex flex-col gap-4" >
                 <div className="flex flex-row items-center justify-between" >
                     <p className="font-semibold text-lg" >Upcoming Fixtures</p>
-                    <ArrowRight />
+                    <button className="cursor-pointer p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800/40 " onClick={toggleFocus} >
+                        {focus !== "upcoming" && <Maximize2 />}
+                        {focus === "upcoming" && <Minimize2 />}
+                    </button>
                 </div>
 
-                <div className="flex flex-row items-center gap-3 overflow-x-auto" >
+                <div className={twMerge(
+                    "flex flex-row items-center gap-3 overflow-x-auto",
+                    focus === 'upcoming' && 'flex flex-col gap-2'
+                )} >
                     {upcomingFixtures.map((fixture, index) => {
                         return <FixtureCard
                             fixture={fixture}
                             key={index}
                             showLogos
-                            className="rounded-xl border min-w-96 max-h-[250px] min-h-[250px] dark:border-slate-700 flex-1"
+                            className={twMerge(
+                                "rounded-xl border min-w-96 max-h-[250px] min-h-[250px] dark:border-slate-700 flex-1",
+                                focus === 'upcoming' && 'w-full'
+                            )}
                         />
                     })}
                 </div>
@@ -139,8 +160,7 @@ const competitionIds = [
     ERPC_COMPETITION_ID,
     INVESTEC_CHAMPIONSHIP_CUP,
     URC_COMPETIION_ID,
-    AFRICA_CUP,
-    'test-1',
+    AFRICA_CUP
 ];
 
 async function fetcher(competitionIds: string[]) {

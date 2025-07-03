@@ -74,11 +74,11 @@ export default function UpcomingFixturesSection() {
             return (
               <div
                 key={index}
-                className="min-w-[280px] bg-gray-900 rounded-xl overflow-hidden text-white"
+                className="min-w-[320px] bg-gray-900 rounded-xl overflow-hidden text-white"
               >
                 <div className="p-4">
                   <div className="text-center mb-3 text-sm text-gray-300">
-                    {fixture.competition_name && <p>{fixture.competition_name} Semi Finals</p>}
+                    {fixture.competition_name && <p>{fixture.competition_name}</p>}
                     {fixture.venue && <p className="text-xs mt-1">{fixture.venue}</p>}
                   </div>
 
@@ -86,7 +86,7 @@ export default function UpcomingFixturesSection() {
                     {/* Home Team */}
                     <div className="flex flex-col items-center min-w-0 w-28">
                       <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
-                        <TeamLogo url={fixture.team_image_url} className="w-10 h-10" />
+                        <TeamLogo url={fixture.team_image_url} teamName={fixture.team_name} className="w-10 h-10" />
                       </div>
                       <p
                         className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden"
@@ -117,6 +117,7 @@ export default function UpcomingFixturesSection() {
                       <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                         <TeamLogo
                           url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
+                          teamName={fixture.opposition_team_name}
                           className="w-10 h-10"
                         />
                       </div>

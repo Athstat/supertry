@@ -5,10 +5,11 @@ import SbrFixtureCard from '../sbr/SbrFixtureCard';
 import MatchSeasonFilterBar from './MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Maximize2, Minimize2 } from 'lucide-react';
 import NoContentCard from '../shared/NoContentMessage';
 import MatchCenterSearchBar from './MatchCenterSearchBar';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
+import { twMerge } from 'tailwind-merge';
 
 export default function SbrMatchCenter() {
 
@@ -16,6 +17,17 @@ export default function SbrMatchCenter() {
     let { data: fixtures, isLoading } = useSWR(key, () => sbrService.getAllFixtures());
     const [season, setSeason] = useQueryState('sbrcs', { init: 'all' });
     const [search, setSearch] = useQueryState('proq');
+    const [focus, setFocus] = useQueryState('sbrfcs');
+
+    const toggleFocus = () => {
+        if (focus === 'upcoming') {
+            setFocus('');
+            return;
+        }
+
+        setFocus('upcoming');
+
+    }
 
     if (isLoading) {
         return <LoadingState />
@@ -91,16 +103,25 @@ export default function SbrMatchCenter() {
             <div className='flex flex-col gap-4' >
                 <div className='flex flex-row items-center justify-between' >
                     <p className='font-semibold text-lg' >Upcoming Fixtures</p>
-                    <ArrowRight />
+                    <button onClick={toggleFocus} >
+                        {focus === "upcoming" && <Minimize2 />}
+                        {focus !== "upcoming" && <Maximize2 />}
+                    </button>
                 </div>
 
-                <div className='flex flex-row gap-2 max-h-62 overflow-y-hidden overflow-x-auto ' >
+                <div className={twMerge(
+                    'flex flex-row gap-2 max-h-62 overflow-y-hidden overflow-x-auto',
+                    focus === 'upcoming' && 'flex flex-col gap-1'
+                )} >
                     {upcomingFixtures.map((fixture, index) => {
                         return <SbrFixtureCard
                             fixture={fixture}
                             key={index}
                             showLogos
-                            className='min-w-[350px] max-h-[270px]'
+                            className={twMerge(
+                                'min-w-[350px] max-h-[270px]',
+                                focus === "upcoming" && 'w-full'
+                            )}
                         />
                     })}
                 </div>
