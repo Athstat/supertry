@@ -184,3 +184,70 @@ export function filterFixturesByDateRange(fixtures: IFixture[], dateRange: Date[
     })
 
 }
+
+export function searchProFixturePredicate(search: string, fixture: IFixture) : boolean {
+    /** Returns true if a fixture meets the predicate given the search */
+    // use things like, team name, venue, date, competition name, case insensitive
+
+    if (!search || search.trim() === "") return true;
+
+    const lowerSearch = search.toLowerCase().trim();
+
+    // Collect searchable fields
+    const fields: (string | undefined)[] = [
+        fixture.team_name,
+        fixture.opposition_team_name,
+        fixture.venue,
+        fixture.competition_name,
+        fixture.kickoff_time ? new Date(fixture.kickoff_time).toLocaleDateString() : undefined,
+        fixture.kickoff_time ? new Date(fixture.kickoff_time).toLocaleTimeString() : undefined,
+    ];
+
+    // Also add "Team vs Opposition" and "Opposition vs Team"
+    // Add "Team vs Opposition" and "Opposition vs Team" (full names)
+    fields.push(
+        fixture.team_name && fixture.opposition_team_name
+            ? `${fixture.team_name} vs ${fixture.opposition_team_name}`
+            : undefined
+    );
+    fields.push(
+        fixture.opposition_team_name && fixture.team_name
+            ? `${fixture.opposition_team_name} vs ${fixture.team_name}`
+            : undefined
+    );
+
+    // Add reversed "Team vs Opposition" and "Opposition vs Team" for matching both orders
+    if (fixture.team_name && fixture.opposition_team_name) {
+        const teamVsOpp = `${fixture.team_name} vs ${fixture.opposition_team_name}`.toLowerCase();
+        const oppVsTeam = `${fixture.opposition_team_name} vs ${fixture.team_name}`.toLowerCase();
+        if (
+            lowerSearch === teamVsOpp ||
+            lowerSearch === oppVsTeam
+        ) {
+            return true;
+        }
+    }
+
+    // Add "Shortened" versions: last word of each team name (e.g., "Bulls vs Sharks")
+    const getShortName = (name?: string) =>
+        name ? name.split(" ").slice(-1)[0] : undefined;
+
+    const shortTeam = getShortName(fixture.team_name);
+    const shortOpposition = getShortName(fixture.opposition_team_name);
+
+    if (shortTeam && shortOpposition) {
+        fields.push(`${shortTeam} vs ${shortOpposition}`);
+        fields.push(`${shortOpposition} vs ${shortTeam}`);
+    }
+    fields.push(
+        fixture.opposition_team_name && fixture.team_name
+            ? `${fixture.opposition_team_name} vs ${fixture.team_name}`
+            : undefined
+    );
+
+    // Check if any field contains the search string
+    return fields.some(field =>
+        field ? field.toLowerCase().includes(lowerSearch) : false
+    );
+
+}

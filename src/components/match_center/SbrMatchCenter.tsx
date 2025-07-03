@@ -13,6 +13,7 @@ export default function SbrMatchCenter() {
     const key = 'sbr-fixtures';
     let { data: fixtures, isLoading } = useSWR(key, () => sbrService.getAllFixtures());
     const [season, setSeason] = useQueryState('sbrcs', { init: 'all' });
+    const [search, setSearch] = useQueryState('proq');
 
     if (isLoading) {
         return <LoadingState />

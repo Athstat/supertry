@@ -9,6 +9,8 @@ import { ArrowRight } from "lucide-react";
 import { useQueryState } from "../../hooks/useQueryState";
 import NoContentCard from "../shared/NoContentMessage";
 import MatchSeasonFilterBar from "./MatcheSeasonFilterBar";
+import MatchCenterSearchBar from "./MatchCenterSearchBar";
+import { searchFixturesPredicate, searchProFixturePredicate } from "../../utils/fixtureUtils";
 
 export default function ProMatchCenter() {
 
@@ -16,6 +18,7 @@ export default function ProMatchCenter() {
     let { data: fixtures, isLoading } = useSWR(key, () => fetcher(competitionIds));
 
     const [season, setSeason] = useQueryState('pcid', { init: 'all' });
+    const [search, setSearch] = useQueryState('proq');
 
     if (isLoading) {
         return <LoadingState />
@@ -32,8 +35,13 @@ export default function ProMatchCenter() {
     });
 
     const filteredFixtures = fixtures.filter((f) => {
-        if (!season || season === 'all') { return true }
-        return f.league_id === season;
+        const seasonMatches = (!season || season === 'all') ? 
+            true : f.league_id === season;
+
+        const searchMatches = search ? searchProFixturePredicate(search, f) : true;
+
+        return searchMatches && seasonMatches;
+
     })
 
     const pastFixtures = filteredFixtures.filter((f) => {
@@ -61,6 +69,11 @@ export default function ProMatchCenter() {
     return (
         <div className="flex flex-col gap-4" >
             <h1 className="font-bold text-lg" >Pro Games</h1>
+            
+            <MatchCenterSearchBar 
+                value={search}
+                onChange={setSearch}
+            />
 
             <MatchSeasonFilterBar 
                 seasons={seasons}
