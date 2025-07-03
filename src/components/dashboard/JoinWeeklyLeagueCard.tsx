@@ -94,11 +94,11 @@ type BannerProps = {
 
 export function HeroImageBanner({link = "/images/africa_banner.jpg"} : BannerProps) {
   return (
-    <div className="w-full overflow-clip bg-slate-100 dark:border-slate-700 rounded-xl relative">
+    <div className="w-full h-44 lg:h-64 overflow-clip bg-slate-100 dark:border-slate-700 rounded-xl relative">
       <img
         src={link}
         alt="Africa Cup Banner"
-        className="w-full object-cover"
+        className="w-full object-center"
       />
       <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent px-6 py-4 flex flex-col items-start">
         <h3
