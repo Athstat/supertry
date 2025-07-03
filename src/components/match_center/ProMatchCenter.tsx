@@ -10,7 +10,7 @@ import { useQueryState } from "../../hooks/useQueryState";
 import NoContentCard from "../shared/NoContentMessage";
 import MatchSeasonFilterBar from "./MatcheSeasonFilterBar";
 import MatchCenterSearchBar from "./MatchCenterSearchBar";
-import { searchFixturesPredicate, searchProFixturePredicate } from "../../utils/fixtureUtils";
+import { searchProFixturePredicate } from "../../utils/fixtureUtils";
 
 export default function ProMatchCenter() {
 

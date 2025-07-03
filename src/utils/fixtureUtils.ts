@@ -210,12 +210,41 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
             ? `${fixture.team_name} vs ${fixture.opposition_team_name}`
             : undefined
     );
-    fields.push(
-        fixture.opposition_team_name && fixture.team_name
-            ? `${fixture.opposition_team_name} vs ${fixture.team_name}`
-            : undefined
-    );
+    // Add both "Team vs Opposition" and "Opposition vs Team" (full names, both orders)
+    if (fixture.team_name && fixture.opposition_team_name) {
+        fields.push(`${fixture.team_name} vs ${fixture.opposition_team_name}`);
+        fields.push(`${fixture.opposition_team_name} vs ${fixture.team_name}`);
+    }
+    // Special handling for "vs" searches: allow partial team name matches in either order
+    if (lowerSearch.includes(" vs ") || lowerSearch.includes(" VS ")) {
+        const [team1, team2] = lowerSearch
+            .replace(" VS ", " vs ")
+            .split(" vs ")
+            .map(s => s.trim());
+            // Allow partial team name matches in either order using includes
+            if (team1 && team2 && fixture.team_name && fixture.opposition_team_name) {
+                const home = fixture.team_name.toLowerCase();
+                const away = fixture.opposition_team_name.toLowerCase();
 
+                if (
+                (home.includes(team1) && away.includes(team2)) ||
+                (away.includes(team1) && home.includes(team2))
+                ) {
+                return true;
+                }
+            }
+        if (team1 && team2 && fixture.team_name && fixture.opposition_team_name) {
+            const home = fixture.team_name.toLowerCase();
+            const away = fixture.opposition_team_name.toLowerCase();
+
+            if (
+                (home.startsWith(team1) && away.startsWith(team2)) ||
+                (away.startsWith(team1) && home.startsWith(team2))
+            ) {
+                return true;
+            }
+        }
+    }
     // Add reversed "Team vs Opposition" and "Opposition vs Team" for matching both orders
     if (fixture.team_name && fixture.opposition_team_name) {
         const teamVsOpp = `${fixture.team_name} vs ${fixture.opposition_team_name}`.toLowerCase();
