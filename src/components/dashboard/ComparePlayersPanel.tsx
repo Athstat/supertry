@@ -7,6 +7,7 @@ import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerCompareModal from '../players/compare/PlayerCompareModal';
 import { twMerge } from 'tailwind-merge';
 import { PlayerSearch } from '../players/PlayerSearch';
+import { Infinity } from 'lucide-react';
 
 const ComparePlayersPanel = () => {
   const navigate = useNavigate();
@@ -85,19 +86,23 @@ const ComparePlayersPanel = () => {
           COMPARE PLAYERS
         </h3>
         <div className="flex gap-2">
+
           <button
             onClick={handleShufflePlayers}
-            className="text-xs px-3 py-1 rounded bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800 border border-primary-200 dark:border-primary-700 transition"
+            className="text-xs px-3 py-1 flex flex-row items-center gap-1 rounded-xl bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800 border border-primary-200 dark:border-primary-700 transition"
             title="Shuffle Players"
           >
             Shuffle
+            <Infinity />
           </button>
+
           <button
             onClick={() => navigate('/players?tab=compare')}
             className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
           >
             View All
           </button>
+          
         </div>
       </div>
 

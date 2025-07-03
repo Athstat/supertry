@@ -1,9 +1,7 @@
-import React from 'react';
-import { Users, Calendar, Award } from 'lucide-react';
+import { Users, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useFetch } from '../../hooks/useFetch';
 import { leagueService } from '../../services/leagueService';
-import { IFantasyLeague } from '../../types/fantasyLeague';
 import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 import { differenceInDays } from 'date-fns';
 
@@ -89,3 +87,29 @@ const JoinWeeklyLeagueCard = () => {
 };
 
 export default JoinWeeklyLeagueCard;
+
+type BannerProps = {
+  link?: string
+}
+
+export function HeroImageBanner({link = "/images/africa_banner.jpg"} : BannerProps) {
+  return (
+    <div className="w-full overflow-clip bg-slate-100 dark:border-slate-700 rounded-xl relative">
+      <img
+        src={link}
+        alt="Africa Cup Banner"
+        className="w-full object-cover"
+      />
+      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent px-6 py-4 flex flex-col items-start">
+        <h3
+          className="text-white text-lg font-bold drop-shadow-xl mb-2"
+          style={{
+        textShadow:
+          '0 4px 24px #000, 0 2px 8px #000, 0 1px 0 #000, 2px 2px 8px #000, -2px 2px 8px #000'
+          }}
+        >
+        </h3>
+      </div>
+    </div>
+  )
+}

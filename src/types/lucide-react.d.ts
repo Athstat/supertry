@@ -95,5 +95,6 @@ declare module "lucide-react" {
   export const PlayCircle: CIP;
   export const Minimize2: CIP;
   export const Maximize2: CIP;
+  export const Infinity: CIP;
 }
 
