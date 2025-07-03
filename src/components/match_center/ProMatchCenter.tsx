@@ -1,7 +1,5 @@
 import useSWR from "swr"
 import { gamesService } from "../../services/gamesService";
-import { IFixture } from "../../types/games";
-import { AFRICA_CUP, ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from "../../types/constants";
 import { LoadingState } from "../ui/LoadingState";
 import FixtureCard from "../fixtures/FixtureCard";
 import { subHours } from "date-fns";
@@ -16,7 +14,7 @@ import { Maximize2, Minimize2 } from "lucide-react";
 export default function ProMatchCenter() {
 
     const key = 'pro-fixtures';
-    let { data: fixtures, isLoading } = useSWR(key, () => fetcher(competitionIds));
+    let { data: fixtures, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
 
     const [season, setSeason] = useQueryState('pcid', { init: 'all' });
     const [search, setSearch] = useQueryState('proq');
@@ -154,28 +152,4 @@ export default function ProMatchCenter() {
 
         </div>
     )
-}
-
-const competitionIds = [
-    ERPC_COMPETITION_ID,
-    INVESTEC_CHAMPIONSHIP_CUP,
-    URC_COMPETIION_ID,
-    AFRICA_CUP
-];
-
-async function fetcher(competitionIds: string[]) {
-    let matches: IFixture[] = [];
-
-    const fetchMatches = async (compId: string) => {
-        const res = await gamesService.getGamesByCompetitionId(compId);
-        matches = [...matches, ...res];
-    };
-
-    const promises = competitionIds.map(compId => {
-        return fetchMatches(compId);
-    });
-
-    await Promise.all(promises);
-
-    return matches;
 }
