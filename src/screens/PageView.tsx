@@ -41,31 +41,33 @@ export function TopicPageView({ children, title, statsCards, className }: TopicP
 
     return (
         <div>
-            <BlueGradientCard className="rounded-none p-4 min-h-32 items-start justify-center flex flex-col gap-2" >
-                <button
-                    onClick={handleGoBack}
-                    className="flex items-center text-primary-100 hover:text-white transition-colors"
-                >
-                    <ChevronLeft size={20} />
-                    <span>
-                        {"Go Back"}
-                    </span>
-                </button>
-                <p className="text-xl font-extrabold" >{title}</p>
+            <BlueGradientCard className="rounded-none p-4 py-8 lg:py-10 min-h-32 items-center justify-center flex flex-col gap-2" >
+                <div className="lg:w-1/2 w-full flex flex-col gap-4" >
+                    <button
+                        onClick={handleGoBack}
+                        className="flex items-center text-primary-100 hover:text-white transition-colors"
+                    >
+                        <ChevronLeft size={20} />
+                        <span>
+                            {"Go Back"}
+                        </span>
+                    </button>
+                    <p className="text-xl font-extrabold" >{title}</p>
 
-                {statsCards && <div className="grid grid-cols-2 w-full gap-2" >
-                    
-                    {statsCards.map((card, index) => {
-                        return (
-                            <TransparentStatCard 
-                                label={card.title}
-                                value={card.value}
-                                key={index}
-                            />
-                        )
-                    })}
+                    {statsCards && <div className="grid grid-cols-2 w-full gap-2" >
 
-                </div>}
+                        {statsCards.map((card, index) => {
+                            return (
+                                <TransparentStatCard
+                                    label={card.title}
+                                    value={card.value}
+                                    key={index}
+                                />
+                            )
+                        })}
+
+                    </div>}
+                </div>
             </BlueGradientCard>
 
             <PageView className={className} >
