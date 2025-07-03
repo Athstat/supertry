@@ -311,11 +311,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
           View Full Match Details
         </button>
       </div>
-
-      <GameHighlightsCard link={fixture.highlights_link} />
+      <div>
+        <GameHighlightsCard link={fixture.highlights_link} />
+      </div>
     </DialogModal>
   );
-
 }
 
 function KickOffInformation({ fixture }: Props) {
