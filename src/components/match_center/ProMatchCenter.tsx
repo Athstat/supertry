@@ -113,7 +113,7 @@ export default function ProMatchCenter() {
 
                 <div className={twMerge(
                     "flex flex-row items-center gap-3 overflow-x-auto",
-                    focus === 'upcoming' && 'flex flex-col gap-2'
+                    focus === 'upcoming' && 'flex flex-col gap-2 overflow-x-hidden'
                 )} >
                     {upcomingFixtures.map((fixture, index) => {
                         return <FixtureCard

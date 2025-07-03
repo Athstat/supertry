@@ -111,7 +111,7 @@ export default function SbrMatchCenter() {
 
                 <div className={twMerge(
                     'flex flex-row gap-2 max-h-62 overflow-y-hidden overflow-x-auto',
-                    focus === 'upcoming' && 'flex flex-col gap-1'
+                    focus === 'upcoming' && 'flex flex-col gap-1 overflow-x-hidden'
                 )} >
                     {upcomingFixtures.map((fixture, index) => {
                         return <SbrFixtureCard

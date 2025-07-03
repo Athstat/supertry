@@ -103,7 +103,7 @@ export default function FixtureCard({
           <div className="w-full items-center justify-center flex flex-col">
             {showCompetition && competition_name && (
               <p className="text-[10px] lg:text-sm text-gray-600 dark:text-slate-400">
-                {competition_name}, Week {round}
+                {competition_name}, { fixture.extra_info ?? `Week ${round}`}
               </p>
             )}
             {showVenue && (
