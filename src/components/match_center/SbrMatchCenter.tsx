@@ -7,6 +7,8 @@ import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
 import { ArrowRight } from 'lucide-react';
 import NoContentCard from '../shared/NoContentMessage';
+import MatchCenterSearchBar from './MatchCenterSearchBar';
+import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
 
 export default function SbrMatchCenter() {
 
@@ -29,11 +31,13 @@ export default function SbrMatchCenter() {
     })
 
     const filteredFixtures = fixtures.filter((f) => {
-        if (!season || season === 'all') {
-            return true;
-        }
 
-        return f.season === season;
+        const seasonMatches = !season || season === 'all' ?
+            true : f.season === season
+
+        const searchMatches = search ? searchSbrFixturePredicate(search ?? '', f) : true;
+
+        return seasonMatches && searchMatches;
     });
 
     const upcomingFixtures = filteredFixtures.filter((f) => {
@@ -66,6 +70,12 @@ export default function SbrMatchCenter() {
     return (
         <div className='flex flex-col gap-4' >
             <h1 className='font-bold text-lg' >Sbr Games</h1>
+
+            <MatchCenterSearchBar 
+                value={search}
+                onChange={setSearch}
+                placeholder='Search SBR games, seasons ...'
+            />
 
             <MatchSeasonFilterBar
                 seasons={seasons}

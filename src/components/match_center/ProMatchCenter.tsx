@@ -73,6 +73,7 @@ export default function ProMatchCenter() {
             <MatchCenterSearchBar 
                 value={search}
                 onChange={setSearch}
+                placeholder="Search Pro Games, Seasons ..."
             />
 
             <MatchSeasonFilterBar 

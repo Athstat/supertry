@@ -3,10 +3,11 @@ import RoundedCard from "../shared/RoundedCard"
 
 type Props = {
     value?: string,
-    onChange?: (val: string) => void
+    onChange?: (val: string) => void,
+    placeholder?: string
 }
 
-export default function MatchCenterSearchBar({ value, onChange }: Props) {
+export default function MatchCenterSearchBar({ value, onChange, placeholder }: Props) {
 
     const handleChange = (val?: string) => {
         if (onChange) {
@@ -19,7 +20,7 @@ export default function MatchCenterSearchBar({ value, onChange }: Props) {
             <Search className="dark:text-dark-500 text-slate-700" />
             <input 
                 className="bg-transparent outline-none w-full"
-                placeholder="Search games, season ..."
+                placeholder={placeholder ?? "Search games, season ..."}
                 onChange={(e) => handleChange(e.target.value)}
                 value={value}
             />
