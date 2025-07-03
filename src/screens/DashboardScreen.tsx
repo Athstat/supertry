@@ -19,7 +19,7 @@ export function DashboardScreen() {
 
       <div className='flex flex-col gap-2' >
         <HeroImageBanner
-          link='/images/africa_banner.jpg'
+          link='/images/africa_cup.jpeg'
         />
         <p className="font-bold text-lg">Rugby Africa Cup 2025 is here!</p>
         
