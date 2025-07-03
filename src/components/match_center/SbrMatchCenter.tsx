@@ -6,6 +6,7 @@ import MatchSeasonFilterBar from './MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
 import { ArrowRight } from 'lucide-react';
+import NoContentCard from '../shared/NoContentMessage';
 
 export default function SbrMatchCenter() {
 
@@ -34,7 +35,7 @@ export default function SbrMatchCenter() {
         return f.season === season;
     });
 
-    const upcomingFixtures = fixtures.filter((f) => {
+    const upcomingFixtures = filteredFixtures.filter((f) => {
         const kickoff = f.kickoff_time ? new Date(f.kickoff_time) : undefined;
 
         if (kickoff) {
@@ -43,7 +44,23 @@ export default function SbrMatchCenter() {
         }
 
         return false;
-    })
+    });
+
+    const pastFixtures = filteredFixtures.filter((f) => {
+        const kickoff = f.kickoff_time ? new Date(f.kickoff_time) : undefined;
+
+        if (kickoff) {
+            const now = (new Date());
+            return now.valueOf() > kickoff.valueOf();
+        }
+
+        return false;
+    }).sort((a, b) => {
+        const aE = new Date(a.kickoff_time ?? new Date());
+        const bE = new Date(b.kickoff_time ?? new Date());
+
+        return bE.valueOf() - aE.valueOf();
+    });
 
     return (
         <div className='flex flex-col gap-4' >
@@ -72,8 +89,34 @@ export default function SbrMatchCenter() {
                     })}
                 </div>
 
+                {upcomingFixtures.length === 0 && (
+                    <NoContentCard message='No upcoming fixtures were found' />
+                )}
+
             </div>
 
+            <div className='flex flex-col gap-4' >
+                <div className='flex flex-row items-center justify-between' >
+                    <p className='font-semibold text-lg' >Past Fixtures</p>
+                    <ArrowRight />
+                </div>
+
+                <div className='flex flex-col gap-2 max-h-62 overflow-y-hidden overflow-x-auto ' >
+                    {pastFixtures.map((fixture, index) => {
+                        return <SbrFixtureCard
+                            fixture={fixture}
+                            key={index}
+                            showLogos
+                            className='min-w-[350px] max-h-[300px]'
+                        />
+                    })}
+                </div>
+
+                {upcomingFixtures.length === 0 && (
+                    <NoContentCard message='No upcoming fixtures were found' />
+                )}
+
+            </div>
 
         </div>
     )

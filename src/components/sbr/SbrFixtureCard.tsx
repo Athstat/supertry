@@ -82,7 +82,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
             {hasBoxscoreData &&
                 <WarningCard className="flex flex-row items-center justify-center" >
                     <Sparkles className="w-4 h-4" />
-                    <p>Stats are available for this game</p>
+                    <p className="text-xs" >Stats are available for this game</p>
                 </WarningCard>
 
             }
