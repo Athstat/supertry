@@ -48,11 +48,16 @@ export default function ProMatchCenter() {
         const kickoff = f.kickoff_time
 
         if (kickoff) {
-            const now = subHours(new Date(), 2).valueOf();
+            const now = (new Date()).valueOf();
             return now > new Date(kickoff).valueOf();
         }
 
         return false;
+    }).sort((a, b) => {
+        const aE = new Date(a.kickoff_time ?? new Date());
+        const bE = new Date(b.kickoff_time ?? new Date());
+
+        return bE.valueOf() - aE.valueOf();
     });
 
     const upcomingFixtures = filteredFixtures.filter((f) => {
@@ -64,6 +69,11 @@ export default function ProMatchCenter() {
         }
 
         return false;
+    }).sort((a, b) => {
+        const aE = new Date(a.kickoff_time ?? new Date());
+        const bE = new Date(b.kickoff_time ?? new Date());
+
+        return aE.valueOf() - bE.valueOf();
     });
 
     return (
@@ -94,7 +104,7 @@ export default function ProMatchCenter() {
                             fixture={fixture}
                             key={index}
                             showLogos
-                            className="rounded-xl border min-w-96 h-full dark:border-slate-700 flex-1"
+                            className="rounded-xl border min-w-96 max-h-[250px] min-h-[250px] dark:border-slate-700 flex-1"
                         />
                     })}
                 </div>
@@ -115,7 +125,7 @@ export default function ProMatchCenter() {
                             fixture={fixture}
                             key={index}
                             showLogos
-                            className="rounded-xl border w-full h-full dark:border-slate-700 flex-1"
+                            className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
                         />
                     })}
                 </div>

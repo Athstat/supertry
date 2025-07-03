@@ -93,7 +93,7 @@ export default function FixtureCard({
       <div
         onClick={toogle}
         className={twMerge(
-          'p-4 flex cursor-pointer flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
+          'p-4 flex cursor-pointer justify-center flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
           className,
         )}
       >
@@ -188,7 +188,7 @@ export default function FixtureCard({
         {/* Voting Section */}
         <div
           className={twMerge(
-            'flex mt-4 flex-col w-full gap-2 items-center justify-center',
+            'flex mt-4 flex-col w-full gap-1 items-center justify-center',
             isVoting && 'animate-pulse opacity-60 cursor-progress'
           )}
           onClick={e => e.stopPropagation()} // Prevent modal from opening when voting
@@ -197,7 +197,7 @@ export default function FixtureCard({
           {!hasUserVoted && !gameKickedOff && (
             <div className="flex flex-col w-full gap-2 items-center text-sm justify-center text-slate-700 dark:text-slate-400">
               <p className="text-xs">Who you got winning?</p>
-              <div className="flex flex-row gap-2 w-full">
+              <div className="flex flex-col gap-2 w-full">
                 <button
                   onClick={() => handleVote('home_team')}
                   className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1.5 text-xs hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
@@ -225,12 +225,13 @@ export default function FixtureCard({
               awayTeamWon={awayTeamWon}
               homeScore={fixture.team_score}
               awayScore={fixture.opposition_score}
-
+              votedAwayTeam={votedAwayTeam}
+              votedHomeTeam={votedHomeTeam}
             />
           )}
 
           {/* Show voting bars after user has voted or after kickoff */}
-          {(hasUserVoted || !gameKickedOff) && (
+          {(hasUserVoted && !gameKickedOff) && (
             <>
               <VotingOptionBar
                 hasUserVoted={votedHomeTeam}

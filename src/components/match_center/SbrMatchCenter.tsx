@@ -49,6 +49,11 @@ export default function SbrMatchCenter() {
         }
 
         return false;
+    }).sort((a, b) => {
+        const aE = new Date(a.kickoff_time ?? new Date());
+        const bE = new Date(b.kickoff_time ?? new Date());
+
+        return aE.valueOf() - bE.valueOf();
     });
 
     const pastFixtures = filteredFixtures.filter((f) => {
