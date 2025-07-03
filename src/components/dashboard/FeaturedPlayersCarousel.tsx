@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Users, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { athleteService } from '../../services/athleteService';
 import { RugbyPlayer } from '../../types/rugbyPlayer';
 import { leagueService } from '../../services/leagueService';
-import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 
@@ -53,6 +52,12 @@ const FeaturedPlayersCarousel = () => {
     };
     fetchPlayers();
   }, []);
+
+  const sortedAthletes = useMemo(() => {
+    return players.sort((a, b) => {
+      return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+    })
+  }, [players])
 
   return (
     <div className="w-full">
@@ -109,7 +114,7 @@ const FeaturedPlayersCarousel = () => {
 
           {/* Player cards carousel */}
           <div className="flex space-x-3 overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
-            {players.slice(0, 5).map(player => (
+            {sortedAthletes.slice(0, 5).map(player => (
               <div key={player.tracking_id} className="pl-1 flex-shrink-0">
                 <PlayerGameCard
                   player={player}
