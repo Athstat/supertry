@@ -37,12 +37,6 @@ export function DashboardScreen() {
     }
   };
 
-  const handleViewLeague = (league: IFantasyLeague) => {
-    navigate(`/league/${league.official_league_id}`, {
-      state: { league },
-    });
-  };
-
   return (
     <PageView className="flex flex-col space-y-6 p-4">
       <JoinWeeklyLeagueCard />
