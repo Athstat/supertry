@@ -10,6 +10,10 @@ import SecondaryText from '../components/shared/SecondaryText';
 export function DashboardScreen() {
   const navigate = useNavigate();
 
+  const goToFixtures = () => {
+    navigate('/fixtures');
+  }
+
   return (
     <PageView className="flex flex-col space-y-6 p-4">
 
@@ -25,7 +29,7 @@ export function DashboardScreen() {
 
         <button
           className="mt-2 px-4 text-sm py-2 border border-blue-400 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition"
-          onClick={() => navigate('/fixtures/africa-cup')}
+          onClick={() => goToFixtures()}
         >
           View Fixtures
         </button>
