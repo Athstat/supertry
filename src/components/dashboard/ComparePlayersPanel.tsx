@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BarChart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { RugbyPlayer } from '../../types/rugbyPlayer';
@@ -7,10 +7,11 @@ import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerCompareModal from '../players/compare/PlayerCompareModal';
 import { twMerge } from 'tailwind-merge';
 import { PlayerSearch } from '../players/PlayerSearch';
+import { Infinity } from 'lucide-react';
 
 const ComparePlayersPanel = () => {
   const navigate = useNavigate();
-  const { athletes } = useAthletes();
+  let { athletes } = useAthletes();
   const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,8 +37,39 @@ const ComparePlayersPanel = () => {
     clearSelections();
   };
 
+  // Shuffle athletes array deterministically every 5 hours using a seeded shuffle
+  function seededRandom(seed: number) {
+    let x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  }
+
+  function seededShuffle<T>(array: T[], seed: number): T[] {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(seededRandom(seed + i) * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Use the current 5-hour window as the seed
+  const now = Date.now();
+  const fiveHourWindow = Math.floor(now / (1000 * 60 * 60 * 5));
+  athletes = seededShuffle(athletes, fiveHourWindow);
+
   // Filter players by search query
-  const filteredPlayers = athletes.filter(player => {
+  const [manualShuffleSeed, setManualShuffleSeed] = useState<number | null>(null);
+
+  // Compute the seed: use manual if set, else default 5-hour window
+  const effectiveSeed = manualShuffleSeed !== null ? manualShuffleSeed : fiveHourWindow;
+  const shuffledAthletes = seededShuffle(athletes, effectiveSeed);
+
+  // Shuffle button handler
+  const handleShufflePlayers = () => {
+    setManualShuffleSeed(Date.now());
+  };
+
+  const filteredPlayers = shuffledAthletes.filter(player => {
     const query = searchQuery.toLowerCase();
     return (
       player.player_name?.toLowerCase().includes(query) ||
@@ -53,15 +85,28 @@ const ComparePlayersPanel = () => {
           <BarChart className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           COMPARE PLAYERS
         </h3>
-        <button
-          onClick={() => navigate('/players?tab=compare')}
-          className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
-        >
-          View All
-        </button>
+        <div className="flex gap-2">
+
+          <button
+            onClick={handleShufflePlayers}
+            className="text-xs px-3 py-1 flex flex-row items-center gap-1 rounded-xl bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800 border border-primary-200 dark:border-primary-700 transition"
+            title="Shuffle Players"
+          >
+            Shuffle
+            <Infinity />
+          </button>
+
+          <button
+            onClick={() => navigate('/players?tab=compare')}
+            className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
+          >
+            View All
+          </button>
+          
+        </div>
       </div>
 
-      <div className="rounded-xl bg-white dark:bg-gray-900 overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-gray-800">
+      <div className="rounded-xl bg-white  dark:bg-gray-900 overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-slate-700">
         <div className="p-4">
           {/* Player Search */}
           <div className="mb-4">

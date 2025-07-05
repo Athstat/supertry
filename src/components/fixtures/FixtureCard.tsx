@@ -11,7 +11,7 @@ import WarningCard from '../shared/WarningCard';
 import { useGameVotes } from '../../hooks/useGameVotes';
 import { gamesService } from '../../services/gamesService';
 import { mutate } from 'swr';
-import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
+import { VotingOptionBar, VotingOptionsResults } from '../shared/bars/VotingOptionBar';
 import GameHighlightsCard from '../video/GameHighlightsCard';
 type Props = {
   fixture: IFixture;
@@ -55,7 +55,7 @@ export default function FixtureCard({
   const { gameKickedOff } = fixtureSumary(fixture);
 
   // Voting functionality
-  const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture);
+  const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
   const [isVoting, setIsVoting] = useState(false);
 
   // Calculate voting percentages
@@ -88,20 +88,22 @@ export default function FixtureCard({
     }
   };
 
+  const isTbdGame = fixture.team_name === 'TBD' || fixture.opposition_team_name === 'TBD';
+
   return (
     <>
       <div
         onClick={toogle}
         className={twMerge(
-          'p-4 flex cursor-pointer flex-col text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800 transition-colors',
-          className
+          'p-4 flex cursor-pointer justify-center flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
+          className,
         )}
       >
         {
           <div className="w-full items-center justify-center flex flex-col">
             {showCompetition && competition_name && (
               <p className="text-[10px] lg:text-sm text-gray-600 dark:text-slate-400">
-                {competition_name}, Week {round}
+                {competition_name}, { fixture.extra_info ?? `Week ${round}`}
               </p>
             )}
             {showVenue && (
@@ -114,7 +116,12 @@ export default function FixtureCard({
           <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
             <div className="flex flex-row gap-2 items-center w-full justify-start">
               <div className="flex flex-col gap-4 items-center w-full justify-start">
-                {showLogos && <TeamLogo url={fixture.team_image_url} className="w-10 h-10" />}
+                {showLogos && <TeamLogo
+                  url={fixture.team_image_url}
+                  teamName={fixture.team_name}
+                  className="w-10 h-10"
+                />
+                }
 
                 <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
                   {fixture.team_name}
@@ -161,6 +168,7 @@ export default function FixtureCard({
                 {showLogos && (
                   <TeamLogo
                     url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
+                    teamName={fixture.opposition_team_name}
                     className="w-10 h-10"
                   />
                 )}
@@ -186,9 +194,9 @@ export default function FixtureCard({
         )}
 
         {/* Voting Section */}
-        <div
+        { !isTbdGame && <div
           className={twMerge(
-            'flex mt-4 flex-col w-full gap-2 items-center justify-center',
+            'flex mt-4 flex-col w-full gap-1 items-center justify-center',
             isVoting && 'animate-pulse opacity-60 cursor-progress'
           )}
           onClick={e => e.stopPropagation()} // Prevent modal from opening when voting
@@ -197,7 +205,7 @@ export default function FixtureCard({
           {!hasUserVoted && !gameKickedOff && (
             <div className="flex flex-col w-full gap-2 items-center text-sm justify-center text-slate-700 dark:text-slate-400">
               <p className="text-xs">Who you got winning?</p>
-              <div className="flex flex-row gap-2 w-full">
+              <div className="flex flex-col gap-2 w-full">
                 <button
                   onClick={() => handleVote('home_team')}
                   className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1.5 text-xs hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
@@ -216,8 +224,22 @@ export default function FixtureCard({
             </div>
           )}
 
+          {gameKickedOff && (
+            <VotingOptionsResults
+              homeTeam={fixture.team_name}
+              awayTeam={fixture.opposition_team_name}
+              hasScores={fixture.game_status === 'completed'}
+              homeTeamWon={homeTeamWon}
+              awayTeamWon={awayTeamWon}
+              homeScore={fixture.team_score}
+              awayScore={fixture.opposition_score}
+              votedAwayTeam={votedAwayTeam}
+              votedHomeTeam={votedHomeTeam}
+            />
+          )}
+
           {/* Show voting bars after user has voted or after kickoff */}
-          {(hasUserVoted || gameKickedOff) && (
+          {(hasUserVoted && !gameKickedOff) && (
             <>
               <VotingOptionBar
                 hasUserVoted={votedHomeTeam}
@@ -241,7 +263,7 @@ export default function FixtureCard({
               />
             </>
           )}
-        </div>
+        </div>}
       </div>
       <FixtureCardModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
@@ -281,7 +303,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
-          <TeamLogo className="w-20 h-20" url={fixture.team_image_url} />
+          <TeamLogo 
+            className="w-20 h-20"
+            url={fixture.team_image_url}
+            teamName={fixture.team_name}
+          />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
             {fixture.team_name}
           </p>
@@ -295,6 +321,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
             className="w-20 h-20"
+            teamName={fixture.opposition_team_name}
             url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
@@ -311,7 +338,6 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
           View Full Match Details
         </button>
       </div>
-
       <div>
         <GameHighlightsCard link={fixture.highlights_link} />
       </div>

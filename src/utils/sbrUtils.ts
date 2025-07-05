@@ -166,3 +166,29 @@ export function sumMultipleSbrBoxscoreActions(boxscore: ISbrBoxscoreItem[], targ
 
     }, 0);
 }
+
+
+export function searchSbrFixturePredicate(search: string, fixture: ISbrFixture) : boolean {
+    if (!search) return true;
+
+    const lowerSearch = search.toLowerCase();
+
+    const homeTeam = fixture.home_team?.toLowerCase() ?? "";
+    const awayTeam = fixture.away_team?.toLowerCase() ?? "";
+    const season = fixture.season?.toLowerCase() ?? "";
+
+    // Support "vs" keyword to search for matchups, e.g. "teamA vs teamB"
+    if (lowerSearch.includes(" vs ")) {
+        const [teamA, teamB] = lowerSearch.split(" vs ").map(s => s.trim());
+        // Check both orders for reverse search
+        const match1 = homeTeam.includes(teamA) && awayTeam.includes(teamB);
+        const match2 = homeTeam.includes(teamB) && awayTeam.includes(teamA);
+        return match1 || match2;
+    }
+
+    return (
+        homeTeam.includes(lowerSearch) ||
+        awayTeam.includes(lowerSearch) ||
+        season.includes(lowerSearch)
+    );
+}

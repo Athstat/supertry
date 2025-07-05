@@ -29,15 +29,17 @@ export default function FixtureScreen() {
 
   if (!fixtureId) return <ErrorState message="Match was not found" />
 
-  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(["games", fixtureId], async ([, gameId]) => await gamesService.getGameById(gameId))
+  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(`fixture/${fixtureId}`, () => gamesService.getGameById(fixtureId));
   const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
+  const { data: teamActions, isLoading: loadingTeamActions } = useSWR(["teamActions", fixtureId], () => gamesService.getGameTeamActions(fixtureId));
+
   const { data: rosters, isLoading: loadingRosters } = useFetch("rosters", fixtureId, gamesService.getGameRostersById);
 
-  const isLoading = loadingFixture || loadingBoxScore || loadingRosters;
+  const isLoading = loadingFixture || loadingBoxScore || loadingRosters || loadingTeamActions;
 
   if (isLoading) return <LoadingState />
 
-  if (!fetchedFixture) return <ErrorState message="Failed to load match information" />
+  if (!fetchedFixture) return <ErrorState message="Failed to load match information, so match doesn't exist???" />
 
   const fixture = fetchedFixture as IFixture;
   const { gameKickedOff } = fixtureSumary(fixture);
@@ -48,13 +50,11 @@ export default function FixtureScreen() {
       tabKey: "athletes-stats",
       disabled: !boxScore || boxScore.length === 0
     },
-
     {
       label: "Team Stats",
       tabKey: "team-stats",
-      disabled: !boxScore || boxScore.length === 0
+      disabled: !teamActions || teamActions.length === 0
     },
-
     {
       label: "Kick Off",
       tabKey: "kick-off",
@@ -90,8 +90,8 @@ export default function FixtureScreen() {
         <div className="flex flex-row h-max items-center justify-center w-full " >
 
           <div className="flex flex-1 flex-col items-center justify-start gap-3" >
-            <TeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " url={fixture.team_image_url} />
-            <TeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " url={fixture.team_image_url} />
+            <TeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " url={fixture.team_image_url} teamName={fixture.team_name} />
+            <TeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " url={fixture.team_image_url} teamName={fixture.team_name} />
             <p className="text text-wrap text-center" >{fixture.team_name}</p>
           </div>
 
@@ -101,8 +101,8 @@ export default function FixtureScreen() {
           </div>
 
           <div className="flex flex-1 flex-col items-center gap-3 justify-end" >
-            <TeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " url={fixture.opposition_image_url} />
-            <TeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " url={fixture.opposition_image_url} />
+            <TeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " url={fixture.opposition_image_url} teamName={fixture.opposition_team_name} />
+            <TeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " url={fixture.opposition_image_url} teamName={fixture.opposition_team_name} />
             <p className="text text-wrap text-center" >{fixture.opposition_team_name}</p>
           </div>
 
@@ -131,7 +131,7 @@ export default function FixtureScreen() {
               </TabViewPage>
 
               <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >
-                {boxScore && <FixtureHeadToHeadStats boxScore={boxScore} fixture={fixture} />}
+                {teamActions && <FixtureHeadToHeadStats teamActions={teamActions} fixture={fixture} />}
               </TabViewPage>
 
               <TabViewPage tabKey="rosters" >

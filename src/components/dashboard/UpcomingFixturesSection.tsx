@@ -1,15 +1,13 @@
-import { addDays, eachDayOfInterval, format } from 'date-fns';
+import { format } from 'date-fns';
 import { gamesService } from '../../services/gamesService';
 import { IFixture } from '../../types/games';
 import useSWR, { mutate } from 'swr';
 import { LoadingState } from '../ui/LoadingState';
 import { ErrorState } from '../ui/ErrorState';
-import { Calendar, MessageCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { useRouter } from '../../hooks/useRoter';
 import TeamLogo from '../team/TeamLogo';
 import { leagueService } from '../../services/leagueService';
-import { IFantasyLeague } from '../../types/fantasyLeague';
-import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import { useGameVotes } from '../../hooks/useGameVotes';
@@ -17,20 +15,10 @@ import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
 import { fixtureSumary } from '../../utils/fixtureUtils';
 
 export default function UpcomingFixturesSection() {
-  const today = new Date();
-  const nextDayWeek = addDays(today, 7);
-  const dates = eachDayOfInterval({
-    start: today,
-    end: nextDayWeek,
-  });
 
-  const { data: fixtures, isLoading, error } = useSWR(dates, fetcher);
-  const { push, navigateToLeagueScreen } = useRouter();
-  const { data: leagues, isLoading: isLoadingLeagues } = useSWR(
-    'all-leagues',
-    leagueService.getAllLeagues
-  );
-  const activeLeague = activeLeaguesFilter(leagues || [])[0];
+  const { data: fixtures, isLoading, error } = useSWR('pro-fixtures', () => gamesService.getAllSupportedGames());
+  const { push } = useRouter();
+  const { data: leagues, isLoading: isLoadingLeagues } = useSWR( 'all-leagues',() => leagueService.getAllLeagues());
 
   const [selectedFixture, setSelectedFixture] = useState<IFixture | null>(null);
   const [showPredictModal, setShowPredictModal] = useState(false);
@@ -75,30 +63,27 @@ export default function UpcomingFixturesSection() {
       ) : (
         <div className="flex space-x-4 overflow-x-auto pb-2">
           {sortedFixtures.map((fixture, index) => {
-            const league = leagues.find(
-              (l: IFantasyLeague) =>
-                l.id === fixture.league_id || l.official_league_id === fixture.league_id
-            );
+
             return (
               <div
                 key={index}
-                className="min-w-[280px] bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-gray-800"
+                className="min-w-[320px]  bg-slate-100 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 rounded-xl overflow-hidden text-white"
               >
                 <div className="p-4">
-                  <div className="text-center mb-3 text-sm text-gray-700 dark:text-gray-300">
-                    {fixture.competition_name && <p>{fixture.competition_name} Semi Finals</p>}
-                    {fixture.venue && (
-                      <p className="text-xs mt-1 text-gray-600 dark:text-gray-400">
-                        {fixture.venue}
-                      </p>
-                    )}
+                  <div className="text-center mb-3 text-sm text-slate-700 dark:text-gray-300">
+                    {fixture.competition_name && <p className='text-[10px]' >{fixture.competition_name}, {fixture.venue}</p>}
+
                   </div>
 
                   <div className="flex justify-between items-center mb-4">
                     {/* Home Team */}
                     <div className="flex flex-col items-center min-w-0 w-28">
-                      <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
-                        <TeamLogo url={fixture.team_image_url} className="w-10 h-10" />
+                      <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
+                        <TeamLogo 
+                          url={fixture.team_image_url}
+                          teamName={fixture.team_name}
+                          className="w-10 h-10" 
+                        />
                       </div>
                       <p
                         className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
@@ -113,10 +98,10 @@ export default function UpcomingFixturesSection() {
                     <div className="flex flex-col items-center flex-shrink-0 mx-4 min-w-[90px]">
                       {fixture.kickoff_time && (
                         <>
-                          <p className="text-sm text-gray-700 dark:text-gray-300 text-center">
+                          <p className="text-xs text-gray-700 dark:text-gray-300 text-center">
                             {format(new Date(fixture.kickoff_time), 'E, d MMM')}
                           </p>
-                          <p className="text-xl font-bold my-1 text-center text-gray-900 dark:text-white">
+                          <p className="text-lg font-bold my-1 text-center text-gray-900 dark:text-white">
                             {format(new Date(fixture.kickoff_time), 'HH:mm')}
                           </p>
                           <p className="text-xs text-gray-600 dark:text-gray-400 text-center">vs</p>
@@ -129,6 +114,7 @@ export default function UpcomingFixturesSection() {
                       <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                         <TeamLogo
                           url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
+                          teamName={fixture.opposition_team_name}
                           className="w-10 h-10"
                         />
                       </div>
@@ -144,7 +130,7 @@ export default function UpcomingFixturesSection() {
 
                   <div className="flex space-x-2">
                     <button
-                      className="flex-1 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
+                      className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
                       onClick={() => {
                         setSelectedFixture(fixture);
                         setShowPredictModal(true);
@@ -182,23 +168,6 @@ export default function UpcomingFixturesSection() {
   );
 }
 
-async function fetcher(dates: Date[]) {
-  let matches: IFixture[] = [];
-
-  const fetchMatches = async (date: Date) => {
-    const res = await gamesService.getGamesByDate(date);
-    matches = [...matches, ...res];
-  };
-
-  const promises = dates.map(date => {
-    return fetchMatches(date);
-  });
-
-  await Promise.all(promises);
-
-  return matches;
-}
-
 // Prediction Modal Component
 function PredictionModal({
   fixture,
@@ -210,7 +179,7 @@ function PredictionModal({
   onClose: () => void;
 }) {
   const { gameKickedOff } = fixtureSumary(fixture);
-  const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture);
+  const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
   const [isVoting, setIsVoting] = useState(false);
 
   // Calculate voting percentages
@@ -261,7 +230,10 @@ function PredictionModal({
 
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
-          <TeamLogo className="w-20 h-20" url={fixture.team_image_url} />
+          <TeamLogo 
+            className="w-20 h-20" url={fixture.team_image_url} 
+            teamName={fixture.team_name}
+          />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
             {fixture.team_name}
           </p>
@@ -284,6 +256,7 @@ function PredictionModal({
           <TeamLogo
             className="w-20 h-20"
             url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
+            teamName={fixture.opposition_team_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
             {fixture.opposition_team_name}

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Users, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { athleteService } from '../../services/athleteService';
 import { RugbyPlayer } from '../../types/rugbyPlayer';
 import { leagueService } from '../../services/leagueService';
-import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 
@@ -57,6 +56,12 @@ const FeaturedPlayersCarousel = () => {
     };
     fetchPlayers();
   }, []);
+
+  const sortedAthletes = useMemo(() => {
+    return players.sort((a, b) => {
+      return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+    })
+  }, [players])
 
   return (
     <div className="w-full">

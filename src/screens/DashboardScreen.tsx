@@ -1,51 +1,40 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { leagueService } from '../services/leagueService';
-import { IFantasyLeague } from '../types/fantasyLeague';
 import PageView from './PageView';
 import MyWeekPanel from '../components/dashboard/MyWeekPanel';
-import ActionList from '../components/dashboard/ActionList';
 import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
-import JoinWeeklyLeagueCard from '../components/dashboard/JoinWeeklyLeagueCard';
+import { HeroImageBanner } from '../components/dashboard/JoinWeeklyLeagueCard';
+import SecondaryText from '../components/shared/SecondaryText';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
-  const [leagues, setLeagues] = useState<IFantasyLeague[]>([]);
-  const [isLoadingLeagues, setIsLoadingLeagues] = useState(true);
 
-  // Fetch user's teams and leagues
-  useEffect(() => {
-    fetchLeagues();
-  }, []);
-
-  // Fetch available leagues
-  const fetchLeagues = async () => {
-    try {
-      setIsLoadingLeagues(true);
-      const allLeagues = await leagueService.getAllLeagues();
-
-      // Filter leagues based on is_open status (same as JoinLeagueScreen)
-      const availableLeagues = allLeagues;
-
-      setLeagues(availableLeagues);
-    } catch (err) {
-      console.error('Failed to fetch leagues:', err);
-    } finally {
-      setIsLoadingLeagues(false);
-    }
-  };
-
-  const handleViewLeague = (league: IFantasyLeague) => {
-    navigate(`/league/${league.official_league_id}`, {
-      state: { league },
-    });
-  };
+  const goToFixtures = () => {
+    navigate('/fixtures');
+  }
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-      <JoinWeeklyLeagueCard />
+
+      <div className='flex flex-col gap-2' >
+        <HeroImageBanner
+          link='/images/africa_cup.jpeg'
+        />
+        <p className="font-bold text-lg">Rugby Africa Cup 2025 is here!</p>
+        
+        <SecondaryText className="text-xs">
+          Stay updated with all the latest Africa Cup fixtures. Check out upcoming matches and follow your favorite teams throughout the tournament.
+        </SecondaryText>
+
+        <button
+          className="mt-2 px-4 text-sm py-2 border border-blue-400 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition"
+          onClick={() => goToFixtures()}
+        >
+          View Fixtures
+        </button>
+      </div>
+
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <FeaturedPlayersCarousel />
