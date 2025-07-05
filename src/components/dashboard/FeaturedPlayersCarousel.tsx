@@ -31,22 +31,26 @@ const FeaturedPlayersCarousel = () => {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const leagues = await leagueService.getAllLeagues();
-        // const activeLeague = activeLeaguesFilter(leagues)[0];
-        // if (!activeLeague) {
-        //   console.error('No active league found');
-        //   setLoading(false);
-        //   return;
-        // }
-        // const athletes = await athleteService.getRugbyAthletesByCompetition(
-        //   activeLeague.official_league_id.toString()
-        // );
-        const athletes = await athleteService.getRugbyAthletesByCompetition(
-          leagues[0].official_league_id.toString()
-        );
-        setPlayers(athletes);
+        // Specific athlete IDs for featured players
+        const featuredPlayerIds = [
+          'ec778da5-62ff-532b-ab6f-ac60eff2bca7', // Jordie Barrett
+          '897ab081-62b8-5b42-95ef-c7c3f150759c', // Andre Esterhuizen
+          '57054090-6c0c-57d9-bdb9-0f209f7b61d9', // Vincent Tshituka
+          'dd86410c-80fa-539e-9bd1-af3c52d0b090', // Dan Sheehan
+          'fc883a37-8b03-53f9-a6cb-7f2ee70638e9', // Negri
+        ];
+
+        // Fetch each player by their specific ID
+        const playerPromises = featuredPlayerIds.map(id => athleteService.getRugbyAthleteById(id));
+
+        const fetchedPlayers = await Promise.all(playerPromises);
+
+        // Filter out any undefined results (in case some players aren't found)
+        const validPlayers = fetchedPlayers.filter(player => player !== undefined);
+
+        setPlayers(validPlayers);
       } catch (error) {
-        console.error('Error fetching players:', error);
+        console.error('Error fetching featured players:', error);
       } finally {
         setLoading(false);
       }
@@ -73,8 +77,8 @@ const FeaturedPlayersCarousel = () => {
         </div>
       ) : (
         <>
-          {/* Filter tabs */}
-          <div className="flex space-x-2 mb-4 overflow-x-auto px-4 sm:px-0 -mx-4 sm:mx-0">
+          {/* Filter tabs - commented out as requested */}
+          {/* <div className="flex space-x-2 mb-4 overflow-x-auto px-4 sm:px-0 -mx-4 sm:mx-0">
             <button
               className={`px-3 py-1.5 sm:px-4 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap ${
                 activeTab === 'top-picks'
@@ -105,11 +109,11 @@ const FeaturedPlayersCarousel = () => {
             >
               By Position
             </button>
-          </div>
+          </div> */}
 
-          {/* Player cards carousel */}
+          {/* Player cards carousel - showing featured players only */}
           <div className="flex space-x-3 overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
-            {players.slice(0, 5).map(player => (
+            {players.map(player => (
               <div key={player.tracking_id} className="pl-1 flex-shrink-0">
                 <PlayerGameCard
                   player={player}
