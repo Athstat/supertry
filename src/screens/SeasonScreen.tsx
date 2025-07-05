@@ -55,7 +55,7 @@ function SeasonScreenContent() {
         },
 
         {
-            title: 'Fixutes',
+            title: 'Fixtures',
             value: fixtures.length
         }
     ]

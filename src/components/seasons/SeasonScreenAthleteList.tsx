@@ -10,6 +10,11 @@ type Props = {
 /** Renders Season Athletes List */
 export default function SeasonScreenAthleteList({ athletes }: Props) {
 
+    if (athletes.length === 0) {
+        return;
+    }
+
+
     return (
         <div className="flex flex-col gap-2" >
             <div className="flex flex-row items-center gap-2" >
