@@ -16,7 +16,7 @@ import { TeamCreationScreen } from './screens/TeamCreationScreen';
 import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
 import { MyTeamScreen } from './screens/MyTeamScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
-import { RankingsScreen } from './screens/RankingsScreen';
+import { FantasyRankingsScreen } from './screens/RankingsScreen';
 import { PlayersScreen } from './screens/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
 import { useAuth } from './contexts/AuthContext';
@@ -24,21 +24,16 @@ import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import SbrScreen from './screens/SbrScreen';
 import FixtureScreen from './screens/FixtureScreen';
-import FixtureListScreen from './screens/FixtureListScreen';
 import FixturesScreen from './screens/FixturesScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
-import { ScopeProvider } from 'jotai-scope';
-import {
-  fixturesDateRangeAtom,
-  fixturesSelectedMonthIndexAtom,
-} from './components/fixtures/calendar/fixtures_calendar.atoms';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import SbrFixtureScreen from './screens/SbrFixtureScreen';
 import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
+import UserRankingsLeaderBoard from './components/rankings/RankingsLeaderBoard';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -241,17 +236,6 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/rankings"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <RankingsScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
         path="/players"
         element={
           <ProtectedRoute>
@@ -388,6 +372,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <PredictionsRankingScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/fantasy-rankings"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <FantasyRankingsScreen />
             </Layout>
           </ProtectedRoute>
         }

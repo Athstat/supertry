@@ -2,7 +2,7 @@ import React from "react";
 import UserRankingCard from "../components/rankings/UserRankingCard";
 import UserRankingsLeaderBoard from "../components/rankings/RankingsLeaderBoard";
 
-export function RankingsScreen() {
+export function FantasyRankingsScreen() {
   
   React.useEffect(() => {
     window.scrollTo(0, 0);
