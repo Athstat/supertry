@@ -1,5 +1,6 @@
 /** Pro Predictions Ranking Service */
 
+import { ProPredictionsRanking } from "../types/proPredictions";
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 import { authService } from "./authService";
 import { logger } from "./logger";
@@ -16,7 +17,7 @@ export const proPredictionsRankingService = {
             });
 
             if (res.ok) {
-                return (await res.json())
+                return (await res.json()) as ProPredictionsRanking
             }
 
             return undefined;
@@ -35,7 +36,7 @@ export const proPredictionsRankingService = {
             })
 
             if (res.ok) {
-                return (await res.json())
+                return (await res.json()) as ProPredictionsRanking[]
             }
 
             return []
