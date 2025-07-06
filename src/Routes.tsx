@@ -38,6 +38,7 @@ import SbrFixtureScreen from './screens/SbrFixtureScreen';
 import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
+import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -380,7 +381,21 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/predictions"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <PredictionsRankingScreen />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
     </Routes>
+
+
   );
 };
 

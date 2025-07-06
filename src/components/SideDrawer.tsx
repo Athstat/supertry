@@ -3,6 +3,7 @@ import {
   Calendar,
   Trophy,
   Users,
+  Sparkles,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +20,7 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
     // { icon: Shield, label: "My Teams", path: "/my-teams" },
     { icon: Calendar, label: "Fixtures", path: "/fixtures" },
     { icon: Trophy, label: "Competitions", path: "/seasons" },
+    { icon: Sparkles, label: "Prediction Rankings", path: "/predictions" },
     { icon: Users, label: "My Teams", path: "/my-teams" },
     // { icon: Settings, label: "Settings", path: "#" },
     // { icon: HelpCircle, label: "Support", path: "#" },
