@@ -33,7 +33,7 @@ export default function ProPredictionsLeaderboard() {
     };
 
     const shouldHide = (r: ProPredictionsRanking) => {
-        return isEmail(r.username)
+        return isEmail(r.username) && r.user_id !== user.id;
     }
 
     return (
