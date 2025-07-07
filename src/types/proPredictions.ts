@@ -7,3 +7,12 @@ export type ProPredictionsRanking = {
     score: number,
     rank?: number
 }
+
+export type ProGameVote = {
+    id: number,
+    game_id: string,
+    user_id: string,
+    vote_for: string,
+    created_at: Date,
+    updated_at?: Date
+}

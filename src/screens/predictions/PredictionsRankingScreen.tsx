@@ -6,6 +6,8 @@ import { proPredictionsRankingService } from "../../services/proPredictionsRanki
 import { LoadingState } from "../../components/ui/LoadingState";
 import { IStatCard, TopicPageView } from "../PageView";
 import ProPredictionsLeaderboard from "../../components/predictions/ProPredictionsLeaderboard";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/shared/tabs/TabView";
+import UserProPredictionsHistoryTab from "../../components/predictions/ProPredictionsHistory";
 
 export default function PredictionsRankingScreen() {
 
@@ -38,13 +40,33 @@ export default function PredictionsRankingScreen() {
 
     ] : []
 
+    const tabItems: TabViewHeaderItem[] = [
+        {
+            label: 'Leaderboard',
+            tabKey: 'leaderboard'
+        },
+
+        {
+            label: 'History',
+            tabKey: 'history'
+        }
+    ]
+
     return (
         <TopicPageView
             title="Pro Predictions Ranking"
             statsCards={stats}
+            className="p-4"
         >
-            
-            <ProPredictionsLeaderboard />
+            <TabView tabHeaderItems={tabItems} >
+                <TabViewPage tabKey="leaderboard" >
+                    <ProPredictionsLeaderboard />
+                </TabViewPage>
+
+                <TabViewPage tabKey="history" >
+                    <UserProPredictionsHistoryTab />
+                </TabViewPage>
+            </TabView>
 
         </TopicPageView>
     )

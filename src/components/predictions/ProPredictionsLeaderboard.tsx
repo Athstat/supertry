@@ -20,7 +20,7 @@ export default function ProPredictionsLeaderboard() {
     rankings = rankings ?? [];
 
     return (
-        <div className="flex flex-col gap-2 p-3" >
+        <div className="flex flex-col gap-2 " >
             {rankings.map((r, index) => {
                 return <LeaderboardItem 
                     ranking={r}
