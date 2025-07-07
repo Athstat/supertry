@@ -11,13 +11,12 @@ import { IFantasyLeague } from '../types/fantasyLeague';
 import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
 import { useFantasyLeague } from '../components/league/useFantasyLeague';
 import { analytics } from '../services/anayticsService';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { isLeagueLocked } from '../utils/leaguesUtils';
 import { Lock } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import LeaguePredictionsTab from '../components/league/LeaguePredictionsTab';
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -99,10 +98,10 @@ export function LeagueScreen() {
       tabKey: 'fixtures',
     },
 
-    {
-      label: 'Predictions',
-      tabKey: 'predictions',
-    },
+    // {
+    //   label: 'Predictions',
+    //   tabKey: 'predictions',
+    // },
   ];
 
   const onJumpToTeam = () => {
@@ -117,7 +116,7 @@ export function LeagueScreen() {
 
   return (
     <FantasyLeagueProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-black">
         <LeagueHeader
           leagueInfo={leagueInfo}
           onOpenSettings={() => setShowSettings(true)}
@@ -176,9 +175,9 @@ export function LeagueScreen() {
                 <FantasyLeagueFixturesList userTeam={userTeam} league={league as IFantasyLeague} />
               </TabViewPage>
 
-              <TabViewPage tabKey="predictions">
+              {/* <TabViewPage tabKey="predictions">
                 <LeaguePredictionsTab />
-              </TabViewPage>
+              </TabViewPage> */}
             </TabView>
           )}
 
