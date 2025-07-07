@@ -77,29 +77,40 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
 // First Visit handler component
 const FirstVisitHandler = () => {
   const { isAuthenticated, loading } = useAuth();
-  const [hasVisitedBefore, setHasVisitedBefore] = useState<boolean | null>(null);
+  const [shouldShowWelcome, setShouldShowWelcome] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check if user has visited the app before
-    const firstVisit = isFirstAppVisit();
-    setHasVisitedBefore(!firstVisit);
+    // Check if this is the user's first visit
+    const isFirstVisit = isFirstAppVisit();
 
-    // If this is the first visit, mark it
-    if (firstVisit) {
+    // Add debugging for development
+    console.log('FirstVisitHandler: isFirstVisit =', isFirstVisit);
+    console.log('FirstVisitHandler: localStorage state =', {
+      has_visited_app: localStorage.getItem('has_visited_app'),
+      app_version: localStorage.getItem('app_version'),
+      first_visit_completed: localStorage.getItem('first_visit_completed'),
+    });
+
+    // Set state based on first visit check
+    setShouldShowWelcome(isFirstVisit);
+
+    // If this is the first visit, mark it as visited
+    if (isFirstVisit) {
       markAppVisited();
+      console.log('FirstVisitHandler: Marked app as visited');
     }
   }, []);
 
-  if (loading || hasVisitedBefore === null) return <div>Loading...</div>;
+  if (loading || shouldShowWelcome === null) return <div>Loading...</div>;
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
 
-  // First-time visitors see WelcomeScreen, returning visitors see AuthChoiceScreen
+  // Show WelcomeScreen for first-time visitors, AuthChoiceScreen for returning visitors
   return (
     <RouteErrorBoundary>
-      {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />}
+      {shouldShowWelcome ? <WelcomeScreen /> : <AuthChoiceScreen />}
     </RouteErrorBoundary>
   );
 };

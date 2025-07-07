@@ -15,15 +15,9 @@ const CURRENT_APP_VERSION = '1.0.0';
  */
 function isFreshInstall(): boolean {
   const storedVersion = localStorage.getItem(APP_VERSION_KEY);
-  
+
   // If no version stored or version is different, consider it a fresh install
-  if (!storedVersion || storedVersion !== CURRENT_APP_VERSION) {
-    // Update stored version to current version
-    localStorage.setItem(APP_VERSION_KEY, CURRENT_APP_VERSION);
-    return true;
-  }
-  
-  return false;
+  return !storedVersion || storedVersion !== CURRENT_APP_VERSION;
 }
 
 /**
@@ -31,14 +25,20 @@ function isFreshInstall(): boolean {
  * @returns {boolean} True if this is the first visit, false otherwise
  */
 export function isFirstAppVisit(): boolean {
-  // If it's a fresh install, always return true regardless of other flags
-  if (isFreshInstall()) {
+  // Check if it's a fresh install first
+  const freshInstall = isFreshInstall();
+
+  // If it's a fresh install, always return true and reset flags
+  if (freshInstall) {
     // Reset other first visit flags to ensure fresh start
     localStorage.removeItem(FIRST_VISIT_KEY);
     localStorage.removeItem(FIRST_VISIT_COMPLETED_KEY);
+    // Update stored version to current version
+    localStorage.setItem(APP_VERSION_KEY, CURRENT_APP_VERSION);
     return true;
   }
-  
+
+  // Otherwise, check the normal first visit flag
   return localStorage.getItem(FIRST_VISIT_KEY) !== 'true';
 }
 
@@ -87,10 +87,39 @@ export function simulateFreshInstall(): void {
  * Get first visit state
  * @returns {Object} The current first visit state
  */
-export function getFirstVisitState(): { isFirstVisit: boolean, isFirstVisitCompleted: boolean, isFreshInstall: boolean } {
+export function getFirstVisitState(): {
+  isFirstVisit: boolean;
+  isFirstVisitCompleted: boolean;
+  isFreshInstall: boolean;
+} {
   return {
     isFirstVisit: isFirstAppVisit(),
     isFirstVisitCompleted: isFirstVisitCompleted(),
-    isFreshInstall: isFreshInstall()
+    isFreshInstall: isFreshInstall(),
   };
-} 
+}
+
+/**
+ * Debug function to log the current first visit state
+ * This is helpful for testing and debugging the first visit flow
+ */
+export function debugFirstVisitState(): void {
+  const state = getFirstVisitState();
+  console.log('=== First Visit Debug State ===');
+  console.log('isFirstVisit:', state.isFirstVisit);
+  console.log('isFirstVisitCompleted:', state.isFirstVisitCompleted);
+  console.log('isFreshInstall:', state.isFreshInstall);
+  console.log('localStorage values:');
+  console.log('  has_visited_app:', localStorage.getItem(FIRST_VISIT_KEY));
+  console.log('  first_visit_completed:', localStorage.getItem(FIRST_VISIT_COMPLETED_KEY));
+  console.log('  app_version:', localStorage.getItem(APP_VERSION_KEY));
+  console.log('  current_app_version:', CURRENT_APP_VERSION);
+  console.log('==============================');
+}
+
+// Make debug function available globally in development
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  (window as any).debugFirstVisit = debugFirstVisitState;
+  (window as any).simulateFreshInstall = simulateFreshInstall;
+  (window as any).resetFirstVisitStatus = resetFirstVisitStatus;
+}

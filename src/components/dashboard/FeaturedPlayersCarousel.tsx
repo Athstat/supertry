@@ -17,6 +17,28 @@ const FeaturedPlayersCarousel = () => {
   const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    const target = e.currentTarget as HTMLElement;
+    target.dataset.startX = touch.clientX.toString();
+    target.dataset.startY = touch.clientY.toString();
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    const target = e.currentTarget as HTMLElement;
+    const startX = parseFloat(target.dataset.startX || '0');
+    const startY = parseFloat(target.dataset.startY || '0');
+
+    const deltaX = Math.abs(touch.clientX - startX);
+    const deltaY = Math.abs(touch.clientY - startY);
+
+    // If vertical movement is greater than horizontal, prevent default
+    if (deltaY > deltaX) {
+      e.preventDefault();
+    }
+  };
+
   const handleClosePlayerModal = () => {
     setPlayerModalPlayer(undefined);
     setShowPlayerModal(false);
@@ -60,8 +82,8 @@ const FeaturedPlayersCarousel = () => {
   const sortedAthletes = useMemo(() => {
     return players.sort((a, b) => {
       return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
-    })
-  }, [players])
+    });
+  }, [players]);
 
   return (
     <div className="w-full">
@@ -117,7 +139,18 @@ const FeaturedPlayersCarousel = () => {
           </div> */}
 
           {/* Player cards carousel - showing featured players only */}
-          <div className="flex space-x-3 overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
+          <div
+            className="flex space-x-3 overflow-x-auto overflow-y-hidden -mx-4 px-4 snap-x snap-mandatory no-scrollbar"
+            style={{
+              touchAction: 'pan-x',
+              overscrollBehavior: 'none',
+              overscrollBehaviorX: 'auto',
+              overscrollBehaviorY: 'none',
+              WebkitOverflowScrolling: 'touch',
+            }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+          >
             {players.map(player => (
               <div key={player.tracking_id} className="pl-1 flex-shrink-0">
                 <PlayerGameCard
