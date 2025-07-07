@@ -42,8 +42,8 @@ function LeaderboardItem({ranking, isUser} : LeaderboardItemProps) {
     return (
         <div className={twMerge(
             "p-4 rounded-xl flex flex-row items-center gap-4 bg-white border border-slate-300",
-            'dark:bg-slate-800/40 dark:border-slate-700',
-            isUser && "dark:bg-primary-500 bg-primary-500 border border-primary-200dark:border-primary-400"
+            'dark:bg-slate-800/40 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer',
+            isUser && "dark:bg-primary-500 hover:animate-glow dark:hover:animate-glow dark:hover:bg-primary-500 hover:bg-primary-500 bg-primary-500 border border-primary-200dark:border-primary-400"
         )}>
             
             <div>
