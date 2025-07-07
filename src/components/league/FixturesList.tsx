@@ -10,8 +10,6 @@ import { format } from 'date-fns';
 import { RankedFantasyTeam } from '../../types/league';
 import { useFetch } from '../../hooks/useFetch';
 import { fantasyTeamService } from '../../services/fantasyTeamService';
-import LeaguePredictionFixtureCard from './LeaguePredictionFixtureCard';
-import GroupedFixturesList from '../fixtures/GroupedFixturesList';
 
 interface FixturesListProps {
   league: IFantasyLeague;
@@ -81,8 +79,6 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
   const sortedDays = Object.keys(fixturesByDay).sort();
   const userTeamAthletes = data ?? [];
 
-  console.log('Team athletes ', userTeamAthletes);
-
   const generateFixtureMessage = (fixture: IFixture) => {
     const playersParticipating = userTeamAthletes.filter(a => {
       const isPlaying =
@@ -122,8 +118,29 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
         </h2>
       </div>
 
-      <div>
-        <GroupedFixturesList fixtures={fixtures} />
+      <div className='' >
+        {sortedDays.map(dayKey => (
+          <div className='flex flex-col gap-2 mb-2' key={dayKey}>
+            {/* Day header */}
+            <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800/40 border border-slate-100 dark:border-slate-800 font-medium text-gray-800 dark:text-gray-200">
+              {format(new Date(dayKey), 'EEEE, MMMM d, yyyy')}
+            </div>
+
+            {/* Fixtures for this day */}
+            <div className="divide-y flex flex-col gap-2 px-3">
+              {fixturesByDay[dayKey].map((fixture, index) => (
+                <FixtureCard 
+                  fixture={fixture}
+                  key={index}
+                  showCompetition
+                  showLogos 
+                  className='rounded-xl border dark:border-slate-700'
+                  message={generateFixtureMessage(fixture)}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
