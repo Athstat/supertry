@@ -96,5 +96,6 @@ declare module "lucide-react" {
   export const Minimize2: CIP;
   export const Maximize2: CIP;
   export const Infinity: CIP;
+  export const ArrowDownUp: CIP;
 }
 
