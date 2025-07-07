@@ -33,11 +33,6 @@ export default function PredictionsRankingScreen() {
             value: userRanking.predictions_made ?? '-'
         },
 
-        // {
-        //     title: 'Score',
-        //     value: userRanking.score ?? '-'
-        // }
-
     ] : []
 
     const tabItems: TabViewHeaderItem[] = [
