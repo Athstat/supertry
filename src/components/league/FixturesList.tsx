@@ -11,6 +11,7 @@ import { RankedFantasyTeam } from '../../types/league';
 import { useFetch } from '../../hooks/useFetch';
 import { fantasyTeamService } from '../../services/fantasyTeamService';
 import LeaguePredictionFixtureCard from './LeaguePredictionFixtureCard';
+import GroupedFixturesList from '../fixtures/GroupedFixturesList';
 
 interface FixturesListProps {
   league: IFantasyLeague;
@@ -122,21 +123,7 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
       </div>
 
       <div>
-        {sortedDays.map(dayKey => (
-          <div key={dayKey}>
-            {/* Day header */}
-            <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800/40 border border-slate-100 dark:border-slate-800 font-medium text-gray-800 dark:text-gray-200">
-              {format(new Date(dayKey), 'EEEE, MMMM d, yyyy')}
-            </div>
-
-            {/* Fixtures for this day */}
-            <div className="divide-y divide-gray-200 dark:divide-slate-800/50 px-3">
-              {fixturesByDay[dayKey].map((fixture, index) => (
-                <LeaguePredictionFixtureCard fixture={fixture} key={index} />
-              ))}
-            </div>
-          </div>
-        ))}
+        <GroupedFixturesList fixtures={fixtures} />
       </div>
     </div>
   );

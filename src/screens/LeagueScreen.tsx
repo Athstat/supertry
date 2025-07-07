@@ -99,10 +99,10 @@ export function LeagueScreen() {
       tabKey: 'fixtures',
     },
 
-    {
-      label: 'Predictions',
-      tabKey: 'predictions',
-    },
+    // {
+    //   label: 'Predictions',
+    //   tabKey: 'predictions',
+    // },
   ];
 
   const onJumpToTeam = () => {
@@ -117,7 +117,7 @@ export function LeagueScreen() {
 
   return (
     <FantasyLeagueProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-black">
         <LeagueHeader
           leagueInfo={leagueInfo}
           onOpenSettings={() => setShowSettings(true)}
@@ -176,9 +176,9 @@ export function LeagueScreen() {
                 <FantasyLeagueFixturesList userTeam={userTeam} league={league as IFantasyLeague} />
               </TabViewPage>
 
-              <TabViewPage tabKey="predictions">
+              {/* <TabViewPage tabKey="predictions">
                 <LeaguePredictionsTab />
-              </TabViewPage>
+              </TabViewPage> */}
             </TabView>
           )}
 
