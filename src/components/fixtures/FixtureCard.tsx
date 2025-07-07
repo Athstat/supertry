@@ -186,15 +186,8 @@ export default function FixtureCard({
           </div>
         </div>
 
-        {message && (
-          <WarningCard>
-            <Info className="w-4 h-4" />
-            <p className="text-sm truncate">{message}</p>
-          </WarningCard>
-        )}
-
         {/* Voting Section */}
-        { !isTbdGame && <div
+        {!isTbdGame && <div
           className={twMerge(
             'flex mt-4 flex-col w-full gap-1 items-center justify-center',
             isVoting && 'animate-pulse opacity-60 cursor-progress'
@@ -264,6 +257,14 @@ export default function FixtureCard({
             </>
           )}
         </div>}
+
+        {message && (
+          <WarningCard>
+            <Info className="w-4 h-4" />
+            <p className="text-xs truncate">{message}</p>
+          </WarningCard>
+        )}
+
       </div>
       <FixtureCardModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
@@ -303,7 +304,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
-          <TeamLogo 
+          <TeamLogo
             className="w-20 h-20"
             url={fixture.team_image_url}
             teamName={fixture.team_name}

@@ -1,4 +1,3 @@
-import { error } from "console";
 import { IEditSbrMotmVoteReq, INewSbrMotmVoteReq, ISbrMotmVote } from "../types/sbr";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { authService } from "./authService";

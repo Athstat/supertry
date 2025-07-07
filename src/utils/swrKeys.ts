@@ -13,11 +13,19 @@ export const swrFetchKeys = {
         return `sbr-fixture/${fixtureId}`;
     },
 
+    getProFixtureKey: (fixtureId: string) => {
+        return `pro-fixture/${fixtureId}`;
+    },
+
     getSbrFixtureEventsKey: (fixtureId: string) => {
         return `sbr-fixture-events/${fixtureId}`;
     },
 
     getSbrFixtureBoxscoreKey: (fixtureId: string) => {
         return `sbr-fixture-boxscore/${fixtureId}`;
+    },
+
+    getUserProPredictionsHistoryKey: (userId: string) => {
+        return `/user-pro-prediction-history/${userId}`;
     }
 }

@@ -24,11 +24,12 @@ export default function PageView({ children, className }: Props) {
         </div>
     )
 }
+export type IStatCard = { title: string, value: string | number };
 
 type TopicPageViewProps = Props & {
     title?: string,
     description?: string,
-    statsCards?: { title: string, value: string | number }[]
+    statsCards?: IStatCard[]
 }
 
 export function TopicPageView({ children, title, statsCards, className }: TopicPageViewProps) {
