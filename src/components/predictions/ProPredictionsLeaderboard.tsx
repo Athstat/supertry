@@ -7,6 +7,7 @@ import { twMerge } from "tailwind-merge";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { User } from "lucide-react";
 import { useSectionNavigation } from "../../hooks/useSectionNavigation";
+import { isEmail } from "../../utils/stringUtils";
 
 export default function ProPredictionsLeaderboard() {
 
@@ -31,9 +32,18 @@ export default function ProPredictionsLeaderboard() {
         }
     };
 
+    const shouldHide = (r: ProPredictionsRanking) => {
+        return isEmail(r.username) && r.user_id !== user.id;
+    }
+
     return (
         <div className="flex flex-col gap-2 " >
             {rankings.map((r, index) => {
+
+                if (shouldHide(r)) {
+                    return;
+                }
+
                 return <LeaderboardItem
                     ranking={r}
                     key={index}
