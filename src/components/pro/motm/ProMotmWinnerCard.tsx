@@ -3,13 +3,33 @@ import { proGameMotmVotesAtom, proGameMotmCandidatesAtom } from "../../../state/
 import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
 import SecondaryText from "../../shared/SecondaryText";
 import { Trophy } from "lucide-react";
+import BlueGradientCard from "../../shared/BlueGradientCard";
 
 export default function ProMotmWinnerCard() {
     const allVotes = useAtomValue(proGameMotmVotesAtom);
     const candidates = useAtomValue(proGameMotmCandidatesAtom);
 
+    const getVoteTally = (athleteId: string) => {
+        return getProAthleteMotmVoteTally(allVotes, athleteId);
+    };
+
+    // Sort votes by tally (descending), then alphabetically by name
+    const votesDesc = allVotes.sort((a, b) => {
+        const aTally = getVoteTally(a.athlete_id);
+        const bTally = getVoteTally(b.athlete_id);
+
+        const aName = (a.athstat_firstname ?? "") + " " + (a.athstat_lastname ?? "");
+        const bName = (b.athstat_firstname ?? "") + " " + (b.athstat_lastname ?? "");
+
+        const voteTallyEqual = aTally === bTally;
+
+        return voteTallyEqual ?
+            aName.localeCompare(bName ?? "") : bTally - aTally;
+    });
+
     // If no votes, select first player alphabetically
-    if (allVotes.length === 0) {
+    let winner;
+    if (votesDesc.length === 0) {
         if (candidates.length === 0) {
             return (
                 <div className="flex flex-col items-center gap-4 p-6 bg-slate-100 dark:bg-slate-800 rounded-xl">
@@ -29,84 +49,12 @@ export default function ProMotmWinnerCard() {
             return nameA.localeCompare(nameB);
         });
 
-        const defaultWinner = sortedCandidates[0];
-
-        return (
-            <div className="flex flex-col gap-4 p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700 rounded-xl">
-                <div className="flex flex-row items-center gap-3">
-                    <div className="bg-yellow-500 p-2 rounded-full">
-                        <Trophy className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-lg text-yellow-800 dark:text-yellow-200">
-                            Top Dawg Of The Match
-                        </h3>
-                        <SecondaryText className="text-yellow-700 dark:text-yellow-300">
-                            Default selection (no votes cast)
-                        </SecondaryText>
-                    </div>
-                </div>
-
-                <div className="flex flex-row items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
-                    {defaultWinner.image_url && (
-                        <img 
-                            src={defaultWinner.image_url} 
-                            alt={`${defaultWinner.athstat_firstname} ${defaultWinner.athstat_lastname}`}
-                            className="w-16 h-16 rounded-full object-cover"
-                        />
-                    )}
-                    
-                    <div className="flex-1">
-                        <h4 className="font-semibold text-lg">
-                            {defaultWinner.athstat_firstname} {defaultWinner.athstat_lastname}
-                        </h4>
-                        <SecondaryText className="text-sm">
-                            {defaultWinner.position} • {defaultWinner.team_name}
-                        </SecondaryText>
-                        {defaultWinner.nationality && (
-                            <SecondaryText className="text-xs">
-                                {defaultWinner.nationality}
-                            </SecondaryText>
-                        )}
-                    </div>
-
-                    <div className="text-right">
-                        <div className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                            #{defaultWinner.player_number || "?"}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="text-center">
-                    <SecondaryText className="text-sm">
-                        Selected alphabetically (first by name) as no votes were cast
-                    </SecondaryText>
-                </div>
-            </div>
-        );
-    }
-
-    // Find the winner (player with most votes)
-    const voteCounts = new Map<string, { count: number; vote: any }>();
-    
-    allVotes.forEach(vote => {
-        const current = voteCounts.get(vote.athlete_id);
-        if (current) {
-            current.count += 1;
-        } else {
-            voteCounts.set(vote.athlete_id, { count: 1, vote });
-        }
-    });
-
-    // Get the winner (highest vote count)
-    let winner = null;
-    let maxVotes = 0;
-    
-    for (const [athleteId, data] of voteCounts) {
-        if (data.count > maxVotes) {
-            maxVotes = data.count;
-            winner = data.vote;
-        }
+        winner = sortedCandidates[0];
+    } else {
+        // Find winner from votes
+        winner = candidates.find((c) => {
+            return votesDesc[0].athlete_id === c.athlete_id;
+        });
     }
 
     if (!winner) {
@@ -121,61 +69,61 @@ export default function ProMotmWinnerCard() {
         );
     }
 
-    const totalVotes = allVotes.length;
-    const winnerVotes = getProAthleteMotmVoteTally(allVotes, winner.athlete_id);
-    const percentage = Math.round((winnerVotes / totalVotes) * 100);
-
     return (
-        <div className="flex flex-col gap-4 p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700 rounded-xl">
-            <div className="flex flex-row items-center gap-3">
-                <div className="bg-yellow-500 p-2 rounded-full">
-                    <Trophy className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                    <h3 className="font-bold text-lg text-yellow-800 dark:text-yellow-200">
-                        Top Dawg Of The Match
-                    </h3>
-                    <SecondaryText className="text-yellow-700 dark:text-yellow-300">
-                        {winnerVotes} votes ({percentage}%)
-                    </SecondaryText>
-                </div>
+        <BlueGradientCard className="relative mt-4 w-full from-amber-400 via-amber-500 to-amber-600 dark:from-amber-500 dark:via-amber-600 dark:to-amber-800 max-w-md mx-auto p-6 bg-gradient-to-br rounded-xl border border-amber-400 shadow-xl hover:shadow-amber-500/10 transition-all duration-300">
+            {/* Trophy Badge */}
+            <div className="absolute -top-4 text-center text-xs left-1/2 -translate-x-1/2 bg-amber-500 text-white px-4 py-1 rounded-full lg:text-sm font-semibold shadow-lg">
+                The Fan's Match MVP
             </div>
 
-            <div className="flex flex-row items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
-                {winner.image_url && (
-                    <img 
-                        src={winner.image_url} 
-                        alt={`${winner.athstat_firstname} ${winner.athstat_lastname}`}
-                        className="w-16 h-16 rounded-full object-cover"
-                    />
+            {/* Main Content */}
+            <div className="mt-2 flex flex-col items-center space-y-2">
+                {winner.image_url ? (
+                    <>
+                        {/* Trophy Icon and Title - Same Row */}
+                        <div className="flex items-center gap-2">
+                            <div className="relative">
+                                <div className="absolute -inset-1 bg-amber-400/30 rounded-full blur"></div>
+                                <Trophy className="w-8 h-8 text-amber-100" />
+                            </div>
+                            <h2 className="text-sm font-bold text-amber-100">Top Dawg Of the Match</h2>
+                        </div>
+
+                        {/* Larger Player Image */}
+                        <div className="relative">
+                            <div className="absolute -inset-1 bg-amber-400/20 rounded-full blur"></div>
+                            <img 
+                                src={winner.image_url} 
+                                alt={`${winner.athstat_firstname} ${winner.athstat_lastname}`}
+                                className="relative w-32 h-32 rounded-full object-cover border-4 border-amber-200"
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        {/* Trophy Icon */}
+                        <div className="relative">
+                            <div className="absolute -inset-1 bg-amber-400/30 rounded-full blur"></div>
+                            <Trophy className="w-12 h-12 text-amber-100" />
+                        </div>
+
+                        {/* Title */}
+                        <div className="text-center">
+                            <h2 className="text font-bold text-amber-100">Top Dawg Of the Match</h2>
+                        </div>
+                    </>
                 )}
-                
-                <div className="flex-1">
-                    <h4 className="font-semibold text-lg">
+
+                {/* Winner Info */}
+                <div className="text-center space-y-3">
+                    <h3 className="text-2xl font-semibold text-white">
                         {winner.athstat_firstname} {winner.athstat_lastname}
-                    </h4>
-                    <SecondaryText className="text-sm">
-                        {winner.position} • {winner.team_name}
+                    </h3>
+                    <SecondaryText className="text-sm text-amber-100 dark:text-amber-100">
+                        {winner.team_name}
                     </SecondaryText>
-                    {winner.nationality && (
-                        <SecondaryText className="text-xs">
-                            {winner.nationality}
-                        </SecondaryText>
-                    )}
-                </div>
-
-                <div className="text-right">
-                    <div className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        #{winner.player_number || "?"}
-                    </div>
                 </div>
             </div>
-
-            <div className="text-center">
-                <SecondaryText className="text-sm">
-                    Based on {totalVotes} {totalVotes === 1 ? "vote" : "votes"} from fans
-                </SecondaryText>
-            </div>
-        </div>
+        </BlueGradientCard>
     );
 }
