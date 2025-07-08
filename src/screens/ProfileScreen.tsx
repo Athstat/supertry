@@ -8,6 +8,7 @@ import UserNotificationsSettings from '../components/settings/UserNotificationsS
 import { useFetch } from '../hooks/useFetch';
 import { useAuthUser } from '../hooks/useAuthUser';
 import { LoadingState } from '../components/ui/LoadingState';
+import LicensingModal from '../components/branding/licensing/LicensingModel';
 
 export function ProfileScreen() {
   const navigate = useNavigate();
@@ -155,6 +156,7 @@ export function ProfileScreen() {
         )}
 
         {userInfo && <UserNotificationsSettings databaseUser={userInfo} />}
+        <LicensingModal />
 
         {/* Logout Button */}
         <motion.div
