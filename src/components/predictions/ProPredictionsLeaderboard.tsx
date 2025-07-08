@@ -6,7 +6,6 @@ import SecondaryText from "../shared/SecondaryText";
 import { twMerge } from "tailwind-merge";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { User } from "lucide-react";
-import { useSectionNavigation } from "../../hooks/useSectionNavigation";
 import { isEmail } from "../../utils/stringUtils";
 
 export default function ProPredictionsLeaderboard() {
@@ -14,9 +13,6 @@ export default function ProPredictionsLeaderboard() {
     const user = useAuthUser();
     const key = `pro-predictions-rankings`;
     let { data: rankings, isLoading } = useSWR(key, () => proPredictionsRankingService.getAllUserRankings());
-
-    const sectionKey = 'my-rank-section';
-    const { scrollToSection } = useSectionNavigation([sectionKey])
 
     if (isLoading) {
         return <LoadingState />
@@ -31,33 +27,52 @@ export default function ProPredictionsLeaderboard() {
         return aN - bN;
     });
 
-    const userRank = rankingsList.find((r) => r.user_id === user.id)
-    const isRanked = userRank?.rank !== undefined;
+    const rankedUsers = rankingsList.filter((r) => {
+        return r.rank && r.rank > 0;
+    });
 
-    const onJumpToRanking = () => {
-        if (userRank) {
-            scrollToSection(sectionKey);
-        }
-    };
+    const unRankedUsers = rankingsList.filter((r) => {
+        return r.rank === undefined || r.rank === null || r.rank === 0;
+    });
 
     const shouldHide = (r: ProPredictionsRanking) => {
         return isEmail(r.username) && r.user_id !== user.id;
     }
 
     return (
-        <div className="flex flex-col gap-2 " >
-            {rankingsList.map((r, index) => {
+        <div className="flex flex-col gap-4 " >
 
-                if (shouldHide(r)) {
-                    return;
-                }
+            <div className="flex flex-col gap-2 " >
+                {rankedUsers.map((r, index) => {
 
-                return <LeaderboardItem
-                    ranking={r}
-                    key={index}
-                    isUser={user.id === r.user_id}
-                />
-            })}
+                    if (shouldHide(r)) {
+                        return;
+                    }
+
+                    return <LeaderboardItem
+                        ranking={r}
+                        key={index}
+                        isUser={user.id === r.user_id}
+                    />
+                })}
+            </div>
+
+            <p className="font-bold text-lg" >Unranked</p>
+
+            <div className="flex flex-col gap-2 " >
+                {unRankedUsers.map((r, index) => {
+
+                    if (shouldHide(r)) {
+                        return;
+                    }
+
+                    return <LeaderboardItem
+                        ranking={r}
+                        key={index}
+                        isUser={user.id === r.user_id}
+                    />
+                })}
+            </div>
 
             {/* {isRanked && (
                 <div className="flex flex-row items-end justify-end p-4 fixed bottom-20 left-0 w-full" >
