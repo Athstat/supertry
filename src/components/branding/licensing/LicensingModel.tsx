@@ -38,7 +38,7 @@ export default function LicensingModal() {
                     <ScrummyLogo className="w-32 h-32" />
                 </div>
                 <SecondaryText className="text-center" >
-                    All images, photographs, graphics, videos, and likenesses displayed on this website are either the property of ATHSTAT, Inc. (d/b/a SCRUMMY), used under valid licenses, or displayed with the express permission of the rights holders. ATHSTAT, Inc. (d/b/a SCRUMMY) affirms that it has obtained all necessary rights, licenses, consents, and permissions to lawfully use and display such content on this website. Any unauthorized reproduction, distribution, or other use of content is strictly prohibited and may violate copyright and other applicable laws. 
+                     All images, photographs, graphics, videos, and likenesses displayed on the scrummy website or scrummy app are either the property of ATHSTAT, Inc. (d/b/a SCRUMMY), used under valid licenses, or displayed with the express permission of the rights holders. ATHSTAT, Inc. (d/b/a SCRUMMY) affirms that it has obtained all necessary rights, licenses, consents, and permissions to lawfully use and display such content on this website. Any unauthorized reproduction, distribution, or other use of content is strictly prohibited and may violate copyright and other applicable laws.
                 </SecondaryText>
 
                 <div className="flex flex-row mt-4 items-center justify-center gap-2" >
