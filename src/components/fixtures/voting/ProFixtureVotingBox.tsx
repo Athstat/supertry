@@ -4,14 +4,15 @@ import { useState } from "react";
 import { mutate } from "swr";
 import { useGameVotes } from "../../../hooks/useGameVotes";
 import { gamesService } from "../../../services/gamesService";
-import { fixtureSumary } from "../../../utils/fixtureUtils";
+import { fixtureSumary, isProGameTBD } from "../../../utils/fixtureUtils";
 import { IFixture } from "../../../types/games";
 
 type Props = {
-    fixture: IFixture
+    fixture: IFixture,
+    className?: string
 }
 
-export default function ProFixtureVotingBox({fixture} : Props) {
+export default function ProFixtureVotingBox({fixture, className} : Props) {
 
     const {
         team_score,
@@ -62,7 +63,7 @@ export default function ProFixtureVotingBox({fixture} : Props) {
         }
     };
 
-    const isTbdGame = fixture.team_name === 'TBD' || fixture.opposition_team_name === 'TBD';
+    const isTbdGame = isProGameTBD(fixture);
 
     if (isTbdGame) return;
 
@@ -70,7 +71,8 @@ export default function ProFixtureVotingBox({fixture} : Props) {
         <div
             className={twMerge(
                 'flex mt-4 flex-col w-full gap-1 items-center justify-center',
-                isVoting && 'animate-pulse opacity-60 cursor-progress'
+                isVoting && 'animate-pulse opacity-60 cursor-progress',
+                className
             )}
             onClick={e => e.stopPropagation()} // Prevent modal from opening when voting
         >

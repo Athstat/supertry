@@ -22,6 +22,7 @@ import FixtureRosters from "../components/fixtures/FixtureRosters";
 import FixtureChat from "../components/fixtures/FixtureChat";
 import GameHighlightsCard from "../components/video/GameHighlightsCard";
 import { ProMotmVotingBox } from "../components/pro/motm";
+import ProFixtureVotingBox from "../components/fixtures/voting/ProFixtureVotingBox";
 
 export default function FixtureScreen() {
 
@@ -131,6 +132,10 @@ export default function FixtureScreen() {
               <TabViewPage className="flex flex-col gap-5" tabKey="kick-off" >
                 <FixtureScreenOverview fixture={fixture} />
                 <GameHighlightsCard link={fixture.highlights_link} />
+                <div className="flex flex-col" >
+                  <p className="font-bold" >Predictions</p>
+                  <ProFixtureVotingBox className="border border-slate-300 px-4 py-6 rounded-xl bg-white dark:border-slate-700 dark:bg-slate-800/40" fixture={fixture} />
+                </div>
               </TabViewPage>
 
               <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >
