@@ -22,8 +22,16 @@ export default function ProPredictionsLeaderboard() {
         return <LoadingState />
     }
 
-    rankings = rankings ?? [];
-    const userRank = rankings.find((r) => r.user_id === user.id)
+    let rankingsList = rankings !== undefined ? rankings : []
+
+    rankingsList = rankingsList.sort((a, b) => {
+        const aN = a.rank ?? rankingsList.length;
+        const bN = b.rank ?? rankingsList.length;
+
+        return aN - bN;
+    });
+
+    const userRank = rankingsList.find((r) => r.user_id === user.id)
     const isRanked = userRank?.rank !== undefined;
 
     const onJumpToRanking = () => {
@@ -38,7 +46,7 @@ export default function ProPredictionsLeaderboard() {
 
     return (
         <div className="flex flex-col gap-2 " >
-            {rankings.map((r, index) => {
+            {rankingsList.map((r, index) => {
 
                 if (shouldHide(r)) {
                     return;
