@@ -228,6 +228,8 @@ export default function FixtureCard({
               awayScore={fixture.opposition_score}
               votedAwayTeam={votedAwayTeam}
               votedHomeTeam={votedHomeTeam}
+              homeVotes={homeVotes.length}
+              awayVotes={awayVotes.length}
             />
           )}
 
