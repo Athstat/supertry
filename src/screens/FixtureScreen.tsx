@@ -21,6 +21,7 @@ import { useFetch } from "../hooks/useFetch";
 import FixtureRosters from "../components/fixtures/FixtureRosters";
 import FixtureChat from "../components/fixtures/FixtureChat";
 import GameHighlightsCard from "../components/video/GameHighlightsCard";
+import { ProMotmVotingBox } from "../components/pro/motm";
 
 export default function FixtureScreen() {
 
@@ -60,19 +61,21 @@ export default function FixtureScreen() {
       tabKey: "kick-off",
       disabled: false
     },
-
+    {
+      label: "Top Dawg",
+      tabKey: "motm",
+      disabled: false
+    },
     {
       label: "Chat",
       tabKey: "chat",
       disabled: false
     },
-
     {
       label: "Team Rosters",
       tabKey: "rosters",
       disabled: !rosters || rosters.length === 0
     }
-
   ]
 
 
@@ -132,6 +135,10 @@ export default function FixtureScreen() {
 
               <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >
                 {teamActions && <FixtureHeadToHeadStats teamActions={teamActions} fixture={fixture} />}
+              </TabViewPage>
+
+              <TabViewPage tabKey="motm" >
+                <ProMotmVotingBox fixture={fixture} />
               </TabViewPage>
 
               <TabViewPage tabKey="rosters" >
