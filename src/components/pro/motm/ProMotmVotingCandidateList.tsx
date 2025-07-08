@@ -57,6 +57,7 @@ export function ProMotmVotingCandidateListItem({ candidate }: ItemProps) {
     const onVote = async () => {
         if (!gameId) return;
         
+
         setIsSendingVote(true);
         setIsLoading(true);
 
@@ -89,7 +90,7 @@ export function ProMotmVotingCandidateListItem({ candidate }: ItemProps) {
     };
 
     return (
-        <div className="flex gap-3 p-2 flex-row items-center">
+        <div onClick={onVote} className="flex cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl gap-3 p-2 flex-row items-center">
             <div className="border dark:border-slate-700 bg-slate-100 dark:bg-slate-800 w-10 h-10 items-center justify-center flex flex-col rounded-xl">
                 <p>{candidate.player_number || "-"}</p>
             </div>
@@ -108,13 +109,12 @@ export function ProMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
             <div className="w-[40%] flex flex-row items-center justify-end">
                 {!hasUserVotedForCandidate && (
-                    <button 
+                    <div
                         onClick={onVote} 
-                        className="border hover:bg-slate-100 hover:dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded-xl w-10 h-10 items-center flex flex-col justify-center"
-                        disabled={isLoading}
+                        className="border-2 hover:bg-slate-100 hover:dark:bg-slate-800 border-slate-400 dark:border-slate-500 rounded-xl w-10 h-10 items-center flex flex-col justify-center"
                     >
                         {isLoading && <Loader className="text-slate-700 dark:text-slate-400 w-4 h-4 animate-spin" />}
-                    </button>
+                    </div>
                 )}
 
                 {hasUserVotedForCandidate && (
