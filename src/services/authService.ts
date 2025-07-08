@@ -1,4 +1,4 @@
-import { DatabaseUser, UserRepresentation } from '../types/auth';
+import { DatabaseUser, ScrummyUser, UserRepresentation } from '../types/auth';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { analytics } from './anayticsService';
 import {
@@ -447,20 +447,25 @@ export const authService = {
     }
   },
 
-  async getUserFromDB(id: string): Promise<any> {
-    //console.log('[getUserFromDB] Fetching user from DB');
-    //console.log('[getUserFromDB] ID:', id);
+  async getUserFromDB(id: string): Promise<ScrummyUser | undefined> {
 
-    const response = await fetchWithTimeout(
-      getUri(`/api/v1/users/${id}`),
-      {
-        method: 'GET',
-      },
-      10000
-    );
+    try {
 
-    const data = await response.json();
-    return data;
+      const uri = getUri(`/api/v1/users/${id}`);
+      const response = await fetchWithTimeout(uri,{
+        method: 'GET'
+      }, 10000);
+
+      const data = (await response.json()) as ScrummyUser;
+      return data;
+
+    } catch (e) {
+      logger.error('Error fetching user ', e);
+      
+    }
+
+    return undefined;
+
   },
 
   /**

@@ -37,9 +37,10 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
         title="Notifications"
         open={show}
         className="overflow-hidden"
+        hw='min-h-[350px]'
       >
         <div className="w-full h-[100%] overflow-hidden flex flex-col">
-          <div className="w-full h-[80%] overflow-y-auto flex flex-col gap-1">
+          <div className="w-full h-[100%] overflow-y-auto flex flex-col gap-1">
             <GameUpdatesSection user={databaseUser} />
           </div>
 
@@ -59,6 +60,7 @@ type GameUpdatesProps = {
 };
 
 function GameUpdatesSection({ user }: GameUpdatesProps) {
+
   const [selection, setSelection] = useState<GameUpdatesPreference>(
     user.game_updates_preference ?? 'key-updates'
   );

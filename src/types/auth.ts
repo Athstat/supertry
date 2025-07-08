@@ -86,3 +86,18 @@ export type DatabaseUser = {
   pref_payout?: string,
   game_updates_preference: GameUpdatesPreference
 }
+
+export type ScrummyUser = {
+  kc_id: string,
+  "email": string,
+  "first_name": string,
+  "last_name"?: string,
+  "us_state"?: string,
+  "verification_state": string,
+  "athcoin_balance": number,
+  "geolocation_allowed": boolean,
+  "device_id"?: string,
+  "pref_payout"?: string,
+  "game_updates_preference": string,
+  "username"?: string,
+}
