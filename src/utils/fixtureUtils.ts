@@ -280,3 +280,7 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
     );
 
 }
+
+export async function isProGameTBD(fixture: IFixture) {
+    return fixture.team_name === 'TBD' || fixture.opposition_team_name === 'TBD';
+}
