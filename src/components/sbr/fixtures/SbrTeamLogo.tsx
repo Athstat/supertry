@@ -80,6 +80,8 @@ function teamLogoMapper(teamName: string): string | undefined {
       case 'Hillcrest College':
         return 'hilcrest.webp';
       case 'Wise Owl Marondera':
+      case 'Wise Owl':
+      case 'Wise Owl Harare':
         return 'wise_owl.webp';
       case 'Churchill Boys High':
         return 'church_hill.webp';
@@ -131,7 +133,7 @@ function teamLogoMapper(teamName: string): string | undefined {
         return undefined;
     }
   }
-  
+
   const fileName = getLogoFileName();
 
   if (fileName === undefined) return undefined;
