@@ -24,21 +24,21 @@ export function VotingOptionBar({ isGreen, isRed, title, voteCount = 0, disable,
     return (
         <div
             className={twMerge(
-                "w-full hover:bg-slate-100 dark:hover:bg-slate-800/80 px-3 py-2 rounded-lg flex flex-col items-center justify-center gap-1.5 cursor-pointer text-xs",
+                "w-full hover:bg-slate-100 dark:hover:bg-slate-800/80 px-3 rounded-lg flex flex-col items-center justify-center gap-1.5 cursor-pointer text-xs",
                 className
             )}
             onClick={handleClick}
         >
 
             <div className="w-full flex text-sm text-slate-500 dark:text-slate-400 flex-row items-center justify-between" >
-                <p className="text-xs" >{title}</p>
-                <p className="text-xs" >Vote{voteCount > 0 ? "s" : ""} {voteCount}</p>
+                <p className="text-[10px]" >{title}</p>
+                <p className="text-[10px]" >Vote{voteCount > 0 ? "s" : ""} {voteCount}</p>
             </div>
 
             <div className="flex flex-row gap-1 rounded-xl w-[100%]">
                 {/* Voting Circle */}
                 <div className={twMerge(
-                    "w-5 h-5 border rounded-xl border-slate-400 dark:border-slate-500",
+                    "w-4 h-4 border rounded-xl border-slate-400 dark:border-slate-500",
                     (hasUserVoted) && "border-none",
                     !hasUserVoted && ""
                 )} >
@@ -49,7 +49,7 @@ export function VotingOptionBar({ isGreen, isRed, title, voteCount = 0, disable,
                             isGreen && "bg-green-400",
                             isRed && "bg-red-400"
                         )} >
-                            <User className="w-3 h-3" />
+                            <User className="w-2 h-2" />
                         </div>
                     )}
 
@@ -60,7 +60,7 @@ export function VotingOptionBar({ isGreen, isRed, title, voteCount = 0, disable,
                         width: `${votePercentage}%`
                     }}
                     className={twMerge(
-                        "rounded-xl h-5 text-slate-700  dark:text-slate-400 text-[9px] lg:text-[10px] text-center flex flex-row items-center justify-center bg-slate-300 dark:bg-slate-700",
+                        "rounded-xl h-4 text-slate-700  dark:text-slate-400 text-[9px] lg:text-[10px] text-center flex flex-row items-center justify-center bg-slate-300 dark:bg-slate-700",
                         hasUserVoted && "bg-gradient-to-r text-white dark:text-white from-blue-600 to-blue-700",
                         isGreen && "bg-gradient-to-r from-green-400 to-green-400",
                         isRed && "bg-gradient-to-r from-red-400 to-red-400 ",

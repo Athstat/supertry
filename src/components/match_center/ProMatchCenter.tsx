@@ -10,6 +10,7 @@ import MatchCenterSearchBar from "./MatchCenterSearchBar";
 import { searchProFixturePredicate } from "../../utils/fixtureUtils";
 import { twMerge } from "tailwind-merge";
 import { Maximize2, Minimize2 } from "lucide-react";
+import { IFixture } from "../../types/games";
 
 export default function ProMatchCenter() {
 
@@ -45,7 +46,7 @@ export default function ProMatchCenter() {
     });
 
     const filteredFixtures = fixtures.filter((f) => {
-        const seasonMatches = (!season || season === 'all') ? 
+        const seasonMatches = (!season || season === 'all') ?
             true : f.league_id === season;
 
         const searchMatches = search ? searchProFixturePredicate(search, f) : true;
@@ -89,49 +90,24 @@ export default function ProMatchCenter() {
     return (
         <div className="flex flex-col gap-4" >
             <h1 className="font-bold text-lg" >Pro Games</h1>
-            
-            <MatchCenterSearchBar 
+
+            <MatchCenterSearchBar
                 value={search}
                 onChange={setSearch}
                 placeholder="Search Pro Games, Seasons ..."
             />
 
-            <MatchSeasonFilterBar 
+            <MatchSeasonFilterBar
                 seasons={seasons}
                 onChange={setSeason}
                 value={season}
             />
 
-            <div className="flex flex-col gap-4" >
-                <div className="flex flex-row items-center justify-between" >
-                    <p className="font-semibold text-lg" >Upcoming Fixtures</p>
-                    <button className="cursor-pointer p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800/40 " onClick={toggleFocus} >
-                        {focus !== "upcoming" && <Maximize2 />}
-                        {focus === "upcoming" && <Minimize2 />}
-                    </button>
-                </div>
-
-                <div className={twMerge(
-                    "flex flex-row items-center gap-3 overflow-x-auto",
-                    focus === 'upcoming' && 'flex flex-col gap-2 overflow-x-hidden'
-                )} >
-                    {upcomingFixtures.map((fixture, index) => {
-                        return <FixtureCard
-                            fixture={fixture}
-                            key={index}
-                            showLogos
-                            className={twMerge(
-                                "rounded-xl border min-w-96 max-h-[250px] min-h-[250px] dark:border-slate-700 flex-1",
-                                focus === 'upcoming' && 'w-full'
-                            )}
-                            showCompetition
-                        />
-                    })}
-                </div>
-
-                {upcomingFixtures.length === 0 && <NoContentCard message="There are no upcoming fixtures" />}
-
-            </div>
+            <UpcomingFixturesSection 
+                upcomingFixtures={upcomingFixtures}
+                onToggleFocus={toggleFocus}
+                focus={focus}
+            />
 
             <div className="flex flex-col gap-4" >
                 <div className="flex flex-row items-center justify-between" >
@@ -151,6 +127,52 @@ export default function ProMatchCenter() {
                 </div>
 
             </div>
+
+        </div>
+    )
+}
+
+type UpcomingFixturesProps = {
+    upcomingFixtures: IFixture[],
+    onToggleFocus: () => void,
+    focus?: string
+}
+
+function UpcomingFixturesSection({upcomingFixtures, focus, onToggleFocus} : UpcomingFixturesProps) {
+    
+    return (
+        <div className="flex flex-col gap-4" >
+            <div className="flex flex-row items-center justify-between" >
+                <p className="font-semibold text-lg" >Upcoming Fixtures</p>
+                
+                <button 
+                    className="cursor-pointer p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800/40 "
+                    onClick={onToggleFocus} 
+                >
+                    {focus !== "upcoming" && <Maximize2 />}
+                    {focus === "upcoming" && <Minimize2 />}
+                </button>
+            </div>
+
+            <div className={twMerge(
+                "flex flex-row items-center gap-3 overflow-x-auto no-scrollbar",
+                focus === 'upcoming' ? 'flex flex-col gap-2 overflow-x-hidden' : ''
+            )} >
+                {upcomingFixtures.map((fixture, index) => {
+                    return <FixtureCard
+                        fixture={fixture}
+                        key={index}
+                        showLogos
+                        className={twMerge(
+                            "rounded-xl border min-w-96 max-h-[240px] min-h-[240px] dark:border-slate-700 flex-1",
+                            focus === 'upcoming' && 'min-w-full'
+                        )}
+                        showCompetition
+                    />
+                })}
+            </div>
+
+            {upcomingFixtures.length === 0 && <NoContentCard message="There are no upcoming fixtures" />}
 
         </div>
     )

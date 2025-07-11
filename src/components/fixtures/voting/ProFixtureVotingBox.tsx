@@ -83,14 +83,14 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
                     <div className="flex flex-col gap-2 w-full">
                         <button
                             onClick={() => handleVote('home_team')}
-                            className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1.5 text-xs hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
+                            className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1 text-[10px] hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
                             disabled={isVoting}
                         >
                             {team_name}
                         </button>
                         <button
                             onClick={() => handleVote('away_team')}
-                            className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1.5 text-xs hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
+                            className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1 text-[10px] hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
                             disabled={isVoting}
                         >
                             {opposition_team_name}
@@ -117,7 +117,7 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
 
             {/* Show voting bars after user has voted or after kickoff */}
             {(hasUserVoted && !gameKickedOff) && (
-                <>
+                <div className="flex flex-col w-full">
                     <VotingOptionBar
                         hasUserVoted={votedHomeTeam}
                         voteCount={homeVotes.length}
@@ -138,7 +138,7 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
                         isRed={!!(votedAwayTeam && matchFinal && homeTeamWon)}
                         disable={isVoting || gameKickedOff}
                     />
-                </>
+                </div>
             )}
         </div>
     )
