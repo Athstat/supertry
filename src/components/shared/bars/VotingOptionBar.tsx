@@ -101,7 +101,7 @@ export function VotingOptionsResults({hasScores, votedAwayTeam, votedHomeTeam, a
                 "border dark:border-slate-700 w-full px-4 rounded-xl py-1.5 flex items-center justify-between",
                 hasScores ? (
                     homeTeamWon ? "bg-green-200 dark:bg-green-900/40 dark:border-green-900" :
-                        awayTeamWon ? "bg-red-200 dark:bg-red-900/40 dark:border-red-900/60" :
+                        awayTeamWon ? "bg-slate-200 dark:bg-slate-700/40 dark:border-slate-500/60" :
                             "bg-slate-200 dark:bg-slate-800"
                 ) : "bg-slate-200 dark:bg-slate-800"
             )} >
@@ -116,7 +116,7 @@ export function VotingOptionsResults({hasScores, votedAwayTeam, votedHomeTeam, a
                 "border dark:border-slate-700 w-full px-4 rounded-xl py-1.5 flex items-center justify-between",
                 hasScores ? (
                     awayTeamWon ? "bg-green-200 dark:bg-green-900/40 dark:border-green-900" :
-                        homeTeamWon ? "bg-red-200 dark:bg-red-900/40 dark:border-red-900/60" :
+                        homeTeamWon ? "bg-slate-200 dark:bg-slate-700/40 dark:border-slate-500/60" :
                             "bg-slate-200 dark:bg-slate-800"
                 ) : "bg-slate-200 dark:bg-slate-800"
             )} >
