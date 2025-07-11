@@ -4,8 +4,6 @@ import { RankedFantasyTeam } from "../../types/league";
 import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
-import TeamAthletesModalListView from "./TeamAthletesModalListView";
-import Experimental from "../shared/ab_testing/Experimental";
 import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
 import { getEnvironment } from "../../utils/envUtils";
 import { twMerge } from "tailwind-merge";
@@ -76,8 +74,6 @@ export function TeamAthletesModal({
   };
 
   const totalScore = pointsBreakdown.reduce((acc, item) => acc + item.score, 0);
-  //console.log("Points Breakdown", pointsBreakdown);
-  const isStable = getEnvironment() === "production";
   const userNameIsEmail = isEmail(team.managerName);
 
   const isUsersTeam = user ? user.id === team.userId : false;
@@ -274,7 +270,7 @@ function PointsBreakdownView({ points }: PointsBreakDownViewProps) {
 
   return (
     <div className=" flex-1 p-4">
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+      <div className="bg-gray-50 dark:bg-gray-700/50 border border-slate-100 dark:border-slate-600 rounded-lg p-4">
         {pointsBreakdown.length > 0 ? (
           <ul className="space-y-3">
             {pointsBreakdown.map((item, index) => {
