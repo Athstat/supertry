@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect } from "react";
 import { IFantasyLeague } from "../types/fantasyLeague";
 import { RankedFantasyTeam } from "../types/league";
 import { useSetAtom } from "jotai";
-import { fantasyLeagueAtom, userFantasyTeamAtom } from "../state/fantasyLeague.atoms";
+import { fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom } from "../state/fantasyLeague.atoms";
 import useSWR from "swr";
 import { LoadingState } from "../components/ui/LoadingState";
 import { leagueService } from "../services/leagueService";

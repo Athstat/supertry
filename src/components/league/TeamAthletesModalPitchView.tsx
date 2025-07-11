@@ -26,14 +26,14 @@ export default function TeamAthletesModalPitchView({ athletes, handleKeyDown, ha
                     No athletes found
                 </div>
             ) : (
-                <div className="relative h-full  ">
+                <div className="relative h-full">
                     {/* Rugby pitch background */}
                     <div className="absolute inset-0 w-full h-full bg-green-700" >
                         <RugbyPitch count={4} />
                     </div>
 
                     {/* Athletes overlay */}
-                    <div className="absolute overflow-y-auto inset-0 w-full h-full flex flex-col items-center justify-center  md:px-6" >
+                    <div className="absolute overflow-y-auto inset-0 w-full h-full flex flex-col items-center justify-start  md:px-6" >
 
                         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 p-4" >
                             {athletes.map((athlete, index) => (

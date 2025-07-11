@@ -17,6 +17,8 @@ import { Lock } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
+import { ScopeProvider } from 'jotai-scope';
+import { fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom } from '../state/fantasyLeague.atoms';
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -114,108 +116,112 @@ export function LeagueScreen() {
     }
   };
 
+  const atoms = [fantasyLeagueAtom, userFantasyTeamAtom, fantasyLeagueLockedAtom];
+
   return (
-    <FantasyLeagueProvider>
-      <div className="min-h-screen bg-gray-50 dark:bg-black">
-        <LeagueHeader
-          leagueInfo={leagueInfo}
-          onOpenSettings={() => setShowSettings(true)}
-          isLoading={isLoading}
-          league={league}
-        >
-          <div className="flex items-center gap-2">
-            {!isLoading && userTeam === undefined && league && !isLocked && (
-              <button
-                onClick={handleJoinLeague}
-                className="hidden lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+    <ScopeProvider atoms={atoms}>
+      <FantasyLeagueProvider league={league} >
+        <div className="min-h-screen bg-gray-50 dark:bg-black">
+          <LeagueHeader
+            leagueInfo={leagueInfo}
+            onOpenSettings={() => setShowSettings(true)}
+            isLoading={isLoading}
+            league={league}
+          >
+            <div className="flex items-center gap-2">
+              {!isLoading && userTeam === undefined && league && !isLocked && (
+                <button
+                  onClick={handleJoinLeague}
+                  className="hidden lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition"
+                >
+                  Join This League
+                </button>
+              )}
+
+              {!isLoading && userTeam === undefined && isLocked && (
+                <button
+                  disabled
+                  className="hidden cursor-not-allowed opacity-70 lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition flex-row items-center justify-center gap-1"
+                >
+                  Join This League
+                  <Lock className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          </LeagueHeader>
+
+          <PageView className="p-4">
+            {league && (
+              <TabView
+                tabHeaderItems={tabItems}
+                tabKeySearchParam="tab"
+                initialTabKey={initialTabKey}
               >
-                Join This League
-              </button>
-            )}
+                <TabViewPage tabKey="standings">
+                  <LeagueStandings
+                    teams={teams}
+                    showJumpButton={showJumpButton}
+                    onJumpToTeam={onJumpToTeam}
+                    isLoading={isLoading}
+                    error={error}
+                    onTeamClick={team => {
+                      handleTeamClick(team);
+                      viewTeam(team.team_id);
+                    }}
+                    league={league}
+                  />
+                </TabViewPage>
 
-            {!isLoading && userTeam === undefined && isLocked && (
-              <button
-                disabled
-                className="hidden cursor-not-allowed opacity-70 lg:flex bg-white text-primary-700 font-semibold rounded-full px-4 py-2 shadow-md hover:bg-gray-100 transition flex-row items-center justify-center gap-1"
-              >
-                Join This League
-                <Lock className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-        </LeagueHeader>
+                <TabViewPage tabKey="chat">
+                  <LeagueGroupChatFeed league={league} />
+                </TabViewPage>
 
-        <PageView className="p-4">
-          {league && (
-            <TabView
-              tabHeaderItems={tabItems}
-              tabKeySearchParam="tab"
-              initialTabKey={initialTabKey}
-            >
-              <TabViewPage tabKey="standings">
-                <LeagueStandings
-                  teams={teams}
-                  showJumpButton={showJumpButton}
-                  onJumpToTeam={onJumpToTeam}
-                  isLoading={isLoading}
-                  error={error}
-                  onTeamClick={team => {
-                    handleTeamClick(team);
-                    viewTeam(team.team_id);
-                  }}
-                  league={league}
-                />
-              </TabViewPage>
+                <TabViewPage tabKey="fixtures">
+                  <FantasyLeagueFixturesList userTeam={userTeam} league={league as IFantasyLeague} />
+                </TabViewPage>
 
-              <TabViewPage tabKey="chat">
-                <LeagueGroupChatFeed league={league} />
-              </TabViewPage>
-
-              <TabViewPage tabKey="fixtures">
-                <FantasyLeagueFixturesList userTeam={userTeam} league={league as IFantasyLeague} />
-              </TabViewPage>
-
-              {/* <TabViewPage tabKey="predictions">
+                {/* <TabViewPage tabKey="predictions">
                 <LeaguePredictionsTab />
               </TabViewPage> */}
-            </TabView>
-          )}
+              </TabView>
+            )}
 
-          {!league && <ErrorState error="Error Loading League Data" />}
-        </PageView>
-      </div>
+            {!league && <ErrorState error="Error Loading League Data" />}
+          </PageView>
+        </div>
 
-      {showSettings && <LeagueSettings onClose={() => setShowSettings(false)} />}
+        {showSettings && <LeagueSettings onClose={() => setShowSettings(false)} />}
 
-      {/* Team Athletes Modal */}
-      {selectedTeam && (
-        <TeamAthletesModal
-          team={selectedTeam as RankedFantasyTeam}
-          athletes={teamAthletes}
-          onClose={handleCloseModal}
-          isLoading={loadingAthletes}
-        />
-      )}
-      {/* Mobile CTA Button - Only for Join This League */}
+        {/* Team Athletes Modal */}
+        {selectedTeam && (
+          <TeamAthletesModal
+            team={selectedTeam as RankedFantasyTeam}
+            athletes={teamAthletes}
+            onClose={handleCloseModal}
+            isLoading={loadingAthletes}
+          />
+        )}
+        {/* Mobile CTA Button - Only for Join This League */}
 
-      {!isLoading && userTeam === undefined && league && !isLocked && (
-        <button
-          onClick={handleJoinLeague}
-          className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 text-white font-semibold rounded-xl py-3 shadow-lg"
-        >
-          Join This League
-        </button>
-      )}
+        {!isLoading && userTeam === undefined && league && !isLocked && (
+          <button
+            onClick={handleJoinLeague}
+            className="lg:hidden fixed bottom-20 inset-x-4 z-50 bg-gradient-to-br from-primary-700 to-primary-700 via-primary-800 hover:from-primary-800 hover:to-primary-900 hover:via-primary-900 text-white font-semibold rounded-xl py-3 shadow-lg"
+          >
+            Join This League
+          </button>
+        )}
 
-      {!isLoading && userTeam === undefined && isLocked && (
-        <button
-          disabled
-          className="lg:hidden cursor-not-allowed flex flex-row items-center justify-center gap-2 fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
-        >
-          Join This League
-          <Lock className="w-4 h-4" />
-        </button>
-      )}
-    </FantasyLeagueProvider>
+        {!isLoading && userTeam === undefined && isLocked && (
+          <button
+            disabled
+            className="lg:hidden cursor-not-allowed flex flex-row items-center justify-center gap-2 fixed bottom-20 inset-x-4 z-50 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3 shadow-lg"
+          >
+            Join This League
+            <Lock className="w-4 h-4" />
+          </button>
+        )}
+      </FantasyLeagueProvider>
+    </ScopeProvider>
   );
 }

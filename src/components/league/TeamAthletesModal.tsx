@@ -207,21 +207,12 @@ export function TeamAthletesModal({
           <div className="w-full h-full" >
             {canPeek ?
 
-              <Experimental
-                placeholder={
-                  <TeamAthletesModalListView
-                    athletes={athletes}
-                    handleKeyDown={handleKeyDown}
-                    handleViewBreakdown={handleViewBreakdown}
-                  />
-                }
-              >
-                <TeamAthletesModalPitchView
-                  athletes={athletes}
-                  handleKeyDown={handleKeyDown}
-                  handleViewBreakdown={handleViewBreakdown}
-                />
-              </Experimental>
+              <TeamAthletesModalPitchView
+                athletes={athletes}
+                handleKeyDown={handleKeyDown}
+                handleViewBreakdown={handleViewBreakdown}
+              />
+
               : <NoPeekingView />
             }
 
