@@ -129,6 +129,8 @@ function teamLogoMapper(teamName: string): string | undefined {
         return 'hilcrest_high_school_sa.png'
       case 'Howick High School':
         return 'howick_logo.png';
+      case 'Plumtree School':
+        return 'plum_tree_zim.png';
       default:
         return undefined;
     }

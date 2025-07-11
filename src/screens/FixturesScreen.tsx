@@ -7,7 +7,8 @@ import SbrMatchCenter from '../components/match_center/SbrMatchCenter';
 
 export default function FixturesScreen() {
 
-  const [fixtureContext, setFixtureContext] = useQueryState('sc', { init: 'Pros' })
+  const fixtureOptions = ["PRO", "SBR"]
+  const [fixtureContext, setFixtureContext] = useQueryState('sc', { init: fixtureOptions[0] })
 
   return (
     <PageView className="dark:text-white lg:w-[60%] p-4 md:p-6 flex flex-col gap-4">
@@ -20,8 +21,8 @@ export default function FixturesScreen() {
 
         <div>
           <ToggleSwitch
-            option1='Pros'
-            option2='Sbr'
+            option1={fixtureOptions[0]}
+            option2={fixtureOptions[1]}
             value={fixtureContext}
             onChange={setFixtureContext}
           />
@@ -29,8 +30,8 @@ export default function FixturesScreen() {
       </div>
 
       <div className="w-full mx-auto">
-        {fixtureContext === "Pros" && <ProMatchCenter />}
-        {fixtureContext === "Sbr" && <SbrMatchCenter />}
+        {fixtureContext === fixtureOptions[0] && <ProMatchCenter />}
+        {fixtureContext === fixtureOptions[1] && <SbrMatchCenter />}
       </div>
 
     </PageView>
