@@ -3,7 +3,6 @@ import { Users, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { athleteService } from '../../services/athleteService';
 import { RugbyPlayer } from '../../types/rugbyPlayer';
-import { leagueService } from '../../services/leagueService';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 
@@ -67,7 +66,7 @@ const FeaturedPlayersCarousel = () => {
     <div className="w-full">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-base font-medium flex items-center gap-2">
-          <Users className="w-4 h-4 text-primary-700" />
+          <Users className="w-4 h-4 text-primary-500" />
           FEATURED PLAYERS
         </h3>
         <button onClick={() => navigate('/players')} className="text-sm text-primary-700">
@@ -117,7 +116,7 @@ const FeaturedPlayersCarousel = () => {
           </div> */}
 
           {/* Player cards carousel - showing featured players only */}
-          <div className="flex space-x-3 overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
+          <div className="flex space-x-3 h-[230px] items-center justify-start overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
             {players.map(player => (
               <div key={player.tracking_id} className="pl-1 flex-shrink-0">
                 <PlayerGameCard
