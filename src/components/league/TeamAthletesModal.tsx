@@ -5,12 +5,12 @@ import { PointsBreakdownItem } from "../../services/athleteService";
 import { formatAction } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
-import { getEnvironment } from "../../utils/envUtils";
 import { twMerge } from "tailwind-merge";
 import { isEmail } from "../../utils/stringUtils";
 import { useAtomValue } from "jotai";
 import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 import { authService } from "../../services/authService";
+import PlayerMugshot from "../shared/PlayerMugshot";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;
@@ -110,8 +110,18 @@ export function TeamAthletesModal({
                     className="text-gray-600 dark:text-gray-300"
                   />
                 </button>
+
+                {selectedAthlete.image_url && <div className="mr-2" >
+                  <PlayerMugshot
+                    url={selectedAthlete.image_url} 
+                    className="w-12 h-12 lg:w-14 lg:h-14"
+                    playerPr={selectedAthlete.power_rank_rating}
+                    showPrBackground={selectedAthlete.power_rank_rating !== undefined}
+                  />
+                </div>}
                 <div>
-                  <h2 className="text-xl font-semibold dark:text-white">
+
+                  <h2 className="text-md truncate font-semibold dark:text-white">
                     {selectedAthlete.player_name}
                   </h2>
                   <p className="text-xs text-gray-500 dark:text-gray-400">

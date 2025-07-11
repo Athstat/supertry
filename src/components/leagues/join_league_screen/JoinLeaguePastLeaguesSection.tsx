@@ -1,4 +1,3 @@
-import { Trophy } from "lucide-react"
 import { IFantasyLeague } from "../../../types/fantasyLeague"
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";

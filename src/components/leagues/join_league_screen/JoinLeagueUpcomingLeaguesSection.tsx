@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { IFantasyLeague } from "../../../types/fantasyLeague"
 import { motion } from "framer-motion";
-import { Trophy } from "lucide-react";
 import { LeagueCard } from "../league_card_small/LeagueCard";
 import { upcomingLeaguesFilter } from "../../../utils/leaguesUtils";
 import NoContentCard from "../../shared/NoContentMessage";
