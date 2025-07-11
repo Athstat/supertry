@@ -13,12 +13,13 @@ import DialogModal from '../shared/DialogModal';
 import { useGameVotes } from '../../hooks/useGameVotes';
 import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
 import { fixtureSumary } from '../../utils/fixtureUtils';
+import { useNavigate } from 'react-router-dom';
 
 export default function UpcomingFixturesSection() {
 
   const { data: fixtures, isLoading, error } = useSWR('pro-fixtures', () => gamesService.getAllSupportedGames());
   const { push } = useRouter();
-  const { data: leagues, isLoading: isLoadingLeagues } = useSWR( 'all-leagues',() => leagueService.getAllLeagues());
+  const { data: leagues, isLoading: isLoadingLeagues } = useSWR('all-leagues', () => leagueService.getAllLeagues());
 
   const [selectedFixture, setSelectedFixture] = useState<IFixture | null>(null);
   const [showPredictModal, setShowPredictModal] = useState(false);
@@ -79,10 +80,10 @@ export default function UpcomingFixturesSection() {
                     {/* Home Team */}
                     <div className="flex flex-col items-center min-w-0 w-28">
                       <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
-                        <TeamLogo 
+                        <TeamLogo
                           url={fixture.team_image_url}
                           teamName={fixture.team_name}
-                          className="w-10 h-10" 
+                          className="w-10 h-10"
                         />
                       </div>
                       <p
@@ -178,6 +179,8 @@ function PredictionModal({
   showModal: boolean;
   onClose: () => void;
 }) {
+
+  const navigate = useNavigate();
   const { gameKickedOff } = fixtureSumary(fixture);
   const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
   const [isVoting, setIsVoting] = useState(false);
@@ -214,6 +217,10 @@ function PredictionModal({
 
   const title = `${fixture.team_name} vs ${fixture.opposition_team_name}`;
 
+  const goToFixturePage = () => {
+    navigate(`/fixtures/${fixture.game_id}`);
+  }
+
   return (
     <DialogModal
       onClose={onClose}
@@ -230,8 +237,8 @@ function PredictionModal({
 
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
-          <TeamLogo 
-            className="w-20 h-20" url={fixture.team_image_url} 
+          <TeamLogo
+            className="w-20 h-20" url={fixture.team_image_url}
             teamName={fixture.team_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
@@ -314,7 +321,18 @@ function PredictionModal({
             />
           </>
         )}
+
+        <div className="flex flex-row items-center justify-center p-3">
+          <button
+            onClick={goToFixturePage}
+            className="underline text-sm text-blue-400 dark:text-blue-200 hover:text-blue-500"
+          >
+            View Full Match Details
+          </button>
+        </div>
       </div>
+
+
     </DialogModal>
   );
 }

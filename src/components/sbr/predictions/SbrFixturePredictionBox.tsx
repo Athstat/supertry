@@ -85,17 +85,17 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
                 {/* Home Team Voting Station */}
 
                 {!hasUserVoted && !hasKickedOff && <div className="flex flex-col w-full gap-2 items-center text-xs lg:text-sm justify-center text-slate-700 dark:text-slate-400" >
-                    <p>Who you got winning?</p>
+                    <p className='text-[10px]' >Who you got winning?</p>
 
                     <div className={twMerge(
                         'grid grid-cols-2 gap-2 w-full',
                         preVotingCols === "one" && "grid grid-cols-1"
                     )} >
-                        <button onClick={handleClickHomeVoteBar} className="border dark:border-slate-700 w-full px-2 rounded-xl bg-slate-200 py-2 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
+                        <button onClick={handleClickHomeVoteBar} className="border dark:border-slate-700 text-[10px] w-full px-2 rounded-xl bg-slate-200 py-1 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
                             {home_team}
                         </button>
 
-                        <button onClick={handleClickAwayVoteBar} className="border dark:border-slate-700 w-full px-2 rounded-xl bg-slate-200 py-2 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
+                        <button onClick={handleClickAwayVoteBar} className="border dark:border-slate-700 text-[10px] w-full px-2 rounded-xl bg-slate-200 py-1 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
                             {away_team}
                         </button>
                     </div>
