@@ -4,11 +4,12 @@ import { powerRankingsService } from "../../../services/powerRankingsService"
 import { LoadingState } from "../../ui/LoadingState"
 import { SingleMatchPowerRanking } from "../../../types/powerRankings"
 import RoundedCard from "../../shared/RoundedCard"
-import { ChartNoAxesColumn } from "lucide-react"
+import { Calendar, ChartNoAxesColumn } from "lucide-react"
 import TeamLogo from "../../team/TeamLogo"
 import { twMerge } from "tailwind-merge"
 import { format } from "date-fns"
 import PillTag from "../../shared/PillTap"
+import SecondaryText from "../../shared/SecondaryText"
 
 type Props = {
     player: RugbyPlayer
@@ -46,14 +47,14 @@ export default function PlayerMatchsPRList({ player }: Props) {
     return (
         <div className="flex flex-col gap-2" >
 
-            <div className="text-lg font-bold flex flex-row items-center gap-1" >
-                <ChartNoAxesColumn />
+            <SecondaryText className="text-lg font-medium flex flex-row items-center gap-1" >
+                <Calendar />
                 Last {matchesPR.length} Matches
-            </div>
+            </SecondaryText>
 
             <div className="flex flex-row items-center gap-1" >
-                <PillTag>Won {matchesWon}</PillTag>
-                <PillTag>Lost {matchesLost}</PillTag>
+                <PillTag className="py-0.5 px-3 text-sm text-slate-700 dark:text-slate-400" >Won {matchesWon}</PillTag>
+                <PillTag className="py-0.5 px-3 text-sm text-slate-700 dark:text-slate-400" >Lost {matchesLost}</PillTag>
                 {matchesDrawn ?  <PillTag>Draw {matchesDrawn}</PillTag> : null}
             </div>
             {matchesPR.map((matchPr) => {
@@ -85,7 +86,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
 
     return (
-        <RoundedCard className="p-4 flex flex-col gap-2 bg-slate-50" >
+        <RoundedCard className="p-4 flex flex-col gap-2 bg-slate-50 dark:bg-slate-800 dark:border-slate-700" >
 
             <div className="flex flex-row items-center justify-between" >
                 <div className="flex flex-row items-center gap-2" >
@@ -97,7 +98,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
                             (<p className="dark:text-slate-400 text-sm text-slate-700" >D {team_score} - {opposition_score}</p>) :
                             <p className={twMerge(
                                 "text-sm",
-                                athleteTeamWon ? "dark:text-primary-500 text-primary-600" : "dark:text-red-500 text-red-600"
+                                athleteTeamWon ? "font-bold dark:text-primary-500 text-primary-600" : "dark:text-slate-400 text-slate-700"
                             )} >{athleteTeamWon ? "W" : "L"} {team_score} - {opposition_score}</p>
                         }
                     </div>
