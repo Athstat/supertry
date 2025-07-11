@@ -147,6 +147,7 @@ export default function SbrMatchCenter() {
                             showLogos
                             className='min-w-[350px] max-h-[300px]'
                             showKickOffTime
+                            showCompetition
                         />
                     })}
                 </div>
