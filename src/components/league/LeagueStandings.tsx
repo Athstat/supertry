@@ -80,20 +80,24 @@ export function LeagueStandings({
           
         >
           <div className="relative">
-            <table className="w-full">
-              <thead className="sticky top-0  bg-gray-50 dark:bg-dark-800 z-40">
-                <tr>
-                  <th className="py-4 px-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
+            <table className="w-full ">
+              
+              <thead className="bg-gray-50 overflow-hidden w-full dark:bg-dark-800/80">
+                
+                <tr className="overflow-hidden min-w-full" >
+                  <th className=" p-2 truncate text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
                     Rank
                   </th>
-                  <th className="py-4 px-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
+                  <th className=" p-2 truncate text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
                     Team
                   </th>
-                  <th className="py-4 px-4 text-right text-sm font-semibold text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                  <th className=" p-2 truncate text-left text-sm font-semibold text-gray-600 dark:text-gray-400">
                     Total Points
                   </th>
                 </tr>
+
               </thead>
+
               <tbody>
                 {[...teams]
                   .sort((a, b) => {
