@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Calendar } from "lucide-react";
+import { Calendar, Trophy, Watch } from "lucide-react";
 import { ISbrFixture } from "../../../types/sbr";
 import { Fragment } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
@@ -9,6 +9,8 @@ import { useSbrFixtureVotes } from "../../../hooks/useFxitureVotes";
 import { sbrService } from "../../../services/sbrService";
 import { sbrFixtureSummary, getSbrVotingSummary } from "../../../utils/sbrUtils";
 import { VotingOptionBar } from "../../shared/bars/VotingOptionBar";
+import RoundedCard from "../../shared/RoundedCard";
+import NoContentCard from "../../shared/NoContentMessage";
 
 type Props = {
     fixture: ISbrFixture
@@ -16,7 +18,7 @@ type Props = {
 
 export default function SbrFixtureKickOffInfo({ fixture }: Props) {
 
-    const { kickoff_time } = fixture;
+    const { kickoff_time, season } = fixture;
     const { homeVotes, awayVotes, userVote, isLoading } = useSbrFixtureVotes(fixture);
     const { home_team, away_team } = fixture;
 
@@ -64,35 +66,33 @@ export default function SbrFixtureKickOffInfo({ fixture }: Props) {
 
     const hasUserVoted = votedAwayTeam || votedHomeTeam;
 
-    if (!kickoff_time) {
-        return (
-            <div>
-                <div className="flex flex-col gap-3 bg-white dark:bg-slate-800/40 p-5 rounded-xl" >
-
-                    <h1 className="text-lg font-bold" >Kick Off</h1>
-
-                    <p className="dark:text-slate-400 text-slate-700" >Kick off time for this game is not available</p>
-                </div>
-            </div>
-        )
-    }
+    const isNoKickoffInfo = season === undefined && kickoff_time === undefined
 
     return (
         <div>
-            <div className="flex flex-col gap-3 bg-white dark:bg-slate-800/40 p-5 rounded-xl" >
+            <RoundedCard className="p-4 flex flex-col gap-2" >
 
-                <h1 className="text-xl font-bold" >Kick Off</h1>
+                <h1 className="text-md font-bold" >Kick Off</h1>
 
-                {/* <div className="flex flex-row items-center mt-3 gap-2" >
+                { kickoff_time && <div className="flex flex-row items-center mt-3 gap-2" >
                     <Watch className="text-blue-500" />
                     {kickoff_time && <p>{format(kickoff_time, "hh:mm a")}</p>}
-                </div> */}
+                </div>}
 
-                <div className="flex flex-row items-center gap-2" >
+                {kickoff_time && <div className="flex flex-row items-center gap-2" >
                     <Calendar className="text-blue-500" />
                     {kickoff_time && <p>{format(kickoff_time, "EEEE dd MMMM yyyy")}</p>}
-                </div>
-            </div>
+                </div>}
+
+                { season && <div className="flex flex-row items-center gap-2" >
+                    <Trophy className="text-blue-500" />
+                    <p>{season}</p>
+                </div>}
+
+                {isNoKickoffInfo && (
+                    <NoContentCard message="No Kickoff Information Available" />
+                )}
+            </RoundedCard>
 
             {isLoading && (
                 <div className="w-full h-20 bg-slate-200 dark:bg-slate-800/40 animate-pulse rounded-xl" >

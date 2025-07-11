@@ -118,6 +118,8 @@ export default function SbrMatchCenter() {
                             fixture={fixture}
                             key={index}
                             showLogos
+                            showCompetition
+                            showKickOffTime
                             className={twMerge(
                                 'min-w-[350px] max-h-[270px]',
                                 focus === "upcoming" && 'min-w-full'

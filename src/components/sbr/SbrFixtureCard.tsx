@@ -77,7 +77,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
         >
 
             <div className="text-center w-full flex flex-col items-center justify-center text-xs text-slate-700 dark:text-slate-400" >
-                {showCompetition && fixture.season && <p>{fixture.season}</p>}
+                {showCompetition && fixture.season && <p className="text-[10px]" >{fixture.season}</p>}
             </div>
 
             {hasBoxscoreData &&
@@ -99,15 +99,19 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
                     <p className="text-slate-700 text-xs dark:text-slate-400" >{gameCompleted && home_score !== undefined ? home_score : "-"}</p>
                 </div>
                 {/* Kick off information */}
-                <div className="flex-1 flex flex-col items-center justify-center dark:text-slate-400 text-slate-700 " >
+                <div className="flex-1 flex flex-col items-center gap-1 justify-center dark:text-slate-400 text-slate-700 " >
 
-                    {!hasScores && fixture.status !== "completed" && <p className="text-sm" >VS</p>}
-                    {fixture.status === "completed" && (
+                    {!hasScores && !showKickOffTime && fixture.status !== "completed" && <p className="text-sm" >vs</p>}
+                    {fixture.status === "completed" && !showKickOffTime && (
                         <div className="flex w-full text-xs flex-row items-center justify-center gap-1" >
                             <div>Final</div>
                         </div>
                     )}
-                    {showKickOffTime && fixture.kickoff_time && <p className="text-xs" >{format(fixture.kickoff_time, 'dd MMMM yyyy')}</p>}
+
+                    <div className="flex flex-col items-center justify-center" >
+                        {showKickOffTime && fixture.kickoff_time && <p className="text-[10px]" >{format(fixture.kickoff_time, 'HH:mm')}</p>}
+                        {showKickOffTime && fixture.kickoff_time && <p className="text-[10px]" >{format(fixture.kickoff_time, 'dd MMMM yyyy')}</p>}
+                    </div>
                 </div>
                 {/* Away Team */}
                 <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >
