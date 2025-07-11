@@ -41,9 +41,8 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Pro
     }
 
     return (
-        <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
-                <Trophy size={24} className="text-primary-500" />
+        <div className=" rounded-xl shadow-sm my-6">
+            <h2 className="text-md font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
                 Past Leagues
             </h2>
 

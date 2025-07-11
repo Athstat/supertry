@@ -39,7 +39,7 @@ export function JoinLeagueScreen() {
         // Map of joined league IDs
         leagues.forEach((league) => {
           // Check if any team's league_id matches the current league's id
-          const hasJoined = teams.some((team) => team.league_id === league.id);
+          const hasJoined = teams.some((team) => team.league_id?.toString() === league.id);
           joinedLeagues[league.id] = hasJoined;
         });
 

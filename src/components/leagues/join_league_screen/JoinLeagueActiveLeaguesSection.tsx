@@ -4,6 +4,7 @@ import { activeLeaguesFilter } from '../../../utils/leaguesUtils'
 import { LeagueCard } from '../league_card_small/LeagueCard'
 import { IFantasyLeague } from '../../../types/fantasyLeague'
 import { useNavigate } from 'react-router-dom'
+import NoContentCard from '../../shared/NoContentMessage'
 
 type Props = {
     leagues: IFantasyLeague[],
@@ -34,17 +35,16 @@ export default function JoinLeagueActiveLeaguesSection({ leagues, userTeams }: P
         });
     };
 
-    if (activeLeagues.length === 0) {
-        return;
-    }
-
 
     return (
-        <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
-                <Trophy size={24} className="text-primary-500" />
+        <div className="rounded-xl shadow-sm">
+            <h2 className="text-md font-semibold flex items-center gap-2 dark:text-gray-100">
                 Active Leagues
             </h2>
+
+            {activeLeagues.length === 0 &&
+                <NoContentCard className='my-6' message='There are no Active Leagues' />
+            }
 
             <motion.div
                 variants={containerVariants}

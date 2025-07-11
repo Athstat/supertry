@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
 import { LeagueCard } from "../league_card_small/LeagueCard";
 import { upcomingLeaguesFilter } from "../../../utils/leaguesUtils";
+import NoContentCard from "../../shared/NoContentMessage";
 
 type Props = {
     leagues: IFantasyLeague[],
@@ -32,16 +33,16 @@ export default function JoinLeagueUpcomingLeaguesSection({ leagues, userTeams }:
         },
     };
 
-    if (upcomingLeages.length === 0) {
-        return;
-    }
 
     return (
-        <div className="bg-white dark:bg-gray-800/40 rounded-xl shadow-sm my-6 p-4 sm:p-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
-                <Trophy size={24} className="text-primary-500" />
+        <div className="rounded-xl shadow-sm">
+            <h2 className="text-md font-semibold flex items-center gap-2 mb-6 dark:text-gray-100">
                 Upcoming Leagues
             </h2>
+
+            {upcomingLeages.length === 0 &&
+                <NoContentCard message="There are no Upcoming Leagues" />
+            }
 
             <motion.div
                 variants={containerVariants}
