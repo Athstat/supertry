@@ -61,7 +61,7 @@ function FixtureRosterListItem({player} : RosterListItemProps) {
                     {player.is_captain && <CaptainsArmBand />}
                 </div>
 
-                <p className="text-slate-700 dark:text-slate-400" >{formatPosition(player.position)}</p>
+                <p className="text-slate-700 dark:text-slate-400" >{player.position !== 'NULL' ? formatPosition(player.position) : ''}</p>
             </div>
         </div>
     )
