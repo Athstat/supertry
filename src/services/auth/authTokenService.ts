@@ -4,6 +4,7 @@ export const AUTH_USER_KEY = 'auth_user';
 export const ACCESS_TOKEN_KEY = 'access_token';
 export const REFRESH_TOKEN_KEY = 'refresh_token';
 export const IS_GUEST_ACCOUNT_KEY = 'is_guest_account';
+export const ONE_SIGNAL_ID = 'onesignal_id';
 
 export const authTokenService = {
 
@@ -57,4 +58,8 @@ export const authTokenService = {
         authTokenService.setAccessToken(accessToken);
         authTokenService.saveUserToLocalStorage(user);
     },
+
+    getOnesignalId: () => {
+        return localStorage.getItem('onesignal_id') ?? undefined;
+    }
 }

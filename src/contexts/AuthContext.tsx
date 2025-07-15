@@ -1,14 +1,14 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 import {
   requestPushPermissionsAfterLogin,
   logoutFromBridge,
   loginWithBridge,
 } from '../utils/bridgeUtils';
-import { DjangoLoginRes, ThrowableRes } from '../types/auth';
+import { DjangoAuthUser, DjangoLoginRes, ThrowableRes } from '../types/auth';
+import { AUTH_USER_KEY, authTokenService } from '../services/auth/authTokenService';
 
-interface AuthContextType {
+type AuthContextType = {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<ThrowableRes<DjangoLoginRes>>;
   logout: () => void;
@@ -41,9 +41,10 @@ declare global {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<any>(null);
+  const [_, setUser] = useState<DjangoAuthUser | null>(null);
 
   // Function to restore authentication from mobile app's scrummyAuthStatus
   const restoreAuthFromMobileApp = useCallback(async () => {
@@ -58,9 +59,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const { tokens, userData } = authStatus;
 
           if (tokens && tokens.accessToken && tokens.refreshToken) {
-            // Store the tokens in the web app's localStorage
-            localStorage.setItem('access_token', tokens.accessToken);
-            localStorage.setItem('refresh_token', tokens.refreshToken);
+
+            authTokenService.setAccessToken(tokens.accessToken);
+            const apiUser = await authService.whoami();
+
+            if (apiUser) {
+              authTokenService.saveUserToLocalStorage(apiUser);
+            }
 
             // Store user data if available
             if (userData) {
@@ -73,6 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         }
       }
+
       // Fallback: Check if we have pre-injected authentication status
       else if (window.scrummyAuthStatus && window.scrummyAuthStatus.isAuthenticated) {
         console.log(
@@ -84,13 +90,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (tokens && tokens.accessToken && tokens.refreshToken) {
           // Store the tokens in the web app's localStorage
-          localStorage.setItem('access_token', tokens.accessToken);
-          localStorage.setItem('refresh_token', tokens.refreshToken);
+            authTokenService.setAccessToken(tokens.accessToken);
+            const apiUser = await authService.whoami();
 
-          // Store user data if available
-          if (userData) {
-            localStorage.setItem('user_data', JSON.stringify(userData));
-          }
+            if (apiUser) {
+              authTokenService.saveUserToLocalStorage(apiUser);
+            }
+
+            // Store user data if available
+            if (userData) {
+              localStorage.setItem('user_data', JSON.stringify(userData));
+            }
 
           console.log(
             'AuthContext: Successfully restored authentication from mobile app (fallback)'
@@ -118,23 +128,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const authenticated = authService.isAuthenticated();
-
-      // If not authenticated but we have a refresh token, try to refresh
-      if (!authenticated && localStorage.getItem('refresh_token')) {
-        const refreshed = await authService.refreshToken();
-        setIsAuthenticated(refreshed);
-        return refreshed;
-      }
-
       setIsAuthenticated(authenticated);
+
       return authenticated;
+
     } catch (error) {
+
       console.error('Authentication check failed:', error);
       setIsAuthenticated(false);
       return false;
+
     } finally {
       setLoading(false);
     }
+
   }, [restoreAuthFromMobileApp]);
 
   // Initial authentication check
@@ -153,13 +160,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (tokens && tokens.accessToken && tokens.refreshToken) {
           // Store the tokens in the web app's localStorage
-          localStorage.setItem('access_token', tokens.accessToken);
-          localStorage.setItem('refresh_token', tokens.refreshToken);
+            authTokenService.setAccessToken(tokens.accessToken);
+            const apiUser = await authService.whoami();
 
-          // Store user data if available
-          if (userData) {
-            localStorage.setItem('user_data', JSON.stringify(userData));
-          }
+            if (apiUser) {
+              authTokenService.saveUserToLocalStorage(apiUser);
+            }
+
+            // Store user data if available
+            if (userData) {
+              localStorage.setItem('user_data', JSON.stringify(userData));
+            }
 
           // console.log(
           //   'AuthContext: Successfully restored authentication from mobile app via callback'
@@ -200,7 +211,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshSession = useCallback(async (): Promise<boolean> => {
     try {
       console.log('AuthContext: Attempting to refresh session');
-      const refreshed = await authService.refreshToken();
+      const refreshed = true;
       console.log('AuthContext: Session refresh result:', refreshed);
       setIsAuthenticated(refreshed);
       return refreshed;
@@ -221,20 +232,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Notify the mobile app bridge about successful login
       try {
-        const userInfo = authService.getUserInfo();
-        if (userInfo) {
+        const userInfo = await authService.getUserInfo();
+        if (userInfo && loginRes) {
           const tokens = {
-            accessToken: localStorage.getItem('access_token') || '',
-            authUserToken: localStorage.getItem('auth_user') || '',
+            accessToken: authTokenService.getAccessToken() || '',
+            authUserToken: localStorage.getItem(AUTH_USER_KEY) || '',
+            refreshToken: ""
           };
+
+          setUser(loginRes.user);
+
           const userData = {
             name:
-              `${userInfo.firstName || ''} ${userInfo.lastName || ''}`.trim() ||
+              `${userInfo.first_name || ''} ${userInfo.last_name || ''}`.trim() ||
               userInfo.username ||
               '',
             email: userInfo.email || '',
-            user_id: userInfo.id || '',
-            onesignal_id: localStorage.getItem('onesignal_id') || undefined,
+            user_id: userInfo.kc_id || '',
+            onesignal_id: authTokenService.getOnesignalId(),
           };
 
           console.log('AuthContext: Notifying mobile app bridge about login...');
@@ -255,7 +270,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Don't navigate here - let the route guards handle it
       // This prevents double navigation/reload
 
-      return result;
+      return {loginRes, message};
+      
     } catch (error) {
       console.error('Login failed:', error);
       setIsAuthenticated(false);

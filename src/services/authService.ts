@@ -209,7 +209,7 @@ export const authService = {
 
   /** Check if user is authenticated by verifying token existence and validity */
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('access_token');
+    const token = authTokenService.getAccessToken();
     if (!token) return false;
 
     return authService.getUserInfo() !== null;
