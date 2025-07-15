@@ -176,6 +176,7 @@ export const authService = {
 
       const uri = getUri(`/api/v1/auth/login`);
 
+      
       const res = await fetch(uri, {
         method: 'POST',
         headers: applicationJsonHeader(),
@@ -184,6 +185,8 @@ export const authService = {
           'password': password
         })
       });
+
+      console.log("Login Result ", res);
 
       if (res.ok) {
 
@@ -202,6 +205,7 @@ export const authService = {
 
     } catch (error) {
       logger.error("Error loging in user with email ", email, ' error: ', error)
+      console.log("Login Error ", error);
     }
 
     return { message: 'Something went wrong, please try again' }
@@ -225,7 +229,7 @@ export const authService = {
    */
   getUserInfo: async (): Promise<DjangoAuthUser | null> => {
 
-    const auth_user_local_storage = localStorage.getItem('auth_user');
+    const auth_user_local_storage = authTokenService.getAccessToken();
 
     if (!auth_user_local_storage) {
       const user = await authService.whoami();

@@ -41,7 +41,7 @@ declare global {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [_, setUser] = useState<DjangoAuthUser | null>(null);
@@ -90,17 +90,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (tokens && tokens.accessToken && tokens.refreshToken) {
           // Store the tokens in the web app's localStorage
-            authTokenService.setAccessToken(tokens.accessToken);
-            const apiUser = await authService.whoami();
+          authTokenService.setAccessToken(tokens.accessToken);
+          const apiUser = await authService.whoami();
 
-            if (apiUser) {
-              authTokenService.saveUserToLocalStorage(apiUser);
-            }
+          if (apiUser) {
+            authTokenService.saveUserToLocalStorage(apiUser);
+          }
 
-            // Store user data if available
-            if (userData) {
-              localStorage.setItem('user_data', JSON.stringify(userData));
-            }
+          // Store user data if available
+          if (userData) {
+            localStorage.setItem('user_data', JSON.stringify(userData));
+          }
 
           console.log(
             'AuthContext: Successfully restored authentication from mobile app (fallback)'
@@ -160,17 +160,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (tokens && tokens.accessToken && tokens.refreshToken) {
           // Store the tokens in the web app's localStorage
-            authTokenService.setAccessToken(tokens.accessToken);
-            const apiUser = await authService.whoami();
+          authTokenService.setAccessToken(tokens.accessToken);
+          const apiUser = await authService.whoami();
 
-            if (apiUser) {
-              authTokenService.saveUserToLocalStorage(apiUser);
-            }
+          if (apiUser) {
+            authTokenService.saveUserToLocalStorage(apiUser);
+          }
 
-            // Store user data if available
-            if (userData) {
-              localStorage.setItem('user_data', JSON.stringify(userData));
-            }
+          // Store user data if available
+          if (userData) {
+            localStorage.setItem('user_data', JSON.stringify(userData));
+          }
 
           // console.log(
           //   'AuthContext: Successfully restored authentication from mobile app via callback'
@@ -224,11 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string) => {
     try {
-      const {data: loginRes, message} = await authService.login(username, password);
-
-      if (loginRes) {
-        setIsAuthenticated(true);
-      }
+      const { data: loginRes, message } = await authService.login(username, password);
 
       // Notify the mobile app bridge about successful login
       try {
@@ -270,8 +266,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Don't navigate here - let the route guards handle it
       // This prevents double navigation/reload
 
-      return {loginRes, message};
-      
+      // if (loginRes) {
+      //   setIsAuthenticated(true);
+      // }
+
+      return { loginRes, message };
+
     } catch (error) {
       console.error('Login failed:', error);
       setIsAuthenticated(false);

@@ -37,6 +37,7 @@ export const authTokenService = {
     },
 
     setAccessToken: (token: string) => {
+        console.log('Saving access token ', token);
         localStorage.setItem(ACCESS_TOKEN_KEY, token);
     },
 
@@ -55,6 +56,7 @@ export const authTokenService = {
     },
 
     saveLoginTokens: (accessToken: string, user: DjangoAuthUser) => {
+        
         authTokenService.setAccessToken(accessToken);
         authTokenService.saveUserToLocalStorage(user);
     },

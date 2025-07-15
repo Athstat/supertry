@@ -48,6 +48,7 @@ export default function InputField({value, onChange, label, type, id, inputCn, l
                     value={value}
                     onChange={e => handleInputChange(e.target.value)}
                     placeholder={placeholder}
+                    defaultValue={""}
                 />
                 {icon}
             </div>

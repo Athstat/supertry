@@ -1,3 +1,5 @@
+import { authTokenService } from "../services/auth/authTokenService";
+
 const BACKEND_SERVER_URL =
   import.meta.env.VITE_API_BASE_URL || "https://athstat-games-server.onrender.com";
 
@@ -11,12 +13,16 @@ export function getUriLocal(endPoint: string) {
 }
 
 export function getAuthHeader() {
+
+  const accessToken = authTokenService.getAccessToken();
+
+  const authHeader = {
+    'Authorization': `Token ${accessToken}`
+  };
+
   return {
     "Content-Type": "application/json",
-    // Add authorization if needed
-    ...(localStorage.getItem("access_token") && {
-      Authorization: `Token ${localStorage.getItem("access_token")}`,
-    }),
+    ... (accessToken ? authHeader : {})
   };
 }
 

@@ -7,9 +7,10 @@ type Props = {
     className?: string,
     onClick?: () => void,
     disbabled?: boolean,
-    isLoading?: boolean
+    isLoading?: boolean,
+    type?: "submit" | "reset" | "button" | undefined
 }
-export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false }: Props) {
+export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
@@ -28,6 +29,8 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
                 disbabled && "opacity-40",
             )}
             onClick={handleOnClick}
+
+            type={type}
         >
             <div className='flex flex-row items-center gap-1' >
                 {children}

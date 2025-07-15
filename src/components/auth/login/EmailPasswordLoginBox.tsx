@@ -39,7 +39,7 @@ export default function EmailPasswordLoginBox() {
 
     const handleLogin = async () => {
         if (email && password) {
-            const {data: loginRes, message} = await login(email, password);
+            const {data: loginRes, message} = await authService.login(email, password);
 
             if (loginRes) {
                 setMessage("Hello " + loginRes.user.first_name);
@@ -55,7 +55,7 @@ export default function EmailPasswordLoginBox() {
 
     return (
         <div>
-            <form className='flex flex-col gap-4' >
+            <form onSubmit={(e) => {e.preventDefault}} className='flex flex-col gap-4' >
 
                 <InputField
                     value={email}
@@ -77,6 +77,7 @@ export default function EmailPasswordLoginBox() {
                     isLoading={isLoading}
                     onClick={checkPasswordStatus}
                     className='py-3'
+                    type='button'
                 >
                     Continue with Email
                 </PrimaryButton>}
@@ -86,6 +87,7 @@ export default function EmailPasswordLoginBox() {
                     isLoading={isLoading}
                     onClick={handleLogin}
                     className='py-3'
+                    type='submit'
                 >
                     Sign In
                 </PrimaryButton>}
