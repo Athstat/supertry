@@ -37,7 +37,7 @@ export function WelcomeScreen() {
     try {
       // Create and login guest user
       console.log("Calling authService.createGuestUser()...");
-      const loginResult = await authService.createGuestUser();
+      const loginResult = await authService.authenticateGuestUser();
       
       console.log("Guest user created and logged in successfully", loginResult);
       

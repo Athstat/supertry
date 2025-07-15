@@ -15,7 +15,13 @@ export function getAuthHeader() {
     "Content-Type": "application/json",
     // Add authorization if needed
     ...(localStorage.getItem("access_token") && {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      Authorization: `Token ${localStorage.getItem("access_token")}`,
     }),
+  };
+}
+
+export function applicationJsonHeader() {
+  return {
+    "Content-Type": "application/json",
   };
 }

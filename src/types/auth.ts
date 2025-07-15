@@ -101,3 +101,94 @@ export type ScrummyUser = {
   "game_updates_preference": string,
   "username"?: string,
 }
+
+export type UserPasswordStatus = {
+  has_password: boolean
+}
+
+export type UserPasswordStatusRes = {
+  status?: UserPasswordStatus,
+  message: string
+}
+
+export type DjangoAuthUser = {
+  kc_id: string,
+  email: string,
+  first_name: string,
+  last_name: string,
+  username?: string,
+  game_updates_preference: string,
+  pref_payout?: string,
+  device_id?: string,
+  verification_state: string,
+  is_claimed_account: boolean
+}
+
+export type DjangoLoginRes = {
+  token: string,
+  email: string,
+  user: DjangoAuthUser
+}
+
+export type ThrowableRes<T> = {
+  message?: string,
+  data?: T
+}
+
+export type RestPromise<T> = Promise<{
+  error?: RestError,
+  data?: T
+}>
+
+
+export type DeviceAuthenticationRequest = {
+  device_id: string
+}
+
+export type DjangoDeviceAuthRes = {
+  token: string,
+  is_device_account: boolean,
+  user: DjangoAuthUser
+  has_email: boolean
+}
+
+export type RestError = {
+  error?: string,
+  message: string
+}
+
+export type ClaimGuestAccountReq = {
+  email: string,
+  password: string,
+  username?: string,
+  first_name?: string,
+  last_name?: string
+}
+
+export type ClaimGuestAccountResult = {
+  message: string,
+  user: DjangoAuthUser
+}
+
+export type AuthRegisterReq = {
+  email: string,
+  password: string,
+  username: string,
+  first_name: string,
+  last_name: string
+}
+
+export type DjangoRegisterRes = {
+  user: DjangoAuthUser,
+  token: string,
+  message?: string
+}
+
+export type RequestPasswordResetRes = {
+  message: string
+}
+
+export type ResetPasswordRes = {
+  email: string,
+  message: string
+}

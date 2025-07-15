@@ -36,7 +36,7 @@ export function ProfileScreen() {
         if (!info) return;
         //console.log('[ProfileScreen] User info:', info);
         setIsGuestAccount(authService.isGuestAccount());
-        const user = await authService.getUserFromDB(info.id);
+        const user = await authService.getUserById(info.id);
         //console.log('[ProfileScreen] User:', user);
         setUserInfo(user);
       } catch (error) {

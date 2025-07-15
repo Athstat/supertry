@@ -1,3 +1,4 @@
+import { Loader } from "lucide-react"
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
 
@@ -5,9 +6,10 @@ type Props = {
     children?: ReactNode,
     className?: string,
     onClick?: () => void,
-    disbabled?: boolean
+    disbabled?: boolean,
+    isLoading?: boolean
 }
-export default function PrimaryButton({ children, className, onClick, disbabled }: Props) {
+export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
@@ -23,11 +25,14 @@ export default function PrimaryButton({ children, className, onClick, disbabled 
                 "hover:bg-primary-700 dark:hover:bg-primary-700",
                 "border border-primary-500 text-sm lg:text-base",
                 className,
-                disbabled && "opacity-40"
+                disbabled && "opacity-40",
             )}
             onClick={handleOnClick}
         >
-            {children}
+            <div className='flex flex-row items-center gap-1' >
+                {children}
+                {isLoading && <Loader className="animate-spin" />}
+            </div>
         </button>
     )
 }

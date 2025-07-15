@@ -6,10 +6,11 @@ import {
   logoutFromBridge,
   loginWithBridge,
 } from '../utils/bridgeUtils';
+import { DjangoLoginRes, ThrowableRes } from '../types/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<any>;
+  login: (username: string, password: string) => Promise<ThrowableRes<DjangoLoginRes>>;
   logout: () => void;
   loading: boolean;
   refreshSession: () => Promise<boolean>;
@@ -212,8 +213,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string) => {
     try {
-      const result = await authService.login(username, password);
-      setIsAuthenticated(true);
+      const {data: loginRes, message} = await authService.login(username, password);
+
+      if (loginRes) {
+        setIsAuthenticated(true);
+      }
 
       // Notify the mobile app bridge about successful login
       try {
@@ -221,7 +225,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (userInfo) {
           const tokens = {
             accessToken: localStorage.getItem('access_token') || '',
-            refreshToken: localStorage.getItem('refresh_token') || '',
+            authUserToken: localStorage.getItem('auth_user') || '',
           };
           const userData = {
             name:
@@ -303,7 +307,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const resetPassword = async (email: string) => {
     try {
-      await authService.forgotPassword(email);
+      await authService.requestPasswordReset(email);
     } catch (error) {
       console.error('Password reset failed:', error);
       throw error;
