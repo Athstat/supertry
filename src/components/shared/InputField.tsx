@@ -3,20 +3,21 @@ import { twMerge } from 'tailwind-merge'
 
 type Props = {
     value?: string,
-    onChange?: (newVal: string) => void,
+    onChange?: (newVal?: string) => void,
     label?: string,
     type?: string,
     id?: string,
     inputCn?: string,
     labelCn?: string,
     className?: string,
-    icon?: ReactNode
+    icon?: ReactNode,
+    placeholder?: string
 }
 
-export default function InputField({value, onChange, label, type, id, inputCn, labelCn, className, icon} : Props) {
+export default function InputField({value, onChange, label, type, id, inputCn, labelCn, className, icon, placeholder} : Props) {
 
     const handleInputChange = (newVal?: string) => {
-        if (onChange && newVal) {
+        if (onChange) {
             onChange(newVal)
         }
     }
@@ -40,11 +41,12 @@ export default function InputField({value, onChange, label, type, id, inputCn, l
                     type={type}
                     required
                     className={twMerge(
-                        "w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100",
+                        "w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100",
                         inputCn
                     )}
                     value={value}
                     onChange={e => handleInputChange(e.target.value)}
+                    placeholder={placeholder}
                 />
                 {icon}
             </div>
