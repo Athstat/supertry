@@ -11,6 +11,7 @@ import { getDeviceId, isGuestEmail } from '../utils/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
 import { analytics } from './anayticsService';
 import { logger } from './logger';
+import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService';
 
 export const authService = {
 
@@ -30,10 +31,7 @@ export const authService = {
       if (res.ok) {
         const json = (await res.json()) as DjangoDeviceAuthRes
 
-        localStorage.setItem('is_guest_account', 'true');
-        localStorage.setItem('access_token', json.token);
-        localStorage.setItem('auth_user', JSON.stringify(json.user));
-
+        authTokenService.saveGuesAccountTokens(json.token, json.user);
         return { data: json }
       }
 
@@ -109,8 +107,8 @@ export const authService = {
       if (response.ok) {
         const json = (await response.json()) as ClaimGuestAccountResult;
 
-        localStorage.removeItem('is_guest_account');
-        localStorage.setItem('auth_user', JSON.stringify(json.user));
+        localStorage.removeItem(IS_GUEST_ACCOUNT_KEY);
+        authTokenService.saveUserToLocalStorage(json.user);
 
         return { data: json }
       }
@@ -149,9 +147,7 @@ export const authService = {
       if (response.ok) {
         const json = (await response.json()) as DjangoRegisterRes;
 
-        localStorage.setItem('access_token', json.token);
-        localStorage.setItem('auth_user', JSON.stringify(json.user));
-
+        authTokenService.saveLoginTokens(json.token, json.user);
         return { data: json };
       }
 
@@ -193,9 +189,7 @@ export const authService = {
 
         const json = (await res.json()) as DjangoLoginRes;
 
-        localStorage.setItem('access_token', json.token);
-        localStorage.setItem('auth_user', JSON.stringify(json.user));
-
+        authTokenService.saveLoginTokens(json.token, json.user);
         return { data: json, message: 'Login Successful' }
 
       }
@@ -223,10 +217,7 @@ export const authService = {
 
   logout(): void {
     analytics.trackUserLogout();
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('is_guest_account');
-    localStorage.removeItem('auth_user');
+    authTokenService.clearUserTokens();
   },
 
   /**
