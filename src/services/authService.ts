@@ -230,21 +230,14 @@ export const authService = {
    */
   getUserInfo: async (): Promise<DjangoAuthUser | null> => {
 
-    const auth_user_local_storage = authTokenService.getAccessToken();
+    const auth_user_local_storage = authTokenService.getUserFromLocalStorage();
 
     if (!auth_user_local_storage) {
       const user = await authService.whoami();
       return user ?? null;
     }
 
-    try {
-      const tokenUser = JSON.parse(auth_user_local_storage) as DjangoAuthUser;
-      return tokenUser;
-    } catch (err) {
-      logger.error("Error getting user info from local storage ", err)
-    }
-
-    return null
+    return auth_user_local_storage;
   },
 
   async getUserById(id: string): Promise<DjangoAuthUser | undefined> {
