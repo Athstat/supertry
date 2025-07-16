@@ -13,10 +13,11 @@ type Props = {
     className?: string,
     icon?: ReactNode,
     placeholder?: string,
-    required?: boolean
+    required?: boolean,
+    minLength?: number
 }
 
-export default function InputField({value, onChange, label, type, id, inputCn, labelCn, className, icon, placeholder, required} : Props) {
+export default function InputField({value, onChange, label, type, id, inputCn, labelCn, className, icon, placeholder, required, minLength} : Props) {
 
     const handleInputChange = (newVal?: string) => {
         if (onChange) {
@@ -51,6 +52,7 @@ export default function InputField({value, onChange, label, type, id, inputCn, l
                     onChange={e => handleInputChange(e.target.value)}
                     placeholder={placeholder}
                     defaultValue={""}
+                    minLength={minLength}
                 />
                 {icon && (
                     <div className="absolute inset-y-0 right-0 flex text-slate-700 dark:text-slate-400  items-center pr-3">
@@ -68,9 +70,10 @@ type PasswordInputProps = {
     label?: string,
     placeholder?: string,
     id?: string,
+    minLength?: number
 }
 
-export function PasswordInputField({value, onChange, placeholder, label, id} : PasswordInputProps) {
+export function PasswordInputField({value, onChange, placeholder, label, id, minLength} : PasswordInputProps) {
 
     const [showPassword, setShowPassword] = useState<boolean>(false); 
 
@@ -87,13 +90,14 @@ export function PasswordInputField({value, onChange, placeholder, label, id} : P
             placeholder={placeholder ?? "Password"}
             required
             id={id}
+            minLength={minLength}
             icon={
                 <button
                     type="button"
                     onClick={toggleVisibility}
                     className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                 >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {!showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
             }
         />

@@ -9,6 +9,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/anayticsService';
 import { emailValidator } from '../../utils/stringUtils';
 import { requestPushPermissionsAfterLogin } from '../../utils/bridgeUtils';
+import InputField, { PasswordInputField } from '../../components/shared/InputField';
+import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
+import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
+import FormErrorText from '../../components/shared/FormError';
 
 // Button animation variants
 const buttonVariants = {
@@ -28,11 +32,11 @@ const MotionButton = motion.button as React.ComponentType<
 export function SignUpScreen() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
   const [currentStep] = useState(1); // Keeping this for compatibility
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  
   const [form, setForm] = useState<SignUpForm>({
     email: '',
     password: '',
@@ -41,6 +45,9 @@ export function SignUpScreen() {
     nationality: undefined,
     favoriteTeam: undefined,
   });
+  
+  const {emailTaken, isLoading: isEmailUniqueValidatorLoading} = useEmailUniqueValidator(form.email);
+  const isEmailTaken = !isLoading && emailTaken;
 
   // Validate all fields and submit the form directly instead of going to next step
   const handleNext = async () => {
@@ -155,120 +162,75 @@ export function SignUpScreen() {
         {currentStep === 1 && (
           <div className="space-y-4">
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Username
-              </label>
-              <div className="relative">
-                <input
+                <InputField
                   id="username"
+                  label='Username'
+                  placeholder='Username'
                   type="text"
                   required
-                  className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
                   value={form.username}
-                  onChange={e =>
+                  onChange={val =>
                     setForm(prev => ({
                       ...prev,
-                      username: e.target.value,
+                      username: val,
                     }))
                   }
+                  icon={<User className="h-5 w-5" />}
                 />
-                <User className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
-              </div>
+                
             </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Email address
-              </label>
-              <div className="relative">
-                <input
+            <div className='flex flex-col gap-1' >
+                <InputField
                   id="email"
                   type="email"
+                  label='Email'
+                  placeholder='Email'
                   required
-                  className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
                   value={form.email}
-                  onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={val => setForm(prev => ({ ...prev, email:val ?? ""}))}
+                  icon={<Mail className="h-5 w-5" />}
                 />
-                <Mail className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
-              </div>
+                
+                {isEmailTaken && <FormErrorText error='Email is already taken' />}
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <input
+                <PasswordInputField
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
+                  label='Password'
+                  placeholder='Password'
                   value={form.password}
-                  onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))}
+                  onChange={val => setForm(prev => ({ ...prev, password: val ?? "" }))}
                   minLength={8}
                 />
-                <MotionButton
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                  variants={buttonVariants}
-                  initial="initial"
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </MotionButton>
-              </div>
             </div>
 
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
+                <PasswordInputField
                   id="confirmPassword"
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
+                  label='Confirm Password'
+                  placeholder='Confirm Password'
                   value={form.confirmPassword}
                   minLength={8}
-                  onChange={e =>
+                  onChange={val =>
                     setForm(prev => ({
                       ...prev,
-                      confirmPassword: e.target.value,
+                      confirmPassword: val ?? ""
                     }))
                   }
                 />
-                <Lock className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
-              </div>
             </div>
 
-            <MotionButton
+            <PrimaryButton
               type="button"
               onClick={handleNext}
-              disabled={isLoading}
-              className="w-full bg-gradient-to-r from-primary-700 to-primary-600 via-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-600 hover:via-primary-650 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
+              disabled={isLoading || isEmailTaken || isEmailUniqueValidatorLoading}
+              isLoading={isLoading}
             >
               {isLoading ? 'Creating Account...' : 'Complete Sign Up'}
               {!isLoading && <ArrowRight size={20} />}
-            </MotionButton>
+            </PrimaryButton>
           </div>
         )}
         {/* Steps 2 and 3 removed - country and team selection no longer needed */}
