@@ -11,8 +11,8 @@ export function getLeagueChannelName(league: IFantasyLeague) {
 
 /** Returns the expected name of a fixture channel */
 export function getFixtureChannelName(fixture: IFixture) {
-    const homeTeamName = fixture.team_name;
-    const awayTeamName = fixture.opposition_team_name;
+    const homeTeamName = fixture.team.athstat_name;
+    const awayTeamName = fixture.opposition_team.athstat_name;
     return `${homeTeamName} vs ${awayTeamName}`
 }
 
