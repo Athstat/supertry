@@ -37,7 +37,7 @@ export const PlayersScreen = () => {
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [positionFilter, setPositionFilter] = useState<string>("");
+  const [positionFilter, setPositionFilter] = useQueryState('position');
 
   const [teamIdFilter, setTeamIdFilter] = useQueryState("team_id");
   const selectedTeam = teams.find(t => t.athstat_id === teamIdFilter);
@@ -165,7 +165,7 @@ export const PlayersScreen = () => {
           <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
 
             <PlayerFilters
-              positionFilter={positionFilter}
+              positionFilter={positionFilter ?? ''}
               teamFilter={selectedTeam}
               availablePositions={positions}
               availableTeams={teams}

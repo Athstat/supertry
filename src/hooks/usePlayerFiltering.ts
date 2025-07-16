@@ -3,11 +3,12 @@ import { IProAthlete } from '../types/athletes';
 import { IProTeam } from '../types/team';
 import { SortTab, SortField, SortDirection } from '../types/playerSorting';
 import { PlayerForm } from '../types/rugbyPlayer';
+import { formatPosition } from '../utils/athleteUtils';
 
 interface UsePlayerFilteringProps {
   athletes: IProAthlete[];
   searchQuery: string;
-  positionFilter: string;
+  positionFilter?: string;
   selectedTeam: IProTeam | undefined;
   activeTab: SortTab;
   sortField: SortField;
@@ -65,10 +66,8 @@ export const usePlayerFiltering = ({
     // Apply position filter
     if (positionFilter) {
       result = result.filter((player) => {
-        const position = player.position_class || "";
-        return (
-          position.charAt(0).toUpperCase() + position.slice(1) === positionFilter
-        );
+        const position = player.position || "";
+        return formatPosition(positionFilter) === formatPosition(position);
       });
     }
 

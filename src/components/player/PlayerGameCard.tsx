@@ -35,7 +35,7 @@ const PlayerGameCard = memo(({ player, onClick, className, blockGlow }: Props) =
 
   const pr = player.power_rank_rating ?? 0;
   const cardTier: CardTier =
-    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+    pr <= 69 ? 'bronze' : pr >= 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
@@ -96,7 +96,7 @@ const PlayerGameCard = memo(({ player, onClick, className, blockGlow }: Props) =
 
           {/* Position and Rating */}
           <div className="flex justify-between items-center text-sm mb-2">
-            <div className="text-xs truncate">{formatPosition(player.position_class ?? '')}</div>
+            <div className="text-xs truncate">{formatPosition(player.position ?? '')}</div>
             <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">
               PR {statValue(pr)}
             </div>
