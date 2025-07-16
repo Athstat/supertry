@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 export default function DeleteAccountButton({ isGuestAccount }: Props) {
 
     const {logout} = useAuth();
-    
+
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [showFinalDeleteConfirmation, setShowFinalDeleteConfirmation] = useState(false);
 
