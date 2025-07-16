@@ -12,10 +12,8 @@ import { useEmailUniqueValidator } from "../hooks/useEmailUniqueValidator";
 import { authUserAtom, isGuestUserAtom } from "../state/authUser.atoms";
 import { ScopeProvider } from "jotai-scope";
 import AuthUserDataProvider from "../components/auth/AuthUserDataProvider";
-import { useAtomValue } from "jotai";
 import FormErrorText from "../components/shared/FormError";
 import NoContentCard from "../components/shared/NoContentMessage";
-import { guestNewUsernameSuggestion } from "../utils/authUtils";
 
 export function CompleteProfileScreen() {
 
@@ -34,7 +32,7 @@ export function CompleteProfileScreen() {
 
 function ScreenContent() {
   
-  const authUser = useAtomValue(authUserAtom);  
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
