@@ -1,53 +1,23 @@
-import { User, LogOut, Shield, ChevronRight, Settings, X } from 'lucide-react';
+import { User, LogOut, ChevronRight} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { authService } from '../services/authService';
 import UserNotificationsSettings from '../components/settings/UserNotificationsSettings';
-import { useFetch } from '../hooks/useFetch';
-import { useAuthUser } from '../hooks/useAuthUser';
 import { LoadingState } from '../components/ui/LoadingState';
 import LicensingModal from '../components/branding/licensing/LicensingModel';
 
-export function ProfileScreen() {
+export function UserProfileScreen() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [isGuestAccount, setIsGuestAccount] = useState(false);
-  const [userInfo, setUserInfo] = useState<any>(null);
+
+  const 
+
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showFinalDeleteConfirmation, setShowFinalDeleteConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  //const userInfo = useAuthUser();
-
-  // useEffect(() => {
-  //   const info = authService.getUserInfo();
-  //   setUserInfo(info);
-  //   setIsGuestAccount(authService.isGuestAccount());
-  // }, []);
-
-  useEffect(() => {
-    const fetchUserFromDB = async () => {
-      setIsLoading(true);
-      try {
-        const info = await authService.getUserInfo();
-        if (!info) return;
-        //console.log('[ProfileScreen] User info:', info);
-        setIsGuestAccount(authService.isGuestAccount());
-        const user = await authService.getUserById(info.id);
-        //console.log('[ProfileScreen] User:', user);
-        setUserInfo(user);
-      } catch (error) {
-        console.error('[ProfileScreen] Error fetching user:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    //console.log('[ProfileScreen] Fetching user from DB');
-    fetchUserFromDB();
-  }, []);
 
   const handleLogout = async () => {
     console.log('[ProfileScreen] Logging out');

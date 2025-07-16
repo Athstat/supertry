@@ -15,7 +15,7 @@ import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
 import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
 import { MyTeamScreen } from './screens/MyTeamScreen';
-import { ProfileScreen } from './screens/ProfileScreen';
+import { UserProfileScreen } from './screens/ProfileScreen';
 import { FantasyRankingsScreen } from './screens/RankingsScreen';
 import { PlayersScreen } from './screens/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
@@ -226,7 +226,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <ProfileScreen />
+              <UserProfileScreen />
             </Layout>
           </ProtectedRoute>
         }
