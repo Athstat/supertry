@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { proGameMotmVotesAtom, proGameMotmCandidatesAtom } from "../../../state/proMotm.atoms";
 import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
 import SecondaryText from "../../shared/SecondaryText";

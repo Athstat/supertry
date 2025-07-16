@@ -33,7 +33,7 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
     const { gameKickedOff } = fixtureSumary(fixture);
 
     // Voting functionality
-    const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
+    const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture);
     const [isVoting, setIsVoting] = useState(false);
 
     // Calculate voting percentages
@@ -69,6 +69,12 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
     const isTbdGame = isProGameTBD(fixture);
 
     if (isTbdGame) return;
+
+    if (isLoading) return (
+        <div className="w-full min-h-24 mt-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 animate-pulse" >
+
+        </div>
+    )
 
     return (
         <div
