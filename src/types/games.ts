@@ -7,7 +7,7 @@ export type IFixture = {
   team_score?: number,
   opposition_score?: number,
   venue?: string,
-  kickoff_time?: string,
+  kickoff_time?: Date,
   competition_name?: string,
   is_knockout?: boolean,
   is_league_managed?: boolean,
@@ -22,7 +22,9 @@ export type IFixture = {
   data_source?: string,
   is_test?: false,
   round: number,
-  league: string
+  league: string,
+  league_id: string,
+  highlights_link?: string
 }
 
 export type GameStatus = string | 'completed' | 'in_progress' | 'not_started';

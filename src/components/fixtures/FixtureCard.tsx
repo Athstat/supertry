@@ -76,14 +76,14 @@ export default function FixtureCard({
             <div className="flex flex-row gap-2 items-center w-full justify-start">
               <div className="flex flex-col gap-4 items-center w-full justify-start">
                 {showLogos && <TeamLogo
-                  url={fixture.team_image_url}
-                  teamName={fixture.team_name}
+                  url={fixture.team.image_url}
+                  teamName={fixture.team.athstat_name}
                   className="w-10 h-10"
                 />
                 }
 
                 <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
-                  {fixture.team_name}
+                  {fixture.team.athstat_name}
                 </p>
               </div>
 
@@ -126,8 +126,8 @@ export default function FixtureCard({
               <div className="flex flex-col gap-4 items-center w-full justify-end">
                 {showLogos && (
                   <TeamLogo
-                    url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
-                    teamName={fixture.opposition_team_name}
+                    url={fixture.opposition_team.image_url ?? fixture.opposition_team.image_url}
+                    teamName={fixture.opposition_team.athstat_name}
                     className="w-10 h-10"
                   />
                 )}
@@ -138,7 +138,7 @@ export default function FixtureCard({
                     awayTeamWon && ''
                   )}
                 >
-                  {fixture.opposition_team_name}
+                  {fixture.opposition_team.athstat_name}
                 </p>
               </div>
             </div>
@@ -170,7 +170,7 @@ type ModalProps = {
 };
 
 function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
-  const title = `${fixture.team_name} vs ${fixture.opposition_team_name}`;
+  const title = `${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}`;
 
   const navigate = useNavigate();
 
@@ -198,11 +198,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
             className="w-20 h-20"
-            url={fixture.team_image_url}
-            teamName={fixture.team_name}
+            url={fixture.team.image_url}
+            teamName={fixture.team.athstat_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
-            {fixture.team_name}
+            {fixture.team.athstat_name}
           </p>
         </div>
 
@@ -214,11 +214,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
             className="w-20 h-20"
-            teamName={fixture.opposition_team_name}
-            url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
+            teamName={fixture.opposition_team.athstat_name}
+            url={fixture.opposition_team.image_url ?? fixture.opposition_team.image_url}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
-            {fixture.opposition_team_name}
+            {fixture.opposition_team.athstat_name}
           </p>
         </div>
       </div>
