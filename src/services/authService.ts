@@ -13,6 +13,8 @@ import { emailValidator } from '../utils/stringUtils';
 import { analytics } from './anayticsService';
 import { logger } from './logger';
 import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService';
+import { mutate } from 'swr';
+import { swrFetchKeys } from '../utils/swrKeys';
 
 export const authService = {
 
@@ -234,10 +236,30 @@ export const authService = {
 
     if (!auth_user_local_storage) {
       const user = await authService.whoami();
+      if (user) authTokenService.saveUserToLocalStorage(user);
       return user ?? null;
     }
 
     return auth_user_local_storage;
+  },
+  
+  /** Refetches user and updates local storage cache */
+  updateUserInfo: async (): Promise<DjangoAuthUser | undefined> => {
+    
+    try {
+      const user = await authService.whoami();
+
+      if (user) {
+        authTokenService.saveUserToLocalStorage(user);
+        await mutate(swrFetchKeys.getAuthUserProfileKey());
+      }
+
+      return user;
+    } catch (error) {
+      console.log("Error updating user info ", error);
+    }
+
+    return undefined;
   },
 
   async getUserById(id: string): Promise<DjangoAuthUser | undefined> {
@@ -348,7 +370,7 @@ export const authService = {
 
   whoami: async () => {
     try {
-      const uri = getUri('/api/v1/users/me');
+      const uri = getUri('/api/v1/auth/me');
 
       const res = await fetch(uri, {
         headers: getAuthHeader()

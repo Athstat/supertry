@@ -9,13 +9,16 @@ export const notificationService = {
     updateGameUpdatesPreferences: async (preference: string) => {
         try {
             
-            const userInfo = authService.getUserInfo();
-            const userId = userInfo?.id ?? "fall-back-id";
+            const userInfo = await authService.getUserInfo();
+            const userId = userInfo?.kc_id ?? "fall-back-id";
 
-            const uri = getUri(`/api/v1/notifications/users/${userId}/preferences/game-updates/${preference}`);
+            const uri = getUri(`/api/v1/notifications/users/${userId}/preferences`);
 
             const res = await fetch(uri, {
                 headers: getAuthHeader(),
+                body: JSON.stringify({
+                    game_updates_preference: preference
+                }),
                 method: "PUT"
             });
 

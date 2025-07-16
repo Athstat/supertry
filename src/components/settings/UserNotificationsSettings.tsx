@@ -4,8 +4,9 @@ import { GameUpdatesPreference, gameUpdatesPreferenceOptions } from '../../types
 import { formatPosition } from '../../utils/athleteUtils';
 import { DjangoAuthUser } from '../../types/auth';
 import { notificationService } from '../../services/notificationsService';
-import { mutate } from 'swr';
 import DialogModal from '../shared/DialogModal';
+import { authService } from '../../services/authService';
+import { ErrorState } from '../ui/ErrorState';
 
 type Props = {
   databaseUser: DjangoAuthUser;
@@ -66,6 +67,7 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
   );
   const [options, setOptions] = useState<GameUpdatesPreference[]>([]);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [error, setError] = useState<string>()
 
   useEffect(() => {
     const options = [selection];
@@ -82,16 +84,23 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
   useEffect(() => {
     const timeout = setTimeout(async () => {
       try {
+
         if (selection === user.game_updates_preference) {
           return;
         }
 
         setIsSaving(true);
+
         await notificationService.updateGameUpdatesPreferences(selection);
-        await mutate(() => true);
+        await authService.updateUserInfo();
+
+      } catch (err) {
+        setError("Something wen't wrong");
+        console.log("Error updating notification preferences ", err)
       } finally {
-        setIsSaving(false);
+      setIsSaving(false);
       }
+
     }, 50);
 
     return () => clearTimeout(timeout);
@@ -120,6 +129,8 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
           <p>Saving</p>
         </div>
       )}
+
+      {error && <ErrorState error={error} />}
     </div>
   );
 }
