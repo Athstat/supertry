@@ -8,7 +8,7 @@ import {
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
 import { validatePassword, validateUsername } from '../utils/authUtils';
-import { getDeviceId, isGuestEmail } from '../utils/deviceIdUtils';
+import { isGuestEmail } from '../utils/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
 import { analytics } from './anayticsService';
 import { logger } from './logger';

@@ -1,5 +1,4 @@
 import { User } from "lucide-react";
-import { buttonVariants, MotionButton } from "../../shared/buttons/MotionButton";
 import { useState } from "react";
 import { authService } from "../../../services/authService";
 import { useDeviceId } from "../../../hooks/useDeviceId";

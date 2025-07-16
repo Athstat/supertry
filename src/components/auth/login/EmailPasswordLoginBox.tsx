@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import InputField, { PasswordInputField } from '../../shared/InputField';
-import { Info, Lock, Mail } from 'lucide-react';
+import { Info, Mail } from 'lucide-react';
 import PrimaryButton from '../../shared/buttons/PrimaryButton';
 import { authService } from '../../../services/authService';
 import { ErrorMessage } from '../../ui/ErrorState';
