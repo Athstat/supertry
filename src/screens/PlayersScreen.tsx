@@ -25,6 +25,7 @@ import { IProTeam } from "../types/team";
 import TeamLogo from "../components/team/TeamLogo";
 import RoundedCard from "../components/shared/RoundedCard";
 import SecondaryText from "../components/shared/SecondaryText";
+import { useQueryState } from "../hooks/useQueryState";
 
 export const PlayersScreen = () => {
 
@@ -39,7 +40,9 @@ export const PlayersScreen = () => {
 
   const [isSorting, setIsSorting] = useState(false);
   const [positionFilter, setPositionFilter] = useState<string>("");
-  const [teamFilter, setTeamFilter] = useState<IProTeam>();
+
+  const [teamIdFilter, setTeamIdFilter] = useQueryState("team_id");
+  const selectedTeam = teams.find(t => t.athstat_id === teamIdFilter);
 
   const [isComparing, setIsComparing] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
@@ -124,13 +127,13 @@ export const PlayersScreen = () => {
 
   // Handle team filter change
   const handleTeamFilter = (team: IProTeam) => {
-    setTeamFilter(team);
+    setTeamIdFilter(team.athstat_id);
   };
 
   // Clear all filters
   const clearFilters = () => {
     setPositionFilter("");
-    setTeamFilter(undefined);
+    setTeamIdFilter("");
     setSearchQuery("");
   };
 
@@ -177,9 +180,9 @@ export const PlayersScreen = () => {
       }
 
       // Apply team filter
-      if (teamFilter) {
+      if (selectedTeam) {
         result = result.filter((player) =>{
-          return player.team.athstat_id === teamFilter.athstat_id
+          return player.team.athstat_id === selectedTeam.athstat_id
         });
       }
 
@@ -232,7 +235,7 @@ export const PlayersScreen = () => {
     return () => clearTimeout(timeoutId);
   }, [
     positionFilter,
-    teamFilter,
+    selectedTeam,
     searchQuery,
     activeTab,
     sortField,
@@ -260,7 +263,7 @@ export const PlayersScreen = () => {
 
             <PlayerFilters
               positionFilter={positionFilter}
-              teamFilter={teamFilter}
+              teamFilter={selectedTeam}
               availablePositions={positions}
               availableTeams={teams}
               onPositionFilter={handlePositionFilter}
@@ -290,16 +293,16 @@ export const PlayersScreen = () => {
 
         {/* Selected Team Section */}
         <div>
-          {teamFilter && <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2" >
+          {selectedTeam && <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2" >
             <TeamLogo 
-              teamName={teamFilter.athstat_name}
-              url={teamFilter.image_url}
+              teamName={selectedTeam.athstat_name}
+              url={selectedTeam.image_url}
               className="w-5 h-5"
             />
 
-            <p>{teamFilter.athstat_name}</p>
+            <p>{selectedTeam.athstat_name}</p>
             
-            <button onClick={() => setTeamFilter(undefined)} >
+            <button onClick={() => setTeamIdFilter("")} >
               <SecondaryText> <X className="w-4 h-4" /> </SecondaryText>
             </button>
 
