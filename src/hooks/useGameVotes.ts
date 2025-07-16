@@ -15,8 +15,8 @@ export function useGameVotes(fixture: IFixture) {
 
   useEffect(() => {
     if (data) {
-      const user = authService.getUserInfo();
-      const userId = user?.id;
+      const user = authService.getUserInfoSync();
+      const userId = user?.kc_id;
 
       const home = data.filter(vote => vote.vote_for === 'home_team');
       const away = data.filter(vote => vote.vote_for === 'away_team');
