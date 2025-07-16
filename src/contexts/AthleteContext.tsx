@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { djangoAthleteService } from "../services/athletes/djangoAthletesService";
@@ -27,19 +27,33 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   const athletes = fetchedAthletes ?? [];
   const isLoading = loadingAthletes;
 
-  const teams: IProTeam[] = []
-  const positions: string[] = [];
-  
-  athletes.forEach((a) => {
-    if (!teams.some(t => t.athstat_id === a.team.athstat_id)) {
-      teams.push(a.team);
-    }
+  // Memoize teams extraction for better performance
+  const teams = useMemo(() => {
+    const uniqueTeams: IProTeam[] = [];
+    const seenTeamIds = new Set<string>();
+    
+    athletes.forEach((athlete) => {
+      if (!seenTeamIds.has(athlete.team.athstat_id)) {
+        seenTeamIds.add(athlete.team.athstat_id);
+        uniqueTeams.push(athlete.team);
+      }
+    });
+    
+    return uniqueTeams;
+  }, [athletes]);
 
-    if (a.position && !positions.includes(a.position)) {
-      positions.push(a.position);
-    }
-
-  });
+  // Memoize positions extraction for better performance
+  const positions = useMemo(() => {
+    const uniquePositions = new Set<string>();
+    
+    athletes.forEach((athlete) => {
+      if (athlete.position) {
+        uniquePositions.add(athlete.position);
+      }
+    });
+    
+    return Array.from(uniquePositions);
+  }, [athletes]);
 
   const refreshAthletes = async () => {
     await mutate(() => djangoAthleteService.getAllAthletes());

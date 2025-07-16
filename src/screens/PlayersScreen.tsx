@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { PlayerForm } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
+import { usePlayerFiltering } from "../hooks/usePlayerFiltering";
+import { useDebounced } from "../hooks/useDebounced";
 
 // Components
 import { PlayerSearch } from "../components/players/PlayerSearch";
@@ -36,13 +38,27 @@ export const PlayersScreen = () => {
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredPlayers, setFilteredPlayers] = useState<IProAthlete[]>([]);
-
-  const [isSorting, setIsSorting] = useState(false);
   const [positionFilter, setPositionFilter] = useState<string>("");
 
   const [teamIdFilter, setTeamIdFilter] = useQueryState("team_id");
   const selectedTeam = teams.find(t => t.athstat_id === teamIdFilter);
+
+  // Use debounced search for better performance
+  const debouncedSearchQuery = useDebounced(searchQuery, 300);
+
+  // Use optimized filtering hook
+  const { filteredPlayers, isEmpty } = usePlayerFiltering({
+    athletes,
+    searchQuery: debouncedSearchQuery,
+    positionFilter,
+    selectedTeam,
+    activeTab,
+    sortField,
+    sortDirection,
+  });
+
+  // Loading state for filtering operations
+  const isFiltering = searchQuery !== debouncedSearchQuery;
 
   const [isComparing, setIsComparing] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
@@ -68,41 +84,27 @@ export const PlayersScreen = () => {
     setIsComparing(false);
   }
 
-  // Handle player selection
-  const handlePlayerClick = (player: IProAthlete) => {
-
+  // Handle player selection with useCallback for better performance
+  const handlePlayerClick = useCallback((player: IProAthlete) => {
     if (isComparing) {
-
-      const isSelectedAlready = selectedPlayers.find((p) => {
-        return p.tracking_id === player.tracking_id;
+      setSelectedPlayers(prev => {
+        const isSelected = prev.some(p => p.tracking_id === player.tracking_id);
+        
+        if (isSelected) {
+          return prev.filter(p => p.tracking_id !== player.tracking_id);
+        } else {
+          return [...prev, player];
+        }
       });
-
-      if (isSelectedAlready) {
-
-        const newList = selectedPlayers.filter((p) => {
-          return p.tracking_id !== player.tracking_id
-        });
-
-        setSelectedPlayers(newList);
-
-      } else {
-        setSelectedPlayers([...selectedPlayers, player]);
-      }
     } else {
-      
       setPlayerModalPlayer(player);
       setShowPlayerModal(true);
-
     }
-  };
+  }, [isComparing]);
 
-  const onRemovePlayerFromSelectedPlayers = (player: IProAthlete) => {
-    const newList = selectedPlayers.filter((p) => {
-      return p.tracking_id !== player.tracking_id
-    });
-
-    setSelectedPlayers(newList);
-  }
+  const onRemovePlayerFromSelectedPlayers = useCallback((player: IProAthlete) => {
+    setSelectedPlayers(prev => prev.filter(p => p.tracking_id !== player.tracking_id));
+  }, []);
 
   // Handle search filtering
   const handleSearch = (query: string) => {
@@ -137,110 +139,12 @@ export const PlayersScreen = () => {
     setSearchQuery("");
   };
 
-  // Apply filters and sorting
+  // Fetch athletes if not already cached
   useEffect(() => {
     if (athletes.length === 0) {
-      refreshAthletes(); // Fetch athletes if not already cached
-    } else {
-      setFilteredPlayers(athletes); // Use cached athletes
+      refreshAthletes();
     }
-  }, [athletes, refreshAthletes]);
-
-  // Apply sorting and filtering
-  useEffect(() => {
-    if (athletes.length === 0) return;
-
-    // Only set isSorting to true when the user applies sorting or filtering
-    setIsSorting(true);
-
-    // Use setTimeout to avoid blocking the UI during filtering/sorting
-    const timeoutId = setTimeout(() => {
-      let result = [...athletes];
-
-      // Apply search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        result = result.filter(
-          (player) =>
-            player.player_name?.toLowerCase().includes(query) ||
-            player.team.athstat_name?.toLowerCase().includes(query) ||
-            player.position_class?.toLowerCase().includes(query)
-        );
-      }
-
-      // Apply position filter
-      if (positionFilter) {
-        result = result.filter((player) => {
-          const position = player.position_class || "";
-          return (
-            position.charAt(0).toUpperCase() + position.slice(1) ===
-            positionFilter
-          );
-        });
-      }
-
-      // Apply team filter
-      if (selectedTeam) {
-        result = result.filter((player) =>{
-          return player.team.athstat_id === selectedTeam.athstat_id
-        });
-      }
-
-      // Apply tab-specific filtering
-      switch (activeTab) {
-        case "trending":
-          result = result.filter(p => p.form === "UP");
-          break;
-        case "top":
-          result = result
-            .sort(
-              (a, b) => (b.power_rank_rating || 0) - (a.power_rank_rating || 0)
-            )
-            .slice(0, 20);
-          break;
-        case "new":
-          // result = result.filter((p) => p.isNew === true);
-          result = result;
-          break;
-      }
-
-      // Apply sorting
-      result = result.sort((a, b) => {
-        if (sortField === "power_rank_rating") {
-          const valueA = a.power_rank_rating || 0;
-          const valueB = b.power_rank_rating || 0;
-          return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
-        }
-        else if (sortField === "form" && sortDirection === "desc") {
-
-          return formBias(b.power_rank_rating ?? 0, b.form) - formBias(a.power_rank_rating ?? 0, a.form)
-        } else if (sortField === "form" && sortDirection === "asc") {
-
-          return formBias(a.power_rank_rating ?? 0, a.form) - formBias(b.power_rank_rating ?? 0, b.form)
-
-        } else if (sortField === "player_name") {
-          const valueA = a.player_name || "";
-          const valueB = b.player_name || "";
-          return sortDirection === "asc"
-            ? valueA.localeCompare(valueB)
-            : valueB.localeCompare(valueA);
-        }
-        return 0;
-      });
-
-      setFilteredPlayers(result);
-      setIsSorting(false); // Set isSorting to false after sorting is done
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [
-    positionFilter,
-    selectedTeam,
-    searchQuery,
-    activeTab,
-    sortField,
-    sortDirection,
-  ]);
+  }, [athletes.length, refreshAthletes]);
 
   return (
     <PlayersScreenProvider
@@ -311,29 +215,28 @@ export const PlayersScreen = () => {
 
         {/* Loading State - for initial load */}
         {isLoading && <LoadingState message="Loading..." />}
-        {/* Sorting Loading State */}
-        {isSorting && !isLoading && <LoadingState message="Loading..." />}
+        {/* Filtering Loading State */}
+        {isFiltering && !isLoading && <LoadingState message="Searching..." />}
         {/* Error State */}
-        {error && !isLoading && !isSorting && (
+        {error && !isLoading && !isFiltering && (
           <ErrorState message={error} onRetry={refreshAthletes} />
         )}
         {/* Empty State */}
         {!isLoading &&
           !error &&
-          !isSorting &&
-          filteredPlayers.length === 0 &&
-          athletes.length > 0 && (
+          !isFiltering &&
+          isEmpty && (
             <EmptyState
               searchQuery={searchQuery}
               onClearSearch={() => handleSearch("")}
             />
           )}
         {/* Player Grid */}
-        {!isLoading && !error && !isSorting && filteredPlayers.length > 0 && (
+        {!isLoading && !error && !isFiltering && filteredPlayers.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {filteredPlayers.map((player, index) => (
+            {filteredPlayers.map((player) => (
               <PlayerGameCard
-                key={index}
+                key={player.tracking_id}
                 player={player}
                 onClick={() => handlePlayerClick(player)}
                 className="h-[250px] lg:h-[300px]"
@@ -363,17 +266,17 @@ export const PlayersScreen = () => {
   );
 };
 
-const formBias = (powerRanking: number, form?: PlayerForm) => {
-  // small influence
+// const formBias = (powerRanking: number, form?: PlayerForm) => {
+//   // small influence
 
-  switch (form) {
-    case "UP":
-      return 3 + powerRanking;
-    case "NEUTRAL":
-      return 2;
-    case "DOWN":
-      return -5;
-    default:
-      return 1; // fallback when form is undefined
-  }
-}
+//   switch (form) {
+//     case "UP":
+//       return 3 + powerRanking;
+//     case "NEUTRAL":
+//       return 2;
+//     case "DOWN":
+//       return -5;
+//     default:
+//       return 1; // fallback when form is undefined
+//   }
+// }
