@@ -18,9 +18,12 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
         team_score,
         game_status,
         opposition_score,
-        team_name,
-        opposition_team_name,
+        team,
+        opposition_team,
     } = fixture;
+
+    const team_name = team.athstat_name;
+    const opposition_team_name = opposition_team.athstat_name;
 
     const matchFinal = game_status === 'completed' && team_score && opposition_score;
 
@@ -101,8 +104,8 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
 
             {gameKickedOff && (
                 <VotingOptionsResults
-                    homeTeam={fixture.team_name}
-                    awayTeam={fixture.opposition_team_name}
+                    homeTeam={fixture.team.athstat_name}
+                    awayTeam={fixture.opposition_team.athstat_name}
                     hasScores={fixture.game_status === 'completed'}
                     homeTeamWon={homeTeamWon}
                     awayTeamWon={awayTeamWon}
