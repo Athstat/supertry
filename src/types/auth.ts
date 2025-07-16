@@ -117,7 +117,7 @@ export type DjangoAuthUser = {
   first_name: string,
   last_name: string,
   username?: string,
-  game_updates_preference: string,
+  game_updates_preference?: GameUpdatesPreference,
   pref_payout?: string,
   device_id?: string,
   verification_state: string,

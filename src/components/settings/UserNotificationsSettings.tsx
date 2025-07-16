@@ -2,13 +2,13 @@ import { Bell, ChevronRight, LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { GameUpdatesPreference, gameUpdatesPreferenceOptions } from '../../types/notifications';
 import { formatPosition } from '../../utils/athleteUtils';
-import { DatabaseUser } from '../../types/auth';
+import { DjangoAuthUser } from '../../types/auth';
 import { notificationService } from '../../services/notificationsService';
 import { mutate } from 'swr';
 import DialogModal from '../shared/DialogModal';
 
 type Props = {
-  databaseUser: DatabaseUser;
+  databaseUser: DjangoAuthUser;
 };
 
 export default function UserNotificationsSettings({ databaseUser }: Props) {
@@ -56,7 +56,7 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
 }
 
 type GameUpdatesProps = {
-  user: DatabaseUser;
+  user: DjangoAuthUser;
 };
 
 function GameUpdatesSection({ user }: GameUpdatesProps) {

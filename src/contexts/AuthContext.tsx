@@ -281,11 +281,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      console.log('[AuthContext] Starting logout process');
 
       // First, set authentication state to false to prevent components from accessing user data
-      setIsAuthenticated(false);
-
+      
       // Clear the auth status from window object immediately to prevent re-authentication
       if (window.scrummyAuthStatus) {
         console.log('[AuthContext] Clearing window.scrummyAuthStatus');
@@ -295,9 +293,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           userData: undefined,
         };
       }
-
+      
       // Clear auth data in the web app first
       authService.logout();
+      setIsAuthenticated(false);
 
       // Clear OneSignal external ID in the mobile app (if running in WebView)
       // Wait for this to complete to ensure proper logout synchronization

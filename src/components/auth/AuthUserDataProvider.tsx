@@ -17,6 +17,8 @@ export default function AuthUserDataProvider({children} : Props) {
     const {data: userInfo, isLoading: loadingUser} = useSWR(userFetchKey, () => authService.getUserInfo());
     const isLoading = loadingUser;
 
+    console.log(userInfo);
+
     const setAuthUser = useSetAtom(authUserAtom);
 
     useEffect(() => {
