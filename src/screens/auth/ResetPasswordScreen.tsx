@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Eye, EyeOff, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { authService } from '../../services/authService';
 import { AuthLayout } from '../../components/auth/AuthLayout';
 import useSWR from 'swr';
@@ -8,7 +8,7 @@ import { usePasswordValidation } from '../../hooks/usePasswordValidation';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { PasswordResetTokenIntrospect } from '../../types/auth';
 import { LoadingState } from '../../components/ui/LoadingState';
-import InputField, { PasswordInputField } from '../../components/shared/InputField';
+import { PasswordInputField } from '../../components/shared/InputField';
 import FormErrorText from '../../components/shared/FormError';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 
@@ -19,7 +19,7 @@ interface SuccessModalProps {
   onSignIn: () => void;
 }
 
-const SuccessModal: React.FC<SuccessModalProps> = ({ isVisible, onClose, onSignIn }) => {
+const SuccessModal: React.FC<SuccessModalProps> = ({ isVisible, onSignIn }) => {
   if (!isVisible) return null;
 
   return (

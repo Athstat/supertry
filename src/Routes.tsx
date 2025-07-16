@@ -123,9 +123,7 @@ const AppRoutes = () => {
       <Route
         path="/forgot-password"
         element={
-          <AuthRoute>
-            <ForgotPasswordScreen />
-          </AuthRoute>
+          <ForgotPasswordScreen />
         }
       />
       <Route

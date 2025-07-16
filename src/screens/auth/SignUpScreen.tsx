@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ArrowRight, User } from 'lucide-react';
-import { motion, MotionProps } from 'framer-motion';
+import { Mail, ArrowRight, User } from 'lucide-react';
 import { AuthLayout } from '../../components/auth/AuthLayout';
-import { RegisterUserReq, SignUpForm, UserRepresentation } from '../../types/auth';
-import { authService } from '../../services/authService';
+import { RegisterUserReq, SignUpForm } from '../../types/auth';
 import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/anayticsService';
 import { emailValidator } from '../../utils/stringUtils';

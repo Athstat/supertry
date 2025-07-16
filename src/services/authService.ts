@@ -1,13 +1,13 @@
-import { 
+import {
   ClaimGuestAccountReq, ClaimGuestAccountResult, DjangoAuthUser,
   DjangoDeviceAuthRes, DjangoLoginRes, RegisterUserReq, RestError,
   RestPromise, ThrowableRes, UserPasswordStatus, UserPasswordStatusRes,
-  DjangoRegisterRes, RequestPasswordResetRes, ResetPasswordRes, 
+  DjangoRegisterRes, RequestPasswordResetRes, ResetPasswordRes,
   PasswordResetTokenIntrospect
 } from '../types/auth';
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
-import { validatePassword, validateUsername } from '../utils/authUtils';
+import { validateUsername } from '../utils/authUtils';
 import { isGuestEmail } from '../utils/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
 import { analytics } from './anayticsService';
@@ -171,7 +171,7 @@ export const authService = {
 
       const uri = getUri(`/api/v1/auth/login`);
 
-      
+
       const res = await fetch(uri, {
         method: 'POST',
         headers: applicationJsonHeader(),
@@ -193,6 +193,10 @@ export const authService = {
       }
 
       if (res.status === 404) {
+        return { message: 'Incorrect password' }
+      }
+
+      if (res.status === 401) {
         return { message: 'Incorrect password' }
       }
 
@@ -234,10 +238,10 @@ export const authService = {
 
     return auth_user_local_storage;
   },
-  
+
   /** Refetches user and updates local storage cache */
   updateUserInfo: async (): Promise<DjangoAuthUser | undefined> => {
-    
+
     try {
       const user = await authService.whoami();
 
@@ -318,6 +322,7 @@ export const authService = {
 
       if (response.ok) {
         const json = (await response.json()) as ResetPasswordRes;
+        authTokenService.clearUserTokens();
         return { data: json }
       }
 
@@ -380,29 +385,31 @@ export const authService = {
     return undefined;
   },
 
-  introspectPasswdResetToken: async (token: string) : RestPromise<PasswordResetTokenIntrospect> => {
+  introspectPasswdResetToken: async (token: string): RestPromise<PasswordResetTokenIntrospect> => {
     try {
       const uri = getUri(`/api/v1/auth/reset-password/introspect/${token}`);
       const res = await fetch(uri);
 
       if (res.ok) {
         const json = (await res.json()) as PasswordResetTokenIntrospect;
-        return {data: json};
+        return { data: json };
       }
 
       if (res.status === 404) {
         const message = "Password reset link has either expired or is invalid";
-        return {error: {message}}
+        return { error: { message } }
       }
 
     } catch (err) {
       logger.error("Error introspecting token ", err);
     }
 
-    return {error: {
-      error: "Error",
-      message: "Something went wrong"
-    }}
+    return {
+      error: {
+        error: "Error",
+        message: "Something went wrong"
+      }
+    }
   }
 
 };

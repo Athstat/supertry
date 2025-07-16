@@ -19,7 +19,7 @@ export default function EmailPasswordLoginBox() {
     const [needsPasswordReset, setNeedsPasswordReset] = useState<boolean>(false);
 
     const navigate = useNavigate();
-    const {login} = useAuth();
+    const { login } = useAuth();
 
     const checkPasswordStatus = async () => {
 
@@ -47,9 +47,9 @@ export default function EmailPasswordLoginBox() {
     }
 
     const handleLogin = async () => {
-        
+
         if (email && password) {
-            
+
             setIsLoading(true)
             const { data: loginRes, message } = await login(email, password);
 
@@ -67,6 +67,10 @@ export default function EmailPasswordLoginBox() {
 
     }
 
+    const handleForgotPassword = () => {
+        navigate('/forgot-password');
+    }
+
     return (
         <div>
             <form onSubmit={(e) => {
@@ -80,12 +84,21 @@ export default function EmailPasswordLoginBox() {
                     icon={<Mail className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />}
                 />
 
-                {hasPassword && <PasswordInputField
-                    value={password}
-                    onChange={setPassword}
-                    placeholder='Password'
-                    // icon={<Lock className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />}
-                />}
+                {hasPassword && (
+                    <div className='flex flex-col gap-1'>
+                        
+                        <PasswordInputField
+                            value={password}
+                            onChange={setPassword}
+                            placeholder='Password'
+                        // icon={<Lock className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />}
+                        />
+
+                        <div className='flex flex-row items-center justify-end' >
+                            <button onClick={handleForgotPassword} className='text-primary-500 underline font-medium' >Forgot Password?</button>
+                        </div>
+                    </div>
+                )}
 
                 {!hasPassword && <PrimaryButton
                     disbabled={isLoading}
@@ -123,7 +136,7 @@ export default function EmailPasswordLoginBox() {
                                 </div>
 
                                 <p className='text-sm'>
-                                    For security reasons, a password reset link has been sent to 
+                                    For security reasons, a password reset link has been sent to
                                     your email, <strong> {email}</strong>. Please reset your password
                                     then login.
                                 </p>

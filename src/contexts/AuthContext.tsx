@@ -5,7 +5,6 @@ import { DjangoAuthUser, DjangoDeviceAuthRes, DjangoLoginRes, DjangoRegisterRes,
 import { useBrudgeAuth } from '../hooks/useBridgeAuth';
 import { analytics } from '../services/anayticsService';
 import { logger } from '../services/logger';
-import { useNavigate } from 'react-router-dom';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -47,7 +46,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<DjangoAuthUser>();
-  const navigate = useNavigate();
 
   const { restoreAuthFromMobileApp, notifyBridgeOfLogin } = useBrudgeAuth(
     isAuthenticated, setIsAuthenticated
