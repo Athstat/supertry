@@ -170,12 +170,12 @@ export type ClaimGuestAccountResult = {
   user: DjangoAuthUser
 }
 
-export type AuthRegisterReq = {
+export type RegisterUserReq = {
   email: string,
   password: string,
   username: string,
-  first_name: string,
-  last_name: string
+  first_name?: string,
+  last_name?: string
 }
 
 export type DjangoRegisterRes = {

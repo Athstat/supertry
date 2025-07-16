@@ -1,8 +1,11 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
-import { logoutFromBridge } from '../utils/bridgeUtils';
-import { DjangoAuthUser, DjangoDeviceAuthRes, DjangoLoginRes, RestPromise, ThrowableRes } from '../types/auth';
+import { logoutFromBridge, requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
+import { DjangoAuthUser, DjangoDeviceAuthRes, DjangoLoginRes, DjangoRegisterRes, RegisterUserReq, RestPromise, ThrowableRes } from '../types/auth';
 import { useBrudgeAuth } from '../hooks/useBridgeAuth';
+import { analytics } from '../services/anayticsService';
+import { logger } from '../services/logger';
+import { useNavigate } from 'react-router-dom';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -13,7 +16,8 @@ type AuthContextType = {
   checkAuth: () => Promise<boolean>;
   resetPassword: (email: string) => Promise<void>;
   guestLogin: (deviceId: string) => RestPromise<DjangoDeviceAuthRes>;
-  user?: DjangoAuthUser
+  user?: DjangoAuthUser,
+  register: (data: RegisterUserReq) => RestPromise<DjangoRegisterRes>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<DjangoAuthUser>();
+  const navigate = useNavigate();
 
   const { restoreAuthFromMobileApp, notifyBridgeOfLogin } = useBrudgeAuth(
     isAuthenticated, setIsAuthenticated
@@ -115,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = async (username: string, password: string) : Promise<ThrowableRes<DjangoLoginRes>> => {
+  const login = async (username: string, password: string): Promise<ThrowableRes<DjangoLoginRes>> => {
     try {
       const { data: loginRes, message } = await authService.login(username, password);
 
@@ -130,12 +135,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Login failed:', error);
       setIsAuthenticated(false);
 
-      return {message: 'Something went wrong, Please try again'}
+      return { message: 'Something went wrong, Please try again' }
     }
   };
 
-  const guestLogin = async (deviceId: string) : RestPromise<DjangoDeviceAuthRes> => {
-    
+  const guestLogin = async (deviceId: string): RestPromise<DjangoDeviceAuthRes> => {
+
     try {
 
       const { data: loginRes, error } = await authService.authenticateAsGuestUser(deviceId);
@@ -152,7 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       console.error('Login failed:', error);
       setIsAuthenticated(false);
-      return {error: {message: "Something went wrong trying to login as guest"}}
+      return { error: { message: "Something went wrong trying to login as guest" } }
 
     }
 
@@ -208,6 +213,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const register = async (req: RegisterUserReq): RestPromise<DjangoRegisterRes> => {
+    try {
+      const { data, error } = await authService.registerUser(req);
+
+      if (data) {
+        analytics.trackUserSignUp('Email');
+        requestPushPermissionsAfterLogin();
+        notifyBridgeOfLogin(data.user);
+        setIsAuthenticated(true);
+      }
+
+      return {data, error};
+
+    } catch (err) {
+      logger.error('Error registering user ', err);
+      return {error: {
+        message: 'Something went wrong, Please Try again'
+      }}
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -219,7 +245,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         checkAuth,
         resetPassword,
         guestLogin,
-        user
+        user,
+        register
       }}
     >
       {children}

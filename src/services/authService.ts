@@ -1,6 +1,6 @@
 import { 
   ClaimGuestAccountReq, ClaimGuestAccountResult, DjangoAuthUser,
-  DjangoDeviceAuthRes, DjangoLoginRes, AuthRegisterReq, RestError,
+  DjangoDeviceAuthRes, DjangoLoginRes, RegisterUserReq, RestError,
   RestPromise, ThrowableRes, UserPasswordStatus, UserPasswordStatusRes,
   DjangoRegisterRes, RequestPasswordResetRes, ResetPasswordRes, 
   PasswordResetTokenIntrospect
@@ -128,7 +128,7 @@ export const authService = {
   /**
    * Register a new user with Keycloak
    */
-  async registerUser(userData: AuthRegisterReq): RestPromise<DjangoRegisterRes> {
+  async registerUser(userData: RegisterUserReq): RestPromise<DjangoRegisterRes> {
     try {
 
       const uri = getUri('/api/v1/auth/register');

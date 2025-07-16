@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, ArrowRight, User } from 'lucide-react';
 import { motion, MotionProps } from 'framer-motion';
 import { AuthLayout } from '../../components/auth/AuthLayout';
-import { SignUpForm, UserRepresentation } from '../../types/auth';
+import { RegisterUserReq, SignUpForm, UserRepresentation } from '../../types/auth';
 import { authService } from '../../services/authService';
 import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/anayticsService';
@@ -14,24 +14,10 @@ import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
 import FormErrorText from '../../components/shared/FormError';
 
-// Button animation variants
-const buttonVariants = {
-  initial: { scale: 1 },
-  hover: {
-    scale: 1.01,
-    transition: { type: 'linear', stiffness: 400, damping: 10 },
-  },
-  tap: { scale: 0.98 },
-};
-
-// Create a typed motion button component
-const MotionButton = motion.button as React.ComponentType<
-  MotionProps & React.ButtonHTMLAttributes<HTMLButtonElement>
->;
 
 export function SignUpScreen() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register } = useAuth();
   const [currentStep] = useState(1); // Keeping this for compatibility
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -90,62 +76,33 @@ export function SignUpScreen() {
     setError(null);
 
     try {
-      // Prepare user data for Keycloak
-      const userData: UserRepresentation = {
-        username: form.username,
-        email: form.email,
-        firstName: form.username, // Using username as firstName for compatibility
-        lastName: '', // Empty lastName for compatibility
-        enabled: true,
-        emailVerified: false,
-        credentials: [
-          {
-            type: 'password',
-            value: form.password,
-            temporary: false,
-          },
-        ],
-        attributes: {
-          nationality: form.nationality ? form.nationality.code : null,
-          favoriteTeam: form.favoriteTeam ? form.favoriteTeam.id : null,
-          terms_and_conditions: [Math.random()], // Adding terms acceptance like in mobile app
-        },
-      };
-
-      // Register the user with both Keycloak and games database
-      const res = await authService.createGamesUser(userData);
-
-      console.log('Sign Up Res ', res);
-
-      if (res === 'User already exists') {
-        setError('An account with this email already exists');
-        setIsLoading(false);
+      
+      if (!form.username) {
+        setError("Username is required");
         return;
       }
 
-      // First login the user to set authentication state
-      analytics.trackUserSignUp('Email');
-
-      try {
-        // Wait for login to complete successfully
-        await login(form.email, form.password);
-
-        // Only navigate to welcome screen after successful login
-        navigate('/post-signup-welcome');
-      } catch (loginErr) {
-        console.error('Auto-login failed:', loginErr);
-
-        // Even if auto-login fails, request push permissions since user is registered
-        requestPushPermissionsAfterLogin();
-
-        // Set authenticated state manually to avoid redirect to signin
-        setIsLoading(false);
-
-        // Force navigation to welcome screen even if login fails
-        navigate('/post-signup-welcome', { replace: true });
+      const registerData: RegisterUserReq = {
+        email: form.email,
+        password: form.password,
+        username: form.username
       }
+
+      const {data:res, error} = await register(registerData);
+
+      if (res) {
+        analytics.trackUserSignUp('Email');
+        requestPushPermissionsAfterLogin();
+        navigate('/post-signup-welcome', { replace: true });
+        return;
+      }
+
+      setError(error?.message ?? "");
+      
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -227,6 +184,7 @@ export function SignUpScreen() {
               onClick={handleNext}
               disabled={isLoading || isEmailTaken || isEmailUniqueValidatorLoading}
               isLoading={isLoading}
+              className='py-3'
             >
               {isLoading ? 'Creating Account...' : 'Complete Sign Up'}
               {!isLoading && <ArrowRight size={20} />}
