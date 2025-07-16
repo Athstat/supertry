@@ -1,7 +1,8 @@
-import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
-import { SportAction } from "../types/sports_actions";
-import { getAuthHeader, getUri } from "../utils/backendUtils";
-import { logger } from "./logger";
+import { IProAthlete } from "../../types/athletes";
+import { IFantasyAthlete, RugbyPlayer } from "../../types/rugbyPlayer";
+import { SportAction } from "../../types/sports_actions";
+import { getAuthHeader, getUri } from "../../utils/backendUtils";
+import { logger } from "../logger";
 
 // Define the type for each individual breakdown item
 export interface PointsBreakdownItem {
@@ -80,7 +81,7 @@ export const athleteService = {
       try {
         const response = await fetch(
           getUri(
-            `/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`
+            `/api/v1/seasons/${competitionId}/athletes`
           ),
           {
             method: "GET",
@@ -101,12 +102,12 @@ export const athleteService = {
 
       // If API fetch fails, use mock data
       console.log("Falling back to mock data");
-      const mockData = await import("../data/rugbyPlayers");
+      const mockData = await import("../../data/rugbyPlayers");
       return mockData.rugbyPlayers;
     } catch (error) {
       console.error("Error in athleteService:", error);
       // Always return something to prevent app crash
-      const mockData = await import("../data/rugbyPlayers");
+      const mockData = await import("../../data/rugbyPlayers");
       return mockData.rugbyPlayers;
     }
   },
@@ -324,6 +325,26 @@ export const athleteService = {
       return undefined;
     }
   },
+
+  getAllAthletes: async () : Promise<IProAthlete[]> => {
+    try {
+      const uri = getUri('/api/v1/athletes');
+      const res = await fetch(uri, {
+          headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as IProAthlete[];
+      }
+
+    } catch (err) {
+      logger.error("Error fetching athletes ", err);
+    }
+
+    return [];
+  },
+
+
 };
 
 /**

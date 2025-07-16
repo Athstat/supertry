@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { useFetch } from "../../hooks/useFetch";
-import { athleteService } from "../../services/athleteService";
+import { athleteService } from "../../services/athletes/athleteService";
 import { useState } from "react";
 import { formatPosition } from "../../utils/athleteUtils";
 import FormIndicator from "../shared/FormIndicator";

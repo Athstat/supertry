@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { RugbyPlayer } from "../types/rugbyPlayer";
-import { athleteService } from "../services/athleteService";
+import { athleteService } from "../services/athletes/athleteService";
 import { URC_COMPETIION_ID } from "../types/constants";
 
 // Default competition ID

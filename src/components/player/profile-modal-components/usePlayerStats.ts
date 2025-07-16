@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { athleteService } from '../../../services/athleteService';
+import { athleteService } from '../../../services/athletes/athleteService';
 import { useLocation } from 'react-router-dom';
 
 export const usePlayerStats = (player: any, isOpen: boolean) => {

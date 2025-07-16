@@ -1,6 +1,6 @@
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
-import { PointsBreakdownItem } from "../../services/athleteService";
+import { PointsBreakdownItem } from "../../services/athletes/athleteService";
 import RugbyPitch from "../shared/RugbyPitch";
 import { PlayerGameCard } from "../player/PlayerGameCard";
 import { ArrowUpDown } from "lucide-react";

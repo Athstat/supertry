@@ -1,4 +1,4 @@
-import { PointsBreakdownItem } from "../services/athleteService";
+import { PointsBreakdownItem } from "../services/athletes/athleteService";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { IFantasyAthlete } from "../types/rugbyPlayer";
 

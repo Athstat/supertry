@@ -31,5 +31,9 @@ export const swrFetchKeys = {
 
     getAuthUserProfileKey: () => {
         return '/auth-user-profile';
+    },
+
+    getAllProAthletesKey: () => {
+        return 'pro-athletes';
     }
 }

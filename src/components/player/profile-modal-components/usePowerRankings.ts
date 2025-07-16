@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { athleteService, PowerRankingItem } from '../../../services/athleteService';
+import { athleteService, PowerRankingItem } from '../../../services/athletes/athleteService';
 
 export interface UsePowerRankingsResult {
   data: PowerRankingItem[];
