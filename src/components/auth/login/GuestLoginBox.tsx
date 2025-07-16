@@ -1,10 +1,10 @@
 import { User } from "lucide-react";
 import { useState } from "react";
-import { authService } from "../../../services/authService";
 import { useDeviceId } from "../../../hooks/useDeviceId";
 import { ErrorState } from "../../ui/ErrorState";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
+import { useAuth } from "../../../contexts/AuthContext";
 
 
 export default function GuestLoginBox() {
@@ -13,6 +13,8 @@ export default function GuestLoginBox() {
     const [isGuestLoading, setIsGuestLoading] = useState(false);
     const [error, setError] = useState<string>();
     const {deviceId} = useDeviceId();
+
+    const {guestLogin} = useAuth();
 
     const handleGuestLogin = async () => {
         
@@ -23,7 +25,7 @@ export default function GuestLoginBox() {
         try {
 
             setIsGuestLoading(true);
-            const {data, error} = await authService.authenticateAsGuestUser(deviceId);
+            const {data, error} = await guestLogin(deviceId);
 
             if (data) {
                 navigate('/dashboard');

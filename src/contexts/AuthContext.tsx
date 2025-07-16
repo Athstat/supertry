@@ -1,12 +1,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
-import {
-  requestPushPermissionsAfterLogin,
-  logoutFromBridge,
-  loginWithBridge,
-} from '../utils/bridgeUtils';
-import { DjangoAuthUser, DjangoLoginRes, ThrowableRes } from '../types/auth';
-import { AUTH_USER_KEY, authTokenService } from '../services/auth/authTokenService';
+import { logoutFromBridge } from '../utils/bridgeUtils';
+import { DjangoAuthUser, DjangoDeviceAuthRes, DjangoLoginRes, RestPromise, ThrowableRes } from '../types/auth';
+import { useBrudgeAuth } from '../hooks/useBridgeAuth';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -16,7 +12,8 @@ type AuthContextType = {
   refreshSession: () => Promise<boolean>;
   checkAuth: () => Promise<boolean>;
   resetPassword: (email: string) => Promise<void>;
-  
+  guestLogin: (deviceId: string) => RestPromise<DjangoDeviceAuthRes>;
+  user?: DjangoAuthUser
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,77 +42,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [_, setUser] = useState<DjangoAuthUser | null>(null);
+  const [user, setUser] = useState<DjangoAuthUser>();
 
-  // Function to restore authentication from mobile app's scrummyAuthStatus
-  const restoreAuthFromMobileApp = useCallback(async () => {
-    try {
-      // If bridge is available, request auth status
-      if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
-        console.log('AuthContext: Requesting auth status from mobile app via initializeAuth');
-        const authStatus = await window.ScrummyBridge.initializeAuth();
-
-        if (authStatus && authStatus.isAuthenticated) {
-          console.log('AuthContext: Found authentication status from mobile app:', authStatus);
-          const { tokens, userData } = authStatus;
-
-          if (tokens && tokens.accessToken && tokens.refreshToken) {
-
-            authTokenService.setAccessToken(tokens.accessToken);
-            const apiUser = await authService.whoami();
-
-            if (apiUser) {
-              authTokenService.saveUserToLocalStorage(apiUser);
-            }
-
-            // Store user data if available
-            if (userData) {
-              localStorage.setItem('user_data', JSON.stringify(userData));
-            }
-
-            console.log('AuthContext: Successfully restored authentication from mobile app');
-            setIsAuthenticated(true);
-            return true;
-          }
-        }
-      }
-
-      // Fallback: Check if we have pre-injected authentication status
-      else if (window.scrummyAuthStatus && window.scrummyAuthStatus.isAuthenticated) {
-        console.log(
-          'AuthContext: Found pre-injected authentication status from mobile app:',
-          window.scrummyAuthStatus
-        );
-
-        const { tokens, userData } = window.scrummyAuthStatus;
-
-        if (tokens && tokens.accessToken && tokens.refreshToken) {
-          // Store the tokens in the web app's localStorage
-          authTokenService.setAccessToken(tokens.accessToken);
-          const apiUser = await authService.whoami();
-
-          if (apiUser) {
-            authTokenService.saveUserToLocalStorage(apiUser);
-          }
-
-          // Store user data if available
-          if (userData) {
-            localStorage.setItem('user_data', JSON.stringify(userData));
-          }
-
-          console.log(
-            'AuthContext: Successfully restored authentication from mobile app (fallback)'
-          );
-          setIsAuthenticated(true);
-          return true;
-        }
-      }
-      return false;
-    } catch (error) {
-      console.error('AuthContext: Error restoring auth from mobile app:', error);
-      return false;
-    }
-  }, []);
+  const { restoreAuthFromMobileApp, notifyBridgeOfLogin } = useBrudgeAuth(
+    isAuthenticated, setIsAuthenticated
+  );
 
   // Create a memoized function to check authentication status
   const checkAuth = useCallback(async () => {
@@ -150,45 +81,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkAuth();
   }, [checkAuth]);
 
-  // Listen for authentication status updates from mobile app
-  useEffect(() => {
-    // Set up the listener for when mobile app provides auth status
-    window.onScrummyAuthStatusReady = async status => {
-      //console.log('AuthContext: Received auth status from mobile app:', status);
-
-      if (status && status.isAuthenticated) {
-        const { tokens, userData } = status;
-
-        if (tokens && tokens.accessToken && tokens.refreshToken) {
-          // Store the tokens in the web app's localStorage
-          authTokenService.setAccessToken(tokens.accessToken);
-          const apiUser = await authService.whoami();
-
-          if (apiUser) {
-            authTokenService.saveUserToLocalStorage(apiUser);
-          }
-
-          // Store user data if available
-          if (userData) {
-            localStorage.setItem('user_data', JSON.stringify(userData));
-          }
-
-          // console.log(
-          //   'AuthContext: Successfully restored authentication from mobile app via callback'
-          // );
-          setIsAuthenticated(true);
-        }
-      } else {
-        console.log('AuthContext: Mobile app indicates user is not authenticated');
-        setIsAuthenticated(false);
-      }
-    };
-
-    // Cleanup function
-    return () => {
-      window.onScrummyAuthStatusReady = undefined;
-    };
-  }, []);
 
   // Add periodic token validation for long-running sessions
   // Note: Visibility change handling is now managed by AppStateContext
@@ -223,68 +115,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = async (username: string, password: string) : Promise<ThrowableRes<DjangoLoginRes>> => {
     try {
       const { data: loginRes, message } = await authService.login(username, password);
 
-      // Notify the mobile app bridge about successful login
-      try {
-        const userInfo = await authService.getUserInfo();
-        if (userInfo && loginRes) {
-          const tokens = {
-            accessToken: authTokenService.getAccessToken() || '',
-            authUserToken: localStorage.getItem(AUTH_USER_KEY) || '',
-            refreshToken: ""
-          };
-
-          setUser(loginRes.user);
-
-          const userData = {
-            name:
-              `${userInfo.first_name || ''} ${userInfo.last_name || ''}`.trim() ||
-              userInfo.username ||
-              '',
-            email: userInfo.email || '',
-            user_id: userInfo.kc_id || '',
-            onesignal_id: authTokenService.getOnesignalId(),
-          };
-
-          console.log('AuthContext: Notifying mobile app bridge about login...');
-          const bridgeResult = await loginWithBridge(tokens, userData);
-          console.log('AuthContext: Mobile app bridge login result:', bridgeResult);
-        }
-      } catch (bridgeError) {
-        console.error('AuthContext: Error notifying mobile app bridge:', bridgeError);
-        // Don't fail the login if bridge communication fails
-      }
-
-      // Request push permissions after successful login (non-blocking)
-      requestPushPermissionsAfterLogin();
-
-      // Add a delay to ensure the mobile app has processed the login
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      // Don't navigate here - let the route guards handle it
-      // This prevents double navigation/reload
-
       if (loginRes) {
+        await notifyBridgeOfLogin(loginRes.user);
+        setUser(loginRes.user)
         setIsAuthenticated(true);
       }
-
-      return { loginRes, message };
+      return { data: loginRes, message };
 
     } catch (error) {
       console.error('Login failed:', error);
       setIsAuthenticated(false);
-      throw error;
+
+      return {message: 'Something went wrong, Please try again'}
     }
   };
+
+  const guestLogin = async (deviceId: string) : RestPromise<DjangoDeviceAuthRes> => {
+    
+    try {
+
+      const { data: loginRes, error } = await authService.authenticateAsGuestUser(deviceId);
+
+      if (loginRes) {
+        await notifyBridgeOfLogin(loginRes.user);
+        setUser(loginRes.user)
+        setIsAuthenticated(true);
+      }
+
+      return { data: loginRes, error };
+
+    } catch (error) {
+
+      console.error('Login failed:', error);
+      setIsAuthenticated(false);
+      return {error: {message: "Something went wrong trying to login as guest"}}
+
+    }
+
+  }
 
   const logout = async () => {
     try {
 
       // First, set authentication state to false to prevent components from accessing user data
-      
+      setIsAuthenticated(false);
+
       // Clear the auth status from window object immediately to prevent re-authentication
       if (window.scrummyAuthStatus) {
         console.log('[AuthContext] Clearing window.scrummyAuthStatus');
@@ -294,10 +173,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           userData: undefined,
         };
       }
-      
+
       // Clear auth data in the web app first
       authService.logout();
-      setIsAuthenticated(false);
 
       // Clear OneSignal external ID in the mobile app (if running in WebView)
       // Wait for this to complete to ensure proper logout synchronization
@@ -340,6 +218,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         refreshSession,
         checkAuth,
         resetPassword,
+        guestLogin,
+        user
       }}
     >
       {children}
