@@ -27,7 +27,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
                 "hover:bg-primary-700 dark:hover:bg-primary-700",
                 "border border-primary-500 text-sm lg:text-base",
                 className,
-                (disbabled || disabled) && "opacity-40",
+                (disbabled || disabled) && "opacity-40 cursor-not-allowed",
             )}
             onClick={handleOnClick}
 
