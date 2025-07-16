@@ -9,7 +9,7 @@ type RosterListProps = {
 /** Renders a roster list */
 export function FixtureRosterList({ roster }: RosterListProps) {
 
-    roster = roster.sort((a, b) => a.player_number - b.player_number);
+    roster = roster.sort((a, b) => (a.player_number ?? 0) - (b.player_number ?? 0));
     const starters = roster.filter((r) => {
         return !r.is_substitute;
     });
@@ -23,7 +23,7 @@ export function FixtureRosterList({ roster }: RosterListProps) {
             <h1 className="text-lg font-bold" >Starters</h1>
             {starters.map((starter) => {
                 return <FixtureRosterListItem 
-                    key={starter.athlete_id}
+                    key={starter.athlete.tracking_id}
                     player={starter}
                 />
             })}
@@ -32,7 +32,7 @@ export function FixtureRosterList({ roster }: RosterListProps) {
 
             {benchers.map((bencher) => {
                 return <FixtureRosterListItem 
-                    key={bencher.athlete_id}
+                    key={bencher.athlete.tracking_id}
                     player={bencher}
                 />
             })}
@@ -52,16 +52,16 @@ function FixtureRosterListItem({player} : RosterListItemProps) {
             </div>
 
             <div>
-                <PlayerMugshot className="w-12 h-12" url={player.image_url} />
+                <PlayerMugshot className="w-12 h-12" url={player.athlete.image_url} />
             </div>
 
             <div>
                 <div className="text-md font-semibold flex flex-row items-center gap-2" >
-                    {player.player_name}
+                    {player.athlete.player_name}
                     {player.is_captain && <CaptainsArmBand />}
                 </div>
 
-                <p className="text-slate-700 dark:text-slate-400" >{player.position !== 'NULL' ? formatPosition(player.position) : ''}</p>
+                <p className="text-slate-700 dark:text-slate-400" >{player.position !== 'NULL' ? formatPosition(player.position ?? "") : ''}</p>
             </div>
         </div>
     )
