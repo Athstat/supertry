@@ -44,12 +44,6 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
           <div className="w-full h-[100%] overflow-y-auto flex flex-col gap-1">
             <GameUpdatesSection user={databaseUser} />
           </div>
-
-          {/* <div className=" w-full h-[20%] pb-5 flex flex-row items-start gap-2" >
-                        <button onClick={toggle} className="bg-blue-500 px-4 py-1 text-md text-white rounded-xl" >
-                            Done
-                        </button>
-                    </div> */}
         </div>
       </DialogModal>
     </div>
@@ -98,7 +92,7 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
         setError("Something wen't wrong");
         console.log("Error updating notification preferences ", err)
       } finally {
-      setIsSaving(false);
+        setIsSaving(false);
       }
 
     }, 50);
