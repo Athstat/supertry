@@ -192,3 +192,9 @@ export type ResetPasswordRes = {
   email: string,
   message: string
 }
+
+export type PasswordResetTokenIntrospect = {
+  created_at: string,
+  expires_at: string,
+  user_id: string
+}

@@ -2,7 +2,8 @@ import {
   ClaimGuestAccountReq, ClaimGuestAccountResult, DjangoAuthUser,
   DjangoDeviceAuthRes, DjangoLoginRes, AuthRegisterReq, RestError,
   RestPromise, ThrowableRes, UserPasswordStatus, UserPasswordStatusRes,
-  DjangoRegisterRes, RequestPasswordResetRes, ResetPasswordRes 
+  DjangoRegisterRes, RequestPasswordResetRes, ResetPasswordRes, 
+  PasswordResetTokenIntrospect
 } from '../types/auth';
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
@@ -370,6 +371,31 @@ export const authService = {
     }
 
     return undefined;
+  },
+
+  introspectPasswdResetToken: async (token: string) : RestPromise<PasswordResetTokenIntrospect> => {
+    try {
+      const uri = getUri(`/api/v1/auth/reset-password/introspect/${token}`);
+      const res = await fetch(uri);
+
+      if (res.ok) {
+        const json = (await res.json()) as PasswordResetTokenIntrospect;
+        return {data: json};
+      }
+
+      if (res.status === 404) {
+        const message = "Password reset link has either expired or is invalid";
+        return {error: {message}}
+      }
+
+    } catch (err) {
+      logger.error("Error introspecting token ", err);
+    }
+
+    return {error: {
+      error: "Error",
+      message: "Something went wrong"
+    }}
   }
 
 };
