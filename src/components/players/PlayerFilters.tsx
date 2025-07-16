@@ -7,11 +7,11 @@ import { formatPosition } from "../../utils/athleteUtils";
 
 interface PlayerFiltersProps {
   positionFilter: string;
-  teamFilter: string;
+  teamFilter?: IProTeam;
   availablePositions: string[];
   availableTeams: IProTeam[];
   onPositionFilter: (position: string) => void;
-  onTeamFilter: (team: string) => void;
+  onTeamFilter: (team: IProTeam) => void;
   onClearFilters: () => void;
 }
 
@@ -97,9 +97,9 @@ export const PlayerFilters = ({
               {availableTeams.map((team) => (
                 <button
                   key={team.athstat_id}
-                  onClick={() => onTeamFilter(team.athstat_id)}
+                  onClick={() => onTeamFilter(team)}
                   className={`px-3 py-2 flex flex-row items-center gap-1 text-sm rounded-md text-left ${
-                    teamFilter === team.athstat_id
+                    teamFilter && teamFilter.athstat_id === team.athstat_id
                       ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-300 dark:border-primary-700"
                       : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-slate-500"
                   }`}

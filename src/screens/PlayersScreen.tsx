@@ -12,7 +12,7 @@ import { ErrorState } from "../components/ui/ErrorState";
 import { EmptyState } from "../components/players/EmptyState";
 import { PlayerGameCard } from "../components/player/PlayerGameCard";
 import PageView from "./PageView";
-import { Users } from "lucide-react";
+import { Users, X } from "lucide-react";
 import PlayersScreenProvider from "../contexts/PlayersScreenContext";
 import PlayersCompareButton from "../components/player/PlayerScreenCompareButton";
 import { twMerge } from "tailwind-merge";
@@ -21,6 +21,10 @@ import PlayerCompareModal from "../components/players/compare/PlayerCompareModal
 import PlayerProfileModal from "../components/player/PlayerProfileModal";
 import { SortDirection, SortField, SortTab } from "../types/playerSorting";
 import { IProAthlete } from "../types/athletes";
+import { IProTeam } from "../types/team";
+import TeamLogo from "../components/team/TeamLogo";
+import RoundedCard from "../components/shared/RoundedCard";
+import SecondaryText from "../components/shared/SecondaryText";
 
 export const PlayersScreen = () => {
 
@@ -35,7 +39,7 @@ export const PlayersScreen = () => {
 
   const [isSorting, setIsSorting] = useState(false);
   const [positionFilter, setPositionFilter] = useState<string>("");
-  const [teamIdFilter, setTeamIdFilter] = useState<string>("");
+  const [teamFilter, setTeamFilter] = useState<IProTeam>();
 
   const [isComparing, setIsComparing] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
@@ -119,14 +123,14 @@ export const PlayersScreen = () => {
   };
 
   // Handle team filter change
-  const handleTeamFilter = (team: string) => {
-    setTeamIdFilter(team === teamIdFilter ? "" : team);
+  const handleTeamFilter = (team: IProTeam) => {
+    setTeamFilter(team);
   };
 
   // Clear all filters
   const clearFilters = () => {
     setPositionFilter("");
-    setTeamIdFilter("");
+    setTeamFilter(undefined);
     setSearchQuery("");
   };
 
@@ -173,8 +177,10 @@ export const PlayersScreen = () => {
       }
 
       // Apply team filter
-      if (teamIdFilter) {
-        result = result.filter((player) => player.team.athstat_id === teamIdFilter);
+      if (teamFilter) {
+        result = result.filter((player) =>{
+          return player.team.athstat_id === teamFilter.athstat_id
+        });
       }
 
       // Apply tab-specific filtering
@@ -226,7 +232,7 @@ export const PlayersScreen = () => {
     return () => clearTimeout(timeoutId);
   }, [
     positionFilter,
-    teamIdFilter,
+    teamFilter,
     searchQuery,
     activeTab,
     sortField,
@@ -254,7 +260,7 @@ export const PlayersScreen = () => {
 
             <PlayerFilters
               positionFilter={positionFilter}
-              teamFilter={teamIdFilter}
+              teamFilter={teamFilter}
               availablePositions={positions}
               availableTeams={teams}
               onPositionFilter={handlePositionFilter}
@@ -281,6 +287,24 @@ export const PlayersScreen = () => {
             onStopComparing={onStopComparing}
           />
         }
+
+        {/* Selected Team Section */}
+        <div>
+          {teamFilter && <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2" >
+            <TeamLogo 
+              teamName={teamFilter.athstat_name}
+              url={teamFilter.image_url}
+              className="w-5 h-5"
+            />
+
+            <p>{teamFilter.athstat_name}</p>
+            
+            <button onClick={() => setTeamFilter(undefined)} >
+              <SecondaryText> <X className="w-4 h-4" /> </SecondaryText>
+            </button>
+
+          </RoundedCard>}
+        </div>
 
         {/* Loading State - for initial load */}
         {isLoading && <LoadingState message="Loading..." />}
