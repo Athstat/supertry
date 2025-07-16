@@ -10,6 +10,7 @@ import { ScopeProvider } from 'jotai-scope';
 import AuthUserDataProvider from '../components/auth/AuthUserDataProvider';
 import { useAtomValue } from 'jotai';
 import UserProfileHeader from '../components/auth/UserProfileHeader';
+import ClaimGuestAccountBox from '../components/auth/ClaimGuestAccountBox';
 
 export function UserProfileScreen() {
 
@@ -27,7 +28,6 @@ export function UserProfileScreen() {
 
 function Content() {
 
-  const navigate = useNavigate();
   const { logout } = useAuth();
 
   const authUser = useAtomValue(authUserAtom);
@@ -67,10 +67,6 @@ function Content() {
     await handleLogout();
   };
 
-  const handleCompleteProfile = () => {
-    navigate('/complete-profile');
-  };
-
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
       <div className="flex flex-col mb-8">
@@ -84,32 +80,7 @@ function Content() {
         />}
 
         {/* Complete Profile Card for Guest Users */}
-        {isGuestAccount && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              Welcome to Scrummy!
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Enhance your experience by creating a full account.
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
-              Adding your email will allow you to access your teams across all your devices and keep
-              them secure.
-            </p>
-            <button
-              onClick={handleCompleteProfile}
-              className="w-full bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center hover:bg-primary-700 transition-colors"
-            >
-              Complete Your Profile
-              <ChevronRight className="ml-2 h-5 w-5" />
-            </button>
-          </motion.div>
-        )}
+        {isGuestAccount && <ClaimGuestAccountBox />}
 
         {authUser && <UserNotificationsSettings databaseUser={authUser} />}
         <LicensingModal />
