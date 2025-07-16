@@ -17,7 +17,6 @@ import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/ta
 import FixtureHeadToHeadStats from "../components/fixtures/FixtureHeadToHeadStats";
 import BlueGradientCard from "../components/shared/BlueGradientCard";
 import PageView from "./PageView";
-import { useFetch } from "../hooks/useFetch";
 import FixtureRosters from "../components/fixtures/FixtureRosters";
 import FixtureChat from "../components/fixtures/FixtureChat";
 import GameHighlightsCard from "../components/video/GameHighlightsCard";

@@ -5,7 +5,6 @@ import { ReactNode, useEffect } from 'react'
 import useSWR from 'swr'
 import { seasonService } from '../../services/seasonsService'
 import { LoadingState } from '../ui/LoadingState'
-import { gamesService } from '../../services/gamesService'
 
 type Props = {
   season: ISeason,
