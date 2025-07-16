@@ -53,7 +53,7 @@ export default function InputField({value, onChange, label, type, id, inputCn, l
                     defaultValue={""}
                 />
                 {icon && (
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                    <div className="absolute inset-y-0 right-0 flex text-slate-700 dark:text-slate-400  items-center pr-3">
                         {icon}
                     </div>
                 )}
@@ -66,10 +66,11 @@ type PasswordInputProps = {
     value?: string,
     onChange?: (value?: string) => void,
     label?: string,
-    placeholder?: string
+    placeholder?: string,
+    id?: string,
 }
 
-export function PasswordInputField({value, onChange, placeholder, label} : PasswordInputProps) {
+export function PasswordInputField({value, onChange, placeholder, label, id} : PasswordInputProps) {
 
     const [showPassword, setShowPassword] = useState<boolean>(false); 
 
@@ -84,6 +85,8 @@ export function PasswordInputField({value, onChange, placeholder, label} : Passw
             label={label ?? "Password"}
             type={showPassword ? "text" : "password"}
             placeholder={placeholder ?? "Password"}
+            required
+            id={id}
             icon={
                 <button
                     type="button"

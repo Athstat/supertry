@@ -7,10 +7,11 @@ type Props = {
     className?: string,
     onClick?: () => void,
     disbabled?: boolean,
+    disabled?: boolean,
     isLoading?: boolean,
     type?: "submit" | "reset" | "button" | undefined
 }
-export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type }: Props) {
+export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
@@ -20,13 +21,13 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
 
     return (
         <button
-            disabled={disbabled}
+            disabled={disbabled || disabled}
             className={twMerge(
                 "bg-primary-600 dark:bg-primary-600 text-white font-medium px-4 py-2 w-full items-center justify-center flex rounded-xl",
                 "hover:bg-primary-700 dark:hover:bg-primary-700",
                 "border border-primary-500 text-sm lg:text-base",
                 className,
-                disbabled && "opacity-40",
+                (disbabled || disabled) && "opacity-40",
             )}
             onClick={handleOnClick}
 

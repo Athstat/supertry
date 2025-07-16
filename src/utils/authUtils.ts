@@ -1,3 +1,5 @@
+import { DjangoAuthUser } from "../types/auth";
+
 export function validateUsername(username: string) {
     const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
     return usernameRegex.test(username)
@@ -29,4 +31,16 @@ export function validatePasswordOrThrow(password: string) {
     if (!isValid) {
         throw new Error(reason ? `Password valdiation failed because: ${reason}` : "Email is invalid");
     }
+}
+
+
+/** Removes the `guest_` from the guest user as a username suggestion */
+export function guestNewUsernameSuggestion(guestUser: DjangoAuthUser) {
+    const oldUsername = guestUser.username
+
+    if (oldUsername) {
+        return oldUsername.replace("guest_", "");
+    }
+
+    return undefined;
 }

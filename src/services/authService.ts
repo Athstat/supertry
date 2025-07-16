@@ -57,11 +57,13 @@ export const authService = {
     return isGuestEmail(userInfo.email);
   },
 
-  /** * Claim a guest account by updating the user's credentials */
-  async claimGuestAccount(data: ClaimGuestAccountReq): RestPromise<any> {
+  /** Claim a guest account by updating the user's credentials */
+  async claimGuestAccount(data: ClaimGuestAccountReq): RestPromise<ClaimGuestAccountResult> {
     try {
 
-      const userInfo = await authService.getUserInfo();
+      console.log("Starting to claim guest account ");
+      const userInfo = await authService.whoami();
+      console.log("Who am i", userInfo);
 
       if (!userInfo || !authService.isGuestAccount()) {
         return { error: { message: 'Not a guest account or not logged in' } };
@@ -80,19 +82,10 @@ export const authService = {
 
       const isEmailValid = emailValidator(data.email);
 
-      if (isEmailValid) return {
+      if (!isEmailValid) return {
         error: {
           error: 'Invalid Email',
           message: "Email is invalid"
-        }
-      }
-
-      const [isPasswordValid, reason] = validatePassword(data.password);
-
-      if (!isPasswordValid) return {
-        error: {
-          error: 'Invalid Password',
-          message: reason ?? "Password is invalid"
         }
       }
 
