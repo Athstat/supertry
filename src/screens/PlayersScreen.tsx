@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PlayerForm, RugbyPlayer } from "../types/rugbyPlayer";
+import { PlayerForm } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 
 // Components
@@ -19,31 +19,31 @@ import { twMerge } from "tailwind-merge";
 import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
 import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
 import PlayerProfileModal from "../components/player/PlayerProfileModal";
-
-type SortTab = "all" | "trending" | "top" | "new";
-// type SortOption = "points" | "name" | "position" | "club";
-type SortDirection = "asc" | "desc";
-type SortField = "power_rank_rating" | "player_name" | "form";
+import { SortDirection, SortField, SortTab } from "../types/playerSorting";
+import { IProAthlete } from "../types/athletes";
 
 export const PlayersScreen = () => {
 
-  const { athletes, error, isLoading, refreshAthletes, positions, teams } =
-    useAthletes();
+  const { athletes, error, isLoading, refreshAthletes, positions, teams } = useAthletes();
+
   const [activeTab, setActiveTab] = useState<SortTab>("all");
   const [sortField, setSortField] = useState<SortField>("power_rank_rating");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredPlayers, setFilteredPlayers] = useState<RugbyPlayer[]>([]);
+  const [filteredPlayers, setFilteredPlayers] = useState<IProAthlete[]>([]);
+
   const [isSorting, setIsSorting] = useState(false);
   const [positionFilter, setPositionFilter] = useState<string>("");
-  const [teamFilter, setTeamFilter] = useState<string>("");
+  const [teamIdFilter, setTeamIdFilter] = useState<string>("");
 
   const [isComparing, setIsComparing] = useState(false);
-  const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
+
   const toggleCompareMode = () => setIsComparing(!isComparing);
   const clearSelections = () => setSelectedPlayers([]);
 
-  const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
   
   const handleClosePlayerModal = () => {
@@ -62,7 +62,7 @@ export const PlayersScreen = () => {
   }
 
   // Handle player selection
-  const handlePlayerClick = (player: RugbyPlayer) => {
+  const handlePlayerClick = (player: IProAthlete) => {
 
     if (isComparing) {
 
@@ -89,7 +89,7 @@ export const PlayersScreen = () => {
     }
   };
 
-  const onRemovePlayerFromSelectedPlayers = (player: RugbyPlayer) => {
+  const onRemovePlayerFromSelectedPlayers = (player: IProAthlete) => {
     const newList = selectedPlayers.filter((p) => {
       return p.tracking_id !== player.tracking_id
     });
@@ -120,13 +120,13 @@ export const PlayersScreen = () => {
 
   // Handle team filter change
   const handleTeamFilter = (team: string) => {
-    setTeamFilter(team === teamFilter ? "" : team);
+    setTeamIdFilter(team === teamIdFilter ? "" : team);
   };
 
   // Clear all filters
   const clearFilters = () => {
     setPositionFilter("");
-    setTeamFilter("");
+    setTeamIdFilter("");
     setSearchQuery("");
   };
 
@@ -156,7 +156,7 @@ export const PlayersScreen = () => {
         result = result.filter(
           (player) =>
             player.player_name?.toLowerCase().includes(query) ||
-            player.team_name?.toLowerCase().includes(query) ||
+            player.team.athstat_name?.toLowerCase().includes(query) ||
             player.position_class?.toLowerCase().includes(query)
         );
       }
@@ -173,8 +173,8 @@ export const PlayersScreen = () => {
       }
 
       // Apply team filter
-      if (teamFilter) {
-        result = result.filter((player) => player.team_name === teamFilter);
+      if (teamIdFilter) {
+        result = result.filter((player) => player.team.athstat_id === teamIdFilter);
       }
 
       // Apply tab-specific filtering
@@ -226,7 +226,7 @@ export const PlayersScreen = () => {
     return () => clearTimeout(timeoutId);
   }, [
     positionFilter,
-    teamFilter,
+    teamIdFilter,
     searchQuery,
     activeTab,
     sortField,
@@ -254,7 +254,7 @@ export const PlayersScreen = () => {
 
             <PlayerFilters
               positionFilter={positionFilter}
-              teamFilter={teamFilter}
+              teamFilter={teamIdFilter}
               availablePositions={positions}
               availableTeams={teams}
               onPositionFilter={handlePositionFilter}
