@@ -1,32 +1,28 @@
+import { IProTeam } from "./team";
+
 export type IFixture = {
-  game_id: string;
-  team_score?: number;
-  opposition_score?: number;
-  venue?: string;
-  kickoff_time?: Date;
-  competition_name?: string;
-  team_id: string;
-  opposition_team_id: string;
-  is_knockout?: boolean;
-  is_league_managed?: boolean;
-  location?: string;
-  extra_info?: string;
-  hidden?: boolean;
-  league_id: string;
-  network?: string;
-  game_status?: GameStatus;
-  game_clock?: string;
-  result?: string;
-  source_id?: string;
-  data_source?: string;
-  is_test?: boolean;
-  round: number;
-  team_name: string;
-  team_image_url?: string;
-  opposition_team_name: string;
-  opposition_image_url?: string;
-  opposition_team_image_url?: string;
-  highlights_link?: string
+  game_id: string,
+  team: IProTeam,
+  opposition_team: IProTeam,
+  team_score?: number,
+  opposition_score?: number,
+  venue?: string,
+  kickoff_time?: string,
+  competition_name?: string,
+  is_knockout?: boolean,
+  is_league_managed?: boolean,
+  location?: string,
+  extra_info?: string,
+  hidden?: boolean,
+  network?: string,
+  game_status?: string,
+  game_clock?: string,
+  result?: string,
+  source_id?: string,
+  data_source?: string,
+  is_test?: false,
+  round: number,
+  league: string
 }
 
 export type GameStatus = string | 'completed' | 'in_progress' | 'not_started';
@@ -113,7 +109,7 @@ export type ITeam = {
   image_url?: string
 }
 
-export type ITeamActionName = 'TurnoversConceded'| 'RucksWon'| 'ScrumsWonOutright'| 'Lineouts'| 'KicksFromHandMetres'| 'ScrumsLostFreeKick'| 'MaulsWonPenaltyTry'| 'PenaltyConcededDelibKnockOn'| 'Runs'| 'Kicks'| 'Points'| 'PenaltyConcededOffside'| 'LineoutsWonSteal'| 'ConversionsMissed'| 'ScrumsLostPenalty'| 'MaulsLostTurnover'| 'Passes'| 'TackleSuccess'| 'RestartsNotTen'| 'CarriesMadeGainLine'| 'TurnoversCarriedInTouch'| 'CarriesSupport'| 'TurnoversLostRuckOrMaul'| 'LineoutsLostHandlingError'| 'PenaltyConcededOwnHalf'| 'ScrumsWonPenaltyTry'| 'PenaltyConcededHighTackle'| 'BallsWonZoneA'| 'TacklesMissed'| 'MaulSuccess'| 'LineBreaks'| 'LineoutsThrowNotStraight'| 'PenaltyConcededStamping'| 'CarriesMetres'| 'CollectionKick'| 'PenaltyGoalsScored'| 'Restarts22M'| 'PenaltyConcededLineoutOffence'| 'SetPiecesWon'| 'RestartsSuccess'| 'KicksTryScored'| 'TrueRetainedKicks'| 'DefendersBeaten'| 'PenaltyConcededHandlingInRuck'| 'RestartsWon'| 'TurnoversKickError'| 'PenaltyConcededDissent'| 'PenaltyConcededKillingRuck'| 'Visits22'| 'KicksInTouch'| 'ScrumSuccess'| 'PenaltyConcededFoulPlay'| 'BallsWonZoneB'| 'LineoutsInfringed'| 'TurnoversOwnHalf'| 'KicksOppnCollection'| 'TurnoversWon'| 'RucksLost'| 'TerritorySecondHalf'| 'MaulMetres'| 'LineoutsCatchOpp'| 'MaulsLostOutright'| 'LineoutsLostOutright'| 'Carries'| 'PossessionFirstHalf'| 'FreeKickConcededGeneralPlay'| 'RestartsOppErrors'| 'TacklesMade'| 'RestartHalfway'| 'CollectionsFailed'| 'ScrumsReset'| 'ScrumsLostOutright'| 'MaulsWonPenalty'| 'PenaltouchesMissed'| 'Metres'| 'ScrumsWonFreeKick'| 'BallsWonZoneC'| 'ScrumsWonPushoverTry'| 'RestartsOutOfPlay'| 'LineoutsLostPenalty'| 'NumberOfTimesInPossession'| 'BallCarry'| 'KicksSucceded'| 'KicksOutOfPlay'| 'Tries'| 'Scrums'| 'AttackingEventsZoneC'| 'MaulsLost'| 'LineoutsLostFreeKick'| 'LineoutsLost'| 'CollectionsInterception'| 'BallsWonZoneD'| 'PenaltyConcededOther'| 'AttackingEventsZoneA'| 'LineoutSuccess'| 'Assists'| 'DropGoalsScored'| 'Territory'| 'PenaltouchesSucceded'| 'DropGoalsMissed'| 'RetainedKicks'| 'FreeKickConcededInRuckOrMaul'| 'LineoutsWonFreeKick'| 'RedCardSecondYellow'| 'PenaltyConcededObstruction'| 'PenaltyTries'| 'YellowCards'| 'PenaltiesConceded'| 'KicksOutTouchInGoal'| 'FreeKickConcededLineout'| 'RestartsLost'| 'LineoutsWon'| 'RestartsOwnPlayer'| 'TurnoversBadPass'| 'TryKicks'| 'LineoutsWonPenalty'| 'PenaltyConcededWrongSide'| 'AttackingEventsZoneB'| 'PenaltyConcededCollapsingMaul'| 'Offloads'| 'RedCards'| 'ConversionsScored'| 'MaulsWonTry'| 'GoalKicksScored'| 'TurnoversForwardPass'| 'ScrumsWonPenalty'| 'CollectionsLooseBall'| 'PenaltyConcededCollapsingOffense'| 'LineoutsWonTap'| 'CarriesNotMadeGainLine'| 'ScrumsWon'| 'TerritoryFirstHalf'| 'Mauls'| 'PossessionSecondHalf'| 'AttackingEventsZoneD'| 'MaulsWon'| 'Possession'| 'TurnoversCarriedOver'| 'ScrumsLostReversed'| 'Rucks'| 'PenaltyConcededScrumOffence'| 'PenaltyConcededOppHalf'| 'KicksFromHand'| 'CollectionsSucceded'| 'TurnoversOppHalf'| 'TerritoryLast10Mins'| 'TurnoversKnockOn'| 'PenaltyConcededEarlyTackle'| 'RuckSuccess'| 'MaulsWonOutright'| 'FreeKickConcededScrum'| 'PenaltyConcededCollapsing'| 'KicksChargedDown'| 'ScrumsLost'| 'LineoutsWonClean'| 'FreeKicksConceded';
+export type ITeamActionName = 'TurnoversConceded' | 'RucksWon' | 'ScrumsWonOutright' | 'Lineouts' | 'KicksFromHandMetres' | 'ScrumsLostFreeKick' | 'MaulsWonPenaltyTry' | 'PenaltyConcededDelibKnockOn' | 'Runs' | 'Kicks' | 'Points' | 'PenaltyConcededOffside' | 'LineoutsWonSteal' | 'ConversionsMissed' | 'ScrumsLostPenalty' | 'MaulsLostTurnover' | 'Passes' | 'TackleSuccess' | 'RestartsNotTen' | 'CarriesMadeGainLine' | 'TurnoversCarriedInTouch' | 'CarriesSupport' | 'TurnoversLostRuckOrMaul' | 'LineoutsLostHandlingError' | 'PenaltyConcededOwnHalf' | 'ScrumsWonPenaltyTry' | 'PenaltyConcededHighTackle' | 'BallsWonZoneA' | 'TacklesMissed' | 'MaulSuccess' | 'LineBreaks' | 'LineoutsThrowNotStraight' | 'PenaltyConcededStamping' | 'CarriesMetres' | 'CollectionKick' | 'PenaltyGoalsScored' | 'Restarts22M' | 'PenaltyConcededLineoutOffence' | 'SetPiecesWon' | 'RestartsSuccess' | 'KicksTryScored' | 'TrueRetainedKicks' | 'DefendersBeaten' | 'PenaltyConcededHandlingInRuck' | 'RestartsWon' | 'TurnoversKickError' | 'PenaltyConcededDissent' | 'PenaltyConcededKillingRuck' | 'Visits22' | 'KicksInTouch' | 'ScrumSuccess' | 'PenaltyConcededFoulPlay' | 'BallsWonZoneB' | 'LineoutsInfringed' | 'TurnoversOwnHalf' | 'KicksOppnCollection' | 'TurnoversWon' | 'RucksLost' | 'TerritorySecondHalf' | 'MaulMetres' | 'LineoutsCatchOpp' | 'MaulsLostOutright' | 'LineoutsLostOutright' | 'Carries' | 'PossessionFirstHalf' | 'FreeKickConcededGeneralPlay' | 'RestartsOppErrors' | 'TacklesMade' | 'RestartHalfway' | 'CollectionsFailed' | 'ScrumsReset' | 'ScrumsLostOutright' | 'MaulsWonPenalty' | 'PenaltouchesMissed' | 'Metres' | 'ScrumsWonFreeKick' | 'BallsWonZoneC' | 'ScrumsWonPushoverTry' | 'RestartsOutOfPlay' | 'LineoutsLostPenalty' | 'NumberOfTimesInPossession' | 'BallCarry' | 'KicksSucceded' | 'KicksOutOfPlay' | 'Tries' | 'Scrums' | 'AttackingEventsZoneC' | 'MaulsLost' | 'LineoutsLostFreeKick' | 'LineoutsLost' | 'CollectionsInterception' | 'BallsWonZoneD' | 'PenaltyConcededOther' | 'AttackingEventsZoneA' | 'LineoutSuccess' | 'Assists' | 'DropGoalsScored' | 'Territory' | 'PenaltouchesSucceded' | 'DropGoalsMissed' | 'RetainedKicks' | 'FreeKickConcededInRuckOrMaul' | 'LineoutsWonFreeKick' | 'RedCardSecondYellow' | 'PenaltyConcededObstruction' | 'PenaltyTries' | 'YellowCards' | 'PenaltiesConceded' | 'KicksOutTouchInGoal' | 'FreeKickConcededLineout' | 'RestartsLost' | 'LineoutsWon' | 'RestartsOwnPlayer' | 'TurnoversBadPass' | 'TryKicks' | 'LineoutsWonPenalty' | 'PenaltyConcededWrongSide' | 'AttackingEventsZoneB' | 'PenaltyConcededCollapsingMaul' | 'Offloads' | 'RedCards' | 'ConversionsScored' | 'MaulsWonTry' | 'GoalKicksScored' | 'TurnoversForwardPass' | 'ScrumsWonPenalty' | 'CollectionsLooseBall' | 'PenaltyConcededCollapsingOffense' | 'LineoutsWonTap' | 'CarriesNotMadeGainLine' | 'ScrumsWon' | 'TerritoryFirstHalf' | 'Mauls' | 'PossessionSecondHalf' | 'AttackingEventsZoneD' | 'MaulsWon' | 'Possession' | 'TurnoversCarriedOver' | 'ScrumsLostReversed' | 'Rucks' | 'PenaltyConcededScrumOffence' | 'PenaltyConcededOppHalf' | 'KicksFromHand' | 'CollectionsSucceded' | 'TurnoversOppHalf' | 'TerritoryLast10Mins' | 'TurnoversKnockOn' | 'PenaltyConcededEarlyTackle' | 'RuckSuccess' | 'MaulsWonOutright' | 'FreeKickConcededScrum' | 'PenaltyConcededCollapsing' | 'KicksChargedDown' | 'ScrumsLost' | 'LineoutsWonClean' | 'FreeKicksConceded';
 
 export type ITeamAction = {
   team_id: string,

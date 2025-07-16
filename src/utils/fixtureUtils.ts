@@ -10,7 +10,7 @@ export function fixtureSumary(fixture: IFixture) {
     const homeTeamWon = matchFinal ? team_score > opposition_score : false;
     const awayTeamWon = matchFinal ? team_score < opposition_score : false;
 
-    const gameKickedOff = kickoff_time && (new Date(kickoff_time) < new Date());
+    const gameKickedOff = kickoff_time !== undefined && (new Date(kickoff_time) < new Date());
     
     return {gameKickedOff, homeTeamWon, awayTeamWon, game_status};
 }
@@ -33,8 +33,8 @@ export function searchFixturesPredicate(fixture: IFixture ,query: string | undef
     let match = false;
 
     const phrases = [
-        `${fixture.team_name} vs ${fixture.opposition_team_name}`,
-        `${fixture.opposition_team_name} vs ${fixture.team_name}`,
+        `${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}`,
+        `${fixture.opposition_team.athstat_name} vs ${fixture.team.athstat_name}`,
     ];
 
     phrases.forEach((phrase: string) => {
@@ -195,8 +195,8 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
 
     // Collect searchable fields
     const fields: (string | undefined)[] = [
-        fixture.team_name,
-        fixture.opposition_team_name,
+        fixture.team.athstat_name,
+        fixture.opposition_team.athstat_name,
         fixture.venue,
         fixture.competition_name,
         fixture.kickoff_time ? new Date(fixture.kickoff_time).toLocaleDateString() : undefined,
@@ -206,14 +206,14 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
     // Also add "Team vs Opposition" and "Opposition vs Team"
     // Add "Team vs Opposition" and "Opposition vs Team" (full names)
     fields.push(
-        fixture.team_name && fixture.opposition_team_name
-            ? `${fixture.team_name} vs ${fixture.opposition_team_name}`
+        fixture.team.athstat_name && fixture.opposition_team.athstat_name
+            ? `${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}`
             : undefined
     );
     // Add both "Team vs Opposition" and "Opposition vs Team" (full names, both orders)
-    if (fixture.team_name && fixture.opposition_team_name) {
-        fields.push(`${fixture.team_name} vs ${fixture.opposition_team_name}`);
-        fields.push(`${fixture.opposition_team_name} vs ${fixture.team_name}`);
+    if (fixture.team.athstat_name && fixture.opposition_team.athstat_name) {
+        fields.push(`${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}`);
+        fields.push(`${fixture.opposition_team.athstat_name} vs ${fixture.team.athstat_name}`);
     }
     // Special handling for "vs" searches: allow partial team name matches in either order
     if (lowerSearch.includes(" vs ") || lowerSearch.includes(" VS ")) {
@@ -222,9 +222,9 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
             .split(" vs ")
             .map(s => s.trim());
             // Allow partial team name matches in either order using includes
-            if (team1 && team2 && fixture.team_name && fixture.opposition_team_name) {
-                const home = fixture.team_name.toLowerCase();
-                const away = fixture.opposition_team_name.toLowerCase();
+            if (team1 && team2 && fixture.team.athstat_name && fixture.opposition_team.athstat_name) {
+                const home = fixture.team.athstat_name.toLowerCase();
+                const away = fixture.opposition_team.athstat_name.toLowerCase();
 
                 if (
                 (home.includes(team1) && away.includes(team2)) ||
@@ -233,9 +233,9 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
                 return true;
                 }
             }
-        if (team1 && team2 && fixture.team_name && fixture.opposition_team_name) {
-            const home = fixture.team_name.toLowerCase();
-            const away = fixture.opposition_team_name.toLowerCase();
+        if (team1 && team2 && fixture.team.athstat_name && fixture.opposition_team.athstat_name) {
+            const home = fixture.team.athstat_name.toLowerCase();
+            const away = fixture.opposition_team.athstat_name.toLowerCase();
 
             if (
                 (home.startsWith(team1) && away.startsWith(team2)) ||
@@ -246,9 +246,9 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
         }
     }
     // Add reversed "Team vs Opposition" and "Opposition vs Team" for matching both orders
-    if (fixture.team_name && fixture.opposition_team_name) {
-        const teamVsOpp = `${fixture.team_name} vs ${fixture.opposition_team_name}`.toLowerCase();
-        const oppVsTeam = `${fixture.opposition_team_name} vs ${fixture.team_name}`.toLowerCase();
+    if (fixture.team.athstat_name && fixture.opposition_team.athstat_name) {
+        const teamVsOpp = `${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}`.toLowerCase();
+        const oppVsTeam = `${fixture.opposition_team.athstat_name} vs ${fixture.team.athstat_name}`.toLowerCase();
         if (
             lowerSearch === teamVsOpp ||
             lowerSearch === oppVsTeam
@@ -261,16 +261,16 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
     const getShortName = (name?: string) =>
         name ? name.split(" ").slice(-1)[0] : undefined;
 
-    const shortTeam = getShortName(fixture.team_name);
-    const shortOpposition = getShortName(fixture.opposition_team_name);
+    const shortTeam = getShortName(fixture.team.athstat_name);
+    const shortOpposition = getShortName(fixture.opposition_team.athstat_name);
 
     if (shortTeam && shortOpposition) {
         fields.push(`${shortTeam} vs ${shortOpposition}`);
         fields.push(`${shortOpposition} vs ${shortTeam}`);
     }
     fields.push(
-        fixture.opposition_team_name && fixture.team_name
-            ? `${fixture.opposition_team_name} vs ${fixture.team_name}`
+        fixture.opposition_team.athstat_name && fixture.team.athstat_name
+            ? `${fixture.opposition_team.athstat_name} vs ${fixture.team.athstat_name}`
             : undefined
     );
 
@@ -282,5 +282,5 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
 }
 
 export function isProGameTBD(fixture: IFixture) {
-    return fixture.team_name === 'TBD' || fixture.opposition_team_name === 'TBD';
+    return fixture.team.athstat_name === 'TBD' || fixture.opposition_team.athstat_name === 'TBD';
 }
