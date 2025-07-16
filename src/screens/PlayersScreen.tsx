@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from "react";
-import { PlayerForm } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 import { usePlayerFiltering } from "../hooks/usePlayerFiltering";
 import { useDebounced } from "../hooks/useDebounced";
