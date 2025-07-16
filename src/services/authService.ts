@@ -19,10 +19,9 @@ import { swrFetchKeys } from '../utils/swrKeys';
 export const authService = {
 
   /** Authenticates a guest user using their device's id */
-  async authenticateGuestUser(): RestPromise<DjangoDeviceAuthRes> {
+  async authenticateAsGuestUser(deviceId: string): RestPromise<DjangoDeviceAuthRes> {
 
     try {
-      const deviceId = await getDeviceId();
       const uri = getUri('/api/v1/auth/device');
 
       const res = await fetch(uri, {

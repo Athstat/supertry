@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import InputField from '../../shared/InputField';
+import InputField, { PasswordInputField } from '../../shared/InputField';
 import { Info, Lock, Mail } from 'lucide-react';
 import PrimaryButton from '../../shared/buttons/PrimaryButton';
 import { authService } from '../../../services/authService';
@@ -7,6 +7,7 @@ import { ErrorMessage } from '../../ui/ErrorState';
 import { useNavigate } from 'react-router-dom';
 import WarningCard from '../../shared/WarningCard';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function EmailPasswordLoginBox() {
 
@@ -18,6 +19,7 @@ export default function EmailPasswordLoginBox() {
     const [needsPasswordReset, setNeedsPasswordReset] = useState<boolean>(false);
 
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     const checkPasswordStatus = async () => {
 
@@ -49,7 +51,7 @@ export default function EmailPasswordLoginBox() {
         if (email && password) {
             
             setIsLoading(true)
-            const { data: loginRes, message } = await authService.login(email, password);
+            const { data: loginRes, message } = await login(email, password);
 
             if (loginRes) {
                 navigate('/dashboard');
@@ -78,12 +80,11 @@ export default function EmailPasswordLoginBox() {
                     icon={<Mail className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />}
                 />
 
-                {hasPassword && <InputField
+                {hasPassword && <PasswordInputField
                     value={password}
                     onChange={setPassword}
-                    type='password'
                     placeholder='Password'
-                    icon={<Lock className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />}
+                    // icon={<Lock className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />}
                 />}
 
                 {!hasPassword && <PrimaryButton

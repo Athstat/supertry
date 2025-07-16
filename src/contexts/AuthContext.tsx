@@ -16,6 +16,7 @@ type AuthContextType = {
   refreshSession: () => Promise<boolean>;
   checkAuth: () => Promise<boolean>;
   resetPassword: (email: string) => Promise<void>;
+  
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -266,9 +267,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Don't navigate here - let the route guards handle it
       // This prevents double navigation/reload
 
-      // if (loginRes) {
-      //   setIsAuthenticated(true);
-      // }
+      if (loginRes) {
+        setIsAuthenticated(true);
+      }
 
       return { loginRes, message };
 
