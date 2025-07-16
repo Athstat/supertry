@@ -1,4 +1,5 @@
 import { PlayerForm } from "./rugbyPlayer"
+import { IProTeam } from "./team"
 
 /** Type Defination for a professional player */
 export type IProAthlete = {
@@ -40,5 +41,6 @@ export type IProAthlete = {
     birth_place?: string,
     form: PlayerForm,
     available?: boolean,
-    team_id: string
+    team_id: string,
+    team: IProTeam
 }
