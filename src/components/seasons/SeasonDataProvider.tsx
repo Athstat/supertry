@@ -24,7 +24,7 @@ export default function SeasonDataProvider({ season, children }: Props) {
   const seasonAthletesKey = `seasons-athletes/${season.id}`;
   const seasonFixutesKey = `seasons-fixtures/${season.id}`;
   const { data: teams, isLoading: loadingTeams } = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(season.id));
-  const { data: fixtures, isLoading: loadingFixtures } = useSWR(seasonFixutesKey, () => gamesService.getGamesByCompetitionId(season.id));
+  const { data: fixtures, isLoading: loadingFixtures } = useSWR(seasonFixutesKey, () => seasonService.getSeasonFixtures(season.id));
   const { data: athletes, isLoading: loadingAthletes } = useSWR(seasonAthletesKey, () => seasonService.getSeasonAthletes(season.id));
 
   const isLoading = loadingTeams || loadingAthletes || loadingFixtures;

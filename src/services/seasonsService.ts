@@ -30,7 +30,7 @@ export const seasonService = {
     getSeasonsById: async (seasonId: string) : Promise<ISeason | undefined> => {
         try {
             
-            const uri = getUri(`/api/v1/entities/seasons/${seasonId}`);
+            const uri = getUri(`/api/v1/seasons/${seasonId}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
@@ -49,7 +49,7 @@ export const seasonService = {
     getSeasonTeams: async (seasonId: string): Promise<ITeam[]> => {
         try {
             
-            const uri = getUri(`/api/v1/entities/seasons/${seasonId}/teams`);
+            const uri = getUri(`/api/v1/seasons/${seasonId}/teams`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
@@ -69,7 +69,7 @@ export const seasonService = {
     getSeasonFixtures: async (seasonId: string): Promise<IFixture[]> => {
         try {
             
-            const uri = getUri(`/api/v1/entities/seasons/${seasonId}/games`);
+            const uri = getUri(`/api/v1/seasons/${seasonId}/games`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
