@@ -4,7 +4,6 @@ import { useDebounced } from "../hooks/useDebounced";
 
 // Components
 import { PlayerSearch } from "../components/players/PlayerSearch";
-import { PlayerScreenTabs } from "../components/players/PlayerTabs";
 import { PlayerFilters } from "../components/players/PlayerFilters";
 import { PlayerSort } from "../components/players/PlayerSort";
 import { LoadingState } from "../components/ui/LoadingState";
@@ -19,7 +18,7 @@ import { twMerge } from "tailwind-merge";
 import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
 import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
 import PlayerProfileModal from "../components/player/PlayerProfileModal";
-import { SortDirection, SortField, SortTab } from "../types/playerSorting";
+import { SortDirection, SortField } from "../types/playerSorting";
 import { IProAthlete } from "../types/athletes";
 import { IProTeam } from "../types/team";
 import TeamLogo from "../components/team/TeamLogo";
@@ -32,7 +31,7 @@ export const PlayersScreen = () => {
 
   const { athletes, error, isLoading, refreshAthletes, positions, teams } = useAthletes();
 
-  const [activeTab, setActiveTab] = useState<SortTab>("all");
+  // const [activeTab, setActiveTab] = useState<SortTab>("all");
   const [sortField, setSortField] = useState<SortField>("power_rank_rating");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
@@ -116,10 +115,10 @@ export const PlayersScreen = () => {
     setSearchQuery(query);
   };
 
-  // Handle tab changes
-  const handleTabChange = (tab: SortTab) => {
-    setActiveTab(tab);
-  };
+  // // Handle tab changes
+  // const handleTabChange = (tab: SortTab) => {
+  //   setActiveTab(tab);
+  // };
 
   // Handle sorting by field and direction
   const handleSortByField = (field: SortField, direction: SortDirection) => {
