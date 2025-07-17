@@ -18,7 +18,7 @@ type Props = {
 export function PlayerProfileModalTabContent({ player }: Props) {
 
   const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
-  const { data: fetchedActions, isLoading, error } = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
+  const { data: fetchedActions, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
 
 
   const tabItems: TabViewHeaderItem[] = [

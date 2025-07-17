@@ -44,3 +44,20 @@ export type IProAthlete = {
     team_id: string,
     team: IProTeam
 }
+
+export type IAthleteSeasonStarRatings = {
+    season_id: string,
+    athlete_id: string,
+    points_kicking?: number,
+    tackling?: number,
+    infield_kicking?: number,
+    strength?: number,
+    playmaking?: number,
+    ball_carrying?: number,
+    lineout?: number,
+    receiving?: number,
+    scoring?: number,
+    attacking?: number,
+    defence?: number,
+    kicking?: number
+}

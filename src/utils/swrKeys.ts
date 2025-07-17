@@ -43,5 +43,9 @@ export const swrFetchKeys = {
         }
 
         return `/athlete-aggregated-stats/${athleteId}`
+    },
+
+    getAthleteSeasonStarRatings: async (athleteId: string, seasonId:string) => {
+        return `/athlete-season-star-ratings/${athleteId}/season/${seasonId}`
     }
 }

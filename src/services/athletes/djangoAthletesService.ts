@@ -1,4 +1,4 @@
-import { IProAthlete } from "../../types/athletes";
+import { IProAthlete, IAthleteSeasonStarRatings } from "../../types/athletes";
 import { SportAction } from "../../types/sports_actions";
 import { getUri, getAuthHeader } from "../../utils/backendUtils";
 import { logger } from "../logger";
@@ -62,5 +62,24 @@ export const djangoAthleteService = {
         }
 
         return [];
+    },
+
+    getAthleteSeasonStarRatings: async (athleteId: string, seasonId: string) : Promise<IAthleteSeasonStarRatings | undefined> => {
+        try {
+            
+            const uri = getUri(`/api/v1/athletes/${athleteId}/stars/season/${seasonId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IAthleteSeasonStarRatings
+            }
+
+        } catch(e) {
+            logger.error("Error getting athlete star ratings ", e);
+        }
+
+        return undefined;
     }
 }
