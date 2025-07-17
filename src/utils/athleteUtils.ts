@@ -175,7 +175,7 @@ export function athletePositionFilter(athletes: IProAthlete[], selectedPositions
 
     const filtered = [...athletes]
 
-    if (!formatted || filtered.length === 0) {
+    if (!formatted || formatted.length === 0) {
         return athletes;
     }
 
@@ -257,6 +257,8 @@ export function athleteSearchFilter(athletes: IProAthlete[], query: string | und
     const buff = [...athletes];
 
     if (!query) return buff;
+
+    // if (query.length < 2) return buff;
 
     return buff.filter((a) => {
         return athleteSearchPredicate(a, query);

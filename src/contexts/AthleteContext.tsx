@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState, useTransition } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { djangoAthleteService } from "../services/athletes/djangoAthletesService";
@@ -14,6 +14,7 @@ interface AthleteContextType {
   getAthleteById: (id: string) => IProAthlete | undefined;
   positions: string[];
   teams: IProTeam[];
+  isTeamsAndPositionsPending: boolean
 }
 
 const AthleteContext = createContext<AthleteContextType | undefined>(undefined);
@@ -33,11 +34,15 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [isTeamsAndPositionsPending, startTransition] = useTransition();
 
-  startTransition(() => {
-    const {teams: _teams, positions: _positions} = getAthletesSummary(athletes);
-    setTeams(_teams);
-    setPositions(_positions)
-  });
+  useEffect(() => {
+    startTransition(() => {
+      const { teams: _teams, positions: _positions } = getAthletesSummary(athletes);
+      setTeams(_teams);
+      setPositions(_positions)
+    });
+  }, [athletes]);
+
+
 
   const refreshAthletes = async () => {
     await mutate(() => djangoAthleteService.getAllAthletes());
@@ -59,6 +64,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
         getAthleteById,
         positions,
         teams,
+        isTeamsAndPositionsPending
       }}
     >
       {children}

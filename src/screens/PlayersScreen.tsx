@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useAthletes } from "../contexts/AthleteContext";
 import { useDebounced } from "../hooks/useDebounced";
 
@@ -45,15 +45,25 @@ export const PlayersScreen = () => {
   // Use debounced search for better performance
   const debouncedSearchQuery = useDebounced(searchQuery, 300);
 
+  const selectedPositions = useMemo(() => {
+    return positionFilter ? [positionFilter] : [];
+  }, [positionFilter]);
+
+  const selectedTeamIds = useMemo(() => {
+    return selectedTeam ? [selectedTeam.athstat_id] : []
+  }, [selectedTeam]);
+
   // Use optimized filtering hook
   const { filteredAthletes } = useAthleteFilter({
     athletes: athletes,
     searchQuery: debouncedSearchQuery,
-    selectedPositions: positionFilter ? [positionFilter] : [],
-    selectedTeamIds: selectedTeam ? [selectedTeam.athstat_id] : [],
+    selectedPositions: selectedPositions,
+    selectedTeamIds: selectedTeamIds,
     sortField,
     sortDirection,
   });
+
+  const isEmpty = filteredAthletes.length === 0;
 
   // Loading state for filtering operations
   const isFiltering = searchQuery !== debouncedSearchQuery;
@@ -137,13 +147,6 @@ export const PlayersScreen = () => {
     setSearchQuery("");
   };
 
-  // Fetch athletes if not already cached
-  useEffect(() => {
-    if (athletes.length === 0) {
-      refreshAthletes();
-    }
-  }, [athletes.length, refreshAthletes]);
-
   return (
     <PlayersScreenProvider
       isComparing={isComparing}
@@ -225,14 +228,16 @@ export const PlayersScreen = () => {
         {/* Empty State */}
         {!isLoading &&
           !error &&
-          !isFiltering && (
+          !isFiltering &&
+          isEmpty && (
             <EmptyState
               searchQuery={searchQuery}
               onClearSearch={() => handleSearch("")}
             />
           )}
+
         {/* Player Grid */}
-        {!isLoading && !error && !isFiltering && filteredAthletes.length > 0 && (
+        {!isLoading && !error && !isFiltering && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {filteredAthletes.map((player) => (
               <PlayerGameCard
