@@ -6,7 +6,8 @@ export function getCountryEmojiFlag(country: string | undefined) {
     if (country === undefined) return;
 
     const flag = countryFlags.find((c) => {
-        const matches = c.name.toUpperCase() === country.toUpperCase();
+        const notNull = c.name && country;
+        const matches = notNull && c.name.toUpperCase() === country.toUpperCase();
         return matches;
     })
 

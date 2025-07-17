@@ -1,9 +1,17 @@
 import { PointsBreakdownItem } from "../services/athletes/athleteService";
-import { IProAthlete } from "../types/athletes";
+import { IProAthlete, IAthleteSeasonStarRatings } from "../types/athletes";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { SortField, SortDirection } from "../types/playerSorting";
 import { PlayerForm } from "../types/rugbyPlayer";
 import { IProTeam } from "../types/team";
+import { IComparePlayerStats, ICompareStarRatingsStats } from "../types/comparePlayers";
+import { getPlayerAggregatedStat } from "../types/sports_actions";
+
+type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineoutOffence" |
+    "Points" | "PenaltiesConceded" | "TacklesMissed" | "Starts" | "TacklesMade" | "TackleSuccess" |
+    "TurnoversConceded" | "TurnoversWon" | "LineoutsWonSteal" | "CarriesMadeGainLine" | "LineoutsWon" |
+    "Tries" | "Carries" | "DefendersBeaten" | "Metres" | "MinutesPlayed" | "Assists" | "LineBreaks" |
+    "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" | "RetainedKicks";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -287,4 +295,68 @@ export function getAthletesSummary(athletes: IProAthlete[]) {
 
 
     return { teams, positions };
+}
+
+/**
+ * Determines if a stat action value is the best (highest) among all compared players
+ */
+export function isStatActionBest(
+    athlete: IProAthlete,
+    value: number | undefined,
+    statKey: PlayerAggregateStatAction,
+    comparePlayerStats: IComparePlayerStats[]
+): boolean {
+    if (value === undefined || comparePlayerStats.length <= 1) return false;
+
+    const allValues = comparePlayerStats
+        .map(playerStat => {
+            const stat = getPlayerAggregatedStat(statKey, playerStat.stats);
+            return stat?.action_count;
+        })
+        .filter((val): val is number => val !== undefined);
+
+    if (allValues.length <= 1) return false;
+    
+    const maxValue = Math.max(...allValues);
+    return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
+}
+
+/**
+ * Determines if a star rating value is the best (highest) among all compared players
+ */
+export function isStarRatingBest(
+    athlete: IProAthlete,
+    value: number | undefined,
+    starRatingKey: keyof IAthleteSeasonStarRatings,
+    compareStarRatings: ICompareStarRatingsStats[]
+): boolean {
+    if (value === undefined || compareStarRatings.length <= 1) return false;
+
+    const allValues = compareStarRatings
+        .map(playerRating => playerRating.stats[starRatingKey])
+        .filter((val): val is number => val !== undefined);
+
+    if (allValues.length <= 1) return false;
+    
+    const maxValue = Math.max(...allValues);
+    return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
+}
+
+/**
+ * Determines if a power rating value is the best (highest) among all compared players
+ */
+export function isPowerRatingBest(
+    athlete: IProAthlete,
+    comparePlayers: IProAthlete[]
+): boolean {
+    let maxVal: number = 0;
+
+    comparePlayers.forEach((p) => {
+        if (p.power_rank_rating && (p.power_rank_rating > maxVal)) {
+            maxVal = p.power_rank_rating;
+        }
+    });
+
+
+    return maxVal === athlete.power_rank_rating;
 }
