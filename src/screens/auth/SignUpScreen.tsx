@@ -34,7 +34,7 @@ export function SignUpScreen() {
   const isEmailTaken = !isLoading && emailTaken;
 
   // Validate all fields and submit the form directly instead of going to next step
-  const handleNext = async () => {
+  const handleNext = () => {
     // Validate email and password
     if (!form.email || !form.password || !form.confirmPassword) {
       setError('Please fill in all fields');
@@ -63,15 +63,14 @@ export function SignUpScreen() {
     // Clear any previous errors and submit the form
     setError(null);
 
-    // Call handleSubmit programmatically
-    const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
-    await handleSubmit(fakeEvent);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+
+    handleNext();
 
     try {
       
