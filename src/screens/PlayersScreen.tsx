@@ -47,11 +47,10 @@ export const PlayersScreen = () => {
 
   // Use optimized filtering hook
   const { filteredAthletes } = useAthleteFilter({
-    athletes,
+    athletes: athletes,
     searchQuery: debouncedSearchQuery,
-    positionFilter,
-    selectedTeam,
-    activeTab,
+    selectedPositions: positionFilter ? [positionFilter] : [],
+    selectedTeamIds: selectedTeam ? [selectedTeam.athstat_id] : [],
     sortField,
     sortDirection,
   });
@@ -226,8 +225,7 @@ export const PlayersScreen = () => {
         {/* Empty State */}
         {!isLoading &&
           !error &&
-          !isFiltering &&
-          isEmpty && (
+          !isFiltering && (
             <EmptyState
               searchQuery={searchQuery}
               onClearSearch={() => handleSearch("")}

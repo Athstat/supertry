@@ -3,6 +3,7 @@ import { IProAthlete } from "../types/athletes";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { SortField, SortDirection } from "../types/playerSorting";
 import { PlayerForm } from "../types/rugbyPlayer";
+import { IProTeam } from "../types/team";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -154,16 +155,16 @@ export function convertPositionNameToPositionObject(positionToSwap: string) {
 }
 
 export const formBias = (powerRanking: number, form?: PlayerForm) => {
-  switch (form) {
-    case "UP":
-      return 3 + powerRanking;
-    case "NEUTRAL":
-      return 2;
-    case "DOWN":
-      return -5;
-    default:
-      return 1;
-  }
+    switch (form) {
+        case "UP":
+            return 3 + powerRanking;
+        case "NEUTRAL":
+            return 2;
+        case "DOWN":
+            return -5;
+        default:
+            return 1;
+    }
 };
 
 /** filters athletes by selected positions and postion classes */
@@ -259,5 +260,29 @@ export function athleteSearchFilter(athletes: IProAthlete[], query: string | und
 
     return buff.filter((a) => {
         return athleteSearchPredicate(a, query);
-    } )
+    })
+}
+
+export function getAthletesSummary(athletes: IProAthlete[]) {
+
+    const teams: IProTeam[] = [];
+
+    const seenTeamIds = new Set<string>();
+    const uniquePositions = new Set<string>();
+
+    athletes.forEach((athlete) => {
+        if (!seenTeamIds.has(athlete.team.athstat_id)) {
+            seenTeamIds.add(athlete.team.athstat_id);
+            teams.push(athlete.team);
+        }
+
+        if (athlete.position) {
+            uniquePositions.add(athlete.position);
+        }
+    });
+
+    const positions =Array.of(...uniquePositions);
+
+
+    return { teams, positions };
 }

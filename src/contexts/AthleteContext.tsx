@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useMemo, useState, useTransition } from "react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { djangoAthleteService } from "../services/athletes/djangoAthletesService";
 import { IProTeam } from "../types/team";
 import { IProAthlete } from "../types/athletes";
+import { getAthletesSummary } from "../utils/athleteUtils";
 
 interface AthleteContextType {
   athletes: IProAthlete[];
@@ -22,38 +23,21 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 
   const key = swrFetchKeys.getAllProAthletesKey();
-  const {data: fetchedAthletes, isLoading: loadingAthletes, mutate, error} = useSWR(key, () => djangoAthleteService.getAllAthletes());
+  const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = useSWR(key, () => djangoAthleteService.getAllAthletes());
 
   const athletes = fetchedAthletes ?? [];
   const isLoading = loadingAthletes;
-  
-  // Memoize teams extraction for better performance
-  const teams = useMemo(() => {
-    const uniqueTeams: IProTeam[] = [];
-    const seenTeamIds = new Set<string>();
-    
-    athletes.forEach((athlete) => {
-      if (!seenTeamIds.has(athlete.team.athstat_id)) {
-        seenTeamIds.add(athlete.team.athstat_id);
-        uniqueTeams.push(athlete.team);
-      }
-    });
-    
-    return uniqueTeams;
-  }, [athletes]);
 
-  // Memoize positions extraction for better performance
-  const positions = useMemo(() => {
-    const uniquePositions = new Set<string>();
-    
-    athletes.forEach((athlete) => {
-      if (athlete.position) {
-        uniquePositions.add(athlete.position);
-      }
-    });
-    
-    return Array.from(uniquePositions);
-  }, [athletes]);
+  const [teams, setTeams] = useState<IProTeam[]>([]);
+  const [positions, setPositions] = useState<string[]>([]);
+
+  const [isTeamsAndPositionsPending, startTransition] = useTransition();
+
+  startTransition(() => {
+    const {teams: _teams, positions: _positions} = getAthletesSummary(athletes);
+    setTeams(_teams);
+    setPositions(_positions)
+  });
 
   const refreshAthletes = async () => {
     await mutate(() => djangoAthleteService.getAllAthletes());
