@@ -49,7 +49,8 @@ export default function usePlayerStats(player: IProAthlete) {
     loadingStarRatings,
     starRatingsErros,
     groupedStats,
-    seasons
+    seasons,
+    playerStats
   }
 };
 

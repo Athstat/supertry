@@ -8,6 +8,10 @@ import { athleteService } from "../../../services/athletes/athleteService";
 import { getPlayerAggregatedStat } from "../../../types/sports_actions";
 import SecondaryText from "../../shared/SecondaryText";
 import { IProAthlete } from "../../../types/athletes";
+import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
+import { swrFetchKeys } from "../../../utils/swrKeys";
+import useSWR from "swr";
+import usePlayerStats from "../../player/profile-modal-components/usePlayerStats";
 
 type Props = {
   selectedPlayers: IProAthlete[];
@@ -67,6 +71,7 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
   )
 }
 
+
 type ItemProps = {
   player: IProAthlete;
   comparingPlayer?: IProAthlete;
@@ -80,65 +85,37 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
     }
   };
 
-  const { data: stats, isLoading: loadingStats } = useFetch(
-    'player-stats',
-    player.tracking_id ?? 'fallback',
-    athleteService.getRugbyAthleteById
-  );
-  const { data: actions, isLoading: loadingActions } = useFetch(
-    'player-actions',
-    player.tracking_id ?? 'fallback',
-    athleteService.getAthleteStatsRaw
-  );
+  const {
+    playerStats: actions,
+    loadingPlayerStats: loadingActions,
+    seasons,
+    currSeason,
+    setCurrSeason,
+    starRatings,
+    loadingStarRatings
+  } = usePlayerStats(player);
 
-  const { data: compareActions, isLoading: loadingCompareActions } = useFetch(
-    'player-actions',
-    comparingPlayer?.tracking_id ?? 'fallback',
-    athleteService.getAthleteStatsRaw
-  );
-  const { data: comparingStats, isLoading: loadingComparingStats } = useFetch(
-    'player-stats',
-    comparingPlayer?.tracking_id ?? 'fallback',
-    athleteService.getRugbyAthleteById
-  );
-
-  const isLoading =
-    loadingComparingStats || loadingStats || loadingCompareActions || loadingActions;
+  const isLoading = loadingActions || loadingStarRatings;
 
   const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
-  const compareTries = getPlayerAggregatedStat("Tries", compareActions)?.action_count;
 
   const assits = getPlayerAggregatedStat("Assists", actions)?.action_count;
-  const compareAssits = getPlayerAggregatedStat("Assists", compareActions)?.action_count;
 
   const passes = getPlayerAggregatedStat("Passes", actions)?.action_count;
-  const comparePasses = getPlayerAggregatedStat("Passes", compareActions)?.action_count;
 
   const tacklesMade = getPlayerAggregatedStat("TacklesMade", actions)?.action_count;
-  const compareTacklesMade = getPlayerAggregatedStat("TacklesMade", compareActions)?.action_count;
 
   const tackleSuccess = getPlayerAggregatedStat("TackleSuccess", actions)?.action_count;
-  const compareTackleSuccess = getPlayerAggregatedStat("TackleSuccess", compareActions)?.action_count;
 
   const turnoversWon = getPlayerAggregatedStat("TurnoversWon", actions)?.action_count;
-  const compareTurnoversWon = getPlayerAggregatedStat("TurnoversWon", compareActions)?.action_count;
 
   const turnovers = getPlayerAggregatedStat("TurnoversConceded", actions)?.action_count;
-  const compareTurnovers = getPlayerAggregatedStat("TurnoversConceded", compareActions)?.action_count;
-
 
   const kicksFromHand = getPlayerAggregatedStat("KicksFromHand", actions)?.action_count;
-  const compareKicksFromHand = getPlayerAggregatedStat("KicksFromHand", compareActions)?.action_count;
 
   const kicksFromHandMetres = getPlayerAggregatedStat("KicksFromHandMetres", actions)?.action_count;
-  const compareKicksFromHandMetres = getPlayerAggregatedStat("KicksFromHandMetres", compareActions)?.action_count;
-
 
   const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
-  const compareMinutesPlayed = getPlayerAggregatedStat(
-    'MinutesPlayed',
-    compareActions
-  )?.action_count;
 
   if (isLoading)
     return <div className="w-full h-[400px] bg-slate-200 dark:bg-slate-800 animate-pulse"></div>;
@@ -176,62 +153,62 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
         <StatLabel
           label="Power Rating"
           value={player.power_rank_rating}
-          isGreen={(player.power_rank_rating ?? 0) > (comparingPlayer?.power_rank_rating ?? 0)}
+
         />
 
         <StatLabel
           label="Price"
           value={player.price}
-          isGreen={(player.price ?? 0) > (comparingPlayer?.price ?? 0)}
+
         />
 
         <StatLabel
           label="Minutes Played"
           value={minutesPlayed}
-          isGreen={(minutesPlayed ?? 0) > (compareMinutesPlayed ?? 0)}
+
         />
 
         <SecondaryText className="mt-2" >Attacking</SecondaryText>
         <StatLabel
           label="Attacking Rating"
-          value={stats?.attacking}
-          isGreen={(stats?.attacking ?? 0) > (comparingStats?.attacking ?? 0)}
+          value={starRatings?.attacking}
+
         />
 
         <StatLabel
           label="Scoring"
-          value={stats?.scoring}
-          isGreen={(stats?.scoring ?? 0) > (comparingStats?.scoring ?? 0)}
+          value={starRatings?.scoring}
+
         />
 
         <StatLabel
           label="Tries"
           value={tries}
-          isGreen={(tries ?? 0) > (compareTries ?? 0)}
+
         />
 
         <StatLabel
           label="Assits"
           value={assits}
-          isGreen={(assits ?? 0) > (compareAssits ?? 0)}
+
         />
 
         <StatLabel
           label="Turnovers"
           value={turnovers}
-          isGreen={(turnovers ?? 0) > (compareTurnovers ?? 0)}
+
         />
 
         <StatLabel
           label="Passes"
           value={passes}
-          isGreen={(passes ?? 0) > (comparePasses ?? 0)}
+
         />
 
         {/* <StatLabel
           label="Ball Carying"
           value={player.ball_carrying}
-          isGreen={(player.ball_carrying ?? 0) > (comparingPlayer?.ball_carrying ?? 0)}
+
         /> */}
 
 
@@ -239,64 +216,64 @@ function PlayersCompareItem({ player, comparingPlayer, onRemove }: ItemProps) {
 
         <StatLabel
           label="Defence"
-          value={stats?.defence}
-          isGreen={(stats?.defence ?? 0) > (comparingStats?.defence ?? 0)}
+          value={starRatings?.defence}
+
         />
 
         {/* <StatLabel
           label="Strength"
           value={player.strength}
-          isGreen={(player.strength ?? 0) > (comparingPlayer?.strength ?? 0)}
+
         /> */}
 
         <StatLabel
           label="Tackles Made"
           value={tacklesMade}
-          isGreen={(tacklesMade ?? 0) > (compareTacklesMade ?? 0)}
+
         />
 
         <StatLabel
           label="Tackles Sucess"
           value={tackleSuccess ? (tackleSuccess * 100) : undefined}
-          isGreen={(tackleSuccess ?? 0) > (compareTackleSuccess ?? 0)}
+
         />
 
         <StatLabel
           label="Turnovers Won"
           value={turnoversWon}
-          isGreen={(turnoversWon ?? 0) > (compareTurnoversWon ?? 0)}
+
         />
 
         <SecondaryText className="mt-2" >Kicking</SecondaryText>
 
         <StatLabel
           label="Kicking"
-          value={stats?.kicking}
-          isGreen={(stats?.kicking ?? 0) > (comparingStats?.kicking ?? 0)}
+          value={starRatings?.kicking}
+
         />
 
         <StatLabel
           label="Kicks From Hand"
           value={kicksFromHand}
-          isGreen={(kicksFromHand ?? 0) > (compareKicksFromHand ?? 0)}
+
         />
 
         <StatLabel
           label="Metres"
           value={kicksFromHandMetres}
-          isGreen={(kicksFromHandMetres ?? 0) > (compareKicksFromHandMetres ?? 0)}
+
         />
 
         <StatLabel
           label="Points Kicking"
-          value={stats?.points_kicking}
-          isGreen={(stats?.points_kicking ?? 0) > (comparingStats?.points_kicking ?? 0)}
+          value={starRatings?.points_kicking}
+
         />
 
         <StatLabel
           label="Infield Kicking"
-          value={stats?.infield_kicking}
-          isGreen={(stats?.infield_kicking ?? 0) > (comparingStats?.infield_kicking ?? 0)}
+          value={starRatings?.infield_kicking}
+
         />
       </div>
     </div>
