@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAthletes } from "../contexts/AthleteContext";
-import { usePlayerFiltering } from "../hooks/athleteFiltering";
+import { usePlayerFiltering } from "../hooks/useAthleteFilter";
 import { useDebounced } from "../hooks/useDebounced";
 
 // Components

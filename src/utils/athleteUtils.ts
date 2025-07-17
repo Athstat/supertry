@@ -1,5 +1,7 @@
 import { PointsBreakdownItem } from "../services/athletes/athleteService";
+import { IProAthlete } from "../types/athletes";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
+import { SortField, SortDirection } from "../types/playerSorting";
 import { IFantasyAthlete, PlayerForm } from "../types/rugbyPlayer";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
@@ -163,3 +165,89 @@ export const formBias = (powerRanking: number, form?: PlayerForm) => {
       return 1;
   }
 };
+
+/** filters athletes by selected positions and postion classes */
+export function athletePositionFilter(athletes: IProAthlete[], selectedPositions: string[] | undefined): IProAthlete[] {
+
+    const formatted = (selectedPositions === undefined) ? undefined
+        : selectedPositions.map((p) => formatPosition(p));
+
+    const filtered = [...athletes]
+
+    if (!formatted || filtered.length === 0) {
+        return athletes;
+    }
+
+    return filtered.filter((a) => {
+
+        const position = a.position;
+        const positionClass = a.position_class;
+
+        const hasPosition = (position !== undefined) && position !== null;
+        const hasPositionClass = (positionClass !== undefined) && positionClass !== null;
+
+        const matchesPosition = hasPosition && formatted.includes(formatPosition(position));
+        const matchesPositionClass = hasPositionClass && formatted.includes(formatPosition(positionClass));
+
+        return matchesPosition || matchesPositionClass
+
+    });
+
+}
+
+export function athleteTeamFilter(athletes: IProAthlete[], selectedTeamIds: string[] | undefined): IProAthlete[] {
+
+    const filtered = [...athletes];
+
+    if (selectedTeamIds === undefined || selectedTeamIds.length === 0) {
+        return filtered;
+    }
+
+    return filtered.filter((a) => {
+        const matchesTeamsId = selectedTeamIds.includes(a.team_id);
+        return matchesTeamsId;
+    });
+
+}
+
+
+export function athleteSorter(athletes: IProAthlete[], sortType: SortField | undefined, direction: SortDirection | undefined): IProAthlete[] {
+
+
+    const sorted = [...athletes];
+
+    if (!sortType || !direction) {
+        return sorted;
+    }
+
+    if (sortType === 'form') {
+
+        return sorted.sort((a, b) => {
+            return direction === "asc" ?
+                formBias(a.power_rank_rating ?? 0, a.form) - formBias(b.power_rank_rating ?? 0, b.form)
+                : formBias(b.power_rank_rating ?? 0, b.form) - formBias(a.power_rank_rating ?? 0, a.form)
+        })
+
+    }
+
+    if (sortType === "power_rank_rating") {
+        return sorted.sort((a, b) => {
+            return direction === "asc" ?
+                (a.power_rank_rating ?? 0) - (b.power_rank_rating ?? 0)
+                : (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0)
+        })
+    }
+
+    if (sortType === "player_name") {
+        return sorted.sort((a, b) => {
+            return direction === "asc" ?
+                (a.player_name.localeCompare(b.player_name))
+                : (b.player_name.localeCompare(a.player_name))
+        });
+    }
+
+    return sorted;
+
+
+
+}
