@@ -174,7 +174,7 @@ export function SignUpScreen() {
             </div>
 
             <PrimaryButton
-              type="button"
+              type="submit"
               disabled={isLoading || isEmailTaken || isEmailUniqueValidatorLoading}
               isLoading={isLoading}
               className='py-3'
