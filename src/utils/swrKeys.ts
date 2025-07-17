@@ -31,5 +31,21 @@ export const swrFetchKeys = {
 
     getAuthUserProfileKey: () => {
         return '/auth-user-profile';
+    },
+
+    getAllProAthletesKey: () => {
+        return 'pro-athletes';
+    },
+
+    getAthleteAggregatedStats: (athleteId: string, competitionId?: string) => {
+        if (competitionId) {
+            return `/athlete-aggregated-stats/${athleteId}/for-comp/${competitionId}`;
+        }
+
+        return `/athlete-aggregated-stats/${athleteId}`
+    },
+
+    getAthleteSeasonStarRatings: async (athleteId: string, seasonId:string) => {
+        return `/athlete-season-star-ratings/${athleteId}/season/${seasonId}`
     }
 }

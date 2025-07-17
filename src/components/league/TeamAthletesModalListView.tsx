@@ -2,7 +2,7 @@ import { ChevronRight, User } from "lucide-react";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { twMerge } from "tailwind-merge";
 import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
-import { PointsBreakdownItem } from "../../services/athleteService";
+import { PointsBreakdownItem } from "../../services/athletes/athleteService";
 import { formatPosition } from "../../utils/athleteUtils";
 
 type Props = {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { IGamesLeagueConfig } from "../../types/leagueConfig";
 import { useTeamCreation } from "../../hooks/useTeamCreation";
 import { leagueService } from "../../services/leagueService";
-import { athleteService } from "../../services/athleteService";
+import { athleteService } from "../../services/athletes/athleteService";
 import { TeamCreationPositionSlot } from "../../types/position";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { MAX_TEAM_BUDGET } from "../../types/constants";

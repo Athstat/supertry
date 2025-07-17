@@ -18,9 +18,12 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
         team_score,
         game_status,
         opposition_score,
-        team_name,
-        opposition_team_name,
+        team,
+        opposition_team,
     } = fixture;
+
+    const team_name = team.athstat_name;
+    const opposition_team_name = opposition_team.athstat_name;
 
     const matchFinal = game_status === 'completed' && team_score && opposition_score;
 
@@ -30,7 +33,7 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
     const { gameKickedOff } = fixtureSumary(fixture);
 
     // Voting functionality
-    const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
+    const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture);
     const [isVoting, setIsVoting] = useState(false);
 
     // Calculate voting percentages
@@ -67,6 +70,12 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
 
     if (isTbdGame) return;
 
+    if (isLoading) return (
+        <div className="w-full min-h-24 mt-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 animate-pulse" >
+
+        </div>
+    )
+
     return (
         <div
             className={twMerge(
@@ -101,8 +110,8 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
 
             {gameKickedOff && (
                 <VotingOptionsResults
-                    homeTeam={fixture.team_name}
-                    awayTeam={fixture.opposition_team_name}
+                    homeTeam={fixture.team.athstat_name}
+                    awayTeam={fixture.opposition_team.athstat_name}
                     hasScores={fixture.game_status === 'completed'}
                     homeTeamWon={homeTeamWon}
                     awayTeamWon={awayTeamWon}

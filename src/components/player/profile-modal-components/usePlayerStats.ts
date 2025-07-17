@@ -1,64 +1,74 @@
-import { useState, useEffect } from 'react';
-import { athleteService } from '../../../services/athleteService';
-import { useLocation } from 'react-router-dom';
+import useSWR from 'swr';
+import { IProAthlete } from '../../../types/athletes';
+import { swrFetchKeys } from '../../../utils/swrKeys';
+import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { useMemo, useState } from 'react';
+import { groupSportActions } from '../../../services/athletes/athleteService';
+import { IProSeason } from '../../../types/season';
 
-export const usePlayerStats = (player: any, isOpen: boolean) => {
-  
-  const [playerStats, setPlayerStats] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const {state} = useLocation();
-  const competitionId = state?.league?.official_league_id;
+export default function usePlayerStats(player: IProAthlete) {
 
-  // Fetch player statistics data
-  useEffect(() => {
-    const fetchPlayerData = async () => {
-      if (!player) {
-        console.log('No player data available');
-        return;
-      }
+  const playerStatsKey = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
+  let { data: playerStats, isLoading: loadingPlayerStats } = useSWR(playerStatsKey, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
 
-      // Log all available IDs to help debug
-      // console.log('Player object:', player);
-      // console.log('Available IDs:', {
-      //   id: player.id,
-      //   tracking_id: player.tracking_id,
-      //   athlete_id: player.athlete_id
-      // });
+  const seasons: IProSeason[] = [];
+  playerStats = playerStats ?? [];
 
-      // Use the first available ID in this priority order
-      const athleteId = player.tracking_id || player.athlete_id || player.id;
-
-      if (!athleteId) {
-        console.warn('No valid ID found for player:', player.player_name);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        // console.log('Calling athleteService.getAthleteStats with ID:', athleteId);
-
-        const stats = await athleteService.getAthleteStats(athleteId, competitionId);
-
-        // console.log('Fetched player stats:', stats);
-
-        setPlayerStats(stats);
-
-      } catch (err) {
-        console.error('Error fetching player statistics:', err);
-        setError('Failed to load player statistics');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (isOpen && player) {
-      console.log('Player profile opened, fetching data...');
-      fetchPlayerData();
+  playerStats.forEach((ps) => {
+    if (!seasons.some(x => x.id === ps.season.id)) {
+      seasons.push(ps.season);
     }
-  }, [isOpen, player]);
+  });
 
-  return { playerStats, isLoading, error };
+  seasons.sort((a, b) => {
+    const aEnd = new Date(a.end_date);
+    const bEnd = new Date(b.end_date);
+
+    return bEnd.valueOf() - aEnd.valueOf();
+  })
+
+  const [currSeason, setCurrSeason] = useState<IProSeason | undefined>(
+    seasons.length > 0 ? seasons[0] : undefined
+  );
+
+  const seasonPlayerStats = playerStats.filter((p) => {
+    return p.season_id === currSeason?.id
+  })
+
+  const groupedStats = useMemo(() => {
+    return groupSportActions(seasonPlayerStats)
+  }, [seasons, playerStats]);
+
+  const { starRatings, isLoading: loadingStarRatings, error: starRatingsErros } =
+    useAthleteStarRatings(player, currSeason?.id ?? "");
+
+
+  return {
+    currSeason,
+    setCurrSeason,
+    starRatings,
+    loadingPlayerStats,
+    loadingStarRatings,
+    starRatingsErros,
+    groupedStats,
+    seasons,
+    playerStats,
+    seasonPlayerStats
+  }
 };
 
-export default usePlayerStats;
+
+/** Fetches star ratings for a player based on a given season */
+export function useAthleteStarRatings(player: IProAthlete, seasonId: string) {
+  const key = useMemo(() => {
+    return swrFetchKeys.getAthleteSeasonStarRatings(player.tracking_id, seasonId);
+  }, [seasonId, player]);
+
+  const { data: starRatings, isLoading, error } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStarRatings(
+    player.tracking_id, seasonId
+  ))
+
+  return {
+    starRatings, isLoading, error
+  }
+}

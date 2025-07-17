@@ -2,7 +2,6 @@ import ModalHeader from "./profile-modal-components/ModalHeader";
 import PlayerStats from "./profile-modal-components/PlayerStats";
 import PlayerInfo from "./profile-modal-components/PlayerInfo";
 import PlayerProfileModalTabContent from "./profile-modal-components/PlayerProfileModalTabContent";
-import usePlayerStats from "./profile-modal-components/usePlayerStats";
 
 interface Props {
   player: any;
@@ -12,8 +11,6 @@ interface Props {
 }
 
 export function PlayerProfileModal ({player, isOpen, onClose}: Props) {
-
-  const { playerStats, isLoading, error } = usePlayerStats(player, isOpen);
 
   if (!isOpen) return null;
 
@@ -46,9 +43,6 @@ export function PlayerProfileModal ({player, isOpen, onClose}: Props) {
           <div className="flex-1 ">
             <PlayerProfileModalTabContent
               player={player}
-              playerStats={playerStats}
-              isLoading={isLoading}
-              error={error}
             />
           </div>
         </div>
