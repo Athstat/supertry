@@ -1,7 +1,15 @@
+
 import { IProAthlete } from '../../../types/athletes'
-import { X, Dot } from 'lucide-react'
+import { X, Dot, Info, User } from 'lucide-react'
 import { formatPosition } from '../../../utils/athleteUtils'
 import { PlayerGameCard } from '../../player/PlayerGameCard'
+import { useAtom } from 'jotai'
+import { showComparePlayerInfo } from '../../../state/comparePlayers.atoms'
+import Collapsable from '../../shared/containers/Collapsable'
+import SecondaryText from '../../shared/SecondaryText'
+import TeamLogo from '../../team/TeamLogo'
+import { calculateAge } from '../../../utils/playerUtils'
+import { getCountryEmojiFlag } from '../../../utils/svrUtils'
 
 type Props = {
     player: IProAthlete,
@@ -10,8 +18,11 @@ type Props = {
 
 export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
 
+    const [showInfo, setShowInfo] = useAtom(showComparePlayerInfo);
+    const toggleShowInfo = () => setShowInfo(!showInfo);
+
     return (
-        <div>
+        <div className='flex flex-col gap-2' >
             <div className="flex flex-row items-center justify-end">
                 <button
                     onClick={onRemove}
@@ -24,17 +35,41 @@ export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
 
             <PlayerGameCard className="h-[200px] lg:h-[300px]" blockGlow player={player} />
 
-            <div>
-                <p className="font-bold truncate text-slate-800 dark:text-slate-100">
-                    {player.player_name}
-                </p>
+            <Collapsable
+                label='Info'
+                open={showInfo}
+                toggle={toggleShowInfo}
+                icon={<User className='w-4 h-4' />}
+            >
+                <div className='flex flex-col text-sm p-1 divide-y gap-2 divide-slate-100 dark:divide-slate-700' >
+                    <div>
+                        <SecondaryText className='text-xs' >Name</SecondaryText>
+                        <p className='text-xs lg:text-sm truncate' >{player.player_name}</p>
+                    </div>
 
-                <div className="flex text-sm flex-row text-slate-700 dark:text-slate-400">
-                    {player.position && <p className="truncate">{formatPosition(player.position)}</p>}
-                    <Dot className="" />
-                    <p className="truncate">{player.team.athstat_name}</p>
+                    <div>
+                        <SecondaryText className='text-xs' >Team</SecondaryText>
+                        <div className='flex flex-row gap-1 items-center' >
+                            <TeamLogo
+                                teamName={player.team.athstat_name}
+                                url={player.team.image_url}
+                                className='w-4 h-4'
+                            />
+                            <p className='text-xs lg:text-sm truncate' >{player.team.athstat_name}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <SecondaryText className='text-xs' >Age</SecondaryText>
+                        <p className='text-xs lg:text-sm truncate' >{player.date_of_birth ? calculateAge(player.date_of_birth) : '-'}</p>
+                    </div> 
+
+                    <div>
+                        <SecondaryText className='text-xs' >Nationality</SecondaryText>
+                        <p className='text-xs lg:text-sm truncate' >{getCountryEmojiFlag(player.nationality)} {player.nationality}</p>
+                    </div>
                 </div>
-            </div>
+            </Collapsable>
         </div>
     )
 }

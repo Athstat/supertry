@@ -1,9 +1,6 @@
-import { X, Dot } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { IProAthlete } from "../../../types/athletes";
 import { getPlayerAggregatedStat } from "../../../types/sports_actions";
-import { formatPosition } from "../../../utils/athleteUtils";
-import { PlayerGameCard } from "../../player/PlayerGameCard";
 import usePlayerStats from "../../player/profile-modal-components/usePlayerStats";
 import SecondaryText from "../../shared/SecondaryText";
 import PlayerCompareSeasonPicker from "./PlayerCompareSeasonPicker";
@@ -90,7 +87,7 @@ export default function PlayersCompareItem({ player, onRemove }: Props) {
         />
 
         <SecondaryText className="mt-2" >Attacking</SecondaryText>
-        
+
         <StatLabel
           label="Attacking Rating"
           value={starRatings?.attacking}

@@ -13,3 +13,6 @@ export const comparePlayersStatsAtom = atom<IComparePlayerStats[]>([]);
 /* Holds the star ratings for the compare players */
 export const comparePlayersStarRatingsAtom = atom<ICompareStarRatingsStats[]>([]);
 
+/** Holds a boolean whether player info should be showed or not */
+export const showComparePlayerInfo = atom<boolean>(false);
+

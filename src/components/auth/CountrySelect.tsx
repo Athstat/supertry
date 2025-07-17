@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Check, ChevronDown, Search } from "lucide-react";
-import { countries, Country } from "../../types/countries";
+import { countryFlags, Country } from "../../types/countries";
 
 interface CountrySelectProps {
   value?: Country;
@@ -13,7 +13,7 @@ export function CountrySelect({ value, onChange }: CountrySelectProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
 
-  const filteredCountries = countries.filter((country) =>
+  const filteredCountries = countryFlags.filter((country) =>
     country.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
