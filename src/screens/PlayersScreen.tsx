@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAthletes } from "../contexts/AthleteContext";
-import { usePlayerFiltering } from "../hooks/usePlayerFiltering";
+import { usePlayerFiltering } from "../hooks/athleteFiltering";
 import { useDebounced } from "../hooks/useDebounced";
 
 // Components
@@ -222,7 +222,7 @@ export const PlayersScreen = () => {
         {error && !isLoading && !isFiltering && (
           <ErrorState message={error} onRetry={refreshAthletes} />
         )}
-        
+
         {/* Empty State */}
         {!isLoading &&
           !error &&
