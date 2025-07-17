@@ -2,13 +2,13 @@ import { useContext } from "react"
 import { PlayersScreenContext } from "../../../contexts/PlayersScreenContext"
 import WarningCard from "../../shared/WarningCard";
 import { Sparkles, X } from "lucide-react";
-import { RugbyPlayer } from "../../../types/rugbyPlayer";
 import { useSticky } from "../../../hooks/useSticky";
 import { Sticky } from "../../shared/Sticky";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
+import { IProAthlete } from "../../../types/athletes";
 
 type Props = {
-    onRemovePlayer: (player: RugbyPlayer) => void,
+    onRemovePlayer: (player: IProAthlete) => void,
     onStopComparing?: () => void,
 }
 

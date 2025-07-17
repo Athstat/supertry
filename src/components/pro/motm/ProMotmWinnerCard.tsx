@@ -4,8 +4,14 @@ import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
 import SecondaryText from "../../shared/SecondaryText";
 import { Trophy } from "lucide-react";
 import BlueGradientCard from "../../shared/BlueGradientCard";
+import { IFixture } from "../../../types/games";
+import TeamLogo from "../../team/TeamLogo";
 
-export default function ProMotmWinnerCard() {
+type Props = {
+    fixture: IFixture
+}
+
+export default function ProMotmWinnerCard({ fixture }: Props) {
     const allVotes = useAtomValue(proGameMotmVotesAtom);
     const candidates = useAtomValue(proGameMotmCandidatesAtom);
 
@@ -29,6 +35,7 @@ export default function ProMotmWinnerCard() {
 
     // If no votes, select first player alphabetically
     let winner;
+
     if (votesDesc.length === 0) {
         if (candidates.length === 0) {
             return (
@@ -44,8 +51,8 @@ export default function ProMotmWinnerCard() {
 
         // Sort candidates alphabetically by full name and pick the first one
         const sortedCandidates = [...candidates].sort((a, b) => {
-            const nameA = `${a.athstat_firstname} ${a.athstat_lastname}`.toLowerCase();
-            const nameB = `${b.athstat_firstname} ${b.athstat_lastname}`.toLowerCase();
+            const nameA = `${a.athlete.athstat_firstname} ${a.athlete.athstat_lastname}`.toLowerCase();
+            const nameB = `${b.athlete.athstat_firstname} ${b.athlete.athstat_lastname}`.toLowerCase();
             return nameA.localeCompare(nameB);
         });
 
@@ -53,7 +60,7 @@ export default function ProMotmWinnerCard() {
     } else {
         // Find winner from votes
         winner = candidates.find((c) => {
-            return votesDesc[0].athlete_id === c.athlete_id;
+            return votesDesc[0].athlete_id === c.athlete.tracking_id;
         });
     }
 
@@ -78,7 +85,7 @@ export default function ProMotmWinnerCard() {
 
             {/* Main Content */}
             <div className="mt-2 flex flex-col items-center space-y-2">
-                {winner.image_url ? (
+                {winner.athlete.image_url ? (
                     <>
                         {/* Trophy Icon and Title - Same Row */}
                         <div className="flex items-center gap-2">
@@ -92,9 +99,9 @@ export default function ProMotmWinnerCard() {
                         {/* Larger Player Image */}
                         <div className="relative">
                             <div className="absolute -inset-1 bg-amber-400/20 rounded-full blur"></div>
-                            <img 
-                                src={winner.image_url} 
-                                alt={`${winner.athstat_firstname} ${winner.athstat_lastname}`}
+                            <img
+                                src={winner.athlete.image_url}
+                                alt={`${winner.athlete.athstat_firstname} ${winner.athlete.athstat_lastname}`}
                                 className="relative w-32 h-32 rounded-full object-cover border-4 border-amber-200"
                             />
                         </div>
@@ -117,11 +124,19 @@ export default function ProMotmWinnerCard() {
                 {/* Winner Info */}
                 <div className="text-center space-y-3">
                     <h3 className="text-2xl font-semibold text-white">
-                        {winner.athstat_firstname} {winner.athstat_lastname}
+                        {winner.athlete.athstat_firstname} {winner.athlete.athstat_lastname}
                     </h3>
-                    <SecondaryText className="text-sm text-amber-100 dark:text-amber-100">
-                        {winner.team_name}
-                    </SecondaryText>
+
+                    <div className="flex flex-row items-center gap-2" >
+                        <TeamLogo 
+                            teamName={winner.team_id === fixture.team.athstat_id ? fixture.team.athstat_name : fixture.opposition_team.athstat_name}
+                            url={winner.team_id === fixture.team.athstat_id ? fixture.team.image_url : fixture.opposition_team.image_url}
+                            className="w-12 h-12"
+                        />
+                        <SecondaryText className="text-sm text-amber-100 dark:text-amber-100">
+                            {winner.team_id === fixture.team.athstat_id ? fixture.team.athstat_name : fixture.opposition_team.athstat_name}
+                        </SecondaryText>
+                    </div>
                 </div>
             </div>
         </BlueGradientCard>

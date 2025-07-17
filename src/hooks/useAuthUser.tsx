@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
 
 export function useAuthUser() {
-    const user = authService.getUserInfo();
+    const user = authService.getUserInfoSync();
     const navigate = useNavigate();
 
     if (!user) {

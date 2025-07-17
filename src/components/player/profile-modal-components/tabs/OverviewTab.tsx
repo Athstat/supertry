@@ -1,9 +1,10 @@
 import React from 'react';
 import { formatDate } from '../utils';
 import { calculateAge } from '../../../../utils/playerUtils';
+import { IProAthlete } from '../../../../types/athletes';
 
 interface OverviewTabProps {
-  player: any;
+  player: IProAthlete;
 }
 
 export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
@@ -21,10 +22,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
             <div className="font-medium text-gray-700 dark:text-gray-300">{player.player_name}</div>
 
             <div className="text-gray-500 dark:text-gray-400">Team</div>
-            <div className="font-medium text-gray-700 dark:text-gray-300">{player.team_name}</div>
+            <div className="font-medium text-gray-700 dark:text-gray-300">{player.team.athstat_name}</div>
 
             <div className="text-gray-500 dark:text-gray-400">Date of Birth</div>
-            <div className="font-medium text-gray-700 dark:text-gray-300">{player.date_of_birth ? formatDate(player.date_of_birth) : "-"}</div>
+            <div className="font-medium text-gray-700 dark:text-gray-300">{player.date_of_birth !== undefined ? formatDate(player.date_of_birth) : "-"}</div>
 
             <div className="text-gray-500 dark:text-gray-400">Age</div>
             <div className="font-medium text-gray-700 dark:text-gray-300">{player.date_of_birth ? calculateAge(player.date_of_birth) : "-"}</div>

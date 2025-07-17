@@ -1,7 +1,8 @@
 import React from "react";
+import { IProAthlete } from "../../../types/athletes";
 
 interface PlayerStatsProps {
-  player: any;
+  player: IProAthlete;
 }
 
 export const PlayerStats: React.FC<PlayerStatsProps> = ({ player }) => {
@@ -26,10 +27,10 @@ export const PlayerStats: React.FC<PlayerStatsProps> = ({ player }) => {
       </div>
 
       <div className="bg-white dark:bg-slate-800/40 flex-1 mx-1 rounded-lg shadow-md flex flex-col items-center justify-center p-3">
-        {player.team_logo ? (
+        {player.team.image_url ? (
           <img
-            src={player.team_logo}
-            alt={player.team_name}
+            src={player.team.image_url}
+            alt={player.team.athstat_name}
             className="h-6 w-6 object-contain mb-1"
           />
         ) : (

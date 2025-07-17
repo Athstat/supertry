@@ -2,12 +2,12 @@ import { twMerge } from 'tailwind-merge';
 import { useContext, useState } from 'react';
 import { formatPosition } from '../../utils/athleteUtils';
 import FormIndicator from '../shared/FormIndicator';
-import { RugbyPlayer } from '../../types/rugbyPlayer';
 import TeamLogo from '../team/TeamLogo';
 import { PlayersScreenContext } from '../../contexts/PlayersScreenContext';
+import { IProAthlete } from '../../types/athletes';
 
 type Props = {
-  player: RugbyPlayer;
+  player: IProAthlete;
   onClick?: () => void;
   className?: string;
   blockGlow?: boolean;
@@ -35,7 +35,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
 
   const pr = player.power_rank_rating ?? 0;
   const cardTier: CardTier =
-    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+    pr <= 69 ? 'bronze' : pr >= 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
@@ -62,7 +62,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         )}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo className="w-8 h-8 dark:text-white/40" url={player.team_logo} />
+          <TeamLogo className="w-8 h-8 dark:text-white/40" url={player.team.image_url} />
         </div>
 
         {/* Player Image */}
@@ -96,7 +96,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
 
           {/* Position and Rating */}
           <div className="flex justify-between items-center text-sm mb-2">
-            <div className="text-xs truncate">{formatPosition(player.position_class ?? '')}</div>
+            <div className="text-xs truncate">{formatPosition(player.position ?? '')}</div>
             <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">
               PR {statValue(pr)}
             </div>
@@ -121,4 +121,4 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
       </div>
     </div>
   );
-}
+};

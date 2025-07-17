@@ -11,7 +11,7 @@ type Props = {
 }
 
 export default function FixtureScreenOverview({ fixture }: Props) {
-
+ 
     const navigate = useNavigate();
 
     const goToCompetitionScreen = () => {

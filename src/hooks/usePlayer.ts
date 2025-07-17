@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { RugbyPlayer } from "../types/rugbyPlayer";
 import { useAthletes } from "../contexts/AthleteContext";
 import { useLocation } from "react-router-dom";
-import { athleteService } from "../services/athleteService";
+import { athleteService } from "../services/athletes/athleteService";
 
 export function usePlayer(id?: string) {
 

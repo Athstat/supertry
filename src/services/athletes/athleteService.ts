@@ -1,7 +1,8 @@
-import { IFantasyAthlete, RugbyPlayer } from "../types/rugbyPlayer";
-import { SportAction } from "../types/sports_actions";
-import { getAuthHeader, getUri } from "../utils/backendUtils";
-import { logger } from "./logger";
+import { IProAthlete } from "../../types/athletes";
+import { IFantasyAthlete, RugbyPlayer } from "../../types/rugbyPlayer";
+import { SportAction } from "../../types/sports_actions";
+import { getAuthHeader, getUri } from "../../utils/backendUtils";
+import { logger } from "../logger";
 
 // Define the type for each individual breakdown item
 export interface PointsBreakdownItem {
@@ -80,7 +81,7 @@ export const athleteService = {
       try {
         const response = await fetch(
           getUri(
-            `/api/v1/unauth/rugby-athletes-by-competition/${competitionId}`
+            `/api/v1/seasons/${competitionId}/athletes`
           ),
           {
             method: "GET",
@@ -101,12 +102,12 @@ export const athleteService = {
 
       // If API fetch fails, use mock data
       console.log("Falling back to mock data");
-      const mockData = await import("../data/rugbyPlayers");
+      const mockData = await import("../../data/rugbyPlayers");
       return mockData.rugbyPlayers;
     } catch (error) {
       console.error("Error in athleteService:", error);
       // Always return something to prevent app crash
-      const mockData = await import("../data/rugbyPlayers");
+      const mockData = await import("../../data/rugbyPlayers");
       return mockData.rugbyPlayers;
     }
   },
@@ -166,65 +167,24 @@ export const athleteService = {
   getAthleteStats: async (athleteId: string, competitionId?: string) => {
 
     try {
-      // Try to get token from localStorage
-      const access_token = localStorage.getItem("access_token");
-      console.log("Token available:", !!access_token);
+      // const query = competitionId ? `?season=${competitionId}` : '';
 
-      // For development/testing, use a hardcoded API response if no token
-      if (!access_token) {
-        console.warn("No auth token found, using mock data");
-        return getMockPlayerStats();
-      }
+      const url = getUri(`api/v1/athletes/${athleteId}/aggregated-stats`);
 
-      const url = getUri(
-        `/api/v1/sports-actions/aggregated/athletes/${athleteId}`
-      );
-      console.log("Fetching from URL:", url);
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access_token}`,
-        },
+      const res = await fetch(url, {
+        headers: getAuthHeader()
       });
 
-      console.log("API response status:", response.status);
-
-      if (!response.ok) {
-        console.error("API error response:", response);
-        throw new Error(`API error: ${response.status}`);
+      if (res.ok) {
+        const json = (await res.json())
+        return groupSportActions(json);
       }
 
-      const json = (await response.json()) as SportAction[];
-
-      // Filtering logic
-      const filterByCompeition = (action: SportAction, cId: string) => {
-        return action.season_id === cId;
-      };
-
-      console.log("API response data: for athlete before filter ", json);
-
-      const data =
-        competitionId !== undefined
-          ? json.filter((a) => filterByCompeition(a, competitionId))
-          : json;
-
-      if (competitionId) {
-        console.log("Competition Id was set ");
-        console.log(
-          "After filter",
-          json.filter((a) => filterByCompeition(a, competitionId))
-        );
-      }
-
-      return groupSportActions(data);
-    } catch (error) {
-      console.error("Error fetching player statistics:", error);
-      // Fall back to mock data in case of any error
-      console.warn("Falling back to mock data due to error");
-      return getMockPlayerStats();
+    } catch (e) {
+      logger.error("Error fetching sports action data ", e);
     }
+
+    return groupSportActions([]);
   },
 
   // Get detailed player statistics by athlete ID
@@ -324,6 +284,26 @@ export const athleteService = {
       return undefined;
     }
   },
+
+  getAllAthletes: async () : Promise<IProAthlete[]> => {
+    try {
+      const uri = getUri('/api/v1/athletes');
+      const res = await fetch(uri, {
+          headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as IProAthlete[];
+      }
+
+    } catch (err) {
+      logger.error("Error fetching athletes ", err);
+    }
+
+    return [];
+  },
+
+
 };
 
 /**
@@ -512,6 +492,7 @@ const getMockPowerRankings = (): PowerRankingItem[] => {
  */
 export const groupSportActions = (rawStats: any[]) => {
   // Convert array of actions to an object with action as key
+
   const statsMap: Record<string, number> = {};
 
   rawStats.forEach((stat) => {

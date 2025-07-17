@@ -11,25 +11,25 @@ export default function FixtureRosters({ rosters, fixture }: Props) {
 
     const tabs: TabViewHeaderItem[] = [
         {
-            label: fixture.team_name,
+            label: fixture.team.athstat_name,
             tabKey: "home-team",
             className: "flex-1 w-1/2"
         },
 
         {
-            label: fixture.opposition_team_name,
+            label: fixture.opposition_team.athstat_name,
             tabKey: "away-team",
             className: "flex-1 w-1/2"
         }
     ]
 
     const awayRoster = rosters.filter((r) => {
-        return r.team_id === fixture.opposition_team_id;
+        return r.team_id === fixture.opposition_team.athstat_id;
     });
 
 
     const homeRoster = rosters.filter((r) => {
-        return r.team_id === fixture.team_id;
+        return r.team_id === fixture.team.athstat_id;
     })
 
     return (
