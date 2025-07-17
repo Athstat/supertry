@@ -1,48 +1,60 @@
-import useSWR from "swr";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import StarRating from "../StarRating";
 import RoundedCard from "../../../shared/RoundedCard";
-import { swrFetchKeys } from "../../../../utils/swrKeys";
-import { djangoAthleteService } from "../../../../services/athletes/djangoAthletesService";
+import { IProSeason } from "../../../../types/season";
+import { SportAction } from "../../../../types/sports_actions";
+import { twMerge } from "tailwind-merge";
 import { groupSportActions } from "../../../../services/athletes/athleteService";
 
 type Props = {
   player: any;
+  playerStats: SportAction[]
 }
 
-export function StatsTab({ player }: Props) {
+export function StatsTab({ player, playerStats }: Props) {
 
-  const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
-  const { data: fetchedActions, isLoading, error } = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
-        <span className="ml-3 text-gray-600 dark:text-gray-400">
-          Loading detailed statistics...
-        </span>
-      </div>
-    );
-  }
+  const seasons: IProSeason[] = [];
+  
+  playerStats.forEach((ps) => {
+    if (!seasons.some(x => x.id === ps.season.id)) {
+      seasons.push(ps.season);
+    }
+  });
 
-  if (error) {
-    return (
-      <div className="flex justify-center items-center p-6">
-        <div className="text-red-500 dark:text-red-400 text-center">
-          {error}
-        </div>
-      </div>
-    );
-  }
+  seasons.sort((a, b) => {
+    const aEnd = new Date(a.end_date);
+    const bEnd = new Date(b.end_date);
 
-  const competitions = [];
-  console.log("What the heck player actions ", fetchedActions);
+    return bEnd.valueOf() - aEnd.valueOf();
+  })
 
-  const playerStats = groupSportActions(fetchedActions ?? []);
+  const [currSeason, setCurrSeason] = useState<IProSeason | undefined>(
+    seasons.length > 0 ? seasons[0] : undefined
+  );
+
+  const groupedStats = useMemo(() => {
+    return groupSportActions(playerStats.filter((p) => {
+      return p.season_id === currSeason?.id
+    }))
+  }, [seasons, playerStats]);
 
   return (
     <div className="space-y-6">
+
+      {/* Season Row */}
+      <div className="w-full flex flex-row items-center gap-2 no-scrollbar overflow-x-auto">
+
+        {seasons.map((season) => {
+          return <SeasonPillItem 
+            season={season}
+            isActive={currSeason?.id === season.id}
+            onClick={setCurrSeason}
+          />
+        })}
+
+      </div>
+
       {/* Player Ratings */}
       <div className="rounded-xl border bg-gray-50 dark:bg-slate-800/40 dark:border-slate-700" >
 
@@ -126,7 +138,7 @@ export function StatsTab({ player }: Props) {
       </div>
 
       {/* Detailed statistics sections */}
-      {playerStats && <StatsCategories playerStats={playerStats} />}
+      {playerStats && <StatsCategories playerStats={groupedStats} />}
     </div>
   );
 };
@@ -213,3 +225,29 @@ const StatsCategory: React.FC<StatsCategoryProps> = ({ title, stats }) => {
 };
 
 export default StatsTab;
+
+type SeasonPillProps = {
+  season: IProSeason,
+  onClick?: (season: IProSeason) => void,
+  isActive?: boolean
+
+}
+
+function SeasonPillItem({season, isActive, onClick} : SeasonPillProps) {
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(season);
+    }
+  }
+
+  return (
+    <div className={twMerge(
+      "flex-1  cursor-pointer text-nowrap bg-slate-200/60 border dark:bg-slate-700/60 ",
+      "dark:border-slate-500 rounded-xl px-2 py-1 hover:bg-primary-500 hover:text-white hover:dark:bg-primary-600 hover:dark:border-primary-500",
+      isActive && "bg-primary-500 dark:bg-primary-600 text-white border border-primary-400 dark:border-primary-500"
+    )} >
+      <button onClick={handleClick} className="text-sm" >{season.name}</button>
+    </div>
+  )
+}

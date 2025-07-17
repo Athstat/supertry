@@ -41,5 +41,7 @@ export const swrFetchKeys = {
         if (competitionId) {
             return `/athlete-aggregated-stats/${athleteId}/for-comp/${competitionId}`;
         }
+
+        return `/athlete-aggregated-stats/${athleteId}`
     }
 }

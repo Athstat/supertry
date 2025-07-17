@@ -1,17 +1,25 @@
+import useSWR from 'swr';
+import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import { IProAthlete } from '../../../types/athletes';
+import { swrFetchKeys } from '../../../utils/swrKeys';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
 import OverviewTab from './tabs/OverviewTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
 import StatsTab from './tabs/StatsTab';
+import { LoadingState } from '../../ui/LoadingState';
 
 
 type Props = {
   player: IProAthlete;
 }
 
-export function PlayerProfileModalTabContent({player}: Props) {
+export function PlayerProfileModalTabContent({ player }: Props) {
+
+  const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
+  const { data: fetchedActions, isLoading, error } = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
+
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -42,9 +50,13 @@ export function PlayerProfileModalTabContent({player}: Props) {
         </TabViewPage>
 
         <TabViewPage tabKey='stats'>
-          <StatsTab
+
+          {isLoading && <LoadingState />}
+
+          {!isLoading && <StatsTab
             player={player}
-          />
+            playerStats={fetchedActions ?? []}
+          />}
         </TabViewPage>
 
         <TabViewPage tabKey='power-ranking'>
