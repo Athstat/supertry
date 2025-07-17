@@ -1,6 +1,6 @@
 
 import { IProAthlete } from '../../../types/athletes'
-import { X, Dot, Info, User } from 'lucide-react'
+import { X, User, Coins } from 'lucide-react'
 import { formatPosition } from '../../../utils/athleteUtils'
 import { PlayerGameCard } from '../../player/PlayerGameCard'
 import { useAtom } from 'jotai'
@@ -62,11 +62,29 @@ export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
                     <div>
                         <SecondaryText className='text-xs' >Age</SecondaryText>
                         <p className='text-xs lg:text-sm truncate' >{player.date_of_birth ? calculateAge(player.date_of_birth) : '-'}</p>
-                    </div> 
+                    </div>
+
+                    <div>
+                        <SecondaryText className='text-xs' >Price</SecondaryText>
+                        <div className='flex flex-row gap-1 items-center' >
+                            <Coins className='w-4 h-4 text-yellow-500' />
+                            <p className='text-xs lg:text-sm truncate' >{player.price}</p>
+                        </div>
+                    </div>
 
                     <div>
                         <SecondaryText className='text-xs' >Nationality</SecondaryText>
                         <p className='text-xs lg:text-sm truncate' >{getCountryEmojiFlag(player.nationality)} {player.nationality}</p>
+                    </div>
+
+                    <div>
+                        <SecondaryText className='text-xs' >Position</SecondaryText>
+                        <p className='text-xs lg:text-sm truncate' >{player.position ? formatPosition(player.position) : '-'}</p>
+                    </div>
+
+                    <div>
+                        <SecondaryText className='text-xs' >Position Class</SecondaryText>
+                        <p className='text-xs lg:text-sm truncate' >{player.position_class ? formatPosition(player.position_class) : '-'}</p>
                     </div>
                 </div>
             </Collapsable>
