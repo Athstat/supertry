@@ -159,7 +159,7 @@ export const PlayersScreen = () => {
         <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
         <div className="flex flex-col gap-1">
 
-          <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} />
+          {/* <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} /> */}
 
           <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
 
