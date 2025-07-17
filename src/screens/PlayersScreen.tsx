@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAthletes } from "../contexts/AthleteContext";
-import { usePlayerFiltering } from "../hooks/useAthleteFilter";
 import { useDebounced } from "../hooks/useDebounced";
 
 // Components
@@ -27,6 +26,7 @@ import TeamLogo from "../components/team/TeamLogo";
 import RoundedCard from "../components/shared/RoundedCard";
 import SecondaryText from "../components/shared/SecondaryText";
 import { useQueryState } from "../hooks/useQueryState";
+import useAthleteFilter from "../hooks/useAthleteFilter";
 
 export const PlayersScreen = () => {
 
@@ -46,7 +46,7 @@ export const PlayersScreen = () => {
   const debouncedSearchQuery = useDebounced(searchQuery, 300);
 
   // Use optimized filtering hook
-  const { filteredPlayers, isEmpty } = usePlayerFiltering({
+  const { filteredAthletes } = useAthleteFilter({
     athletes,
     searchQuery: debouncedSearchQuery,
     positionFilter,
@@ -234,9 +234,9 @@ export const PlayersScreen = () => {
             />
           )}
         {/* Player Grid */}
-        {!isLoading && !error && !isFiltering && filteredPlayers.length > 0 && (
+        {!isLoading && !error && !isFiltering && filteredAthletes.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {filteredPlayers.map((player) => (
+            {filteredAthletes.map((player) => (
               <PlayerGameCard
                 key={player.tracking_id}
                 player={player}

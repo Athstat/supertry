@@ -1,6 +1,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { IProAthlete } from "../types/athletes";
-import { athletePositionFilter, athleteSorter, athleteTeamFilter } from "../utils/athleteUtils";
+import { athletePositionFilter, athleteSearchFilter, athleteSorter, athleteTeamFilter } from "../utils/athleteUtils";
 import { SortDirection, SortField } from "../types/playerSorting";
 
 
@@ -9,7 +9,8 @@ type Props = {
     selectedPositions?: string[],
     selectedTeamIds?: string[],
     sortField?: SortField,
-    sortDirection?: SortDirection
+    sortDirection?: SortDirection,
+    searchQuery?: string
 }
 
 /** Is a comprehensive filter and sorter that handles
@@ -18,7 +19,7 @@ type Props = {
 export default function useAthleteFilter(data: Props) {
     const {
         athletes, selectedPositions, selectedTeamIds,
-        sortField, sortDirection
+        sortField, sortDirection, searchQuery
     } = data;
 
     const [filteredAthletes, setFilteredAthletes] = useState(athletes);
@@ -30,11 +31,14 @@ export default function useAthleteFilter(data: Props) {
             const buff = [...athletes];
             const byPosition = athletePositionFilter(buff, selectedPositions);
             const byTeams = athleteTeamFilter(byPosition, selectedTeamIds);
-            const bySort = athleteSorter(byTeams, sortField, sortDirection);
+            const bySearch = athleteSearchFilter(byTeams, searchQuery);
+            const bySort = athleteSorter(bySearch, sortField, sortDirection);
 
             setFilteredAthletes(bySort);
         });
-    }, [athletes, selectedPositions, selectedTeamIds, sortField, sortDirection]);
+    }, [athletes, selectedPositions, selectedTeamIds,
+        sortField, sortDirection, searchQuery
+    ]);
 
     return { filteredAthletes, isFiltering: isPending };
 }

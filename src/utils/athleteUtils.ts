@@ -2,7 +2,7 @@ import { PointsBreakdownItem } from "../services/athletes/athleteService";
 import { IProAthlete } from "../types/athletes";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { SortField, SortDirection } from "../types/playerSorting";
-import { IFantasyAthlete, PlayerForm } from "../types/rugbyPlayer";
+import { PlayerForm } from "../types/rugbyPlayer";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -69,7 +69,7 @@ function nameMatches(input: string, target: string): boolean {
 }
 
 
-export function athleteSearchPredicate(athlete: IFantasyAthlete, query: string) {
+export function athleteSearchPredicate(athlete: IProAthlete, query: string) {
     return nameMatches(athlete.player_name ?? "", query);
 }
 
@@ -250,4 +250,14 @@ export function athleteSorter(athletes: IProAthlete[], sortType: SortField | und
 
 
 
+}
+
+export function athleteSearchFilter(athletes: IProAthlete[], query: string | undefined) {
+    const buff = [...athletes];
+
+    if (!query) return buff;
+
+    return buff.filter((a) => {
+        return athleteSearchPredicate(a, query);
+    } )
 }
