@@ -26,7 +26,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const athletes = fetchedAthletes ?? [];
   const isLoading = loadingAthletes;
-
+  
   // Memoize teams extraction for better performance
   const teams = useMemo(() => {
     const uniqueTeams: IProTeam[] = [];

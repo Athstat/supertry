@@ -1,140 +1,131 @@
-import { useMemo } from 'react';
-import { IProAthlete } from '../types/athletes';
-import { IProTeam } from '../types/team';
-import { SortTab, SortField, SortDirection } from '../types/playerSorting';
-import { PlayerForm } from '../types/rugbyPlayer';
-import { formatPosition } from '../utils/athleteUtils';
+import { useMemo } from "react";
+import { IProAthlete } from "../types/athletes";
+import { formatPosition, formBias } from "../utils/athleteUtils";
+import { SortDirection, SortField } from "../types/playerSorting";
 
-interface UsePlayerFilteringProps {
-  athletes: IProAthlete[];
-  searchQuery: string;
-  positionFilter?: string;
-  selectedTeam: IProTeam | undefined;
-  activeTab: SortTab;
-  sortField: SortField;
-  sortDirection: SortDirection;
+
+type Props = {
+    athletes: IProAthlete[],
+    selectedPositions?: string[],
+    selectedTeamIds?: string[],
+    sortField?: SortField,
+    sortDirection?: SortDirection
 }
 
-const formBias = (powerRanking: number, form?: PlayerForm) => {
-  switch (form) {
-    case "UP":
-      return 3 + powerRanking;
-    case "NEUTRAL":
-      return 2;
-    case "DOWN":
-      return -5;
-    default:
-      return 1;
-  }
-};
+/** Is a comprehensive filter and sorter that handles
+ * position filtering, team filtering and so on */
 
-export const usePlayerFiltering = ({
-  athletes,
-  searchQuery,
-  positionFilter,
-  selectedTeam,
-  activeTab,
-  sortField,
-  sortDirection,
-}: UsePlayerFilteringProps) => {
-  
-  // Memoize search terms for better performance
-  const searchTerms = useMemo(() => {
-    if (!searchQuery) return null;
-    return searchQuery.toLowerCase().split(' ').filter(term => term.length > 0);
-  }, [searchQuery]);
+export default function useAthleteFilter(data: Props) {
+    const {
+        athletes, selectedPositions, selectedTeamIds,
+        sortField, sortDirection
+    } = data;
 
-  // Memoize filtered players
-  const filteredPlayers = useMemo(() => {
-    if (athletes.length === 0) return [];
+    // To avoid mutating main athletes list
+    const buff = [...athletes];
 
-    let result = [...athletes];
+    const byPosition = useAthletePositionFilter(buff, selectedPositions);
+    const byTeams = useAthleteTeamFilter(byPosition, selectedTeamIds);
+    const bySort = useAthleteSorter(byTeams, sortField, sortDirection);
 
-    // Apply search filter with optimized matching
-    if (searchTerms && searchTerms.length > 0) {
-      result = result.filter((player) => {
-        const searchableText = [
-          player.player_name?.toLowerCase() || '',
-          player.team.athstat_name?.toLowerCase() || '',
-          player.position_class?.toLowerCase() || ''
-        ].join(' ');
+    return {sortedAthletes: bySort};
+}
 
-        return searchTerms.every(term => searchableText.includes(term));
-      });
-    }
+/** Hook that filters athletes by selected positions and postion classes */
+export function useAthletePositionFilter(athletes: IProAthlete[], selectedPositions: string[] | undefined) {
+    
+    const formatted = useMemo(() => {
 
-    // Apply position filter
-    if (positionFilter) {
-      result = result.filter((player) => {
-        const position = player.position || "";
-        return formatPosition(positionFilter) === formatPosition(position);
-      });
-    }
+        if (selectedPositions === undefined) return undefined;
 
-    // Apply team filter
-    if (selectedTeam) {
-      result = result.filter((player) => 
-        player.team.athstat_id === selectedTeam.athstat_id
-      );
-    }
+        return selectedPositions.map((p) => {
+            return formatPosition(p);
+        })
+    }, [selectedPositions]);
+    
+    return useMemo(() => {
 
-    // Apply tab-specific filtering
-    switch (activeTab) {
-      case "trending":
-        result = result.filter(p => p.form === "UP");
-        break;
-      case "top":
-        result = result
-          .sort((a, b) => (b.power_rank_rating || 0) - (a.power_rank_rating || 0))
-          .slice(0, 20);
-        break;
-      case "new":
-        // Keep all for now - can add isNew logic later
-        break;
-    }
 
-    return result;
-  }, [athletes, searchTerms, positionFilter, selectedTeam, activeTab]);
+        const filtered = [...athletes]
 
-  // Memoize sorted players
-  const sortedPlayers = useMemo(() => {
-    if (filteredPlayers.length === 0) return [];
+        if (!formatted || filtered.length === 0) {
+            return athletes;
+        }
 
-    return [...filteredPlayers].sort((a, b) => {
-      if (sortField === "power_rank_rating") {
-        const valueA = a.power_rank_rating || 0;
-        const valueB = b.power_rank_rating || 0;
-        return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
-      }
-      else if (sortField === "form") {
-        const biasA = formBias(a.power_rank_rating ?? 0, a.form);
-        const biasB = formBias(b.power_rank_rating ?? 0, b.form);
-        return sortDirection === "desc" ? biasB - biasA : biasA - biasB;
-      } 
-      else if (sortField === "player_name") {
-        const valueA = a.player_name || "";
-        const valueB = b.player_name || "";
-        return sortDirection === "asc"
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
-      }
-      return 0;
-    });
-  }, [filteredPlayers, sortField, sortDirection]);
+        return filtered.filter((a) => {
 
-  // Memoize filter state for debugging
-  const filterState = useMemo(() => ({
-    hasSearch: !!searchQuery,
-    hasPositionFilter: !!positionFilter,
-    hasTeamFilter: !!selectedTeam,
-    activeTab,
-    totalResults: sortedPlayers.length,
-    originalCount: athletes.length
-  }), [searchQuery, positionFilter, selectedTeam, activeTab, sortedPlayers.length, athletes.length]);
+            const position = a.position;
+            const positionClass = a.position_class;
+        
+            const hasPosition = (position !== undefined) && position !== null;
+            const hasPositionClass = (positionClass !== undefined) && positionClass !== null;
 
-  return {
-    filteredPlayers: sortedPlayers,
-    filterState,
-    isEmpty: sortedPlayers.length === 0 && athletes.length > 0
-  };
-};
+            const matchesPosition = hasPosition && formatted.includes(formatPosition(position));
+            const matchesPositionClass = hasPositionClass && formatted.includes(formatPosition(positionClass));
+
+            return matchesPosition || matchesPositionClass
+
+        });
+    }, [athletes, formatted]);
+}
+
+export function useAthleteTeamFilter(athletes: IProAthlete[], selectedTeamIds: string[] | undefined) {
+    
+    
+    return useMemo(() => {
+        const filtered = [...athletes];
+
+        if (selectedTeamIds === undefined || selectedTeamIds.length === 0) {
+            return filtered;
+        }
+
+        return filtered.filter((a) => {
+            const matchesTeamsId = selectedTeamIds.includes(a.team_id);
+            return matchesTeamsId;
+        });
+
+    }, [athletes, selectedTeamIds])
+}
+
+
+export function useAthleteSorter(athletes: IProAthlete[], sortType: SortField | undefined, direction: SortDirection | undefined) {
+
+    
+    return useMemo(() => {
+        const sorted = [...athletes];
+
+        if (!sortType || !direction) {
+            return sorted;
+        }
+
+        if (sortType === 'form') {
+
+            return sorted.sort((a, b) => {
+                return direction === "asc" ?
+                    formBias(a.power_rank_rating ?? 0, a.form) - formBias(b.power_rank_rating ?? 0, b.form)
+                : formBias(b.power_rank_rating ?? 0, b.form) - formBias(a.power_rank_rating ?? 0, a.form)
+            })
+
+        }
+
+        if (sortType === "power_rank_rating") {
+            return sorted.sort((a, b) => {
+                return direction === "asc" ? 
+                    (a.power_rank_rating ?? 0) - (b.power_rank_rating ?? 0)
+                    : (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0)
+            })
+        }
+
+        if (sortType === "player_name") {
+            return sorted.sort((a, b) => {
+                return direction === "asc" ?
+                    (a.player_name.localeCompare(b.player_name))
+                    : (b.player_name.localeCompare(a.player_name))
+            }); 
+        }
+
+        return sorted;
+
+    }, [sortType, direction, athletes]);
+
+}

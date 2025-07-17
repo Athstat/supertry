@@ -1,20 +1,16 @@
 import React from "react";
 import StarRating from "../StarRating";
 import RoundedCard from "../../../shared/RoundedCard";
+import usePlayerStats from "../usePlayerStats";
 
-interface StatsTabProps {
+type Props = {
   player: any;
-  playerStats: any;
-  isLoading: boolean;
-  error: string;
 }
 
-export const StatsTab: React.FC<StatsTabProps> = ({
-  player,
-  playerStats,
-  isLoading,
-  error,
-}) => {
+export function StatsTab({ player}: Props) {
+
+  const {playerStats, isLoading, error} = usePlayerStats(player);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">

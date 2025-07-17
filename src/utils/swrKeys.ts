@@ -35,5 +35,11 @@ export const swrFetchKeys = {
 
     getAllProAthletesKey: () => {
         return 'pro-athletes';
+    },
+
+    getAthleteAggregatedStats: (athleteId: string, competitionId?: string) => {
+        if (competitionId) {
+            return `/athlete-aggregated-stats/${athleteId}/for-comp/${competitionId}`;
+        }
     }
 }

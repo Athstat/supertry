@@ -1,6 +1,6 @@
 import { PointsBreakdownItem } from "../services/athletes/athleteService";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
-import { IFantasyAthlete } from "../types/rugbyPlayer";
+import { IFantasyAthlete, PlayerForm } from "../types/rugbyPlayer";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -150,3 +150,16 @@ export function convertPositionNameToPositionObject(positionToSwap: string) {
         y: "0",
     }
 }
+
+export const formBias = (powerRanking: number, form?: PlayerForm) => {
+  switch (form) {
+    case "UP":
+      return 3 + powerRanking;
+    case "NEUTRAL":
+      return 2;
+    case "DOWN":
+      return -5;
+    default:
+      return 1;
+  }
+};

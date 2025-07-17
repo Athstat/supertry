@@ -214,12 +214,15 @@ export const PlayersScreen = () => {
 
         {/* Loading State - for initial load */}
         {isLoading && <LoadingState message="Loading..." />}
+
         {/* Filtering Loading State */}
         {isFiltering && !isLoading && <LoadingState message="Searching..." />}
+
         {/* Error State */}
         {error && !isLoading && !isFiltering && (
           <ErrorState message={error} onRetry={refreshAthletes} />
         )}
+        
         {/* Empty State */}
         {!isLoading &&
           !error &&

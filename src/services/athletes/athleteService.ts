@@ -167,27 +167,13 @@ export const athleteService = {
   getAthleteStats: async (athleteId: string, competitionId?: string) => {
 
     try {
-      // Try to get token from localStorage
-      const access_token = localStorage.getItem("access_token");
-      console.log("Token available:", !!access_token);
+      // const query = competitionId ? `?season=${competitionId}` : '';
 
-      // For development/testing, use a hardcoded API response if no token
-      if (!access_token) {
-        console.warn("No auth token found, using mock data");
-        return getMockPlayerStats();
-      }
-
-      const url = getUri(
-        `/api/v1/sports-actions/aggregated/athletes/${athleteId}`
-      );
+      const url = getUri(`api/v1/athletes/${athleteId}/aggregated-stats`);
       console.log("Fetching from URL:", url);
 
       const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access_token}`,
-        },
+        headers: getAuthHeader()
       });
 
       console.log("API response status:", response.status);

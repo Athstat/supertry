@@ -1,5 +1,4 @@
 import useSWR from "swr"
-import { RugbyPlayer } from "../../../types/rugbyPlayer"
 import { powerRankingsService } from "../../../services/powerRankingsService"
 import { LoadingState } from "../../ui/LoadingState"
 import { SingleMatchPowerRanking } from "../../../types/powerRankings"
@@ -10,9 +9,10 @@ import { twMerge } from "tailwind-merge"
 import { format } from "date-fns"
 import PillTag from "../../shared/PillTap"
 import SecondaryText from "../../shared/SecondaryText"
+import { IProAthlete } from "../../../types/athletes"
 
 type Props = {
-    player: RugbyPlayer
+    player: IProAthlete
 }
 
 export default function PlayerMatchsPRList({ player }: Props) {

@@ -1,3 +1,4 @@
+import { IProAthlete } from '../../../types/athletes';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
 import OverviewTab from './tabs/OverviewTab';
@@ -7,37 +8,10 @@ import StatsTab from './tabs/StatsTab';
 
 
 type Props = {
-  player: any;
-  playerStats: any;
-  isLoading: boolean;
-  error: string;
+  player: IProAthlete;
 }
 
-export function PlayerProfileModalTabContent({player, playerStats, isLoading,error}: Props) {
-  
-  // switch (activeTab) {
-  //   case 0: // Overview
-  //     return <OverviewTab player={player} />;
-
-  //   case 1: // Stats
-  //     return (
-  //       <StatsTab 
-  //         player={player} 
-  //         playerStats={playerStats}
-  //         isLoading={isLoading}
-  //         error={error}
-  //       />
-  //     );
-
-  //   case 2: // Power Ranking
-  //     return <PowerRankingTab player={player} />;
-
-  //   case 3: // PR Chart
-  //     return <PRChartTab player={player} />;
-
-  //   default:
-  //     return null;
-  // }
+export function PlayerProfileModalTabContent({player}: Props) {
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -70,9 +44,6 @@ export function PlayerProfileModalTabContent({player, playerStats, isLoading,err
         <TabViewPage tabKey='stats'>
           <StatsTab
             player={player}
-            playerStats={playerStats}
-            isLoading={isLoading}
-            error={error}
           />
         </TabViewPage>
 

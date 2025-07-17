@@ -1,64 +1,35 @@
-import { useState, useEffect } from 'react';
 import { athleteService } from '../../../services/athletes/athleteService';
-import { useLocation } from 'react-router-dom';
+import { IProAthlete } from '../../../types/athletes';
+import { swrFetchKeys } from '../../../utils/swrKeys';
+import useSWR from 'swr';
 
-export const usePlayerStats = (player: any, isOpen: boolean) => {
-  
-  const [playerStats, setPlayerStats] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const {state} = useLocation();
-  const competitionId = state?.league?.official_league_id;
+export default function usePlayerStats(player: IProAthlete) {
 
-  // Fetch player statistics data
-  useEffect(() => {
-    const fetchPlayerData = async () => {
-      if (!player) {
-        console.log('No player data available');
-        return;
-      }
-
-      // Log all available IDs to help debug
-      // console.log('Player object:', player);
-      // console.log('Available IDs:', {
-      //   id: player.id,
-      //   tracking_id: player.tracking_id,
-      //   athlete_id: player.athlete_id
-      // });
-
-      // Use the first available ID in this priority order
-      const athleteId = player.tracking_id || player.athlete_id || player.id;
-
-      if (!athleteId) {
-        console.warn('No valid ID found for player:', player.player_name);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        // console.log('Calling athleteService.getAthleteStats with ID:', athleteId);
-
-        const stats = await athleteService.getAthleteStats(athleteId, competitionId);
-
-        // console.log('Fetched player stats:', stats);
-
-        setPlayerStats(stats);
-
-      } catch (err) {
-        console.error('Error fetching player statistics:', err);
-        setError('Failed to load player statistics');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (isOpen && player) {
-      console.log('Player profile opened, fetching data...');
-      fetchPlayerData();
-    }
-  }, [isOpen, player]);
+  const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
+  const {data: playerStats, isLoading, error} = useSWR(key, () => athleteStatsFetcher(player));
 
   return { playerStats, isLoading, error };
 };
 
-export default usePlayerStats;
+
+async function athleteStatsFetcher(player?: IProAthlete) {
+
+  if (!player) {
+    console.log('No player data available');
+    return undefined;
+  }
+  
+  try {
+
+    const athleteId = player.tracking_id;
+    const stats = await athleteService.getAthleteStats(athleteId);
+    console.log('Fetched player stats:', stats);
+
+    return stats;
+
+  } catch (err) {
+    console.error('Error fetching player statistics:', err);
+  }
+
+  return undefined;
+};
