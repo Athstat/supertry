@@ -1,17 +1,70 @@
-import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import useSWR from 'swr';
 import { IProAthlete } from '../../../types/athletes';
 import { swrFetchKeys } from '../../../utils/swrKeys';
-import useSWR from 'swr';
+import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { useMemo, useState } from 'react';
+import { groupSportActions } from '../../../services/athletes/athleteService';
+import { IProSeason } from '../../../types/season';
 
 export default function usePlayerStats(player: IProAthlete) {
 
-  const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
-  const {data: playerStats, isLoading, error} = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
+  const playerStatsKey = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
+  let { data: playerStats, isLoading: loadingPlayerStats } = useSWR(playerStatsKey, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
 
+  const seasons: IProSeason[] = [];
+  playerStats = playerStats ?? [];
+
+  playerStats.forEach((ps) => {
+    if (!seasons.some(x => x.id === ps.season.id)) {
+      seasons.push(ps.season);
+    }
+  });
+
+  seasons.sort((a, b) => {
+    const aEnd = new Date(a.end_date);
+    const bEnd = new Date(b.end_date);
+
+    return bEnd.valueOf() - aEnd.valueOf();
+  })
+
+  const [currSeason, setCurrSeason] = useState<IProSeason | undefined>(
+    seasons.length > 0 ? seasons[0] : undefined
+  );
+
+  const groupedStats = useMemo(() => {
+    return groupSportActions(playerStats.filter((p) => {
+      return p.season_id === currSeason?.id
+    }))
+  }, [seasons, playerStats]);
+
+  const {starRatings, isLoading:  loadingStarRatings, error: starRatingsErros} = 
+    useAthleteStarRatings(player, currSeason?.id ?? "");
   
-  if (!isLoading) {
-    console.log("Some Player Stats ", playerStats);
-  }
 
-  return { playerStats, isLoading, error };
+  return {
+    currSeason,
+    setCurrSeason,
+    starRatings, 
+    loadingPlayerStats,
+    loadingStarRatings,
+    starRatingsErros,
+    groupedStats,
+    seasons
+  }
 };
+
+
+/** Fetches star ratings for a player based on a given season */
+export function useAthleteStarRatings(player: IProAthlete, seasonId: string) {
+  const key = useMemo(() => {
+    return swrFetchKeys.getAthleteSeasonStarRatings(player.tracking_id, seasonId);
+  }, [seasonId, player]);
+
+  const { data: starRatings, isLoading, error} = useSWR(key, () => djangoAthleteService.getAthleteSeasonStarRatings(
+    player.tracking_id, seasonId
+  ))
+
+  return {
+    starRatings, isLoading, error
+  }
+}
