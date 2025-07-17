@@ -75,12 +75,6 @@ export default function PlayersCompareItem({ player, onRemove }: Props) {
         />
 
         <StatLabel
-          label="Price"
-          value={player.price}
-
-        />
-
-        <StatLabel
           label="Minutes Played"
           value={minutesPlayed}
 
