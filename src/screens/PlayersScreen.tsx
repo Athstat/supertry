@@ -54,7 +54,7 @@ export const PlayersScreen = () => {
   }, [selectedTeam]);
 
   // Use optimized filtering hook
-  const { filteredAthletes } = useAthleteFilter({
+  const { filteredAthletes, isFiltering } = useAthleteFilter({
     athletes: athletes,
     searchQuery: debouncedSearchQuery,
     selectedPositions: selectedPositions,
@@ -63,10 +63,7 @@ export const PlayersScreen = () => {
     sortDirection,
   });
 
-  const isEmpty = filteredAthletes.length === 0;
-
-  // Loading state for filtering operations
-  const isFiltering = searchQuery !== debouncedSearchQuery;
+  const isEmpty = !isLoading && !isFiltering && filteredAthletes.length === 0;
 
   const [isComparing, setIsComparing] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
@@ -226,10 +223,7 @@ export const PlayersScreen = () => {
         )}
 
         {/* Empty State */}
-        {!isLoading &&
-          !error &&
-          !isFiltering &&
-          isEmpty && (
+        { isEmpty && (
             <EmptyState
               searchQuery={searchQuery}
               onClearSearch={() => handleSearch("")}
