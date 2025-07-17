@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { useContext, useState, memo } from 'react';
+import { useContext, useState } from 'react';
 import { formatPosition } from '../../utils/athleteUtils';
 import FormIndicator from '../shared/FormIndicator';
 import TeamLogo from '../team/TeamLogo';
@@ -20,7 +20,7 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
  *
  * does not rely on team context */
 
-const PlayerGameCard = memo(({ player, onClick, className, blockGlow }: Props) => {
+export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
   const context = useContext(PlayersScreenContext);
   const shouldGlow =
     (
@@ -121,6 +121,4 @@ const PlayerGameCard = memo(({ player, onClick, className, blockGlow }: Props) =
       </div>
     </div>
   );
-});
-
-export { PlayerGameCard };
+};
