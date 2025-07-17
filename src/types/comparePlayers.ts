@@ -4,7 +4,7 @@ import { SportAction } from "./sports_actions"
 /** Represents a selected compare player's stats  */
 export type IComparePlayerStats = {
     athlete: IProAthlete,
-    stats: SportAction
+    stats: SportAction[]
 }
 
 /** Represents a selected compare player's season star ratings */
