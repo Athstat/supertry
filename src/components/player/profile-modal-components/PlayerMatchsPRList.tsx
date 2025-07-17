@@ -10,6 +10,7 @@ import { format } from "date-fns"
 import PillTag from "../../shared/PillTap"
 import SecondaryText from "../../shared/SecondaryText"
 import { IProAthlete } from "../../../types/athletes"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
     player: IProAthlete
@@ -45,7 +46,7 @@ export default function PlayerMatchsPRList({ player }: Props) {
     }, 0);
 
     return (
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-4 py-6" >
 
             <SecondaryText className="text-lg font-medium flex flex-row items-center gap-1" >
                 <Calendar />
@@ -88,6 +89,12 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
         singleMatchPr.game.opposition_team.image_url : 
         singleMatchPr.game.team.image_url;
 
+    const navigate = useNavigate();
+
+    const goToMatchPage = () => {
+        navigate(`/fixtures/${singleMatchPr.game.game_id}`);
+    }
+
 
     return (
         <RoundedCard className="p-4 flex flex-col gap-2 bg-slate-50 dark:bg-slate-800 dark:border-slate-700" >
@@ -115,6 +122,14 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
             <div className="dark:text-slate-400 text-wrap text-xs text-slate-700" >
                 {kickoff_time ? format(kickoff_time, "EE dd MMMM yyy") : ""}, {season_name}
+            </div>
+
+            <div className="flex flex-row items-center" >
+                <button 
+                    onClick={goToMatchPage}
+                    className="text-sm text-primary-500 hover:underline dark:text-primary-400" >
+                        View Match Details
+                    </button>
             </div>
         </RoundedCard>
     )
