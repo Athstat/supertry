@@ -34,7 +34,7 @@ export function SignUpScreen() {
   const isEmailTaken = !isLoading && emailTaken;
 
   // Validate all fields and submit the form directly instead of going to next step
-  const handleNext = () => {
+  const validateForm = () => {
     // Validate email and password
     if (!form.email || !form.password || !form.confirmPassword) {
       setError('Please fill in all fields');
@@ -60,9 +60,6 @@ export function SignUpScreen() {
       return;
     }
 
-    // Clear any previous errors and submit the form
-    setError(null);
-
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,7 +67,7 @@ export function SignUpScreen() {
     setIsLoading(true);
     setError(null);
 
-    handleNext();
+    validateForm();
 
     try {
       
@@ -178,7 +175,7 @@ export function SignUpScreen() {
 
             <PrimaryButton
               type="button"
-              onClick={handleNext}
+              onClick={validateForm}
               disabled={isLoading || isEmailTaken || isEmailUniqueValidatorLoading}
               isLoading={isLoading}
               className='py-3'
