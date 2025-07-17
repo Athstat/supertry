@@ -36,7 +36,7 @@ export default function FixtureScreen() {
 
   const { data: rosters, isLoading: loadingRosters } = useSWR(`rosters/${fixtureId}`, () => gamesService.getGameRostersById(fixtureId ?? ""));
 
-  const isLoading = loadingFixture;
+  const isLoading = loadingFixture || loadingRosters || loadingBoxScore || loadingTeamActions;
 
   if (isLoading) return <LoadingState />
 
