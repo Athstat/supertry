@@ -18,12 +18,6 @@ export function isAppStateValid(): boolean {
     // Check if we have authentication tokens when needed
     const hasAuthToken = localStorage.getItem('access_token') !== null;
     const hasRefreshToken = localStorage.getItem('refresh_token') !== null;
-    
-    // If we have one token but not the other, that's an inconsistent state
-    if ((hasAuthToken && !hasRefreshToken) || (!hasAuthToken && hasRefreshToken)) {
-      console.warn('AppStateUtils: Inconsistent authentication state detected');
-      return false;
-    }
 
     // Check if React is still responsive by attempting to access React's internal properties
     // This is a heuristic and not foolproof

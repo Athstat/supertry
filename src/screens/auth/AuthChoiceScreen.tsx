@@ -29,7 +29,7 @@ export function AuthChoiceScreen() {
   const handleGuestLogin = async () => {
     try {
       setIsLoading(true);
-      await authService.createGuestUser();
+      await authService.authenticateAsGuestUser();
 
       // Update auth context
       await checkAuth();
