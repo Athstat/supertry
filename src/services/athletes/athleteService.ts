@@ -170,48 +170,21 @@ export const athleteService = {
       // const query = competitionId ? `?season=${competitionId}` : '';
 
       const url = getUri(`api/v1/athletes/${athleteId}/aggregated-stats`);
-      console.log("Fetching from URL:", url);
 
-      const response = await fetch(url, {
+      const res = await fetch(url, {
         headers: getAuthHeader()
       });
 
-      console.log("API response status:", response.status);
-
-      if (!response.ok) {
-        console.error("API error response:", response);
-        throw new Error(`API error: ${response.status}`);
+      if (res.ok) {
+        const json = (await res.json())
+        return groupSportActions(json);
       }
 
-      const json = (await response.json()) as SportAction[];
-
-      // Filtering logic
-      const filterByCompeition = (action: SportAction, cId: string) => {
-        return action.season_id === cId;
-      };
-
-      console.log("API response data: for athlete before filter ", json);
-
-      const data =
-        competitionId !== undefined
-          ? json.filter((a) => filterByCompeition(a, competitionId))
-          : json;
-
-      if (competitionId) {
-        console.log("Competition Id was set ");
-        console.log(
-          "After filter",
-          json.filter((a) => filterByCompeition(a, competitionId))
-        );
-      }
-
-      return groupSportActions(data);
-    } catch (error) {
-      console.error("Error fetching player statistics:", error);
-      // Fall back to mock data in case of any error
-      console.warn("Falling back to mock data due to error");
-      return getMockPlayerStats();
+    } catch (e) {
+      logger.error("Error fetching sports action data ", e);
     }
+
+    return groupSportActions([]);
   },
 
   // Get detailed player statistics by athlete ID
@@ -519,6 +492,7 @@ const getMockPowerRankings = (): PowerRankingItem[] => {
  */
 export const groupSportActions = (rawStats: any[]) => {
   // Convert array of actions to an object with action as key
+
   const statsMap: Record<string, number> = {};
 
   rawStats.forEach((stat) => {

@@ -1,4 +1,5 @@
 import { IProAthlete } from "../../types/athletes";
+import { SportAction } from "../../types/sports_actions";
 import { getUri, getAuthHeader } from "../../utils/backendUtils";
 import { logger } from "../logger";
 
@@ -37,6 +38,27 @@ export const djangoAthleteService = {
 
         } catch (err) {
             logger.error("Error fetching athletes ", err);
+        }
+
+        return [];
+    },
+
+    getAthleteSportsActions: async (athleteId: string) : Promise<SportAction[]> => {
+        try {
+
+            console.log("Fetching athlete sports aggregating actions ", athleteId)
+
+            const uri = getUri(`/api/v1/athletes/${athleteId}/aggregated-stats`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as SportAction[];
+            }
+
+        } catch (error) {
+            logger.error("Error fetching sports actions for ", athleteId,  error)
         }
 
         return [];

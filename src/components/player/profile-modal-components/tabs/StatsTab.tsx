@@ -1,15 +1,19 @@
+import useSWR from "swr";
 import React from "react";
 import StarRating from "../StarRating";
 import RoundedCard from "../../../shared/RoundedCard";
-import usePlayerStats from "../usePlayerStats";
+import { swrFetchKeys } from "../../../../utils/swrKeys";
+import { djangoAthleteService } from "../../../../services/athletes/djangoAthletesService";
+import { groupSportActions } from "../../../../services/athletes/athleteService";
 
 type Props = {
   player: any;
 }
 
-export function StatsTab({ player}: Props) {
+export function StatsTab({ player }: Props) {
 
-  const {playerStats, isLoading, error} = usePlayerStats(player);
+  const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
+  const { data: fetchedActions, isLoading, error } = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
 
   if (isLoading) {
     return (
@@ -31,6 +35,11 @@ export function StatsTab({ player}: Props) {
       </div>
     );
   }
+
+  const competitions = [];
+  console.log("What the heck player actions ", fetchedActions);
+
+  const playerStats = groupSportActions(fetchedActions ?? []);
 
   return (
     <div className="space-y-6">

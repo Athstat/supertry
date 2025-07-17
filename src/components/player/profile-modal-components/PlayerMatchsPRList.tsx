@@ -70,19 +70,23 @@ type CardProps = {
 
 function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
-    const { opposition_score, team_score, game_status, kickoff_time, season_name } = singleMatchPr;
+    const { opposition_score, team_score, game_status, kickoff_time, competition_name: season_name } = singleMatchPr.game;
 
     if (opposition_score === undefined || team_score === undefined || game_status !== "completed") {
         return;
     }
 
-    const athleteTeamId = singleMatchPr.athlete_team_id;
-    const wasHomePlayer = singleMatchPr.team_id === athleteTeamId;
+    const wasHomePlayer = singleMatchPr.team_id === singleMatchPr.game.team.athstat_id;
 
     const { wasDraw, athleteTeamWon } = didAthleteTeamWin(singleMatchPr);
 
-    const oppositionTeamName = wasHomePlayer ? singleMatchPr.opposition_team_name : singleMatchPr.team_name;
-    const oppositionImageUrl = wasHomePlayer ? singleMatchPr.opposition_team_image_url : singleMatchPr.team_image_url;
+    const oppositionTeamName = wasHomePlayer ? 
+        singleMatchPr.game.opposition_team.athstat_name : 
+        singleMatchPr.game.team.athstat_name;
+
+    const oppositionImageUrl = wasHomePlayer ? 
+        singleMatchPr.game.opposition_team.image_url : 
+        singleMatchPr.game.team.image_url;
 
 
     return (
@@ -98,7 +102,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
                             (<p className="dark:text-slate-400 text-sm text-slate-700" >D {team_score} - {opposition_score}</p>) :
                             <p className={twMerge(
                                 "text-sm",
-                                athleteTeamWon ? "font-bold dark:text-primary-500 text-primary-600" : "dark:text-slate-400 text-slate-700"
+                                athleteTeamWon ? "font-bold dark:text-primary-500 text-primary-600" : "dark:text-slate-300 text-slate-700"
                             )} >{athleteTeamWon ? "W" : "L"} {team_score} - {opposition_score}</p>
                         }
                     </div>
@@ -118,9 +122,8 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
 function didAthleteTeamWin(singleMatchPr: SingleMatchPowerRanking) {
 
-    const { opposition_score, team_score } = singleMatchPr;
-    const athleteTeamId = singleMatchPr.athlete_team_id;
-    const wasHomePlayer = singleMatchPr.team_id === athleteTeamId;
+    const { opposition_score, team_score } = singleMatchPr.game;
+    const wasHomePlayer = singleMatchPr.team_id === singleMatchPr.game.team.athstat_id;
 
     const homeTeamWon = (team_score || 0) > (opposition_score || 0);
     const awayTeamWon = (opposition_score || 0) > (team_score || 0);
