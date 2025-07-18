@@ -108,8 +108,8 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
 
                 {hasKickedOff && (
                     <VotingOptionsResults 
-                        homeTeam={home_team}
-                        awayTeam={away_team}
+                        homeTeam={home_team.team_name}
+                        awayTeam={away_team.team_name}
                         homeTeamWon={homeTeamWon}
                         awayTeamWon={awayTeamWon}
                         homeScore={home_score}
