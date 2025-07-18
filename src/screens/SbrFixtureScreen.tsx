@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
 import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
 import SbrMotmVotingBox from "../components/sbr/motm/SbrMotmVotingBox";
-import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../state/sbrFixtureScreen.atoms";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../state/sbrFixtureScreen.atoms";
 import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "../components/sbr/fixture/SbrFixtureDataProvider";
 import { useAtomValue } from "jotai";
@@ -25,7 +25,7 @@ export default function SbrFixtureScreen() {
     if (!fixtureId) return <ErrorState message="Fixture was not found" />
 
     const atoms = [
-        sbrFixtureAtom, sbrFixtureEventsAtom, sbrFixtureBoxscoreAtom
+        sbrFixtureAtom, sbrFixtureTimelineAtom, sbrFixtureBoxscoreAtom
     ]
 
     return (
@@ -42,7 +42,7 @@ function SbrFixtureScreenContent() {
 
     const fixture = useAtomValue(sbrFixtureAtom);
     const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
-    const events = useAtomValue(sbrFixtureEventsAtom);
+    const events = useAtomValue(sbrFixtureTimelineAtom);
 
     const navigate = useNavigate();
 

@@ -167,7 +167,7 @@ export const sbrService = {
 
     getFixtureEvents: async (fixtureId: string) => {
         try {
-            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/events`);
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/timeline`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

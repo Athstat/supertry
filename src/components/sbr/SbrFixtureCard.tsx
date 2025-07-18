@@ -4,7 +4,7 @@ import SbrTeamLogo from "./fixtures/SbrTeamLogo";
 import { twMerge } from "tailwind-merge";
 import SbrFixturePredictionBox from "./predictions/SbrFixturePredictionBox";
 import { useAtomValue } from "jotai";
-import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../../state/sbrFixtureScreen.atoms";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../../state/sbrFixtureScreen.atoms";
 import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "./fixture/SbrFixtureDataProvider";
 import { Sparkles } from "lucide-react";
@@ -22,7 +22,7 @@ type Props = {
 
 export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, hideVoting, showKickOffTime }: Props) {
 
-    const atoms = [sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom];
+    const atoms = [sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom];
 
     return (
         <ScopeProvider atoms={atoms}>
