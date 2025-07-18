@@ -7,8 +7,6 @@ import { useAtomValue } from "jotai";
 import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../../state/sbrFixtureScreen.atoms";
 import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "./fixture/SbrFixtureDataProvider";
-import { Sparkles } from "lucide-react";
-import WarningCard from "../shared/WarningCard";
 import { format } from "date-fns";
 import SbrFixtureStatsStatusCard from "./card/SbrFixtureStatsStatusCard";
 
@@ -52,9 +50,6 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
 
     const navigate = useNavigate();
     const fixture = useAtomValue(sbrFixtureAtom);
-    const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
-
-    const hasBoxscoreData = boxscore.length > 0;
 
     if (!fixture) return;
 

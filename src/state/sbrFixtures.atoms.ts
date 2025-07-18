@@ -1,7 +1,7 @@
 /** Sbr Fixtures Atoms */
 
 import { atom } from "jotai";
-import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureEvent, ISbrFixtureStatsStatus } from "../types/sbr";
+import { ISbrFixture, ISbrFixtureStatsStatus } from "../types/sbr";
 import { getLastWednesdayIfNotWednesday, getNextTuesdayIfNotTuesday } from "../utils/dateUtils";
 import { endOfDay, startOfDay } from "date-fns";
 import { filterSbrFixturesByDateRange } from "../utils/sbrUtils";
