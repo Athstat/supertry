@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { mutate } from 'swr';
 import { sbrService } from '../../../services/sbrService';
 import { sbrFixtureSummary, getSbrVotingSummary } from '../../../utils/sbrUtils';
+import { useInView } from 'react-intersection-observer';
 
 type Props = {
     fixture: ISbrFixture,
@@ -17,7 +18,10 @@ type Props = {
 /** Renders a box that can be used to predict and view an sbr fixtures predictions */
 export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols = "one" }: Props) {
 
-    const { homeVotes, awayVotes, userVote, isLoading, votes } = useSbrFixtureVotes(fixture);
+
+    const {ref, inView} = useInView({triggerOnce: true});
+
+    const { homeVotes, awayVotes, userVote, isLoading, votes } = useSbrFixtureVotes(fixture, inView);
     const { home_score, away_score, home_team, away_team } = fixture;
     const hasScores = home_score !== null && away_score !== null;
 
@@ -67,7 +71,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
     const hasUserVoted = votedAwayTeam || votedHomeTeam;
 
     return (
-        <div className='' >
+        <div ref={ref} className='' >
 
             {isLoading && (
                 <div className="w-full h-20 bg-slate-200 dark:bg-slate-800/40 animate-pulse rounded-xl" >

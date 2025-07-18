@@ -4,11 +4,11 @@ import { ISbrFixture, ISbrFixtureVote } from "../types/sbr";
 import { useAuthUser } from "./useAuthUser";
 import { useEffect, useState, useTransition } from "react";
 
-export function useSbrFixtureVotes(fixture: ISbrFixture) {
+export function useSbrFixtureVotes(fixture: ISbrFixture, shouldFetch: boolean = true) {
 
     const user = useAuthUser();
 
-    const key = `sbr/${fixture.fixture_id}/votes`;
+    const key = shouldFetch ? `sbr/${fixture.fixture_id}/votes` : null;
     const { data, isLoading, error } = useSWR(key, () => sbrService.getFixtureVotes(fixture.fixture_id));
 
     const [userVote, setUserVote] = useState<ISbrFixtureVote>();
