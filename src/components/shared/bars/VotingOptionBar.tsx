@@ -1,6 +1,5 @@
 import { User, Check, X } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { ISbrTeam } from "../../../types/sbrTeam";
 
 type Props = {
     isGreen?: boolean,

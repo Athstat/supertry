@@ -5,7 +5,7 @@ import SbrFixtureCard from '../sbr/SbrFixtureCard';
 import MatchSeasonFilterBar from './MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
-import { ArrowRight, Maximize2, Minimize2 } from 'lucide-react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 import NoContentCard from '../shared/NoContentMessage';
 import MatchCenterSearchBar from './MatchCenterSearchBar';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
