@@ -13,7 +13,8 @@ export type ISbrFixture = {
     round: number,
     season?: string,
     country?: string,
-    venue?: string
+    venue?: string,
+    is_feature_game?: boolean
 }
 
 export type ISbrFixtureStatsStatus = {

@@ -10,6 +10,7 @@ import SbrFixtureDataProvider from "./fixture/SbrFixtureDataProvider";
 import { Sparkles } from "lucide-react";
 import WarningCard from "../shared/WarningCard";
 import { format } from "date-fns";
+import SbrFixtureStatsStatusCard from "./card/SbrFixtureStatsStatusCard";
 
 type Props = {
     fixture: ISbrFixture,
@@ -71,7 +72,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
         <div
             // onClick={handleClick}
             className={twMerge(
-                "dark:bg-slate-800/40 gap-2 flex flex-col cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
+                "dark:bg-slate-800/40 gap-2.5 flex flex-col cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
                 className
             )}
         >
@@ -80,13 +81,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
                 {showCompetition && fixture.season && <p className="text-[10px]" >{fixture.season}</p>}
             </div>
 
-            {hasBoxscoreData &&
-                <WarningCard className="flex flex-row items-center justify-center" >
-                    <Sparkles className="w-4 h-4" />
-                    <p className="text-xs" >Stats are available for this game</p>
-                </WarningCard>
-
-            }
+            <SbrFixtureStatsStatusCard fixture={fixture} />
 
             <div
                 onClick={handleClick}

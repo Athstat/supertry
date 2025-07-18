@@ -1,7 +1,7 @@
 /** Sbr Fixtures Atoms */
 
 import { atom } from "jotai";
-import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureEvent } from "../types/sbr";
+import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureEvent, ISbrFixtureStatsStatus } from "../types/sbr";
 import { getLastWednesdayIfNotWednesday, getNextTuesdayIfNotTuesday } from "../utils/dateUtils";
 import { endOfDay, startOfDay } from "date-fns";
 import { filterSbrFixturesByDateRange } from "../utils/sbrUtils";
@@ -42,3 +42,5 @@ export const sbrWeekFeatureGamesAtom = atom<ISbrFixture[]>((get) => {
 /** Holds a current sbr fixture */
 export const currentSbrFixtureAtom = atom<ISbrFixture>();
 
+/** Holds the Status of an sbr fixture stats */
+export const sbrFixtureStatsStatusAtom = atom<ISbrFixtureStatsStatus>();
