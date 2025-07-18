@@ -95,6 +95,7 @@ export function getSbrVotingSummary(fixture: ISbrFixture, allVotes: ISbrFixtureV
     const homeVotes = allVotes.map((v) => {
         return v.vote_for === "home_team";
     }).length;
+    
     const awayVotes = allVotes.map((v) => {
         return v.vote_for === "away_team";
     }).length;

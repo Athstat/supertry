@@ -6,17 +6,19 @@ import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom as sbrFi
 import { ReactNode, useEffect } from "react";
 import { ErrorState } from "../../ui/ErrorState";
 import { ISbrFixture } from "../../../types/sbr";
+import { LoadingState } from "../../ui/LoadingState";
 
 type Props = {
     fixture: ISbrFixture,
     children?: ReactNode,
     fetchTimeLine?: boolean
-    fetchBoxscore?: boolean
+    fetchBoxscore?: boolean,
+    hideShimmer?: boolean
 }
 
 
 /** Fetches and provides data for a single sbr fixture */
-export default function SbrFixtureDataProvider({ fixture, children, fetchBoxscore, fetchTimeLine }: Props) {
+export default function SbrFixtureDataProvider({ fixture, children, fetchBoxscore, fetchTimeLine, hideShimmer }: Props) {
 
     const setSbrFixture = useSetAtom(sbrFixtureAtom);
     const setSbrFixtureEvents = useSetAtom(sbrFixtureTimelineAtom);
@@ -40,9 +42,14 @@ export default function SbrFixtureDataProvider({ fixture, children, fetchBoxscor
     }, [fixture, events, boxscore]);
 
     if (isLoading) {
-        return <div className="min-w-[350px] w-full bg-white rounded-xl dark:bg-slate-700/50 animate-pulse h-[250px]" >
 
-        </div>
+        return <>
+            {!hideShimmer ? (
+                <div className="min-w-[350px] w-full bg-white rounded-xl dark:bg-slate-700/50 animate-pulse h-[250px]" ></div>
+            ) : (
+                <LoadingState />
+            )}
+        </>
     }
 
     if (error) {

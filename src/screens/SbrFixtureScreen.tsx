@@ -28,7 +28,7 @@ export default function SbrFixtureScreen() {
     const key = swrFetchKeys.getSbrFixtureKey(fixtureId ?? 'fall-back');
     const {data: fixture, isLoading, error} = useSWR(key, () => sbrService.getFixtureById(fixtureId ?? ''));
 
-    if (!isLoading) {
+    if (isLoading) {
         return <LoadingState />
     }
     
@@ -46,6 +46,7 @@ export default function SbrFixtureScreen() {
                 fixture={fixture}
                 fetchBoxscore
                 fetchTimeLine
+                hideShimmer
             >
                 <SbrFixtureScreenContent />
             </SbrFixtureDataProvider>
