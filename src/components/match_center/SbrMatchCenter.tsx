@@ -121,7 +121,7 @@ export default function SbrMatchCenter() {
                             showCompetition
                             showKickOffTime
                             className={twMerge(
-                                'min-w-[350px] max-h-[270px]',
+                                'min-w-96 max-h-[270px]',
                                 focus === "upcoming" && 'min-w-full'
                             )}
                         />
@@ -152,8 +152,8 @@ export default function SbrMatchCenter() {
                     })}
                 </div>
 
-                {upcomingFixtures.length === 0 && (
-                    <NoContentCard message='No upcoming fixtures were found' />
+                {pastFixtures.length === 0 && (
+                    <NoContentCard message='No past fixtures were found' />
                 )}
 
             </div>

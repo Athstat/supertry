@@ -67,7 +67,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
         <div
             // onClick={handleClick}
             className={twMerge(
-                "dark:bg-slate-800/40 gap-2.5 flex flex-col cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
+                "dark:bg-slate-800/40 gap-2.5 flex flex-col cursor-pointer bg-white rounded-xl border dark:border-slate-700 p-4",
                 className
             )}
         >
