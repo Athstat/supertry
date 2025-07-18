@@ -17,7 +17,7 @@ type Props = {
 /** Renders a box that can be used to predict and view an sbr fixtures predictions */
 export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols = "one" }: Props) {
 
-    const { homeVotes, awayVotes, userVote, isLoading } = useSbrFixtureVotes(fixture);
+    const { homeVotes, awayVotes, userVote, isLoading, votes } = useSbrFixtureVotes(fixture);
     const { home_score, away_score, home_team, away_team } = fixture;
     const hasScores = home_score !== null && away_score !== null;
 
@@ -62,7 +62,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
     const gameCompleted = fixture.status === "completed";
 
     const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFixtureSummary(fixture);
-    const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, userVote)
+    const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, votes, userVote)
 
     const hasUserVoted = votedAwayTeam || votedHomeTeam;
 
