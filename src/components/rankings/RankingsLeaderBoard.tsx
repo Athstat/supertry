@@ -1,4 +1,4 @@
-import { userRankingsService } from "../../services/userRankingsService";
+import { fantasyRankingsService } from "../../services/fantasyRankingsService";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import UserRankingFocusShort from "./UserRankingFocusShort";
 import { LoadingState } from "../ui/LoadingState";
@@ -9,7 +9,7 @@ export default function UserRankingsLeaderBoard() {
 
     const {data: rankings, isLoading, error} = useFetch(
         "rankings",[],
-        async () => await userRankingsService.getUserRankings()
+        async () => await fantasyRankingsService.getUserRankings()
     );
 
     console.log("Errors ", error);
