@@ -1,5 +1,6 @@
 import { User, Check, X } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import { ISbrTeam } from "../../../types/sbrTeam";
 
 type Props = {
     isGreen?: boolean,
@@ -86,8 +87,8 @@ type ResultsProps = {
     awayTeamWon?: boolean,
     homeVotes?: number,
     awayVotes?: number,  
-    homeTeam: string,
-    awayTeam: string,
+    homeTeam: ISbrTeam,
+    awayTeam: ISbrTeam,
     homeScore?: number,
     awayScore?: number
 }
@@ -105,7 +106,7 @@ export function VotingOptionsResults({hasScores, votedAwayTeam, votedHomeTeam, a
                             "bg-slate-200 dark:bg-slate-800"
                 ) : "bg-slate-200 dark:bg-slate-800"
             )} >
-                <span className="flex-1 text-left text-[10px]">{homeTeam} Win - {homeVotes} Votes</span>
+                <span className="flex-1 text-left text-[10px]">{homeTeam.team_name} Win - {homeVotes} Votes</span>
                 <span className="flex items-center gap-1">
                     {votedHomeTeam && <span className="text-[8px] lg:text-sm bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
                     {hasScores && homeTeamWon && '✓'}
@@ -120,7 +121,7 @@ export function VotingOptionsResults({hasScores, votedAwayTeam, votedHomeTeam, a
                             "bg-slate-200 dark:bg-slate-800"
                 ) : "bg-slate-200 dark:bg-slate-800"
             )} >
-                <span className="flex-1 text-left text-[10px]">{awayTeam} Win - {awayVotes} Votes</span>
+                <span className="flex-1 text-left text-[10px]">{awayTeam.team_name} Win - {awayVotes} Votes</span>
                 <span className="flex items-center gap-1">
                     {votedAwayTeam && <span className="text-[8px] lg:text-sm bg-blue-500 text-white px-2 py-0.5 rounded-full">Your Pick</span>}
                     {hasScores && awayTeamWon && '✓'}

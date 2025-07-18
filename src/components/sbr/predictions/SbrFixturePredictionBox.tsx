@@ -92,11 +92,11 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
                         preVotingCols === "one" && "grid grid-cols-1"
                     )} >
                         <button onClick={handleClickHomeVoteBar} className="border dark:border-slate-700 text-[10px] w-full px-2 rounded-xl bg-slate-200 py-1 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
-                            {home_team}
+                            {home_team.team_name}
                         </button>
 
                         <button onClick={handleClickAwayVoteBar} className="border dark:border-slate-700 text-[10px] w-full px-2 rounded-xl bg-slate-200 py-1 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
-                            {away_team}
+                            {away_team.team_name}
                         </button>
                     </div>
 

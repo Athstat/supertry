@@ -92,8 +92,9 @@ export function filterSbrFixturesByDateRange(fixtures: ISbrFixture[], weekStart:
 
 export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixtureVote) {
 
-    const homeVotes = Number.parseInt(fixture.home_votes.toString());
-    const awayVotes = Number.parseInt(fixture.away_votes.toString());
+    const homeVotes = Number.parseInt("0");
+    const awayVotes = Number.parseInt("0");
+    
     const total = homeVotes + awayVotes;
     const homePerc = calculatePerc(homeVotes, total);
     const awayPerc = calculatePerc(awayVotes, total);
@@ -173,8 +174,8 @@ export function searchSbrFixturePredicate(search: string, fixture: ISbrFixture) 
 
     const lowerSearch = search.toLowerCase();
 
-    const homeTeam = fixture.home_team?.toLowerCase() ?? "";
-    const awayTeam = fixture.away_team?.toLowerCase() ?? "";
+    const homeTeam = fixture.home_team.team_name.toLowerCase() ?? "";
+    const awayTeam = fixture.away_team.team_name.toLowerCase() ?? "";
     const season = fixture.season?.toLowerCase() ?? "";
 
     // Support "vs" keyword to search for matchups, e.g. "teamA vs teamB"

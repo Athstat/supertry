@@ -94,8 +94,8 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
             >
                 {/* Home Team */}
                 <div className="flex-1 flex gap-2 flex-col items-center justify-start" >
-                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.home_team} />}
-                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team}</p>
+                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.home_team.team_name} />}
+                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team.team_name}</p>
                     <p className="text-slate-700 text-xs dark:text-slate-400" >{gameCompleted && home_score !== undefined ? home_score : "-"}</p>
                 </div>
                 {/* Kick off information */}
@@ -115,8 +115,8 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
                 </div>
                 {/* Away Team */}
                 <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >
-                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.away_team} />}
-                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team}</p>
+                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.away_team.team_name} />}
+                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team.team_name}</p>
                     <p className="text-slate-700 text-xs dark:text-slate-400" >{gameCompleted && away_score !== undefined ? away_score : "-"}</p>
                 </div>
             </div>

@@ -42,13 +42,13 @@ export const sbrService = {
     postSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
 
         try {
-            const user = authService.getUserInfo();
+            const user = authService.getUserInfoSync();
             const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
 
             const res = await fetch(uri, {
                 method: "POST",
                 headers: getAuthHeader(),
-                body: JSON.stringify({ voteFor, userId: user?.id ?? "fall-back" })
+                body: JSON.stringify({ voteFor, userId: user?.kc_id ?? "fall-back" })
             });
 
             return await res.json();
@@ -62,13 +62,13 @@ export const sbrService = {
     putSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
 
         try {
-            const user = authService.getUserInfo();
+            const user = authService.getUserInfoSync();
             const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
 
             const res = await fetch(uri, {
                 method: "PUT",
                 headers: getAuthHeader(),
-                body: JSON.stringify({ voteFor, userId: user?.id ?? "fall-back" })
+                body: JSON.stringify({ voteFor, userId: user?.kc_id ?? "fall-back" })
             });
 
             return await res.json();
