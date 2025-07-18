@@ -26,7 +26,7 @@ export default function SbrFixtureCard({ fixture, showLogos, showCompetition, cl
 
     return (
         <ScopeProvider atoms={atoms}>
-            <SbrFixtureDataProvider fixtureId={fixture.fixture_id}>
+            <SbrFixtureDataProvider fixture={fixture}>
                 <SbrFixtureCardContent
                     showCompetition={showCompetition}
                     showKickOffTime={showKickOffTime}
