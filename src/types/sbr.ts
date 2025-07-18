@@ -16,6 +16,11 @@ export type ISbrFixture = {
     venue?: string
 }
 
+export type ISbrFixtureStatsStatus = {
+    has_timeline: boolean,
+    has_boxscore: boolean
+}
+
 export type ISbrBoxscoreItem = {
     action: string,
     count: number,

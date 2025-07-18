@@ -1,9 +1,9 @@
 /** School Boy Rugby Service */
 
-import { getAuthHeader, getUri } from "../utils/backendUtils"
-import { logger } from "./logger";
-import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureEvent, ISbrFixtureRosterItem, ISbrFixtureVote, UserPredictionsRanking } from "../types/sbr";
-import { authService } from "./authService";
+import { getAuthHeader, getUri } from "../../utils/backendUtils"
+import { logger } from "../logger";
+import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureEvent, ISbrFixtureRosterItem, ISbrFixtureVote, UserPredictionsRanking } from "../../types/sbr";
+import { authService } from "../authService";
 
 export const sbrService = {
     getAllFixtures: async (): Promise<ISbrFixture[]> => {

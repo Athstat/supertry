@@ -5,7 +5,7 @@ import { ISbrFixture } from '../../../types/sbr'
 import { VotingOptionBar, VotingOptionsResults } from '../../shared/bars/VotingOptionBar';
 import { useState } from 'react';
 import { mutate } from 'swr';
-import { sbrService } from '../../../services/sbrService';
+import { sbrService } from '../../../services/sbr/sbrService';
 import { sbrFixtureSummary, getSbrVotingSummary } from '../../../utils/sbrUtils';
 import { useInView } from 'react-intersection-observer';
 

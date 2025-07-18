@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { sbrService } from "../services/sbrService";
+import { sbrService } from "../services/sbr/sbrService";
 import { ISbrFixture } from "../types/sbr";
 import { useAuthUser } from "./useAuthUser";
 import { useMemo } from "react";

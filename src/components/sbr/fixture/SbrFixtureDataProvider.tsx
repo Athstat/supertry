@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { swrFetchKeys } from "../../../utils/swrKeys"
-import { sbrService } from "../../../services/sbrService";
+import { sbrService } from "../../../services/sbr/sbrService";
 import { useSetAtom } from "jotai";
 import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom as sbrFixtureTimelineAtom } from "../../../state/sbrFixtureScreen.atoms";
 import { ReactNode, useEffect } from "react";

@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { useState } from "react";
 import { mutate } from "swr";
 import { useSbrFixtureVotes } from "../../../hooks/useFixtureVotes";
-import { sbrService } from "../../../services/sbrService";
+import { sbrService } from "../../../services/sbr/sbrService";
 import { sbrFixtureSummary, getSbrVotingSummary } from "../../../utils/sbrUtils";
 import { VotingOptionBar } from "../../shared/bars/VotingOptionBar";
 import RoundedCard from "../../shared/RoundedCard";
