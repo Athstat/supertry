@@ -4,12 +4,11 @@ import SbrTeamLogo from "./fixtures/SbrTeamLogo";
 import { twMerge } from "tailwind-merge";
 import SbrFixturePredictionBox from "./predictions/SbrFixturePredictionBox";
 import { useAtomValue } from "jotai";
-import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../../state/sbrFixtureScreen.atoms";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../../state/sbrFixtureScreen.atoms";
 import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "./fixture/SbrFixtureDataProvider";
-import { Sparkles } from "lucide-react";
-import WarningCard from "../shared/WarningCard";
 import { format } from "date-fns";
+import SbrFixtureStatsStatusCard from "./card/SbrFixtureStatsStatusCard";
 
 type Props = {
     fixture: ISbrFixture,
@@ -22,11 +21,11 @@ type Props = {
 
 export default function SbrFixtureCard({ fixture, showLogos, showCompetition, className, hideVoting, showKickOffTime }: Props) {
 
-    const atoms = [sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom];
+    const atoms = [sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom];
 
     return (
         <ScopeProvider atoms={atoms}>
-            <SbrFixtureDataProvider fixtureId={fixture.fixture_id}>
+            <SbrFixtureDataProvider fixture={fixture}>
                 <SbrFixtureCardContent
                     showCompetition={showCompetition}
                     showKickOffTime={showKickOffTime}
@@ -51,9 +50,6 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
 
     const navigate = useNavigate();
     const fixture = useAtomValue(sbrFixtureAtom);
-    const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
-
-    const hasBoxscoreData = boxscore.length > 0;
 
     if (!fixture) return;
 
@@ -71,7 +67,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
         <div
             // onClick={handleClick}
             className={twMerge(
-                "dark:bg-slate-800/40 gap-2 flex flex-col cursor-pointer bg-white rounded-xl border dark:border-slate-800/60 p-4",
+                "dark:bg-slate-800/40 gap-2.5 flex flex-col cursor-pointer bg-white rounded-xl border dark:border-slate-700 p-4",
                 className
             )}
         >
@@ -80,13 +76,7 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
                 {showCompetition && fixture.season && <p className="text-[10px]" >{fixture.season}</p>}
             </div>
 
-            {hasBoxscoreData &&
-                <WarningCard className="flex flex-row items-center justify-center" >
-                    <Sparkles className="w-4 h-4" />
-                    <p className="text-xs" >Stats are available for this game</p>
-                </WarningCard>
-
-            }
+            <SbrFixtureStatsStatusCard fixture={fixture} />
 
             <div
                 onClick={handleClick}
@@ -94,8 +84,8 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
             >
                 {/* Home Team */}
                 <div className="flex-1 flex gap-2 flex-col items-center justify-start" >
-                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.home_team} />}
-                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team}</p>
+                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.home_team.team_name} />}
+                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.home_team.team_name}</p>
                     <p className="text-slate-700 text-xs dark:text-slate-400" >{gameCompleted && home_score !== undefined ? home_score : "-"}</p>
                 </div>
                 {/* Kick off information */}
@@ -115,8 +105,8 @@ function SbrFixtureCardContent({ showCompetition, showLogos, hideVoting, classNa
                 </div>
                 {/* Away Team */}
                 <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end" >
-                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.away_team} />}
-                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team}</p>
+                    {showLogos && <SbrTeamLogo className="w-10 h-10 lg:w-10 lg:h-10" teamName={fixture.away_team.team_name} />}
+                    <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center" >{fixture.away_team.team_name}</p>
                     <p className="text-slate-700 text-xs dark:text-slate-400" >{gameCompleted && away_score !== undefined ? away_score : "-"}</p>
                 </div>
             </div>

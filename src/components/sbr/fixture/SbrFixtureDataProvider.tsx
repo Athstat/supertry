@@ -1,36 +1,37 @@
 import useSWR from "swr"
 import { swrFetchKeys } from "../../../utils/swrKeys"
-import { sbrService } from "../../../services/sbrService";
+import { sbrService } from "../../../services/sbr/sbrService";
 import { useSetAtom } from "jotai";
-import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../../../state/sbrFixtureScreen.atoms";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom as sbrFixtureTimelineAtom } from "../../../state/sbrFixtureScreen.atoms";
 import { ReactNode, useEffect } from "react";
-import { LoadingState } from "../../ui/LoadingState";
 import { ErrorState } from "../../ui/ErrorState";
+import { ISbrFixture } from "../../../types/sbr";
+import { LoadingState } from "../../ui/LoadingState";
 
 type Props = {
-    fixtureId: string,
-    children?: ReactNode
+    fixture: ISbrFixture,
+    children?: ReactNode,
+    fetchTimeLine?: boolean
+    fetchBoxscore?: boolean,
+    hideShimmer?: boolean
 }
 
 
 /** Fetches and provides data for a single sbr fixture */
-export default function SbrFixtureDataProvider({ fixtureId, children }: Props) {
+export default function SbrFixtureDataProvider({ fixture, children, fetchBoxscore, fetchTimeLine, hideShimmer }: Props) {
 
     const setSbrFixture = useSetAtom(sbrFixtureAtom);
-    const setSbrFixtureEvents = useSetAtom(sbrFixtureEventsAtom);
+    const setSbrFixtureEvents = useSetAtom(sbrFixtureTimelineAtom);
     const setSbrFixtureBoxscore = useSetAtom(sbrFixtureBoxscoreAtom)
 
-    const fixtureFetchKey = swrFetchKeys.getSbrFixtureKey(fixtureId);
-    const {data: fixture, isLoading: loadingFixture, error: fixtureError} = useSWR(fixtureFetchKey, () => sbrService.getFixtureById(fixtureId));
+    const eventsFetchKey = fetchTimeLine ? swrFetchKeys.getSbrFixtureTimeline(fixture.fixture_id) : null;
+    const {data: events, isLoading: loadingTimeline, error: eventsError} = useSWR(eventsFetchKey, () => sbrService.getFixtureEvents(fixture.fixture_id));
 
-    const eventsFetchKey = swrFetchKeys.getSbrFixtureEventsKey(fixtureId);
-    const {data: events, isLoading: loadingEvents, error: eventsError} = useSWR(eventsFetchKey, () => sbrService.getFixtureEvents(fixtureId));
+    const boxscoreFetchKey = fetchBoxscore ? swrFetchKeys.getSbrFixtureBoxscoreKey(fixture.fixture_id) : null;
+    const {data: boxscore, isLoading: loadingBoxscore, error: boxscoreError} = useSWR(boxscoreFetchKey, () => sbrService.getFixtureBoxscoreById(fixture.fixture_id));
 
-    const boxscoreFetchKey = swrFetchKeys.getSbrFixtureBoxscoreKey(fixtureId);
-    const {data: boxscore, isLoading: loadingBoxscore, error: boxscoreError} = useSWR(boxscoreFetchKey, () => sbrService.getFixtureBoxscoreById(fixtureId));
-
-    const error = fixtureError || eventsError || boxscoreError;
-    const isLoading = loadingFixture || loadingBoxscore || loadingEvents;
+    const error = eventsError || boxscoreError;
+    const isLoading = loadingBoxscore || loadingTimeline;
 
     useEffect(() => {
 
@@ -41,9 +42,14 @@ export default function SbrFixtureDataProvider({ fixtureId, children }: Props) {
     }, [fixture, events, boxscore]);
 
     if (isLoading) {
-        return <div className="min-w-[350px] w-full bg-white rounded-xl dark:bg-slate-700/50 animate-pulse h-[250px]" >
 
-        </div>
+        return <>
+            {!hideShimmer ? (
+                <div className="min-w-[350px] w-full bg-white rounded-xl dark:bg-slate-700/50 animate-pulse h-[250px]" ></div>
+            ) : (
+                <LoadingState />
+            )}
+        </>
     }
 
     if (error) {

@@ -4,8 +4,10 @@ import { IFixture, IGameVote } from '../types/games';
 import { gamesService } from '../services/gamesService';
 import { authService } from '../services/authService';
 
-export function useGameVotes(fixture: IFixture) {
-  const { data, isLoading } = useSWR(fixture.game_id ? `game-votes-${fixture.game_id}` : null, () =>
+export function useGameVotes(fixture: IFixture, fetchData: boolean = true) {
+  
+  const key = fetchData ? (fixture.game_id ? `game-votes-${fixture.game_id}` : null) : null;
+  const { data, isLoading } = useSWR(key, () =>
     gamesService.getGameVotes(fixture.game_id)
   );
 

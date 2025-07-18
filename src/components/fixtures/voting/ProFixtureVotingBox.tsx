@@ -6,6 +6,7 @@ import { useGameVotes } from "../../../hooks/useGameVotes";
 import { gamesService } from "../../../services/gamesService";
 import { fixtureSumary, isProGameTBD } from "../../../utils/fixtureUtils";
 import { IFixture } from "../../../types/games";
+import { useInView } from "react-intersection-observer";
 
 type Props = {
     fixture: IFixture,
@@ -33,7 +34,8 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
     const { gameKickedOff } = fixtureSumary(fixture);
 
     // Voting functionality
-    const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture);
+    const {ref, inView} = useInView({triggerOnce: true});
+    const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture, inView);
     const [isVoting, setIsVoting] = useState(false);
 
     // Calculate voting percentages
@@ -78,6 +80,7 @@ export default function ProFixtureVotingBox({fixture, className} : Props) {
 
     return (
         <div
+            ref={ref}
             className={twMerge(
                 'flex mt-4 flex-col w-full gap-1 items-center justify-center',
                 isVoting && 'animate-pulse opacity-60 cursor-progress',
