@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai"
-import { sbrFixtureEventsAtom } from "../../../state/sbrFixtureScreen.atoms"
+import { sbrFixtureTimelineAtom } from "../../../state/sbrFixtureScreen.atoms"
 import TitledCard from "../../shared/TitledCard";
 import { twMerge } from "tailwind-merge";
 import SecondaryText from "../../shared/SecondaryText";
@@ -12,7 +12,7 @@ const timelineEvents = ["Try", "Conversion", "Conversion Missed", "Full-Time", "
 /** Renders a summary card showing timeline of events for an sbr fixture */
 export default function SbrFixtureTimeline() {
 
-    const events = useAtomValue(sbrFixtureEventsAtom)
+    const events = useAtomValue(sbrFixtureTimelineAtom)
         .filter((e) => {
             return timelineEvents.includes(e.event_name);
         });

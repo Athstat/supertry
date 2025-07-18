@@ -1,9 +1,9 @@
 /** School Boy Rugby Service */
 
-import { getAuthHeader, getUri } from "../utils/backendUtils"
-import { logger } from "./logger";
-import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureEvent, ISbrFixtureRosterItem, ISbrFixtureVote, UserPredictionsRanking } from "../types/sbr";
-import { authService } from "./authService";
+import { getAuthHeader, getUri } from "../../utils/backendUtils"
+import { logger } from "../logger";
+import { ISbrBoxscoreItem, ISbrFixture, ISbrFixtureEvent, ISbrFixtureRosterItem, ISbrFixtureVote, UserPredictionsRanking } from "../../types/sbr";
+import { authService } from "../authService";
 
 export const sbrService = {
     getAllFixtures: async (): Promise<ISbrFixture[]> => {
@@ -39,16 +39,16 @@ export const sbrService = {
         }
     },
 
-    postSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
+    postSbrFixtureVote: async (fixture_id: string, vote_for: "home_team" | "away_team") => {
 
         try {
-            const user = authService.getUserInfo();
+            const user = authService.getUserInfoSync();
             const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
 
             const res = await fetch(uri, {
                 method: "POST",
                 headers: getAuthHeader(),
-                body: JSON.stringify({ voteFor, userId: user?.id ?? "fall-back" })
+                body: JSON.stringify({ vote_for, user_id: user?.kc_id ?? "fall-back" })
             });
 
             return await res.json();
@@ -59,16 +59,16 @@ export const sbrService = {
 
     },
 
-    putSbrFixtureVote: async (fixture_id: string, voteFor: "home_team" | "away_team") => {
+    putSbrFixtureVote: async (fixture_id: string, vote_for: "home_team" | "away_team") => {
 
         try {
-            const user = authService.getUserInfo();
+            const user = authService.getUserInfoSync();
             const uri = getUri(`/api/v1/sbr/fixtures/${fixture_id}/votes`);
 
             const res = await fetch(uri, {
                 method: "PUT",
                 headers: getAuthHeader(),
-                body: JSON.stringify({ voteFor, userId: user?.id ?? "fall-back" })
+                body: JSON.stringify({ vote_for, user_id: user?.kc_id ?? "fall-back" })
             });
 
             return await res.json();
@@ -167,7 +167,7 @@ export const sbrService = {
 
     getFixtureEvents: async (fixtureId: string) => {
         try {
-            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/events`);
+            const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/timeline`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

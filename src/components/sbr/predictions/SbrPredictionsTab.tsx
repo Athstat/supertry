@@ -1,5 +1,5 @@
 import { CircleCheck, Info, Sparkles} from "lucide-react";
-import { sbrService } from "../../../services/sbrService";
+import { sbrService } from "../../../services/sbr/sbrService";
 import { useFetch } from "../../../hooks/useFetch";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import { UserPredictionsRanking } from "../../../types/sbr";

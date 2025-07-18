@@ -17,7 +17,7 @@ export const swrFetchKeys = {
         return `pro-fixture/${fixtureId}`;
     },
 
-    getSbrFixtureEventsKey: (fixtureId: string) => {
+    getSbrFixtureTimeline: (fixtureId: string) => {
         return `sbr-fixture-events/${fixtureId}`;
     },
 

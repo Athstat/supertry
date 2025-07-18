@@ -90,10 +90,16 @@ export function filterSbrFixturesByDateRange(fixtures: ISbrFixture[], weekStart:
 
 }
 
-export function getSbrVotingSummary(fixture: ISbrFixture, userVote?: ISbrFixtureVote) {
+export function getSbrVotingSummary(fixture: ISbrFixture, allVotes: ISbrFixtureVote[], userVote?: ISbrFixtureVote,) {
 
-    const homeVotes = Number.parseInt(fixture.home_votes.toString());
-    const awayVotes = Number.parseInt(fixture.away_votes.toString());
+    const homeVotes = allVotes.map((v) => {
+        return v.vote_for === "home_team";
+    }).length;
+    
+    const awayVotes = allVotes.map((v) => {
+        return v.vote_for === "away_team";
+    }).length;
+
     const total = homeVotes + awayVotes;
     const homePerc = calculatePerc(homeVotes, total);
     const awayPerc = calculatePerc(awayVotes, total);
@@ -156,25 +162,25 @@ export function hasMotmVotingStarted(kickoff?: Date, now?: Date) {
 /** Counts instances of a related group of sbr actions */
 export function sumMultipleSbrBoxscoreActions(boxscore: ISbrBoxscoreItem[], targetActions: string[], side: 1 | 2) {
     return boxscore.reduce((sum, bx) => {
-        
+
         console.log(bx);
         if (bx.team_id === side && targetActions.includes(bx.action)) {
             return sum + bx.count;
         }
-        
+
         return sum;
 
     }, 0);
 }
 
 
-export function searchSbrFixturePredicate(search: string, fixture: ISbrFixture) : boolean {
+export function searchSbrFixturePredicate(search: string, fixture: ISbrFixture): boolean {
     if (!search) return true;
 
     const lowerSearch = search.toLowerCase();
 
-    const homeTeam = fixture.home_team?.toLowerCase() ?? "";
-    const awayTeam = fixture.away_team?.toLowerCase() ?? "";
+    const homeTeam = fixture.home_team.team_name.toLowerCase() ?? "";
+    const awayTeam = fixture.away_team.team_name.toLowerCase() ?? "";
     const season = fixture.season?.toLowerCase() ?? "";
 
     // Support "vs" keyword to search for matchups, e.g. "teamA vs teamB"
