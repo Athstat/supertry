@@ -412,7 +412,7 @@ export const authService = {
   /** Authenticate with Google OAuth */
   async googleOAuth(token: string): RestPromise<DjangoLoginRes> {
     try {
-      const uri = getUri('/api/v1/auth/social/google');
+      const uri = getUri('/api/v1/auth/oauth/google/');
 
       const response = await fetch(uri, {
         method: 'POST',
@@ -446,7 +446,7 @@ export const authService = {
   /** Authenticate with Apple OAuth */
   async appleOAuth(token: string): RestPromise<DjangoLoginRes> {
     try {
-      const uri = getUri('/api/v1/auth/social/apple');
+      const uri = getUri('/api/v1/auth/oauth/apple/');
 
       const response = await fetch(uri, {
         method: 'POST',

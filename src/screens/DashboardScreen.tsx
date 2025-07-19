@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import PageView from './PageView';
 import MyWeekPanel from '../components/dashboard/MyWeekPanel';
+import OpenActionsSection from '../components/dashboard/OpenActionsSection';
 import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
@@ -12,12 +13,12 @@ export function DashboardScreen() {
 
   const goToFixtures = () => {
     navigate('/fixtures');
-  }
+  };
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-
-      <div className='flex flex-col gap-2' >
+      <MyWeekPanel />
+      {/* <div className='flex flex-col gap-2' >
         <HeroImageBanner
           link='/images/africa_cup.jpeg'
         />
@@ -33,13 +34,13 @@ export function DashboardScreen() {
         >
           View Fixtures
         </button>
-      </div>
+      </div> */}
 
+      <OpenActionsSection />
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <FeaturedPlayersCarousel />
       <ComparePlayersPanel />
-      <MyWeekPanel />
     </PageView>
   );
 }
