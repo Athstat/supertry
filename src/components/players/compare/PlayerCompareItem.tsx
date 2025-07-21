@@ -41,6 +41,8 @@ export default function PlayersCompareItem({ player, onRemove }: Props) {
 
     useEffect(() => {
 
+        if (loadingActions || loadingStarRatings) return;
+
         startTransition(() => {
             const newStats = comparePlayersStats.filter((f) => {
                 return !(f.athlete.tracking_id === player.tracking_id);
@@ -66,6 +68,9 @@ export default function PlayersCompareItem({ player, onRemove }: Props) {
 
             setComparePlayerRatings(newStarRatings)
         })
+
+        return () => {};
+
     }, [actions, starRatings]);
 
     const isLoading = loadingActions || loadingStarRatings;
@@ -91,7 +96,7 @@ export default function PlayersCompareItem({ player, onRemove }: Props) {
     const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
 
     return (
-        <div className="flex flex-col gap-2 flex-1 min-w-[190px] max-w-[300px]">
+        <div className="flex flex-col gap-2 flex-1 min-w-[200px] max-w-[300px]">
 
             <PlayerCompareItemHeader
                 player={player}

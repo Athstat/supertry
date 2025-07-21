@@ -249,11 +249,9 @@ export function athleteSorter(athletes: IProAthlete[], sortType: SortField | und
 }
 
 export function athleteSearchFilter(athletes: IProAthlete[], query: string | undefined) {
+    
     const buff = [...athletes];
-
     if (!query) return buff;
-
-    // if (query.length < 2) return buff;
 
     return buff.filter((a) => {
         return athleteSearchPredicate(a, query);
