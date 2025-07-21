@@ -1,4 +1,5 @@
 import { DjangoAuthUser } from "../../types/auth";
+import { isKeycloakToken } from "../../utils/authUtils";
 
 export const AUTH_USER_KEY = 'auth_user';
 export const ACCESS_TOKEN_KEY = 'access_token';
@@ -42,7 +43,14 @@ export const authTokenService = {
     },
 
     getAccessToken: () => {
-        return localStorage.getItem(ACCESS_TOKEN_KEY);
+        const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+        if (token && isKeycloakToken(token)) {
+            authTokenService.clearUserTokens();
+            return null
+        }
+
+        return token;
     },
 
     clearAccessToken: () => {
