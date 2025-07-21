@@ -1,13 +1,13 @@
 import useSWR from "swr";
 import { useAuthUser } from "../../hooks/useAuthUser";
-import { userRankingsService } from "../../services/userRankingsService";
+import { fantasyRankingsService } from "../../services/fantasyRankingsService";
 import { LoadingState } from "../ui/LoadingState";
 
 
 export default function UserStatsGrid() {
 
     const user = useAuthUser();
-    const  {data: rank, isLoading} = useSWR(user.id, userRankingsService.getUserRankingByUserId);
+    const  {data: rank, isLoading} = useSWR(user.id, fantasyRankingsService.getUserRankingByUserId);
 
     if (isLoading) return <LoadingState />
 
