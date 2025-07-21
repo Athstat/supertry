@@ -1,13 +1,13 @@
 import { UserRanking } from "../types/userRanking";
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 
-export const userRankingsService = {
+export const fantasyRankingsService = {
 
     getUserRankings: async (start?: number, end?: number) => {
 
         try {
             const queryParams = start && end ? `?start=${Number.parseInt(start.toString())}&end=${Number.parseInt(end.toString())}` : "";
-            const url = getUri(`/api/v1/rankings/users${queryParams}`);
+            const url = getUri(`/api/v1/fantasy/user-rankings/${queryParams}`);
 
             const res = await fetch(url, {
                 headers: getAuthHeader(),
@@ -26,7 +26,7 @@ export const userRankingsService = {
     getUserRankingByUserId: async (userId: string) => {
 
         try {
-            const uri = getUri(`/api/v1/rankings/users/${userId}`);
+            const uri = getUri(`/api/v1/fantasy/user-rankings/${userId}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

@@ -1,6 +1,6 @@
 import React from "react";
 import UserRankingCard from "../components/rankings/UserRankingCard";
-import UserRankingsLeaderBoard from "../components/rankings/RankingsLeaderBoard";
+import FantasyRankingsLeaderBoard from "../components/rankings/RankingsLeaderBoard";
 
 export function FantasyRankingsScreen() {
   
@@ -14,7 +14,7 @@ export function FantasyRankingsScreen() {
       <UserRankingCard />
 
       {/* Leaderboard */}
-      <UserRankingsLeaderBoard />
+      <FantasyRankingsLeaderBoard />
     </main>
   );
 }

@@ -9,7 +9,7 @@ export const proPredictionsRankingService = {
     getUserRanking: async (userId?: string) => {
         try {
 
-            userId = userId ?? authService.getUserInfo()?.id;
+            userId = userId ?? authService.getUserInfoSync()?.kc_id;
             const uri = getUri(`/api/v1/pro-predictions/rankings/${userId}`);
             
             const res = await fetch(uri, {
@@ -30,7 +30,7 @@ export const proPredictionsRankingService = {
 
     getAllUserRankings: async () => {
         try {
-            const uri = getUri(`/api/v1/pro-predictions/rankings`);
+            const uri = getUri(`/api/v1/pro/predictions/rankings`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             })
@@ -49,8 +49,8 @@ export const proPredictionsRankingService = {
     getUserPredicitionHistory: async (userId?: string) => {
         
         try {
-            userId = userId ?? authService.getUserInfo()?.id;
-            const uri = getUri(`/api/v1/pro-predictions/history/${userId}`);
+            userId = userId ?? authService.getUserInfoSync()?.kc_id;
+            const uri = getUri(`/api/v1/pro/predictions/history/${userId}`);
 
             const res = await fetch(uri, {
                 headers: getAuthHeader()
