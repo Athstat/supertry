@@ -91,7 +91,7 @@ export default function PlayersCompareItem({ player, onRemove }: Props) {
     const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 flex-1 min-w-[190px] max-w-[300px]">
 
             <PlayerCompareItemHeader
                 player={player}

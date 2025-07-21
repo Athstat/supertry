@@ -5,6 +5,8 @@ import { useAtomValue } from "jotai";
 import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, showComparePlayerInfo } from "../../../state/comparePlayers.atoms";
 import { ScopeProvider } from "jotai-scope";
 import PlayerCompareDataProvider from "./PlayerCompareDataProvider";
+import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
   selectedPlayers: IProAthlete[];
@@ -58,10 +60,13 @@ function Content({ onRemove, onClose, open }: ContentProps) {
       open={open}
       title={title}
       onClose={onClose}
-      hw="lg:w-[45%] max-h-[95%]"
+      hw="w-[98%] lg:w-[45%] max-h-[98%]"
+      outerCon="p-3"
     >
 
-      <div className="grid grid-cols-2 gap-4" >
+      <div className={twMerge(
+        "flex flex-row gap-2 overflow-x-auto"
+      )} >
 
         {selectedPlayers.map((player) => {
           return <PlayersCompareItem
@@ -69,6 +74,8 @@ function Content({ onRemove, onClose, open }: ContentProps) {
             onRemove={onRemove}
           />
         })}
+
+        <EmptyPlayerCompareSlot />
 
       </div>
     </DialogModal>
