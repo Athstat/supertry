@@ -249,9 +249,13 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
 
     return (
         <div className="flex flex-row items-center gap-1" >
-            <div className="bg-slate-200 flex-[3] py-1 border border-slate-300 dark:border-slate-700 dark:bg-slate-700/40 rounded-md text-sm px-2" >{label}</div>
             <div className={twMerge(
-                "bg-slate-300 flex-1 py-1 text-center items-center dark:bg-slate-700 border border-slate-400 dark:border-slate-600 rounded-md text-sm px-1",
+                "bg-slate-200 flex-[3] py-1 border border-slate-300 dark:border-slate-700 dark:bg-slate-700/40 rounded-md text-[12px] px-2 sm:text-sm",
+            )} >
+                {label}
+            </div>
+            <div className={twMerge(
+                "bg-slate-300 flex-1 py-1 text-center items-center dark:bg-slate-700 border border-slate-400 dark:border-slate-600 rounded-md text-[12px] sm:text-sm px-1",
                 isGreen && "from-primary-500 bg-gradient-to-r to-blue-700 text-white border-blue-600 dark:border-blue-600"
             )} >{hasVal ? valueFixed?.endsWith(".0") ? value : valueFixed : "-"}</div>
         </div>
