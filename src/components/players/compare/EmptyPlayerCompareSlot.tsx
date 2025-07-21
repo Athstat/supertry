@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import SecondaryText from "../../shared/SecondaryText";
+import QuickPlayerSelectModal from "../QuickPlayerPickModal";
 
 
 export default function EmptyPlayerCompareSlot() {
@@ -22,6 +23,9 @@ export default function EmptyPlayerCompareSlot() {
 
             </div>
 
+            <QuickPlayerSelectModal 
+                open={true}
+            />
         </div>
     )
 }

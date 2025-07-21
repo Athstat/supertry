@@ -33,53 +33,40 @@ export const formatPosition = (inStr: string) => {
     return outStr
 }
 
-function normalizeName(name: string) {
-    return name.trim().toLowerCase().replace(/\s+/g, ' ');
-}
+function nameMatches(query: string, target: string) {
+  // Normalize strings: convert to lowercase, remove diacritics, and remove apostrophes
+  const normalizeString = (str: string) => {
+    return str
+      .toLowerCase()
+      .normalize('NFD') // Decompose combined characters into base + diacritics
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (combining diacritical marks)
+      .replace(/'/g, ''); // Remove apostrophes
+  };
 
-function getInitials(name: string) {
-    return name
-        .split(' ')
-        .map(word => word[0])
-        .join('');
-}
+  const normalizedQuery = normalizeString(query);
+  const normalizedTarget = normalizeString(target);
 
-function nameMatches(input: string, target: string): boolean {
-    const inputNorm = normalizeName(input);
-    const targetNorm = normalizeName(target);
+  let queryIndex = 0; // Pointer for the normalized query string
+  let targetIndex = 0; // Pointer for the normalized target string
 
-    const inputTokens = inputNorm.split(' ');
-    const targetTokens = targetNorm.split(' ');
-
-    const inputLast = inputTokens[inputTokens.length - 1];
-    const targetLast = targetTokens[targetTokens.length - 1];
-
-    // Always require exact match on last name
-    if (inputLast !== targetLast) return false;
-
-    // If full names match
-    if (inputNorm === targetNorm) return true;
-
-    // If all non-last input tokens match prefix of target tokens
-    for (let i = 0; i < inputTokens.length - 1; i++) {
-        const inputPart = inputTokens[i];
-        const targetPart = targetTokens[i] || '';
-        if (!targetPart.startsWith(inputPart)) return false;
+  // Iterate through the normalized target string
+  while (queryIndex < normalizedQuery.length && targetIndex < normalizedTarget.length) {
+    // If the current characters match, move to the next character in the query
+    if (normalizedQuery[queryIndex] === normalizedTarget[targetIndex]) {
+      queryIndex++;
     }
+    // Always move to the next character in the target string
+    targetIndex++;
+  }
 
-    // Match initials (e.g. "J Hurts" → "Jaylen Hurts")
-    const inputInitials = getInitials(inputNorm);
-    const targetInitials = getInitials(targetNorm);
-    if (inputInitials === targetInitials && inputLast === targetLast) {
-        return true;
-    }
-
-    return true;
-}
+  // If all characters in the normalized query were found in order within the normalized target,
+  // then queryIndex will be equal to the length of the normalized query.
+  return queryIndex === normalizedQuery.length;
+};
 
 
 export function athleteSearchPredicate(athlete: IProAthlete, query: string) {
-    return nameMatches(athlete.player_name ?? "", query);
+    return nameMatches(query, athlete.player_name);
 }
 
 /** Predicate for searching by human names */
