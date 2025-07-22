@@ -62,7 +62,10 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         )}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo className="w-8 h-8 dark:text-white/40" url={player.team.image_url} />
+          <TeamLogo 
+            className="w-8 h-8 dark:text-white/40"
+            url={player.team.image_url} 
+          />
         </div>
 
         {/* Player Image */}
