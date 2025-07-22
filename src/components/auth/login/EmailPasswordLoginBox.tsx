@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InputField, { PasswordInputField } from '../../shared/InputField';
 import { Info, Mail } from 'lucide-react';
 import PrimaryButton from '../../shared/buttons/PrimaryButton';
@@ -20,6 +20,11 @@ export default function EmailPasswordLoginBox() {
 
     const navigate = useNavigate();
     const { login } = useAuth();
+
+    useEffect(() => {
+        setNeedsPasswordReset(false);
+        setMessage(undefined);
+    }, [email])
 
     const checkPasswordStatus = async () => {
 
@@ -95,7 +100,7 @@ export default function EmailPasswordLoginBox() {
                         />
 
                         <div className='flex flex-row items-center justify-end' >
-                            <button onClick={handleForgotPassword} className='text-primary-500 underline font-medium' >Forgot Password?</button>
+                            <p onClick={handleForgotPassword} className='text-primary-500 underline font-medium' >Forgot Password?</p>
                         </div>
                     </div>
                 )}
@@ -105,7 +110,7 @@ export default function EmailPasswordLoginBox() {
                     isLoading={isLoading}
                     onClick={checkPasswordStatus}
                     className='py-3'
-                    type='button'
+                    type='submit'
                 >
                     Continue with Email
                 </PrimaryButton>}
