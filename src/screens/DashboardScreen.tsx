@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import PageView from './PageView';
 import MyWeekPanel from '../components/dashboard/MyWeekPanel';
-import OpenActionsSection from '../components/dashboard/OpenActionsSection';
 import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
@@ -17,15 +16,13 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-      <MyWeekPanel />
-      {/* <div className='flex flex-col gap-2' >
-        <HeroImageBanner
-          link='/images/africa_cup.jpeg'
-        />
+      <div className="flex flex-col gap-2">
+        <HeroImageBanner link="/images/africa_cup.jpeg" />
         <p className="font-bold text-lg">Rugby Africa Cup 2025 is here!</p>
-        
+
         <SecondaryText className="text-xs">
-          Stay updated with all the latest Africa Cup fixtures. Check out upcoming matches and follow your favorite teams throughout the tournament.
+          Stay updated with all the latest Africa Cup fixtures. Check out upcoming matches and
+          follow your favorite teams throughout the tournament.
         </SecondaryText>
 
         <button
@@ -34,13 +31,13 @@ export function DashboardScreen() {
         >
           View Fixtures
         </button>
-      </div> */}
+      </div>
 
-      <OpenActionsSection />
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <FeaturedPlayersCarousel />
       <ComparePlayersPanel />
+      <MyWeekPanel />
     </PageView>
   );
 }
