@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { comparePlayersAtomGroup } from "../state/comparePlayers.atoms";
 import { IProAthlete } from "../types/athletes";
 
@@ -7,10 +7,6 @@ export function usePlayerCompareActions() {
 
     const [compareMode, setCompareMode] = useAtom(
         comparePlayersAtomGroup.compareModeAtom
-    );
-
-    const comparePlayerMap = useAtomValue(
-        comparePlayersAtomGroup.comparePlayersMapAtom
     );
 
     const [selectedPlayers, setSelectedPlayers] = useAtom(
@@ -34,29 +30,49 @@ export function usePlayerCompareActions() {
         setCompareMode('picking');
     }
 
-    const isPlayerSelectedAlready = (player: IProAthlete) => {
-        const fPlayer = selectedPlayers.find(p => p.tracking_id === player.tracking_id);
-        console.log("Some flag here ", fPlayer);
-        
-        return fPlayer !== undefined;
+    const isPlayerSelectedAlready = (player: IProAthlete, list: IProAthlete[]) => {
+        return list.some(selectedPlayer => selectedPlayer.tracking_id === player.tracking_id);
     }
 
     const addPlayer = (player: IProAthlete) => {
-        const isAlreadyInList = isPlayerSelectedAlready(player);
-        if (isAlreadyInList) return;
 
-        console.log("Is this in the list already ", isAlreadyInList);
+        setSelectedPlayers(prev => {
 
-        setSelectedPlayers(prev => [...prev, player]);
+            const doNotAdded = isPlayerSelectedAlready(player, prev);
+
+            if (doNotAdded) {
+                return prev
+            } else {
+                return [...prev, player]
+            }
+        });
+    }
+
+    const addOrRemovePlayer = (player: IProAthlete) => {
+
+        setSelectedPlayers(prev => {
+
+            const isAlreadyThere = isPlayerSelectedAlready(player, prev);
+
+            if (isAlreadyThere) {
+                return prev.filter((a) => {
+                    return a.tracking_id !== player.tracking_id;
+                })
+            } else {
+                return [...prev, player]
+            }
+        });
     }
 
     const addMultiplePlayers = (players: IProAthlete[]) => {
-        
-        const playersNotSelectedAlready = players.filter((p) => {
-            return !isPlayerSelectedAlready(p);
-        })
 
-        setSelectedPlayers(prev => [...prev, ...playersNotSelectedAlready]);
+        setSelectedPlayers(prev => {
+            const playersNotSelectedAlready = players.filter((p) => {
+                return !isPlayerSelectedAlready(p, prev);
+            })
+
+            return [...prev, ...playersNotSelectedAlready]
+        });
     }
 
     const removePlayer = (player: IProAthlete) => {
@@ -111,7 +127,8 @@ export function usePlayerCompareActions() {
         addMultiplePlayers,
         startPicking,
         clearSelections,
-        isPlayerSelectedAlready
+        isPlayerSelectedAlready,
+        addOrRemovePlayer
     }
 
 }

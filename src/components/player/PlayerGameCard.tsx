@@ -6,6 +6,9 @@ import TeamLogo from '../team/TeamLogo';
 import { PlayersScreenContext } from '../../contexts/PlayersScreenContext';
 import { IProAthlete } from '../../types/athletes';
 import OptimizedImage from '../shared/OptimizedImage';
+import { usePlayerCompareActions } from '../../hooks/usePlayerCompare';
+import { useAtomValue } from 'jotai';
+import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
 
 type Props = {
   player: IProAthlete;
@@ -22,15 +25,12 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
  * does not rely on team context */
 
 export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
-  const context = useContext(PlayersScreenContext);
-  const shouldGlow =
-    (
-      context?.selectedPlayers.filter(p => {
-        return p.tracking_id === player.tracking_id;
-      }) ?? []
-    ).length > 0 &&
-    context?.isComparing &&
-    !blockGlow;
+
+  const selectedPlayers = useAtomValue(comparePlayersAtom);
+  
+  const shouldGlow = selectedPlayers.some((a) => (
+    a.tracking_id === player.tracking_id
+  ));
 
 
   const pr = player.power_rank_rating ?? 0;

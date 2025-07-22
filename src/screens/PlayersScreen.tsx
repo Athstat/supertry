@@ -87,13 +87,13 @@ export const PlayerScreenContent = () => {
     comparePlayersAtomGroup.isCompareModePicking
   );
 
-  const {addPlayer} = usePlayerCompareActions();
+  const {addOrRemovePlayer} = usePlayerCompareActions();
 
   // Handle player selection with useCallback for better performance
   const handlePlayerClick = useCallback((player: IProAthlete) => {
     
     if (isPickingPlayers) {
-      addPlayer(player);
+      addOrRemovePlayer(player);
     } else {
       setPlayerModalPlayer(player);
       setShowPlayerModal(true);
