@@ -1,7 +1,7 @@
 import DialogModal from "../../shared/DialogModal";
 import { IProAthlete } from "../../../types/athletes";
 import PlayersCompareItem from "./PlayerCompareItem";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, showComparePlayerInfo } from "../../../state/comparePlayers.atoms";
 import { ScopeProvider } from "jotai-scope";
 import PlayerCompareDataProvider from "./PlayerCompareDataProvider";
@@ -77,6 +77,7 @@ function Content({ onClose, open }: ContentProps) {
           return <PlayersCompareItem
             player={player}
             onRemove={onRemovePlayer}
+            key={player.tracking_id}
           />
         })}
 

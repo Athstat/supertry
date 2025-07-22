@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAthletes } from "../../contexts/AthleteContext"
 import useAthleteFilter from "../../hooks/useAthleteFilter";
 import { IProAthlete } from "../../types/athletes"
@@ -55,21 +55,27 @@ export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose,
         )
     }
 
+    const handleCloseModal = () => {
+
+        if (onClose) {
+            onClose();
+            setSelected([]);
+        }
+    }
+
     const onLockSelection = () => {
-        
+
         if (onSelectPlayers) {
             onSelectPlayers(selected);
         }
 
-        if (onClose) {
-            onClose();
-        }
+        handleCloseModal();
     }
 
     return (
         <DialogModal
             open={open}
-            onClose={onClose}
+            onClose={handleCloseModal}
             title="Add Players"
             className="flex flex-col gap-3 overflow-hidden"
         >
@@ -129,7 +135,7 @@ type PlayerItemProps = {
     player: IProAthlete,
     onClick?: (player: IProAthlete) => void,
     isSelected?: boolean,
-    disabled?: boolean
+    disabled?: boolean,
 }
 
 function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) {
@@ -148,36 +154,41 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
     return (
         <div
             className={twMerge(
-                "flex py-2 px-4 rounded-xl cursor-pointer flex-row items-center justify-between gap-2",
+                "flex py-2 px-4 rounded-xl cursor-pointer flex-col items-start gap-2",
                 "bg-slate-200 dark:bg-slate-700/40 hover:dark:bg-slate-600 hover:bg-slate-100",
-                isSelected && "bg-blue-400 dark:bg-blue-600"
+                isSelected && "bg-blue-400 dark:bg-blue-600 hover:bg-blue-400 hover:dark:bg-blue-600",
+                disabled && "opacity-35"
             )}
 
             onClick={handleClick}
         >
-            <PlayerMugshot
-                url={player.image_url}
-                playerPr={player.power_rank_rating}
-                showPrBackground
-            />
+            <div className="flex flex-row items-center w-full gap-2 justify-between" >
+                <PlayerMugshot
+                    url={player.image_url}
+                    playerPr={player.power_rank_rating}
+                    showPrBackground
+                />
 
-            <div className="flex-1 flex items-start flex-col" >
-                <p>{player.player_name}</p>
-                <SecondaryText className={twMerge(
-                    "text-sm",
-                    isSelected && "text-slate-100 dark:text-slate-100"
-                )} >{player.team.athstat_name}</SecondaryText>
+                <div className="flex-1 flex items-start flex-col" >
+                    <p>{player.player_name}</p>
+                    <SecondaryText className={twMerge(
+                        "text-sm",
+                        isSelected && "text-slate-100 dark:text-slate-100"
+                    )} >{player.team.athstat_name}</SecondaryText>
+                </div>
+
+                <div className="flex flex-row items-center gap-2" >
+                    <p className="font-bold text-primary-500 dark:text-primary-4 00" >
+                        {player.power_rank_rating ?
+                            Math.floor(player.power_rank_rating)
+                            : "-"
+                        }
+                    </p>
+
+                </div>
             </div>
 
-            <div className="flex flex-row items-center gap-2" >
-                <p className="font-bold text-primary-500 dark:text-primary-4 00" >
-                    {player.power_rank_rating ?
-                        Math.floor(player.power_rank_rating)
-                        : "-"
-                    }
-                </p>
-
-            </div>
+            {disabled && <p className="text-xs text-red-500" >Player is already selected</p>}
 
         </div>
     )

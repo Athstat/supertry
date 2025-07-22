@@ -16,7 +16,21 @@ export default function EmptyPlayerCompareSlot() {
     const toggle = () => setShow(!show);
 
     const onSelectPlayers = (arr: IProAthlete[]) => {
-        setComparePlayers(arr);
+        
+        // Remove players who are already in the compare
+        // players list
+        const prunedList = arr.filter((a) => {
+
+            const isInListAlready = comparePlayers.some((p) => {
+                return a.tracking_id === p.tracking_id;
+            });
+
+            return !isInListAlready;
+        });
+
+
+        setComparePlayers(prev => [...prev, ...prunedList]);
+        
     }
 
     return (
