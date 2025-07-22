@@ -5,6 +5,7 @@ import { comparePlayersAtom, comparePlayersAtomGroup } from "../../../state/comp
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
+import { useImagePreloader } from "../../../hooks/useImagePreloader";
 
 type Props = {
 }
@@ -15,6 +16,9 @@ export default function PlayerCompareModal({}: Props) {
   const open = useAtomValue(comparePlayersAtomGroup.isCompareModeModal);
 
   const  {closeCompareModal} = usePlayerCompareActions();
+
+  // Preload images when modal is open
+  useImagePreloader({ players: selectedPlayers, enabled: open });
 
   const playerLen = selectedPlayers.length;
   let title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;

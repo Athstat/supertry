@@ -1,10 +1,11 @@
 import { twMerge } from 'tailwind-merge';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { formatPosition } from '../../utils/athleteUtils';
 import FormIndicator from '../shared/FormIndicator';
 import TeamLogo from '../team/TeamLogo';
 import { PlayersScreenContext } from '../../contexts/PlayersScreenContext';
 import { IProAthlete } from '../../types/athletes';
+import OptimizedImage from '../shared/OptimizedImage';
 
 type Props = {
   player: IProAthlete;
@@ -31,7 +32,6 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
     context?.isComparing &&
     !blockGlow;
 
-  const [imageError, setIamgeError] = useState<string>();
 
   const pr = player.power_rank_rating ?? 0;
   const cardTier: CardTier =
@@ -67,11 +67,12 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
 
         {/* Player Image */}
         <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">
-          {player.image_url && !imageError && (
-            <img
+          {player.image_url && (
+            <OptimizedImage
               src={player.image_url}
-              onError={() => setIamgeError('Image failed to load')}
+              alt={player.player_name}
               className="w-full object-scale-down object-top"
+              lazy={true}
             />
           )}
         </div>
