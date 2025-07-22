@@ -1,6 +1,6 @@
 
 import { IProAthlete } from '../../../types/athletes'
-import { X, User, Coins, ChevronLeft } from 'lucide-react'
+import { X, User, Coins, ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatPosition } from '../../../utils/athleteUtils'
 import { PlayerGameCard } from '../../player/PlayerGameCard'
 import { useAtom } from 'jotai'
@@ -28,18 +28,31 @@ export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
     const moveLeft = useCallback(() => {
         const myIndex = comparePlayers.findIndex(a => a.tracking_id === player.tracking_id);
 
-        if (myIndex === -1) {
+        if (myIndex <= 0) {
             return;
         }
 
-        if (myIndex === 0) {
+
+        const newArr = [...comparePlayers];
+        newArr.splice(myIndex, 1);
+
+        newArr.splice(myIndex - 1, 0, player);
+
+        setComparePlayers(newArr);
+
+    }, [comparePlayers]);
+
+    const moveRight = useCallback(() => {
+        const myIndex = comparePlayers.findIndex(a => a.tracking_id === player.tracking_id);
+
+        if (myIndex >= comparePlayers.length) {
             return;
         }
 
         const newArr = [...comparePlayers];
         newArr.splice(myIndex, 1);
 
-        newArr.splice(myIndex - 1, 0, player);
+        newArr.splice(myIndex + 1, 0, player);
 
         setComparePlayers(newArr);
 
@@ -52,12 +65,19 @@ export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
                 "border border-slate-200 dark:border-slate-600"
             )}>
 
-                <div className='flex flex-row items-center' >
-                    <button 
+                <div className='flex flex-row items-center gap-1' >
+                    <button
                         onClick={moveLeft}
                         className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
                     >
                         <ChevronLeft className='w-4 h-4' />
+                    </button>
+
+                    <button
+                        onClick={moveRight}
+                        className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
+                    >
+                        <ChevronRight className='w-4 h-4' />
                     </button>
                 </div>
 
