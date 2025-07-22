@@ -1,49 +1,48 @@
 import { useState } from 'react';
-import { BarChart } from 'lucide-react';
+import { BarChart, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerCompareModal from '../players/compare/PlayerCompareModal';
 import { twMerge } from 'tailwind-merge';
 import { PlayerSearch } from '../players/PlayerSearch';
 import { Infinity } from 'lucide-react';
-import useSWR from 'swr';
-import { swrFetchKeys } from '../../utils/swrKeys';
-import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
 import { IProAthlete } from '../../types/athletes';
 import { LoadingState } from '../ui/LoadingState';
+import { useAthletes } from '../../contexts/AthleteContext';
+import PlayerCompareProvider from '../players/compare/PlayerCompareProvider';
+import { usePlayerCompareActions } from '../../hooks/usePlayerCompare';
+import { useAtomValue } from 'jotai';
+import { comparePlayersAtomGroup } from '../../state/comparePlayers.atoms';
+import PrimaryButton from '../shared/buttons/PrimaryButton';
+import { ArrowLeftRight } from 'lucide-react';
 
-const ComparePlayersPanel = () => {
-  
+export default function ComparePlayersPanel() {
+
+  return (
+    <PlayerCompareProvider>
+      <PanelContent />
+    </PlayerCompareProvider>
+  )
+
+}
+
+
+function PanelContent() {
+
   const navigate = useNavigate();
+  let { athletes, isLoading } = useAthletes();
 
-  const fetchKey = swrFetchKeys.getAllProAthletesKey()
-  const {data: fetchedAthletes, isLoading} = useSWR(fetchKey, () => djangoAthleteService.getAllAthletes());
-  
-  let athletes = fetchedAthletes ?? [];
 
-  const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
+  const selectedPlayers = useAtomValue(
+    comparePlayersAtomGroup.comparePlayersAtom
+  )
+
+  const { clearSelections, addPlayer, removePlayer, showCompareModal } = usePlayerCompareActions();
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Always in compare mode
-  const clearSelections = () => setSelectedPlayers([]);
 
   const handlePlayerClick = (player: IProAthlete) => {
-    const isSelectedAlready = selectedPlayers.find(p => p.tracking_id === player.tracking_id);
-    if (isSelectedAlready) {
-      const newList = selectedPlayers.filter(p => p.tracking_id !== player.tracking_id);
-      setSelectedPlayers(newList);
-    } else if (selectedPlayers.length < 2) {
-      setSelectedPlayers([...selectedPlayers, player]);
-    }
-  };
-
-  const onRemovePlayerFromSelectedPlayers = (player: IProAthlete) => {
-    const newList = selectedPlayers.filter(p => p.tracking_id !== player.tracking_id);
-    setSelectedPlayers(newList);
-  };
-
-  const onClear = () => {
-    clearSelections();
+    addPlayer(player);
   };
 
   // Shuffle athletes array deterministically every 5 hours using a seeded shuffle
@@ -112,7 +111,7 @@ const ComparePlayersPanel = () => {
           >
             View All
           </button>
-          
+
         </div>
       </div>
 
@@ -124,11 +123,14 @@ const ComparePlayersPanel = () => {
           </div>
 
           <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
               {selectedPlayers.length === 0
-                ? 'Select two players to compare'
-                : `Selected ${selectedPlayers.length}/2 players`}
+                ? 'Select players to compare'
+                : `Selected ${selectedPlayers.length} players`}
             </p>
+
+
             {selectedPlayers.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {selectedPlayers.map(player => (
@@ -136,21 +138,31 @@ const ComparePlayersPanel = () => {
                     key={player.tracking_id}
                     className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full"
                   >
-                    <span className="text-sm text-gray-900 dark:text-white">
+                    <span className="text-xs lg:text-sm text-gray-900 dark:text-white">
                       {player.player_name}
                     </span>
                     <button
-                      onClick={() => onRemovePlayerFromSelectedPlayers(player)}
+                      onClick={() => removePlayer(player)}
                       className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-lg font-bold"
                     >
-                      ×
+                      <X className='w-4 h-4' />
                     </button>
                   </div>
                 ))}
               </div>
             )}
           </div>
-            
+
+          {selectedPlayers.length > 0 && (
+            <PrimaryButton 
+              className='mb-4' 
+              onClick={showCompareModal}
+            >
+              Compare
+              <ArrowLeftRight className='w-4 h-4' />
+            </PrimaryButton>
+          )}
+
           {isLoading && <LoadingState />}
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -163,22 +175,15 @@ const ComparePlayersPanel = () => {
                   'h-[200px] cursor-pointer transition-all',
                   'hover:ring-2 hover:ring-primary-500 dark:hover:ring-primary-400',
                   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
-                    'ring-2 ring-primary-500 dark:ring-primary-400'
+                  'ring-2 ring-primary-500 dark:ring-primary-400'
                 )}
               />
             ))}
           </div>
 
-          <PlayerCompareModal
-            selectedPlayers={selectedPlayers}
-            open={selectedPlayers.length >= 2}
-            onClose={onClear}
-            onRemove={onRemovePlayerFromSelectedPlayers}
-          />
+          <PlayerCompareModal />
         </div>
       </div>
     </div>
   );
 };
-
-export default ComparePlayersPanel;

@@ -98,5 +98,6 @@ declare module "lucide-react" {
   export const Infinity: CIP;
   export const ArrowDownUp: CIP;
   export const Newspaper: CIP;
+  export const ArrowLeftRight: CIP;
 }
 

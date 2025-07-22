@@ -91,6 +91,10 @@ export function usePlayerCompareActions() {
         setSelectedPlayers(newArr);
     }
 
+    const clearSelections = () => {
+        setSelectedPlayers([])
+    }
+
     return {
         showCompareModal,
         closeCompareModal,
@@ -102,7 +106,8 @@ export function usePlayerCompareActions() {
         movePlayerRight,
         compareMode,
         addMultiplePlayers,
-        startPicking
+        startPicking,
+        clearSelections
     }
 
 }
