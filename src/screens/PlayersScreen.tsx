@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, Fragment } from "react";
 import { useAthletes } from "../contexts/AthleteContext";
 import { useDebounced } from "../hooks/useDebounced";
 
@@ -12,10 +12,9 @@ import { EmptyState } from "../components/players/EmptyState";
 import { PlayerGameCard } from "../components/player/PlayerGameCard";
 import PageView from "./PageView";
 import { Users, X } from "lucide-react";
-import PlayersScreenProvider from "../contexts/PlayersScreenContext";
 import PlayersCompareButton from "../components/player/PlayerScreenCompareButton";
 import { twMerge } from "tailwind-merge";
-import PlayerCompareStatus from "../components/players/compare/PlayerCompareStatus";
+import PlayersScreenCompareStatus from "../components/players/compare/PlayersScreenCompareStatus";
 import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
 import PlayerProfileModal from "../components/player/PlayerProfileModal";
 import { SortDirection, SortField } from "../types/playerSorting";
@@ -26,8 +25,20 @@ import RoundedCard from "../components/shared/RoundedCard";
 import SecondaryText from "../components/shared/SecondaryText";
 import { useQueryState } from "../hooks/useQueryState";
 import useAthleteFilter from "../hooks/useAthleteFilter";
+import PlayerCompareProvider from "../components/players/compare/PlayerCompareProvider";
+import { usePlayerCompareActions } from "../hooks/usePlayerCompare";
+import { useAtomValue } from "jotai";
+import { comparePlayersAtomGroup } from "../state/comparePlayers.atoms";
 
-export const PlayersScreen = () => {
+export function PlayersScreen() {
+  return (
+    <PlayerCompareProvider>
+      <PlayerScreenContent />
+    </PlayerCompareProvider>
+  )
+}
+
+export const PlayerScreenContent = () => {
 
   const { athletes, error, isLoading, refreshAthletes, positions, teams } = useAthletes();
 
@@ -64,51 +75,32 @@ export const PlayersScreen = () => {
 
   const isEmpty = !isLoading && !isFiltering && filteredAthletes.length === 0;
 
-  const [isComparing, setIsComparing] = useState(false);
-  const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
-
-  const toggleCompareMode = () => setIsComparing(!isComparing);
-  const clearSelections = () => setSelectedPlayers([]);
-
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
-  
+
   const handleClosePlayerModal = () => {
     setPlayerModalPlayer(undefined);
     setShowPlayerModal(false);
   }
 
-  const onClear = () => {
-    clearSelections();
-    // toggleCompareMode();
-  }
+  const isPickingPlayers = useAtomValue(
+    comparePlayersAtomGroup.isCompareModePicking
+  );
 
-  const onStopComparing = () => {
-    clearSelections();
-    setIsComparing(false);
-  }
+  const {addOrRemovePlayer} = usePlayerCompareActions();
 
   // Handle player selection with useCallback for better performance
   const handlePlayerClick = useCallback((player: IProAthlete) => {
-    if (isComparing) {
-      setSelectedPlayers(prev => {
-        const isSelected = prev.some(p => p.tracking_id === player.tracking_id);
-        
-        if (isSelected) {
-          return prev.filter(p => p.tracking_id !== player.tracking_id);
-        } else {
-          return [...prev, player];
-        }
-      });
+    
+    if (isPickingPlayers) {
+      addOrRemovePlayer(player);
     } else {
       setPlayerModalPlayer(player);
       setShowPlayerModal(true);
     }
-  }, [isComparing]);
 
-  const onRemovePlayerFromSelectedPlayers = useCallback((player: IProAthlete) => {
-    setSelectedPlayers(prev => prev.filter(p => p.tracking_id !== player.tracking_id));
-  }, []);
+  }, [isPickingPlayers]);
+
 
   // Handle search filtering
   const handleSearch = (query: string) => {
@@ -144,9 +136,7 @@ export const PlayersScreen = () => {
   };
 
   return (
-    <PlayersScreenProvider
-      isComparing={isComparing}
-      selectedPlayers={selectedPlayers}
+    <Fragment
     >
       <PageView className="px-5 flex flex-col gap-3 md:w-[80%] lg:w-[60%]">
 
@@ -179,17 +169,13 @@ export const PlayersScreen = () => {
             />
 
             <PlayersCompareButton
-              className={twMerge(isComparing && "bg-gradient-to-r from-primary-600 to-blue-700")}
-              onClick={toggleCompareMode}
+              className={twMerge(isPickingPlayers && "bg-gradient-to-r from-primary-600 to-blue-700")}
             />
           </div>
         </div>
 
         {
-          <PlayerCompareStatus
-            onRemovePlayer={onRemovePlayerFromSelectedPlayers}
-            onStopComparing={onStopComparing}
-          />
+          <PlayersScreenCompareStatus/>
         }
 
         {/* Selected Team Section */}
@@ -243,12 +229,7 @@ export const PlayersScreen = () => {
           </div>
         )}
 
-        <PlayerCompareModal 
-          selectedPlayers={selectedPlayers} 
-          open={selectedPlayers.length >= 2 && isComparing}
-          onClose={onClear}
-          onRemove={onRemovePlayerFromSelectedPlayers}
-        />
+        <PlayerCompareModal />
 
         {playerModalPlayer && <PlayerProfileModal
           onClose={handleClosePlayerModal}
@@ -260,7 +241,7 @@ export const PlayersScreen = () => {
       </PageView>
 
 
-    </PlayersScreenProvider>
+    </Fragment>
   );
 };
 
