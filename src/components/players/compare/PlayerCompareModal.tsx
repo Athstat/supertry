@@ -4,7 +4,7 @@ import PlayersCompareItem from "./PlayerCompareItem";
 import { useAtom } from "jotai";
 import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, showComparePlayerInfo } from "../../../state/comparePlayers.atoms";
 import { ScopeProvider } from "jotai-scope";
-import PlayerCompareDataProvider from "./PlayerCompareDataProvider";
+import PlayerCompareProvider from "./PlayerCompareProvider";
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { useCallback } from "react";
@@ -23,7 +23,7 @@ export default function PlayerCompareModal({ selectedPlayers, open, onCloseCallb
 
   return (
     <ScopeProvider atoms={atoms}>
-      <PlayerCompareDataProvider
+      <PlayerCompareProvider
         selectedPlayers={selectedPlayers}
       >
 
@@ -32,7 +32,7 @@ export default function PlayerCompareModal({ selectedPlayers, open, onCloseCallb
           open={open}
         />
 
-      </PlayerCompareDataProvider>
+      </PlayerCompareProvider>
     </ScopeProvider>
   )
 }
