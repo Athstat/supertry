@@ -32,15 +32,16 @@ export const isCompareModeModal = atom<boolean>((get) => {
     return get(compareModeAtom) === "modal"
 })
 
-export const comparePlayersRecordAtom = atom<Record<string, IProAthlete>>((get) => {
+/** A map of player tracking id and the player object itself as a map */
+export const comparePlayersMapAtom = atom<Map<string, IProAthlete>>((get) => {
     const players = get(comparePlayersAtom);
-    const record: Record<string, IProAthlete> = {};
+    const map: Map<string, IProAthlete> = new Map();
 
     players.forEach((p) => {
-        record[p.tracking_id] = p;
+        map.set(p.tracking_id, p);
     });
 
-    return record;
+    return map;
 })
 
 /** Object that holds all compare player feature atoms */
@@ -52,5 +53,5 @@ export const comparePlayersAtomGroup = {
     compareModeAtom,
     isCompareModePicking,
     isCompareModeModal,
-    comparePlayersRecordAtom
+    comparePlayersMapAtom
 }
