@@ -3,28 +3,41 @@ import { twMerge } from "tailwind-merge"
 import { useSticky } from "../../hooks/useSticky"
 import PrimaryButton from "../shared/buttons/PrimaryButton"
 import { Sticky } from "../shared/Sticky"
-import { useContext } from "react"
-import { PlayersScreenContext } from "../../contexts/PlayersScreenContext"
+import { usePlayerCompareActions } from "../../hooks/usePlayerCompare"
+import { useAtomValue } from "jotai"
+import { comparePlayersAtomGroup } from "../../state/comparePlayers.atoms"
 
 type Props = {
-    onClick?: () => void,
     className?: string
 }
 
-export default function PlayersCompareButton({ className, onClick }: Props) {
+export default function PlayersCompareButton({ className }: Props) {
 
     const { sentinelRef, isSticky } = useSticky<HTMLDivElement>();
-    const context = useContext(PlayersScreenContext);
-    const isComparing = context?.isComparing;
+
+    const isPicking = useAtomValue(
+        comparePlayersAtomGroup.isCompareModePicking
+    );
+
+
+    const {startPicking, stopPicking} = usePlayerCompareActions();
+
+    const handleOnClick = () => {
+        if (!isPicking) {
+            startPicking()
+        } else {
+            stopPicking()
+        }
+    }
 
     return (
         <div>
             <div ref={sentinelRef} />
             <button
-                onClick={onClick}
+                onClick={startPicking}
                 className={twMerge(
                     "flex items-center dark:text-white text-slate-700 gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 hover:bg-gray-200 dark:hover:bg-dark-800 rounded-lg font-medium",
-                    isComparing && "text-white",
+                    isPicking && "text-white",
                     className
                 )}
             >
@@ -32,12 +45,12 @@ export default function PlayersCompareButton({ className, onClick }: Props) {
                 <p>Compare</p>
             </button>
 
-            {isSticky && !isComparing && (
+            {isSticky && !isPicking && (
                 <Sticky className="" >
                     <div className="z-10 bottom-20 fixed px-4 py-2  flex flex-col items-center justify-center gap-1 w-full  left-0" >
 
                         <PrimaryButton
-                            onClick={onClick}
+                            onClick={handleOnClick}
                             className="animate-glow  flex flex-row items-center from-primary-500 to-blue-700 bg-gradient-to-r gap-1 w-[90%] lg:w-[40%]"
                         >
                             <Sparkles className="w-4 h-4 " />

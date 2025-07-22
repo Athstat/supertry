@@ -9,10 +9,11 @@ type Props = {
     className?: string,
 
     /** The hight and width of the outer view point of the modal */
-    hw?: string
+    hw?: string,
+    outerCon?: string
 }
 
-export default function DialogModal({ children, onClose, title, open, className, hw }: Props) {
+export default function DialogModal({ children, onClose, title, open, className, hw, outerCon }: Props) {
 
     const handleOnClose = () => {
         if (onClose) {
@@ -31,7 +32,8 @@ export default function DialogModal({ children, onClose, title, open, className,
 
                 <div
                     className={twMerge(
-                        "bg-white dark:bg-gray-800/70 border border-slate-300 dark:border-slate-700 w-full h-full  rounded-lg p-6 shadow-xl overflow-y-auto flex flex-col"
+                        "bg-white dark:bg-gray-800/70 border border-slate-300 dark:border-slate-700 w-full h-full  rounded-lg p-6 shadow-xl overflow-y-auto flex flex-col",
+                        outerCon
                     )}
                 >
                     <div className="flex items-center justify-between mb-4">
