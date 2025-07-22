@@ -40,6 +40,15 @@ export function usePlayerCompareActions() {
         setSelectedPlayers(prev => [...prev, player]);
     }
 
+    const addMultiplePlayers = (players: IProAthlete[]) => {
+        
+        const playersNotSelectedAlready = players.filter((p) => {
+            return !isPlayerSelectedAlready(p);
+        })
+
+        setSelectedPlayers(prev => [...prev, ...playersNotSelectedAlready]);
+    }
+
     const removePlayer = (player: IProAthlete) => {
         const isNotInList = isPlayerSelectedAlready(player);
         if (isNotInList) return;
@@ -86,7 +95,8 @@ export function usePlayerCompareActions() {
         selectedPlayers,
         movePlayerLeft,
         movePlayerRight,
-        compareMode
+        compareMode,
+        addMultiplePlayers
     }
 
 }

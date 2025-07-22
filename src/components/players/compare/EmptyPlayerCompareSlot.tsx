@@ -3,34 +3,26 @@ import { twMerge } from "tailwind-merge";
 import SecondaryText from "../../shared/SecondaryText";
 import QuickPlayerSelectModal from "../QuickPlayerPickModal";
 import { useState } from "react";
-import { useAtom } from "jotai";
-import { comparePlayersAtom } from "../../../state/comparePlayers.atoms";
 import { IProAthlete } from "../../../types/athletes";
+import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
+import { useAtomValue } from "jotai";
+import { comparePlayersAtomGroup } from "../../../state/comparePlayers.atoms";
 
 
 export default function EmptyPlayerCompareSlot() {
 
-    const [comparePlayers, setComparePlayers] = useAtom(comparePlayersAtom);
     const [show, setShow] = useState(false);
+
+    const alreadySelectedPlayers = useAtomValue(
+        comparePlayersAtomGroup.comparePlayersAtom
+    );
+
+    const {addMultiplePlayers} = usePlayerCompareActions();
 
     const toggle = () => setShow(!show);
 
     const onSelectPlayers = (arr: IProAthlete[]) => {
-        
-        // Remove players who are already in the compare
-        // players list
-        const prunedList = arr.filter((a) => {
-
-            const isInListAlready = comparePlayers.some((p) => {
-                return a.tracking_id === p.tracking_id;
-            });
-
-            return !isInListAlready;
-        });
-
-
-        setComparePlayers(prev => [...prev, ...prunedList]);
-        
+        addMultiplePlayers(arr);
     }
 
     return (
@@ -56,7 +48,7 @@ export default function EmptyPlayerCompareSlot() {
 
             <QuickPlayerSelectModal
                 open={show}
-                exclude={comparePlayers}
+                exclude={alreadySelectedPlayers}
                 onClose={toggle}
                 onSelectPlayers={onSelectPlayers}
             />
