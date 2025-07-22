@@ -7,7 +7,6 @@ interface OptimizedImageProps {
   src: string;
   alt: string;
   className?: string;
-  placeholder?: string;
   onLoad?: () => void;
   onError?: (error: string) => void;
   lazy?: boolean;
@@ -18,7 +17,6 @@ export const OptimizedImage = ({
   src,
   alt,
   className,
-  placeholder,
   onLoad,
   onError,
   lazy = true,
