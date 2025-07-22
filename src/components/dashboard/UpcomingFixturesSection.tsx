@@ -16,10 +16,15 @@ import { fixtureSumary } from '../../utils/fixtureUtils';
 import { useNavigate } from 'react-router-dom';
 
 export default function UpcomingFixturesSection() {
-
-  const { data: fixtures, isLoading, error } = useSWR('pro-fixtures', () => gamesService.getAllSupportedGames());
+  const {
+    data: fixtures,
+    isLoading,
+    error,
+  } = useSWR('pro-fixtures', () => gamesService.getAllSupportedGames());
   const { push } = useRouter();
-  const { data: leagues, isLoading: isLoadingLeagues } = useSWR('all-leagues', () => leagueService.getAllLeagues());
+  const { data: leagues, isLoading: isLoadingLeagues } = useSWR('all-leagues', () =>
+    leagueService.getAllLeagues()
+  );
 
   const [selectedFixture, setSelectedFixture] = useState<IFixture | null>(null);
   const [showPredictModal, setShowPredictModal] = useState(false);
@@ -31,16 +36,18 @@ export default function UpcomingFixturesSection() {
   }
 
   // Sort fixtures by date and time
-  const sortedFixtures = fixtures
-    .sort((a, b) =>
-      a.kickoff_time && b.kickoff_time
-        ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
-        : 0
-    )
-    .filter(f => {
-      return f.game_status !== 'completed';
-    })
-    .slice(0, 5);
+  const sortedFixtures = Array.isArray(fixtures)
+    ? fixtures
+        .sort((a, b) =>
+          a.kickoff_time && b.kickoff_time
+            ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
+            : 0
+        )
+        .filter(f => {
+          return f.game_status !== 'completed';
+        })
+        .slice(0, 5)
+    : [];
 
   return (
     <div>
@@ -64,7 +71,6 @@ export default function UpcomingFixturesSection() {
       ) : (
         <div className="flex space-x-4 overflow-x-auto pb-2">
           {sortedFixtures.map((fixture, index) => {
-
             return (
               <div
                 key={index}
@@ -72,8 +78,11 @@ export default function UpcomingFixturesSection() {
               >
                 <div className="p-4">
                   <div className="text-center mb-3 text-sm text-slate-700 dark:text-gray-300">
-                    {fixture.competition_name && <p className='text-[10px]' >{fixture.competition_name}, {fixture.venue}</p>}
-
+                    {fixture.competition_name && (
+                      <p className="text-[10px]">
+                        {fixture.competition_name}, {fixture.venue}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex justify-between items-center mb-4">
@@ -179,7 +188,6 @@ function PredictionModal({
   showModal: boolean;
   onClose: () => void;
 }) {
-
   const navigate = useNavigate();
   const { gameKickedOff } = fixtureSumary(fixture);
   const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
@@ -219,7 +227,7 @@ function PredictionModal({
 
   const goToFixturePage = () => {
     navigate(`/fixtures/${fixture.game_id}`);
-  }
+  };
 
   return (
     <DialogModal
@@ -331,8 +339,6 @@ function PredictionModal({
           </button>
         </div>
       </div>
-
-
     </DialogModal>
   );
 }
