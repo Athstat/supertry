@@ -14,7 +14,7 @@ export default function PlayerCompareDataProvider({selectedPlayers, children} : 
     const setComparePlayers = useSetAtom(comparePlayersAtom);
 
     useEffect(() => {
-        if(selectedPlayers) setComparePlayers(selectedPlayers);
+        setComparePlayers(selectedPlayers);
     }, [selectedPlayers]);
 
     return (

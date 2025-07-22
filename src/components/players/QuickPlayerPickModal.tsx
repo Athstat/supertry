@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAthletes } from "../../contexts/AthleteContext"
 import useAthleteFilter from "../../hooks/useAthleteFilter";
 import { IProAthlete } from "../../types/athletes"
@@ -16,14 +16,15 @@ type Props = {
     onSelectPlayers?: (players: IProAthlete[]) => void,
     open?: boolean,
     onClose?: () => void,
-    init?: IProAthlete[]
+    exclude?: IProAthlete[]
 }
 
-export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose, init = [] }: Props) {
+export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose, exclude = [] }: Props) {
 
     const { athletes } = useAthletes();
     const [search, setSearch] = useState<string>("");
-    const [selected, setSelected] = useState<IProAthlete[]>(init);
+
+    const [selected, setSelected] = useState<IProAthlete[]>([]);
 
     const debouncedSearchQuery = useDebounced(search, 300);
 
@@ -33,6 +34,11 @@ export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose,
     });
 
     const onClickPlayer = (player: IProAthlete) => {
+
+        if (exclude.find((a) => a.tracking_id === player.tracking_id)) {
+            return;
+        }
+
         if (selected.some(p => p.tracking_id === player.tracking_id)) {
 
             setSelected(prev =>
@@ -106,6 +112,7 @@ export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose,
                             key={athlete.tracking_id}
                             onClick={onClickPlayer}
                             isSelected={selected.some(p => p.tracking_id === athlete.tracking_id)}
+                            disabled={exclude.some(p => p.tracking_id === athlete.tracking_id)}
                         />
                     })}
                 </div>
@@ -121,12 +128,18 @@ export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose,
 type PlayerItemProps = {
     player: IProAthlete,
     onClick?: (player: IProAthlete) => void,
-    isSelected?: boolean
+    isSelected?: boolean,
+    disabled?: boolean
 }
 
-function PlayerItem({ player, onClick, isSelected }: PlayerItemProps) {
+function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) {
 
     const handleClick = () => {
+
+        if (disabled) {
+            return;
+        }
+
         if (onClick) {
             onClick(player);
         }

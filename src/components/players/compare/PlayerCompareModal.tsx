@@ -1,7 +1,7 @@
 import DialogModal from "../../shared/DialogModal";
 import { IProAthlete } from "../../../types/athletes";
 import PlayersCompareItem from "./PlayerCompareItem";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, showComparePlayerInfo } from "../../../state/comparePlayers.atoms";
 import { ScopeProvider } from "jotai-scope";
 import PlayerCompareDataProvider from "./PlayerCompareDataProvider";
@@ -44,15 +44,20 @@ type ContentProps = {
   onRemove: (player: IProAthlete) => void;
 }
 
-function Content({ onRemove, onClose, open }: ContentProps) {
+function Content({ onClose, open }: ContentProps) {
 
-  const selectedPlayers = useAtomValue(comparePlayersAtom);
+  const [selectedPlayers, setSelectedPlayers] = useAtom(comparePlayersAtom);
+  
+  const onRemovePlayer = (player: IProAthlete) => {
+    setSelectedPlayers(prev => {
+      return prev.filter(a => a.tracking_id !== player.tracking_id);
+    });
+  }
 
-  if (open === false || selectedPlayers.length < 2) return;
+  if (open === false) return;
 
-  const player1 = selectedPlayers[0];
-  const player2 = selectedPlayers[1];
-  let title = `Comparing ${player1.player_name} and ${player2.player_name}`;
+  const playerLen = selectedPlayers.length;
+  let title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;
 
   return (
     <DialogModal
@@ -60,8 +65,8 @@ function Content({ onRemove, onClose, open }: ContentProps) {
       open={open}
       title={title}
       onClose={onClose}
-      hw="w-[98%] lg:w-[45%] max-h-[98%]"
-      outerCon="p-3"
+      hw="w-[98%] lg:w-[85%] max-h-[98%] min-h-[98%] lg:max-h-[90%] lg:min-h-[90%]"
+      outerCon="p-3 lg:p-6"
     >
 
       <div className={twMerge(
@@ -71,7 +76,7 @@ function Content({ onRemove, onClose, open }: ContentProps) {
         {selectedPlayers.map((player) => {
           return <PlayersCompareItem
             player={player}
-            onRemove={onRemove}
+            onRemove={onRemovePlayer}
           />
         })}
 
