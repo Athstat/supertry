@@ -12,10 +12,10 @@ import { isStatActionBest, isStarRatingBest, isPowerRatingBest } from "../../../
 
 type Props = {
     player: IProAthlete;
-    onRemove?: (player: IProAthlete) => void;
+    onRemove?: (player: IProAthlete) => void
 };
 
-export default function PlayersCompareItem({ player, onRemove }: Props) {
+export default function PlayersCompareItem({ player , onRemove}: Props) {
 
     const comparePlayers = useAtomValue(comparePlayersAtom);
     const [comparePlayersStats, setComparePlayersStats] = useAtom(comparePlayersStatsAtom);

@@ -7,15 +7,15 @@ import { ScopeProvider } from "jotai-scope";
 import PlayerCompareDataProvider from "./PlayerCompareDataProvider";
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
+import { useCallback } from "react";
 
 type Props = {
   selectedPlayers: IProAthlete[];
   open?: boolean;
-  onClose?: () => void;
-  onRemove: (player: IProAthlete) => void;
+  onCloseCallback?: (players: IProAthlete[]) => void;
 };
 
-export default function PlayerCompareModal({ selectedPlayers, open, onClose, onRemove }: Props) {
+export default function PlayerCompareModal({ selectedPlayers, open, onCloseCallback }: Props) {
   const atoms = [
     comparePlayersAtom, comparePlayersStatsAtom,
     comparePlayersStarRatingsAtom, showComparePlayerInfo
@@ -28,8 +28,7 @@ export default function PlayerCompareModal({ selectedPlayers, open, onClose, onR
       >
 
         <Content
-          onRemove={onRemove}
-          onClose={onClose}
+          onCloseCallback={onCloseCallback}
           open={open}
         />
 
@@ -40,31 +39,38 @@ export default function PlayerCompareModal({ selectedPlayers, open, onClose, onR
 
 type ContentProps = {
   open?: boolean;
-  onClose?: () => void;
-  onRemove: (player: IProAthlete) => void;
+  onCloseCallback?: (player: IProAthlete[]) => void;
 }
 
-function Content({ onClose, open }: ContentProps) {
+function Content({ open, onCloseCallback }: ContentProps) {
 
   const [selectedPlayers, setSelectedPlayers] = useAtom(comparePlayersAtom);
-  
-  const onRemovePlayer = (player: IProAthlete) => {
-    setSelectedPlayers(prev => {
-      return prev.filter(a => a.tracking_id !== player.tracking_id);
-    });
-  }
-
-  if (open === false) return;
 
   const playerLen = selectedPlayers.length;
   let title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;
+
+  const handleOnClose = useCallback(() => {
+    if (onCloseCallback) {
+      onCloseCallback(selectedPlayers);
+    }
+  }, [selectedPlayers]);
+
+  const onRemove = useCallback((player: IProAthlete) => {
+    setSelectedPlayers(prev => {
+      return prev.filter((p) => {
+        return p.tracking_id !== player.tracking_id;
+      })
+    })
+  }, [selectedPlayers]);
+
+  if (open === false) return;
 
   return (
     <DialogModal
 
       open={open}
       title={title}
-      onClose={onClose}
+      onClose={handleOnClose}
       hw="w-[98%] lg:w-[85%] max-h-[98%] min-h-[98%] lg:max-h-[90%] lg:min-h-[90%]"
       outerCon="p-3 lg:p-6"
     >
@@ -76,8 +82,8 @@ function Content({ onClose, open }: ContentProps) {
         {selectedPlayers.map((player) => {
           return <PlayersCompareItem
             player={player}
-            onRemove={onRemovePlayer}
             key={player.tracking_id}
+            onRemove={onRemove}
           />
         })}
 

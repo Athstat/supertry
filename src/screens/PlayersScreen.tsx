@@ -64,33 +64,36 @@ export const PlayersScreen = () => {
 
   const isEmpty = !isLoading && !isFiltering && filteredAthletes.length === 0;
 
-  const [isComparing, setIsComparing] = useState(false);
+  const [showCompareModal, setShowCompareModal] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
 
-  const toggleCompareMode = () => setIsComparing(!isComparing);
-  const clearSelections = () => setSelectedPlayers([]);
+  const [isPickingPlayers, setIsPickingPlayers] = useState(false);
+
+  const stopPickingPlayers = () => {
+    setIsPickingPlayers(prev => !prev);
+    setSelectedPlayers([]);
+  }
+
+  const toggleCompareMode = () => setShowCompareModal(!showCompareModal);
+  const togglePickingPlayers = () => setIsPickingPlayers(prev => !prev);
 
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
+
   
   const handleClosePlayerModal = () => {
     setPlayerModalPlayer(undefined);
     setShowPlayerModal(false);
   }
 
-  const onClear = () => {
-    clearSelections();
-    // toggleCompareMode();
-  }
-
-  const onStopComparing = () => {
-    clearSelections();
-    setIsComparing(false);
+  const onCloseCompareModal = (players: IProAthlete[]) => {
+    setSelectedPlayers(players);
+    setShowCompareModal(false);
   }
 
   // Handle player selection with useCallback for better performance
   const handlePlayerClick = useCallback((player: IProAthlete) => {
-    if (isComparing) {
+    if (isPickingPlayers) {
       setSelectedPlayers(prev => {
         const isSelected = prev.some(p => p.tracking_id === player.tracking_id);
         
@@ -104,7 +107,7 @@ export const PlayersScreen = () => {
       setPlayerModalPlayer(player);
       setShowPlayerModal(true);
     }
-  }, [isComparing]);
+  }, [showCompareModal]);
 
   const onRemovePlayerFromSelectedPlayers = useCallback((player: IProAthlete) => {
     setSelectedPlayers(prev => prev.filter(p => p.tracking_id !== player.tracking_id));
@@ -145,7 +148,7 @@ export const PlayersScreen = () => {
 
   return (
     <PlayersScreenProvider
-      isComparing={isComparing}
+      isComparing={showCompareModal}
       selectedPlayers={selectedPlayers}
     >
       <PageView className="px-5 flex flex-col gap-3 md:w-[80%] lg:w-[60%]">
@@ -179,8 +182,8 @@ export const PlayersScreen = () => {
             />
 
             <PlayersCompareButton
-              className={twMerge(isComparing && "bg-gradient-to-r from-primary-600 to-blue-700")}
-              onClick={toggleCompareMode}
+              className={twMerge(isPickingPlayers && "bg-gradient-to-r from-primary-600 to-blue-700")}
+              onClick={togglePickingPlayers}
             />
           </div>
         </div>
@@ -188,7 +191,10 @@ export const PlayersScreen = () => {
         {
           <PlayerCompareStatus
             onRemovePlayer={onRemovePlayerFromSelectedPlayers}
-            onStopComparing={onStopComparing}
+            onStopPickingPlayers={stopPickingPlayers}
+            isPicking={isPickingPlayers}
+            selectedPlayers={selectedPlayers}
+            setIsPicking={setIsPickingPlayers}
           />
         }
 
@@ -244,10 +250,9 @@ export const PlayersScreen = () => {
         )}
 
         <PlayerCompareModal 
-          selectedPlayers={selectedPlayers} 
-          open={selectedPlayers.length >= 2 && isComparing}
-          onClose={onClear}
-          onRemove={onRemovePlayerFromSelectedPlayers}
+          selectedPlayers={selectedPlayers}
+          open={showCompareModal}
+          onCloseCallback={onCloseCompareModal}
         />
 
         {playerModalPlayer && <PlayerProfileModal

@@ -9,24 +9,33 @@ import { IProAthlete } from "../../../types/athletes";
 
 type Props = {
     onRemovePlayer: (player: IProAthlete) => void,
-    onStopComparing?: () => void,
+    selectedPlayers: IProAthlete[]
+    onStopPickingPlayers?: () => void,
+    isPicking?: boolean,
+    setIsPicking?: (flag: boolean) => void
 }
 
-export default function PlayerCompareStatus({ onRemovePlayer, onStopComparing }: Props) {
+export default function PlayerCompareStatus({ onRemovePlayer, onStopPickingPlayers, selectedPlayers, isPicking, setIsPicking }: Props) {
 
     const context = useContext(PlayersScreenContext);
 
     if (!context) return;
 
-    const { isComparing, selectedPlayers } = context;
     const { sentinelRef, isSticky } = useSticky<HTMLDivElement>();
+
+    const startPicking = () => {
+
+        if (!isPicking && setIsPicking) {
+            setIsPicking(true);
+        }
+    }
 
     return (
         <div>
 
             <div ref={sentinelRef} />
 
-            {isComparing && (
+            {isPicking && (
 
                 <WarningCard className="p-3 flex flex-col gap-2" >
 
@@ -57,7 +66,7 @@ export default function PlayerCompareStatus({ onRemovePlayer, onStopComparing }:
             )}
 
 
-            {isSticky && isComparing && (
+            {isSticky && isPicking && (
                 <Sticky className="" >
                     <div className="z-10 bottom-20 fixed py-2  flex flex-col gap-1 w-full items-center justify-center left-0" >
 
@@ -79,9 +88,11 @@ export default function PlayerCompareStatus({ onRemovePlayer, onStopComparing }:
                             })}
                         </div>
 
-                        {isComparing && (
+                        {isPicking && (
 
-                            <PrimaryButton className="w-[90%] lg:w-[50%]" onClick={onStopComparing} >Stop Comparing</PrimaryButton>
+                            <PrimaryButton className="w-[90%] lg:w-[50%]" onClick={onStopPickingPlayers} >
+                                Compare Players
+                            </PrimaryButton>
 
                         )}
                     </div>
