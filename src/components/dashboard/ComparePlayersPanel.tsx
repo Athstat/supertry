@@ -38,13 +38,13 @@ function PanelContent() {
     comparePlayersAtomGroup.comparePlayersAtom
   )
 
-  const { clearSelections, addPlayer, removePlayer, showCompareModal } = usePlayerCompareActions();
+  const { clearSelections, addOrRemovePlayer, removePlayer, showCompareModal } = usePlayerCompareActions();
   const [searchQuery, setSearchQuery] = useState('');
 
   let {shuffledArr: shuffledAthletes, triggerShuffle} = useDeterministicShuffle(athletes);
 
   const handlePlayerClick = (player: IProAthlete) => {
-    addPlayer(player);
+    addOrRemovePlayer(player);
   };
 
   const handleShuffle = () => {
