@@ -98,13 +98,13 @@ export const gamesService = {
 
   postGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team') => {
     try {
-      const user = authService.getUserInfo();
+      const user = await authService.getUserInfo();
       const uri = getUri(`/api/v1/games/${gameId}/votes`);
 
       const res = await fetch(uri, {
         method: 'POST',
         headers: getAuthHeader(),
-        body: JSON.stringify({ voteFor, userId: user?.id ?? 'fall-back' }),
+        body: JSON.stringify({ voteFor, userId: user?.kc_id ?? 'fall-back' }),
       });
 
       return await res.json();
@@ -115,13 +115,13 @@ export const gamesService = {
 
   putGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team') => {
     try {
-      const user = authService.getUserInfo();
+      const user = await authService.getUserInfo();
       const uri = getUri(`/api/v1/games/${gameId}/votes`);
 
       const res = await fetch(uri, {
         method: 'PUT',
         headers: getAuthHeader(),
-        body: JSON.stringify({ voteFor, userId: user?.id ?? 'fall-back' }),
+        body: JSON.stringify({ voteFor, userId: user?.kc_id ?? 'fall-back' }),
       });
 
       return await res.json();

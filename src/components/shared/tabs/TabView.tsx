@@ -124,6 +124,7 @@ export type TabViewHeaderItem = {
   tabKey: string;
   disabled?: boolean;
   className?: string;
+  loading?: boolean
 };
 
 function TabViewButton({ label, tabKey, disabled = false, className }: TabViewHeaderItem) {

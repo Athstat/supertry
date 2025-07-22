@@ -5,7 +5,6 @@ import { ReactNode, useEffect } from 'react'
 import useSWR from 'swr'
 import { seasonService } from '../../services/seasonsService'
 import { LoadingState } from '../ui/LoadingState'
-import { gamesService } from '../../services/gamesService'
 
 type Props = {
   season: ISeason,
@@ -24,7 +23,7 @@ export default function SeasonDataProvider({ season, children }: Props) {
   const seasonAthletesKey = `seasons-athletes/${season.id}`;
   const seasonFixutesKey = `seasons-fixtures/${season.id}`;
   const { data: teams, isLoading: loadingTeams } = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(season.id));
-  const { data: fixtures, isLoading: loadingFixtures } = useSWR(seasonFixutesKey, () => gamesService.getGamesByCompetitionId(season.id));
+  const { data: fixtures, isLoading: loadingFixtures } = useSWR(seasonFixutesKey, () => seasonService.getSeasonFixtures(season.id));
   const { data: athletes, isLoading: loadingAthletes } = useSWR(seasonAthletesKey, () => seasonService.getSeasonAthletes(season.id));
 
   const isLoading = loadingTeams || loadingAthletes || loadingFixtures;

@@ -1,10 +1,10 @@
 import { Users } from "lucide-react"
-import { RugbyPlayer } from "../../types/rugbyPlayer"
 import { PlayerGameCard } from "../player/PlayerGameCard"
 import NoContentCard from "../shared/NoContentMessage"
+import { IProAthlete } from "../../types/athletes"
 
 type Props = {
-    athletes: RugbyPlayer[]
+    athletes: IProAthlete[]
 }
 
 /** Renders Season Athletes List */

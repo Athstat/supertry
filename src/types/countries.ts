@@ -4,7 +4,7 @@ export type Country = {
     flag: string;
 }
 
-export const countries: Country[] = [
+export const countryFlags: Country[] = [
     {
         "code": "AD",
         "name": "Andorra",
@@ -319,6 +319,11 @@ export const countries: Country[] = [
         "code": "EC",
         "name": "Ecuador",
         "flag": "🇪🇨"
+    },
+    {
+        "code": "ENG",
+        "name": "England",
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
     },
     {
         "code": "EE",

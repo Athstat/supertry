@@ -90,16 +90,16 @@ export default function UpcomingFixturesSection() {
                     <div className="flex flex-col items-center min-w-0 w-28">
                       <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                         <TeamLogo
-                          url={fixture.team_image_url}
-                          teamName={fixture.team_name}
+                          url={fixture.team.image_url}
+                          teamName={fixture.team.athstat_name}
                           className="w-10 h-10"
                         />
                       </div>
                       <p
                         className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
-                        title={fixture.team_name}
+                        title={fixture.team.athstat_name}
                       >
-                        {fixture.team_name}
+                        {fixture.team.athstat_name}
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>
                     </div>
@@ -123,16 +123,16 @@ export default function UpcomingFixturesSection() {
                     <div className="flex flex-col items-center min-w-0 w-28">
                       <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
                         <TeamLogo
-                          url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
-                          teamName={fixture.opposition_team_name}
+                          url={fixture.opposition_team.image_url}
+                          teamName={fixture.opposition_team.athstat_name}
                           className="w-10 h-10"
                         />
                       </div>
                       <p
                         className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
-                        title={fixture.opposition_team_name}
+                        title={fixture.opposition_team.athstat_name}
                       >
-                        {fixture.opposition_team_name}
+                        {fixture.opposition_team.athstat_name}
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>
                     </div>
@@ -223,7 +223,7 @@ function PredictionModal({
     }
   };
 
-  const title = `${fixture.team_name} vs ${fixture.opposition_team_name}`;
+  const title = `${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}`;
 
   const goToFixturePage = () => {
     navigate(`/fixtures/${fixture.game_id}`);
@@ -246,12 +246,11 @@ function PredictionModal({
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
-            className="w-20 h-20"
-            url={fixture.team_image_url}
-            teamName={fixture.team_name}
+            className="w-20 h-20" url={fixture.team.image_url}
+            teamName={fixture.team.athstat_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
-            {fixture.team_name}
+            {fixture.team.athstat_name}
           </p>
         </div>
 
@@ -271,11 +270,11 @@ function PredictionModal({
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
             className="w-20 h-20"
-            url={fixture.opposition_team_image_url ?? fixture.opposition_image_url}
-            teamName={fixture.opposition_team_name}
+            url={fixture.opposition_team.image_url ?? fixture.opposition_team.image_url}
+            teamName={fixture.opposition_team.athstat_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
-            {fixture.opposition_team_name}
+            {fixture.opposition_team.athstat_name}
           </p>
         </div>
       </div>
@@ -292,14 +291,14 @@ function PredictionModal({
                 className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1.5 text-xs hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
                 disabled={isVoting}
               >
-                {fixture.team_name}
+                {fixture.team.athstat_name}
               </button>
               <button
                 onClick={() => handleVote('away_team')}
                 className="border dark:border-slate-700 flex-1 px-2 rounded-lg bg-slate-200 py-1.5 text-xs hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
                 disabled={isVoting}
               >
-                {fixture.opposition_team_name}
+                {fixture.opposition_team.athstat_name}
               </button>
             </div>
           </div>
@@ -312,7 +311,7 @@ function PredictionModal({
               hasUserVoted={votedHomeTeam}
               voteCount={homeVotes.length}
               votePercentage={homePerc}
-              title={`${fixture.team_name}`}
+              title={`${fixture.team.athstat_name}`}
               onClick={() => handleVote('home_team')}
               isGreen={false}
               isRed={false}
@@ -322,7 +321,7 @@ function PredictionModal({
               hasUserVoted={votedAwayTeam}
               voteCount={awayVotes.length}
               votePercentage={awayPerc}
-              title={`${fixture.opposition_team_name}`}
+              title={`${fixture.opposition_team.athstat_name}`}
               onClick={() => handleVote('away_team')}
               isGreen={false}
               isRed={false}

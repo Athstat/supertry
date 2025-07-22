@@ -1,8 +1,11 @@
+import { IProSeason } from "./season"
+
 export type SportAction = {
     athlete_id: string,
     action: PlayerAggregateStatAction
     action_count: number,
-    season_id: string
+    season_id: string,
+    season: IProSeason
 }
 
 type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineoutOffence" |

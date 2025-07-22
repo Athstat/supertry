@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { sbrService } from "../../../services/sbrService"
+import { sbrService } from "../../../services/sbr/sbrService"
 import { ISbrFixture, ISbrFixtureVote } from "../../../types/sbr"
 import { Check, CircleCheck, Loader, XIcon } from "lucide-react"
 import { mutate } from "swr"

@@ -1,4 +1,5 @@
 import { DjangoAuthUser } from "../types/auth";
+import {jwtDecode} from "jwt-decode";
 
 export function validateUsername(username: string) {
     const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
@@ -43,4 +44,25 @@ export function guestNewUsernameSuggestion(guestUser: DjangoAuthUser) {
     }
 
     return undefined;
+}
+
+/** Returns true if a auth token is a keycloak token */
+export function isKeycloakToken(token: string): boolean {
+  try {
+    const decoded: any = jwtDecode(token);
+
+    // Basic check: issuer contains Keycloak
+    if (decoded?.iss && decoded.iss.includes("/auth/realms/")) {
+      return true;
+    }
+
+    // Optional: check for common Keycloak claims
+    if (decoded.realm_access || decoded.resource_access) {
+      return true;
+    }
+
+    return false;
+  } catch (e) {
+    return false;
+  }
 }

@@ -1,16 +1,15 @@
-import { userRankingsService } from "../../services/userRankingsService";
+import { fantasyRankingsService } from "../../services/fantasyRankingsService";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import UserRankingFocusShort from "./UserRankingFocusShort";
 import { LoadingState } from "../ui/LoadingState";
 import UserRankingsItem from "./UserRankingsItem";
-import { useFetch } from "../../hooks/useFetch";
+import useSWR from "swr";
 
-export default function UserRankingsLeaderBoard() {
+export default function FantasyRankingsLeaderBoard() {
 
-    const {data: rankings, isLoading, error} = useFetch(
-        "rankings",[],
-        async () => await userRankingsService.getUserRankings()
-    );
+    const key = 'fantasy-user-rankings';
+
+    const {data: rankings, isLoading, error} = useSWR(key, () => fantasyRankingsService.getUserRankings());
 
     console.log("Errors ", error);
     

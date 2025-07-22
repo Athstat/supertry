@@ -2,9 +2,9 @@
 
 import { atom } from "jotai";
 import { IFixture, ISeason, ITeam } from "../types/games";
-import { RugbyPlayer } from "../types/rugbyPlayer";
+import { IProAthlete } from "../types/athletes";
 
 export const seasonAtom = atom<ISeason>();
 export const seasonFixtutesAtoms = atom<IFixture[]>([]);
-export const seasonAthletesAtoms = atom<RugbyPlayer[]>([]);
+export const seasonAthletesAtoms = atom<IProAthlete[]>([]);
 export const seasonTeamsAtoms = atom<ITeam[]>([])

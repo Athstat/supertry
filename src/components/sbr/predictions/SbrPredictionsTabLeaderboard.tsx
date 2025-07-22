@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { sbrService } from "../../../services/sbrService";
+import { sbrService } from "../../../services/sbr/sbrService";
 import { LoadingState } from "../../ui/LoadingState";
 
 /** Renders the SBR Leaderboard component */

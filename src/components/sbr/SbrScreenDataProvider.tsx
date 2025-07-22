@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useSetAtom } from "jotai"
 import { ReactNode, useEffect } from "react";
 import { LoadingState } from "../ui/LoadingState";
-import { sbrService } from "../../services/sbrService";
+import { sbrService } from "../../services/sbr/sbrService";
 import { useQueryState } from "../../hooks/useQueryState";
 import { allSbrWeekFixturesAtom, sbrFixturesPivotDateAtom } from "../../state/sbrFixtures.atoms"
 import { dateToStrWithoutTime, safeTransformStringToDate } from "../../utils/dateUtils";

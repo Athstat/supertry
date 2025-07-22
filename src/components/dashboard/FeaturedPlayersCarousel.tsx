@@ -1,19 +1,19 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Users, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { athleteService } from '../../services/athleteService';
-import { RugbyPlayer } from '../../types/rugbyPlayer';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
+import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import { IProAthlete } from '../../types/athletes';
 
-type TabType = 'top-picks' | 'hot-streak' | 'by-position';
+// type TabType = 'top-picks' | 'hot-streak' | 'by-position';
 
 const FeaturedPlayersCarousel = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabType>('top-picks');
-  const [players, setPlayers] = useState<RugbyPlayer[]>([]);
+  // const [activeTab, setActiveTab] = useState<TabType>('top-picks');
+  const [players, setPlayers] = useState<IProAthlete[]>([]);
   const [loading, setLoading] = useState(true);
-  const [playerModalPlayer, setPlayerModalPlayer] = useState<RugbyPlayer>();
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
 
   const handleClosePlayerModal = () => {
@@ -21,7 +21,7 @@ const FeaturedPlayersCarousel = () => {
     setShowPlayerModal(false);
   };
 
-  const handlePlayerClick = (player: RugbyPlayer) => {
+  const handlePlayerClick = (player: IProAthlete) => {
     setPlayerModalPlayer(player);
     setShowPlayerModal(true);
   };
@@ -39,7 +39,7 @@ const FeaturedPlayersCarousel = () => {
         ];
 
         // Fetch each player by their specific ID
-        const playerPromises = featuredPlayerIds.map(id => athleteService.getRugbyAthleteById(id));
+        const playerPromises = featuredPlayerIds.map(id => djangoAthleteService.getAthleteById(id));
 
         const fetchedPlayers = await Promise.all(playerPromises);
 
@@ -56,11 +56,11 @@ const FeaturedPlayersCarousel = () => {
     fetchPlayers();
   }, []);
 
-  const sortedAthletes = useMemo(() => {
-    return players.sort((a, b) => {
-      return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
-    })
-  }, [players])
+  // const sortedAthletes = useMemo(() => {
+  //   return players.sort((a, b) => {
+  //     return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+  //   })
+  // }, [players])
 
   return (
     <div className="w-full">

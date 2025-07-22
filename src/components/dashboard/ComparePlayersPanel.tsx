@@ -1,24 +1,33 @@
 import { useState } from 'react';
 import { BarChart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { RugbyPlayer } from '../../types/rugbyPlayer';
-import { useAthletes } from '../../contexts/AthleteContext';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerCompareModal from '../players/compare/PlayerCompareModal';
 import { twMerge } from 'tailwind-merge';
 import { PlayerSearch } from '../players/PlayerSearch';
 import { Infinity } from 'lucide-react';
+import useSWR from 'swr';
+import { swrFetchKeys } from '../../utils/swrKeys';
+import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import { IProAthlete } from '../../types/athletes';
+import { LoadingState } from '../ui/LoadingState';
 
 const ComparePlayersPanel = () => {
+  
   const navigate = useNavigate();
-  let { athletes } = useAthletes();
-  const [selectedPlayers, setSelectedPlayers] = useState<RugbyPlayer[]>([]);
+
+  const fetchKey = swrFetchKeys.getAllProAthletesKey()
+  const {data: fetchedAthletes, isLoading} = useSWR(fetchKey, () => djangoAthleteService.getAllAthletes());
+  
+  let athletes = fetchedAthletes ?? [];
+
+  const [selectedPlayers, setSelectedPlayers] = useState<IProAthlete[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Always in compare mode
   const clearSelections = () => setSelectedPlayers([]);
 
-  const handlePlayerClick = (player: RugbyPlayer) => {
+  const handlePlayerClick = (player: IProAthlete) => {
     const isSelectedAlready = selectedPlayers.find(p => p.tracking_id === player.tracking_id);
     if (isSelectedAlready) {
       const newList = selectedPlayers.filter(p => p.tracking_id !== player.tracking_id);
@@ -28,7 +37,7 @@ const ComparePlayersPanel = () => {
     }
   };
 
-  const onRemovePlayerFromSelectedPlayers = (player: RugbyPlayer) => {
+  const onRemovePlayerFromSelectedPlayers = (player: IProAthlete) => {
     const newList = selectedPlayers.filter(p => p.tracking_id !== player.tracking_id);
     setSelectedPlayers(newList);
   };
@@ -67,13 +76,14 @@ const ComparePlayersPanel = () => {
   // Shuffle button handler
   const handleShufflePlayers = () => {
     setManualShuffleSeed(Date.now());
+    clearSelections()
   };
 
   const filteredPlayers = shuffledAthletes.filter(player => {
     const query = searchQuery.toLowerCase();
     return (
       player.player_name?.toLowerCase().includes(query) ||
-      player.team_name?.toLowerCase().includes(query) ||
+      player.team.athstat_name?.toLowerCase().includes(query) ||
       player.position_class?.toLowerCase().includes(query)
     );
   });
@@ -140,6 +150,8 @@ const ComparePlayersPanel = () => {
               </div>
             )}
           </div>
+            
+          {isLoading && <LoadingState />}
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {filteredPlayers.slice(0, 6).map(player => (

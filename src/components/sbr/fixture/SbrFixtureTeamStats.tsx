@@ -219,13 +219,13 @@ export default function SbrFixtureTeamStats() {
 
         <div className="flex flex-row gap-1" >
           <div className="flex flex-1 items-center justify-start" >
-            <SbrTeamLogo className="w-6 h-6" teamName={fixture.home_team} />
+            <SbrTeamLogo className="w-6 h-6" teamName={fixture.home_team.team_name} />
           </div>
           <div className="flex flex-[3] items-center justify-center text-center " >
             <p>Team Stats</p>
           </div>
           <div className="flex flex-1 items-center justify-end" >
-            <SbrTeamLogo className="w-6 h-6" teamName={fixture.away_team} />
+            <SbrTeamLogo className="w-6 h-6" teamName={fixture.away_team.team_name} />
           </div>
         </div>
 

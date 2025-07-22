@@ -245,6 +245,12 @@ export const authService = {
     return auth_user_local_storage;
   },
 
+  getUserInfoSync: (): DjangoAuthUser | null => {
+
+    const auth_user_local_storage = authTokenService.getUserFromLocalStorage();
+    return auth_user_local_storage || null;
+  },
+
   /** Refetches user and updates local storage cache */
   updateUserInfo: async (): Promise<DjangoAuthUser | undefined> => {
     try {

@@ -11,26 +11,43 @@ import { format } from "date-fns";
 import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
 import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
 import SbrMotmVotingBox from "../components/sbr/motm/SbrMotmVotingBox";
-import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureEventsAtom } from "../state/sbrFixtureScreen.atoms";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../state/sbrFixtureScreen.atoms";
 import { ScopeProvider } from "jotai-scope";
 import SbrFixtureDataProvider from "../components/sbr/fixture/SbrFixtureDataProvider";
 import { useAtomValue } from "jotai";
 import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
 import SbrFixtureChat from "../components/sbr/fixture/SbrFixtureChat";
+import useSWR from "swr";
+import { swrFetchKeys } from "../utils/swrKeys";
+import { sbrService } from "../services/sbr/sbrService";
+import { LoadingState } from "../components/ui/LoadingState";
 
 export default function SbrFixtureScreen() {
 
     const { fixtureId } = useParams();
+    const key = swrFetchKeys.getSbrFixtureKey(fixtureId ?? 'fall-back');
+    const {data: fixture, isLoading, error} = useSWR(key, () => sbrService.getFixtureById(fixtureId ?? ''));
 
-    if (!fixtureId) return <ErrorState message="Fixture was not found" />
+    if (isLoading) {
+        return <LoadingState />
+    }
+    
+    if (error) return <ErrorState error="Error fetching fixture" message={error} />
+
+    if (!fixture || !fixtureId) return <ErrorState message="Fixture was not found" />
 
     const atoms = [
-        sbrFixtureAtom, sbrFixtureEventsAtom, sbrFixtureBoxscoreAtom
+        sbrFixtureAtom, sbrFixtureTimelineAtom, sbrFixtureBoxscoreAtom
     ]
 
     return (
         <ScopeProvider atoms={atoms}>
-            <SbrFixtureDataProvider fixtureId={fixtureId}>
+            <SbrFixtureDataProvider 
+                fixture={fixture}
+                fetchBoxscore
+                fetchTimeLine
+                hideShimmer
+            >
                 <SbrFixtureScreenContent />
             </SbrFixtureDataProvider>
         </ScopeProvider>
@@ -42,7 +59,7 @@ function SbrFixtureScreenContent() {
 
     const fixture = useAtomValue(sbrFixtureAtom);
     const boxscore = useAtomValue(sbrFixtureBoxscoreAtom);
-    const events = useAtomValue(sbrFixtureEventsAtom);
+    const events = useAtomValue(sbrFixtureTimelineAtom);
 
     const navigate = useNavigate();
 
@@ -95,9 +112,9 @@ function SbrFixtureScreenContent() {
                 <div className="flex flex-row h-max items-center justify-center w-full " >
 
                     <div className="flex flex-1 flex-col items-center justify-start gap-3" >
-                        <SbrTeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " teamName={fixture.home_team} />
-                        <SbrTeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " teamName={fixture.home_team} />
-                        <p className="text text-wrap text-center" >{fixture.home_team}</p>
+                        <SbrTeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " teamName={fixture.home_team.team_name} />
+                        <SbrTeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " teamName={fixture.home_team.team_name} />
+                        <p className="text text-wrap text-center" >{fixture.home_team.team_name}</p>
                     </div>
 
                     <div className="flex flex-col flex-1" >
@@ -106,9 +123,9 @@ function SbrFixtureScreenContent() {
                     </div>
 
                     <div className="flex flex-1 flex-col items-center gap-3 justify-end" >
-                        <SbrTeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " teamName={fixture.away_team} />
-                        <SbrTeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " teamName={fixture.away_team} />
-                        <p className="text text-wrap text-center" >{fixture.away_team}</p>
+                        <SbrTeamLogo className="lg:hidden w-12 h-12 dark:text-slate-200 " teamName={fixture.away_team.team_name} />
+                        <SbrTeamLogo className="lg:block hidden w-16 h-16 dark:text-slate-200 " teamName={fixture.away_team.team_name} />
+                        <p className="text text-wrap text-center" >{fixture.away_team.team_name}</p>
                     </div>
 
                 </div>

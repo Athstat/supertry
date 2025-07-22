@@ -1,19 +1,20 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { RugbyPlayer } from "../types/rugbyPlayer";
-import { athleteService } from "../services/athleteService";
-import { URC_COMPETIION_ID } from "../types/constants";
-
-// Default competition ID
-const DEFAULT_COMPETITION_ID = "d313fbf5-c721-569b-975d-d9ec242a6f19";
+import React, { createContext, useContext, useEffect, useState, useTransition } from "react";
+import useSWR from "swr";
+import { swrFetchKeys } from "../utils/swrKeys";
+import { djangoAthleteService } from "../services/athletes/djangoAthletesService";
+import { IProTeam } from "../types/team";
+import { IProAthlete } from "../types/athletes";
+import { getAthletesSummary } from "../utils/athleteUtils";
 
 interface AthleteContextType {
-  athletes: RugbyPlayer[];
+  athletes: IProAthlete[];
   isLoading: boolean;
   error: string | null;
   refreshAthletes: () => Promise<void>;
-  getAthleteById: (id: string) => RugbyPlayer | undefined;
+  getAthleteById: (id: string) => IProAthlete | undefined;
   positions: string[];
-  teams: string[];
+  teams: IProTeam[];
+  isTeamsAndPositionsPending: boolean
 }
 
 const AthleteContext = createContext<AthleteContextType | undefined>(undefined);
@@ -21,71 +22,35 @@ const AthleteContext = createContext<AthleteContextType | undefined>(undefined);
 export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [athletes, setAthletes] = useState<RugbyPlayer[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const key = swrFetchKeys.getAllProAthletesKey();
+  const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = useSWR(key, () => djangoAthleteService.getAllAthletes());
+
+  const athletes = fetchedAthletes ?? [];
+  const isLoading = loadingAthletes;
+
+  const [teams, setTeams] = useState<IProTeam[]>([]);
   const [positions, setPositions] = useState<string[]>([]);
-  const [teams, setTeams] = useState<string[]>([]);
-  const [lastFetchTime, setLastFetchTime] = useState<number | null>(null);
 
-  const fetchAthletes = async (forceRefresh = false) => {
-    // Skip fetching if we already have data and it's not a forced refresh
-    const now = Date.now();
-    const cacheExpired = lastFetchTime
-      ? now - lastFetchTime > 5 * 60 * 1000
-      : true;
+  const [isTeamsAndPositionsPending, startTransition] = useTransition();
 
-    if (athletes.length > 0 && !forceRefresh && !cacheExpired) {
-      return; // Use cached athletes
-    }
-
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await athleteService.getRugbyAthletesByCompetition(
-        URC_COMPETIION_ID
-      );
-      setAthletes(data);
-      setLastFetchTime(now);
-
-      // Extract unique positions and teams for filters
-      const extractedPositions = [
-        ...new Set(
-          data.map((player) => {
-            const position = player.position_class || "";
-            return position.charAt(0).toUpperCase() + position.slice(1);
-          })
-        ),
-      ]
-        .filter(Boolean)
-        .sort();
-
-      const extractedTeams = [
-        ...new Set(data.map((player) => player.team_name)),
-      ]
-        .filter(Boolean)
-        .sort();
-
-      setPositions(extractedPositions);
-      setTeams(extractedTeams);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load athletes");
-      console.error("Error fetching athletes:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Initial fetch on mount
   useEffect(() => {
-    fetchAthletes();
-  }, []);
+    startTransition(() => {
+      const { teams: _teams, positions: _positions } = getAthletesSummary(athletes);
+      setTeams(_teams);
+      setPositions(_positions)
+    });
+  }, [athletes]);
 
-  const refreshAthletes = () => fetchAthletes(true);
+
+
+  const refreshAthletes = async () => {
+    await mutate(() => djangoAthleteService.getAllAthletes());
+  }
 
   const getAthleteById = (id: string) => {
     return athletes.find(
-      (athlete) => athlete.id === id || athlete.tracking_id === id
+      (athlete) => athlete.tracking_id === id || athlete.tracking_id === id
     );
   };
 
@@ -99,6 +64,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
         getAthleteById,
         positions,
         teams,
+        isTeamsAndPositionsPending
       }}
     >
       {children}
