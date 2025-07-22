@@ -9,16 +9,34 @@ type Props = {
   className?: string;
 };
 
+/** Renders a pro teams logo */
 export default function TeamLogo({ url, alt, className, teamName }: Props) {
   // Always use fallback Shield icon instead of official logos
+
+  const [error, setError] = useState(false);
+  const imageUrl = url ?? getTeamLogoUrl(teamName);
+
+  if (error) {
+    return (
+      <Shield
+        className={twMerge(
+          'w-14 h-14 text-slate-300 dark:text-slate-600 rounded-md flex items-center justify-center',
+          className
+        )}
+      />
+    );
+  }
+
   return (
-    <Shield
-      className={twMerge(
-        'w-14 h-14 text-slate-300 dark:text-slate-600 rounded-md flex items-center justify-center',
-        className
-      )}
-    />
-  );
+    <div className={twMerge("w-14 h-14 overflow-clip ", className)} >
+      <img
+        src={imageUrl}
+        alt={alt ?? "team_logo"}
+        onError={() => setError(true)}
+        className='w-full h-full object-contain'
+      />
+    </div>
+  )
 }
 
 function getTeamLogoUrl(teamName?: string) {
