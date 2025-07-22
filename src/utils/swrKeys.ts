@@ -27,5 +27,9 @@ export const swrFetchKeys = {
 
     getUserProPredictionsHistoryKey: (userId: string) => {
         return `/user-pro-prediction-history/${userId}`;
+    },
+
+    getAuthUserProfileKey: () => {
+        return '/auth-user-profile';
     }
 }

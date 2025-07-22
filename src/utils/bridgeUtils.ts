@@ -281,15 +281,15 @@ export async function requestPushPermissions(): Promise<boolean> {
     }
 
     // Get current user info
-    const userInfo = authService.getUserInfo();
-    if (!userInfo || !userInfo.id) {
+    const userInfo = await authService.getUserInfo();
+    if (!userInfo || !userInfo.kc_id) {
       console.error('User info not available');
       return false;
     }
 
     // Request push permissions with user ID and email
-    console.log(`Requesting push permissions for user ${userInfo.id}`);
-    const result = await requestPushPermission(userInfo.id, userInfo.email);
+    console.log(`Requesting push permissions for user ${userInfo.kc_id}`);
+    const result = await requestPushPermission(userInfo.kc_id, userInfo.email);
 
     if (result.granted) {
       console.log(`Push permissions granted with OneSignal ID: ${result.onesignal_id}`);

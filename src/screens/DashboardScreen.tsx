@@ -12,19 +12,17 @@ export function DashboardScreen() {
 
   const goToFixtures = () => {
     navigate('/fixtures');
-  }
+  };
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-
-      <div className='flex flex-col gap-2' >
-        <HeroImageBanner
-          link='/images/africa_cup.jpeg'
-        />
+      <div className="flex flex-col gap-2">
+        <HeroImageBanner link="/images/africa_cup.jpeg" />
         <p className="font-bold text-lg">Rugby Africa Cup 2025 is here!</p>
-        
+
         <SecondaryText className="text-xs">
-          Stay updated with all the latest Africa Cup fixtures. Check out upcoming matches and follow your favorite teams throughout the tournament.
+          Stay updated with all the latest Africa Cup fixtures. Check out upcoming matches and
+          follow your favorite teams throughout the tournament.
         </SecondaryText>
 
         <button
