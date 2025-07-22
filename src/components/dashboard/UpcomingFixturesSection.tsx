@@ -71,6 +71,7 @@ export default function UpcomingFixturesSection() {
       ) : (
         <div className="flex space-x-4 overflow-x-auto pb-2">
           {sortedFixtures.map((fixture, index) => {
+            console.log(fixture);
             return (
               <div
                 key={index}
@@ -246,7 +247,8 @@ function PredictionModal({
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
-            className="w-20 h-20" url={fixture.team.image_url}
+            className="w-20 h-20"
+            url={fixture.team.image_url}
             teamName={fixture.team.athstat_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
