@@ -15,6 +15,7 @@ import { useAtomValue } from 'jotai';
 import { comparePlayersAtomGroup } from '../../state/comparePlayers.atoms';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { ArrowLeftRight } from 'lucide-react';
+import { useDeterministicShuffle } from '../../hooks/useShuffle';
 
 export default function ComparePlayersPanel() {
 
@@ -40,43 +41,16 @@ function PanelContent() {
   const { clearSelections, addPlayer, removePlayer, showCompareModal } = usePlayerCompareActions();
   const [searchQuery, setSearchQuery] = useState('');
 
+  let {shuffledArr: shuffledAthletes, triggerShuffle} = useDeterministicShuffle(athletes);
 
   const handlePlayerClick = (player: IProAthlete) => {
     addPlayer(player);
   };
 
-  // Shuffle athletes array deterministically every 5 hours using a seeded shuffle
-  function seededRandom(seed: number) {
-    let x = Math.sin(seed++) * 10000;
-    return x - Math.floor(x);
+  const handleShuffle = () => {
+    triggerShuffle();
+    clearSelections();
   }
-
-  function seededShuffle<T>(array: T[], seed: number): T[] {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(seededRandom(seed + i) * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
-  // Use the current 5-hour window as the seed
-  const now = Date.now();
-  const fiveHourWindow = Math.floor(now / (1000 * 60 * 60 * 5));
-  athletes = seededShuffle(athletes, fiveHourWindow);
-
-  // Filter players by search query
-  const [manualShuffleSeed, setManualShuffleSeed] = useState<number | null>(null);
-
-  // Compute the seed: use manual if set, else default 5-hour window
-  const effectiveSeed = manualShuffleSeed !== null ? manualShuffleSeed : fiveHourWindow;
-  const shuffledAthletes = seededShuffle(athletes, effectiveSeed);
-
-  // Shuffle button handler
-  const handleShufflePlayers = () => {
-    setManualShuffleSeed(Date.now());
-    clearSelections()
-  };
 
   const filteredPlayers = shuffledAthletes.filter(player => {
     const query = searchQuery.toLowerCase();
@@ -97,7 +71,7 @@ function PanelContent() {
         <div className="flex gap-2">
 
           <button
-            onClick={handleShufflePlayers}
+            onClick={handleShuffle}
             className="text-xs px-3 py-1 flex flex-row items-center gap-1 rounded-xl bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800 border border-primary-200 dark:border-primary-700 transition"
             title="Shuffle Players"
           >
