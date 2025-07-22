@@ -1,10 +1,11 @@
 import { twMerge } from 'tailwind-merge';
-import { useContext, useState } from 'react';
 import { formatPosition } from '../../utils/athleteUtils';
 import FormIndicator from '../shared/FormIndicator';
 import TeamLogo from '../team/TeamLogo';
-import { PlayersScreenContext } from '../../contexts/PlayersScreenContext';
 import { IProAthlete } from '../../types/athletes';
+import OptimizedImage from '../shared/OptimizedImage';
+import { useAtomValue } from 'jotai';
+import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
 
 type Props = {
   player: IProAthlete;
@@ -21,17 +22,13 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
  * does not rely on team context */
 
 export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
-  const context = useContext(PlayersScreenContext);
-  const shouldGlow =
-    (
-      context?.selectedPlayers.filter(p => {
-        return p.tracking_id === player.tracking_id;
-      }) ?? []
-    ).length > 0 &&
-    context?.isComparing &&
-    !blockGlow;
 
-  const [imageError, setIamgeError] = useState<string>();
+  const selectedPlayers = useAtomValue(comparePlayersAtom);
+  
+  const shouldGlow = selectedPlayers.some((a) => (
+    a.tracking_id === player.tracking_id
+  ));
+
 
   const pr = player.power_rank_rating ?? 0;
   const cardTier: CardTier =
@@ -53,7 +50,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
             'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
           cardTier === 'blue' &&
             'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
-          shouldGlow && 'animate-glow border border-yellow-500',
+          shouldGlow && !blockGlow && 'animate-glow border border-yellow-500',
           className
         )}
       >
@@ -70,11 +67,12 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
 
         {/* Player Image */}
         <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">
-          {player.image_url && !imageError && (
-            <img
+          {player.image_url && (
+            <OptimizedImage
               src={player.image_url}
-              onError={() => setIamgeError('Image failed to load')}
+              alt={player.player_name}
               className="w-full object-scale-down object-top"
+              lazy={true}
             />
           )}
         </div>

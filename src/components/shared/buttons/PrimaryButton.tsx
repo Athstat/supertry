@@ -23,8 +23,8 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
         <button
             disabled={disbabled || disabled}
             className={twMerge(
-                "bg-primary-600 dark:bg-primary-600 text-white font-medium px-4 py-2 w-full items-center justify-center flex rounded-xl",
-                "hover:bg-primary-700 dark:hover:bg-primary-700",
+                "bg-blue-600 dark:bg-blue-600 text-white font-medium px-4 py-2 w-full items-center justify-center flex rounded-xl",
+                "hover:bg-blue-700 dark:hover:bg-blue-700",
                 "border border-primary-500 text-sm lg:text-base",
                 className,
                 (disbabled || disabled) && "opacity-40 cursor-not-allowed",

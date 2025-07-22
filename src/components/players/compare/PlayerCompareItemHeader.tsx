@@ -1,6 +1,6 @@
 
 import { IProAthlete } from '../../../types/athletes'
-import { X, User, Coins } from 'lucide-react'
+import { X, User, Coins, ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatPosition } from '../../../utils/athleteUtils'
 import { PlayerGameCard } from '../../player/PlayerGameCard'
 import { useAtom } from 'jotai'
@@ -10,30 +10,58 @@ import SecondaryText from '../../shared/SecondaryText'
 import TeamLogo from '../../team/TeamLogo'
 import { calculateAge } from '../../../utils/playerUtils'
 import { getCountryEmojiFlag } from '../../../utils/svrUtils'
+import { twMerge } from 'tailwind-merge'
+import { usePlayerCompareActions } from '../../../hooks/usePlayerCompare'
 
 type Props = {
     player: IProAthlete,
-    onRemove?: () => void
 }
 
-export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
+export default function PlayerCompareItemHeader({ player }: Props) {
 
     const [showInfo, setShowInfo] = useAtom(showComparePlayerInfo);
     const toggleShowInfo = () => setShowInfo(!showInfo);
 
+    const {movePlayerLeft, movePlayerRight, removePlayer} = usePlayerCompareActions()
+
     return (
         <div className='flex flex-col gap-2' >
-            <div className="flex flex-row items-center justify-end">
-                <button
-                    onClick={onRemove}
-                    className="flex w-fit text-sm text-slate-700 dark:text-white flex-row gap-1 cursor-pointer items-center dark:bg-slate-700/70 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 border dark:border-slate-600 px-2 rounded-xl py-0.5"
-                >
-                    Remove
-                    <X className="w-4 h-4" />
+            <div className={twMerge(
+                "flex flex-row bg-slate-100 dark:bg-slate-700/50 items-center justify-between p-1 rounded-lg",
+                "border border-slate-200 dark:border-slate-600"
+            )}>
+
+                <div className='flex flex-row items-center gap-1' >
+                    <button
+                        onClick={() => movePlayerLeft(player)}
+                        className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
+                    >
+                        <ChevronLeft className='w-4 h-4' />
+                    </button>
+
+                    <button
+                        onClick={() => movePlayerRight(player)}
+                        className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
+                    >
+                        <ChevronRight className='w-4 h-4' />
+                    </button>
+                </div>
+
+                <button>
+                    <button
+                        onClick={() => removePlayer(player)}
+                        className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
+                    >
+                        <X className="w-4 h-4" />
+                    </button>
                 </button>
             </div>
 
-            <PlayerGameCard className="h-[200px] lg:h-[300px]" blockGlow player={player} />
+            <PlayerGameCard 
+                className="h-[200px] lg:h-[250px]"
+                blockGlow
+                player={player} 
+            />
 
             <Collapsable
                 label='Info'

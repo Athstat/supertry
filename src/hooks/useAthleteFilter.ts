@@ -31,13 +31,16 @@ export default function useAthleteFilter(data: Props) {
             const buff = [...athletes];
 
             console.log("Buffer athletes ", buff);
+            
             const byPosition = athletePositionFilter(buff, selectedPositions);
             console.log("By position ", byPosition);
+
             const byTeams = athleteTeamFilter(byPosition, selectedTeamIds);
             console.log("By Team ", byTeams);
 
             const bySearch = athleteSearchFilter(byTeams, searchQuery);
             console.log("By Search ", bySearch);
+
             const bySort = athleteSorter(bySearch, sortField, sortDirection);
             console.log("By sort ", bySort);
 

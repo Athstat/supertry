@@ -61,3 +61,5 @@ export type IAthleteSeasonStarRatings = {
     defence?: number,
     kicking?: number
 }
+
+export type PlayerCompareMode = "none" | "picking" | "modal";
