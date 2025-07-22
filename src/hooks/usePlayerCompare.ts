@@ -27,6 +27,11 @@ export function usePlayerCompareActions() {
 
     const stopPicking = () => {
         setCompareMode("none");
+        setSelectedPlayers([]);
+    }
+
+    const startPicking = () => {
+        setCompareMode('picking');
     }
 
     const isPlayerSelectedAlready = (player: IProAthlete) => {
@@ -96,7 +101,8 @@ export function usePlayerCompareActions() {
         movePlayerLeft,
         movePlayerRight,
         compareMode,
-        addMultiplePlayers
+        addMultiplePlayers,
+        startPicking
     }
 
 }

@@ -1,24 +1,24 @@
 import DialogModal from "../../shared/DialogModal";
 import PlayersCompareItem from "./PlayerCompareItem";
 import { useAtomValue } from "jotai";
-import { comparePlayersAtom } from "../../../state/comparePlayers.atoms";
+import { comparePlayersAtom, comparePlayersAtomGroup } from "../../../state/comparePlayers.atoms";
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
 
 type Props = {
-  open?: boolean;
 }
 
-export default function PlayerCompareModal({ open }: Props) {
+export default function PlayerCompareModal({}: Props) {
 
   const selectedPlayers = useAtomValue(comparePlayersAtom);
+  const open = useAtomValue(comparePlayersAtomGroup.isCompareModeModal);
 
   const  {closeCompareModal} = usePlayerCompareActions();
 
   const playerLen = selectedPlayers.length;
   let title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;
-
+  
   if (open === false) return;
 
   return (
