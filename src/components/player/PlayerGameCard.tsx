@@ -1,12 +1,9 @@
 import { twMerge } from 'tailwind-merge';
-import { useContext } from 'react';
 import { formatPosition } from '../../utils/athleteUtils';
 import FormIndicator from '../shared/FormIndicator';
 import TeamLogo from '../team/TeamLogo';
-import { PlayersScreenContext } from '../../contexts/PlayersScreenContext';
 import { IProAthlete } from '../../types/athletes';
 import OptimizedImage from '../shared/OptimizedImage';
-import { usePlayerCompareActions } from '../../hooks/usePlayerCompare';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
 
@@ -53,7 +50,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
             'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
           cardTier === 'blue' &&
             'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
-          shouldGlow && 'animate-glow border border-yellow-500',
+          shouldGlow && !blockGlow && 'animate-glow border border-yellow-500',
           className
         )}
       >

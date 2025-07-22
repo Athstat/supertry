@@ -57,7 +57,11 @@ export default function PlayerCompareItemHeader({ player }: Props) {
                 </button>
             </div>
 
-            <PlayerGameCard className="h-[200px] lg:h-[250px]" blockGlow player={player} />
+            <PlayerGameCard 
+                className="h-[200px] lg:h-[250px]"
+                blockGlow
+                player={player} 
+            />
 
             <Collapsable
                 label='Info'
