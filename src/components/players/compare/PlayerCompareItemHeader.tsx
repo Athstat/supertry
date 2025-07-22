@@ -4,59 +4,25 @@ import { X, User, Coins, ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatPosition } from '../../../utils/athleteUtils'
 import { PlayerGameCard } from '../../player/PlayerGameCard'
 import { useAtom } from 'jotai'
-import { comparePlayersAtom, showComparePlayerInfo } from '../../../state/comparePlayers.atoms'
+import { showComparePlayerInfo } from '../../../state/comparePlayers.atoms'
 import Collapsable from '../../shared/containers/Collapsable'
 import SecondaryText from '../../shared/SecondaryText'
 import TeamLogo from '../../team/TeamLogo'
 import { calculateAge } from '../../../utils/playerUtils'
 import { getCountryEmojiFlag } from '../../../utils/svrUtils'
 import { twMerge } from 'tailwind-merge'
-import { useCallback } from 'react'
+import { usePlayerCompareActions } from '../../../hooks/usePlayerCompare'
 
 type Props = {
     player: IProAthlete,
-    onRemove?: () => void
 }
 
-export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
+export default function PlayerCompareItemHeader({ player }: Props) {
 
     const [showInfo, setShowInfo] = useAtom(showComparePlayerInfo);
     const toggleShowInfo = () => setShowInfo(!showInfo);
 
-    const [comparePlayers, setComparePlayers] = useAtom(comparePlayersAtom);
-
-    const moveLeft = useCallback(() => {
-        const myIndex = comparePlayers.findIndex(a => a.tracking_id === player.tracking_id);
-
-        if (myIndex <= 0) {
-            return;
-        }
-
-
-        const newArr = [...comparePlayers];
-        newArr.splice(myIndex, 1);
-
-        newArr.splice(myIndex - 1, 0, player);
-
-        setComparePlayers(newArr);
-
-    }, [comparePlayers]);
-
-    const moveRight = useCallback(() => {
-        const myIndex = comparePlayers.findIndex(a => a.tracking_id === player.tracking_id);
-
-        if (myIndex >= comparePlayers.length) {
-            return;
-        }
-
-        const newArr = [...comparePlayers];
-        newArr.splice(myIndex, 1);
-
-        newArr.splice(myIndex + 1, 0, player);
-
-        setComparePlayers(newArr);
-
-    }, [comparePlayers]);
+    const {movePlayerLeft, movePlayerRight, removePlayer} = usePlayerCompareActions()
 
     return (
         <div className='flex flex-col gap-2' >
@@ -67,14 +33,14 @@ export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
 
                 <div className='flex flex-row items-center gap-1' >
                     <button
-                        onClick={moveLeft}
+                        onClick={() => movePlayerLeft(player)}
                         className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
                     >
                         <ChevronLeft className='w-4 h-4' />
                     </button>
 
                     <button
-                        onClick={moveRight}
+                        onClick={() => movePlayerRight(player)}
                         className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
                     >
                         <ChevronRight className='w-4 h-4' />
@@ -83,7 +49,7 @@ export default function PlayerCompareItemHeader({ player, onRemove }: Props) {
 
                 <button>
                     <button
-                        onClick={onRemove}
+                        onClick={() => removePlayer(player)}
                         className="flex w-fit text-sm p-1 rounded-md hover:bg-slate-100 hover:dark:bg-slate-600 text-slate-700 dark:text-white cursor-pointer items-center"
                     >
                         <X className="w-4 h-4" />

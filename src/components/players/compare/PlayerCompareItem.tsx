@@ -12,22 +12,15 @@ import { isStatActionBest, isStarRatingBest, isPowerRatingBest } from "../../../
 
 type Props = {
     player: IProAthlete;
-    onRemove?: (player: IProAthlete) => void
 };
 
-export default function PlayersCompareItem({ player , onRemove}: Props) {
+export default function PlayersCompareItem({ player }: Props) {
 
     const comparePlayers = useAtomValue(comparePlayersAtom);
     const [comparePlayersStats, setComparePlayersStats] = useAtom(comparePlayersStatsAtom);
     const [comparePlayersStarRatings, setComparePlayerRatings] = useAtom(comparePlayersStarRatingsAtom);
 
     const [_, startTransition] = useTransition();
-
-    const handleRemove = () => {
-        if (onRemove) {
-            onRemove(player);
-        }
-    };
 
     const {
         seasonPlayerStats: actions,
@@ -100,7 +93,6 @@ export default function PlayersCompareItem({ player , onRemove}: Props) {
 
             <PlayerCompareItemHeader
                 player={player}
-                onRemove={handleRemove}
             />
 
             {seasons && <PlayerCompareSeasonPicker
