@@ -1,9 +1,19 @@
 import {
-  ClaimGuestAccountReq, ClaimGuestAccountResult, DjangoAuthUser,
-  DjangoDeviceAuthRes, DjangoLoginRes, RegisterUserReq, RestError,
-  RestPromise, ThrowableRes, UserPasswordStatus, UserPasswordStatusRes,
-  DjangoRegisterRes, RequestPasswordResetRes, ResetPasswordRes,
-  PasswordResetTokenIntrospect
+  ClaimGuestAccountReq,
+  ClaimGuestAccountResult,
+  DjangoAuthUser,
+  DjangoDeviceAuthRes,
+  DjangoLoginRes,
+  RegisterUserReq,
+  RestError,
+  RestPromise,
+  ThrowableRes,
+  UserPasswordStatus,
+  UserPasswordStatusRes,
+  DjangoRegisterRes,
+  RequestPasswordResetRes,
+  ResetPasswordRes,
+  PasswordResetTokenIntrospect,
 } from '../types/auth';
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
@@ -16,37 +26,42 @@ import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService'
 import { mutate } from 'swr';
 import { swrFetchKeys } from '../utils/swrKeys';
 
-export const authService = {
+// OAuth types
+interface SocialAuthData {
+  provider: 'google' | 'apple';
+  token: string;
+  email?: string;
+  name?: string;
+}
 
+export const authService = {
   /** Authenticates a guest user using their device's id */
   async authenticateAsGuestUser(deviceId: string): RestPromise<DjangoDeviceAuthRes> {
-
     try {
       const uri = getUri('/api/v1/auth/device');
 
       const res = await fetch(uri, {
-        method: "POST",
+        method: 'POST',
         headers: applicationJsonHeader(),
-        body: JSON.stringify({ 'device_id': deviceId })
+        body: JSON.stringify({ device_id: deviceId }),
       });
 
       if (res.ok) {
-        const json = (await res.json()) as DjangoDeviceAuthRes
+        const json = (await res.json()) as DjangoDeviceAuthRes;
 
         authTokenService.saveGuesAccountTokens(json.token, json.user);
-        return { data: json }
+        return { data: json };
       }
 
       if (res.status === 400) {
         const errJson = (await res.json()) as RestError;
         return { error: errJson };
       }
-
     } catch (error: any) {
-      logger.error("Error on device auth ", error);
+      logger.error('Error on device auth ', error);
     }
 
-    return { error: { message: "Something went wrong, Please try again " } };
+    return { error: { message: 'Something went wrong, Please try again ' } };
   },
 
   /** Check if the current user is a guest account */
@@ -60,10 +75,9 @@ export const authService = {
   /** Claim a guest account by updating the user's credentials */
   async claimGuestAccount(data: ClaimGuestAccountReq): RestPromise<ClaimGuestAccountResult> {
     try {
-
-      console.log("Starting to claim guest account ");
+      console.log('Starting to claim guest account ');
       const userInfo = await authService.whoami();
-      console.log("Who am i", userInfo);
+      console.log('Who am i', userInfo);
 
       if (!userInfo || !authService.isGuestAccount()) {
         return { error: { message: 'Not a guest account or not logged in' } };
@@ -72,22 +86,24 @@ export const authService = {
       if (data.username) {
         const isUsernameValid = validateUsername(data.username);
 
-        if (!isUsernameValid) return {
-          error: {
-            error: 'Invalid Username',
-            message: `Username ${data.username} is invalid`
-          }
-        }
+        if (!isUsernameValid)
+          return {
+            error: {
+              error: 'Invalid Username',
+              message: `Username ${data.username} is invalid`,
+            },
+          };
       }
 
       const isEmailValid = emailValidator(data.email);
 
-      if (!isEmailValid) return {
-        error: {
-          error: 'Invalid Email',
-          message: "Email is invalid"
-        }
-      }
+      if (!isEmailValid)
+        return {
+          error: {
+            error: 'Invalid Email',
+            message: 'Email is invalid',
+          },
+        };
 
       console.log('[claimGuestAccount] Request payload:', JSON.stringify(data));
 
@@ -105,24 +121,23 @@ export const authService = {
         localStorage.removeItem(IS_GUEST_ACCOUNT_KEY);
         authTokenService.saveUserToLocalStorage(json.user);
 
-        return { data: json }
+        return { data: json };
       }
 
       if (response.status === 400) {
         const json = (await response.json()) as RestError;
-        return { error: json }
+        return { error: json };
       }
-
     } catch (error) {
       console.error('Error claiming guest account:', error);
     }
 
     return {
       error: {
-        error: "Unkown Error",
-        message: "Something went wrong trying to claim your account. Please try Again"
-      }
-    }
+        error: 'Unkown Error',
+        message: 'Something went wrong trying to claim your account. Please try Again',
+      },
+    };
   },
 
   /**
@@ -130,14 +145,12 @@ export const authService = {
    */
   async registerUser(userData: RegisterUserReq): RestPromise<DjangoRegisterRes> {
     try {
-
       const uri = getUri('/api/v1/auth/register');
       const response = await fetch(uri, {
         method: 'POST',
         headers: applicationJsonHeader(),
         body: JSON.stringify(userData),
-      }
-      );
+      });
 
       if (response.ok) {
         const json = (await response.json()) as DjangoRegisterRes;
@@ -148,9 +161,8 @@ export const authService = {
 
       if (response.status === 400) {
         const json = (await response.json()) as RestError;
-        return { error: json }
+        return { error: json };
       }
-
     } catch (error) {
       console.error('Registration error:', error);
     }
@@ -158,9 +170,9 @@ export const authService = {
     return {
       error: {
         error: 'Unkown Error',
-        message: 'Something went wrong, please try again'
-      }
-    }
+        message: 'Something went wrong, please try again',
+      },
+    };
   },
 
   /**
@@ -168,46 +180,41 @@ export const authService = {
    */
   async login(email: string, password: string): Promise<ThrowableRes<DjangoLoginRes>> {
     try {
-
       const uri = getUri(`/api/v1/auth/login`);
-
 
       const res = await fetch(uri, {
         method: 'POST',
         headers: applicationJsonHeader(),
         body: JSON.stringify({
-          'email': email,
-          'password': password
-        })
+          email: email,
+          password: password,
+        }),
       });
 
-      console.log("Login Result ", res);
+      console.log('Login Result ', res);
 
       if (res.ok) {
-
         const json = (await res.json()) as DjangoLoginRes;
 
         authTokenService.saveLoginTokens(json.token, json.user);
-        return { data: json, message: 'Login Successful' }
-
+        return { data: json, message: 'Login Successful' };
       }
 
       if (res.status === 404) {
-        return { message: 'Incorrect password' }
+        return { message: 'Incorrect password' };
       }
 
       if (res.status === 401) {
-        return { message: 'Incorrect password' }
+        return { message: 'Incorrect password' };
       }
 
       analytics.trackUserSignIn('Email');
-
     } catch (error) {
-      logger.error("Error loging in user with email ", email, ' error: ', error)
-      console.log("Login Error ", error);
+      logger.error('Error loging in user with email ', email, ' error: ', error);
+      console.log('Login Error ', error);
     }
 
-    return { message: 'Something went wrong, please try again' }
+    return { message: 'Something went wrong, please try again' };
   },
 
   /** Check if user is authenticated by verifying token existence and validity */
@@ -227,7 +234,6 @@ export const authService = {
    * Get user info from the token
    */
   getUserInfo: async (): Promise<DjangoAuthUser | null> => {
-
     const auth_user_local_storage = authTokenService.getUserFromLocalStorage();
 
     if (!auth_user_local_storage) {
@@ -247,7 +253,6 @@ export const authService = {
 
   /** Refetches user and updates local storage cache */
   updateUserInfo: async (): Promise<DjangoAuthUser | undefined> => {
-
     try {
       const user = await authService.whoami();
 
@@ -258,38 +263,36 @@ export const authService = {
 
       return user;
     } catch (error) {
-      console.log("Error updating user info ", error);
+      console.log('Error updating user info ', error);
     }
 
     return undefined;
   },
 
   async getUserById(id: string): Promise<DjangoAuthUser | undefined> {
-
     try {
-
       const uri = getUri(`/api/v1/users/${id}`);
       const response = await fetch(uri, {
         method: 'GET',
-        headers: getAuthHeader()
+        headers: getAuthHeader(),
       });
 
       const data = (await response.json()) as DjangoAuthUser;
       return data;
-
     } catch (e) {
       logger.error('Error fetching user ', e);
-
     }
 
     return undefined;
-
   },
 
   /**
    * Request a password reset email
    */
-  async requestPasswordReset(email: string, forced: boolean = false): Promise<RequestPasswordResetRes | undefined> {
+  async requestPasswordReset(
+    email: string,
+    forced: boolean = false
+  ): Promise<RequestPasswordResetRes | undefined> {
     try {
       const uri = getUri(`/api/v1/auth/request-password-reset`);
 
@@ -297,24 +300,23 @@ export const authService = {
         method: 'POST',
         headers: applicationJsonHeader(),
         body: JSON.stringify({ email, forced }),
-      },
-      );
+      });
 
       if (response.ok) {
-        return { message: 'If an account exists with this email, you will receive password reset instructions shortly.' }
+        return {
+          message:
+            'If an account exists with this email, you will receive password reset instructions shortly.',
+        };
       }
-
     } catch (error) {
       console.error('Password reset error:', error);
     }
 
     return undefined;
-
   },
 
   /** Reset password using the reset token */
   async resetPassword(resetToken: string, newPassword: string): RestPromise<ResetPasswordRes> {
-
     try {
       const uri = getUri(`/api/v1/auth/reset-password/${resetToken}`);
 
@@ -322,21 +324,20 @@ export const authService = {
         method: 'POST',
         headers: applicationJsonHeader(),
         body: JSON.stringify({
-          new_password: newPassword
+          new_password: newPassword,
         }),
       });
 
       if (response.ok) {
         const json = (await response.json()) as ResetPasswordRes;
         authTokenService.clearUserTokens();
-        return { data: json }
+        return { data: json };
       }
 
       if (response.status === 400) {
         const json = (await response.json()) as RestError;
-        return { error: json }
+        return { error: json };
       }
-
     } catch (error) {
       console.error('Password reset error:', error);
     }
@@ -344,31 +345,29 @@ export const authService = {
     return {
       error: {
         error: 'Unkown Error',
-        message: 'Something went wrong whiles trying to reset your password. Please try again'
-      }
-    }
+        message: 'Something went wrong whiles trying to reset your password. Please try again',
+      },
+    };
   },
 
   getPasswordStatus: async (email: string): Promise<UserPasswordStatusRes> => {
     try {
-
       const uri = getUri(`/api/v1/users/password-status/${email}`);
       const res = await fetch(uri, {});
 
       if (res.ok) {
-        const status = await res.json() as UserPasswordStatus
-        return { status, message: 'Password Status Recieved' }
+        const status = (await res.json()) as UserPasswordStatus;
+        return { status, message: 'Password Status Recieved' };
       }
 
       if (res.status === 404) {
-        return { message: 'Email was not found' }
+        return { message: 'Email was not found' };
       }
-
     } catch (err) {
-      logger.error("Error Fetching user password status ", err);
+      logger.error('Error Fetching user password status ', err);
     }
 
-    return { message: "Something went wrong" }
+    return { message: 'Something went wrong' };
   },
 
   whoami: async () => {
@@ -376,14 +375,13 @@ export const authService = {
       const uri = getUri('/api/v1/auth/me');
 
       const res = await fetch(uri, {
-        headers: getAuthHeader()
+        headers: getAuthHeader(),
       });
 
       if (res.ok) {
         const json = (await res.json()) as DjangoAuthUser;
-        return json
+        return json;
       }
-
     } catch (error) {
       logger.error('Who am i failed to fetch ', error);
     }
@@ -402,20 +400,86 @@ export const authService = {
       }
 
       if (res.status === 404) {
-        const message = "Password reset link has either expired or is invalid";
-        return { error: { message } }
+        const message = 'Password reset link has either expired or is invalid';
+        return { error: { message } };
       }
-
     } catch (err) {
-      logger.error("Error introspecting token ", err);
+      logger.error('Error introspecting token ', err);
     }
 
     return {
       error: {
-        error: "Error",
-        message: "Something went wrong"
-      }
-    }
-  }
+        error: 'Error',
+        message: 'Something went wrong',
+      },
+    };
+  },
 
+  /** Authenticate with Google OAuth */
+  async googleOAuth(token: string): RestPromise<DjangoLoginRes> {
+    try {
+      const uri = getUri('/api/v1/auth/oauth/google/');
+
+      const response = await fetch(uri, {
+        method: 'POST',
+        headers: applicationJsonHeader(),
+        body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        const json = (await response.json()) as DjangoLoginRes;
+        authTokenService.saveLoginTokens(json.token, json.user);
+        analytics.trackUserSignIn('Google');
+        return { data: json };
+      }
+
+      if (response.status === 400) {
+        const json = (await response.json()) as RestError;
+        return { error: json };
+      }
+    } catch (error) {
+      logger.error('Google OAuth error:', error);
+    }
+
+    return {
+      error: {
+        error: 'OAuth Error',
+        message: 'Something went wrong with Google sign in. Please try again.',
+      },
+    };
+  },
+
+  /** Authenticate with Apple OAuth */
+  async appleOAuth(token: string): RestPromise<DjangoLoginRes> {
+    try {
+      const uri = getUri('/api/v1/auth/oauth/apple/');
+
+      const response = await fetch(uri, {
+        method: 'POST',
+        headers: applicationJsonHeader(),
+        body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        const json = (await response.json()) as DjangoLoginRes;
+        authTokenService.saveLoginTokens(json.token, json.user);
+        analytics.trackUserSignIn('Apple');
+        return { data: json };
+      }
+
+      if (response.status === 400) {
+        const json = (await response.json()) as RestError;
+        return { error: json };
+      }
+    } catch (error) {
+      logger.error('Apple OAuth error:', error);
+    }
+
+    return {
+      error: {
+        error: 'OAuth Error',
+        message: 'Something went wrong with Apple sign in. Please try again.',
+      },
+    };
+  },
 };
