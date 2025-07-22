@@ -35,12 +35,17 @@ export function usePlayerCompareActions() {
     }
 
     const isPlayerSelectedAlready = (player: IProAthlete) => {
-        return comparePlayerMap.has(player.tracking_id);
+        const fPlayer = selectedPlayers.find(p => p.tracking_id === player.tracking_id);
+        console.log("Some flag here ", fPlayer);
+        
+        return fPlayer !== undefined;
     }
 
     const addPlayer = (player: IProAthlete) => {
         const isAlreadyInList = isPlayerSelectedAlready(player);
         if (isAlreadyInList) return;
+
+        console.log("Is this in the list already ", isAlreadyInList);
 
         setSelectedPlayers(prev => [...prev, player]);
     }
@@ -55,8 +60,6 @@ export function usePlayerCompareActions() {
     }
 
     const removePlayer = (player: IProAthlete) => {
-        const isNotInList = isPlayerSelectedAlready(player);
-        if (isNotInList) return;
 
         setSelectedPlayers(prev => prev.filter(p => (
             p.tracking_id !== player.tracking_id
@@ -107,7 +110,8 @@ export function usePlayerCompareActions() {
         compareMode,
         addMultiplePlayers,
         startPicking,
-        clearSelections
+        clearSelections,
+        isPlayerSelectedAlready
     }
 
 }
