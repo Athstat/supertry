@@ -9,6 +9,7 @@ import { useAtom } from "jotai";
 import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, statCategoriesCollapsedAtom } from "../../../state/comparePlayers.atoms";
 import { isStatActionBest, isStarRatingBest, isPowerRatingBest } from "../../../utils/athleteUtils";
 import { Crosshair, Shield, Zap, Star } from "lucide-react";
+import PlayerIconsRow from "./PlayerIconsRow";
 
 type Props = {
     player: IProAthlete;
@@ -95,6 +96,18 @@ export default function PlayersCompareItem({ player }: Props) {
             <PlayerCompareItemHeader
                 player={player}
             />
+
+            {/* Player Icons Row */}
+            {!isLoading && starRatings && actions && (
+                <div className="mt-2">
+                    <PlayerIconsRow
+                        player={player}
+                        starRatings={starRatings}
+                        seasonStats={actions}
+                        size="sm"
+                    />
+                </div>
+            )}
 
             {seasons && <PlayerCompareSeasonPicker
                 seasons={seasons}
