@@ -339,7 +339,7 @@ function StatCategory({ title, icon, isMainBest, isCollapsed, onToggle, stats }:
     );
 
     return (
-        <div className="bg-slate-300 border border-slate-100 dark:border-slate-600 dark:bg-slate-800/40 p-1 rounded-md">
+        <div className="bg-slate-300 border border-slate-300 dark:border-slate-600 dark:bg-slate-800/40 p-1 rounded-md">
             <div
                 onClick={onToggle}
                 className={twMerge(
@@ -349,7 +349,7 @@ function StatCategory({ title, icon, isMainBest, isCollapsed, onToggle, stats }:
             >
                 <div className="flex flex-row items-center gap-1">
                     {icon}
-                    <span className="text-xs font-bold text-white uppercase">{title}</span>
+                    <span className="text-xs font-bold dark:text-white uppercase">{title}</span>
                 </div>
 
                 <div className="flex flex-row items-center gap-2">
@@ -385,17 +385,17 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
         <div className={twMerge(
             "flex flex-row items-center justify-between py-2 px-3 rounded",
             isGreen ? "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
-                : "bg-slate-200 dark:bg-slate-700/40 border-slate-100 dark:border-slate-600"
+                : "bg-slate-100 dark:bg-slate-700/40 border-slate-100 dark:border-slate-600"
         )}>
             <span className={twMerge(
-                "text-xs font-medium",
-                isGreen ? "text-white dark:text-white" : "text-slate-300"
+                "text-xs font-medium text-slate-600 dark:text-slate-300",
+                isGreen && " text-white dark:text-white"
             )}>
                 {label}
             </span>
             <span className={twMerge(
-                "text-sm font-bold",
-                isGreen ? "text-white" : "text-white"
+                "text-sm font-bold text-slate-600 dark:text-white",
+                isGreen && "text-white"
             )}>
                 {hasVal ? valueFixed?.endsWith(".0") ? value : valueFixed : "-"}
             </span>
