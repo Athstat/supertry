@@ -1,5 +1,5 @@
 import { useLocation, Link } from 'react-router-dom';
-import { Home, Trophy, Users, BarChart, Calendar, User } from 'lucide-react';
+import { Home, Trophy, Users, Calendar, User } from 'lucide-react';
 import { useState } from 'react';
 
 export function BottomNav() {

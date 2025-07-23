@@ -67,7 +67,7 @@ const FeaturedPlayersCarousel = () => {
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-base font-medium flex items-center gap-2">
           <Users className="w-4 h-4 text-primary-500" />
-          FEATURED PLAYERS
+          Featured Players
         </h3>
         <button onClick={() => navigate('/players')} className="text-sm text-primary-700">
           View All

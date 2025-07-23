@@ -66,7 +66,7 @@ function PanelContent() {
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
           <BarChart className="w-4 h-4 text-primary-700 dark:text-primary-400" />
-          COMPARE PLAYERS
+          Compare Players
         </h3>
         <div className="flex gap-2">
 
