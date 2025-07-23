@@ -40,7 +40,7 @@ export default function usePlayerStats(player: IProAthlete) {
   }, [seasons, playerStats]);
 
   const { starRatings, isLoading: loadingStarRatings, error: starRatingsErros } =
-    useAthleteStarRatings(player, currSeason?.id ?? "");
+    useAthleteStarRatings(player, currSeason?.id ?? null);
 
 
   return {
@@ -59,13 +59,13 @@ export default function usePlayerStats(player: IProAthlete) {
 
 
 /** Fetches star ratings for a player based on a given season */
-export function useAthleteStarRatings(player: IProAthlete, seasonId: string) {
+export function useAthleteStarRatings(player: IProAthlete, seasonId: string | null) {
   const key = useMemo(() => {
-    return swrFetchKeys.getAthleteSeasonStarRatings(player.tracking_id, seasonId);
+    return seasonId ? swrFetchKeys.getAthleteSeasonStarRatings(player.tracking_id, seasonId) : null;
   }, [seasonId, player]);
 
   const { data: starRatings, isLoading, error } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStarRatings(
-    player.tracking_id, seasonId
+    player.tracking_id, seasonId ?? ""
   ))
 
   return {
