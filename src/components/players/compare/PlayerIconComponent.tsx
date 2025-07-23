@@ -9,7 +9,7 @@ import {
   Sparkles,
   Star
 } from 'lucide-react';
-import { PlayerIcon, PLAYER_ICONS } from '../../../utils/playerIcons';
+import { PlayerIcon, PLAYER_ICONS, getIconColorScheme } from '../../../utils/playerIcons';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Gem } from 'lucide-react';
@@ -75,63 +75,7 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
     setShowTooltip(false);
   };
 
-  // Different color schemes for different icon types
-  const getColorScheme = (iconName: PlayerIcon) => {
-    switch (iconName) {
-      case 'Diamond In the Ruff':
-        return {
-          bg: 'bg-gradient-to-br from-purple-400 to-purple-600',
-          border: 'border-purple-300'
-        };
-      case 'Rookie':
-        return {
-          bg: 'bg-gradient-to-br from-green-400 to-green-600',
-          border: 'border-green-300'
-        };
-      case 'Captain':
-        return {
-          bg: 'bg-gradient-to-br from-yellow-400 to-yellow-600',
-          border: 'border-yellow-300'
-        };
-      case 'Superstar':
-        return {
-          bg: 'bg-gradient-to-br from-red-400 to-red-600',
-          border: 'border-yellow-400'
-        };
-      case 'Speed Merchant':
-        return {
-          bg: 'bg-gradient-to-br from-blue-400 to-blue-600',
-          border: 'border-blue-300'
-        };
-      case 'Scrum Master':
-        return {
-          bg: 'bg-gradient-to-br from-orange-400 to-orange-600',
-          border: 'border-orange-300'
-        };
-      case 'Ruck Master':
-        return {
-          bg: 'bg-gradient-to-br from-indigo-400 to-indigo-600',
-          border: 'border-indigo-300'
-        };
-      case 'Media Darling':
-        return {
-          bg: 'bg-gradient-to-br from-pink-400 to-pink-600',
-          border: 'border-pink-300'
-        };
-      case 'Magician':
-        return {
-          bg: 'bg-gradient-to-br from-cyan-400 to-cyan-600',
-          border: 'border-cyan-300'
-        };
-      default:
-        return {
-          bg: 'bg-gradient-to-br from-gray-400 to-gray-600',
-          border: 'border-gray-300'
-        };
-    }
-  };
-
-  const colorScheme = getColorScheme(iconName);
+  const colorScheme = getIconColorScheme(iconName);
 
   const renderIcon = () => {
     const iconProps = {
@@ -177,25 +121,23 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
   };
 
   return (
-    <div className="relative">
-      <div
-        className={`
-          ${sizeClasses[size]} 
-          ${colorScheme.bg}
-          flex items-center justify-center 
-          shadow-md
-          border-2 ${colorScheme.border}
-          transform rotate-45
-          cursor-pointer
-          hover:scale-110
-          transition-transform duration-200
-        `}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div className="transform -rotate-45">
-          {renderIcon()}
-        </div>
+    <div
+      className={`
+        ${sizeClasses[size]} 
+        ${colorScheme.bg}
+        flex items-center justify-center 
+        shadow-md
+        border-2 ${colorScheme.border}
+        transform rotate-45
+        cursor-pointer
+        hover:scale-110
+        transition-transform duration-200
+      `}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="transform -rotate-45">
+        {renderIcon()}
       </div>
 
       {/* Portal-based Tooltip */}
@@ -208,7 +150,7 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
             transform: 'translate(-50%, -100%)'
           }}
         >
-          <div className="bg-slate-800 dark:bg-slate-900 text-white px-3 py-2 rounded-lg shadow-xl border border-slate-600 whitespace-nowrap">
+          <div className="bg-slate-300 dark:bg-slate-900 text-white px-3 py-2 rounded-lg shadow-xl border border-slate-600 whitespace-nowrap">
             <div className="text-sm font-bold text-center">{iconData.name}</div>
             <div className="text-xs text-slate-300 text-center mt-1 max-w-[200px] whitespace-normal">{iconData.description}</div>
             {/* Tooltip Arrow */}

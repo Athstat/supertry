@@ -22,52 +22,52 @@ export interface PlayerIconData {
 export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
   'Diamond In the Ruff': {
     name: 'Diamond In the Ruff',
-    description: 'Young player who is future face of the game',
+    description: 'A young talent destined to become the face of the rugby.',
     iconType: 'Gem'
   },
   'Rookie': {
     name: 'Rookie',
-    description: 'Player is a rookie in their first season',
+    description: 'Newcomer making their debut season in top-level rugby.',
     iconType: 'Baby'
   },
   'Scrum Master': {
     name: 'Scrum Master',
-    description: 'Player is very good in the scrum',
+    description: 'Dominates the scrum with power and technique.',
     iconType: 'BicepFlexed'
   },
   'Ruck Master': {
     name: 'Ruck Master',
-    description: 'Player is very good at the Ruck',
+    description: 'Exceptional at securing and disrupting possession at the ruck.',
     iconType: 'Dumbell'
   },
   'Speed Merchant': {
     name: 'Speed Merchant',
-    description: 'Player is very quick and fast',
+    description: 'Blazing pace and electric acceleration on the field.',
     iconType: 'Zap'
   },
   'Captain': {
     name: 'Captain',
-    description: 'Player is a captain',
+    description: 'The leader on and off the pitch—sets the tone.',
     iconType: 'Trophy'
   },
   'Superstar': {
     name: 'Superstar',
-    description: 'Needs no introduction, Proven superstar!',
+    description: 'Elite, proven player with an undeniable presence on the field.',
     iconType: 'Star'
   },
   'Media Darling': {
     name: 'Media Darling',
-    description: 'The media loves this guy',
+    description: 'A fan and media favorite—always in the spotlight.',
     iconType: 'Camera'
   },
   'Magician': {
     name: 'Magician',
-    description: 'Very smart and elusive player, that can always pull one out of the back of tricks',
+    description: 'Creative and unpredictable—always has something special up his sleeve.',
     iconType: 'WandSparkles'
   },
   'Mr Reliable': {
     name: 'Mr Reliable',
-    description: 'Battle Tested and you rarely misses a game',
+    description: 'Consistent, durable, and always delivers under pressure.',
     iconType: 'Swords'
   }
 };
@@ -75,6 +75,67 @@ export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
 /**
  * Algorithm to determine which icons a player should have based on their stats and profile
  */
+// Color scheme helper function
+export function getIconColorScheme(iconName: PlayerIcon) {
+  switch (iconName) {
+    case 'Diamond In the Ruff':
+      return {
+        bg: 'bg-gradient-to-br from-purple-400 to-purple-600',
+        border: 'border-purple-300'
+      };
+    case 'Rookie':
+      return {
+        bg: 'bg-gradient-to-br from-green-400 to-green-600',
+        border: 'border-green-300'
+      };
+    case 'Captain':
+      return {
+        bg: 'bg-gradient-to-br from-yellow-400 to-yellow-600',
+        border: 'border-yellow-300'
+      };
+    case 'Superstar':
+      return {
+        bg: 'bg-gradient-to-br from-red-400 to-yellow-600',
+        border: 'border-yellow-300'
+      };
+    case 'Mr Reliable':
+      return {
+        bg: 'bg-gradient-to-br from-slate-400 to-slate-600',
+        border: 'border-slate-300'
+      };
+    case 'Speed Merchant':
+      return {
+        bg: 'bg-gradient-to-br from-blue-400 to-blue-600',
+        border: 'border-blue-300'
+      };
+    case 'Scrum Master':
+      return {
+        bg: 'bg-gradient-to-br from-orange-400 to-orange-600',
+        border: 'border-orange-300'
+      };
+    case 'Ruck Master':
+      return {
+        bg: 'bg-gradient-to-br from-indigo-400 to-indigo-600',
+        border: 'border-indigo-300'
+      };
+    case 'Media Darling':
+      return {
+        bg: 'bg-gradient-to-br from-pink-400 to-pink-600',
+        border: 'border-pink-300'
+      };
+    case 'Magician':
+      return {
+        bg: 'bg-gradient-to-br from-cyan-400 to-cyan-600',
+        border: 'border-cyan-300'
+      };
+    default:
+      return {
+        bg: 'bg-gradient-to-br from-gray-400 to-gray-600',
+        border: 'border-gray-300'
+      };
+  }
+}
+
 export function getPlayerIcons(
   player: IProAthlete,
   starRatings: IAthleteSeasonStarRatings | null,

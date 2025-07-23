@@ -97,23 +97,22 @@ export default function PlayersCompareItem({ player }: Props) {
                 player={player}
             />
 
-            {/* Player Icons Row */}
-            {!isLoading && starRatings && actions && (
-                <div className="mt-2">
-                    <PlayerIconsRow
-                        player={player}
-                        starRatings={starRatings}
-                        seasonStats={actions}
-                        size="sm"
-                    />
-                </div>
-            )}
-
             {seasons && <PlayerCompareSeasonPicker
                 seasons={seasons}
                 setCurrSeason={setCurrSeason}
                 currSeason={currSeason}
             />}
+
+            {/* Player Icons Row */}
+            {!isLoading && starRatings && actions && (
+                <PlayerIconsRow
+                    player={player}
+                    starRatings={starRatings}
+                    seasonStats={actions}
+                    size="sm"
+                />
+            )}
+
 
             {!isLoading && <div className="flex mt-6 flex-col gap-4" >
 
@@ -132,7 +131,7 @@ export default function PlayersCompareItem({ player }: Props) {
                             isGreen: isPowerRatingBest(player, comparePlayers)
                         },
                         {
-                            label: "Minutes Played", 
+                            label: "Minutes Played",
                             value: minutesPlayed,
                             isGreen: isStatActionBest(player, minutesPlayed, "MinutesPlayed", comparePlayersStats)
                         },
@@ -175,7 +174,7 @@ export default function PlayersCompareItem({ player }: Props) {
                             isGreen: isStatActionBest(player, tries, "Tries", comparePlayersStats)
                         },
                         {
-                            label: "Assists", 
+                            label: "Assists",
                             value: assits,
                             isGreen: isStatActionBest(player, assits, "Assists", comparePlayersStats)
                         },
@@ -283,7 +282,7 @@ type StatCategoryProps = {
 };
 
 function StatCategory({ title, icon, isMainBest, isCollapsed, onToggle, stats }: StatCategoryProps) {
-    
+
     const statsContent = (
         <div className="flex flex-col gap-1 mt-2">
             {stats.map((stat, index) => (
@@ -296,23 +295,23 @@ function StatCategory({ title, icon, isMainBest, isCollapsed, onToggle, stats }:
             ))}
         </div>
     );
-    
+
     return (
         <div className="bg-slate-300 border border-slate-100 dark:border-slate-600 dark:bg-slate-800/40 p-1 rounded-md">
-            <div 
-                onClick={onToggle} 
+            <div
+                onClick={onToggle}
                 className={twMerge(
                     "w-full cursor-pointer px-2 py-2 flex flex-row items-center justify-between rounded-md bg-slate-100 dark:bg-slate-700/60",
-                   isMainBest &&  "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
+                    isMainBest && "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
                 )}
             >
                 <div className="flex flex-row items-center gap-1">
                     {icon}
                     <span className="text-xs font-bold text-white uppercase">{title}</span>
                 </div>
-                
+
                 <div className="flex flex-row items-center gap-2">
-                    
+
                     {!isCollapsed ? (
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
@@ -343,8 +342,8 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
     return (
         <div className={twMerge(
             "flex flex-row items-center justify-between py-2 px-3 rounded",
-            isGreen ? "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white" 
-            : "bg-slate-200 dark:bg-slate-700/40 border-slate-100 dark:border-slate-600" 
+            isGreen ? "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
+                : "bg-slate-200 dark:bg-slate-700/40 border-slate-100 dark:border-slate-600"
         )}>
             <span className={twMerge(
                 "text-xs font-medium",

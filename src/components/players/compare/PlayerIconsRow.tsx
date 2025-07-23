@@ -13,18 +13,16 @@ type Props = {
 export default function PlayerIconsRow({ player, starRatings, seasonStats, size = 'md' }: Props) {
   const playerIcons = getPlayerIcons(player, starRatings, seasonStats);
 
-  if (playerIcons.length === 0) {
-    return null;
-  }
-
+  // Always show the container, even when empty
   return (
-    <div className="flex flex-row gap-2 items-center flex-wrap overflow-visible">
+    <div className="flex flex-row items-center justify-start flex-wrap min-h-[32px]">
       {playerIcons.map((iconName, index) => (
-        <PlayerIconComponent
-          key={`${iconName}-${index}`}
-          iconName={iconName}
-          size={size}
-        />
+        <div key={`${iconName}-${index}`} className="mr-4">
+          <PlayerIconComponent
+            iconName={iconName}
+            size={size}
+          />
+        </div>
       ))}
     </div>
   );
