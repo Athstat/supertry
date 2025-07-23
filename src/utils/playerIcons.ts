@@ -11,7 +11,10 @@ export type PlayerIcon =
   | 'Superstar'
   | 'Media Darling'
   | 'Magician'
-  | 'Mr Reliable';
+  | 'Mr Reliable'
+  | "Stack'em"
+  | "Brick Wall"
+  | "Golden Boot";
 
 export interface PlayerIconData {
   name: PlayerIcon;
@@ -42,7 +45,7 @@ export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
   },
   'Speed Merchant': {
     name: 'Speed Merchant',
-    description: 'Blazing pace and electric acceleration on the field.',
+    description: 'Blazing fast, elusive and always electric on the field.',
     iconType: 'Zap'
   },
   'Captain': {
@@ -62,13 +65,31 @@ export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
   },
   'Magician': {
     name: 'Magician',
-    description: 'Creative and unpredictable—always has something special up his sleeve.',
+    description: 'Creative and unpredictable, always has something special up from the bag of tricks',
     iconType: 'WandSparkles'
   },
   'Mr Reliable': {
     name: 'Mr Reliable',
     description: 'Consistent, durable, and always delivers under pressure.',
     iconType: 'Swords'
+  },
+
+  "Stack'em": {
+    name: "Stack'em",
+    description: 'Consistently racks up points on the board, tries, kicks, you name it',
+    iconType: 'Cash'
+  },
+
+  "Brick Wall": {
+    name: "Brick Wall",
+    description: 'Specializes in shutting down opposition attacks with unbreakable defense',
+    iconType: 'BrickWall'
+  },
+
+  "Golden Boot": {
+    name: "Golden Boot",
+    description: 'Besides almost making every kick, they rarely miss any',
+    iconType: 'Target'
   }
 };
 
@@ -128,6 +149,21 @@ export function getIconColorScheme(iconName: PlayerIcon) {
         bg: 'bg-gradient-to-br from-cyan-400 to-cyan-600',
         border: 'border-cyan-300'
       };
+    case "Stack'em":
+      return {
+        bg: 'bg-gradient-to-br from-green-500 to-green-700',
+        border: 'border-green-300'
+      };
+    case "Brick Wall":
+      return {
+        bg: 'bg-gradient-to-br from-orange-400 to-orange-700',
+        border: 'border-orange-300'
+      };
+    case "Golden Boot":
+      return {
+        bg: 'bg-gradient-to-br from-violet-400 to-violet-700',
+        border: 'border-violet-300'
+      };
     default:
       return {
         bg: 'bg-gradient-to-br from-gray-400 to-gray-600',
@@ -156,15 +192,22 @@ export function getPlayerIcons(
   const turnoversWon = getPlayerAggregatedStat("TurnoversWon", seasonStats)?.action_count || 0;
   const kicksFromHand = getPlayerAggregatedStat("KicksFromHand", seasonStats)?.action_count || 0;
   const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', seasonStats)?.action_count || 0;
+  const defendersBeaten = getPlayerAggregatedStat("DefendersBeaten", seasonStats)?.action_count || 0;
+  const carries = getPlayerAggregatedStat("Carries", seasonStats)?.action_count || 0;
+  const points = getPlayerAggregatedStat("Points", seasonStats)?.action_count || 0;
+  const ConversionsScored = getPlayerAggregatedStat("ConversionsScored", seasonStats)?.action_count || 0;
+  const penaltyGoalsScored = getPlayerAggregatedStat("PenaltyGoalsScored", seasonStats)?.action_count || 0;
+  const dropGoalsScored = getPlayerAggregatedStat("PenaltyGoalsScored", seasonStats)?.action_count || 0;
 
   // Diamond In the Ruff - Young player with high potential (age < 23 and high power rating)
-  if (age && age < 25 && (player.power_rank_rating || 0) > 75) {
+  if (age && age < 25 && (player.power_rank_rating || 0) > 75 && minutesPlayed > 400) {
     icons.push('Diamond In the Ruff');
   }
 
   // Rookie - Player is a rookie in their first season (age < 23 and only has stats for 1 season)
   const uniqueSeasons = new Set(seasonStats.map(stat => stat.season_id)).size;
-  if (age && age < 23 && uniqueSeasons === 1) {
+
+  if (age && age < 20) {
     icons.push('Rookie');
   }
 
@@ -179,7 +222,7 @@ export function getPlayerIcons(
   }
 
   // Speed Merchant - High tries for backs or high attacking rating
-  if (isBack(player.position_class) && (tries > 8 || (starRatings?.attacking || 0) > 4.0)) {
+  if (defendersBeaten >= 45 && carries >= 80) {
     icons.push('Speed Merchant');
   }
 
@@ -206,6 +249,21 @@ export function getPlayerIcons(
   // Mr Reliable
   if ((minutesPlayed || 0) >= 800) {
     icons.push('Mr Reliable');
+  }
+
+  // Stack'em
+  if (points > 30 || tries > 10) {
+    icons.push("Stack'em");
+  }
+
+  // Brick Wall
+  if (tacklesMade >= 80 && tackleSuccess >= 0.8) {
+    icons.push("Brick Wall");
+  }
+
+  // Golden Boot
+  if (ConversionsScored > 10) {
+    icons.push("Golden Boot");
   }
 
   return icons;

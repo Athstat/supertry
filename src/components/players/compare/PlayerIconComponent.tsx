@@ -7,7 +7,8 @@ import {
   Trophy,
   Mail,
   Sparkles,
-  Star
+  Star,
+  Target
 } from 'lucide-react';
 import { PlayerIcon, PLAYER_ICONS, getIconColorScheme } from '../../../utils/playerIcons';
 import { useState } from 'react';
@@ -18,6 +19,8 @@ import { BicepsFlexed } from 'lucide-react';
 import { Dumbbell } from 'lucide-react';
 import { WandSparkles } from 'lucide-react';
 import { Swords } from 'lucide-react';
+import { BadgeDollarSign } from 'lucide-react';
+import { BrickWall } from 'lucide-react';
 
 type Props = {
   iconName: PlayerIcon;
@@ -113,7 +116,12 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
         return <Star {...iconProps} />;
       case 'Swords':
         return <Swords {...iconProps} />;
-
+      case 'Cash':
+        return <BadgeDollarSign {...iconProps} />;
+      case 'BrickWall':
+        return <BrickWall {...iconProps} />;
+      case 'Target':
+        return <Target {...iconProps} />;
 
       default:
         return <Award {...iconProps} />;

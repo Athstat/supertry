@@ -71,24 +71,23 @@ export default function PlayersCompareItem({ player }: Props) {
     const isLoading = loadingActions || loadingStarRatings;
 
     const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
-
     const assits = getPlayerAggregatedStat("Assists", actions)?.action_count;
-
     const passes = getPlayerAggregatedStat("Passes", actions)?.action_count;
-
     const tacklesMade = getPlayerAggregatedStat("TacklesMade", actions)?.action_count;
-
     const tackleSuccess = getPlayerAggregatedStat("TackleSuccess", actions)?.action_count;
-
     const turnoversWon = getPlayerAggregatedStat("TurnoversWon", actions)?.action_count;
-
     const turnovers = getPlayerAggregatedStat("TurnoversConceded", actions)?.action_count;
-
+    const defendersBeaten = getPlayerAggregatedStat("DefendersBeaten", actions)?.action_count;
     const kicksFromHand = getPlayerAggregatedStat("KicksFromHand", actions)?.action_count;
-
     const kicksFromHandMetres = getPlayerAggregatedStat("KicksFromHandMetres", actions)?.action_count;
-
     const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
+    const pentalyGoalsScored = getPlayerAggregatedStat('PenaltyGoalsScored', actions)?.action_count;
+    const conversionsScored = getPlayerAggregatedStat('ConversionsScored', actions)?.action_count;
+    const points = getPlayerAggregatedStat('Points', actions)?.action_count;
+    const carries = getPlayerAggregatedStat('Carries', actions)?.action_count;
+    const redCards = getPlayerAggregatedStat('RedCards', actions)?.action_count;
+    const linebreaks = getPlayerAggregatedStat('LineBreaks', actions)?.action_count;
+    const dropGoalsScored = getPlayerAggregatedStat("DropGoalsScored", actions)?.action_count;
 
     return (
         <div className="flex flex-col gap-2 w-[calc(50%-0.25rem)] md:flex-1 md:min-w-[200px] md:max-w-[300px] flex-shrink-0">
@@ -114,7 +113,9 @@ export default function PlayersCompareItem({ player }: Props) {
             )}
 
 
-            {!isLoading && <div className="flex mt-6 flex-col gap-4" >
+
+
+            {!isLoading && <div className="flex flex-col gap-4" >
 
                 {/* OVERALLS Section */}
                 <StatCategory
@@ -174,6 +175,11 @@ export default function PlayersCompareItem({ player }: Props) {
                             isGreen: isStatActionBest(player, tries, "Tries", comparePlayersStats)
                         },
                         {
+                            label: "Points",
+                            value: points,
+                            isGreen: isStatActionBest(player, tries, "Points", comparePlayersStats)
+                        },
+                        {
                             label: "Assists",
                             value: assits,
                             isGreen: isStatActionBest(player, assits, "Assists", comparePlayersStats)
@@ -187,6 +193,21 @@ export default function PlayersCompareItem({ player }: Props) {
                             label: "Turnovers",
                             value: turnovers,
                             isGreen: isStatActionBest(player, turnovers, "TurnoversConceded", comparePlayersStats)
+                        },
+                        {
+                            label: "Defenders Beaten",
+                            value: defendersBeaten,
+                            isGreen: isStatActionBest(player, turnovers, "DefendersBeaten", comparePlayersStats)
+                        },
+                        {
+                            label: "Carries",
+                            value: carries,
+                            isGreen: isStatActionBest(player, turnovers, "Carries", comparePlayersStats)
+                        },
+                        {
+                            label: "Line Breaks",
+                            value: linebreaks,
+                            isGreen: isStatActionBest(player, turnovers, "LineBreaks", comparePlayersStats)
                         }
                     ]}
                 />
@@ -220,6 +241,12 @@ export default function PlayersCompareItem({ player }: Props) {
                             label: "Turnovers Won",
                             value: turnoversWon,
                             isGreen: isStatActionBest(player, turnoversWon, "TurnoversWon", comparePlayersStats)
+                        },
+
+                        {
+                            label: "Red Cards",
+                            value: redCards,
+                            isGreen: isStatActionBest(player, turnoversWon, "RedCards", comparePlayersStats)
                         }
                     ]}
                 />
@@ -234,6 +261,21 @@ export default function PlayersCompareItem({ player }: Props) {
                     isCollapsed={statCategoriesCollapsed.kicking}
                     onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, kicking: !prev.kicking }))}
                     stats={[
+                        {
+                            label: "Penalty Goals Scored",
+                            value: pentalyGoalsScored,
+                            isGreen: isStatActionBest(player, kicksFromHand, 'PenaltyGoalsScored', comparePlayersStats)
+                        },
+                        {
+                            label: "Conversions Scored",
+                            value: conversionsScored,
+                            isGreen: isStatActionBest(player, kicksFromHand, 'ConversionsScored', comparePlayersStats)
+                        },
+                        {
+                            label: "Drop Goals",
+                            value: dropGoalsScored,
+                            isGreen: isStatActionBest(player, kicksFromHand, 'DropGoalsScored', comparePlayersStats)
+                        },
                         {
                             label: "Kicks From Hand",
                             value: kicksFromHand,
@@ -253,13 +295,13 @@ export default function PlayersCompareItem({ player }: Props) {
                             label: "Infield Kicking",
                             value: starRatings?.infield_kicking,
                             isGreen: isStarRatingBest(player, starRatings?.infield_kicking, "infield_kicking", comparePlayersStarRatings)
-                        }
+                        },
                     ]}
                 />
 
             </div>}
 
-            {isLoading && <div className="w-full h-screen mt-6 rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>}
+            {isLoading && <div className="w-full h-screen rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>}
         </div>
     );
 }

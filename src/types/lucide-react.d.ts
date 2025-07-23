@@ -104,5 +104,7 @@ declare module "lucide-react" {
   export const BicepsFlexed : CIP;
   export const Dumbbell : CIP;
   export const WandSparkles : CIP;
+  export const BadgeDollarSign : CIP;
+  export const BrickWall : CIP;
 }
 
