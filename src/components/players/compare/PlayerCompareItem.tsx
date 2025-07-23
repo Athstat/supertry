@@ -285,11 +285,11 @@ function StatCategory({ title, icon, isMainBest, isCollapsed, onToggle, stats }:
     );
     
     return (
-        <div className="bg-slate-300 border border-slate-100 dark:border-slate-600 dark:bg-slate-700/60 p-1 rounded-md">
+        <div className="bg-slate-300 border border-slate-100 dark:border-slate-600 dark:bg-slate-800/40 p-1 rounded-md">
             <div 
                 onClick={onToggle} 
                 className={twMerge(
-                    "w-full cursor-pointer px-2 py-2 flex flex-row items-center justify-between rounded-md bg-slate-100 dark:bg-slate-800",
+                    "w-full cursor-pointer px-2 py-2 flex flex-row items-center justify-between rounded-md bg-slate-100 dark:bg-slate-700/60",
                    isMainBest &&  "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
                 )}
             >
