@@ -9,6 +9,7 @@ import { useEffect, useTransition } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom } from "../../../state/comparePlayers.atoms";
 import { isStatActionBest, isStarRatingBest, isPowerRatingBest } from "../../../utils/athleteUtils";
+import { Crosshair, Info, Shield, Star, Zap } from "lucide-react";
 
 type Props = {
     player: IProAthlete;
@@ -62,7 +63,7 @@ export default function PlayersCompareItem({ player }: Props) {
             setComparePlayerRatings(newStarRatings)
         })
 
-        return () => {};
+        return () => { };
 
     }, [actions, starRatings]);
 
@@ -101,130 +102,106 @@ export default function PlayersCompareItem({ player }: Props) {
                 currSeason={currSeason}
             />}
 
-            {!isLoading && <div className="flex flex-col gap-1" >
+            {!isLoading && <div className="flex flex-col gap-3" >
 
-                <SecondaryText className="mt-2" >General</SecondaryText>
+                {/* General Stats */}
+                <div className="flex flex-row items-center justify-between py-2 px-3 bg-slate-700 dark:bg-slate-800 rounded">
+                    <span className="text-xs font-medium text-slate-300">IGS</span>
+                    <span className="text-sm font-bold text-white">{player.power_rank_rating || 0}</span>
+                </div>
+                
+                <div className="flex flex-row items-center justify-between py-2 px-3 bg-slate-700 dark:bg-slate-800 rounded">
+                    <span className="text-xs font-medium text-slate-300">Face Stats</span>
+                    <span className="text-sm font-bold text-white">{minutesPlayed || 0}</span>
+                </div>
 
-                <StatLabel
-                    label="Power Rating"
-                    value={player.power_rank_rating}
-                    isGreen={isPowerRatingBest(player, comparePlayers)}
+                {/* ATTACKING Section */}
+                <StatCategory
+                    title="ATTACKING"
+                    mainScore={starRatings?.attacking || 0}
+                    isMainBest={isStarRatingBest(player, starRatings?.attacking, "attacking", comparePlayersStarRatings)}
+                    stats={[
+                        {
+                            label: "Tries",
+                            value: tries,
+                            isGreen: isStatActionBest(player, tries, "Tries", comparePlayersStats)
+                        },
+                        {
+                            label: "Assists", 
+                            value: assits,
+                            isGreen: isStatActionBest(player, assits, "Assists", comparePlayersStats)
+                        },
+                        {
+                            label: "Passes",
+                            value: passes,
+                            isGreen: isStatActionBest(player, passes, "Passes", comparePlayersStats)
+                        },
+                        {
+                            label: "Turnovers",
+                            value: turnovers,
+                            isGreen: isStatActionBest(player, turnovers, "TurnoversConceded", comparePlayersStats)
+                        }
+                    ]}
                 />
 
-                <StatLabel
-                    label="Minutes Played"
-                    value={minutesPlayed}
-                    isGreen={isStatActionBest(player, minutesPlayed, "MinutesPlayed", comparePlayersStats)}
+                {/* DEFENDING Section */}
+                <StatCategory
+                    title="DEFENDING"
+                    mainScore={starRatings?.defence || 0}
+                    isMainBest={isStarRatingBest(player, starRatings?.defence, "defence", comparePlayersStarRatings)}
+                    stats={[
+                        {
+                            label: "Strength",
+                            value: starRatings?.strength,
+                            isGreen: isStarRatingBest(player, starRatings?.strength, "strength", comparePlayersStarRatings)
+                        },
+                        {
+                            label: "Tackles Made",
+                            value: tacklesMade,
+                            isGreen: isStatActionBest(player, tacklesMade, "TacklesMade", comparePlayersStats)
+                        },
+                        {
+                            label: "Tackle Success",
+                            value: tackleSuccess ? (tackleSuccess * 100) : undefined,
+                            isGreen: isStatActionBest(player, tackleSuccess ? (tackleSuccess * 100) : undefined, "TackleSuccess", comparePlayersStats)
+                        },
+                        {
+                            label: "Turnovers Won",
+                            value: turnoversWon,
+                            isGreen: isStatActionBest(player, turnoversWon, "TurnoversWon", comparePlayersStats)
+                        }
+                    ]}
                 />
 
-                <SecondaryText className="mt-2" >Attacking</SecondaryText>
-
-                <StatLabel
-                    label="Attacking Rating"
-                    value={starRatings?.attacking}
-                    isGreen={isStarRatingBest(player, starRatings?.attacking, "attacking", comparePlayersStarRatings)}
+                {/* KICKING Section */}
+                <StatCategory
+                    title="KICKING"
+                    mainScore={starRatings?.kicking || 0}
+                    isMainBest={isStarRatingBest(player, starRatings?.kicking, "kicking", comparePlayersStarRatings)}
+                    stats={[
+                        {
+                            label: "Kicks From Hand",
+                            value: kicksFromHand,
+                            isGreen: isStatActionBest(player, kicksFromHand, "KicksFromHand", comparePlayersStats)
+                        },
+                        {
+                            label: "Metres",
+                            value: kicksFromHandMetres,
+                            isGreen: isStatActionBest(player, kicksFromHandMetres, "KicksFromHandMetres", comparePlayersStats)
+                        },
+                        {
+                            label: "Points Kicking",
+                            value: starRatings?.points_kicking,
+                            isGreen: isStarRatingBest(player, starRatings?.points_kicking, "points_kicking", comparePlayersStarRatings)
+                        },
+                        {
+                            label: "Infield Kicking",
+                            value: starRatings?.infield_kicking,
+                            isGreen: isStarRatingBest(player, starRatings?.infield_kicking, "infield_kicking", comparePlayersStarRatings)
+                        }
+                    ]}
                 />
 
-                <StatLabel
-                    label="Scoring"
-                    value={starRatings?.scoring}
-                    isGreen={isStarRatingBest(player, starRatings?.scoring, "scoring", comparePlayersStarRatings)}
-                />
-
-                <StatLabel
-                    label="Tries"
-                    value={tries}
-                    isGreen={isStatActionBest(player, tries, "Tries", comparePlayersStats)}
-                />
-
-                <StatLabel
-                    label="Assists"
-                    value={assits}
-                    isGreen={isStatActionBest(player, assits, "Assists", comparePlayersStats)}
-                />
-
-                <StatLabel
-                    label="Turnovers"
-                    value={turnovers}
-                    isGreen={isStatActionBest(player, turnovers, "TurnoversConceded", comparePlayersStats)}
-                />
-
-                <StatLabel
-                    label="Passes"
-                    value={passes}
-                    isGreen={isStatActionBest(player, passes, "Passes", comparePlayersStats)}
-                />
-
-                {/* <StatLabel
-          label="Ball Carying"
-          value={player.ball_carrying}
-
-        /> */}
-
-
-                <SecondaryText className="mt-2" >Defense</SecondaryText>
-
-                <StatLabel
-                    label="Defence"
-                    value={starRatings?.defence}
-                    isGreen={isStarRatingBest(player, starRatings?.defence, "defence", comparePlayersStarRatings)}
-                />
-
-                {/* <StatLabel
-          label="Strength"
-          value={player.strength}
-
-        /> */}
-
-                <StatLabel
-                    label="Tackles Made"
-                    value={tacklesMade}
-                    isGreen={isStatActionBest(player, tacklesMade, "TacklesMade", comparePlayersStats)}
-                />
-
-                <StatLabel
-                    label="Tackles Sucess"
-                    value={tackleSuccess ? (tackleSuccess * 100) : undefined}
-                    isGreen={isStatActionBest(player, tackleSuccess ? (tackleSuccess * 100) : undefined, "TackleSuccess", comparePlayersStats)}
-                />
-
-                <StatLabel
-                    label="Turnovers Won"
-                    value={turnoversWon}
-                    isGreen={isStatActionBest(player, turnoversWon, "TurnoversWon", comparePlayersStats)}
-                />
-
-                <SecondaryText className="mt-2" >Kicking</SecondaryText>
-
-                <StatLabel
-                    label="Kicking"
-                    value={starRatings?.kicking}
-                    isGreen={isStarRatingBest(player, starRatings?.kicking, "kicking", comparePlayersStarRatings)}
-                />
-
-                <StatLabel
-                    label="Kicks From Hand"
-                    value={kicksFromHand}
-                    isGreen={isStatActionBest(player, kicksFromHand, "KicksFromHand", comparePlayersStats)}
-                />
-
-                <StatLabel
-                    label="Metres"
-                    value={kicksFromHandMetres}
-                    isGreen={isStatActionBest(player, kicksFromHandMetres, "KicksFromHandMetres", comparePlayersStats)}
-                />
-
-                <StatLabel
-                    label="Points Kicking"
-                    value={starRatings?.points_kicking}
-                    isGreen={isStarRatingBest(player, starRatings?.points_kicking, "points_kicking", comparePlayersStarRatings)}
-                />
-
-                <StatLabel
-                    label="Infield Kicking"
-                    value={starRatings?.infield_kicking}
-                    isGreen={isStarRatingBest(player, starRatings?.infield_kicking, "infield_kicking", comparePlayersStarRatings)}
-                />
             </div>}
 
             {isLoading && <div className="w-full h-[400px] bg-slate-200 dark:bg-slate-800 animate-pulse"></div>}
@@ -233,6 +210,77 @@ export default function PlayersCompareItem({ player }: Props) {
 }
 
 
+
+type StatCategoryProps = {
+    title: string;
+    mainScore: number;
+    isMainBest?: boolean;
+    stats: Array<{
+        label: string;
+        value?: number;
+        isGreen?: boolean;
+    }>;
+};
+
+function StatCategory({ title, mainScore, isMainBest, stats }: StatCategoryProps) {
+    const scoreColor = isMainBest ? "text-blue-500" : "text-slate-300";
+    const progressColor = isMainBest ? "bg-blue-500" : "bg-slate-400";
+    
+    // Calculate rotation angle based on score (0-5 scale, -90 to 90 degrees)
+    const rotationAngle = ((mainScore / 5) * 180) - 90;
+    
+    return (
+        <div className="flex flex-col gap-2">
+            {/* Category Header with FUT.gg Half Circle */}
+            <div className="flex flex-row items-end justify-between">
+                <span className="text-xs font-bold text-white uppercase">{title}</span>
+                <div className="relative w-[40px] md:w-[60px] shrink-0 flex justify-end items-center md:pr-1">
+                    <div className="overflow-hidden relative shrink-0" style={{ width: '60px', height: '30px' }}>
+                        {/* Background circle */}
+                        <div 
+                            className="absolute top-0 left-0 rounded-full bg-slate-600" 
+                            style={{ width: '60px', height: '60px' }}
+                        />
+                        {/* Progress circle */}
+                        <div 
+                            className={twMerge("absolute top-0 left-0 rounded-full", progressColor)} 
+                            style={{ 
+                                clipPath: 'inset(0px 0px 50%)', 
+                                transform: `rotate(${rotationAngle}deg)`, 
+                                transformOrigin: 'center center', 
+                                width: '60px', 
+                                height: '60px' 
+                            }}
+                        />
+                        {/* Inner circle */}
+                        <div 
+                            className="absolute rounded-full bg-slate-800" 
+                            style={{ width: '48px', height: '48px', top: '6px', left: '6px' }}
+                        />
+                        {/* Score number */}
+                        <div 
+                            className={twMerge("absolute left-1/2 -translate-x-1/2 font-bold leading-none text-base bottom-[-2px]", scoreColor)}
+                        >
+                            {Math.round(mainScore)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Individual Stats */}
+            <div className="flex flex-col gap-1">
+                {stats.map((stat, index) => (
+                    <StatLabel
+                        key={index}
+                        label={stat.label}
+                        value={stat.value}
+                        isGreen={stat.isGreen}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
 
 type StatLabelProp = {
     label?: string;
@@ -245,16 +293,22 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
     const valueFixed = value?.toFixed(1);
 
     return (
-        <div className="flex flex-row items-center gap-1" >
-            <div className={twMerge(
-                "bg-slate-200 flex-[3] py-1 border border-slate-300 dark:border-slate-700 dark:bg-slate-700/40 rounded-md text-[12px] px-2 sm:text-sm",
-            )} >
+        <div className={twMerge(
+            "flex flex-row items-center justify-between py-2 px-3 rounded",
+            isGreen ? "bg-blue-500/20 border border-blue-500/30" : "bg-slate-700 dark:bg-slate-800"
+        )}>
+            <span className={twMerge(
+                "text-xs font-medium",
+                isGreen ? "text-blue-600 dark:text-blue-400" : "text-slate-300"
+            )}>
                 {label}
-            </div>
-            <div className={twMerge(
-                "bg-slate-300 flex-1 py-1 text-center items-center dark:bg-slate-700 border border-slate-400 dark:border-slate-600 rounded-md text-[12px] sm:text-sm px-1",
-                isGreen && "from-primary-500 bg-gradient-to-r to-blue-700 text-white border-blue-600 dark:border-blue-600"
-            )} >{hasVal ? valueFixed?.endsWith(".0") ? value : valueFixed : "-"}</div>
+            </span>
+            <span className={twMerge(
+                "text-sm font-bold",
+                isGreen ? "text-blue-600 dark:text-blue-400" : "text-white"
+            )}>
+                {hasVal ? valueFixed?.endsWith(".0") ? value : valueFixed : "-"}
+            </span>
         </div>
     )
 }
