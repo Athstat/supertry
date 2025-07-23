@@ -3,6 +3,7 @@ import PlayerStats from "./profile-modal-components/PlayerStats";
 import PlayerInfo from "./profile-modal-components/PlayerInfo";
 import PlayerIconsCard from "./profile-modal-components/PlayerIconsCard";
 import PlayerProfileModalTabContent from "./profile-modal-components/PlayerProfileModalTabContent";
+import usePlayerStats from "./profile-modal-components/usePlayerStats";
 
 interface Props {
   player: any;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function PlayerProfileModal ({player, isOpen, onClose}: Props) {
+
 
   if (!isOpen) return null;
 
