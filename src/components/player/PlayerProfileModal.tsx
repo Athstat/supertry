@@ -1,6 +1,7 @@
 import ModalHeader from "./profile-modal-components/ModalHeader";
 import PlayerStats from "./profile-modal-components/PlayerStats";
 import PlayerInfo from "./profile-modal-components/PlayerInfo";
+import PlayerIconsCard from "./profile-modal-components/PlayerIconsCard";
 import PlayerProfileModalTabContent from "./profile-modal-components/PlayerProfileModalTabContent";
 
 interface Props {
@@ -27,6 +28,8 @@ export function PlayerProfileModal ({player, isOpen, onClose}: Props) {
 
           {/* Player Name and Position */}
           <PlayerInfo player={player} />
+
+          {/* Player Icons */}
 
           {/* <div className="p-4">
             <PlayerStatsContextInfo />
