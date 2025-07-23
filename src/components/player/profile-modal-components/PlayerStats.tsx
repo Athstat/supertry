@@ -8,9 +8,9 @@ interface PlayerStatsProps {
 }
 
 export const PlayerStats: React.FC<PlayerStatsProps> = ({ player }) => {
-  console.log("player stats", player);
 
   const {starRatings, seasonPlayerStats} = usePlayerStats(player);
+  console.log("Sacha star ratings ", starRatings);
 
   return (
     <>

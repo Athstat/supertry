@@ -3,6 +3,7 @@ import { calculateAge } from '../../../../utils/playerUtils';
 import { IProAthlete } from '../../../../types/athletes';
 import PlayerIconsCard from '../PlayerIconsCard';
 import SecondaryText from '../../../shared/SecondaryText';
+import Experimental from '../../../shared/ab_testing/Experimental';
 
 interface OverviewTabProps {
   player: IProAthlete;
@@ -10,7 +11,7 @@ interface OverviewTabProps {
 
 export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-1 pb-20">
 
       <div className='rounded-xl p-4 bg-slate-50 dark:bg-slate-800/40 border dark:border-slate-700' >
         <div className="flex flex-col gap-2.5">
@@ -53,8 +54,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
 
         </div>
       </div>
-
-      <PlayerIconsCard player={player} />
+      
+      <Experimental>
+        <PlayerIconsCard player={player} />
+      </Experimental>
 
     </div>
   );
