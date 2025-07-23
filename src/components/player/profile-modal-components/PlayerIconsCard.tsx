@@ -1,19 +1,20 @@
+import { useAtomValue } from 'jotai';
 import { IProAthlete } from '../../../types/athletes';
 import { getPlayerIcons, PLAYER_ICONS, PlayerIcon } from '../../../utils/playerIcons';
 import PlayerIconComponent from '../../players/compare/PlayerIconComponent';
-import usePlayerStats from './usePlayerStats';
+import { playerProfileCurrStarRatings, playerProfileCurrStatsAtom } from '../../../state/playerProfile.atoms';
 
 interface Props {
   player: IProAthlete;
-  className?: string
+  className?: string,
 }
 
-export function PlayerIconsCard({ player } : Props ){
-  // Get player stats and star ratings
-  const { starRatings, seasonPlayerStats } = usePlayerStats(player);
-  
-  // Get player icons based on their stats and profile
-  const playerIcons = getPlayerIcons(player, starRatings || null, seasonPlayerStats);
+export function PlayerIconsCard({ player }: Props) {
+
+  const starRatings = useAtomValue(playerProfileCurrStarRatings);
+  const stats = useAtomValue(playerProfileCurrStatsAtom);
+
+  const playerIcons = getPlayerIcons(player, starRatings || null, stats);
 
   if (playerIcons.length === 0) {
     return null;
@@ -24,11 +25,11 @@ export function PlayerIconsCard({ player } : Props ){
       <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
         Player Icons
       </h3>
-      
+
       <div className="space-y-3">
         {playerIcons.map((iconName: PlayerIcon) => {
           const iconData = PLAYER_ICONS[iconName];
-          
+
           return (
             <div
               key={iconName}
@@ -39,7 +40,7 @@ export function PlayerIconsCard({ player } : Props ){
                 <div className="flex-shrink-0 mt-1">
                   <PlayerIconComponent iconName={iconName} size="lg" />
                 </div>
-                
+
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">

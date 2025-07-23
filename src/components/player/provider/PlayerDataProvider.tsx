@@ -12,6 +12,7 @@ type Props = {
     player: IProAthlete
 }
 
+/** Provides a players data and stats down to child components */
 export default function PlayerDataProvider({ children, player }: Props) {
 
     const atoms = [

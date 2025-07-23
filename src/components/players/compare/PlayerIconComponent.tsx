@@ -21,6 +21,7 @@ import { WandSparkles } from 'lucide-react';
 import { Swords } from 'lucide-react';
 import { BadgeDollarSign } from 'lucide-react';
 import { BrickWall } from 'lucide-react';
+import SecondaryText from '../../shared/SecondaryText';
 
 type Props = {
   iconName: PlayerIcon;
@@ -158,9 +159,9 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
             transform: 'translate(-50%, -100%)'
           }}
         >
-          <div className="bg-slate-300 dark:bg-slate-900 text-white px-3 py-2 rounded-lg shadow-xl border border-slate-600 whitespace-nowrap">
+          <div className="bg-white dark:bg-slate-900 text-slate-700 dark:text-white px-3 py-2 rounded-lg shadow-xl border border-slate-400 dark:border-slate-600 whitespace-nowrap">
             <div className="text-sm font-bold text-center">{iconData.name}</div>
-            <div className="text-xs text-slate-300 text-center mt-1 max-w-[200px] whitespace-normal">{iconData.description}</div>
+            <SecondaryText className="text-xs text-center mt-1 max-w-[200px] whitespace-normal">{iconData.description}</SecondaryText>
             {/* Tooltip Arrow */}
             <div className="absolute top-full left-1/2 transform -translate-x-1/2">
               <div className="border-4 border-transparent border-t-slate-800 dark:border-t-slate-900"></div>

@@ -1,16 +1,16 @@
-import React from "react";
 import { IProAthlete } from "../../../types/athletes";
 import PlayerIconsRow from "../../players/compare/PlayerIconsRow";
-import usePlayerStats from "./usePlayerStats";
+import { useAtomValue } from "jotai";
+import { playerProfileCurrStarRatings, playerProfileCurrStatsAtom } from "../../../state/playerProfile.atoms";
 
-interface PlayerStatsProps {
+type Props = {
   player: IProAthlete;
 }
 
-export const PlayerStats: React.FC<PlayerStatsProps> = ({ player }) => {
+export function PlayerStats({ player } : Props) {
 
-  const {starRatings, seasonPlayerStats} = usePlayerStats(player);
-  console.log("Sacha star ratings ", starRatings);
+  const starRatings = useAtomValue(playerProfileCurrStarRatings);
+  const stats = useAtomValue(playerProfileCurrStatsAtom);
 
   return (
     <>
@@ -52,7 +52,7 @@ export const PlayerStats: React.FC<PlayerStatsProps> = ({ player }) => {
         <PlayerIconsRow 
           player={player} 
           starRatings={starRatings ?? null} 
-          seasonStats={seasonPlayerStats} 
+          seasonStats={stats} 
           size="sm" 
         />
       </div>
