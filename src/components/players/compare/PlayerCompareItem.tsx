@@ -2,14 +2,13 @@ import { twMerge } from "tailwind-merge";
 import { IProAthlete } from "../../../types/athletes";
 import { getPlayerAggregatedStat } from "../../../types/sports_actions";
 import usePlayerStats from "../../player/profile-modal-components/usePlayerStats";
-import SecondaryText from "../../shared/SecondaryText";
 import PlayerCompareSeasonPicker from "./PlayerCompareSeasonPicker";
 import PlayerCompareItemHeader from "./PlayerCompareItemHeader";
 import { useEffect, useTransition } from "react";
-import { useAtom, useAtomValue } from "jotai";
-import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom } from "../../../state/comparePlayers.atoms";
-import { isStatActionBest, isStarRatingBest, isPowerRatingBest } from "../../../utils/athleteUtils";
-import { Crosshair, Info, Shield, Star, Zap } from "lucide-react";
+import { useAtom } from "jotai";
+import { comparePlayersStarRatingsAtom, comparePlayersStatsAtom } from "../../../state/comparePlayers.atoms";
+import { isStatActionBest, isStarRatingBest } from "../../../utils/athleteUtils";
+import {FaStar} from "react-icons/fa6";
 
 type Props = {
     player: IProAthlete;
@@ -17,7 +16,6 @@ type Props = {
 
 export default function PlayersCompareItem({ player }: Props) {
 
-    const comparePlayers = useAtomValue(comparePlayersAtom);
     const [comparePlayersStats, setComparePlayersStats] = useAtom(comparePlayersStatsAtom);
     const [comparePlayersStarRatings, setComparePlayerRatings] = useAtom(comparePlayersStarRatingsAtom);
 
@@ -223,47 +221,19 @@ type StatCategoryProps = {
 };
 
 function StatCategory({ title, mainScore, isMainBest, stats }: StatCategoryProps) {
-    const scoreColor = isMainBest ? "text-blue-500" : "text-slate-300";
-    const progressColor = isMainBest ? "bg-blue-500" : "bg-slate-400";
-    
-    // Calculate rotation angle based on score (0-5 scale, -90 to 90 degrees)
-    const rotationAngle = ((mainScore / 5) * 180) - 90;
     
     return (
         <div className="flex flex-col gap-2">
-            {/* Category Header with FUT.gg Half Circle */}
-            <div className="flex flex-row items-end justify-between">
+
+            <div className="flex flex-row items-center justify-between">
                 <span className="text-xs font-bold text-white uppercase">{title}</span>
-                <div className="relative w-[40px] md:w-[60px] shrink-0 flex justify-end items-center md:pr-1">
-                    <div className="overflow-hidden relative shrink-0" style={{ width: '60px', height: '30px' }}>
-                        {/* Background circle */}
-                        <div 
-                            className="absolute top-0 left-0 rounded-full bg-slate-600" 
-                            style={{ width: '60px', height: '60px' }}
-                        />
-                        {/* Progress circle */}
-                        <div 
-                            className={twMerge("absolute top-0 left-0 rounded-full", progressColor)} 
-                            style={{ 
-                                clipPath: 'inset(0px 0px 50%)', 
-                                transform: `rotate(${rotationAngle}deg)`, 
-                                transformOrigin: 'center center', 
-                                width: '60px', 
-                                height: '60px' 
-                            }}
-                        />
-                        {/* Inner circle */}
-                        <div 
-                            className="absolute rounded-full bg-slate-800" 
-                            style={{ width: '48px', height: '48px', top: '6px', left: '6px' }}
-                        />
-                        {/* Score number */}
-                        <div 
-                            className={twMerge("absolute left-1/2 -translate-x-1/2 font-bold leading-none text-base bottom-[-2px]", scoreColor)}
-                        >
-                            {Math.round(mainScore)}
-                        </div>
-                    </div>
+                
+                <div className={twMerge(
+                    "flex flex-row items-center gap-1 text-slate-700 dark:text-slate-300",
+                    isMainBest && "text-yellow-500 dark:text-yellow-500"
+                )} >
+                    <FaStar className="w-4 h-4" />
+                    <p className="font-bold text-sm" >{mainScore}</p>
                 </div>
             </div>
 
@@ -295,17 +265,17 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
     return (
         <div className={twMerge(
             "flex flex-row items-center justify-between py-2 px-3 rounded",
-            isGreen ? "bg-blue-500/20 border border-blue-500/30" : "bg-slate-700 dark:bg-slate-800"
+            isGreen ? "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white" : "bg-slate-700 dark:bg-slate-800"
         )}>
             <span className={twMerge(
                 "text-xs font-medium",
-                isGreen ? "text-blue-600 dark:text-blue-400" : "text-slate-300"
+                isGreen ? "text-white dark:text-white" : "text-slate-300"
             )}>
                 {label}
             </span>
             <span className={twMerge(
                 "text-sm font-bold",
-                isGreen ? "text-blue-600 dark:text-blue-400" : "text-white"
+                isGreen ? "text-white" : "text-white"
             )}>
                 {hasVal ? valueFixed?.endsWith(".0") ? value : valueFixed : "-"}
             </span>
