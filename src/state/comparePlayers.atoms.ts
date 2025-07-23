@@ -44,6 +44,19 @@ export const comparePlayersMapAtom = atom<Map<string, IProAthlete>>((get) => {
     return map;
 })
 
+/** Holds the collapsed state of stat categories */
+export const statCategoriesCollapsedAtom = atom<{
+    overalls: boolean;
+    attacking: boolean;
+    defending: boolean;
+    kicking: boolean;
+}>({
+    overalls: false,
+    attacking: false,
+    defending: false,
+    kicking: false
+});
+
 /** Object that holds all compare player feature atoms */
 export const comparePlayersAtomGroup = {
     comparePlayersAtom,
@@ -53,5 +66,6 @@ export const comparePlayersAtomGroup = {
     compareModeAtom,
     isCompareModePicking,
     isCompareModeModal,
-    comparePlayersMapAtom
+    comparePlayersMapAtom,
+    statCategoriesCollapsedAtom
 }
