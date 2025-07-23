@@ -99,5 +99,10 @@ declare module "lucide-react" {
   export const ArrowDownUp: CIP;
   export const Newspaper: CIP;
   export const ArrowLeftRight: CIP;
+  export const Gem : CIP;
+  export const Baby : CIP;
+  export const BicepsFlexed : CIP;
+  export const Dumbbell : CIP;
+  export const WandSparkles : CIP;
 }
 

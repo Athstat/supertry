@@ -22,22 +22,22 @@ export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
   'Diamond In the Ruff': {
     name: 'Diamond In the Ruff',
     description: 'Young player who is future face of the game',
-    iconType: 'Award'
+    iconType: 'Gem'
   },
   'Rookie': {
     name: 'Rookie',
     description: 'Player is a rookie in their first season',
-    iconType: 'User'
+    iconType: 'Baby'
   },
   'Scrum Master': {
     name: 'Scrum Master',
     description: 'Player is very good in the scrum',
-    iconType: 'Shield'
+    iconType: 'BicepFlexed'
   },
   'Ruck Master': {
     name: 'Ruck Master',
     description: 'Player is very good at the Ruck',
-    iconType: 'Users'
+    iconType: 'Dumbell'
   },
   'Speed Merchant': {
     name: 'Speed Merchant',
@@ -57,12 +57,12 @@ export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
   'Media Darling': {
     name: 'Media Darling',
     description: 'The media loves this guy',
-    iconType: 'Mail'
+    iconType: 'Camera'
   },
   'Magician': {
     name: 'Magician',
     description: 'Very smart and elusive player, that can always pull one out of the back of tricks',
-    iconType: 'Sparkles'
+    iconType: 'WandSparkles'
   }
 };
 
@@ -83,6 +83,7 @@ export function getPlayerIcons(
   // Get key stats
   const tries = getPlayerAggregatedStat("Tries", seasonStats)?.action_count || 0;
   const assists = getPlayerAggregatedStat("Assists", seasonStats)?.action_count || 0;
+  const passes = getPlayerAggregatedStat("Passes", seasonStats)?.action_count || 0;
   const tacklesMade = getPlayerAggregatedStat("TacklesMade", seasonStats)?.action_count || 0;
   const tackleSuccess = getPlayerAggregatedStat("TackleSuccess", seasonStats)?.action_count || 0;
   const turnoversWon = getPlayerAggregatedStat("TurnoversWon", seasonStats)?.action_count || 0;
@@ -94,23 +95,24 @@ export function getPlayerIcons(
     icons.push('Diamond In the Ruff');
   }
 
-  // Rookie - Young player with limited minutes (age < 22 and low minutes)
-  if (age && age < 22 && minutesPlayed < 500) {
+  // Rookie - Player is a rookie in their first season (age < 23 and only has stats for 1 season)
+  const uniqueSeasons = new Set(seasonStats.map(stat => stat.season_id)).size;
+  if (age && age < 23 && uniqueSeasons === 1) {
     icons.push('Rookie');
   }
 
   // Scrum Master - Forward with high strength rating
-  if (isForward(player.position_class) && (starRatings?.strength || 0) > 80) {
+  if (isForward(player.position_class) && (starRatings?.strength || 0) > 4.0) {
     icons.push('Scrum Master');
   }
 
   // Ruck Master - High turnovers won and good breakdown work
-  if (turnoversWon > 15 && (starRatings?.ball_carrying || 0) > 75) {
+  if (turnoversWon > 15 && (starRatings?.ball_carrying || 0) > 3.5) {
     icons.push('Ruck Master');
   }
 
   // Speed Merchant - High tries for backs or high attacking rating
-  if (isBack(player.position_class) && (tries > 8 || (starRatings?.attacking || 0) > 85)) {
+  if (isBack(player.position_class) && (tries > 8 || (starRatings?.attacking || 0) > 4.0)) {
     icons.push('Speed Merchant');
   }
 
@@ -130,7 +132,7 @@ export function getPlayerIcons(
   }
 
   // Magician - High playmaking and assists (creative player)
-  if ((starRatings?.playmaking || 0) > 80 && assists > 8) {
+  if ((starRatings?.playmaking || 0) >= 3.5 && assists >= 4 && passes > 40) {
     icons.push('Magician');
   }
 

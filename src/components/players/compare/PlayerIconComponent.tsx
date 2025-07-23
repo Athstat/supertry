@@ -1,16 +1,21 @@
-import { 
-  Award, 
-  User, 
-  Shield, 
-  Users, 
-  Zap, 
-  Trophy, 
-  Mail, 
-  Sparkles 
+import {
+  Award,
+  User,
+  Shield,
+  Users,
+  Zap,
+  Trophy,
+  Mail,
+  Sparkles
 } from 'lucide-react';
 import { PlayerIcon, PLAYER_ICONS } from '../../../utils/playerIcons';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Gem } from 'lucide-react';
+import { Baby } from 'lucide-react';
+import { BicepsFlexed } from 'lucide-react';
+import { Dumbbell } from 'lucide-react';
+import { WandSparkles } from 'lucide-react';
 
 type Props = {
   iconName: PlayerIcon;
@@ -21,7 +26,7 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
   const iconData = PLAYER_ICONS[iconName];
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  
+
   const sizeClasses = {
     sm: 'w-6 h-6 p-1',
     md: 'w-8 h-8 p-1.5',
@@ -40,11 +45,11 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
       width: window.innerWidth,
       height: window.innerHeight
     };
-    
+
     // Calculate optimal position to avoid viewport edges
     let x = rect.left + rect.width / 2;
     let y = rect.top - 10;
-    
+
     // Adjust horizontal position if too close to edges
     const tooltipWidth = 200; // estimated tooltip width
     const horizontalMargin = 20; // increased margin for better aesthetics
@@ -53,13 +58,13 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
     } else if (x + tooltipWidth / 2 > viewport.width - horizontalMargin) {
       x = viewport.width - tooltipWidth / 2 - horizontalMargin;
     }
-    
+
     // Adjust vertical position if too close to top
     const verticalMargin = 100; // increased margin for better spacing
     if (y < verticalMargin) {
       y = rect.bottom + 15; // Show below instead with more spacing
     }
-    
+
     setTooltipPosition({ x, y });
     setShowTooltip(true);
   };
@@ -148,6 +153,17 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
         return <Mail {...iconProps} />;
       case 'Sparkles':
         return <Sparkles {...iconProps} />;
+      case 'Gem':
+        return <Gem {...iconProps} />;
+      case 'Baby':
+        return <Baby {...iconProps} />;
+      case 'BicepFlexed':
+        return <BicepsFlexed {...iconProps} />;
+      case 'Dumbell':
+        return <Dumbbell {...iconProps} />;
+      case 'WandSparkles':
+        return <WandSparkles {...iconProps} />;
+        
       default:
         return <Award {...iconProps} />;
     }
@@ -155,7 +171,7 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
 
   return (
     <div className="relative">
-      <div 
+      <div
         className={`
           ${sizeClasses[size]} 
           ${colorScheme.bg}
@@ -174,10 +190,10 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
           {renderIcon()}
         </div>
       </div>
-      
+
       {/* Portal-based Tooltip */}
       {showTooltip && createPortal(
-        <div 
+        <div
           className="fixed z-[9999] pointer-events-none"
           style={{
             left: tooltipPosition.x,
