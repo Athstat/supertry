@@ -156,7 +156,7 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
             className={twMerge(
                 "flex py-2 px-4 rounded-xl cursor-pointer flex-col items-start gap-2",
                 "bg-slate-200 dark:bg-slate-700/40 hover:dark:bg-slate-600 hover:bg-slate-100",
-                isSelected && "bg-blue-400 dark:bg-blue-600 hover:bg-blue-400 hover:dark:bg-blue-600",
+                isSelected && "bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 hover:dark:bg-blue-600",
                 disabled && "opacity-35"
             )}
 
@@ -170,7 +170,9 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
                 />
 
                 <div className="flex-1 flex items-start flex-col" >
-                    <p>{player.player_name}</p>
+                    <p  className={twMerge(
+                        isSelected && "text-white font-bold"
+                    )} >{player.player_name}</p>
                     <SecondaryText className={twMerge(
                         "text-sm",
                         isSelected && "text-slate-100 dark:text-slate-100"
@@ -178,7 +180,10 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
                 </div>
 
                 <div className="flex flex-row items-center gap-2" >
-                    <p className="font-bold text-primary-500 dark:text-primary-4 00" >
+                    <p className={twMerge(
+                        "font-bold text-primary-500 dark:text-primary-4 00",
+                        isSelected && "text-white"
+                    )} >
                         {player.power_rank_rating ?
                             Math.floor(player.power_rank_rating)
                             : "-"
