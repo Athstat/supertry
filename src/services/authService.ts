@@ -218,11 +218,34 @@ export const authService = {
   },
 
   /** Check if user is authenticated by verifying token existence and validity */
-  isAuthenticated(): boolean {
+  async isAuthenticated(): Promise<boolean> {
     const token = authTokenService.getAccessToken();
     if (!token) return false;
 
-    return authService.getUserInfo() !== null;
+    try {
+      // Validate token against Django server
+      const user = await authService.whoami();
+      if (user) {
+        // Update local storage with fresh user data
+        authTokenService.saveUserToLocalStorage(user);
+        return true;
+      }
+
+      // If whoami fails, clear invalid tokens
+      authTokenService.clearUserTokens();
+      return false;
+    } catch (error) {
+      console.error('Authentication validation failed:', error);
+      // Clear potentially invalid tokens
+      authTokenService.clearUserTokens();
+      return false;
+    }
+  },
+
+  /** Synchronous check for token existence only (use sparingly) */
+  hasToken(): boolean {
+    const token = authTokenService.getAccessToken();
+    return !!token;
   },
 
   logout(): void {
@@ -246,7 +269,6 @@ export const authService = {
   },
 
   getUserInfoSync: (): DjangoAuthUser | null => {
-
     const auth_user_local_storage = authTokenService.getUserFromLocalStorage();
     return auth_user_local_storage || null;
   },
