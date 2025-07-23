@@ -6,9 +6,9 @@ import PlayerCompareSeasonPicker from "./PlayerCompareSeasonPicker";
 import PlayerCompareItemHeader from "./PlayerCompareItemHeader";
 import { useEffect, useTransition } from "react";
 import { useAtom } from "jotai";
-import { comparePlayersStarRatingsAtom, comparePlayersStatsAtom } from "../../../state/comparePlayers.atoms";
-import { isStatActionBest, isStarRatingBest } from "../../../utils/athleteUtils";
-import {FaStar} from "react-icons/fa6";
+import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, statCategoriesCollapsedAtom } from "../../../state/comparePlayers.atoms";
+import { isStatActionBest, isStarRatingBest, isPowerRatingBest } from "../../../utils/athleteUtils";
+import { Crosshair, Shield, Zap, Star } from "lucide-react";
 
 type Props = {
     player: IProAthlete;
@@ -16,8 +16,10 @@ type Props = {
 
 export default function PlayersCompareItem({ player }: Props) {
 
+    const [comparePlayers] = useAtom(comparePlayersAtom);
     const [comparePlayersStats, setComparePlayersStats] = useAtom(comparePlayersStatsAtom);
     const [comparePlayersStarRatings, setComparePlayerRatings] = useAtom(comparePlayersStarRatingsAtom);
+    const [statCategoriesCollapsed, setStatCategoriesCollapsed] = useAtom(statCategoriesCollapsedAtom);
 
     const [_, startTransition] = useTransition();
 
@@ -100,24 +102,59 @@ export default function PlayersCompareItem({ player }: Props) {
                 currSeason={currSeason}
             />}
 
-            {!isLoading && <div className="flex flex-col gap-3" >
+            {!isLoading && <div className="flex mt-6 flex-col gap-4" >
 
-                {/* General Stats */}
-                <div className="flex flex-row items-center justify-between py-2 px-3 bg-slate-700 dark:bg-slate-800 rounded">
-                    <span className="text-xs font-medium text-slate-300">IGS</span>
-                    <span className="text-sm font-bold text-white">{player.power_rank_rating || 0}</span>
-                </div>
-                
-                <div className="flex flex-row items-center justify-between py-2 px-3 bg-slate-700 dark:bg-slate-800 rounded">
-                    <span className="text-xs font-medium text-slate-300">Face Stats</span>
-                    <span className="text-sm font-bold text-white">{minutesPlayed || 0}</span>
-                </div>
+                {/* OVERALLS Section */}
+                <StatCategory
+                    title="OVERALLS"
+                    categoryKey="overalls"
+                    icon={<Star className="w-4 h-4" />}
+                    mainScore={player.power_rank_rating || 0}
+                    isCollapsed={statCategoriesCollapsed.overalls}
+                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, overalls: !prev.overalls }))}
+                    stats={[
+                        {
+                            label: "Power Ranking",
+                            value: player.power_rank_rating,
+                            isGreen: isPowerRatingBest(player, comparePlayers)
+                        },
+                        {
+                            label: "Minutes Played", 
+                            value: minutesPlayed,
+                            isGreen: isStatActionBest(player, minutesPlayed, "MinutesPlayed", comparePlayersStats)
+                        },
+                        {
+                            label: "Attacking Rating",
+                            value: starRatings?.scoring,
+                            isGreen: isStarRatingBest(player, starRatings?.scoring, "scoring", comparePlayersStarRatings)
+                        },
+                        {
+                            label: "Scoring Rating",
+                            value: starRatings?.scoring,
+                            isGreen: isStarRatingBest(player, starRatings?.scoring, "scoring", comparePlayersStarRatings)
+                        },
+                        {
+                            label: "Defensive Rating",
+                            value: starRatings?.defence,
+                            isGreen: isStarRatingBest(player, starRatings?.defence, "defence", comparePlayersStarRatings)
+                        },
+                        {
+                            label: "Kicking Rating",
+                            value: starRatings?.kicking,
+                            isGreen: isStarRatingBest(player, starRatings?.kicking, "kicking", comparePlayersStarRatings)
+                        }
+                    ]}
+                />
 
                 {/* ATTACKING Section */}
                 <StatCategory
                     title="ATTACKING"
-                    mainScore={starRatings?.attacking || 0}
-                    isMainBest={isStarRatingBest(player, starRatings?.attacking, "attacking", comparePlayersStarRatings)}
+                    categoryKey="attacking"
+                    icon={<Zap className="w-4 h-4" />}
+                    mainScore={starRatings?.scoring || 0}
+                    isMainBest={isStarRatingBest(player, starRatings?.scoring, "scoring", comparePlayersStarRatings)}
+                    isCollapsed={statCategoriesCollapsed.attacking}
+                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, attacking: !prev.attacking }))}
                     stats={[
                         {
                             label: "Tries",
@@ -145,8 +182,12 @@ export default function PlayersCompareItem({ player }: Props) {
                 {/* DEFENDING Section */}
                 <StatCategory
                     title="DEFENDING"
+                    categoryKey="defending"
+                    icon={<Shield className="w-4 h-4" />}
                     mainScore={starRatings?.defence || 0}
                     isMainBest={isStarRatingBest(player, starRatings?.defence, "defence", comparePlayersStarRatings)}
+                    isCollapsed={statCategoriesCollapsed.defending}
+                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, defending: !prev.defending }))}
                     stats={[
                         {
                             label: "Strength",
@@ -174,8 +215,12 @@ export default function PlayersCompareItem({ player }: Props) {
                 {/* KICKING Section */}
                 <StatCategory
                     title="KICKING"
+                    categoryKey="kicking"
+                    icon={<Crosshair className="w-4 h-4" />}
                     mainScore={starRatings?.kicking || 0}
                     isMainBest={isStarRatingBest(player, starRatings?.kicking, "kicking", comparePlayersStarRatings)}
+                    isCollapsed={statCategoriesCollapsed.kicking}
+                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, kicking: !prev.kicking }))}
                     stats={[
                         {
                             label: "Kicks From Hand",
@@ -202,7 +247,7 @@ export default function PlayersCompareItem({ player }: Props) {
 
             </div>}
 
-            {isLoading && <div className="w-full h-[400px] bg-slate-200 dark:bg-slate-800 animate-pulse"></div>}
+            {isLoading && <div className="w-full h-screen mt-6 rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>}
         </div>
     );
 }
@@ -211,8 +256,12 @@ export default function PlayersCompareItem({ player }: Props) {
 
 type StatCategoryProps = {
     title: string;
-    mainScore: number;
+    categoryKey: string;
+    icon: React.ReactNode;
+    mainScore?: number;
     isMainBest?: boolean;
+    isCollapsed: boolean;
+    onToggle: () => void;
     stats: Array<{
         label: string;
         value?: number;
@@ -220,34 +269,50 @@ type StatCategoryProps = {
     }>;
 };
 
-function StatCategory({ title, mainScore, isMainBest, stats }: StatCategoryProps) {
+function StatCategory({ title, icon, isMainBest, isCollapsed, onToggle, stats }: StatCategoryProps) {
+    
+    const statsContent = (
+        <div className="flex flex-col gap-1 mt-2">
+            {stats.map((stat, index) => (
+                <StatLabel
+                    key={index}
+                    label={stat.label}
+                    value={stat.value}
+                    isGreen={stat.isGreen}
+                />
+            ))}
+        </div>
+    );
     
     return (
-        <div className="flex flex-col gap-2">
-
-            <div className="flex flex-row items-center justify-between">
-                <span className="text-xs font-bold text-white uppercase">{title}</span>
+        <div className="bg-slate-300 border border-slate-100 dark:border-slate-600 dark:bg-slate-700/60 p-1 rounded-md">
+            <div 
+                onClick={onToggle} 
+                className={twMerge(
+                    "w-full cursor-pointer px-2 py-2 flex flex-row items-center justify-between rounded-md bg-slate-100 dark:bg-slate-800",
+                   isMainBest &&  "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
+                )}
+            >
+                <div className="flex flex-row items-center gap-1">
+                    {icon}
+                    <span className="text-xs font-bold text-white uppercase">{title}</span>
+                </div>
                 
-                <div className={twMerge(
-                    "flex flex-row items-center gap-1 text-slate-700 dark:text-slate-300",
-                    isMainBest && "text-yellow-500 dark:text-yellow-500"
-                )} >
-                    <FaStar className="w-4 h-4" />
-                    <p className="font-bold text-sm" >{mainScore}</p>
+                <div className="flex flex-row items-center gap-2">
+                    
+                    {!isCollapsed ? (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                        </svg>
+                    ) : (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                    )}
                 </div>
             </div>
 
-            {/* Individual Stats */}
-            <div className="flex flex-col gap-1">
-                {stats.map((stat, index) => (
-                    <StatLabel
-                        key={index}
-                        label={stat.label}
-                        value={stat.value}
-                        isGreen={stat.isGreen}
-                    />
-                ))}
-            </div>
+            {!isCollapsed && statsContent}
         </div>
     );
 }
@@ -265,7 +330,8 @@ function StatLabel({ label, value, isGreen }: StatLabelProp) {
     return (
         <div className={twMerge(
             "flex flex-row items-center justify-between py-2 px-3 rounded",
-            isGreen ? "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white" : "bg-slate-700 dark:bg-slate-800"
+            isGreen ? "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white" 
+            : "bg-slate-200 dark:bg-slate-700/40 border-slate-100 dark:border-slate-600" 
         )}>
             <span className={twMerge(
                 "text-xs font-medium",
