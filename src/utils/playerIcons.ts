@@ -1,16 +1,17 @@
 import { IProAthlete, IAthleteSeasonStarRatings } from '../types/athletes';
 import { SportAction, getPlayerAggregatedStat } from '../types/sports_actions';
 
-export type PlayerIcon = 
+export type PlayerIcon =
   | 'Diamond In the Ruff'
-  | 'Rookie' 
+  | 'Rookie'
   | 'Scrum Master'
   | 'Ruck Master'
   | 'Speed Merchant'
   | 'Captain'
-  | 'Game Changer'
+  | 'Superstar'
   | 'Media Darling'
-  | 'Magician';
+  | 'Magician'
+  | 'Mr Reliable';
 
 export interface PlayerIconData {
   name: PlayerIcon;
@@ -49,10 +50,10 @@ export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
     description: 'Player is a captain',
     iconType: 'Trophy'
   },
-  'Game Changer': {
-    name: 'Game Changer',
-    description: 'Player has the ability to tilt the balance of the game for his team',
-    iconType: 'Zap'
+  'Superstar': {
+    name: 'Superstar',
+    description: 'Needs no introduction, Proven superstar!',
+    iconType: 'Star'
   },
   'Media Darling': {
     name: 'Media Darling',
@@ -63,6 +64,11 @@ export const PLAYER_ICONS: Record<PlayerIcon, PlayerIconData> = {
     name: 'Magician',
     description: 'Very smart and elusive player, that can always pull one out of the back of tricks',
     iconType: 'WandSparkles'
+  },
+  'Mr Reliable': {
+    name: 'Mr Reliable',
+    description: 'Battle Tested and you rarely misses a game',
+    iconType: 'Swords'
   }
 };
 
@@ -75,9 +81,9 @@ export function getPlayerIcons(
   seasonStats: SportAction[]
 ): PlayerIcon[] {
   const icons: PlayerIcon[] = [];
-  
+
   // Calculate age if date_of_birth is available
-  const age = player.date_of_birth ? 
+  const age = player.date_of_birth ?
     new Date().getFullYear() - new Date(player.date_of_birth).getFullYear() : null;
 
   // Get key stats
@@ -91,7 +97,7 @@ export function getPlayerIcons(
   const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', seasonStats)?.action_count || 0;
 
   // Diamond In the Ruff - Young player with high potential (age < 23 and high power rating)
-  if (age && age < 23 && (player.power_rank_rating || 0) > 75) {
+  if (age && age < 25 && (player.power_rank_rating || 0) > 75) {
     icons.push('Diamond In the Ruff');
   }
 
@@ -122,8 +128,8 @@ export function getPlayerIcons(
   }
 
   // Game Changer - Very high power rating
-  if ((player.power_rank_rating || 0) > 90) {
-    icons.push('Game Changer');
+  if ((player.power_rank_rating || 0) > 90 && minutesPlayed > 700) {
+    icons.push('Superstar');
   }
 
   // Media Darling - High tries and assists (exciting player)
@@ -134,6 +140,11 @@ export function getPlayerIcons(
   // Magician - High playmaking and assists (creative player)
   if ((starRatings?.playmaking || 0) >= 3.5 && assists >= 4 && passes > 40) {
     icons.push('Magician');
+  }
+
+  // Mr Reliable
+  if ((minutesPlayed || 0) >= 800) {
+    icons.push('Mr Reliable');
   }
 
   return icons;

@@ -6,7 +6,8 @@ import {
   Zap,
   Trophy,
   Mail,
-  Sparkles
+  Sparkles,
+  Star
 } from 'lucide-react';
 import { PlayerIcon, PLAYER_ICONS } from '../../../utils/playerIcons';
 import { useState } from 'react';
@@ -16,6 +17,7 @@ import { Baby } from 'lucide-react';
 import { BicepsFlexed } from 'lucide-react';
 import { Dumbbell } from 'lucide-react';
 import { WandSparkles } from 'lucide-react';
+import { Swords } from 'lucide-react';
 
 type Props = {
   iconName: PlayerIcon;
@@ -91,10 +93,10 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
           bg: 'bg-gradient-to-br from-yellow-400 to-yellow-600',
           border: 'border-yellow-300'
         };
-      case 'Game Changer':
+      case 'Superstar':
         return {
           bg: 'bg-gradient-to-br from-red-400 to-red-600',
-          border: 'border-red-300'
+          border: 'border-yellow-400'
         };
       case 'Speed Merchant':
         return {
@@ -163,7 +165,12 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
         return <Dumbbell {...iconProps} />;
       case 'WandSparkles':
         return <WandSparkles {...iconProps} />;
-        
+      case 'Star':
+        return <Star {...iconProps} />;
+      case 'Swords':
+        return <Swords {...iconProps} />;
+
+
       default:
         return <Award {...iconProps} />;
     }
