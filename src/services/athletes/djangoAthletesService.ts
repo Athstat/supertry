@@ -25,7 +25,7 @@ export const djangoAthleteService = {
         return undefined;
     },
 
-    getAllAthletes: async () : Promise<IProAthlete[]> => {
+    getAllAthletes: async (): Promise<IProAthlete[]> => {
         try {
             const uri = getUri('/api/v1/athletes');
             const res = await fetch(uri, {
@@ -43,7 +43,7 @@ export const djangoAthleteService = {
         return [];
     },
 
-    getAthleteSportsActions: async (athleteId: string) : Promise<SportAction[]> => {
+    getAthleteSportsActions: async (athleteId: string): Promise<SportAction[]> => {
         try {
 
             console.log("Fetching athlete sports aggregating actions ", athleteId)
@@ -58,15 +58,15 @@ export const djangoAthleteService = {
             }
 
         } catch (error) {
-            logger.error("Error fetching sports actions for ", athleteId,  error)
+            logger.error("Error fetching sports actions for ", athleteId, error)
         }
 
         return [];
     },
 
-    getAthleteSeasonStarRatings: async (athleteId: string, seasonId: string) : Promise<IAthleteSeasonStarRatings | undefined> => {
+    getAthleteSeasonStarRatings: async (athleteId: string, seasonId: string): Promise<IAthleteSeasonStarRatings | undefined> => {
         try {
-            
+
             const uri = getUri(`/api/v1/athletes/${athleteId}/stars/season/${seasonId}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
@@ -76,10 +76,29 @@ export const djangoAthleteService = {
                 return (await res.json()) as IAthleteSeasonStarRatings
             }
 
-        } catch(e) {
+        } catch (e) {
             logger.error("Error getting athlete star ratings ", e);
         }
 
         return undefined;
+    },
+
+    getAthleteCareerStarRatings: async (athleteId: string): Promise<IAthleteSeasonStarRatings[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/athletes/${athleteId}/stars`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IAthleteSeasonStarRatings[]
+            }
+
+        } catch (e) {
+            logger.error("Error getting athlete star ratings ", e);
+        }
+
+        return [];
     }
 }

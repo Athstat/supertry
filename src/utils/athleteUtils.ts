@@ -5,13 +5,7 @@ import { SortField, SortDirection } from "../types/playerSorting";
 import { PlayerForm } from "../types/rugbyPlayer";
 import { IProTeam } from "../types/team";
 import { IComparePlayerStats, ICompareStarRatingsStats } from "../types/comparePlayers";
-import { getPlayerAggregatedStat } from "../types/sports_actions";
-
-type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineoutOffence" |
-    "Points" | "PenaltiesConceded" | "TacklesMissed" | "Starts" | "TacklesMade" | "TackleSuccess" |
-    "TurnoversConceded" | "TurnoversWon" | "LineoutsWonSteal" | "CarriesMadeGainLine" | "LineoutsWon" |
-    "Tries" | "Carries" | "DefendersBeaten" | "Metres" | "MinutesPlayed" | "Assists" | "LineBreaks" |
-    "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" | "RetainedKicks";
+import { getPlayerAggregatedStat, PlayerAggregateStatAction } from "../types/sports_actions";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -300,7 +294,7 @@ export function isStatActionBest(
         })
         .filter((val): val is number => val !== undefined);
 
-    if (allValues.length <= 1) return false;
+    if (allValues.length < 1) return false;
     
     const maxValue = Math.max(...allValues);
     return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
