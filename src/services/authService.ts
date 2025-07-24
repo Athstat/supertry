@@ -437,7 +437,7 @@ export const authService = {
     };
   },
 
-  /** Authenticate with Google OAuth */
+  /** Authenticate with Google OAuth using authorization code (web flow) */
   async googleOAuth(token: string): RestPromise<DjangoLoginRes> {
     try {
       const uri = getUri('/api/v1/auth/oauth/google/');
@@ -445,7 +445,7 @@ export const authService = {
       const response = await fetch(uri, {
         method: 'POST',
         headers: applicationJsonHeader(),
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token, token_type: 'code' }),
       });
 
       if (response.ok) {
@@ -461,6 +461,40 @@ export const authService = {
       }
     } catch (error) {
       logger.error('Google OAuth error:', error);
+    }
+
+    return {
+      error: {
+        error: 'OAuth Error',
+        message: 'Something went wrong with Google sign in. Please try again.',
+      },
+    };
+  },
+
+  /** Authenticate with Google OAuth using ID token (mobile flow) */
+  async googleOAuthWithIdToken(idToken: string): RestPromise<DjangoLoginRes> {
+    try {
+      const uri = getUri('/api/v1/auth/oauth/google/');
+
+      const response = await fetch(uri, {
+        method: 'POST',
+        headers: applicationJsonHeader(),
+        body: JSON.stringify({ token: idToken, token_type: 'id_token' }),
+      });
+
+      if (response.ok) {
+        const json = (await response.json()) as DjangoLoginRes;
+        authTokenService.saveLoginTokens(json.token, json.user);
+        analytics.trackUserSignIn('Google');
+        return { data: json };
+      }
+
+      if (response.status === 400) {
+        const json = (await response.json()) as RestError;
+        return { error: json };
+      }
+    } catch (error) {
+      logger.error('Google OAuth with ID token error:', error);
     }
 
     return {
