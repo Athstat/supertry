@@ -25,14 +25,7 @@ import { logger } from './logger';
 import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService';
 import { mutate } from 'swr';
 import { swrFetchKeys } from '../utils/swrKeys';
-
-// OAuth types
-interface SocialAuthData {
-  provider: 'google' | 'apple';
-  token: string;
-  email?: string;
-  name?: string;
-}
+import { appStorageTokenService } from './auth/appStorageTokenService';
 
 export const authService = {
   /** Authenticates a guest user using their device's id */
@@ -49,7 +42,7 @@ export const authService = {
       if (res.ok) {
         const json = (await res.json()) as DjangoDeviceAuthRes;
 
-        authTokenService.saveGuesAccountTokens(json.token, json.user);
+        await appStorageTokenService.saveGuesAccountTokens(json.token, json.user);
         return { data: json };
       }
 
@@ -111,7 +104,7 @@ export const authService = {
 
       const response = await fetch(uri, {
         method: 'POST',
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
         body: JSON.stringify(data),
       });
 
@@ -155,7 +148,7 @@ export const authService = {
       if (response.ok) {
         const json = (await response.json()) as DjangoRegisterRes;
 
-        authTokenService.saveLoginTokens(json.token, json.user);
+        await appStorageTokenService.saveLoginTokens(json.token, json.user);
         return { data: json };
       }
 
@@ -196,7 +189,7 @@ export const authService = {
       if (res.ok) {
         const json = (await res.json()) as DjangoLoginRes;
 
-        authTokenService.saveLoginTokens(json.token, json.user);
+        await appStorageTokenService.saveLoginTokens(json.token, json.user);
         return { data: json, message: 'Login Successful' };
       }
 
@@ -225,9 +218,9 @@ export const authService = {
     return authService.getUserInfo() !== null;
   },
 
-  logout(): void {
+  async logout (): Promise<void> {
     analytics.trackUserLogout();
-    authTokenService.clearUserTokens();
+    await appStorageTokenService.clearUserTokens();
   },
 
   /**
@@ -274,7 +267,7 @@ export const authService = {
       const uri = getUri(`/api/v1/users/${id}`);
       const response = await fetch(uri, {
         method: 'GET',
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       const data = (await response.json()) as DjangoAuthUser;
@@ -375,7 +368,7 @@ export const authService = {
       const uri = getUri('/api/v1/auth/me');
 
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       if (res.ok) {

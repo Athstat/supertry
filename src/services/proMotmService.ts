@@ -10,7 +10,7 @@ export const proMotmService = {
 
             const res = await fetch(uri, {
                 method: 'POST',
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 body: JSON.stringify(data)
             });
 
@@ -31,7 +31,7 @@ export const proMotmService = {
             const uri = getUri(`/api/v1/games/${gameId}/motm-votes`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
             });
 
             if (res.ok) {
@@ -50,7 +50,7 @@ export const proMotmService = {
             const uri = getUri(`/api/v1/games/${gameId}/motm-votes/${userId}`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
             });
 
             if (res.ok) {
@@ -69,7 +69,7 @@ export const proMotmService = {
             const uri = getUri(`/api/v1/games/${gameId}/motm-votes/${userId}`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 body: JSON.stringify(data),
                 method: 'PUT'
             });
@@ -90,7 +90,7 @@ export const proMotmService = {
             const uri = getUri(`/api/v1/games/${gameId}/motm-votes/${userId}`);
 
             await fetch(uri, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 method: 'DELETE'
             });
 

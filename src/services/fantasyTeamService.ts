@@ -22,7 +22,7 @@ export const fantasyTeamService = {
 
       const response = await fetch(uri, {
         method: "PUT",
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
         body: JSON.stringify({ team, teamId }),
       });
 
@@ -107,7 +107,7 @@ export const fantasyTeamService = {
 
       const response = await fetch(url, {
         method: "GET",
-        headers: getAuthHeader()
+        headers: await getAuthHeader()
       });
 
       return await response.json();
@@ -153,7 +153,7 @@ export const fantasyTeamService = {
 
       const response = await fetch(uri, {
         method: "POST",
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
         body: JSON.stringify(payload),
       });
 
@@ -244,7 +244,7 @@ export const fantasyTeamService = {
       
       const response = await fetch(uri, {
         method: "PUT",
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
         body: JSON.stringify({ 
           teamId, 
           captainId: playerId // This is the tracking_id from the frontend

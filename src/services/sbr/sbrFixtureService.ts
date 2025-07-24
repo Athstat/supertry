@@ -9,7 +9,7 @@ export const sbrFixtureService = {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/stats/status`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {

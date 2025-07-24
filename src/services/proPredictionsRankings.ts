@@ -13,7 +13,7 @@ export const proPredictionsRankingService = {
             const uri = getUri(`/api/v1/pro-predictions/rankings/${userId}`);
             
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {
@@ -32,7 +32,7 @@ export const proPredictionsRankingService = {
         try {
             const uri = getUri(`/api/v1/pro/predictions/rankings`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             })
 
             if (res.ok) {
@@ -53,7 +53,7 @@ export const proPredictionsRankingService = {
             const uri = getUri(`/api/v1/pro/predictions/history/${userId}`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {

@@ -7,7 +7,7 @@ export const boxScoreService = {
 
             const uri = getUri(`/api/v1/games-r/${gameId}/boxscore`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
             
 

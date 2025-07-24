@@ -14,7 +14,7 @@ export const seasonService = {
             
             const uri = getUri(`/api/v1/entities/seasons`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
             
             if (res.ok) {
@@ -33,7 +33,7 @@ export const seasonService = {
             
             const uri = getUri(`/api/v1/seasons/${seasonId}`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
             
             if (res.ok) {
@@ -52,7 +52,7 @@ export const seasonService = {
             
             const uri = getUri(`/api/v1/seasons/${seasonId}/teams`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
             
             if (res.ok) {
@@ -72,7 +72,7 @@ export const seasonService = {
             
             const uri = getUri(`/api/v1/seasons/${seasonId}/games`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
             
             if (res.ok) {
@@ -91,7 +91,7 @@ export const seasonService = {
             
             const uri = getUri(`/api/v1/seasons/${seasonId}/athletes?ordering=power_rank_rating`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
             
             if (res.ok) {

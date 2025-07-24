@@ -9,7 +9,7 @@ export const powerRankingsService = {
             const uri = getUri(`/api/v1/games/match-prs/athletes/${athleteId}${queryParam}`);
             
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json() as SingleMatchPowerRanking[];

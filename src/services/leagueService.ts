@@ -11,7 +11,7 @@ export const leagueService = {
       const uri = getUri(`/api/v1/fantasy-leagues`);
       const response = await fetch(uri, {
         method: "GET",
-        headers: getAuthHeader()
+        headers: await getAuthHeader()
       });
 
       if (response.ok) {
@@ -42,7 +42,7 @@ export const leagueService = {
       
       const response = await fetch(uri, {
         method: "GET",
-        headers: getAuthHeader()
+        headers: await getAuthHeader()
       });
 
       return await response.json();

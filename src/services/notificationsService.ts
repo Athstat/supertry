@@ -15,7 +15,7 @@ export const notificationService = {
             const uri = getUri(`/api/v1/notifications/users/${userId}/preferences`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 body: JSON.stringify({
                     game_updates_preference: preference
                 }),

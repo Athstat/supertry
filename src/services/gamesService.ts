@@ -10,7 +10,7 @@ export const gamesService = {
 
     try {
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       return (await res.json()) as IFixture[];
@@ -25,7 +25,7 @@ export const gamesService = {
 
     try {
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       return (await res.json()) as IFixture[];
@@ -40,7 +40,7 @@ export const gamesService = {
         
         try {
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
       return (await res.json()) as IFixture;
@@ -69,7 +69,7 @@ export const gamesService = {
     try {
       const uri = getUri(`/api/v1/games/${gameId}/rosters`);
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       const json = await res.json();
@@ -85,7 +85,7 @@ export const gamesService = {
     try {
       const uri = getUri(`/api/v1/games/${gameId}/votes`);
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       const json = await res.json();
@@ -103,7 +103,7 @@ export const gamesService = {
 
       const res = await fetch(uri, {
         method: 'POST',
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
         body: JSON.stringify({ voteFor, userId: user?.kc_id ?? 'fall-back' }),
       });
 
@@ -120,7 +120,7 @@ export const gamesService = {
 
       const res = await fetch(uri, {
         method: 'PUT',
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
         body: JSON.stringify({ voteFor, userId: user?.kc_id ?? 'fall-back' }),
       });
 
@@ -136,7 +136,7 @@ export const gamesService = {
         const uri = getUri(`/api/v1/games/${gameId}/team-actions`);
         
         const res = await fetch(uri, {
-            headers: getAuthHeader()
+            headers: await getAuthHeader()
         });
 
         if (res.ok) {
@@ -155,7 +155,7 @@ export const gamesService = {
 
     try {
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       return (await res.json()) as IFixture[];

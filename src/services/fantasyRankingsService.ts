@@ -10,7 +10,7 @@ export const fantasyRankingsService = {
             const url = getUri(`/api/v1/fantasy/user-rankings/${queryParams}`);
 
             const res = await fetch(url, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 cache: "no-store"
             });
 
@@ -28,7 +28,7 @@ export const fantasyRankingsService = {
         try {
             const uri = getUri(`/api/v1/fantasy/user-rankings/${userId}`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json();

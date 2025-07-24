@@ -11,7 +11,7 @@ export const sbrService = {
             const uri = getUri(`/api/v1/sbr/fixtures`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json() as ISbrFixture[];
@@ -27,7 +27,7 @@ export const sbrService = {
         try {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/votes`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json();
@@ -47,7 +47,7 @@ export const sbrService = {
 
             const res = await fetch(uri, {
                 method: "POST",
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 body: JSON.stringify({ vote_for, user_id: user?.kc_id ?? "fall-back" })
             });
 
@@ -67,7 +67,7 @@ export const sbrService = {
 
             const res = await fetch(uri, {
                 method: "PUT",
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 body: JSON.stringify({ vote_for, user_id: user?.kc_id ?? "fall-back" })
             });
 
@@ -84,7 +84,7 @@ export const sbrService = {
 
             const uri = getUri(`/api/v1/sbr/predictions/rankings`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json();
@@ -100,7 +100,7 @@ export const sbrService = {
         try {
             const uri = getUri(`/api/v1/sbr/predictions/rankings/${userId}`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json();
@@ -117,7 +117,7 @@ export const sbrService = {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json();
@@ -134,7 +134,7 @@ export const sbrService = {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/boxscore`);
 
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json();
@@ -152,7 +152,7 @@ export const sbrService = {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/rosters`);
             
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             const json = await res.json() as ISbrFixtureRosterItem[];
@@ -169,7 +169,7 @@ export const sbrService = {
         try {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/timeline`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             return await (res.json()) as ISbrFixtureEvent[];

@@ -11,7 +11,7 @@ export const djangoAthleteService = {
         try {
             const uri = getUri(`/api/v1/athletes/${id}`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {
@@ -29,7 +29,7 @@ export const djangoAthleteService = {
         try {
             const uri = getUri('/api/v1/athletes');
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {
@@ -50,7 +50,7 @@ export const djangoAthleteService = {
 
             const uri = getUri(`/api/v1/athletes/${athleteId}/aggregated-stats`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {
@@ -69,7 +69,7 @@ export const djangoAthleteService = {
 
             const uri = getUri(`/api/v1/athletes/${athleteId}/stars/season/${seasonId}`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {
@@ -88,7 +88,7 @@ export const djangoAthleteService = {
 
             const uri = getUri(`/api/v1/athletes/${athleteId}/stars`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {

@@ -10,7 +10,7 @@ export const sbrMotmService = {
             const userId = authService.getUserInfo()?.id ?? "fall-back-id";
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/motm/votes/by-user/${userId}`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {
@@ -37,7 +37,7 @@ export const sbrMotmService = {
             }
 
             const res = await fetch(uri, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 body: JSON.stringify(reqBody),
                 method: "POST"
             });
@@ -62,7 +62,7 @@ export const sbrMotmService = {
             }
 
             const res = await fetch(uri, {
-                headers: getAuthHeader(),
+                headers: await getAuthHeader(),
                 body: JSON.stringify(reqBody),
                 method: "PUT"
             });
@@ -81,7 +81,7 @@ export const sbrMotmService = {
         try {
             const uri = getUri(`/api/v1/sbr/fixtures/${fixtureId}/motm/votes`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: await getAuthHeader()
             });
 
             if (res.ok) {

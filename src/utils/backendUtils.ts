@@ -1,3 +1,4 @@
+import { appStorageTokenService } from "../services/auth/appStorageTokenService";
 import { authTokenService } from "../services/auth/authTokenService";
 
 const BACKEND_SERVER_URL =
@@ -12,9 +13,9 @@ export function getUriLocal(endPoint: string) {
   return `http://localhost:5005${endPoint}`;
 }
 
-export function getAuthHeader() {
+export async function getAuthHeader() {
 
-  const accessToken = authTokenService.getAccessToken();
+  const accessToken = await appStorageTokenService.getAccessToken();
 
   const authHeader = {
     'Authorization': `Token ${accessToken}`

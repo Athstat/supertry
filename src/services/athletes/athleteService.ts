@@ -121,7 +121,7 @@ export const athleteService = {
       );
       const response = await fetch(uri, {
         method: "GET",
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       if (!response.ok) {
@@ -147,7 +147,7 @@ export const athleteService = {
 
       const response = await fetch(uri, {
         method: "GET",
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       if (!response.ok) {
@@ -172,7 +172,7 @@ export const athleteService = {
       const url = getUri(`api/v1/athletes/${athleteId}/aggregated-stats`);
 
       const res = await fetch(url, {
-        headers: getAuthHeader()
+        headers: await getAuthHeader()
       });
 
       if (res.ok) {
@@ -196,7 +196,7 @@ export const athleteService = {
 
       const response = await fetch(url, {
         method: "GET",
-        headers: getAuthHeader()
+        headers: await getAuthHeader()
       });
 
       const json = (await response.json()) as SportAction[];
@@ -258,7 +258,7 @@ export const athleteService = {
       const uri = getUri(`/api/v1/fantasy-athletes/${athleteId}`);
 
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       const json = await res.json();
@@ -289,7 +289,7 @@ export const athleteService = {
     try {
       const uri = getUri('/api/v1/athletes');
       const res = await fetch(uri, {
-          headers: getAuthHeader()
+          headers: await getAuthHeader()
       });
 
       if (res.ok) {

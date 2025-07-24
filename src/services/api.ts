@@ -20,7 +20,7 @@ export const api = {
 
     const response = await fetch(url, {
       method: 'GET',
-      headers: getAuthHeader(),
+      headers: await getAuthHeader(),
     });
 
     return await response.json();
@@ -32,7 +32,7 @@ export const api = {
   post: async (endpoint: string, data: any) => {
     const response = await fetch(getUri(endpoint), {
       method: 'POST',
-      headers: getAuthHeader(),
+      headers: await getAuthHeader(),
       body: JSON.stringify(data),
     });
 
@@ -45,7 +45,7 @@ export const api = {
   put: async (endpoint: string, data: any) => {
     const response = await fetch(getUri(endpoint), {
       method: 'PUT',
-      headers: getAuthHeader(),
+      headers: await getAuthHeader(),
       body: JSON.stringify(data),
     });
 
@@ -58,7 +58,7 @@ export const api = {
   delete: async (endpoint: string) => {
     const response = await fetch(getUri(endpoint), {
       method: 'DELETE',
-      headers: getAuthHeader(),
+      headers: await getAuthHeader(),
     });
 
     return await response.json();

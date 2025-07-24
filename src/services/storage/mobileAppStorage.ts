@@ -35,7 +35,10 @@ export class MobileAppStorage implements AppStorage {
 
         try {
             const bridge = this.getBridge();
-            return await bridge!.getStorageItem!(key);
+            const value = await bridge!.getStorageItem!(key);
+            
+            console.log(`Retrieved item from mobile storage: ${key}=${value}`);
+            return value;
         } catch (error) {
             console.error('MobileAppStorage: Error getting item via bridge, falling back to localStorage:', error);
             return localStorage.getItem(key);

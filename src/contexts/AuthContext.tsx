@@ -2,9 +2,10 @@ import { createContext, useContext, useState, useEffect, ReactNode, useCallback 
 import { authService } from '../services/authService';
 import { logoutFromBridge, requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
 import { DjangoAuthUser, DjangoDeviceAuthRes, DjangoLoginRes, DjangoRegisterRes, RegisterUserReq, RestPromise, ThrowableRes } from '../types/auth';
-import { useBrudgeAuth } from '../hooks/useBridgeAuth';
 import { analytics } from '../services/anayticsService';
 import { logger } from '../services/logger';
+import { getAppStorage } from '../services/storage/appStorageFactory';
+import { ACCESS_TOKEN_KEY } from '../services/auth/authTokenService';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -12,7 +13,6 @@ type AuthContextType = {
   logout: () => void;
   loading: boolean;
   refreshSession: () => Promise<boolean>;
-  checkAuth: () => Promise<boolean>;
   resetPassword: (email: string) => Promise<void>;
   guestLogin: (deviceId: string) => RestPromise<DjangoDeviceAuthRes>;
   user?: DjangoAuthUser,
@@ -47,75 +47,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<DjangoAuthUser>();
 
-  const { restoreAuthFromMobileApp, notifyBridgeOfLogin } = useBrudgeAuth(
-    isAuthenticated, setIsAuthenticated
-  );
+  // Initial authentication check
 
-  // Create a memoized function to check authentication status
-  const checkAuth = useCallback(async () => {
-    try {
-      // First, try to restore authentication from mobile app
-      const restoredFromMobile = await restoreAuthFromMobileApp();
+  const checkAuth = async () => {
+    setLoading(true);
 
-      if (restoredFromMobile) {
-        setLoading(false);
-        return true;
-      }
+    const appStorage = getAppStorage();
+    const authToken = await appStorage.getItem(ACCESS_TOKEN_KEY);
 
-      const authenticated = authService.isAuthenticated();
-      setIsAuthenticated(authenticated);
-
-      return authenticated;
-
-    } catch (error) {
-
-      console.error('Authentication check failed:', error);
+    if (authToken) {
+      setIsAuthenticated(true);
+    } else {
       setIsAuthenticated(false);
-      return false;
-
-    } finally {
-      setLoading(false);
     }
 
-  }, [restoreAuthFromMobileApp]);
+    setLoading(false);
+  }
 
-  // Initial authentication check
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
-
-
-  // Add periodic token validation for long-running sessions
-  // Note: Visibility change handling is now managed by AppStateContext
-  useEffect(() => {
-    // Add periodic token validation for long-running sessions
-    const tokenValidationInterval = setInterval(
-      () => {
-        if (document.visibilityState === 'visible') {
-          checkAuth();
-        }
-      },
-      15 * 60 * 1000
-    ); // Check every 15 minutes
-
-    return () => {
-      clearInterval(tokenValidationInterval);
-    };
-  }, [checkAuth]);
+  }, []);
 
   // Function to refresh the session
   const refreshSession = useCallback(async (): Promise<boolean> => {
+    
     try {
-      console.log('AuthContext: Attempting to refresh session');
-      const refreshed = true;
-      console.log('AuthContext: Session refresh result:', refreshed);
-      setIsAuthenticated(refreshed);
-      return refreshed;
-    } catch (error) {
-      console.error('AuthContext: Session refresh failed:', error);
-      setIsAuthenticated(false);
-      return false;
+      checkAuth();
+    } catch (err) {
+      logger.error('Error refreshing auth ', err);
     }
+    return true;
   }, []);
 
   const login = async (username: string, password: string): Promise<ThrowableRes<DjangoLoginRes>> => {
@@ -123,7 +84,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data: loginRes, message } = await authService.login(username, password);
 
       if (loginRes) {
-        await notifyBridgeOfLogin(loginRes.user);
         setUser(loginRes.user)
         setIsAuthenticated(true);
       }
@@ -144,7 +104,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data: loginRes, error } = await authService.authenticateAsGuestUser(deviceId);
 
       if (loginRes) {
-        await notifyBridgeOfLogin(loginRes.user);
         setUser(loginRes.user)
         setIsAuthenticated(true);
       }
@@ -178,7 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Clear auth data in the web app first
-      authService.logout();
+      await authService.logout();
 
       // Clear OneSignal external ID in the mobile app (if running in WebView)
       // Wait for this to complete to ensure proper logout synchronization
@@ -218,17 +177,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data) {
         analytics.trackUserSignUp('Email');
         requestPushPermissionsAfterLogin();
-        notifyBridgeOfLogin(data.user);
         setIsAuthenticated(true);
       }
 
-      return {data, error};
+      return { data, error };
 
     } catch (err) {
       logger.error('Error registering user ', err);
-      return {error: {
-        message: 'Something went wrong, Please Try again'
-      }}
+      return {
+        error: {
+          message: 'Something went wrong, Please Try again'
+        }
+      }
     }
   }
 
@@ -240,7 +200,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         loading,
         refreshSession,
-        checkAuth,
         resetPassword,
         guestLogin,
         user,

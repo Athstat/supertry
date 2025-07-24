@@ -9,7 +9,7 @@ export const athleteSportActionsService = {
       );
       const res = await fetch(uri, {
         method: "GET",
-        headers: getAuthHeader(),
+        headers: await getAuthHeader(),
       });
 
       return (await res.json()) as SportAction[];
