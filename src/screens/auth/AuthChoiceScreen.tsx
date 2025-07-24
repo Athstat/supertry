@@ -239,10 +239,8 @@ export function AuthChoiceScreen() {
                   <span>Continue with Google</span>
                 </button>
               </motion.div>
-            </Experimental>
 
-            {/* Apple Sign In Button */}
-            <Experimental>
+              {/* Apple Sign In Button */}
               <motion.div
                 className="w-[90%]"
                 variants={buttonVariants}
@@ -277,14 +275,15 @@ export function AuthChoiceScreen() {
                   )}
                 />
               </motion.div>
-            </Experimental>
 
-            {/* Divider */}
-            <div className="w-[90%] flex items-center my-4">
-              <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
-              <span className="px-4 text-sm text-gray-500 dark:text-gray-400">or</span>
-              <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
-            </div>
+              {/* Divider */}
+              <div className="w-[90%] flex items-center my-4">
+                <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
+                <span className="px-4 text-sm text-gray-500 dark:text-gray-400">or</span>
+                <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
+              </div>
+
+            </Experimental>
 
             {/* Create Account Button */}
             <MotionButton

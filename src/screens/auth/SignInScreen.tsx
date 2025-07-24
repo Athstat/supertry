@@ -166,10 +166,8 @@ export function SignInScreen() {
                 <span>Continue with Google</span>
               </button>
             </motion.div>
-          </Experimental>
 
-          {/* Apple Sign In Button */}
-          <Experimental>
+            {/* Apple Sign In Button */}
             <motion.div variants={buttonVariants} initial="initial" whileHover="hover" whileTap="tap">
               <AppleSignin
                 authOptions={{
@@ -198,15 +196,16 @@ export function SignInScreen() {
                 )}
               />
             </motion.div>
-          </Experimental>
 
-          <div className="relative flex items-center justify-center">
-            <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
-            <div className="text-sm px-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-dark-850">
-              or
+            <div className="relative flex items-center justify-center">
+              <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
+              <div className="text-sm px-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-dark-850">
+                or
+              </div>
+              <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
             </div>
-            <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
-          </div>
+
+          </Experimental>
 
           <EmailPasswordLoginBox />
 
