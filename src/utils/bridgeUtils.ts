@@ -44,6 +44,10 @@ declare global {
           external_id?: string;
         };
       }>;
+      // Storage methods
+      setStorageItem?(key: string, value: string): Promise<void>;
+      getStorageItem?(key: string): Promise<string | null>;
+      removeStorageItem?(key: string): Promise<void>;
     };
     // Also support lowercase version (as injected by mobile app)
     scrummyBridge?: {
@@ -79,6 +83,10 @@ declare global {
           external_id?: string;
         };
       }>;
+      // Storage methods
+      setStorageItem?(key: string, value: string): Promise<void>;
+      getStorageItem?(key: string): Promise<string | null>;
+      removeStorageItem?(key: string): Promise<void>;
     };
   }
 }
