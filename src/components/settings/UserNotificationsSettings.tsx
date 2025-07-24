@@ -113,7 +113,7 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
         name="game_updates_preference"
       >
         {options.map(p => {
-          return <option value={p}>{formatPosition(p)}</option>;
+          return <option key={p} value={p}>{formatPosition(p)}</option>;
         })}
       </select>
 

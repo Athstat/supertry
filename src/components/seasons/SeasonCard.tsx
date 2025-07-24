@@ -1,11 +1,11 @@
 import { format } from 'date-fns'
-import { ISeason } from '../../types/games'
 import RoundedCard from '../shared/RoundedCard'
 import SecondaryText from '../shared/SecondaryText'
 import { useNavigate } from 'react-router-dom'
+import { IProSeason } from '../../types/season'
 
 type Props = {
-  season: ISeason
+  season: IProSeason
 }
 
 export default function SeasonCard({season} : Props) {

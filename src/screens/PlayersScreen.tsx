@@ -29,6 +29,7 @@ import PlayerCompareProvider from "../components/players/compare/PlayerComparePr
 import { usePlayerCompareActions } from "../hooks/usePlayerCompare";
 import { useAtomValue } from "jotai";
 import { comparePlayersAtomGroup } from "../state/comparePlayers.atoms";
+import { useInView } from "react-intersection-observer";
 
 export function PlayersScreen() {
   return (
@@ -87,11 +88,11 @@ export const PlayerScreenContent = () => {
     comparePlayersAtomGroup.isCompareModePicking
   );
 
-  const {addOrRemovePlayer} = usePlayerCompareActions();
+  const { addOrRemovePlayer } = usePlayerCompareActions();
 
   // Handle player selection with useCallback for better performance
   const handlePlayerClick = useCallback((player: IProAthlete) => {
-    
+
     if (isPickingPlayers) {
       addOrRemovePlayer(player);
     } else {
@@ -175,20 +176,20 @@ export const PlayerScreenContent = () => {
         </div>
 
         {
-          <PlayersScreenCompareStatus/>
+          <PlayersScreenCompareStatus />
         }
 
         {/* Selected Team Section */}
         <div>
           {selectedTeam && <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2" >
-            <TeamLogo 
+            <TeamLogo
               teamName={selectedTeam.athstat_name}
               url={selectedTeam.image_url}
               className="w-5 h-5"
             />
 
             <p>{selectedTeam.athstat_name}</p>
-            
+
             <button onClick={() => setTeamIdFilter("")} >
               <SecondaryText> <X className="w-4 h-4" /> </SecondaryText>
             </button>
@@ -208,22 +209,21 @@ export const PlayerScreenContent = () => {
         )}
 
         {/* Empty State */}
-        { isEmpty && (
-            <EmptyState
-              searchQuery={searchQuery}
-              onClearSearch={() => handleSearch("")}
-            />
-          )}
+        {isEmpty && (
+          <EmptyState
+            searchQuery={searchQuery}
+            onClearSearch={() => handleSearch("")}
+          />
+        )}
 
         {/* Player Grid */}
         {!isLoading && !error && !isFiltering && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {filteredAthletes.map((player) => (
-              <PlayerGameCard
-                key={player.tracking_id}
+              <PlayerCardItem
                 player={player}
                 onClick={() => handlePlayerClick(player)}
-                className="h-[250px] lg:h-[300px]"
+                key={player.tracking_id}
               />
             ))}
           </div>
@@ -235,7 +235,7 @@ export const PlayerScreenContent = () => {
           onClose={handleClosePlayerModal}
           player={playerModalPlayer}
           isOpen={playerModalPlayer !== undefined && showPlayerModal}
-          
+
         />}
 
       </PageView>
@@ -245,17 +245,26 @@ export const PlayerScreenContent = () => {
   );
 };
 
-// const formBias = (powerRanking: number, form?: PlayerForm) => {
-//   // small influence
+type ItemProps = {
+  player: IProAthlete,
+  onClick: () => void
+}
 
-//   switch (form) {
-//     case "UP":
-//       return 3 + powerRanking;
-//     case "NEUTRAL":
-//       return 2;
-//     case "DOWN":
-//       return -5;
-//     default:
-//       return 1; // fallback when form is undefined
-//   }
-// }
+function PlayerCardItem({ player, onClick }: ItemProps) {
+
+  const { ref, inView } = useInView({triggerOnce: true});
+
+  return (
+    <div
+      ref={ref}
+    >
+      {inView && <PlayerGameCard
+        key={player.tracking_id}
+        player={player}
+        onClick={onClick}
+        className="h-[250px] lg:h-[300px]"
+      />}
+    </div>
+  )
+
+}

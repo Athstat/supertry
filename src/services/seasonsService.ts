@@ -2,23 +2,23 @@
 
 import { IProAthlete } from "../types/athletes";
 import { IFixture, ISeason, ITeam } from "../types/games";
-import { RugbyPlayer } from "../types/rugbyPlayer";
+import { IProSeason } from "../types/season";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger";
 
 
 export const seasonService = {
     
-    getAllSupportedSeasons: async () : Promise<ISeason[]> => {
+    getAllSupportedSeasons: async () : Promise<IProSeason[]> => {
         try {
             
-            const uri = getUri(`/api/v1/entities/seasons`);
+            const uri = getUri(`/api/v1/seasons`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
             
             if (res.ok) {
-                return (await res.json()) as ISeason[]
+                return (await res.json()) as IProSeason[]
             }
             
         } catch (error) {
