@@ -106,14 +106,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Function to refresh the session
   const refreshSession = useCallback(async (): Promise<boolean> => {
     try {
-      console.log('AuthContext: Attempting to refresh session');
-      const refreshed = true;
-      console.log('AuthContext: Session refresh result:', refreshed);
-      setIsAuthenticated(refreshed);
-      return refreshed;
+      return true;
     } catch (error) {
-      console.error('AuthContext: Session refresh failed:', error);
-      setIsAuthenticated(false);
       return false;
     }
   }, []);
