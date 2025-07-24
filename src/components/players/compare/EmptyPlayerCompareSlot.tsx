@@ -34,7 +34,7 @@ export default function EmptyPlayerCompareSlot() {
             )}
 
         >
-            <div onClick={toggle} className="flex cursor-pointer flex-1 flex-col items-center gap-2 justify-center" >
+            <div onClick={toggle} className="flex cursor-pointer hover:bg-slate-300 hover:dark:bg-slate-800  w-full flex-1 flex-col items-center gap-2 justify-center" >
 
                 <SecondaryText>
                     <Plus className="w-14 h-14" />
