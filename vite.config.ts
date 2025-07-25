@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       ],
       proxy: {
         '/api/v1': {
-          target: 'https://athstat-games-server.onrender.com',
+          target: 'http://localhost:8000', // Updated to Django server
           changeOrigin: true,
           secure: false,
           rewrite: path => path.replace(/^\/api\/v1/, '/api/v1'),
