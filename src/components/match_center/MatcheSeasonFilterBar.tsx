@@ -37,6 +37,7 @@ export default function MatchSeasonFilterBar({onChange, seasons, value} : Props)
             {seasons.map((c) => {
                 return (
                     <RoundedCard
+                        key={c.id}
                         className={twMerge(
                             "w-fit px-4 cursor-pointer text-nowrap py-2 rounded-lg",
                             value === c.id && "bg-blue-500 text-white hover:dark:bg-blue-600 hover:bg-blue-600  dark:bg-blue-600 border-blue-400 dark:border-blue-400"
