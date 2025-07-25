@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Users, Loader } from 'lucide-react';
+import { useState, useEffect, Fragment } from 'react';
+import { Users, Loader, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
 import { IProAthlete } from '../../types/athletes';
+import PlayerMugshot from '../shared/PlayerMugshot';
+import { useInView } from 'react-intersection-observer';
 
 // type TabType = 'top-picks' | 'hot-streak' | 'by-position';
 
-const FeaturedPlayersCarousel = () => {
+export default function FeaturedPlayersCarousel() {
   const navigate = useNavigate();
   // const [activeTab, setActiveTab] = useState<TabType>('top-picks');
   const [players, setPlayers] = useState<IProAthlete[]>([]);
@@ -67,10 +68,13 @@ const FeaturedPlayersCarousel = () => {
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-base font-medium flex items-center gap-2">
           <Users className="w-4 h-4 text-primary-500" />
-          Featured Players
+          Discover Players
         </h3>
-        <button onClick={() => navigate('/players')} className="text-sm text-primary-700">
+        <button
+          onClick={() => navigate('/players')}
+          className="text-sm text-primary-700 hover:text-primary-600 flex flex-row items-center gap-1">
           View All
+          <ArrowRight className='w-4 h-4' />
         </button>
       </div>
 
@@ -116,14 +120,12 @@ const FeaturedPlayersCarousel = () => {
           </div> */}
 
           {/* Player cards carousel - showing featured players only */}
-          <div className="flex space-x-3 h-[230px] items-center justify-start overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
+          <div className="flex space-x-3 items-center justify-start overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
             {players.map(player => (
               <div key={player.tracking_id} className="pl-1 flex-shrink-0">
-                <PlayerGameCard
+                <FeaturePlayerCard
                   player={player}
-                  onClick={() => handlePlayerClick(player)}
-                  className="w-[140px] sm:w-[160px] h-[200px] sm:h-[220px]"
-                  blockGlow={true}
+                  onClick={handlePlayerClick}
                 />
               </div>
             ))}
@@ -142,4 +144,39 @@ const FeaturedPlayersCarousel = () => {
   );
 };
 
-export default FeaturedPlayersCarousel;
+type FeaturePlayerProp = {
+  player: IProAthlete,
+  onClick?: (player: IProAthlete) => void
+}
+
+function FeaturePlayerCard({ player, onClick }: FeaturePlayerProp) {
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(player);
+    }
+  }
+
+  const { ref, inView } = useInView({ triggerOnce: true });
+
+  return (
+    <div
+      className="flex flex-col items-center gap-1"
+      onClick={handleClick}
+      ref={ref}
+    >
+      {inView && <Fragment>
+        <PlayerMugshot
+          url={player.image_url}
+          className='w-24 h-24'
+          playerPr={player.power_rank_rating}
+          showPrBackground
+        />
+
+        <p className='text-xs truncate' >
+          {player.athstat_firstname && player.athstat_firstname[0]}. {player.athstat_lastname}
+        </p>
+      </Fragment>}
+    </div>
+  )
+}

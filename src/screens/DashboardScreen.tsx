@@ -17,10 +17,10 @@ export function DashboardScreen() {
       </div>
 
       <HeroSection />
+      <FeaturedPlayersCarousel />
 
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
-      <FeaturedPlayersCarousel />
       <ComparePlayersPanel />
       <MyWeekPanel />
     </PageView>

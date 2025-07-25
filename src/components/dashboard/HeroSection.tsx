@@ -26,7 +26,7 @@ export function HeroSection({ }: Props) {
   }
 
   const key = swrFetchKeys.getAllFantasyLeagues();
-  const { data: fetchedLeagues, isLoading } = useSWR(key, () => leagueService.getAllLeagues());
+  const { data: fetchedLeagues } = useSWR(key, () => leagueService.getAllLeagues());
 
   const availableLeagues = fetchedLeagues ?? [];
 
