@@ -4,6 +4,7 @@ import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSec
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
+import { HeroSection } from '../components/dashboard';
 
 export function DashboardScreen() {
 
@@ -12,8 +13,10 @@ export function DashboardScreen() {
 
       <div className='flex flex-row items-center gap-2' >
         <Home />
-        <p className='text-xl font-bold' >Dashboard</p>
+        <p className='text-xl font-extrabold' >Dashboard</p>
       </div>
+
+      <HeroSection />
 
       {/* <ActionList /> */}
       <UpcomingFixturesSection />

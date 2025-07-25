@@ -45,11 +45,15 @@ export const swrFetchKeys = {
         return `/athlete-aggregated-stats/${athleteId}`
     },
 
-    getAthleteSeasonStarRatings: async (athleteId: string, seasonId: string) => {
+    getAthleteSeasonStarRatings: (athleteId: string, seasonId: string) => {
         return `/athlete-season-star-ratings/${athleteId}/season/${seasonId}`
     },
 
-    getAthleteCareerStarRatings: async (athleteId: string) => {
+    getAthleteCareerStarRatings: (athleteId: string) => {
         return `/athlete-career-star-ratings/${athleteId}`
+    },
+
+    getAllFantasyLeagues: () => {
+        return `fantasy-leagues`;
     }
 }
