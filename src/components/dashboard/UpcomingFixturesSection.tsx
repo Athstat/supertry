@@ -14,6 +14,7 @@ import { useGameVotes } from '../../hooks/useGameVotes';
 import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
 import { fixtureSumary } from '../../utils/fixtureUtils';
 import { useNavigate } from 'react-router-dom';
+import SecondaryText from '../shared/SecondaryText';
 
 export default function UpcomingFixturesSection() {
   const {
@@ -22,6 +23,7 @@ export default function UpcomingFixturesSection() {
     error,
   } = useSWR('pro-fixtures', () => gamesService.getAllSupportedGames());
   const { push } = useRouter();
+
   const { data: leagues, isLoading: isLoadingLeagues } = useSWR('all-leagues', () =>
     leagueService.getAllLeagues()
   );
@@ -38,16 +40,29 @@ export default function UpcomingFixturesSection() {
   // Sort fixtures by date and time
   const sortedFixtures = Array.isArray(fixtures)
     ? fixtures
-        .sort((a, b) =>
-          a.kickoff_time && b.kickoff_time
-            ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
-            : 0
-        )
-        .filter(f => {
-          return f.game_status !== 'completed';
-        })
-        .slice(0, 5)
+      .sort((a, b) =>
+        a.kickoff_time && b.kickoff_time
+          ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
+          : 0
+      )
+      .filter(f => {
+        return f.game_status !== 'completed';
+      })
+      .slice(0, 5)
     : [];
+
+  const last10 = [...fixtures].slice(
+    fixtures.length - 11, fixtures.length
+  );
+
+  const handleClickPredict = (fixture: IFixture) => {
+    setSelectedFixture(fixture);
+    setShowPredictModal(true);
+  }
+
+  if (last10.length === 0 && sortedFixtures.length == 0) {
+    return;
+  }
 
   return (
     <div>
@@ -65,99 +80,27 @@ export default function UpcomingFixturesSection() {
       </div>
 
       {sortedFixtures.length === 0 ? (
-        <div className="text-gray-500 dark:text-gray-400 text-center py-6">
-          No upcoming fixtures in the next 7 days.
+
+        <div className="flex space-x-4 overflow-x-auto pb-2">
+          {last10.map((fixture) => {
+            return (
+              <UpcomingFixtureCard
+                fixture={fixture}
+                onClickPredict={handleClickPredict}
+                key={fixture.game_id}
+              />
+            );
+          })}
         </div>
       ) : (
         <div className="flex space-x-4 overflow-x-auto pb-2">
-          {sortedFixtures.map((fixture, index) => {
+          {sortedFixtures.map((fixture) => {
             return (
-              <div
-                key={index}
-                className="min-w-[320px]  bg-slate-100 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 rounded-xl overflow-hidden text-white"
-              >
-                <div className="p-4">
-                  <div className="text-center mb-3 text-sm text-slate-700 dark:text-gray-300">
-                    {fixture.competition_name && (
-                      <p className="text-[10px]">
-                        {fixture.competition_name}, {fixture.venue}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex justify-between items-center mb-4">
-                    {/* Home Team */}
-                    <div className="flex flex-col items-center min-w-0 w-28">
-                      <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
-                        <TeamLogo
-                          url={fixture.team.image_url}
-                          teamName={fixture.team.athstat_name}
-                          className="w-10 h-10"
-                        />
-                      </div>
-                      <p
-                        className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
-                        title={fixture.team.athstat_name}
-                      >
-                        {fixture.team.athstat_name}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>
-                    </div>
-
-                    {/* Match Info (centered) */}
-                    <div className="flex flex-col items-center flex-shrink-0 mx-4 min-w-[90px]">
-                      {fixture.kickoff_time && (
-                        <>
-                          <p className="text-xs text-gray-700 dark:text-gray-300 text-center">
-                            {format(new Date(fixture.kickoff_time), 'E, d MMM')}
-                          </p>
-                          <p className="text-lg font-bold my-1 text-center text-gray-900 dark:text-white">
-                            {format(new Date(fixture.kickoff_time), 'HH:mm')}
-                          </p>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 text-center">vs</p>
-                        </>
-                      )}
-                    </div>
-
-                    {/* Away Team */}
-                    <div className="flex flex-col items-center min-w-0 w-28">
-                      <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
-                        <TeamLogo
-                          url={fixture.opposition_team.image_url}
-                          teamName={fixture.opposition_team.athstat_name}
-                          className="w-10 h-10"
-                        />
-                      </div>
-                      <p
-                        className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
-                        title={fixture.opposition_team.athstat_name}
-                      >
-                        {fixture.opposition_team.athstat_name}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>
-                    </div>
-                  </div>
-
-                  <div className="flex space-x-2">
-                    <button
-                      className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
-                      onClick={() => {
-                        setSelectedFixture(fixture);
-                        setShowPredictModal(true);
-                      }}
-                    >
-                      Predict
-                    </button>
-                    <button
-                      className="flex-1 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
-                      onClick={() => push(`/fixtures/${fixture.game_id}#chat`)}
-                    >
-                      <span>Chat</span>
-                      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <UpcomingFixtureCard
+                fixture={fixture}
+                onClickPredict={handleClickPredict}
+                key={fixture.game_id}
+              />
             );
           })}
         </div>
@@ -176,6 +119,119 @@ export default function UpcomingFixturesSection() {
       )}
     </div>
   );
+}
+
+type Props = {
+  fixture: IFixture,
+  onClickPredict?: (fixture: IFixture) => void
+}
+
+function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
+
+  const { push } = useRouter();
+
+  const handleClickChat = () => {
+    push(`/fixtures/${fixture.game_id}#chat`)
+  }
+
+  const handleClickPredict = () => {
+    if (onClickPredict) {
+      onClickPredict(fixture);
+    }
+  }
+
+  const {game_status} = fixtureSumary(fixture);
+  const gameCompleted = game_status === "completed";
+
+  return (
+    <div
+      className="min-w-[320px]  bg-slate-100 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 rounded-xl overflow-hidden text-white"
+    >
+      <div className="p-4">
+        <div className="text-center mb-3 text-sm text-slate-700 dark:text-gray-300">
+          {fixture.competition_name && (
+            <p className="text-[10px]">
+              {fixture.competition_name}, {fixture.venue}
+            </p>
+          )}
+        </div>
+
+        <div className="flex justify-between items-center mb-4">
+          {/* Home Team */}
+          <div className="flex flex-col items-center min-w-0 w-28">
+            <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
+              <TeamLogo
+                url={fixture.team.image_url}
+                teamName={fixture.team.athstat_name}
+                className="w-10 h-10"
+              />
+            </div>
+            <p
+              className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
+              title={fixture.team.athstat_name}
+            >
+              {fixture.team.athstat_name}
+            </p>
+            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>} 
+            <SecondaryText className='font-bold' >{fixture.team_score}</SecondaryText>
+          </div>
+
+          {/* Match Info (centered) */}
+          <div className="flex flex-col items-center flex-shrink-0 mx-4 min-w-[90px]">
+            {fixture.kickoff_time && (
+              <>
+                <p className="text-xs text-gray-700 dark:text-gray-300 text-center">
+                  {format(new Date(fixture.kickoff_time), 'E, d MMM')}
+                </p>
+                {!gameCompleted && <p className="text-lg font-bold my-1 text-center text-gray-900 dark:text-white">
+                  {format(new Date(fixture.kickoff_time), 'HH:mm')}
+                </p>}
+                {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400 text-center">vs</p>}
+                {gameCompleted && <SecondaryText>Final</SecondaryText>}
+              </>
+            )}
+          </div>
+
+          {/* Away Team */}
+          <div className="flex flex-col items-center min-w-0 w-28">
+            <div className="w-12 h-12 bg-gray-800 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
+              <TeamLogo
+                url={fixture.opposition_team.image_url}
+                teamName={fixture.opposition_team.athstat_name}
+                className="w-10 h-10"
+              />
+            </div>
+            <p
+              className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
+              title={fixture.opposition_team.athstat_name}
+            >
+              {fixture.opposition_team.athstat_name}
+            </p>
+            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>}
+            <SecondaryText className='font-bold' >{fixture.opposition_score}</SecondaryText>
+          </div>
+        </div>
+
+        {!gameCompleted && <div className="flex space-x-2">
+          <button
+            className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
+            onClick={handleClickPredict}
+          >
+            Predict
+          </button>
+          <button
+            className="flex-1 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+            onClick={handleClickChat}
+          >
+            <span>Chat</span>
+            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+          </button>
+        </div>}
+
+        {}
+      </div>
+    </div>
+  )
 }
 
 // Prediction Modal Component
