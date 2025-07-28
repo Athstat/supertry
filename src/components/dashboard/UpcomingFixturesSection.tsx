@@ -7,7 +7,6 @@ import { ErrorState } from '../ui/ErrorState';
 import { Calendar } from 'lucide-react';
 import { useRouter } from '../../hooks/useRoter';
 import TeamLogo from '../team/TeamLogo';
-import { leagueService } from '../../services/leagueService';
 import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import { useGameVotes } from '../../hooks/useGameVotes';
@@ -15,44 +14,58 @@ import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
 import { fixtureSumary } from '../../utils/fixtureUtils';
 import { useNavigate } from 'react-router-dom';
 import SecondaryText from '../shared/SecondaryText';
+import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
+import { PilledSeasonFilterBar } from '../match_center/MatcheSeasonFilterBar';
 
 export default function UpcomingFixturesSection() {
-  const {
+  let {
     data: fixtures,
     isLoading,
     error,
   } = useSWR('pro-fixtures', () => gamesService.getAllSupportedGames());
   const { push } = useRouter();
 
-  const { data: leagues, isLoading: isLoadingLeagues } = useSWR('all-leagues', () =>
-    leagueService.getAllLeagues()
-  );
+  const seasonIds = [
+    'b5cae2ff-d123-5f12-a771-5faa6d40e967',
+    'd313fbf5-c721-569b-975d-d9ec242a6f19',
+  ];
+
+  const { seasons, currSeason, setCurrSeason } = useSupportedSeasons({ wantedSeasonsId: seasonIds });
 
   const [selectedFixture, setSelectedFixture] = useState<IFixture | null>(null);
   const [showPredictModal, setShowPredictModal] = useState(false);
 
-  if (isLoading || isLoadingLeagues) return <LoadingState />;
+  if (isLoading) return <LoadingState />;
 
-  if (!fixtures || error || !leagues) {
+  if (error) {
     return <ErrorState message="Failed to fetch upcoming matches" />;
   }
+
+  fixtures = (fixtures ?? []).filter(f => {
+    return currSeason ? f.league_id === currSeason?.id : true;
+  }).sort((a, b) =>
+    a.kickoff_time && b.kickoff_time
+      ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
+      : 0
+  );
 
   // Sort fixtures by date and time
   const sortedFixtures = Array.isArray(fixtures)
     ? fixtures
-      .sort((a, b) =>
-        a.kickoff_time && b.kickoff_time
-          ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
-          : 0
-      )
       .filter(f => {
-        return f.game_status !== 'completed';
+        const notCompleted = f.game_status !== 'completed';
+
+        return notCompleted;
       })
       .slice(0, 5)
     : [];
 
   const last10 = [...fixtures].slice(
     fixtures.length - 11, fixtures.length
+  ).sort((a, b) =>
+    a.kickoff_time && b.kickoff_time
+      ? new Date(b.kickoff_time).valueOf() - new Date(a.kickoff_time).valueOf()
+      : 0
   );
 
   const handleClickPredict = (fixture: IFixture) => {
@@ -64,8 +77,11 @@ export default function UpcomingFixturesSection() {
     return;
   }
 
+  console.log("Seasons from fixtures", seasons);
+
   return (
-    <div>
+    <div className='flex flex-col gap-2' >
+      
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
           <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
@@ -78,6 +94,17 @@ export default function UpcomingFixturesSection() {
           View All
         </button>
       </div>
+
+      <PilledSeasonFilterBar
+        seasons={seasons}
+        onChange={(sId?: string) => {
+          const szn = seasons.find((f) => f.id === sId);
+          setCurrSeason(szn)
+        }}
+        value={currSeason?.id}
+        sortDesc
+        hideAllOption
+      />
 
       {sortedFixtures.length === 0 ? (
 
@@ -140,12 +167,12 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
     }
   }
 
-  const {game_status} = fixtureSumary(fixture);
+  const { game_status } = fixtureSumary(fixture);
   const gameCompleted = game_status === "completed";
 
   return (
     <div
-      className="min-w-[320px] cursor-pointer  bg-slate-100 hover:bg-slate-200 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 hover:dark:bg-gray-800/70 rounded-xl overflow-hidden text-white"
+      className="min-w-[320px] cursor-pointer  bg-white hover:bg-slate-200 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 hover:dark:bg-gray-800/70 rounded-xl overflow-hidden text-white"
       onClick={() => {
         if (gameCompleted && onClickPredict) {
           onClickPredict(fixture)
@@ -164,7 +191,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
         <div className="flex justify-between items-center mb-4">
           {/* Home Team */}
           <div className="flex flex-col items-center min-w-0 w-28">
-            <div className="w-12 h-12 bg-gray-800 rounded-full mb-2 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full mb-2 flex items-center justify-center">
               <TeamLogo
                 url={fixture.team.image_url}
                 teamName={fixture.team.athstat_name}
@@ -177,7 +204,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
             >
               {fixture.team.athstat_name}
             </p>
-            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>} 
+            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>}
             <SecondaryText className='' >{fixture.team_score}</SecondaryText>
           </div>
 
@@ -199,7 +226,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
 
           {/* Away Team */}
           <div className="flex flex-col items-center min-w-0 w-28">
-            <div className="w-12 h-12 bg-gray-800 dark:bg-gray-800 rounded-full mb-2 flex items-center justify-center">
+            <div className="w-12 h-12  rounded-full mb-2 flex items-center justify-center">
               <TeamLogo
                 url={fixture.opposition_team.image_url}
                 teamName={fixture.opposition_team.athstat_name}
@@ -225,7 +252,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
             Predict
           </button>}
           <button
-            className="flex-1 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+            className="flex-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-slate-300 dark:border-slate-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
             onClick={handleClickChat}
           >
             <span>Chat</span>
@@ -233,7 +260,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
           </button>
         </div>
 
-        {}
+        { }
       </div>
     </div>
   )

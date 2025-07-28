@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { seasonService } from "../services/seasonsService";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { IProSeason } from "../types/season";
 
 /** Provides reusable logic for fetching
@@ -18,7 +18,7 @@ export function useSupportedSeasons({ wantedSeasonsId = [] }: Options = {}) {
     const key = swrFetchKeys.getAllSuppportedSeasons(wantedSeasonsId);
 
     const { data, isLoading } = useSWR(key, () => (
-        wantedSeasonsId ? wantedSeasonsFetcher(wantedSeasonsId) : seasonService.getAllSupportedSeasons()
+        wantedSeasonsId.length > 0 ? wantedSeasonsFetcher(wantedSeasonsId) : seasonService.getAllSupportedSeasons()
     ));
 
     const seasons = (data ?? []).sort((a, b) => {
