@@ -4,7 +4,7 @@ import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSec
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
-import { HeroSection } from '../components/dashboard';
+import { HeroSection, MyTeamsSection } from '../components/dashboard';
 
 export function DashboardScreen() {
 
@@ -23,6 +23,7 @@ export function DashboardScreen() {
       <UpcomingFixturesSection />
       <ComparePlayersPanel />
       <MyWeekPanel />
+      {/* <MyTeamsSection /> */}
     </PageView>
   );
 }
