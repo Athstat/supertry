@@ -72,9 +72,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshSession = useCallback(async (): Promise<boolean> => {
     
     try {
-      checkAuth();
-    } catch (err) {
-      logger.error('Error refreshing auth ', err);
+      return true;
+    } catch (error) {
+      return false;
     }
     return true;
   }, []);

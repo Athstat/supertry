@@ -17,7 +17,7 @@ export default function PlayerIconsRow({ player, starRatings, seasonStats, size 
   // Always show the container, even when empty
   return (
     <Experimental>
-      <div className="flex flex-row min-h-[40px] max-h-[40px] p-2 items-center justify-start flex-wrap">
+      <div className="flex flex-row man-h-[40px] hide-scrollbar min-h-[40px] p-2 items-center justify-start overflow-x-auto">
         {playerIcons.map((iconName, index) => (
           <div key={`${iconName}-${index}`} className="mr-4">
             <PlayerIconComponent

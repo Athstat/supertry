@@ -11,6 +11,7 @@ import { useDebounced } from "../../hooks/useDebounced";
 import { X } from "lucide-react";
 import RoundedCard from "../shared/RoundedCard";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
+import { useInView } from "react-intersection-observer";
 
 type Props = {
     onSelectPlayers?: (players: IProAthlete[]) => void,
@@ -140,6 +141,8 @@ type PlayerItemProps = {
 
 function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) {
 
+    const {ref, inView} = useInView({triggerOnce: true});
+
     const handleClick = () => {
 
         if (disabled) {
@@ -152,49 +155,52 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
     }
 
     return (
-        <div
-            className={twMerge(
-                "flex py-2 px-4 rounded-xl cursor-pointer flex-col items-start gap-2",
-                "bg-slate-200 dark:bg-slate-700/40 hover:dark:bg-slate-600 hover:bg-slate-100",
-                isSelected && "bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 hover:dark:bg-blue-600",
-                disabled && "opacity-35"
-            )}
 
-            onClick={handleClick}
-        >
-            <div className="flex flex-row items-center w-full gap-2 justify-between" >
-                <PlayerMugshot
-                    url={player.image_url}
-                    playerPr={player.power_rank_rating}
-                    showPrBackground
-                />
+        <div ref={ref}>
+           {inView && <div
+                className={twMerge(
+                    "flex py-2 px-4 rounded-xl cursor-pointer flex-col items-start gap-2",
+                    "bg-slate-200 dark:bg-slate-700/40 hover:dark:bg-slate-600 hover:bg-slate-100",
+                    isSelected && "bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 hover:dark:bg-blue-600",
+                    disabled && "opacity-35"
+                )}
 
-                <div className="flex-1 flex items-start flex-col" >
-                    <p  className={twMerge(
-                        isSelected && "text-white font-bold"
-                    )} >{player.player_name}</p>
-                    <SecondaryText className={twMerge(
-                        "text-sm",
-                        isSelected && "text-slate-100 dark:text-slate-100"
-                    )} >{player.team.athstat_name}</SecondaryText>
+                onClick={handleClick}
+            >
+                <div className="flex flex-row items-center w-full gap-2 justify-between" >
+                    <PlayerMugshot
+                        url={player.image_url}
+                        playerPr={player.power_rank_rating}
+                        showPrBackground
+                    />
+
+                    <div className="flex-1 flex items-start flex-col" >
+                        <p className={twMerge(
+                            isSelected && "text-white font-bold"
+                        )} >{player.player_name}</p>
+                        <SecondaryText className={twMerge(
+                            "text-sm",
+                            isSelected && "text-slate-100 dark:text-slate-100"
+                        )} >{player.team.athstat_name}</SecondaryText>
+                    </div>
+
+                    <div className="flex flex-row items-center gap-2" >
+                        <p className={twMerge(
+                            "font-bold text-primary-500 dark:text-primary-4 00",
+                            isSelected && "text-white"
+                        )} >
+                            {player.power_rank_rating ?
+                                Math.floor(player.power_rank_rating)
+                                : "-"
+                            }
+                        </p>
+
+                    </div>
                 </div>
 
-                <div className="flex flex-row items-center gap-2" >
-                    <p className={twMerge(
-                        "font-bold text-primary-500 dark:text-primary-4 00",
-                        isSelected && "text-white"
-                    )} >
-                        {player.power_rank_rating ?
-                            Math.floor(player.power_rank_rating)
-                            : "-"
-                        }
-                    </p>
+                {disabled && <p className="text-xs text-red-500" >Player is already selected</p>}
 
-                </div>
-            </div>
-
-            {disabled && <p className="text-xs text-red-500" >Player is already selected</p>}
-
+            </div>}
         </div>
     )
 }
