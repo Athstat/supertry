@@ -80,9 +80,9 @@ export default function UpcomingFixturesSection() {
   console.log("Seasons from fixtures", seasons);
 
   return (
-    <div className='flex flex-col gap-2' >
+    <div className='flex flex-col gap-4' >
       
-      <div className="flex justify-between items-center mb-3">
+      <div className="flex justify-between items-center">
         <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
           <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           Fixtures
