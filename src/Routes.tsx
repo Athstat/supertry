@@ -33,6 +33,7 @@ import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
+import ScrummyLoadingState from './components/ui/ScrummyLoadingState';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -47,7 +48,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <ScrummyLoadingState />;
 
   if (!isAuthenticated) {
     return <Navigate to="/signin" />;
@@ -60,7 +61,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <ScrummyLoadingState />;
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
