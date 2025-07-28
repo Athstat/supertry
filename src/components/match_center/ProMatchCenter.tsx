@@ -5,7 +5,7 @@ import FixtureCard from "../fixtures/FixtureCard";
 import { subHours } from "date-fns";
 import { useQueryState } from "../../hooks/useQueryState";
 import NoContentCard from "../shared/NoContentMessage";
-import MatchSeasonFilterBar from "./MatcheSeasonFilterBar";
+import PilledSeasonFilterBar from "./MatcheSeasonFilterBar";
 import MatchCenterSearchBar from "./MatchCenterSearchBar";
 import { searchProFixturePredicate } from "../../utils/fixtureUtils";
 import { twMerge } from "tailwind-merge";
@@ -98,7 +98,7 @@ export default function ProMatchCenter() {
                 placeholder="Search Pro Games, Seasons ..."
             />
 
-            <MatchSeasonFilterBar
+            <PilledSeasonFilterBar
                 seasons={seasons}
                 onChange={setSeason}
                 value={season}
