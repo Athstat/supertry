@@ -1,574 +1,219 @@
-import { IProAthlete } from "../../types/athletes";
-import { IFantasyAthlete, RugbyPlayer } from "../../types/rugbyPlayer";
-import { SportAction } from "../../types/sports_actions";
-import { getAuthHeader, getUri } from "../../utils/backendUtils";
-import { logger } from "../logger";
+import { RugbyPlayer, IFantasyAthlete } from '../../types/rugbyPlayer';
+import { getUri, getAuthHeader } from '../../utils/backendUtils';
+import { logger } from '../logger';
+import { SportAction } from '../../types/sports_actions';
 
-// Define the type for each individual breakdown item
-export interface PointsBreakdownItem {
-  action: string;
-  action_count: number;
-  athlete_id: string;
-  game_id: string;
-  round: number;
-  score: number;
-}
-
-export interface PointsBreakdown {
-  total_points: number;
-  breakdown: PointsBreakdownItem[];
-}
-
-// Define the type for power ranking item
-export interface PowerRankingItem {
-  athlete_id: string;
-  game_id: string;
-  updated_power_ranking: number;
-  team_name: string;
-  opposition_name: string;
-  kickoff_time: string;
-}
-
-// Map of action names to human-friendly labels for player stats
-export const actionLabels: Record<string, string> = {
-  Assists: "Assists",
-  Carries: "Carries",
-  CarriesMadeGainLine: "Gain Line Carries",
-  DefendersBeaten: "Defenders Beaten",
-  LineBreaks: "Line Breaks",
-  LineoutsWon: "Lineouts Won",
-  LineoutsWonSteal: "Lineouts Stolen",
-  Metres: "Meters Gained",
-  MinutesPlayed: "Minutes Played",
-  Offloads: "Offloads",
-  Passes: "Passes",
-  PenaltiesConceded: "Penalties Conceded",
-  Points: "Points Scored",
-  TacklesMade: "Tackles Made",
-  TacklesMissed: "Tackles Missed",
-  TackleSuccess: "Tackle Success %",
-  Tries: "Tries",
-  TurnoversConceded: "Turnovers Conceded",
-  TurnoversWon: "Turnovers Won",
-  Starts: "Starts",
-};
-
-// Categories for grouping stats in the UI
-export const statCategories = {
-  attack: [
-    "Carries",
-    "CarriesMadeGainLine",
-    "Metres",
-    "LineBreaks",
-    "DefendersBeaten",
-    "Offloads",
-    "Passes",
-    "Assists",
-  ],
-  defense: ["TacklesMade", "TacklesMissed", "TackleSuccess", "TurnoversWon"],
-  general: ["Tries", "Points", "MinutesPlayed", "Starts"],
-  discipline: ["PenaltiesConceded", "TurnoversConceded"],
-  setpiece: ["LineoutsWon", "LineoutsWonSteal"],
-};
-
+/** Athlete Service for fetching rugby players and athletes */
 export const athleteService = {
-  // Get all rugby athletes by competition
-  getRugbyAthletesByCompetition: async (
-    competitionId: string
-  ): Promise<RugbyPlayer[]> => {
+  /**
+   * Get rugby athletes by competition/season ID
+   * This is the main method used by team creation to fetch available players
+   */
+  getRugbyAthletesByCompetition: async (competitionId: string): Promise<RugbyPlayer[]> => {
     try {
-      // Try to fetch from API first
-      try {
-        const response = await fetch(
-          getUri(
-            `/api/v1/seasons/${competitionId}/athletes`
-          ),
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            // Remove no-cors mode to see if it works
-          }
-        );
+      logger.debug(`Fetching rugby athletes for competition: ${competitionId}`);
 
-        if (response.ok) {
-          return await response.json();
-        }
-      } catch (apiError) {
-        console.error("API fetch error:", apiError);
-        // Continue to fallback if API fetch fails
-      }
-
-      // If API fetch fails, use mock data
-      console.log("Falling back to mock data");
-      const mockData = await import("../../data/rugbyPlayers");
-      return mockData.rugbyPlayers;
-    } catch (error) {
-      console.error("Error in athleteService:", error);
-      // Always return something to prevent app crash
-      const mockData = await import("../../data/rugbyPlayers");
-      return mockData.rugbyPlayers;
-    }
-  },
-
-  getAthletePointsBreakdown: async (
-    athleteId: string
-  ): Promise<PointsBreakdownItem[]> => {
-    try {
-      const uri = getUri(
-        `/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/${athleteId}`
-      );
-      const response = await fetch(uri, {
-        method: "GET",
-        headers: getAuthHeader(),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch points breakdown: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error fetching athlete points breakdown:", error);
-      throw error;
-    }
-  },
-
-  getAthletePointsBreakdownByLeagueAndRound: async (
-    athleteId: string,
-    roundId: number,
-    leagueId: string
-  ): Promise<PointsBreakdownItem[]> => {
-    try {
-      const uri = getUri(
-        `/api/v1/fantasy-athletes/fantasy-athletes/points-breakdown/league/${leagueId}/round/${roundId}/athlete/${athleteId}`
-      );
-
-      const response = await fetch(uri, {
-        method: "GET",
-        headers: getAuthHeader(),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch points breakdown: ${response.status}`);
-      }
-
-      const json = await response.json();
-
-      return json;
-    } catch (error) {
-      console.error("Error fetching athlete points breakdown:", error);
-      throw error;
-    }
-  },
-
-  // Get detailed player statistics by athlete ID
-  getAthleteStats: async (athleteId: string, competitionId?: string) => {
-
-    try {
-      // const query = competitionId ? `?season=${competitionId}` : '';
-
-      const url = getUri(`api/v1/athletes/${athleteId}/aggregated-stats`);
-
-      const res = await fetch(url, {
-        headers: getAuthHeader()
-      });
-
-      if (res.ok) {
-        const json = (await res.json())
-        return groupSportActions(json);
-      }
-
-    } catch (e) {
-      logger.error("Error fetching sports action data ", e);
-    }
-
-    return groupSportActions([]);
-  },
-
-  // Get detailed player statistics by athlete ID
-  getAthleteStatsRaw: async (athleteId: string, competitionId?: string) => {
-
-    try {
-
-      const url = getUri(`/api/v1/sports-actions/aggregated/athletes/${athleteId}`);
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: getAuthHeader()
-      });
-
-      const json = (await response.json()) as SportAction[];
-
-      // Filtering logic
-      const filterByCompeition = (action: SportAction, cId: string) => {
-        return action.season_id === cId;
-      };
-
-      const data =
-        competitionId !== undefined
-          ? json.filter((a) => filterByCompeition(a, competitionId))
-          : json;
-
-      return data;
-
-    } catch (error) {
-      logger.error("Error fetching player statistics:", error);
-      return []
-    }
-  },
-
-  // Get player power rankings history
-  getAthletePowerRankings: async (
-    athleteId: string
-  ): Promise<PowerRankingItem[]> => {
-    console.log("Fetching power rankings for athlete ID:", athleteId);
-
-    try {
-      const url = getUri(`/api/v1/unauth/athletes-power-rankings/${athleteId}`);
-      console.log("Fetching from URL:", url);
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      console.log("API response status:", response.status);
-
-      if (!response.ok) {
-        console.error("API error response:", response);
-        throw new Error(`API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Power Rankings data:", data);
-      return data;
-    } catch (error) {
-      console.error("Error fetching player power rankings:", error);
-      // Return mock data in case of any error
-      return getMockPowerRankings();
-    }
-  },
-
-  getAthleteById: async (athleteId: string) => {
-    try {
-      const uri = getUri(`/api/v1/fantasy-athletes/${athleteId}`);
-
+      const uri = getUri(`/api/v1/athletes/rugby/season/${competitionId}/`);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
 
-      const json = await res.json();
-      return json as IFantasyAthlete;
-    } catch (error) {
-      console.log("Error fetching athlete", error);
-      return undefined;
-    }
-  },
-
-  getRugbyAthleteById: async (athleteId: string) => {
-    try {
-      const uri = getUri(`/api/v1/unauth/rugby-athletes/${athleteId}`);
-      const res = await fetch(uri);
-
-      const json = (await res.json()) as RugbyPlayer[];
-
-      if (json.length === 0) return undefined;
-
-      return json[0];
-    } catch (error) {
-      console.log("Error fetching rugby athlete ", error);
-      return undefined;
-    }
-  },
-
-  getAllAthletes: async () : Promise<IProAthlete[]> => {
-    try {
-      const uri = getUri('/api/v1/athletes');
-      const res = await fetch(uri, {
-          headers: getAuthHeader()
-      });
-
       if (res.ok) {
-        return (await res.json()) as IProAthlete[];
-      }
+        const athletes = (await res.json()) as (IFantasyAthlete & { team?: any })[];
 
+        // Transform IFantasyAthlete to RugbyPlayer format expected by frontend
+        const rugbyPlayers: RugbyPlayer[] = athletes.map(athlete => ({
+          id: athlete.tracking_id,
+          tracking_id: athlete.tracking_id,
+          player_name: athlete.player_name,
+          team_name: athlete.team?.athstat_name || athlete.team?.name || 'Unknown Team',
+          position_class: athlete.position_class,
+          position: athlete.position,
+          price: athlete.price || 0,
+          power_rank_rating: athlete.power_rank_rating || 0,
+          image_url: athlete.image_url,
+          height: athlete.height,
+          weight: athlete.weight,
+          date_of_birth: athlete.date_of_birth,
+          team_id: athlete.team_id,
+          form: athlete.form,
+          available: athlete.available === 'true' || athlete.available === undefined,
+
+          // Default values for required fields
+          scoring: 0,
+          defence: 0,
+          attacking: 0,
+          is_starting: true,
+        }));
+
+        logger.debug(`Successfully fetched ${rugbyPlayers.length} rugby athletes`);
+        return rugbyPlayers;
+      } else {
+        logger.error(`Failed to fetch rugby athletes: ${res.status} ${res.statusText}`);
+        throw new Error(`Failed to fetch athletes: ${res.status}`);
+      }
     } catch (err) {
-      logger.error("Error fetching athletes ", err);
+      logger.error('Error fetching rugby athletes by competition:', err);
+      throw err;
     }
-
-    return [];
   },
 
+  /**
+   * Get all athletes (fallback method)
+   */
+  getAllAthletes: async (): Promise<RugbyPlayer[]> => {
+    try {
+      const uri = getUri('/api/v1/athletes/');
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
 
+      if (res.ok) {
+        const athletes = (await res.json()) as (IFantasyAthlete & { team?: any })[];
+
+        // Transform to RugbyPlayer format
+        const rugbyPlayers: RugbyPlayer[] = athletes.map(athlete => ({
+          id: athlete.tracking_id,
+          tracking_id: athlete.tracking_id,
+          player_name: athlete.player_name,
+          team_name: athlete.team?.athstat_name || athlete.team?.name || 'Unknown Team',
+          position_class: athlete.position_class,
+          position: athlete.position,
+          price: athlete.price || 0,
+          power_rank_rating: athlete.power_rank_rating || 0,
+          image_url: athlete.image_url,
+          height: athlete.height,
+          weight: athlete.weight,
+          date_of_birth: athlete.date_of_birth,
+          team_id: athlete.team_id,
+          form: athlete.form,
+          available: athlete.available === 'true' || athlete.available === undefined,
+
+          // Default values for required fields
+          scoring: 0,
+          defence: 0,
+          attacking: 0,
+          is_starting: true,
+        }));
+
+        return rugbyPlayers;
+      } else {
+        logger.error(`Failed to fetch all athletes: ${res.status} ${res.statusText}`);
+        throw new Error(`Failed to fetch athletes: ${res.status}`);
+      }
+    } catch (err) {
+      logger.error('Error fetching all athletes:', err);
+      throw err;
+    }
+  },
+
+  /**
+   * Get athlete by ID
+   */
+  getAthleteById: async (id: string): Promise<RugbyPlayer | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/athletes/${id}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
+
+      if (res.ok) {
+        const athlete = (await res.json()) as IFantasyAthlete & { team?: any };
+
+        // Transform to RugbyPlayer format
+        const rugbyPlayer: RugbyPlayer = {
+          id: athlete.tracking_id,
+          tracking_id: athlete.tracking_id,
+          player_name: athlete.player_name,
+          team_name: athlete.team?.athstat_name || athlete.team?.name || 'Unknown Team',
+          position_class: athlete.position_class,
+          position: athlete.position,
+          price: athlete.price || 0,
+          power_rank_rating: athlete.power_rank_rating || 0,
+          image_url: athlete.image_url,
+          height: athlete.height,
+          weight: athlete.weight,
+          date_of_birth: athlete.date_of_birth,
+          team_id: athlete.team_id,
+          form: athlete.form,
+          available: athlete.available === 'true' || athlete.available === undefined,
+
+          // Default values for required fields
+          scoring: 0,
+          defence: 0,
+          attacking: 0,
+          is_starting: true,
+        };
+
+        return rugbyPlayer;
+      }
+    } catch (err) {
+      logger.error('Error fetching athlete by ID:', err);
+    }
+
+    return undefined;
+  },
 };
 
 /**
- * Generate mock player stats for development/testing
+ * Group sport actions by category for display in stats components
  */
-const getMockPlayerStats = () => {
-  console.log("Generating mock stats data");
+export const groupSportActions = (sportActions: SportAction[]) => {
+  const categorizedStats = {
+    general: [] as any[],
+    attack: [] as any[],
+    defense: [] as any[],
+    setpiece: [] as any[],
+    discipline: [] as any[],
+  };
 
-  // Sample mock data mimicking API response format
-  const mockRawStats = [
-    {
-      id: "mock_TacklesMade",
-      athlete_id: "mock",
-      action: "TacklesMade",
-      action_count: 118,
-    },
-    {
-      id: "mock_TackleSuccess",
-      athlete_id: "mock",
-      action: "TackleSuccess",
-      action_count: 85.5,
-    },
-    {
-      id: "mock_Assists",
-      athlete_id: "mock",
-      action: "Assists",
-      action_count: 12,
-    },
-    {
-      id: "mock_Starts",
-      athlete_id: "mock",
-      action: "Starts",
-      action_count: 15,
-    },
-    {
-      id: "mock_CarriesMadeGainLine",
-      athlete_id: "mock",
-      action: "CarriesMadeGainLine",
-      action_count: 42,
-    },
-    {
-      id: "mock_TurnoversConceded",
-      athlete_id: "mock",
-      action: "TurnoversConceded",
-      action_count: 7,
-    },
-    {
-      id: "mock_TurnoversWon",
-      athlete_id: "mock",
-      action: "TurnoversWon",
-      action_count: 5,
-    },
-    {
-      id: "mock_LineoutsWon",
-      athlete_id: "mock",
-      action: "LineoutsWon",
-      action_count: 25,
-    },
-    {
-      id: "mock_Points",
-      athlete_id: "mock",
-      action: "Points",
-      action_count: 24,
-    },
-    { id: "mock_Tries", athlete_id: "mock", action: "Tries", action_count: 4 },
-    {
-      id: "mock_Carries",
-      athlete_id: "mock",
-      action: "Carries",
-      action_count: 81,
-    },
-    {
-      id: "mock_LineBreaks",
-      athlete_id: "mock",
-      action: "LineBreaks",
-      action_count: 8,
-    },
-    {
-      id: "mock_DefendersBeaten",
-      athlete_id: "mock",
-      action: "DefendersBeaten",
-      action_count: 14,
-    },
-    {
-      id: "mock_Metres",
-      athlete_id: "mock",
-      action: "Metres",
-      action_count: 342,
-    },
-    {
-      id: "mock_MinutesPlayed",
-      athlete_id: "mock",
-      action: "MinutesPlayed",
-      action_count: 738,
-    },
-    {
-      id: "mock_TacklesMissed",
-      athlete_id: "mock",
-      action: "TacklesMissed",
-      action_count: 12,
-    },
-    {
-      id: "mock_Offloads",
-      athlete_id: "mock",
-      action: "Offloads",
-      action_count: 9,
-    },
-    {
-      id: "mock_Passes",
-      athlete_id: "mock",
-      action: "Passes",
-      action_count: 127,
-    },
-    {
-      id: "mock_PenaltiesConceded",
-      athlete_id: "mock",
-      action: "PenaltiesConceded",
-      action_count: 6,
-    },
-  ];
+  // Group actions by category based on action name
+  sportActions.forEach(action => {
+    const stat = {
+      label: action.action,
+      displayValue: action.action_count,
+      rawValue: action.action_count,
+    };
 
-  return groupSportActions(mockRawStats);
-};
+    // Categorize based on action type
+    const actionName = action.action.toLowerCase();
 
-/**
- * Generate mock power rankings for development/testing
- */
-const getMockPowerRankings = (): PowerRankingItem[] => {
-  console.log("Generating mock power rankings data");
-
-  // Sample mock data mimicking API response format
-  return [
-    {
-      athlete_id: "mock-id",
-      game_id: "3bfe942e-179e-55df-b72e-ee674d4afcda",
-      updated_power_ranking: 88,
-      team_name: "Connacht Rugby",
-      opposition_name: "Munster Rugby",
-      kickoff_time: "2025-03-29T14:30:00.000Z",
-    },
-    {
-      athlete_id: "mock-id",
-      game_id: "80b4f49b-2ac4-57e7-a12e-9dc7c29b8db4",
-      updated_power_ranking: 76,
-      team_name: "Connacht Rugby",
-      opposition_name: "Vodacom Bulls",
-      kickoff_time: "2024-11-30T17:30:00.000Z",
-    },
-    {
-      athlete_id: "mock-id",
-      game_id: "e65594ee-f7e9-5191-9615-7fe22df36fd1",
-      updated_power_ranking: 81,
-      team_name: "Leinster Rugby",
-      opposition_name: "Connacht Rugby",
-      kickoff_time: "2024-12-21T17:30:00.000Z",
-    },
-    {
-      athlete_id: "mock-id",
-      game_id: "ec52bfc9-8120-5f76-902d-e92c04bc9522",
-      updated_power_ranking: 82,
-      team_name: "Glasgow Warriors",
-      opposition_name: "Connacht Rugby",
-      kickoff_time: "2025-01-26T15:30:00.000Z",
-    },
-    {
-      athlete_id: "mock-id",
-      game_id: "fd82c96a-9eb2-53fa-a655-ba5fde8323d9",
-      updated_power_ranking: 92,
-      team_name: "Connacht Rugby",
-      opposition_name: "Cardiff Rugby",
-      kickoff_time: "2025-04-05T19:00:00.000Z",
-    },
-    {
-      athlete_id: "mock-id",
-      game_id: "ad329bd8-3d2c-56d7-91b3-7a9311b59791",
-      updated_power_ranking: 90,
-      team_name: "Connacht Rugby",
-      opposition_name: "Racing 92",
-      kickoff_time: "2025-04-12T19:00:00.000Z",
-    },
-  ];
-};
-
-/**
- * Process the raw stats data into a more usable format
- */
-export const groupSportActions = (rawStats: any[]) => {
-  // Convert array of actions to an object with action as key
-
-  const statsMap: Record<string, number> = {};
-
-  rawStats.forEach((stat) => {
-    statsMap[stat.action] = stat.action_count;
+    if (
+      actionName.includes('try') ||
+      actionName.includes('assist') ||
+      actionName.includes('break') ||
+      actionName.includes('offload') ||
+      actionName.includes('carry')
+    ) {
+      categorizedStats.attack.push(stat);
+    } else if (
+      actionName.includes('tackle') ||
+      actionName.includes('turnover') ||
+      actionName.includes('steal') ||
+      actionName.includes('intercept')
+    ) {
+      categorizedStats.defense.push(stat);
+    } else if (
+      actionName.includes('lineout') ||
+      actionName.includes('scrum') ||
+      actionName.includes('kickoff') ||
+      actionName.includes('restart')
+    ) {
+      categorizedStats.setpiece.push(stat);
+    } else if (
+      actionName.includes('penalty') ||
+      actionName.includes('card') ||
+      actionName.includes('yellow') ||
+      actionName.includes('red')
+    ) {
+      categorizedStats.discipline.push(stat);
+    } else {
+      categorizedStats.general.push(stat);
+    }
   });
 
-  // Create categorized stats for UI display
-  const categorizedStats = {
-    attack: extractCategoryStats(statsMap, statCategories.attack),
-    defense: extractCategoryStats(statsMap, statCategories.defense),
-    general: extractCategoryStats(statsMap, statCategories.general),
-    discipline: extractCategoryStats(statsMap, statCategories.discipline),
-    setpiece: extractCategoryStats(statsMap, statCategories.setpiece),
-  };
-
-  // Calculate derived metrics
-  if (statsMap.TacklesMade && statsMap.TacklesMissed) {
-    const totalTackles = statsMap.TacklesMade + statsMap.TacklesMissed;
-    statsMap.TackleSuccess =
-      totalTackles > 0 ? (statsMap.TacklesMade / totalTackles) * 100 : 0;
-  }
-
   return {
-    rawStats,
-    statsMap,
     categorizedStats,
+    totalActions: sportActions.length,
   };
-};
-
-/**
- * Extract stats for a specific category
- */
-const extractCategoryStats = (
-  statsMap: Record<string, number>,
-  categoryActions: string[]
-) => {
-  return categoryActions.reduce((result, action) => {
-    if (statsMap[action] !== undefined) {
-      result.push({
-        action,
-        label: actionLabels[action] || formatActionName(action),
-        value: statsMap[action],
-        // Format percentage values differently
-        displayValue:
-          action === "TackleSuccess"
-            ? statsMap["TacklesMade"] && statsMap["TacklesMissed"]
-              ? `${Math.floor(
-                  (statsMap["TacklesMade"] /
-                    (statsMap["TacklesMade"] + statsMap["TacklesMissed"])) *
-                    100
-                )}%`
-              : `${Math.floor(statsMap["TackleSuccess"] * 100)}%`
-            : statsMap[action].toString(),
-      });
-    } else {
-      // If action is null just put 0
-      result.push({
-        action,
-        label: formatActionName(action),
-        value: 0,
-        // Format percentage values differently
-        displayValue: action.endsWith("Success") ? "0%" : "0",
-      });
-    }
-    return result;
-  }, [] as Array<{ action: string; label: string; value: number; displayValue: string }>);
-};
-
-/**
- * Format an action name into a human-readable label if not in the mapping
- */
-const formatActionName = (action: string): string => {
-  if (actionLabels[action]) return actionLabels[action];
-
-  // Convert camelCase to separate words with spaces
-  return action
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^./, (str) => str.toUpperCase());
 };

@@ -218,11 +218,34 @@ export const authService = {
   },
 
   /** Check if user is authenticated by verifying token existence and validity */
-  isAuthenticated(): boolean {
+  async isAuthenticated(): Promise<boolean> {
     const token = authTokenService.getAccessToken();
     if (!token) return false;
 
-    return authService.getUserInfo() !== null;
+    try {
+      // Validate token against Django server
+      const user = await authService.whoami();
+      if (user) {
+        // Update local storage with fresh user data
+        authTokenService.saveUserToLocalStorage(user);
+        return true;
+      }
+
+      // If whoami fails, clear invalid tokens
+      authTokenService.clearUserTokens();
+      return false;
+    } catch (error) {
+      console.error('Authentication validation failed:', error);
+      // Clear potentially invalid tokens
+      authTokenService.clearUserTokens();
+      return false;
+    }
+  },
+
+  /** Synchronous check for token existence only (use sparingly) */
+  hasToken(): boolean {
+    const token = authTokenService.getAccessToken();
+    return !!token;
   },
 
   logout(): void {
@@ -246,7 +269,6 @@ export const authService = {
   },
 
   getUserInfoSync: (): DjangoAuthUser | null => {
-
     const auth_user_local_storage = authTokenService.getUserFromLocalStorage();
     return auth_user_local_storage || null;
   },
@@ -415,7 +437,7 @@ export const authService = {
     };
   },
 
-  /** Authenticate with Google OAuth */
+  /** Authenticate with Google OAuth using authorization code (web flow) */
   async googleOAuth(token: string): RestPromise<DjangoLoginRes> {
     try {
       const uri = getUri('/api/v1/auth/oauth/google/');
@@ -423,7 +445,7 @@ export const authService = {
       const response = await fetch(uri, {
         method: 'POST',
         headers: applicationJsonHeader(),
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token, token_type: 'code' }),
       });
 
       if (response.ok) {
@@ -439,6 +461,40 @@ export const authService = {
       }
     } catch (error) {
       logger.error('Google OAuth error:', error);
+    }
+
+    return {
+      error: {
+        error: 'OAuth Error',
+        message: 'Something went wrong with Google sign in. Please try again.',
+      },
+    };
+  },
+
+  /** Authenticate with Google OAuth using ID token (mobile flow) */
+  async googleOAuthWithIdToken(idToken: string): RestPromise<DjangoLoginRes> {
+    try {
+      const uri = getUri('/api/v1/auth/oauth/google/');
+
+      const response = await fetch(uri, {
+        method: 'POST',
+        headers: applicationJsonHeader(),
+        body: JSON.stringify({ token: idToken, token_type: 'id_token' }),
+      });
+
+      if (response.ok) {
+        const json = (await response.json()) as DjangoLoginRes;
+        authTokenService.saveLoginTokens(json.token, json.user);
+        analytics.trackUserSignIn('Google');
+        return { data: json };
+      }
+
+      if (response.status === 400) {
+        const json = (await response.json()) as RestError;
+        return { error: json };
+      }
+    } catch (error) {
+      logger.error('Google OAuth with ID token error:', error);
     }
 
     return {

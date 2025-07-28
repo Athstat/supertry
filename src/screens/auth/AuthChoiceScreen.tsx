@@ -31,6 +31,14 @@ export function AuthChoiceScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Check if running in mobile WebView
+  const isMobileWebView = () => {
+    return (
+      (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
+      window.ReactNativeWebView !== undefined
+    );
+  };
+
   const googleLogin = useGoogleLogin({
     onSuccess: async tokenResponse => {
       try {
@@ -71,6 +79,106 @@ export function AuthChoiceScreen() {
     },
     flow: 'auth-code',
   });
+
+  // Handle mobile OAuth callback
+  const handleMobileOAuthCallback = async (callbackData: any) => {
+    console.log('🎉 Mobile OAuth callback received:', callbackData);
+
+    if (callbackData.error) {
+      setError(`OAuth failed: ${callbackData.error}`);
+      setIsLoading(false);
+      return;
+    }
+
+    if (callbackData.code) {
+      try {
+        // Use the authorization code to complete authentication
+        const result = await authService.googleOAuth(callbackData.code);
+
+        if (result.error) {
+          setError(result.error.message || 'Google sign-in failed');
+          setIsLoading(false);
+          return;
+        }
+
+        // Update auth context
+        await checkAuth();
+
+        // Check if this is the first completed visit
+        const firstVisitCompleted = isFirstVisitCompleted();
+
+        // Navigate to appropriate screen
+        if (firstVisitCompleted) {
+          navigate('/dashboard');
+        } else {
+          markFirstVisitCompleted();
+          navigate('/post-signup-welcome');
+        }
+      } catch (err: any) {
+        console.error('OAuth callback processing error:', err);
+        setError('Failed to process OAuth callback. Please try again.');
+        setIsLoading(false);
+      }
+    }
+  };
+
+  // Native Google Sign-In handler for mobile
+  const handleGoogleSignIn = async () => {
+    console.log('🔄 Google sign-in triggered, mobile WebView?', isMobileWebView());
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      if (isMobileWebView() && window.ScrummyBridge?.googleSignIn) {
+        console.log('📱 Using native Google Sign-In');
+        // Use native bridge for mobile
+        const result = await window.ScrummyBridge.googleSignIn();
+
+        if (!result.success) {
+          setError(result.error || 'Google sign-in failed');
+          setIsLoading(false);
+          return;
+        }
+
+        if (result.idToken) {
+          // Send ID token to backend
+          const authResult = await authService.googleOAuthWithIdToken(result.idToken);
+
+          if (authResult.error) {
+            setError(authResult.error.message || 'Google sign-in failed');
+            setIsLoading(false);
+            return;
+          }
+
+          // Update auth context
+          await checkAuth();
+
+          // Check if this is the first completed visit
+          const firstVisitCompleted = isFirstVisitCompleted();
+
+          // Navigate to appropriate screen
+          if (firstVisitCompleted) {
+            navigate('/dashboard');
+          } else {
+            markFirstVisitCompleted();
+            navigate('/post-signup-welcome');
+          }
+        } else {
+          setError('No authentication token received');
+          setIsLoading(false);
+        }
+      } else {
+        // Regular web OAuth flow
+        console.log('🌐 Using web OAuth flow');
+        googleLogin();
+      }
+    } catch (err: any) {
+      console.error('Google Sign-In error:', err);
+      setError('Google sign-in failed. Please try again.');
+      setIsLoading(false);
+    }
+  };
 
   const handleAppleSuccess = async (response: any) => {
     if (!response.authorization || !response.authorization.id_token) {
@@ -205,6 +313,7 @@ export function AuthChoiceScreen() {
             className="w-full space-y-4 flex flex-col items-center"
           >
             {/* Google Sign In Button */}
+
             <Experimental>
               <motion.div
                 className="w-[90%]"
@@ -214,7 +323,7 @@ export function AuthChoiceScreen() {
                 whileTap="tap"
               >
                 <button
-                  onClick={() => googleLogin()}
+                  onClick={handleGoogleSignIn}
                   disabled={isLoading}
                   className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white flex items-center justify-center space-x-2 px-4 py-3 rounded-md shadow-md hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium border border-gray-300 dark:border-gray-600 transition-all duration-200"
                 >
