@@ -1,30 +1,30 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { requestPushPermissions } from "../utils/bridgeUtils";
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { useAuth } from "../contexts/AuthContext";
-import { authService } from "../services/authService";
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { requestPushPermissions } from '../utils/bridgeUtils';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useAuth } from '../contexts/AuthContext';
+import { authService } from '../services/authService';
 
 // Components
-import { LoadingState } from "../components/team-creation/LoadingState";
-import { ErrorState } from "../components/team-creation/ErrorState";
-import PlayerSelectionModal from "../components/team-creation/PlayerSelectionModal";
-import TeamActions from "../components/team-creation/TeamActions";
-import { fantasyTeamService } from "../services/fantasyTeamService";
-import { ArrowRight, Check, Trophy, Users } from "lucide-react";
+import { LoadingState } from '../components/team-creation/LoadingState';
+import { ErrorState } from '../components/team-creation/ErrorState';
+import PlayerSelectionModal from '../components/team-creation/PlayerSelectionModal';
+import TeamActions from '../components/team-creation/TeamActions';
+import { fantasyTeamService } from '../services/fantasyTeamService';
+import { ArrowRight, Check, Trophy, Users } from 'lucide-react';
 
 // Refactored team creation components
-import TeamCreationContainer from "./team-creation-components/TeamCreationContainer";
-import PositionsGrid from "./team-creation-components/PositionsGrid";
-import TeamNameInput from "./team-creation-components/TeamNameInput";
-import TeamToast from "./team-creation-components/TeamToast";
-import useTeamCreationState from "./team-creation-components/useTeamCreationState";
-import { leagueService } from "../services/leagueService";
-import { URC_COMPETIION_ID } from "../types/constants";
-import { IFantasyLeague } from "../types/fantasyLeague";
-import { useTeamCreationGuard } from "../hooks/useTeamCreationGuard";
-import PrimaryButton from "../components/shared/buttons/PrimaryButton";
-import { ICreateFantasyTeamAthleteItem } from "../types/fantasyTeamAthlete";
+import TeamCreationContainer from './team-creation-components/TeamCreationContainer';
+import PositionsGrid from './team-creation-components/PositionsGrid';
+import TeamNameInput from './team-creation-components/TeamNameInput';
+import TeamToast from './team-creation-components/TeamToast';
+import useTeamCreationState from './team-creation-components/useTeamCreationState';
+import { leagueService } from '../services/leagueService';
+import { URC_COMPETIION_ID } from '../types/constants';
+import { IFantasyLeague } from '../types/fantasyLeague';
+import { useTeamCreationGuard } from '../hooks/useTeamCreationGuard';
+import PrimaryButton from '../components/shared/buttons/PrimaryButton';
+import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -53,12 +53,10 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
             <Check size={32} />
           </div>
-          <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">
-            Team Submitted!
-          </h2>
+          <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Congratulations! Your team "{teamName}" has been successfully
-            submitted to the {leagueName} league.
+            Congratulations! Your team "{teamName}" has been successfully submitted to the{' '}
+            {leagueName} league.
           </p>
           <div className="flex flex-col gap-3">
             <motion.button
@@ -66,7 +64,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
               className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
               whileHover={{
                 scale: 1.02,
-                transition: { type: "spring", stiffness: 300 },
+                transition: { type: 'spring', stiffness: 300 },
               }}
             >
               <Trophy size={20} />
@@ -77,7 +75,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
               className="w-full dark:bg-transparent text-primary-600 dark:text-primary-400 px-6 py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 border border-primary-200 dark:border-primary-800"
               whileHover={{
                 scale: 1.02,
-                transition: { type: "spring", stiffness: 300 },
+                transition: { type: 'spring', stiffness: 300 },
               }}
             >
               <Users size={20} />
@@ -98,23 +96,26 @@ export function TeamCreationScreen() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
-  const league = location.state?.league ? location.state?.league as IFantasyLeague : undefined;
-  const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } = useTeamCreationGuard(league);
+  const league = location.state?.league ? (location.state?.league as IFantasyLeague) : undefined;
+  const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } =
+    useTeamCreationGuard(league);
   const [isGuest, setIsGuest] = useState(false);
   const [userInfo, setUserInfo] = useState<any>(null);
 
   // Check if coming from welcome screen
-  const isFromWelcome = location.state?.from === "welcome";
+  const isFromWelcome = location.state?.from === 'welcome';
   const isLocked = isTeamCreationLocked;
 
   useEffect(() => {
     requestPushPermissions();
-    
+
     // Check if user is a guest and get user info
     if (isAuthenticated) {
       const info = authService.getUserInfo();
       setUserInfo(info);
-      setIsGuest(authService.isGuestAccount());
+      authService.isGuestAccount().then(isGuest => {
+        setIsGuest(isGuest);
+      });
     }
   }, [isAuthenticated]);
 
@@ -159,13 +160,12 @@ export function TeamCreationScreen() {
 
   // Debug captain state changes
   useEffect(() => {
-    console.log("Captain ID changed:", captainId);
+    console.log('Captain ID changed:', captainId);
   }, [captainId]);
 
-  const selectedPlayersArr = Object.values(selectedPlayers)
-    .map((a) => {
-      return {tracking_id: a.id}
-    });
+  const selectedPlayersArr = Object.values(selectedPlayers).map(a => {
+    return { tracking_id: a.id };
+  });
 
   // Set the team name to username for non-guest users
   useEffect(() => {
@@ -179,28 +179,27 @@ export function TeamCreationScreen() {
 
   // Handle team submission
   const handleSaveTeam = async () => {
-    
     // Validate team
-    if (isGuest && teamName.trim() === "") {
-      showToast("Please enter a club name", "error");
+    if (isGuest && teamName.trim() === '') {
+      showToast('Please enter a club name', 'error');
       return;
     }
     if (selectedPlayersCount !== requiredPlayersCount) {
-      showToast(`Please select all ${requiredPlayersCount} players`, "error");
+      showToast(`Please select all ${requiredPlayersCount} players`, 'error');
       return;
     }
     if (remainingBudget < 0) {
-      showToast("You have exceeded the budget", "error");
+      showToast('You have exceeded the budget', 'error');
       return;
     }
 
     if (captainId === null) {
-      showToast("Please select a captain", "error");
+      showToast('Please select a captain', 'error');
       return;
     }
 
     if (!officialLeagueId) {
-      showToast("League ID is required", "error");
+      showToast('League ID is required', 'error');
       return;
     }
 
@@ -212,50 +211,46 @@ export function TeamCreationScreen() {
         (player, index) => {
           // Check if this player is in the Super Sub position
           const position = positionList.find(
-            (pos) => pos.player && pos.player.tracking_id === player.tracking_id
+            pos => pos.player && pos.player.tracking_id === player.tracking_id
           );
 
-          console.log("The position we found ", position);
+          console.log('The position we found ', position);
 
           const isSuperSub = position?.isSpecial || false;
           const isPlayerCaptain = captainId === player.tracking_id;
 
           return {
-            athlete_id: player.tracking_id ?? "",
+            athlete_id: player.tracking_id ?? '',
             id: player.id,
             purchase_price: player.price ?? 0,
             purchase_date: new Date(),
             is_starting: !isSuperSub,
             slot: index + 1,
             is_super_sub: isSuperSub,
-            score: player.scoring || 0,            
+            score: player.scoring || 0,
             // Add missing properties required by IFantasyTeamAthlete interface
             team_id: 0, // This will be set by the backend
             team_name: teamName,
-            team_logo: "", // This will be set by the backend
-            athlete_team_id: player.team_id || "", // Use team_id property
-            player_name: player.player_name || "", // Use player_name property
-            is_captain: isPlayerCaptain
+            team_logo: '', // This will be set by the backend
+            athlete_team_id: player.team_id || '', // Use team_id property
+            player_name: player.player_name || '', // Use player_name property
+            is_captain: isPlayerCaptain,
           };
         }
       );
 
-      console.log("Team Athletes ", teamAthletes);
+      console.log('Team Athletes ', teamAthletes);
 
       // Submit the team using the team service
-      const result = await fantasyTeamService.submitTeam(
-        teamName,
-        teamAthletes,
-        officialLeagueId
-      );
+      const result = await fantasyTeamService.submitTeam(teamName, teamAthletes, officialLeagueId);
 
       // Store the created team ID for navigation
-      console.log("Result from team screation ", result);
+      console.log('Result from team creation ', result);
       setCreatedTeamId(result.id);
-      
-      // Step 2: Join the league using the recently submitted team
-      const joinLeagueRes = await leagueService.joinLeague(league);
-      console.log("Result from join res ", joinLeagueRes);
+
+      // Step 2: Join the league using the recently submitted team ID
+      const joinLeagueRes = await leagueService.joinLeague(league, result.id);
+      console.log('Result from join res ', joinLeagueRes);
 
       // update users username on db
       // if (isGuest) {
@@ -270,12 +265,10 @@ export function TeamCreationScreen() {
       // Show success modal instead of navigating away
       setShowSuccessModal(true);
     } catch (error) {
-      console.error("Error saving team:", error);
+      console.error('Error saving team:', error);
       showToast(
-        error instanceof Error
-          ? error.message
-          : "Failed to save team. Please try again.",
-        "error"
+        error instanceof Error ? error.message : 'Failed to save team. Please try again.',
+        'error'
       );
     } finally {
       setIsSaving(false);
@@ -293,24 +286,25 @@ export function TeamCreationScreen() {
   }
 
   if (userTeam && hasCreatedTeam) {
-
     const handleViewTeam = () => {
-
       const uri = `/my-team/${userTeam.team_id}`;
       navigate(uri, {
-        state: { teamWithRank: rankedUserTeam, leagueInfo: league, team: userTeam}
+        state: { teamWithRank: rankedUserTeam, leagueInfo: league, team: userTeam },
       });
-    }
+    };
 
     return (
-      <div className="w-full h-[70vh] flex flex-col gap-4 items-center justify-center px-10 lg:px-[30%]" >
-        <p className="text-center text-slate-700 dark:text-slate-300" >You have already created a team for {league?.title || " this league"}. You can only create one team for each fantasy league!</p>
-        <PrimaryButton onClick={handleViewTeam} className="flex flex-row items-center gap-1" >
+      <div className="w-full h-[70vh] flex flex-col gap-4 items-center justify-center px-10 lg:px-[30%]">
+        <p className="text-center text-slate-700 dark:text-slate-300">
+          You have already created a team for {league?.title || ' this league'}. You can only create
+          one team for each fantasy league!
+        </p>
+        <PrimaryButton onClick={handleViewTeam} className="flex flex-row items-center gap-1">
           View Team
           <ArrowRight className="w-4 h-4" />
         </PrimaryButton>
       </div>
-    )
+    );
   }
 
   return (
@@ -323,7 +317,6 @@ export function TeamCreationScreen() {
       isFromWelcome={isFromWelcome}
       isLocked={isLocked}
     >
-
       {/* Position selection grid */}
       <PositionsGrid
         positions={positionList}
@@ -336,9 +329,7 @@ export function TeamCreationScreen() {
       />
 
       {/* Team name input - only show for guest users */}
-      {isGuest && (
-        <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />
-      )}
+      {isGuest && <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />}
 
       {/* Team action buttons */}
       <TeamActions
@@ -346,7 +337,6 @@ export function TeamCreationScreen() {
         isLoading={isSaving}
         onReset={handleReset}
         onSave={handleSaveTeam}
-
       />
 
       {/* Player selection modal */}
@@ -359,7 +349,7 @@ export function TeamCreationScreen() {
           selectedPlayers={selectedPlayersArr}
           handlePlayerSelect={handleAddPlayer}
           onClose={() => setShowPlayerSelection(false)}
-          roundId={parseInt(officialLeagueId || "0")}
+          roundId={parseInt(officialLeagueId || '0')}
           roundStart={league?.start_round ?? 0}
           roundEnd={league?.end_round ?? 0}
           competitionId={officialLeagueId ?? URC_COMPETIION_ID}
@@ -378,7 +368,7 @@ export function TeamCreationScreen() {
       <SuccessModal
         isVisible={showSuccessModal}
         teamName={teamName}
-        leagueName={league?.title ?? "League"}
+        leagueName={league?.title ?? 'League'}
         onClose={() => setShowSuccessModal(false)}
         onGoToLeague={() => {
           setShowSuccessModal(false);
@@ -386,13 +376,13 @@ export function TeamCreationScreen() {
           navigate(`/league/${officialLeagueId}`, {
             state: {
               league,
-              from: "team-creation",
+              from: 'team-creation',
             },
           });
         }}
         onViewTeam={() => {
           setShowSuccessModal(false);
-            navigate("/my-teams");
+          navigate('/my-teams');
         }}
       />
     </TeamCreationContainer>

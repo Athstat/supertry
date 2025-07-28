@@ -44,10 +44,31 @@ declare global {
           external_id?: string;
         };
       }>;
-      // Storage methods
-      setStorageItem?(key: string, value: string): Promise<void>;
-      getStorageItem?(key: string): Promise<string | null>;
-      removeStorageItem?(key: string): Promise<void>;
+      // OAuth methods
+      isMobileApp(): boolean;
+      requestOAuth(
+        provider: string,
+        options?: {
+          clientId?: string;
+          redirectUri?: string;
+          url?: string;
+        }
+      ): Promise<{
+        success: boolean;
+        message?: string;
+        authUrl?: string;
+      }>;
+      // Native Google Sign-In
+      googleSignIn(): Promise<{
+        success: boolean;
+        idToken?: string;
+        user?: {
+          email: string;
+          name: string;
+          id: string;
+        };
+        error?: string;
+      }>;
     };
     // Also support lowercase version (as injected by mobile app)
     scrummyBridge?: {
@@ -83,10 +104,20 @@ declare global {
           external_id?: string;
         };
       }>;
-      // Storage methods
-      setStorageItem?(key: string, value: string): Promise<void>;
-      getStorageItem?(key: string): Promise<string | null>;
-      removeStorageItem?(key: string): Promise<void>;
+      // OAuth methods
+      isMobileApp(): boolean;
+      requestOAuth(
+        provider: string,
+        options?: {
+          clientId?: string;
+          redirectUri?: string;
+          url?: string;
+        }
+      ): Promise<{
+        success: boolean;
+        message?: string;
+        authUrl?: string;
+      }>;
     };
   }
 }

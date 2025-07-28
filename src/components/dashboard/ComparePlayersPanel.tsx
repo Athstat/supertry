@@ -31,6 +31,7 @@ export default function ComparePlayersPanel() {
 function PanelContent() {
 
   const navigate = useNavigate();
+  const minimumRatings = 85;
   let { athletes, isLoading } = useAthletes();
 
 
@@ -42,6 +43,10 @@ function PanelContent() {
   const [searchQuery, setSearchQuery] = useState('');
 
   let {shuffledArr: shuffledAthletes, triggerShuffle} = useDeterministicShuffle(athletes);
+
+  shuffledAthletes = shuffledAthletes.filter((f) => {
+    return (f.power_rank_rating ?? 0) > minimumRatings;
+  })
 
   const handlePlayerClick = (player: IProAthlete) => {
     addOrRemovePlayer(player);

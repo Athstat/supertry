@@ -28,7 +28,7 @@ export const seasonService = {
         return []
     },
     
-    getSeasonsById: async (seasonId: string) : Promise<ISeason | undefined> => {
+    getSeasonsById: async (seasonId: string) : Promise<IProSeason | undefined> => {
         try {
             
             const uri = getUri(`/api/v1/seasons/${seasonId}`);
@@ -37,7 +37,7 @@ export const seasonService = {
             });
             
             if (res.ok) {
-                return (await res.json()) as ISeason
+                return (await res.json()) as IProSeason
             }
             
         } catch (error) {
