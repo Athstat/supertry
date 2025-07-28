@@ -8,11 +8,12 @@ type Props = {
     onChange?: (newVal: string) => void,
     value?: string,
     hideAllOption?: boolean,
-    isLoading?: boolean
+    isLoading?: boolean,
+    sortDesc?: boolean
 }
 
 /** Renders a filter bar that can be used to filter out seasons */
-export default function MatchSeasonFilterBar({ onChange, seasons, value }: Props) {
+export default function MatchSeasonFilterBar({ onChange, seasons, value, sortDesc }: Props) {
 
     const handleChange = (val: string) => {
         if (onChange) {
@@ -21,6 +22,10 @@ export default function MatchSeasonFilterBar({ onChange, seasons, value }: Props
     }
 
     seasons = seasons.sort((a, b) => {
+        if (sortDesc) {
+            return b.name.localeCompare(a.name);
+        }
+        
         return a.name.localeCompare(b.name);
     })
 
@@ -55,7 +60,7 @@ export default function MatchSeasonFilterBar({ onChange, seasons, value }: Props
     )
 }
 
-export function PilledSeasonFilterBar({ onChange, seasons, value, hideAllOption, isLoading }: Props) {
+export function PilledSeasonFilterBar({ onChange, seasons, value, hideAllOption, isLoading, sortDesc }: Props) {
 
     const handleChange = (val: string) => {
         if (onChange) {
@@ -64,6 +69,10 @@ export function PilledSeasonFilterBar({ onChange, seasons, value, hideAllOption,
     }
 
     seasons = seasons.sort((a, b) => {
+        if (sortDesc) {
+            return b.name.localeCompare(a.name);
+        }
+        
         return a.name.localeCompare(b.name);
     })
 

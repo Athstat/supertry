@@ -145,7 +145,12 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
 
   return (
     <div
-      className="min-w-[320px]  bg-slate-100 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 rounded-xl overflow-hidden text-white"
+      className="min-w-[320px] cursor-pointer  bg-slate-100 hover:bg-slate-200 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 hover:dark:bg-gray-800/70 rounded-xl overflow-hidden text-white"
+      onClick={() => {
+        if (gameCompleted && onClickPredict) {
+          onClickPredict(fixture)
+        }
+      }}
     >
       <div className="p-4">
         <div className="text-center mb-3 text-sm text-slate-700 dark:text-gray-300">
@@ -173,7 +178,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>} 
-            <SecondaryText className='font-bold' >{fixture.team_score}</SecondaryText>
+            <SecondaryText className='' >{fixture.team_score}</SecondaryText>
           </div>
 
           {/* Match Info (centered) */}
@@ -208,25 +213,25 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.opposition_team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>}
-            <SecondaryText className='font-bold' >{fixture.opposition_score}</SecondaryText>
+            <SecondaryText className='' >{fixture.opposition_score}</SecondaryText>
           </div>
         </div>
 
-        {!gameCompleted && <div className="flex space-x-2">
-          <button
+        <div className="flex space-x-2">
+          {!gameCompleted && <button
             className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
             onClick={handleClickPredict}
           >
             Predict
-          </button>
+          </button>}
           <button
             className="flex-1 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
             onClick={handleClickChat}
           >
             <span>Chat</span>
-            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+            {/* <span className="w-2 h-2 bg-blue-500 rounded-full"></span> */}
           </button>
-        </div>}
+        </div>
 
         {}
       </div>

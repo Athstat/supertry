@@ -10,6 +10,7 @@ import useSWR from 'swr';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { seasonService } from '../../services/seasonsService';
 import { PilledSeasonFilterBar } from '../match_center/MatcheSeasonFilterBar';
+import { useDeterministicShuffle } from '../../hooks/useShuffle';
 
 export default function FeaturedPlayersCarousel() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function FeaturedPlayersCarousel() {
     'b5cae2ff-d123-5f12-a771-5faa6d40e967',
     'd313fbf5-c721-569b-975d-d9ec242a6f19',
   ];
+
   const { seasons, currSeason, setCurrSeason, isLoading: seasonsLoading } = useSupportedSeasons({ wantedSeasonsId: wantedSeasons });
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
@@ -25,7 +27,13 @@ export default function FeaturedPlayersCarousel() {
   const key = currSeason ? swrFetchKeys.getAllSeasonAthletes(currSeason) : undefined;
   const { data: fetchedPlayers, isLoading: playersLoading } = useSWR(key, () => seasonService.getSeasonAthletes(currSeason?.id ?? "fallback"));
 
-  const players = fetchedPlayers ?? [];
+  const players = (fetchedPlayers ?? []).filter(p => {
+    return (p.power_rank_rating ?? 0) > 85;
+  });
+
+  const {shuffledArr: shuffledPlayers} = useDeterministicShuffle(players, {
+    shuffleWindow: 1000 * 60 * 5
+  });
 
   const handlePlayerClick = (player: IProAthlete) => {
     setPlayerModalPlayer(player);
@@ -66,6 +74,7 @@ export default function FeaturedPlayersCarousel() {
           onChange={handleChangeSeason}
           hideAllOption
           isLoading={seasonsLoading}
+          sortDesc
         />
 
         {playersLoading || seasonsLoading && (
@@ -85,7 +94,7 @@ export default function FeaturedPlayersCarousel() {
 
         {/* Player cards carousel - showing featured players only */}
         {!playersLoading && !seasonsLoading && <div className="flex space-x-3 items-center justify-start overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
-          {players.map(player => (
+          {shuffledPlayers.map(player => (
             <div key={player.tracking_id} className="pl-1 flex-shrink-0">
               <FeaturePlayerCard
                 player={player}

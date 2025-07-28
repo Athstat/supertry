@@ -16,14 +16,14 @@ type Options = {
 
 export function useSupportedSeasons({ wantedSeasonsId = [] }: Options = {}) {
     const key = swrFetchKeys.getAllSuppportedSeasons(wantedSeasonsId);
-    
+
     const { data, isLoading } = useSWR(key, () => (
         wantedSeasonsId ? wantedSeasonsFetcher(wantedSeasonsId) : seasonService.getAllSupportedSeasons()
     ));
 
-    const seasons = useMemo(() => {
-        return (data ?? []);
-    }, [data, wantedSeasonsId]);
+    const seasons = (data ?? []).sort((a, b) => {
+        return b.name.localeCompare(a.name);
+    });
 
     const [currSeason, setCurrSeason] = useState<IProSeason>();
 
