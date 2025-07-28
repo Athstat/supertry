@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { IProSeason } from "../../../types/season";
 
-const abbreviateSeasonName = (seasonName: string): string => {
+export const abbreviateSeasonName = (seasonName: string): string => {
     if (seasonName.startsWith("United Rugby Championship")) {
         return seasonName.replace("United Rugby Championship", "URC");
     }

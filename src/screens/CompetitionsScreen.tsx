@@ -5,11 +5,13 @@ import { seasonService } from "../services/seasonsService";
 import { LoadingState } from "../components/ui/LoadingState";
 import SeasonCard from "../components/seasons/SeasonCard";
 import NoContentCard from "../components/shared/NoContentMessage";
+import { swrFetchKeys } from "../utils/swrKeys";
 
 /** Renders Competition Screen */
 export default function CompetitionsScreen() {
 
-    let { data: seasons, isLoading } = useSWR('seasons', () => seasonService.getAllSupportedSeasons());
+    const key = swrFetchKeys.getAllSuppportedSeasons();
+    let { data: seasons, isLoading } = useSWR(key, () => seasonService.getAllSupportedSeasons());
 
     if (isLoading) return <LoadingState />
 

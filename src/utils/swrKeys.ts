@@ -1,5 +1,7 @@
 /** provides functions to get keys for different swr fetch keys */
 
+import { IProSeason } from "../types/season";
+
 export const swrFetchKeys = {
     getSbrUserMotmVoteKey: (fixtureId: string) => {
         return `user-sbr-fixture-motm-vote/${fixtureId}`;
@@ -45,11 +47,23 @@ export const swrFetchKeys = {
         return `/athlete-aggregated-stats/${athleteId}`
     },
 
-    getAthleteSeasonStarRatings: async (athleteId: string, seasonId: string) => {
+    getAthleteSeasonStarRatings: (athleteId: string, seasonId: string) => {
         return `/athlete-season-star-ratings/${athleteId}/season/${seasonId}`
     },
 
-    getAthleteCareerStarRatings: async (athleteId: string) => {
+    getAthleteCareerStarRatings: (athleteId: string) => {
         return `/athlete-career-star-ratings/${athleteId}`
+    },
+
+    getAllFantasyLeagues: () => {
+        return `fantasy-leagues`;
+    },
+
+    getAllSuppportedSeasons: (seasonIds?: string[]) => {
+        return `seasons/${seasonIds?.join('-')}`;
+    },
+
+    getAllSeasonAthletes: (season: IProSeason) => {
+        return `seasons/${season.id}/athletes`;
     }
 }

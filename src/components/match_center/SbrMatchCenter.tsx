@@ -2,7 +2,7 @@ import useSWR from 'swr'
 import { sbrService } from '../../services/sbr/sbrService';
 import { LoadingState } from '../ui/LoadingState';
 import SbrFixtureCard from '../sbr/SbrFixtureCard';
-import MatchSeasonFilterBar from './MatcheSeasonFilterBar';
+import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
 import { Maximize2, Minimize2 } from 'lucide-react';
@@ -94,7 +94,7 @@ export default function SbrMatchCenter() {
                 placeholder='Search SBR games, seasons ...'
             />
 
-            <MatchSeasonFilterBar
+            <PilledSeasonFilterBar
                 seasons={seasons}
                 onChange={setSeason}
                 value={season}
