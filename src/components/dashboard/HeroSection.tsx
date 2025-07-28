@@ -22,7 +22,9 @@ export function HeroSection({ }: Props) {
   const navigate = useNavigate();
 
   const onViewLeague = (league: IFantasyLeague) => {
-    navigate(`/leagues/${league.id}`);
+    navigate(`/leagues/${league.id}`, {
+      state: {league}
+    });
   }
 
   const key = swrFetchKeys.getAllFantasyLeagues();
@@ -87,11 +89,11 @@ function JoinDeadlineCountdown({
   const { navigateToMyTeam: navigateToMyTeam, navigateToLeagueScreen } = useRouter();
 
   const handleCallToAction = () => {
-    if (userTeam) {
-      navigateToMyTeam(userTeam, rankedUserTeam);
-    } else {
-      onViewLeague(league);
-    }
+    // if (userTeam) {
+    //   navigateToMyTeam(userTeam, rankedUserTeam);
+    // } else {
+      // onViewLeague(league);
+    // }
   };
 
   const handleClickCard = () => {
@@ -142,7 +144,7 @@ function JoinDeadlineCountdown({
 
       <div className="flex items-center gap-4">
         <button
-          onClick={handleCallToAction}
+          onClick={handleClickCard}
           className={twMerge(
             "w-full sm:w-auto text-sm lg:text-base bg-gradient-to-r from-white to-gray-200 via-gray-50 text-primary-800 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center justify-center sm:justify-start gap-2 shadow-lg",
             isLoading && "animate-pulse h-10 opacity-30"
