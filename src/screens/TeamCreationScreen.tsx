@@ -16,7 +16,6 @@ import { ArrowRight, Check, Trophy, Users } from 'lucide-react';
 // Refactored team creation components
 import TeamCreationContainer from './team-creation-components/TeamCreationContainer';
 import PositionsGrid from './team-creation-components/PositionsGrid';
-import TeamNameInput from './team-creation-components/TeamNameInput';
 import TeamToast from './team-creation-components/TeamToast';
 import useTeamCreationState from './team-creation-components/useTeamCreationState';
 import { leagueService } from '../services/leagueService';
@@ -168,13 +167,15 @@ export function TeamCreationScreen() {
     return { tracking_id: a.id };
   });
 
-  // Set the team name to username for non-guest users
+  // Set default team name from user info
   useEffect(() => {
-    // If not a guest and we have user info, use the username as the team name
-    if (!isGuest && userInfo?.username && teamName === '') {
-      setTeamName(userInfo.firstName); //need to make this more clear
+    console.log('userInfoooo: ', userInfo);
+    if (userInfo) {
+      // Use first name if available, otherwise fall back to username
+      const defaultName = userInfo.username;
+      setTeamName(defaultName);
     }
-  }, [isGuest, userInfo, teamName, setTeamName]);
+  }, [userInfo]);
 
   //console.log("userInfo", userInfo.firstName);
 
@@ -280,12 +281,32 @@ export function TeamCreationScreen() {
 
       // Show success modal instead of navigating away
       setShowSuccessModal(true);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error saving team:', error);
-      showToast(
-        error instanceof Error ? error.message : 'Failed to save team. Please try again.',
-        'error'
-      );
+      try {
+        // Type guard to check if error is an object with errorText
+        if (error && typeof error === 'object' && 'errorText' in error) {
+          const errorData = error.errorText ? JSON.parse(error.errorText as string) : {};
+          const errorMessage = errorData.message || errorData.error || 'Unknown error';
+          showToast(
+            errorMessage,
+            'error'
+          );
+        } else if (error instanceof Error) {
+          showToast(
+            error.message || 'Failed to join league',
+            'error'
+          );
+        } else {
+          showToast('Failed to join league. Please try again.', 'error');
+        }
+      } catch (parseError) {
+        // Fallback to generic error if parsing fails
+        showToast(
+          'Failed to join league. Please try again.',
+          'error'
+        );
+      }
     } finally {
       setIsSaving(false);
     }
@@ -345,7 +366,6 @@ export function TeamCreationScreen() {
       />
 
       {/* Team name input - only show for guest users */}
-      {isGuest && <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />}
 
       {/* Team action buttons */}
       <TeamActions
