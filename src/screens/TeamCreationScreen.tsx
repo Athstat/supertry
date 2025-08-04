@@ -111,8 +111,9 @@ export function TeamCreationScreen() {
 
     // Check if user is a guest and get user info
     if (isAuthenticated) {
-      const info = authService.getUserInfo();
+      const info = authService.getUserInfoSync();
       setUserInfo(info);
+      console.log('user info ', info);
       authService.isGuestAccount().then(isGuest => {
         setIsGuest(isGuest);
       });
@@ -203,6 +204,18 @@ export function TeamCreationScreen() {
       return;
     }
 
+    if (!league) {
+      showToast('League is required', 'error');
+      return;
+    }
+
+    if (!userInfo) {
+      showToast('User info is required', 'error');
+      return;
+    }
+
+    console.log('User info ', userInfo.kc_id);
+
     setIsSaving(true);
 
     try {
@@ -214,7 +227,7 @@ export function TeamCreationScreen() {
             pos => pos.player && pos.player.tracking_id === player.tracking_id
           );
 
-          console.log('The position we found ', position);
+          //console.log('The position we found ', position);
 
           const isSuperSub = position?.isSpecial || false;
           const isPlayerCaptain = captainId === player.tracking_id;
@@ -240,17 +253,20 @@ export function TeamCreationScreen() {
       );
 
       console.log('Team Athletes ', teamAthletes);
+      console.log('league id ', league.id);
+      console.log('user id ', userInfo);
 
-      // Submit the team using the team service
-      const result = await fantasyTeamService.submitTeam(teamName, teamAthletes, officialLeagueId);
+      // Join the league with the new team
+      const joinLeagueRes = await leagueService.joinLeague(
+        league.id,
+        userInfo.kc_id,
+        teamName,
+        teamAthletes
+      );
+      console.log('Result from join res ', joinLeagueRes);
 
       // Store the created team ID for navigation
-      console.log('Result from team creation ', result);
-      setCreatedTeamId(result.id);
-
-      // Step 2: Join the league using the recently submitted team ID
-      const joinLeagueRes = await leagueService.joinLeague(league, result.id);
-      console.log('Result from join res ', joinLeagueRes);
+      setCreatedTeamId(joinLeagueRes.team.id);
 
       // update users username on db
       // if (isGuest) {

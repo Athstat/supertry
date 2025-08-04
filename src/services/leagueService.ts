@@ -4,6 +4,7 @@ import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { analytics } from './anayticsService';
 import { fantasyTeamService } from './fantasyTeamService';
 import { authService } from './authService';
+import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
 
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
@@ -138,7 +139,58 @@ export const leagueService = {
     }
   },
 
-  joinLeague: async (league: any, teamId?: string): Promise<any> => {
+  joinLeague: async (
+    leagueId: string,
+    userId: string,
+    teamName: string,
+    athletes: ICreateFantasyTeamAthleteItem[]
+  ): Promise<any> => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/join`);
+      const headers = getAuthHeader();
+
+      const payload = {
+        user_id: userId,
+        team_name: teamName,
+        athletes: athletes.map(athlete => ({
+          athlete_id: athlete.athlete_id,
+          purchase_price: athlete.purchase_price,
+          is_starting: athlete.is_starting,
+          slot: athlete.slot,
+          is_captain: athlete.is_captain,
+          is_super_sub: athlete.is_super_sub,
+        })),
+      };
+
+      console.log('Joining league with new team:', { uri, payload });
+
+      const response = await fetch(uri, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to join league:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText,
+        });
+        throw new Error(`Failed to join league: ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+      // Assuming responseData contains league and team info for analytics
+      // analytics.trackTeamCreationCompleted(leagueId, responseData.team.id, responseData.league.official_league_id);
+      return responseData;
+    } catch (error) {
+      console.error('Error in leagueService.joinLeague:', error);
+      throw error;
+    }
+  },
+
+  joinLeagueWithExistingTeam: async (league: any, teamId?: string): Promise<any> => {
     try {
       // Get user ID from auth service (Django uses simple tokens, not JWTs)
       const userInfo = await authService.getUserInfo();

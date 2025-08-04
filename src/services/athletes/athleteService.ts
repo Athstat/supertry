@@ -29,12 +29,12 @@ export const athleteService = {
           .filter(athlete => {
             // Only include players with valid prices (greater than 0)
             const hasValidPrice = athlete.price && athlete.price > 0;
-            if (!hasValidPrice) {
-              console.log(
-                `Filtering out player ${athlete.player_name} - invalid price:`,
-                athlete.price
-              );
-            }
+            // if (!hasValidPrice) {
+            //   console.log(
+            //     `Filtering out player ${athlete.player_name} - invalid price:`,
+            //     athlete.price
+            //   );
+            // }
             return hasValidPrice;
           })
           .map(athlete => ({
