@@ -73,6 +73,10 @@ export function JoinLeagueScreen() {
   //   return <LoadingState />
   // }
 
+  const handleBackToDashboard = () => {
+    navigate('/dashboard');
+  }
+
   return (
     <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
       <div className="flex fleex-row items-center gap-2" >
@@ -88,6 +92,8 @@ export function JoinLeagueScreen() {
         Coming Soon
         <Info />
       </PrimaryButton>
+
+      <button onClick={handleBackToDashboard} >Go to Dashboard</button>
     </PageView>
   )
 
