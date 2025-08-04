@@ -62,7 +62,7 @@ export default function UserCreatedLeaguesSection() {
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold flex items-center gap-2 mb-4 text-gray-900 dark:text-gray-100">
+        <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
           My Created Leagues
         </h2>
         {userLeagues.length > 0 && (
