@@ -1,4 +1,4 @@
-import { getAuthHeader, getUri } from '../utils/backendUtils';
+import { getAuthHeader, getUri, getUriLocal } from '../utils/backendUtils';
 import {
   IUserLeagueGroup,
   ICreateLeagueGroup,
@@ -13,7 +13,7 @@ export const leagueGroupService = {
    */
   getUserLeagueGroups: async (): Promise<IUserLeagueGroup[]> => {
     try {
-      const uri = getUri('/api/v1/league-groups');
+      const uri = getUri('/api/v1/league-groups/');
       const response = await fetch(uri, {
         method: 'GET',
         headers: getAuthHeader(),
@@ -36,7 +36,7 @@ export const leagueGroupService = {
    */
   createLeagueGroup: async (groupData: ICreateLeagueGroup): Promise<IUserLeagueGroup> => {
     try {
-      const uri = getUri('/api/v1/league-groups');
+      const uri = getUri('/api/v1/league-groups/');
       const response = await fetch(uri, {
         method: 'POST',
         headers: getAuthHeader(),

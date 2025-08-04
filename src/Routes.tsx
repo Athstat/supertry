@@ -19,6 +19,7 @@ import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
 import { PlayersScreen } from './screens/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
+import JoinGroupScreen from './screens/JoinGroupScreen';
 import { useAuth } from './contexts/AuthContext';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
@@ -150,6 +151,15 @@ const AppRoutes = () => {
             <Layout>
               <JoinLeagueScreen />
             </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/join-group/:inviteCode"
+        element={
+          <ProtectedRoute>
+            <JoinGroupScreen />
           </ProtectedRoute>
         }
       />

@@ -7,6 +7,7 @@ import { fantasyTeamService } from '../services/fantasyTeamService';
 import { TeamAthletesModal } from '../components/league/TeamAthletesModal';
 import LeagueGroupChatFeed from '../components/leagues/LeagueGroupChat';
 import { FantasyLeagueFixturesList } from '../components/league/FixturesList';
+import LeagueGroupFilter from '../components/league/LeagueGroupFilter';
 import { IFantasyLeague } from '../types/fantasyLeague';
 import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
 import { useFantasyLeague } from '../components/league/useFantasyLeague';
@@ -36,6 +37,7 @@ export function LeagueScreen() {
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
+  const [groupFilterMembers, setGroupFilterMembers] = useState<string[] | null>(null);
 
   const { leagueInfo, userTeam, error, isLoading, league, teams } = useFantasyLeague();
 
@@ -89,6 +91,15 @@ export function LeagueScreen() {
   };
 
   const isLocked = isLeagueLocked(league?.join_deadline);
+
+  // Filter teams based on group selection
+  const filteredTeams = groupFilterMembers
+    ? teams.filter(team => groupFilterMembers.includes(team.userId))
+    : teams;
+
+  const handleGroupFilterChange = (groupMembers: string[] | null) => {
+    setGroupFilterMembers(groupMembers);
+  };
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -164,8 +175,15 @@ export function LeagueScreen() {
                 initialTabKey={initialTabKey}
               >
                 <TabViewPage tabKey="standings">
+                  {league && (
+                    <LeagueGroupFilter
+                      league={league}
+                      onGroupFilterChange={handleGroupFilterChange}
+                      isFiltered={groupFilterMembers !== null}
+                    />
+                  )}
                   <LeagueStandings
-                    teams={teams}
+                    teams={filteredTeams}
                     showJumpButton={showJumpButton}
                     onJumpToTeam={onJumpToTeam}
                     isLoading={isLoading}
