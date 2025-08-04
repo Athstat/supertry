@@ -22,6 +22,7 @@ import FixtureChat from "../components/fixtures/FixtureChat";
 import GameHighlightsCard from "../components/video/GameHighlightsCard";
 import { ProMotmVotingBox } from "../components/pro/motm";
 import ProFixtureVotingBox from "../components/fixtures/voting/ProFixtureVotingBox";
+import NoContentCard from "../components/shared/NoContentMessage";
 
 export default function FixtureScreen() {
 
@@ -31,8 +32,12 @@ export default function FixtureScreen() {
   if (!fixtureId) return <ErrorState message="Match was not found" />
 
   const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(`fixture/${fixtureId}`, () => gamesService.getGameById(fixtureId));
-  const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
-  const { data: teamActions, isLoading: loadingTeamActions } = useSWR(["teamActions", fixtureId], () => gamesService.getGameTeamActions(fixtureId));
+
+  const boxscoresKey = `/fixture/${fixtureId}/boxscore`;
+  const { data: boxScore, isLoading: loadingBoxScore } = useSWR(boxscoresKey, () => boxScoreService.getBoxScoreByGameId(fixtureId));
+
+  const teamActionsKey = `/fixture/${fixtureId}/team-actions/`;
+  const { data: teamActions, isLoading: loadingTeamActions } = useSWR(teamActionsKey, () => gamesService.getGameTeamActions(fixtureId));
 
   const { data: rosters, isLoading: loadingRosters } = useSWR(`rosters/${fixtureId}`, () => gamesService.getGameRostersById(fixtureId ?? ""));
 
@@ -40,7 +45,11 @@ export default function FixtureScreen() {
 
   if (isLoading) return <LoadingState />
 
-  if (!fetchedFixture) return <ErrorState message="Failed to load match information, so match doesn't exist???" />
+  if (!fetchedFixture) {
+    return <NoContentCard 
+      message="Failed to retrieve fixture data"
+    />
+  }
 
   const fixture = fetchedFixture as IFixture;
   const { gameKickedOff } = fixtureSumary(fixture);

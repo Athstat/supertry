@@ -4,10 +4,11 @@ type Props = {
     message?: string,
     icon?: any,
     className?: string,
+    showGoBackButton?: boolean
 }
 
 /** Renders a card that shows a message when there is no content */
-export default function NoContentCard({ message, icon, className}: Props) {
+export default function NoContentCard({ message, icon, className, showGoBackButton}: Props) {
 
     const Icon = icon;
     const iconClassName = 'text-2xl';
