@@ -112,7 +112,7 @@ export function TeamCreationScreen() {
     if (isAuthenticated) {
       const info = authService.getUserInfoSync();
       setUserInfo(info);
-      console.log('user info ', info);
+      //console.log('user info ', info);
       authService.isGuestAccount().then(isGuest => {
         setIsGuest(isGuest);
       });
@@ -169,7 +169,7 @@ export function TeamCreationScreen() {
 
   // Set default team name from user info
   useEffect(() => {
-    console.log('userInfoooo: ', userInfo);
+    //console.log('userInfoooo: ', userInfo);
     if (userInfo) {
       // Use first name if available, otherwise fall back to username
       const defaultName = userInfo.username;
@@ -215,7 +215,7 @@ export function TeamCreationScreen() {
       return;
     }
 
-    console.log('User info ', userInfo.kc_id);
+    //console.log('User info ', userInfo.kc_id);
 
     setIsSaving(true);
 
@@ -253,9 +253,9 @@ export function TeamCreationScreen() {
         }
       );
 
-      console.log('Team Athletes ', teamAthletes);
-      console.log('league id ', league.id);
-      console.log('user id ', userInfo);
+      // console.log('Team Athletes ', teamAthletes);
+      // console.log('league id ', league.id);
+      // console.log('user id ', userInfo);
 
       // Join the league with the new team
       const joinLeagueRes = await leagueService.joinLeague(
@@ -288,24 +288,15 @@ export function TeamCreationScreen() {
         if (error && typeof error === 'object' && 'errorText' in error) {
           const errorData = error.errorText ? JSON.parse(error.errorText as string) : {};
           const errorMessage = errorData.message || errorData.error || 'Unknown error';
-          showToast(
-            errorMessage,
-            'error'
-          );
+          showToast(errorMessage, 'error');
         } else if (error instanceof Error) {
-          showToast(
-            error.message || 'Failed to join league',
-            'error'
-          );
+          showToast(error.message || 'Failed to join league', 'error');
         } else {
           showToast('Failed to join league. Please try again.', 'error');
         }
       } catch (parseError) {
         // Fallback to generic error if parsing fails
-        showToast(
-          'Failed to join league. Please try again.',
-          'error'
-        );
+        showToast('Failed to join league. Please try again.', 'error');
       }
     } finally {
       setIsSaving(false);
