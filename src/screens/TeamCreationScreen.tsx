@@ -352,7 +352,7 @@ export function TeamCreationScreen() {
           roundId={parseInt(officialLeagueId || '0')}
           roundStart={league?.start_round ?? 0}
           roundEnd={league?.end_round ?? 0}
-          competitionId={officialLeagueId ?? URC_COMPETIION_ID}
+          leagueId={league?.id}
         />
       )}
 

@@ -18,7 +18,11 @@ import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/ta
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
 import { ScopeProvider } from 'jotai-scope';
-import { fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom } from '../state/fantasyLeague.atoms';
+import {
+  fantasyLeagueAtom,
+  fantasyLeagueLockedAtom,
+  userFantasyTeamAtom,
+} from '../state/fantasyLeague.atoms';
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -70,7 +74,9 @@ export function LeagueScreen() {
     if (league) {
       analytics.trackTeamCreationStarted(league.id, league.official_league_id);
 
-      navigate(`/${league.official_league_id}/create-team`, {
+      console.log('league to join: ', league);
+
+      navigate(`/${league.season}/create-team`, {
         state: { league },
       });
     }
@@ -120,7 +126,7 @@ export function LeagueScreen() {
 
   return (
     <ScopeProvider atoms={atoms}>
-      <FantasyLeagueProvider league={league} >
+      <FantasyLeagueProvider league={league}>
         <div className="min-h-screen bg-gray-50 dark:bg-black">
           <LeagueHeader
             leagueInfo={leagueInfo}
@@ -177,7 +183,10 @@ export function LeagueScreen() {
                 </TabViewPage>
 
                 <TabViewPage tabKey="fixtures">
-                  <FantasyLeagueFixturesList userTeam={userTeam} league={league as IFantasyLeague} />
+                  <FantasyLeagueFixturesList
+                    userTeam={userTeam}
+                    league={league as IFantasyLeague}
+                  />
                 </TabViewPage>
 
                 {/* <TabViewPage tabKey="predictions">

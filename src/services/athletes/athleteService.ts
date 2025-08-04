@@ -1,5 +1,5 @@
 import { RugbyPlayer, IFantasyAthlete } from '../../types/rugbyPlayer';
-import { getUri, getAuthHeader } from '../../utils/backendUtils';
+import { getUri, getAuthHeader, getUriLocal } from '../../utils/backendUtils';
 import { logger } from '../logger';
 import { SportAction } from '../../types/sports_actions';
 
@@ -13,13 +13,15 @@ export const athleteService = {
     try {
       logger.debug(`Fetching rugby athletes for competition: ${competitionId}`);
 
-      const uri = getUri(`/api/v1/athletes/rugby/season/${competitionId}/`);
+      const uri = getUriLocal(`/api/v1/athletes/rugby/season/${competitionId}/`);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
 
       if (res.ok) {
         const athletes = (await res.json()) as (IFantasyAthlete & { team?: any })[];
+
+        console.log('Athletes: ', athletes);
 
         // Transform IFantasyAthlete to RugbyPlayer format expected by frontend
         const rugbyPlayers: RugbyPlayer[] = athletes.map(athlete => ({
@@ -37,13 +39,27 @@ export const athleteService = {
           date_of_birth: athlete.date_of_birth,
           team_id: athlete.team_id,
           form: athlete.form,
-          available: athlete.available === 'true' || athlete.available === undefined,
+          available:
+            typeof athlete.available === 'boolean'
+              ? athlete.available
+              : athlete.available === 'true',
 
-          // Default values for required fields
-          scoring: 0,
-          defence: 0,
-          attacking: 0,
+          // Use actual rugby stats from API response
+          kicking: athlete.kicking || 0, // Replace scoring with kicking as requested
+          defence: athlete.defence || 0,
+          attacking: athlete.attacking || 0,
           is_starting: true,
+
+          // Include all rugby stats for detailed player view
+          points_kicking: athlete.points_kicking || 0,
+          tackling: athlete.tackling || 0,
+          infield_kicking: athlete.infield_kicking || 0,
+          strength: athlete.strength || 0,
+          playmaking: athlete.playmaking || 0,
+          ball_carrying: athlete.ball_carrying || 0,
+          lineout: athlete.lineout || 0,
+          receiving: athlete.receiving || 0,
+          scoring: athlete.scoring || 0, // Keep scoring for internal use
         }));
 
         logger.debug(`Successfully fetched ${rugbyPlayers.length} rugby athletes`);
@@ -87,7 +103,10 @@ export const athleteService = {
           date_of_birth: athlete.date_of_birth,
           team_id: athlete.team_id,
           form: athlete.form,
-          available: athlete.available === 'true' || athlete.available === undefined,
+          available:
+            typeof athlete.available === 'boolean'
+              ? athlete.available
+              : athlete.available === 'true',
 
           // Default values for required fields
           scoring: 0,
@@ -136,7 +155,10 @@ export const athleteService = {
           date_of_birth: athlete.date_of_birth,
           team_id: athlete.team_id,
           form: athlete.form,
-          available: athlete.available === 'true' || athlete.available === undefined,
+          available:
+            typeof athlete.available === 'boolean'
+              ? athlete.available
+              : athlete.available === 'true',
 
           // Default values for required fields
           scoring: 0,

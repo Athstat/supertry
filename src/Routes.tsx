@@ -120,18 +120,8 @@ const AppRoutes = () => {
           </AuthRoute>
         }
       />
-      <Route
-        path="/forgot-password"
-        element={
-          <ForgotPasswordScreen />
-        }
-      />
-      <Route
-        path="/reset-password"
-        element={
-          <ResetPasswordScreen />
-        }
-      />
+      <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+      <Route path="/reset-password" element={<ResetPasswordScreen />} />
       <Route
         path="/auth-choice"
         element={
@@ -165,7 +155,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/league/:leagueId"
+        path="/league/:officialLeagueId"
         element={
           <ProtectedRoute>
             <Layout>
@@ -382,10 +372,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
     </Routes>
-
-
   );
 };
 

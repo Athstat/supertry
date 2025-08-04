@@ -68,9 +68,6 @@ importers:
       react-router-dom:
         specifier: ^6.29.0
         version: 6.30.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      styles:
-        specifier: link:@sendbird/uikit-react/styles
-        version: link:@sendbird/uikit-react/styles
       swr:
         specifier: ^2.3.3
         version: 2.3.3(react@18.3.1)

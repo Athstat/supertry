@@ -41,9 +41,49 @@ export const leagueService = {
         headers: getAuthHeader(),
       });
 
-      return await response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Failed to fetch league by ID:', await response.text());
+        return undefined;
+      }
     } catch (error) {
       console.error('Error fetching league by ID:', error);
+      return undefined;
+    }
+  },
+
+  /**
+   * Fetch a league by its official league ID
+   */
+  getLeagueByOfficialId: async (officialLeagueId: string): Promise<IFantasyLeague | undefined> => {
+    try {
+      if (!officialLeagueId) return undefined;
+
+      // First, get all leagues and find the one with matching official_league_id
+      const allLeagues = await leagueService.getAllLeagues();
+      const league = allLeagues.find(l => l.official_league_id === officialLeagueId);
+
+      if (league) {
+        return league;
+      }
+
+      // Fallback: try direct fetch by ID (in case officialLeagueId is actually the league ID)
+      const uri = getUri(`/api/v1/fantasy-leagues/${officialLeagueId}`);
+
+      const response = await fetch(uri, {
+        method: 'GET',
+        headers: getAuthHeader(),
+      });
+
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Failed to fetch league by official ID:', await response.text());
+        return undefined;
+      }
+    } catch (error) {
+      console.error('Error fetching league by official ID:', error);
       return undefined;
     }
   },
@@ -53,9 +93,7 @@ export const leagueService = {
    */
   fetchParticipatingTeams: async (leagueId: string | number): Promise<IFantasyLeagueTeam[]> => {
     try {
-      const uri = getUri(
-        `/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`
-      );
+      const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/teams`);
 
       const response = await fetch(uri, {
         method: 'GET',
@@ -76,7 +114,7 @@ export const leagueService = {
 
   getLeagueConfig: async (officialLeagueId: string): Promise<IGamesLeagueConfig | null> => {
     try {
-      const uri = getUri(`/api/v1/unauth/fantasy-league-config/${officialLeagueId}`);
+      const uri = getUri(`/api/v1/fantasy-leagues-config/${officialLeagueId}`);
 
       try {
         const response = await fetch(uri, {

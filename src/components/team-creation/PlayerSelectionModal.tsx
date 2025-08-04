@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import { BasePositionType, Position } from "../../types/position";
+import React, { useState } from 'react';
+import { BasePositionType, Position } from '../../types/position';
 
 // Import components
-import ModalHeader from "./player-selection-components/ModalHeader";
-import SearchBar from "./player-selection-components/SearchBar";
-import TeamFilter from "./TeamFilter";
-import TableHeader from "./TableHeader";
-import PlayerList from "./player-selection-components/PlayerList";
+import ModalHeader from './player-selection-components/ModalHeader';
+import SearchBar from './player-selection-components/SearchBar';
+import TeamFilter from './TeamFilter';
+import TableHeader from './TableHeader';
+import PlayerList from './player-selection-components/PlayerList';
 
 // Import hooks
-import { useFetch } from "../../hooks/useFetch";
-import { gamesService } from "../../services/gamesService";
-import { LoadingState } from "../ui/LoadingState";
-import usePlayersFilter from "./player-selection-components/usePlayersFilter";
-import useAvailableTeams from "./player-selection-components/useAvailableTeams";
-import useModalEffects from "./player-selection-components/useModalEffects";
-import AvailableFilter from "./AvailableFilter";
-import { AthleteWithTrackingId } from "../../types/fantasyTeamAthlete";
-import { RugbyPlayer } from "../../types/rugbyPlayer";
+import { useFetch } from '../../hooks/useFetch';
+import { gamesService } from '../../services/gamesService';
+import { LoadingState } from '../ui/LoadingState';
+import usePlayersFilter from './player-selection-components/usePlayersFilter';
+import useAvailableTeams from './player-selection-components/useAvailableTeams';
+import useModalEffects from './player-selection-components/useModalEffects';
+import AvailableFilter from './AvailableFilter';
+import { AthleteWithTrackingId } from '../../types/fantasyTeamAthlete';
+import { RugbyPlayer } from '../../types/rugbyPlayer';
 
 interface PlayerSelectionModalProps {
   visible: boolean;
@@ -30,7 +30,7 @@ interface PlayerSelectionModalProps {
   roundId: number;
   roundStart?: number;
   roundEnd?: number;
-  competitionId?: string;
+  leagueId?: string;
 }
 
 const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
@@ -44,22 +44,23 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   roundId,
   roundStart,
   roundEnd,
-  competitionId,
+  leagueId,
 }) => {
-
   // State for filtering and sorting
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [teamFilter, setTeamFilter] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<
-    "price" | "rating" | "attack" | "defense" | "kicking"
-  >("rating");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortBy, setSortBy] = useState<'price' | 'rating' | 'attack' | 'defense' | 'kicking'>(
+    'rating'
+  );
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [filterAvailable, setFilterAvailable] = useState(false);
-  
-  // Only fetch fixtures if competitionId is provided (TeamCreationScreen)
-  const { data: fixtureData, isLoading: loadingFixtures } = competitionId
-    ? useFetch("games", competitionId, gamesService.getGamesByCompetitionId)
+
+  // Only fetch fixtures if leagueId is provided (TeamCreationScreen)
+  const { data: fixtureData, isLoading: loadingFixtures } = leagueId
+    ? useFetch('games', leagueId, gamesService.getGamesByLeagueId)
     : { data: null, isLoading: false };
+
+  console.log('Players: ', players);
 
   // Get filtered and sorted players
   const { sortedPlayers } = usePlayersFilter({
@@ -84,7 +85,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   // Helper function to toggle team filter
   const toggleTeamFilter = (teamId: string) => {
     if (teamFilter.includes(teamId)) {
-      setTeamFilter(teamFilter.filter((id) => id !== teamId));
+      setTeamFilter(teamFilter.filter(id => id !== teamId));
     } else {
       setTeamFilter([...teamFilter, teamId]);
     }
@@ -98,41 +99,38 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   let availableTeams = allTeams;
 
   if (fixtureData) {
-
     const fixtures = fixtureData ?? [];
-    const roundFixtures = fixtures.filter((f) => {
-
+    const roundFixtures = fixtures.filter(f => {
       // Only filter by round if we have start/end values
       if (roundStart !== undefined && roundEnd !== undefined) {
         const start = Math.min(roundStart, roundEnd);
         const end = Math.max(roundStart, roundEnd);
         return f.round >= start && f.round <= end;
       }
-      
+
       return true;
     });
 
-    console.log("All fixtures ", fixtures.length);
-    console.log("Round fixtures ", roundFixtures.length);
+    console.log('All fixtures ', fixtures.length);
+    console.log('Round fixtures ', roundFixtures.length);
 
     const participatingTeamsId = new Set<string>();
 
-    roundFixtures.forEach((rf) => {
-      
-      if (!participatingTeamsId.has(rf.team_id)) {
-        participatingTeamsId.add(rf.team_id);
+    roundFixtures.forEach(rf => {
+      if (!participatingTeamsId.has(rf.team.athstat_id)) {
+        participatingTeamsId.add(rf.team.athstat_id);
       }
 
-      if (!participatingTeamsId.has(rf.opposition_team_id)) {
-        participatingTeamsId.add(rf.opposition_team_id);
+      if (!participatingTeamsId.has(rf.opposition_team.athstat_id)) {
+        participatingTeamsId.add(rf.opposition_team.athstat_id);
       }
     });
 
-    console.log("Participating Teams", participatingTeamsId);
+    console.log('Participating Teams', participatingTeamsId);
 
     // Only filter teams if there are participating teams
     if (participatingTeamsId.size > 0) {
-      availableTeams = allTeams.filter((t) => participatingTeamsId.has(t.id));
+      availableTeams = allTeams.filter(t => participatingTeamsId.has(t.id));
     }
   }
 
@@ -167,12 +165,12 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
         <TableHeader
           sortBy={sortBy}
           sortOrder={sortOrder}
-          onSort={(field) => {
+          onSort={field => {
             if (sortBy === field) {
-              setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+              setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
             } else {
               setSortBy(field);
-              setSortOrder("desc");
+              setSortOrder('desc');
             }
           }}
         />
