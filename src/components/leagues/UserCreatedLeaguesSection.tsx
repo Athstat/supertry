@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Users, DollarSign, Calendar, Lock, Globe, ArrowRight } from 'lucide-react';
+import { LoadingState } from '../ui/LoadingState';
 import { useNavigate } from 'react-router-dom';
 import { userCreatedLeagueService } from '../../services/userCreatedLeagueService';
 import { IUserCreatedLeague } from '../../types/userCreatedLeague';
@@ -62,20 +63,19 @@ export default function UserCreatedLeaguesSection() {
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold dark:text-white">My Created Leagues</h2>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Create League
-        </button>
+        {userLeagues.length > 0 && (
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Create League
+          </button>
+        )}
       </div>
 
       {isLoading ? (
-        <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">Loading your leagues...</p>
-        </div>
+        <LoadingState message="Loading your leagues..." />
       ) : userLeagues.length === 0 ? (
         <div className="text-center py-8 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
