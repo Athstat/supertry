@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader } from "lucide-react";
+import { Info, Loader, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { leagueService } from "../services/leagueService";
 import { fantasyTeamService } from "../services/fantasyTeamService";
@@ -12,6 +12,9 @@ import JoinLeaguePastLeaguesSection from "../components/leagues/join_league_scre
 import JoinLeagueUpcomingLeaguesSection from "../components/leagues/join_league_screen/JoinLeagueUpcomingLeaguesSection";
 import { useFetch } from "../hooks/useFetch";
 import { LoadingState } from "../components/ui/LoadingState";
+import SecondaryText from "../components/shared/SecondaryText";
+import PrimaryButton from "../components/shared/buttons/PrimaryButton";
+import PageView from "./PageView";
 
 export function JoinLeagueScreen() {
   const navigate = useNavigate();
@@ -66,9 +69,27 @@ export function JoinLeagueScreen() {
     });
   };
 
-  if (isLoadingUserTeams) {
-    return <LoadingState />
-  }
+  // if (isLoadingUserTeams) {
+  //   return <LoadingState />
+  // }
+
+  return (
+    <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
+      <div className="flex fleex-row items-center gap-2" >
+        <Trophy />
+        <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
+      </div>
+
+      <div>
+        <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
+      </div>
+
+      <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
+        Coming Soon
+        <Info />
+      </PrimaryButton>
+    </PageView>
+  )
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
@@ -78,7 +99,7 @@ export function JoinLeagueScreen() {
         </h1>
       </div>
 
-      {leagueOnTheClock && <JoinLeagueDeadlineCountdown league={leagueOnTheClock} onViewLeague={handleLeagueClick} />}
+      {/* {leagueOnTheClock && <JoinLeagueDeadlineCountdown league={leagueOnTheClock} onViewLeague={handleLeagueClick} />} */}
 
       {isLoading ? (
         <div className="flex justify-center items-center py-12">
