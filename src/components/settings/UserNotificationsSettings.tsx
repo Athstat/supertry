@@ -2,13 +2,14 @@ import { Bell, ChevronRight, LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { GameUpdatesPreference, gameUpdatesPreferenceOptions } from '../../types/notifications';
 import { formatPosition } from '../../utils/athleteUtils';
-import { DatabaseUser } from '../../types/auth';
+import { DjangoAuthUser } from '../../types/auth';
 import { notificationService } from '../../services/notificationsService';
-import { mutate } from 'swr';
 import DialogModal from '../shared/DialogModal';
+import { authService } from '../../services/authService';
+import { ErrorState } from '../ui/ErrorState';
 
 type Props = {
-  databaseUser: DatabaseUser;
+  databaseUser: DjangoAuthUser;
 };
 
 export default function UserNotificationsSettings({ databaseUser }: Props) {
@@ -43,12 +44,6 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
           <div className="w-full h-[100%] overflow-y-auto flex flex-col gap-1">
             <GameUpdatesSection user={databaseUser} />
           </div>
-
-          {/* <div className=" w-full h-[20%] pb-5 flex flex-row items-start gap-2" >
-                        <button onClick={toggle} className="bg-blue-500 px-4 py-1 text-md text-white rounded-xl" >
-                            Done
-                        </button>
-                    </div> */}
         </div>
       </DialogModal>
     </div>
@@ -56,7 +51,7 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
 }
 
 type GameUpdatesProps = {
-  user: DatabaseUser;
+  user: DjangoAuthUser;
 };
 
 function GameUpdatesSection({ user }: GameUpdatesProps) {
@@ -66,6 +61,7 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
   );
   const [options, setOptions] = useState<GameUpdatesPreference[]>([]);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [error, setError] = useState<string>()
 
   useEffect(() => {
     const options = [selection];
@@ -82,16 +78,23 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
   useEffect(() => {
     const timeout = setTimeout(async () => {
       try {
+
         if (selection === user.game_updates_preference) {
           return;
         }
 
         setIsSaving(true);
+
         await notificationService.updateGameUpdatesPreferences(selection);
-        await mutate(() => true);
+        await authService.updateUserInfo();
+
+      } catch (err) {
+        setError("Something wen't wrong");
+        console.log("Error updating notification preferences ", err)
       } finally {
         setIsSaving(false);
       }
+
     }, 50);
 
     return () => clearTimeout(timeout);
@@ -110,7 +113,7 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
         name="game_updates_preference"
       >
         {options.map(p => {
-          return <option value={p}>{formatPosition(p)}</option>;
+          return <option key={p} value={p}>{formatPosition(p)}</option>;
         })}
       </select>
 
@@ -120,6 +123,8 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
           <p>Saving</p>
         </div>
       )}
+
+      {error && <ErrorState error={error} />}
     </div>
   );
 }

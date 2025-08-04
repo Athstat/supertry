@@ -7,6 +7,7 @@ import { twMerge } from "tailwind-merge";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { User } from "lucide-react";
 import { isEmail } from "../../utils/stringUtils";
+import NoContentCard from "../shared/NoContentMessage";
 
 export default function ProPredictionsLeaderboard() {
 
@@ -36,8 +37,10 @@ export default function ProPredictionsLeaderboard() {
     });
 
     const shouldHide = (r: ProPredictionsRanking) => {
-        return isEmail(r.username) && r.user_id !== user.id;
+        return isEmail(r.username) && r.user_id !== user.kc_id;
     }
+
+    const isEmpty = rankingsList.length === 0;
 
     return (
         <div className="flex flex-col gap-4 " >
@@ -52,12 +55,12 @@ export default function ProPredictionsLeaderboard() {
                     return <LeaderboardItem
                         ranking={r}
                         key={index}
-                        isUser={user.id === r.user_id}
+                        isUser={user.kc_id === r.user_id}
                     />
                 })}
             </div>
 
-            <p className="font-bold text-lg" >Unranked</p>
+           {unRankedUsers.length > 0 && <p className="font-bold text-lg" >Unranked</p>}
 
             <div className="flex flex-col gap-2 " >
                 {unRankedUsers.map((r, index) => {
@@ -69,7 +72,7 @@ export default function ProPredictionsLeaderboard() {
                     return <LeaderboardItem
                         ranking={r}
                         key={index}
-                        isUser={user.id === r.user_id}
+                        isUser={user.kc_id === r.user_id}
                     />
                 })}
             </div>
@@ -81,6 +84,12 @@ export default function ProPredictionsLeaderboard() {
                     </button>
                 </div>
             )} */}
+
+            {isEmpty && (
+                <NoContentCard 
+                    message="No pro predictions rankings available right now"
+                />
+            )}
         </div>
     )
 }

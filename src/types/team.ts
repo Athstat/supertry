@@ -32,3 +32,19 @@ export interface Team {
   formation: string;
   matchesPlayed: number;
 }
+
+export type IProTeam = {
+  athstat_id: string,
+  source_id: string,
+  athstat_name: string,
+  data_source?: string,
+  source_abbreviation?: string,
+  athstat_abbreviation?: string,
+  possible_names?: string,
+  hidden?: boolean,
+  on_dark_image_url?: string,
+  on_light_image_url?: string,
+  image_url?: string,
+  sport: string,
+  organization: string
+}

@@ -1,11 +1,11 @@
 import useSWR from 'swr'
-import { sbrService } from '../../services/sbrService';
+import { sbrService } from '../../services/sbr/sbrService';
 import { LoadingState } from '../ui/LoadingState';
 import SbrFixtureCard from '../sbr/SbrFixtureCard';
-import MatchSeasonFilterBar from './MatcheSeasonFilterBar';
+import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
-import { ArrowRight, Maximize2, Minimize2 } from 'lucide-react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 import NoContentCard from '../shared/NoContentMessage';
 import MatchCenterSearchBar from './MatchCenterSearchBar';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
@@ -94,7 +94,7 @@ export default function SbrMatchCenter() {
                 placeholder='Search SBR games, seasons ...'
             />
 
-            <MatchSeasonFilterBar
+            <PilledSeasonFilterBar
                 seasons={seasons}
                 onChange={setSeason}
                 value={season}
@@ -121,7 +121,7 @@ export default function SbrMatchCenter() {
                             showCompetition
                             showKickOffTime
                             className={twMerge(
-                                'min-w-[350px] max-h-[270px]',
+                                'min-w-96 max-h-[270px]',
                                 focus === "upcoming" && 'min-w-full'
                             )}
                         />
@@ -152,8 +152,8 @@ export default function SbrMatchCenter() {
                     })}
                 </div>
 
-                {upcomingFixtures.length === 0 && (
-                    <NoContentCard message='No upcoming fixtures were found' />
+                {pastFixtures.length === 0 && (
+                    <NoContentCard message='No past fixtures were found' />
                 )}
 
             </div>

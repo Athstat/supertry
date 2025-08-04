@@ -1,16 +1,16 @@
 import { createContext, ReactNode } from "react";
-import { RugbyPlayer } from "../types/rugbyPlayer";
+import { IProAthlete } from "../types/athletes";
 
 type ContextProps = {
     isComparing?: boolean,
-    selectedPlayers: RugbyPlayer[]
+    selectedPlayers: IProAthlete[]
 }
 
 export const PlayersScreenContext = createContext<ContextProps | null>(null);
 
 type Props = {
     isComparing?: boolean,
-    selectedPlayers: RugbyPlayer[],
+    selectedPlayers: IProAthlete[],
     children?: ReactNode
 }
 

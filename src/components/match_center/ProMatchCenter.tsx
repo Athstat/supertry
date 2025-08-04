@@ -5,12 +5,13 @@ import FixtureCard from "../fixtures/FixtureCard";
 import { subHours } from "date-fns";
 import { useQueryState } from "../../hooks/useQueryState";
 import NoContentCard from "../shared/NoContentMessage";
-import MatchSeasonFilterBar from "./MatcheSeasonFilterBar";
+import PilledSeasonFilterBar from "./MatcheSeasonFilterBar";
 import MatchCenterSearchBar from "./MatchCenterSearchBar";
 import { searchProFixturePredicate } from "../../utils/fixtureUtils";
 import { twMerge } from "tailwind-merge";
 import { Maximize2, Minimize2 } from "lucide-react";
 import { IFixture } from "../../types/games";
+import { useInView } from "react-intersection-observer";
 
 export default function ProMatchCenter() {
 
@@ -97,13 +98,13 @@ export default function ProMatchCenter() {
                 placeholder="Search Pro Games, Seasons ..."
             />
 
-            <MatchSeasonFilterBar
+            <PilledSeasonFilterBar
                 seasons={seasons}
                 onChange={setSeason}
                 value={season}
             />
 
-            <UpcomingFixturesSection 
+            <UpcomingFixturesSection
                 upcomingFixtures={upcomingFixtures}
                 onToggleFocus={toggleFocus}
                 focus={focus}
@@ -116,11 +117,9 @@ export default function ProMatchCenter() {
 
                 <div className="flex flex-col items-center gap-3 w-full" >
                     {pastFixtures.map((fixture, index) => {
-                        return <FixtureCard
+                        return <FixtureItem
                             fixture={fixture}
                             key={index}
-                            showLogos
-                            showCompetition
                             className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
                         />
                     })}
@@ -138,16 +137,16 @@ type UpcomingFixturesProps = {
     focus?: string
 }
 
-function UpcomingFixturesSection({upcomingFixtures, focus, onToggleFocus} : UpcomingFixturesProps) {
-    
+function UpcomingFixturesSection({ upcomingFixtures, focus, onToggleFocus }: UpcomingFixturesProps) {
+
     return (
         <div className="flex flex-col gap-4" >
             <div className="flex flex-row items-center justify-between" >
                 <p className="font-semibold text-lg" >Upcoming Fixtures</p>
-                
-                <button 
+
+                <button
                     className="cursor-pointer p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800/40 "
-                    onClick={onToggleFocus} 
+                    onClick={onToggleFocus}
                 >
                     {focus !== "upcoming" && <Maximize2 />}
                     {focus === "upcoming" && <Minimize2 />}
@@ -159,21 +158,43 @@ function UpcomingFixturesSection({upcomingFixtures, focus, onToggleFocus} : Upco
                 focus === 'upcoming' ? 'flex flex-col gap-2 overflow-x-hidden' : ''
             )} >
                 {upcomingFixtures.map((fixture, index) => {
-                    return <FixtureCard
+                    return <FixtureItem
                         fixture={fixture}
                         key={index}
-                        showLogos
                         className={twMerge(
                             "rounded-xl border min-w-96 max-h-[240px] min-h-[240px] dark:border-slate-700 flex-1",
                             focus === 'upcoming' && 'min-w-full'
                         )}
-                        showCompetition
                     />
                 })}
             </div>
 
             {upcomingFixtures.length === 0 && <NoContentCard message="There are no upcoming fixtures" />}
 
+        </div>
+    )
+}
+
+type FixtureItemProps = {
+    fixture: IFixture,
+    className?: string
+}
+
+function FixtureItem({ fixture, className }: FixtureItemProps) {
+
+    const { ref, inView } = useInView({ triggerOnce: true });
+
+    return (
+        <div
+            ref={ref}
+            className="w-full"
+        >
+            {inView && <FixtureCard
+                fixture={fixture}
+                showLogos
+                showCompetition
+                className={className}
+            />}
         </div>
     )
 }

@@ -4,7 +4,7 @@ import {
   RulerIcon,
   WeightIcon,
 } from "lucide-react";
-import { athleteService } from "../services/athleteService";
+import { athleteService } from "../services/athletes/athleteService";
 import PlayerProfileHeader from "../components/players/profile/PlayerProfileHeaders";
 import { StatCard } from "../components/shared/StatCard";
 import { GroupedStatsGrid } from "../components/shared/GroupedStatsGrid";

@@ -1,35 +1,9 @@
+import { IFixture } from "./games"
+
+/** Represents a single matches power ranking */
 export type SingleMatchPowerRanking = {
+    game: IFixture
+    updated_power_ranking: number,
     athlete_id: string,
-    athlete_name?: string,
-    athlete_image_url?: string,
-    athlete_team_id?: string,
-    athlete_team_name?: string,
-    updated_power_ranking?: number,
-    season_name?: string,
-    team_name?: string,
-    team_image_url?: string,
-    opposition_team_name?: string,
-    opposition_team_image_url?: string,
-    game_id: string,
-    team_score?: number,
-    opposition_score?: number,
-    venue?: string,
-    kickoff_time?: Date,
-    competition_name?: string,
-    team_id?: string,
-    opposition_team_id?: string,
-    is_knockout?: boolean,
-    is_league_managed?: boolean,
-    location?: undefined,
-    extra_info?: string,
-    hidden?: boolean,
-    league_id?: string,
-    network?: string,
-    game_status?: string,
-    game_clock?: string,
-    result?: string,
-    source_id?: string,
-    data_source?: string,
-    is_test?: boolean,
-    round: number
+    team_id: string
 }

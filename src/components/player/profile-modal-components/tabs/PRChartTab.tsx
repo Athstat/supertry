@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import usePowerRankings from "../usePowerRankings";
 import { useTheme } from "../../../../contexts/ThemeContext";
+import { format } from "date-fns";
 
 // Register ChartJS components
 ChartJS.register(
@@ -37,13 +38,6 @@ export function PowerRankingChartTab ({ player }: Props) {
 
   const { data, isLoading, error } = usePowerRankings(player.tracking_id);
 
-  // Format dates for display on X-axis
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return `${date.toLocaleString("default", {
-      month: "short",
-    })} ${date.getDate()}`;
-  };
 
   if (isLoading) {
     return (
@@ -74,7 +68,16 @@ export function PowerRankingChartTab ({ player }: Props) {
 
   // Prepare data for chart
   const chartData = {
-    labels: data.map((item) => formatDate(item.kickoff_time)),
+    labels: data.map((item) => {
+      const kickoff =  item.game.kickoff_time;
+
+      if (kickoff) {
+        return format(kickoff, 'dd MMM yy');
+      }
+
+      return "-";
+
+    }),
     datasets: [
       {
         label: "Power Ranking",
@@ -145,7 +148,7 @@ export function PowerRankingChartTab ({ player }: Props) {
         callbacks: {
           title: (tooltipItems) => {
             const item = data[tooltipItems[0].dataIndex];
-            const date = new Date(item.kickoff_time);
+            const date = new Date(item.game.kickoff_time ?? new Date());
             return date.toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -156,7 +159,7 @@ export function PowerRankingChartTab ({ player }: Props) {
             const item = data[tooltipItem.dataIndex];
             return [
               `Power Ranking: ${item.updated_power_ranking}`,
-              `${item.team_name} vs ${item.opposition_name}`,
+              `${item.game.team.athstat_name} vs ${item.game.opposition_team.athstat_name}`,
             ];
           },
         },

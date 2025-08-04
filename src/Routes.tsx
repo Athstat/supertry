@@ -15,8 +15,8 @@ import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
 import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
 import { MyTeamScreen } from './screens/MyTeamScreen';
-import { ProfileScreen } from './screens/ProfileScreen';
-import { FantasyRankingsScreen } from './screens/RankingsScreen';
+import { UserProfileScreen } from './screens/UserProfileScreen';
+import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
 import { PlayersScreen } from './screens/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
 import { useAuth } from './contexts/AuthContext';
@@ -33,6 +33,7 @@ import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
+import ScrummyLoadingState from './components/ui/ScrummyLoadingState';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -47,7 +48,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <ScrummyLoadingState />;
 
   if (!isAuthenticated) {
     return <Navigate to="/signin" />;
@@ -60,7 +61,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <ScrummyLoadingState />;
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
@@ -123,17 +124,13 @@ const AppRoutes = () => {
       <Route
         path="/forgot-password"
         element={
-          <AuthRoute>
-            <ForgotPasswordScreen />
-          </AuthRoute>
+          <ForgotPasswordScreen />
         }
       />
       <Route
         path="/reset-password"
         element={
-          <AuthRoute>
-            <ResetPasswordScreen />
-          </AuthRoute>
+          <ResetPasswordScreen />
         }
       />
       <Route
@@ -228,7 +225,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <ProfileScreen />
+              <UserProfileScreen />
             </Layout>
           </ProtectedRoute>
         }

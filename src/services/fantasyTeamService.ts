@@ -3,9 +3,9 @@ import {
   IFantasyClubTeam,
   IUpdateFantasyTeamAthleteItem,
   ICreateFantasyTeamAthleteItem,
-} from "../types/fantasyTeamAthlete";
-import { getAuthHeader, getUri } from "../utils/backendUtils";
-import { authService } from "./authService";
+} from '../types/fantasyTeamAthlete';
+import { getAuthHeader, getUri } from '../utils/backendUtils';
+import { authService } from './authService';
 
 export const fantasyTeamService = {
   /**
@@ -16,26 +16,22 @@ export const fantasyTeamService = {
     teamId: string
   ): Promise<any> => {
     try {
-
-
-      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes`);
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-team-athletes/`);
 
       const response = await fetch(uri, {
-        method: "PUT",
+        method: 'PUT',
         headers: getAuthHeader(),
         body: JSON.stringify({ team, teamId }),
       });
 
       if (!response.ok) {
-        console.error("Failed to update team athletes:", await response.text());
-        throw new Error(
-          `Failed to update team: ${response.status} ${response.statusText}`
-        );
+        console.error('Failed to update team athletes:', await response.text());
+        throw new Error(`Failed to update team: ${response.status} ${response.statusText}`);
       }
 
       return await response.json();
     } catch (error) {
-      console.error("Error updating team athletes:", error);
+      console.error('Error updating team athletes:', error);
       throw error;
     }
   },
@@ -45,76 +41,70 @@ export const fantasyTeamService = {
    */
   fetchUserClub: async () => {
     try {
-      // Get user ID from token
-      const token = localStorage.getItem("access_token");
+      // Get user ID from stored user info (Django uses simple tokens, not JWTs)
+      const userInfo = await authService.getUserInfo();
 
-      if (!token) {
-        throw new Error(
-          "Authentication token is missing. Please log in again."
-        );
+      if (!userInfo || !userInfo.kc_id) {
+        throw new Error('Could not determine user identity. Please log in again.');
       }
 
-      // Extract user ID from token
-      let userId = "default-user-id";
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        userId = payload.sub || userId;
-      } catch (error) {
-        console.error("Error extracting user ID from token:", error);
-        throw new Error(
-          "Could not determine user identity. Please log in again."
-        );
-      }
+      const userId = userInfo.kc_id;
+      console.log('Using user ID for club fetch:', userId);
 
-      // Make API request to get user's club
-      const uri = getUri(`/api/v1/fantasy-teams/fantasy-clubs/${userId}`);
+      // Make API request to get/create user's club (single club, not list of club teams)
+      const uri = getUri(`/api/v1/fantasy-teams/fantasy-club/${userId}/`);
 
       const response = await fetch(uri, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        method: 'GET',
+        headers: getAuthHeader(),
       });
 
       if (!response.ok) {
-        console.error("Failed to fetch user club:", await response.text());
-        return null;
+        const errorText = await response.text();
+        console.error('Failed to fetch user club:', errorText);
+        throw new Error(`Failed to fetch user club: ${response.status} ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const club = await response.json();
 
-      // Return the first club if available
-      if (data && data.length > 0) {
-        return data[0];
+      // Return the club directly (it's now a single object, not an array)
+      if (club && club.id) {
+        return club;
       } else {
-        return null;
+        throw new Error('Club data is invalid');
       }
     } catch (error) {
-      console.error("Error fetching user club:", error);
-      return null;
+      console.error('Error fetching user club:', error);
+      throw error; // Re-throw instead of returning null so errors are handled properly
     }
   },
 
   /**
-   * Fetch all teams for the current user
+   * Fetch all club teams for the current user (not league teams)
    */
   fetchUserTeams: async (id?: string): Promise<IFantasyClubTeam[]> => {
     try {
-
-      let userId = id || authService.getUserInfo()?.id || "default-user-id";
-      const url = getUri(`/api/v1/fantasy-teams/fantasy-teams-all/${userId}`);
+      let userId = id;
+      if (!userId) {
+        const userInfo = await authService.getUserInfo();
+        userId = userInfo?.kc_id || 'default-user-id';
+      }
+      // Use the fantasy-clubs endpoint to get FantasyClubTeam objects
+      const url = getUri(`/api/v1/fantasy-teams/fantasy-clubs/${userId}/`);
 
       const response = await fetch(url, {
-        method: "GET",
-        headers: getAuthHeader()
+        method: 'GET',
+        headers: getAuthHeader(),
       });
 
+      if (!response.ok) {
+        console.error('Failed to fetch user teams:', await response.text());
+        return [];
+      }
+
       return await response.json();
-
     } catch (error) {
-
-      console.error("Error fetching user teams:", error);
+      console.error('Error fetching user teams:', error);
       return [];
     }
   },
@@ -128,14 +118,11 @@ export const fantasyTeamService = {
     leagueId: string
   ): Promise<IFantasyClubTeam> => {
     try {
-
       const club = await fantasyTeamService.fetchUserClub();
 
       // Throw error if club not found
       if (!club || !club.id) {
-        throw new Error(
-          "Unable to retrieve your club information. Please try again later."
-        );
+        throw new Error('Unable to retrieve your club information. Please try again later.');
       }
 
       // Prepare the request payload
@@ -146,28 +133,39 @@ export const fantasyTeamService = {
         team: teamAthletes,
       };
 
-      console.log("Payload: ", payload);
+      console.log('Payload: ', payload);
 
       // Submit the team to the server
-      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes`);
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/`);
 
       const response = await fetch(uri, {
-        method: "POST",
+        method: 'POST',
         headers: getAuthHeader(),
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Failed to submit team:", errorText);
-        throw new Error(
-          `Failed to submit team: ${response.status} ${response.statusText}`
-        );
+        console.error('Failed to submit team:', errorText);
+        throw new Error(`Failed to submit team: ${response.status} ${response.statusText}`);
       }
 
-      return club;
+      const createdTeam = await response.json();
+      console.log('Created team response:', createdTeam);
+
+      // Return the created team data with the ID from the backend
+      return {
+        id: createdTeam.id,
+        name: createdTeam.name,
+        club_id: createdTeam.club_id,
+        league_id: parseInt(leagueId),
+        official_league_id: leagueId,
+        created_at: new Date(),
+        updated_at: new Date(),
+        athletes: [],
+      } as IFantasyClubTeam;
     } catch (error) {
-      console.error("Error in teamService.submitTeam:", error);
+      console.error('Error in teamService.submitTeam:', error);
       throw error;
     }
   },
@@ -177,36 +175,22 @@ export const fantasyTeamService = {
    */
   fetchTeamAthletes: async (teamId: string): Promise<IFantasyTeamAthlete[]> => {
     try {
-      // Get token for authentication
-      const token = localStorage.getItem("access_token");
-
-      if (!token) {
-        throw new Error(
-          "Authentication token is missing. Please log in again."
-        );
-      }
-
       // Make API request to get team athletes
-      const uri = getUri(
-        `/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}`
-      );
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}/`);
 
       const response = await fetch(uri, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        method: 'GET',
+        headers: getAuthHeader(),
       });
 
       if (!response.ok) {
-        console.error("Failed to fetch team athletes:", await response.text());
+        console.error('Failed to fetch team athletes:', await response.text());
         return [];
       }
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching team athletes:", error);
+      console.error('Error fetching team athletes:', error);
       return [];
     }
   },
@@ -214,14 +198,12 @@ export const fantasyTeamService = {
   /** Gets a users team by its id and user id */
   getUserTeamById: async (teamId: string, userId?: string) => {
     try {
-
       const userTeams = await fantasyTeamService.fetchUserTeams(userId);
-      let currentTeam = userTeams.find((t) => t.id == teamId);
+      let currentTeam = userTeams.find(t => t.id == teamId);
 
       return currentTeam;
-
     } catch (error) {
-      console.log("Error fetching user team");
+      console.log('Error fetching user team');
       return undefined;
     }
   },
@@ -233,35 +215,33 @@ export const fantasyTeamService = {
    */
   updateTeamCaptain: async (teamId: string, playerId: string): Promise<any> => {
     try {
-      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-captain`);
+      const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/update-captain/`);
 
       // Validate that we have a playerId - a team must always have a captain
       if (!playerId) {
-        throw new Error("Captain ID is required - a team must always have a captain");
+        throw new Error('Captain ID is required - a team must always have a captain');
       }
 
       console.log('Updating team captain:', { teamId, captainId: playerId });
-      
+
       const response = await fetch(uri, {
-        method: "PUT",
+        method: 'PUT',
         headers: getAuthHeader(),
-        body: JSON.stringify({ 
-          teamId, 
-          captainId: playerId // This is the tracking_id from the frontend
+        body: JSON.stringify({
+          teamId,
+          captainId: playerId, // This is the tracking_id from the frontend
         }),
       });
 
       if (!response.ok) {
-        console.error("Failed to update team captain:", await response.text());
-        throw new Error(
-          `Failed to update captain: ${response.status} ${response.statusText}`
-        );
+        console.error('Failed to update team captain:', await response.text());
+        throw new Error(`Failed to update captain: ${response.status} ${response.statusText}`);
       }
 
       return await response.json();
     } catch (error) {
-      console.error("Error updating team captain:", error);
+      console.error('Error updating team captain:', error);
       throw error;
     }
-  }
+  },
 };

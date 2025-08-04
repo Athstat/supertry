@@ -1,14 +1,15 @@
 import { Trophy } from 'lucide-react'
 import { useAuthUser } from '../../hooks/useAuthUser';
 import useSWR from 'swr';
-import { userRankingsService } from '../../services/userRankingsService';
+import { fantasyRankingsService } from '../../services/fantasyRankingsService';
 import BlueGradientCard from '../shared/BlueGradientCard';
 
 
 export default function UserRankingCard() {
 
-    const authUser = useAuthUser();
-    const { data: userRank, isLoading } = useSWR(authUser.id, userRankingsService.getUserRankingByUserId);
+    const user = useAuthUser();
+    const key = `/fantasy-rankings/user/${user.kc_id}`;
+    const { data: userRank, isLoading } = useSWR(key, () => fantasyRankingsService.getUserRankingByUserId(user.kc_id));
 
     const rank = userRank?.rank;
     const totalScore = userRank?.total_score;

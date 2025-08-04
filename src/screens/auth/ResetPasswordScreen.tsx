@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Eye, EyeOff, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { authService } from '../../services/authService';
 import { AuthLayout } from '../../components/auth/AuthLayout';
+import useSWR from 'swr';
+import { usePasswordValidation } from '../../hooks/usePasswordValidation';
+import { ErrorState } from '../../components/ui/ErrorState';
+import { PasswordResetTokenIntrospect } from '../../types/auth';
+import { LoadingState } from '../../components/ui/LoadingState';
+import { PasswordInputField } from '../../components/shared/InputField';
+import FormErrorText from '../../components/shared/FormError';
+import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -11,7 +19,7 @@ interface SuccessModalProps {
   onSignIn: () => void;
 }
 
-const SuccessModal: React.FC<SuccessModalProps> = ({ isVisible, onClose, onSignIn }) => {
+const SuccessModal: React.FC<SuccessModalProps> = ({ isVisible, onSignIn }) => {
   if (!isVisible) return null;
 
   return (
@@ -37,134 +45,48 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ isVisible, onClose, onSignI
   );
 };
 
-const ResetPasswordScreen = () => {
-  const navigate = useNavigate();
+export default function ResetPasswordScreen() {
+
   const [searchParams] = useSearchParams();
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  // Get the reset token from the URL parameters
   const resetToken = searchParams.get('token');
-  const email = searchParams.get('email');
 
-  const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  const key = `/introspect/password-reset-token/${resetToken}`;
+  const { data: passwordReset, isLoading } = useSWR(key, () => authService.introspectPasswdResetToken(resetToken ?? "fallback-token"));
 
-    if (!resetToken || !email) {
-      setError('Invalid reset token or email');
-      return;
-    }
+  const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const onSuccess = () => setShowSuccessModal(true);
 
-    if (newPassword.length < 6) {
-      setError('Password must be at least 6 characters long');
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      await authService.resetPassword(email, resetToken, newPassword);
-      setShowSuccessModal(true);
-    } catch (error: any) {
-      setError(error.message || 'Failed to reset password');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  if (isLoading) {
+    return <LoadingState />
+  }
 
   return (
     <AuthLayout title="Reset Password" subtitle="Please enter your new password below">
-      <form onSubmit={handleResetPassword} className="mt-8 space-y-6">
-        {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
 
-        <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="new-password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              New Password
-            </label>
-            <div className="relative">
-              <input
-                id="new-password"
-                type={showNewPassword ? 'text' : 'password'}
-                required
-                className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
-                placeholder="Enter new password"
-                value={newPassword}
-                onChange={e => setNewPassword(e.target.value)}
-              />
-              <button
-                type="button"
-                onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
-            </div>
-          </div>
+      {resetToken && passwordReset?.data && !showSuccessModal && (
+        <ResetPasswordForm
+          resetToken={resetToken}
+          passwordReset={passwordReset?.data}
+          onSuccess={onSuccess}
+        />
+      )}
 
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Confirm New Password
-            </label>
-            <div className="relative">
-              <input
-                id="confirm-password"
-                type={showConfirmPassword ? 'text' : 'password'}
-                required
-                className="w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100"
-                placeholder="Confirm new password"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
-            </div>
-          </div>
-        </div>
+      {!resetToken || !passwordReset || !passwordReset.data && (
+        <ErrorState
+          error={passwordReset.error?.message}
+        />
+      )}
 
+      <div className="text-center">
         <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+          type="button"
+          onClick={() => navigate('/signin')}
+          className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
         >
-          {isLoading ? 'Resetting Password...' : 'Reset Password'}
+          Back to Sign In
         </button>
-
-        <div className="text-center">
-          <button
-            type="button"
-            onClick={() => navigate('/signin')}
-            className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
-          >
-            Back to Sign In
-          </button>
-        </div>
-      </form>
+      </div>
 
       {/* Success Modal */}
       <SuccessModal
@@ -176,4 +98,100 @@ const ResetPasswordScreen = () => {
   );
 };
 
-export default ResetPasswordScreen;
+type FormProps = {
+  passwordReset: PasswordResetTokenIntrospect,
+  resetToken: string,
+  onSuccess: () => void
+}
+
+export function ResetPasswordForm({ resetToken, onSuccess }: FormProps) {
+
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+
+  const { isValid: isPasswordValid, reason: passwordMessage } = usePasswordValidation(newPassword);
+
+  const handleResetPassword = async () => {
+    setError('');
+    
+    if (!resetToken) return;
+    
+    if (!isPasswordValid) {
+      setError(passwordMessage ?? "Invalid Password");
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    try {
+
+      setIsLoading(true);
+      const {data: resetData, error: resetError} = await authService.resetPassword(resetToken, newPassword);
+
+      if (resetData) {
+        onSuccess();
+      } else {
+        setError(resetError?.message ?? "Failed to reset password");
+      }
+
+    } catch (error: any) {
+      setError(error.message || 'Failed to reset password');
+    } finally {
+      setIsLoading(false);
+    }
+
+  };
+
+  const hasEnteredPassword = newPassword.length > 0;
+  const passwordsMatch = newPassword === confirmPassword;
+
+  return (
+    <form onSubmit={(e) => e.preventDefault()} className="mt-8 space-y-6">
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm">
+          {error}
+        </div>
+      )}
+
+      <div className="space-y-4">
+        <div className='flex flex-col gap-1' >
+          <PasswordInputField
+            label='New Password'
+            placeholder='New Password'
+            value={newPassword}
+            onChange={(s) => {setNewPassword(s ?? "")}}
+          />
+          {hasEnteredPassword && <FormErrorText error={passwordMessage} />}
+        </div>
+
+        <div>
+          <PasswordInputField
+            label='Confirm Password'
+            placeholder='Confirm Password'
+            value={confirmPassword}
+            onChange={(s) => setConfirmPassword(s ?? "")}
+          />
+
+          {!passwordsMatch && <FormErrorText error='Passwords should match' />}
+        </div>
+
+        {}
+      </div>
+
+    <PrimaryButton
+      isLoading={isLoading}
+      disbabled={isLoading || !isPasswordValid}
+      className='py-3.5' 
+      onClick={handleResetPassword}
+    >
+      Reset Password
+    </PrimaryButton>
+    </form>
+  )
+
+}

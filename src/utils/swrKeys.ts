@@ -1,5 +1,7 @@
 /** provides functions to get keys for different swr fetch keys */
 
+import { IProSeason } from "../types/season";
+
 export const swrFetchKeys = {
     getSbrUserMotmVoteKey: (fixtureId: string) => {
         return `user-sbr-fixture-motm-vote/${fixtureId}`;
@@ -17,7 +19,7 @@ export const swrFetchKeys = {
         return `pro-fixture/${fixtureId}`;
     },
 
-    getSbrFixtureEventsKey: (fixtureId: string) => {
+    getSbrFixtureTimeline: (fixtureId: string) => {
         return `sbr-fixture-events/${fixtureId}`;
     },
 
@@ -27,5 +29,41 @@ export const swrFetchKeys = {
 
     getUserProPredictionsHistoryKey: (userId: string) => {
         return `/user-pro-prediction-history/${userId}`;
+    },
+
+    getAuthUserProfileKey: () => {
+        return '/auth-user-profile';
+    },
+
+    getAllProAthletesKey: () => {
+        return 'pro-athletes';
+    },
+
+    getAthleteAggregatedStats: (athleteId: string, competitionId?: string) => {
+        if (competitionId) {
+            return `/athlete-aggregated-stats/${athleteId}/for-comp/${competitionId}`;
+        }
+
+        return `/athlete-aggregated-stats/${athleteId}`
+    },
+
+    getAthleteSeasonStarRatings: (athleteId: string, seasonId: string) => {
+        return `/athlete-season-star-ratings/${athleteId}/season/${seasonId}`
+    },
+
+    getAthleteCareerStarRatings: (athleteId: string) => {
+        return `/athlete-career-star-ratings/${athleteId}`
+    },
+
+    getAllFantasyLeagues: () => {
+        return `fantasy-leagues`;
+    },
+
+    getAllSuppportedSeasons: (seasonIds?: string[]) => {
+        return `seasons/${seasonIds?.join('-')}`;
+    },
+
+    getAllSeasonAthletes: (season: IProSeason) => {
+        return `seasons/${season.id}/athletes`;
     }
 }

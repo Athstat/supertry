@@ -4,7 +4,7 @@ import { useSetAtom } from "jotai";
 import { sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms";
 import useSWR from "swr";
 import { sbrMotmService } from "../../../services/sbrMotmService";
-import { sbrService } from "../../../services/sbrService";
+import { sbrService } from "../../../services/sbr/sbrService";
 import { LoadingState } from "../../ui/LoadingState";
 import { swrFetchKeys } from "../../../utils/swrKeys";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";

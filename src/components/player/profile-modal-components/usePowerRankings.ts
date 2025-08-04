@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { athleteService, PowerRankingItem } from '../../../services/athleteService';
+import { powerRankingsService } from '../../../services/powerRankingsService';
+import { SingleMatchPowerRanking } from '../../../types/powerRankings';
 
 export interface UsePowerRankingsResult {
-  data: PowerRankingItem[];
+  data: SingleMatchPowerRanking[];
   isLoading: boolean;
   error: string | null;
 }
 
 export const usePowerRankings = (athleteId?: string): UsePowerRankingsResult => {
-  const [data, setData] = useState<PowerRankingItem[]>([]);
+  const [data, setData] = useState<SingleMatchPowerRanking[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,11 +24,11 @@ export const usePowerRankings = (athleteId?: string): UsePowerRankingsResult => 
       setError(null);
 
       try {
-        const rankingsData = await athleteService.getAthletePowerRankings(athleteId);
+        const rankingsData = await powerRankingsService.getPastMatchsPowerRankings(athleteId, 10);
         
         // Sort by kickoff_time
         const sortedData = [...rankingsData].sort((a, b) => 
-          new Date(a.kickoff_time).getTime() - new Date(b.kickoff_time).getTime()
+          new Date(a.game.kickoff_time ?? new Date()).getTime() - new Date(b.game.kickoff_time ?? new Date()).getTime()
         );
         
         setData(sortedData);
