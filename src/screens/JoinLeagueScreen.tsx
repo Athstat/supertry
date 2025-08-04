@@ -11,6 +11,8 @@ import JoinLeagueActiveLeaguesSection from '../components/leagues/join_league_sc
 import JoinLeaguePastLeaguesSection from '../components/leagues/join_league_screen/JoinLeaguePastLeaguesSection';
 import JoinLeagueUpcomingLeaguesSection from '../components/leagues/join_league_screen/JoinLeagueUpcomingLeaguesSection';
 import JoinLeagueGroupsSection from '../components/leagues/join_league_screen/JoinLeagueGroupsSection';
+import UserCreatedLeaguesSection from '../components/leagues/UserCreatedLeaguesSection';
+import PublicLeaguesSection from '../components/leagues/PublicLeaguesSection';
 import { useFetch } from '../hooks/useFetch';
 import { LoadingState } from '../components/ui/LoadingState';
 
@@ -84,7 +86,9 @@ export function JoinLeagueScreen() {
         <JoinLeagueDeadlineCountdown league={leagueOnTheClock} onViewLeague={handleLeagueClick} />
       )}
 
-      <JoinLeagueGroupsSection leagues={leagues} />
+      <UserCreatedLeaguesSection />
+      {/* <PublicLeaguesSection /> */}
+      {/* <JoinLeagueGroupsSection leagues={leagues} /> */}
 
       {isLoading ? (
         <div className="flex justify-center items-center py-12">

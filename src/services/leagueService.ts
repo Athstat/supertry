@@ -1,4 +1,4 @@
-import { IFantasyLeague, IFantasyLeagueTeam } from '../types/fantasyLeague';
+import { IFantasyLeague, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../types/leagueConfig';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { analytics } from './anayticsService';
@@ -258,6 +258,27 @@ export const leagueService = {
     } catch (error) {
       console.error(`Error checking user status for league ${leagueId}:`, error);
       return false;
+    }
+  },
+
+  /**
+   * Fetch all available competitions/seasons
+   */
+  getAllSeasons: async (): Promise<ISeason[]> => {
+    try {
+      const uri = getUri('/api/v1/seasons/');
+      const response = await fetch(uri, {
+        method: 'GET',
+        headers: getAuthHeader(),
+      });
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw new Error('Failed to fetch seasons');
+      }
+    } catch (error) {
+      console.error('Error in getAllSeasons:', error);
+      return [];
     }
   },
 };

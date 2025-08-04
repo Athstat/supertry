@@ -14,6 +14,7 @@ export default function JoinLeagueUpcomingLeaguesSection({ leagues, userTeams }:
   const navigate = useNavigate();
 
   const handleLeagueClick = (league: IFantasyLeague) => {
+    console.log('league clicked::', league);
     navigate(`/league/${league.id}`, {
       state: { league },
     });

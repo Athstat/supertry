@@ -78,7 +78,7 @@ export function LeagueScreen() {
 
       console.log('league to join: ', league);
 
-      navigate(`/${league.season}/create-team`, {
+      navigate(`/${league.season ? league.season : league.official_league_id}/create-team`, {
         state: { league },
       });
     }

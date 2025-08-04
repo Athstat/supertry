@@ -1,5 +1,12 @@
 import { IFantasyTeamAthlete } from './fantasyTeamAthlete';
 
+export interface ISeason {
+  id: string;
+  name: string;
+  start_date?: string;
+  end_date?: string;
+}
+
 export interface IFantasyLeague {
   season: string;
   id: string;
