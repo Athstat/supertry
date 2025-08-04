@@ -86,7 +86,9 @@ export function JoinLeagueScreen() {
         <JoinLeagueDeadlineCountdown league={leagueOnTheClock} onViewLeague={handleLeagueClick} />
       )}
 
-      <UserCreatedLeaguesSection />
+      <div className="mt-6">
+        <UserCreatedLeaguesSection />
+      </div>
       {/* <PublicLeaguesSection /> */}
       {/* <JoinLeagueGroupsSection leagues={leagues} /> */}
 
