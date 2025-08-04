@@ -35,13 +35,30 @@ export const gamesService = {
     }
   },
 
-    getGameById: async (gameId: string) : Promise<IFullFixture | undefined> => {
-        const uri = getUri(`/api/v1/games/${gameId}`);
-        
-        try {
-            const res = await fetch(uri, {
-                headers: getAuthHeader()
-            });
+  getGamesByLeagueId: async (leagueId: string): Promise<IFixture[]> => {
+    const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/related-games`);
+
+    console.log('gamesbyid: ', leagueId);
+
+    try {
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
+
+      return (await res.json()) as IFixture[];
+    } catch (err) {
+      console.log('Error fetching games', err);
+      return [];
+    }
+  },
+
+  getGameById: async (gameId: string): Promise<IFullFixture | undefined> => {
+    const uri = getUri(`/api/v1/games/${gameId}`);
+
+    try {
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
 
       return (await res.json()) as IFixture;
     } catch (err) {
@@ -130,21 +147,19 @@ export const gamesService = {
     }
   },
 
-  getGameTeamActions: async (gameId: string) : Promise<ITeamAction[]> => {
+  getGameTeamActions: async (gameId: string): Promise<ITeamAction[]> => {
     try {
-        
-        const uri = getUri(`/api/v1/games/${gameId}/team-actions`);
-        
-        const res = await fetch(uri, {
-            headers: getAuthHeader()
-        });
+      const uri = getUri(`/api/v1/games/${gameId}/team-actions`);
 
-        if (res.ok) {
-            return (await res.json()) as ITeamAction[]
-        }
-        
+      const res = await fetch(uri, {
+        headers: getAuthHeader(),
+      });
+
+      if (res.ok) {
+        return (await res.json()) as ITeamAction[];
+      }
     } catch (err) {
-        logger.error('Error loading team actions ', err);
+      logger.error('Error loading team actions ', err);
     }
 
     return [];

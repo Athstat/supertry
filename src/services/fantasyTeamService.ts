@@ -82,15 +82,15 @@ export const fantasyTeamService = {
   /**
    * Fetch all club teams for the current user (not league teams)
    */
-  fetchUserTeams: async (id?: string): Promise<IFantasyClubTeam[]> => {
+  fetchUserTeams: async (id?: string): Promise<any[]> => {
     try {
       let userId = id;
       if (!userId) {
         const userInfo = await authService.getUserInfo();
         userId = userInfo?.kc_id || 'default-user-id';
       }
-      // Use the fantasy-clubs endpoint to get FantasyClubTeam objects
-      const url = getUri(`/api/v1/fantasy-teams/fantasy-clubs/${userId}/`);
+      // Use the fantasy-teams-all endpoint to get FantasyLeagueTeam objects with league_id
+      const url = getUri(`/api/v1/fantasy-teams/fantasy-teams-all/${userId}`);
 
       const response = await fetch(url, {
         method: 'GET',

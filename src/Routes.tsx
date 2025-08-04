@@ -19,6 +19,7 @@ import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
 import { PlayersScreen } from './screens/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
+import JoinGroupScreen from './screens/JoinGroupScreen';
 import { useAuth } from './contexts/AuthContext';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
@@ -121,18 +122,8 @@ const AppRoutes = () => {
           </AuthRoute>
         }
       />
-      <Route
-        path="/forgot-password"
-        element={
-          <ForgotPasswordScreen />
-        }
-      />
-      <Route
-        path="/reset-password"
-        element={
-          <ResetPasswordScreen />
-        }
-      />
+      <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+      <Route path="/reset-password" element={<ResetPasswordScreen />} />
       <Route
         path="/auth-choice"
         element={
@@ -166,7 +157,16 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/league/:leagueId"
+        path="/join-group/:inviteCode"
+        element={
+          <ProtectedRoute>
+            <JoinGroupScreen />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/league/:officialLeagueId"
         element={
           <ProtectedRoute>
             <Layout>
@@ -383,10 +383,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
     </Routes>
-
-
   );
 };
 

@@ -1,6 +1,6 @@
-import React from "react";
-import { TeamCreationPositionSlot } from "../../types/position";
-import { Award } from "lucide-react";
+import React from 'react';
+import { TeamCreationPositionSlot } from '../../types/position';
+import { Award } from 'lucide-react';
 
 interface PositionCardProps {
   position: TeamCreationPositionSlot;
@@ -26,42 +26,46 @@ const PositionCard: React.FC<PositionCardProps> = ({
   // Debug log for component render
   React.useEffect(() => {
     if (hasPlayer) {
-      console.log("PositionCard rendered with player:", {
-        playerName: position.player?.player_name,
-        playerId: position.player?.tracking_id,
-        hasCaptainSetter: !!setCaptainId,
-        isCaptain,
-        currentCaptainId: captainId
-      });
+      // console.log("PositionCard rendered with player:", {
+      //   playerName: position.player?.player_name,
+      //   playerId: position.player?.tracking_id,
+      //   hasCaptainSetter: !!setCaptainId,
+      //   isCaptain,
+      //   currentCaptainId: captainId
+      // });
     }
   }, [hasPlayer, position.player, setCaptainId, isCaptain, captainId]);
 
   const handleCaptainClick = (e: React.MouseEvent) => {
-    console.log("Captain button clicked - START");
+    console.log('Captain button clicked - START');
     e.preventDefault();
     e.stopPropagation();
-    console.log("Captain icon clicked!", { 
-      hasPlayer, 
+    console.log('Captain icon clicked!', {
+      hasPlayer,
       playerInfo: position.player,
-      currentCaptainId: captainId 
+      currentCaptainId: captainId,
     });
-    
+
     if (!hasPlayer || !setCaptainId) {
-      console.log("Cannot set captain: ", {
+      console.log('Cannot set captain: ', {
         hasPlayer,
-        hasCaptainSetter: !!setCaptainId
+        hasCaptainSetter: !!setCaptainId,
       });
       return;
     }
-    
+
     if (captainId === position.player?.tracking_id) {
-      console.log("Removing captain status");
+      console.log('Removing captain status');
       setCaptainId(null);
     } else {
-      console.log("Setting new captain:", position.player?.player_name, position.player?.tracking_id);
+      console.log(
+        'Setting new captain:',
+        position.player?.player_name,
+        position.player?.tracking_id
+      );
       setCaptainId(position.player?.tracking_id || null);
     }
-    console.log("Captain button clicked - END");
+    console.log('Captain button clicked - END');
   };
 
   return (
@@ -70,9 +74,9 @@ const PositionCard: React.FC<PositionCardProps> = ({
       className={`
         bg-white dark:bg-dark-800 rounded-lg shadow-md p-4 cursor-pointer transition
         hover:shadow-lg transform hover:-translate-y-1 
-        ${selected ? "ring-2 ring-green-500 dark:ring-green-400" : ""}
-        ${hasPlayer ? "bg-gray-50 dark:bg-dark-750" : ""}
-        ${isCaptain ? "border-2 border-yellow-400" : ""}
+        ${selected ? 'ring-2 ring-green-500 dark:ring-green-400' : ''}
+        ${hasPlayer ? 'bg-gray-50 dark:bg-dark-750' : ''}
+        ${isCaptain ? 'border-2 border-yellow-400' : ''}
       `}
     >
       <div className="flex flex-col items-center">
@@ -84,12 +88,14 @@ const PositionCard: React.FC<PositionCardProps> = ({
                   onClick={handleCaptainClick}
                   className="absolute top-0 right-0 z-10 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   title="Set as captain"
-                  aria-label={isCaptain ? "Remove as captain" : "Set as captain"}
+                  aria-label={isCaptain ? 'Remove as captain' : 'Set as captain'}
                 >
-                  <Award 
+                  <Award
                     className={`w-6 h-6 transition-colors ${
-                      isCaptain ? "text-yellow-400 fill-yellow-400" : "text-gray-300 dark:text-gray-500"
-                    }`} 
+                      isCaptain
+                        ? 'text-yellow-400 fill-yellow-400'
+                        : 'text-gray-300 dark:text-gray-500'
+                    }`}
                   />
                 </button>
               )}
@@ -102,14 +108,14 @@ const PositionCard: React.FC<PositionCardProps> = ({
                   />
                 ) : (
                   <span className="text-white font-semibold text-lg">
-                    {position.player.player_name?.charAt(0) ?? ""}
+                    {position.player.player_name?.charAt(0) ?? ''}
                   </span>
                 )}
               </div>
             </div>
             <h3
               className={`font-bold text-sm mb-1 dark:text-white ${
-                isSuperSub ? "text-orange-600 dark:text-orange-400" : ""
+                isSuperSub ? 'text-orange-600 dark:text-orange-400' : ''
               }`}
             >
               {position.name}
@@ -117,11 +123,9 @@ const PositionCard: React.FC<PositionCardProps> = ({
             <p className="text-xs text-center font-medium mb-1 dark:text-gray-300">
               {position.player.player_name}
             </p>
-            
+
             <div className="flex justify-between w-full text-xs mb-3">
-              <span className="text-gray-500 dark:text-gray-400">
-                {position.player.team_name}
-              </span>
+              <span className="text-gray-500 dark:text-gray-400">{position.player.team_name}</span>
               <span className="font-bold dark:text-gray-200 flex items-center">
                 <svg
                   className="w-3.5 h-3.5 mr-1 text-yellow-500"
@@ -135,26 +139,25 @@ const PositionCard: React.FC<PositionCardProps> = ({
               </span>
             </div>
 
-                        
             {/* Captain button as separate control */}
             {hasPlayer && setCaptainId && (
               <button
                 onClick={handleCaptainClick}
                 className={`text-xs py-1.5 px-2 rounded mb-2 flex items-center justify-center w-full ${
-                  isCaptain 
-                    ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400"
+                  isCaptain
+                    ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400'
                 }`}
               >
-                <Award className={`w-3.5 h-3.5 mr-1.5 ${isCaptain ? "fill-yellow-400" : ""}`} />
-                {isCaptain ? "Captain" : "Make Captain"}
+                <Award className={`w-3.5 h-3.5 mr-1.5 ${isCaptain ? 'fill-yellow-400' : ''}`} />
+                {isCaptain ? 'Captain' : 'Make Captain'}
               </button>
             )}
-            
+
             {/* Mobile-friendly remove button */}
             {onRemove && (
               <button
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   onRemove(position.id);
                 }}
@@ -180,13 +183,11 @@ const PositionCard: React.FC<PositionCardProps> = ({
         ) : (
           <>
             <div className="w-14 h-14 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mb-2">
-              <span className="text-2xl text-gray-500 dark:text-gray-300">
-                +
-              </span>
+              <span className="text-2xl text-gray-500 dark:text-gray-300">+</span>
             </div>
             <h3
               className={`font-bold text-sm mb-1 dark:text-white ${
-                isSuperSub ? "text-orange-600 dark:text-orange-400" : ""
+                isSuperSub ? 'text-orange-600 dark:text-orange-400' : ''
               }`}
             >
               {position.name}
@@ -194,9 +195,7 @@ const PositionCard: React.FC<PositionCardProps> = ({
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Add {position.name}
               {isSuperSub && (
-                <span className="block text-orange-500 font-semibold mt-0.5">
-                  Any Position
-                </span>
+                <span className="block text-orange-500 font-semibold mt-0.5">Any Position</span>
               )}
             </p>
             <span className="mt-2 text-xs py-1 px-2 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded-full">
