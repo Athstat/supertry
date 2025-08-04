@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log('[AuthContext] User authenticated, fetching user data...');
         // Fetch fresh user data if authenticated
         try {
-          const user = await authService.getUserInfo();
+          const user = authService.getUserInfoSync();
           if (user) {
             console.log('[AuthContext] User data fetched successfully:', user.email);
             setUser(user);
