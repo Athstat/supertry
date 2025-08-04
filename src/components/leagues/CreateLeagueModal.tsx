@@ -89,7 +89,7 @@ export default function CreateLeagueModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 pb-20">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Create New League</h2>
@@ -161,22 +161,22 @@ export default function CreateLeagueModal({
               Privacy Setting
             </label>
             <div className="flex gap-4">
-              <label className="flex items-center">
+              <label className="flex items-center text-gray-700 dark:text-gray-300">
                 <input
                   type="radio"
                   checked={formData.is_public}
                   onChange={() => handleInputChange('is_public', true)}
-                  className="mr-2"
+                  className="mr-2 text-primary-600 dark:text-primary-500 focus:ring-primary-500"
                 />
                 <Globe className="w-4 h-4 mr-1" />
                 Public
               </label>
-              <label className="flex items-center">
+              <label className="flex items-center text-gray-700 dark:text-gray-300">
                 <input
                   type="radio"
                   checked={!formData.is_public}
                   onChange={() => handleInputChange('is_public', false)}
-                  className="mr-2"
+                  className="mr-2 text-primary-600 dark:text-primary-500 focus:ring-primary-500"
                 />
                 <Lock className="w-4 h-4 mr-1" />
                 Private
@@ -199,38 +199,6 @@ export default function CreateLeagueModal({
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white"
                 min="2"
                 max="50"
-              />
-            </div>
-
-            {/* Entry Fee */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                <DollarSign className="w-4 h-4 inline mr-1" />
-                Entry Fee ($)
-              </label>
-              <input
-                type="number"
-                value={formData.entry_fee}
-                onChange={e => handleInputChange('entry_fee', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white"
-                min="0"
-                step="0.01"
-              />
-            </div>
-
-            {/* Prize Pool */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                <DollarSign className="w-4 h-4 inline mr-1" />
-                Prize Pool ($)
-              </label>
-              <input
-                type="number"
-                value={formData.prize_pool}
-                onChange={e => handleInputChange('prize_pool', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white"
-                min="0"
-                step="0.01"
               />
             </div>
 
