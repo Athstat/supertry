@@ -6,3 +6,5 @@ export const AFRICA_CUP = "sr-1";
 
 /** The amount of coins avaialble to a player to build their team */
 export const MAX_TEAM_BUDGET = 240;
+
+export const MAX_COMPARE_PLAYERS = 10;

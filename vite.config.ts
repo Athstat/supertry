@@ -9,6 +9,20 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: (assetInfo) => {
+            // Optimize image assets
+            if (assetInfo.name && /\.(png|jpe?g|gif|svg|webp|avif)$/i.test(assetInfo.name)) {
+              return 'assets/images/[name]-[hash][extname]';
+            }
+            return 'assets/[name]-[hash][extname]';
+          },
+        },
+      },
+    },
+    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg', '**/*.webp', '**/*.avif'],
     server: {
       historyApiFallback: true,
       host: true,
@@ -23,7 +37,7 @@ export default defineConfig(({ mode }) => {
       ],
       proxy: {
         '/api/v1': {
-          target: 'https://athstat-games-server.onrender.com',
+          target: 'http://localhost:8000', // Updated to Django server
           changeOrigin: true,
           secure: false,
           rewrite: path => path.replace(/^\/api\/v1/, '/api/v1'),

@@ -4,7 +4,7 @@
  * @param dateString The date string to format
  * @returns Formatted date string (e.g. "01 Jan 2000")
  */
-export const formatDate = (dateString: string): string => {
+export const formatDate = (dateString: Date): string => {
   if (!dateString) return 'Unknown';
   try {
     const date = new Date(dateString);

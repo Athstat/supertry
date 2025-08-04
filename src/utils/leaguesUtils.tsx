@@ -1,4 +1,3 @@
-import { add, differenceInDays } from 'date-fns';
 import { IFantasyLeague } from '../types/fantasyLeague';
 import { leagueService } from '../services/leagueService';
 import { dateComparator } from './dateUtils';
@@ -7,19 +6,7 @@ import { dateComparator } from './dateUtils';
 export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
   return leagues
     .filter(l => {
-      if (!l.is_open && l.has_ended) {
-        return false;
-      }
-
-      if (!l.join_deadline) {
-        return false;
-      }
-
-      const today = new Date();
-      const deadline = new Date(l.join_deadline);
-      const daysDiff = differenceInDays(deadline, today);
-
-      return daysDiff <= 14;
+      return l.has_ended === false;
     })
     .sort((a, b) => {
       const aDeadline = new Date(a.join_deadline ?? 0);
@@ -93,25 +80,15 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   const now = new Date();
   const deadline = new Date(joinDeadline);
 
-  const softDeadline = add(deadline, {
-    hours: 1,
-    minutes: 30,
-  });
-
-  return now.valueOf() > softDeadline.valueOf();
+  return now.valueOf() > deadline.valueOf();
 }
 
 /** Returns the last possible date that users can join a league */
 export function calculateJoinDeadline(league: IFantasyLeague) {
+
   if (league.join_deadline) {
     const deadline = new Date(league.join_deadline);
-
-    const adjustedDeadline = add(deadline, {
-      hours: 1,
-      minutes: 30,
-    });
-
-    return adjustedDeadline;
+    return deadline;
   }
 
   return undefined;
@@ -191,16 +168,12 @@ export function pastLeaguesFilter(leagues: IFantasyLeague[]) {
 export function leaguesOnClockFilter(leagues: IFantasyLeague[]) {
   const activeLeagues = activeLeaguesFilter(leagues);
 
-  let leagueOnTheClock: IFantasyLeague | undefined;
-  const threeDays = 1000 * 60 * 60 * 24 * 3;
+  const leagueOnTheClock = activeLeagues.length > 0 ?
+    activeLeagues[0] : undefined;
 
-  const leaguesOnTheClock = activeLeagues.filter(l => {
-    return isLeagueOnTheClock(l, threeDays);
-  });
+  return {
+    leaguesOnTheClock: activeLeagues,
+    firstLeagueOnClock: leagueOnTheClock
+  };
 
-  if (leaguesOnTheClock.length > 0) {
-    leagueOnTheClock = leaguesOnTheClock[0];
-  }
-
-  return { leaguesOnTheClock, firstLeagueOnClock: leagueOnTheClock };
 }

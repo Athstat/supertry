@@ -35,7 +35,7 @@ export default function PlayerMugshot({ url, className, alt, showPrBackground, p
 
   return (
     <div className={twMerge(
-      "w-14 h-14 overflow-clip border border-slate-400 dark:border-slate-800 rounded-full",
+      "w-14 h-14 overflow-clip cursor-pointer border border-slate-400 dark:border-slate-800 rounded-full",
       cardTier === "gold" && showPrBackground &&
       "bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ",
       cardTier === "silver" && showPrBackground &&
@@ -44,6 +44,8 @@ export default function PlayerMugshot({ url, className, alt, showPrBackground, p
       "bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white",
       cardTier === "blue" && showPrBackground &&
       "bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white",
+      "hover:bg-gradient-to-br hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 hover:text-white",
+      "transition-all delay-100",
       className
     )} >
       <img

@@ -8,7 +8,7 @@ import { SwapConfirmationModal } from "../team/SwapConfirmationModal";
 import PlayerSelectionModal from "../team-creation/PlayerSelectionModal";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
 import { fantasyTeamService } from "../../services/fantasyTeamService";
-import { athleteService } from "../../services/athleteService";
+import { athleteService } from "../../services/athletes/athleteService";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useAtom, useAtomValue } from "jotai";
 import { fantasyTeamAthletesAtom, fantasyTeamAtom, remainingTeamBudgetAtom } from "../../state/myTeam.atoms";

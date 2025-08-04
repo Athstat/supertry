@@ -1,4 +1,4 @@
-import { athleteService } from "../../services/athleteService";
+import { athleteService } from "../../services/athletes/athleteService";
 import { RugbyPlayer } from "../../types/rugbyPlayer"
 import WarningCard from "../shared/WarningCard"
 import { useFetch } from "../../hooks/useFetch";

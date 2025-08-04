@@ -1,31 +1,28 @@
-import { IFantasyLeague, IFantasyLeagueTeam } from "../types/fantasyLeague";
-import { IGamesLeagueConfig } from "../types/leagueConfig";
-import { getAuthHeader, getUri } from "../utils/backendUtils";
-import { analytics } from "./anayticsService";
-import { fantasyTeamService } from "./fantasyTeamService";
+import { IFantasyLeague, IFantasyLeagueTeam } from '../types/fantasyLeague';
+import { IGamesLeagueConfig } from '../types/leagueConfig';
+import { getAuthHeader, getUri } from '../utils/backendUtils';
+import { analytics } from './anayticsService';
+import { fantasyTeamService } from './fantasyTeamService';
+import { authService } from './authService';
 
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-
       const uri = getUri(`/api/v1/fantasy-leagues`);
       const response = await fetch(uri, {
-        method: "GET",
-        headers: getAuthHeader()
+        method: 'GET',
+        headers: getAuthHeader(),
       });
 
       if (response.ok) {
-
         const json = await response.json();
         return json;
-
       } else {
-        console.error("Failed to fetch leagues:", await response.text());
-        throw new Error("Failed to fetch leagues");
+        console.error('Failed to fetch leagues:', await response.text());
+        throw new Error('Failed to fetch leagues');
       }
-
     } catch (error) {
-      console.error("Error in leagueService:", error);
+      console.error('Error in leagueService:', error);
       return [];
     }
   },
@@ -35,20 +32,18 @@ export const leagueService = {
    */
   getLeagueById: async (leagueId: number): Promise<IFantasyLeague | undefined> => {
     try {
-
       if (leagueId == 0) return undefined;
-      
+
       const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}`);
-      
+
       const response = await fetch(uri, {
-        method: "GET",
-        headers: getAuthHeader()
+        method: 'GET',
+        headers: getAuthHeader(),
       });
 
       return await response.json();
-
     } catch (error) {
-      console.error("Error fetching league by ID:", error);
+      console.error('Error fetching league by ID:', error);
       return undefined;
     }
   },
@@ -56,157 +51,137 @@ export const leagueService = {
   /**
    * Fetch participating teams for a league
    */
-  fetchParticipatingTeams: async (
-    leagueId: string | number
-  ): Promise<IFantasyLeagueTeam[]> => {
+  fetchParticipatingTeams: async (leagueId: string | number): Promise<IFantasyLeagueTeam[]> => {
     try {
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        throw new Error(
-          "Authentication token is missing. Please log in again."
-        );
-      }
-
       const uri = getUri(
         `/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`
       );
 
       const response = await fetch(uri, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        method: 'GET',
+        headers: getAuthHeader(),
       });
 
       if (!response.ok) {
-        console.error(
-          "Failed to fetch participating teams:",
-          await response.text()
-        );
+        console.error('Failed to fetch participating teams:', await response.text());
         return [];
       }
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching participating teams:", error);
+      console.error('Error fetching participating teams:', error);
       return [];
     }
   },
 
-  getLeagueConfig: async (
-    officialLeagueId: string
-  ): Promise<IGamesLeagueConfig | null> => {
+  getLeagueConfig: async (officialLeagueId: string): Promise<IGamesLeagueConfig | null> => {
     try {
-      const uri = getUri(
-        `/api/v1/unauth/fantasy-league-config/${officialLeagueId}`
-      );
+      const uri = getUri(`/api/v1/unauth/fantasy-league-config/${officialLeagueId}`);
 
       try {
         const response = await fetch(uri, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            ...(localStorage.getItem("access_token") && {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            }),
-          },
+          method: 'GET',
+          headers: getAuthHeader(),
         });
 
         if (response.ok) {
           return await response.json();
         } else {
-          console.error(
-            "Failed to fetch league config:",
-            await response.text()
-          );
-          throw new Error("Failed to fetch league config");
+          console.error('Failed to fetch league config:', await response.text());
+          throw new Error('Failed to fetch league config');
         }
       } catch (apiError) {
-        console.error("API fetch error:", apiError);
+        console.error('API fetch error:', apiError);
         return null;
       }
     } catch (error) {
-      console.error("Error in leagueService.getLeagueConfig:", error);
+      console.error('Error in leagueService.getLeagueConfig:', error);
       return null;
     }
   },
 
-  joinLeague: async (league: any): Promise<any> => {
+  joinLeague: async (league: any, teamId?: string): Promise<any> => {
     try {
-      // Get user ID from token
-      const token = localStorage.getItem("access_token");
+      // Get user ID from auth service (Django uses simple tokens, not JWTs)
+      const userInfo = await authService.getUserInfo();
 
-      if (!token) {
-        throw new Error(
-          "Authentication token is missing. Please log in again."
+      if (!userInfo || !userInfo.kc_id) {
+        throw new Error('Could not determine user identity. Please log in again.');
+      }
+
+      const userId = userInfo.kc_id;
+
+      let teamToJoin;
+
+      if (teamId) {
+        // If team ID is provided, use it directly
+        teamToJoin = { id: teamId };
+      } else {
+        // Fallback: Fetch the user's latest team
+        const userTeams = await fantasyTeamService.fetchUserTeams();
+
+        if (!userTeams || userTeams.length === 0) {
+          throw new Error('Could not find your team. Please try again.');
+        }
+
+        // Use the most recently created team (assuming it's the one we just submitted)
+        teamToJoin = userTeams.reduce(
+          (highest, team) => (team.id > highest.id ? team : highest),
+          userTeams[0]
         );
       }
-
-      // Extract user ID from token
-      let userId = "default-user-id";
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        userId = payload.sub || userId;
-      } catch (error) {
-        console.error("Error extracting user ID from token:", error);
-        throw new Error(
-          "Could not determine user identity. Please log in again."
-        );
-      }
-
-      //console.log("League for joining: ", league);
-
-      // // Fetch the user's latest team
-      const userTeams = await fantasyTeamService
-        .fetchUserTeams
-        // league.official_league_id
-        ();
-
-      if (!userTeams || userTeams.length === 0) {
-        throw new Error("Could not find your team. Please try again.");
-      }
-
-      //console.log("User teams: ", userTeams);
-
-      // Use the most recently created team (assuming it's the one we just submitted)
-      const latestTeam = userTeams.reduce(
-        (highest, team) => (team.id > highest.id ? team : highest),
-        userTeams[0]
-      );
 
       const uri = getUri(`/api/v1/fantasy-leagues/join-league`);
 
-      const response = await fetch(uri, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const headers = getAuthHeader();
+
+      // Check if we have an auth token
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in again.');
+      }
+
+      // Ensure we're sending the correct structure expected by Django
+      const payload = {
+        team: {
+          id: teamToJoin.id,
         },
-        body: JSON.stringify({
-          team: latestTeam,
-          league: league,
-          user_id: userId,
-        }),
+        league: {
+          id: league.id || league.league_id, // Handle both possible field names
+        },
+        user_id: userId,
+      };
+
+      console.log('Join league request:', {
+        uri,
+        headers,
+        payload,
+        hasToken: !!token,
+        tokenPrefix: token ? token.substring(0, 10) + '...' : 'none',
+      });
+
+      const response = await fetch(uri, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Failed to join league:", errorText);
-        throw new Error(
-          `Failed to join league: ${response.status} ${response.statusText}`
-        );
+        console.error('Failed to join league:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText,
+          headers: response.headers,
+        });
+        throw new Error(`Failed to join league: ${response.status} ${response.statusText}`);
       }
 
-      analytics.trackTeamCreationCompleted(
-        league.id,
-        latestTeam.id,
-        league.official_league_id
-      );
+      analytics.trackTeamCreationCompleted(league.id, teamToJoin.id, league.official_league_id);
 
       return await response.json();
     } catch (error) {
-      console.error("Error in leagueService.joinLeague:", error);
+      console.error('Error in leagueService.joinLeague:', error);
       throw error;
     }
   },
@@ -228,35 +203,22 @@ export const leagueService = {
           return true;
         }
       } catch (error) {
-        console.log("First approach failed, trying second approach", error);
+        console.log('First approach failed, trying second approach', error);
       }
 
-      // Get token for authentication
-      const token = localStorage.getItem("access_token");
-      if (!token) return false;
+      // Get user ID from auth service (Django uses simple tokens, not JWTs)
+      const userInfo = await authService.getUserInfo();
+      if (!userInfo || !userInfo.kc_id) return false;
 
-      // Extract user ID from token
-      let userId;
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        userId = payload.sub;
-      } catch (error) {
-        console.error("Error extracting user ID from token:", error);
-        return false;
-      }
+      const userId = userInfo.kc_id;
 
       // Fetch participating teams for this league
-      const participatingTeams = await leagueService.fetchParticipatingTeams(
-        leagueId
-      );
+      const participatingTeams = await leagueService.fetchParticipatingTeams(leagueId);
 
       // Check if any team belongs to the current user
-      return participatingTeams.some((team) => team.user_id === userId);
+      return participatingTeams.some(team => team.user_id === userId);
     } catch (error) {
-      console.error(
-        `Error checking user status for league ${leagueId}:`,
-        error
-      );
+      console.error(`Error checking user status for league ${leagueId}:`, error);
       return false;
     }
   },

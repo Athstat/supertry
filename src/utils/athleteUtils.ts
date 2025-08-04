@@ -1,6 +1,11 @@
-import { PointsBreakdownItem } from "../services/athleteService";
+import { PointsBreakdownItem } from "../services/athletes/athleteService";
+import { IProAthlete, IAthleteSeasonStarRatings } from "../types/athletes";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
-import { IFantasyAthlete } from "../types/rugbyPlayer";
+import { SortField, SortDirection } from "../types/playerSorting";
+import { PlayerForm } from "../types/rugbyPlayer";
+import { IProTeam } from "../types/team";
+import { IComparePlayerStats, ICompareStarRatingsStats } from "../types/comparePlayers";
+import { getPlayerAggregatedStat, PlayerAggregateStatAction } from "../types/sports_actions";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr: string) => {
@@ -22,53 +27,40 @@ export const formatPosition = (inStr: string) => {
     return outStr
 }
 
-function normalizeName(name: string) {
-    return name.trim().toLowerCase().replace(/\s+/g, ' ');
-}
+function nameMatches(query: string, target: string) {
+  // Normalize strings: convert to lowercase, remove diacritics, and remove apostrophes
+  const normalizeString = (str: string) => {
+    return str
+      .toLowerCase()
+      .normalize('NFD') // Decompose combined characters into base + diacritics
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (combining diacritical marks)
+      .replace(/'/g, ''); // Remove apostrophes
+  };
 
-function getInitials(name: string) {
-    return name
-        .split(' ')
-        .map(word => word[0])
-        .join('');
-}
+  const normalizedQuery = normalizeString(query);
+  const normalizedTarget = normalizeString(target);
 
-function nameMatches(input: string, target: string): boolean {
-    const inputNorm = normalizeName(input);
-    const targetNorm = normalizeName(target);
+  let queryIndex = 0; // Pointer for the normalized query string
+  let targetIndex = 0; // Pointer for the normalized target string
 
-    const inputTokens = inputNorm.split(' ');
-    const targetTokens = targetNorm.split(' ');
-
-    const inputLast = inputTokens[inputTokens.length - 1];
-    const targetLast = targetTokens[targetTokens.length - 1];
-
-    // Always require exact match on last name
-    if (inputLast !== targetLast) return false;
-
-    // If full names match
-    if (inputNorm === targetNorm) return true;
-
-    // If all non-last input tokens match prefix of target tokens
-    for (let i = 0; i < inputTokens.length - 1; i++) {
-        const inputPart = inputTokens[i];
-        const targetPart = targetTokens[i] || '';
-        if (!targetPart.startsWith(inputPart)) return false;
+  // Iterate through the normalized target string
+  while (queryIndex < normalizedQuery.length && targetIndex < normalizedTarget.length) {
+    // If the current characters match, move to the next character in the query
+    if (normalizedQuery[queryIndex] === normalizedTarget[targetIndex]) {
+      queryIndex++;
     }
+    // Always move to the next character in the target string
+    targetIndex++;
+  }
 
-    // Match initials (e.g. "J Hurts" → "Jaylen Hurts")
-    const inputInitials = getInitials(inputNorm);
-    const targetInitials = getInitials(targetNorm);
-    if (inputInitials === targetInitials && inputLast === targetLast) {
-        return true;
-    }
-
-    return true;
-}
+  // If all characters in the normalized query were found in order within the normalized target,
+  // then queryIndex will be equal to the length of the normalized query.
+  return queryIndex === normalizedQuery.length;
+};
 
 
-export function athleteSearchPredicate(athlete: IFantasyAthlete, query: string) {
-    return nameMatches(athlete.player_name ?? "", query);
+export function athleteSearchPredicate(athlete: IProAthlete, query: string) {
+    return nameMatches(query, athlete.player_name);
 }
 
 /** Predicate for searching by human names */
@@ -149,4 +141,201 @@ export function convertPositionNameToPositionObject(positionToSwap: string) {
         x: "0",
         y: "0",
     }
+}
+
+export const formBias = (powerRanking: number, form?: PlayerForm) => {
+    switch (form) {
+        case "UP":
+            return 3 + powerRanking;
+        case "NEUTRAL":
+            return 2;
+        case "DOWN":
+            return -5;
+        default:
+            return 1;
+    }
+};
+
+/** filters athletes by selected positions and postion classes */
+export function athletePositionFilter(athletes: IProAthlete[], selectedPositions: string[] | undefined): IProAthlete[] {
+
+    const formatted = (selectedPositions === undefined) ? undefined
+        : selectedPositions.map((p) => formatPosition(p));
+
+    const filtered = [...athletes]
+
+    if (!formatted || formatted.length === 0) {
+        return athletes;
+    }
+
+    return filtered.filter((a) => {
+
+        const position = a.position;
+        const positionClass = a.position_class;
+
+        const hasPosition = (position !== undefined) && position !== null;
+        const hasPositionClass = (positionClass !== undefined) && positionClass !== null;
+
+        const matchesPosition = hasPosition && formatted.includes(formatPosition(position));
+        const matchesPositionClass = hasPositionClass && formatted.includes(formatPosition(positionClass));
+
+        return matchesPosition || matchesPositionClass
+
+    });
+
+}
+
+export function athleteTeamFilter(athletes: IProAthlete[], selectedTeamIds: string[] | undefined): IProAthlete[] {
+
+    const filtered = [...athletes];
+
+    if (selectedTeamIds === undefined || selectedTeamIds.length === 0) {
+        return filtered;
+    }
+
+    return filtered.filter((a) => {
+        const matchesTeamsId = selectedTeamIds.includes(a.team_id);
+        return matchesTeamsId;
+    });
+
+}
+
+
+export function athleteSorter(athletes: IProAthlete[], sortType: SortField | undefined, direction: SortDirection | undefined): IProAthlete[] {
+
+
+    const sorted = [...athletes];
+
+    if (!sortType || !direction) {
+        return sorted;
+    }
+
+    if (sortType === 'form') {
+
+        return sorted.sort((a, b) => {
+            return direction === "asc" ?
+                formBias(a.power_rank_rating ?? 0, a.form) - formBias(b.power_rank_rating ?? 0, b.form)
+                : formBias(b.power_rank_rating ?? 0, b.form) - formBias(a.power_rank_rating ?? 0, a.form)
+        })
+
+    }
+
+    if (sortType === "power_rank_rating") {
+        return sorted.sort((a, b) => {
+            return direction === "asc" ?
+                (a.power_rank_rating ?? 0) - (b.power_rank_rating ?? 0)
+                : (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0)
+        })
+    }
+
+    if (sortType === "player_name") {
+        return sorted.sort((a, b) => {
+            return direction === "asc" ?
+                (a.player_name.localeCompare(b.player_name))
+                : (b.player_name.localeCompare(a.player_name))
+        });
+    }
+
+    return sorted;
+
+
+
+}
+
+export function athleteSearchFilter(athletes: IProAthlete[], query: string | undefined) {
+    
+    const buff = [...athletes];
+    if (!query) return buff;
+
+    return buff.filter((a) => {
+        return athleteSearchPredicate(a, query);
+    })
+}
+
+export function getAthletesSummary(athletes: IProAthlete[]) {
+
+    const teams: IProTeam[] = [];
+
+    const seenTeamIds = new Set<string>();
+    const uniquePositions = new Set<string>();
+
+    athletes.forEach((athlete) => {
+        if (!seenTeamIds.has(athlete.team.athstat_id)) {
+            seenTeamIds.add(athlete.team.athstat_id);
+            teams.push(athlete.team);
+        }
+
+        if (athlete.position) {
+            uniquePositions.add(athlete.position);
+        }
+    });
+
+    const positions =Array.of(...uniquePositions);
+
+
+    return { teams, positions };
+}
+
+/**
+ * Determines if a stat action value is the best (highest) among all compared players
+ */
+export function isStatActionBest(
+    athlete: IProAthlete,
+    value: number | undefined,
+    statKey: PlayerAggregateStatAction,
+    comparePlayerStats: IComparePlayerStats[]
+): boolean {
+    if (value === undefined || comparePlayerStats.length <= 1) return false;
+
+    const allValues = comparePlayerStats
+        .map(playerStat => {
+            const stat = getPlayerAggregatedStat(statKey, playerStat.stats);
+            return stat?.action_count;
+        })
+        .filter((val): val is number => val !== undefined);
+
+    if (allValues.length < 1) return false;
+    
+    const maxValue = Math.max(...allValues);
+    return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
+}
+
+/**
+ * Determines if a star rating value is the best (highest) among all compared players
+ */
+export function isStarRatingBest(
+    athlete: IProAthlete,
+    value: number | undefined,
+    starRatingKey: keyof IAthleteSeasonStarRatings,
+    compareStarRatings: ICompareStarRatingsStats[]
+): boolean {
+    if (value === undefined || compareStarRatings.length <= 1) return false;
+
+    const allValues = compareStarRatings
+        .map(playerRating => playerRating.stats[starRatingKey])
+        .filter((val): val is number => val !== undefined);
+
+    if (allValues.length <= 1) return false;
+    
+    const maxValue = Math.max(...allValues);
+    return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
+}
+
+/**
+ * Determines if a power rating value is the best (highest) among all compared players
+ */
+export function isPowerRatingBest(
+    athlete: IProAthlete,
+    comparePlayers: IProAthlete[]
+): boolean {
+    let maxVal: number = 0;
+
+    comparePlayers.forEach((p) => {
+        if (p.power_rank_rating && (p.power_rank_rating > maxVal)) {
+            maxVal = p.power_rank_rating;
+        }
+    });
+
+
+    return maxVal === athlete.power_rank_rating;
 }

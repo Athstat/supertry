@@ -20,7 +20,7 @@ export default function SeasonScreen() {
 
     if (isLoading) return <LoadingState />
 
-    if (!season) return <ErrorState error="Season was not found hahahahaah" />
+    if (!season) return <ErrorState error="Season was not found" />
 
     const atoms = [
         seasonAtom, seasonTeamsAtoms,

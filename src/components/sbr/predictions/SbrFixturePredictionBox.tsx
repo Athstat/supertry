@@ -1,12 +1,13 @@
 import { Fragment } from 'react/jsx-runtime';
 import { twMerge } from 'tailwind-merge';
-import { useSbrFixtureVotes } from '../../../hooks/useFxitureVotes';
+import { useSbrFixtureVotes } from '../../../hooks/useFixtureVotes';
 import { ISbrFixture } from '../../../types/sbr'
 import { VotingOptionBar, VotingOptionsResults } from '../../shared/bars/VotingOptionBar';
 import { useState } from 'react';
 import { mutate } from 'swr';
-import { sbrService } from '../../../services/sbrService';
+import { sbrService } from '../../../services/sbr/sbrService';
 import { sbrFixtureSummary, getSbrVotingSummary } from '../../../utils/sbrUtils';
+import { useInView } from 'react-intersection-observer';
 
 type Props = {
     fixture: ISbrFixture,
@@ -17,7 +18,10 @@ type Props = {
 /** Renders a box that can be used to predict and view an sbr fixtures predictions */
 export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols = "one" }: Props) {
 
-    const { homeVotes, awayVotes, userVote, isLoading } = useSbrFixtureVotes(fixture);
+
+    const {ref, inView} = useInView({triggerOnce: true});
+
+    const { homeVotes, awayVotes, userVote, isLoading, votes } = useSbrFixtureVotes(fixture, inView);
     const { home_score, away_score, home_team, away_team } = fixture;
     const hasScores = home_score !== null && away_score !== null;
 
@@ -62,12 +66,12 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
     const gameCompleted = fixture.status === "completed";
 
     const { hasKickedOff, homeTeamWon, awayTeamWon } = sbrFixtureSummary(fixture);
-    const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, userVote)
+    const { homePerc, awayPerc, votedAwayTeam, votedHomeTeam } = getSbrVotingSummary(fixture, votes, userVote)
 
     const hasUserVoted = votedAwayTeam || votedHomeTeam;
 
     return (
-        <div className='' >
+        <div ref={ref} className='' >
 
             {isLoading && (
                 <div className="w-full h-20 bg-slate-200 dark:bg-slate-800/40 animate-pulse rounded-xl" >
@@ -92,11 +96,11 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
                         preVotingCols === "one" && "grid grid-cols-1"
                     )} >
                         <button onClick={handleClickHomeVoteBar} className="border dark:border-slate-700 text-[10px] w-full px-2 rounded-xl bg-slate-200 py-1 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
-                            {home_team}
+                            {home_team.team_name}
                         </button>
 
                         <button onClick={handleClickAwayVoteBar} className="border dark:border-slate-700 text-[10px] w-full px-2 rounded-xl bg-slate-200 py-1 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700" >
-                            {away_team}
+                            {away_team.team_name}
                         </button>
                     </div>
 
@@ -104,8 +108,8 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
 
                 {hasKickedOff && (
                     <VotingOptionsResults 
-                        homeTeam={home_team}
-                        awayTeam={away_team}
+                        homeTeam={home_team.team_name}
+                        awayTeam={away_team.team_name}
                         homeTeamWon={homeTeamWon}
                         awayTeamWon={awayTeamWon}
                         homeScore={home_score}
@@ -125,7 +129,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
                         hasUserVoted={votedHomeTeam}
                         voteCount={homeVotes.length}
                         votePercentage={homePerc}
-                        title={`${home_team} Win`}
+                        title={`${home_team.team_name} Win`}
                         onClick={handleClickHomeVoteBar}
                         isGreen={votedHomeTeam && gameCompleted && homeTeamWon}
                         isRed={votedHomeTeam && gameCompleted && awayTeamWon}
@@ -135,7 +139,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
                         hasUserVoted={votedAwayTeam}
                         voteCount={awayVotes.length}
                         votePercentage={awayPerc}
-                        title={`${away_team} Win`}
+                        title={`${away_team.team_name} Win`}
                         onClick={handleClickAwayVoteBar}
                         isGreen={votedAwayTeam && gameCompleted && awayTeamWon}
                         isRed={votedAwayTeam && gameCompleted && homeTeamWon}

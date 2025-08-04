@@ -1,15 +1,19 @@
+import { IProSeason } from "./season"
+
 export type SportAction = {
     athlete_id: string,
     action: PlayerAggregateStatAction
     action_count: number,
-    season_id: string
+    season_id: string,
+    season: IProSeason
 }
 
-type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineoutOffence" |
+export type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineoutOffence" |
     "Points" | "PenaltiesConceded" | "TacklesMissed" | "Starts" | "TacklesMade" | "TackleSuccess" |
     "TurnoversConceded" | "TurnoversWon" | "LineoutsWonSteal" | "CarriesMadeGainLine" | "LineoutsWon" |
     "Tries" | "Carries" | "DefendersBeaten" | "Metres" | "MinutesPlayed" | "Assists" | "LineBreaks" |
-    "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" | "RetainedKicks"
+    "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" |
+    "RetainedKicks" | "PenaltyGoalsScored" | "ConversionsScored" | "RedCards" | "DropGoalsScored"
 
 /** Helper function to get a stat */
 export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregatedStats?: SportAction[]) => {

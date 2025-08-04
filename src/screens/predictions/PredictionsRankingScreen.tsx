@@ -13,9 +13,9 @@ export default function PredictionsRankingScreen() {
 
     const user = useAuthUser();
 
-    const key = `pro-predictions-rankings/${user.id}`
+    const key = `pro-predictions-rankings/${user.kc_id}`
     const { data: userRanking, isLoading: loadingUserRanking } = useSWR(
-        key, () => proPredictionsRankingService.getUserRanking(user.id)
+        key, () => proPredictionsRankingService.getUserRanking(user.kc_id)
     );
 
     if (loadingUserRanking) {

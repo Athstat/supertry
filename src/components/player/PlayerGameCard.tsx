@@ -1,13 +1,14 @@
 import { twMerge } from 'tailwind-merge';
-import { useContext, useState } from 'react';
 import { formatPosition } from '../../utils/athleteUtils';
 import FormIndicator from '../shared/FormIndicator';
-import { RugbyPlayer } from '../../types/rugbyPlayer';
 import TeamLogo from '../team/TeamLogo';
-import { PlayersScreenContext } from '../../contexts/PlayersScreenContext';
+import { IProAthlete } from '../../types/athletes';
+import OptimizedImage from '../shared/OptimizedImage';
+import { useAtomValue } from 'jotai';
+import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
 
 type Props = {
-  player: RugbyPlayer;
+  player: IProAthlete;
   onClick?: () => void;
   className?: string;
   blockGlow?: boolean;
@@ -21,21 +22,17 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
  * does not rely on team context */
 
 export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
-  const context = useContext(PlayersScreenContext);
-  const shouldGlow =
-    (
-      context?.selectedPlayers.filter(p => {
-        return p.tracking_id === player.tracking_id;
-      }) ?? []
-    ).length > 0 &&
-    context?.isComparing &&
-    !blockGlow;
 
-  const [imageError, setIamgeError] = useState<string>();
+  const selectedPlayers = useAtomValue(comparePlayersAtom);
+  
+  const shouldGlow = selectedPlayers.some((a) => (
+    a.tracking_id === player.tracking_id
+  ));
+
 
   const pr = player.power_rank_rating ?? 0;
   const cardTier: CardTier =
-    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+    pr <= 69 ? 'bronze' : pr >= 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
@@ -53,7 +50,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
             'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
           cardTier === 'blue' &&
             'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
-          shouldGlow && 'animate-glow border border-yellow-500',
+          shouldGlow && !blockGlow && 'animate-glow border border-yellow-500',
           className
         )}
       >
@@ -62,16 +59,20 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         )}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo className="w-8 h-8 dark:text-white/40" url={player.team_logo} />
+          <TeamLogo 
+            className="w-8 h-8 dark:text-white/40"
+            url={player.team.image_url} 
+          />
         </div>
 
         {/* Player Image */}
         <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">
-          {player.image_url && !imageError && (
-            <img
+          {player.image_url && (
+            <OptimizedImage
               src={player.image_url}
-              onError={() => setIamgeError('Image failed to load')}
+              alt={player.player_name}
               className="w-full object-scale-down object-top"
+              lazy={true}
             />
           )}
         </div>
@@ -96,7 +97,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
 
           {/* Position and Rating */}
           <div className="flex justify-between items-center text-sm mb-2">
-            <div className="text-xs truncate">{formatPosition(player.position_class ?? '')}</div>
+            <div className="text-xs truncate">{formatPosition(player.position ?? '')}</div>
             <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">
               PR {statValue(pr)}
             </div>
@@ -121,4 +122,4 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
       </div>
     </div>
   );
-}
+};

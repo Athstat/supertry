@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { athleteService } from "../services/athleteService";
+import { athleteService } from "../services/athletes/athleteService";
 import { useFetch } from "./useFetch";
 import { fantasyLeagueAtom } from "../state/fantasyLeague.atoms";
 

@@ -1,43 +1,29 @@
-import { useNavigate } from 'react-router-dom';
 import PageView from './PageView';
 import MyWeekPanel from '../components/dashboard/MyWeekPanel';
 import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
-import { HeroImageBanner } from '../components/dashboard/JoinWeeklyLeagueCard';
-import SecondaryText from '../components/shared/SecondaryText';
+import { Home } from 'lucide-react';
+import { HeroSection, MyTeamsSection } from '../components/dashboard';
 
 export function DashboardScreen() {
-  const navigate = useNavigate();
-
-  const goToFixtures = () => {
-    navigate('/fixtures');
-  };
 
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-      <div className="flex flex-col gap-2">
-        <HeroImageBanner link="/images/africa_cup.jpeg" />
-        <p className="font-bold text-lg">Rugby Africa Cup 2025 is here!</p>
 
-        <SecondaryText className="text-xs">
-          Stay updated with all the latest Africa Cup fixtures. Check out upcoming matches and
-          follow your favorite teams throughout the tournament.
-        </SecondaryText>
-
-        <button
-          className="mt-2 px-4 text-sm py-2 border border-blue-400 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition"
-          onClick={() => goToFixtures()}
-        >
-          View Fixtures
-        </button>
+      <div className='flex flex-row items-center gap-2' >
+        <Home />
+        <p className='text-xl font-extrabold' >Dashboard</p>
       </div>
+
+      <HeroSection />
+      <FeaturedPlayersCarousel />
 
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
-      <FeaturedPlayersCarousel />
       <ComparePlayersPanel />
       <MyWeekPanel />
+      {/* <MyTeamsSection /> */}
     </PageView>
   );
 }

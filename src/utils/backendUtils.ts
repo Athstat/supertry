@@ -1,7 +1,7 @@
-import { authTokenService } from "../services/auth/authTokenService";
+import { authTokenService } from '../services/auth/authTokenService';
 
-const BACKEND_SERVER_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://athstat-games-server.onrender.com";
+// Updated to use Django server instead of Node.js server
+const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'; // Django default port
 
 /** Completes an api url */
 export function getUri(endPoint: string) {
@@ -9,25 +9,24 @@ export function getUri(endPoint: string) {
 }
 
 export function getUriLocal(endPoint: string) {
-  return `http://localhost:5005${endPoint}`;
+  return `http://localhost:8000${endPoint}`; // Updated to Django port
 }
 
 export function getAuthHeader() {
-
   const accessToken = authTokenService.getAccessToken();
 
   const authHeader = {
-    'Authorization': `Token ${accessToken}`
+    Authorization: `Token ${accessToken}`,
   };
 
   return {
-    "Content-Type": "application/json",
-    ... (accessToken ? authHeader : {})
+    'Content-Type': 'application/json',
+    ...(accessToken ? authHeader : {}),
   };
 }
 
 export function applicationJsonHeader() {
   return {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   };
 }

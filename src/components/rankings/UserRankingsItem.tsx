@@ -1,6 +1,6 @@
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { UserRanking } from "../../types/userRanking"
-import { UserCircle } from "lucide-react";
+import { Medal, UserCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
@@ -8,11 +8,11 @@ type Props = {
     userRank: UserRanking
 }
 
-export default function UserRankingsItem({userRank} : Props) {
-    
+export default function UserRankingsItem({ userRank }: Props) {
+
     const authUser = useAuthUser();
 
-    const isCurrentUser = authUser.id === userRank.user_id;
+    const isCurrentUser = authUser.kc_id === userRank.user_id;
 
 
     const isInPromotionZone = userRank.rank <= 5;
@@ -22,7 +22,7 @@ export default function UserRankingsItem({userRank} : Props) {
     if (!userRank.first_name) {
         return;
     }
-    
+
     return (
         <>
             <div
@@ -46,19 +46,19 @@ export default function UserRankingsItem({userRank} : Props) {
 
                 )}
             >
-                <div className="w-12 text-center">
-                    <span
-                        className={`font-semibold ${userRank.rank === 1
-                            ? "text-yellow-500"
-                            : userRank.rank === 2
-                                ? "text-gray-400"
-                                : userRank.rank === 3
-                                    ? "text-amber-600"
-                                    : "text-gray-700 dark:text-gray-300"
-                            }`}
-                    >
-                        {userRank.total_score ? userRank.rank : "-"}
-                    </span>
+                <div className="w-12 flex flex-row gap-2">
+                    <p className="font-semibold dark:text-white" >{userRank.total_score ? userRank.rank : "-"}</p>
+
+                    {userRank.rank <= 3 && <Medal
+                        className={twMerge(
+                            'font-semibold text-gray-700 dark:text-gray-300',
+                            userRank.rank === 1 && "text-yellow-500 dark:text-yellow-500",
+                            userRank.rank === 2 && "text-gray-400 dark:text-gray-300",
+                            userRank.rank === 3 && "text-amber-600 dark:text-amber-600"
+                        )}
+                    />}
+
+
                 </div>
                 <div className="w-8">
 

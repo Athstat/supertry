@@ -1,43 +1,25 @@
+import useSWR from 'swr';
+import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { IProAthlete } from '../../../types/athletes';
+import { swrFetchKeys } from '../../../utils/swrKeys';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
 import OverviewTab from './tabs/OverviewTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
 import StatsTab from './tabs/StatsTab';
+import { LoadingState } from '../../ui/LoadingState';
 
 
 type Props = {
-  player: any;
-  playerStats: any;
-  isLoading: boolean;
-  error: string;
+  player: IProAthlete;
 }
 
-export function PlayerProfileModalTabContent({player, playerStats, isLoading,error}: Props) {
-  
-  // switch (activeTab) {
-  //   case 0: // Overview
-  //     return <OverviewTab player={player} />;
+export function PlayerProfileModalTabContent({ player }: Props) {
 
-  //   case 1: // Stats
-  //     return (
-  //       <StatsTab 
-  //         player={player} 
-  //         playerStats={playerStats}
-  //         isLoading={isLoading}
-  //         error={error}
-  //       />
-  //     );
+  const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
+  const { data: fetchedActions, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
 
-  //   case 2: // Power Ranking
-  //     return <PowerRankingTab player={player} />;
-
-  //   case 3: // PR Chart
-  //     return <PRChartTab player={player} />;
-
-  //   default:
-  //     return null;
-  // }
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -68,12 +50,13 @@ export function PlayerProfileModalTabContent({player, playerStats, isLoading,err
         </TabViewPage>
 
         <TabViewPage tabKey='stats'>
-          <StatsTab
+
+          {isLoading && <LoadingState />}
+
+          {!isLoading && <StatsTab
             player={player}
-            playerStats={playerStats}
-            isLoading={isLoading}
-            error={error}
-          />
+            playerStats={fetchedActions ?? []}
+          />}
         </TabViewPage>
 
         <TabViewPage tabKey='power-ranking'>
