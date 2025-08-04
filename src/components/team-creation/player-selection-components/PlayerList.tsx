@@ -64,6 +64,12 @@ export const PlayerList: React.FC<PlayerListProps> = ({
 
   const teamIds = availableTeams.map(t => t.id);
 
+  console.log('PlayerList - Available team IDs:', teamIds);
+  console.log(
+    'PlayerList - Sample player team_ids:',
+    players.slice(0, 3).map(p => ({ name: p.player_name, team_id: p.team_id }))
+  );
+
   /** Bias is used to sort affordable players first
    * and unaffordable players last
    */
@@ -78,11 +84,27 @@ export const PlayerList: React.FC<PlayerListProps> = ({
 
   const availablePlayers = players
     .filter(p => {
-      return p.team_id && teamIds.includes(p.team_id);
+      const hasTeamId = p.team_id && teamIds.includes(p.team_id);
+      if (!hasTeamId && p.player_name === 'Dafydd Hughes') {
+        console.log(
+          'Dafydd Hughes filtered out - team_id:',
+          p.team_id,
+          'available teams:',
+          teamIds
+        );
+      }
+      return hasTeamId;
     })
     .sort((a, b) => {
       return affordabilityBias(a) - affordabilityBias(b);
     });
+
+  console.log(
+    'PlayerList - Filtered players count:',
+    availablePlayers.length,
+    'out of',
+    players.length
+  );
 
   return (
     <>

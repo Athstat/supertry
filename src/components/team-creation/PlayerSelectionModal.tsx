@@ -62,6 +62,9 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
 
   console.log('Players: ', players);
 
+  // Get available teams for filter
+  const allTeams = useAvailableTeams(players);
+
   // Get filtered and sorted players
   const { sortedPlayers } = usePlayersFilter({
     players,
@@ -74,10 +77,6 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     sortOrder,
     filterAvailable,
   });
-
-  // Get available teams for filter
-
-  const allTeams = useAvailableTeams(players);
 
   // Disable body scrolling when modal is open
   useModalEffects(visible);
@@ -97,6 +96,9 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   // For MyTeamScreen, use all available teams
   // For TeamCreationScreen, filter teams by fixtures
   let availableTeams = allTeams;
+
+  console.log('PlayerSelectionModal - sortedPlayers count:', sortedPlayers.length);
+  console.log('PlayerSelectionModal - availableTeams count:', availableTeams.length);
 
   if (fixtureData) {
     const fixtures = fixtureData ?? [];
@@ -127,10 +129,20 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     });
 
     console.log('Participating Teams', participatingTeamsId);
+    console.log(
+      'All teams from players:',
+      allTeams.map(t => ({ id: t.id, name: t.name }))
+    );
 
     // Only filter teams if there are participating teams
     if (participatingTeamsId.size > 0) {
       availableTeams = allTeams.filter(t => participatingTeamsId.has(t.id));
+      console.log(
+        'Filtered available teams:',
+        availableTeams.map(t => ({ id: t.id, name: t.name }))
+      );
+    } else {
+      console.log('No participating teams found, using all teams');
     }
   }
 
