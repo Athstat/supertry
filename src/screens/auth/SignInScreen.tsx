@@ -21,6 +21,14 @@ const buttonVariants = {
   tap: { scale: 0.98 },
 };
 
+// Check if running in mobile WebView
+const isMobileWebView = () => {
+  return (
+    (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
+    window.ReactNativeWebView !== undefined
+  );
+};
+
 export function SignInScreen() {
   const navigate = useNavigate();
   const { checkAuth } = useAuth();
@@ -209,7 +217,7 @@ export function SignInScreen() {
 
           <EmailPasswordLoginBox />
 
-          <GuestLoginBox />
+          {isMobileWebView() && <GuestLoginBox />}
 
           {/* Error Display */}
           {error && (
