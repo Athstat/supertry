@@ -35,18 +35,26 @@ export function JoinLeagueScreen() {
       if (leagues.length === 0) return;
 
       setIsLoadingUserTeams(true);
-      const joinedLeagues: Record<string, boolean> = {};
 
       try {
-        // Fetch all teams for the user
+        // Fetch all teams for the user in a single API call
         const teams = await fantasyTeamService.fetchUserTeams();
 
-        // Map of joined league IDs
-        leagues.forEach(league => {
-          // Check if any team's league_id matches the current league's id
-          const hasJoined = teams.some(team => team.league_id?.toString() === league.id);
-          joinedLeagues[league.id] = hasJoined;
-        });
+        // Create a Set of league IDs that the user has joined for O(1) lookups
+        const joinedLeagueIds = new Set(
+          teams
+            .filter(team => team.league_id) // Filter out teams without a league_id
+            .map(team => team.league_id.toString())
+        );
+
+        // Create a mapping of league IDs to whether the user has joined
+        const joinedLeagues = leagues.reduce(
+          (acc, league) => {
+            acc[league.id] = joinedLeagueIds.has(league.id);
+            return acc;
+          },
+          {} as Record<string, boolean>
+        );
 
         setUserTeams(joinedLeagues);
       } catch (error) {
@@ -56,7 +64,9 @@ export function JoinLeagueScreen() {
       }
     };
 
-    fetchUserTeams();
+    // Add a small debounce to prevent rapid calls if leagues changes frequently
+    const timeoutId = setTimeout(fetchUserTeams, 100);
+    return () => clearTimeout(timeoutId);
   }, [leagues]);
 
   // Scroll to top on mount
@@ -72,9 +82,9 @@ export function JoinLeagueScreen() {
     // });
   };
 
-  if (isLoadingUserTeams) {
-    return <LoadingState />;
-  }
+  // if (isLoadingUserTeams) {
+  //   return <LoadingState />;
+  // }
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">

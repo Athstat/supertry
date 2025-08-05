@@ -89,8 +89,9 @@ export const fantasyTeamService = {
         const userInfo = await authService.getUserInfo();
         userId = userInfo?.kc_id || 'default-user-id';
       }
-      // Use the fantasy-teams-all endpoint to get FantasyLeagueTeam objects with league_id
-      const url = getUri(`/api/v1/fantasy-teams/fantasy-teams-all/${userId}`);
+      
+      // Use the correct endpoint for fetching user teams
+      const url = getUri(`/api/v1/fantasy-teams/user-teams/${userId}`);
 
       const response = await fetch(url, {
         method: 'GET',
@@ -98,14 +99,16 @@ export const fantasyTeamService = {
       });
 
       if (!response.ok) {
-        console.error('Failed to fetch user teams:', await response.text());
-        return [];
+        const errorText = await response.text();
+        console.error('Failed to fetch user teams:', errorText);
+        throw new Error(`Failed to fetch user teams: ${errorText}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error('Error fetching user teams:', error);
-      return [];
+      console.error('Error in fetchUserTeams:', error);
+      throw error; // Re-throw to be handled by the caller
     }
   },
 
