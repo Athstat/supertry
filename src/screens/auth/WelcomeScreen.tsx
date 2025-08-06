@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronRight, Loader } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { authService } from '../../services/authService';
 import ScrummyLogo from '../../components/branding/scrummy_logo';
 import { markFirstVisitCompleted } from '../../utils/firstVisitUtils';
 import { getDeviceId } from '../../utils/deviceIdUtils';
-import { CredentialResponse, useGoogleLogin } from '@react-oauth/google';
-import AppleSignin from 'react-apple-signin-auth';
+import { useGoogleLogin } from '@react-oauth/google';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -176,7 +175,7 @@ export function WelcomeScreen() {
           className="w-full mt-12 items-center justify-center flex flex-col space-y-4"
         >
           {/* Google Sign In Button */}
-          <motion.div
+          {/* <motion.div
             whileHover={{
               scale: 1.05,
               transition: { type: 'spring', stiffness: 300 },
@@ -208,10 +207,10 @@ export function WelcomeScreen() {
               </svg>
               <span>Continue with Google</span>
             </button>
-          </motion.div>
+          </motion.div> */}
 
           {/* Apple Sign In Button */}
-          <motion.div
+          {/* <motion.div
             whileHover={{
               scale: 1.05,
               transition: { type: 'spring', stiffness: 300 },
@@ -244,14 +243,14 @@ export function WelcomeScreen() {
                 </button>
               )}
             />
-          </motion.div>
+          </motion.div> */}
 
           {/* Divider */}
-          <div className="w-[90%] flex items-center my-4">
+          {/* <div className="w-[90%] flex items-center my-4">
             <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
             <span className="px-4 text-sm text-gray-500 dark:text-gray-400">or</span>
             <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
-          </div>
+          </div> */}
 
           {/* Create Account Button */}
           <motion.button
@@ -260,10 +259,10 @@ export function WelcomeScreen() {
               transition: { type: 'spring', stiffness: 300 },
             }}
             onClick={() => navigate('/signup')}
-            className="w-[90%] bg-primary-600 text-white px-4 py-3 rounded-md font-medium text-base flex items-center justify-center shadow"
+            className="w-[90%] bg-primary-600 text-white px-4 py-3 rounded-xl font-medium text-base flex items-center justify-center shadow"
           >
             <span>Create Account</span>
-            <ChevronRight className="ml-2 h-5 w-5" />
+            {/* <ChevronRight className="ml-2 h-5 w-5" /> */}
           </motion.button>
 
           {/* Login Button */}
@@ -273,10 +272,10 @@ export function WelcomeScreen() {
               transition: { type: 'spring', stiffness: 300 },
             }}
             onClick={() => navigate('/signin')}
-            className="w-[90%] bg-green-600 text-white px-4 py-3 rounded-md font-medium text-base flex items-center justify-center shadow"
+            className="w-[90%] bg-green-600 text-white px-4 py-3 rounded-xl font-medium text-base flex items-center justify-center shadow"
           >
             <span>Login</span>
-            <ChevronRight className="ml-2 h-5 w-5" />
+            {/* <ChevronRight className="ml-2 h-5 w-5" /> */}
           </motion.button>
 
           {/* Continue without account */}
