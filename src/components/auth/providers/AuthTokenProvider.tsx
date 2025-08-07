@@ -48,6 +48,7 @@ export default function AuthTokenProvider({children} : Props) {
             const tokenFromBridge = await getSavedAccessTokenFromMobile();
             
             if (tokenFromBridge) {
+                console.log("Access Token from bridge ", tokenFromBridge);
                 setAccessToken(tokenFromBridge);
                 authTokenService.setAccessToken(tokenFromBridge);
                 setIsLoading(false);
@@ -57,6 +58,7 @@ export default function AuthTokenProvider({children} : Props) {
             const tokenFromLocalStorage = authTokenService.getAccessToken();
             
             if (tokenFromLocalStorage) {
+                console.log("Access Token from storage ", tokenFromLocalStorage);
                 setAccessToken(tokenFromLocalStorage);
                 saveAccessTokenToMobile(tokenFromLocalStorage);
                 setIsLoading(false);

@@ -43,6 +43,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearAccessTokenAndUser
   } = useAuthToken();
 
+
+  console.log("Now inside the auth provider here is the token we got", accessToken);
+
   const fetchKey = accessToken ? '/auth-user' : null;
   const {data: authUser, isLoading, error} = useSWR(fetchKey, () => authService.whoami(accessToken));
 
@@ -67,13 +70,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     )
   }
 
+  console.log("Auth User here is the auth user ", authUser);
+
   return (
     <AuthContext.Provider
       value={{
         authUser,
         setAuth,
         logout,
-        isAuthenticated: authService === undefined
+        isAuthenticated: authService !== undefined
       }}
     >
       {children}
