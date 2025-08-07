@@ -13,7 +13,7 @@ export const athleteService = {
     try {
       logger.debug(`Fetching rugby athletes for competition: ${competitionId}`);
 
-      const uri = getUri(`/api/v1/athletes/rugby/season/${competitionId}/`);
+      const uri = getUri(`/api/v1/athletes/rugby/season/${competitionId}`);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
@@ -63,7 +63,7 @@ export const athleteService = {
    */
   getAllAthletes: async (): Promise<RugbyPlayer[]> => {
     try {
-      const uri = getUri('/api/v1/athletes/');
+      const uri = getUri('/api/v1/athletes');
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
