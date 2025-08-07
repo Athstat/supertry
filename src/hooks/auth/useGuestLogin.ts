@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 /** Hook that provides functionality to handle guest login */
-export function useGuestLogin() {
+export function useGuestLogin(nextRoute?: string) {
 
     const [error, setError] = useState<string>();
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -32,7 +32,7 @@ export function useGuestLogin() {
                 const authUser = data.user;
 
                 setAuth(accessToken, authUser);
-                navigate('/dashboard');
+                navigate(nextRoute ?? '/dashboard');
             } else {
                 setError(error?.message);
             }
@@ -43,7 +43,7 @@ export function useGuestLogin() {
         } finally {
             setLoading(false);
         }
-    }, [deviceId, setAuth])
+    }, [deviceId, setAuth, nextRoute])
 
     return {
         handleGuestLogin,

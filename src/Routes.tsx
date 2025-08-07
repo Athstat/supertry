@@ -78,7 +78,8 @@ const FirstVisitHandler = () => {
   // First-time visitors see WelcomeScreen, returning visitors see AuthChoiceScreen
   return (
     <RouteErrorBoundary>
-      {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />}
+      {/* {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />} */}
+      <WelcomeScreen />
     </RouteErrorBoundary>
   );
 };

@@ -13,8 +13,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import AuthTokenProvider from './components/auth/providers/AuthTokenProvider';
 
 function App() {
-  const [error, setError] = useState<Error | null>(null);
-  const isDevelopment = import.meta.env.MODE === 'development';
+  const [, setError] = useState<Error | null>(null);
 
   // Removed visibility change handler that was causing double reloads
   // Auth redirects are now handled by AuthContext and route guards
