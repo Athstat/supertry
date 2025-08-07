@@ -1,7 +1,3 @@
-import useSWR from "swr"
-import { swrFetchKeys } from "../../utils/swrKeys"
-import { authService } from "../../services/authService";
-import { LoadingState } from "../ui/LoadingState";
 import { ReactNode, useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { authUserAtom } from "../../state/authUser.atoms";
