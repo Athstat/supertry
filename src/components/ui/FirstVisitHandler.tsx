@@ -8,7 +8,7 @@ import RouteErrorBoundary from "../RouteErrorBoundary";
 // First Visit handler component
 export function FirstVisitHandler() {
   const { isAuthenticated } = useAuth();
-  const [hasVisitedBefore, setHasVisitedBefore] = useState<boolean | null>(null);
+  const [, setHasVisitedBefore] = useState<boolean | null>(null);
 
   const {pathname} = useLocation();
 

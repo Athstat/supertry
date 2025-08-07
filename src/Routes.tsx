@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { WelcomeScreen } from './screens/auth/WelcomeScreen';
 import { SignUpScreen } from './screens/auth/SignUpScreen';
 import { SignInScreen } from './screens/auth/SignInScreen';
 import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
@@ -29,11 +28,11 @@ import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import SbrFixtureScreen from './screens/SbrFixtureScreen';
-import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -53,35 +52,6 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
-};
-
-// First Visit handler component
-const FirstVisitHandler = () => {
-  const { isAuthenticated } = useAuth();
-  const [hasVisitedBefore, setHasVisitedBefore] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    // Check if user has visited the app before
-    const firstVisit = isFirstAppVisit();
-    setHasVisitedBefore(!firstVisit);
-
-    // If this is the first visit, mark it
-    if (firstVisit) {
-      markAppVisited();
-    }
-  }, []);
-
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
-  }
-
-  // First-time visitors see WelcomeScreen, returning visitors see AuthChoiceScreen
-  return (
-    <RouteErrorBoundary>
-      {/* {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />} */}
-      <WelcomeScreen />
-    </RouteErrorBoundary>
-  );
 };
 
 const AppRoutes = () => {
