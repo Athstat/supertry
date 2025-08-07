@@ -12,8 +12,8 @@ export function getUriLocal(endPoint: string) {
   return `http://localhost:8000${endPoint}`; // Updated to Django port
 }
 
-export function getAuthHeader() {
-  const accessToken = authTokenService.getAccessToken();
+export function getAuthHeader(accessTokenFromParams?: string) {
+  const accessToken = accessTokenFromParams ?? authTokenService.getAccessToken();
 
   const authHeader = {
     Authorization: `Token ${accessToken}`,

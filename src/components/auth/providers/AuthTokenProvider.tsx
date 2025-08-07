@@ -15,7 +15,9 @@ type AuthTokenContextProps = {
     getUserInfoFromLocalStorage: () => DjangoAuthUser | undefined,
 
     /** Saves the user passed in the param as the local storage user */
-    saveUserInfoToLocalStorage: (user: DjangoAuthUser) => void
+    saveUserInfoToLocalStorage: (user: DjangoAuthUser) => void,
+
+    clearAccessTokenAndUser: () => void
 } 
 
 const AuthTokenContext = createContext<AuthTokenContextProps | undefined>(undefined);
@@ -83,6 +85,13 @@ export default function AuthTokenProvider({children} : Props) {
         return authTokenService.getUserFromLocalStorage();
     }
 
+    const handleClearAuthTokenAndUser = () => {
+        setAccessToken(undefined);
+        authTokenService.clearAccessToken();
+        authTokenService.clearUserTokens();
+        authTokenService.cleanupKeycloakTokens();
+    }
+
     if (isLoading) {
         return <ScrummyLoadingState />
     }
@@ -93,7 +102,8 @@ export default function AuthTokenProvider({children} : Props) {
                 saveUserInfoToLocalStorage: handleSaveLocalStorageUser,
                 accessToken,
                 setAcessToken: handleChangeAuthToken,
-                getUserInfoFromLocalStorage
+                getUserInfoFromLocalStorage,
+                clearAccessTokenAndUser: handleClearAuthTokenAndUser
             }}
         >
             {children}
