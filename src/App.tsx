@@ -3,7 +3,6 @@ import AppRoutes from './Routes';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AthleteProvider } from './contexts/AthleteContext';
 import { PlayerProfileProvider } from './hooks/usePlayerProfile';
-import PageVisitsTracker from './components/analytics/PageVisitTracker';
 import { AppStateProvider } from './contexts/AppStateContext';
 import ErrorBoundary, { FallbackProps } from './components/ErrorBoundary';
 import AppErrorFallback from './components/AppErrorFallback';
@@ -36,7 +35,6 @@ function App() {
                       }}
                       fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                     >
-                      <PageVisitsTracker />
                       <AppRoutes />
                     </ErrorBoundary>
                   </AppStateProvider>
