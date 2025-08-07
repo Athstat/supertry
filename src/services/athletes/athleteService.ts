@@ -1,5 +1,5 @@
 import { RugbyPlayer, IFantasyAthlete } from '../../types/rugbyPlayer';
-import { getUri, getAuthHeader, getUriLocal } from '../../utils/backendUtils';
+import { getUri, getAuthHeader } from '../../utils/backendUtils';
 import { logger } from '../logger';
 import { SportAction } from '../../types/sports_actions';
 
@@ -13,7 +13,7 @@ export const athleteService = {
     try {
       logger.debug(`Fetching rugby athletes for competition: ${competitionId}`);
 
-      const uri = getUriLocal(`/api/v1/athletes/rugby/season/${competitionId}/`);
+      const uri = getUri(`/api/v1/athletes/rugby/season/${competitionId}/`);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
@@ -93,6 +93,7 @@ export const athleteService = {
   getAllAthletes: async (): Promise<RugbyPlayer[]> => {
     try {
       const uri = getUri('/api/v1/athletes/');
+      console.log('Fetching all athletes: ', uri);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });

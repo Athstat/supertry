@@ -157,6 +157,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
       try {
         setLoadingPlayers(true);
         const data = await athleteService.getRugbyAthletesByCompetition(officialLeagueId);
+        console.log('officialLeagueId: ', officialLeagueId);
         console.log('fetched player data: ', data);
         setAllPlayers(data);
       } catch (err) {

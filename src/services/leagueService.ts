@@ -9,7 +9,7 @@ import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-      const uri = getUri(`/api/v1/fantasy-leagues`);
+      const uri = getUri(`/api/v1/fantasy-leagues/`);
       const response = await fetch(uri, {
         method: 'GET',
         headers: getAuthHeader(),
