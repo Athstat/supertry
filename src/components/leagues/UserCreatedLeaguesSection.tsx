@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Users, DollarSign, Calendar, Lock, Globe, ArrowRight } from 'lucide-react';
+import { Plus, Users, DollarSign, Calendar, Lock, Globe, ArrowRight, User } from 'lucide-react';
 import { LoadingState } from '../ui/LoadingState';
 import { useNavigate } from 'react-router-dom';
 import { userCreatedLeagueService } from '../../services/userCreatedLeagueService';
@@ -72,6 +72,18 @@ export default function UserCreatedLeaguesSection({
     }
   };
 
+  const handleInviteClick = (e: React.MouseEvent, league: IUserCreatedLeague) => {
+    e.stopPropagation();
+    // TODO: Implement invite functionality
+    console.log('Invite players to league:', league.id);
+  };
+
+  const handleManageClick = (e: React.MouseEvent, league: IUserCreatedLeague) => {
+    e.stopPropagation();
+    // TODO: Implement manage functionality
+    console.log('Manage league:', league.id);
+  };
+
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
@@ -113,53 +125,90 @@ export default function UserCreatedLeaguesSection({
             <div
               key={league.id}
               onClick={() => handleLeagueClick(league)}
-              className="bg-white dark:border-slate-800 dark:bg-slate-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 transition-colors"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-md hover:shadow-lg cursor-pointer transition-all duration-200 space-y-2"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white text-base">
-                        {league.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                        {league.season_name}
-                      </p>
+              {/* Header Row */}
+              <div className="flex justify-between items-start">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+                      {league.title}
+                    </h3>
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                      <User size={10} />
                     </div>
-
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${getStatusColor(league.status || 'open')}`}
-                    >
-                      {(league.status || 'open').toUpperCase()}
-                    </span>
-                    {league.is_public ? (
-                      <Globe className="w-4 h-4 text-blue-500" />
-                    ) : (
-                      <Lock className="w-4 h-4 text-gray-500" />
-                    )}
                   </div>
-
-                  {league.description && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                      {league.description}
+                  {league.season_name && (
+                    <p className="text-xs uppercase text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+                      {league.season_name}
                     </p>
                   )}
+                </div>
+                <div className="flex items-center gap-2 ml-2">
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(league.status || 'open')}`}
+                  >
+                    {(league.status || 'open').toUpperCase()}
+                  </span>
+                  {league.is_public ? (
+                    <Globe className="w-3 h-3 text-blue-500" />
+                  ) : (
+                    <Lock className="w-3 h-3 text-gray-500" />
+                  )}
+                </div>
+              </div>
 
-                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="flex items-center gap-1">
-                      <Users className="w-4 h-4" />
-                      {league.participant_count} {league.max_teams ? `/${league.max_teams}` : ''}{' '}
-                      teams
-                    </span>
+              {/* Description - Single line with truncation */}
+              {league.description && (
+                <p className="text-sm italic text-gray-600 dark:text-gray-300 truncate">
+                  {league.description}
+                </p>
+              )}
 
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      Created {formatDate(league.created_date)}
+              {/* Metadata Row - Compressed single line */}
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-1">
+                    <Users size={12} />
+                    <span>
+                      {league.participant_count}
+                      {league.max_teams ? `/${league.max_teams}` : ''} Teams
                     </span>
                   </div>
+                  <span className="text-gray-400">|</span>
+                  <div className="flex items-center gap-1">
+                    <Calendar size={12} />
+                    <span>Created: {formatDate(league.created_date)}</span>
+                  </div>
+                  {league.entry_fee > 0 && (
+                    <>
+                      <span className="text-gray-400">|</span>
+                      <div className="flex items-center gap-1">
+                        <DollarSign size={12} />
+                        <span>${league.entry_fee}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                <ArrowRight className="w-5 h-5 text-gray-400" />
+                <ArrowRight size={16} className="text-gray-400 dark:text-gray-500" />
+              </div>
+
+              {/* Action Buttons - Compact row */}
+              <div className="flex justify-between items-center pt-1 border-t border-gray-100 dark:border-gray-700">
+                <button
+                  onClick={e => handleManageClick(e, league)}
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                >
+                  Manage
+                </button>
+                <button
+                  onClick={e => handleInviteClick(e, league)}
+                  className="flex items-center justify-center w-8 h-8 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  title="Invite Players"
+                >
+                  <Users size={16} />
+                </button>
               </div>
             </div>
           ))}
