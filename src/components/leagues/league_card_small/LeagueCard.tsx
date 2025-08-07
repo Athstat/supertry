@@ -16,9 +16,10 @@ type Props = {
   custom?: number;
   isJoined?: boolean;
   hideIfNoTeamsJoined?: boolean;
+  getGamesByCompetitionId: (competitionId: string) => any[];
 };
 
-export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false }: Props) {
+export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false, getGamesByCompetitionId }: Props) {
   const isLocked = isLeagueLocked(league.join_deadline);
   const adjustedDeadline = calculateJoinDeadline(league);
 
@@ -62,7 +63,7 @@ export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false
         <div className="flex flex-col gap-2">
           <div className="flex flex-row items-center gap-3">
             <LeagueTeamsCount league={league} />
-            <LeagueLiveIndicator league={league} />
+            <LeagueLiveIndicator league={league} getGamesByCompetitionId={getGamesByCompetitionId} />
           </div>
 
           {!isLocked && adjustedDeadline && (

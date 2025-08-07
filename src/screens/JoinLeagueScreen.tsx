@@ -1,31 +1,66 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Loader } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { leagueService } from '../services/leagueService';
 import { fantasyTeamService } from '../services/fantasyTeamService';
+import { gamesService } from '../services/gamesService';
 import { IFantasyLeague } from '../types/fantasyLeague';
+// Using any as a temporary solution since the actual type definition is missing
+type IGame = any;
 
 import { leaguesOnClockFilter } from '../utils/leaguesUtils';
 import JoinLeagueDeadlineCountdown from '../components/leagues/JoinLeagueDeadlineContdown';
 import JoinLeagueActiveLeaguesSection from '../components/leagues/join_league_screen/JoinLeagueActiveLeaguesSection';
 import JoinLeaguePastLeaguesSection from '../components/leagues/join_league_screen/JoinLeaguePastLeaguesSection';
 import JoinLeagueUpcomingLeaguesSection from '../components/leagues/join_league_screen/JoinLeagueUpcomingLeaguesSection';
-import JoinLeagueGroupsSection from '../components/leagues/join_league_screen/JoinLeagueGroupsSection';
 import UserCreatedLeaguesSection from '../components/leagues/UserCreatedLeaguesSection';
-import PublicLeaguesSection from '../components/leagues/PublicLeaguesSection';
 import { useFetch } from '../hooks/useFetch';
-import { LoadingState } from '../components/ui/LoadingState';
 
 export function JoinLeagueScreen() {
-  const navigate = useNavigate();
-  const { data, isLoading, error } = useFetch('fantasy-leagues', [], () =>
+  // Fetch all leagues
+  const { data: leaguesData, isLoading, error } = useFetch('fantasy-leagues', [], () =>
     leagueService.getAllLeagues()
   );
 
-  const leagues = data ?? [];
+  const leagues = leaguesData ?? [];
+
+  // Get unique competition IDs from all leagues - create a stable string key
+  const competitionIdsKey = useMemo(() => {
+    const ids = new Set<string>();
+    leagues.forEach(league => {
+      if (league.official_league_id) {
+        ids.add(league.official_league_id);
+      }
+    });
+    return Array.from(ids).sort().join(','); // Create stable string key
+  }, [leagues]);
+
+  // Fetch games for all competitions
+  const { data: allGames } = useFetch(
+    'all-games',
+    competitionIdsKey,
+    async (key: string) => {
+      if (!key) return {};
+      const ids = key.split(',').filter(Boolean);
+      const games: Record<string, IGame[]> = {};
+      for (const id of ids) {
+        try {
+          const competitionGames = await gamesService.getGamesByCompetitionId(id);
+          games[id] = competitionGames;
+        } catch (error) {
+          console.error(`Failed to fetch games for competition ${id}:`, error);
+          games[id] = [];
+        }
+      }
+      return games;
+    }
+  );
+
+  // Get games for a specific competition
+  const getGamesByCompetitionId = (competitionId: string): IGame[] => {
+    return allGames?.[competitionId] ?? [];
+  };
 
   const [userTeams, setUserTeams] = useState<Record<string, boolean>>({});
-  const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(false);
 
   const { firstLeagueOnClock: leagueOnTheClock } = leaguesOnClockFilter(leagues);
 
@@ -33,8 +68,6 @@ export function JoinLeagueScreen() {
   useEffect(() => {
     const fetchUserTeams = async () => {
       if (leagues.length === 0) return;
-
-      setIsLoadingUserTeams(true);
 
       try {
         // Fetch all teams for the user in a single API call
@@ -58,9 +91,7 @@ export function JoinLeagueScreen() {
 
         setUserTeams(joinedLeagues);
       } catch (error) {
-        console.error('Failed to fetch user teams:', error);
-      } finally {
-        setIsLoadingUserTeams(false);
+        console.error('Error fetching user teams:', error);
       }
     };
 
@@ -126,13 +157,31 @@ export function JoinLeagueScreen() {
         </div>
       ) : (
         <>
-          {!isLoading && <JoinLeagueActiveLeaguesSection leagues={leagues} userTeams={userTeams} />}
+          {!isLoading && (
+            <JoinLeagueActiveLeaguesSection 
+              leagues={leagues} 
+              userTeams={userTeams} 
+              getGamesByCompetitionId={getGamesByCompetitionId} 
+            />
+          )}
         </>
       )}
 
-      {!isLoading && <JoinLeagueUpcomingLeaguesSection leagues={leagues} userTeams={userTeams} />}
+      {!isLoading && (
+        <JoinLeagueUpcomingLeaguesSection 
+          leagues={leagues} 
+          userTeams={userTeams} 
+          getGamesByCompetitionId={getGamesByCompetitionId} 
+        />
+      )}
 
-      {!isLoading && <JoinLeaguePastLeaguesSection leagues={leagues} userTeams={userTeams} />}
+      {!isLoading && (
+        <JoinLeaguePastLeaguesSection 
+          leagues={leagues} 
+          userTeams={userTeams} 
+          getGamesByCompetitionId={getGamesByCompetitionId} 
+        />
+      )}
     </div>
   );
 }

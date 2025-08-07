@@ -14,6 +14,7 @@ import { fantasyTeamService } from '../../services/fantasyTeamService';
 interface FixturesListProps {
   league: IFantasyLeague;
   userTeam?: RankedFantasyTeam;
+  getGamesByCompetitionId?: (competitionId: string) => any[];
 }
 
 const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => {
@@ -35,14 +36,22 @@ const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => 
     );
 };
 
-export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProps) {
+export function FantasyLeagueFixturesList({ league, userTeam, getGamesByCompetitionId }: FixturesListProps) {
   const competitionId = league.official_league_id;
 
+  // Use provided getGamesByCompetitionId function or fallback to direct API call
   const {
     data: allFixtures,
     error,
     isLoading,
-  } = useSWR(competitionId, gamesService.getGamesByCompetitionId);
+  } = useSWR(
+    getGamesByCompetitionId ? null : competitionId, // Only use SWR if no prop provided
+    getGamesByCompetitionId ? null : gamesService.getGamesByCompetitionId
+  );
+
+  // Get fixtures from prop function if available
+  const fixturesFromProp = getGamesByCompetitionId && competitionId ? getGamesByCompetitionId(competitionId) : null;
+  const fixtures = fixturesFromProp || allFixtures;
   const { data, isLoading: isLoadingUserTeamAthletes } = useFetch(
     'user-team-athletes',
     userTeam?.team_id ?? 'fall-back',
@@ -53,19 +62,19 @@ export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProp
 
   if (error) return <ErrorState message={'Error fetching matches'} />;
 
-  if (!allFixtures)
+  if (!fixtures)
     return (
       <div>
         <p>There are no fixtures available</p>
       </div>
     );
 
-  const fixtures = filterMatchesForRound(allFixtures, league);
+  const filteredFixtures = filterMatchesForRound(fixtures, league);
 
   // Group fixtures by day
   const fixturesByDay: Record<string, IFixture[]> = {};
 
-  fixtures.forEach((fixture: IFixture) => {
+  filteredFixtures.forEach((fixture: IFixture) => {
     if (fixture.kickoff_time) {
       const dayKey = format(new Date(fixture.kickoff_time), 'yyyy-MM-dd');
       if (!fixturesByDay[dayKey]) {
