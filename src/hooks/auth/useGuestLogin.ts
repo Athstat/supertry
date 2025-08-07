@@ -32,7 +32,6 @@ export function useGuestLogin() {
                 const authUser = data.user;
 
                 setAuth(accessToken, authUser);
-
                 navigate('/dashboard');
             } else {
                 setError(error?.message);

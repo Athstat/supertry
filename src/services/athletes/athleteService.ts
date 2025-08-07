@@ -63,7 +63,7 @@ export const athleteService = {
    */
   getAllAthletes: async (): Promise<RugbyPlayer[]> => {
     try {
-      const uri = getUri('/api/v1/athletes/');
+      const uri = getUri('/api/v1/athletes');
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
