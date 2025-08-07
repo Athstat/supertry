@@ -33,7 +33,6 @@ import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
-import ScrummyLoadingState from './components/ui/ScrummyLoadingState';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -46,9 +45,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 
 // Protected route component with error boundary
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) return <ScrummyLoadingState />;
+  const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/signin" />;
@@ -59,9 +56,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 // Auth route component - redirects to dashboard if already authenticated
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  if (loading) return <ScrummyLoadingState />;
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
@@ -72,7 +68,7 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
 
 // First Visit handler component
 const FirstVisitHandler = () => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [hasVisitedBefore, setHasVisitedBefore] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -85,8 +81,6 @@ const FirstVisitHandler = () => {
       markAppVisited();
     }
   }, []);
-
-  if (loading || hasVisitedBefore === null) return <div>Loading...</div>;
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
