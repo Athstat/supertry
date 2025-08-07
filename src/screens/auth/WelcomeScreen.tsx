@@ -151,9 +151,13 @@ export function WelcomeScreen() {
             Sign In
           </PrimaryButton>}
 
-          {deviceId && <SecondaryText className='underline cursor-pointer hover:text-slate-800 dark:text-slate-300' >
-            Already Part of The Scrum? Sign In
-          </SecondaryText>}
+          {deviceId && (
+            <div onClick={navigateToSignin} >
+              <SecondaryText className='underline cursor-pointer hover:text-slate-800 dark:text-slate-300' >
+                Already Part of The Scrum? Sign In
+              </SecondaryText>
+            </div>
+          )}
 
         </motion.div>
       </motion.div>
