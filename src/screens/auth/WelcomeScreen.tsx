@@ -8,28 +8,20 @@ import ScrummyLogo from '../../components/branding/scrummy_logo';
 import { markFirstVisitCompleted } from '../../utils/firstVisitUtils';
 import { getDeviceId } from '../../utils/deviceIdUtils';
 import { useGoogleLogin } from '@react-oauth/google';
+import { authTokenService } from '../../services/auth/authTokenService';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
-  const { isAuthenticated, loading, checkAuth } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [isCreatingGuest, setIsCreatingGuest] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
-    if (isAuthenticated && !loading) {
+    if (isAuthenticated) {
       navigate('/dashboard');
     }
-  }, [isAuthenticated, loading, navigate]);
-
-  // If still loading, show a loading indicator
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-      </div>
-    );
-  }
+  }, [isAuthenticated, navigate]);
 
   const handleGetStarted = async () => {
     console.log('Starting guest account creation...');
@@ -56,20 +48,17 @@ export function WelcomeScreen() {
       // The authenticateAsGuestUser method already logs in the user and sets tokens
       // Now we need to update the auth context
       console.log('Updating auth state...');
-      const authUpdated = await checkAuth();
-
-      console.log('Auth check result:', authUpdated);
-
-      // Store that this was the first visit completed
       markFirstVisitCompleted();
 
-      // Navigate to post-signup-welcome
-      if (authUpdated || localStorage.getItem('access_token')) {
-        console.log('Navigating to post-signup welcome...');
+      const authUser = loginResult.data?.user;
+      const accessToken = loginResult.data?.token;
+
+      if (authUser && accessToken) {
+        authTokenService.setAccessToken(accessToken);
+        authTokenService.saveUserToLocalStorage(authUser);
         navigate('/post-signup-welcome');
-      } else {
-        throw new Error('Failed to authenticate after guest account creation');
       }
+
     } catch (err: any) {
       console.error('Error creating guest account:', err);
       console.error('Error message:', err.message);
@@ -90,12 +79,19 @@ export function WelcomeScreen() {
           return;
         }
 
-        // Update auth context
-        await checkAuth();
+        const authUser = result.data?.user;
+        const accessToken = result.data?.token;
+
+        if (authUser && accessToken) {
+          authTokenService.setAccessToken(accessToken);
+          authTokenService.saveUserToLocalStorage(authUser);
+          navigate('/post-signup-welcome');
+        }
 
         // Mark first visit completed and navigate
         markFirstVisitCompleted();
-        navigate('/post-signup-welcome');
+        setError('Google sign-in failed. Please try again.');
+
       } catch (err: any) {
         console.error('Google OAuth error:', err);
         setError('Google sign-in failed. Please try again.');
@@ -120,8 +116,14 @@ export function WelcomeScreen() {
         return;
       }
 
-      // Update auth context
-      await checkAuth();
+      const authUser = result.data?.user;
+      const accessToken = result.data?.token;
+
+      if (authUser && accessToken) {
+        authTokenService.setAccessToken(accessToken);
+        authTokenService.saveUserToLocalStorage(authUser);
+        navigate('/post-signup-welcome');
+      }
 
       // Mark first visit completed and navigate
       markFirstVisitCompleted();
@@ -283,9 +285,9 @@ export function WelcomeScreen() {
             whileHover={
               !isCreatingGuest
                 ? {
-                    scale: 1.02,
-                    transition: { type: 'spring', stiffness: 300 },
-                  }
+                  scale: 1.02,
+                  transition: { type: 'spring', stiffness: 300 },
+                }
                 : {}
             }
             onClick={handleGetStarted}
