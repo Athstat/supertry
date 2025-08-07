@@ -7,8 +7,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../utils/firstVisitUtils';
 import { getDeviceId } from '../../utils/deviceIdUtils';
 import { useGoogleLogin } from '@react-oauth/google';
-import AppleSignin from 'react-apple-signin-auth';
-import Experimental from '../../components/shared/ab_testing/Experimental';
 
 // Button animation variants
 const buttonVariants = {
@@ -314,7 +312,7 @@ export function AuthChoiceScreen() {
           >
             {/* Google Sign In Button */}
 
-            <Experimental>
+            {/* <Experimental>
               <motion.div
                 className="w-[90%]"
                 variants={buttonVariants}
@@ -349,7 +347,6 @@ export function AuthChoiceScreen() {
                 </button>
               </motion.div>
 
-              {/* Apple Sign In Button */}
               <motion.div
                 className="w-[90%]"
                 variants={buttonVariants}
@@ -385,14 +382,13 @@ export function AuthChoiceScreen() {
                 />
               </motion.div>
 
-              {/* Divider */}
               <div className="w-[90%] flex items-center my-4">
                 <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
                 <span className="px-4 text-sm text-gray-500 dark:text-gray-400">or</span>
                 <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
               </div>
 
-            </Experimental>
+            </Experimental> */}
 
             {/* Create Account Button */}
             <MotionButton

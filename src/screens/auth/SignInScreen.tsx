@@ -138,7 +138,7 @@ export function SignInScreen() {
         <div className="mt-8 space-y-6">
           {/* Google Sign In Button */}
 
-          <Experimental>
+          {/* <Experimental>
             <motion.div variants={buttonVariants} initial="initial" whileHover="hover" whileTap="tap">
               <button
                 onClick={() => googleLogin()}
@@ -167,7 +167,6 @@ export function SignInScreen() {
               </button>
             </motion.div>
 
-            {/* Apple Sign In Button */}
             <motion.div variants={buttonVariants} initial="initial" whileHover="hover" whileTap="tap">
               <AppleSignin
                 authOptions={{
@@ -205,7 +204,7 @@ export function SignInScreen() {
               <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
             </div>
 
-          </Experimental>
+          </Experimental> */}
 
           <EmailPasswordLoginBox />
 
