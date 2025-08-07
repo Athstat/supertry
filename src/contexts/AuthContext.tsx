@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     clearAccessTokenAndUser();
-  }, [setAcessToken, saveUserInfoToLocalStorage]);
+  }, [clearAccessTokenAndUser]);
 
   if (isLoading) {
     return (
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         authUser,
         setAuth,
         logout,
-        isAuthenticated: authService !== undefined
+        isAuthenticated: authUser !== undefined
       }}
     >
       {children}
