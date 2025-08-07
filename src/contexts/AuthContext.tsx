@@ -10,7 +10,8 @@ type AuthContextType = {
   isAuthenticated: boolean;
   setAuth: (accessToken: string, user: DjangoAuthUser) => void,
   logout: () => void,
-  authUser: DjangoAuthUser | undefined
+  authUser: DjangoAuthUser | undefined,
+  isLoading: boolean
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -78,7 +79,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         authUser,
         setAuth,
         logout,
-        isAuthenticated: authUser !== undefined
+        isAuthenticated: authUser !== undefined,
+        isLoading
       }}
     >
       {children}

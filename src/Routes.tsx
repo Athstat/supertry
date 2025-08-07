@@ -48,7 +48,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
 
-
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }

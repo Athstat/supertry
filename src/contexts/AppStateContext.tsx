@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
-import { useAuth } from './AuthContext';
 import { useAthletes } from './AthleteContext';
 import { analytics } from '../services/anayticsService';
 import { useLocation } from 'react-router-dom';
@@ -32,7 +31,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [appStateStatus, setAppStateStatus] = useState<'idle' | 'refreshing' | 'error'>('idle');
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
-  const { refreshSession } = useAuth();
+  // const { refreshSession } = useAuth();
   const { refreshAthletes } = useAthletes();
   const location = useLocation();
 
@@ -52,8 +51,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setAppStateStatus('refreshing');
 
       // First refresh authentication session
-      const authRefreshed = await refreshSession();
-      console.log('AppStateManager: Auth session refresh result:', authRefreshed);
+      // const authRefreshed = await refreshSession();
+      // console.log('AppStateManager: Auth session refresh result:', authRefreshed);
 
       // Then refresh data regardless of auth result
       // This ensures we at least try to get fresh data
@@ -84,7 +83,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       // Increment recovery attempts
       recoveryAttemptsRef.current += 1;
     }
-  }, [refreshSession, refreshAthletes, location.pathname]);
+  }, [refreshAthletes, location.pathname]);
 
   // Handle visibility change
   useEffect(() => {
