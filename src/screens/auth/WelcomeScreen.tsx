@@ -137,6 +137,7 @@ export function WelcomeScreen() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
           className='flex flex-1 flex-col gap-2 items-center justify-center p-4 w-full' >
+          
           {deviceId && <PrimaryButton
             className='w-full py-3 animate-glow'
             onClick={handleGuestLogin}
