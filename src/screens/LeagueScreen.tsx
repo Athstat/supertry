@@ -281,7 +281,7 @@ export function LeagueScreen() {
                         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                           Invite Code
                         </h3>
-                        {league?.entry_code ? (
+                        {true ? (
                           <div className="flex items-center gap-3">
                             <code className="bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-md font-mono text-sm text-gray-900 dark:text-white">
                               {league.entry_code}

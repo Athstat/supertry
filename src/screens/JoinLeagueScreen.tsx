@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Loader } from 'lucide-react';
 import { leagueService } from '../services/leagueService';
 import { fantasyTeamService } from '../services/fantasyTeamService';
@@ -17,9 +17,12 @@ import { useFetch } from '../hooks/useFetch';
 
 export function JoinLeagueScreen() {
   // Fetch all leagues
-  const { data: leaguesData, isLoading, error } = useFetch('fantasy-leagues', [], () =>
-    leagueService.getAllLeagues()
-  );
+  const {
+    data: leaguesData,
+    isLoading,
+    error,
+    mutate: refreshLeagues
+  } = useFetch('fantasy-leagues', [], () => leagueService.getAllLeagues());
 
   const leagues = leaguesData ?? [];
 
@@ -35,25 +38,21 @@ export function JoinLeagueScreen() {
   }, [leagues]);
 
   // Fetch games for all competitions
-  const { data: allGames } = useFetch(
-    'all-games',
-    competitionIdsKey,
-    async (key: string) => {
-      if (!key) return {};
-      const ids = key.split(',').filter(Boolean);
-      const games: Record<string, IGame[]> = {};
-      for (const id of ids) {
-        try {
-          const competitionGames = await gamesService.getGamesByCompetitionId(id);
-          games[id] = competitionGames;
-        } catch (error) {
-          console.error(`Failed to fetch games for competition ${id}:`, error);
-          games[id] = [];
-        }
+  const { data: allGames } = useFetch('all-games', competitionIdsKey, async (key: string) => {
+    if (!key) return {};
+    const ids = key.split(',').filter(Boolean);
+    const games: Record<string, IGame[]> = {};
+    for (const id of ids) {
+      try {
+        const competitionGames = await gamesService.getGamesByCompetitionId(id);
+        games[id] = competitionGames;
+      } catch (error) {
+        console.error(`Failed to fetch games for competition ${id}:`, error);
+        games[id] = [];
       }
-      return games;
     }
-  );
+    return games;
+  });
 
   // Get games for a specific competition
   const getGamesByCompetitionId = (competitionId: string): IGame[] => {
@@ -105,6 +104,11 @@ export function JoinLeagueScreen() {
     window.scrollTo(0, 0);
   }, []);
 
+  // Function to refresh all leagues data
+  const refreshAllLeagues = useCallback(() => {
+    refreshLeagues();
+  }, [refreshLeagues]);
+
   // Handle league click
   const handleLeagueClick = (league: IFantasyLeague) => {
     console.log('league clicked: ', league);
@@ -128,7 +132,7 @@ export function JoinLeagueScreen() {
       )}
 
       <div className="mt-6">
-        <UserCreatedLeaguesSection />
+        <UserCreatedLeaguesSection onLeagueCreated={refreshAllLeagues} />
       </div>
       {/* <PublicLeaguesSection /> */}
       {/* <JoinLeagueGroupsSection leagues={leagues} /> */}
@@ -158,28 +162,28 @@ export function JoinLeagueScreen() {
       ) : (
         <>
           {!isLoading && (
-            <JoinLeagueActiveLeaguesSection 
-              leagues={leagues} 
-              userTeams={userTeams} 
-              getGamesByCompetitionId={getGamesByCompetitionId} 
+            <JoinLeagueActiveLeaguesSection
+              leagues={leagues}
+              userTeams={userTeams}
+              getGamesByCompetitionId={getGamesByCompetitionId}
             />
           )}
         </>
       )}
 
       {!isLoading && (
-        <JoinLeagueUpcomingLeaguesSection 
-          leagues={leagues} 
-          userTeams={userTeams} 
-          getGamesByCompetitionId={getGamesByCompetitionId} 
+        <JoinLeagueUpcomingLeaguesSection
+          leagues={leagues}
+          userTeams={userTeams}
+          getGamesByCompetitionId={getGamesByCompetitionId}
         />
       )}
 
       {!isLoading && (
-        <JoinLeaguePastLeaguesSection 
-          leagues={leagues} 
-          userTeams={userTeams} 
-          getGamesByCompetitionId={getGamesByCompetitionId} 
+        <JoinLeaguePastLeaguesSection
+          leagues={leagues}
+          userTeams={userTeams}
+          getGamesByCompetitionId={getGamesByCompetitionId}
         />
       )}
     </div>

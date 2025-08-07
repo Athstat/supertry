@@ -30,5 +30,6 @@ export interface IUserCreatedLeague {
   prize_pool: number;
   join_deadline?: string;
   season_id: string;
+  season_name?: string;
   official_league_id: string;
 }

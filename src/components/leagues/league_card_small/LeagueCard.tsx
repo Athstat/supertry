@@ -19,7 +19,13 @@ type Props = {
   getGamesByCompetitionId: (competitionId: string) => any[];
 };
 
-export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false, getGamesByCompetitionId }: Props) {
+export function LeagueCard({
+  league,
+  onLeagueClick,
+  custom = 0,
+  isJoined = false,
+  getGamesByCompetitionId,
+}: Props) {
   const isLocked = isLeagueLocked(league.join_deadline);
   const adjustedDeadline = calculateJoinDeadline(league);
 
@@ -48,7 +54,10 @@ export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false
       }}
     >
       <div className="flex justify-between items-start mb-3 relative">
-        <h3 className="font-semibold text-gray-900 dark:text-white text-base">{league.title}</h3>
+        <div>
+          <h3 className="font-semibold text-gray-900 dark:text-white text-base">{league.title}</h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{league.season_name}</p>
+        </div>
         <div className="flex items-center gap-2">
           {isJoined && (
             <div className="px-2 py-0.5 text-xs rounded-full bg-blue-600 dark:bg-blue-500 text-white font-semibold flex items-center gap-1">
@@ -63,7 +72,10 @@ export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false
         <div className="flex flex-col gap-2">
           <div className="flex flex-row items-center gap-3">
             <LeagueTeamsCount league={league} />
-            <LeagueLiveIndicator league={league} getGamesByCompetitionId={getGamesByCompetitionId} />
+            <LeagueLiveIndicator
+              league={league}
+              getGamesByCompetitionId={getGamesByCompetitionId}
+            />
           </div>
 
           {!isLocked && adjustedDeadline && (

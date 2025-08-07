@@ -6,7 +6,13 @@ import { userCreatedLeagueService } from '../../services/userCreatedLeagueServic
 import { IUserCreatedLeague } from '../../types/userCreatedLeague';
 import CreateLeagueModal from './CreateLeagueModal';
 
-export default function UserCreatedLeaguesSection() {
+interface UserCreatedLeaguesSectionProps {
+  onLeagueCreated?: () => void;
+}
+
+export default function UserCreatedLeaguesSection({
+  onLeagueCreated,
+}: UserCreatedLeaguesSectionProps) {
   const [userLeagues, setUserLeagues] = useState<IUserCreatedLeague[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -21,6 +27,7 @@ export default function UserCreatedLeaguesSection() {
     try {
       setIsLoading(true);
       const leagues = await userCreatedLeagueService.getUserCreatedLeagues();
+      console.log('leagues: ', leagues);
       setUserLeagues(leagues);
     } catch (error) {
       console.error('Failed to fetch user leagues:', error);
@@ -29,8 +36,14 @@ export default function UserCreatedLeaguesSection() {
     }
   };
 
-  const handleLeagueCreated = (newLeague: IUserCreatedLeague) => {
-    setUserLeagues(prev => [newLeague, ...prev]);
+  const handleLeagueCreated = async (newLeague: IUserCreatedLeague) => {
+    // Refresh the user's leagues
+    await fetchUserLeagues();
+
+    // Notify parent component to refresh all leagues
+    if (onLeagueCreated) {
+      onLeagueCreated();
+    }
   };
 
   const handleLeagueClick = (league: IUserCreatedLeague) => {
@@ -105,7 +118,15 @@ export default function UserCreatedLeaguesSection() {
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{league.title}</h3>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white text-base">
+                        {league.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                        {league.season_name}
+                      </p>
+                    </div>
+
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${getStatusColor(league.status || 'open')}`}
                     >
@@ -127,7 +148,8 @@ export default function UserCreatedLeaguesSection() {
                   <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                     <span className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
-                      {league.participant_count}/{league.max_teams} teams
+                      {league.participant_count} {league.max_teams ? `/${league.max_teams}` : ''}{' '}
+                      teams
                     </span>
 
                     <span className="flex items-center gap-1">
