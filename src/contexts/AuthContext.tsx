@@ -37,6 +37,7 @@ declare global {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  
   const {
     accessToken,
     setAcessToken,

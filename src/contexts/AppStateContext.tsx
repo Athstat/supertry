@@ -204,3 +204,18 @@ export function useAppState() {
   }
   return context;
 }
+
+
+/** Hook that provides a function to reload the entire page */
+export function useAppReload() {
+  
+  const reloadWindow  = () => {
+    if (window) {
+      window.location.reload()
+    }
+  }
+  
+  return {
+    reloadWindow
+  }
+}
