@@ -9,12 +9,12 @@ amplitude.init('7a73614db43ac3fb1e4c8b8e24a280eb', { "autocapture": true });
 function track(event: string, eventInfo?: Record<string, any>) {
     
     if (!isInProduction()) {
-        console.log(`Skipped recording event ${event} because app is not in production`);
+        // console.log(`Skipped recording event ${event} because app is not in production`);
         return;
     }
     
     const { agent } = getDeviceInfo();
-    const user = authService.getUserInfo();
+    const user = authService.getUserInfoSync();
 
 
     amplitude.track(event, {
@@ -23,7 +23,7 @@ function track(event: string, eventInfo?: Record<string, any>) {
         device: agent,
         source: getCurrentPath(),
         weekNumber: getWeekFromLaunch(),
-        userId: user ? user.id : null
+        userId: user ? user.kc_id : null
     });
 
     console.log("ER")
