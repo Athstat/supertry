@@ -131,6 +131,9 @@ export async function teamsFetcher(
       lastRank: team.rank, // TODO: update this
       isUserTeam: user ? user.kc_id === team.user_id : false,
       userId: team.user_id,
+      is_admin: team.is_admin,
+      first_name: team.first_name,
+      last_name: team.last_name,
     };
 
     return rankedTeam;

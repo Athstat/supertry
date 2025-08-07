@@ -14,7 +14,7 @@ import { useFantasyLeague } from '../components/league/useFantasyLeague';
 import { analytics } from '../services/anayticsService';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isLeagueLocked } from '../utils/leaguesUtils';
-import { Lock } from 'lucide-react';
+import { Lock, Share2 } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
@@ -116,6 +116,11 @@ export function LeagueScreen() {
       tabKey: 'fixtures',
     },
 
+    {
+      label: 'Info',
+      tabKey: 'info',
+    },
+
     // {
     //   label: 'Predictions',
     //   tabKey: 'predictions',
@@ -204,6 +209,171 @@ export function LeagueScreen() {
                     userTeam={userTeam}
                     league={league as IFantasyLeague}
                   />
+                </TabViewPage>
+
+                <TabViewPage tabKey="info">
+                  <div className="bg-white dark:bg-dark-800/40 rounded-lg shadow-sm">
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-700 dark:border-dark-600">
+                      <h2 className="text-xl font-semibold flex items-center gap-2 dark:text-gray-100">
+                        <svg
+                          className="w-6 h-6 text-primary-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        League Information
+                      </h2>
+                    </div>
+
+                    <div className="p-4 space-y-6">
+                      {/* League Admin/Creator */}
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                          League Administrator
+                        </h3>
+                        {(() => {
+                          const adminTeam = teams?.find(team => team.is_admin);
+                          return adminTeam ? (
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
+                                <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                                  {adminTeam.first_name?.[0]}
+                                  {adminTeam.last_name?.[0]}
+                                </span>
+                              </div>
+                              <span className="text-gray-900 dark:text-white font-medium">
+                                {adminTeam.first_name} {adminTeam.last_name}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-gray-500 dark:text-gray-400">Not available</span>
+                          );
+                        })()}
+                      </div>
+
+                      {/* Creation Date */}
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                          Created
+                        </h3>
+                        <span className="text-gray-900 dark:text-white">
+                          {league?.created_date
+                            ? new Date(league.created_date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })
+                            : 'Not available'}
+                        </span>
+                      </div>
+
+                      {/* Invite Code */}
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                          Invite Code
+                        </h3>
+                        {league?.entry_code ? (
+                          <div className="flex items-center gap-3">
+                            <code className="bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-md font-mono text-sm text-gray-900 dark:text-white">
+                              {league.entry_code}
+                            </code>
+                            <button
+                              onClick={async () => {
+                                const shareData = {
+                                  title: `Join my ${league.title} league!`,
+                                  text: `Join my fantasy league on Scrumification with this code: ${league.entry_code}`,
+                                  url: window.location.href,
+                                };
+                                if (navigator.share) {
+                                  try {
+                                    await navigator.share(shareData);
+                                  } catch (err) {
+                                    console.error('Share failed:', err);
+                                  }
+                                } else {
+                                  // Fallback for browsers that don't support navigator.share
+                                  navigator.clipboard.writeText(shareData.text);
+                                  alert('Invite text copied to clipboard!');
+                                }
+                              }}
+                              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium"
+                            >
+                              <Share2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-gray-500 dark:text-gray-400">
+                            Public league (no code required)
+                          </span>
+                        )}
+                      </div>
+
+                      {/* League Type */}
+                      <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                          League Type
+                        </h3>
+                        <span className="text-gray-900 dark:text-white capitalize">
+                          {league?.is_private ? 'Private' : 'Public'}
+                        </span>
+                      </div>
+
+                      {/* Participants */}
+                      <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                          Participants
+                        </h3>
+                        <span className="text-gray-900 dark:text-white">
+                          {league?.participants_count || teams?.length || 0} teams
+                        </span>
+                      </div>
+
+                      {/* Duration */}
+                      {(league?.start_round || league?.end_round) && (
+                        <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
+                          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                            Duration
+                          </h3>
+                          <span className="text-gray-900 dark:text-white">
+                            {league.start_round && league.end_round
+                              ? `Round ${league.start_round} - ${league.end_round}`
+                              : league.start_round
+                                ? `From Round ${league.start_round}`
+                                : league.end_round
+                                  ? `Until Round ${league.end_round}`
+                                  : 'Full season'}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Status */}
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                          Status
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`w-2 h-2 rounded-full ${
+                              league?.is_open ? 'bg-green-500' : 'bg-red-500'
+                            }`}
+                          />
+                          <span className="text-gray-900 dark:text-white">
+                            {league?.is_open ? 'Open for joining' : 'Closed'}
+                            {league?.has_ended && ' (Ended)'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </TabViewPage>
 
                 {/* <TabViewPage tabKey="predictions">
