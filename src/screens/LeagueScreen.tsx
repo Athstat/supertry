@@ -32,7 +32,6 @@ export function LeagueScreen() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const initialTabKey = searchParams.get('tab') || 'standings';
-  console.log('initialTabKey', initialTabKey);
 
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);

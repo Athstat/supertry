@@ -36,7 +36,11 @@ const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => 
     );
 };
 
-export function FantasyLeagueFixturesList({ league, userTeam, getGamesByCompetitionId }: FixturesListProps) {
+export function FantasyLeagueFixturesList({
+  league,
+  userTeam,
+  getGamesByCompetitionId,
+}: FixturesListProps) {
   const competitionId = league.official_league_id;
 
   // Use provided getGamesByCompetitionId function or fallback to direct API call
@@ -50,15 +54,18 @@ export function FantasyLeagueFixturesList({ league, userTeam, getGamesByCompetit
   );
 
   // Get fixtures from prop function if available
-  const fixturesFromProp = getGamesByCompetitionId && competitionId ? getGamesByCompetitionId(competitionId) : null;
+  const fixturesFromProp =
+    getGamesByCompetitionId && competitionId ? getGamesByCompetitionId(competitionId) : null;
   const fixtures = fixturesFromProp || allFixtures;
+  // Only fetch team athletes if userTeam is defined
   const { data, isLoading: isLoadingUserTeamAthletes } = useFetch(
     'user-team-athletes',
-    userTeam?.team_id ?? 'fall-back',
+    userTeam?.team_id,
     fantasyTeamService.fetchTeamAthletes
   );
 
-  if (isLoading || isLoadingUserTeamAthletes) return <LoadingSpinner />;
+  // Show loading state if either fixtures are loading or we're waiting for user team data
+  if (isLoading || (userTeam && isLoadingUserTeamAthletes)) return <LoadingSpinner />;
 
   if (error) return <ErrorState message={'Error fetching matches'} />;
 
@@ -127,9 +134,9 @@ export function FantasyLeagueFixturesList({ league, userTeam, getGamesByCompetit
         </h2>
       </div>
 
-      <div className='' >
+      <div className="">
         {sortedDays.map(dayKey => (
-          <div className='flex flex-col gap-2 mb-2' key={dayKey}>
+          <div className="flex flex-col gap-2 mb-2" key={dayKey}>
             {/* Day header */}
             <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800/40 border border-slate-100 dark:border-slate-800 font-medium text-gray-800 dark:text-gray-200">
               {format(new Date(dayKey), 'EEEE, MMMM d, yyyy')}
@@ -138,12 +145,12 @@ export function FantasyLeagueFixturesList({ league, userTeam, getGamesByCompetit
             {/* Fixtures for this day */}
             <div className="divide-y flex flex-col gap-2 px-3">
               {fixturesByDay[dayKey].map((fixture, index) => (
-                <FixtureCard 
+                <FixtureCard
                   fixture={fixture}
                   key={index}
                   showCompetition
-                  showLogos 
-                  className='rounded-xl border dark:border-slate-700'
+                  showLogos
+                  className="rounded-xl border dark:border-slate-700"
                   message={generateFixtureMessage(fixture)}
                 />
               ))}
