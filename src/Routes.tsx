@@ -33,6 +33,7 @@ import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -42,17 +43,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
     <BottomNav />
   </div>
 );
-
-// Protected route component with error boundary
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/signin" />;
-  }
-
-  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
-};
 
 // Auth route component - redirects to dashboard if already authenticated
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
