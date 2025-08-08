@@ -148,7 +148,7 @@ export default function UserCreatedLeaguesSection({
                   <span
                     className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(league.status || 'open')}`}
                   >
-                    {(league.status || 'open').toUpperCase()}
+                    {(league.status || 'open').charAt(0).toUpperCase() + (league.status || 'open').slice(1)}
                   </span>
                   {league.is_public ? (
                     <Globe className="w-3 h-3 text-blue-500" />
@@ -204,10 +204,10 @@ export default function UserCreatedLeaguesSection({
                 </button>
                 <button
                   onClick={e => handleInviteClick(e, league)}
-                  className="flex items-center justify-center w-8 h-8 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                  title="Invite Players"
+                  className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm transition-colors"
                 >
-                  <Users size={16} />
+                  <Plus size={14} />
+                  Invite
                 </button>
               </div>
             </div>
