@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, MotionProps } from 'framer-motion';
 import ScrummyLogo from '../../components/branding/scrummy_logo';
-import { useState } from 'react';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
 
 // Button animation variants
@@ -25,15 +24,15 @@ export function AuthChoiceScreen() {
   // const [isLoading, ] = useState(false);
   // const [error, ] = useState<string | null>(null);
 
-  const {handleGuestLogin, isLoading, error} = useGuestLogin();
+  const { handleGuestLogin, isLoading, error } = useGuestLogin();
 
   // Check if running in mobile WebView
-  // const isMobileWebView = () => {
-  //   return (
-  //     (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
-  //     window.ReactNativeWebView !== undefined
-  //   );
-  // };
+  const isMobileWebView = () => {
+    return (
+      (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
+      window.ReactNativeWebView !== undefined
+    );
+  };
 
   // const googleLogin = useGoogleLogin({
   //   onSuccess: async tokenResponse => {
@@ -302,16 +301,17 @@ export function AuthChoiceScreen() {
               rights from here.
             </p>
           </motion.div>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="w-full space-y-4 flex flex-col items-center"
-          >
-            {/* Google Sign In Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="w-full space-y-4 flex flex-col items-center"
+        >
+          {/* Google Sign In Button */}
 
-            {/* <Experimental>
+          {/* <Experimental>
               <motion.div
                 className="w-[90%]"
                 variants={buttonVariants}
@@ -389,36 +389,37 @@ export function AuthChoiceScreen() {
 
             </Experimental> */}
 
-            {/* Create Account Button */}
-            <MotionButton
-              onClick={() => navigate('/signup')}
-              className="w-[90%] bg-gradient-to-r from-primary-700 to-primary-600 via-primary-600 text-white px-4 py-3 rounded-md font-medium text-base shadow hover:from-primary-700 hover:to-primary-600 hover:via-primary-650 transition-colors border border-primary-600"
-              disabled={isLoading}
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              Create Account
-            </MotionButton>
-
-        {/* Login Button */}
-        <button
-          onClick={() => navigate('/signin')}
-          className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
-        >
-          Login
-        </button>
-
-        {/* Continue without account - Only show in mobile app */}
-        {isMobileWebView() && (
-          <button
-            onClick={handleGuestLogin}
-            className="w-full text-gray-400 text-sm underline mt-4 py-2"
+          {/* Create Account Button */}
+          <MotionButton
+            onClick={() => navigate('/signup')}
+            className="w-[90%] bg-gradient-to-r from-primary-700 to-primary-600 via-primary-600 text-white px-4 py-3 rounded-md font-medium text-base shadow hover:from-primary-700 hover:to-primary-600 hover:via-primary-650 transition-colors border border-primary-600"
+            disabled={isLoading}
+            variants={buttonVariants}
+            initial="initial"
+            whileHover="hover"
+            whileTap="tap"
           >
-            Continue without an account
+            Create Account
+          </MotionButton>
+
+          {/* Login Button */}
+          <button
+            onClick={() => navigate('/signin')}
+            className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
+          >
+            Login
           </button>
-        )}
+
+          {/* Continue without account - Only show in mobile app */}
+          {isMobileWebView() && (
+            <button
+              onClick={handleGuestLogin}
+              className="w-full text-gray-400 text-sm underline mt-4 py-2"
+            >
+              Continue without an account
+            </button>
+          )}
+        </motion.div>
       </div>
 
       {/* Error Message */}
@@ -437,6 +438,6 @@ export function AuthChoiceScreen() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
