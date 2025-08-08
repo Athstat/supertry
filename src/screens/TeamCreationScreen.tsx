@@ -53,25 +53,25 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
     navigate('/dashboard');
   }
 
-  return (
-    <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
-      <div className="flex fleex-row items-center gap-2" >
-        <Trophy />
-        <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
-      </div>
+  // return (
+  //   <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
+  //     <div className="flex fleex-row items-center gap-2" >
+  //       <Trophy />
+  //       <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
+  //     </div>
 
-      <div>
-        <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
-      </div>
+  //     <div>
+  //       <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
+  //     </div>
 
-      <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
-        Coming Soon
-        <Info />
-      </PrimaryButton>
+  //     <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
+  //       Coming Soon
+  //       <Info />
+  //     </PrimaryButton>
 
-      <button onClick={handleBackToDashboard} >Go to Dashboard</button>
-    </PageView>
-  )
+  //     <button onClick={handleBackToDashboard} >Go to Dashboard</button>
+  //   </PageView>
+  // )
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
