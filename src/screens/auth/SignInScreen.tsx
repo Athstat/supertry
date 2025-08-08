@@ -9,6 +9,14 @@ import { useAuth } from '../../contexts/AuthContext';
 import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../utils/firstVisitUtils';
 import { useGoogleLogin } from '@react-oauth/google';
 
+// Check if running in mobile WebView
+const isMobileWebView = () => {
+  return (
+    (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
+    window.ReactNativeWebView !== undefined
+  );
+};
+
 export function SignInScreen() {
   const navigate = useNavigate();
   const { } = useAuth();
@@ -193,7 +201,7 @@ export function SignInScreen() {
 
           <EmailPasswordLoginBox />
 
-          <GuestLoginBox />
+          {isMobileWebView() && <GuestLoginBox />}
 
           {/* Error Display */}
           {error && (

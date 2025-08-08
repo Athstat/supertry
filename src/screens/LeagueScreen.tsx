@@ -7,6 +7,7 @@ import { fantasyTeamService } from '../services/fantasyTeamService';
 import { TeamAthletesModal } from '../components/league/TeamAthletesModal';
 import LeagueGroupChatFeed from '../components/leagues/LeagueGroupChat';
 import { FantasyLeagueFixturesList } from '../components/league/FixturesList';
+import LeagueGroupFilter from '../components/league/LeagueGroupFilter';
 import { IFantasyLeague } from '../types/fantasyLeague';
 import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
 import { useFantasyLeague } from '../components/league/useFantasyLeague';
@@ -18,7 +19,11 @@ import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/ta
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
 import { ScopeProvider } from 'jotai-scope';
-import { fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom } from '../state/fantasyLeague.atoms';
+import {
+  fantasyLeagueAtom,
+  fantasyLeagueLockedAtom,
+  userFantasyTeamAtom,
+} from '../state/fantasyLeague.atoms';
 
 export function LeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -32,6 +37,7 @@ export function LeagueScreen() {
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
   const [loadingAthletes, setLoadingAthletes] = useState(false);
+  const [groupFilterMembers, setGroupFilterMembers] = useState<string[] | null>(null);
 
   const { leagueInfo, userTeam, error, isLoading, league, teams } = useFantasyLeague();
 
@@ -70,7 +76,9 @@ export function LeagueScreen() {
     if (league) {
       analytics.trackTeamCreationStarted(league.id, league.official_league_id);
 
-      navigate(`/${league.official_league_id}/create-team`, {
+      console.log('league to join: ', league);
+
+      navigate(`/${league.season ? league.season : league.official_league_id}/create-team`, {
         state: { league },
       });
     }
@@ -83,6 +91,15 @@ export function LeagueScreen() {
   };
 
   const isLocked = isLeagueLocked(league?.join_deadline);
+
+  // Filter teams based on group selection
+  const filteredTeams = groupFilterMembers
+    ? teams.filter(team => groupFilterMembers.includes(team.userId))
+    : teams;
+
+  const handleGroupFilterChange = (groupMembers: string[] | null) => {
+    setGroupFilterMembers(groupMembers);
+  };
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -120,7 +137,7 @@ export function LeagueScreen() {
 
   return (
     <ScopeProvider atoms={atoms}>
-      <FantasyLeagueProvider league={league} >
+      <FantasyLeagueProvider league={league}>
         <div className="min-h-screen bg-gray-50 dark:bg-black">
           <LeagueHeader
             leagueInfo={leagueInfo}
@@ -158,8 +175,15 @@ export function LeagueScreen() {
                 initialTabKey={initialTabKey}
               >
                 <TabViewPage tabKey="standings">
+                  {league && (
+                    <LeagueGroupFilter
+                      league={league}
+                      onGroupFilterChange={handleGroupFilterChange}
+                      isFiltered={groupFilterMembers !== null}
+                    />
+                  )}
                   <LeagueStandings
-                    teams={teams}
+                    teams={filteredTeams}
                     showJumpButton={showJumpButton}
                     onJumpToTeam={onJumpToTeam}
                     isLoading={isLoading}
@@ -177,7 +201,10 @@ export function LeagueScreen() {
                 </TabViewPage>
 
                 <TabViewPage tabKey="fixtures">
-                  <FantasyLeagueFixturesList userTeam={userTeam} league={league as IFantasyLeague} />
+                  <FantasyLeagueFixturesList
+                    userTeam={userTeam}
+                    league={league as IFantasyLeague}
+                  />
                 </TabViewPage>
 
                 {/* <TabViewPage tabKey="predictions">

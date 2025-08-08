@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { motion, MotionProps } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ScrummyLogo from '../../components/branding/scrummy_logo';
 import { useState } from 'react';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
@@ -402,48 +402,41 @@ export function AuthChoiceScreen() {
               Create Account
             </MotionButton>
 
-            {/* Login Button */}
-            <MotionButton
-              onClick={() => navigate('/signin')}
-              className="w-[90%] bg-gradient-to-r from-green-700 to-green-600 via-green-600 text-white px-4 py-3 rounded-md font-medium text-base shadow hover:from-green-700 hover:to-green-600 hover:via-green-650 transition-colors border border-green-600"
-              disabled={isLoading}
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              Login
-            </MotionButton>
+        {/* Login Button */}
+        <button
+          onClick={() => navigate('/signin')}
+          className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
+        >
+          Login
+        </button>
 
-            {/* Continue without account */}
-            <MotionButton
-              onClick={handleGuestLogin}
-              className="mt-4 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline px-6 py-3 rounded-xl font-medium transition-colors flex justify-center items-center"
-              disabled={isLoading}
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              {isLoading ? (
-                <span className="inline-block w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mr-2"></span>
-              ) : null}
-              Continue without an account
-            </MotionButton>
-
-            {/* Error Display */}
-            {error && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-4 text-red-500 text-sm text-center"
-              >
-                {error}
-              </motion.div>
-            )}
-          </motion.div>
-        </motion.div>
+        {/* Continue without account - Only show in mobile app */}
+        {isMobileWebView() && (
+          <button
+            onClick={handleGuestLogin}
+            className="w-full text-gray-400 text-sm underline mt-4 py-2"
+          >
+            Continue without an account
+          </button>
+        )}
       </div>
-    </>
+
+      {/* Error Message */}
+      {error && (
+        <div className="mt-6 text-red-400 text-sm text-center max-w-xs">
+          {error}
+        </div>
+      )}
+
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-dark-800 p-6 rounded-lg text-center">
+            <div className="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+            <p className="text-white">Signing you in...</p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

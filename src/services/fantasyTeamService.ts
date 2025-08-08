@@ -82,15 +82,16 @@ export const fantasyTeamService = {
   /**
    * Fetch all club teams for the current user (not league teams)
    */
-  fetchUserTeams: async (id?: string): Promise<IFantasyClubTeam[]> => {
+  fetchUserTeams: async (id?: string): Promise<any[]> => {
     try {
       let userId = id;
       if (!userId) {
         const userInfo = await authService.getUserInfo();
         userId = userInfo?.kc_id || 'default-user-id';
       }
-      // Use the fantasy-clubs endpoint to get FantasyClubTeam objects
-      const url = getUri(`/api/v1/fantasy-teams/fantasy-clubs/${userId}/`);
+      
+      // Use the correct endpoint for fetching user teams
+      const url = getUri(`/api/v1/fantasy-teams/user-teams/${userId}`);
 
       const response = await fetch(url, {
         method: 'GET',
@@ -98,14 +99,16 @@ export const fantasyTeamService = {
       });
 
       if (!response.ok) {
-        console.error('Failed to fetch user teams:', await response.text());
-        return [];
+        const errorText = await response.text();
+        console.error('Failed to fetch user teams:', errorText);
+        throw new Error(`Failed to fetch user teams: ${errorText}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error('Error fetching user teams:', error);
-      return [];
+      console.error('Error in fetchUserTeams:', error);
+      throw error; // Re-throw to be handled by the caller
     }
   },
 
