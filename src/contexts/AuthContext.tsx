@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
 import { useAuthToken } from '../components/auth/providers/AuthTokenProvider';
-import useSWR from 'swr';
+import useSWR, { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
@@ -11,7 +11,8 @@ type AuthContextType = {
   setAuth: (accessToken: string, user: DjangoAuthUser) => void,
   logout: () => void,
   authUser: DjangoAuthUser | undefined,
-  isLoading: boolean
+  isLoading: boolean, 
+  refreshAuthUser: KeyedMutator<DjangoAuthUser | undefined>
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -49,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   console.log("Now inside the auth provider here is the token we got", accessToken);
 
   const fetchKey = accessToken ? '/auth-user' : null;
-  const {data: authUser, isLoading, error} = useSWR(fetchKey, () => authService.whoami(accessToken));
+  const {data: authUser, isLoading, error, mutate} = useSWR(fetchKey, () => authService.whoami(accessToken));
 
   const setAuth = useCallback((token: string, user: DjangoAuthUser) => {
     setAcessToken(token);
@@ -81,7 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAuth,
         logout,
         isAuthenticated: authUser !== undefined,
-        isLoading
+        isLoading,
+        refreshAuthUser: mutate
       }}
     >
       {children}
