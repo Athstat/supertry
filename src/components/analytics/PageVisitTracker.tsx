@@ -42,9 +42,9 @@ export default function PageVisitsTracker() {
         if (isActive) {
             try {
                 analytics.trackPageVisit(location.pathname);
-                console.log('PageVisitsTracker: Tracked page visit after app became active');
+                // console.log('PageVisitsTracker: Tracked page visit after app became active');
             } catch (error) {
-                console.error("Error tracking page visit after app became active:", error);
+                // console.error("Error tracking page visit after app became active:", error);
             }
         }
     }, [isActive, location.pathname]);

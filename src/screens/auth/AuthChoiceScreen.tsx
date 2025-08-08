@@ -2,11 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, MotionProps } from 'framer-motion';
 import ScrummyLogo from '../../components/branding/scrummy_logo';
 import { useState } from 'react';
-import { authService } from '../../services/authService';
-import { useAuth } from '../../contexts/AuthContext';
-import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../utils/firstVisitUtils';
-import { getDeviceId } from '../../utils/deviceIdUtils';
-import { useGoogleLogin } from '@react-oauth/google';
+import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
 
 // Button animation variants
 const buttonVariants = {
@@ -25,236 +21,239 @@ const MotionButton = motion.button as React.ComponentType<
 
 export function AuthChoiceScreen() {
   const navigate = useNavigate();
-  const { checkAuth } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const { setAuth } = useAuth();
+  // const [isLoading, ] = useState(false);
+  // const [error, ] = useState<string | null>(null);
+
+  const {handleGuestLogin, isLoading, error} = useGuestLogin();
 
   // Check if running in mobile WebView
-  const isMobileWebView = () => {
-    return (
-      (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
-      window.ReactNativeWebView !== undefined
-    );
-  };
+  // const isMobileWebView = () => {
+  //   return (
+  //     (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
+  //     window.ReactNativeWebView !== undefined
+  //   );
+  // };
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async tokenResponse => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        // For the code flow, we need to exchange the code for a token on the backend
-        // But since our backend expects an ID token, we'll use the authorization code
-        const result = await authService.googleOAuth(tokenResponse.code);
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async tokenResponse => {
+  //     try {
+  //       setIsLoading(true);
+  //       setError(null);
+  //       // For the code flow, we need to exchange the code for a token on the backend
+  //       // But since our backend expects an ID token, we'll use the authorization code
+  //       const result = await authService.googleOAuth(tokenResponse.code);
 
-        if (result.error) {
-          setError(result.error.message || 'Google sign-in failed');
-          setIsLoading(false);
-          return;
-        }
+  //       if (result.error) {
+  //         setError(result.error.message || 'Google sign-in failed');
+  //         setIsLoading(false);
+  //         return;
+  //       }
 
-        // Update auth context
-        await checkAuth();
+  //       // Update auth context
+  //       await checkAuth();
 
-        // Check if this is the first completed visit
-        const firstVisitCompleted = isFirstVisitCompleted();
+  //       // Check if this is the first completed visit
+  //       const firstVisitCompleted = isFirstVisitCompleted();
 
-        // Navigate to appropriate screen
-        if (firstVisitCompleted) {
-          navigate('/dashboard');
-        } else {
-          markFirstVisitCompleted();
-          navigate('/post-signup-welcome');
-        }
-      } catch (err: any) {
-        console.error('Google OAuth error:', err);
-        setError('Google sign-in failed. Please try again.');
-        setIsLoading(false);
-      }
-    },
-    onError: () => {
-      setError('Google sign-in failed. Please try again.');
-      setIsLoading(false);
-    },
-    flow: 'auth-code',
-  });
+  //       // Navigate to appropriate screen
+  //       if (firstVisitCompleted) {
+  //         navigate('/dashboard');
+  //       } else {
+  //         markFirstVisitCompleted();
+  //         navigate('/post-signup-welcome');
+  //       }
+  //     } catch (err: any) {
+  //       console.error('Google OAuth error:', err);
+  //       setError('Google sign-in failed. Please try again.');
+  //       setIsLoading(false);
+  //     }
+  //   },
+  //   onError: () => {
+  //     setError('Google sign-in failed. Please try again.');
+  //     setIsLoading(false);
+  //   },
+  //   flow: 'auth-code',
+  // });
 
   // Handle mobile OAuth callback
-  const handleMobileOAuthCallback = async (callbackData: any) => {
-    console.log('🎉 Mobile OAuth callback received:', callbackData);
+  // const handleMobileOAuthCallback = async (callbackData: any) => {
+  //   console.log('🎉 Mobile OAuth callback received:', callbackData);
 
-    if (callbackData.error) {
-      setError(`OAuth failed: ${callbackData.error}`);
-      setIsLoading(false);
-      return;
-    }
+  //   if (callbackData.error) {
+  //     setError(`OAuth failed: ${callbackData.error}`);
+  //     setIsLoading(false);
+  //     return;
+  //   }
 
-    if (callbackData.code) {
-      try {
-        // Use the authorization code to complete authentication
-        const result = await authService.googleOAuth(callbackData.code);
+  //   if (callbackData.code) {
+  //     try {
+  //       // Use the authorization code to complete authentication
+  //       const result = await authService.googleOAuth(callbackData.code);
 
-        if (result.error) {
-          setError(result.error.message || 'Google sign-in failed');
-          setIsLoading(false);
-          return;
-        }
+  //       if (result.error) {
+  //         setError(result.error.message || 'Google sign-in failed');
+  //         setIsLoading(false);
+  //         return;
+  //       }
 
-        // Update auth context
-        await checkAuth();
+  //       // Update auth context
+  //       await checkAuth();
 
-        // Check if this is the first completed visit
-        const firstVisitCompleted = isFirstVisitCompleted();
+  //       // Check if this is the first completed visit
+  //       const firstVisitCompleted = isFirstVisitCompleted();
 
-        // Navigate to appropriate screen
-        if (firstVisitCompleted) {
-          navigate('/dashboard');
-        } else {
-          markFirstVisitCompleted();
-          navigate('/post-signup-welcome');
-        }
-      } catch (err: any) {
-        console.error('OAuth callback processing error:', err);
-        setError('Failed to process OAuth callback. Please try again.');
-        setIsLoading(false);
-      }
-    }
-  };
+  //       // Navigate to appropriate screen
+  //       if (firstVisitCompleted) {
+  //         navigate('/dashboard');
+  //       } else {
+  //         markFirstVisitCompleted();
+  //         navigate('/post-signup-welcome');
+  //       }
+  //     } catch (err: any) {
+  //       console.error('OAuth callback processing error:', err);
+  //       setError('Failed to process OAuth callback. Please try again.');
+  //       setIsLoading(false);
+  //     }
+  //   }
+  // };
 
   // Native Google Sign-In handler for mobile
-  const handleGoogleSignIn = async () => {
-    console.log('🔄 Google sign-in triggered, mobile WebView?', isMobileWebView());
+  // const handleGoogleSignIn = async () => {
+  //   console.log('🔄 Google sign-in triggered, mobile WebView?', isMobileWebView());
 
-    try {
-      setIsLoading(true);
-      setError(null);
+  //   try {
+  //     setIsLoading(true);
+  //     setError(null);
 
-      if (isMobileWebView() && window.ScrummyBridge?.googleSignIn) {
-        console.log('📱 Using native Google Sign-In');
-        // Use native bridge for mobile
-        const result = await window.ScrummyBridge.googleSignIn();
+  //     if (isMobileWebView() && window.ScrummyBridge?.googleSignIn) {
+  //       console.log('📱 Using native Google Sign-In');
+  //       // Use native bridge for mobile
+  //       const result = await window.ScrummyBridge.googleSignIn();
 
-        if (!result.success) {
-          setError(result.error || 'Google sign-in failed');
-          setIsLoading(false);
-          return;
-        }
+  //       if (!result.success) {
+  //         setError(result.error || 'Google sign-in failed');
+  //         setIsLoading(false);
+  //         return;
+  //       }
 
-        if (result.idToken) {
-          // Send ID token to backend
-          const authResult = await authService.googleOAuthWithIdToken(result.idToken);
+  //       if (result.idToken) {
+  //         // Send ID token to backend
+  //         const authResult = await authService.googleOAuthWithIdToken(result.idToken);
 
-          if (authResult.error) {
-            setError(authResult.error.message || 'Google sign-in failed');
-            setIsLoading(false);
-            return;
-          }
+  //         if (authResult.error) {
+  //           setError(authResult.error.message || 'Google sign-in failed');
+  //           setIsLoading(false);
+  //           return;
+  //         }
 
-          // Update auth context
-          await checkAuth();
+  //         // Update auth context
+  //         await checkAuth();
 
-          // Check if this is the first completed visit
-          const firstVisitCompleted = isFirstVisitCompleted();
+  //         // Check if this is the first completed visit
+  //         const firstVisitCompleted = isFirstVisitCompleted();
 
-          // Navigate to appropriate screen
-          if (firstVisitCompleted) {
-            navigate('/dashboard');
-          } else {
-            markFirstVisitCompleted();
-            navigate('/post-signup-welcome');
-          }
-        } else {
-          setError('No authentication token received');
-          setIsLoading(false);
-        }
-      } else {
-        // Regular web OAuth flow
-        console.log('🌐 Using web OAuth flow');
-        googleLogin();
-      }
-    } catch (err: any) {
-      console.error('Google Sign-In error:', err);
-      setError('Google sign-in failed. Please try again.');
-      setIsLoading(false);
-    }
-  };
+  //         // Navigate to appropriate screen
+  //         if (firstVisitCompleted) {
+  //           navigate('/dashboard');
+  //         } else {
+  //           markFirstVisitCompleted();
+  //           navigate('/post-signup-welcome');
+  //         }
+  //       } else {
+  //         setError('No authentication token received');
+  //         setIsLoading(false);
+  //       }
+  //     } else {
+  //       // Regular web OAuth flow
+  //       console.log('🌐 Using web OAuth flow');
+  //       googleLogin();
+  //     }
+  //   } catch (err: any) {
+  //     console.error('Google Sign-In error:', err);
+  //     setError('Google sign-in failed. Please try again.');
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const handleAppleSuccess = async (response: any) => {
-    if (!response.authorization || !response.authorization.id_token) {
-      setError('Apple sign-in failed. Please try again.');
-      return;
-    }
+  // const handleAppleSuccess = async (response: any) => {
+  //   if (!response.authorization || !response.authorization.id_token) {
+  //     setError('Apple sign-in failed. Please try again.');
+  //     return;
+  //   }
 
-    try {
-      setIsLoading(true);
-      setError(null);
-      const result = await authService.appleOAuth(response.authorization.id_token);
+  //   try {
+  //     setIsLoading(true);
+  //     setError(null);
+  //     const result = await authService.appleOAuth(response.authorization.id_token);
 
-      if (result.error) {
-        setError(result.error.message || 'Apple sign-in failed');
-        setIsLoading(false);
-        return;
-      }
+  //     if (result.error) {
+  //       setError(result.error.message || 'Apple sign-in failed');
+  //       setIsLoading(false);
+  //       return;
+  //     }
 
-      // Update auth context
-      await checkAuth();
+  //     // Update auth context
+  //     await checkAuth();
 
-      // Check if this is the first completed visit
-      const firstVisitCompleted = isFirstVisitCompleted();
+  //     // Check if this is the first completed visit
+  //     const firstVisitCompleted = isFirstVisitCompleted();
 
-      // Navigate to appropriate screen
-      if (firstVisitCompleted) {
-        navigate('/dashboard');
-      } else {
-        markFirstVisitCompleted();
-        navigate('/post-signup-welcome');
-      }
-    } catch (err: any) {
-      console.error('Apple OAuth error:', err);
-      setError('Apple sign-in failed. Please try again.');
-      setIsLoading(false);
-    }
-  };
+  //     // Navigate to appropriate screen
+  //     if (firstVisitCompleted) {
+  //       navigate('/dashboard');
+  //     } else {
+  //       markFirstVisitCompleted();
+  //       navigate('/post-signup-welcome');
+  //     }
+  //   } catch (err: any) {
+  //     console.error('Apple OAuth error:', err);
+  //     setError('Apple sign-in failed. Please try again.');
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const handleAppleError = (error: any) => {
-    console.error('Apple sign-in failed:', error);
-    setError('Apple sign-in failed. Please try again.');
-  };
+  // const handleAppleError = (error: any) => {
+  //   console.error('Apple sign-in failed:', error);
+  //   setError('Apple sign-in failed. Please try again.');
+  // };
 
-  const handleGuestLogin = async () => {
-    try {
-      setIsLoading(true);
+  // const handleGuestLogin = async () => {
+  //   try {
+  //     setIsLoading(true);
 
-      // Get device ID first
-      const deviceId = await getDeviceId();
-      const loginResult = await authService.authenticateAsGuestUser(deviceId);
+  //     // Get device ID first
+  //     const deviceId = await getDeviceId();
+  //     const loginResult = await authService.authenticateAsGuestUser(deviceId);
 
-      // Check if login was successful
-      if (loginResult.error) {
-        throw new Error(loginResult.error.message || 'Failed to authenticate as guest user');
-      }
+  //     // Check if login was successful
+  //     if (loginResult.error) {
+  //       throw new Error(loginResult.error.message || 'Failed to authenticate as guest user');
+  //     }
 
-      // Update auth context
-      await checkAuth();
+  //     // Update auth context
+  //     await checkAuth();
 
-      // Check if this is the first completed visit
-      const firstVisitCompleted = isFirstVisitCompleted();
+  //     // Check if this is the first completed visit
+  //     const firstVisitCompleted = isFirstVisitCompleted();
 
-      // Navigate to appropriate screen
-      if (firstVisitCompleted) {
-        navigate('/dashboard');
-      } else {
-        // Mark first visit as completed since we're creating a guest account
-        markFirstVisitCompleted();
-        navigate('/post-signup-welcome');
-      }
-    } catch (error) {
-      console.error('Guest login failed:', error);
-      // If guest login fails, still navigate to dashboard as fallback
-      navigate('/dashboard');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     // Navigate to appropriate screen
+  //     if (firstVisitCompleted) {
+  //       navigate('/dashboard');
+  //     } else {
+  //       // Mark first visit as completed since we're creating a guest account
+  //       markFirstVisitCompleted();
+  //       navigate('/post-signup-welcome');
+  //     }
+  //   } catch (error) {
+  //     console.error('Guest login failed:', error);
+  //     // If guest login fails, still navigate to dashboard as fallback
+  //     navigate('/dashboard');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
 
   return (
     <>

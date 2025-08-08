@@ -392,12 +392,12 @@ export const authService = {
     return { message: 'Something went wrong' };
   },
 
-  whoami: async () => {
+  whoami: async (accessToken?: string) => {
     try {
       const uri = getUri('/api/v1/auth/me');
 
       const res = await fetch(uri, {
-        headers: getAuthHeader(),
+        headers: getAuthHeader(accessToken),
       });
 
       if (res.ok) {
