@@ -181,10 +181,16 @@ export default function UserCreatedLeaguesSection({
                 </div>
                 <div className="flex items-center gap-2 ml-2">
                   <span
-                    className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(league.status || 'open')}`}
+                    className={`text-xs px-2 py-1 rounded-full font-medium ${
+                      league.is_public
+                        ? getStatusColor(league.status || 'open')
+                        : 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                    }`}
                   >
-                    {(league.status || 'open').charAt(0).toUpperCase() +
-                      (league.status || 'open').slice(1)}
+                    {league.is_public
+                      ? (league.status || 'open').charAt(0).toUpperCase() +
+                        (league.status || 'open').slice(1)
+                      : 'Invite Only'}
                   </span>
                   {league.is_public ? (
                     <Globe className="w-3 h-3 text-blue-500" />

@@ -19,6 +19,7 @@ import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/ta
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
 import { ScopeProvider } from 'jotai-scope';
+import { mutate } from 'swr';
 import {
   fantasyLeagueAtom,
   fantasyLeagueLockedAtom,
@@ -32,6 +33,7 @@ export function LeagueScreen() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const initialTabKey = searchParams.get('tab') || 'standings';
+  const fromTeamCreation = (location.state as any)?.from === 'team-creation';
 
   const [selectedTeam, setSelectedTeam] = useState<RankedFantasyTeam | null>(null);
   const [teamAthletes, setTeamAthletes] = useState<any[]>([]);
@@ -47,6 +49,37 @@ export function LeagueScreen() {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Ensure freshest teams when arriving at LeagueScreen (e.g., after creating a team)
+  useEffect(() => {
+    if (league?.id) {
+      // Revalidate SWR cache for participating teams
+      mutate([league.id, 'participating-teams-hook']);
+    }
+    // We intentionally don't depend on teams to avoid loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [league?.id, location.state]);
+
+  // Short-lived polling to overcome server-side lag after team creation
+  useEffect(() => {
+    if (!fromTeamCreation || !league?.id) return;
+    if (userTeam) return; // already present
+
+    let attempts = 0;
+    const maxAttempts = 6; // ~9s if interval=1500ms
+    const intervalMs = 1500;
+
+    const timer = setInterval(() => {
+      attempts += 1;
+      mutate([league.id, 'participating-teams-hook']);
+      if (attempts >= maxAttempts) {
+        clearInterval(timer);
+      }
+    }, intervalMs);
+
+    return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromTeamCreation, league?.id, !!userTeam]);
 
   // Handle team click
   const handleTeamClick = async (team: RankedFantasyTeam) => {
