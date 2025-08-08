@@ -46,9 +46,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearAccessTokenAndUser
   } = useAuthToken();
 
-
-  console.log("Now inside the auth provider here is the token we got", accessToken);
-
   const fetchKey = accessToken ? '/auth-user' : null;
   const {data: authUser, isLoading, error, mutate} = useSWR(fetchKey, () => authService.whoami(accessToken));
 
