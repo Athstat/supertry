@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { WelcomeScreen } from "../../screens/auth/WelcomeScreen";
 import { isFirstAppVisit, markAppVisited } from "../../utils/firstVisitUtils";
 import RouteErrorBoundary from "../RouteErrorBoundary";
+import { AuthChoiceScreen } from "../../screens/auth/AuthChoiceScreen";
 
 // First Visit handler component
 export function FirstVisitHandler() {
@@ -33,6 +34,7 @@ export function FirstVisitHandler() {
   return (
     <RouteErrorBoundary>
       {/* {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />} */}
+      {/* {<AuthChoiceScreen />} */}
       <WelcomeScreen />
     </RouteErrorBoundary>
   );

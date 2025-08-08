@@ -1,23 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { authService } from '../services/authService';
 import { useAuth } from '../contexts/AuthContext';
 
 export function useAuthUser() {
-  const user = authService.getUserInfoSync();
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, isLoading, authUser: user} = useAuth();
 
   useEffect(() => {
     // If not loading and not authenticated, redirect to signin
-    if (!loading && !isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       console.log('[useAuthUser] User not authenticated, redirecting to signin');
       navigate('/signin');
     }
-  }, [isAuthenticated, loading, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   // If still loading, return null
-  if (loading) {
+  if (isLoading) {
     return null;
   }
 

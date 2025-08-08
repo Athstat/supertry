@@ -1,10 +1,9 @@
-import React from 'react';
 import { useFetch } from '../../hooks/useFetch';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { leagueService } from '../../services/leagueService';
 import { useNavigate } from 'react-router-dom';
 import { LoadingState } from '../ui/LoadingState';
-import { IFantasyLeague, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 
 const MyWeekPanel = () => {
@@ -54,7 +53,7 @@ const MyWeekPanel = () => {
   let points = 0;
 
   leagueTeams.forEach((team, index) => {
-    if (team.user_id === user.id) {
+    if (team.user_id === user?.kc_id) {
       userTeam = team;
       teamRank = index + 1;
       points = team.overall_score || 0;
