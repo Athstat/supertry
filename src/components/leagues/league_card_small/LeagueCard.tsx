@@ -24,6 +24,8 @@ const Badge = ({ variant, children }: { variant: string; children: React.ReactNo
         return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
       case 'secondary':
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+      case 'invite':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
@@ -41,10 +43,14 @@ export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false
   const adjustedDeadline = calculateJoinDeadline(league);
 
   const getStatusBadge = () => {
+    const isPrivate = (league as any)?.is_private === true || (league as any)?.is_public === false;
+    if (isPrivate) {
+      return <Badge variant="invite">Invite Only</Badge>;
+    }
     if (league.has_ended) {
       return <Badge variant="secondary">Ended</Badge>;
     } else if (league.is_open) {
-      return <Badge variant="success">Open</Badge>;
+      return <Badge variant="success">Public</Badge>;
     } else {
       return <Badge variant="destructive">Locked</Badge>;
     }

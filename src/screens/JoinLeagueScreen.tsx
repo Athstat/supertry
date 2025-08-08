@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Loader } from 'lucide-react';
+import { LeagueCard } from '../components/leagues/league_card_small/LeagueCard';
+import NoContentCard from '../components/shared/NoContentMessage';
 import { leagueService } from '../services/leagueService';
 import { fantasyTeamService } from '../services/fantasyTeamService';
 import { gamesService } from '../services/gamesService';
@@ -9,14 +11,17 @@ type IGame = any;
 
 import { leaguesOnClockFilter } from '../utils/leaguesUtils';
 import JoinLeagueDeadlineCountdown from '../components/leagues/JoinLeagueDeadlineContdown';
+// Removed Upcoming/Past sections in favor of a single Joined Leagues list
 import JoinLeagueActiveLeaguesSection from '../components/leagues/join_league_screen/JoinLeagueActiveLeaguesSection';
-import JoinLeaguePastLeaguesSection from '../components/leagues/join_league_screen/JoinLeaguePastLeaguesSection';
-import JoinLeagueUpcomingLeaguesSection from '../components/leagues/join_league_screen/JoinLeagueUpcomingLeaguesSection';
 import UserCreatedLeaguesSection from '../components/leagues/UserCreatedLeaguesSection';
 import { useFetch } from '../hooks/useFetch';
 import LeagueTabs from '../components/leagues/LeagueTabs';
 import JoinLeagueByCode from '../components/leagues/JoinLeagueByCode';
-import LeagueFilterPanel, { type CreatorType, type AccessType, type DateOrder } from '../components/leagues/LeagueFilterPanel';
+import LeagueFilterPanel, {
+  type CreatorType,
+  type AccessType,
+  type DateOrder,
+} from '../components/leagues/LeagueFilterPanel';
 
 export function JoinLeagueScreen() {
   // Tabs state (persist between visits)
@@ -34,10 +39,13 @@ export function JoinLeagueScreen() {
     data: leaguesData,
     isLoading,
     error,
-    mutate: refreshLeagues
+    mutate: refreshLeagues,
   } = useFetch('fantasy-leagues', [], () => leagueService.getAllLeagues());
 
   const leagues = leaguesData ?? [];
+
+  // Local cache of joined leagues that aren't returned by the general leagues list
+  const [extraJoinedLeagues, setExtraJoinedLeagues] = useState<IFantasyLeague[]>([]);
 
   // Get unique competition IDs from all leagues - create a stable string key
   const competitionIdsKey = useMemo(() => {
@@ -98,7 +106,7 @@ export function JoinLeagueScreen() {
         const teams = await fantasyTeamService.fetchUserTeams();
 
         // Create a Set of league IDs that the user has joined for O(1) lookups
-        const joinedLeagueIds = new Set(
+        const joinedLeagueIds = new Set<string>(
           teams
             .filter(team => team.league_id) // Filter out teams without a league_id
             .map(team => team.league_id.toString())
@@ -107,13 +115,31 @@ export function JoinLeagueScreen() {
         // Create a mapping of league IDs to whether the user has joined
         const joinedLeagues = leagues.reduce(
           (acc, league) => {
-            acc[league.id] = joinedLeagueIds.has(league.id);
+            const idStr = String(league.id);
+            acc[idStr] = joinedLeagueIds.has(idStr);
             return acc;
           },
           {} as Record<string, boolean>
         );
 
         setUserTeams(joinedLeagues);
+
+        // Ensure we also display leagues the user joined that may not be in `leagues`
+        const knownIds = new Set<string>(leagues.map(l => String(l.id)));
+        const missingIds = Array.from(joinedLeagueIds).filter(id => !knownIds.has(id));
+
+        if (missingIds.length > 0) {
+          try {
+            const fetched = await Promise.all(
+              missingIds.map(async id => await leagueService.getLeagueById(Number(id)))
+            );
+            setExtraJoinedLeagues(fetched.filter(Boolean) as IFantasyLeague[]);
+          } catch (e) {
+            console.warn('Failed fetching some joined leagues by id', e);
+          }
+        } else {
+          setExtraJoinedLeagues([]);
+        }
       } catch (error) {
         console.error('Error fetching user teams:', error);
       }
@@ -147,13 +173,25 @@ export function JoinLeagueScreen() {
   // }
 
   // Derived lists
-  const joinedLeagues = useMemo(
-    () => leagues.filter(l => userTeams[l.id]),
-    [leagues, userTeams]
+  const isLeagueJoined = useCallback(
+    (leagueId: string | number) => !!userTeams[String(leagueId)],
+    [userTeams]
   );
+  const isLeagueEnded = useCallback(
+    (league: IFantasyLeague) => String((league as any)?.status || '').toLowerCase() === 'ended',
+    []
+  );
+
+  const joinedLeagues = useMemo(() => {
+    const base = leagues.filter(l => isLeagueJoined(l.id) && !isLeagueEnded(l));
+    // Merge extras, avoid duplicates by id
+    const seen = new Set(base.map(l => String(l.id)));
+    const extras = extraJoinedLeagues.filter(l => !seen.has(String(l.id)) && !isLeagueEnded(l));
+    return [...base, ...extras];
+  }, [leagues, isLeagueJoined, extraJoinedLeagues, isLeagueEnded]);
   const discoverBase = useMemo(
-    () => leagues.filter(l => !userTeams[l.id] && l.is_open),
-    [leagues, userTeams]
+    () => leagues.filter(l => !isLeagueJoined(l.id) && l.is_open),
+    [leagues, isLeagueJoined]
   );
 
   const discoverLeagues = useMemo(() => {
@@ -163,7 +201,11 @@ export function JoinLeagueScreen() {
     if (discoverFilters.access === 'invite') list = list.filter(l => l.is_private);
     // Creator Type (best-effort: uses `type` when provided)
     if (discoverFilters.creator !== 'all') {
-      list = list.filter(l => (l as any).type ? (l as any).type === (discoverFilters.creator === 'scrummy' ? 'scrummy' : 'user') : true);
+      list = list.filter(l =>
+        (l as any).type
+          ? (l as any).type === (discoverFilters.creator === 'scrummy' ? 'scrummy' : 'user')
+          : true
+      );
     }
     // Date order
     list.sort((a, b) => {
@@ -190,30 +232,6 @@ export function JoinLeagueScreen() {
 
       {activeTab === 'my' && (
         <div className="space-y-6">
-          {/* Filter pills */}
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => setShowCreatedByMe(v => !v)}
-              className={`px-3 py-1.5 rounded-full text-sm border ${
-                showCreatedByMe
-                  ? 'bg-primary-600 text-white border-primary-600'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700'
-              }`}
-            >
-              Created By Me
-            </button>
-            <button
-              onClick={() => setShowJoined(v => !v)}
-              className={`px-3 py-1.5 rounded-full text-sm border ${
-                showJoined
-                  ? 'bg-primary-600 text-white border-primary-600'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700'
-              }`}
-            >
-              Joined
-            </button>
-          </div>
-
           {showCreatedByMe && (
             <div className="mt-2">
               <UserCreatedLeaguesSection onLeagueCreated={refreshAllLeagues} />
@@ -225,31 +243,42 @@ export function JoinLeagueScreen() {
               {isLoading ? (
                 <div className="flex justify-center items-center py-12">
                   <Loader className="w-8 h-8 text-primary-500 animate-spin" />
-                  <span className="ml-3 text-gray-600 dark:text-gray-400">Loading your leagues...</span>
+                  <span className="ml-3 text-gray-600 dark:text-gray-400">
+                    Loading your leagues...
+                  </span>
                 </div>
               ) : error ? (
                 <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-6 rounded-lg text-center">
                   <p className="mb-4">{error}</p>
-                  <button onClick={() => window.location.reload()} className="px-4 py-2 bg-red-100 dark:bg-red-800/30 rounded-md hover:bg-red-200">Try Again</button>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="px-4 py-2 bg-red-100 dark:bg-red-800/30 rounded-md hover:bg-red-200"
+                  >
+                    Try Again
+                  </button>
                 </div>
               ) : (
-                <>
-                  <JoinLeagueActiveLeaguesSection
-                    leagues={joinedLeagues}
-                    userTeams={userTeams}
-                    getGamesByCompetitionId={getGamesByCompetitionId}
-                  />
-                  <JoinLeagueUpcomingLeaguesSection
-                    leagues={joinedLeagues}
-                    userTeams={userTeams}
-                    getGamesByCompetitionId={getGamesByCompetitionId}
-                  />
-                  <JoinLeaguePastLeaguesSection
-                    leagues={joinedLeagues}
-                    userTeams={userTeams}
-                    getGamesByCompetitionId={getGamesByCompetitionId}
-                  />
-                </>
+                <div className="mb-8">
+                  <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                    Joined Leagues
+                  </h2>
+                  {joinedLeagues.length === 0 ? (
+                    <NoContentCard className="my-6" message="You haven't joined any leagues yet" />
+                  ) : (
+                    <div className="space-y-3">
+                      {joinedLeagues.map((league, index) => (
+                        <LeagueCard
+                          key={league.id}
+                          league={league}
+                          onLeagueClick={() => handleLeagueClick(league)}
+                          custom={index}
+                          isJoined={false}
+                          getGamesByCompetitionId={getGamesByCompetitionId}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
             </>
           )}
@@ -259,7 +288,9 @@ export function JoinLeagueScreen() {
       {activeTab === 'discover' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Discover Public Leagues</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Discover Public Leagues
+            </h2>
             <button
               onClick={() => setIsFilterOpen(true)}
               className="px-3 py-1.5 rounded-lg text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
@@ -276,11 +307,18 @@ export function JoinLeagueScreen() {
           ) : error ? (
             <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-6 rounded-lg text-center">
               <p className="mb-4">{error}</p>
-              <button onClick={() => window.location.reload()} className="px-4 py-2 bg-red-100 dark:bg-red-800/30 rounded-md hover:bg-red-200">Try Again</button>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-red-100 dark:bg-red-800/30 rounded-md hover:bg-red-200"
+              >
+                Try Again
+              </button>
             </div>
           ) : discoverLeagues.length === 0 ? (
             <div className="text-center py-12">
-              <h3 className="text-base sm:text-lg font-medium mb-2 dark:text-gray-200">No leagues to discover</h3>
+              <h3 className="text-base sm:text-lg font-medium mb-2 dark:text-gray-200">
+                No leagues to discover
+              </h3>
               <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters.</p>
             </div>
           ) : (

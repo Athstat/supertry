@@ -188,8 +188,9 @@ export default function UserCreatedLeaguesSection({
                     }`}
                   >
                     {league.is_public
-                      ? (league.status || 'open').charAt(0).toUpperCase() +
-                        (league.status || 'open').slice(1)
+                      ? ((league.status || 'open').toLowerCase() === 'open'
+                          ? 'Public'
+                          : (league.status || 'open').charAt(0).toUpperCase() + (league.status || 'open').slice(1))
                       : 'Invite Only'}
                   </span>
                   {league.is_public ? (

@@ -51,7 +51,7 @@ export default function JoinLeagueByCode({ onSuccess }: JoinLeagueByCodeProps) {
             type="text"
             value={code}
             onChange={e => setCode(e.target.value.toUpperCase())}
-            placeholder="e.g. RUGBY24-ABC"
+            placeholder="e.g. ABC123"
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white text-center tracking-wider font-mono"
             maxLength={18}
           />
@@ -73,7 +73,7 @@ export default function JoinLeagueByCode({ onSuccess }: JoinLeagueByCodeProps) {
           disabled={loading}
           className="w-full bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg"
         >
-          {loading ? 'Joining...' : 'Join League'}
+          {loading ? 'Joining...' : 'Find League'}
         </button>
       </form>
     </div>
