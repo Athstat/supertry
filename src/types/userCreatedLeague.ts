@@ -11,6 +11,7 @@ export interface ICreateFantasyLeague {
 }
 
 export interface IUserCreatedLeague {
+  entry_code: any;
   id: string;
   title: string;
   description?: string;

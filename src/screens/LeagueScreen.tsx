@@ -14,7 +14,7 @@ import { useFantasyLeague } from '../components/league/useFantasyLeague';
 import { analytics } from '../services/anayticsService';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isLeagueLocked } from '../utils/leaguesUtils';
-import { Lock, Share2 } from 'lucide-react';
+import { Lock, Share2, Copy } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
@@ -179,13 +179,6 @@ export function LeagueScreen() {
                 initialTabKey={initialTabKey}
               >
                 <TabViewPage tabKey="standings">
-                  {league && (
-                    <LeagueGroupFilter
-                      league={league}
-                      onGroupFilterChange={handleGroupFilterChange}
-                      isFiltered={groupFilterMembers !== null}
-                    />
-                  )}
                   <LeagueStandings
                     teams={filteredTeams}
                     showJumpButton={showJumpButton}
@@ -286,26 +279,64 @@ export function LeagueScreen() {
                             <code className="bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-md font-mono text-sm text-gray-900 dark:text-white">
                               {league.entry_code}
                             </code>
+                            {/* Copy invite code */}
+                            <button
+                              onClick={() => {
+                                const entryCode = league.entry_code ?? '';
+                                navigator.clipboard
+                                  .writeText(entryCode)
+                                  .then(() => alert('Code copied to clipboard'))
+                                  .catch(() => alert('Unable to copy code. Please try again.'));
+                              }}
+                              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium"
+                              aria-label="Copy invite code"
+                            >
+                              <Copy className="w-5 h-5" />
+                            </button>
+                            {/* Share full invite message */}
                             <button
                               onClick={async () => {
-                                const shareData = {
-                                  title: `Join my ${league.title} league!`,
-                                  text: `Join my fantasy league on Scrumification with this code: ${league.entry_code}`,
-                                  url: window.location.href,
-                                };
+                                const baseUrl =
+                                  (import.meta as any)?.env?.VITE_APP_LINK_BASE_URL ||
+                                  window.location.origin;
+                                const deepLink = `${baseUrl}/league/${league.id}`;
+                                const entryCode = league.entry_code ?? '';
+                                const shareMessage =
+                                  `You’ve been invited to join a rugby league: “${league.title}”\n\n` +
+                                  `🏉 Step 1: Install the app\n` +
+                                  `👉 Download for iOS: https://apps.apple.com/za/app/scrummy-fantasy-rugby/id6744964910\n` +
+                                  `👉 Download for Android: https://play.google.com/store/apps/details?id=com.scrummy&hl=en_ZA\n\n` +
+                                  `📲 Step 2: Open the app, tap “Join a League”, and enter this code: ${entryCode}\n\n` +
+                                  `Already have the app?\n` +
+                                  `Just click here to join instantly: ${deepLink}`;
+
+                                const shareData: ShareData = { title: shareMessage };
+
                                 if (navigator.share) {
                                   try {
                                     await navigator.share(shareData);
                                   } catch (err) {
                                     console.error('Share failed:', err);
+                                    // Fallback to clipboard on error
+                                    navigator.clipboard
+                                      .writeText(shareMessage)
+                                      .then(() => alert('Invite copied to clipboard'))
+                                      .catch(() =>
+                                        alert('Unable to share or copy. Please try manually.')
+                                      );
                                   }
                                 } else {
                                   // Fallback for browsers that don't support navigator.share
-                                  navigator.clipboard.writeText(shareData.text);
-                                  alert('Invite text copied to clipboard!');
+                                  navigator.clipboard
+                                    .writeText(shareMessage)
+                                    .then(() => alert('Invite copied to clipboard'))
+                                    .catch(() =>
+                                      alert('Unable to copy invite. Please try manually.')
+                                    );
                                 }
                               }}
                               className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium"
+                              aria-label="Share invite"
                             >
                               <Share2 className="w-5 h-5" />
                             </button>
