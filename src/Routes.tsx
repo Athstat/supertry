@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { SignUpScreen } from './screens/auth/SignUpScreen';
 import { SignInScreen } from './screens/auth/SignInScreen';
 import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
@@ -46,9 +46,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 // Auth route component - redirects to dashboard if already authenticated
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
+  const {state} = useLocation();
+
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
+    const nextRoute = state?.fromPathname ?? "/dashboard";
+
+    console.log("Next route: ", nextRoute);
+
+    return <Navigate to={nextRoute} />;
   }
 
   return <RouteErrorBoundary>{children}</RouteErrorBoundary>;

@@ -23,6 +23,7 @@ function App() {
     >
       <ThemeProvider>
         <AuthTokenProvider>
+          
           <AuthProvider>
             <ChatProvider>
               <AthleteProvider>
