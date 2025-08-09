@@ -28,6 +28,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
                 "border border-primary-500 text-sm lg:text-base",
                 className,
                 (disbabled || disabled) && "opacity-40 cursor-not-allowed",
+                isLoading && 'animate-pulse'
             )}
             onClick={handleOnClick}
 
@@ -35,7 +36,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
         >
             <div className='flex flex-row items-center gap-1' >
                 {children}
-                {isLoading && <Loader className="animate-spin" />}
+                {isLoading && <Loader className="animate-spin w-4 h-4" />}
             </div>
         </button>
     )

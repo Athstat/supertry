@@ -1,10 +1,9 @@
-import React from 'react';
 import { useFetch } from '../../hooks/useFetch';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { leagueService } from '../../services/leagueService';
 import { useNavigate } from 'react-router-dom';
 import { LoadingState } from '../ui/LoadingState';
-import { IFantasyLeague, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 
 const MyWeekPanel = () => {

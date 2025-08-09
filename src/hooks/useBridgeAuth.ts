@@ -4,6 +4,11 @@ import { authService } from '../services/authService';
 import { DjangoAuthUser } from '../types/auth';
 import { loginWithBridge, requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
 
+type AuthStatusRes = {
+  authToken?: string,
+  authUser?: DjangoAuthUser
+}
+
 export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => void) {
   const restoreAuthFromMobileApp = useCallback(async () => {
     try {
@@ -180,5 +185,63 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
   return {
     restoreAuthFromMobileApp,
     notifyBridgeOfLogin,
+  };
+}
+
+
+export function useBrudgeAuthV2() {
+
+  /** Communicates with bridge for the auth token to be
+   * saved on the mobile devices async storage
+   */
+  const saveAccessTokenToMobile = async (accessToken: string): Promise<void> => {
+    try {
+
+      // If bridge is available, request auth status
+      if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
+
+        window.ScrummyBridge.login({ accessToken, refreshToken: accessToken }, {
+          user_id: "",
+          email: "",
+          name: ""
+        });
+
+      }
+
+    } catch (err) {
+      console.log("Error saving user auth token to mobile bridge", err);
+    }
+  }
+
+  /** Returns the auth status object with the saved auth token and user object */
+  const getSavedAccessTokenFromMobile = async (): Promise<string | undefined> => {
+    try {
+      // Clean up any existing Keycloak tokens first
+      authTokenService.cleanupKeycloakTokens();
+
+      // If bridge is available, request auth status
+      if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
+        console.log('AuthContext: Requesting auth status from mobile app via initializeAuth');
+        const authStatus = await window.ScrummyBridge.initializeAuth();
+
+        if (authStatus && authStatus.isAuthenticated) {
+          console.log('AuthContext: Found authentication status from mobile app:', authStatus);
+
+          const { tokens } = authStatus;
+          return tokens?.accessToken
+
+        }
+      }
+    }
+    catch (err) {
+
+    }
+
+    return undefined;
+  }
+
+  return {
+    getSavedAccessTokenFromMobile,
+    saveAccessTokenToMobile
   };
 }

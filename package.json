@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "rm -rf node_modules/.vite &&  vite --host=0.0.0.0",
+    "dev-win": "vite --host=0.0.0.0",
     "build": "vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
