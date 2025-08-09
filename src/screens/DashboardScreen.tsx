@@ -4,7 +4,7 @@ import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSec
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
-import { HeroSection, MyTeamsSection } from '../components/dashboard';
+import { HeroSection } from '../components/dashboard';
 
 export function DashboardScreen() {
 
