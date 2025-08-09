@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { userCreatedLeagueService } from '../../services/userCreatedLeagueService';
 import { IUserCreatedLeague } from '../../types/userCreatedLeague';
 import CreateLeagueModal from './CreateLeagueModal';
+import { Toast } from '../ui/Toast';
 
 interface UserCreatedLeaguesSectionProps {
   onLeagueCreated?: () => void;
@@ -16,6 +17,7 @@ export default function UserCreatedLeaguesSection({
   const [userLeagues, setUserLeagues] = useState<IUserCreatedLeague[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const navigate = useNavigate();
 
@@ -148,7 +150,7 @@ export default function UserCreatedLeaguesSection({
             Create your first fantasy league and invite friends to join
           </p>
           <button
-            onClick={() => setShowCreateModal(true)}
+            onClick={() => setShowComingSoon(true)}
             className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors"
           >
             Create Your First League
@@ -188,9 +190,10 @@ export default function UserCreatedLeaguesSection({
                     }`}
                   >
                     {league.is_public
-                      ? ((league.status || 'open').toLowerCase() === 'open'
-                          ? 'Public'
-                          : (league.status || 'open').charAt(0).toUpperCase() + (league.status || 'open').slice(1))
+                      ? (league.status || 'open').toLowerCase() === 'open'
+                        ? 'Public'
+                        : (league.status || 'open').charAt(0).toUpperCase() +
+                          (league.status || 'open').slice(1)
                       : 'Invite Only'}
                   </span>
                   {league.is_public ? (
@@ -257,6 +260,15 @@ export default function UserCreatedLeaguesSection({
           ))}
         </div>
       )}
+
+      {/* Coming soon toast for empty-state create button */}
+      <Toast
+        message="Feature Coming Soon!"
+        type="info"
+        isVisible={showComingSoon}
+        onClose={() => setShowComingSoon(false)}
+        duration={3000}
+      />
 
       <CreateLeagueModal
         isOpen={showCreateModal}

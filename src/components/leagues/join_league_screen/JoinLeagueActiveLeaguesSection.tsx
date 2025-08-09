@@ -13,7 +13,11 @@ type Props = {
 };
 
 /** Renders active leagues on the join league screen */
-export default function JoinLeagueActiveLeaguesSection({ leagues, userTeams, getGamesByCompetitionId }: Props) {
+export default function JoinLeagueActiveLeaguesSection({
+  leagues,
+  userTeams,
+  getGamesByCompetitionId,
+}: Props) {
   const activeLeagues = activeLeaguesFilter(leagues);
   const navigate = useNavigate();
 
@@ -42,7 +46,7 @@ export default function JoinLeagueActiveLeaguesSection({ leagues, userTeams, get
       </h2>
 
       {activeLeagues.length === 0 && (
-        <NoContentCard className="my-6" message="There are no Active Leagues" />
+        <NoContentCard className="my-6" message="There are no new leagues" />
       )}
 
       <motion.div
