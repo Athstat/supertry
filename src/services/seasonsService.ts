@@ -12,7 +12,7 @@ export const seasonService = {
     getAllSupportedSeasons: async () : Promise<IProSeason[]> => {
         try {
             
-            const uri = getUri(`/api/v1/seasons`);
+            const uri = getUri(`/api/v1/seasons/`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

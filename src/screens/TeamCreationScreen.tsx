@@ -24,6 +24,7 @@ import { IFantasyLeague } from '../types/fantasyLeague';
 import { useTeamCreationGuard } from '../hooks/useTeamCreationGuard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
+import { mutate } from 'swr';
 import PageView from './PageView';
 import SecondaryText from '../components/shared/SecondaryText';
 
@@ -296,6 +297,40 @@ export function TeamCreationScreen() {
 
       // Store the created team ID for navigation
       setCreatedTeamId(joinLeagueRes.team.id);
+
+      // Optimistically insert the user's team into the SWR cache so it shows immediately
+      // useFetch in useFantasyLeague uses fetch key: [league.id, 'participating-teams-hook']
+      if (league?.id) {
+        const swrKey: [number | string, string] = [league.id, 'participating-teams-hook'];
+
+        // Build a minimal RankedFantasyTeam-like object for immediate display
+        const optimisticTeam = {
+          team_id: String(joinLeagueRes.team.id ?? ''),
+          rank: joinLeagueRes.team.rank ?? undefined,
+          teamName: joinLeagueRes.team.team_name ?? teamName,
+          managerName: `${userInfo.firstName ?? ''} ${userInfo.lastName ?? ''}`.trim() ||
+            (userInfo.username ?? 'Manager'),
+          overall_score: joinLeagueRes.team.overall_score ?? 0,
+          weeklyPoints: joinLeagueRes.team.overall_score ?? 0,
+          lastRank: joinLeagueRes.team.rank ?? undefined,
+          isUserTeam: true,
+          userId: joinLeagueRes.team.user_id ?? userInfo.kc_id,
+          is_admin: false,
+          first_name: userInfo.firstName ?? '',
+          last_name: userInfo.lastName ?? '',
+        };
+
+        // Optimistically update without revalidation
+        mutate(swrKey, (current: any) => {
+          const list = Array.isArray(current) ? current : [];
+          const exists = list.some((t: any) => t?.userId === optimisticTeam.userId);
+          if (exists) return list;
+          return [...list, optimisticTeam];
+        }, false);
+
+        // Trigger background revalidation
+        mutate(swrKey);
+      }
 
       // update users username on db
       // if (isGuest) {

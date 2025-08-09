@@ -1,4 +1,4 @@
-import { getAuthHeader, getUri, getUriLocal } from '../utils/backendUtils';
+import { getAuthHeader, getUri } from '../utils/backendUtils';
 import {
   IUserLeagueGroup,
   ICreateLeagueGroup,
