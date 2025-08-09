@@ -16,6 +16,7 @@ export default function FeaturedPlayersCarousel() {
   const navigate = useNavigate();
 
   const wantedSeasons = [
+    '695fa717-1448-5080-8f6f-64345a714b10',
     'b5cae2ff-d123-5f12-a771-5faa6d40e967',
     'd313fbf5-c721-569b-975d-d9ec242a6f19',
   ];
@@ -28,7 +29,7 @@ export default function FeaturedPlayersCarousel() {
   const { data: fetchedPlayers, isLoading: playersLoading } = useSWR(key, () => seasonService.getSeasonAthletes(currSeason?.id ?? "fallback"));
 
   const players = (fetchedPlayers ?? []).filter(p => {
-    return (p.power_rank_rating ?? 0) > 85;
+    return (p.power_rank_rating ?? 0) > 60;
   });
 
   const {shuffledArr: shuffledPlayers} = useDeterministicShuffle(players, {

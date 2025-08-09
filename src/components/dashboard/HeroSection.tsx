@@ -32,31 +32,31 @@ export function HeroSection({ }: Props) {
 
   const availableLeagues = fetchedLeagues ?? [];
 
-  const { firstLeagueOnClock: leagueOnTheClock } =
-    leaguesOnClockFilter(availableLeagues);
+  const navigateToLeagues = () => {
+    navigate('/leagues');
+  }
 
   return (
-    <BlueGradientCard className="rounded-2xl p-4 mb-6 text-white  transition-all ease-in delay-300">
-      {true && (
-        <div className="flex flex-col gap-2 p-3">
+    <BlueGradientCard className="rounded-2xl cursor-pointer p-4 mb-6 text-white  transition-all ease-in delay-300 hover:from-blue-600 hover:animate-glow hover:to-blue-900">
+        <div onClick={navigateToLeagues} className="flex flex-col gap-2 p-3">
 
           <h1 className="text-lg lg:text-xl font-bold">
-            Rugby Fantasy Leagues
+            New Feature Drop!
           </h1>
 
           <p className="text-md opacity-90">
-            Create your dream team and compete in weekly leagues
+            Create your own league - live now!
+            Invite your friends. Set the rules. Battle for glory.
           </p>
 
           <button
             onClick={() => navigate("/leagues")}
             className="bg-white w-fit text-primary-600 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
           >
-            Coming Soon <Info size={16} />
+            Take Me There
           </button>
 
         </div>
-      )}
 
       {/* {leagueOnTheClock && (
         <JoinDeadlineCountdown

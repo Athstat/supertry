@@ -10,6 +10,7 @@ import { useState } from 'react';
 import ChatProvider from './contexts/ChatContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AuthTokenProvider from './components/auth/providers/AuthTokenProvider';
+import NetworkStatusProvider from './components/network/NetworkStatusProvider';
 
 function App() {
   const [, setError] = useState<Error | null>(null);
@@ -18,33 +19,36 @@ function App() {
   // Auth redirects are now handled by AuthContext and route guards
 
   return (
+
     <GoogleOAuthProvider
       clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id'}
     >
       <ThemeProvider>
-        <AuthTokenProvider>
-          
-          <AuthProvider>
-            <ChatProvider>
-              <AthleteProvider>
-                <PlayerProfileProvider>
-                  <AppStateProvider>
-                    <ErrorBoundary
-                      onError={(err, errorInfo) => {
-                        console.error('Root level error caught:', err, errorInfo);
-                        setError(err);
-                      }}
-                      fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
-                    >
-                      <AppRoutes />
-                    </ErrorBoundary>
-                  </AppStateProvider>
-                </PlayerProfileProvider>
-              </AthleteProvider>
-            </ChatProvider>
-          </AuthProvider>
+        <NetworkStatusProvider>
+          <AuthTokenProvider>
 
-        </AuthTokenProvider>
+            <AuthProvider>
+              <ChatProvider>
+                <AthleteProvider>
+                  <PlayerProfileProvider>
+                    <AppStateProvider>
+                      <ErrorBoundary
+                        onError={(err, errorInfo) => {
+                          console.error('Root level error caught:', err, errorInfo);
+                          setError(err);
+                        }}
+                        fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
+                      >
+                        <AppRoutes />
+                      </ErrorBoundary>
+                    </AppStateProvider>
+                  </PlayerProfileProvider>
+                </AthleteProvider>
+              </ChatProvider>
+            </AuthProvider>
+
+          </AuthTokenProvider>
+        </NetworkStatusProvider>
       </ThemeProvider>
     </GoogleOAuthProvider>
   );

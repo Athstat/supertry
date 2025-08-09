@@ -30,3 +30,20 @@ export function applicationJsonHeader() {
     'Content-Type': 'application/json',
   };
 }
+
+export async function pingServer() {
+  try {
+
+    const uri = getUri(`/api/v1/ping`);
+    const res = await fetch(uri);
+
+    if (res.ok) {
+      return (await res.json()) as {ping: string}
+    }
+
+  } catch (err) {
+    console.log("Failed to reach server at ", getUri(''), err);
+  }
+
+  return undefined;
+}
