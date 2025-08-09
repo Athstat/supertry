@@ -34,6 +34,9 @@ export function SignUpScreen() {
   const {emailTaken, isLoading: isEmailUniqueValidatorLoading} = useEmailUniqueValidator(form.email);
   const isEmailTaken = !isLoading && emailTaken;
 
+  const isAllFieldsComplete = form.email && form.username && form.password && form.confirmPassword;
+  const isPasswordsMatch = form.password === form.confirmPassword;
+
   // Validate all fields and submit the form directly instead of going to next step
   const validateForm = () => {
     // Validate email and password
@@ -184,7 +187,7 @@ export function SignUpScreen() {
 
             <PrimaryButton
               type="submit"
-              disabled={isLoading || isEmailTaken || isEmailUniqueValidatorLoading}
+              disabled={!(!isLoading && !isEmailTaken && !isEmailUniqueValidatorLoading && isAllFieldsComplete && isPasswordsMatch)}
               isLoading={isLoading}
               className='py-3'
             >
