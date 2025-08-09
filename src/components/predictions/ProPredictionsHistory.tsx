@@ -14,8 +14,9 @@ import FixtureCard from "../fixtures/FixtureCard";
 export default function UserProPredictionsHistoryTab() {
 
     const user = useAuthUser();
-    const key = swrFetchKeys.getUserProPredictionsHistoryKey(user.id);
-    let { data: history, isLoading, error } = useSWR(key, () => proPredictionsRankingService.getUserPredicitionHistory(user.id));
+    const uid = (user as any)?.kc_id ?? (user as any)?.id;
+    const key = swrFetchKeys.getUserProPredictionsHistoryKey(uid);
+    let { data: history, isLoading, error } = useSWR(key, () => proPredictionsRankingService.getUserPredicitionHistory(uid));
 
     history = history ?? [];
 

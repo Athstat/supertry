@@ -54,7 +54,8 @@ const MyWeekPanel = () => {
   let points = 0;
 
   leagueTeams.forEach((team, index) => {
-    if (team.user_id === user.id) {
+    const uid = (user as any)?.kc_id ?? (user as any)?.id;
+    if (team.user_id === uid) {
       userTeam = team;
       teamRank = index + 1;
       points = team.overall_score || 0;

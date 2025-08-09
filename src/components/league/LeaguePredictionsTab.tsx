@@ -69,10 +69,11 @@ export default function LeaguePredictionsTab() {
   const user = useAuthUser();
   const { league } = useFantasyLeague();
 
+  const uid = (user as any)?.kc_id ?? (user as any)?.id;
   const { data: userRank, isLoading: loadingUserRank } = useFetch(
     `league-predictions-ranking-${league?.id}`,
-    [user.id, league?.id],
-    () => leaguePredictionsService.getLeagueUserPredictionsRanking(user.id, league?.id)
+    [uid, league?.id],
+    () => leaguePredictionsService.getLeagueUserPredictionsRanking(uid, league?.id)
   );
 
   // Group fixtures by day

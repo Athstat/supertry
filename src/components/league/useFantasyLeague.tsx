@@ -43,7 +43,7 @@ export function useFantasyLeague(leagueFromParam?: IFantasyLeague) {
     data: teams,
     isLoading: loadingTeams,
     error: teamsError,
-  } = useFetch('participating-teams-hook', league?.id, teamsFetcher);
+  } = useFetch('participating-teams-hook', league?.id ?? 'fall-back-id', teamsFetcher);
 
   const [isLoadingUserTeam, setIsUserTeamLoading] = useState(false);
   const [userTeam, setUserTeam] = useState<RankedFantasyTeam>();

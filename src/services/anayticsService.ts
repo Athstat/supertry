@@ -19,7 +19,7 @@ function track(event: string, eventInfo?: Record<string, any>) {
     device: agent,
     source: getCurrentPath(),
     weekNumber: getWeekFromLaunch(),
-    userId: user ? user.id : null,
+    userId: user ? ((user as any)?.kc_id ?? (user as any)?.id) : null,
   });
 
   console.log('ER');

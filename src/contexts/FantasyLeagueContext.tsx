@@ -33,8 +33,9 @@ export default function FantasyLeagueProvider({league, children, userTeam}: Prop
     if (league) setFantasyLeague(league);
 
     if (participatingTeams && user) {
+      const uid = (user as any)?.kc_id ?? (user as any)?.id;
       const userRoundTeam = participatingTeams.find((t) => {
-        return t.user_id === user.id;
+        return t.user_id === uid;
       });
 
       if (userRoundTeam) setUserFantasyTeam(userRoundTeam);
