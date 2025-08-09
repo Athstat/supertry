@@ -76,7 +76,7 @@ export function TeamAthletesModal({
   const totalScore = pointsBreakdown.reduce((acc, item) => acc + item.score, 0);
   const userNameIsEmail = isEmail(team.managerName);
 
-  const isUsersTeam = user ? user.id === team.userId : false;
+  const isUsersTeam = user ? ((user as any)?.kc_id ?? (user as any)?.id) === team.userId : false;
   const canPeek = isLeagueLocked || isUsersTeam;
 
   return (

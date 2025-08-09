@@ -16,7 +16,6 @@ import { ArrowRight, Check, Info, Trophy, Users } from 'lucide-react';
 // Refactored team creation components
 import TeamCreationContainer from './team-creation-components/TeamCreationContainer';
 import PositionsGrid from './team-creation-components/PositionsGrid';
-import TeamNameInput from './team-creation-components/TeamNameInput';
 import TeamToast from './team-creation-components/TeamToast';
 import useTeamCreationState from './team-creation-components/useTeamCreationState';
 import { leagueService } from '../services/leagueService';
@@ -25,8 +24,7 @@ import { IFantasyLeague } from '../types/fantasyLeague';
 import { useTeamCreationGuard } from '../hooks/useTeamCreationGuard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
-import PageView from './PageView';
-import SecondaryText from '../components/shared/SecondaryText';
+import { mutate } from 'swr';
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -54,25 +52,25 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
     navigate('/dashboard');
   }
 
-  return (
-    <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
-      <div className="flex fleex-row items-center gap-2" >
-        <Trophy />
-        <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
-      </div>
+  // return (
+  //   <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
+  //     <div className="flex fleex-row items-center gap-2" >
+  //       <Trophy />
+  //       <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
+  //     </div>
 
-      <div>
-        <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
-      </div>
+  //     <div>
+  //       <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
+  //     </div>
 
-      <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
-        Coming Soon
-        <Info />
-      </PrimaryButton>
+  //     <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
+  //       Coming Soon
+  //       <Info />
+  //     </PrimaryButton>
 
-      <button onClick={handleBackToDashboard} >Go to Dashboard</button>
-    </PageView>
-  )
+  //     <button onClick={handleBackToDashboard} >Go to Dashboard</button>
+  //   </PageView>
+  // )
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
@@ -139,8 +137,9 @@ export function TeamCreationScreen() {
 
     // Check if user is a guest and get user info
     if (isAuthenticated) {
-      const info = authService.getUserInfo();
+      const info = authService.getUserInfoSync();
       setUserInfo(info);
+      //console.log('user info ', info);
       authService.isGuestAccount().then(isGuest => {
         setIsGuest(isGuest);
       });
@@ -195,13 +194,15 @@ export function TeamCreationScreen() {
     return { tracking_id: a.id };
   });
 
-  // Set the team name to username for non-guest users
+  // Set default team name from user info
   useEffect(() => {
-    // If not a guest and we have user info, use the username as the team name
-    if (!isGuest && userInfo?.username && teamName === '') {
-      setTeamName(userInfo.firstName); //need to make this more clear
+    //console.log('userInfoooo: ', userInfo);
+    if (userInfo) {
+      // Use first name if available, otherwise fall back to username
+      const defaultName = userInfo.username;
+      setTeamName(defaultName);
     }
-  }, [isGuest, userInfo, teamName, setTeamName]);
+  }, [userInfo]);
 
   //console.log("userInfo", userInfo.firstName);
 
@@ -231,6 +232,18 @@ export function TeamCreationScreen() {
       return;
     }
 
+    if (!league) {
+      showToast('League is required', 'error');
+      return;
+    }
+
+    if (!userInfo) {
+      showToast('User info is required', 'error');
+      return;
+    }
+
+    //console.log('User info ', userInfo.kc_id);
+
     setIsSaving(true);
 
     try {
@@ -242,7 +255,7 @@ export function TeamCreationScreen() {
             pos => pos.player && pos.player.tracking_id === player.tracking_id
           );
 
-          console.log('The position we found ', position);
+          console.log('The player we found ', player);
 
           const isSuperSub = position?.isSpecial || false;
           const isPlayerCaptain = captainId === player.tracking_id;
@@ -267,18 +280,60 @@ export function TeamCreationScreen() {
         }
       );
 
-      console.log('Team Athletes ', teamAthletes);
+      // console.log('Team Athletes ', teamAthletes);
+      // console.log('league id ', league.id);
+      // console.log('user id ', userInfo);
 
-      // Submit the team using the team service
-      const result = await fantasyTeamService.submitTeam(teamName, teamAthletes, officialLeagueId);
+      // Join the league with the new team
+      const joinLeagueRes = await leagueService.joinLeague(
+        league.id,
+        userInfo.kc_id,
+        teamName,
+        teamAthletes
+      );
+      console.log('Result from join res ', joinLeagueRes);
 
       // Store the created team ID for navigation
-      console.log('Result from team creation ', result);
-      setCreatedTeamId(result.id);
+      setCreatedTeamId(joinLeagueRes.team.id);
 
-      // Step 2: Join the league using the recently submitted team ID
-      const joinLeagueRes = await leagueService.joinLeague(league, result.id);
-      console.log('Result from join res ', joinLeagueRes);
+      // Optimistically insert the user's team into the SWR cache so it shows immediately
+      // useFetch in useFantasyLeague uses fetch key: [league.id, 'participating-teams-hook']
+      if (league?.id) {
+        const swrKey: [number | string, string] = [league.id, 'participating-teams-hook'];
+
+        // Build a minimal RankedFantasyTeam-like object for immediate display
+        const optimisticTeam = {
+          team_id: String(joinLeagueRes.team.id ?? ''),
+          rank: joinLeagueRes.team.rank ?? undefined,
+          teamName: joinLeagueRes.team.team_name ?? teamName,
+          managerName:
+            `${userInfo.firstName ?? ''} ${userInfo.lastName ?? ''}`.trim() ||
+            (userInfo.username ?? 'Manager'),
+          overall_score: joinLeagueRes.team.overall_score ?? 0,
+          weeklyPoints: joinLeagueRes.team.overall_score ?? 0,
+          lastRank: joinLeagueRes.team.rank ?? undefined,
+          isUserTeam: true,
+          userId: joinLeagueRes.team.user_id ?? userInfo.kc_id,
+          is_admin: false,
+          first_name: userInfo.firstName ?? '',
+          last_name: userInfo.lastName ?? '',
+        };
+
+        // Optimistically update without revalidation
+        mutate(
+          swrKey,
+          (current: any) => {
+            const list = Array.isArray(current) ? current : [];
+            const exists = list.some((t: any) => t?.userId === optimisticTeam.userId);
+            if (exists) return list;
+            return [...list, optimisticTeam];
+          },
+          false
+        );
+
+        // Trigger background revalidation
+        mutate(swrKey);
+      }
 
       // update users username on db
       // if (isGuest) {
@@ -292,12 +347,23 @@ export function TeamCreationScreen() {
 
       // Show success modal instead of navigating away
       setShowSuccessModal(true);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error saving team:', error);
-      showToast(
-        error instanceof Error ? error.message : 'Failed to save team. Please try again.',
-        'error'
-      );
+      try {
+        // Type guard to check if error is an object with errorText
+        if (error && typeof error === 'object' && 'errorText' in error) {
+          const errorData = error.errorText ? JSON.parse(error.errorText as string) : {};
+          const errorMessage = errorData.message || errorData.error || 'Unknown error';
+          showToast(errorMessage, 'error');
+        } else if (error instanceof Error) {
+          showToast(error.message || 'Failed to join league', 'error');
+        } else {
+          showToast('Failed to join league. Please try again.', 'error');
+        }
+      } catch (parseError) {
+        // Fallback to generic error if parsing fails
+        showToast('Failed to join league. Please try again.', 'error');
+      }
     } finally {
       setIsSaving(false);
     }
@@ -357,7 +423,6 @@ export function TeamCreationScreen() {
       />
 
       {/* Team name input - only show for guest users */}
-      {isGuest && <TeamNameInput teamName={teamName} onTeamNameChange={setTeamName} />}
 
       {/* Team action buttons */}
       <TeamActions
@@ -380,7 +445,7 @@ export function TeamCreationScreen() {
           roundId={parseInt(officialLeagueId || '0')}
           roundStart={league?.start_round ?? 0}
           roundEnd={league?.end_round ?? 0}
-          competitionId={officialLeagueId ?? URC_COMPETIION_ID}
+          leagueId={league?.id}
         />
       )}
 

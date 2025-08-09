@@ -1,14 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { motion, MotionProps } from 'framer-motion';
 import ScrummyLogo from '../../components/branding/scrummy_logo';
-import { useState } from 'react';
-import { authService } from '../../services/authService';
-import { useAuth } from '../../contexts/AuthContext';
-import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../utils/firstVisitUtils';
-import { getDeviceId } from '../../utils/deviceIdUtils';
-import { useGoogleLogin } from '@react-oauth/google';
-import AppleSignin from 'react-apple-signin-auth';
-import Experimental from '../../components/shared/ab_testing/Experimental';
+import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
 
 // Button animation variants
 const buttonVariants = {
@@ -27,9 +20,11 @@ const MotionButton = motion.button as React.ComponentType<
 
 export function AuthChoiceScreen() {
   const navigate = useNavigate();
-  const { checkAuth } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const { setAuth } = useAuth();
+  // const [isLoading, ] = useState(false);
+  // const [error, ] = useState<string | null>(null);
+
+  const { handleGuestLogin, isLoading, error } = useGuestLogin();
 
   // Check if running in mobile WebView
   const isMobileWebView = () => {
@@ -39,224 +34,225 @@ export function AuthChoiceScreen() {
     );
   };
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async tokenResponse => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        // For the code flow, we need to exchange the code for a token on the backend
-        // But since our backend expects an ID token, we'll use the authorization code
-        const result = await authService.googleOAuth(tokenResponse.code);
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async tokenResponse => {
+  //     try {
+  //       setIsLoading(true);
+  //       setError(null);
+  //       // For the code flow, we need to exchange the code for a token on the backend
+  //       // But since our backend expects an ID token, we'll use the authorization code
+  //       const result = await authService.googleOAuth(tokenResponse.code);
 
-        if (result.error) {
-          setError(result.error.message || 'Google sign-in failed');
-          setIsLoading(false);
-          return;
-        }
+  //       if (result.error) {
+  //         setError(result.error.message || 'Google sign-in failed');
+  //         setIsLoading(false);
+  //         return;
+  //       }
 
-        // Update auth context
-        await checkAuth();
+  //       // Update auth context
+  //       await checkAuth();
 
-        // Check if this is the first completed visit
-        const firstVisitCompleted = isFirstVisitCompleted();
+  //       // Check if this is the first completed visit
+  //       const firstVisitCompleted = isFirstVisitCompleted();
 
-        // Navigate to appropriate screen
-        if (firstVisitCompleted) {
-          navigate('/dashboard');
-        } else {
-          markFirstVisitCompleted();
-          navigate('/post-signup-welcome');
-        }
-      } catch (err: any) {
-        console.error('Google OAuth error:', err);
-        setError('Google sign-in failed. Please try again.');
-        setIsLoading(false);
-      }
-    },
-    onError: () => {
-      setError('Google sign-in failed. Please try again.');
-      setIsLoading(false);
-    },
-    flow: 'auth-code',
-  });
+  //       // Navigate to appropriate screen
+  //       if (firstVisitCompleted) {
+  //         navigate('/dashboard');
+  //       } else {
+  //         markFirstVisitCompleted();
+  //         navigate('/post-signup-welcome');
+  //       }
+  //     } catch (err: any) {
+  //       console.error('Google OAuth error:', err);
+  //       setError('Google sign-in failed. Please try again.');
+  //       setIsLoading(false);
+  //     }
+  //   },
+  //   onError: () => {
+  //     setError('Google sign-in failed. Please try again.');
+  //     setIsLoading(false);
+  //   },
+  //   flow: 'auth-code',
+  // });
 
   // Handle mobile OAuth callback
-  const handleMobileOAuthCallback = async (callbackData: any) => {
-    console.log('🎉 Mobile OAuth callback received:', callbackData);
+  // const handleMobileOAuthCallback = async (callbackData: any) => {
+  //   console.log('🎉 Mobile OAuth callback received:', callbackData);
 
-    if (callbackData.error) {
-      setError(`OAuth failed: ${callbackData.error}`);
-      setIsLoading(false);
-      return;
-    }
+  //   if (callbackData.error) {
+  //     setError(`OAuth failed: ${callbackData.error}`);
+  //     setIsLoading(false);
+  //     return;
+  //   }
 
-    if (callbackData.code) {
-      try {
-        // Use the authorization code to complete authentication
-        const result = await authService.googleOAuth(callbackData.code);
+  //   if (callbackData.code) {
+  //     try {
+  //       // Use the authorization code to complete authentication
+  //       const result = await authService.googleOAuth(callbackData.code);
 
-        if (result.error) {
-          setError(result.error.message || 'Google sign-in failed');
-          setIsLoading(false);
-          return;
-        }
+  //       if (result.error) {
+  //         setError(result.error.message || 'Google sign-in failed');
+  //         setIsLoading(false);
+  //         return;
+  //       }
 
-        // Update auth context
-        await checkAuth();
+  //       // Update auth context
+  //       await checkAuth();
 
-        // Check if this is the first completed visit
-        const firstVisitCompleted = isFirstVisitCompleted();
+  //       // Check if this is the first completed visit
+  //       const firstVisitCompleted = isFirstVisitCompleted();
 
-        // Navigate to appropriate screen
-        if (firstVisitCompleted) {
-          navigate('/dashboard');
-        } else {
-          markFirstVisitCompleted();
-          navigate('/post-signup-welcome');
-        }
-      } catch (err: any) {
-        console.error('OAuth callback processing error:', err);
-        setError('Failed to process OAuth callback. Please try again.');
-        setIsLoading(false);
-      }
-    }
-  };
+  //       // Navigate to appropriate screen
+  //       if (firstVisitCompleted) {
+  //         navigate('/dashboard');
+  //       } else {
+  //         markFirstVisitCompleted();
+  //         navigate('/post-signup-welcome');
+  //       }
+  //     } catch (err: any) {
+  //       console.error('OAuth callback processing error:', err);
+  //       setError('Failed to process OAuth callback. Please try again.');
+  //       setIsLoading(false);
+  //     }
+  //   }
+  // };
 
   // Native Google Sign-In handler for mobile
-  const handleGoogleSignIn = async () => {
-    console.log('🔄 Google sign-in triggered, mobile WebView?', isMobileWebView());
+  // const handleGoogleSignIn = async () => {
+  //   console.log('🔄 Google sign-in triggered, mobile WebView?', isMobileWebView());
 
-    try {
-      setIsLoading(true);
-      setError(null);
+  //   try {
+  //     setIsLoading(true);
+  //     setError(null);
 
-      if (isMobileWebView() && window.ScrummyBridge?.googleSignIn) {
-        console.log('📱 Using native Google Sign-In');
-        // Use native bridge for mobile
-        const result = await window.ScrummyBridge.googleSignIn();
+  //     if (isMobileWebView() && window.ScrummyBridge?.googleSignIn) {
+  //       console.log('📱 Using native Google Sign-In');
+  //       // Use native bridge for mobile
+  //       const result = await window.ScrummyBridge.googleSignIn();
 
-        if (!result.success) {
-          setError(result.error || 'Google sign-in failed');
-          setIsLoading(false);
-          return;
-        }
+  //       if (!result.success) {
+  //         setError(result.error || 'Google sign-in failed');
+  //         setIsLoading(false);
+  //         return;
+  //       }
 
-        if (result.idToken) {
-          // Send ID token to backend
-          const authResult = await authService.googleOAuthWithIdToken(result.idToken);
+  //       if (result.idToken) {
+  //         // Send ID token to backend
+  //         const authResult = await authService.googleOAuthWithIdToken(result.idToken);
 
-          if (authResult.error) {
-            setError(authResult.error.message || 'Google sign-in failed');
-            setIsLoading(false);
-            return;
-          }
+  //         if (authResult.error) {
+  //           setError(authResult.error.message || 'Google sign-in failed');
+  //           setIsLoading(false);
+  //           return;
+  //         }
 
-          // Update auth context
-          await checkAuth();
+  //         // Update auth context
+  //         await checkAuth();
 
-          // Check if this is the first completed visit
-          const firstVisitCompleted = isFirstVisitCompleted();
+  //         // Check if this is the first completed visit
+  //         const firstVisitCompleted = isFirstVisitCompleted();
 
-          // Navigate to appropriate screen
-          if (firstVisitCompleted) {
-            navigate('/dashboard');
-          } else {
-            markFirstVisitCompleted();
-            navigate('/post-signup-welcome');
-          }
-        } else {
-          setError('No authentication token received');
-          setIsLoading(false);
-        }
-      } else {
-        // Regular web OAuth flow
-        console.log('🌐 Using web OAuth flow');
-        googleLogin();
-      }
-    } catch (err: any) {
-      console.error('Google Sign-In error:', err);
-      setError('Google sign-in failed. Please try again.');
-      setIsLoading(false);
-    }
-  };
+  //         // Navigate to appropriate screen
+  //         if (firstVisitCompleted) {
+  //           navigate('/dashboard');
+  //         } else {
+  //           markFirstVisitCompleted();
+  //           navigate('/post-signup-welcome');
+  //         }
+  //       } else {
+  //         setError('No authentication token received');
+  //         setIsLoading(false);
+  //       }
+  //     } else {
+  //       // Regular web OAuth flow
+  //       console.log('🌐 Using web OAuth flow');
+  //       googleLogin();
+  //     }
+  //   } catch (err: any) {
+  //     console.error('Google Sign-In error:', err);
+  //     setError('Google sign-in failed. Please try again.');
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const handleAppleSuccess = async (response: any) => {
-    if (!response.authorization || !response.authorization.id_token) {
-      setError('Apple sign-in failed. Please try again.');
-      return;
-    }
+  // const handleAppleSuccess = async (response: any) => {
+  //   if (!response.authorization || !response.authorization.id_token) {
+  //     setError('Apple sign-in failed. Please try again.');
+  //     return;
+  //   }
 
-    try {
-      setIsLoading(true);
-      setError(null);
-      const result = await authService.appleOAuth(response.authorization.id_token);
+  //   try {
+  //     setIsLoading(true);
+  //     setError(null);
+  //     const result = await authService.appleOAuth(response.authorization.id_token);
 
-      if (result.error) {
-        setError(result.error.message || 'Apple sign-in failed');
-        setIsLoading(false);
-        return;
-      }
+  //     if (result.error) {
+  //       setError(result.error.message || 'Apple sign-in failed');
+  //       setIsLoading(false);
+  //       return;
+  //     }
 
-      // Update auth context
-      await checkAuth();
+  //     // Update auth context
+  //     await checkAuth();
 
-      // Check if this is the first completed visit
-      const firstVisitCompleted = isFirstVisitCompleted();
+  //     // Check if this is the first completed visit
+  //     const firstVisitCompleted = isFirstVisitCompleted();
 
-      // Navigate to appropriate screen
-      if (firstVisitCompleted) {
-        navigate('/dashboard');
-      } else {
-        markFirstVisitCompleted();
-        navigate('/post-signup-welcome');
-      }
-    } catch (err: any) {
-      console.error('Apple OAuth error:', err);
-      setError('Apple sign-in failed. Please try again.');
-      setIsLoading(false);
-    }
-  };
+  //     // Navigate to appropriate screen
+  //     if (firstVisitCompleted) {
+  //       navigate('/dashboard');
+  //     } else {
+  //       markFirstVisitCompleted();
+  //       navigate('/post-signup-welcome');
+  //     }
+  //   } catch (err: any) {
+  //     console.error('Apple OAuth error:', err);
+  //     setError('Apple sign-in failed. Please try again.');
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const handleAppleError = (error: any) => {
-    console.error('Apple sign-in failed:', error);
-    setError('Apple sign-in failed. Please try again.');
-  };
+  // const handleAppleError = (error: any) => {
+  //   console.error('Apple sign-in failed:', error);
+  //   setError('Apple sign-in failed. Please try again.');
+  // };
 
-  const handleGuestLogin = async () => {
-    try {
-      setIsLoading(true);
+  // const handleGuestLogin = async () => {
+  //   try {
+  //     setIsLoading(true);
 
-      // Get device ID first
-      const deviceId = await getDeviceId();
-      const loginResult = await authService.authenticateAsGuestUser(deviceId);
+  //     // Get device ID first
+  //     const deviceId = await getDeviceId();
+  //     const loginResult = await authService.authenticateAsGuestUser(deviceId);
 
-      // Check if login was successful
-      if (loginResult.error) {
-        throw new Error(loginResult.error.message || 'Failed to authenticate as guest user');
-      }
+  //     // Check if login was successful
+  //     if (loginResult.error) {
+  //       throw new Error(loginResult.error.message || 'Failed to authenticate as guest user');
+  //     }
 
-      // Update auth context
-      await checkAuth();
+  //     // Update auth context
+  //     await checkAuth();
 
-      // Check if this is the first completed visit
-      const firstVisitCompleted = isFirstVisitCompleted();
+  //     // Check if this is the first completed visit
+  //     const firstVisitCompleted = isFirstVisitCompleted();
 
-      // Navigate to appropriate screen
-      if (firstVisitCompleted) {
-        navigate('/dashboard');
-      } else {
-        // Mark first visit as completed since we're creating a guest account
-        markFirstVisitCompleted();
-        navigate('/post-signup-welcome');
-      }
-    } catch (error) {
-      console.error('Guest login failed:', error);
-      // If guest login fails, still navigate to dashboard as fallback
-      navigate('/dashboard');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     // Navigate to appropriate screen
+  //     if (firstVisitCompleted) {
+  //       navigate('/dashboard');
+  //     } else {
+  //       // Mark first visit as completed since we're creating a guest account
+  //       markFirstVisitCompleted();
+  //       navigate('/post-signup-welcome');
+  //     }
+  //   } catch (error) {
+  //     console.error('Guest login failed:', error);
+  //     // If guest login fails, still navigate to dashboard as fallback
+  //     navigate('/dashboard');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
 
   return (
     <>
@@ -305,16 +301,17 @@ export function AuthChoiceScreen() {
               rights from here.
             </p>
           </motion.div>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="w-full space-y-4 flex flex-col items-center"
-          >
-            {/* Google Sign In Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="w-full space-y-4 flex flex-col items-center"
+        >
+          {/* Google Sign In Button */}
 
-            <Experimental>
+          {/* <Experimental>
               <motion.div
                 className="w-[90%]"
                 variants={buttonVariants}
@@ -349,7 +346,6 @@ export function AuthChoiceScreen() {
                 </button>
               </motion.div>
 
-              {/* Apple Sign In Button */}
               <motion.div
                 className="w-[90%]"
                 variants={buttonVariants}
@@ -385,70 +381,63 @@ export function AuthChoiceScreen() {
                 />
               </motion.div>
 
-              {/* Divider */}
               <div className="w-[90%] flex items-center my-4">
                 <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
                 <span className="px-4 text-sm text-gray-500 dark:text-gray-400">or</span>
                 <div className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></div>
               </div>
 
-            </Experimental>
+            </Experimental> */}
 
-            {/* Create Account Button */}
-            <MotionButton
-              onClick={() => navigate('/signup')}
-              className="w-[90%] bg-gradient-to-r from-primary-700 to-primary-600 via-primary-600 text-white px-4 py-3 rounded-md font-medium text-base shadow hover:from-primary-700 hover:to-primary-600 hover:via-primary-650 transition-colors border border-primary-600"
-              disabled={isLoading}
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              Create Account
-            </MotionButton>
+          {/* Create Account Button */}
+          <MotionButton
+            onClick={() => navigate('/signup')}
+            className="w-[90%] bg-gradient-to-r from-primary-700 to-primary-600 via-primary-600 text-white px-4 py-3 rounded-md font-medium text-base shadow hover:from-primary-700 hover:to-primary-600 hover:via-primary-650 transition-colors border border-primary-600"
+            disabled={isLoading}
+            variants={buttonVariants}
+            initial="initial"
+            whileHover="hover"
+            whileTap="tap"
+          >
+            Create Account
+          </MotionButton>
 
-            {/* Login Button */}
-            <MotionButton
-              onClick={() => navigate('/signin')}
-              className="w-[90%] bg-gradient-to-r from-green-700 to-green-600 via-green-600 text-white px-4 py-3 rounded-md font-medium text-base shadow hover:from-green-700 hover:to-green-600 hover:via-green-650 transition-colors border border-green-600"
-              disabled={isLoading}
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              Login
-            </MotionButton>
+          {/* Login Button */}
+          <button
+            onClick={() => navigate('/signin')}
+            className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
+          >
+            Login
+          </button>
 
-            {/* Continue without account */}
-            <MotionButton
+          {/* Continue without account - Only show in mobile app */}
+          {isMobileWebView() && (
+            <button
               onClick={handleGuestLogin}
-              className="mt-4 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline px-6 py-3 rounded-xl font-medium transition-colors flex justify-center items-center"
-              disabled={isLoading}
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
+              className="w-full text-gray-400 text-sm underline mt-4 py-2"
             >
-              {isLoading ? (
-                <span className="inline-block w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mr-2"></span>
-              ) : null}
               Continue without an account
-            </MotionButton>
-
-            {/* Error Display */}
-            {error && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-4 text-red-500 text-sm text-center"
-              >
-                {error}
-              </motion.div>
-            )}
-          </motion.div>
+            </button>
+          )}
         </motion.div>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="mt-6 text-red-400 text-sm text-center max-w-xs">
+          {error}
+        </div>
+      )}
+
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-dark-800 p-6 rounded-lg text-center">
+            <div className="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+            <p className="text-white">Signing you in...</p>
+          </div>
+        </div>
+      )}
     </>
   );
 }

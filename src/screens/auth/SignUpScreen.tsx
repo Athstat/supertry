@@ -11,11 +11,12 @@ import InputField, { PasswordInputField } from '../../components/shared/InputFie
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
 import FormErrorText from '../../components/shared/FormError';
+import { authService } from '../../services/authService';
 
 
 export function SignUpScreen() {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { setAuth } = useAuth();
   const [currentStep] = useState(1); // Keeping this for compatibility
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +33,9 @@ export function SignUpScreen() {
   
   const {emailTaken, isLoading: isEmailUniqueValidatorLoading} = useEmailUniqueValidator(form.email);
   const isEmailTaken = !isLoading && emailTaken;
+
+  const isAllFieldsComplete = form.email && form.username && form.password && form.confirmPassword;
+  const isPasswordsMatch = form.password === form.confirmPassword;
 
   // Validate all fields and submit the form directly instead of going to next step
   const validateForm = () => {
@@ -82,12 +86,20 @@ export function SignUpScreen() {
         username: form.username
       }
 
-      const {data:res, error} = await register(registerData);
+      const {data:res, error} = await authService.registerUser(registerData);
 
       if (res) {
+
         analytics.trackUserSignUp('Email');
+
+        const authUser = res.user;
+        const accessToken = res.token;
+
+        setAuth(accessToken, authUser);
+
         requestPushPermissionsAfterLogin();
         navigate('/post-signup-welcome', { replace: true });
+        
         return;
       }
 
@@ -175,7 +187,7 @@ export function SignUpScreen() {
 
             <PrimaryButton
               type="submit"
-              disabled={isLoading || isEmailTaken || isEmailUniqueValidatorLoading}
+              disabled={!(!isLoading && !isEmailTaken && !isEmailUniqueValidatorLoading && isAllFieldsComplete && isPasswordsMatch)}
               isLoading={isLoading}
               className='py-3'
             >

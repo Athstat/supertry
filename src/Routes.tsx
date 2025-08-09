@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { WelcomeScreen } from './screens/auth/WelcomeScreen';
+import React from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { SignUpScreen } from './screens/auth/SignUpScreen';
 import { SignInScreen } from './screens/auth/SignInScreen';
 import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
@@ -19,6 +18,7 @@ import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
 import { PlayersScreen } from './screens/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
+import JoinGroupScreen from './screens/JoinGroupScreen';
 import { useAuth } from './contexts/AuthContext';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
@@ -29,11 +29,11 @@ import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import SbrFixtureScreen from './screens/SbrFixtureScreen';
-import { isFirstAppVisit, markAppVisited } from './utils/firstVisitUtils';
 import CompetitionsScreen from './screens/CompetitionsScreen';
 import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
-import ScrummyLoadingState from './components/ui/ScrummyLoadingState';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -44,60 +44,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-// Protected route component with error boundary
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) return <ScrummyLoadingState />;
-
-  if (!isAuthenticated) {
-    return <Navigate to="/signin" />;
-  }
-
-  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
-};
-
 // Auth route component - redirects to dashboard if already authenticated
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const {state} = useLocation();
 
-  if (loading) return <ScrummyLoadingState />;
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
+    const nextRoute = state?.fromPathname ?? "/dashboard";
+
+    console.log("Next route: ", nextRoute);
+
+    return <Navigate to={nextRoute} />;
   }
 
   return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
-};
-
-// First Visit handler component
-const FirstVisitHandler = () => {
-  const { isAuthenticated, loading } = useAuth();
-  const [hasVisitedBefore, setHasVisitedBefore] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    // Check if user has visited the app before
-    const firstVisit = isFirstAppVisit();
-    setHasVisitedBefore(!firstVisit);
-
-    // If this is the first visit, mark it
-    if (firstVisit) {
-      markAppVisited();
-    }
-  }, []);
-
-  if (loading || hasVisitedBefore === null) return <div>Loading...</div>;
-
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
-  }
-
-  // First-time visitors see WelcomeScreen, returning visitors see AuthChoiceScreen
-  return (
-    <RouteErrorBoundary>
-      {!hasVisitedBefore ? <WelcomeScreen /> : <AuthChoiceScreen />}
-    </RouteErrorBoundary>
-  );
 };
 
 const AppRoutes = () => {
@@ -121,18 +82,8 @@ const AppRoutes = () => {
           </AuthRoute>
         }
       />
-      <Route
-        path="/forgot-password"
-        element={
-          <ForgotPasswordScreen />
-        }
-      />
-      <Route
-        path="/reset-password"
-        element={
-          <ResetPasswordScreen />
-        }
-      />
+      <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+      <Route path="/reset-password" element={<ResetPasswordScreen />} />
       <Route
         path="/auth-choice"
         element={
@@ -166,7 +117,16 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/league/:leagueId"
+        path="/join-group/:inviteCode"
+        element={
+          <ProtectedRoute>
+            <JoinGroupScreen />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/league/:officialLeagueId"
         element={
           <ProtectedRoute>
             <Layout>
@@ -383,10 +343,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
     </Routes>
-
-
   );
 };
 

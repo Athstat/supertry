@@ -14,6 +14,7 @@ import { ScopeProvider } from "jotai-scope";
 import AuthUserDataProvider from "../components/auth/AuthUserDataProvider";
 import FormErrorText from "../components/shared/FormError";
 import NoContentCard from "../components/shared/NoContentMessage";
+import { useAuth } from "../contexts/AuthContext";
 
 export function CompleteProfileScreen() {
 
@@ -44,6 +45,7 @@ function ScreenContent() {
   const [errors, setErrors] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const {refreshAuthUser} = useAuth();
 
   const {emailTaken, isLoading: isEmailValidatorLoading} = useEmailUniqueValidator(formData.email);
 
@@ -106,6 +108,7 @@ function ScreenContent() {
       const {data: res, error} = await authService.claimGuestAccount(data);
 
       if (res) {
+        await refreshAuthUser();
         navigate("/dashboard");
         return;
       }

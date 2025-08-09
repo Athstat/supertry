@@ -11,8 +11,9 @@ import SbrPredictionsTabLeaderboard from "./SbrPredictionsTabLeaderboard";
 export default function SbrPredictionsTab() {
 
   const user = useAuthUser();
+  const uid = (user as any)?.kc_id ?? (user as any)?.id;
 
-  const { data: userRank, isLoading: loadingUserRank } = useFetch("user-predictions-ranking", user.id, sbrService.getUserPredictionsRanking)
+  const { data: userRank, isLoading: loadingUserRank } = useFetch("user-predictions-ranking", uid, sbrService.getUserPredictionsRanking)
 
   return (
     <div className="flex flex-col gap-3" >

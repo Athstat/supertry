@@ -1,14 +1,15 @@
-import { IFantasyLeague, IFantasyLeagueTeam } from '../types/fantasyLeague';
+import { IFantasyLeague, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../types/leagueConfig';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { analytics } from './anayticsService';
 import { fantasyTeamService } from './fantasyTeamService';
 import { authService } from './authService';
+import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
 
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-      const uri = getUri(`/api/v1/fantasy-leagues`);
+      const uri = getUri(`/api/v1/fantasy-leagues/`);
       const response = await fetch(uri, {
         method: 'GET',
         headers: getAuthHeader(),
@@ -28,6 +29,33 @@ export const leagueService = {
   },
 
   /**
+   * Join a league by entry code
+   */
+  joinLeagueByCode: async (code: string): Promise<{ success: boolean; message?: string } & Partial<IFantasyLeague>> => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-leagues/join-league-code/`);
+      const response = await fetch(uri, {
+        method: 'PUT',
+        headers: getAuthHeader(),
+        body: JSON.stringify({ entry_code: code }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to join league by code:', errorText);
+        return { success: false, message: 'League code not found or join failed' };
+      }
+
+      const data = await response.json();
+      // The API may return league details; surface them for caller to use
+      return { success: true, ...(data || {}) };
+    } catch (error) {
+      console.error('Error in joinLeagueByCode:', error);
+      return { success: false, message: 'Unexpected error joining by code' };
+    }
+  },
+
+  /**
    * Fetch a league by its ID
    */
   getLeagueById: async (leagueId: number): Promise<IFantasyLeague | undefined> => {
@@ -41,9 +69,49 @@ export const leagueService = {
         headers: getAuthHeader(),
       });
 
-      return await response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Failed to fetch league by ID:', await response.text());
+        return undefined;
+      }
     } catch (error) {
       console.error('Error fetching league by ID:', error);
+      return undefined;
+    }
+  },
+
+  /**
+   * Fetch a league by its official league ID
+   */
+  getLeagueByOfficialId: async (officialLeagueId: string): Promise<IFantasyLeague | undefined> => {
+    try {
+      if (!officialLeagueId) return undefined;
+
+      // First, get all leagues and find the one with matching official_league_id
+      const allLeagues = await leagueService.getAllLeagues();
+      const league = allLeagues.find(l => l.official_league_id === officialLeagueId);
+
+      if (league) {
+        return league;
+      }
+
+      // Fallback: try direct fetch by ID (in case officialLeagueId is actually the league ID)
+      const uri = getUri(`/api/v1/fantasy-leagues/${officialLeagueId}`);
+
+      const response = await fetch(uri, {
+        method: 'GET',
+        headers: getAuthHeader(),
+      });
+
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Failed to fetch league by official ID:', await response.text());
+        return undefined;
+      }
+    } catch (error) {
+      console.error('Error fetching league by official ID:', error);
       return undefined;
     }
   },
@@ -53,9 +121,7 @@ export const leagueService = {
    */
   fetchParticipatingTeams: async (leagueId: string | number): Promise<IFantasyLeagueTeam[]> => {
     try {
-      const uri = getUri(
-        `/api/v1/fantasy-leagues/participating-teams-with-user-athletes/${leagueId}`
-      );
+      const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/teams`);
 
       const response = await fetch(uri, {
         method: 'GET',
@@ -76,7 +142,7 @@ export const leagueService = {
 
   getLeagueConfig: async (officialLeagueId: string): Promise<IGamesLeagueConfig | null> => {
     try {
-      const uri = getUri(`/api/v1/unauth/fantasy-league-config/${officialLeagueId}`);
+      const uri = getUri(`/api/v1/fantasy-leagues-config/${officialLeagueId}`);
 
       try {
         const response = await fetch(uri, {
@@ -100,7 +166,58 @@ export const leagueService = {
     }
   },
 
-  joinLeague: async (league: any, teamId?: string): Promise<any> => {
+  joinLeague: async (
+    leagueId: string,
+    userId: string,
+    teamName: string,
+    athletes: ICreateFantasyTeamAthleteItem[]
+  ): Promise<any> => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/join`);
+      const headers = getAuthHeader();
+
+      const payload = {
+        user_id: userId,
+        team_name: teamName,
+        athletes: athletes.map(athlete => ({
+          athlete_id: athlete.athlete_id,
+          purchase_price: athlete.purchase_price,
+          is_starting: athlete.is_starting,
+          slot: athlete.slot,
+          is_captain: athlete.is_captain,
+          is_super_sub: athlete.is_super_sub,
+        })),
+      };
+
+      console.log('Joining league with new team:', { uri, payload });
+
+      const response = await fetch(uri, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to join league:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText,
+        });
+        throw new Error(`Failed to join league: ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+      // Assuming responseData contains league and team info for analytics
+      // analytics.trackTeamCreationCompleted(leagueId, responseData.team.id, responseData.league.official_league_id);
+      return responseData;
+    } catch (error) {
+      console.error('Error in leagueService.joinLeague:', error);
+      throw error;
+    }
+  },
+
+  joinLeagueWithExistingTeam: async (league: any, teamId?: string): Promise<any> => {
     try {
       // Get user ID from auth service (Django uses simple tokens, not JWTs)
       const userInfo = await authService.getUserInfo();
@@ -220,6 +337,27 @@ export const leagueService = {
     } catch (error) {
       console.error(`Error checking user status for league ${leagueId}:`, error);
       return false;
+    }
+  },
+
+  /**
+   * Fetch all available competitions/seasons
+   */
+  getAllSeasons: async (): Promise<ISeason[]> => {
+    try {
+      const uri = getUri('/api/v1/seasons/');
+      const response = await fetch(uri, {
+        method: 'GET',
+        headers: getAuthHeader(),
+      });
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw new Error('Failed to fetch seasons');
+      }
+    } catch (error) {
+      console.error('Error in getAllSeasons:', error);
+      return [];
     }
   },
 };

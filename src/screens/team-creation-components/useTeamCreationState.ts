@@ -1,18 +1,15 @@
-import { useState, useEffect } from "react";
-import { IGamesLeagueConfig } from "../../types/leagueConfig";
-import { useTeamCreation } from "../../hooks/useTeamCreation";
-import { leagueService } from "../../services/leagueService";
-import { athleteService } from "../../services/athletes/athleteService";
-import { TeamCreationPositionSlot } from "../../types/position";
-import { RugbyPlayer } from "../../types/rugbyPlayer";
-import { MAX_TEAM_BUDGET } from "../../types/constants";
+import { useState, useEffect } from 'react';
+import { IGamesLeagueConfig } from '../../types/leagueConfig';
+import { useTeamCreation } from '../../hooks/useTeamCreation';
+import { leagueService } from '../../services/leagueService';
+import { athleteService } from '../../services/athletes/athleteService';
+import { TeamCreationPositionSlot } from '../../types/position';
+import { RugbyPlayer } from '../../types/rugbyPlayer';
+import { MAX_TEAM_BUDGET } from '../../types/constants';
 
 export const useTeamCreationState = (officialLeagueId: string | undefined) => {
-  
   // League and players data states
-  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(
-    null
-  );
+  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(null);
   const [allPlayers, setAllPlayers] = useState<RugbyPlayer[]>([]);
   const [positionList, setPositionList] = useState<any[]>([]);
 
@@ -21,19 +18,17 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   const [loadingPlayers, setLoadingPlayers] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPlayerSelection, setShowPlayerSelection] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState<TeamCreationPositionSlot | null>(
-    null
-  );
+  const [selectedPosition, setSelectedPosition] = useState<TeamCreationPositionSlot | null>(null);
   const [captainId, setCaptainId] = useState<string | null>(null);
 
   // Toast state
   const [toast, setToast] = useState<{
     message: string;
-    type: "success" | "error" | "info";
+    type: 'success' | 'error' | 'info';
     isVisible: boolean;
   }>({
-    message: "",
-    type: "info",
+    message: '',
+    type: 'info',
     isVisible: false,
   });
 
@@ -41,7 +36,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   const teamCreationHook = useTeamCreation(
     leagueConfig?.team_budget || MAX_TEAM_BUDGET,
     (players, teamName, isFavorite) => {
-      console.log("Team creation complete", players, teamName, isFavorite);
+      console.log('Team creation complete', players, teamName, isFavorite);
       // Navigation is handled in the parent component
     }
   );
@@ -59,10 +54,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   } = teamCreationHook;
 
   // Function to show toast message
-  const showToast = (
-    message: string,
-    type: "success" | "error" | "info" = "info"
-  ) => {
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
     setToast({
       message,
       type,
@@ -72,7 +64,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
 
   // Function to hide toast message
   const hideToast = () => {
-    setToast((prev) => ({
+    setToast(prev => ({
       ...prev,
       isVisible: false,
     }));
@@ -83,27 +75,27 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
     if (!config || !config.positions) {
       // Fallback to create some default positions if config is missing
       const defaultPositions = [
-        { name: "Front Row", position_class: "front-row" },
-        { name: "Second Row", position_class: "second-row" },
-        { name: "Back Row", position_class: "back-row" },
-        { name: "Halfback", position_class: "half-back" },
-        { name: "Back", position_class: "back" },
-        { name: "Super Sub", position_class: "super-sub", isSpecial: true },
+        { name: 'Front Row', position_class: 'front-row' },
+        { name: 'Second Row', position_class: 'second-row' },
+        { name: 'Back Row', position_class: 'back-row' },
+        { name: 'Halfback', position_class: 'half-back' },
+        { name: 'Back', position_class: 'back' },
+        { name: 'Super Sub', position_class: 'super-sub', isSpecial: true },
       ];
 
       const positions = defaultPositions.map((pos, index) => ({
         id: String(index),
         name: pos.name,
         shortName: pos.name.substring(0, 3),
-        x: "0",
-        y: "0",
+        x: '0',
+        y: '0',
         positionClass: pos.position_class,
         isSpecial: pos.isSpecial || false,
         player: undefined,
       }));
 
       setPositionList(positions);
-      console.log("Using default positions:", positions);
+      console.log('Using default positions:', positions);
       return;
     }
 
@@ -112,8 +104,8 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
       id: String(index),
       name: pos.name,
       shortName: pos.name.substring(0, 3),
-      x: "0",
-      y: "0",
+      x: '0',
+      y: '0',
       positionClass: pos.position_class,
       isSpecial: false,
       player: undefined,
@@ -122,18 +114,18 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
     // Add Super Sub as an additional position
     const superSubPosition = {
       id: String(configPositions.length),
-      name: "Super Sub",
-      shortName: "Sub",
-      x: "0",
-      y: "0",
-      positionClass: "super-sub",
+      name: 'Super Sub',
+      shortName: 'Sub',
+      x: '0',
+      y: '0',
+      positionClass: 'super-sub',
       isSpecial: true,
       player: undefined,
     };
 
     const positions = [...configPositions, superSubPosition];
 
-    console.log("Setting up positions from config:", positions);
+    console.log('Setting up positions from config:', positions);
     setPositionList(positions);
   };
 
@@ -153,66 +145,71 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
     setShowPlayerSelection(false); // Close the modal after player is added
   };
 
-  // Fetch players from API
+  // Fetch all required data in a single effect
   useEffect(() => {
-    const fetchPlayers = async () => {
+    let isMounted = true;
+    
+    const fetchData = async () => {
+      console.log('fetching data for league: ', officialLeagueId);
+      
       if (!officialLeagueId) {
-        setError("League ID is missing");
-        setIsLoading(false);
+        if (isMounted) {
+          setError('League ID is missing');
+          setIsLoading(false);
+        }
         return;
       }
+
       try {
+        setIsLoading(true);
         setLoadingPlayers(true);
-        const data = await athleteService.getRugbyAthletesByCompetition(
-          officialLeagueId
-        );
-        setAllPlayers(data);
-      } catch (err) {
-        console.error("Error fetching players:", err);
-      } finally {
-        setLoadingPlayers(false);
-      }
-    };
+        
+        // Fetch both data in parallel
+        const [players, config] = await Promise.all([
+          athleteService.getRugbyAthletesByCompetition(officialLeagueId),
+          leagueService.getLeagueConfig(officialLeagueId)
+        ]);
 
-    fetchPlayers();
-  }, [officialLeagueId]);
+        if (!isMounted) return;
 
-  // Fetch league config on mount
-  useEffect(() => {
-    const fetchLeagueConfig = async () => {
-      if (!officialLeagueId) {
-        setError("League ID is missing");
-        setIsLoading(false);
-        return;
-      }
+        console.log('Fetched players data:', players);
+        setAllPlayers(players);
 
-      try {
-        const config = await leagueService.getLeagueConfig(officialLeagueId);
         if (config) {
           setLeagueConfig(config);
           setupPositionsFromConfig(config);
           setError(null);
         } else {
-          setError("Failed to load league configuration");
+          setError('Failed to load league configuration');
         }
       } catch (err) {
-        console.error("Error fetching league config:", err);
-        setError("An error occurred while loading league configuration");
+        console.error('Error fetching data:', err);
+        if (isMounted) {
+          setError('An error occurred while loading data');
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+          setLoadingPlayers(false);
+        }
       }
     };
 
-    fetchLeagueConfig();
+    fetchData();
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isMounted = false;
+    };
   }, [officialLeagueId]);
 
   // Update position list when players are selected
   useEffect(() => {
     if (positionList.length === 0) return;
 
-    const updatedPositions = positionList.map((position) => {
+    const updatedPositions = positionList.map(position => {
       const selectedPlayer = Object.values(selectedPlayers).find(
-        (player) => player.position === position.name
+        player => player.position === position.name
       );
       return {
         ...position,
@@ -226,7 +223,7 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
   // Force setup of positions on initial load if they're not set from config
   useEffect(() => {
     if (positionList.length === 0 && !isLoading && !loadingPlayers) {
-      console.log("No positions found, setting up default positions");
+      console.log('No positions found, setting up default positions');
       setupPositionsFromConfig(null);
     }
   }, [isLoading, loadingPlayers, positionList.length]);

@@ -1,6 +1,15 @@
-import { IFantasyTeamAthlete } from "./fantasyTeamAthlete";
+import { IFantasyTeamAthlete } from './fantasyTeamAthlete';
+
+export interface ISeason {
+  id: string;
+  name: string;
+  start_date?: string;
+  end_date?: string;
+}
 
 export interface IFantasyLeague {
+  season: string;
+  season_name: string;
   id: string;
   type: string;
   official_league_id: string;

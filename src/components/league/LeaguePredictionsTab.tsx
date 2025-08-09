@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { CircleCheck, Info, Sparkles, Calendar } from 'lucide-react';
 import { useFetch } from '../../hooks/useFetch';
 import { useAuthUser } from '../../hooks/useAuthUser';
-import { UserPredictionsRanking } from '../../types/sbr';
 import { BowArrow } from 'lucide-react';
 import { XCircle } from 'lucide-react';
 import { Percent } from 'lucide-react';
@@ -69,9 +68,10 @@ export default function LeaguePredictionsTab() {
   const user = useAuthUser();
   const { league } = useFantasyLeague();
 
+  const uid = (user as any)?.kc_id ?? (user as any)?.id;
   const { data: userRank, isLoading: loadingUserRank } = useFetch(
     `league-predictions-ranking-${league?.id}`,
-    [user.id, league?.id],
+    [user?.kc_id, league?.id],
     () => leaguePredictionsService.getLeagueUserPredictionsRanking(user.id, league?.id)
   );
 

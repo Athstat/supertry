@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "rm -rf node_modules/.vite &&  vite --host=0.0.0.0",
+    "dev-win": "vite --host=0.0.0.0",
     "build": "vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -33,7 +34,6 @@
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
     "react-router-dom": "^6.29.0",
-    "styles": "link:@sendbird/uikit-react/styles",
     "swr": "^2.3.3",
     "tailwind-merge": "^3.2.0"
   },

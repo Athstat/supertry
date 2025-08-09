@@ -12,8 +12,8 @@ export function getUriLocal(endPoint: string) {
   return `http://localhost:8000${endPoint}`; // Updated to Django port
 }
 
-export function getAuthHeader() {
-  const accessToken = authTokenService.getAccessToken();
+export function getAuthHeader(accessTokenFromParams?: string) {
+  const accessToken = accessTokenFromParams ?? authTokenService.getAccessToken();
 
   const authHeader = {
     Authorization: `Token ${accessToken}`,
@@ -29,4 +29,21 @@ export function applicationJsonHeader() {
   return {
     'Content-Type': 'application/json',
   };
+}
+
+export async function pingServer() {
+  try {
+
+    const uri = getUri(`/api/v1/ping`);
+    const res = await fetch(uri);
+
+    if (res.ok) {
+      return (await res.json()) as {ping: string}
+    }
+
+  } catch (err) {
+    console.log("Failed to reach server at ", getUri(''), err);
+  }
+
+  return undefined;
 }

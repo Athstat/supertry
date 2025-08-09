@@ -1,49 +1,65 @@
-import { ChevronRight, Calendar, Check } from "lucide-react";
-import { motion } from "framer-motion";
-import { format } from "date-fns";
-import { useCountdown } from "../../../hooks/useCountdown";
-import LeagueLockStatus from "./LeagueLockStatus";
-import { calculateJoinDeadline, isLeagueLocked } from "../../../utils/leaguesUtils";
-import LeagueLiveIndicator from "../LeagueLiveIndicator";
-import LeagueTeamsCount from "./LeagueTeamsCount";
-import { IFantasyLeague } from "../../../types/fantasyLeague";
-import { useFetch } from "../../../hooks/useFetch";
-import { leagueService } from "../../../services/leagueService";
+import { ChevronRight, Calendar, Check, Users } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { format } from 'date-fns';
+import { useCountdown } from '../../../hooks/useCountdown';
+import { calculateJoinDeadline, isLeagueLocked } from '../../../utils/leaguesUtils';
+import { IFantasyLeague } from '../../../types/fantasyLeague';
 
 type Props = {
   league: IFantasyLeague;
   onLeagueClick: (league: IFantasyLeague) => void;
   custom?: number;
   isJoined?: boolean;
-  hideIfNoTeamsJoined?: boolean
-}
+  hideIfNoTeamsJoined?: boolean;
+  getGamesByCompetitionId: (competitionId: string) => any[];
+};
 
+// Simple Badge component
+const Badge = ({ variant, children }: { variant: string; children: React.ReactNode }) => {
+  const getVariantClasses = () => {
+    switch (variant) {
+      case 'success':
+        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+      case 'destructive':
+        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+      case 'secondary':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+      case 'invite':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+    }
+  };
 
-export function LeagueCard({
-  league,
-  onLeagueClick,
-  custom = 0,
-  isJoined = false,
-  hideIfNoTeamsJoined
-}: Props) {
+  return (
+    <span className={`px-2 py-1 text-xs rounded-full font-medium ${getVariantClasses()}`}>
+      {children}
+    </span>
+  );
+};
 
+export function LeagueCard({ league, onLeagueClick, custom = 0, isJoined = false }: Props) {
   const isLocked = isLeagueLocked(league.join_deadline);
   const adjustedDeadline = calculateJoinDeadline(league);
-  const {data, isLoading} = useFetch("participating-teams", league.id, leagueService.fetchParticipatingTeams);
 
-  const teams = data ?? [];
+  const getStatusBadge = () => {
+    const isPrivate = (league as any)?.is_private === true || (league as any)?.is_public === false;
+    if (isPrivate) {
+      return <Badge variant="invite">Invite Only</Badge>;
+    }
+    if (league.has_ended) {
+      return <Badge variant="secondary">Ended</Badge>;
+    } else if (league.is_open) {
+      return <Badge variant="success">Public</Badge>;
+    } else {
+      return <Badge variant="destructive">Locked</Badge>;
+    }
+  };
 
-  if (isLoading && hideIfNoTeamsJoined) {
-    return (
-      <div className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 border border-gray-100 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow h-20 w-full animate-pulse" >
-
-      </div>
-    )
-  }
-
-  if (teams.length === 0 && hideIfNoTeamsJoined) {
-    return;
-  }
+  const formatCreatedDate = (dateString: string | Date) => {
+    const date = new Date(dateString);
+    return format(date, 'MMM d, yyyy');
+  };
 
   return (
     <motion.div
@@ -55,7 +71,7 @@ export function LeagueCard({
           opacity: 1,
           y: 0,
           transition: {
-            type: "spring",
+            type: 'spring',
             stiffness: 400,
             damping: 25,
             delay: custom * 0.1,
@@ -63,52 +79,74 @@ export function LeagueCard({
         },
       }}
       onClick={() => onLeagueClick(league)}
-      className="bg-gray-50 dark:bg-dark-800/60 rounded-xl p-4 border border-gray-100 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow"
+      className="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-md hover:shadow-lg cursor-pointer transition-all duration-200 space-y-2"
       whileHover={{
         scale: 1.02,
-        transition: { type: "spring", stiffness: 300 },
+        transition: { type: 'spring', stiffness: 300 },
       }}
     >
-      <div className="flex justify-between items-start mb-2 relative">
-        <h3 className="font-semibold dark:text-white">{league.title}</h3>
-        <div className="flex items-center gap-2">
+      {/* Header Row */}
+      <div className="flex justify-between items-start">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+            {league.title}
+          </h3>
+          {league.season_name && (
+            <p className="text-xs uppercase text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+              {league.season_name}
+            </p>
+          )}
+        </div>
+        <div className="flex items-center gap-2 ml-2">
           {isJoined && (
-            <div className="px-2 py-0.5 text-xs rounded-full bg-blue-600 text-white font-semibold flex items-center gap-1">
-              <Check size={12} />
+            <div className="px-2 py-0.5 text-xs rounded-full bg-blue-600 dark:bg-blue-500 text-white font-semibold flex items-center gap-1">
+              <Check size={10} />
               Joined
             </div>
           )}
-          <LeagueLockStatus league={league} />
+          {getStatusBadge()}
         </div>
       </div>
+
+      {/* Description - Single line with truncation */}
+      {league.disclaimer && (
+        <p className="text-sm italic text-gray-600 dark:text-gray-300 truncate">
+          {league.disclaimer}
+        </p>
+      )}
+
+      {/* Metadata Row - Compressed single line */}
       <div className="flex justify-between items-center">
-        <div className="flex flex-col gap-1">
-
-          <div className="flex flex-row items-center gap-2" >
-
-            <LeagueTeamsCount league={league} />
-            <LeagueLiveIndicator league={league} />
+        <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-1">
+            <Users size={12} />
+            <span>{league.participants_count} Teams</span>
           </div>
-
-          {!isLocked && adjustedDeadline && (
-            <JoinDeadlineCountdown joinDeadline={adjustedDeadline} />
-          )}
-
+          <span className="text-gray-400">|</span>
+          <div className="flex items-center gap-1">
+            <Calendar size={12} />
+            <span>Created {formatCreatedDate(league.created_date)}</span>
+          </div>
         </div>
 
-        <ChevronRight size={18} className="text-gray-400" />
+        <ChevronRight size={16} className="text-gray-400 dark:text-gray-500" />
       </div>
+
+      {/* Join Deadline Countdown */}
+      {!isLocked && adjustedDeadline && (
+        <div className="pt-2 border-t border-gray-100 dark:border-gray-700">
+          <JoinDeadlineCountdown joinDeadline={adjustedDeadline} />
+        </div>
+      )}
     </motion.div>
   );
 }
 
-
 type JoinDeadlineCountdownProps = {
-  joinDeadline: Date
-}
+  joinDeadline: Date;
+};
 
 function JoinDeadlineCountdown({ joinDeadline }: JoinDeadlineCountdownProps) {
-
   // Countdown should start two days before the join deadline
   const today = new Date();
   const deadline = new Date(joinDeadline);
@@ -125,16 +163,15 @@ function JoinDeadlineCountdown({ joinDeadline }: JoinDeadlineCountdownProps) {
     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
       <Calendar size={16} />
       <span>
-        {showCountDown ? "Starts in " : "Deadline "}
-        {!showCountDown && <strong>
-          {format(joinDeadline, "EE dd MMM h:mm a")}
-        </strong>}
+        {showCountDown ? 'Starts in ' : 'Deadline '}
+        {!showCountDown && <strong>{format(joinDeadline, 'EE dd MMM h:mm a')}</strong>}
 
-        {showCountDown && <strong>
-          {`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`}
-        </strong>}
+        {showCountDown && (
+          <strong>
+            {`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+          </strong>
+        )}
       </span>
     </div>
-  )
-
+  );
 }

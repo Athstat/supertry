@@ -1,7 +1,7 @@
 import React from 'react';
 import ErrorBoundary, { FallbackProps } from './ErrorBoundary';
 import { useLocation } from 'react-router-dom';
-import { useAppState } from '../contexts/AppStateContext';
+import { useAppReload } from '../contexts/AppStateContext';
 
 interface RouteErrorBoundaryProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface RouteErrorBoundaryProps {
  */
 const RouteErrorBoundary: React.FC<RouteErrorBoundaryProps> = ({ children }) => {
   const location = useLocation();
-  const { refreshAppState } = useAppState();
+  const {reloadWindow} = useAppReload();
 
   const handleRouteError = (error: Error, errorInfo: React.ErrorInfo) => {
     console.error(`Route error at ${location.pathname}:`, error, errorInfo);
@@ -22,7 +22,7 @@ const RouteErrorBoundary: React.FC<RouteErrorBoundaryProps> = ({ children }) => 
     const handleRetry = async () => {
       try {
         // Refresh app state before resetting the error boundary
-        await refreshAppState();
+        reloadWindow()
         resetErrorBoundary();
       } catch (refreshError) {
         console.error('Failed to refresh app state during route error recovery:', refreshError);
