@@ -9,10 +9,15 @@ import NoContentCard from '../../shared/NoContentMessage';
 type Props = {
   leagues: IFantasyLeague[];
   userTeams: Record<string, boolean>;
+  getGamesByCompetitionId: (competitionId: string) => any[];
 };
 
 /** Renders active leagues on the join league screen */
-export default function JoinLeagueActiveLeaguesSection({ leagues, userTeams }: Props) {
+export default function JoinLeagueActiveLeaguesSection({
+  leagues,
+  userTeams,
+  getGamesByCompetitionId,
+}: Props) {
   const activeLeagues = activeLeaguesFilter(leagues);
   const navigate = useNavigate();
 
@@ -41,7 +46,7 @@ export default function JoinLeagueActiveLeaguesSection({ leagues, userTeams }: P
       </h2>
 
       {activeLeagues.length === 0 && (
-        <NoContentCard className="my-6" message="There are no Active Leagues" />
+        <NoContentCard className="my-6" message="There are no new leagues" />
       )}
 
       <motion.div
@@ -57,6 +62,7 @@ export default function JoinLeagueActiveLeaguesSection({ leagues, userTeams }: P
             onLeagueClick={handleLeagueClick}
             custom={index}
             isJoined={userTeams[league.id]}
+            getGamesByCompetitionId={getGamesByCompetitionId}
           />
         ))}
       </motion.div>

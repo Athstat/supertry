@@ -24,8 +24,7 @@ import { IFantasyLeague } from '../types/fantasyLeague';
 import { useTeamCreationGuard } from '../hooks/useTeamCreationGuard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
-import PageView from './PageView';
-import SecondaryText from '../components/shared/SecondaryText';
+import { mutate } from 'swr';
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -53,25 +52,25 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
     navigate('/dashboard');
   }
 
-  return (
-    <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
-      <div className="flex fleex-row items-center gap-2" >
-        <Trophy />
-        <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
-      </div>
+  // return (
+  //   <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
+  //     <div className="flex fleex-row items-center gap-2" >
+  //       <Trophy />
+  //       <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
+  //     </div>
 
-      <div>
-        <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
-      </div>
+  //     <div>
+  //       <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
+  //     </div>
 
-      <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
-        Coming Soon
-        <Info />
-      </PrimaryButton>
+  //     <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
+  //       Coming Soon
+  //       <Info />
+  //     </PrimaryButton>
 
-      <button onClick={handleBackToDashboard} >Go to Dashboard</button>
-    </PageView>
-  )
+  //     <button onClick={handleBackToDashboard} >Go to Dashboard</button>
+  //   </PageView>
+  // )
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
@@ -256,7 +255,7 @@ export function TeamCreationScreen() {
             pos => pos.player && pos.player.tracking_id === player.tracking_id
           );
 
-          //console.log('The position we found ', position);
+          console.log('The player we found ', player);
 
           const isSuperSub = position?.isSpecial || false;
           const isPlayerCaptain = captainId === player.tracking_id;
@@ -296,6 +295,45 @@ export function TeamCreationScreen() {
 
       // Store the created team ID for navigation
       setCreatedTeamId(joinLeagueRes.team.id);
+
+      // Optimistically insert the user's team into the SWR cache so it shows immediately
+      // useFetch in useFantasyLeague uses fetch key: [league.id, 'participating-teams-hook']
+      if (league?.id) {
+        const swrKey: [number | string, string] = [league.id, 'participating-teams-hook'];
+
+        // Build a minimal RankedFantasyTeam-like object for immediate display
+        const optimisticTeam = {
+          team_id: String(joinLeagueRes.team.id ?? ''),
+          rank: joinLeagueRes.team.rank ?? undefined,
+          teamName: joinLeagueRes.team.team_name ?? teamName,
+          managerName:
+            `${userInfo.firstName ?? ''} ${userInfo.lastName ?? ''}`.trim() ||
+            (userInfo.username ?? 'Manager'),
+          overall_score: joinLeagueRes.team.overall_score ?? 0,
+          weeklyPoints: joinLeagueRes.team.overall_score ?? 0,
+          lastRank: joinLeagueRes.team.rank ?? undefined,
+          isUserTeam: true,
+          userId: joinLeagueRes.team.user_id ?? userInfo.kc_id,
+          is_admin: false,
+          first_name: userInfo.firstName ?? '',
+          last_name: userInfo.lastName ?? '',
+        };
+
+        // Optimistically update without revalidation
+        mutate(
+          swrKey,
+          (current: any) => {
+            const list = Array.isArray(current) ? current : [];
+            const exists = list.some((t: any) => t?.userId === optimisticTeam.userId);
+            if (exists) return list;
+            return [...list, optimisticTeam];
+          },
+          false
+        );
+
+        // Trigger background revalidation
+        mutate(swrKey);
+      }
 
       // update users username on db
       // if (isGuest) {

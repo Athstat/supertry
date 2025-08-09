@@ -22,7 +22,7 @@ export const gamesService = {
 
   getGamesByCompetitionId: async (competitionId: string): Promise<IFixture[]> => {
     //const uri = getUri(`/api/v1/games/leagues/${competitionId}`); //no such endpoint
-    const uri = getUri(`/api/v1/games`);
+    const uri = getUri(`/api/v1/games/`);
 
     try {
       const res = await fetch(uri, {
@@ -167,7 +167,7 @@ export const gamesService = {
   },
 
   getAllSupportedGames: async (): Promise<IFixture[]> => {
-    const uri = getUri(`/api/v1/games`);
+    const uri = getUri(`/api/v1/games/`);
 
     try {
       const res = await fetch(uri, {

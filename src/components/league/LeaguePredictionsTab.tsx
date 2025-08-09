@@ -68,6 +68,7 @@ export default function LeaguePredictionsTab() {
   const user = useAuthUser();
   const { league } = useFantasyLeague();
 
+  const uid = (user as any)?.kc_id ?? (user as any)?.id;
   const { data: userRank, isLoading: loadingUserRank } = useFetch(
     `league-predictions-ranking-${league?.id}`,
     [user?.kc_id, league?.id],

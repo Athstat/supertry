@@ -19,7 +19,8 @@ const sb = SendbirdChat.init(params);
 export async function connectUserToSendBird(user: AuthUser) : ThrowablePromise<SendbirdChatWith<[OpenChannelModule]>> {
     try {
         
-        await sb.connect(user.id);
+        const uid = (user as any)?.kc_id ?? (user as any)?.id;
+        await sb.connect(uid);
         
         const userNickName = user.firstName + " " + user.lastName;
         sb.updateCurrentUserInfo({

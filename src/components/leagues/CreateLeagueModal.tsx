@@ -22,7 +22,7 @@ export default function CreateLeagueModal({
     title: '',
     description: '',
     is_public: true,
-    max_teams: 20,
+    max_teams: undefined,
     entry_fee: 0,
     prize_pool: 0,
     rules: '',
@@ -69,7 +69,7 @@ export default function CreateLeagueModal({
         title: '',
         description: '',
         is_public: true,
-        max_teams: 20,
+        max_teams: undefined,
         entry_fee: 0,
         prize_pool: 0,
         rules: '',
@@ -179,7 +179,7 @@ export default function CreateLeagueModal({
                   className="mr-2 text-primary-600 dark:text-primary-500 focus:ring-primary-500"
                 />
                 <Lock className="w-4 h-4 mr-1" />
-                Private
+                Invitation only
               </label>
             </div>
           </div>
@@ -194,8 +194,14 @@ export default function CreateLeagueModal({
               </label>
               <input
                 type="number"
-                value={formData.max_teams}
-                onChange={e => handleInputChange('max_teams', parseInt(e.target.value))}
+                value={formData.max_teams || ''}
+                onChange={e =>
+                  handleInputChange(
+                    'max_teams',
+                    e.target.value ? parseInt(e.target.value) : undefined
+                  )
+                }
+                placeholder="e.g., 12"
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:text-white"
                 min="2"
                 max="50"
