@@ -44,6 +44,8 @@ export function JoinLeagueScreen() {
 
   const leagues = leaguesData ?? [];
 
+  console.log('leagues join: ', leagues);
+
   // Local cache of joined leagues that aren't returned by the general leagues list
   const [extraJoinedLeagues, setExtraJoinedLeagues] = useState<IFantasyLeague[]>([]);
 
@@ -112,6 +114,8 @@ export function JoinLeagueScreen() {
             .map(team => team.league_id.toString())
         );
 
+        console.log('joined league ids: ', joinedLeagueIds);
+
         // Create a mapping of league IDs to whether the user has joined
         const joinedLeagues = leagues.reduce(
           (acc, league) => {
@@ -121,6 +125,8 @@ export function JoinLeagueScreen() {
           },
           {} as Record<string, boolean>
         );
+
+        console.log('joined leagues: ', joinedLeagues);
 
         setUserTeams(joinedLeagues);
 
@@ -182,13 +188,24 @@ export function JoinLeagueScreen() {
     []
   );
 
+  const isLeagueHidden = useCallback(
+    (league: IFantasyLeague) => String((league as any)?.hidden || '').toLowerCase() === 'true',
+    []
+  );
+
   const joinedLeagues = useMemo(() => {
-    const base = leagues.filter(l => isLeagueJoined(l.id) && !isLeagueEnded(l));
+    const base = leagues.filter(
+      l => isLeagueJoined(l.id) && !isLeagueEnded(l) && !isLeagueHidden(l)
+    );
     // Merge extras, avoid duplicates by id
     const seen = new Set(base.map(l => String(l.id)));
-    const extras = extraJoinedLeagues.filter(l => !seen.has(String(l.id)) && !isLeagueEnded(l));
+    const extras = extraJoinedLeagues.filter(
+      l => !seen.has(String(l.id)) && !isLeagueEnded(l) && !isLeagueHidden(l)
+    );
+    console.log('joined leagues: ', [...base, ...extras]);
     return [...base, ...extras];
-  }, [leagues, isLeagueJoined, extraJoinedLeagues, isLeagueEnded]);
+  }, [leagues, isLeagueJoined, extraJoinedLeagues, isLeagueEnded, isLeagueHidden]);
+
   const discoverBase = useMemo(
     () => leagues.filter(l => !isLeagueJoined(l.id) && l.is_open),
     [leagues, isLeagueJoined]

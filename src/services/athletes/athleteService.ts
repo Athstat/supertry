@@ -13,7 +13,8 @@ export const athleteService = {
     try {
       logger.debug(`Fetching rugby athletes for competition: ${competitionId}`);
 
-      const uri = getUri(`/api/v1/athletes/rugby/season/${competitionId}/`);
+      //const uri = getUri(`/api/v1/athletes/rugby/season/${competitionId}/`);
+      const uri = getUri(`/api/v1/seasons/${competitionId}/athletes`);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
@@ -41,7 +42,9 @@ export const athleteService = {
             id: athlete.tracking_id,
             tracking_id: athlete.tracking_id,
             player_name: athlete.player_name,
-            team_name: athlete.team?.athstat_name || athlete.team?.name || 'Unknown Team',
+            team_name: athlete.team?.athstat_name || athlete.team?.name || 'Unknown team',
+            team_logo: athlete.team?.image_url || 'Unknown team logo',
+            team: athlete.team,
             position_class: athlete.position_class,
             position: athlete.position,
             price: athlete.price, // No need for fallback since we filtered out invalid prices
