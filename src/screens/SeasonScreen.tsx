@@ -25,7 +25,7 @@ export default function SeasonScreen() {
     const atoms = [
         seasonAtom, seasonTeamsAtoms,
         seasonFixtutesAtoms, seasonAthletesAtoms
-    ]
+    ] 
 
     return (
         <ScopeProvider atoms={atoms} >
