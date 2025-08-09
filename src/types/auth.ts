@@ -204,3 +204,7 @@ export type PasswordResetTokenIntrospect = {
 export type RequestEmailVerificationRes = {
   message: string
 }
+
+export type VerifyEmailRes = {
+  message: string
+}

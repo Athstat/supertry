@@ -15,6 +15,7 @@ import {
   ResetPasswordRes,
   PasswordResetTokenIntrospect,
   RequestEmailVerificationRes,
+  VerifyEmailRes,
 } from '../types/auth';
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
@@ -561,6 +562,35 @@ export const authService = {
     return {
       error: {
         message: "Something wen't wrong request for an email verification. Please try again shortly"
+      }
+    }
+  },
+
+  verifyEmailWithToken: async (token: string) : RestPromise<VerifyEmailRes> => {
+    try {
+      const uri = getUri(`/api/v1/auth/verify-email/${token}`);
+
+      const res = await fetch(uri, {
+        method: 'POST',
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        const json = (await res.json()) as VerifyEmailRes;
+        return {data: json};
+      }
+
+      if (res.status === 404) {
+        return {error: {message: "Email verification is either invalid or has expired"}}
+      }
+
+    } catch(err) {
+      console.log("Error verifying email ", err);
+    }
+
+    return {
+      error: {
+        message: "Something wen't wrong trying to verify your email. Please try again"
       }
     }
   }
