@@ -34,6 +34,7 @@ import SeasonScreen from './screens/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
+import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -47,7 +48,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
 // Auth route component - redirects to dashboard if already authenticated
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
-  const {state} = useLocation();
+  const { state } = useLocation();
 
 
   if (isAuthenticated) {
@@ -343,6 +344,14 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/verify-email"
+        element={
+          <VerifyEmailScreen />
+        }
+      />
+
     </Routes>
   );
 };
