@@ -200,3 +200,7 @@ export type PasswordResetTokenIntrospect = {
   expires_at: string,
   user_id: string
 }
+
+export type RequestEmailVerificationRes = {
+  message: string
+}

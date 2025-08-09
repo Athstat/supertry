@@ -14,6 +14,7 @@ import {
   RequestPasswordResetRes,
   ResetPasswordRes,
   PasswordResetTokenIntrospect,
+  RequestEmailVerificationRes,
 } from '../types/auth';
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
@@ -539,11 +540,28 @@ export const authService = {
     };
   },
 
-  requestEmailVerification: async () => {
+  requestEmailVerification: async () : RestPromise<RequestEmailVerificationRes> => {
     try {
+      const uri = getUri(`/api/v1/auth/resend-verification`);
+      
+      const res = await fetch(uri, {
+        method: 'POST',
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        const json = (await res.json()) as RequestEmailVerificationRes;
+        return {data: json};
+      }
 
     } catch (err) {
       console.log("Error requesting email verification ", err);
+    }
+
+    return {
+      error: {
+        message: "Something wen't wrong request for an email verification. Please try again shortly"
+      }
     }
   }
 };
