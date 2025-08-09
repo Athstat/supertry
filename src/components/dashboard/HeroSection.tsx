@@ -14,6 +14,7 @@ export function HeroSection({ }: Props) {
 
           <h1 className="text-lg lg:text-xl font-bold">
             New Feature Drop!
+            New Feature Drop!
           </h1>
 
           <p className="text-md opacity-90">
@@ -23,6 +24,7 @@ export function HeroSection({ }: Props) {
           <button
             className="bg-white w-fit text-primary-600 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
           >
+            Take Me There
             Take Me There
           </button>
 
