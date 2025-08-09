@@ -201,7 +201,7 @@ export function SignInScreen() {
 
           <EmailPasswordLoginBox />
 
-          {isMobileWebView() && <GuestLoginBox />}
+          {<GuestLoginBox />}
 
           {/* Error Display */}
           {error && (
