@@ -4,6 +4,7 @@ import PrimaryButton from "../shared/buttons/PrimaryButton";
 import WarningCard from "../shared/WarningCard";
 import { authService } from "../../services/authService";
 import { CheckCircle2 } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
     authUser: DjangoAuthUser
@@ -35,6 +36,7 @@ export default function EmailVerificationWarning({ authUser }: Props) {
 
             if (res.data) {
                 setSuccessMessage(res.data.message);
+                setError(undefined);
             } else {
                 setError(res.error?.message);
             }
@@ -44,11 +46,14 @@ export default function EmailVerificationWarning({ authUser }: Props) {
             setError("Something wen't wrong trying to request for email verification. Please try again");
         }
 
-        setLoading(true);
+        setLoading(false);
     }
 
     return (
-        <WarningCard className="flex bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-700/50 flex-col gap-2 items-start justify-start p-4" >
+        <WarningCard className={twMerge(
+            "flex bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-700/50 flex-col gap-2 items-start justify-start p-4",
+            error && "bg-red-100 dark:bg-red-900/20 border-red-300 text-red-900 dark:text-red-500"
+        )} >
             
             <h2 className="font-bold" >Email Verfication</h2>
 
@@ -70,8 +75,11 @@ export default function EmailVerificationWarning({ authUser }: Props) {
                 onClick={handleRequestVerification}
                 isLoading={isLoading}
                 disabled={isLoading}
+                className={twMerge(
+                    error && ""
+                )}
             >
-                Verify Email
+                {error ? "Try Again" : "Verify Email"}
             </PrimaryButton>}
         </WarningCard>
     )
