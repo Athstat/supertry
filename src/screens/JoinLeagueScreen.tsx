@@ -22,6 +22,7 @@ import LeagueFilterPanel, {
   type AccessType,
   type DateOrder,
 } from '../components/leagues/LeagueFilterPanel';
+import { useNavigate } from 'react-router-dom';
 
 export function JoinLeagueScreen() {
   // Tabs state (persist between visits)
@@ -166,12 +167,12 @@ export function JoinLeagueScreen() {
     refreshLeagues();
   }, [refreshLeagues]);
 
+  const navigate = useNavigate();
+
   // Handle league click
   const handleLeagueClick = (league: IFantasyLeague) => {
-    console.log('league clicked: ', league);
-    // navigate(`/league/${league.official_league_id}`, {
-    //   state: { league },
-    // });
+    //console.log('league clicked: ', league);
+    navigate(`/league/${league.id}`, { state: { league } });
   };
 
   // if (isLoadingUserTeams) {
