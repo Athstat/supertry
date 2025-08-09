@@ -145,36 +145,41 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
     setShowPlayerSelection(false); // Close the modal after player is added
   };
 
-  // Fetch all required data in a single effect
+  // Fetch players from API
   useEffect(() => {
-    let isMounted = true;
-    
-    const fetchData = async () => {
-      console.log('fetching data for league: ', officialLeagueId);
-      
+    const fetchPlayers = async () => {
+      console.log('fetching players: ', officialLeagueId);
       if (!officialLeagueId) {
-        if (isMounted) {
-          setError('League ID is missing');
-          setIsLoading(false);
-        }
+        setError('League ID is missing');
+        setIsLoading(false);
+        return;
+      }
+      try {
+        setLoadingPlayers(true);
+        const data = await athleteService.getRugbyAthletesByCompetition(officialLeagueId);
+        console.log('fetched player data: ', data);
+        setAllPlayers(data);
+      } catch (err) {
+        console.error('Error fetching players:', err);
+      } finally {
+        setLoadingPlayers(false);
+      }
+    };
+
+    fetchPlayers();
+  }, [officialLeagueId]);
+
+  // Fetch league config on mount
+  useEffect(() => {
+    const fetchLeagueConfig = async () => {
+      if (!officialLeagueId) {
+        setError('League ID is missing');
+        setIsLoading(false);
         return;
       }
 
       try {
-        setIsLoading(true);
-        setLoadingPlayers(true);
-        
-        // Fetch both data in parallel
-        const [players, config] = await Promise.all([
-          athleteService.getRugbyAthletesByCompetition(officialLeagueId),
-          leagueService.getLeagueConfig(officialLeagueId)
-        ]);
-
-        if (!isMounted) return;
-
-        console.log('Fetched players data:', players);
-        setAllPlayers(players);
-
+        const config = await leagueService.getLeagueConfig(officialLeagueId);
         if (config) {
           setLeagueConfig(config);
           setupPositionsFromConfig(config);
@@ -183,24 +188,14 @@ export const useTeamCreationState = (officialLeagueId: string | undefined) => {
           setError('Failed to load league configuration');
         }
       } catch (err) {
-        console.error('Error fetching data:', err);
-        if (isMounted) {
-          setError('An error occurred while loading data');
-        }
+        console.error('Error fetching league config:', err);
+        setError('An error occurred while loading league configuration');
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-          setLoadingPlayers(false);
-        }
+        setIsLoading(false);
       }
     };
 
-    fetchData();
-
-    // Cleanup function to prevent state updates after unmount
-    return () => {
-      isMounted = false;
-    };
+    fetchLeagueConfig();
   }, [officialLeagueId]);
 
   // Update position list when players are selected

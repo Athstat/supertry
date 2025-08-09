@@ -192,7 +192,12 @@ const PositionCard: React.FC<PositionCardProps> = ({
             >
               {position.name}
             </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Add {position.name}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Add {position.name}
+              {isSuperSub && (
+                <span className="block text-orange-500 font-semibold mt-0.5">Any Position</span>
+              )}
+            </p>
             <span className="mt-2 text-xs py-1 px-2 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded-full">
               Click to add
             </span>

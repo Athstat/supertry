@@ -8,9 +8,6 @@ export interface RankedFantasyTeam {
   lastRank: number;
   isUserTeam?: boolean;
   userId: string;
-  is_admin?: boolean;
-  first_name?: string;
-  last_name?: string;
 }
 
 export interface Fixture {

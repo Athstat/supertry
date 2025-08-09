@@ -7,10 +7,9 @@ import { pastLeaguesFilter } from '../../../utils/leaguesUtils';
 type Props = {
   leagues: IFantasyLeague[];
   userTeams: Record<string, boolean>;
-  getGamesByCompetitionId: (competitionId: string) => any[];
 };
 
-export default function JoinLeaguePastLeaguesSection({ leagues, userTeams, getGamesByCompetitionId }: Props) {
+export default function JoinLeaguePastLeaguesSection({ leagues, userTeams }: Props) {
   const navigate = useNavigate();
   const pastLeagues = pastLeaguesFilter(leagues);
 
@@ -56,7 +55,6 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams, getGa
             custom={index}
             isJoined={userTeams[league.id]}
             hideIfNoTeamsJoined
-            getGamesByCompetitionId={getGamesByCompetitionId}
           />
         ))}
       </motion.div>

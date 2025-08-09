@@ -8,10 +8,9 @@ import NoContentCard from '../../shared/NoContentMessage';
 type Props = {
   leagues: IFantasyLeague[];
   userTeams: Record<string, boolean>;
-  getGamesByCompetitionId: (competitionId: string) => any[];
 };
 
-export default function JoinLeagueUpcomingLeaguesSection({ leagues, userTeams, getGamesByCompetitionId }: Props) {
+export default function JoinLeagueUpcomingLeaguesSection({ leagues, userTeams }: Props) {
   const navigate = useNavigate();
 
   const handleLeagueClick = (league: IFantasyLeague) => {
@@ -55,7 +54,6 @@ export default function JoinLeagueUpcomingLeaguesSection({ leagues, userTeams, g
             onLeagueClick={handleLeagueClick}
             custom={index}
             isJoined={userTeams[league.id]}
-            getGamesByCompetitionId={getGamesByCompetitionId}
           />
         ))}
       </motion.div>

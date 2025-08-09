@@ -11,7 +11,6 @@ export interface ICreateFantasyLeague {
 }
 
 export interface IUserCreatedLeague {
-  entry_code: any;
   id: string;
   title: string;
   description?: string;
@@ -31,6 +30,5 @@ export interface IUserCreatedLeague {
   prize_pool: number;
   join_deadline?: string;
   season_id: string;
-  season_name?: string;
   official_league_id: string;
 }
