@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Users, DollarSign, Calendar, Lock, Globe, ArrowRight, User } from 'lucide-react';
+import { Plus, Users, DollarSign, Calendar, Lock, Globe, ArrowRight } from 'lucide-react';
 import { LoadingState } from '../ui/LoadingState';
 import { useNavigate } from 'react-router-dom';
 import { userCreatedLeagueService } from '../../services/userCreatedLeagueService';
 import { IUserCreatedLeague } from '../../types/userCreatedLeague';
 import CreateLeagueModal from './CreateLeagueModal';
 
-interface UserCreatedLeaguesSectionProps {
-  onLeagueCreated?: () => void;
-}
-
-export default function UserCreatedLeaguesSection({
-  onLeagueCreated,
-}: UserCreatedLeaguesSectionProps) {
+export default function UserCreatedLeaguesSection() {
   const [userLeagues, setUserLeagues] = useState<IUserCreatedLeague[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -27,7 +21,6 @@ export default function UserCreatedLeaguesSection({
     try {
       setIsLoading(true);
       const leagues = await userCreatedLeagueService.getUserCreatedLeagues();
-      console.log('leagues: ', leagues);
       setUserLeagues(leagues);
     } catch (error) {
       console.error('Failed to fetch user leagues:', error);
@@ -36,14 +29,8 @@ export default function UserCreatedLeaguesSection({
     }
   };
 
-  const handleLeagueCreated = async (newLeague: IUserCreatedLeague) => {
-    // Refresh the user's leagues
-    await fetchUserLeagues();
-
-    // Notify parent component to refresh all leagues
-    if (onLeagueCreated) {
-      onLeagueCreated();
-    }
+  const handleLeagueCreated = (newLeague: IUserCreatedLeague) => {
+    setUserLeagues(prev => [newLeague, ...prev]);
   };
 
   const handleLeagueClick = (league: IUserCreatedLeague) => {
@@ -70,53 +57,6 @@ export default function UserCreatedLeaguesSection({
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
-  };
-
-  const handleInviteClick = (e: React.MouseEvent, league: IUserCreatedLeague) => {
-    e.stopPropagation();
-    // Native share (Web Share API) with fallback to clipboard
-    const baseUrl = (import.meta as any)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
-    const deepLink = `${baseUrl}/league/${league.id}`;
-
-    const shareMessage =
-      `You’ve been invited to join a rugby league: “${league.title}”\n\n` +
-      `🏉 Step 1: Install the app\n` +
-      `👉 Download for iOS: https://apps.apple.com/za/app/scrummy-fantasy-rugby/id6744964910\n` +
-      `👉 Download for Android: https://play.google.com/store/apps/details?id=com.scrummy&hl=en_ZA\n\n` +
-      `📲 Step 2: Open the app, tap “Join a League”, and enter this code: ${league.entry_code}\n\n` +
-      `Already have the app?\n` +
-      `Just click here to join instantly: ${deepLink}`;
-
-    // Ensure there are no leading blank lines
-    //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
-
-    // Share ONLY the composed message text (no title/url),
-    // so the share sheet doesn't prepend extra lines.
-    const shareData: ShareData = {
-      title: shareMessage,
-    };
-
-    if (navigator.share) {
-      navigator.share(shareData).catch(err => {
-        console.error('Share failed:', err);
-        // Fallback to clipboard if share dismissed or fails
-        navigator.clipboard
-          .writeText(shareMessage)
-          .then(() => alert('Invite copied to clipboard'))
-          .catch(() => alert('Unable to share or copy. Please try manually.'));
-      });
-    } else {
-      navigator.clipboard
-        .writeText(shareMessage)
-        .then(() => alert('Invite copied to clipboard'))
-        .catch(() => alert('Unable to copy invite. Please try manually.'));
-    }
-  };
-
-  const handleManageClick = (e: React.MouseEvent, league: IUserCreatedLeague) => {
-    e.stopPropagation();
-    // TODO: Implement manage functionality
-    console.log('Manage league:', league.id);
   };
 
   return (
@@ -160,98 +100,44 @@ export default function UserCreatedLeaguesSection({
             <div
               key={league.id}
               onClick={() => handleLeagueClick(league)}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-md hover:shadow-lg cursor-pointer transition-all duration-200 space-y-2"
+              className="bg-white dark:border-slate-800 dark:bg-slate-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 transition-colors"
             >
-              {/* Header Row */}
-              <div className="flex justify-between items-start">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
-                      {league.title}
-                    </h3>
-                    <div className="flex items-center gap-1 px-1.5 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-                      <User size={10} />
-                    </div>
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{league.title}</h3>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${getStatusColor(league.status || 'open')}`}
+                    >
+                      {(league.status || 'open').toUpperCase()}
+                    </span>
+                    {league.is_public ? (
+                      <Globe className="w-4 h-4 text-blue-500" />
+                    ) : (
+                      <Lock className="w-4 h-4 text-gray-500" />
+                    )}
                   </div>
-                  {league.season_name && (
-                    <p className="text-xs uppercase text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-                      {league.season_name}
+
+                  {league.description && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      {league.description}
                     </p>
                   )}
-                </div>
-                <div className="flex items-center gap-2 ml-2">
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      league.is_public
-                        ? getStatusColor(league.status || 'open')
-                        : 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
-                    }`}
-                  >
-                    {league.is_public
-                      ? ((league.status || 'open').toLowerCase() === 'open'
-                          ? 'Public'
-                          : (league.status || 'open').charAt(0).toUpperCase() + (league.status || 'open').slice(1))
-                      : 'Invite Only'}
-                  </span>
-                  {league.is_public ? (
-                    <Globe className="w-3 h-3 text-blue-500" />
-                  ) : (
-                    <Lock className="w-3 h-3 text-gray-500" />
-                  )}
-                </div>
-              </div>
 
-              {/* Description - Single line with truncation */}
-              {league.description && (
-                <p className="text-sm italic text-gray-600 dark:text-gray-300 truncate">
-                  {league.description}
-                </p>
-              )}
+                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="flex items-center gap-1">
+                      <Users className="w-4 h-4" />
+                      {league.participant_count}/{league.max_teams} teams
+                    </span>
 
-              {/* Metadata Row - Compressed single line */}
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                  <div className="flex items-center gap-1">
-                    <Users size={12} />
-                    <span>
-                      {league.participant_count}
-                      {league.max_teams ? `/${league.max_teams}` : ''} Teams
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      Created {formatDate(league.created_date)}
                     </span>
                   </div>
-                  <span className="text-gray-400">|</span>
-                  <div className="flex items-center gap-1">
-                    <Calendar size={12} />
-                    <span>Created: {formatDate(league.created_date)}</span>
-                  </div>
-                  {league.entry_fee > 0 && (
-                    <>
-                      <span className="text-gray-400">|</span>
-                      <div className="flex items-center gap-1">
-                        <DollarSign size={12} />
-                        <span>${league.entry_fee}</span>
-                      </div>
-                    </>
-                  )}
                 </div>
 
-                <ArrowRight size={16} className="text-gray-400 dark:text-gray-500" />
-              </div>
-
-              {/* Action Buttons - Compact row */}
-              <div className="flex justify-between items-center pt-1 border-t border-gray-100 dark:border-gray-700">
-                <button
-                  onClick={e => handleManageClick(e, league)}
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                >
-                  Manage
-                </button>
-                <button
-                  onClick={e => handleInviteClick(e, league)}
-                  className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm transition-colors"
-                >
-                  <Plus size={14} />
-                  Invite
-                </button>
+                <ArrowRight className="w-5 h-5 text-gray-400" />
               </div>
             </div>
           ))}

@@ -34,12 +34,12 @@ export function useAsync<T>(func: () => Promise<T>) {
 }
 
 /** Custom fetch hook with revalidation and caching */
-export function useFetch<T, E = string | number | undefined>(
+export function useFetch<T, E>(
     cacheGroup: string,
     key: E,
     fetcher: (key: E) => Promise<T>,
     dependencies?: any[]
 ): SWRResponse<T, any> {
-    const fetchKey = key !== undefined ? [key, cacheGroup] : null;
-    return useSWR<T>(fetchKey, () => fetcher(key));
+    const fetchKey = [key, cacheGroup]
+    return useSWR<T>(fetchKey, async () => await fetcher(key));
 }

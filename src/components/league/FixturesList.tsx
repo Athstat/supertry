@@ -14,7 +14,6 @@ import { fantasyTeamService } from '../../services/fantasyTeamService';
 interface FixturesListProps {
   league: IFantasyLeague;
   userTeam?: RankedFantasyTeam;
-  getGamesByCompetitionId?: (competitionId: string) => any[];
 }
 
 const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => {
@@ -36,52 +35,37 @@ const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => 
     );
 };
 
-export function FantasyLeagueFixturesList({
-  league,
-  userTeam,
-  getGamesByCompetitionId,
-}: FixturesListProps) {
+export function FantasyLeagueFixturesList({ league, userTeam }: FixturesListProps) {
   const competitionId = league.official_league_id;
 
-  // Use provided getGamesByCompetitionId function or fallback to direct API call
   const {
     data: allFixtures,
     error,
     isLoading,
-  } = useSWR(
-    getGamesByCompetitionId ? null : competitionId, // Only use SWR if no prop provided
-    getGamesByCompetitionId ? null : gamesService.getGamesByCompetitionId
-  );
-
-  // Get fixtures from prop function if available
-  const fixturesFromProp =
-    getGamesByCompetitionId && competitionId ? getGamesByCompetitionId(competitionId) : null;
-  const fixtures = fixturesFromProp || allFixtures;
-  // Only fetch team athletes if userTeam is defined
+  } = useSWR(competitionId, gamesService.getGamesByCompetitionId);
   const { data, isLoading: isLoadingUserTeamAthletes } = useFetch(
     'user-team-athletes',
-    userTeam?.team_id,
+    userTeam?.team_id ?? 'fall-back',
     fantasyTeamService.fetchTeamAthletes
   );
 
-  // Show loading state if either fixtures are loading or we're waiting for user team data
-  if (isLoading || (userTeam && isLoadingUserTeamAthletes)) return <LoadingSpinner />;
+  if (isLoading || isLoadingUserTeamAthletes) return <LoadingSpinner />;
 
   if (error) return <ErrorState message={'Error fetching matches'} />;
 
-  if (!fixtures)
+  if (!allFixtures)
     return (
       <div>
         <p>There are no fixtures available</p>
       </div>
     );
 
-  const filteredFixtures = filterMatchesForRound(fixtures, league);
+  const fixtures = filterMatchesForRound(allFixtures, league);
 
   // Group fixtures by day
   const fixturesByDay: Record<string, IFixture[]> = {};
 
-  filteredFixtures.forEach((fixture: IFixture) => {
+  fixtures.forEach((fixture: IFixture) => {
     if (fixture.kickoff_time) {
       const dayKey = format(new Date(fixture.kickoff_time), 'yyyy-MM-dd');
       if (!fixturesByDay[dayKey]) {
@@ -134,9 +118,9 @@ export function FantasyLeagueFixturesList({
         </h2>
       </div>
 
-      <div className="">
+      <div className='' >
         {sortedDays.map(dayKey => (
-          <div className="flex flex-col gap-2 mb-2" key={dayKey}>
+          <div className='flex flex-col gap-2 mb-2' key={dayKey}>
             {/* Day header */}
             <div className="px-4 py-2 bg-gray-100 dark:bg-dark-800/40 border border-slate-100 dark:border-slate-800 font-medium text-gray-800 dark:text-gray-200">
               {format(new Date(dayKey), 'EEEE, MMMM d, yyyy')}
@@ -145,12 +129,12 @@ export function FantasyLeagueFixturesList({
             {/* Fixtures for this day */}
             <div className="divide-y flex flex-col gap-2 px-3">
               {fixturesByDay[dayKey].map((fixture, index) => (
-                <FixtureCard
+                <FixtureCard 
                   fixture={fixture}
                   key={index}
                   showCompetition
-                  showLogos
-                  className="rounded-xl border dark:border-slate-700"
+                  showLogos 
+                  className='rounded-xl border dark:border-slate-700'
                   message={generateFixtureMessage(fixture)}
                 />
               ))}

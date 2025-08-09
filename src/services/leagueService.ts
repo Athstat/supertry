@@ -9,7 +9,7 @@ import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
 export const leagueService = {
   getAllLeagues: async (): Promise<IFantasyLeague[]> => {
     try {
-      const uri = getUri(`/api/v1/fantasy-leagues/`);
+      const uri = getUri(`/api/v1/fantasy-leagues`);
       const response = await fetch(uri, {
         method: 'GET',
         headers: getAuthHeader(),
@@ -25,33 +25,6 @@ export const leagueService = {
     } catch (error) {
       console.error('Error in leagueService:', error);
       return [];
-    }
-  },
-
-  /**
-   * Join a league by entry code
-   */
-  joinLeagueByCode: async (code: string): Promise<{ success: boolean; message?: string } & Partial<IFantasyLeague>> => {
-    try {
-      const uri = getUri(`/api/v1/fantasy-leagues/join-league-code/`);
-      const response = await fetch(uri, {
-        method: 'PUT',
-        headers: getAuthHeader(),
-        body: JSON.stringify({ entry_code: code }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Failed to join league by code:', errorText);
-        return { success: false, message: 'League code not found or join failed' };
-      }
-
-      const data = await response.json();
-      // The API may return league details; surface them for caller to use
-      return { success: true, ...(data || {}) };
-    } catch (error) {
-      console.error('Error in joinLeagueByCode:', error);
-      return { success: false, message: 'Unexpected error joining by code' };
     }
   },
 

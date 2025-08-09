@@ -1,10 +1,11 @@
-import { ReactNode } from 'react';
-import { ChevronLeft, Lock } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { IFantasyLeague } from '../../types/fantasyLeague';
-import { isLeagueLocked } from '../../utils/leaguesUtils';
-import { LeagueInfo } from '../../types/league';
-import { LeagueLiveIndicatorSolid } from '../leagues/LeagueLiveIndicator';
+import { ReactNode } from "react";
+import { ChevronLeft, Lock } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { IFantasyLeague } from "../../types/fantasyLeague";
+import { isLeagueLocked } from "../../utils/leaguesUtils";
+import { LeagueInfo } from "../../types/league";
+import { LeagueLiveIndicatorSolid } from "../leagues/LeagueLiveIndicator";
+
 
 interface LeagueHeaderProps {
   leagueInfo: LeagueInfo;
@@ -18,18 +19,21 @@ export function LeagueHeader({
   leagueInfo,
   isLoading = false,
   children,
-  league,
+  league
 }: LeagueHeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
   // Check if coming from welcome screen
-  const isFromWelcome = location.state?.from === 'welcome';
+  const isFromWelcome = location.state?.from === "welcome";
   const isLocked = isLeagueLocked(league?.join_deadline);
+
+  console.log("leagueInfo", leagueInfo);
+
 
   const handleBackClick = () => {
     if (isFromWelcome) {
-      navigate('/welcome');
+      navigate("/welcome");
     } else {
       navigate(-1);
     }
@@ -43,31 +47,46 @@ export function LeagueHeader({
             <button
               onClick={handleBackClick}
               className="flex items-center text-primary-100 hover:text-white mb-2 transition-colors"
-              aria-label={isFromWelcome ? 'Back to welcome' : 'Go Back'}
+              aria-label={isFromWelcome ? "Back to welcome" : "Go Back"}
             >
               <ChevronLeft size={20} />
-              <span>{isFromWelcome ? 'Back to welcome screen' : 'Go Back'}</span>
+              <span>
+                {isFromWelcome ? "Back to welcome screen" : "Go Back"}
+              </span>
             </button>
             <h1 className="text-2xl flex flex-row items-center gap-2 md:text-3xl font-bold">
               {isLocked && <Lock className="" />}
               {leagueInfo.name}
             </h1>
 
-            {league && <LeagueLiveIndicatorSolid league={league} className="mt-2" />}
+            {league &&
+              <LeagueLiveIndicatorSolid
+                league={league}
+                className="mt-2"
+              />
+            }
+
           </div>
           {children}
         </div>
 
+
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Total Teams</div>
-            <div className="text-xl font-bold">{isLoading ? '...' : leagueInfo.totalTeams}</div>
+            <div className="text-xl font-bold">
+              {isLoading ? "..." : leagueInfo.totalTeams}
+            </div>
           </div>
 
           <div className="bg-white/10 rounded-lg p-4">
             <div className="text-sm text-primary-100">Your Rank</div>
             <div className="text-xl font-bold">
-              {isLoading ? '...' : leagueInfo.userRank ? `#${leagueInfo.userRank}` : 'N/A'}
+              {isLoading
+                ? "..."
+                : leagueInfo.userRank
+                  ? `#${leagueInfo.userRank}`
+                  : "N/A"}
             </div>
           </div>
 

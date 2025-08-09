@@ -43,7 +43,9 @@ export function useFantasyLeague(leagueFromParam?: IFantasyLeague) {
     data: teams,
     isLoading: loadingTeams,
     error: teamsError,
-  } = useFetch('participating-teams-hook', league?.id, teamsFetcher);
+  } = useFetch('participating-teams-hook', league?.id ?? 'fall-back-id', teamsFetcher);
+
+  console.log('teams', teams);
 
   const [isLoadingUserTeam, setIsUserTeamLoading] = useState(false);
   const [userTeam, setUserTeam] = useState<RankedFantasyTeam>();
@@ -109,14 +111,10 @@ export function useFantasyLeague(leagueFromParam?: IFantasyLeague) {
   };
 }
 
-export async function teamsFetcher(
-  leagueId: string | number | undefined
-): Promise<RankedFantasyTeam[]> {
-  if (!leagueId) {
-    return [];
-  }
-
+export async function teamsFetcher(leagueId: string | number): Promise<RankedFantasyTeam[]> {
   const teams = await leagueService.fetchParticipatingTeams(leagueId);
+
+  console.log('Fantasy League teams returned ', teams);
 
   const user = await authService.getUserInfo();
 
@@ -131,9 +129,6 @@ export async function teamsFetcher(
       lastRank: team.rank, // TODO: update this
       isUserTeam: user ? user.kc_id === team.user_id : false,
       userId: team.user_id,
-      is_admin: team.is_admin,
-      first_name: team.first_name,
-      last_name: team.last_name,
     };
 
     return rankedTeam;

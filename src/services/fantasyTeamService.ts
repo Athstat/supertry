@@ -176,11 +176,7 @@ export const fantasyTeamService = {
   /**
    * Fetch athletes for a specific team
    */
-  fetchTeamAthletes: async (teamId: string | undefined): Promise<IFantasyTeamAthlete[]> => {
-    if (!teamId) {
-      return [];
-    }
-    
+  fetchTeamAthletes: async (teamId: string): Promise<IFantasyTeamAthlete[]> => {
     try {
       // Make API request to get team athletes
       const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}/`);
