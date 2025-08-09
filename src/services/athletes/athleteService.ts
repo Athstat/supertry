@@ -13,7 +13,7 @@ export const athleteService = {
     try {
       logger.debug(`Fetching rugby athletes for competition: ${competitionId}`);
 
-      const uri = getUriLocal(`/api/v1/athletes/rugby/season/${competitionId}/`);
+      const uri = getUri(`/api/v1/season/athletes/${competitionId}/`);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });
