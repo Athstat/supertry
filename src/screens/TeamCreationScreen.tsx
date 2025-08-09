@@ -11,7 +11,7 @@ import { ErrorState } from '../components/team-creation/ErrorState';
 import PlayerSelectionModal from '../components/team-creation/PlayerSelectionModal';
 import TeamActions from '../components/team-creation/TeamActions';
 import { fantasyTeamService } from '../services/fantasyTeamService';
-import { ArrowRight, Check, Trophy, Users } from 'lucide-react';
+import { ArrowRight, Check, Info, Trophy, Users } from 'lucide-react';
 
 // Refactored team creation components
 import TeamCreationContainer from './team-creation-components/TeamCreationContainer';
@@ -25,6 +25,8 @@ import { useTeamCreationGuard } from '../hooks/useTeamCreationGuard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
 import { mutate } from 'swr';
+import PageView from './PageView';
+import SecondaryText from '../components/shared/SecondaryText';
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -45,6 +47,32 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   onViewTeam,
 }) => {
   if (!isVisible) return null;
+
+  const navigate = useNavigate();
+
+  const handleBackToDashboard = () => {
+    navigate('/dashboard');
+  }
+
+  // return (
+  //   <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
+  //     <div className="flex fleex-row items-center gap-2" >
+  //       <Trophy />
+  //       <h1 className="font-bold text-xl" >Rugby Fantasy Leagues</h1>
+  //     </div>
+
+  //     <div>
+  //       <SecondaryText className="text-center text-md" >Create, invite friends, compete and battle it out in Weekly Rugby Fantasy Leagues. We are hard at work to bring you this fantasy experience. Stay tuned</SecondaryText>
+  //     </div>
+
+  //     <PrimaryButton className="flex w-fit flex-row items-center gap-2" >
+  //       Coming Soon
+  //       <Info />
+  //     </PrimaryButton>
+
+  //     <button onClick={handleBackToDashboard} >Go to Dashboard</button>
+  //   </PageView>
+  // )
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">

@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail } from 'lucide-react';
 import { AuthLayout } from '../../components/auth/AuthLayout';
-import { useAuth } from '../../contexts/AuthContext';
+import { authService } from '../../services/authService';
 
 export function ForgotPasswordScreen() {
-  const { resetPassword } = useAuth();
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -18,7 +17,7 @@ export function ForgotPasswordScreen() {
     setIsLoading(true);
 
     try {
-      await resetPassword(email);
+      await authService.requestPasswordReset(email);
       setSuccess(true);
     } catch (err) {
       setError(

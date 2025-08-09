@@ -1,4 +1,4 @@
-import { ChevronRight, Trophy } from "lucide-react";
+import { ChevronRight, Info, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IFantasyLeague } from "../../types/fantasyLeague";
 import {
@@ -37,11 +37,11 @@ export function HeroSection({ }: Props) {
 
   return (
     <BlueGradientCard className="rounded-2xl p-4 mb-6 text-white  transition-all ease-in delay-300">
-      {!leagueOnTheClock && (
+      {true && (
         <div className="flex flex-col gap-2 p-3">
 
           <h1 className="text-lg lg:text-xl font-bold">
-            Weekly Rugby Fantasy Leagues
+            Rugby Fantasy Leagues
           </h1>
 
           <p className="text-md opacity-90">
@@ -52,18 +52,18 @@ export function HeroSection({ }: Props) {
             onClick={() => navigate("/leagues")}
             className="bg-white w-fit text-primary-600 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
           >
-            Join A Weekly League <ChevronRight size={20} />
+            Coming Soon <Info size={16} />
           </button>
 
         </div>
       )}
 
-      {leagueOnTheClock && (
+      {/* {leagueOnTheClock && (
         <JoinDeadlineCountdown
           onViewLeague={onViewLeague}
           league={leagueOnTheClock}
         />
-      )}
+      )} */}
 
     </BlueGradientCard>
   );

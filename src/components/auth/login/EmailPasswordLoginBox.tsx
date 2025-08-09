@@ -19,7 +19,7 @@ export default function EmailPasswordLoginBox() {
     const [needsPasswordReset, setNeedsPasswordReset] = useState<boolean>(false);
 
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { setAuth } = useAuth();
 
     useEffect(() => {
         setNeedsPasswordReset(false);
@@ -56,10 +56,16 @@ export default function EmailPasswordLoginBox() {
         if (email && password) {
 
             setIsLoading(true)
-            const { data: loginRes, message } = await login(email, password);
+            const { data: loginRes, message } = await authService.login(email, password);
 
             if (loginRes) {
+                
+                const authUser = loginRes.user;
+                const token = loginRes.token;
+
+                setAuth(token, authUser);
                 navigate('/dashboard');
+
             } else {
                 setMessage(message);
             }

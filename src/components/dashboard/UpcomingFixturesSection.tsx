@@ -77,8 +77,6 @@ export default function UpcomingFixturesSection() {
     return;
   }
 
-  console.log("Seasons from fixtures", seasons);
-
   return (
     <div className='flex flex-col gap-4' >
       

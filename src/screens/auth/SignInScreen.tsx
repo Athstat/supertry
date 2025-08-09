@@ -8,18 +8,6 @@ import { authService } from '../../services/authService';
 import { useAuth } from '../../contexts/AuthContext';
 import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../utils/firstVisitUtils';
 import { useGoogleLogin } from '@react-oauth/google';
-import AppleSignin from 'react-apple-signin-auth';
-import Experimental from '../../components/shared/ab_testing/Experimental';
-
-// Button animation variants
-const buttonVariants = {
-  initial: { scale: 1 },
-  hover: {
-    scale: 1.01,
-    transition: { type: 'linear', stiffness: 400, damping: 10 },
-  },
-  tap: { scale: 0.98 },
-};
 
 // Check if running in mobile WebView
 const isMobileWebView = () => {
@@ -31,7 +19,7 @@ const isMobileWebView = () => {
 
 export function SignInScreen() {
   const navigate = useNavigate();
-  const { checkAuth } = useAuth();
+  const { } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,9 +37,6 @@ export function SignInScreen() {
           setIsLoading(false);
           return;
         }
-
-        // Update auth context
-        await checkAuth();
 
         // Check if this is the first completed visit
         const firstVisitCompleted = isFirstVisitCompleted();
@@ -94,7 +79,7 @@ export function SignInScreen() {
       }
 
       // Update auth context
-      await checkAuth();
+      // await checkAuth();
 
       // Check if this is the first completed visit
       const firstVisitCompleted = isFirstVisitCompleted();
@@ -146,7 +131,7 @@ export function SignInScreen() {
         <div className="mt-8 space-y-6">
           {/* Google Sign In Button */}
 
-          <Experimental>
+          {/* <Experimental>
             <motion.div variants={buttonVariants} initial="initial" whileHover="hover" whileTap="tap">
               <button
                 onClick={() => googleLogin()}
@@ -175,7 +160,6 @@ export function SignInScreen() {
               </button>
             </motion.div>
 
-            {/* Apple Sign In Button */}
             <motion.div variants={buttonVariants} initial="initial" whileHover="hover" whileTap="tap">
               <AppleSignin
                 authOptions={{
@@ -213,7 +197,7 @@ export function SignInScreen() {
               <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
             </div>
 
-          </Experimental>
+          </Experimental> */}
 
           <EmailPasswordLoginBox />
 
