@@ -111,6 +111,8 @@ export type UserPasswordStatusRes = {
   message: string
 }
 
+export type VerificationState = "verified" | "pending" | "guest";
+
 export type DjangoAuthUser = {
   kc_id: string,
   email: string,
@@ -120,7 +122,7 @@ export type DjangoAuthUser = {
   game_updates_preference?: GameUpdatesPreference,
   pref_payout?: string,
   device_id?: string,
-  verification_state: string,
+  verification_state: VerificationState,
   is_claimed_account: boolean
 }
 
@@ -197,4 +199,12 @@ export type PasswordResetTokenIntrospect = {
   created_at: string,
   expires_at: string,
   user_id: string
+}
+
+export type RequestEmailVerificationRes = {
+  message: string
+}
+
+export type VerifyEmailRes = {
+  message: string
 }

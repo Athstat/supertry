@@ -8,6 +8,7 @@ import UserProfileHeader from '../components/auth/UserProfileHeader';
 import ClaimGuestAccountBox from '../components/auth/ClaimGuestAccountBox';
 import LogoutButton from '../components/auth/LogoutButton';
 import DeleteAccountButton from '../components/auth/DeleteAccountButton';
+import EmailVerificationWarning from '../components/auth/EmailVerificationWarning';
 
 export function UserProfileScreen() {
 
@@ -42,6 +43,8 @@ function Content() {
             isGuestAccount={isGuestAccount}
           />
         )}
+
+        {authUser && <EmailVerificationWarning authUser={authUser} />}
 
         {/* Complete Profile Card for Guest Users */}
         {isGuestAccount && <ClaimGuestAccountBox />}
