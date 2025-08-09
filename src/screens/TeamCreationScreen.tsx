@@ -229,7 +229,7 @@ export function TeamCreationScreen() {
             pos => pos.player && pos.player.tracking_id === player.tracking_id
           );
 
-          //console.log('The position we found ', position);
+          console.log('The player we found ', player);
 
           const isSuperSub = position?.isSpecial || false;
           const isPlayerCaptain = captainId === player.tracking_id;
@@ -280,7 +280,8 @@ export function TeamCreationScreen() {
           team_id: String(joinLeagueRes.team.id ?? ''),
           rank: joinLeagueRes.team.rank ?? undefined,
           teamName: joinLeagueRes.team.team_name ?? teamName,
-          managerName: `${userInfo.firstName ?? ''} ${userInfo.lastName ?? ''}`.trim() ||
+          managerName:
+            `${userInfo.firstName ?? ''} ${userInfo.lastName ?? ''}`.trim() ||
             (userInfo.username ?? 'Manager'),
           overall_score: joinLeagueRes.team.overall_score ?? 0,
           weeklyPoints: joinLeagueRes.team.overall_score ?? 0,
@@ -293,12 +294,16 @@ export function TeamCreationScreen() {
         };
 
         // Optimistically update without revalidation
-        mutate(swrKey, (current: any) => {
-          const list = Array.isArray(current) ? current : [];
-          const exists = list.some((t: any) => t?.userId === optimisticTeam.userId);
-          if (exists) return list;
-          return [...list, optimisticTeam];
-        }, false);
+        mutate(
+          swrKey,
+          (current: any) => {
+            const list = Array.isArray(current) ? current : [];
+            const exists = list.some((t: any) => t?.userId === optimisticTeam.userId);
+            if (exists) return list;
+            return [...list, optimisticTeam];
+          },
+          false
+        );
 
         // Trigger background revalidation
         mutate(swrKey);
