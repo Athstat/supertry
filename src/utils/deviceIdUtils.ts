@@ -2,6 +2,8 @@
  * Device ID utilities for both mobile app (via WebView) and web browser
  */
 
+import { DjangoAuthUser } from "../types/auth";
+
 /**
  * Get the device ID - either from mobile app or generate/retrieve for web
  * @returns Promise<string> The device ID
@@ -140,6 +142,12 @@ export async function getDeviceId(): Promise<string> {
    */
   export function isGuestEmail(email: string): boolean {
     return email.endsWith('@devices.scrummy-app.ai');
+  }
+
+  /** Returns true is a user's account is a guest account */
+  export function isGuestUser(user: DjangoAuthUser | undefined) {
+    if (!user) return false;
+    return user.is_claimed_account !== true;
   }
   
   /**

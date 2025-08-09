@@ -44,7 +44,7 @@ function Content() {
           />
         )}
 
-        <EmailVerificationWarning />
+        {authUser && <EmailVerificationWarning authUser={authUser} />}
 
         {/* Complete Profile Card for Guest Users */}
         {isGuestAccount && <ClaimGuestAccountBox />}

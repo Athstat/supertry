@@ -538,4 +538,12 @@ export const authService = {
       },
     };
   },
+
+  requestEmailVerification: async () => {
+    try {
+
+    } catch (err) {
+      console.log("Error requesting email verification ", err);
+    }
+  }
 };

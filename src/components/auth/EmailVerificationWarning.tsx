@@ -1,21 +1,25 @@
-import { useAuth } from "../../contexts/AuthContext"
+import { DjangoAuthUser } from "../../types/auth";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
 import WarningCard from "../shared/WarningCard";
 
 type Props = {
-
+    authUser: DjangoAuthUser
 }
 
-export default function EmailVerificationWarning({ }: Props) {
+export default function EmailVerificationWarning({ authUser }: Props) {
 
-    const {authUser} = useAuth();
+    const showWarning = 
+        authUser && 
+        authUser.verification_state === "pending" &&
+        authUser.is_claimed_account === true
+    ;
 
-    if (authUser?.verification_state === "verified") {
+    if (!showWarning) {
         return;
     }
 
     return (
-        <WarningCard className="flex bg-yellow-50 flex-col gap-1 items-start justify-start p-4" >
+        <WarningCard className="flex bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-700/50 flex-col gap-2 items-start justify-start p-4" >
             
             <h2 className="font-bold" >Email Verfication</h2>
 
