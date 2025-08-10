@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Check, AlertCircle } from 'lucide-react';
 import { leagueService } from '../../services/leagueService';
+import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 interface JoinLeagueByCodeProps {
   onSuccess?: () => void;
@@ -44,7 +45,7 @@ export default function JoinLeagueByCode({ onSuccess }: JoinLeagueByCodeProps) {
     <div className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-md font-bold text-gray-700 dark:text-gray-300 mb-1">
             Enter League Code
           </label>
           <input
@@ -62,19 +63,21 @@ export default function JoinLeagueByCode({ onSuccess }: JoinLeagueByCodeProps) {
             <span>{error}</span>
           </div>
         )}
+
         {success && (
           <div className="flex items-center gap-2 text-green-700 dark:text-green-400 text-sm bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded">
             <Check size={16} />
             <span>{success}</span>
           </div>
         )}
-        <button
+
+        <PrimaryButton
           type="submit"
           disabled={loading}
-          className="w-full bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg"
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg"
         >
           {loading ? 'Joining...' : 'Find League'}
-        </button>
+        </PrimaryButton>
       </form>
     </div>
   );
