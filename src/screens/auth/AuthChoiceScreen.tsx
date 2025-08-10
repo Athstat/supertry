@@ -294,7 +294,7 @@ export function AuthChoiceScreen() {
             className="text-center mb-8"
           >
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Welcome to Scrummy
+              Welcome to SCRUMMY
             </h1>
             <p className="mt-3 lg:text-xl text-gray-600 dark:text-gray-300 text-center">
               You've officially joined the scrum! Don't worry, it's less bruises and more bragging

@@ -168,7 +168,7 @@ export const leagueGroupService = {
    */
   generateInviteMessage: (groupName: string, inviteCode: string): string => {
     const inviteLink = leagueGroupService.generateInviteLink(inviteCode);
-    return `Join my league group "${groupName}" on Scrummy! Use code: ${inviteCode} or click: ${inviteLink}`;
+    return `Join my league group "${groupName}" on SCRUMMY! Use code: ${inviteCode} or click: ${inviteLink}`;
   },
 
   /**
@@ -181,7 +181,7 @@ export const leagueGroupService = {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Join ${groupName} on Scrummy`,
+          title: `Join ${groupName} on SCRUMMY`,
           text: message,
           url: leagueGroupService.generateInviteLink(inviteCode),
         });

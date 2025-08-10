@@ -35,7 +35,7 @@ export default function LeagueFilterPanel({ isOpen, onClose, value, onChange }: 
             <div className="flex gap-2 flex-wrap">
               {([
                 { key: 'all', label: 'All' },
-                { key: 'scrummy', label: 'Scrummy' },
+                { key: 'scrummy', label: 'SCRUMMY' },
                 { key: 'user', label: 'User' },
               ] as const).map(opt => (
                 <button

@@ -117,7 +117,7 @@ export function WelcomeScreen() {
           transition={{ delay: 0.3, duration: 0.6 }}
         >
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center">
-            Welcome to Scrummy
+            Welcome to SCRUMMY
           </h1>
         </motion.div>
 
