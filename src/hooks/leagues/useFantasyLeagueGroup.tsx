@@ -9,17 +9,19 @@ export function useFantasyLeagueGroup() {
     const rounds = useAtomValue(fantasyLeagueGroupRoundsAtom);
     const userMemberRecord = useAtomValue(currGroupMemberAtom);
 
-    const currentRound = useMemo(() => {
-        // The first open round we encounter
-        // if all rounds are have ended, go to the last round
-        // if all rounds are not yet open but they have not ended, use first round
-
-        const sortedRounds = [...rounds].sort((a, b) => {
+    const sortedRounds = useMemo(() => {
+        return [...rounds].sort((a, b) => {
             const aStart = a.start_round;
             const bStart = b.start_round;
 
             return (aStart ?? 0) - (bStart ?? 0);
         })
+    }, [rounds]);
+
+    const currentRound = useMemo(() => {
+        // The first open round we encounter
+        // if all rounds are have ended, go to the last round
+        // if all rounds are not yet open but they have not ended, use first round
 
         const openRounds = sortedRounds.filter((r) => {
             return r.is_open === true;
@@ -45,6 +47,7 @@ export function useFantasyLeagueGroup() {
         members,
         rounds,
         userMemberRecord,
-        currentRound
+        currentRound,
+        sortedRounds
     }
 }

@@ -9,6 +9,7 @@ import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/ta
 import NoContentCard from "../components/shared/NoContentMessage";
 import { LeagueStandings } from "../components/fantasy-league/LeagueStandings";
 import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
+import LeagueFixturesTab from "../components/fantasy-league/LeagueFixturesTab";
 
 
 export function FantasyLeagueScreen() {
@@ -23,7 +24,7 @@ export function FantasyLeagueScreen() {
 
 function Content() {
 
-  const { league, members, rounds, userMemberRecord, currentRound } = useFantasyLeagueGroup();
+  const { league, members, userMemberRecord, currentRound } = useFantasyLeagueGroup();
   const navigate = useNavigate();
 
   if (!league) {
@@ -110,6 +111,10 @@ function Content() {
 
         <TabViewPage tabKey="info" >
           <LeagueInfoTab />
+        </TabViewPage>
+
+        <TabViewPage tabKey="fixtures" >
+          <LeagueFixturesTab />
         </TabViewPage>
       </TabView>
 
