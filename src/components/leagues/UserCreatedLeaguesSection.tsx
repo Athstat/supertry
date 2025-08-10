@@ -26,7 +26,7 @@ export default function UserCreatedLeaguesSection({
     fantasyLeagueGroupsService.getMyCreatedLeagues()
   );
 
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(true);
   const [showComingSoon, setShowComingSoon] = useState(false);
 
   const navigate = useNavigate();

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import InputField, { TextField } from '../shared/InputField';
+import LeagueVisibilityInput from './ui/LeagueVisibilityInput';
 
 interface CreateLeagueModalProps {
   isOpen: boolean;
@@ -45,6 +46,13 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
           })}
         />
 
+          <LeagueVisibilityInput 
+            value={form.is_private ? 'private' : 'public'}
+            onChange={(v) => setForm({
+              ...form,
+              is_private: v === 'private' ? true : false 
+            })}
+          />
 
       </form>
 
