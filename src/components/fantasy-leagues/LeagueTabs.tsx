@@ -23,7 +23,7 @@ export default function LeagueTabs({ value, onChange, className = '' }: LeagueTa
               className={
                 `text-sm sm:text-base px-3 py-2 rounded-lg font-medium transition-colors truncate ` +
                 (isActive
-                  ? 'bg-primary-600 text-white shadow'
+                  ? 'bg-blue-600 text-white shadow'
                   : 'bg-transparent text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800')
               }
               aria-pressed={isActive}
