@@ -1,8 +1,7 @@
-import { forwardRef, Fragment, RefObject, useEffect, useRef } from 'react'
+import { Fragment, useState } from 'react'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup'
-import { Calendar } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
-import { twMerge } from 'tailwind-merge';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
@@ -13,28 +12,74 @@ import NoContentCard from '../shared/NoContentMessage';
 export default function LeagueFixturesTab() {
 
     const { sortedRounds, currentRound } = useFantasyLeagueGroup();
-    const currRoundRef = useRef<HTMLDivElement>();
 
-    useEffect(() => {
+    const [selectedRoundId, setSelectedRoundId] = useState<number | undefined>(() => {
+        const index = sortedRounds.findIndex((r) => r.id === currentRound?.id)
 
-        if (currRoundRef) {
-            currRoundRef.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            })
+        if (index === -1) {
+            return undefined;
         }
 
-    }, [currRoundRef, currentRound]);
+        return index;
+    });
+
+    const isIndexValid = selectedRoundId !== undefined && selectedRoundId >= 0 && selectedRoundId < sortedRounds.length;
+    const selectedRound = isIndexValid ? sortedRounds[selectedRoundId] : undefined;
+
+    const canMoveLeft = selectedRoundId !== undefined && selectedRoundId > 0;
+    const canMoveRight = selectedRoundId !== undefined && selectedRoundId < sortedRounds.length - 1;
+
+    const moveLeft = () => {
+
+        if (selectedRoundId === undefined) {
+            return;
+        }
+
+        if (selectedRoundId > 0) {
+            setSelectedRoundId(selectedRoundId - 1)
+        }
+    }
+
+    const moveRight = () => {
+
+        if (selectedRoundId === undefined) {
+            return;
+        }
+
+        if (canMoveRight) {
+            setSelectedRoundId(selectedRoundId + 1)
+        }
+    }
+
+    console.log("Selected Round Id ", selectedRoundId);
+    console.log("Can you move left ", canMoveLeft);
 
     return (
         <div className='flex flex-col gap-2' >
-            <div className='flex flex-row items-center gap-2' >
-                <Calendar className='' />
-                <p className='font-bold text-xl' >Fixtures</p>
+            <div className='flex flex-row items-center justify-between gap-2' >
+                <div className='flex flex-row items-center gap-2' >
+                    <Calendar className='' />
+                    <p className='font-bold text-xl' >Fixtures</p>
+                </div>
+
+                {selectedRound && (
+                    <div className='flex flex-row items-center gap-2' >
+                        {canMoveLeft && <button onClick={moveLeft} className='bg-slate-300 cursor-pointer text-slate-700 dark:text-slate-400 dark:bg-slate-800 px-3 py-1 rounded-xl hover:dark:bg-slate-700' >
+                            <ChevronLeft />
+                        </button>}
+                        <div className='bg-slate-300 text-slate-700 dark:text-slate-400 dark:bg-slate-800 px-3 py-1 rounded-xl hover:dark:bg-slate-700' >
+                            {selectedRound.title}
+                        </div>
+
+                        {canMoveRight && <button onClick={moveRight} className='bg-slate-300 cursor-pointer text-slate-700 dark:text-slate-400 dark:bg-slate-800 hover:dark:bg-slate-700 px-3 py-1 rounded-xl' >
+                            <ChevronRight />
+                        </button>}
+                    </div>
+                )}
             </div>
 
 
-            <div className='flex flex-row items-center gap-2 flex-nowrap overflow-x-auto no-scrollbar' >
+            {/* <div className='flex flex-row items-center gap-2 flex-nowrap overflow-x-auto no-scrollbar' >
                 {sortedRounds.map((round) => {
                     return <RoundListItem
                         round={round}
@@ -43,33 +88,14 @@ export default function LeagueFixturesTab() {
                         isCurrent={round.id === currentRound?.id}
                     />
                 })}
-            </div>
+            </div> */}
 
-            {currentRound && <FixtureListView 
-                round={currentRound}
+            {selectedRound && <FixtureListView
+                round={selectedRound}
             />}
         </div>
     )
 }
-
-type ListItemProps = {
-    round: IFantasyLeagueRound,
-    isCurrent?: boolean
-}
-
-const RoundListItem = forwardRef(({ round, isCurrent }: ListItemProps, ref) => {
-    return (
-        <div
-            ref={ref as RefObject<HTMLDivElement>}
-            className={twMerge(
-                'flex flex-row text-nowrap cursor-pointer text-slate-800 dark:text-slate-400 px-3 py-1 rounded-xl text-sm bg-slate-200 dark:bg-slate-800 ',
-                isCurrent && "bg-blue-500 text-white dark:bg-blue-500 dark:text-white"
-            )}
-        >
-            <p className='' >{round.title}</p>
-        </div>
-    )
-})
 
 type FixtureListProps = {
     round: IFantasyLeagueRound
@@ -106,7 +132,7 @@ function FixtureListView({ round }: FixtureListProps) {
             />}
 
             {games.length === 0 && (
-                <NoContentCard 
+                <NoContentCard
                     message={`There are no related games for ${round.title}`}
                 />
             )}
