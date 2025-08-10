@@ -92,11 +92,11 @@ function LeagueStandingsRow({member, index, isUser } : StandingsProps) {
         <p className="w-10" >{index + 1}</p>
 
         {isUser && <div className=" w-6 h-6 bg-blue-500 rounded-xl flex flex-col items-center justify-center" >
-          <User className="w-4 h-4" />
+          <User className="w-4 h-4 text-white" />
         </div>}
 
         <div>
-          <p>{member.user.username}</p>
+          <p>{member.user.username ?? member.user.first_name}</p>
           {/* <p>{member.user.first_name}</p> */}
         </div>
 

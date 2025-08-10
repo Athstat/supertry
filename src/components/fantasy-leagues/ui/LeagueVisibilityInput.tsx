@@ -31,10 +31,9 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
         },
 
         {
-            label: "Private",
+            label: "Invite Only",
             description: `
-                Access to your league is is restricted, great if you want 
-                to create a league for yourself and your mates
+                Access to your league is is restricted. People can only join your league through invite
             `,
 
             icon: <Lock className="w-4 h-4 text-slate-800 dark:text-slate-600" />,
@@ -60,7 +59,7 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
                     return (
                         <div
                             className={twMerge(
-                                "flex flex-col gap-2 flex-1 p-3 border-2 cursor-pointer border-slate-200 dark:border-slate-700 rounded-lg",
+                                "flex flex-col gap-2 flex-1 p-3 border-2 h-[150px] cursor-pointer border-slate-200 dark:border-slate-700 rounded-lg",
                                 isSelected && "border-primary-500 dark:border-primary-700 bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/40 hover:dark:bg-primary-900/60",
                                 !isSelected && "hover:bg-slate-100 hover:dark:bg-slate-800"
                             )}
@@ -87,6 +86,7 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
 
                             <SecondaryText className={twMerge(
                                 // isSelected && 'text-blue-500'
+                                
                             )} >{option.description}</SecondaryText>
                         </div>
                     )

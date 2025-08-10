@@ -33,17 +33,18 @@ function Content() {
 
 
   const headerItems: TabViewHeaderItem[] = [
-    {
-      label: "My Team",
-      tabKey: 'my-team',
-      className: "flex-1"
-    },
 
     {
       label: "Standings",
       tabKey: "standings",
       className: "flex-1"
 
+    },
+
+    {
+      label: "My Team",
+      tabKey: 'my-team',
+      className: "flex-1"
     },
 
     {
