@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Loader } from 'lucide-react';
+import { Loader, Trophy } from 'lucide-react';
 import { LeagueCard } from '../components/leagues/league_card_small/LeagueCard';
 import NoContentCard from '../components/shared/NoContentMessage';
 import { leagueService } from '../services/leagueService';
@@ -23,6 +23,7 @@ import LeagueFilterPanel, {
   type DateOrder,
 } from '../components/leagues/LeagueFilterPanel';
 import { useNavigate } from 'react-router-dom';
+import FantasyLeagueScreenCTA from '../components/leagues/join_league_screen/LeagueScreenCTA';
 
 export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
@@ -235,9 +236,17 @@ export function FantasyLeaguesScreen() {
   }, [discoverBase, discoverFilters]);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
-      <div className="flex items-center mb-4 sm:mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold dark:text-white flex-1">Leagues</h1>
+    <div className="container dark:text-white mx-auto px-4 sm:px-6 py-6 max-w-3xl">
+      <div className="flex items-center mb-4 gap-2 sm:mb-6 justify-between">
+
+        <div className='flex flex-row gap-2 items-center justify-center' >
+          <Trophy className='dark:text-white' />
+          <h1 className="text-2xl sm:text-3xl font-bold dark:text-white flex-1">Fantasy Leagues</h1>
+        </div>
+
+        <div>
+          <FantasyLeagueScreenCTA />
+        </div>
       </div>
 
       <LeagueTabs value={activeTab} onChange={setActiveTab} className="mb-4 sm:mb-6" />

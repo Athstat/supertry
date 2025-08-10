@@ -8,7 +8,7 @@ import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
 import PostSignUpWelcomeScreen from './screens/PostSignUpWelcomeScreen';
 import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
-import { FantasyLeaguesScreen } from './screens/JoinLeagueScreen';
+import { FantasyLeaguesScreen } from './screens/FantasyLeagueScreen';
 import { LeagueScreen } from './screens/LeagueScreen';
 import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
