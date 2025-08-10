@@ -11,6 +11,7 @@ import { LeagueStandings } from "../components/fantasy-league/LeagueStandings";
 import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
 import LeagueFixturesTab from "../components/fantasy-league/LeagueFixturesTab";
 import JoinLeagueButton from "../components/fantasy-league/buttons/JoinLeagueButton";
+import LeagueCommissionerTab from "../components/fantasy-league/commissioner/LeagueCommissionerTab";
 
 
 export function FantasyLeagueScreen() {
@@ -83,7 +84,7 @@ function Content() {
         </div>
 
         <div>
-          {!isMember && <JoinLeagueButton 
+          {!isMember && <JoinLeagueButton
             league={league}
           />}
         </div>
@@ -128,6 +129,10 @@ function Content() {
 
         <TabViewPage tabKey="fixtures" >
           <LeagueFixturesTab />
+        </TabViewPage>
+
+        <TabViewPage tabKey="commissioner" >
+          <LeagueCommissionerTab />
         </TabViewPage>
       </TabView>
 

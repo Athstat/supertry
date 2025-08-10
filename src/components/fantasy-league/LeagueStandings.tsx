@@ -11,7 +11,7 @@ type Props = {
 
 export function LeagueStandings({}: Props) {
 
-  const { members, userMemberRecord, isMember, isAdminMember } = useFantasyLeagueGroup();
+  const { members, userMemberRecord, isAdminMember } = useFantasyLeagueGroup();
 
 
   // const userTeamRef = useRef<HTMLTableRowElement>(null);
