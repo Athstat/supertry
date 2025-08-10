@@ -23,7 +23,7 @@ export function FantasyLeagueScreen() {
 
 function Content() {
 
-  const { league, members, rounds, userMemberRecord } = useFantasyLeagueGroup();
+  const { league, members, rounds, userMemberRecord, currentRound } = useFantasyLeagueGroup();
   const navigate = useNavigate();
 
   if (!league) {
@@ -89,8 +89,8 @@ function Content() {
         />
 
         <StatCard
-          label="Rounds"
-          value={rounds?.length ?? "-"}
+          label="Round"
+          value={currentRound?.title}
           className="flex-1"
         />
       </div>
