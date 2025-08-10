@@ -49,6 +49,7 @@ export function useFantasyLeagueGroup() {
         userMemberRecord,
         currentRound,
         sortedRounds,
-        isMember: userMemberRecord !== undefined
+        isMember: userMemberRecord !== undefined,
+        isAdminMember: userMemberRecord?.is_admin === true
     }
 }
