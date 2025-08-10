@@ -5,7 +5,7 @@ import { LeagueSettings } from '../components/league/LeagueSettings';
 import { RankedFantasyTeam } from '../types/league';
 import { fantasyTeamService } from '../services/fantasyTeamService';
 import { TeamAthletesModal } from '../components/league/TeamAthletesModal';
-import LeagueGroupChatFeed from '../components/leagues/LeagueGroupChat';
+import LeagueGroupChatFeed from '../components/fantasy-leagues/LeagueGroupChat';
 import { FantasyLeagueFixturesList } from '../components/league/FixturesList';
 import { IFantasyLeague } from '../types/fantasyLeague';
 import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
