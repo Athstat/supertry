@@ -1,10 +1,11 @@
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { currGroupMemberAtom, fantasyLeagueGroupAtom, fantasyLeagueGroupMembersAtom, fantasyLeagueGroupRoundsAtom } from "../../state/fantasy/fantasyLeagueGroup.atoms";
 import { useMemo } from "react";
+import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
 /** Hook that provides fantasy league group info. Should be used with in the fantasy league group provider */
 export function useFantasyLeagueGroup() {
-    const league = useAtomValue(fantasyLeagueGroupAtom);
+    const [league, setLeague] = useAtom(fantasyLeagueGroupAtom);
     const members = useAtomValue(fantasyLeagueGroupMembersAtom);
     const rounds = useAtomValue(fantasyLeagueGroupRoundsAtom);
     const userMemberRecord = useAtomValue(currGroupMemberAtom);
@@ -42,6 +43,11 @@ export function useFantasyLeagueGroup() {
         return undefined;
     }, [rounds]);
 
+
+    const mutateLeague = (newLeague: FantasyLeagueGroup) => {
+        setLeague(newLeague);
+    }
+
     return {
         league,
         members,
@@ -50,6 +56,7 @@ export function useFantasyLeagueGroup() {
         currentRound,
         sortedRounds,
         isMember: userMemberRecord !== undefined,
-        isAdminMember: userMemberRecord?.is_admin === true
+        isAdminMember: userMemberRecord?.is_admin === true,
+        mutateLeague
     }
 }
