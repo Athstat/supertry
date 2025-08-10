@@ -1,22 +1,23 @@
-import { IFantasyLeague } from '../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../types/fantasyLeague';
 import { leagueService } from '../services/leagueService';
 import { dateComparator } from './dateUtils';
+import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
 
 /** Filters to only remain with leagues that seven days away */
-export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
+export function activeLeaguesFilter(leagues: FantasyLeagueGroup[]) {
   return leagues
     .filter(l => {
-      return l.has_ended === false;
+      return l.is_hidden === false;
     })
     .sort((a, b) => {
-      const aDeadline = new Date(a.join_deadline ?? 0);
-      const bDealine = new Date(b.join_deadline ?? 0);
+      const aEndDate = new Date(a.end_date ?? 0);
+      const bEndDate = new Date(b.end_date ?? 0);
 
-      return aDeadline.valueOf() - bDealine.valueOf();
+      return aEndDate.valueOf() - bEndDate.valueOf();
     });
 }
 
-export function isLeagueOnTheClock(league: IFantasyLeague, targetDiff: number) {
+export function isLeagueOnTheClock(league: IFantasyLeagueRound, targetDiff: number) {
   const { join_deadline } = league;
 
   if (!join_deadline) return false;
@@ -33,7 +34,7 @@ export function isLeagueOnTheClock(league: IFantasyLeague, targetDiff: number) {
  * Fetches the latest active official league
  * @returns Promise with the latest official league or null if none found
  */
-export async function getLatestOfficialLeague(): Promise<IFantasyLeague | null> {
+export async function getLatestOfficialLeague(): Promise<IFantasyLeagueRound | null> {
   try {
     // Fetch all leagues
     const allLeagues = await leagueService.getAllLeagues();
@@ -83,8 +84,17 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   return now.valueOf() > deadline.valueOf();
 }
 
+export function isLeagueGroupLocked(joinDeadline: Date | null | undefined) {
+  if (!joinDeadline) return false;
+
+  const now = new Date();
+  const deadline = new Date(joinDeadline);
+
+  return now.valueOf() > deadline.valueOf();
+}
+
 /** Returns the last possible date that users can join a league */
-export function calculateJoinDeadline(league: IFantasyLeague) {
+export function calculateJoinDeadline(league: IFantasyLeagueRound) {
 
   if (league.join_deadline) {
     const deadline = new Date(league.join_deadline);
@@ -95,7 +105,7 @@ export function calculateJoinDeadline(league: IFantasyLeague) {
 }
 
 /** Returns a bias that can be used to sort locked leagues and unclocked leagues */
-export function leagueLockBias(a: IFantasyLeague) {
+export function leagueLockBias(a: IFantasyLeagueRound) {
   const isLocked = isLeagueLocked(a.join_deadline);
   return isLocked ? 0 : 1;
 }
@@ -128,7 +138,7 @@ export async function latestLeagueFetcher() {
 }
 
 /** Upcoming Leagues Filter, returns leagues that are more than 7 days away */
-export function upcomingLeaguesFilter(leagues: IFantasyLeague[]) {
+export function upcomingLeaguesFilter(leagues: IFantasyLeagueRound[]) {
   return leagues
     .filter(l => {
       if (!l.join_deadline) {
@@ -151,7 +161,7 @@ export function upcomingLeaguesFilter(leagues: IFantasyLeague[]) {
 }
 
 /** Returns a list of leagues that have ended */
-export function pastLeaguesFilter(leagues: IFantasyLeague[]) {
+export function pastLeaguesFilter(leagues: IFantasyLeagueRound[]) {
   return leagues
     .filter(l => {
       return l.has_ended === true;
@@ -165,7 +175,7 @@ export function pastLeaguesFilter(leagues: IFantasyLeague[]) {
 }
 
 /** Filters leagues and returns leagues that are on the clock (7 days away) */
-export function leaguesOnClockFilter(leagues: IFantasyLeague[]) {
+export function leaguesOnClockFilter(leagues: FantasyLeagueGroup[]) {
   const activeLeagues = activeLeaguesFilter(leagues);
 
   const leagueOnTheClock = activeLeagues.length > 0 ?

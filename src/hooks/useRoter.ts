@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { IFantasyLeague, IFantasyLeagueTeam } from '../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../types/fantasyLeague';
 import { RankedFantasyTeam } from '../types/league';
 
 export function useRouter() {
@@ -22,7 +22,7 @@ export function useRouter() {
         },
       });
     },
-    navigateToLeagueScreen: (league: IFantasyLeague, tabKey?: string) => {
+    navigateToLeagueScreen: (league: IFantasyLeagueRound, tabKey?: string) => {
       const url = tabKey
         ? `/league/${league.official_league_id}?tab=${tabKey}`
         : `/league/${league.official_league_id}`;

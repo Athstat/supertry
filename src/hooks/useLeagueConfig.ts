@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { leagueService } from "../services/leagueService";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
-import { IFantasyLeague } from "../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../types/fantasyLeague";
 
 /** Fetches the league config */
-export function useLeagueConfig(league: IFantasyLeague | undefined) {
+export function useLeagueConfig(league: IFantasyLeagueRound | undefined) {
 
     const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(null);
 

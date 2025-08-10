@@ -2,8 +2,8 @@ import React from "react";
 import { Trophy, Users, Award, ChevronLeft,Zap, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
-import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 import { fantasyTeamAtom, fantasyTeamAthletesAtom, fantasyTeamPointsAtom } from "../../state/myTeam.atoms";
+import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 interface TeamHeaderProps {
 

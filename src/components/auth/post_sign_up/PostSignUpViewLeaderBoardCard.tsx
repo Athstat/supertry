@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { Trophy, ChevronRight } from "lucide-react";
-import { IFantasyLeague } from "../../../types/fantasyLeague"
-import { LeagueLiveIndicatorDot } from "../../leagues/LeagueLiveIndicator";
+import { IFantasyLeagueRound } from "../../../types/fantasyLeague"
+import { LeagueLiveIndicatorDot } from "../../fantasy-leagues/LeagueLiveIndicator";
 import { useNavigate } from "react-router-dom";
 import { isLeagueLocked } from "../../../utils/leaguesUtils";
 
 type Props = {
-    league?: IFantasyLeague
+    league?: IFantasyLeagueRound
 }
 
 export default function PostSignUpViewLeaderBoardCard({ league }: Props) {

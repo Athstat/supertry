@@ -1,12 +1,12 @@
 import { motion } from "framer-motion"
 import { Trophy, ChevronRight } from "lucide-react"
-import { IFantasyLeague } from "../../../types/fantasyLeague"
+import { IFantasyLeagueRound } from "../../../types/fantasyLeague"
 import { isLeagueLocked } from "../../../utils/leaguesUtils"
-import { LeagueLiveIndicatorDot } from "../../leagues/LeagueLiveIndicator"
+import { LeagueLiveIndicatorDot } from "../../fantasy-leagues/LeagueLiveIndicator"
 import { useNavigate } from "react-router-dom"
 
 type Props = {
-    league?: IFantasyLeague
+    league?: IFantasyLeagueRound
 }
 
 /** Pick your team card on post sign up screen */
