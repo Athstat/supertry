@@ -61,7 +61,8 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
                         <div
                             className={twMerge(
                                 "flex flex-col gap-2 flex-1 p-3 border-2 cursor-pointer border-slate-200 dark:border-slate-700 rounded-lg",
-                                isSelected && "border-primary-500 bg-primary-50"
+                                isSelected && "border-primary-500 dark:border-primary-700 bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/40 hover:dark:bg-primary-900/60",
+                                !isSelected && "hover:bg-slate-100 hover:dark:bg-slate-800"
                             )}
                             onClick={handleSelect}
                         >
@@ -78,9 +79,9 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
 
                                 <div className={twMerge(
                                     "w-5 h-5 rounded-full border border-slate-600 dark:border-slate-400",
-                                    isSelected && "border-primary-500 p-[4px] flex flex-col items-center justify-center"
+                                    isSelected && "border-primary-500 dark:border-primary-600 p-[4px] flex flex-col items-center justify-center"
                                 )} >
-                                    {isSelected && <div className="bg-primary-500 w-full h-full rounded-full" ></div>}
+                                    {isSelected && <div className="bg-primary-500 dark:bg-primary-600 w-full h-full rounded-full" ></div>}
                                 </div>
                             </div>
 

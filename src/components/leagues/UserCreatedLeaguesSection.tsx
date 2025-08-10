@@ -22,7 +22,7 @@ export default function UserCreatedLeaguesSection({
 
 
   const key = swrFetchKeys.getMyLeagueGroups();
-  let { data: myLeagues, isLoading, error, mutate} = useSWR(key, () =>
+  let { data: myLeagues, isLoading, mutate} = useSWR(key, () =>
     fantasyLeagueGroupsService.getMyCreatedLeagues()
   );
 
