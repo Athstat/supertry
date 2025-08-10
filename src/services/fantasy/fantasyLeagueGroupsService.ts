@@ -169,4 +169,35 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
+    joinLeague: async (leagueId: string, entry_code: string) : RestPromise<FantasyLeagueGroupMember> => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/join/${entry_code}`);
+            
+            const res = await fetch(uri, {
+                headers: getAuthHeader(),
+                method: 'POST'
+            });
+
+            if (res.ok) {
+                const json = (await res.json()) as FantasyLeagueGroupMember;
+                return {data: json};
+            }
+
+            if (res.status === 404) {
+                return {error: {
+                    message: "Incorrect Entry Code"
+                }}
+            }
+
+        } catch (err) {
+            console.log("Error joining league");
+        }
+
+        return {
+            error: {
+                message: "Something wen't wrong"
+            }
+        }
+    }
+
 }

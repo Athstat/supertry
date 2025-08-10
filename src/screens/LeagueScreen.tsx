@@ -25,7 +25,7 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-  const { league, members, userMemberRecord, currentRound } = useFantasyLeagueGroup();
+  const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
   const navigate = useNavigate();
 
   if (!league) {
@@ -77,9 +77,7 @@ function Content() {
           <p className="font-bold text-xl">{league?.title}</p>
         </div>
 
-        <div>
-          <JoinLeagueButton league={league} />
-        </div>
+        <div>{!isMember && <JoinLeagueButton league={league} />}</div>
       </div>
 
       <div
