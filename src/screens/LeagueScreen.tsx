@@ -5,6 +5,7 @@ import PageView from "./PageView";
 import { ErrorState } from "../components/ui/ErrorState";
 import { Trophy } from "lucide-react";
 import { StatCard } from "../components/shared/StatCard";
+import TabView, { TabViewHeaderItem } from "../components/shared/tabs/TabView";
 
 
 export function FantasyLeagueScreen() {
@@ -24,6 +25,39 @@ function Content() {
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />
   }
+
+  const headerItems: TabViewHeaderItem[] = [
+    {
+      label: "My Team",
+      tabKey: 'my-team',
+      className: "flex-1"
+    },
+
+    {
+      label: "Standings",
+      tabKey: "standings",
+      className: "flex-1"
+      
+    },
+
+    {
+      label: "Fixtures",
+      tabKey: 'fixtures',
+      className: "flex-1"
+    },
+
+    {
+      label: "Commissioner",
+      tabKey: 'commissioner',
+      className: "flex-1"
+    },
+
+    {
+      label: "Info",
+      tabKey: 'info',
+      className: "flex-1"
+    }
+  ]
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4" >
@@ -45,6 +79,12 @@ function Content() {
           className="flex-1"
         />
       </div>
+
+      <TabView
+        tabHeaderItems={ headerItems}
+      >
+        
+      </TabView>
 
     </PageView>
   )
