@@ -4,14 +4,13 @@ import {
   IFantasyClubTeam,
   IFantasyTeamAthlete,
 } from "../../types/fantasyTeamAthlete";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { leagueService } from "../../services/leagueService";
 import { useAtom } from "jotai";
 import { LoadingState } from "../ui/LoadingState";
 import { calculateFantasyTeamValue } from "../../utils/athleteUtils";
 import { ErrorState } from "../ui/ErrorState";
-import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 import { 
   fantasyTeamValueAtom, 
   fantasyTeamAtom, 
@@ -19,13 +18,14 @@ import {
   teamCaptainIdAtom 
 } from "../../state/myTeam.atoms";
 import useSWR from "swr";
+import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 interface TeamDataContextType {
   team: IFantasyClubTeam | undefined;
   athletes: IFantasyTeamAthlete[];
   isLoading: boolean;
   error: string | null;
-  leagueInfo: IFantasyLeague | undefined;
+  leagueInfo: IFantasyLeagueRound | undefined;
   fetchingLeague: boolean;
   teamBudget: number;
   teamAny: any;

@@ -103,3 +103,49 @@ export function PasswordInputField({value, onChange, placeholder, label, id, min
         />
     )
 }
+
+
+export function TextField({value, onChange, label, id, inputCn, labelCn, className, icon, placeholder, required, minLength} : Props) {
+    const handleInputChange = (newVal?: string) => {
+        if (onChange) {
+            onChange(newVal)
+        }
+    }
+
+    return (
+        <div className={twMerge(className)} >
+            {label && <label
+                htmlFor={id}
+                className={twMerge(
+                    "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1",
+                    labelCn
+                )}
+            >
+                {label}
+
+            </label>}
+
+            <div className="relative">
+                <textarea
+                    id={id}
+                    required={required}
+                    className={twMerge(
+                        "w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100",
+                        icon && "pr-12",
+                        inputCn
+                    )}
+                    value={value}
+                    onChange={e => handleInputChange(e.target.value)}
+                    placeholder={placeholder}
+                    defaultValue={""}
+                    minLength={minLength}
+                />
+                {icon && (
+                    <div className="absolute inset-y-0 right-0 flex text-slate-700 dark:text-slate-400  items-center pr-3">
+                        {icon}
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}

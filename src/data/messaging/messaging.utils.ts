@@ -1,11 +1,11 @@
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFixture } from "../../types/games";
 
-export function getLeagueChatChannelUrl(league: IFantasyLeague) {
+export function getLeagueChatChannelUrl(league: IFantasyLeagueRound) {
     return `sendbird_league_open_channel_league_${league.id}`;
 }
 
-export function getLeagueChannelName(league: IFantasyLeague) {
+export function getLeagueChannelName(league: IFantasyLeagueRound) {
     return league.title + " Chat";
 }
 

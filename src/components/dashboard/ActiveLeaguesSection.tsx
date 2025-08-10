@@ -2,7 +2,7 @@ import React from "react";
 import { Loader } from "lucide-react";
 import { ActiveLeaguesSectionProps } from "./types";
 import { activeLeaguesFilter, upcomingLeaguesFilter } from "../../utils/leaguesUtils";
-import LeagueCardDetailed from "../leagues/LeagueCardDetailed";
+import LeagueCardDetailed from "../fantasy-leagues/LeagueCardDetailed";
 
 export const ActiveLeaguesSection: React.FC<ActiveLeaguesSectionProps> = ({
   leagues,

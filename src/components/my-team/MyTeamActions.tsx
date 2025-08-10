@@ -13,11 +13,11 @@ import { RugbyPlayer } from "../../types/rugbyPlayer";
 import { useAtom, useAtomValue } from "jotai";
 import { fantasyTeamAthletesAtom, fantasyTeamAtom, remainingTeamBudgetAtom } from "../../state/myTeam.atoms";
 import { IFantasyTeamAthlete, IUpdateFantasyTeamAthleteItem } from "../../types/fantasyTeamAthlete";
-import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 import { playerToSwapInAtom, playerToSwapOutAtom, positionToSwapAtom } from "../../state/playerSwap.atoms";
 import { useFetch } from "../../hooks/useFetch";
 import { useSWRConfig } from "swr";
 import { convertPositionNameToPositionObject } from "../../utils/athleteUtils";
+import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 // Define the context type
 interface TeamActionsContextType {
@@ -294,7 +294,6 @@ export function MyTeamScreenActionsProvider({ children }: Props) {
           remainingBudget={remainingTeamBudget + (playerToSwapOut?.purchase_price ?? 0)}
           selectedPlayers={athletes}
           handlePlayerSelect={handlePlayerListModalSelect}
-          competitionId={league?.official_league_id ?? team?.official_league_id}
           onClose={() => setIsSwapping(false)}
           roundId={league?.start_round ?? 1}
           roundStart={league?.start_round ?? undefined}

@@ -10,7 +10,6 @@ import {
 } from '../components/my-team/MyTeamScreenTabView';
 import { ErrorState } from '../components/ui/ErrorState';
 import { ScopeProvider } from 'jotai-scope';
-import { fantasyLeagueAtom, fantasyLeagueLockedAtom } from '../state/fantasyLeague.atoms';
 import {
   fantasyTeamAtom,
   fantasyTeamAthletesAtom,
@@ -18,6 +17,7 @@ import {
   fantasyTeamPointsAtom,
 } from '../state/myTeam.atoms';
 import { playerToSwapInAtom, positionToSwapAtom } from '../state/playerSwap.atoms';
+import { fantasyLeagueAtom, fantasyLeagueLockedAtom } from '../state/fantasy/fantasyLeague.atoms';
 
 export function MyTeamScreen() {
   const { teamId } = useParams<{ teamId: string }>();

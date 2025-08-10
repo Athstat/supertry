@@ -108,5 +108,9 @@ declare module "lucide-react" {
   export const BrickWall : CIP;
   export const WifiOff : CIP;
   export const CheckCircle2 : CIP;
+  export const DollarSign : CIP;
+  export const Globe : CIP;
+  export const Badge : CIP;
+  export const Table2 : CIP;
 }
 

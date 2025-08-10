@@ -7,7 +7,7 @@ export interface ISeason {
   end_date?: string;
 }
 
-export interface IFantasyLeague {
+export interface IFantasyLeagueRound {
   season: string;
   season_name: string;
   id: string;

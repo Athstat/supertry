@@ -1,5 +1,6 @@
 /** provides functions to get keys for different swr fetch keys */
 
+import { authService } from "../services/authService";
 import { IProSeason } from "../types/season";
 
 export const swrFetchKeys = {
@@ -55,8 +56,12 @@ export const swrFetchKeys = {
         return `/athlete-career-star-ratings/${athleteId}`
     },
 
-    getAllFantasyLeagues: () => {
-        return `fantasy-leagues`;
+    getAllPublicFantasyLeagues: () => {
+        return `public-fantasy-leagues`;
+    },
+
+    getAllDiscorverLeagues: () => {
+        return `public-fantasy-leagues/discorver`;
     },
 
     getAllSuppportedSeasons: (seasonIds?: string[]) => {
@@ -65,5 +70,26 @@ export const swrFetchKeys = {
 
     getAllSeasonAthletes: (season: IProSeason) => {
         return `seasons/${season.id}/athletes`;
+    },
+
+    getMyLeagueGroups: () => {
+        const authUser = authService.getUserInfoSync();
+        return `my-leagues/${authUser?.kc_id}`;
+    },
+
+    getLeagueGroupMembers: (leagueId: string) => {
+        return `fantasy-league-group/members/${leagueId}`;
+    },
+
+    getJoinedFantasyLeagueGroups: () => {
+        return `joined-league-groups`;
+    },
+
+    getFantasyLeagueGroupById: (id: string) => {
+        return `fantasy-league-groups/${id}`;
+    },
+
+    getLeagueGroupRounds: (id: string) => {
+        return `fantasy-league-groups/${id}/rounds`;
     }
 }

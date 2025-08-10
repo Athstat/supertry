@@ -4,8 +4,8 @@ import WarningCard from "../shared/WarningCard"
 import { useFetch } from "../../hooks/useFetch";
 import { Info } from "lucide-react";
 import { useAtomValue } from "jotai";
-import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
 import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
+import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 type Props = {
 
@@ -60,7 +60,7 @@ async function fetcher(athleteIds: string[]) {
     const athletes: RugbyPlayer[] = [];
 
     const promises = athleteIds.map((id) => {
-        return athleteService.getRugbyAthleteById(id);
+        return athleteService.getAthleteById(id);
     });
 
     const res = await Promise.all(promises);
