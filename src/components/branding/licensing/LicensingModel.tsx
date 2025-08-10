@@ -42,7 +42,7 @@ export default function LicensingModal() {
                 </SecondaryText>
 
                 <div className="flex flex-row mt-4 items-center justify-center gap-2" >
-                    <SecondaryText className="font-bold" >&copy; Scrummy App {year}</SecondaryText>
+                    <SecondaryText className="font-bold" >&copy; SCRUMMY App {year}</SecondaryText>
                 </div>
 
             </DialogModal>

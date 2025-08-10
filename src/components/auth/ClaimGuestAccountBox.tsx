@@ -20,7 +20,7 @@ export default function ClaimGuestAccountBox() {
                 className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
             >
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Welcome to Scrummy!
+                    Welcome to SCRUMMY!
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                     Enhance your experience by creating a full account.

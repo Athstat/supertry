@@ -10,10 +10,9 @@ type Props = {
     teamActions: ITeamAction[]
 }
 
-
 export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) {
 
-    const taParser = new TeamActionsParser(teamActions, fixture.team_id, fixture.opposition_team_id);
+    const taParser = new TeamActionsParser(teamActions, fixture.team.athstat_id, fixture.opposition_team.athstat_id);
 
     return (
         <TitledCard title="Head to Head" icon={Shield} >
@@ -22,13 +21,13 @@ export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) 
 
                 <div className="flex flex-row gap-1" >
                     <div className="flex flex-1 items-center justify-start" >
-                        <TeamLogo className="w-6 h-6" url={fixture.team_image_url} />
+                        <TeamLogo className="w-6 h-6" url={fixture.team.image_url} />
                     </div>
                     <div className="flex flex-[3] items-center justify-center text-center " >
                         <p>Team Stats</p>
                     </div>
                     <div className="flex flex-1 items-center justify-end" >
-                        <TeamLogo className="w-6 h-6" url={fixture.opposition_image_url} />
+                        <TeamLogo className="w-6 h-6" url={fixture.opposition_team.image_url} />
                     </div>
                 </div>
 

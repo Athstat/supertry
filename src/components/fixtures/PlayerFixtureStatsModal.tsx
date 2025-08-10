@@ -4,6 +4,7 @@ import DialogModal from "../shared/DialogModal"
 import PlayerMugshot from "../shared/PlayerMugshot"
 import RoundedCard from "../shared/RoundedCard"
 import { StatCard } from "../shared/StatCard"
+import TeamLogo from "../team/TeamLogo"
 
 type AthleteStatsModalProps = {
   open?: boolean,
@@ -28,17 +29,24 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
     return outStr
   }
 
-  const isHomePlayer = fixture.team_id === bs.athlete_team_id;
+  const isHomePlayer = fixture.team.athstat_id === bs.athlete.team_id;
 
   return (
-    <DialogModal open={open} className="gap-6 flex dark:text-white text-slate-700 flex-col" onClose={onClose} title={bs.athlete_first_name + " " + bs.athlete_last_name} >
+    <DialogModal open={open} className="gap-6 flex dark:text-white text-slate-700 flex-col" onClose={onClose} title={bs.athlete.player_name} >
 
-      <div className="flex flex-row items-center justify-start gap-3" >
-        <PlayerMugshot className="w-20 h-20" url={bs.athlete_image_url} />
+      <div className="flex flex-row items-center justify-between w-full bg-slate-100 dark:bg-slate-800 rounded-xl p-4 gap-3" >
 
-        <div className="flex-col" >
-          <p className="text-lg font-bold" >{bs.athlete_first_name} {bs.athlete_last_name}</p>
-          <p className="text-slate-400 font-bold" >{bs.athlete_position && fixPosition(bs.athlete_position)}</p>
+        <div className="flex flex-row items-center gap-2" >
+          <PlayerMugshot className="w-20 h-20" showPrBackground playerPr={bs.athlete.power_rank_rating} url={bs.athlete.image_url} />
+
+          <div className="flex-col" >
+            <p className="text-lg font-bold" >{bs.athlete.player_name}</p>
+            <p className="text-slate-400 font-bold" >{bs.athlete.position && fixPosition(bs.athlete.position)}</p>
+          </div>
+        </div>
+
+        <div>
+          <TeamLogo url={bs.athlete.team.image_url} />
         </div>
 
       </div>
@@ -48,7 +56,7 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
         <StatCard
           label="Team"
           valueClassName="text-md"
-          value={isHomePlayer ? fixture.team_name : fixture.opposition_team_name}
+          value={isHomePlayer ? fixture.team.athstat_name : fixture.opposition_team.athstat_name}
         />
 
         <StatCard
@@ -56,10 +64,10 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
           value={bs.minutesplayed}
         />
 
-        <StatCard
+        {/* <StatCard
           label="Power Ranking"
           value={bs.athlete_match_power_ranking?.toFixed(1)}
-        />
+        /> */}
 
         {/* <StatCard
           label="Points"

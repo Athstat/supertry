@@ -28,7 +28,7 @@ export default function PostSignUpWelcomeScreen() {
         <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40 mb-6" />
 
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center">
-          Welcome to Scrummy! 🎉 🏉
+          Welcome to SCRUMMY! 🎉 🏉
         </h1>
 
         <p className="w-full text-center mt-3 dark:text-slate-200" >

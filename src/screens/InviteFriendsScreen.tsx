@@ -8,7 +8,7 @@ export default function InviteFriendsScreen() {
     const user = useAuthUser();
 
     const baseUrl = "https://fantasy-rugby.netlify.app";
-    const referBase64 = btoa(user.id);
+    const referBase64 = btoa(user?.kc_id ?? "");
     const searchParams = `?rfr=${referBase64.split('').reverse().join('')}`;
 
     const inviteLink = baseUrl + searchParams;
@@ -31,7 +31,7 @@ export default function InviteFriendsScreen() {
             <p className="text-slate-700 text-center dark:text-slate-400" >
 
                 {`Build your dream team. Beat your mates.
-                Scrummy is the ultimate rugby fantasy experience — and it’s even better with friends.
+                SCRUMMY is the ultimate rugby fantasy experience — and it’s even better with friends.
                 Invite your crew, compete in leagues, track real-time rankings, and see who’s got the sharpest rugby mind.`}
 
             </p>
