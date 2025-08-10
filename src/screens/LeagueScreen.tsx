@@ -10,6 +10,7 @@ import NoContentCard from '../components/shared/NoContentMessage';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
+import MyTeam from '../components/fantasy-leagues/MyTeam';
 import JoinLeagueButton from '../components/fantasy-league/buttons/JoinLeagueButton';
 import LeagueCommissionerTab from '../components/fantasy-league/commissioner/LeagueCommissionerTab';
 
@@ -18,8 +19,10 @@ export function FantasyLeagueScreen() {
 
   return (
     <FantasyLeagueGroupDataProvider leagueId={leagueId}>
+    <FantasyLeagueGroupDataProvider leagueId={leagueId}>
       <Content />
     </FantasyLeagueGroupDataProvider>
+  );
   );
 }
 
@@ -29,6 +32,7 @@ function Content() {
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />;
+    return <ErrorState error="Whoops" message="Fantasy League was not found" />;
   }
 
   const headerItems: TabViewHeaderItem[] = [
@@ -36,30 +40,44 @@ function Content() {
       label: 'Standings',
       tabKey: 'standings',
       className: 'flex-1',
+      label: 'Standings',
+      tabKey: 'standings',
+      className: 'flex-1',
     },
 
     {
       label: 'My Team',
+      label: 'My Team',
       tabKey: 'my-team',
+      className: 'flex-1',
       className: 'flex-1',
     },
 
     {
       label: 'Fixtures',
+      label: 'Fixtures',
       tabKey: 'fixtures',
+      className: 'flex-1',
       className: 'flex-1',
     },
 
     {
       label: 'Commissioner',
+      label: 'Commissioner',
       tabKey: 'commissioner',
+      className: 'flex-1',
+      disabled: !userMemberRecord || userMemberRecord.is_admin == false,
       className: 'flex-1',
       disabled: !userMemberRecord || userMemberRecord.is_admin == false,
     },
 
     {
       label: 'Info',
+      label: 'Info',
       tabKey: 'info',
+      className: 'flex-1',
+    },
+  ];
       className: 'flex-1',
     },
   ];
@@ -67,18 +85,28 @@ function Content() {
   const navigateToLeagues = () => {
     navigate('/leagues');
   };
+  };
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4">
       <div className="flex flex-row items-center justify-between gap-2">
         <div className="flex flex-row items-center gap-2">
+    <PageView className="dark:text-white p-4 flex flex-col gap-4">
+      <div className="flex flex-row items-center justify-between gap-2">
+        <div className="flex flex-row items-center gap-2">
           <Trophy />
+          <p className="font-bold text-xl">{league?.title}</p>
           <p className="font-bold text-xl">{league?.title}</p>
         </div>
 
         <div>{!isMember && <JoinLeagueButton league={league} />}</div>
+        <div>{!isMember && <JoinLeagueButton league={league} />}</div>
       </div>
 
+      <div
+        onClick={navigateToLeagues}
+        className="flex flex-row hover:text-blue-500 cursor-pointer items-center"
+      >
       <div
         onClick={navigateToLeagues}
         className="flex flex-row hover:text-blue-500 cursor-pointer items-center"
@@ -89,31 +117,42 @@ function Content() {
 
       <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
         <StatCard label="Members" value={members?.length ?? '-'} className="flex-1" />
+      <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
+        <StatCard label="Members" value={members?.length ?? '-'} className="flex-1" />
 
+        <StatCard label="Round" value={currentRound?.title} className="flex-1" />
         <StatCard label="Round" value={currentRound?.title} className="flex-1" />
       </div>
 
       <TabView tabHeaderItems={headerItems}>
         <TabViewPage tabKey="my-team">
           <MyTeam />
+      <TabView tabHeaderItems={headerItems}>
+        <TabViewPage tabKey="my-team">
+          <MyTeam />
         </TabViewPage>
 
+        <TabViewPage tabKey="standings">
         <TabViewPage tabKey="standings">
           <LeagueStandings />
         </TabViewPage>
 
         <TabViewPage tabKey="info">
+        <TabViewPage tabKey="info">
           <LeagueInfoTab />
         </TabViewPage>
 
+        <TabViewPage tabKey="fixtures">
         <TabViewPage tabKey="fixtures">
           <LeagueFixturesTab />
         </TabViewPage>
 
         <TabViewPage tabKey="commissioner">
+        <TabViewPage tabKey="commissioner">
           <LeagueCommissionerTab />
         </TabViewPage>
       </TabView>
     </PageView>
+  );
   );
 }
