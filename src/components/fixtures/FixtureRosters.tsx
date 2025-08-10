@@ -1,13 +1,24 @@
-import { IFixture, IRosterItem } from "../../types/games"
+import useSWR from "swr";
+import { IFixture } from "../../types/games"
 import TabView, { TabViewHeaderItem, TabViewPage } from "../shared/tabs/TabView"
+import { LoadingState } from "../ui/LoadingState";
 import { FixtureRosterList } from "./FixtureRosterList"
+import { gamesService } from "../../services/gamesService";
 
 type Props = {
     fixture: IFixture,
-    rosters: IRosterItem[]
 }
 
-export default function FixtureRosters({ rosters, fixture }: Props) {
+export default function FixtureRosters({ fixture }: Props) {
+
+    const fixtureId = fixture.game_id;
+    const rostersKey = fixtureId ? `fixtures/${fixtureId}/rosters` : null;
+    let { data: rosters, isLoading: loadingRosters } = useSWR(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
+
+
+    if (loadingRosters) {
+        return <LoadingState />
+    }
 
     const tabs: TabViewHeaderItem[] = [
         {
@@ -23,6 +34,8 @@ export default function FixtureRosters({ rosters, fixture }: Props) {
         }
     ]
 
+    rosters = rosters ?? [];
+
     const awayRoster = rosters.filter((r) => {
         return r.team_id === fixture.opposition_team.athstat_id;
     });
@@ -35,7 +48,7 @@ export default function FixtureRosters({ rosters, fixture }: Props) {
     return (
         <div className="flex flex-col" >
             <TabView tabHeaderItems={tabs}>
-                
+
                 <TabViewPage className="p-4" tabKey="home-team">
                     <FixtureRosterList roster={homeRoster} />
                 </TabViewPage>

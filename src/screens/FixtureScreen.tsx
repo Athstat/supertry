@@ -28,19 +28,22 @@ export default function FixtureScreen() {
   const navigate = useNavigate();
   const { fixtureId } = useParams();
 
-  if (!fixtureId) return <ErrorState message="Match was not found" />
+  const fixtureKey = fixtureId ? `fixture/${fixtureId}` : null;
+  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(fixtureKey, () => gamesService.getGameById(fixtureId ?? ""));
 
-  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(`fixture/${fixtureId}`, () => gamesService.getGameById(fixtureId));
-  const { data: boxScore, isLoading: loadingBoxScore } = useSWR(["boxscores", fixtureId], ([, gameId]) => boxScoreService.getBoxScoreByGameId(gameId));
-  const { data: teamActions, isLoading: loadingTeamActions } = useSWR(["teamActions", fixtureId], () => gamesService.getGameTeamActions(fixtureId));
+  const boxscoreKey = fixtureId ? `fixtures/${fixtureId}/boxscore` : null;
+  const { data: boxScore, isLoading: loadingBoxScore } = useSWR(boxscoreKey, () => boxScoreService.getBoxScoreByGameId(fixtureId ?? ""));
 
-  const { data: rosters, isLoading: loadingRosters } = useSWR(`rosters/${fixtureId}`, () => gamesService.getGameRostersById(fixtureId ?? ""));
+  const teamActionsKey = fixtureId ? `fixtures/${fixtureId}/team-actions` : null;
+  const { data: teamActions, isLoading: loadingTeamActions } = useSWR(teamActionsKey, () => gamesService.getGameTeamActions(fixtureId ?? ""));
 
-  const isLoading = loadingFixture || loadingRosters || loadingBoxScore || loadingTeamActions;
+  const isLoading = loadingFixture || loadingBoxScore || loadingTeamActions;
 
   if (isLoading) return <LoadingState />
 
   if (!fetchedFixture) return <ErrorState message="Failed to load match information, so match doesn't exist???" />
+
+  if (!fixtureId) return <ErrorState message="Match was not found" />
 
   const fixture = fetchedFixture as IFixture;
   const { gameKickedOff } = fixtureSumary(fixture);
@@ -74,7 +77,7 @@ export default function FixtureScreen() {
     {
       label: "Team Rosters",
       tabKey: "rosters",
-      disabled: !rosters || rosters.length === 0
+      disabled: false
     }
   ]
 
@@ -146,11 +149,11 @@ export default function FixtureScreen() {
               </TabViewPage>
 
               <TabViewPage tabKey="rosters" >
-                {rosters && <FixtureRosters rosters={rosters} fixture={fixture} />}
+                { <FixtureRosters  fixture={fixture} /> }
               </TabViewPage>
 
               <TabViewPage tabKey="chat" >
-                {rosters && <FixtureChat fixture={fixture} />}
+                <FixtureChat fixture={fixture} />
               </TabViewPage>
 
             </TabView>
