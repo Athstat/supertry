@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { IFantasyLeague } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import { motion } from 'framer-motion';
 import { LeagueCard } from '../league_card_small/LeagueCard';
 import { upcomingLeaguesFilter } from '../../../utils/leaguesUtils';
 import NoContentCard from '../../shared/NoContentMessage';
 
 type Props = {
-  leagues: IFantasyLeague[];
+  leagues: IFantasyLeagueRound[];
   userTeams: Record<string, boolean>;
   getGamesByCompetitionId: (competitionId: string) => any[];
 };
@@ -14,7 +14,7 @@ type Props = {
 export default function JoinLeagueUpcomingLeaguesSection({ leagues, userTeams, getGamesByCompetitionId }: Props) {
   const navigate = useNavigate();
 
-  const handleLeagueClick = (league: IFantasyLeague) => {
+  const handleLeagueClick = (league: IFantasyLeagueRound) => {
     console.log('league clicked::', league);
     navigate(`/league/${league.id}`, {
       state: { league },

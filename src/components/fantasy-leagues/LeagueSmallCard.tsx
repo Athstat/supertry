@@ -1,11 +1,11 @@
 import React from 'react'
-import { IFantasyLeague } from '../../types/fantasyLeague'
+import { IFantasyLeagueRound } from '../../types/fantasyLeague'
 import { Users } from 'lucide-react'
 
 type Props = {
-    league: IFantasyLeague,
-    handleJoinLeague: (league: IFantasyLeague) => void,
-    handleViewLeague: (league: IFantasyLeague) => void,
+    league: IFantasyLeagueRound,
+    handleJoinLeague: (league: IFantasyLeagueRound) => void,
+    handleViewLeague: (league: IFantasyLeagueRound) => void,
 
 }
 

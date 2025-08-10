@@ -4,7 +4,7 @@ import { formatPosition } from "../../utils/athleteUtils";
 import { CircleDollarSign } from "lucide-react";
 import { useFetch } from "../../hooks/useFetch";
 import { athleteService } from "../../services/athletes/athleteService";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { useAtomValue } from "jotai";
 import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
@@ -14,7 +14,7 @@ type PlayerActionModalProps = {
   onClose: () => void;
   onViewStats: (player: IFantasyTeamAthlete) => void;
   onSwapPlayer: (player: IFantasyTeamAthlete) => void;
-  league?: IFantasyLeague
+  league?: IFantasyLeagueRound
 }
 
 export function PlayerActionModal({

@@ -1,4 +1,4 @@
-import { IFantasyLeague } from './fantasyLeague';
+import { IFantasyLeagueRound } from './fantasyLeague';
 
 export interface IUserLeagueGroup {
   id: string;

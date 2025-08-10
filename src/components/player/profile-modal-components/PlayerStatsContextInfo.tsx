@@ -1,7 +1,7 @@
 /** Card that provides more information about the stats currently being shown for a player */
 
 import { useLocation, useParams } from "react-router-dom"
-import { IFantasyLeague } from "../../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { useFetch } from "../../../hooks/useFetch";
 import { gamesService } from "../../../services/gamesService";
 import { Info } from "lucide-react";
@@ -16,7 +16,7 @@ export default function PlayerStatsContextInfo({ competitionId }: Props) {
   const {officialLeagueId} = useParams();
 
   const fetchKey = competitionId
-    ?? (state?.league as IFantasyLeague)?.official_league_id
+    ?? (state?.league as IFantasyLeagueRound)?.official_league_id
     ?? officialLeagueId
     ?? "fallback-key";
 

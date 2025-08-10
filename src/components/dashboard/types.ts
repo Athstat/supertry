@@ -2,7 +2,7 @@ import {
   IFantasyClubTeam,
   IFantasyTeamAthlete,
 } from "../../types/fantasyTeamAthlete";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 
 export interface MyTeamsSectionProps {
   teams: IFantasyClubTeam[];
@@ -12,7 +12,7 @@ export interface MyTeamsSectionProps {
 }
 
 export interface ActiveLeaguesSectionProps {
-  leagues: IFantasyLeague[];
+  leagues: IFantasyLeagueRound[];
   isLoading: boolean;
-  onViewLeague: (league: IFantasyLeague) => void;
+  onViewLeague: (league: IFantasyLeagueRound) => void;
 }

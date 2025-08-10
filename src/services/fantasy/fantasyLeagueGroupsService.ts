@@ -1,4 +1,5 @@
 import { RestPromise } from "../../types/auth";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { FantasyLeagueGroup, FantasyLeagueGroupMember, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
@@ -25,7 +26,7 @@ export const fantasyLeagueGroupsService = {
     },
 
     getAllPublicLeaguesNotMember: async (): Promise<FantasyLeagueGroup[]> => {
-        try {   
+        try {
 
             const authUser = authService.getUserInfoSync();
             const uri = getUri(`/api/v1/fantasy-league-groups/public?not_member=${authUser?.kc_id}`);
@@ -120,10 +121,10 @@ export const fantasyLeagueGroupsService = {
     },
 
     /** API to create a league group */
-    createGroup: async (data: NewFantasyLeagueGroupReq) : RestPromise<FantasyLeagueGroup> => {
-        
+    createGroup: async (data: NewFantasyLeagueGroupReq): RestPromise<FantasyLeagueGroup> => {
+
         try {
-            
+
             const uri = getUri(`/api/v1/fantasy-league-groups/`);
             const res = await fetch(uri, {
                 headers: getAuthHeader(),
@@ -133,7 +134,7 @@ export const fantasyLeagueGroupsService = {
 
             if (res.ok) {
                 const json = (await res.json()) as FantasyLeagueGroup;
-                return {data: json} 
+                return { data: json }
             }
 
         } catch (err) {
@@ -145,6 +146,27 @@ export const fantasyLeagueGroupsService = {
                 message: "Something wen't wrong creating your fantasy league, please try again"
             }
         }
-    }
+    },
+
+
+    getGroupRounds: async (leagueId: string): Promise<IFantasyLeagueRound[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/rounds`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IFantasyLeagueRound[];
+            }
+
+        } catch (err) {
+            console.log("Error fetching public fantasy league groups ", err);
+        }
+
+        return [];
+    },
 
 }

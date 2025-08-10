@@ -2,7 +2,7 @@ import { Shield, Pencil, Trophy, Users, Lock, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  IFantasyLeague,
+  IFantasyLeagueRound,
   IFantasyLeagueTeam,
 } from "../../../types/fantasyLeague";
 import { isLeagueLocked } from "../../../utils/leaguesUtils";
@@ -10,7 +10,7 @@ import { isLeagueLocked } from "../../../utils/leaguesUtils";
 type MyTeamSectionProps = {
   team: IFantasyLeagueTeam;
   rank: number;
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
 };
 
 /** Renders a my team card */

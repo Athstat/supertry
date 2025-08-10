@@ -84,4 +84,12 @@ export const swrFetchKeys = {
     getJoinedFantasyLeagueGroups: () => {
         return `joined-league-groups`;
     },
+
+    getFantasyLeagueGroupById: (id: string) => {
+        return `fantasy-league-groups/${id}`;
+    },
+
+    getLeagueGroupRounds: (id: string) => {
+        return `fantasy-league-groups/${id}/rounds`;
+    }
 }

@@ -1,8 +1,8 @@
 import { Users } from 'lucide-react';
-import { IFantasyLeague } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 
 type Props = {
-  league: IFantasyLeague & { participants_count?: number };
+  league: IFantasyLeagueRound & { participants_count?: number };
 };
 
 export default function LeagueTeamsCount({ league }: Props) {

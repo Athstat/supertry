@@ -1,8 +1,8 @@
 import { isLeagueLocked } from '../../../utils/leaguesUtils'
-import { IFantasyLeague } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 
 type Props = {
-    league: IFantasyLeague
+    league: IFantasyLeagueRound
 }
 
 export default function LeagueLockStatus({league} : Props) {

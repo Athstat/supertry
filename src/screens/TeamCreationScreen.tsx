@@ -20,7 +20,7 @@ import TeamToast from './team-creation-components/TeamToast';
 import useTeamCreationState from './team-creation-components/useTeamCreationState';
 import { leagueService } from '../services/leagueService';
 import { URC_COMPETIION_ID } from '../types/constants';
-import { IFantasyLeague } from '../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../types/fantasyLeague';
 import { useTeamCreationGuard } from '../hooks/useTeamCreationGuard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
@@ -122,7 +122,7 @@ export function TeamCreationScreen() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
-  const league = location.state?.league ? (location.state?.league as IFantasyLeague) : undefined;
+  const league = location.state?.league ? (location.state?.league as IFantasyLeagueRound) : undefined;
   const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } =
     useTeamCreationGuard(league);
   const [isGuest, setIsGuest] = useState(false);

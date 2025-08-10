@@ -7,7 +7,7 @@ import { fantasyTeamService } from '../services/fantasyTeamService';
 import { TeamAthletesModal } from '../components/fantasy-league/TeamAthletesModal';
 import LeagueGroupChatFeed from '../components/fantasy-leagues/LeagueGroupChat';
 import { FantasyLeagueFixturesList } from '../components/fantasy-league/FixturesList';
-import { IFantasyLeague } from '../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../types/fantasyLeague';
 import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
 import { useFantasyLeague } from '../components/fantasy-league/useFantasyLeague';
 import { analytics } from '../services/anayticsService';
@@ -232,7 +232,7 @@ export function FantasyLeagueScreen() {
                 <TabViewPage tabKey="fixtures">
                   <FantasyLeagueFixturesList
                     userTeam={userTeam}
-                    league={league as IFantasyLeague}
+                    league={league as IFantasyLeagueRound}
                   />
                 </TabViewPage>
 

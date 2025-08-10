@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { ChevronLeft, Lock } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { IFantasyLeague } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { isLeagueLocked } from '../../utils/leaguesUtils';
 import { LeagueInfo } from '../../types/league';
 import { LeagueLiveIndicatorSolid } from '../fantasy-leagues/LeagueLiveIndicator';
@@ -10,7 +10,7 @@ interface LeagueHeaderProps {
   leagueInfo: LeagueInfo;
   onOpenSettings: () => void;
   isLoading?: boolean;
-  league?: IFantasyLeague;
+  league?: IFantasyLeagueRound;
   children?: ReactNode;
 }
 

@@ -1,7 +1,7 @@
 import { useRef, Ref, useEffect } from "react";
 import { Trophy, Loader, ChevronRight } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import RoundedCard from "../shared/RoundedCard";
 import { isEmail } from "../../utils/stringUtils";
 
@@ -12,7 +12,7 @@ interface LeagueStandingsProps {
   isLoading?: boolean;
   error?: string | null;
   onTeamClick?: (team: RankedFantasyTeam) => void;
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
 }
 
 export function LeagueStandings({
@@ -163,7 +163,7 @@ type StandingsTableRowProps = {
   userTeamRef: Ref<any>;
   handleTeamClick: (team: RankedFantasyTeam) => void;
   index: number;
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
 };
 
 function StandingsTableRow({ team, userTeamRef, handleTeamClick, index }: StandingsTableRowProps) {

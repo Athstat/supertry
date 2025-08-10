@@ -1,4 +1,4 @@
-import { IFantasyLeague } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { gamesService } from '../../services/gamesService';
 import useSWR from 'swr';
 import { LoadingSpinner } from '../team-creation/player-list/LoadingSpinner';
@@ -12,12 +12,12 @@ import { useFetch } from '../../hooks/useFetch';
 import { fantasyTeamService } from '../../services/fantasyTeamService';
 
 interface FixturesListProps {
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
   userTeam?: RankedFantasyTeam;
   getGamesByCompetitionId?: (competitionId: string) => any[];
 }
 
-const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeague) => {
+const filterMatchesForRound = (fixtures: IFixture[], league: IFantasyLeagueRound) => {
   return fixtures
     .filter(f => {
       const start_round = league.start_round;

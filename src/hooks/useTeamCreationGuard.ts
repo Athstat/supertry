@@ -1,5 +1,5 @@
 import { leagueService } from '../services/leagueService';
-import { IFantasyLeague, IFantasyLeagueTeam } from '../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../types/fantasyLeague';
 import { RankedFantasyTeam } from '../types/league';
 import { calculateJoinDeadline, isLeagueLocked } from '../utils/leaguesUtils';
 import { useAuthUser } from './useAuthUser';
@@ -14,7 +14,7 @@ type ResProps = {
 };
 
 /** Hook that can be used as a guard for team creation */
-export function useTeamCreationGuard(league?: IFantasyLeague): ResProps {
+export function useTeamCreationGuard(league?: IFantasyLeagueRound): ResProps {
   const user = useAuthUser();
   const isLocked = isLeagueLocked(league?.join_deadline);
 

@@ -1,11 +1,11 @@
-import { IFantasyLeague } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { LeagueCard } from '../league_card_small/LeagueCard';
 import { pastLeaguesFilter } from '../../../utils/leaguesUtils';
 
 type Props = {
-  leagues: IFantasyLeague[];
+  leagues: IFantasyLeagueRound[];
   userTeams: Record<string, boolean>;
   getGamesByCompetitionId: (competitionId: string) => any[];
 };
@@ -26,7 +26,7 @@ export default function JoinLeaguePastLeaguesSection({ leagues, userTeams, getGa
     },
   };
 
-  const handleLeagueClick = (league: IFantasyLeague) => {
+  const handleLeagueClick = (league: IFantasyLeagueRound) => {
     navigate(`/league/${league.id}`, {
       state: { league },
     });

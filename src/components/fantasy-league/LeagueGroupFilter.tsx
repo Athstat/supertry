@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Users, Filter, Copy, Check, Share2 } from 'lucide-react';
 import { leagueGroupService } from '../../services/leagueGroupService';
 import { IUserLeagueGroup, ILeagueGroupMember } from '../../types/leagueGroup';
-import { IFantasyLeague } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
 interface LeagueGroupFilterProps {
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
   onGroupFilterChange: (groupMembers: string[] | null) => void;
   isFiltered: boolean;
 }

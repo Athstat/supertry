@@ -1,8 +1,8 @@
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 
 export interface LeagueCardProps {
-  league: IFantasyLeague;
-  onLeagueClick: (league: IFantasyLeague) => void;
+  league: IFantasyLeagueRound;
+  onLeagueClick: (league: IFantasyLeagueRound) => void;
   teamCount?: number;
   isLoading?: boolean;
   custom?: number;

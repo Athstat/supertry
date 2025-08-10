@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Users, Copy, Check } from 'lucide-react';
 import { leagueGroupService } from '../../../services/leagueGroupService';
 import { IUserLeagueGroup, ICreateLeagueGroup, IJoinLeagueGroup } from '../../../types/leagueGroup';
-import { IFantasyLeague } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 
 interface JoinLeagueGroupsSectionProps {
-  leagues: IFantasyLeague[];
+  leagues: IFantasyLeagueRound[];
 }
 
 export default function JoinLeagueGroupsSection({ leagues }: JoinLeagueGroupsSectionProps) {

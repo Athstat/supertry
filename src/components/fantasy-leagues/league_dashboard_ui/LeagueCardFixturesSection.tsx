@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useFetch } from "../../../hooks/useFetch";
 import { gamesService } from "../../../services/gamesService";
-import { IFantasyLeague } from "../../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { IFixture } from "../../../types/games";
 import { fixtureSumary } from "../../../utils/fixtureUtils";
 import TeamLogo from "../../team/TeamLogo";
 import { LoadingState } from "../../ui/LoadingState";
 
 type FixturesSectionProps = {
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
 };
 
 export default function LeagueCardFixturesSection({

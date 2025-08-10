@@ -1,7 +1,7 @@
 import { Lock } from 'lucide-react';
 import { useFetch } from '../../hooks/useFetch';
 import { useAuthUser } from '../../hooks/useAuthUser';
-import { IFantasyLeague, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { LoadingState } from '../ui/LoadingState';
 import { useNavigate } from 'react-router-dom';
 import { leagueService } from '../../services/leagueService';
@@ -12,7 +12,7 @@ import { isLeagueLocked } from '../../utils/leaguesUtils';
 import LeagueLiveIndicator from './LeagueLiveIndicator';
 
 type Props = {
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
 };
 
 export default function LeagueCardDetailed({ league }: Props) {

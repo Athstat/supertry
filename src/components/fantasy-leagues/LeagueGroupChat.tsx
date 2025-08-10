@@ -1,11 +1,11 @@
 import { getLeagueChatChannelUrl, getLeagueChannelName } from '../../data/messaging/messaging.utils'
 
 import "@sendbird/uikit-react/dist/index.css";
-import { IFantasyLeague } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import OpenChatFeed from '../messaging/OpenChatFeed';
 
 type Props = {
-    league: IFantasyLeague
+    league: IFantasyLeagueRound
 }
 
 export default function LeagueGroupChatFeed({ league }: Props) {

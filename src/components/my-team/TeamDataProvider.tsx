@@ -4,7 +4,7 @@ import {
   IFantasyClubTeam,
   IFantasyTeamAthlete,
 } from "../../types/fantasyTeamAthlete";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { leagueService } from "../../services/leagueService";
 import { useAtom } from "jotai";
@@ -25,7 +25,7 @@ interface TeamDataContextType {
   athletes: IFantasyTeamAthlete[];
   isLoading: boolean;
   error: string | null;
-  leagueInfo: IFantasyLeague | undefined;
+  leagueInfo: IFantasyLeagueRound | undefined;
   fetchingLeague: boolean;
   teamBudget: number;
   teamAny: any;

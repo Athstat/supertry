@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect } from "react";
-import { IFantasyLeague } from "../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../types/fantasyLeague";
 import { RankedFantasyTeam } from "../types/league";
 import { useSetAtom } from "jotai";
 import { fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom } from "../state/fantasyLeague.atoms";
@@ -9,14 +9,14 @@ import { leagueService } from "../services/leagueService";
 import { authService } from "../services/authService";
 
 type ContextProps = {
-  league?: IFantasyLeague,
+  league?: IFantasyLeagueRound,
   userTeam?: RankedFantasyTeam
 }
 
 export const FantasyLeagueContext = createContext<ContextProps | undefined>(undefined);
 
 type Props = {
-    league?: IFantasyLeague,
+    league?: IFantasyLeagueRound,
     children?: ReactNode,
     userTeam?: RankedFantasyTeam,
 }

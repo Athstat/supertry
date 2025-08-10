@@ -1,4 +1,4 @@
-import { IFantasyLeague, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../types/leagueConfig';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { analytics } from './anayticsService';
@@ -7,7 +7,7 @@ import { authService } from './authService';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
 
 export const leagueService = {
-  getAllLeagues: async (): Promise<IFantasyLeague[]> => {
+  getAllLeagues: async (): Promise<IFantasyLeagueRound[]> => {
     try {
       const uri = getUri(`/api/v1/fantasy-leagues/`);
       const response = await fetch(uri, {
@@ -31,7 +31,7 @@ export const leagueService = {
   /**
    * Join a league by entry code
    */
-  joinLeagueByCode: async (code: string): Promise<{ success: boolean; message?: string } & Partial<IFantasyLeague>> => {
+  joinLeagueByCode: async (code: string): Promise<{ success: boolean; message?: string } & Partial<IFantasyLeagueRound>> => {
     try {
       const uri = getUri(`/api/v1/fantasy-leagues/join-league-code/`);
       const response = await fetch(uri, {
@@ -58,7 +58,7 @@ export const leagueService = {
   /**
    * Fetch a league by its ID
    */
-  getLeagueById: async (leagueId: number): Promise<IFantasyLeague | undefined> => {
+  getLeagueById: async (leagueId: number): Promise<IFantasyLeagueRound | undefined> => {
     try {
       if (leagueId == 0) return undefined;
 
@@ -84,7 +84,7 @@ export const leagueService = {
   /**
    * Fetch a league by its official league ID
    */
-  getLeagueByOfficialId: async (officialLeagueId: string): Promise<IFantasyLeague | undefined> => {
+  getLeagueByOfficialId: async (officialLeagueId: string): Promise<IFantasyLeagueRound | undefined> => {
     try {
       if (!officialLeagueId) return undefined;
 

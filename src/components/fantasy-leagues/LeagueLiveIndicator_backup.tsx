@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { IFantasyLeague } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { getRoundFixtures } from '../../utils/fixtureUtils';
 import { isLeagueLocked } from '../../utils/leaguesUtils';
 import { twMerge } from 'tailwind-merge';
@@ -7,7 +7,7 @@ import { useFetch } from '../../hooks/useFetch';
 import { gamesService } from '../../services/gamesService';
 
 type Props = {
-  league: IFantasyLeague;
+  league: IFantasyLeagueRound;
   className?: string;
   getGamesByCompetitionId?: (competitionId: string) => any[];
 };

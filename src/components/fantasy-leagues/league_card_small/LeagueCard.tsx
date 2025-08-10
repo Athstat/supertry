@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { useCountdown } from '../../../hooks/useCountdown';
 import { calculateJoinDeadline, isLeagueLocked } from '../../../utils/leaguesUtils';
-import { IFantasyLeague } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 
 type Props = {
-  league: IFantasyLeague;
-  onLeagueClick: (league: IFantasyLeague) => void;
+  league: IFantasyLeagueRound;
+  onLeagueClick: (league: IFantasyLeagueRound) => void;
   custom?: number;
   isJoined?: boolean;
   hideIfNoTeamsJoined?: boolean;

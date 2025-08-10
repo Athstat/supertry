@@ -1,12 +1,12 @@
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { analytics } from "../../../services/anayticsService";
-import { IFantasyLeague } from "../../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { isLeagueLocked } from "../../../utils/leaguesUtils";
 
 type NoTeamPlaceholderProps = {
-    league: IFantasyLeague
+    league: IFantasyLeagueRound
 }
 
 /** Renders placeholder when there is no 'My Team' */

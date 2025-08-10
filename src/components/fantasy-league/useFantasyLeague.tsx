@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IFantasyLeague, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { LeagueInfo, RankedFantasyTeam } from '../../types/league';
 import { authService } from '../../services/authService';
 import { useLocation, useParams } from 'react-router-dom';
@@ -9,12 +9,12 @@ import { isLeagueLocked } from '../../utils/leaguesUtils';
 import { useAuthUser } from '../../hooks/useAuthUser';
 
 /** Hook for fetching league information on league screen */
-export function useFantasyLeague(leagueFromParam?: IFantasyLeague) {
+export function useFantasyLeague(leagueFromParam?: IFantasyLeagueRound) {
   const { state } = useLocation();
   const { officialLeagueId } = useParams();
 
-  const [league, setLeague] = useState<IFantasyLeague | undefined>(
-    leagueFromParam ?? (state?.league as IFantasyLeague) ?? undefined
+  const [league, setLeague] = useState<IFantasyLeagueRound | undefined>(
+    leagueFromParam ?? (state?.league as IFantasyLeagueRound) ?? undefined
   );
   const [isLoadingLeague, setIsLoadingLeague] = useState(false);
 
@@ -149,7 +149,7 @@ const formatPrizePool = (league: any): string => {
 };
 
 /** Hook that gets the users team in a league */
-export function useUserFantasyTeam(league: IFantasyLeague) {
+export function useUserFantasyTeam(league: IFantasyLeagueRound) {
   // get teams participating in league
   // Get user using use auth
   // get users team

@@ -2,14 +2,14 @@ import { ChevronRight } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useCountdown } from '../../hooks/useCountdown';
 import { useRouter } from '../../hooks/useRoter';
-import { IFantasyLeague } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { epochDiff } from '../../utils/dateUtils';
 import { calculateJoinDeadline } from '../../utils/leaguesUtils';
 import { useUserFantasyTeam } from '../fantasy-league/useFantasyLeague';
 
 type Props = {
-  league: IFantasyLeague;
-  onViewLeague: (league: IFantasyLeague) => void;
+  league: IFantasyLeagueRound;
+  onViewLeague: (league: IFantasyLeagueRound) => void;
 };
 
 export default function JoinLeagueDeadlineCountdown({ league, onViewLeague }: Props) {

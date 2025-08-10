@@ -1,11 +1,11 @@
 import React from "react";
 import { Users, Lock, Unlock, ChevronRight } from "lucide-react";
-import { IFantasyLeague } from "../../types/fantasyLeague";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { motion } from "framer-motion";
 
 interface MyLeagueCardProps {
-  league: IFantasyLeague;
-  onViewLeague: (league: IFantasyLeague) => void;
+  league: IFantasyLeagueRound;
+  onViewLeague: (league: IFantasyLeagueRound) => void;
   cardVariants: any;
   custom?: number;
 }
@@ -17,7 +17,7 @@ export function MyLeagueCard({
   custom = 0,
 }: MyLeagueCardProps) {
   // Helper function to format prize pool
-  const formatPrizePool = (league: IFantasyLeague): string => {
+  const formatPrizePool = (league: IFantasyLeagueRound): string => {
     if (league.reward_description) return league.reward_description;
     return league.reward_type === "cash"
       ? `$${league.entry_fee || 0 * 10}`
