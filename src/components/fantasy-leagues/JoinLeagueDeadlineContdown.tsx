@@ -5,7 +5,7 @@ import { useRouter } from '../../hooks/useRoter';
 import { IFantasyLeague } from '../../types/fantasyLeague';
 import { epochDiff } from '../../utils/dateUtils';
 import { calculateJoinDeadline } from '../../utils/leaguesUtils';
-import { useUserFantasyTeam } from '../league/useFantasyLeague';
+import { useUserFantasyTeam } from '../fantasy-league/useFantasyLeague';
 
 type Props = {
   league: IFantasyLeague;
