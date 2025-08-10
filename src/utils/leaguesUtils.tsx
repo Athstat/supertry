@@ -83,6 +83,15 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   return now.valueOf() > deadline.valueOf();
 }
 
+export function isLeagueGroupLocked(joinDeadline: Date | null | undefined) {
+  if (!joinDeadline) return false;
+
+  const now = new Date();
+  const deadline = new Date(joinDeadline);
+
+  return now.valueOf() > deadline.valueOf();
+}
+
 /** Returns the last possible date that users can join a league */
 export function calculateJoinDeadline(league: IFantasyLeague) {
 

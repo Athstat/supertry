@@ -1,5 +1,6 @@
 /** provides functions to get keys for different swr fetch keys */
 
+import { authService } from "../services/authService";
 import { IProSeason } from "../types/season";
 
 export const swrFetchKeys = {
@@ -65,5 +66,14 @@ export const swrFetchKeys = {
 
     getAllSeasonAthletes: (season: IProSeason) => {
         return `seasons/${season.id}/athletes`;
+    },
+
+    getMyLeagueGroups: () => {
+        const authUser = authService.getUserInfoSync();
+        return `my-leagues/${authUser?.kc_id}`;
+    },
+
+    getLeagueGroupMembers: (leagueId: string) => {
+        return `fantasy-league-group/members/${leagueId}`;
     }
 }

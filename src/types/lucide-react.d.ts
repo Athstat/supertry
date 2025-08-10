@@ -110,5 +110,6 @@ declare module "lucide-react" {
   export const CheckCircle2 : CIP;
   export const DollarSign : CIP;
   export const Globe : CIP;
+  export const Badge : CIP;
 }
 
