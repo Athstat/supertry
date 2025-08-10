@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IBoxScoreItem } from "../../types/boxScore"
 import { IFixture } from "../../types/games";
-import { formatPosition } from "../../utils/athleteUtils";
+import { athleteSearchPredicate, formatPosition } from "../../utils/athleteUtils";
 import PlayerMugshot from "../shared/PlayerMugshot";
 import PlayerFixtureStatsModal from "./PlayerFixtureStatsModal";
 
@@ -13,11 +13,7 @@ type Props = {
 
 export default function FixtureSearchResults({ search, boxScore, fixture }: Props) {
 
-
-    const searchResults = boxScore.filter(bs => {
-        const fullName = (bs.athlete_first_name + " " + bs.athlete_last_name).toLowerCase();
-        return fullName.includes(search.toLowerCase());
-    });
+    const searchResults = boxScore.filter(bs => athleteSearchPredicate(bs.athlete, search));
 
     return (
         <div className="grid grid-cols-1 gap-3" >
@@ -41,8 +37,8 @@ type ResultItemProps = {
 
 function ResultItem({ bs, fixture }: ResultItemProps) {
 
-    const teamName = bs.athlete_team_id === fixture.team_id ?
-        fixture.team_name : fixture.competition_name;
+    const teamName = bs.athlete.team.athstat_id === fixture.team.athstat_id ?
+        fixture.team.athstat_name : fixture.competition_name;
 
     const [show, setShow] = useState(false);
     const toggle = () => setShow(!show);
@@ -51,12 +47,12 @@ function ResultItem({ bs, fixture }: ResultItemProps) {
         <>
             <div onClick={toggle}  className="flex gap-3 flex-row items-center p-3 hover:bg-slate-200 rounded-xl dark:hover:bg-slate-800/40" >
                 <div>
-                    <PlayerMugshot url={bs.athlete_image_url} className="w-14 h-14" />
+                    <PlayerMugshot url={bs.athlete.image_url} className="w-14 h-14" />
                 </div>
                 <div >
-                    <p className="font-medium" >{bs.athlete_first_name} {bs.athlete_last_name}</p>
+                    <p className="font-medium" >{bs.athlete.athstat_firstname} {bs.athlete.athstat_lastname}</p>
                     <div className="dark:text-slate-400 text-slate-700 text-sm" >
-                        <p>{teamName} · {formatPosition(bs.athlete_position ?? "")}</p>
+                        <p>{teamName} · {formatPosition(bs.athlete.position ?? "")}</p>
                     </div>
                 </div>
             </div>
@@ -66,6 +62,7 @@ function ResultItem({ bs, fixture }: ResultItemProps) {
                 fixture={fixture}
                 open={show}
                 onClose={toggle}
+                
             />
 
         </>

@@ -38,7 +38,6 @@ export default function FixtureDisciplineLeaders({ boxScores, fixture }: Props) 
               fixture={fixture}
             >
               <div className="flex flex-row w-full text-wrap text-slate-600 dark:text-slate-400 text-sm gap-2 items-center justify-start" >
-                {bs.athlete_match_power_ranking !== 0 && <p>PR {bs.athlete_match_power_ranking?.toFixed(1)}</p>}
                 {bs.redcards !== 0 && <p className="text-nowrap">Red Cards {bs.redcards}</p>}
                 {bs.yellowcards !== 0 && <p className="text-nowrap">Yellow Cards {bs.yellowcards}</p>}
               </div>

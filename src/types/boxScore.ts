@@ -1,7 +1,10 @@
+import { IProAthlete } from "./athletes"
+
 export type IBoxScoreItem = {
-    game_id: string,
     athlete_id: string,
-    player_type: "Back" | "Forward" | string,
+    game_id: string,
+    athlete: IProAthlete
+    player_type: string,
     player_name: string,
     passes: number,
     carries: number,
@@ -30,11 +33,5 @@ export type IBoxScoreItem = {
     penaltygoalsscored: number,
     dropgoalsscored: number,
     points: number,
-    minutesplayed: number,
-    athlete_image_url: string,
-    athlete_position: string,
-    athlete_team_id: string,
-    athlete_first_name: string,
-    athlete_last_name: string,
-    athlete_match_power_ranking?: number
+    minutesplayed: number
 }

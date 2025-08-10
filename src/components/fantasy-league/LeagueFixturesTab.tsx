@@ -104,12 +104,12 @@ type FixtureListProps = {
 function FixtureListView({ round }: FixtureListProps) {
 
     const key = swrFetchKeys.getGroupRoundGames(round.fantasy_league_group_id, round.id);
-    let { data: games, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getGroupRoundGames(
+    const { data: fetchedGames, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getGroupRoundGames(
         round.fantasy_league_group_id,
         round.id
     ));
 
-    games = games ?? [];
+    const games = fetchedGames ?? [];
 
     if (isLoading) {
         return (

@@ -9,6 +9,7 @@ import useSWR from "swr";
 import { swrFetchKeys } from "../../../../utils/swrKeys";
 import { IProAthlete } from "../../../../types/athletes";
 import { djangoAthleteService } from "../../../../services/athletes/djangoAthletesService";
+import { abbreviateSeasonName } from "../../../players/compare/PlayerCompareSeasonPicker";
 
 type Props = {
   player: any;
@@ -81,7 +82,7 @@ const StatsCategories: React.FC<StatsCategoriesProps> = ({ playerStats }) => {
       {/* General Stats */}
       {playerStats.categorizedStats.general.length > 0 && (
         <StatsCategory
-          title="Season Performance"
+          title="Performance Overview"
           stats={playerStats.categorizedStats.general}
         />
       )}
@@ -171,11 +172,11 @@ function SeasonPillItem({ season, isActive, onClick }: SeasonPillProps) {
 
   return (
     <div className={twMerge(
-      "flex-1  cursor-pointer text-nowrap bg-slate-200/60 border dark:bg-slate-700/60 ",
-      "dark:border-slate-500 rounded-xl px-2 py-1 hover:bg-primary-500 hover:text-white hover:dark:bg-primary-600 hover:dark:border-primary-500",
-      isActive && "bg-primary-500 dark:bg-primary-600 text-white border border-primary-400 dark:border-primary-500"
+      "flex-1  cursor-pointer text-nowrap bg-slate-200/60 dark:bg-slate-700/60 ",
+      " rounded-xl px-2 py-1 hover:bg-primary-500 hover:text-white hover:dark:bg-blue-600 hover:dark:border-blue-500",
+      isActive && "bg-blue-500 dark:bg-blue-600 text-white border border-blue-400 dark:border-blue-500"
     )} >
-      <button onClick={handleClick} className="text-sm" >{season.name}</button>
+      <button onClick={handleClick} className="text-sm" >{season.name && abbreviateSeasonName(season.name)}</button>
     </div>
   )
 }

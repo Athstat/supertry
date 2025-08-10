@@ -30,7 +30,7 @@ export default function MatchSeasonFilterBar({ onChange, seasons, value, sortDes
     })
 
     return (
-        <div className="flex flex-row items-center overflow-y-auto gap-2" >
+        <div className="flex flex-row items-center no-scrollbar overflow-y-auto gap-2" >
 
             <RoundedCard
                 className={twMerge(
