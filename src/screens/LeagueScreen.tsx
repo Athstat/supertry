@@ -8,6 +8,7 @@ import { StatCard } from "../components/shared/StatCard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import NoContentCard from "../components/shared/NoContentMessage";
 import { LeagueStandings } from "../components/fantasy-league/LeagueStandings";
+import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
 
 
 export function FantasyLeagueScreen() {
@@ -22,7 +23,7 @@ export function FantasyLeagueScreen() {
 
 function Content() {
 
-  const { league, members, rounds } = useFantasyLeagueGroup();
+  const { league, members, rounds, userMemberRecord } = useFantasyLeagueGroup();
   const navigate = useNavigate();
 
   if (!league) {
@@ -53,7 +54,8 @@ function Content() {
     {
       label: "Commissioner",
       tabKey: 'commissioner',
-      className: "flex-1"
+      className: "flex-1",
+      disabled: !userMemberRecord || userMemberRecord.is_admin == false
     },
 
     {
@@ -104,6 +106,10 @@ function Content() {
 
         <TabViewPage tabKey="standings" >
           <LeagueStandings />
+        </TabViewPage>
+
+        <TabViewPage tabKey="info" >
+          <LeagueInfoTab />
         </TabViewPage>
       </TabView>
 
