@@ -1,18 +1,19 @@
 import { IFantasyLeague } from '../types/fantasyLeague';
 import { leagueService } from '../services/leagueService';
 import { dateComparator } from './dateUtils';
+import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
 
 /** Filters to only remain with leagues that seven days away */
-export function activeLeaguesFilter(leagues: IFantasyLeague[]) {
+export function activeLeaguesFilter(leagues: FantasyLeagueGroup[]) {
   return leagues
     .filter(l => {
-      return l.has_ended === false;
+      return l.is_hidden === false;
     })
     .sort((a, b) => {
-      const aDeadline = new Date(a.join_deadline ?? 0);
-      const bDealine = new Date(b.join_deadline ?? 0);
+      const aEndDate = new Date(a.end_date ?? 0);
+      const bEndDate = new Date(b.end_date ?? 0);
 
-      return aDeadline.valueOf() - bDealine.valueOf();
+      return aEndDate.valueOf() - bEndDate.valueOf();
     });
 }
 
@@ -174,7 +175,7 @@ export function pastLeaguesFilter(leagues: IFantasyLeague[]) {
 }
 
 /** Filters leagues and returns leagues that are on the clock (7 days away) */
-export function leaguesOnClockFilter(leagues: IFantasyLeague[]) {
+export function leaguesOnClockFilter(leagues: FantasyLeagueGroup[]) {
   const activeLeagues = activeLeaguesFilter(leagues);
 
   const leagueOnTheClock = activeLeagues.length > 0 ?

@@ -1,5 +1,6 @@
 import { FantasyLeagueGroup, FantasyLeagueGroupMember } from "../../types/fantasyLeagueGroups";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
+import { authService } from "../authService";
 
 export const fantasyLeagueGroupsService = {
 
@@ -7,6 +8,26 @@ export const fantasyLeagueGroupsService = {
         try {
 
             const uri = getUri(`/api/v1/fantasy-league-groups/public`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasyLeagueGroup[];
+            }
+
+        } catch (err) {
+            console.log("Error fetching public fantasy league groups ", err);
+        }
+
+        return [];
+    },
+
+    getAllPublicLeaguesNotMember: async (): Promise<FantasyLeagueGroup[]> => {
+        try {   
+
+            const authUser = authService.getUserInfoSync();
+            const uri = getUri(`/api/v1/fantasy-league-groups/public?not_member=${authUser?.kc_id}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

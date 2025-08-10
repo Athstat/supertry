@@ -56,8 +56,12 @@ export const swrFetchKeys = {
         return `/athlete-career-star-ratings/${athleteId}`
     },
 
-    getAllFantasyLeagues: () => {
-        return `fantasy-leagues`;
+    getAllPublicFantasyLeagues: () => {
+        return `public-fantasy-leagues`;
+    },
+
+    getAllDiscorverLeagues: () => {
+        return `public-fantasy-leagues/discorver`;
     },
 
     getAllSuppportedSeasons: (seasonIds?: string[]) => {

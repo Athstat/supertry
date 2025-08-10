@@ -1,23 +1,19 @@
 import { motion } from 'framer-motion';
-import { Trophy } from 'lucide-react';
 import { activeLeaguesFilter } from '../../../utils/leaguesUtils';
-import { LeagueCard } from '../league_card_small/LeagueCard';
-import { IFantasyLeague } from '../../../types/fantasyLeague';
 import { useNavigate } from 'react-router-dom';
 import NoContentCard from '../../shared/NoContentMessage';
+import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups';
+import { FantasyLeagueGroupCard } from '../league_card_small/FantasyLeagueGroupCard';
 
 type Props = {
-  leagues: IFantasyLeague[];
-  userTeams: Record<string, boolean>;
-  getGamesByCompetitionId: (competitionId: string) => any[];
+  leagues: FantasyLeagueGroup[];
 };
 
 /** Renders active leagues on the join league screen */
 export default function JoinLeagueActiveLeaguesSection({
-  leagues,
-  userTeams,
-  getGamesByCompetitionId,
+  leagues
 }: Props) {
+
   const activeLeagues = activeLeaguesFilter(leagues);
   const navigate = useNavigate();
 
@@ -33,7 +29,7 @@ export default function JoinLeagueActiveLeaguesSection({
     },
   };
 
-  const handleLeagueClick = (league: IFantasyLeague) => {
+  const handleLeagueClick = (league: FantasyLeagueGroup) => {
     navigate(`/league/${league.id}`, {
       state: { league },
     });
@@ -55,14 +51,11 @@ export default function JoinLeagueActiveLeaguesSection({
         animate="visible"
         className="space-y-3"
       >
-        {activeLeagues.map((league, index) => (
-          <LeagueCard
+        {activeLeagues.map((league ) => (
+          <FantasyLeagueGroupCard 
+            leagueGroup={league}
             key={league.id}
-            league={league}
-            onLeagueClick={handleLeagueClick}
-            custom={index}
-            isJoined={userTeams[league.id]}
-            getGamesByCompetitionId={getGamesByCompetitionId}
+            onClick={handleLeagueClick}
           />
         ))}
       </motion.div>
