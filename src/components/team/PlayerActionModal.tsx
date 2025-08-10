@@ -7,7 +7,7 @@ import { athleteService } from "../../services/athletes/athleteService";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { useAtomValue } from "jotai";
-import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
+import { fantasyLeagueLockedAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -24,7 +24,7 @@ export function PlayerActionModal({
   onSwapPlayer
 }: PlayerActionModalProps) {
 
-  const { data: info, isLoading } = useFetch("athletes-info", player.tracking_id ?? "fall-back", athleteService.getRugbyAthleteById);
+  const { data: info, isLoading } = useFetch("athletes-info", player.tracking_id ?? "fall-back", athleteService.getAthleteById);
   console.log(info);
 
   const isSwapLocked = useAtomValue(fantasyLeagueLockedAtom);
@@ -83,9 +83,9 @@ export function PlayerActionModal({
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                {!isLoading && info && <span className="text-gray-600 font-semibold w-full dark:text-gray-400">
+                {/* {!isLoading && info && <span className="text-gray-600 font-semibold w-full dark:text-gray-400">
                   {player.team_name}
-                </span>}
+                </span>} */}
 
                 {isLoading && <div className="h-2 w-10 rounded-lg bg-slate-300 dark:bg-slate-700 animate-pulse" ></div>}
                 <p className="text-primary-700 dark:text-primary-500 font-bold flex flex-row gap-2 items-center">

@@ -7,7 +7,6 @@ import {
 } from '../../state/myTeam.atoms';
 import { MAX_TEAM_BUDGET } from '../../types/constants';
 import { Coins, Lock, Award } from 'lucide-react';
-import { fantasyLeagueLockedAtom } from '../../state/fantasyLeague.atoms';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { FantasyTeamPosition, Position } from '../../types/position';
 import { useMemo, useState } from 'react';
@@ -16,6 +15,7 @@ import PlayerMugshotPlayerHolder from '../player/PlayerMugshotPlayerHolder';
 import { formatPosition } from '../../utils/athleteUtils';
 import { useMyTeamScreenActions } from './MyTeamActions';
 import { fantasyTeamService } from '../../services/fantasyTeamService';
+import { fantasyLeagueLockedAtom } from '../../state/fantasy/fantasyLeague.atoms';
 
 type Props = {};
 

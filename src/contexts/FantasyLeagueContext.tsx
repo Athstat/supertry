@@ -2,11 +2,11 @@ import { createContext, ReactNode, useEffect } from "react";
 import { IFantasyLeagueRound } from "../types/fantasyLeague";
 import { RankedFantasyTeam } from "../types/league";
 import { useSetAtom } from "jotai";
-import { fantasyLeagueAtom, fantasyLeagueLockedAtom, userFantasyTeamAtom } from "../state/fantasyLeague.atoms";
 import useSWR from "swr";
 import { LoadingState } from "../components/ui/LoadingState";
 import { leagueService } from "../services/leagueService";
 import { authService } from "../services/authService";
+import { fantasyLeagueAtom, userFantasyTeamAtom } from "../state/fantasy/fantasyLeague.atoms";
 
 type ContextProps = {
   league?: IFantasyLeagueRound,

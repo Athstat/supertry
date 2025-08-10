@@ -19,11 +19,7 @@ import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
 import { ScopeProvider } from 'jotai-scope';
 import { mutate } from 'swr';
-import {
-  fantasyLeagueAtom,
-  fantasyLeagueLockedAtom,
-  userFantasyTeamAtom,
-} from '../state/fantasyLeague.atoms';
+import { fantasyLeagueAtom, userFantasyTeamAtom, fantasyLeagueLockedAtom } from '../state/fantasy/fantasyLeague.atoms';
 
 export function FantasyLeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
@@ -128,9 +124,9 @@ export function FantasyLeagueScreen() {
     ? teams.filter(team => groupFilterMembers.includes(team.userId))
     : teams;
 
-  const handleGroupFilterChange = (groupMembers: string[] | null) => {
-    setGroupFilterMembers(groupMembers);
-  };
+  // const handleGroupFilterChange = (groupMembers: string[] | null) => {
+  //   setGroupFilterMembers(groupMembers);
+  // };
 
   const tabItems: TabViewHeaderItem[] = [
     {

@@ -1,7 +1,6 @@
 import { useAtomValue } from "jotai";
-import { athleteService } from "../services/athletes/athleteService";
 import { useFetch } from "./useFetch";
-import { fantasyLeagueAtom } from "../state/fantasyLeague.atoms";
+import { fantasyLeagueAtom } from "../state/fantasy/fantasyLeague.atoms";
 
 export function useAthletePointsBreakdown(trackingId: string) {
 
@@ -22,9 +21,7 @@ export function useAthletePointsBreakdown(trackingId: string) {
             round: league?.start_round ?? 1,
             trackingId
         }
-        , async ({ leagueId, round, trackingId }) => {
-            return await athleteService.getAthletePointsBreakdownByLeagueAndRound(
-                trackingId, round, leagueId ?? "fall-back"
-            )
+        , async ({  }) => {
+            return []
         });
 }

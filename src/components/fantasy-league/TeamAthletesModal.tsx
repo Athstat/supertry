@@ -8,9 +8,9 @@ import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
 import { twMerge } from "tailwind-merge";
 import { isEmail } from "../../utils/stringUtils";
 import { useAtomValue } from "jotai";
-import { fantasyLeagueLockedAtom } from "../../state/fantasyLeague.atoms";
 import { authService } from "../../services/authService";
 import PlayerMugshot from "../shared/PlayerMugshot";
+import { fantasyLeagueLockedAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;

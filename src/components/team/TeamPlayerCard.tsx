@@ -8,7 +8,7 @@ import TeamLogo from "./TeamLogo";
 import { Info } from "lucide-react";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { useAtomValue } from "jotai";
-import { fantasyLeagueAtom } from "../../state/fantasyLeague.atoms";
+import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 type Props = {
   player: IFantasyTeamAthlete;
@@ -27,7 +27,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
   const { data: playerInfo, isLoading } = useFetch(
     "athletes",
     player.tracking_id,
-    athleteService.getRugbyAthleteById
+    athleteService.getAthleteById
   );
 
   const league = useAtomValue(fantasyLeagueAtom);
@@ -40,12 +40,8 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
       round: league?.start_round ?? -1,
       trackingId: playerInfo?.tracking_id ?? "fallback-tid",
     },
-    async ({ leagueId, round, trackingId }) => {
-      return await athleteService.getAthletePointsBreakdownByLeagueAndRound(
-        trackingId,
-        round,
-        leagueId ?? "fall-back"
-      );
+    async ({ }) => {
+      return []
     }
   );
 
@@ -71,7 +67,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
 
   const totalPoints = pointsBreakDown
     ? pointsBreakDown.reduce((res, action) => {
-      return res + action.score;
+      return res + 0;
     }, 0)
     : 0;
 
