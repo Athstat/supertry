@@ -8,7 +8,7 @@ import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
 import PostSignUpWelcomeScreen from './screens/PostSignUpWelcomeScreen';
 import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
-import { FantasyLeaguesScreen } from './screens/FantasyLeagueScreen';
+import { FantasyLeaguesScreen } from './screens/FantasyLeaguesScreen';
 import { FantasyLeagueScreen } from './screens/LeagueScreen';
 import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
@@ -127,7 +127,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/league/:officialLeagueId"
+        path="/league/:leagueId"
         element={
           <ProtectedRoute>
             <Layout>
