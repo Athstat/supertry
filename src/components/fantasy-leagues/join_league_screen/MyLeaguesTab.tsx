@@ -5,6 +5,8 @@ import NoContentCard from '../../shared/NoContentMessage';
 import UserCreatedLeaguesSection from '../UserCreatedLeaguesSection';
 import { FantasyLeagueGroupCard } from '../league_card_small/FantasyLeagueGroupCard';
 import { swrFetchKeys } from '../../../utils/swrKeys';
+import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyLeaguesTab() {
 
@@ -31,6 +33,12 @@ function JoinedLeaguesList({ }: JoinedProps) {
     const { data: joinedLeagues, isLoading: loadingJoined, error: joinedError } = useSWR(key, () =>
         fantasyLeagueGroupsService.getJoinedLeagues()
     );
+
+    const navigate = useNavigate();
+
+    const handleClickLeague = (league: FantasyLeagueGroup) => {
+        navigate(`/league/${league.id}`);
+    }
 
     return (
         <>
@@ -64,6 +72,7 @@ function JoinedLeaguesList({ }: JoinedProps) {
                                 <FantasyLeagueGroupCard 
                                     leagueGroup={league}
                                     key={league.id}
+                                    onClick={() => handleClickLeague(league)}
                                 />
                             ))}
                         </div>
