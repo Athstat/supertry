@@ -17,7 +17,7 @@ type Props = {
 export function FantasyLeagueGroupCard({ leagueGroup, custom = 0, onClick }: Props) {
 
     const key = swrFetchKeys.getLeagueGroupMembers(leagueGroup.id);
-    const {data: members, isLoading:loadingMembers} = useSWR(key, () => fantasyLeagueGroupsService.getGroupMembers(leagueGroup.id));
+    const { data: members, isLoading: loadingMembers } = useSWR(key, () => fantasyLeagueGroupsService.getGroupMembers(leagueGroup.id));
 
     const membersCount = members ? members.length : '-';
 
@@ -50,11 +50,11 @@ export function FantasyLeagueGroupCard({ leagueGroup, custom = 0, onClick }: Pro
         }
     }
 
-    const {authUser} = useAuth();
-    
+    const { authUser } = useAuth();
+
     const isJoined = (members ?? []).find((m) => {
         return m.user.kc_id === authUser?.kc_id
-    }) !== undefined; 
+    }) !== undefined;
 
     return (
         <motion.div
@@ -74,7 +74,7 @@ export function FantasyLeagueGroupCard({ leagueGroup, custom = 0, onClick }: Pro
                 },
             }}
             onClick={handleOnClick}
-            className="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-md hover:shadow-lg cursor-pointer transition-all duration-200 space-y-2"
+            className="bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 rounded-2xl p-4 shadow-md hover:shadow-lg cursor-pointer transition-all duration-200 space-y-2"
             whileHover={{
                 scale: 1.02,
                 transition: { type: 'spring', stiffness: 300 },
@@ -82,15 +82,25 @@ export function FantasyLeagueGroupCard({ leagueGroup, custom = 0, onClick }: Pro
         >
             {/* Header Row */}
             <div className="flex justify-between items-start">
-                <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
-                        {leagueGroup.title}
-                    </h3>
-                    {leagueGroup.season.name && (
-                        <p className="text-xs uppercase text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-                            {leagueGroup.season.name}
-                        </p>
-                    )}
+                <div className="flex-1 flex min-w-0 flex-col gap-2">
+
+                    <div className="flex flex-row items-center gap-12" >
+
+                        {/* <Trophy /> */}
+
+                        <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+                            {leagueGroup.title}
+                        </h3>
+                    </div>
+
+                    <div>
+                        {leagueGroup.season.name && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+                                {leagueGroup.season.name}
+                            </p>
+                        )}
+                    </div>
+
                 </div>
                 <div className="flex items-center gap-2 ml-2">
                     {isJoined && (
@@ -112,12 +122,12 @@ export function FantasyLeagueGroupCard({ leagueGroup, custom = 0, onClick }: Pro
 
             {/* Metadata Row - Compressed single line */}
             <div className="flex justify-between items-center">
-                
+
                 <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    
+
                     {!loadingMembers && <div className="flex items-center gap-1">
                         <Users size={12} />
-                        <span>{membersCount} Teams</span>
+                        <span>{membersCount} Team{membersCount === 1 ? "" : 's'}</span>
                     </div>}
 
                     {loadingMembers && (
@@ -148,24 +158,24 @@ export function FantasyLeagueGroupCard({ leagueGroup, custom = 0, onClick }: Pro
 
 
 const Badge = ({ variant, children }: { variant: string; children: React.ReactNode }) => {
-  const getVariantClasses = () => {
-    switch (variant) {
-      case 'success':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
-      case 'destructive':
-        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
-      case 'secondary':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
-      case 'invite':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
-    }
-  };
+    const getVariantClasses = () => {
+        switch (variant) {
+            case 'success':
+                return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+            case 'destructive':
+                return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+            case 'secondary':
+                return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+            case 'invite':
+                return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400';
+            default:
+                return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+        }
+    };
 
-  return (
-    <span className={`px-2 py-1 text-xs rounded-full font-medium ${getVariantClasses()}`}>
-      {children}
-    </span>
-  );
+    return (
+        <span className={`px-2 py-1 text-xs rounded-full font-medium ${getVariantClasses()}`}>
+            {children}
+        </span>
+    );
 };

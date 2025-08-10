@@ -1,7 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Loader, Trophy } from 'lucide-react';
-import { LeagueCard } from '../components/leagues/league_card_small/LeagueCard';
-import NoContentCard from '../components/shared/NoContentMessage';
 import { leagueService } from '../services/leagueService';
 import { fantasyTeamService } from '../services/fantasyTeamService';
 import { gamesService } from '../services/gamesService';
@@ -13,7 +11,6 @@ import { leaguesOnClockFilter } from '../utils/leaguesUtils';
 import JoinLeagueDeadlineCountdown from '../components/leagues/JoinLeagueDeadlineContdown';
 // Removed Upcoming/Past sections in favor of a single Joined Leagues list
 import JoinLeagueActiveLeaguesSection from '../components/leagues/join_league_screen/JoinLeagueActiveLeaguesSection';
-import UserCreatedLeaguesSection from '../components/leagues/UserCreatedLeaguesSection';
 import { useFetch } from '../hooks/useFetch';
 import LeagueTabs from '../components/leagues/LeagueTabs';
 import JoinLeagueByCode from '../components/leagues/JoinLeagueByCode';
@@ -24,6 +21,7 @@ import LeagueFilterPanel, {
 } from '../components/leagues/LeagueFilterPanel';
 import { useNavigate } from 'react-router-dom';
 import FantasyLeagueScreenCTA from '../components/leagues/join_league_screen/LeagueScreenCTA';
+import MyLeaguesTab from '../components/leagues/join_league_screen/MyLeaguesTab';
 
 export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
@@ -258,58 +256,7 @@ export function FantasyLeaguesScreen() {
       )}
 
       {activeTab === 'my' && (
-        <div className="space-y-6">
-          {showCreatedByMe && (
-            <div className="mt-2">
-              <UserCreatedLeaguesSection onLeagueCreated={refreshAllLeagues} />
-            </div>
-          )}
-
-          {showJoined && (
-            <>
-              {isLoading ? (
-                <div className="flex justify-center items-center py-12">
-                  <Loader className="w-8 h-8 text-primary-500 animate-spin" />
-                  <span className="ml-3 text-gray-600 dark:text-gray-400">
-                    Loading your leagues...
-                  </span>
-                </div>
-              ) : error ? (
-                <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-6 rounded-lg text-center">
-                  <p className="mb-4">{error}</p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="px-4 py-2 bg-red-100 dark:bg-red-800/30 rounded-md hover:bg-red-200"
-                  >
-                    Try Again
-                  </button>
-                </div>
-              ) : (
-                <div className="mb-8">
-                  <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-                    Joined Leagues
-                  </h2>
-                  {joinedLeagues.length === 0 ? (
-                    <NoContentCard className="my-6" message="You haven't joined any leagues yet" />
-                  ) : (
-                    <div className="space-y-3">
-                      {joinedLeagues.map((league, index) => (
-                        <LeagueCard
-                          key={league.id}
-                          league={league}
-                          onLeagueClick={() => handleLeagueClick(league)}
-                          custom={index}
-                          isJoined={false}
-                          getGamesByCompetitionId={getGamesByCompetitionId}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </>
-          )}
-        </div>
+        <MyLeaguesTab />
       )}
 
       {activeTab === 'discover' && (

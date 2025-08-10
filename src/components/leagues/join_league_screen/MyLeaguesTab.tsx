@@ -1,10 +1,10 @@
-import { swrFetchKeys } from '../../../utils/swrKeys'
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService';
 import { Loader } from 'lucide-react';
 import NoContentCard from '../../shared/NoContentMessage';
 import UserCreatedLeaguesSection from '../UserCreatedLeaguesSection';
 import { FantasyLeagueGroupCard } from '../league_card_small/FantasyLeagueGroupCard';
+import { swrFetchKeys } from '../../../utils/swrKeys';
 
 export default function MyLeaguesTab() {
 
@@ -27,8 +27,9 @@ type JoinedProps = {
 
 function JoinedLeaguesList({ }: JoinedProps) {
 
+    const key = swrFetchKeys.getJoinedFantasyLeagueGroups();
     const { data: joinedLeagues, isLoading: loadingJoined, error: joinedError } = useSWR(key, () =>
-        fantasyLeagueGroupsService.getMyCreatedLeagues()
+        fantasyLeagueGroupsService.getJoinedLeagues()
     );
 
     return (
@@ -59,7 +60,7 @@ function JoinedLeaguesList({ }: JoinedProps) {
                         <NoContentCard className="my-6" message="You haven't joined any leagues yet" />
                     ) : (
                         <div className="space-y-3">
-                            {joinedLeagues?.map((league, index) => (
+                            {joinedLeagues?.map((league ) => (
                                 <FantasyLeagueGroupCard 
                                     leagueGroup={league}
                                     key={league.id}

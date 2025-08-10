@@ -75,5 +75,9 @@ export const swrFetchKeys = {
 
     getLeagueGroupMembers: (leagueId: string) => {
         return `fantasy-league-group/members/${leagueId}`;
-    }
+    },
+
+    getJoinedFantasyLeagueGroups: () => {
+        return `joined-league-groups`;
+    },
 }
