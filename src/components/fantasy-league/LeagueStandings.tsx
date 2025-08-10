@@ -23,7 +23,7 @@ export function LeagueStandings({}: Props) {
 
   // Handle team row click
   const handleTeamClick = (team: FantasyLeagueGroupMember) => {
-
+    
   };
 
   return (

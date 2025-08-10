@@ -3,14 +3,13 @@ import FantasyLeagueGroupDataProvider from "../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from "../hooks/leagues/useFantasyLeagueGroup";
 import PageView from "./PageView";
 import { ErrorState } from "../components/ui/ErrorState";
-import { ArrowLeft, Swords, Trophy } from "lucide-react";
+import { ArrowLeft, Trophy } from "lucide-react";
 import { StatCard } from "../components/shared/StatCard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import NoContentCard from "../components/shared/NoContentMessage";
 import { LeagueStandings } from "../components/fantasy-league/LeagueStandings";
 import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
 import LeagueFixturesTab from "../components/fantasy-league/LeagueFixturesTab";
-import PrimaryButton from "../components/shared/buttons/PrimaryButton";
 import JoinLeagueButton from "../components/fantasy-league/buttons/JoinLeagueButton";
 
 
