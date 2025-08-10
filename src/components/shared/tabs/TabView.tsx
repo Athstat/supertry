@@ -82,7 +82,7 @@ function TabViewInner({
   return (
     <div className={twMerge('w-full flex flex-col gap-5', className)}>
       {/* Header */}
-      <div className="flex flex-row w-full h-fit border border-slate-200 dark:border-slate-700 rounded-xl bg-white shadow-md dark:bg-slate-800/40 overflow-x-auto">
+      <div className="flex flex-row no-scrollbar w-full h-fit border border-slate-200 dark:border-slate-700 rounded-xl bg-white shadow-md dark:bg-slate-800/40 overflow-x-auto">
         {enabledTabs.map((item, index) => {
           return (
             <TabViewButton

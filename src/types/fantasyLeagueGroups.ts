@@ -36,3 +36,9 @@ export type NewFantasyLeagueGroupReq = {
     season_id: string,
     description?: string
 }
+
+export type EditFantasyLeagueGroupReq = {
+    title: string,
+    is_private: boolean,
+    description?: string
+}

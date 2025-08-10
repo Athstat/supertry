@@ -47,7 +47,7 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
         <div className="flex flex-col gap-1" >
             <label>Visibility</label>
 
-            <div className="flex flex-row items-center gap-2" >
+            <div className="flex flex-row items-start justify-start gap-2" >
                 {options.map((option) => {
 
                     const isSelected = value === option.value;
@@ -59,7 +59,7 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
                     return (
                         <div
                             className={twMerge(
-                                "flex flex-col gap-2 flex-1 p-3 border-2 h-[150px] cursor-pointer border-slate-200 dark:border-slate-700 rounded-lg",
+                                "flex flex-col gap-2 flex-1 p-3 border-2 w-full h-[200px] cursor-pointer border-slate-200 dark:border-slate-700 rounded-lg",
                                 isSelected && "border-primary-500 dark:border-primary-700 bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/40 hover:dark:bg-primary-900/60",
                                 !isSelected && "hover:bg-slate-100 hover:dark:bg-slate-800"
                             )}
