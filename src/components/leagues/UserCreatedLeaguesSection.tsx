@@ -31,6 +31,8 @@ export default function UserCreatedLeaguesSection({
 
   const navigate = useNavigate();
 
+  const toggleShowModal = () => setShowCreateModal(prev => !prev);
+
 
   const handleLeagueCreated = async (newLeague: FantasyLeagueGroup) => {
 
@@ -115,12 +117,12 @@ export default function UserCreatedLeaguesSection({
       <div className="flex items-center justify-between mb-4">
         
         <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
-          My Created Leagues
+          My Leagues
         </h2>
 
         {myLeagues.length > 0 && (
           <PrimaryButton
-            onClick={() => setShowCreateModal(true)}
+            onClick={toggleShowModal}
             className='w-fit'
           >
             <Plus className="w-4 h-4" />
@@ -132,20 +134,25 @@ export default function UserCreatedLeaguesSection({
       {isLoading ? (
         <LoadingState message="Loading your leagues..." />
       ) : myLeagues.length === 0 ? (
-        <div className="text-center py-8 bg-gray-50 dark:border-slate-800 dark:bg-slate-800/50 rounded-lg px-6">
+        <div className="text-center flex flex-col items-center justify-center py-8 bg-gray-50 dark:border-slate-800 dark:bg-slate-800/50 rounded-lg px-6">
+          
           <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            No Leagues Created Yet
+            You haven't created a league yet
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Create your first fantasy league and invite friends to join
           </p>
-          <button
-            onClick={() => setShowComingSoon(true)}
-            className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors"
+
+          <PrimaryButton
+            onClick={toggleShowModal}
+            className='w-fit'
           >
+            <Plus />
             Create Your First League
-          </button>
+          </PrimaryButton>
+          
         </div>
       ) : (
         <div className="space-y-3">
