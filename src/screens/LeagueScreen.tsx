@@ -7,7 +7,6 @@ import { fantasyTeamService } from '../services/fantasyTeamService';
 import { TeamAthletesModal } from '../components/league/TeamAthletesModal';
 import LeagueGroupChatFeed from '../components/leagues/LeagueGroupChat';
 import { FantasyLeagueFixturesList } from '../components/league/FixturesList';
-import LeagueGroupFilter from '../components/league/LeagueGroupFilter';
 import { IFantasyLeague } from '../types/fantasyLeague';
 import FantasyLeagueProvider from '../contexts/FantasyLeagueContext';
 import { useFantasyLeague } from '../components/league/useFantasyLeague';
@@ -26,7 +25,7 @@ import {
   userFantasyTeamAtom,
 } from '../state/fantasyLeague.atoms';
 
-export function LeagueScreen() {
+export function FantasyLeagueScreen() {
   const [showSettings, setShowSettings] = useState(false);
   const [showJumpButton, setShowJumpButton] = useState(false);
   const navigate = useNavigate();
