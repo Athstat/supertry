@@ -1,6 +1,7 @@
 import { RestPromise } from "../../types/auth";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { FantasyLeagueGroup, FantasyLeagueGroupMember, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
+import { IFixture } from "../../types/games";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
 
@@ -169,10 +170,10 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
-    joinLeague: async (leagueId: string, entry_code: string) : RestPromise<FantasyLeagueGroupMember> => {
+    joinLeague: async (leagueId: string, entry_code: string): RestPromise<FantasyLeagueGroupMember> => {
         try {
             const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/join/${entry_code}`);
-            
+
             const res = await fetch(uri, {
                 headers: getAuthHeader(),
                 method: 'POST'
@@ -180,13 +181,15 @@ export const fantasyLeagueGroupsService = {
 
             if (res.ok) {
                 const json = (await res.json()) as FantasyLeagueGroupMember;
-                return {data: json};
+                return { data: json };
             }
 
             if (res.status === 404) {
-                return {error: {
-                    message: "Incorrect Entry Code"
-                }}
+                return {
+                    error: {
+                        message: "Incorrect Entry Code"
+                    }
+                }
             }
 
         } catch (err) {
@@ -198,6 +201,26 @@ export const fantasyLeagueGroupsService = {
                 message: "Something wen't wrong"
             }
         }
-    }
+    },
+
+    getGroupRoundGames: async (leagueId: string, roundId: string | number): Promise<IFixture[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/rounds/${roundId}/games`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IFixture[];
+            }
+
+        } catch (err) {
+            console.log("Error fetching public fantasy league groups ", err);
+        }
+
+        return [];
+    },
 
 }

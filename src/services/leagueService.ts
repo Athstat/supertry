@@ -359,5 +359,5 @@ export const leagueService = {
       console.error('Error in getAllSeasons:', error);
       return [];
     }
-  },
+  }
 };

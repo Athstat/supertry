@@ -91,5 +91,9 @@ export const swrFetchKeys = {
 
     getLeagueGroupRounds: (id: string) => {
         return `fantasy-league-groups/${id}/rounds`;
+    },
+
+    getGroupRoundGames: (leagueId: string, roundId:string) => {
+        return `/fantasy-league-groups/${leagueId}/rounds/${roundId}/games`;
     }
 }
