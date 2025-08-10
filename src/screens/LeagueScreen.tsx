@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Trophy } from 'lucide-react';
+import { ArrowLeft, Swords, Trophy } from 'lucide-react';
 import { StatCard } from '../components/shared/StatCard';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import NoContentCard from '../components/shared/NoContentMessage';
@@ -11,6 +11,8 @@ import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
 import MyTeam from '../components/fantasy-leagues/MyTeam';
+import PrimaryButton from '../components/shared/buttons/PrimaryButton';
+import JoinLeagueButton from '../components/fantasy-league/buttons/JoinLeagueButton';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -69,9 +71,15 @@ function Content() {
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4">
-      <div className="flex flex-row items-center gap-2">
-        <Trophy />
-        <p className="font-bold text-xl">{league?.title}</p>
+      <div className="flex flex-row items-center justify-between gap-2">
+        <div className="flex flex-row items-center gap-2">
+          <Trophy />
+          <p className="font-bold text-xl">{league?.title}</p>
+        </div>
+
+        <div>
+          <JoinLeagueButton league={league} />
+        </div>
       </div>
 
       <div
