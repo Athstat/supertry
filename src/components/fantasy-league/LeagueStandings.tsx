@@ -11,7 +11,7 @@ type Props = {
 
 export function LeagueStandings({}: Props) {
 
-  const { members, userMemberRecord, isMember } = useFantasyLeagueGroup();
+  const { members, userMemberRecord, isMember, isAdminMember } = useFantasyLeagueGroup();
 
 
   // const userTeamRef = useRef<HTMLTableRowElement>(null);
@@ -23,7 +23,7 @@ export function LeagueStandings({}: Props) {
 
   // Handle team row click
   const handleTeamClick = (team: FantasyLeagueGroupMember) => {
-    
+
   };
 
   return (
@@ -67,7 +67,7 @@ export function LeagueStandings({}: Props) {
       })}
 
       <div>
-        {isMember && <PrimaryButton className="" >
+        {isAdminMember && <PrimaryButton className="" >
           <Plus className="w-4 h-4" />
           <p>Invite</p>
         </PrimaryButton>}
