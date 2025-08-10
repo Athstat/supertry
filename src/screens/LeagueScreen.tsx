@@ -10,6 +10,8 @@ import NoContentCard from "../components/shared/NoContentMessage";
 import { LeagueStandings } from "../components/fantasy-league/LeagueStandings";
 import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
 import LeagueFixturesTab from "../components/fantasy-league/LeagueFixturesTab";
+import JoinLeagueButton from "../components/fantasy-league/buttons/JoinLeagueButton";
+import LeagueCommissionerTab from "../components/fantasy-league/commissioner/LeagueCommissionerTab";
 
 
 export function FantasyLeagueScreen() {
@@ -24,7 +26,7 @@ export function FantasyLeagueScreen() {
 
 function Content() {
 
-  const { league, members, userMemberRecord, currentRound } = useFantasyLeagueGroup();
+  const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
   const navigate = useNavigate();
 
   if (!league) {
@@ -71,11 +73,22 @@ function Content() {
     navigate('/leagues');
   }
 
+
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4" >
-      <div className="flex flex-row items-center gap-2" >
-        <Trophy />
-        <p className="font-bold text-xl" >{league?.title}</p>
+      <div className="flex flex-row items-center justify-between gap-2" >
+
+        <div className="flex flex-row items-center gap-2" >
+          <Trophy />
+          <p className="font-bold text-xl" >{league?.title}</p>
+        </div>
+
+        <div>
+          {!isMember && <JoinLeagueButton
+            league={league}
+          />}
+        </div>
+
       </div>
 
       <div onClick={navigateToLeagues} className="flex flex-row hover:text-blue-500 cursor-pointer items-center" >
@@ -116,6 +129,10 @@ function Content() {
 
         <TabViewPage tabKey="fixtures" >
           <LeagueFixturesTab />
+        </TabViewPage>
+
+        <TabViewPage tabKey="commissioner" >
+          <LeagueCommissionerTab />
         </TabViewPage>
       </TabView>
 
