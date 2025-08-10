@@ -24,7 +24,7 @@ import LeagueFilterPanel, {
 } from '../components/leagues/LeagueFilterPanel';
 import { useNavigate } from 'react-router-dom';
 
-export function JoinLeagueScreen() {
+export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
   const [activeTab, setActiveTab] = useState<'my' | 'discover' | 'code'>(() => {
     const saved = localStorage.getItem('league_tab');

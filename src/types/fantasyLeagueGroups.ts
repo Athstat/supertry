@@ -1,3 +1,4 @@
+import { DjangoAuthUser } from "./auth";
 import { IProSeason } from "./season";
 
 export type FantasyLeagueGroupType = "user_created" | "system_created";
@@ -16,4 +17,12 @@ export type FantasyLeagueGroup = {
     start_date?: Date,
     end_date?: Date,
     season: IProSeason
+}
+
+export type FantasyLeagueGroupMember = {
+    user_id: string,
+    fantasy_league_group_id: string,
+    joined_at?: Date,
+    is_admin?: boolean,
+    user: DjangoAuthUser
 }
