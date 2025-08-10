@@ -26,3 +26,13 @@ export type FantasyLeagueGroupMember = {
     is_admin?: boolean,
     user: DjangoAuthUser
 }
+
+/** Represents the payload of the request to create
+ * a fantasy league group
+ */
+export type NewFantasyLeagueGroupReq = {
+    title: string,
+    is_private: boolean,
+    season_id: string,
+    description?: string
+}

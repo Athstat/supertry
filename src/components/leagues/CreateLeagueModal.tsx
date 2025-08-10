@@ -4,6 +4,10 @@ import InputField, { TextField } from '../shared/InputField';
 import LeagueVisibilityInput from './ui/LeagueVisibilityInput';
 import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
 import SeasonInput from './ui/SeasonInput';
+import PrimaryButton from '../shared/buttons/PrimaryButton';
+import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
+import { useNavigate } from 'react-router-dom';
+import { ErrorState } from '../ui/ErrorState';
 
 interface CreateLeagueModalProps {
   isOpen: boolean;
@@ -20,12 +24,37 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
     ]
   });
 
+  const navigate = useNavigate();
+  const [isSubmiting, setSubmiting] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>();
+
   const [form, setForm] = useState<CreateLeagueForm>({
     title: "",
     season_id: "695fa717-1448-5080-8f6f-64345a714b10",
-    description: "",
     is_private: false
   });
+
+  const handleSubmitForm = async () => {
+    setSubmiting(true);
+    
+    try {
+      const res = await fantasyLeagueGroupsService.createGroup(form);
+      if (res.data) {
+        navigate(`/league/${res.data.id}`, {
+          state: {
+            is_new: true
+          }
+        });
+      } else {
+        setError(res.error?.message);
+      }
+    } catch (err) {
+      console.log("Error creating league ", err);
+      setError("Something wen't wrong creating your league, please try again");
+    }
+
+    setSubmiting(false);
+  }
 
   return (
     <DialogModal
@@ -44,7 +73,10 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
 
       )}
 
-      {!isLoading && <form className='flex flex-col gap-4' >
+      {!isLoading && <form onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmitForm();
+      }} className='flex flex-col gap-4' >
         <InputField
           label='Title'
           placeholder='Give your league a nice title!'
@@ -53,6 +85,8 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
             ...form,
             title: v ?? ""
           })}
+
+          required
         />
 
         <TextField
@@ -84,6 +118,18 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
           })}
         />
 
+        <PrimaryButton
+          type={"submit"}
+          isLoading={isSubmiting}
+          disabled={isSubmiting}
+        >
+          Create
+        </PrimaryButton>
+
+        {error && <ErrorState 
+          error='Whoops'
+          message={error}
+        />}
       </form>}
 
     </DialogModal>
