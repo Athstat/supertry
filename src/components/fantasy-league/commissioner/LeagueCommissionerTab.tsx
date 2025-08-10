@@ -6,11 +6,13 @@ import SecondaryText from "../../shared/SecondaryText";
 import LeagueVisibilityInput from "../../fantasy-leagues/ui/LeagueVisibilityInput";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";
+import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
+import { ErrorState } from "../../ui/ErrorState";
 
 export default function LeagueCommissionerTab() {
 
-  const { league } = useFantasyLeagueGroup();
-  const {ref, inView: isTopButtonInView} = useInView();
+  const { league, mutateLeague } = useFantasyLeagueGroup();
+  const { ref, inView: isTopButtonInView } = useInView();
 
   const initialForm: EditLeagueForm = {
     title: league?.title ?? "",
@@ -19,10 +21,37 @@ export default function LeagueCommissionerTab() {
   }
 
   const originalHash = JSON.stringify(initialForm);
-
   const [form, setForm] = useState<EditLeagueForm>(initialForm);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
 
   const changesDetected = originalHash !== JSON.stringify(form);
+
+  const handleSubmit = async () => {
+
+    setIsLoading(true);
+    try {
+      const res = await fantasyLeagueGroupsService.editGroupInfo(league?.id ?? "", form);
+
+      if (res.data) {
+        mutateLeague(res.data);
+        setError(undefined);
+        setIsLoading(false);
+        return;
+      }
+
+      if (res.error) {
+        setError(res.error.message);
+        setIsLoading(false);
+      }
+
+    } catch (err) {
+      console.log("Error saving commissioner changes");
+      setError("Something wen't wrong saving your league settings")
+    }
+
+    setIsLoading(false);
+  }
 
   return (
     <div className="flex flex-col gap-4" >
@@ -37,7 +66,11 @@ export default function LeagueCommissionerTab() {
           <div>
             {changesDetected && (
               <div ref={ref} >
-                <PrimaryButton>
+                <PrimaryButton
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                  onClick={handleSubmit}
+                >
                   Save
                 </PrimaryButton>
               </div>
@@ -49,9 +82,20 @@ export default function LeagueCommissionerTab() {
           <SecondaryText>Edit and customize your fantasy league.</SecondaryText>
         </div>
 
+        {
+          isTopButtonInView && error && (
+            <div>
+              <ErrorState
+                error="Whoops"
+                message={error}
+              />
+            </div>
+          )
+        }
+
       </div>
 
-      <form className="flex flex-col gap-4" >
+      <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4" >
         <InputField
           label="League Title"
           value={form.title}
@@ -59,6 +103,7 @@ export default function LeagueCommissionerTab() {
             ...form,
             title: v ?? ""
           })}
+          required
         />
 
         <TextField
@@ -79,10 +124,25 @@ export default function LeagueCommissionerTab() {
         />
 
         {changesDetected && !isTopButtonInView && (
-          <PrimaryButton>
+          <PrimaryButton
+            isLoading={isLoading}
+            disabled={isLoading}
+            onClick={handleSubmit}
+          >
             Save Changes
           </PrimaryButton>
         )}
+
+        {
+          !isTopButtonInView && error && (
+            <div>
+              <ErrorState
+                error="Whoops"
+                message={error}
+              />
+            </div>
+          )
+        }
       </form>
 
     </div>
