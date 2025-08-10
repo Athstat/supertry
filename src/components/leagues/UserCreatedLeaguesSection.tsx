@@ -10,6 +10,7 @@ import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeague
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { FantasyLeagueGroupCard } from './league_card_small/FantasyLeagueGroupCard';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
+import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 interface UserCreatedLeaguesSectionProps {
   onLeagueCreated?: () => void;
@@ -112,17 +113,19 @@ export default function UserCreatedLeaguesSection({
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
+        
         <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
           My Created Leagues
         </h2>
+
         {myLeagues.length > 0 && (
-          <button
+          <PrimaryButton
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
+            className='w-fit'
           >
             <Plus className="w-4 h-4" />
-            Create League
-          </button>
+            Create
+          </PrimaryButton>
         )}
       </div>
 

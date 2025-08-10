@@ -243,7 +243,7 @@ export function FantasyLeaguesScreen() {
         </div>
 
         <div>
-          <FantasyLeagueScreenCTA />
+          {/* <FantasyLeagueScreenCTA /> */}
         </div>
       </div>
 
