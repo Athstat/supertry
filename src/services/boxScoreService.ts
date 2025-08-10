@@ -5,12 +5,10 @@ export const boxScoreService = {
     getBoxScoreByGameId: async (gameId: string) => {
         try {
 
-            const uri = getUri(`/api/v1/games-r/${gameId}/boxscore`);
+            const uri = getUri(`/api/v1/games/${gameId}/boxscore`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
-            
-
 
             const json = (await res.json()) as IBoxScoreItem[];
             // console.log("Box Score ", json);

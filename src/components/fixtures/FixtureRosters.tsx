@@ -13,7 +13,7 @@ export default function FixtureRosters({ fixture }: Props) {
 
     const fixtureId = fixture.game_id;
     const rostersKey = fixtureId ? `fixtures/${fixtureId}/rosters` : null;
-    let { data: rosters, isLoading: loadingRosters } = useSWR(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
+    const { data: fetchedRosters, isLoading: loadingRosters } = useSWR(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
 
 
     if (loadingRosters) {
@@ -34,7 +34,7 @@ export default function FixtureRosters({ fixture }: Props) {
         }
     ]
 
-    rosters = rosters ?? [];
+    const rosters = fetchedRosters ?? [];
 
     const awayRoster = rosters.filter((r) => {
         return r.team_id === fixture.opposition_team.athstat_id;
