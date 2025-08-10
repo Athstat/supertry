@@ -11,7 +11,6 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import { FantasyLeagueGroupCard } from './league_card_small/FantasyLeagueGroupCard';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
-import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
 
 interface UserCreatedLeaguesSectionProps {
   onLeagueCreated?: () => void;
@@ -27,7 +26,7 @@ export default function UserCreatedLeaguesSection({
     fantasyLeagueGroupsService.getMyCreatedLeagues()
   );
 
-  const [showCreateModal, setShowCreateModal] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
 
   const navigate = useNavigate();
