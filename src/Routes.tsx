@@ -35,6 +35,7 @@ import PredictionsRankingScreen from './screens/predictions/PredictionsRankingSc
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
 import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
+import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -349,6 +350,13 @@ const AppRoutes = () => {
         path="/verify-email"
         element={
           <VerifyEmailScreen />
+        }
+      />
+
+      <Route
+        path="/onboarding/join-league"
+        element={
+          <JoinLeagueOnboardingScreen/>
         }
       />
 

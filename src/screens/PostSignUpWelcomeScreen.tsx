@@ -28,7 +28,7 @@ export default function PostSignUpWelcomeScreen() {
   }
 
   const handleProceedWithLeagues = () => {
-    navigate('/onboarding/joining-league')
+    navigate('/leagues')
   }
 
   const handleSkipToDashboard = () => {
