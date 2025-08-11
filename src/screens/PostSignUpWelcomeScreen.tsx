@@ -1,59 +1,103 @@
-import { Loader } from "lucide-react";
+import { useState } from "react";
+import { IOnboardingTab } from "../types/onboarding";
+import PageView from "./PageView";
+import OnboardingTab from "../components/onboarding/OnboardingTab";
+import PrimaryButton from "../components/shared/buttons/PrimaryButton";
 import ScrummyLogo from "../components/branding/scrummy_logo";
-import { useFetch } from "../hooks/useFetch";
-import { latestLeagueFetcher } from "../utils/leaguesUtils";
-import PostSignUpPickYourTeamCard from "../components/auth/post_sign_up/PickYourTeamCard";
-import PostSignUpViewLeaderBoardCard from "../components/auth/post_sign_up/PostSignUpViewLeaderBoardCard";
-import PostSignUpDashboardButton from "../components/auth/post_sign_up/PostSignUpDashboardButton";
-import PostSignUpTutorialButton from "../components/auth/post_sign_up/PostSignUpTutorialButton";
+import { twMerge } from "tailwind-merge";
 
 export default function PostSignUpWelcomeScreen() {
 
-  const { 
-    data: latestLeague, 
-    isLoading: loading, error 
-  } = useFetch("latest-leagues", "", (_) => latestLeagueFetcher());
+  const [currIndex, setIndex] = useState(0);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-dark-850">
-        <Loader className="w-12 h-12 text-primary-600 animate-spin" />
-      </div>
-    );
+  const isIndexValid = currIndex >= 0 && currIndex < tabs.length;
+  const currTab = tabs[currIndex];
+
+
+  const handleNextIndex = () => {
+    if (currIndex < tabs.length - 1) {
+      setIndex(currIndex + 1);
+    } else {
+      setIndex(0);
+    }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-dark-850 px-4 py-8">
-      <div className="w-full max-w-md flex flex-col items-center">
-        <ScrummyLogo className="w-32 h-32 md:w-40 md:h-40 mb-6" />
+    <PageView className="flex flex-col w-full h-screen overflow-hidden white" >
 
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center">
-          Welcome to SCRUMMY! 🎉 🏉
-        </h1>
-
-        <p className="w-full text-center mt-3 dark:text-slate-200" >
-          You’ve officially joined the scrum! Don’t worry, it’s less bruises and more bragging rights from here.
-        </p>
-
-        {/* <p className="mt-3 text-gray-600 dark:text-gray-300 text-center">
-          Choose how you'd like to begin your journey.
-        </p> */}
-
-        {error && (
-          <div className="mt-4 w-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
-
-        <div className="w-full mt-8 space-y-4">
-
-          <PostSignUpTutorialButton />
-          <PostSignUpPickYourTeamCard league={latestLeague} />
-          <PostSignUpViewLeaderBoardCard league={latestLeague} />
-          <PostSignUpDashboardButton />
-
-        </div>
+      <div className="flex flex-row w-full h-fit items-center justify-center" >
+        <ScrummyLogo className="" />
       </div>
-    </div>
-  );
+
+      {currTab &&
+        <OnboardingTab
+          tab={currTab}
+          className="w-full items-center justify-center flex flex-col flex-2 p-4"
+        />
+      }
+
+      <div className="flex flex-1  w-full p-4 justify-end flex-col gap-4 items-center" >
+
+        <PrimaryButton onClick={handleNextIndex} className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2" >
+          {currIndex == 0 ? 'Get Started' : "Continue"}
+        </PrimaryButton>
+
+        {/* Progress Dots */}
+        <div className="flex flex-row items-center gap-1 justify-center" >
+          {tabs.map((_, index) => {
+
+            const curr = index === currIndex;
+
+            return (
+              <div
+                key={index}
+                className={twMerge(
+                  "w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700",
+                  curr && 'w-12'
+                )}
+              >
+
+              </div>
+            )
+          })}
+        </div>
+
+      </div>
+
+    </PageView>
+  )
+
 }
+
+
+const tabs: IOnboardingTab[] = [
+  {
+    title: "Welcome to The Scrum",
+    description: "You've officially joined the scrum! Don't worry, it's less bruises and more bragging rights from here.",
+    imageUrl: "/public/images/onboarding/Discover Leagues.png"
+  },
+
+  {
+    title: "Discover Leagues",
+    description: "Discover Scrummy and Community Created Public Leagues to join, to and battle it out to be the best in world",
+    imageUrl: "/public/images/onboarding/Discover Leagues.png"
+  },
+
+  {
+    title: "Build Your Team",
+    description: "Draft your dream team of players, but there is a catch, you have 240 SCRUMMY coins to spend. Make informed descisions by checkout player stats or even comparing players!",
+    imageUrl: "/public/images/onboarding/Compare Players.png"
+  },
+
+  {
+    title: "Create Your Own Leagues",
+    description: "You can create your own fantasy leagues, and manage it as a 'Commissioner'. You can manage things like league visibility, league title and description.",
+    imageUrl: "/public/images/onboarding/Create Your Own Leagues.png"
+  },
+
+  {
+    title: "Invite Your Friends",
+    description: "SCRUMMY like food is better enjoyed when shared. Invite your friends over and battle it out for glory. Also don't forget to have fun",
+    imageUrl: "/public/images/onboarding/Invite Friends.png"
+  }
+]
