@@ -19,7 +19,7 @@ export default function OnboardingTab({ tab, className }: Props) {
 
             <img
                 src={imageUrl}
-                className='rounded-2xl w-[90%]'
+                className='rounded-2xl w-[90%] sm:w-[80%] md:w-[70%]'
             />
 
 

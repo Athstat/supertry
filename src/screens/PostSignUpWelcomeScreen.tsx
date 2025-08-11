@@ -73,31 +73,31 @@ export default function PostSignUpWelcomeScreen() {
 const tabs: IOnboardingTab[] = [
   {
     title: "Welcome to The Scrum",
-    description: "You've officially joined the scrum! Don't worry, it's less bruises and more bragging rights from here.",
-    imageUrl: "/public/images/onboarding/Discover Leagues.png"
+    description: "You’ve made the squad! From here on, it’s all tries, conversions, and bragging rights — with far fewer bruises than the real thing. Time to lace up and dive in.",
+    imageUrl: "/public/images/onboarding/Scrummy Background Gradient.png"
   },
 
   {
     title: "Discover Leagues",
-    description: "Discover Scrummy and Community Created Public Leagues to join, to and battle it out to be the best in world",
+    description: "Explore official Scrummy Leagues and fan-made competitions. Join the ruck, take on challengers from across the globe, and fight for a spot at the top of the table.",
     imageUrl: "/public/images/onboarding/Discover Leagues.png"
   },
 
   {
     title: "Build Your Team",
-    description: "Draft your dream team of players, but there is a catch, you have 240 SCRUMMY coins to spend. Make informed descisions by checkout player stats or even comparing players!",
+    description: "Assemble your dream 5 with just 240 SCRUMMY coins in the bank. Scout player stats, compare the form, and make tactical picks like a seasoned head coach.",
     imageUrl: "/public/images/onboarding/Compare Players.png"
   },
 
   {
     title: "Create Your Own Leagues",
-    description: "You can create your own fantasy leagues, and manage it as a 'Commissioner'. You can manage things like league visibility, league title and description.",
+    description: "Be the Commissioner — your pitch, your rules. Set league titles, tweak visibility, and host the fiercest fantasy battles since Jonah Lomu ran over Mike Catt.",
     imageUrl: "/public/images/onboarding/Create Your Own Leagues.png"
   },
 
   {
     title: "Invite Your Friends",
-    description: "SCRUMMY like food is better enjoyed when shared. Invite your friends over and battle it out for glory. Also don't forget to have fun",
+    description: "Like a post-match braai, fantasy rugby is better shared. Rally your mates, start the banter, and play for glory, honour, and the ultimate bragging rights.",
     imageUrl: "/public/images/onboarding/Invite Friends.png"
   }
 ]
