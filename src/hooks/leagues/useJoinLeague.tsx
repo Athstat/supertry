@@ -24,7 +24,11 @@ export function useJoinLeague() {
             if (res.data) {
 
                 if (nextUrl) {
-                    navigate(nextUrl);
+                    navigate(nextUrl, {
+                        state: {
+                            reloadApp: true
+                        }
+                    });
                     return;
                 }
                 window.location.reload();
@@ -37,7 +41,7 @@ export function useJoinLeague() {
 
         } catch (err) {
             console.log("Error joining the league ", err);
-            setError("Something wen't wrong joining league")
+            setError("Something wen't wrong joining league");
         }
 
         setLoading(false);
