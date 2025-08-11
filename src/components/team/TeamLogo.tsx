@@ -1,5 +1,6 @@
 import { Shield } from 'lucide-react';
 import { useState } from 'react';
+import { MdShield } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
 
 type Props = {
@@ -18,7 +19,7 @@ export default function TeamLogo({ url, alt, className, teamName }: Props) {
 
   if (error) {
     return (
-      <Shield
+      <MdShield
         className={twMerge(
           'w-14 h-14 text-slate-300 dark:text-slate-600 rounded-md flex items-center justify-center',
           className
