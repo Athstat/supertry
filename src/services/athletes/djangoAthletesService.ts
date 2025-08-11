@@ -1,6 +1,7 @@
 import { IProAthlete, IAthleteSeasonStarRatings } from "../../types/athletes";
 import { SportAction } from "../../types/sports_actions";
 import { getUri, getAuthHeader } from "../../utils/backendUtils";
+import { mapSportsActionToAthstatName } from "../../utils/sportsActionUtils";
 import { logger } from "../logger";
 
 /** Pro Athlete Service for django API */
@@ -54,7 +55,18 @@ export const djangoAthleteService = {
             });
 
             if (res.ok) {
-                return (await res.json()) as SportAction[];
+                const actions = (await res.json()) as SportAction[];
+                const fixedActions: SportAction[] = actions.map((a) => {
+                    return {
+                        action: mapSportsActionToAthstatName(a.action),
+                        athlete_id: a.athlete_id,
+                        action_count: a.action_count,
+                        season_id: a.season_id,
+                        season: a.season
+                    }
+                })
+
+                return fixedActions;
             }
 
         } catch (error) {
