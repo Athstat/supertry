@@ -90,7 +90,10 @@ export default function EmailPasswordLoginBox() {
 
                 <InputField
                     value={email}
-                    onChange={setEmail}
+                    onChange={(v) => {
+                        if (v) setEmail(v.toLowerCase());
+                        else setEmail(v);
+                    }}
                     placeholder='Email'
                     icon={<Mail className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />}
                 />

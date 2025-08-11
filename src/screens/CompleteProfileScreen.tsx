@@ -205,7 +205,7 @@ function ScreenContent() {
                   placeholder="Email"
                   required
                   value={formData.email}
-                  onChange={(v) => handleInputChange('email', v ?? "")}
+                  onChange={(v) => handleInputChange('email', v?.toLowerCase() ?? "")}
                   id="email"
                   type="email"
                   icon={<Mail className="w-4 h-4" />}

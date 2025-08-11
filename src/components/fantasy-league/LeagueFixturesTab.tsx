@@ -114,11 +114,11 @@ function FixtureListView({ round }: FixtureListProps) {
     if (isLoading) {
         return (
             <div className='flex w-full flex-col gap-2' >
-                <RoundedCard className='w-full h-16 animate-pulse border-none' />
-                <RoundedCard className='w-full h-16 animate-pulse border-none' />
-                <RoundedCard className='w-full h-16 animate-pulse border-none' />
-                <RoundedCard className='w-full h-16 animate-pulse border-none' />
-                <RoundedCard className='w-full h-16 animate-pulse border-none' />
+                <RoundedCard className='w-full bg-slate-200 h-16 animate-pulse border-none' />
+                <RoundedCard className='w-full bg-slate-200 h-16 animate-pulse border-none' />
+                <RoundedCard className='w-full bg-slate-200 h-16 animate-pulse border-none' />
+                <RoundedCard className='w-full bg-slate-200 h-16 animate-pulse border-none' />
+                <RoundedCard className='w-full bg-slate-200 h-16 animate-pulse border-none' />
             </div>
         )
     }

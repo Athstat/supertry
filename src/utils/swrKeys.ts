@@ -93,7 +93,11 @@ export const swrFetchKeys = {
         return `fantasy-league-groups/${id}/rounds`;
     },
 
-    getGroupRoundGames: (leagueId: string, roundId:string) => {
+    getGroupRoundGames: (leagueId: string, roundId: string) => {
         return `/fantasy-league-groups/${leagueId}/rounds/${roundId}/games`;
+    },
+
+    getLeaguesByEntryCode: (entry_code: string) => {
+        return `/fantasy-league-groups/entry-code/${entry_code}`;
     }
 }

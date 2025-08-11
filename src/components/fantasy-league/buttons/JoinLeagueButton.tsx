@@ -1,9 +1,8 @@
-import { Swords } from 'lucide-react'
 import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups'
 import PrimaryButton from '../../shared/buttons/PrimaryButton'
-import { Fragment, useState } from 'react'
-import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService'
+import { Fragment } from 'react'
 import { Toast } from '../../ui/Toast'
+import { useJoinLeague } from '../../../hooks/leagues/useJoinLeague'
 
 type Props = {
     league: FantasyLeagueGroup
@@ -11,46 +10,16 @@ type Props = {
 
 export default function JoinLeagueButton({ league }: Props) {
 
-    const [isLoading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>();
-
-    const handleJoinLeague = async () => {
-
-        setLoading(true);
-
-        try {
-
-            const res = await fantasyLeagueGroupsService.joinLeague(
-                league.id,
-                league.entry_code ?? ""
-            );
-
-            if (res.data) {
-                window.location.reload();
-                setLoading(false);
-            } else {
-                setError(res.error?.message);
-                setLoading(false);
-            }
-
-
-        } catch (err) {
-            console.log("Error joining the league ", err);
-            setError("Something wen't wrong joining league")
-        }
-
-        setLoading(false);
-    }
+    const {isLoading, error, handleJoinLeague, clearError} = useJoinLeague();
 
     return (
         <Fragment>
             <PrimaryButton
                 isLoading={isLoading}
                 disabled={isLoading}
-                onClick={handleJoinLeague}
+                onClick={() => handleJoinLeague(league)}
             >
-                <Swords />
-                Join League
+                Join
             </PrimaryButton>
 
 
@@ -58,7 +27,7 @@ export default function JoinLeagueButton({ league }: Props) {
                 message={error ?? ""}
                 type="error"
                 isVisible={error !== undefined}
-                onClose={() => setError(undefined)}
+                onClose={clearError}
                 duration={3000}
             />
         </Fragment>

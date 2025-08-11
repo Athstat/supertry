@@ -46,6 +46,44 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
+    getDiscoverLeagues: async (): Promise<FantasyLeagueGroup[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/discover`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasyLeagueGroup[];
+            }
+
+        } catch (err) {
+            console.log("Error fetching public fantasy league groups ", err);
+        }
+
+        return [];
+    },
+
+    getLeagueByEntryCode: async (entry_code: string): Promise<FantasyLeagueGroup[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/by-entry-code/${entry_code}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasyLeagueGroup[];
+            }
+
+        } catch (err) {
+            console.log("Error fetching public fantasy league groups ", err);
+        }
+
+        return [];
+    },
+
     getMyCreatedLeagues: async (): Promise<FantasyLeagueGroup[]> => {
         try {
 
