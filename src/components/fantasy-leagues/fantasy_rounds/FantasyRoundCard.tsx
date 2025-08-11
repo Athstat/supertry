@@ -9,9 +9,10 @@ type Props = {
   round: IFantasyLeagueRound;
   teams?: IFantasyLeagueTeam[];
   onCreateTeam: () => void;
+  onViewTeam?: (team: IFantasyLeagueTeam) => void;
 };
 
-export default function FantasyRoundCard({ round, teams, onCreateTeam }: Props) {
+export default function FantasyRoundCard({ round, teams, onCreateTeam, onViewTeam }: Props) {
   const currentUser = authService.getUserInfoSync();
   const totalTeams = teams?.length ?? 0;
 
@@ -31,7 +32,14 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam }: Props) 
   const userRank = userTeam?.rank ?? userTeam?.position;
 
   return (
-    <div className="w-full p-4 rounded-2xl bg-gray-50 dark:bg-dark-800/40 border border-gray-100 dark:border-gray-700">
+    <div
+      className={`w-full p-4 rounded-2xl bg-gray-50 dark:bg-dark-800/40 border border-gray-100 dark:border-gray-700 ${
+        hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
+      }`}
+      onClick={() => {
+        if (hasUserTeam && userTeam && onViewTeam) onViewTeam(userTeam);
+      }}
+    >
       {/* Header: title left, status + chevron right */}
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">

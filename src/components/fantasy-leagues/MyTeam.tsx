@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import CreateMyTeam from './CreateMyTeam';
+import ViewMyTeam from './ViewMyTeam';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { Users } from 'lucide-react';
@@ -13,6 +14,7 @@ export default function MyTeam() {
   );
   const { refreshRounds, sortedRounds } = useFantasyLeagueGroup();
   const [selectedRound, setSelectedRound] = useState<IFantasyLeagueRound | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<IFantasyLeagueTeam | null>(null);
   const [isFetchingTeams, setIsFetchingTeams] = useState<boolean>(false);
   const [roundIdToTeams, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
 
@@ -75,6 +77,11 @@ export default function MyTeam() {
                   setSelectedRound(r);
                   setTabScene('creating-team');
                 }}
+                onViewTeam={team => {
+                  setSelectedRound(r);
+                  setSelectedTeam(team);
+                  setTabScene('team-created');
+                }}
               />
             </div>
           ))}
@@ -97,6 +104,12 @@ export default function MyTeam() {
     return <CreateMyTeam leagueRound={selectedRound ?? undefined} />;
   }
 
-  // Placeholder for future 'team-created' state
+  if (tabScene === 'team-created') {
+    if (selectedRound && selectedTeam) {
+      return <ViewMyTeam leagueRound={selectedRound} team={selectedTeam} />;
+    }
+    return <div className="p-4 text-sm text-gray-500 dark:text-gray-400">Loading team…</div>;
+  }
+
   return <div className="p-4" />;
 }

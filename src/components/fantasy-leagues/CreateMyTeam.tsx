@@ -205,7 +205,7 @@ export default function CreateMyTeam({ leagueRound }: { leagueRound?: IFantasyLe
         {positions.map((p, index) => {
           const selected = selectedPlayers[p.name];
           return (
-            <div key={p.position_class} className="flex flex-col">
+            <div key={p.position_class} className="flex flex-col w-full">
               <button
                 onClick={() => {
                   const pos = toPosition(p, index);
@@ -217,16 +217,14 @@ export default function CreateMyTeam({ leagueRound }: { leagueRound?: IFantasyLe
                     setIsModalOpen(true);
                   }
                 }}
-                className="aspect-square rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center"
+                className="aspect-square overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center"
               >
                 {selected ? (
-                  <div className="w-full h-full p-2">
-                    <PlayerGameCard
-                      player={toIProAthlete(selected)}
-                      className="w-full h-full"
-                      blockGlow
-                    />
-                  </div>
+                  <PlayerGameCard
+                    player={toIProAthlete(selected)}
+                    className="w-full h-full"
+                    blockGlow
+                  />
                 ) : (
                   <div className="flex flex-col items-center justify-center">
                     <span className="text-3xl">+</span>
