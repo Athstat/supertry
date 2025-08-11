@@ -18,6 +18,15 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam }: Props) 
   const userTeam = teams?.find(t => t.user_id === currentUser?.kc_id);
   const hasUserTeam = Boolean(userTeam);
 
+  // Determine top team by best rank (fallback to position)
+  const sortedByRank = [...(teams || [])].sort(
+    (a, b) =>
+      (a.rank ?? a.position ?? Number.POSITIVE_INFINITY) -
+      (b.rank ?? b.position ?? Number.POSITIVE_INFINITY)
+  );
+  const topTeam = sortedByRank[0];
+  const topTeamName = topTeam?.team_name || undefined;
+
   const totalPoints = (userTeam?.athletes || []).reduce((sum, a) => sum + (a.score ?? 0), 0);
   const userRank = userTeam?.rank ?? userTeam?.position;
 
@@ -63,7 +72,7 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam }: Props) 
             athletesCount={(userTeam?.athletes || []).length}
             athletes={userTeam?.athletes || []}
           />
-        ) : (
+        ) : round.is_open ? (
           <div className="w-full flex flex-col items-center justify-center gap-2">
             <span className="text-sm text-gray-600 dark:text-gray-400">
               No team yet for this round
@@ -72,10 +81,17 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam }: Props) 
               Create Team
             </PrimaryButton>
           </div>
+        ) : (
+          <div className="w-full flex items-center justify-center">
+            <span className="text-sm text-gray-600 dark:text-gray-400">No team for this round</span>
+          </div>
         )}
       </div>
 
-      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">Total teams: {totalTeams}</p>
+      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+        Total teams: {totalTeams}
+        {topTeamName ? ` • Top team: ${topTeamName}` : ''}
+      </p>
     </div>
   );
 }
