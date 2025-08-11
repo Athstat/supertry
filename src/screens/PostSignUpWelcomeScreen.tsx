@@ -6,6 +6,8 @@ import PrimaryButton from "../components/shared/buttons/PrimaryButton";
 import ScrummyLogo from "../components/branding/scrummy_logo";
 import { twMerge } from "tailwind-merge";
 
+import { AnimatePresence, motion } from 'framer-motion';
+
 export default function PostSignUpWelcomeScreen() {
 
   const [currIndex, setIndex] = useState(0);
@@ -30,10 +32,19 @@ export default function PostSignUpWelcomeScreen() {
       </div>
 
       {currTab &&
-        <OnboardingTab
-          tab={currTab}
-          className="w-full items-center justify-center flex flex-col flex-2 p-4"
-        />
+
+        <AnimatePresence >
+          <motion.div
+            key={currIndex}
+            initial={{ opacity: 0, x: "-100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 1, x: "100%" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="flex flex-col items-center justify-center p-4"
+          >
+            <OnboardingTab tab={currTab} />
+          </motion.div>
+        </AnimatePresence>
       }
 
       <div className="flex flex-1  w-full p-4 justify-end flex-col gap-4 items-center" >
@@ -49,15 +60,24 @@ export default function PostSignUpWelcomeScreen() {
             const curr = index === currIndex;
 
             return (
-              <div
+              <motion.div
                 key={index}
+                initial={{ width: curr ? 12 : 4 }}
                 className={twMerge(
-                  "w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700",
-                  curr && 'w-12'
+                  "rounded-full h-3 bg-slate-300 dark:bg-slate-700",
                 )}
+
+                animate={{
+                  width: curr ? 40 : 10,
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
+                  },
+                }}
               >
 
-              </div>
+              </motion.div>
             )
           })}
         </div>
@@ -90,7 +110,7 @@ const tabs: IOnboardingTab[] = [
   },
 
   {
-    title: "Create Your Own Leagues",
+    title: "Create Leagues",
     description: "Be the Commissioner — your pitch, your rules. Set league titles, tweak visibility, and host the fiercest fantasy battles since Jonah Lomu ran over Mike Catt.",
     imageUrl: "/public/images/onboarding/Create Your Own Leagues.png"
   },
