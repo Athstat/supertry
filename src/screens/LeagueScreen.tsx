@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FantasyLeagueGroupDataProvider from "../components/fantasy-league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../hooks/leagues/useFantasyLeagueGroup";
 import PageView from "./PageView";
@@ -11,7 +11,10 @@ import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
 import LeagueFixturesTab from "../components/fantasy-league/LeagueFixturesTab";
 import JoinLeagueButton from "../components/fantasy-league/buttons/JoinLeagueButton";
 import LeagueCommissionerTab from "../components/fantasy-league/commissioner/LeagueCommissionerTab";
-import LeagueGroupChatFeed, { FantasyLeagueGroupChatFeed } from "../components/fantasy-leagues/LeagueGroupChat";
+import { FantasyLeagueGroupChatFeed } from "../components/fantasy-leagues/LeagueGroupChat";
+import PrimaryButton from "../components/shared/buttons/PrimaryButton";
+import { Plus } from "lucide-react";
+import { useShareLeague } from "../hooks/leagues/useShareLeague";
 
 
 export function FantasyLeagueScreen() {
@@ -27,12 +30,12 @@ export function FantasyLeagueScreen() {
 function Content() {
 
   const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
-  const { state } = useLocation();
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />
   }
 
+  const { handleShare } = useShareLeague(league);
 
   const headerItems: TabViewHeaderItem[] = [
 
@@ -88,6 +91,15 @@ function Content() {
           {!isMember && <JoinLeagueButton
             league={league}
           />}
+
+          {isMember && (
+            <PrimaryButton
+              onClick={handleShare}
+            >
+              <Plus className="w-4 h-4" />
+              Invite
+            </PrimaryButton>
+          )}
         </div>
 
       </div>
