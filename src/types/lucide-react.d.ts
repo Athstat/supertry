@@ -112,5 +112,7 @@ declare module "lucide-react" {
   export const Globe : CIP;
   export const Badge : CIP;
   export const Table2 : CIP;
+  export const Hash : CIP;
+  export const UserCog2 : CIP;
 }
 

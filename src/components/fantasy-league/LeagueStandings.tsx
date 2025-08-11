@@ -4,6 +4,7 @@ import { Plus, Table2, User } from "lucide-react";
 import {  } from "lucide-react";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
 import SecondaryText from "../shared/SecondaryText";
+import { useShareLeague } from "../../hooks/leagues/useShareLeague";
 
 type Props = {
   
@@ -11,8 +12,8 @@ type Props = {
 
 export function LeagueStandings({}: Props) {
 
-  const { members, userMemberRecord, isAdminMember } = useFantasyLeagueGroup();
-
+  const { members, userMemberRecord, isAdminMember, isMember, league } = useFantasyLeagueGroup();
+  const { handleShare } = useShareLeague(league);
 
   // const userTeamRef = useRef<HTMLTableRowElement>(null);
   // const tableRef = useRef<HTMLDivElement>(null);
@@ -67,11 +68,12 @@ export function LeagueStandings({}: Props) {
       })}
 
       <div>
-        {isAdminMember && <PrimaryButton className="" >
+        {isMember && <PrimaryButton onClick={handleShare} className="" >
           <Plus className="w-4 h-4" />
           <p>Invite</p>
         </PrimaryButton>}
       </div>
+      
     </div>
   );
 }

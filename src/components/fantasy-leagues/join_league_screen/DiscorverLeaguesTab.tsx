@@ -12,7 +12,7 @@ export default function DiscorverLeaguesTab() {
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
     const key = swrFetchKeys.getAllDiscorverLeagues();
-    const { data: publicLeagues, isLoading, error } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeaguesNotMember());
+    const { data: publicLeagues, isLoading, error } = useSWR(key, () => fantasyLeagueGroupsService.getDiscoverLeagues());
 
     const discoverLeagues = publicLeagues ?? [];
 

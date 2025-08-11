@@ -3,7 +3,6 @@ import FantasyLeagueGroupDataProvider from "../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from "../hooks/leagues/useFantasyLeagueGroup";
 import PageView from "./PageView";
 import { ErrorState } from "../components/ui/ErrorState";
-import { ArrowLeft, Trophy } from "lucide-react";
 import { StatCard } from "../components/shared/StatCard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import NoContentCard from "../components/shared/NoContentMessage";
@@ -27,7 +26,6 @@ export function FantasyLeagueScreen() {
 function Content() {
 
   const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
-  const navigate = useNavigate();
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />
@@ -69,17 +67,11 @@ function Content() {
     }
   ]
 
-  const navigateToLeagues = () => {
-    navigate('/leagues');
-  }
-
-
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4" >
       <div className="flex flex-row items-center justify-between gap-2" >
 
         <div className="flex flex-row items-center gap-2" >
-          <Trophy />
           <p className="font-bold text-xl" >{league?.title}</p>
         </div>
 
@@ -91,10 +83,10 @@ function Content() {
 
       </div>
 
-      <div onClick={navigateToLeagues} className="flex flex-row hover:text-blue-500 cursor-pointer items-center" >
+      {/* <div onClick={navigateToLeagues} className="flex flex-row hover:text-blue-500 cursor-pointer items-center" >
         <ArrowLeft />
         Back to Leagues
-      </div>
+      </div> */}
 
       <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2" >
         <StatCard

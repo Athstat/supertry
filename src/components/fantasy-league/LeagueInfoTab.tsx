@@ -1,6 +1,13 @@
-import { Info, Trophy, User } from 'lucide-react'
-import SecondaryText from '../shared/SecondaryText'
+import { Info, Lock, Trophy } from 'lucide-react'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup'
+import { InfoCard } from '../shared/StatCard';
+import { UserCog2 } from 'lucide-react';
+import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
+import { Hash } from 'lucide-react';
+import PrimaryButton from '../shared/buttons/PrimaryButton';
+import { Copy } from 'lucide-react';
+import { useState } from 'react';
+import { Toast } from '../ui/Toast';
 
 export default function LeagueInfoTab() {
 
@@ -9,46 +16,69 @@ export default function LeagueInfoTab() {
         return m.user_id === league?.creator_id
     })
 
+    const [message, setMessage] = useState<string>();
+
+    const handleCopyEntryCode = () => {
+
+        if (league) {   
+            navigator.clipboard.writeText(league.entry_code ?? "");
+            setMessage("Entry code was copied to clip board")
+        }
+    }
+
     return (
-        <div className='flex flex-col gap-4' >
+        <div className='flex flex-col gap-4 pb-8' >
+
             <div className='flex flex-row gap-2 items-center' >
                 <Info />
                 <p className='font-bold text-lg' >League Info</p>
             </div>
 
-            <div>
-                <SecondaryText>League Name</SecondaryText>
-                <p>{league?.title}</p>
+            <div className='grid grid-cols-2 gap-2' >
+                <InfoCard
+                    label='League Name'
+                    value={league?.title}
+                    icon={<Info className='w-4 h-4' />}
+                />
+
+                <InfoCard
+                    label='Commissioner'
+                    value={commisioner?.user.username}
+                    icon={<UserCog2 className='w-4 h-4' />}
+                />
+
+                <InfoCard
+                    label='Season'
+                    value={league?.season.name ? abbreviateSeasonName(league?.season.name) : "-"}
+                    icon={<Trophy className='w-4 h-4' />}
+                />
+
+                <InfoCard
+                    label='Rounds'
+                    value={rounds.length ?? "-"}
+                    icon={<Hash className='w-4 h-4' />}
+                />
+
             </div>
 
-            <div>
-                <SecondaryText>Commisioner</SecondaryText>
-                <div className='flex flex-row items-center gap-2' >
-                    <User className='w-4 h-4' />
-                    <p>{commisioner?.user.username}</p>
-                </div>
-            </div>
+            <div className='flex flex-col gap-4' >
+                <InfoCard
+                    label='Entry Code'
+                    value={league?.entry_code ?? "-"}
+                    icon={<Lock className='w-4 h-4' />}
+                />
 
-            <div>
-                <SecondaryText>Season</SecondaryText>
-                <div className='flex flex-row items-center gap-2' >
-                    <Trophy className='w-4 h-4' />
-                    <p>{league?.season.name}</p>
-                </div>
-            </div>
+                <PrimaryButton onClick={handleCopyEntryCode} >
+                    <Copy />
+                    Copy Entry Code
+                </PrimaryButton>
 
-            <div>
-                <SecondaryText>Rounds</SecondaryText>
-                <div className='flex flex-row items-center gap-2' >
-                    <p>{rounds.length ?? "-"}</p>
-                </div>
-            </div>
-
-            <div>
-                <SecondaryText>Entry Code</SecondaryText>
-                <div className='flex flex-row items-center gap-2' >
-                    <p>{league?.entry_code ?? "-"}</p>
-                </div>
+                <Toast 
+                    isVisible={message !== undefined}
+                    onClose={() => setMessage(undefined)}
+                    message={message ?? ""}
+                    type='info'
+                />
             </div>
 
         </div>
