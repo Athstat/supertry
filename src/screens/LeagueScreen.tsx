@@ -11,6 +11,7 @@ import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
 import LeagueFixturesTab from "../components/fantasy-league/LeagueFixturesTab";
 import JoinLeagueButton from "../components/fantasy-league/buttons/JoinLeagueButton";
 import LeagueCommissionerTab from "../components/fantasy-league/commissioner/LeagueCommissionerTab";
+import LeagueGroupChatFeed, { FantasyLeagueGroupChatFeed } from "../components/fantasy-leagues/LeagueGroupChat";
 
 
 export function FantasyLeagueScreen() {
@@ -26,7 +27,7 @@ export function FantasyLeagueScreen() {
 function Content() {
 
   const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
-  const {state} = useLocation();
+  const { state } = useLocation();
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />
@@ -54,6 +55,7 @@ function Content() {
       className: "flex-1"
     },
 
+
     {
       label: "Commissioner",
       tabKey: 'commissioner',
@@ -65,7 +67,13 @@ function Content() {
       label: "Info",
       tabKey: 'info',
       className: "flex-1"
-    }
+    },
+
+    {
+      label: "Chat",
+      tabKey: 'chat',
+      className: "flex-1"
+    },
   ]
 
   return (
@@ -127,6 +135,10 @@ function Content() {
         <TabViewPage tabKey="commissioner" >
           <LeagueCommissionerTab />
         </TabViewPage>
+
+        {league && <TabViewPage tabKey="chat" >
+          <FantasyLeagueGroupChatFeed league={league} />
+        </TabViewPage>}
       </TabView>
 
     </PageView>
