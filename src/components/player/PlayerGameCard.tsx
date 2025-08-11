@@ -22,13 +22,9 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
  * does not rely on team context */
 
 export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
-
   const selectedPlayers = useAtomValue(comparePlayersAtom);
-  
-  const shouldGlow = selectedPlayers.some((a) => (
-    a.tracking_id === player.tracking_id
-  ));
 
+  const shouldGlow = selectedPlayers.some(a => a.tracking_id === player.tracking_id);
 
   const pr = player.power_rank_rating ?? 0;
   const cardTier: CardTier =
@@ -39,11 +35,11 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
   const isAvailable = true;
 
   return (
-    <div className="">
+    <div className="h-full">
       <div
         onClick={onClick}
         className={twMerge(
-          'group relative shadow-xl rounded-lg flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden transform-style-3d text-white',
+          'group relative shadow-xl rounded-lg flex flex-col h-full transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden transform-style-3d text-white',
           cardTier === 'gold' && 'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
           cardTier === 'silver' && 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
           cardTier === 'bronze' &&
@@ -59,14 +55,11 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         )}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo 
-            className="w-8 h-8 dark:text-white/40"
-            url={player.team.image_url} 
-          />
+          <TeamLogo className="w-8 h-8 dark:text-white/40" url={player.team.image_url} />
         </div>
 
         {/* Player Image */}
-        <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">
+        <div className="relative flex-[3] min-h-0 overflow-hidden bg-gradient-to-b from-transparent to-black/20">
           {player.image_url && (
             <OptimizedImage
               src={player.image_url}
@@ -80,7 +73,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         {/* Player Details */}
         <div
           className={twMerge(
-            'p-3  flex-[1] ',
+            'p-3 flex-[1]',
             cardTier === 'gold' && 'bg-yellow-500/10',
             cardTier === 'silver' && 'bg-gray-500/10',
             cardTier === 'bronze' && 'bg-amber-900/10',
@@ -122,4 +115,4 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
       </div>
     </div>
   );
-};
+}
