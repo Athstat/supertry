@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ScrummyLogo from '../../branding/scrummy_logo';
 
 interface ModalHeaderProps {
   player: any;
@@ -6,15 +7,25 @@ interface ModalHeaderProps {
 }
 
 export const ModalHeader: React.FC<ModalHeaderProps> = ({ player, onClose }) => {
+  
+  const [imageError, setImageError] = useState<boolean>(false);
+  
   return (
     <div className="relative">
       {/* Background image with overlay */}
       <div className="h-80 w-full relative overflow-hidden rounded-t-lg">
-        <img 
+        {!imageError && <img 
           src={player.image_url || 'https://via.placeholder.com/400'} 
           alt={player.player_name}
           className="w-full h-full object-cover object-top"
-        />
+          onError={() => setImageError(true)}
+        />}
+
+        {imageError && (
+          <div className='w-full h-full flex flex-col items-center justify-center' >
+            <ScrummyLogo className='w-36  h-36 opacity-20 grayscale' />
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 dark:from-slate-900 via-slate-900/20 to-transparent"></div>
       </div>
       
