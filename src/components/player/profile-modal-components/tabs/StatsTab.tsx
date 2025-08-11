@@ -128,6 +128,13 @@ interface StatsCategoryProps {
 }
 
 const StatsCategory: React.FC<StatsCategoryProps> = ({ title, stats }) => {
+
+  const shouldHide = (actionName: string) => {
+    const hideActions = ['PlayerId', 'PlayerTeamId'];
+
+    return hideActions.includes(actionName);
+  }
+
   return (
     <div className="dark:bg-slate-800/40 border bg-slate-50 dark:border-slate-700 rounded-xl" >
 
@@ -138,16 +145,23 @@ const StatsCategory: React.FC<StatsCategoryProps> = ({ title, stats }) => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4">
-        {stats.map((stat: any, index) => (
-          <RoundedCard key={index} className="text-center p-3 rounded-lg">
-            <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
-              {stat.displayValue ?? "N/A"}
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">
-              {stat.label}
-            </div>
-          </RoundedCard>
-        ))}
+        {stats.map((stat: any, index) => {
+
+          if (shouldHide(stat.label)) {
+            return;
+          }
+
+          return (
+            <RoundedCard key={index} className="text-center p-3 rounded-lg">
+              <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
+                {stat.displayValue ?? "N/A"}
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                {stat.label}
+              </div>
+            </RoundedCard>
+          )
+        })}
       </div>
     </div>
   );

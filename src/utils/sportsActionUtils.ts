@@ -2,7 +2,7 @@ import { PlayerAggregateStatAction } from "../types/sports_actions";
 
 export function mapSportsActionToAthstatName(rawActionName: string) {
 
-    if (rawActionName.includes('_')) {
+    if (rawActionName) {
         // Split the word by that _
         // capitalize first word of each item
         // lower case every other letter
@@ -21,7 +21,7 @@ export function mapSportsActionToAthstatName(rawActionName: string) {
                 const firstLetter = (w[0] + "").toUpperCase();
                 const restLetters = (w.slice(1, w.length) + "").toLowerCase();
 
-                outStr += `${firstLetter}${restLetters} `;
+                outStr += `${firstLetter}${restLetters}`;
             }
         })
 
