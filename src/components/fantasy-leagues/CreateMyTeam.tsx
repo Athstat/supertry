@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { Player } from '../../types/player';
 import { Position } from '../../types/position';
@@ -9,8 +9,14 @@ import { useParams } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import { IProAthlete } from '../../types/athletes';
 import PlayerProfileModal from '../player/PlayerProfileModal';
+// import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { leagueService } from '../../services/leagueService';
+import { authService } from '../../services/authService';
+import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
+import { Check } from 'lucide-react';
 
-export default function CreateMyTeam() {
+export default function CreateMyTeam({ leagueRound }: { leagueRound?: IFantasyLeagueRound }) {
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, Player>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -18,18 +24,21 @@ export default function CreateMyTeam() {
   const [captainId, setCaptainId] = useState<string | null>(null);
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete | undefined>(undefined);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | undefined>(undefined);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const selectedRoundId = useMemo(() => leagueRound?.id, [leagueRound?.id]);
 
   const { leagueId } = useParams();
 
+  console.log('leagueRound: ', leagueRound);
+
   useEffect(() => {
     const loadAthletes = async () => {
-      if (!leagueId) return;
+      if (!leagueRound) return;
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
-        const athletes = await seasonService.getSeasonAthletes(
-          '695fa717-1448-5080-8f6f-64345a714b10'
-        );
-        console.log('athletes: ', athletes);
+        const athletes = await seasonService.getSeasonAthletes(leagueRound.season_id);
         const mapped: RugbyPlayer[] = athletes.map(a => ({
           id: a.tracking_id,
           tracking_id: a.tracking_id,
@@ -56,9 +65,7 @@ export default function CreateMyTeam() {
     };
 
     loadAthletes();
-  }, [leagueId]);
-
-  console.log('players: ', players);
+  }, [leagueRound]);
 
   const positions = [
     { name: 'Front Row', position_class: 'front-row' },
@@ -102,6 +109,55 @@ export default function CreateMyTeam() {
     },
   });
 
+  const handleSave = async () => {
+    if (!leagueRound) return;
+    try {
+      setIsSaving(true);
+      setSaveError(undefined);
+
+      const userInfo = await authService.getUserInfo();
+      if (!userInfo?.kc_id) {
+        setSaveError('You must be logged in to save a team.');
+        setIsSaving(false);
+        return;
+      }
+
+      const teamName = `${userInfo.username} - ${leagueRound.title}`;
+
+      const athletes: ICreateFantasyTeamAthleteItem[] = positions
+        .map((p, index) => {
+          const selected = selectedPlayers[p.name];
+          if (!selected) return undefined;
+          const isSuperSub = p.isSpecial === true;
+          return {
+            athlete_id: selected.id,
+            purchase_price: selected.price || 0,
+            purchase_date: new Date(),
+            is_starting: !isSuperSub,
+            slot: index + 1,
+            is_super_sub: isSuperSub,
+            is_captain: selected.id === captainId || false,
+          } as ICreateFantasyTeamAthleteItem;
+        })
+        .filter(Boolean) as ICreateFantasyTeamAthleteItem[];
+
+      const response = await leagueService.joinLeague(
+        leagueRound.id,
+        userInfo.kc_id,
+        teamName,
+        athletes
+      );
+
+      console.log('Join league response:', response);
+      setShowSuccessModal(true);
+    } catch (e) {
+      console.error('Failed to save team', e);
+      setSaveError('Failed to save team. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="w-full py-4">
       {/* Top stats row */}
@@ -126,9 +182,16 @@ export default function CreateMyTeam() {
 
       {/* Save button */}
       <div className="mt-3">
-        <PrimaryButton disabled className="w-full">
-          Save
+        <PrimaryButton
+          className="w-full"
+          disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
+          onClick={handleSave}
+        >
+          {isSaving ? 'Saving...' : 'Save'}
         </PrimaryButton>
+        {saveError && (
+          <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
+        )}
       </div>
 
       {/* 2x3 grid of position slots */}
@@ -226,7 +289,9 @@ export default function CreateMyTeam() {
             setIsModalOpen(false);
           }}
           onClose={() => setIsModalOpen(false)}
-          roundId={0}
+          roundId={parseInt(selectedRoundId || '0')}
+          roundStart={leagueRound?.start_round ?? undefined}
+          roundEnd={leagueRound?.end_round ?? undefined}
           leagueId={leagueId}
         />
       )}
@@ -241,6 +306,26 @@ export default function CreateMyTeam() {
             setShowPlayerModal(false);
           }}
         />
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+          <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
+                <Check size={32} />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Your team has been successfully submitted to {leagueRound?.title}.
+              </p>
+              <PrimaryButton className="w-full" onClick={() => setShowSuccessModal(false)}>
+                Let's Go!
+              </PrimaryButton>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

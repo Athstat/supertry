@@ -10,6 +10,7 @@ export interface ISeason {
 export interface IFantasyLeagueRound {
   season: string;
   season_name: string;
+  season_id: string;
   id: string;
   type: string;
   official_league_id: string;

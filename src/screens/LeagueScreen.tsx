@@ -6,7 +6,6 @@ import { ErrorState } from '../components/ui/ErrorState';
 import { ArrowLeft, Trophy } from 'lucide-react';
 import { StatCard } from '../components/shared/StatCard';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
-import NoContentCard from '../components/shared/NoContentMessage';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
