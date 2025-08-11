@@ -4,17 +4,20 @@ import PageView from "./PageView";
 import OnboardingTab from "../components/onboarding/OnboardingTab";
 import PrimaryButton from "../components/shared/buttons/PrimaryButton";
 import ScrummyLogo from "../components/branding/scrummy_logo";
-import { twMerge } from "tailwind-merge";
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from "react-router-dom";
+import TabProgressDots from "../components/shared/TabProgressDots";
 
 export default function PostSignUpWelcomeScreen() {
 
   const [currIndex, setIndex] = useState(0);
+  const navigate = useNavigate();
 
   const isIndexValid = currIndex >= 0 && currIndex < tabs.length;
-  const currTab = tabs[currIndex];
+  const currTab = isIndexValid ? tabs[currIndex] : undefined;
 
+  const isWelcomeComplete = currIndex === tabs.length - 1;
 
   const handleNextIndex = () => {
     if (currIndex < tabs.length - 1) {
@@ -22,6 +25,14 @@ export default function PostSignUpWelcomeScreen() {
     } else {
       setIndex(0);
     }
+  }
+
+  const handleProceedWithLeagues = () => {
+    navigate('/onboarding/joining-league')
+  }
+
+  const handleSkipToDashboard = () => {
+    navigate('/dashboard');
   }
 
   return (
@@ -49,39 +60,29 @@ export default function PostSignUpWelcomeScreen() {
 
       <div className="flex flex-1  w-full p-4 justify-end flex-col gap-4 items-center" >
 
-        <PrimaryButton onClick={handleNextIndex} className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2" >
-          {currIndex == 0 ? 'Get Started' : "Continue"}
-        </PrimaryButton>
+        {!isWelcomeComplete && <PrimaryButton onClick={handleNextIndex} className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2" >
+          {"Continue"}
+        </PrimaryButton>}
+
+        {isWelcomeComplete && <div className="flex flex-col items-center justify-center" >
+          <PrimaryButton onClick={handleProceedWithLeagues} className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2" >
+            Get Started With Leagues
+          </PrimaryButton>
+
+          <button
+            onClick={handleSkipToDashboard}
+            className="rounded-3xl text-slate-700 w-fit p-4 h-10 w-22 px-10 py-2"
+          >
+            Look Around First
+          </button>
+        </div>}
 
         {/* Progress Dots */}
-        <div className="flex flex-row items-center gap-1 justify-center" >
-          {tabs.map((_, index) => {
-
-            const curr = index === currIndex;
-
-            return (
-              <motion.div
-                key={index}
-                onClick={() => setIndex(index)}
-                initial={{ width: curr ? 12 : 4 }}
-                className={twMerge(
-                  "rounded-full h-3 bg-slate-300 dark:bg-slate-700",
-                )}
-
-                animate={{
-                  width: curr ? 40 : 10,
-                  transition: {
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 20,
-                  },
-                }}
-              >
-
-              </motion.div>
-            )
-          })}
-        </div>
+        <TabProgressDots 
+          items={tabs}
+          currIndex={currIndex}
+          setIndex={setIndex}
+        />
 
       </div>
 
