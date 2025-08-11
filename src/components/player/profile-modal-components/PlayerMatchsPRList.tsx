@@ -30,6 +30,10 @@ export default function PlayerMatchsPRList({ player }: Props) {
         return <></>
     }
 
+    if (matchesPR.length === 0) {
+        return;
+    }
+
     const matchesWon = matchesPR.reduce((sum, m) => {
         const { athleteTeamWon } = didAthleteTeamWin(m);
         return sum + (athleteTeamWon ? 1 : 0);

@@ -6,6 +6,8 @@ import { IProAthlete } from '../../types/athletes';
 import OptimizedImage from '../shared/OptimizedImage';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
+import { useState } from 'react';
+import ScrummyLogo from '../branding/scrummy_logo';
 
 type Props = {
   player: IProAthlete;
@@ -24,7 +26,9 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
 export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
 
   const selectedPlayers = useAtomValue(comparePlayersAtom);
-  
+
+  const [imageError, setImageError] = useState<boolean>(false);
+
   const shouldGlow = selectedPlayers.some((a) => (
     a.tracking_id === player.tracking_id
   ));
@@ -47,9 +51,9 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
           cardTier === 'gold' && 'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
           cardTier === 'silver' && 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
           cardTier === 'bronze' &&
-            'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
+          'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
           cardTier === 'blue' &&
-            'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
+          'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
           shouldGlow && !blockGlow && 'animate-glow border border-yellow-500',
           className
         )}
@@ -59,22 +63,28 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         )}
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo 
+          <TeamLogo
             className="w-8 h-8 dark:text-white/40"
-            url={player.team.image_url} 
+            url={player.team.image_url}
           />
         </div>
 
         {/* Player Image */}
         <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">
-          {player.image_url && (
-            <OptimizedImage
-              src={player.image_url}
-              alt={player.player_name}
-              className="w-full object-scale-down object-top"
-              lazy={true}
-            />
+
+          {!imageError && player.image_url && <img
+            src={player.image_url}
+            alt={""}
+            className="w-full object-scale-down object-top"
+            onError={() => setImageError(true)}
+          />}
+
+          {imageError || !player.image_url && (
+            <div className='flex flex-col items-center justify-center w-full h-full' >
+              <ScrummyLogo className='w-32 h-32 opacity-20 grayscale ' />
+            </div>
           )}
+
         </div>
 
         {/* Player Details */}
