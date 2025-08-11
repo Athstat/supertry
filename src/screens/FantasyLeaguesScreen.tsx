@@ -3,7 +3,7 @@ import { Trophy } from 'lucide-react';
 import LeagueTabs from '../components/fantasy-leagues/LeagueTabs';
 import MyLeaguesTab from '../components/fantasy-leagues/join_league_screen/MyLeaguesTab';
 import DiscorverLeaguesTab from '../components/fantasy-leagues/join_league_screen/DiscorverLeaguesTab';
-import JoinLeagueByCodeTab from '../components/fantasy-leagues/join_league_screen/JoinedByCodeTab';
+import JoinLeagueByCodeTab from '../components/fantasy-leagues/join_league_screen/JoinByCodeTab';
 
 export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
