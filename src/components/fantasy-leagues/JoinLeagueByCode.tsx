@@ -9,7 +9,6 @@ import SecondaryText from '../shared/SecondaryText';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { useJoinLeague } from '../../hooks/leagues/useJoinLeague';
 import { Toast } from '../ui/Toast';
-import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import WarningCard from '../shared/WarningCard';
@@ -114,7 +113,7 @@ type Props = {
 }
 
 /** Renders a fantasy league group card */
-function JoinFantasyLeagueGroupCard({ leagueGroup, custom = 0, onClick }: Props) {
+function JoinFantasyLeagueGroupCard({ leagueGroup, custom = 0}: Props) {
 
   const key = swrFetchKeys.getLeagueGroupMembers(leagueGroup.id);
   const { data: members, isLoading: loadingMembers } = useSWR(key, () => fantasyLeagueGroupsService.getGroupMembers(leagueGroup.id));
