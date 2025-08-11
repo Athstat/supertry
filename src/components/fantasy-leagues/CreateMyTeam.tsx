@@ -14,7 +14,7 @@ import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { Check } from 'lucide-react';
+import { Check, Users } from 'lucide-react';
 
 export default function CreateMyTeam({ leagueRound }: { leagueRound?: IFantasyLeagueRound }) {
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, Player>>({});
@@ -160,6 +160,12 @@ export default function CreateMyTeam({ leagueRound }: { leagueRound?: IFantasyLe
 
   return (
     <div className="w-full py-4">
+      <div className="flex flex-row items-center justify-between mb-5">
+        <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
+          <Users />
+          <p className="font-bold text-xl">Create a Team</p>
+        </div>
+      </div>
       {/* Top stats row */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800/70 p-3">

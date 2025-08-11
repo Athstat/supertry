@@ -39,7 +39,7 @@ function Content() {
     },
 
     {
-      label: 'My Team',
+      label: 'My Teams',
       tabKey: 'my-team',
       className: 'flex-1',
     },
@@ -70,10 +70,15 @@ function Content() {
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4">
-      <div className="flex flex-row items-center justify-between gap-2">
-        <div className="flex flex-row items-center gap-2">
-          <Trophy />
-          <p className="font-bold text-xl">{league?.title}</p>
+      <div className="flex flex-row items-center justify-between ">
+        <div className="flex flex-col items-start gap-2">
+          <div className="flex flex-row items-center gap-2">
+            <Trophy />
+            <p className="font-bold text-xl">{league?.title}</p>
+          </div>
+          <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+            {league?.season.name}
+          </p>
         </div>
 
         <div>{!isMember && <JoinLeagueButton league={league} />}</div>
