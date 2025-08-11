@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { connectUserToSendBird, CustomSendBirdInstance } from "../data/messaging/send_bird.init";
 import { createOrGetOpenChannel } from "../data/messaging/open_channel.init";
 import { OpenChannel } from "@sendbird/chat/openChannel";
-import { AuthUser } from "../types/auth";
+import { DjangoAuthUser } from "../types/auth";
 
 /** Connects a user to sendbird and the open channel specified */
-export function useOpenChat(channelUrl: string, channelName: string, authUser?: AuthUser) {
+export function useOpenChat(channelUrl: string, channelName: string, authUser?: DjangoAuthUser) {
 
     const [sbInstance, setSbInstance] = useState<CustomSendBirdInstance>();
     const [channel, setChannel] = useState<OpenChannel>();
@@ -46,7 +46,7 @@ export function useOpenChat(channelUrl: string, channelName: string, authUser?: 
             if (sbInstance) sbInstance.disconnect();
         }
 
-    }, [channelUrl, channelName]);
+    }, [channelUrl, channelName, authUser]);
 
 
     return { channel, error, sbInstance, authUser, isLoading };

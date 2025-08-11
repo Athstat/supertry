@@ -17,6 +17,8 @@ export async function createOrGetOpenChannel(channelUrl: string, channelName: st
             channelUrl: channelUrl,
             operatorUserIds: ['1'],
         };
+
+        console.log("Params ", params);
         
         const newChannel = await sb.openChannel.createChannel(params);
         

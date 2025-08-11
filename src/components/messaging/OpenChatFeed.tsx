@@ -2,8 +2,8 @@ import OpenChannelUI from "@sendbird/uikit-react/OpenChannel/components/OpenChan
 import { OpenChannelProvider } from "@sendbird/uikit-react/OpenChannel/context"
 import { useOpenChat } from "../../hooks/useOpenChat"
 import DelayedView from "../shared/containers/DelayedView"
-import { authService } from "../../services/authService"
 import { twMerge } from "tailwind-merge"
+import { useAuth } from "../../contexts/AuthContext"
 
 type Props = {
     channelUrl: string,
@@ -14,8 +14,8 @@ type Props = {
 /** Renders an open chat feed box */
 export default function OpenChatFeed({ className, channelName, channelUrl }: Props) {
 
-    const user = authService.getUserInfo();
-    useOpenChat(channelUrl, channelName, user ?? undefined)
+    const {authUser: user} = useAuth();
+    useOpenChat(channelUrl, channelName, user);
 
     return (
         <DelayedView className={twMerge(

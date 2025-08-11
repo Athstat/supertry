@@ -1,4 +1,4 @@
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Check, ChevronRight, Users } from 'lucide-react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { useQueryState } from '../../hooks/useQueryState';
 import useSWR from 'swr';
@@ -6,15 +6,18 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import NoContentCard from '../shared/NoContentMessage';
 import SecondaryText from '../shared/SecondaryText';
-import { FantasyLeagueGroupCard } from './league_card_small/FantasyLeagueGroupCard';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { useJoinLeague } from '../../hooks/leagues/useJoinLeague';
 import { Toast } from '../ui/Toast';
+import { motion } from 'framer-motion';
+import { useAuth } from '../../contexts/AuthContext';
+import WarningCard from '../shared/WarningCard';
+import { useNavigate } from 'react-router-dom';
 
 type JoinLeagueByCodeProps = {
 }
 
-export default function JoinLeagueByCode({}: JoinLeagueByCodeProps) {
+export default function JoinLeagueByCode({ }: JoinLeagueByCodeProps) {
 
   const [code, setCode] = useQueryState('code');
 
@@ -91,26 +94,176 @@ type JoinCardProps = {
 
 function JoinLeagueCard({ league }: JoinCardProps) {
 
-  const { isLoading, error, handleJoinLeague: joinLeague, clearError } = useJoinLeague();
-
-  const handleJoinLeague = () => {
-    joinLeague(league, `/league/${league.id}`);
-  }
-
   return (
     <div className='gap-2 flex flex-col' >
-      <FantasyLeagueGroupCard
+      <JoinFantasyLeagueGroupCard
         leagueGroup={league}
-        onClick={handleJoinLeague}
       />
+    </div>
+  )
 
-      <PrimaryButton
+}
+
+
+
+type Props = {
+  leagueGroup: FantasyLeagueGroup,
+  onClick?: (league: FantasyLeagueGroup) => void,
+  custom?: number
+}
+
+/** Renders a fantasy league group card */
+function JoinFantasyLeagueGroupCard({ leagueGroup, custom = 0}: Props) {
+
+  const key = swrFetchKeys.getLeagueGroupMembers(leagueGroup.id);
+  const { data: members, isLoading: loadingMembers } = useSWR(key, () => fantasyLeagueGroupsService.getGroupMembers(leagueGroup.id));
+
+  const membersCount = members ? members.length : '-';
+
+  const { isLoading, error, handleJoinLeague: joinLeague, clearError } = useJoinLeague();
+
+  const navigate = useNavigate()
+
+  const { authUser } = useAuth();
+
+  const isJoined = (members ?? []).find((m) => {
+    return m.user.kc_id === authUser?.kc_id
+  }) !== undefined;
+
+  const handleOnClick = () => {
+
+    if (isJoined) {
+      navigate(`/league/${leagueGroup.id}`);
+    }
+
+  }
+
+  const handleJoinLeague = () => {
+
+    if (isJoined) {
+      return;
+    }
+
+    joinLeague(leagueGroup, `/league/${leagueGroup.id}`);
+  }
+
+
+  return (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0, y: 10 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            type: 'spring',
+            stiffness: 400,
+            damping: 25,
+            delay: custom * 0.1,
+          },
+        },
+      }}
+      onClick={handleOnClick}
+      className="bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 rounded-2xl p-4 shadow-md hover:shadow-lg cursor-pointer transition-all duration-200 space-y-2"
+      whileHover={{
+        scale: 1.02,
+        transition: { type: 'spring', stiffness: 300 },
+      }}
+    >
+      {/* Header Row */}
+      <div className="flex justify-between items-start">
+        <div className="flex-1 flex min-w-0 flex-col gap-2">
+
+          <div className="flex flex-row items-center gap-12" >
+
+            {/* <Trophy /> */}
+
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+              {leagueGroup.title}
+            </h3>
+          </div>
+
+          <div>
+            {leagueGroup.season.name && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+                {leagueGroup.season.name}
+              </p>
+            )}
+          </div>
+
+        </div>
+        <div className="flex items-center gap-2 ml-2">
+          {isJoined && (
+            <div className="px-2 py-0.5 text-xs rounded-full bg-blue-600 dark:bg-blue-500 text-white font-semibold flex items-center gap-1">
+              <Check size={10} />
+              Joined
+            </div>
+          )}
+          {/* {getStatusBadge()} */}
+        </div>
+      </div>
+
+      {/* Description - Single line with truncation */}
+      {leagueGroup.description && (
+        <p className="text-sm italic text-gray-600 dark:text-gray-300 truncate">
+          {leagueGroup.description}
+        </p>
+      )}
+
+      {/* Metadata Row - Compressed single line */}
+      <div className="flex justify-between items-center">
+
+        <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+
+          {!loadingMembers && <div className="flex text-slate-800 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 rounded-xl px-3 py-1 items-center gap-1">
+            <Users size={12} />
+            <span>{membersCount} Team{membersCount === 1 ? "" : 's'}</span>
+          </div>}
+
+          {loadingMembers && (
+            <div className="w-6 h-2 rounded-full animate-pulse bg-slate-100 dark:bg-slate-800" >
+
+            </div>
+          )}
+
+        </div>
+
+        <ChevronRight size={16} className="text-gray-400 dark:text-gray-500" />
+      </div>
+
+      {/* Join Deadline Countdown */}
+      {/* {!isLocked && adjustedDeadline && (
+        <div className="pt-2 border-t border-gray-100 dark:border-gray-700">
+          <JoinDeadlineCountdown joinDeadline={adjustedDeadline} />
+        </div>
+      )} */}
+
+      {!isJoined && !loadingMembers && <PrimaryButton
         isLoading={isLoading}
         onClick={handleJoinLeague}
         disabled={isLoading}
+        className={isJoined ? 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200 dark:bg-slate-700/60 dark:text-slate-400 dark:border-slate-600 dark:hover:bg-slate-700' : ''}
       >
-        Join {league.title}
-      </PrimaryButton>
+        {isJoined ? `View League` : `Join ${leagueGroup.title}`}
+      </PrimaryButton>}
+
+      {isJoined && !loadingMembers && (
+        <div>
+          <WarningCard className='text-sm py-2 px-3' >
+            You are already a member of this fantasy league
+          </WarningCard>
+        </div>
+      )}
+
+      {loadingMembers && (
+        <PrimaryButton
+          className={isJoined ? 'bg-slate-300 opacity-30 h-10 animate-pulse text-slate-800 border-none border-slate-300 hover:bg-slate-200 dark:bg-slate-700/60 dark:text-slate-400 dark:border-slate-600 dark:hover:bg-slate-700' : ''}
+        >
+
+        </PrimaryButton>
+      )}
 
       <Toast
         message={error ?? ""}
@@ -119,7 +272,6 @@ function JoinLeagueCard({ league }: JoinCardProps) {
         onClose={clearError}
         duration={3000}
       />
-    </div>
-  )
-
+    </motion.div>
+  );
 }
