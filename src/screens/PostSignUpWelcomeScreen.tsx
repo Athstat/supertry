@@ -78,7 +78,7 @@ export default function PostSignUpWelcomeScreen() {
         </div>}
 
         {/* Progress Dots */}
-        <TabProgressDots 
+        <TabProgressDots
           items={tabs}
           currIndex={currIndex}
           setIndex={setIndex}
@@ -121,5 +121,11 @@ const tabs: IOnboardingTab[] = [
     title: "Invite Your Friends",
     description: "Like a post-match braai, fantasy rugby is better shared. Rally your mates, start the banter, and play for glory, honour, and the ultimate bragging rights.",
     imageUrl: "/public/images/onboarding/Invite Friends.png"
+  },
+
+  {
+    title: "Lets Get You Started",
+    description: "The ref’s blown the whistle and it’s game time! Choose your league, pick your squad, and get ready to rack up the points",
+    imageUrl: "/public/images/onboarding/Join Fantasy Leagues.png"
   }
 ]
