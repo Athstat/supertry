@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { twMerge } from 'tailwind-merge';
 import { useImageCache } from '../../hooks/useImageCache';
+import ScrummyLogo from '../branding/scrummy_logo';
 
 interface OptimizedImageProps {
   src: string;
@@ -26,6 +27,8 @@ export const OptimizedImage = ({
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const { loadImage } = useImageCache();
   const imgRef = useRef<HTMLImageElement>(null);
+
+  const [error, setError] = useState<boolean>(false);
 
   // Intersection observer for lazy loading
   const { ref: inViewRef, inView } = useInView({
@@ -88,22 +91,12 @@ export const OptimizedImage = ({
     );
   }
 
-  // Render error state
-  if (imageState === 'error') {
+  if (error) {
     return (
-      <div
-        ref={setRefs}
-        className={twMerge(
-          'bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-600',
-          'flex items-center justify-center',
-          className
-        )}
-      >
-        <span className="text-slate-500 dark:text-slate-400 text-sm">
-          Failed to load
-        </span>
+      <div>
+        <ScrummyLogo />
       </div>
-    );
+    )
   }
 
   // Render loaded image
@@ -122,8 +115,7 @@ export const OptimizedImage = ({
         onLoad?.();
       }}
       onError={() => {
-        setImageState('error');
-        onError?.('Image failed to load');
+        setError(error)
       }}
     />
   );
