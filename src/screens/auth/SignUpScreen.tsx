@@ -151,7 +151,7 @@ export function SignUpScreen() {
                   placeholder='Email'
                   required
                   value={form.email}
-                  onChange={val => setForm(prev => ({ ...prev, email:val ?? ""}))}
+                  onChange={val => setForm(prev => ({ ...prev, email:val?.toLowerCase() ?? ""}))}
                   icon={<Mail className="h-5 w-5" />}
                 />
                 
