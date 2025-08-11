@@ -5,6 +5,7 @@ import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { Users } from 'lucide-react';
 import { leagueService } from '../../services/leagueService';
+import FantasyRoundCard from './fantasy_rounds/FantasyRoundCard';
 
 export default function MyTeam() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -64,37 +65,29 @@ export default function MyTeam() {
           )}
         </div>
 
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800/70 overflow-hidden">
-          <div className="divide-y divide-slate-200 dark:divide-slate-700">
-            {sortedRounds.map(r => (
-              <button
-                key={r.id}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-slate-50 dark:hover:bg-gray-800/50"
-                onClick={() => {
+        <div className="">
+          {sortedRounds.map(r => (
+            <div key={r.id} className="py-3">
+              <FantasyRoundCard
+                round={r}
+                teams={roundIdToTeams[r.id]}
+                onCreateTeam={() => {
                   setSelectedRound(r);
                   setTabScene('creating-team');
                 }}
-              >
-                <span className="text-left">
-                  <span className="block text-sm text-gray-800 dark:text-gray-200">{r.title}</span>
-                  <span className="block text-xs text-gray-500 dark:text-gray-400">
-                    Total teams: {roundIdToTeams[r.id]?.length ?? 0}
-                  </span>
-                </span>
-                <span className="text-gray-400">→</span>
-              </button>
-            ))}
-            {(sortedRounds.length ?? 0) === 0 && (
-              <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                No rounds available
-                <div className="mt-4 flex justify-center">
-                  <PrimaryButton className="w-auto px-6" onClick={() => refreshRounds()}>
-                    Refresh
-                  </PrimaryButton>
-                </div>
+              />
+            </div>
+          ))}
+          {(sortedRounds.length ?? 0) === 0 && (
+            <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+              No rounds available
+              <div className="mt-4 flex justify-center">
+                <PrimaryButton className="w-auto px-6" onClick={() => refreshRounds()}>
+                  Refresh
+                </PrimaryButton>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     );
