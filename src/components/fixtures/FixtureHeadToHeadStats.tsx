@@ -21,13 +21,13 @@ export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) 
 
                 <div className="flex flex-row gap-1" >
                     <div className="flex flex-1 items-center justify-start" >
-                        <TeamLogo className="w-6 h-6" url={fixture.team.image_url} />
+                        <TeamLogo className="w-6 h-6" teamName={fixture.team.athstat_name} url={fixture.team.image_url} />
                     </div>
                     <div className="flex flex-[3] items-center justify-center text-center " >
                         <p>Team Stats</p>
                     </div>
                     <div className="flex flex-1 items-center justify-end" >
-                        <TeamLogo className="w-6 h-6" url={fixture.opposition_team.image_url} />
+                        <TeamLogo className="w-6 h-6" teamName={fixture.team.athstat_name} url={fixture.opposition_team.image_url} />
                     </div>
                 </div>
 
