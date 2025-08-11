@@ -27,7 +27,7 @@ export default function JoinLeagueByCode({}: JoinLeagueByCodeProps) {
   return (
     <div className="flex flex-col gap-4">
 
-      <form className="space-y-3 bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-3 bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
         <label className="block text-md font-bold text-gray-700 dark:text-gray-300 mb-1">
           Enter League Code
         </label>

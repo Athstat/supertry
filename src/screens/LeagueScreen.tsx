@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import FantasyLeagueGroupDataProvider from "../components/fantasy-league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../hooks/leagues/useFantasyLeagueGroup";
 import PageView from "./PageView";
@@ -11,6 +11,7 @@ import LeagueInfoTab from "../components/fantasy-league/LeagueInfoTab";
 import LeagueFixturesTab from "../components/fantasy-league/LeagueFixturesTab";
 import JoinLeagueButton from "../components/fantasy-league/buttons/JoinLeagueButton";
 import LeagueCommissionerTab from "../components/fantasy-league/commissioner/LeagueCommissionerTab";
+import { useEffect } from "react";
 
 
 export function FantasyLeagueScreen() {
@@ -26,6 +27,15 @@ export function FantasyLeagueScreen() {
 function Content() {
 
   const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
+  const {state} = useLocation();
+
+  useEffect(() => {
+
+    if (state?.reloadApp === true) {
+      window.location.reload();
+    }
+
+  }, [state]);
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />
