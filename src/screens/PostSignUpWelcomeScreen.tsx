@@ -33,12 +33,12 @@ export default function PostSignUpWelcomeScreen() {
 
       {currTab &&
 
-        <AnimatePresence >
+        <AnimatePresence mode="wait" >
           <motion.div
             key={currIndex}
             initial={{ opacity: 0, x: "-100%" }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 1, x: "100%" }}
+            exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="flex flex-col items-center justify-center p-4"
           >
@@ -62,6 +62,7 @@ export default function PostSignUpWelcomeScreen() {
             return (
               <motion.div
                 key={index}
+                onClick={() => setIndex(index)}
                 initial={{ width: curr ? 12 : 4 }}
                 className={twMerge(
                   "rounded-full h-3 bg-slate-300 dark:bg-slate-700",
