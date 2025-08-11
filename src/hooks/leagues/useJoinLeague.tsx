@@ -4,13 +4,13 @@ import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import { useNavigate } from "react-router-dom";
 
 /** Hook that provides a function to a league */
-export function useJoinLeague(league: FantasyLeagueGroup) {
+export function useJoinLeague() {
     const [isLoading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>();
 
     const navigate = useNavigate()
 
-    const handleJoinLeague = async (nextUrl?: string) => {
+    const handleJoinLeague = async (league: FantasyLeagueGroup, nextUrl?: string) => {
 
         setLoading(true);
 

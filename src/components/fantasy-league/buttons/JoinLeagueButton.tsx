@@ -10,14 +10,14 @@ type Props = {
 
 export default function JoinLeagueButton({ league }: Props) {
 
-    const {isLoading, error, handleJoinLeague, clearError} = useJoinLeague(league);
+    const {isLoading, error, handleJoinLeague, clearError} = useJoinLeague();
 
     return (
         <Fragment>
             <PrimaryButton
                 isLoading={isLoading}
                 disabled={isLoading}
-                onClick={handleJoinLeague}
+                onClick={() => handleJoinLeague(league)}
             >
                 Join
             </PrimaryButton>

@@ -3,7 +3,6 @@ import FantasyLeagueGroupDataProvider from "../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from "../hooks/leagues/useFantasyLeagueGroup";
 import PageView from "./PageView";
 import { ErrorState } from "../components/ui/ErrorState";
-import { Trophy } from "lucide-react";
 import { StatCard } from "../components/shared/StatCard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
 import NoContentCard from "../components/shared/NoContentMessage";
@@ -27,7 +26,6 @@ export function FantasyLeagueScreen() {
 function Content() {
 
   const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
-  const navigate = useNavigate();
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />
