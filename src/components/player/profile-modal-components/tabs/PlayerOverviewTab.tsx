@@ -13,6 +13,7 @@ import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Dumbbell } from 'lucide-react';
 import SecondaryText from '../../../shared/SecondaryText';
 import { isNumeric } from '../../../../utils/stringUtils';
+import RelatedPlayersList from '../RelatedPlayersList';
 
 type Props = {
   player: IProAthlete;
@@ -25,7 +26,7 @@ export default function PlayerOverviewTab({ player }: Props) {
   const nationalityIsValid = player.nationality && !isNumeric(player.nationality ?? "");
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-6">
 
       <div className='flex flex-row items-center gap-2' >
 
@@ -94,6 +95,10 @@ export default function PlayerOverviewTab({ player }: Props) {
           season={currentSeason}
         />
       </Experimental>}
+
+      <RelatedPlayersList 
+        player={player}
+      />
 
     </div>
   );

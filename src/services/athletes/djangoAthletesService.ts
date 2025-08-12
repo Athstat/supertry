@@ -170,5 +170,24 @@ export const djangoAthleteService = {
         }
 
         return undefined;
-    }
+    },
+
+    getAthleteTeamMates: async (athleteId: string, limit?: number): Promise<IProAthlete[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/athletes/${athleteId}/team-mates?limit=${limit ?? 10}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IProAthlete[];
+            }
+
+        } catch (err) {
+            console.log(`Error fetching athlete team mates for ${athleteId}`);
+        }
+
+        return [];
+    },
 }

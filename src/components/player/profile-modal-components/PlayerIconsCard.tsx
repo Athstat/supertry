@@ -6,6 +6,8 @@ import { djangoAthleteService } from '../../../services/athletes/djangoAthletesS
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { IProSeason } from '../../../types/season';
 import RoundedCard from '../../shared/RoundedCard';
+import SecondaryText from '../../shared/SecondaryText';
+import { Sparkles } from 'lucide-react';
 
 interface Props {
   player: IProAthlete;
@@ -44,10 +46,12 @@ export function PlayerIconsCard({ player, season }: Props) {
   }
 
   return (
-    <div className="">
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-        Player Icons
-      </h3>
+    <div className="flex flex-col gap-2">
+      <SecondaryText className='flex flex-row items-center gap-2' >
+        <Sparkles className='w-4 h-4' />
+        <p>Player Icons</p>
+        
+      </SecondaryText>
 
       <div className="space-y-3">
         {playerIcons.map((iconName: PlayerIcon) => {
