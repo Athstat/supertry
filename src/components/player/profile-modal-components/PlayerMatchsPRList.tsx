@@ -101,7 +101,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
 
     return (
-        <RoundedCard className="flex flex-col gap-2 bg-slate-200 p-6 border-none" >
+        <RoundedCard className="flex flex-col gap-2 bg-slate-200 dark:bg-slate-700 p-4 border-none hover:dark:bg-slate-700/80" >
 
             <div className="flex flex-row items-center justify-between" >
                 <div className="flex flex-row items-center gap-2" >

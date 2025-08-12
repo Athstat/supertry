@@ -23,7 +23,7 @@ export default function PlayerOverviewTab({ player }: Props) {
   const { currentSeason } = usePlayerData();
 
   return (
-    <div className="space-y-4 px-1 ">
+    <div className="flex flex-col gap-4">
 
       <div className='flex flex-row items-center gap-2' >
 
@@ -32,7 +32,7 @@ export default function PlayerOverviewTab({ player }: Props) {
           label={format(player.date_of_birth, 'dd MMMM yyyy')}
         />}
 
-        {player.date_of_birth && <PlayerInfoCard
+        {player.nationality && <PlayerInfoCard
           value={`${player.nationality}`}
           label={player.birth_country ? `Born in ${player.birth_country}` : 'Nationality'}
         />}
@@ -41,7 +41,7 @@ export default function PlayerOverviewTab({ player }: Props) {
       {player.team && <PlayerTeamCard player={player} />}
 
 
-      <div className='flex flex-col gap-2' >
+      {player.height && player.weight && <div className='flex flex-col gap-2' >
         <SecondaryText className='flex flex-row items-center gap-2' >
           <Dumbbell className='w-4 h-4' />
           <p>Physique</p>
@@ -60,7 +60,7 @@ export default function PlayerOverviewTab({ player }: Props) {
           />}
         </div>
 
-      </div>
+      </div>}
 
       {/* <PlayerIconsRow 
       player={player}
