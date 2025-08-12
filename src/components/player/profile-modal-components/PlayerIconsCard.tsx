@@ -1,23 +1,46 @@
-import { useAtomValue } from 'jotai';
 import { IProAthlete } from '../../../types/athletes';
 import { getPlayerIcons, PLAYER_ICONS, PlayerIcon } from '../../../utils/playerIcons';
 import PlayerIconComponent from '../../players/compare/PlayerIconComponent';
-import { playerProfileCurrStarRatings, playerProfileCurrStatsAtom } from '../../../state/playerProfile.atoms';
+import useSWR from 'swr';
+import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { swrFetchKeys } from '../../../utils/swrKeys';
+import { IProSeason } from '../../../types/season';
+import RoundedCard from '../../shared/RoundedCard';
 
 interface Props {
   player: IProAthlete;
   className?: string,
+  season: IProSeason
 }
 
-export function PlayerIconsCard({ player }: Props) {
+export function PlayerIconsCard({ player, season }: Props) {
 
-  const starRatings = useAtomValue(playerProfileCurrStarRatings);
-  const stats = useAtomValue(playerProfileCurrStatsAtom);
+  const statsKey = swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id);
+  const { data: actions, isLoading: loadingStats } = useSWR(statsKey, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
 
-  const playerIcons = getPlayerIcons(player, starRatings || null, stats);
+  const starsKey = swrFetchKeys.getAthleteSeasonStars(player.tracking_id, season.id);
+  const { data: starRatings, isLoading: loadingStars } = useSWR(starsKey, () => djangoAthleteService.getAthleteSeasonStarRatings(player.tracking_id, season.id));
+
+  const isLoading = loadingStars || loadingStats;
+
+  const playerIcons = getPlayerIcons(player, starRatings ?? null, actions ?? []);
 
   if (playerIcons.length === 0) {
     return null;
+  }
+
+  if (isLoading) {
+    return (
+      <div className='flex flex-col gap-2' >
+        <RoundedCard className='bg-slate-200 animate-pulse rounded-xl w-full h-[20px]' />
+        <RoundedCard className='bg-slate-200 animate-pulse rounded-xl w-full h-[20px]' />
+        <RoundedCard className='bg-slate-200 animate-pulse rounded-xl w-full h-[20px]' />
+      </div>
+    )
+  }
+
+  if (!playerIcons) {
+    return;
   }
 
   return (

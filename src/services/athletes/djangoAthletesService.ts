@@ -151,5 +151,24 @@ export const djangoAthleteService = {
         }
 
         return [];
+    },
+
+    getAthleteSeasonStaarRatings: async (athleteId: string, season_id: string): Promise<IAthleteSeasonStarRatings | undefined> => {
+        try {
+
+            const uri = getUri(`/api/v1/athletes/${athleteId}/seasons/${season_id}/stars`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IAthleteSeasonStarRatings;
+            }
+
+        } catch (err) {
+            console.log(`Error fetching athlete season stats for ${season_id}`);
+        }
+
+        return undefined;
     }
 }

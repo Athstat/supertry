@@ -9,6 +9,7 @@ import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { IProAthlete } from '../../../../types/athletes';
 import { usePlayerData } from '../../provider/PlayerDataProvider';
 import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
+import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 
 type Props = {
   player: IProAthlete;
@@ -16,11 +17,11 @@ type Props = {
 
 /** Renders a player profile overview tab */
 export default function PlayerOverviewTab({ player }: Props) {
-  
-  const {currentSeason} = usePlayerData();
+
+  const { currentSeason } = usePlayerData();
 
   return (
-    <div className="space-y-4 px-1 pb-20">
+    <div className="space-y-4 px-1 ">
 
 
       <div className='flex flex-row items-center gap-2' >
@@ -36,26 +37,41 @@ export default function PlayerOverviewTab({ player }: Props) {
         />}
       </div>
 
-     { player.team && <PlayerTeamCard player={player} />}
+      {player.team && <PlayerTeamCard player={player} />}
 
-     {/* <PlayerIconsRow 
+
+
+      {/* <PlayerIconsRow 
       player={player}
      /> */}
 
-     <CoachScrummyPlayerReport 
-      player={player}
-     />
+      {
+        currentSeason && (
+          <PlayerIconsRow
+            player={player}
+            season={currentSeason}
+          />
+        )
+      }
 
-     {currentSeason && (
-      <PlayerSeasonStatsCard 
+      <CoachScrummyPlayerReport
         player={player}
-        season={currentSeason}
       />
-     )}
 
-      <Experimental>
-        <PlayerIconsCard player={player} />
-      </Experimental>
+      {currentSeason && (
+        <PlayerSeasonStatsCard
+          player={player}
+          season={currentSeason}
+        />
+      )}
+
+
+      { currentSeason && <Experimental>
+        <PlayerIconsCard
+          player={player}
+          season={currentSeason}
+        />
+      </Experimental>}
 
     </div>
   );
