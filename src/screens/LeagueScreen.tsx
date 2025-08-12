@@ -21,7 +21,7 @@ export function FantasyLeagueScreen() {
   return (
     <FantasyLeagueGroupDataProvider leagueId={leagueId}>
       <Content />
-  </FantasyLeagueGroupDataProvider>
+    </FantasyLeagueGroupDataProvider>
   );
 }
 
@@ -52,7 +52,6 @@ function Content() {
       tabKey: 'fixtures',
       className: 'flex-1',
     },
-
 
     {
       label: 'Commissioner',
@@ -85,7 +84,16 @@ function Content() {
           </p>
         </div>
 
-        <div>{!isMember && <JoinLeagueButton league={league} />}</div>
+        <div>
+          {!isMember && <JoinLeagueButton league={league} />}
+
+          {isMember && (
+            <PrimaryButton onClick={handleShare}>
+              <Plus className="w-4 h-4" />
+              Invite
+            </PrimaryButton>
+          )}
+        </div>
       </div>
 
       <div
@@ -94,29 +102,6 @@ function Content() {
       >
         <ArrowLeft />
         Back
-      </div>
-
-      <div className="flex flex-row items-center justify-between gap-2" >
-
-        <div className="flex flex-row items-center gap-2" >
-          <p className="font-bold text-xl" >{league?.title}</p>
-        </div>
-
-        <div>
-          {!isMember && <JoinLeagueButton
-            league={league}
-          />}
-
-          {isMember && (
-            <PrimaryButton
-              onClick={handleShare}
-            >
-              <Plus className="w-4 h-4" />
-              Invite
-            </PrimaryButton>
-          )}
-        </div>
-
       </div>
 
       <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
