@@ -1,0 +1,33 @@
+import { IProAthlete } from "../../../types/athletes"
+import { formatPosition } from "../../../utils/athleteUtils"
+import FormIndicator from "../../shared/FormIndicator"
+import SecondaryText from "../../shared/SecondaryText"
+import TeamLogo from "../../team/TeamLogo"
+
+type Props = {
+    player: IProAthlete
+}
+
+export default function PlayerTeamCard({player} : Props) {
+  return (
+    <div className="flex flex-row bg-slate-200 border p-4 rounded-2xl items-center justify-between" >
+        <div className="flex flex-row items-center gap-4" >
+            
+            <TeamLogo 
+                url={player.team.image_url}
+                teamName={player.team.athstat_name}
+                className="w-10 h-10"
+            />
+
+            <div className="flex flex-col" >
+                <p>{player.team.athstat_name}</p>
+                {player.position && <SecondaryText>{formatPosition(player.position)}</SecondaryText>}
+            </div>
+        </div>
+
+        <div>
+            <FormIndicator form={player.form} />
+        </div>
+    </div>
+  )
+}

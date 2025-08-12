@@ -6,6 +6,7 @@ import SecondaryText from '../../../shared/SecondaryText';
 import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import PlayerInfoCard from '../PlayerInfoCard';
+import PlayerTeamCard from '../PlayerTeamCard';
 
 interface OverviewTabProps {
   player: IProAthlete;
@@ -29,7 +30,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
         />}
       </div>
 
-      
+     { player.team && <PlayerTeamCard player={player} />}
 
       <Experimental>
         <PlayerIconsCard player={player} />
