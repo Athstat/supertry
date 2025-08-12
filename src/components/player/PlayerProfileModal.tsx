@@ -42,6 +42,6 @@ export function PlayerProfileModal({ player, isOpen, onClose }: Props) {
       </DialogModal>
     </PlayerDataProvider>
   );
-};
+}
 
 export default PlayerProfileModal;

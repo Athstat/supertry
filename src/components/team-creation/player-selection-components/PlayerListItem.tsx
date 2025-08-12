@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { Position } from '../../../types/position';
-import { RugbyPlayer } from '../../../types/rugbyPlayer';
+import { IProAthlete } from '../../../types/athletes';
 import { formatPosition } from '../../../utils/athleteUtils';
 import FormIndicator from '../../shared/FormIndicator';
 import renderStatDots from './renderStatDots';
@@ -9,9 +9,9 @@ import { WarningPopup } from '../../shared/WarningPopup';
 
 type Props = {
   index?: number;
-  handlePlayerSelect: (player: RugbyPlayer) => void;
+  handlePlayerSelect: (player: IProAthlete) => void;
   selectedPosition: Position;
-  player: RugbyPlayer;
+  player: IProAthlete;
   onClose: () => void;
   handleViewPlayerProfile: (player: any, e: React.MouseEvent) => void;
   remainingBudget: number;
@@ -73,7 +73,7 @@ export default function PlayerListItem({
             </div>
           </div>
           <div className="flex flex-col gap-0 lg:flex-col">
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{player.team_name}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{player.team?.athstat_name || 'No team'}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {formatPosition(player.position || selectedPosition.name)}
             </p>
@@ -104,17 +104,15 @@ export default function PlayerListItem({
         <div className="w-16 text-center">
           <p className="text-sm dark:text-gray-200">{(player.power_rank_rating || 0).toFixed(1)}</p>
         </div>
-        {/* Attack stat */}
+        {/* Stats placeholders - using power_rank_rating as a fallback */}
         <div className="w-14 flex justify-center px-2">
-          {renderStatDots(player.ball_carrying || 0, 'bg-red-500')}
+          {renderStatDots(Math.round((player.power_rank_rating || 0) / 20), 'bg-red-500')}
         </div>
-        {/* Defense stat */}
         <div className="w-14 flex justify-center px-2">
-          {renderStatDots(player.tackling || 0, 'bg-blue-500')}
+          {renderStatDots(Math.round((player.power_rank_rating || 0) / 25), 'bg-blue-500')}
         </div>
-        {/* Kicking stat */}
         <div className="w-14 flex justify-center px-2">
-          {renderStatDots(player.points_kicking || 0, 'bg-green-500')}
+          {renderStatDots(Math.round((player.power_rank_rating || 0) / 33), 'bg-green-500')}
         </div>
       </div>
 

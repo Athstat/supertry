@@ -17,15 +17,15 @@ import useAvailableTeams from './player-selection-components/useAvailableTeams';
 import useModalEffects from './player-selection-components/useModalEffects';
 import AvailableFilter from './AvailableFilter';
 import { AthleteWithTrackingId } from '../../types/fantasyTeamAthlete';
-import { RugbyPlayer } from '../../types/rugbyPlayer';
+import { IProAthlete } from '../../types/athletes';
 
 interface PlayerSelectionModalProps {
   visible: boolean;
   selectedPosition: BasePositionType;
-  players: RugbyPlayer[];
+  players: IProAthlete[];
   remainingBudget: number;
   selectedPlayers: AthleteWithTrackingId[];
-  handlePlayerSelect: (player: RugbyPlayer) => void;
+  handlePlayerSelect: (player: IProAthlete) => void;
   onClose: () => void;
   roundId: number;
   roundStart?: number;
