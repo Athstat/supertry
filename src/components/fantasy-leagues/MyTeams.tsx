@@ -4,10 +4,12 @@ import CreateMyTeam from './CreateMyTeam';
 import ViewMyTeam from './ViewMyTeam';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { Users, Loader, Check } from 'lucide-react';
 import { leagueService } from '../../services/leagueService';
 import FantasyRoundCard from './fantasy_rounds/FantasyRoundCard';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
+import PlayerProfileModal from '../player/PlayerProfileModal';
 
 export default function MyTeams() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -21,6 +23,32 @@ export default function MyTeams() {
   const [showCreationSuccessModal, setShowCreationSuccessModal] = useState<boolean>(false);
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
   const [refreshKey, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
+  const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | null>(null);
+
+  // Debug effect to log when selectedPlayer changes
+  useEffect(() => {
+    console.log('Selected player changed:', selectedPlayer);
+  }, [selectedPlayer]);
+
+  // Handler for player click in FantasyRoundCard
+  const handlePlayerClick = (player: IFantasyTeamAthlete) => {
+    console.log('handlePlayerClick called with player:', player);
+    setSelectedPlayer(player);
+  };
+
+  // Handler for creating a new team
+  const handleCreateTeam = (round: IFantasyLeagueRound) => {
+    setSelectedRound(round);
+    setTabScene('creating-team');
+  };
+
+  // Handler for viewing an existing team
+  const handleViewTeam = (team: IFantasyLeagueTeam, round: IFantasyLeagueRound) => {
+    console.log('handleViewTeam called with team:', team);
+    setSelectedTeam(team);
+    setSelectedRound(round);
+    setTabScene('team-created');
+  };
 
   // Fetch teams for the current round
   const fetchTeamsForCurrentRound = async (roundId: string) => {
@@ -95,84 +123,75 @@ export default function MyTeams() {
     fetchLeagueConfig();
   }, [selectedRound?.season_id]);
 
-  if (tabScene === 'fantasy-rounds') {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col items-start justify-start">
-          <div className="flex flex-row items-center gap-2">
-            <Users />
-            <p className="font-bold text-xl">My Teams</p>
-          </div>
-          <p className="mt-1 text-gray-600 dark:text-gray-400 text-sm">
-            Choose a round to create or view your team
-          </p>
-        </div>
-
-        <div className="">
-          {isFetchingTeams && Object.keys(roundIdToTeams).length === 0 ? (
-            <div className="flex flex-col items-center py-12 space-y-3">
-              <Loader className="w-8 h-8 text-primary-500 animate-spin" />
-              <span className="text-gray-600 dark:text-gray-400">Loading league rounds...</span>
+  // Render the main content based on the current tab scene
+  const renderContent = () => {
+    if (tabScene === 'fantasy-rounds') {
+      return (
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-start justify-start">
+            <div className="flex flex-row items-center gap-2">
+              <Users />
+              <p className="font-bold text-xl">My Teams</p>
             </div>
-          ) : (
-            <>
-              {sortedRounds.map(r => (
-                <div key={r.id} className="py-3">
-                  <FantasyRoundCard
-                    round={r}
-                    teams={roundIdToTeams[r.id]}
-                    onCreateTeam={() => {
-                      setSelectedRound(r);
-                      setTabScene('creating-team');
-                    }}
-                    onViewTeam={team => {
-                      setSelectedRound(r);
-                      setSelectedTeam(team);
-                      setTabScene('team-created');
-                    }}
-                  />
-                </div>
-              ))}
-              {(sortedRounds.length ?? 0) === 0 && (
-                <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                  No rounds available
-                  <div className="mt-4 flex justify-center">
-                    <PrimaryButton className="w-auto px-6" onClick={() => refreshRounds()}>
-                      Refresh
-                    </PrimaryButton>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    );
-  }
+            <p className="mt-1 text-gray-600 dark:text-gray-400 text-sm">
+              Choose a round to create or view your team
+            </p>
+          </div>
 
-  if (tabScene === 'creating-team') {
-    return (
-      <>
+          <div className="">
+            {isFetchingTeams && Object.keys(roundIdToTeams).length === 0 ? (
+              <div className="flex flex-col items-center py-12 space-y-3">
+                <Loader className="w-8 h-8 text-primary-500 animate-spin" />
+                <span className="text-gray-600 dark:text-gray-400">Loading league rounds...</span>
+              </div>
+            ) : (
+              <>
+                {sortedRounds.map(round => (
+                  <div key={round.id} className="py-3">
+                    <FantasyRoundCard
+                      round={round}
+                      teams={roundIdToTeams[round.id]}
+                      onCreateTeam={() => handleCreateTeam(round)}
+                      onViewTeam={handleViewTeam}
+                      onPlayerClick={handlePlayerClick}
+                    />
+                  </div>
+                ))}
+                {(sortedRounds.length ?? 0) === 0 && (
+                  <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                    No rounds available
+                    <div className="mt-4 flex justify-center">
+                      <PrimaryButton className="w-auto px-6" onClick={() => refreshRounds()}>
+                        Refresh
+                      </PrimaryButton>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    if (tabScene === 'creating-team') {
+      return (
         <CreateMyTeam
           leagueRound={selectedRound ?? undefined}
           onBack={() => setTabScene('fantasy-rounds')}
           leagueConfig={leagueConfig}
           onViewTeam={() => setTabScene('team-created')}
           onTeamCreated={(team: IFantasyLeagueTeam) => {
-            // Ensure we keep the same round context
             if (selectedRound) {
               setSelectedRound(selectedRound);
             }
-            // Capture the newly created team
             setSelectedTeam(team as IFantasyLeagueTeam);
           }}
         />
-      </>
-    );
-  }
+      );
+    }
 
-  if (tabScene === 'team-created') {
-    if (selectedRound && selectedTeam) {
+    if (tabScene === 'team-created' && selectedRound && selectedTeam) {
       return (
         <ViewMyTeam
           leagueRound={selectedRound}
@@ -188,8 +207,30 @@ export default function MyTeams() {
         />
       );
     }
-    return <div className="p-4 text-sm text-gray-500 dark:text-gray-400">Loading team…</div>;
-  }
 
-  return <div className="p-4" />;
+    return <div className="p-4 text-sm text-gray-500 dark:text-gray-400">Loading...</div>;
+  };
+
+  return (
+    <>
+      {renderContent()}
+
+      {/* Player Profile Modal */}
+      {selectedPlayer && (
+        <PlayerProfileModal
+          isOpen={!!selectedPlayer}
+          onClose={() => setSelectedPlayer(null)}
+          player={{
+            ...selectedPlayer,
+            id: selectedPlayer.athlete_id,
+            name: selectedPlayer.player_name,
+            position: selectedPlayer.position,
+            team: selectedPlayer.team_name || '',
+            image_url: selectedPlayer.image_url,
+            power_rank_rating: selectedPlayer.power_rank_rating,
+          }}
+        />
+      )}
+    </>
+  );
 }

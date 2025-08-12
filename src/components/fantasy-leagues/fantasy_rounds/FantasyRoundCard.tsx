@@ -10,10 +10,17 @@ type Props = {
   round: IFantasyLeagueRound;
   teams?: IFantasyLeagueTeam[];
   onCreateTeam: () => void;
-  onViewTeam?: (team: IFantasyLeagueTeam) => void;
+  onViewTeam?: (team: IFantasyLeagueTeam, round: IFantasyLeagueRound) => void;
+  onPlayerClick?: (player: IFantasyTeamAthlete) => void;
 };
 
-export default function FantasyRoundCard({ round, teams, onCreateTeam, onViewTeam }: Props) {
+export default function FantasyRoundCard({
+  round,
+  teams,
+  onCreateTeam,
+  onViewTeam,
+  onPlayerClick,
+}: Props) {
   const currentUser = authService.getUserInfoSync();
   const totalTeams = teams?.length ?? 0;
 
@@ -38,7 +45,8 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam, onViewTea
         hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
       }`}
       onClick={() => {
-        if (hasUserTeam && userTeam && onViewTeam) onViewTeam(userTeam);
+        console.log('onClick called');
+        onViewTeam && userTeam && onViewTeam(userTeam, round);
       }}
       whileHover={
         hasUserTeam && onViewTeam
@@ -88,6 +96,7 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam, onViewTea
           <AthletesRow
             athletesCount={(userTeam?.athletes || []).length}
             athletes={userTeam?.athletes || []}
+            onPlayerClick={onPlayerClick}
           />
         ) : round.is_open ? (
           <div className="w-full flex flex-col items-center justify-center gap-2">
@@ -116,14 +125,23 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam, onViewTea
 type AthletesRowProps = {
   athletes: IFantasyTeamAthlete[];
   athletesCount: number;
+  onPlayerClick?: (player: IFantasyTeamAthlete) => void;
 };
 
-function AthletesRow({ athletes }: AthletesRowProps) {
+function AthletesRow({ athletes, onPlayerClick }: AthletesRowProps) {
   return (
     <div className="max-w-full overflow-x-auto pb-1">
       <div className="whitespace-nowrap scroll-smooth space-x-4 flex pr-2">
         {athletes.map(a => (
-          <div key={a.tracking_id} className="items-center flex flex-col gap-1">
+          <div
+            key={a.tracking_id}
+            className="items-center flex flex-col gap-1 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={e => {
+              e.stopPropagation();
+              console.log('Player clicked:', a);
+              onPlayerClick?.(a);
+            }}
+          >
             <PlayerMugshot playerPr={a.power_rank_rating} showPrBackground url={a.image_url} />
             <p className="text-xs text-gray-600 dark:text-gray-400 max-w-14 truncate">
               {a.player_name}
