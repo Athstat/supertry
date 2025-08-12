@@ -36,6 +36,7 @@ export interface IFantasyLeagueRound {
 }
 
 export type IFantasyLeagueTeam = {
+  id: string | number;
   rank: number;
   overall_score: number;
   team_id: string;

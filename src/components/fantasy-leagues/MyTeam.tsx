@@ -106,7 +106,13 @@ export default function MyTeam() {
 
   if (tabScene === 'team-created') {
     if (selectedRound && selectedTeam) {
-      return <ViewMyTeam leagueRound={selectedRound} team={selectedTeam} />;
+      return (
+        <ViewMyTeam
+          leagueRound={selectedRound}
+          team={selectedTeam}
+          onBack={() => setTabScene('fantasy-rounds')}
+        />
+      );
     }
     return <div className="p-4 text-sm text-gray-500 dark:text-gray-400">Loading team…</div>;
   }
