@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BasePositionType, Position } from '../../types/position';
+import { BasePositionType } from '../../types/position';
 
 // Import components
 import ModalHeader from './player-selection-components/ModalHeader';
@@ -9,7 +9,6 @@ import TableHeader from './TableHeader';
 import PlayerList from './player-selection-components/PlayerList';
 
 // Import hooks
-import { useFetch } from '../../hooks/useFetch';
 import { gamesService } from '../../services/gamesService';
 import { LoadingState } from '../ui/LoadingState';
 import usePlayersFilter from './player-selection-components/usePlayersFilter';
@@ -18,6 +17,7 @@ import useModalEffects from './player-selection-components/useModalEffects';
 import AvailableFilter from './AvailableFilter';
 import { AthleteWithTrackingId } from '../../types/fantasyTeamAthlete';
 import { IProAthlete } from '../../types/athletes';
+import useSWR from 'swr';
 
 interface PlayerSelectionModalProps {
   visible: boolean;
@@ -56,9 +56,8 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   const [filterAvailable, setFilterAvailable] = useState(false);
 
   // Only fetch fixtures if leagueId is provided (TeamCreationScreen)
-  const { data: fixtureData, isLoading: loadingFixtures } = leagueId
-    ? useFetch('games', leagueId, gamesService.getGamesByLeagueId)
-    : { data: null, isLoading: false };
+  const fetchKey = leagueId ? `games/${leagueId}` : null;
+  const { data: fixtureData, isLoading: loadingFixtures } = useSWR(fetchKey, () => gamesService.getGamesByLeagueId(leagueId ?? ""));
 
   console.log('Players: ', players);
 

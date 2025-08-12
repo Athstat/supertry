@@ -1,5 +1,5 @@
 import React, { useState, useContext, createContext } from "react";
-import { PlayerProfileModal } from "../components/player/PlayerProfileModal";
+import PlayerProfileModal from "../components/player/PlayerProfileModal";
 
 interface PlayerProfileContextType {
   showPlayerProfile: (player: any, options?: { roundId?: string }) => void;

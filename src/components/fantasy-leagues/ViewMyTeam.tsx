@@ -4,7 +4,6 @@ import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeag
 import { AthleteWithTrackingId, IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import { IProAthlete } from '../../types/athletes';
-import { PlayerForm } from '../../types/rugbyPlayer';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { Position } from '../../types/position';
@@ -29,9 +28,7 @@ export default function ViewMyTeam({
   const [captainAthleteId, setCaptainAthleteId] = useState<string | undefined>(
     () => team.athletes?.find(a => a.is_captain)?.athlete_id
   );
-  const [playerModalPlayer, setPlayerModalPlayer] = useState<
-    IProAthlete | IFantasyTeamAthlete | undefined
-  >(undefined);
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
   const [players, setPlayers] = useState<IProAthlete[]>([]);
   const [isSaving, setIsSaving] = useState(false);

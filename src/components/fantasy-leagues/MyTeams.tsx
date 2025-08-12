@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
 import CreateMyTeam from './CreateMyTeam';
 import ViewMyTeam from './ViewMyTeam';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { Users, Loader, Check } from 'lucide-react';
 import { leagueService } from '../../services/leagueService';
-import FantasyRoundCard from './fantasy_rounds/FantasyRoundCard';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import PlayerProfileModal from '../player/PlayerProfileModal';
+import FantasyRoundsList from './FantasyRoundsList';
 
 export default function MyTeams() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -78,33 +76,33 @@ export default function MyTeams() {
     }
   };
 
-  // Phase 1: Fetch participating teams for each round (by round/league id)
-  useEffect(() => {
-    // Only fetch teams while listing rounds
-    if (tabScene !== 'fantasy-rounds') return;
-    if (!sortedRounds || sortedRounds.length === 0) return;
+  // // Phase 1: Fetch participating teams for each round (by round/league id)
+  // useEffect(() => {
+  //   // Only fetch teams while listing rounds
+  //   if (tabScene !== 'fantasy-rounds') return;
+  //   if (!sortedRounds || sortedRounds.length === 0) return;
 
-    async function fetchTeamsForRounds() {
-      try {
-        setIsFetchingTeams(true);
-        const fetches = sortedRounds.map(r => leagueService.fetchParticipatingTeams(r.id));
-        const results = await Promise.all(fetches);
+  //   async function fetchTeamsForRounds() {
+  //     try {
+  //       setIsFetchingTeams(true);
+  //       const fetches = sortedRounds.map(r => leagueService.fetchParticipatingTeams(r.id));
+  //       const results = await Promise.all(fetches);
 
-        const mapping: Record<string, IFantasyLeagueTeam[]> = {};
-        sortedRounds.forEach((round, index) => {
-          mapping[round.id] = results[index] ?? [];
-        });
+  //       const mapping: Record<string, IFantasyLeagueTeam[]> = {};
+  //       sortedRounds.forEach((round, index) => {
+  //         mapping[round.id] = results[index] ?? [];
+  //       });
 
-        setRoundIdToTeams(mapping);
-      } catch (error) {
-        console.error('Failed to fetch teams for rounds', error);
-      } finally {
-        setIsFetchingTeams(false);
-      }
-    }
+  //       setRoundIdToTeams(mapping);
+  //     } catch (error) {
+  //       console.error('Failed to fetch teams for rounds', error);
+  //     } finally {
+  //       setIsFetchingTeams(false);
+  //     }
+  //   }
 
-    fetchTeamsForRounds();
-  }, [tabScene, sortedRounds, refreshKey]); // Add refreshKey to dependencies
+  //   fetchTeamsForRounds();
+  // }, [tabScene, sortedRounds, refreshKey]); // Add refreshKey to dependencies
 
   useEffect(() => {
     const fetchLeagueConfig = async () => {
@@ -126,52 +124,13 @@ export default function MyTeams() {
   // Render the main content based on the current tab scene
   const renderContent = () => {
     if (tabScene === 'fantasy-rounds') {
-      return (
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col items-start justify-start">
-            <div className="flex flex-row items-center gap-2">
-              <Users />
-              <p className="font-bold text-xl">My Teams</p>
-            </div>
-            <p className="mt-1 text-gray-600 dark:text-gray-400 text-sm">
-              Choose a round to create or view your team
-            </p>
-          </div>
-
-          <div className="">
-            {isFetchingTeams && Object.keys(roundIdToTeams).length === 0 ? (
-              <div className="flex flex-col items-center py-12 space-y-3">
-                <Loader className="w-8 h-8 text-primary-500 animate-spin" />
-                <span className="text-gray-600 dark:text-gray-400">Loading league rounds...</span>
-              </div>
-            ) : (
-              <>
-                {sortedRounds.map(round => (
-                  <div key={round.id} className="py-3">
-                    <FantasyRoundCard
-                      round={round}
-                      teams={roundIdToTeams[round.id]}
-                      onCreateTeam={() => handleCreateTeam(round)}
-                      onViewTeam={handleViewTeam}
-                      onPlayerClick={handlePlayerClick}
-                    />
-                  </div>
-                ))}
-                {(sortedRounds.length ?? 0) === 0 && (
-                  <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                    No rounds available
-                    <div className="mt-4 flex justify-center">
-                      <PrimaryButton className="w-auto px-6" onClick={() => refreshRounds()}>
-                        Refresh
-                      </PrimaryButton>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      );
+      return <FantasyRoundsList 
+        rounds={sortedRounds}
+        handleCreateTeam={handleCreateTeam}
+        handlePlayerClick={handlePlayerClick}
+        handleViewTeam={handleViewTeam}
+        refreshRounds={refreshRounds}
+      />
     }
 
     if (tabScene === 'creating-team') {

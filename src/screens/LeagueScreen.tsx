@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Trophy } from 'lucide-react';
+import { ArrowLeft, Plus, Trophy } from 'lucide-react';
 import { StatCard } from '../components/shared/StatCard';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
@@ -12,6 +12,8 @@ import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
 import JoinLeagueButton from '../components/fantasy-league/buttons/JoinLeagueButton';
 import LeagueCommissionerTab from '../components/fantasy-league/commissioner/LeagueCommissionerTab';
 import MyTeams from '../components/fantasy-leagues/MyTeams';
+import PrimaryButton from '../components/shared/buttons/PrimaryButton';
+import { useShareLeague } from '../hooks/leagues/useShareLeague';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -19,7 +21,7 @@ export function FantasyLeagueScreen() {
   return (
     <FantasyLeagueGroupDataProvider leagueId={leagueId}>
       <Content />
-    </FantasyLeagueGroupDataProvider>
+  </FantasyLeagueGroupDataProvider>
   );
 }
 

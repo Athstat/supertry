@@ -3,7 +3,6 @@ import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 import { Position } from '../../types/position';
 import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
-import { RugbyPlayer } from '../../types/rugbyPlayer';
 import { seasonService } from '../../services/seasonsService';
 import { useParams } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
@@ -15,7 +14,7 @@ import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { ArrowLeft, Check, Loader, Users } from 'lucide-react';
+import { ArrowLeft, Check, Loader } from 'lucide-react';
 import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
 
@@ -35,7 +34,9 @@ export default function CreateMyTeam({
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, IProAthlete>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const [players, setPlayers] = useState<IProAthlete[]>([]);
+  
   const [captainId, setCaptainId] = useState<string | null>(null);
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete | undefined>(undefined);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
@@ -76,7 +77,14 @@ export default function CreateMyTeam({
       if (!leagueRound) return;
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
-        const athletes = await seasonService.getSeasonAthletes(leagueRound.season_id);
+        const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
+          .filter((a) => {
+            return a.power_rank_rating && a.power_rank_rating > 50;
+          })
+          .sort((a, b) => {
+            return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+          });
+
         setPlayers(athletes);
         console.log('athletes: ', athletes);
       } catch (e) {
@@ -419,7 +427,9 @@ export default function CreateMyTeam({
                 className="w-full"
                 onClick={() => {
                   setShowSuccessModal(false);
-                  onViewTeam();
+                  if (onViewTeam) {
+                    onViewTeam();
+                  }
                 }}
               >
                 Let's Go!
