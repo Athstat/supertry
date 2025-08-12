@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Check } from 'lucide-react';
+import { ArrowLeft, Check, Loader } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { AthleteWithTrackingId, IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { PlayerGameCard } from '../player/PlayerGameCard';
@@ -18,11 +18,13 @@ export default function ViewMyTeam({
   leagueConfig,
   team,
   onBack,
+  onTeamUpdated,
 }: {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
   team: IFantasyLeagueTeam;
   onBack?: () => void;
+  onTeamUpdated: () => Promise<void>;
 }) {
   const [captainAthleteId, setCaptainAthleteId] = useState<string | undefined>(
     () => team.athletes?.find(a => a.is_captain)?.athlete_id
@@ -116,26 +118,7 @@ export default function ViewMyTeam({
       if (!leagueRound) return;
       try {
         const athletes = await seasonService.getSeasonAthletes(leagueRound.season_id);
-        const mapped = athletes.map(a => ({
-          ...a,
-          team: a.team || {
-            athstat_id: '',
-            source_id: '',
-            athstat_name: 'Unknown Team',
-            sport: '',
-            organization: '',
-          },
-          image_url: a.image_url,
-          position: a.position,
-          position_class: a.position_class,
-          price: a.price ?? 0,
-          power_rank_rating: a.power_rank_rating ?? 0,
-          team_id: a.team_id || '',
-          form: a.form || 'NEUTRAL',
-          available: a.available ?? true,
-          gender: a.gender || 'M',
-        }));
-        setPlayers(mapped);
+        setPlayers(athletes);
       } catch (e) {
         console.error('Failed to load athletes for season', e);
       }
@@ -181,7 +164,10 @@ export default function ViewMyTeam({
         is_captain: boolean;
       }[];
 
+      console.log('athletesPayload: ', athletesPayload);
+
       await fantasyTeamService.updateFantasyTeam(team.id, { athletes: athletesPayload });
+      await onTeamUpdated();
       setShowSuccessModal(true);
     } catch (e) {
       console.error('Failed to update fantasy team', e);
@@ -369,6 +355,23 @@ export default function ViewMyTeam({
         />
       )}
 
+      {/* Loading Modal */}
+      {isSaving && !showSuccessModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+          <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full text-primary-500 dark:text-primary-400">
+                <Loader className="w-10 h-10 animate-spin" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Saving</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Please wait while we save your team...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
@@ -381,7 +384,15 @@ export default function ViewMyTeam({
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Your team changes have been saved for {leagueRound?.title}.
               </p>
-              <PrimaryButton className="w-full" onClick={() => setShowSuccessModal(false)}>
+              <PrimaryButton
+                className="w-full"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  if (onTeamUpdated) {
+                    onTeamUpdated();
+                  }
+                }}
+              >
                 Great!
               </PrimaryButton>
             </div>

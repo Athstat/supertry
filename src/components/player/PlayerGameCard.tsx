@@ -27,8 +27,6 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
 export function PlayerGameCard({ player, name, onClick, className, blockGlow }: Props) {
   const selectedPlayers = useAtomValue(comparePlayersAtom);
 
-  console.log('player game card: ', player);
-
   const shouldGlow = selectedPlayers.some(a => a.tracking_id === player.tracking_id);
 
   const pr = player.power_rank_rating ?? 0;

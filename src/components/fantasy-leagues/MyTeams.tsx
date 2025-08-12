@@ -20,6 +20,35 @@ export default function MyTeams() {
   const [roundIdToTeams, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
   const [showCreationSuccessModal, setShowCreationSuccessModal] = useState<boolean>(false);
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
+  const [refreshKey, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
+
+  // Fetch teams for the current round
+  const fetchTeamsForCurrentRound = async (roundId: string) => {
+    if (!roundId) return;
+
+    try {
+      setIsFetchingTeams(true);
+      const teams = await leagueService.fetchParticipatingTeams(roundId);
+
+      setRoundIdToTeams(prev => ({
+        ...prev,
+        [roundId]: teams ?? [],
+      }));
+
+      // Update the selected team if it exists in the new data
+      if (selectedTeam) {
+        const updatedTeam = teams?.find(t => t.id === selectedTeam.id);
+        if (updatedTeam) {
+          console.log('updatedTeam: ', updatedTeam);
+          setSelectedTeam(updatedTeam);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch teams for round', error);
+    } finally {
+      setIsFetchingTeams(false);
+    }
+  };
 
   // Phase 1: Fetch participating teams for each round (by round/league id)
   useEffect(() => {
@@ -47,7 +76,7 @@ export default function MyTeams() {
     }
 
     fetchTeamsForRounds();
-  }, [tabScene, sortedRounds]);
+  }, [tabScene, sortedRounds, refreshKey]); // Add refreshKey to dependencies
 
   useEffect(() => {
     const fetchLeagueConfig = async () => {
@@ -65,8 +94,6 @@ export default function MyTeams() {
 
     fetchLeagueConfig();
   }, [selectedRound?.season_id]);
-
-  console.log('teams: ', roundIdToTeams);
 
   if (tabScene === 'fantasy-rounds') {
     return (
@@ -152,6 +179,12 @@ export default function MyTeams() {
           leagueConfig={leagueConfig}
           team={selectedTeam}
           onBack={() => setTabScene('fantasy-rounds')}
+          onTeamUpdated={async () => {
+            if (selectedRound?.id) {
+              return fetchTeamsForCurrentRound(selectedRound.id);
+            }
+            return Promise.resolve();
+          }}
         />
       );
     }
