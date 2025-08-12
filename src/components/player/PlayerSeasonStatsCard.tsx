@@ -11,11 +11,12 @@ import { Activity } from "lucide-react"
 
 type Props = {
   player: IProAthlete,
-  season: IProSeason
+  season: IProSeason,
+  hideTitle?: boolean
 }
 
 /** Renders a Player Season Stats Card  */
-export default function PlayerSeasonStatsCard({ player, season }: Props) {
+export default function PlayerSeasonStatsCard({ player, season, hideTitle = false }: Props) {
 
   const key = swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id);
   const { data: actions, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
@@ -23,7 +24,7 @@ export default function PlayerSeasonStatsCard({ player, season }: Props) {
   if (isLoading) {
     return (
       <div className="flex flex-col bg-slate-200 w-full p-4 rounded-xl" >
-        <div className="flex flex-row items-center justify-between" >
+        {!hideTitle && <div className="flex flex-row items-center justify-between" >
           <p className="text-xs" >{season.name}</p>
 
           <div>
@@ -32,7 +33,7 @@ export default function PlayerSeasonStatsCard({ player, season }: Props) {
               {/* <ChevronRight /> */}
             </div>
           </div>
-        </div>
+        </div>}
 
         <div className="flex flex-row items-center animate-pulse gap-2 p-2" >
           <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 border-none" />
@@ -51,10 +52,10 @@ export default function PlayerSeasonStatsCard({ player, season }: Props) {
 
   return (
     <div className="flex flex-col gap-2" >
-      <SecondaryText className="flex flex-rowi items-center gap-2" >
+      {!hideTitle && <SecondaryText className="flex flex-rowi items-center gap-2" >
         <Activity className="w-4 h-4" />
         <SecondaryText>Season Stats</SecondaryText>
-      </SecondaryText>
+      </SecondaryText>}
 
       <div className="flex flex-col bg-slate-200 w-full gap-2 p-4 rounded-xl" >
         <div className="flex flex-row items-center justify-between" >

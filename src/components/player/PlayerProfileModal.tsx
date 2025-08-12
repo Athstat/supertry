@@ -21,7 +21,7 @@ export function PlayerProfileModal({ player, isOpen, onClose }: Props) {
         className="p-0 flex flex-col gap-2 "
         title={player?.player_name}
         outerCon="p-4"
-        hw="w-[96%] max-h-[96vh]"
+        hw="w-[96%] max-h-[96vh] min-h-[96vh]"
         onClose={onClose}
         
       >
