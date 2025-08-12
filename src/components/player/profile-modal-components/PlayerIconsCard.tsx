@@ -60,16 +60,16 @@ export function PlayerIconsCard({ player, season }: Props) {
             >
               <div className="flex items-center flex-row gap-4">
                 {/* Icon */}
-                <div className="flex-shrink-0 mt-1">
-                  <PlayerIconComponent iconName={iconName} size="lg" />
+                <div className="flex-shrink-0 mt-1 min-w-[40px]">
+                  <PlayerIconComponent iconName={iconName} size="md" />
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                <div className="flex-1 min-w-0 flex-col flex">
+                  <h4 className="text-md font-bold text-gray-900 dark:text-white">
                     {iconData.name}
                   </h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                     {iconData.description}
                   </p>
                 </div>

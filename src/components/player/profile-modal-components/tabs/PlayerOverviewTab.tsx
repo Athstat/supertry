@@ -23,7 +23,6 @@ export default function PlayerOverviewTab({ player }: Props) {
   return (
     <div className="space-y-4 px-1 ">
 
-
       <div className='flex flex-row items-center gap-2' >
 
         {player.date_of_birth && <PlayerInfoCard
@@ -45,14 +44,13 @@ export default function PlayerOverviewTab({ player }: Props) {
       player={player}
      /> */}
 
-      {
-        currentSeason && (
-          <PlayerIconsRow
-            player={player}
-            season={currentSeason}
-          />
-        )
-      }
+      {currentSeason && (
+        <PlayerIconsRow
+          player={player}
+          season={currentSeason}
+          size='sm'
+        />
+      )}
 
       <CoachScrummyPlayerReport
         player={player}
@@ -66,7 +64,7 @@ export default function PlayerOverviewTab({ player }: Props) {
       )}
 
 
-      { currentSeason && <Experimental>
+      {currentSeason && <Experimental>
         <PlayerIconsCard
           player={player}
           season={currentSeason}

@@ -231,10 +231,11 @@ export const PlayerScreenContent = () => {
 
         <PlayerCompareModal />
 
-        {filteredAthletes.length > 0 && <PlayerProfileModal
+        {playerModalPlayer && <PlayerProfileModal
           onClose={handleClosePlayerModal}
-          player={filteredAthletes[0]}
-          isOpen={true}
+          player={playerModalPlayer}
+          isOpen={playerModalPlayer !== undefined && showPlayerModal}
+
         />}
 
       </PageView>

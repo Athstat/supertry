@@ -70,12 +70,12 @@ export default function PlayerSeasonStatsCard({ player, season }: Props) {
 
         <div className="flex flex-row items-center" >
           <div className="flex flex-col items-center w-full text-center flex-1 justify-start" >
-            <p className="font-bold" >{tries}</p>
+            <p className="font-bold" >{tries ?? "-"}</p>
             <SecondaryText className="text-center text-wrap text-xs truncate" >Tries</SecondaryText>
           </div>
 
           <div className="flex flex-col items-center text-center flex-1 justify-start" >
-            <p className="font-bold" >{passes}</p>
+            <p className="font-bold" >{passes ?? "-"}</p>
             <SecondaryText className="text-center text-xs truncate" >Passes</SecondaryText>
           </div>
 
@@ -85,7 +85,7 @@ export default function PlayerSeasonStatsCard({ player, season }: Props) {
         </div> */}
 
           <div className="flex flex-col items-center text-center flex-1 justify-start" >
-            <p className="font-bold" >{minutesPlayed}</p>
+            <p className="font-bold" >{minutesPlayed ?? "-"}</p>
             <SecondaryText className="text-center text-xs truncate" >Minutes Played</SecondaryText>
           </div>
         </div>

@@ -31,7 +31,7 @@ export default function PlayerIconsRow({ player, size = 'md', season }: Props) {
 
   if (isLoading) {
     return (
-      <RoundedCard className='w-full rounded-xl h-[20px] border-none bg-slate-200' >
+      <RoundedCard className='w-full rounded-xl h-[40px] animate-pulse border-none bg-slate-200' >
       </RoundedCard>
     )
   }
@@ -43,7 +43,7 @@ export default function PlayerIconsRow({ player, size = 'md', season }: Props) {
   // Always show the container, even when empty
   return (
     <Experimental>
-      <div className="flex flex-row man-h-[40px] hide-scrollbar min-h-[40px] p-2 items-center justify-start overflow-x-auto">
+      <div className="flex flex-row max-h-[40px] hide-scrollbar min-h-[40px] p-2 items-center justify-start overflow-x-auto">
         {playerIcons.map((iconName, index) => (
           <div key={`${iconName}-${index}`} className="mr-4">
             <PlayerIconComponent
