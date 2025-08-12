@@ -239,7 +239,7 @@ export default function ViewMyTeam({
           const slot = index + 1;
           const athlete = athletesBySlot[slot];
           return (
-            <div key={p.position_class} className="flex flex-col w-full min-w-0">
+            <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0">
               <div className="w-full min-w-0 aspect-square overflow-hidden p-2 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center">
                 {athlete ? (
                   <div className="w-full h-full">
