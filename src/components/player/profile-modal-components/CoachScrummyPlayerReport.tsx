@@ -22,7 +22,7 @@ export default function CoachScrummyPlayerReport({ player }: Props) {
                 <p>Coach Scrummy's Scouting Report</p>
             </SecondaryText>
 
-            <div className="text-xs bg-slate-200 dark:bg-slate-800 p-4 rounded-xl" >
+            <div className="text-xs bg-slate-200 dark:bg-slate-700/80 p-4 rounded-xl" >
                 {reportText}
             </div>
 

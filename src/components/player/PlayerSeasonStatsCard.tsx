@@ -31,7 +31,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
 
   if (isLoading) {
     return (
-      <div ref={ref} className="flex flex-col bg-slate-200 w-full p-4 rounded-xl" >
+      <div ref={ref} className="flex flex-col bg-slate-200 dark:bg-slate-700/80 w-full p-4 rounded-xl" >
 
         {!hideTitle && <div className="flex flex-row items-center justify-between" >
           <p className="text-xs" >{season.name}</p>
@@ -45,10 +45,10 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
         </div>}
 
         <div className="flex flex-row items-center animate-pulse gap-2 p-2" >
-          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 border-none" />
-          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 border-none" />
-          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 border-none" />
-          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 border-none" />
+          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 dark:bg-slate-600/40 border-none" />
+          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 dark:bg-slate-600/40 border-none" />
+          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 dark:bg-slate-600/40 border-none" />
+          <RoundedCard className="w-[80px] h-[60px] animate-pulse flex-1 bg-slate-300 dark:bg-slate-600/40 border-none" />
         </div>
 
       </div>
@@ -74,7 +74,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
       </SecondaryText>}
 
       <div
-        className="flex flex-col bg-slate-200 w-full gap-2 p-4 rounded-xl"
+        className="flex flex-col bg-slate-200 dark:bg-slate-700/80 w-full gap-2 p-4 rounded-xl"
         onClick={toggleExpand}
       >
         <div className="flex flex-row items-center justify-between" >
@@ -91,7 +91,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
           </div>
         </div>
 
-        <div className="flex flex-row items-center" >
+        <div className="flex flex-row items-center divide-x divide-slate-100 dark:divide-slate-600" >
           <div className="flex flex-col items-center w-full text-center flex-1 justify-start" >
             <p className="font-bold" >{tries ?? "-"}</p>
             <SecondaryText className="text-center text-wrap text-xs truncate" >Tries</SecondaryText>

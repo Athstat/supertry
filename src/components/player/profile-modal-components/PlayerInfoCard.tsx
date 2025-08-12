@@ -13,12 +13,12 @@ export default function PlayerInfoCard({value, label, className} : Props) {
     return (
         <div className={
             twMerge(
-                'bg-slate-200 flex-1 rounded-xl p-3 dark:bg-slate-700',
+                'bg-slate-200 flex-1 rounded-xl p-3 dark:bg-slate-700/80',
                 className
             )
         } >
-            <p className='font-medium' >{value}</p>
-            <SecondaryText className='text-xs' >{label}</SecondaryText>
+            <p className='font-semibold' >{value}</p>
+            <SecondaryText className='text-xs dark:text-slate-300' >{label}</SecondaryText>
         </div>
     )
 }

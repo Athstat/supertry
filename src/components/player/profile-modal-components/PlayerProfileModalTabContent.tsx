@@ -17,20 +17,17 @@ export function PlayerProfileModalTabContent({ player }: Props) {
   const tabItems: TabViewHeaderItem[] = [
     {
       label: "Overview",
-      tabKey: "overview",
-      className: "flex-1"
+      tabKey: "overview"
     },
 
     {
       label: "Stats",
-      tabKey: "stats",
-      className: "flex-1"
+      tabKey: "stats"
     },
 
     {
       label: "Power Ranking",
-      tabKey: "power-ranking",
-      className: "flex-1"
+      tabKey: "power-ranking"
     }
   ]
 

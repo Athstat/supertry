@@ -10,7 +10,7 @@ type Props = {
 
 export default function PlayerTeamCard({player} : Props) {
   return (
-    <div className="flex flex-row bg-slate-200 border p-4 rounded-2xl items-center justify-between" >
+    <div className="flex flex-row bg-slate-200 dark:bg-slate-700/80 border-none p-4 rounded-2xl items-center justify-between" >
         <div className="flex flex-row items-center gap-4" >
             
             <TeamLogo 
@@ -20,8 +20,8 @@ export default function PlayerTeamCard({player} : Props) {
             />
 
             <div className="flex flex-col" >
-                <p>{player.team.athstat_name}</p>
-                {player.position && <SecondaryText>{formatPosition(player.position)}</SecondaryText>}
+                <p className="text-sm font-semibold" >{player.team.athstat_name}</p>
+                {player.position && <SecondaryText className="dark:text-slate-300 text-xs" >{formatPosition(player.position)}</SecondaryText>}
             </div>
         </div>
 
