@@ -47,3 +47,9 @@ export function renderIfNotEmail(str: string) {
 export function replaceDashesWithUnderscrolls(inStr: string) {
     return String(inStr).replace(/-/g, '_');
 }
+
+
+export function isNumeric(str: string) {
+  if (typeof str != "string") return false; // only process strings
+  return !isNaN(Number(str)) && !isNaN(parseFloat(str));
+}

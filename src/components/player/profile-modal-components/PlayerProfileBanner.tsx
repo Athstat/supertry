@@ -17,13 +17,14 @@ export default function PlayerProfileBanner({ player} : Props) {
 
   return (
     <div className={twMerge(
-      'flex animate-glow flex-row overflow-clip object-contain items-end rounded-xl bg-blue-500 justify-center w-full h-[200px]',
+      'flex flex-row overflow-clip object-contain items-end rounded-xl bg-blue-500 justify-center w-full h-[200px]',
           cardTier === 'gold' && 'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
           cardTier === 'silver' && 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
           cardTier === 'bronze' &&
           'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
           cardTier === 'blue' &&
           'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
+          cardTier === "blue" && "animate-glow"
     )} >
       
       {player.image_url && !imageError && <img 
@@ -33,7 +34,7 @@ export default function PlayerProfileBanner({ player} : Props) {
 
       />}
 
-      {imageError && (
+      {imageError || !player.image_url && (
         <ScrummyDarkModeLogo
           className='h-[200px] w-[200px] grayscale opacity-30'
         />

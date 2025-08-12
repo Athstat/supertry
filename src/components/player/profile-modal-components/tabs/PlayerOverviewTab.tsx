@@ -12,6 +12,7 @@ import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Dumbbell } from 'lucide-react';
 import SecondaryText from '../../../shared/SecondaryText';
+import { isNumeric } from '../../../../utils/stringUtils';
 
 type Props = {
   player: IProAthlete;
@@ -21,6 +22,7 @@ type Props = {
 export default function PlayerOverviewTab({ player }: Props) {
 
   const { currentSeason } = usePlayerData();
+  const nationalityIsValid = player.nationality && !isNumeric(player.nationality ?? "");
 
   return (
     <div className="flex flex-col gap-4">
@@ -32,9 +34,9 @@ export default function PlayerOverviewTab({ player }: Props) {
           label={format(player.date_of_birth, 'dd MMMM yyyy')}
         />}
 
-        {player.nationality && <PlayerInfoCard
+        {nationalityIsValid && <PlayerInfoCard
           value={`${player.nationality}`}
-          label={player.birth_country ? `Born in ${player.birth_country}` : 'Nationality'}
+          label={player.birth_place ? `From ${player.birth_place}` : 'Nationality'}
         />}
       </div>
 

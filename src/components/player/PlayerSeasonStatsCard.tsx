@@ -169,6 +169,11 @@ type StatRowProps = {
 function StatRow({ label, value }: StatRowProps) {
 
   const fixCapitalization = (name: string) => {
+
+    if (name.includes("PlayerId")) {
+      return;
+    }
+
     return name
       // Replace underscores with spaces
       .replace(/_/g, ' ')
