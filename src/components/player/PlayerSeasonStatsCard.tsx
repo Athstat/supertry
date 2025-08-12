@@ -11,6 +11,7 @@ import { Activity } from "lucide-react"
 import { useState } from "react"
 import { useInView } from "react-intersection-observer"
 import NoContentCard from "../shared/NoContentMessage"
+import { AnimatePresence, motion } from "framer-motion"
 
 type Props = {
   player: IProAthlete,
@@ -26,7 +27,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
   const key = inView ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id) : null;
   const { data: actions, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
 
-  const [isExpanded, setExpanded] = useState(true);
+  const [isExpanded, setExpanded] = useState(false);
 
   if (isLoading) {
     return (
@@ -63,7 +64,9 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
   const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
 
   return (
-    <div ref={ref} className="flex flex-col gap-2" >
+    <motion.div ref={ref} className="flex flex-col gap-2"
+
+    >
 
       {!hideTitle && <SecondaryText className="flex flex-rowi items-center gap-2" >
         <Activity className="w-4 h-4" />
@@ -78,12 +81,13 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
           <p className="text-xs" >{season.name}</p>
 
           <div>
-            <button
+            <motion.button
               className="w-6 h-6 bg-slate-300 dark:bg-slate-600 rounded-full items-center justify-center flex flex-col"
+              animate={{ rotate: isExpanded ? 90 : 0 }}
+              transition={{ duration: 0.25 }}
             >
-              {/* <ChevronDown /> */}
-              {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-            </button>
+              <ChevronRight className="w-4 h-4" />
+            </motion.button>
           </div>
         </div>
 
@@ -109,14 +113,22 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
           </div>
         </div>
 
-        {actions && isExpanded && <StatsTray
-          player={player}
-          stats={actions}
-          season={season}
-        />}
-
+        <AnimatePresence initial={false}>
+          {isExpanded && actions && (
+            <motion.div
+              key="statsTray"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <StatsTray player={player} stats={actions} season={season} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -130,7 +142,7 @@ function StatsTray({ player, season, stats }: StatsTrayProps) {
 
   if (stats.length === 0) {
     return (
-      <NoContentCard 
+      <NoContentCard
         messageClassName="w-full"
         message={`${player.player_name}'s stats for ${season.name} are not available`}
       />
