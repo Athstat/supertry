@@ -12,7 +12,7 @@ interface Props {
   roundId?: string;
 }
 
-export function PlayerProfileModal({ player, isOpen, onClose }: Props) {
+export default function PlayerProfileModal({ player, isOpen, onClose }: Props) {
 
   return (
     <PlayerDataProvider player={player} >
@@ -43,5 +43,3 @@ export function PlayerProfileModal({ player, isOpen, onClose }: Props) {
     </PlayerDataProvider>
   );
 }
-
-export default PlayerProfileModal;
