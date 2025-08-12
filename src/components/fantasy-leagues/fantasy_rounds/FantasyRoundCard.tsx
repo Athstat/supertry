@@ -1,4 +1,4 @@
-import { Trophy, Zap, ChevronRight } from 'lucide-react';
+import { Trophy, Zap, ChevronRight, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
@@ -142,7 +142,19 @@ function AthletesRow({ athletes, onPlayerClick }: AthletesRowProps) {
               onPlayerClick?.(a);
             }}
           >
-            <PlayerMugshot playerPr={a.power_rank_rating} showPrBackground url={a.image_url} />
+            <div className="relative">
+              {a.is_captain && (
+                <div className="absolute -top-0 -left-0 z-10 bg-yellow-500 rounded-full p-1">
+                  <Award className="w-3 h-3 text-white" />
+                </div>
+              )}
+              <PlayerMugshot
+                playerPr={a.power_rank_rating}
+                showPrBackground
+                url={a.image_url}
+                isCaptain={a.is_captain}
+              />
+            </div>
             <p className="text-xs text-gray-600 dark:text-gray-400 max-w-14 truncate">
               {a.player_name}
             </p>
