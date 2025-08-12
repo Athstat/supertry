@@ -63,3 +63,5 @@ export type IAthleteSeasonStarRatings = {
 }
 
 export type PlayerCompareMode = "none" | "picking" | "modal";
+
+export type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';

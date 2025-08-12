@@ -9,6 +9,7 @@ import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
 import StatsTab from './tabs/StatsTab';
 import { LoadingState } from '../../ui/LoadingState';
+import PilledTabView from '../../shared/tabs/PilledTabView';
 
 
 type Props = {
@@ -42,9 +43,9 @@ export function PlayerProfileModalTabContent({ player }: Props) {
   ]
 
   return (
-    <div className='p-2'>
+    <div className=''>
 
-      <TabView tabHeaderItems={tabItems}>
+      <PilledTabView tabHeaderItems={tabItems}>
         <TabViewPage tabKey='overview'>
           <OverviewTab player={player} />
         </TabViewPage>
@@ -65,7 +66,7 @@ export function PlayerProfileModalTabContent({ player }: Props) {
           <PlayerMatchsPRList player={player} />
         </TabViewPage>
 
-      </TabView>
+      </PilledTabView>
     </div>
   )
 };
