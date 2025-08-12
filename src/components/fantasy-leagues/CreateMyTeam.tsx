@@ -10,13 +10,19 @@ import { PlayerGameCard } from '../player/PlayerGameCard';
 import { IProAthlete } from '../../types/athletes';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 // import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
 import { Check, Users } from 'lucide-react';
 
-export default function CreateMyTeam({ leagueRound }: { leagueRound?: IFantasyLeagueRound }) {
+export default function CreateMyTeam({
+  leagueRound,
+  onTeamCreated,
+}: {
+  leagueRound?: IFantasyLeagueRound;
+  onTeamCreated?: (team: IFantasyLeagueTeam) => void;
+}) {
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, Player>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -149,7 +155,26 @@ export default function CreateMyTeam({ leagueRound }: { leagueRound?: IFantasyLe
       );
 
       console.log('Join league response:', response);
-      setShowSuccessModal(true);
+      // If parent wants to handle success (e.g., show modal and switch tabScene), notify it
+      if (onTeamCreated) {
+        // Best-effort mapping to IFantasyLeagueTeam
+        const createdTeam: IFantasyLeagueTeam = {
+          id: response?.team?.id ?? response?.id ?? '',
+          team_id: String(response?.team?.id ?? response?.id ?? ''),
+          league_id: Number(leagueRound.id),
+          rank: response?.team?.rank ?? 0,
+          overall_score: response?.team?.overall_score ?? 0,
+          team_name: response?.team?.team_name ?? teamName,
+          user_id: userInfo.kc_id,
+          first_name: (userInfo as any).first_name ?? '',
+          last_name: (userInfo as any).last_name ?? '',
+          athletes: Array.isArray(response?.team?.athletes) ? response.team.athletes : [],
+        };
+        onTeamCreated(createdTeam);
+      } else {
+        // Fall back to local success modal
+        setShowSuccessModal(true);
+      }
     } catch (e) {
       console.error('Failed to save team', e);
       setSaveError('Failed to save team. Please try again.');

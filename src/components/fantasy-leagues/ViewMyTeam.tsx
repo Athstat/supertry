@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { AthleteWithTrackingId, IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
@@ -67,6 +67,32 @@ export default function ViewMyTeam({
   }, [team.athletes]);
 
   const athletesBySlot = editableAthletesBySlot;
+
+  // Original (non-edited) snapshot from props for diff detection
+  const originalAthletesBySlot = useMemo(() => {
+    const map: Record<number, IFantasyTeamAthlete | undefined> = {};
+    (team.athletes || []).forEach(a => {
+      if (a?.slot != null) map[a.slot] = a as IFantasyTeamAthlete;
+    });
+    return map;
+  }, [team.athletes]);
+
+  const originalCaptainAthleteId = useMemo(
+    () => team.athletes?.find(a => a.is_captain)?.athlete_id,
+    [team.athletes]
+  );
+
+  const isEditing = useMemo(() => {
+    // Captain changed?
+    if (captainAthleteId !== originalCaptainAthleteId) return true;
+    // Any slot player changed?
+    for (let i = 1; i <= positions.length; i++) {
+      const orig = originalAthletesBySlot[i]?.athlete_id || undefined;
+      const curr = editableAthletesBySlot[i]?.athlete_id || undefined;
+      if (orig !== curr) return true;
+    }
+    return false;
+  }, [captainAthleteId, originalCaptainAthleteId, originalAthletesBySlot, editableAthletesBySlot, positions.length]);
 
   // Minimal mapper to PlayerGameCard shape
   const toIProAthlete = (a: IFantasyTeamAthlete): IProAthlete => ({
@@ -206,19 +232,21 @@ export default function ViewMyTeam({
         </div>
       </div>
 
-      {/* Save changes */}
-      <div className="mt-3">
-        <PrimaryButton
-          className="w-full"
-          disabled={isSaving || !leagueRound?.is_open}
-          onClick={buildPayloadAndSave}
-        >
-          {isSaving ? 'Saving...' : 'Save Changes'}
-        </PrimaryButton>
-        {saveError && (
-          <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
-        )}
-      </div>
+      {/* Save changes - only show when editing */}
+      {isEditing && (
+        <div className="mt-3">
+          <PrimaryButton
+            className="w-full"
+            disabled={isSaving || !leagueRound?.is_open}
+            onClick={buildPayloadAndSave}
+          >
+            {isSaving ? 'Saving...' : 'Save Changes'}
+          </PrimaryButton>
+          {saveError && (
+            <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
+          )}
+        </div>
+      )}
 
       {/* 2x3 grid of slots with player cards */}
       <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
