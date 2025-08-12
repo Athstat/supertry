@@ -102,30 +102,30 @@ const tabs: IOnboardingTab[] = [
   {
     title: "Discover Leagues",
     description: "Explore official Scrummy Leagues and fan-made competitions. Join the ruck, take on challengers from across the globe, and fight for a spot at the top of the table.",
-    imageUrl: "/public/images/onboarding/Discover Leagues.png"
+    imageUrl: "/images/onboarding/Discover Leagues.png"
   },
 
   {
     title: "Build Your Team",
     description: "Assemble your dream 5 with just 240 SCRUMMY coins in the bank. Scout player stats, compare the form, and make tactical picks like a seasoned head coach.",
-    imageUrl: "/public/images/onboarding/Compare Players.png"
+    imageUrl: "/images/onboarding/Compare Players.png"
   },
 
   {
     title: "Create Leagues",
     description: "Be the Commissioner — your pitch, your rules. Set league titles, tweak visibility, and host the fiercest fantasy battles since Jonah Lomu ran over Mike Catt.",
-    imageUrl: "/public/images/onboarding/Create Your Own Leagues.png"
+    imageUrl: "/images/onboarding/Create Your Own Leagues.png"
   },
 
   {
     title: "Invite Your Friends",
     description: "Like a post-match braai, fantasy rugby is better shared. Rally your mates, start the banter, and play for glory, honour, and the ultimate bragging rights.",
-    imageUrl: "/public/images/onboarding/Invite Friends.png"
+    imageUrl: "/images/onboarding/Invite Friends.png"
   },
 
   {
     title: "Lets Get You Started",
     description: "The ref’s blown the whistle and it’s game time! Choose your league, pick your squad, and get ready to rack up the points",
-    imageUrl: "/public/images/onboarding/Join Fantasy Leagues.png"
+    imageUrl: "/images/onboarding/Join Fantasy Leagues.png"
   }
 ]
