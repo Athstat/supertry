@@ -114,7 +114,14 @@ export default function ViewMyTeam({
     const loadAthletes = async () => {
       if (!leagueRound) return;
       try {
-        const athletes = await seasonService.getSeasonAthletes(leagueRound.season_id);
+        const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
+          .filter(a => {
+            return a.power_rank_rating && a.power_rank_rating > 50;
+          })
+          .sort((a, b) => {
+            return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+          });
+
         setPlayers(athletes);
       } catch (e) {
         console.error('Failed to load athletes for season', e);
