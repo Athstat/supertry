@@ -1,7 +1,7 @@
 import { ScopeProvider } from 'jotai-scope'
-import { Fragment, ReactNode } from 'react'
+import { Fragment, ReactNode, useEffect } from 'react'
 import { IProAthlete } from '../../../types/athletes'
-import { useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { playerAtom, playerCurrentSeasonAtom, playerSeasonsAtom } from '../../../state/player.atoms'
 import { swrFetchKeys } from '../../../utils/swrKeys'
 import useSWR from 'swr'
@@ -42,6 +42,14 @@ function ProviderInner({ children, player }: Props) {
     const seasonFetchKey = swrFetchKeys.getAthleteSeasons(player.tracking_id);
     const { data: seasons, isLoading } = useSWR(seasonFetchKey, () => djangoAthleteService.getAthleteSeasons(player.tracking_id));
 
+
+    useEffect(() => {
+
+        if (player) setPlayer(player);
+        if (seasons) setSeasons(seasons);
+
+    }, [player, seasons]);
+
     if (isLoading) {
         return <DialogModal
             open={true}
@@ -81,4 +89,15 @@ function ProviderInner({ children, player }: Props) {
             {children}
         </Fragment>
     )
+}
+
+/** A hook that provides data from the PlayerDataProvider */
+
+export function usePlayerData() {
+    const [player] = useAtom(playerAtom);
+    const [seasons] = useAtom(playerAtom);
+    const currentSeason = useAtomValue(playerCurrentSeasonAtom);
+
+
+    return {player, seasons, currentSeason};
 }

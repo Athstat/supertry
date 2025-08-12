@@ -7,6 +7,8 @@ import PlayerInfoCard from '../PlayerInfoCard';
 import PlayerTeamCard from '../PlayerTeamCard';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { IProAthlete } from '../../../../types/athletes';
+import { usePlayerData } from '../../provider/PlayerDataProvider';
+import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 
 type Props = {
   player: IProAthlete;
@@ -15,6 +17,8 @@ type Props = {
 /** Renders a player profile overview tab */
 export default function PlayerOverviewTab({ player }: Props) {
   
+  const {currentSeason} = usePlayerData();
+
   return (
     <div className="space-y-4 px-1 pb-20">
 
@@ -41,6 +45,13 @@ export default function PlayerOverviewTab({ player }: Props) {
      <CoachScrummyPlayerReport 
       player={player}
      />
+
+     {currentSeason && (
+      <PlayerSeasonStatsCard 
+        player={player}
+        season={currentSeason}
+      />
+     )}
 
       <Experimental>
         <PlayerIconsCard player={player} />

@@ -103,5 +103,9 @@ export const swrFetchKeys = {
 
     getAthleteSeasons: (id: string) => {
         return `/athletes/${id}/seasons`;
+    },
+
+    getAthleteSeasonStats: (id: string, season_id: string) => {
+        return `/athletes/${id}/seasons/${season_id}/stats`;
     }
 }

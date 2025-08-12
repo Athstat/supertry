@@ -115,5 +115,6 @@ declare module "lucide-react" {
   export const Hash : CIP;
   export const UserCog2 : CIP;
   export const Binoculars : CIP;
+  export const Activity : CIP;
 }
 
