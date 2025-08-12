@@ -99,5 +99,9 @@ export const swrFetchKeys = {
 
     getLeaguesByEntryCode: (entry_code: string) => {
         return `/fantasy-league-groups/entry-code/${entry_code}`;
+    },
+
+    getAthleteSeasons: (id: string) => {
+        return `/athletes/${id}/seasons`;
     }
 }

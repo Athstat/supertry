@@ -1,6 +1,5 @@
 import PlayerProfileBanner from "./profile-modal-components/PlayerProfileBanner";
 import PlayerNameAndPosition from "./profile-modal-components/PlayerNameAndPosition";
-import PlayerInfo from "./profile-modal-components/PlayerInfo";
 import PlayerProfileModalTabContent from "./profile-modal-components/PlayerProfileModalTabContent";
 import PlayerDataProvider from "./provider/PlayerDataProvider";
 import DialogModal from "../shared/DialogModal";
@@ -23,6 +22,7 @@ export function PlayerProfileModal({ player, isOpen, onClose }: Props) {
         title={player?.player_name}
         outerCon="p-4"
         hw="w-[96%] max-h-[96vh]"
+        onClose={onClose}
         
       >
         {/* Modal header with player image and close button */}

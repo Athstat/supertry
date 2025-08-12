@@ -1,4 +1,5 @@
 import { IProAthlete, IAthleteSeasonStarRatings } from "../../types/athletes";
+import { IProSeason } from "../../types/season";
 import { SportAction } from "../../types/sports_actions";
 import { getUri, getAuthHeader } from "../../utils/backendUtils";
 import { mapSportsActionToAthstatName } from "../../utils/sportsActionUtils";
@@ -109,6 +110,44 @@ export const djangoAthleteService = {
 
         } catch (e) {
             logger.error("Error getting athlete star ratings ", e);
+        }
+
+        return [];
+    },
+
+    getAthleteSeasons: async (athleteId: string): Promise<IProSeason[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/athletes/${athleteId}/seasons`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IProSeason[];
+            }
+
+        } catch (err) {
+            console.log("Error fetching athlete seasons");
+        }
+
+        return [];
+    },
+
+    getAthleteSeasonStats: async (athleteId: string, season_id: string): Promise<SportAction[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/athletes/${athleteId}/seasons/${season_id}/stats`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as SportAction[];
+            }
+
+        } catch (err) {
+            console.log(`Error fetching athlete season stats for ${season_id}`);
         }
 
         return [];
