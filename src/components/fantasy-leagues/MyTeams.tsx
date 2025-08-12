@@ -182,10 +182,18 @@ export default function MyTeams() {
           leagueConfig={leagueConfig}
           onViewTeam={() => setTabScene('team-created')}
           onTeamCreated={(team: IFantasyLeagueTeam) => {
+            // Optimistically update the teams for the current round
             if (selectedRound) {
+              setRoundIdToTeams(prev => ({
+                ...prev,
+                [selectedRound.id]: [...(prev[selectedRound.id] || []), team]
+              }));
               setSelectedRound(selectedRound);
             }
-            setSelectedTeam(team as IFantasyLeagueTeam);
+            
+            // Set the selected team and trigger a background refresh
+            setSelectedTeam(team);
+            setRefreshKey(prev => prev + 1);
           }}
         />
       );
