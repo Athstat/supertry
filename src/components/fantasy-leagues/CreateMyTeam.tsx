@@ -15,8 +15,9 @@ import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { ArrowLeft, Check, Users } from 'lucide-react';
+import { ArrowLeft, Check, Loader, Users } from 'lucide-react';
 import { Toast } from '../ui/Toast';
+import { LoadingState } from '../ui/LoadingState';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -210,7 +211,7 @@ export default function CreateMyTeam({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <LoadingState message="Loading..." />
       </div>
     );
   }
@@ -324,7 +325,7 @@ export default function CreateMyTeam({
                         delete copy[p.name];
                         return copy;
                       });
-                      if (captainId === selected.id) setCaptainId(null);
+                      if (captainId === selected.tracking_id) setCaptainId(null);
                     }}
                   >
                     Remove
@@ -332,16 +333,16 @@ export default function CreateMyTeam({
 
                   <button
                     className={`${
-                      captainId === selected.id
+                      captainId === selected.tracking_id
                         ? 'text-xs w-full rounded-lg py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
                         : 'text-xs w-full rounded-lg py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
                     }`}
                     onClick={() => {
-                      if (captainId !== selected.id) setCaptainId(selected.id);
+                      if (captainId !== selected.tracking_id) setCaptainId(selected.tracking_id);
                     }}
-                    disabled={captainId === selected.id}
+                    disabled={captainId === selected.tracking_id}
                   >
-                    {captainId === selected.id ? 'Captain' : 'Set as Captain'}
+                    {captainId === selected.tracking_id ? 'Captain' : 'Set as Captain'}
                   </button>
                 </div>
               )}

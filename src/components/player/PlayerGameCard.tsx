@@ -6,6 +6,7 @@ import { IProAthlete } from '../../types/athletes';
 import OptimizedImage from '../shared/OptimizedImage';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
+import { CircleDollarSign } from 'lucide-react';
 
 type Props = {
   player: IProAthlete;
@@ -55,6 +56,11 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
         {!isAvailable && (
           <div className="top-0 left-0 absolute w-full h-full bg-black/50 z-10"></div>
         )}
+        {/* Player Price */}
+        <div className="absolute top-2 left-2 z-[5] flex gap-1">
+          <CircleDollarSign className="w-4 h-fit" />
+          <h3 className="text-xs font-bold truncate flex-1">{player.price}</h3>
+        </div>
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
           <TeamLogo className="w-8 h-8 dark:text-white/40" url={player.team.image_url} />
@@ -83,8 +89,8 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
           )}
         >
           {/* Player name and form */}
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-xs font-bold truncate flex-1">{player.player_name}</h3>
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <h3 className="text-xs text-left font-bold truncate flex-1">{player.player_name}</h3>
             {player.form && (player.form === 'UP' || player.form === 'DOWN') && (
               <FormIndicator form={player.form} />
             )}
