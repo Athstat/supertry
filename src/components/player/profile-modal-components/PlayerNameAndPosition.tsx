@@ -23,10 +23,9 @@ export default function PlayerNameAndPosition({ player }: Props) {
           <SecondaryText>{player.position && formatPosition(player.position)}</SecondaryText>
         </div>
 
-        <div className='flex flex-col items-center gap-0' >
-          <p className='font-bold text-xl' >{player.power_rank_rating}</p>
-          {/* <SecondaryText>PR</SecondaryText> */}
-        </div>
+        {player.power_rank_rating && <div className='flex flex-col items-center gap-0' >
+          <p className='font-bold text-xl' >{Math.floor(player.power_rank_rating)}</p>
+        </div>}
       </div>
 
       {/* Player Icons

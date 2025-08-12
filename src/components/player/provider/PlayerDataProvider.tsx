@@ -1,5 +1,5 @@
 import { ScopeProvider } from 'jotai-scope'
-import { Fragment, ReactNode, useEffect } from 'react'
+import { Fragment, ReactNode, useEffect, useMemo } from 'react'
 import { IProAthlete } from '../../../types/athletes'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { playerAtom, playerCurrentSeasonAtom, playerSeasonsAtom } from '../../../state/player.atoms'
@@ -73,8 +73,8 @@ function ProviderInner({ children, player }: Props) {
             </div>
 
             <div className='flex flex-row gap-2 items-center' >
-                 <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1 ' />
-                 <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1' />
+                <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1 ' />
+                <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1' />
             </div>
 
             <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full' />
@@ -95,9 +95,18 @@ function ProviderInner({ children, player }: Props) {
 
 export function usePlayerData() {
     const [player] = useAtom(playerAtom);
-    const [seasons] = useAtom(playerAtom);
+    const [seasons] = useAtom(playerSeasonsAtom);
     const currentSeason = useAtomValue(playerCurrentSeasonAtom);
 
+    const sortedSeasons = useMemo(() => {
+        return [...seasons].sort((a, b) => {
+            const aEnd = new Date(a.end_date);
+            const bEnd = new Date(b.end_date);
 
-    return {player, seasons, currentSeason};
+            return bEnd.valueOf() - aEnd.valueOf();
+        });
+    }, [seasons])
+
+
+    return { player, seasons, currentSeason, sortedSeasons };
 }

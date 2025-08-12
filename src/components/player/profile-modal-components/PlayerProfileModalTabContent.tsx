@@ -2,14 +2,14 @@ import useSWR from 'swr';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import { IProAthlete } from '../../../types/athletes';
 import { swrFetchKeys } from '../../../utils/swrKeys';
-import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
+import { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
-import StatsTab from './tabs/StatsTab';
 import { LoadingState } from '../../ui/LoadingState';
 import PilledTabView from '../../shared/tabs/PilledTabView';
+import PlayerStatsTab from './tabs/PlayerStatsTab';
 
 
 type Props = {
@@ -54,9 +54,8 @@ export function PlayerProfileModalTabContent({ player }: Props) {
 
           {isLoading && <LoadingState />}
 
-          {!isLoading && <StatsTab
+          {!isLoading && <PlayerStatsTab
             player={player}
-            playerStats={fetchedActions ?? []}
           />}
         </TabViewPage>
 
