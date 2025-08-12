@@ -91,7 +91,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
           </div>
         </div>
 
-        <div className="flex flex-row items-center divide-x divide-slate-100 dark:divide-slate-600" >
+        <div className="flex flex-row items-center divide-x divide-slate-100 dark:divide-slate-600/60" >
           <div className="flex flex-col items-center w-full text-center flex-1 justify-start" >
             <p className="font-bold" >{tries ?? "-"}</p>
             <SecondaryText className="text-center text-wrap text-xs truncate" >Tries</SecondaryText>

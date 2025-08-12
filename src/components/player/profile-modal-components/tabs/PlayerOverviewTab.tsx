@@ -10,6 +10,8 @@ import { IProAthlete } from '../../../../types/athletes';
 import { usePlayerData } from '../../provider/PlayerDataProvider';
 import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
+import { Dumbbell } from 'lucide-react';
+import SecondaryText from '../../../shared/SecondaryText';
 
 type Props = {
   player: IProAthlete;
@@ -39,6 +41,26 @@ export default function PlayerOverviewTab({ player }: Props) {
       {player.team && <PlayerTeamCard player={player} />}
 
 
+      <div className='flex flex-col gap-2' >
+        <SecondaryText className='flex flex-row items-center gap-2' >
+          <Dumbbell className='w-4 h-4' />
+          <p>Physique</p>
+        </SecondaryText>
+
+        <div className='flex flex-row items-center gap-2' >
+
+          {player.height && <PlayerInfoCard
+            value={`${player.height} cm`}
+            label={'Height'}
+          />}
+
+          {player.weight && <PlayerInfoCard
+            value={`${player.weight} kg`}
+            label={'Weight'}
+          />}
+        </div>
+
+      </div>
 
       {/* <PlayerIconsRow 
       player={player}

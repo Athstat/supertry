@@ -9,9 +9,9 @@ type Props = {
 export default function CoachScrummyPlayerReport({ player }: Props) {
 
     const reportText = `
-        ${player.player_name} needs no introduction. He is a strong player known for his juke
-        moves, crazy no look passes and electric energy. He is the type of player every
-        Coach wants in a locker room
+        ${player.player_name} needs no introduction. ${player.gender === 'M' ? 'He' : 'She'} is a strong player known for ${player.gender === 'M' ? 'his' : 'her'} juke
+        moves, crazy no look passes and electric energy. ${player.gender === 'M' ? 'He' : 'She'} is the type of player every
+        Coach wants in a locker room.
     `;
 
     return (
