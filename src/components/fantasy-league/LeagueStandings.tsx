@@ -3,13 +3,9 @@ import { FantasyLeagueGroupMember } from "../../types/fantasyLeagueGroups";
 import { Table2, User } from "lucide-react";
 import {  } from "lucide-react";
 import SecondaryText from "../shared/SecondaryText";
-import { useShareLeague } from "../../hooks/leagues/useShareLeague";
 
-type Props = {
-  
-}
 
-export function LeagueStandings({}: Props) {
+export function LeagueStandings() {
 
   const { members, userMemberRecord } = useFantasyLeagueGroup();
 
@@ -21,10 +17,6 @@ export function LeagueStandings({}: Props) {
   // const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
 
   // Handle team row click
-  const handleTeamClick = (team: FantasyLeagueGroupMember) => {
-
-  };
-
   return (
     <div className="flex flex-col gap-4" >
 

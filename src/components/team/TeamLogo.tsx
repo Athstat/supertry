@@ -29,15 +29,15 @@ export default function TeamLogo({ url, alt, className, teamName }: Props) {
   }
 
   return (
-    <div className={twMerge("w-14 h-14 overflow-clip ", className)} >
+    <div className={twMerge('w-14 h-14 overflow-clip ', className)}>
       <img
         src={imageUrl}
-        alt={alt ?? "team_logo"}
+        alt={alt ?? 'team_logo'}
         onError={() => setError(true)}
-        className='w-full h-full object-contain'
+        className="w-full h-full object-contain"
       />
     </div>
-  )
+  );
 }
 
 function getTeamLogoUrl(teamName?: string) {

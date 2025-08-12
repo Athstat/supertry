@@ -44,16 +44,16 @@ export default function RelatedPlayersList({ player }: Props) {
         <div className="flex flex-col gap-4" >
             <SecondaryText className="flex flex-row items-center gap-2" >
                 <Users className="w-4 h-4" />
-                <p>{player.team.athstat_name} Team Mates</p>
+                <p>{player.team?.athstat_name} Team Mates</p>
             </SecondaryText>
 
             <div className="flex flex-row overflow-x-auto gap-2" >
 
                 <TeamLogo
-                    teamName={player.team.athstat_name}
-                    url={player.team.image_url}
+                    teamName={player.team?.athstat_name}
+                    url={player.team?.image_url}
                     className="w-20 h-20 flex-shrink-0"
-                    key={player.team.athstat_id}
+                    key={player.team?.athstat_id}
                 />
 
                 {teamMates.map((t) => {

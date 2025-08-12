@@ -251,4 +251,42 @@ export const fantasyTeamService = {
       throw error;
     }
   },
+
+  /**
+   * Update a fantasy team (swap athletes, captain, etc.)
+   * PUT /api/v1/fantasy-teams/:teamId
+   */
+  updateFantasyTeam: async (
+    teamId: string | number,
+    body: {
+      athletes: Array<{
+        athlete_id: string;
+        slot: number;
+        purchase_price: number;
+        is_starting: boolean;
+        is_captain: boolean;
+      }>;
+    }
+  ): Promise<any> => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-teams/${teamId}`);
+
+      const response = await fetch(uri, {
+        method: 'PUT',
+        headers: getAuthHeader(),
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to update fantasy team:', errorText);
+        throw new Error(`Failed to update fantasy team: ${response.status} ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating fantasy team:', error);
+      throw error;
+    }
+  },
 };

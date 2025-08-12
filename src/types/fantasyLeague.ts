@@ -10,6 +10,7 @@ export interface ISeason {
 export interface IFantasyLeagueRound {
   season: string;
   season_name: string;
+  season_id: string;
   id: string;
   type: string;
   official_league_id: string;
@@ -35,6 +36,7 @@ export interface IFantasyLeagueRound {
 }
 
 export type IFantasyLeagueTeam = {
+  id: string | number;
   rank: number;
   overall_score: number;
   team_id: string;
