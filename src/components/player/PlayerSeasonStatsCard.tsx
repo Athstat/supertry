@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import { IProAthlete } from "../../types/athletes"
 import { IProSeason } from "../../types/season"
 import useSWR from "swr"
