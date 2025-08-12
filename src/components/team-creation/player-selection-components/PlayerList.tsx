@@ -1,16 +1,15 @@
 import React from 'react';
 import { usePlayerProfile } from '../../../hooks/usePlayerProfile';
-import { Player } from '../../../types/player';
 import { Position } from '../../../types/position';
-import { RugbyPlayer } from '../../../types/rugbyPlayer';
+import { IProAthlete } from '../../../types/athletes';
 import { AvailableTeam } from './useAvailableTeams';
 import PlayerListItem from './PlayerListItem';
 
 interface PlayerListProps {
-  players: RugbyPlayer[];
+  players: IProAthlete[];
   isLoading: boolean;
   selectedPosition: Position;
-  handlePlayerSelect: (player: RugbyPlayer) => void;
+  handlePlayerSelect: (player: IProAthlete) => void;
   onClose: () => void;
   roundId?: number;
   availableTeams: AvailableTeam[];
@@ -73,7 +72,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   /** Bias is used to sort affordable players first
    * and unaffordable players last
    */
-  const affordabilityBias = (a: RugbyPlayer) => {
+  const affordabilityBias = (a: IProAthlete) => {
     if (!a.price) return -1;
     if (a.price > remainingBudget) {
       return 1;

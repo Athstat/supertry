@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
-import { Player } from '../../types/player';
+
 import { Position } from '../../types/position';
 import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { RugbyPlayer } from '../../types/rugbyPlayer';
@@ -11,6 +11,7 @@ import { IProAthlete } from '../../types/athletes';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 // import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
@@ -26,16 +27,24 @@ export default function CreateMyTeam({
   onTeamCreated?: (team: IFantasyLeagueTeam) => void;
   onBack?: () => void;
 }) {
-  const [selectedPlayers, setSelectedPlayers] = useState<Record<string, Player>>({});
+  const [selectedPlayers, setSelectedPlayers] = useState<Record<string, IProAthlete>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [players, setPlayers] = useState<RugbyPlayer[]>([]);
+  const [players, setPlayers] = useState<IProAthlete[]>([]);
   const [captainId, setCaptainId] = useState<string | null>(null);
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete | undefined>(undefined);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const totalSpent = Object.values(selectedPlayers).reduce(
+    (sum, player) => sum + (player.price || 0),
+    0
+  );
+  const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
   const [toast, setToast] = useState<{
     isVisible: boolean;
     message: string;
@@ -58,31 +67,35 @@ export default function CreateMyTeam({
   console.log('leagueRound: ', leagueRound);
 
   useEffect(() => {
+    const fetchLeagueConfig = async () => {
+      if (!leagueRound?.season_id) return;
+      setIsLoading(true);
+      try {
+        const config = await leagueService.getLeagueConfig(leagueRound.season_id.toString());
+        if (!config) {
+          throw new Error('Failed to load league configuration');
+        }
+        setLeagueConfig(config);
+      } catch (error) {
+        console.error('Failed to fetch league config:', error);
+        // You might want to show an error to the user here
+        showToast('Failed to load league configuration', 'error');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLeagueConfig();
+  }, [leagueRound?.season_id]);
+
+  useEffect(() => {
     const loadAthletes = async () => {
       if (!leagueRound) return;
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
         const athletes = await seasonService.getSeasonAthletes(leagueRound.season_id);
-        const mapped: RugbyPlayer[] = athletes.map(a => ({
-          id: a.tracking_id,
-          tracking_id: a.tracking_id,
-          player_name: a.player_name,
-          team_name: a.team?.athstat_name || 'Unknown Team',
-          team_logo: a.team?.image_url || '',
-          position_class: a.position_class,
-          position: a.position,
-          price: a.price ?? 0,
-          power_rank_rating: a.power_rank_rating ?? 0,
-          image_url: a.image_url,
-          team_id: a.team_id,
-          form: a.form,
-          available: a.available,
-          // Required fields in RugbyPlayer
-          scoring: 0,
-          defence: 0,
-          attacking: 0,
-        }));
-        setPlayers(mapped);
+        setPlayers(athletes);
+        console.log('athletes: ', athletes);
       } catch (e) {
         console.error('Failed to load athletes for season ', leagueId, e);
       }
@@ -113,29 +126,12 @@ export default function CreateMyTeam({
     isSpecial: Boolean(p.isSpecial),
   });
 
-  const toIProAthlete = (p: Player): IProAthlete => ({
-    tracking_id: p.id,
-    player_name: p.name,
-    power_rank_rating: p.power_rank_rating,
-    image_url: p.image_url,
-    position: p.position,
-    // Defaults/fallbacks for required fields
-    gender: 'M',
-    form: 'NEUTRAL',
-    team_id: '',
-    team: {
-      athstat_id: '',
-      source_id: '',
-      athstat_name: p.team,
-      image_url: p.team.image_url,
-      sport: '',
-      organization: '',
-    },
-  });
-
   const handleSave = async () => {
-    if (!leagueRound) {
-      showToast('No league round selected');
+    if (!leagueRound || isLoading) {
+      return;
+    }
+
+    if (!leagueConfig) {
       return;
     }
 
@@ -164,13 +160,13 @@ export default function CreateMyTeam({
           if (!selected) return undefined;
           const isSuperSub = p.isSpecial === true;
           return {
-            athlete_id: selected.id,
+            athlete_id: selected.tracking_id,
             purchase_price: selected.price || 0,
             purchase_date: new Date(),
             is_starting: !isSuperSub,
             slot: index + 1,
             is_super_sub: isSuperSub,
-            is_captain: selected.id === captainId || false,
+            is_captain: selected.tracking_id === captainId || false,
           } as ICreateFantasyTeamAthleteItem;
         })
         .filter(Boolean) as ICreateFantasyTeamAthleteItem[];
@@ -211,6 +207,28 @@ export default function CreateMyTeam({
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!leagueConfig) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center">
+        <div className="text-red-500 text-lg mb-4">Failed to load league configuration</div>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full py-4">
       <div className="flex flex-row items-center justify-between mb-5">
@@ -241,7 +259,7 @@ export default function CreateMyTeam({
             Budget
           </div>
           <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-            {240 - Object.values(selectedPlayers).reduce((sum, p) => sum + p.price, 0)}/240
+            {budgetRemaining}/{leagueConfig?.team_budget}
           </div>
         </div>
       </div>
@@ -258,7 +276,7 @@ export default function CreateMyTeam({
         {saveError && (
           <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
         )}
-        
+
         <Toast
           message={toast.message}
           type={toast.type}
@@ -278,7 +296,7 @@ export default function CreateMyTeam({
                   const pos = toPosition(p, index);
                   setActivePosition(pos);
                   if (selected) {
-                    setPlayerModalPlayer(toIProAthlete(selected));
+                    setPlayerModalPlayer(selected);
                     setShowPlayerModal(true);
                   } else {
                     setIsModalOpen(true);
@@ -287,11 +305,7 @@ export default function CreateMyTeam({
                 className="aspect-square overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center"
               >
                 {selected ? (
-                  <PlayerGameCard
-                    player={toIProAthlete(selected)}
-                    className="w-full h-full"
-                    blockGlow
-                  />
+                  <PlayerGameCard player={selected} className="w-full h-full" blockGlow />
                 ) : (
                   <div className="flex flex-col items-center justify-center">
                     <span className="text-3xl">+</span>
@@ -306,7 +320,7 @@ export default function CreateMyTeam({
                     className="text-xs w-full rounded-lg py-1.5 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 hover:bg-red-100 dark:hover:bg-red-900/50"
                     onClick={() => {
                       setSelectedPlayers(prev => {
-                        const copy = { ...prev } as Record<string, Player>;
+                        const copy = { ...prev } as Record<string, IProAthlete>;
                         delete copy[p.name];
                         return copy;
                       });
@@ -342,21 +356,14 @@ export default function CreateMyTeam({
           selectedPosition={activePosition}
           players={players}
           remainingBudget={
-            240 - Object.values(selectedPlayers).reduce((sum, p) => sum + (p.price || 0), 0)
+            (leagueConfig?.team_budget || 240) -
+            Object.values(selectedPlayers).reduce((sum, p) => sum + (p.price || 0), 0)
           }
-          selectedPlayers={Object.values(selectedPlayers).map(p => ({ tracking_id: p.id }))}
+          selectedPlayers={Object.values(selectedPlayers).map(p => ({
+            tracking_id: p.tracking_id,
+          }))}
           handlePlayerSelect={rugbyPlayer => {
-            const mapped: Player = {
-              id: rugbyPlayer.tracking_id || rugbyPlayer.id || Math.random().toString(),
-              name: rugbyPlayer.player_name || 'Unknown Player',
-              team: rugbyPlayer.team_name || 'Unknown Team',
-              position: activePosition.name,
-              price: rugbyPlayer.price || 0,
-              points: rugbyPlayer.power_rank_rating || 0,
-              image_url: rugbyPlayer.image_url,
-              power_rank_rating: rugbyPlayer.power_rank_rating,
-            };
-            setSelectedPlayers(prev => ({ ...prev, [activePosition.name]: mapped }));
+            setSelectedPlayers(prev => ({ ...prev, [activePosition.name]: rugbyPlayer }));
             setIsModalOpen(false);
           }}
           onClose={() => setIsModalOpen(false)}

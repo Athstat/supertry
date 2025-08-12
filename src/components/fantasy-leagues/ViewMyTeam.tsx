@@ -3,9 +3,9 @@ import { ArrowLeft, Check } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { AthleteWithTrackingId, IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { PlayerGameCard } from '../player/PlayerGameCard';
-import { PlayerForm, RugbyPlayer } from '../../types/rugbyPlayer';
-import PlayerProfileModal from '../player/PlayerProfileModal';
 import { IProAthlete } from '../../types/athletes';
+import { PlayerForm } from '../../types/rugbyPlayer';
+import PlayerProfileModal from '../player/PlayerProfileModal';
 import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { Position } from '../../types/position';
 import { seasonService } from '../../services/seasonsService';
@@ -26,7 +26,7 @@ export default function ViewMyTeam({
   );
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete | undefined>(undefined);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
-  const [players, setPlayers] = useState<RugbyPlayer[]>([]);
+  const [players, setPlayers] = useState<IProAthlete[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
   const [swapState, setSwapState] = useState<{
@@ -128,23 +128,24 @@ export default function ViewMyTeam({
       if (!leagueRound) return;
       try {
         const athletes = await seasonService.getSeasonAthletes(leagueRound.season_id);
-        const mapped: RugbyPlayer[] = athletes.map(a => ({
-          id: a.tracking_id,
-          tracking_id: a.tracking_id,
-          player_name: a.player_name,
-          team_name: a.team?.athstat_name || 'Unknown Team',
-          team_logo: a.team?.image_url || '',
-          position_class: a.position_class,
+        const mapped = athletes.map(a => ({
+          ...a,
+          team: a.team || {
+            athstat_id: '',
+            source_id: '',
+            athstat_name: 'Unknown Team',
+            sport: '',
+            organization: '',
+          },
+          image_url: a.image_url,
           position: a.position,
+          position_class: a.position_class,
           price: a.price ?? 0,
           power_rank_rating: a.power_rank_rating ?? 0,
-          image_url: a.image_url,
-          team_id: a.team_id,
-          form: a.form,
-          available: a.available,
-          scoring: 0,
-          defence: 0,
-          attacking: 0,
+          team_id: a.team_id || '',
+          form: a.form || 'NEUTRAL',
+          available: a.available ?? true,
+          gender: a.gender || 'M',
         }));
         setPlayers(mapped);
       } catch (e) {
@@ -340,24 +341,24 @@ export default function ViewMyTeam({
             .map(
               ([, a]) => ({ tracking_id: a?.tracking_id || a?.athlete_id }) as AthleteWithTrackingId
             )}
-          handlePlayerSelect={(rugbyPlayer: RugbyPlayer) => {
+          handlePlayerSelect={(athlete: IProAthlete) => {
             setEditableAthletesBySlot(prev => {
               const updated = { ...prev };
               const slot = swapState.slot!;
               const current = updated[slot];
               updated[slot] = {
                 ...(current || ({} as IFantasyTeamAthlete)),
-                athlete_id: rugbyPlayer.tracking_id || rugbyPlayer.id || '',
-                tracking_id: rugbyPlayer.tracking_id || rugbyPlayer.id || '',
-                player_name: rugbyPlayer.player_name || 'Unknown Player',
-                image_url: rugbyPlayer.image_url,
-                position: rugbyPlayer.position,
-                position_class: rugbyPlayer.position_class,
-                team_name: rugbyPlayer.team_name,
-                team_logo: rugbyPlayer.team_logo,
-                price: rugbyPlayer.price || 0,
-                power_rank_rating: rugbyPlayer.power_rank_rating || 0,
-                team_id: rugbyPlayer.team_id,
+                athlete_id: athlete.tracking_id,
+                tracking_id: athlete.tracking_id,
+                player_name: athlete.player_name || 'Unknown Player',
+                image_url: athlete.image_url,
+                position: athlete.position || current?.position || '',
+                price: athlete.price || 0,
+                points: athlete.power_rank_rating || 0,
+                team: athlete.team?.athstat_name || 'Unknown Team',
+                form: athlete.form || 'NEUTRAL',
+                power_rank_rating: athlete.power_rank_rating,
+                team_logo: athlete.team?.image_url,
                 slot,
                 is_captain: (current?.athlete_id || '') === captainAthleteId,
               } as unknown as IFantasyTeamAthlete;
