@@ -1,13 +1,16 @@
-import { ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronRight } from "lucide-react"
 import { IProAthlete } from "../../types/athletes"
 import { IProSeason } from "../../types/season"
 import useSWR from "swr"
 import { swrFetchKeys } from "../../utils/swrKeys"
 import { djangoAthleteService } from "../../services/athletes/djangoAthletesService"
 import RoundedCard from "../shared/RoundedCard"
-import { getPlayerAggregatedStat } from "../../types/sports_actions"
+import { getPlayerAggregatedStat, SportAction } from "../../types/sports_actions"
 import SecondaryText from "../shared/SecondaryText"
 import { Activity } from "lucide-react"
+import { useState } from "react"
+import { useInView } from "react-intersection-observer"
+import NoContentCard from "../shared/NoContentMessage"
 
 type Props = {
   player: IProAthlete,
@@ -18,12 +21,17 @@ type Props = {
 /** Renders a Player Season Stats Card  */
 export default function PlayerSeasonStatsCard({ player, season, hideTitle = false }: Props) {
 
-  const key = swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id);
+  const { ref, inView } = useInView({ triggerOnce: true });
+
+  const key = inView ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id) : null;
   const { data: actions, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
+
+  const [isExpanded, setExpanded] = useState(true);
 
   if (isLoading) {
     return (
-      <div className="flex flex-col bg-slate-200 w-full p-4 rounded-xl" >
+      <div ref={ref} className="flex flex-col bg-slate-200 w-full p-4 rounded-xl" >
+
         {!hideTitle && <div className="flex flex-row items-center justify-between" >
           <p className="text-xs" >{season.name}</p>
 
@@ -46,26 +54,36 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
     )
   }
 
+  const toggleExpand = () => {
+    setExpanded(prev => !prev);
+  }
+
   const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
   const passes = getPlayerAggregatedStat("Passes", actions)?.action_count;
   const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
 
   return (
-    <div className="flex flex-col gap-2" >
+    <div ref={ref} className="flex flex-col gap-2" >
+
       {!hideTitle && <SecondaryText className="flex flex-rowi items-center gap-2" >
         <Activity className="w-4 h-4" />
         <SecondaryText>Season Stats</SecondaryText>
       </SecondaryText>}
 
-      <div className="flex flex-col bg-slate-200 w-full gap-2 p-4 rounded-xl" >
+      <div
+        className="flex flex-col bg-slate-200 w-full gap-2 p-4 rounded-xl"
+        onClick={toggleExpand}
+      >
         <div className="flex flex-row items-center justify-between" >
           <p className="text-xs" >{season.name}</p>
 
           <div>
-            <div >
+            <button
+              className="w-6 h-6 bg-slate-300 dark:bg-slate-600 rounded-full items-center justify-center flex flex-col"
+            >
               {/* <ChevronDown /> */}
-              <ChevronRight className="w-4 h-4" />
-            </div>
+              {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            </button>
           </div>
         </div>
 
@@ -91,7 +109,81 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
           </div>
         </div>
 
+        {actions && isExpanded && <StatsTray
+          player={player}
+          stats={actions}
+          season={season}
+        />}
+
       </div>
+    </div>
+  )
+}
+
+type StatsTrayProps = {
+  player: IProAthlete,
+  stats: SportAction[],
+  season: IProSeason
+}
+
+function StatsTray({ player, season, stats }: StatsTrayProps) {
+
+  if (stats.length === 0) {
+    return (
+      <NoContentCard 
+        messageClassName="w-full"
+        message={`${player.player_name}'s stats for ${season.name} are not available`}
+      />
+    )
+  }
+
+  return (
+    <div>
+      {stats.map((s) => {
+        return <StatRow
+          label={s.action}
+          value={s.action_count}
+        />
+      })}
+    </div>
+  )
+}
+
+type StatRowProps = {
+  label?: string,
+  value?: string | number
+}
+
+function StatRow({ label, value }: StatRowProps) {
+
+  const fixCapitalization = (name: string) => {
+    return name
+      // Replace underscores with spaces
+      .replace(/_/g, ' ')
+      // Add space before capital letters (if not at the start)
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      // Capitalize each word
+      .replace(/\b\w/g, char => char.toUpperCase());
+  };
+
+  const toPercentageIfFraction = (value: string | number) => {
+    const num = Number(value);
+
+    // Not a valid number
+    if (isNaN(num)) return value;
+
+    // If between 0 and 1 (inclusive), treat as fraction → percentage
+    if (num?.toString().startsWith('0.')) {
+      return `${Math.floor(num * 100)}%`;
+    }
+
+    return num;
+  };
+
+  return (
+    <div className="flex p-1 flex-row items-center justify-between" >
+      <SecondaryText>{label ? fixCapitalization(label) : '-'}</SecondaryText>
+      <p className="text-sm font-medium" >{value ? toPercentageIfFraction(value) : '-'}</p>
     </div>
   )
 }

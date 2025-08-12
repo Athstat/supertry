@@ -4,10 +4,11 @@ type Props = {
     message?: string,
     icon?: any,
     className?: string,
+    messageClassName?: string
 }
 
 /** Renders a card that shows a message when there is no content */
-export default function NoContentCard({ message, icon, className}: Props) {
+export default function NoContentCard({ message, icon, className, messageClassName}: Props) {
 
     const Icon = icon;
     const iconClassName = 'text-2xl';
@@ -20,7 +21,10 @@ export default function NoContentCard({ message, icon, className}: Props) {
             
             {icon ? <Icon className={iconClassName} /> : null}
             
-            <p className="w-2/3 text-center" >{message}</p>
+            <p className={twMerge(
+                "w-2/3 text-center",
+                messageClassName
+            )} >{message}</p>
         </div>
     )
 }
