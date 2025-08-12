@@ -1,4 +1,5 @@
 import { Trophy, Zap, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { authService } from '../../../services/authService';
@@ -32,13 +33,21 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam, onViewTea
   const userRank = userTeam?.rank ?? userTeam?.position;
 
   return (
-    <div
-      className={`w-full p-4 rounded-2xl bg-gray-50 dark:bg-dark-800/40 border border-gray-100 dark:border-gray-700 ${
+    <motion.div
+      className={`w-full p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 ${
         hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
       }`}
       onClick={() => {
         if (hasUserTeam && userTeam && onViewTeam) onViewTeam(userTeam);
       }}
+      whileHover={
+        hasUserTeam && onViewTeam
+          ? {
+              scale: 1.02,
+              transition: { type: 'spring', stiffness: 300 },
+            }
+          : {}
+      }
     >
       {/* Header: title left, status + chevron right */}
       <div className="flex items-start justify-between gap-3">
@@ -100,7 +109,7 @@ export default function FantasyRoundCard({ round, teams, onCreateTeam, onViewTea
         Total teams: {totalTeams}
         {topTeamName ? ` • Top team: ${topTeamName}` : ''}
       </p>
-    </div>
+    </motion.div>
   );
 }
 

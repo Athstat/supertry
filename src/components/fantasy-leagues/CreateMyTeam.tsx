@@ -14,14 +14,17 @@ import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeag
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { Check, Users } from 'lucide-react';
+import { ArrowLeft, Check, Users } from 'lucide-react';
+import { Toast } from '../ui/Toast';
 
 export default function CreateMyTeam({
   leagueRound,
   onTeamCreated,
+  onBack,
 }: {
   leagueRound?: IFantasyLeagueRound;
   onTeamCreated?: (team: IFantasyLeagueTeam) => void;
+  onBack?: () => void;
 }) {
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, Player>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
@@ -33,6 +36,21 @@ export default function CreateMyTeam({
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [toast, setToast] = useState<{
+    isVisible: boolean;
+    message: string;
+    type: 'error' | 'success' | 'info';
+  }>({
+    isVisible: false,
+    message: '',
+    type: 'error',
+  });
+
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'error') => {
+    setToast({ isVisible: true, message, type });
+    setTimeout(() => setToast(prev => ({ ...prev, isVisible: false })), 5000);
+  };
+
   const selectedRoundId = useMemo(() => leagueRound?.id, [leagueRound?.id]);
 
   const { leagueId } = useParams();
@@ -109,14 +127,24 @@ export default function CreateMyTeam({
       athstat_id: '',
       source_id: '',
       athstat_name: p.team,
-      image_url: p.image_url,
+      image_url: p.team.image_url,
       sport: '',
       organization: '',
     },
   });
 
   const handleSave = async () => {
-    if (!leagueRound) return;
+    if (!leagueRound) {
+      showToast('No league round selected');
+      return;
+    }
+
+    //if the user hasn't selected a captain then show them a toast asking them to select one
+    if (!captainId) {
+      showToast('Please select a captain');
+      return;
+    }
+
     try {
       setIsSaving(true);
       setSaveError(undefined);
@@ -187,8 +215,15 @@ export default function CreateMyTeam({
     <div className="w-full py-4">
       <div className="flex flex-row items-center justify-between mb-5">
         <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
-          <Users />
-          <p className="font-bold text-xl">Create a Team</p>
+          <button
+            type="button"
+            onClick={() => onBack && onBack()}
+            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="Back to rounds"
+          >
+            <ArrowLeft />
+          </button>
+          <p className="font-bold text-xl">Create Team</p>
         </div>
       </div>
       {/* Top stats row */}
@@ -223,6 +258,13 @@ export default function CreateMyTeam({
         {saveError && (
           <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
         )}
+        
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          isVisible={toast.isVisible}
+          onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+        />
       </div>
 
       {/* 2x3 grid of position slots */}

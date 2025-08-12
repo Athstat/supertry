@@ -52,16 +52,13 @@ export default function MyTeam() {
   if (tabScene === 'fantasy-rounds') {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-col items-start justify-start">
           <div className="flex flex-row items-center gap-2">
             <Users />
             <p className="font-bold text-xl">My Teams</p>
           </div>
-        </div>
-
-        <div className="px-1">
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            Choose a round to view/create your team
+          <p className="mt-1 text-gray-600 dark:text-gray-400 text-sm">
+            Choose a round to create or view your team
           </p>
         </div>
 
@@ -69,9 +66,7 @@ export default function MyTeam() {
           {isFetchingTeams && Object.keys(roundIdToTeams).length === 0 ? (
             <div className="flex flex-col items-center py-12 space-y-3">
               <Loader className="w-8 h-8 text-primary-500 animate-spin" />
-              <span className="text-gray-600 dark:text-gray-400">
-                Loading league rounds...
-              </span>
+              <span className="text-gray-600 dark:text-gray-400">Loading league rounds...</span>
             </div>
           ) : (
             <>
@@ -114,6 +109,7 @@ export default function MyTeam() {
       <>
         <CreateMyTeam
           leagueRound={selectedRound ?? undefined}
+          onBack={() => setTabScene('fantasy-rounds')}
           onTeamCreated={(team: IFantasyLeagueTeam) => {
             // Ensure we keep the same round context
             if (selectedRound) {
@@ -135,9 +131,13 @@ export default function MyTeam() {
                 </div>
                 <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Your team has been successfully submitted{selectedRound ? ` to ${selectedRound.title}` : ''}.
+                  Your team has been successfully submitted
+                  {selectedRound ? ` to ${selectedRound.title}` : ''}.
                 </p>
-                <PrimaryButton className="w-full" onClick={() => setShowCreationSuccessModal(false)}>
+                <PrimaryButton
+                  className="w-full"
+                  onClick={() => setShowCreationSuccessModal(false)}
+                >
                   {"Let's Go!"}
                 </PrimaryButton>
               </div>

@@ -92,7 +92,13 @@ export default function ViewMyTeam({
       if (orig !== curr) return true;
     }
     return false;
-  }, [captainAthleteId, originalCaptainAthleteId, originalAthletesBySlot, editableAthletesBySlot, positions.length]);
+  }, [
+    captainAthleteId,
+    originalCaptainAthleteId,
+    originalAthletesBySlot,
+    editableAthletesBySlot,
+    positions.length,
+  ]);
 
   // Minimal mapper to PlayerGameCard shape
   const toIProAthlete = (a: IFantasyTeamAthlete): IProAthlete => ({
@@ -108,7 +114,7 @@ export default function ViewMyTeam({
       athstat_id: '',
       source_id: '',
       athstat_name: a.team_name || '',
-      image_url: a.team_logo || a.image_url || '',
+      image_url: a.team_logo || '',
       sport: '',
       organization: '',
     },

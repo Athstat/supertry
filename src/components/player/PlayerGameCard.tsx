@@ -24,6 +24,8 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
 export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
   const selectedPlayers = useAtomValue(comparePlayersAtom);
 
+  console.log('player game card: ', player);
+
   const shouldGlow = selectedPlayers.some(a => a.tracking_id === player.tracking_id);
 
   const pr = player.power_rank_rating ?? 0;
@@ -35,7 +37,7 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
   const isAvailable = true;
 
   return (
-    <div className="h-full">
+    <div className="h-full w-full">
       <div
         onClick={onClick}
         className={twMerge(
