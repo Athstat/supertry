@@ -114,5 +114,7 @@ declare module "lucide-react" {
   export const Table2 : CIP;
   export const Hash : CIP;
   export const UserCog2 : CIP;
+  export const Binoculars : CIP;
+  export const Activity : CIP;
 }
 

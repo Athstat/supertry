@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 import { formatPosition } from '../../utils/athleteUtils';
 import FormIndicator from '../shared/FormIndicator';
 import TeamLogo from '../team/TeamLogo';
-import { IProAthlete } from '../../types/athletes';
+import { CardTier, IProAthlete } from '../../types/athletes';
 import OptimizedImage from '../shared/OptimizedImage';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
@@ -16,7 +16,7 @@ type Props = {
   blockGlow?: boolean;
 };
 
-type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
+
 
 /** Renders a athlete game card that is either gold, silver or
  * bronze depending on the power ranking of the player

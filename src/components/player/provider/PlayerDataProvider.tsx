@@ -1,11 +1,13 @@
 import { ScopeProvider } from 'jotai-scope'
-import { playerProfileCareerSeasons, playerProfileCareerStarRatings, playerProfileCareerStatsAtom, playerProfileCurrSeason, playerProfileCurrStarRatings, playerProfileCurrStatsAtom, playerProfilePlayerAtom, playerProfileStatsLoadingAtom } from '../../../state/playerProfile.atoms'
-import { Fragment, ReactNode, useEffect } from 'react'
+import { Fragment, ReactNode, useEffect, useMemo } from 'react'
+import { IProAthlete } from '../../../types/athletes'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { playerAtom, playerCurrentSeasonAtom, playerSeasonsAtom } from '../../../state/player.atoms'
+import { swrFetchKeys } from '../../../utils/swrKeys'
 import useSWR from 'swr'
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService'
-import { swrFetchKeys } from '../../../utils/swrKeys'
-import { IProAthlete } from '../../../types/athletes'
-import { useSetAtom } from 'jotai'
+import DialogModal from '../../shared/DialogModal'
+import RoundedCard from '../../shared/RoundedCard'
 
 type Props = {
     children?: ReactNode,
@@ -16,14 +18,9 @@ type Props = {
 export default function PlayerDataProvider({ children, player }: Props) {
 
     const atoms = [
-        playerProfilePlayerAtom,
-        playerProfileCareerStarRatings,
-        playerProfileCareerStatsAtom,
-        playerProfileCareerSeasons,
-        playerProfileCurrSeason,
-        playerProfileCurrStatsAtom,
-        playerProfileCurrStarRatings,
-        playerProfileStatsLoadingAtom
+        playerAtom,
+        playerSeasonsAtom,
+        playerCurrentSeasonAtom
     ]
 
     return (
@@ -39,30 +36,77 @@ export default function PlayerDataProvider({ children, player }: Props) {
 
 function ProviderInner({ children, player }: Props) {
 
-    const setCareerStars = useSetAtom(playerProfileCareerStarRatings);
-    const setCareerStats = useSetAtom(playerProfileCareerStatsAtom);
-    const setLoading = useSetAtom(playerProfileStatsLoadingAtom);
+    const setPlayer = useSetAtom(playerAtom);
+    const setSeasons = useSetAtom(playerSeasonsAtom);
 
-    const careerStatsKey = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
-    let { data: careerStats, isLoading: loadingStats } = useSWR(careerStatsKey, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
+    const seasonFetchKey = swrFetchKeys.getAthleteSeasons(player.tracking_id);
+    const { data: seasons, isLoading } = useSWR(seasonFetchKey, () => djangoAthleteService.getAthleteSeasons(player.tracking_id));
 
-    const careerStarsKey = swrFetchKeys.getAthleteCareerStarRatings(player.tracking_id);
-    const { data: careerStars, isLoading: loadingStars } = useSWR(careerStarsKey, () =>
-        djangoAthleteService.getAthleteCareerStarRatings(player.tracking_id)
-    );
 
     useEffect(() => {
-        if (careerStars) setCareerStars(careerStars);
-        if (careerStats) setCareerStats(careerStats);
 
-        setLoading(loadingStars || loadingStats);
+        if (player) setPlayer(player);
+        if (seasons) setSeasons(seasons);
 
-    }, [careerStars, careerStats, loadingStars, loadingStats]);
+    }, [player, seasons]);
 
+    if (isLoading) {
+        return <DialogModal
+            open={true}
+            hw='min-h-[95%]'
+            className='animate-pulse flex flex-col gap-4'
+            title={player.player_name}
+        >
+
+            <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[200px]' >
+
+            </RoundedCard>
+
+            <div className='flex flex-row  justify-between' >
+                <div className='flex flex-col gap-2' >
+                    <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[20px] w-[120px]' />
+                    <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[20px] w-[60px]' />
+                </div>
+
+                <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[20px] w-[60px]' />
+
+            </div>
+
+            <div className='flex flex-row gap-2 items-center' >
+                <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1 ' />
+                <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1' />
+            </div>
+
+            <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full' />
+            <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[50px] w-full' />
+            <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full' />
+
+        </DialogModal>
+    }
 
     return (
         <Fragment>
             {children}
         </Fragment>
     )
+}
+
+/** A hook that provides data from the PlayerDataProvider */
+
+export function usePlayerData() {
+    const [player] = useAtom(playerAtom);
+    const [seasons] = useAtom(playerSeasonsAtom);
+    const currentSeason = useAtomValue(playerCurrentSeasonAtom);
+
+    const sortedSeasons = useMemo(() => {
+        return [...seasons].sort((a, b) => {
+            const aEnd = new Date(a.end_date);
+            const bEnd = new Date(b.end_date);
+
+            return bEnd.valueOf() - aEnd.valueOf();
+        });
+    }, [seasons])
+
+
+    return { player, seasons, currentSeason, sortedSeasons };
 }

@@ -99,5 +99,21 @@ export const swrFetchKeys = {
 
     getLeaguesByEntryCode: (entry_code: string) => {
         return `/fantasy-league-groups/entry-code/${entry_code}`;
+    },
+
+    getAthleteSeasons: (id: string) => {
+        return `/athletes/${id}/seasons`;
+    },
+
+    getAthleteSeasonStats: (id: string, season_id: string) => {
+        return `/athletes/${id}/seasons/${season_id}/stats`;
+    },
+
+    getAthleteSeasonStars: (id: string, season_id: string) => {
+        return `/athletes/${id}/seasons/${season_id}/stars`;
+    },
+
+    getAthleteTeamMates: (id: string) => {
+        return `/athletes/${id}/team-mates`;
     }
 }

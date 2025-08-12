@@ -1,0 +1,140 @@
+import { ReactNode, useEffect } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { ScopeProvider } from 'jotai-scope';
+import { useLocation } from 'react-router-dom';
+import { currentTabAtom, useTabView } from './TabView';
+
+type Props = {
+    tabKeySearchParam?: string;
+    initialTabKey?: string;
+    children?: ReactNode;
+    tabHeaderItems: TabViewHeaderItem[];
+    className?: string;
+};
+
+export default function PilledTabView({
+    tabKeySearchParam = 'tabKey',
+    initialTabKey,
+    children,
+    tabHeaderItems,
+    className,
+}: Props) {
+    return (
+        <ScopeProvider atoms={[currentTabAtom]}>
+            <TabViewInner
+                className={className}
+                tabKeySearchParam={tabKeySearchParam}
+                initialTabKey={initialTabKey}
+                tabHeaderItems={tabHeaderItems}
+            >
+                {children}
+            </TabViewInner>
+        </ScopeProvider>
+    );
+}
+
+type TabInnerProps = Props;
+
+function TabViewInner({
+    tabHeaderItems,
+    children,
+    className,
+    tabKeySearchParam = 'tabKey',
+}: TabInnerProps) {
+    const { currentTabKey, navigate } = useTabView();
+    const location = useLocation();
+
+    const enabledTabs = tabHeaderItems.filter(th => {
+        return th.disabled !== true;
+    });
+
+    useEffect(() => {
+        if (currentTabKey === undefined) {
+            // Try to get tab from URL
+            const params = new URLSearchParams(location.search);
+            const tabFromUrl = params.get(tabKeySearchParam);
+            const tabExists = enabledTabs.some(tab => tab.tabKey === tabFromUrl);
+            if (tabFromUrl && tabExists) {
+                navigate(tabFromUrl);
+            } else {
+                const firstTab = enabledTabs.length > 0 ? enabledTabs[0] : undefined;
+                if (firstTab) {
+                    navigate(firstTab.tabKey);
+                }
+            }
+        }
+    }, [location.search]);
+
+    return (
+        <div className={twMerge('w-full flex flex-col gap-5', className)}>
+            {/* Header */}
+            <div className="flex flex-row no-scrollbar gap-1 w-full h-fit overflow-x-auto">
+                {enabledTabs.map((item, index) => {
+                    return (
+                        <PilledTabViewButton
+                            className={item.className}
+                            label={item.label}
+                            disabled={item.disabled}
+                            tabKey={item.tabKey}
+                            key={index}
+                        />
+                    );
+                })}
+            </div>
+
+            <div>{children}</div>
+        </div>
+    );
+}
+
+export type TabViewHeaderItem = {
+    label?: string;
+    tabKey: string;
+    disabled?: boolean;
+    className?: string;
+    loading?: boolean
+};
+
+function PilledTabViewButton({ label, tabKey, disabled = false, className }: TabViewHeaderItem) {
+    const { currentTabKey, navigate } = useTabView();
+
+    const handleTabClick = (newKey: string) => {
+        navigate(newKey);
+    };
+
+    if (disabled) return <></>;
+
+    return (
+        <PilledTabButton
+            active={currentTabKey === tabKey}
+            onClick={() => handleTabClick(tabKey)}
+            className={className}
+        >
+            {label}
+        </PilledTabButton>
+    );
+}
+
+interface TabButtonProps {
+    active: boolean;
+    onClick: () => void;
+    children: React.ReactNode;
+    className?: string
+}
+
+export function PilledTabButton({ active, onClick, children, className }: TabButtonProps) {
+    return (
+        <button
+            onClick={onClick}
+            className={twMerge(`px-4 py-1.5 w-fit font-medium bg-slate-200 dark:bg-slate-700 text-nowrap dark:text-slate-200 rounded-xl text-xs md:text-sm lg:text-base ${active
+                ? "bg-blue-600 dark:bg-blue-600 text-white dark:blue-blue-500 dark:text-white"
+                : " text-gray-600 hover:text-gray-900"
+                }`, className)}
+            aria-label={`View ${children} tab`}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && onClick()}
+        >
+            {children}
+        </button>
+    )
+};
