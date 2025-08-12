@@ -1,18 +1,21 @@
 import { IProAthlete, IAthleteSeasonStarRatings } from '../../../types/athletes';
-import { SportAction } from '../../../types/sports_actions';
 import { getPlayerIcons } from '../../../utils/playerIcons';
 import Experimental from '../../shared/ab_testing/Experimental';
 import PlayerIconComponent from './PlayerIconComponent';
+import { SportAction } from '../../../types/sports_actions';
 
 type Props = {
   player: IProAthlete;
   starRatings: IAthleteSeasonStarRatings | null;
-  seasonStats: SportAction[];
   size?: 'sm' | 'md' | 'lg';
 };
 
-export default function PlayerIconsRow({ player, starRatings, seasonStats, size = 'md' }: Props) {
-  const playerIcons = getPlayerIcons(player, starRatings, seasonStats);
+export default function PlayerIconsRow({ player, starRatings, size = 'md' }: Props) {
+
+  // consr fetchKey = swrFetchKeys.getAthleteCurrentSeasonStats(player.tracking_id)
+  // const seasonStats = useSWR()
+  const seasonStats: SportAction[] = [];
+  const playerIcons = getPlayerIcons(player, starRatings, seasonStats );
 
   // Always show the container, even when empty
   return (

@@ -7,12 +7,15 @@ import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import PlayerInfoCard from '../PlayerInfoCard';
 import PlayerTeamCard from '../PlayerTeamCard';
+import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
+import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 
 interface OverviewTabProps {
   player: IProAthlete;
 }
 
 export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
+  
   return (
     <div className="space-y-4 px-1 pb-20">
 
@@ -31,6 +34,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
       </div>
 
      { player.team && <PlayerTeamCard player={player} />}
+
+     {/* <PlayerIconsRow 
+      player={player}
+     /> */}
+
+     <CoachScrummyPlayerReport 
+      player={player}
+     />
 
       <Experimental>
         <PlayerIconsCard player={player} />
