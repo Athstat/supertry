@@ -5,7 +5,7 @@ import { ScopeProvider } from 'jotai-scope';
 import { TabButton } from '../TabButton';
 import { useLocation } from 'react-router-dom';
 
-const currentTabAtom = atom<string>();
+export const currentTabAtom = atom<string>();
 
 export function useTabView() {
   const [currentTabKey, setTabKey] = useAtom(currentTabAtom);

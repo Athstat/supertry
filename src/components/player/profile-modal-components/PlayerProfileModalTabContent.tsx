@@ -1,14 +1,11 @@
-import useSWR from 'swr';
-import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import { IProAthlete } from '../../../types/athletes';
-import { swrFetchKeys } from '../../../utils/swrKeys';
-import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
+import { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
-import OverviewTab from './tabs/OverviewTab';
+import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
-import StatsTab from './tabs/StatsTab';
-import { LoadingState } from '../../ui/LoadingState';
+import PilledTabView from '../../shared/tabs/PilledTabView';
+import PlayerStatsTab from './tabs/PlayerStatsTab';
 
 
 type Props = {
@@ -17,46 +14,33 @@ type Props = {
 
 export function PlayerProfileModalTabContent({ player }: Props) {
 
-  const key = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
-  const { data: fetchedActions, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
-
-
   const tabItems: TabViewHeaderItem[] = [
     {
       label: "Overview",
-      tabKey: "overview",
-      className: "flex-1"
+      tabKey: "overview"
     },
 
     {
       label: "Stats",
-      tabKey: "stats",
-      className: "flex-1"
+      tabKey: "stats"
     },
 
     {
       label: "Power Ranking",
-      tabKey: "power-ranking",
-      className: "flex-1"
+      tabKey: "power-ranking"
     }
   ]
 
   return (
-    <div className='p-2'>
+    <div className=''>
 
-      <TabView tabHeaderItems={tabItems}>
+      <PilledTabView tabHeaderItems={tabItems}>
         <TabViewPage tabKey='overview'>
-          <OverviewTab player={player} />
+          <PlayerOverviewTab player={player} />
         </TabViewPage>
 
         <TabViewPage tabKey='stats'>
-
-          {isLoading && <LoadingState />}
-
-          {!isLoading && <StatsTab
-            player={player}
-            playerStats={fetchedActions ?? []}
-          />}
+          <PlayerStatsTab player={player} />
         </TabViewPage>
 
         <TabViewPage tabKey='power-ranking'>
@@ -65,7 +49,7 @@ export function PlayerProfileModalTabContent({ player }: Props) {
           <PlayerMatchsPRList player={player} />
         </TabViewPage>
 
-      </TabView>
+      </PilledTabView>
     </div>
   )
 };

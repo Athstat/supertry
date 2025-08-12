@@ -47,7 +47,7 @@ export const PlayerScreenContent = () => {
   const [sortField, setSortField] = useState<SortField>("power_rank_rating");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useQueryState("query", {init: ""});
   const [positionFilter, setPositionFilter] = useQueryState('position');
 
   const [teamIdFilter, setTeamIdFilter] = useQueryState("team_id");
@@ -146,7 +146,7 @@ export const PlayerScreenContent = () => {
           <Users />
           <h1 className="text-2xl font-bold" >Players</h1>
         </div>
-        <PlayerSearch searchQuery={searchQuery} onSearch={handleSearch} />
+        <PlayerSearch searchQuery={searchQuery ?? ""} onSearch={handleSearch} />
         <div className="flex flex-col gap-1">
 
           {/* <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} /> */}
