@@ -21,8 +21,8 @@ export function PlayerProfileModal({ player, isOpen, onClose }: Props) {
         className="p-0 flex flex-col gap-2 "
         title={player?.player_name}
         outerCon="p-4"
-        hw="w-[96%] max-h-[96vh] min-h-[96vh]"
         onClose={onClose}
+        hw="w-[96%] max-h-[96vh] min-h-[96vh] md:w-[60%] lg:w-[40%]"
         
       >
         {/* Modal header with player image and close button */}

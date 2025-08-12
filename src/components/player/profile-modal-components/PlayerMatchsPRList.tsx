@@ -58,8 +58,8 @@ export default function PlayerMatchsPRList({ player }: Props) {
             </SecondaryText>
 
             <div className="flex flex-row items-center gap-1" >
-                <PillTag className="py-0.5 px-3 text-sm text-slate-700 dark:text-slate-400" >Won {matchesWon}</PillTag>
-                <PillTag className="py-0.5 px-3 text-sm text-slate-700 dark:text-slate-400" >Lost {matchesLost}</PillTag>
+                <PillTag className="py-0.5 px-3 text-sm text-slate-600 dark:text-slate-400" >Won {matchesWon}</PillTag>
+                <PillTag className="py-0.5 px-3 text-sm text-slate-600 dark:text-slate-400" >Lost {matchesLost}</PillTag>
                 {matchesDrawn ?  <PillTag>Draw {matchesDrawn}</PillTag> : null}
             </div>
             {matchesPR.map((matchPr) => {
@@ -101,7 +101,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
 
 
     return (
-        <RoundedCard className="p-4 flex flex-col gap-2 bg-slate-50 dark:bg-slate-800 dark:border-slate-700" >
+        <RoundedCard className="flex flex-col gap-2 bg-slate-200 p-6 border-none" >
 
             <div className="flex flex-row items-center justify-between" >
                 <div className="flex flex-row items-center gap-2" >

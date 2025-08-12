@@ -17,7 +17,7 @@ export default function PlayerProfileBanner({ player} : Props) {
 
   return (
     <div className={twMerge(
-      'flex flex-row overflow-clip object-contain items-end rounded-xl bg-blue-500 justify-center w-full h-[200px]',
+      'flex animate-glow flex-row overflow-clip object-contain items-end rounded-xl bg-blue-500 justify-center w-full h-[200px]',
           cardTier === 'gold' && 'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
           cardTier === 'silver' && 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
           cardTier === 'bronze' &&
@@ -25,10 +25,12 @@ export default function PlayerProfileBanner({ player} : Props) {
           cardTier === 'blue' &&
           'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
     )} >
+      
       {player.image_url && !imageError && <img 
         src={player.image_url}
         className='h-[200px]'
         onError={() => setImageError(true)}
+
       />}
 
       {imageError && (
