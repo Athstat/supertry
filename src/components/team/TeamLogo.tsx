@@ -27,8 +27,6 @@ export default function TeamLogo({ url, alt, className, teamName }: Props) {
     );
   }
 
-  console.log('team image url: ', imageUrl);
-
   return (
     <div className={twMerge('w-14 h-14 overflow-clip ', className)}>
       <img

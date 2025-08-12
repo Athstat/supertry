@@ -32,10 +32,10 @@ export function PlayerStats({ player }: Props) {
         </div>
 
         <div className="bg-white dark:bg-slate-800/40 flex-1 mx-1 rounded-lg shadow-md flex flex-col items-center justify-center p-3">
-          {player.team.image_url ? (
+          {player.team?.image_url || player.athlete?.team?.image_url ? (
             <img
-              src={player.team.image_url}
-              alt={player.team.athstat_name}
+              src={player.team?.image_url || player.athlete?.team?.image_url}
+              alt={player.team?.athstat_name}
               className="h-6 w-6 object-contain mb-1"
             />
           ) : (

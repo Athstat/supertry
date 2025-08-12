@@ -7,9 +7,10 @@ import OptimizedImage from '../shared/OptimizedImage';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
 import { CircleDollarSign } from 'lucide-react';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 
 type Props = {
-  player: IProAthlete;
+  player: IProAthlete | IFantasyTeamAthlete;
   name?: string;
   onClick?: () => void;
   className?: string;
@@ -64,7 +65,10 @@ export function PlayerGameCard({ player, name, onClick, className, blockGlow }: 
         </div>
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo className="w-8 h-8 dark:text-white/40" url={player.team.image_url} />
+          <TeamLogo
+            className="w-8 h-8 dark:text-white/40"
+            url={player.team?.image_url ?? player.athlete.team.image_url}
+          />
         </div>
 
         {/* Player Image */}

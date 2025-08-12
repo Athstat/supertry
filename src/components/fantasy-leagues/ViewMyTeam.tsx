@@ -11,20 +11,25 @@ import { Position } from '../../types/position';
 import { seasonService } from '../../services/seasonsService';
 import { fantasyTeamService } from '../../services/fantasyTeamService';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
+import { IGamesLeagueConfig } from '../../types/leagueConfig';
 
 export default function ViewMyTeam({
   leagueRound,
+  leagueConfig,
   team,
   onBack,
 }: {
   leagueRound?: IFantasyLeagueRound;
+  leagueConfig?: IGamesLeagueConfig;
   team: IFantasyLeagueTeam;
   onBack?: () => void;
 }) {
   const [captainAthleteId, setCaptainAthleteId] = useState<string | undefined>(
     () => team.athletes?.find(a => a.is_captain)?.athlete_id
   );
-  const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete | undefined>(undefined);
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<
+    IProAthlete | IFantasyTeamAthlete | undefined
+  >(undefined);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
   const [players, setPlayers] = useState<IProAthlete[]>([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -35,6 +40,9 @@ export default function ViewMyTeam({
     position?: Position | null;
   }>({ open: false, slot: null, position: null });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const totalSpent = team.athletes.reduce((sum, player) => sum + (player.price || 0), 0);
+  const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
 
   // Stable mapping of 6 slots like in CreateMyTeam
   const positions = [
@@ -99,26 +107,6 @@ export default function ViewMyTeam({
     editableAthletesBySlot,
     positions.length,
   ]);
-
-  // Minimal mapper to PlayerGameCard shape
-  const toIProAthlete = (a: IFantasyTeamAthlete): IProAthlete => ({
-    tracking_id: a.tracking_id || a.athlete_id,
-    player_name: a.player_name,
-    power_rank_rating: a.power_rank_rating || a.total_points || 0,
-    image_url: a.image_url,
-    position: a.position,
-    gender: a.gender || 'M',
-    form: 'NEUTRAL' as PlayerForm,
-    team_id: String(a.team_id || ''),
-    team: {
-      athstat_id: '',
-      source_id: '',
-      athstat_name: a.team_name || '',
-      image_url: a.team_logo || '',
-      sport: '',
-      organization: '',
-    },
-  });
 
   const selectedCount = (team.athletes || []).length;
 
@@ -215,7 +203,12 @@ export default function ViewMyTeam({
           >
             <ArrowLeft />
           </button>
-          <p className="font-bold text-xl">My Team</p>
+          <div className="flex flex-col">
+            <p className="font-bold text-xl">My Team</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+              Viewing your team for {leagueRound?.title}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -231,11 +224,13 @@ export default function ViewMyTeam({
         </div>
         <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800/70 p-3">
           <div className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            Round
+            Budget
           </div>
-          <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-            {leagueRound?.title || '—'}
-          </div>
+          {leagueConfig && (
+            <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+              {budgetRemaining}/{leagueConfig?.team_budget}
+            </div>
+          )}
         </div>
       </div>
 
@@ -266,12 +261,12 @@ export default function ViewMyTeam({
                 {athlete ? (
                   <div className="w-full h-full">
                     <PlayerGameCard
-                      player={toIProAthlete(athlete)}
+                      player={athlete}
                       className="w-full h-full"
                       blockGlow
                       onClick={() => {
-                        const p = toIProAthlete(athlete);
-                        setPlayerModalPlayer(p);
+                        console.log('clicked player: ', athlete);
+                        setPlayerModalPlayer(athlete);
                         setShowPlayerModal(true);
                       }}
                     />

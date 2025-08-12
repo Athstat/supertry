@@ -21,11 +21,13 @@ import { LoadingState } from '../ui/LoadingState';
 
 export default function CreateMyTeam({
   leagueRound,
+  leagueConfig,
   onTeamCreated,
   onViewTeam,
   onBack,
 }: {
   leagueRound?: IFantasyLeagueRound;
+  leagueConfig?: IGamesLeagueConfig;
   onTeamCreated?: (team: IFantasyLeagueTeam) => void;
   onViewTeam?: () => void;
   onBack?: () => void;
@@ -41,7 +43,6 @@ export default function CreateMyTeam({
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
   const [isLoading, setIsLoading] = useState(true);
 
   const totalSpent = Object.values(selectedPlayers).reduce(
@@ -71,28 +72,6 @@ export default function CreateMyTeam({
   console.log('leagueRound: ', leagueRound);
 
   useEffect(() => {
-    const fetchLeagueConfig = async () => {
-      if (!leagueRound?.season_id) return;
-      setIsLoading(true);
-      try {
-        const config = await leagueService.getLeagueConfig(leagueRound.season_id.toString());
-        if (!config) {
-          throw new Error('Failed to load league configuration');
-        }
-        setLeagueConfig(config);
-      } catch (error) {
-        console.error('Failed to fetch league config:', error);
-        // You might want to show an error to the user here
-        showToast('Failed to load league configuration', 'error');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLeagueConfig();
-  }, [leagueRound?.season_id]);
-
-  useEffect(() => {
     const loadAthletes = async () => {
       if (!leagueRound) return;
       try {
@@ -102,6 +81,8 @@ export default function CreateMyTeam({
         console.log('athletes: ', athletes);
       } catch (e) {
         console.error('Failed to load athletes for season ', leagueId, e);
+      } finally {
+        setIsLoading(false);
       }
     };
 

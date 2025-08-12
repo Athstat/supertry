@@ -7,6 +7,7 @@ import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeag
 import { Users, Loader, Check } from 'lucide-react';
 import { leagueService } from '../../services/leagueService';
 import FantasyRoundCard from './fantasy_rounds/FantasyRoundCard';
+import { IGamesLeagueConfig } from '../../types/leagueConfig';
 
 export default function MyTeams() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -18,6 +19,7 @@ export default function MyTeams() {
   const [isFetchingTeams, setIsFetchingTeams] = useState<boolean>(false);
   const [roundIdToTeams, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
   const [showCreationSuccessModal, setShowCreationSuccessModal] = useState<boolean>(false);
+  const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
 
   // Phase 1: Fetch participating teams for each round (by round/league id)
   useEffect(() => {
@@ -46,6 +48,23 @@ export default function MyTeams() {
 
     fetchTeamsForRounds();
   }, [tabScene, sortedRounds]);
+
+  useEffect(() => {
+    const fetchLeagueConfig = async () => {
+      if (!selectedRound?.season_id) return;
+      try {
+        const config = await leagueService.getLeagueConfig(selectedRound.season_id.toString());
+        if (!config) {
+          throw new Error('Failed to load league configuration');
+        }
+        setLeagueConfig(config);
+      } catch (error) {
+        console.error('Failed to fetch league config:', error);
+      }
+    };
+
+    fetchLeagueConfig();
+  }, [selectedRound?.season_id]);
 
   console.log('teams: ', roundIdToTeams);
 
@@ -110,6 +129,7 @@ export default function MyTeams() {
         <CreateMyTeam
           leagueRound={selectedRound ?? undefined}
           onBack={() => setTabScene('fantasy-rounds')}
+          leagueConfig={leagueConfig}
           onViewTeam={() => setTabScene('team-created')}
           onTeamCreated={(team: IFantasyLeagueTeam) => {
             // Ensure we keep the same round context
@@ -129,6 +149,7 @@ export default function MyTeams() {
       return (
         <ViewMyTeam
           leagueRound={selectedRound}
+          leagueConfig={leagueConfig}
           team={selectedTeam}
           onBack={() => setTabScene('fantasy-rounds')}
         />
