@@ -4,11 +4,11 @@ import CreateMyTeam from './CreateMyTeam';
 import ViewMyTeam from './ViewMyTeam';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
-import { Users, Loader } from 'lucide-react';
+import { Users, Loader, Check } from 'lucide-react';
 import { leagueService } from '../../services/leagueService';
 import FantasyRoundCard from './fantasy_rounds/FantasyRoundCard';
 
-export default function MyTeam() {
+export default function MyTeams() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
     'fantasy-rounds'
   );
@@ -110,40 +110,16 @@ export default function MyTeam() {
         <CreateMyTeam
           leagueRound={selectedRound ?? undefined}
           onBack={() => setTabScene('fantasy-rounds')}
+          onViewTeam={() => setTabScene('team-created')}
           onTeamCreated={(team: IFantasyLeagueTeam) => {
             // Ensure we keep the same round context
             if (selectedRound) {
               setSelectedRound(selectedRound);
             }
-            // Capture the newly created team and show the created view in the background
+            // Capture the newly created team
             setSelectedTeam(team as IFantasyLeagueTeam);
-            setTabScene('team-created');
-            setShowCreationSuccessModal(true);
           }}
         />
-
-        {showCreationSuccessModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-            <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
-                  <Users className="w-8 h-8" />
-                </div>
-                <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Your team has been successfully submitted
-                  {selectedRound ? ` to ${selectedRound.title}` : ''}.
-                </p>
-                <PrimaryButton
-                  className="w-full"
-                  onClick={() => setShowCreationSuccessModal(false)}
-                >
-                  {"Let's Go!"}
-                </PrimaryButton>
-              </div>
-            </div>
-          </div>
-        )}
       </>
     );
   }

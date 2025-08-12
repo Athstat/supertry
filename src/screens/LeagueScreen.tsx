@@ -11,7 +11,7 @@ import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
 import JoinLeagueButton from '../components/fantasy-league/buttons/JoinLeagueButton';
 import LeagueCommissionerTab from '../components/fantasy-league/commissioner/LeagueCommissionerTab';
-import MyTeam from '../components/fantasy-leagues/MyTeam';
+import MyTeams from '../components/fantasy-leagues/MyTeams';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -95,12 +95,12 @@ function Content() {
       <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
         <StatCard label="Members" value={members?.length ?? '-'} className="flex-1" />
 
-        <StatCard label="Round" value={currentRound?.title} className="flex-1" />
+        <StatCard label="Current Round" value={currentRound?.title} className="flex-1" />
       </div>
 
       <TabView tabHeaderItems={headerItems}>
         <TabViewPage tabKey="my-team">
-          <MyTeam />
+          <MyTeams />
         </TabViewPage>
 
         <TabViewPage tabKey="standings">

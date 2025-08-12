@@ -22,10 +22,12 @@ import { LoadingState } from '../ui/LoadingState';
 export default function CreateMyTeam({
   leagueRound,
   onTeamCreated,
+  onViewTeam,
   onBack,
 }: {
   leagueRound?: IFantasyLeagueRound;
   onTeamCreated?: (team: IFantasyLeagueTeam) => void;
+  onViewTeam?: () => void;
   onBack?: () => void;
 }) {
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, IProAthlete>>({});
@@ -38,6 +40,7 @@ export default function CreateMyTeam({
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -144,6 +147,7 @@ export default function CreateMyTeam({
 
     try {
       setIsSaving(true);
+      setIsSubmitting(true);
       setSaveError(undefined);
 
       const userInfo = await authService.getUserInfo();
@@ -180,31 +184,35 @@ export default function CreateMyTeam({
       );
 
       console.log('Join league response:', response);
-      // If parent wants to handle success (e.g., show modal and switch tabScene), notify it
+      // Best-effort mapping to IFantasyLeagueTeam
+      const createdTeam: IFantasyLeagueTeam = {
+        id: response?.team?.id ?? response?.id ?? '',
+        team_id: String(response?.team?.id ?? response?.id ?? ''),
+        league_id: Number(leagueRound.id),
+        rank: response?.team?.rank ?? 0,
+        overall_score: response?.team?.overall_score ?? 0,
+        team_name: response?.team?.team_name ?? teamName,
+        user_id: userInfo.kc_id,
+        first_name: (userInfo as any).first_name ?? '',
+        last_name: (userInfo as any).last_name ?? '',
+        athletes: Array.isArray(response?.team?.athletes) ? response.team.athletes : [],
+      };
+
+      // Show success modal
+      setShowSuccessModal(true);
+
+      // If parent wants to handle success, notify it
       if (onTeamCreated) {
-        // Best-effort mapping to IFantasyLeagueTeam
-        const createdTeam: IFantasyLeagueTeam = {
-          id: response?.team?.id ?? response?.id ?? '',
-          team_id: String(response?.team?.id ?? response?.id ?? ''),
-          league_id: Number(leagueRound.id),
-          rank: response?.team?.rank ?? 0,
-          overall_score: response?.team?.overall_score ?? 0,
-          team_name: response?.team?.team_name ?? teamName,
-          user_id: userInfo.kc_id,
-          first_name: (userInfo as any).first_name ?? '',
-          last_name: (userInfo as any).last_name ?? '',
-          athletes: Array.isArray(response?.team?.athletes) ? response.team.athletes : [],
-        };
         onTeamCreated(createdTeam);
-      } else {
-        // Fall back to local success modal
-        setShowSuccessModal(true);
       }
-    } catch (e) {
-      console.error('Failed to save team', e);
-      setSaveError('Failed to save team. Please try again.');
+    } catch (error) {
+      console.error('Failed to save team:', error);
+      setSaveError(
+        error instanceof Error ? error.message : 'Failed to save team. Please try again.'
+      );
     } finally {
       setIsSaving(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -242,7 +250,12 @@ export default function CreateMyTeam({
           >
             <ArrowLeft />
           </button>
-          <p className="font-bold text-xl">Create Team</p>
+          <div className="flex flex-col">
+            <p className="font-bold text-xl">Create Team</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+              Create your team for {leagueRound?.title}
+            </p>
+          </div>
         </div>
       </div>
       {/* Top stats row */}
@@ -306,7 +319,12 @@ export default function CreateMyTeam({
                 className="aspect-square overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center"
               >
                 {selected ? (
-                  <PlayerGameCard player={selected} className="w-full h-full" blockGlow />
+                  <PlayerGameCard
+                    player={selected}
+                    name={p.name}
+                    className="w-full h-full"
+                    blockGlow
+                  />
                 ) : (
                   <div className="flex flex-col items-center justify-center">
                     <span className="text-3xl">+</span>
@@ -317,20 +335,6 @@ export default function CreateMyTeam({
 
               {selected && (
                 <div className="mt-2 flex flex-col gap-2">
-                  <button
-                    className="text-xs w-full rounded-lg py-1.5 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 hover:bg-red-100 dark:hover:bg-red-900/50"
-                    onClick={() => {
-                      setSelectedPlayers(prev => {
-                        const copy = { ...prev } as Record<string, IProAthlete>;
-                        delete copy[p.name];
-                        return copy;
-                      });
-                      if (captainId === selected.tracking_id) setCaptainId(null);
-                    }}
-                  >
-                    Remove
-                  </button>
-
                   <button
                     className={`${
                       captainId === selected.tracking_id
@@ -343,6 +347,19 @@ export default function CreateMyTeam({
                     disabled={captainId === selected.tracking_id}
                   >
                     {captainId === selected.tracking_id ? 'Captain' : 'Set as Captain'}
+                  </button>
+                  <button
+                    className="text-xs w-full rounded-lg py-1.5 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 hover:bg-red-100 dark:hover:bg-red-900/50"
+                    onClick={() => {
+                      setSelectedPlayers(prev => {
+                        const copy = { ...prev } as Record<string, IProAthlete>;
+                        delete copy[p.name];
+                        return copy;
+                      });
+                      if (captainId === selected.tracking_id) setCaptainId(null);
+                    }}
+                  >
+                    Remove
                   </button>
                 </div>
               )}
@@ -387,19 +404,43 @@ export default function CreateMyTeam({
         />
       )}
 
+      {/* Loading Modal */}
+      {isSaving && !showSuccessModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full text-primary-500 dark:text-primary-400">
+                <Loader className="w-10 h-10 animate-spin" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Joining the Scrum...</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Please wait while we save your team.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Success Modal */}
       {showSuccessModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
-                <Check size={32} />
+                <Check className="w-8 h-8" />
               </div>
               <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Your team has been successfully submitted to {leagueRound?.title}.
+                Your team has been successfully submitted
+                {leagueRound ? ` to ${leagueRound.title}` : ''}.
               </p>
-              <PrimaryButton className="w-full" onClick={() => setShowSuccessModal(false)}>
+              <PrimaryButton
+                className="w-full"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  onViewTeam();
+                }}
+              >
                 Let's Go!
               </PrimaryButton>
             </div>

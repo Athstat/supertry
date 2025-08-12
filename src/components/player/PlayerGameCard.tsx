@@ -10,6 +10,7 @@ import { CircleDollarSign } from 'lucide-react';
 
 type Props = {
   player: IProAthlete;
+  name?: string;
   onClick?: () => void;
   className?: string;
   blockGlow?: boolean;
@@ -22,7 +23,7 @@ type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
  *
  * does not rely on team context */
 
-export function PlayerGameCard({ player, onClick, className, blockGlow }: Props) {
+export function PlayerGameCard({ player, name, onClick, className, blockGlow }: Props) {
   const selectedPlayers = useAtomValue(comparePlayersAtom);
 
   console.log('player game card: ', player);
@@ -97,12 +98,17 @@ export function PlayerGameCard({ player, onClick, className, blockGlow }: Props)
           </div>
 
           {/* Position and Rating */}
-          <div className="flex justify-between items-center text-sm mb-2">
-            <div className="text-xs truncate">{formatPosition(player.position ?? '')}</div>
+          <div className="flex justify-between items-center text-sm">
+            <div className="font-bold text-xs truncate">
+              {formatPosition(player.position ?? '')}
+            </div>
             <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">
               PR {statValue(pr)}
             </div>
           </div>
+
+          {/* Position and Rating */}
+          <div className="text-xs mt-1 text-left truncate">{name}</div>
 
           {/* Stats Grid */}
           {/* <div className="grid grid-cols-3 gap-1 text-xs">
