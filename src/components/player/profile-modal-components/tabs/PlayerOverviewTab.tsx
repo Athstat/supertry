@@ -1,20 +1,19 @@
-import React from 'react';
+
 import { calculateAge } from '../../../../utils/playerUtils';
-import { IProAthlete } from '../../../../types/athletes';
 import PlayerIconsCard from '../PlayerIconsCard';
-import SecondaryText from '../../../shared/SecondaryText';
 import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import PlayerInfoCard from '../PlayerInfoCard';
 import PlayerTeamCard from '../PlayerTeamCard';
-import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
+import { IProAthlete } from '../../../../types/athletes';
 
-interface OverviewTabProps {
+type Props = {
   player: IProAthlete;
 }
 
-export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
+/** Renders a player profile overview tab */
+export default function PlayerOverviewTab({ player }: Props) {
   
   return (
     <div className="space-y-4 px-1 pb-20">
@@ -50,5 +49,3 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ player }) => {
     </div>
   );
 };
-
-export default OverviewTab;

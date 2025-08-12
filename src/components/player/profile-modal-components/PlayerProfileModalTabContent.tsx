@@ -4,7 +4,7 @@ import { IProAthlete } from '../../../types/athletes';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
-import OverviewTab from './tabs/OverviewTab';
+import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
 import StatsTab from './tabs/StatsTab';
@@ -47,7 +47,7 @@ export function PlayerProfileModalTabContent({ player }: Props) {
 
       <PilledTabView tabHeaderItems={tabItems}>
         <TabViewPage tabKey='overview'>
-          <OverviewTab player={player} />
+          <PlayerOverviewTab player={player} />
         </TabViewPage>
 
         <TabViewPage tabKey='stats'>
