@@ -1,9 +1,10 @@
 import { Shield } from "lucide-react"
-import { IFixture, ITeamAction } from "../../types/games"
+import { IFixture, ITeamAction, ITeamActionName } from "../../types/games"
 import TitledCard from "../shared/TitledCard"
 import TeamLogo from "../team/TeamLogo"
 import { twMerge } from "tailwind-merge"
 import { TeamActionsParser, TeamHeadtoHeadItem } from "../../utils/teamActionsUtils"
+import { mapSportsActionToAthstatName } from "../../utils/sportsActionUtils"
 
 type Props = {
     fixture: IFixture,
@@ -12,7 +13,14 @@ type Props = {
 
 export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) {
 
-    const taParser = new TeamActionsParser(teamActions, fixture.team.athstat_id, fixture.opposition_team.athstat_id);
+    const formatedTeamActions = teamActions.map((t) => {
+        
+        return {
+            ...t,
+            action: mapSportsActionToAthstatName(t.action) as ITeamActionName
+        }
+    })
+    const taParser = new TeamActionsParser(formatedTeamActions, fixture.team.athstat_id, fixture.opposition_team.athstat_id);
 
     return (
         <TitledCard title="Head to Head" icon={Shield} >
