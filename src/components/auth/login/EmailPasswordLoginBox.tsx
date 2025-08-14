@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import WarningCard from '../../shared/WarningCard';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '../../../contexts/AuthContext';
+import { requestPushPermissionsAfterLogin } from '../../../utils/bridgeUtils';
 
 export default function EmailPasswordLoginBox() {
 
@@ -59,11 +60,12 @@ export default function EmailPasswordLoginBox() {
             const { data: loginRes, message } = await authService.login(email, password);
 
             if (loginRes) {
-                
+
                 const authUser = loginRes.user;
                 const token = loginRes.token;
 
                 setAuth(token, authUser);
+                requestPushPermissionsAfterLogin();
                 navigate('/dashboard');
 
             } else {
@@ -100,7 +102,7 @@ export default function EmailPasswordLoginBox() {
 
                 {hasPassword && (
                     <div className='flex flex-col gap-1'>
-                        
+
                         <PasswordInputField
                             value={password}
                             onChange={setPassword}
