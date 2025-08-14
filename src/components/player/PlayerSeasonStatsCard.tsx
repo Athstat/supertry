@@ -12,9 +12,7 @@ import { useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import NoContentCard from "../shared/NoContentMessage"
 import { AnimatePresence, motion } from "framer-motion"
-import { PillCard } from "../shared/PillTap"
-import { twMerge } from "tailwind-merge"
-import { shouldShowSportAction } from "../../utils/sportsActionUtils"
+import SportActionCategoryList from "../stats/SportActionCategoryList"
 
 type Props = {
   player: IProAthlete,
@@ -77,7 +75,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
       </SecondaryText>}
 
       <div
-        className="flex flex-col bg-slate-50 border border-slate-300 dark:bg-slate-700/80 w-full gap-2 p-4 rounded-xl"
+        className="flex flex-col bg-slate-50 border border-slate-300 dark:bg-slate-700/80 w-full gap-4 p-4 rounded-xl"
       >
         <div className="flex flex-row items-center justify-between" >
           <p className="text-xs" >{season.name}</p>
@@ -156,25 +154,6 @@ function StatsTray({ player, season, stats }: StatsTrayProps) {
     return [...seen];
   }, [stats]);
 
-
-  const [currCategory, setCategory] = useState<string | undefined>(() => {
-    if (categories.length > 0) {
-      return categories[0]
-    }
-
-    return undefined;
-  });
-
-  const categoryStats = useMemo(() => {
-    return [...stats].filter((s) => {
-      return s.definition?.category === currCategory
-    })
-  }, [categories, stats, currCategory]);
-
-  const handleClickCategory = (cat: string) => {
-    setCategory(cat);
-  }
-
   if (stats.length === 0) {
     return (
       <NoContentCard
@@ -186,80 +165,15 @@ function StatsTray({ player, season, stats }: StatsTrayProps) {
 
   return (
     <div className="flex flex-col gap-2" >
-
-      <div className="flex flex-row items-center gap-2 overflow-x-auto no-scrollbar" >
-        {categories.map((c) => {
-          return (
-            <PillCard
-              onClick={() => handleClickCategory(c)}
-              className={twMerge(
-                "bg-slate-100 text-slate-600",
-                currCategory === c && 'bg-slate-300 text-slate-600'
-              )}
-            >
-              {c}
-            </PillCard>
-          )
-        })}
-      </div>
-
-      <div>
-        {categoryStats.map((s) => {
-
-          if (!shouldShowSportAction(s)) {
-            return;
-          }
-
-          return <StatRow
-            label={s.definition?.action_name}
-            value={s.action_count}
+      <div  className="flex flex-col gap-2" >
+        {categories.map((c, index) => {
+          return <SportActionCategoryList 
+            categoryName={c}
+            stats={stats}
+            key={index}
           />
         })}
       </div>
-    </div>
-  )
-}
-
-type StatRowProps = {
-  label?: string,
-  value?: string | number
-}
-
-function StatRow({ label, value }: StatRowProps) {
-
-  const fixCapitalization = (name: string) => {
-
-    if (name.includes("PlayerId")) {
-      return;
-    }
-
-    return name
-      // Replace underscores with spaces
-      .replace(/_/g, ' ')
-      // Add space before capital letters (if not at the start)
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      // Capitalize each word
-      .replace(/\b\w/g, char => char.toUpperCase());
-  };
-
-  const toPercentageIfFraction = (value: string | number) => {
-    const num = Number(value);
-
-    // Not a valid number
-    if (isNaN(num)) return value;
-
-    // If between 0 and 1 (inclusive), treat as fraction → percentage
-    if (num?.toString().startsWith('0.')) {
-      return `${Math.floor(num * 100)}%`;
-    }
-
-    return num;
-  };
-
-  return (
-    <div className="flex p-1 flex-row items-center justify-between" >
-      <SecondaryText>{label ? fixCapitalization(label) : '-'}</SecondaryText>
-      <p className="text-sm font-medium" >{value ? toPercentageIfFraction(value) : '-'}</p>
     </div>
   )
 }
