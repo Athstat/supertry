@@ -76,34 +76,6 @@ export default function MyTeams() {
     }
   };
 
-  // // Phase 1: Fetch participating teams for each round (by round/league id)
-  // useEffect(() => {
-  //   // Only fetch teams while listing rounds
-  //   if (tabScene !== 'fantasy-rounds') return;
-  //   if (!sortedRounds || sortedRounds.length === 0) return;
-
-  //   async function fetchTeamsForRounds() {
-  //     try {
-  //       setIsFetchingTeams(true);
-  //       const fetches = sortedRounds.map(r => leagueService.fetchParticipatingTeams(r.id));
-  //       const results = await Promise.all(fetches);
-
-  //       const mapping: Record<string, IFantasyLeagueTeam[]> = {};
-  //       sortedRounds.forEach((round, index) => {
-  //         mapping[round.id] = results[index] ?? [];
-  //       });
-
-  //       setRoundIdToTeams(mapping);
-  //     } catch (error) {
-  //       console.error('Failed to fetch teams for rounds', error);
-  //     } finally {
-  //       setIsFetchingTeams(false);
-  //     }
-  //   }
-
-  //   fetchTeamsForRounds();
-  // }, [tabScene, sortedRounds, refreshKey]); // Add refreshKey to dependencies
-
   useEffect(() => {
     const fetchLeagueConfig = async () => {
       if (!selectedRound?.season_id) return;
@@ -124,13 +96,15 @@ export default function MyTeams() {
   // Render the main content based on the current tab scene
   const renderContent = () => {
     if (tabScene === 'fantasy-rounds') {
-      return <FantasyRoundsList 
-        rounds={sortedRounds}
-        handleCreateTeam={handleCreateTeam}
-        handlePlayerClick={handlePlayerClick}
-        handleViewTeam={handleViewTeam}
-        refreshRounds={refreshRounds}
-      />
+      return (
+        <FantasyRoundsList
+          rounds={sortedRounds}
+          handleCreateTeam={handleCreateTeam}
+          handlePlayerClick={handlePlayerClick}
+          handleViewTeam={handleViewTeam}
+          refreshRounds={refreshRounds}
+        />
+      );
     }
 
     if (tabScene === 'creating-team') {
@@ -145,11 +119,11 @@ export default function MyTeams() {
             if (selectedRound) {
               setRoundIdToTeams(prev => ({
                 ...prev,
-                [selectedRound.id]: [...(prev[selectedRound.id] || []), team]
+                [selectedRound.id]: [...(prev[selectedRound.id] || []), team],
               }));
               setSelectedRound(selectedRound);
             }
-            
+
             // Set the selected team and trigger a background refresh
             setSelectedTeam(team);
             setRefreshKey(prev => prev + 1);

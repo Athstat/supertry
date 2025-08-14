@@ -280,6 +280,8 @@ export const authService = {
     try {
       const user = await authService.whoami();
 
+      console.log('userrrr: ', user);
+
       if (user) {
         authTokenService.saveUserToLocalStorage(user);
         await mutate(swrFetchKeys.getAuthUserProfileKey());
@@ -541,57 +543,56 @@ export const authService = {
     };
   },
 
-  requestEmailVerification: async () : RestPromise<RequestEmailVerificationRes> => {
+  requestEmailVerification: async (): RestPromise<RequestEmailVerificationRes> => {
     try {
       const uri = getUri(`/api/v1/auth/resend-verification`);
-      
+
       const res = await fetch(uri, {
         method: 'POST',
-        headers: getAuthHeader()
+        headers: getAuthHeader(),
       });
 
       if (res.ok) {
         const json = (await res.json()) as RequestEmailVerificationRes;
-        return {data: json};
+        return { data: json };
       }
-
     } catch (err) {
-      console.log("Error requesting email verification ", err);
+      console.log('Error requesting email verification ', err);
     }
 
     return {
       error: {
-        message: "Something wen't wrong request for an email verification. Please try again shortly"
-      }
-    }
+        message:
+          "Something wen't wrong request for an email verification. Please try again shortly",
+      },
+    };
   },
 
-  verifyEmailWithToken: async (token: string) : RestPromise<VerifyEmailRes> => {
+  verifyEmailWithToken: async (token: string): RestPromise<VerifyEmailRes> => {
     try {
       const uri = getUri(`/api/v1/auth/verify-email/${token}`);
 
       const res = await fetch(uri, {
         method: 'POST',
-        headers: getAuthHeader()
+        headers: getAuthHeader(),
       });
 
       if (res.ok) {
         const json = (await res.json()) as VerifyEmailRes;
-        return {data: json};
+        return { data: json };
       }
 
       if (res.status === 404) {
-        return {error: {message: "Email verification is either invalid or has expired"}}
+        return { error: { message: 'Email verification is either invalid or has expired' } };
       }
-
-    } catch(err) {
-      console.log("Error verifying email ", err);
+    } catch (err) {
+      console.log('Error verifying email ', err);
     }
 
     return {
       error: {
-        message: "Something wen't wrong trying to verify your email. Please try again"
-      }
-    }
-  }
+        message: "Something wen't wrong trying to verify your email. Please try again",
+      },
+    };
+  },
 };
