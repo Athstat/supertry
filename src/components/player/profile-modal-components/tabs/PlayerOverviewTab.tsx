@@ -12,6 +12,7 @@ import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Dumbbell } from 'lucide-react';
 import SecondaryText from '../../../shared/SecondaryText';
 import { isNumeric } from '../../../../utils/stringUtils';
+import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 
 type Props = {
   player: IProAthlete;
@@ -81,12 +82,12 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       </Experimental>
 
-      {/* {currentSeason && (
+      {currentSeason && (
         <PlayerSeasonStatsCard
           player={player}
           season={currentSeason}
         />
-      )} */}
+      )}
 
 
       {currentSeason && <Experimental>
