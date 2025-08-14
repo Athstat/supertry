@@ -10,6 +10,7 @@ import { leagueService } from '../../../services/leagueService';
 import RoundedCard from '../../shared/RoundedCard';
 import { useMemo } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 
 type Props = {
   round: IFantasyLeagueRound;
@@ -24,21 +25,22 @@ export default function FantasyRoundCard({
   onViewTeam,
   onPlayerClick,
 }: Props) {
-
-  const { ref, inView } = useInView({triggerOnce: true});
+  const { ref, inView } = useInView({ triggerOnce: true });
 
   const key = inView ? `/participating-teams/round/${round.id}` : null;
-  const { data: fetchedTeams, isLoading } = useSWR(key, () => leagueService.fetchParticipatingTeams(round.id));
+  const { data: fetchedTeams, isLoading } = useSWR(key, () =>
+    leagueService.fetchParticipatingTeams(round.id)
+  );
 
   const teams = fetchedTeams ?? [];
   const { authUser: currentUser } = useAuth();
+  const { isMember } = useFantasyLeagueGroup();
 
   const totalTeams = teams?.length ?? 0;
 
   const userTeam = useMemo(() => {
-    return teams.find((t) => t.user_id === currentUser?.kc_id)
+    return teams.find(t => t.user_id === currentUser?.kc_id);
   }, [teams, currentUser]);
-
 
   const hasUserTeam = Boolean(userTeam);
 
@@ -55,34 +57,28 @@ export default function FantasyRoundCard({
   const userRank = userTeam?.rank ?? userTeam?.position;
 
   return (
-
-    <div
-      ref={ref}      
-    >
+    <div ref={ref}>
       {isLoading ? (
-        <RoundedCard
-          className='w-full h-[100px] rounded-xl border-none animate-pulse'
-        />
-      ) :
-
-        (<motion.div
+        <RoundedCard className="w-full h-[100px] rounded-xl border-none animate-pulse" />
+      ) : (
+        <motion.div
           ref={ref}
-          className={`w-full p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 ${hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
-            }`}
+          className={`w-full p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 ${
+            hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
+          }`}
           onClick={() => {
             console.log('onClick called');
 
             if (onViewTeam && userTeam) {
               onViewTeam(userTeam, round);
             }
-
           }}
           whileHover={
             hasUserTeam && onViewTeam
               ? {
-                scale: 1.02,
-                transition: { type: 'spring', stiffness: 300 },
-              }
+                  scale: 1.02,
+                  transition: { type: 'spring', stiffness: 300 },
+                }
               : {}
           }
         >
@@ -93,10 +89,11 @@ export default function FantasyRoundCard({
             </h3>
             <div className="flex items-center gap-2">
               <span
-                className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${round.is_open
+                className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${
+                  round.is_open
                     ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                     : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                  }`}
+                }`}
               >
                 {round.is_open ? 'Open' : 'Locked'}
               </span>
@@ -120,12 +117,12 @@ export default function FantasyRoundCard({
 
           {/* Athletes row or Create CTA */}
           <div className="mt-4">
-            {hasUserTeam ? (
-              <AthletesRow
-                athletesCount={(userTeam?.athletes || []).length}
-                athletes={userTeam?.athletes || []}
-                onPlayerClick={onPlayerClick}
-              />
+            {!isMember ? (
+              <div className="w-full flex flex-col items-center justify-center gap-2">
+                <span className="text-md text-gray-900 dark:text-gray-100">
+                  Join this league to create a team
+                </span>
+              </div>
             ) : round.is_open ? (
               <div className="w-full flex flex-col items-center justify-center gap-2">
                 <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -137,7 +134,9 @@ export default function FantasyRoundCard({
               </div>
             ) : (
               <div className="w-full flex items-center justify-center">
-                <span className="text-sm text-gray-600 dark:text-gray-400">No team for this round</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  No team for this round
+                </span>
               </div>
             )}
           </div>
@@ -146,9 +145,9 @@ export default function FantasyRoundCard({
             Total teams: {totalTeams}
             {topTeamName ? ` • Top team: ${topTeamName}` : ''}
           </p>
-        </motion.div>)
-
-      }</div>
+        </motion.div>
+      )}
+    </div>
   );
 }
 
