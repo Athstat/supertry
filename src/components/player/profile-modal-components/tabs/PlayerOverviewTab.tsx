@@ -8,7 +8,6 @@ import PlayerTeamCard from '../PlayerTeamCard';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { IProAthlete } from '../../../../types/athletes';
 import { usePlayerData } from '../../provider/PlayerDataProvider';
-import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Dumbbell } from 'lucide-react';
 import SecondaryText from '../../../shared/SecondaryText';
@@ -82,12 +81,12 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       </Experimental>
 
-      {currentSeason && (
+      {/* {currentSeason && (
         <PlayerSeasonStatsCard
           player={player}
           season={currentSeason}
         />
-      )}
+      )} */}
 
 
       {currentSeason && <Experimental>
