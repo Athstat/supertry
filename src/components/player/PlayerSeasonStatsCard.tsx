@@ -62,6 +62,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
   const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
   const passes = getPlayerAggregatedStat("Passes", actions)?.action_count;
   const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
+  const points = getPlayerAggregatedStat('Points', actions)?.action_count;
 
   return (
     <motion.div ref={ref} className="flex flex-col gap-2"
@@ -93,13 +94,13 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
 
         <div className="flex flex-row items-center divide-x divide-slate-100 dark:divide-slate-600/60" >
           <div className="flex flex-col items-center w-full text-center flex-1 justify-start" >
-            <p className="font-bold" >{tries ?? "-"}</p>
+            <p className="font-bold" >{tries ?? "0"}</p>
             <SecondaryText className="text-center text-wrap text-xs truncate" >Tries</SecondaryText>
           </div>
 
           <div className="flex flex-col items-center text-center flex-1 justify-start" >
-            <p className="font-bold" >{passes ?? "-"}</p>
-            <SecondaryText className="text-center text-xs truncate" >Passes</SecondaryText>
+            <p className="font-bold" >{points ?? "0"}</p>
+            <SecondaryText className="text-center text-xs truncate" >Points</SecondaryText>
           </div>
 
           {/* <div className="flex flex-col items-center text-center flex-1 justify-start" >
@@ -108,7 +109,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
         </div> */}
 
           <div className="flex flex-col items-center text-center flex-1 justify-start" >
-            <p className="font-bold" >{minutesPlayed ?? "-"}</p>
+            <p className="font-bold" >{minutesPlayed ?? "0"}</p>
             <SecondaryText className="text-center text-xs truncate" >Minutes Played</SecondaryText>
           </div>
         </div>
