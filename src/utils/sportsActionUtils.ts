@@ -1,4 +1,4 @@
-import { PlayerAggregateStatAction } from "../types/sports_actions";
+import { PlayerAggregateStatAction, SportAction } from "../types/sports_actions";
 
 export function mapSportsActionToAthstatName(rawActionName: string) {
 
@@ -62,4 +62,15 @@ export function normaliseSportsActionName(rawActionName: string) {
 
     return rawActionName as PlayerAggregateStatAction;
 
+}
+
+/** Returns true if a sport action should be shown on the UI */
+export function shouldShowSportAction(sportAction: SportAction) {
+    const {definition} = sportAction;
+
+    if (definition && definition.action_name && definition.display_name && definition.show_on_ui) {
+        return true;
+    }
+
+    return false
 }

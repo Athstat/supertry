@@ -8,10 +8,11 @@ import RoundedCard from "../shared/RoundedCard"
 import { getPlayerAggregatedStat, SportAction } from "../../types/sports_actions"
 import SecondaryText from "../shared/SecondaryText"
 import { Activity } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import NoContentCard from "../shared/NoContentMessage"
 import { AnimatePresence, motion } from "framer-motion"
+import SportActionCategoryList from "../stats/SportActionCategoryList"
 
 type Props = {
   player: IProAthlete,
@@ -60,8 +61,8 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
   }
 
   const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
-  const passes = getPlayerAggregatedStat("Passes", actions)?.action_count;
-  const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
+  const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count || getPlayerAggregatedStat('minutes_played_total', actions)?.action_count;
+  const points = getPlayerAggregatedStat('Points', actions)?.action_count;
 
   return (
     <motion.div ref={ref} className="flex flex-col gap-2"
@@ -74,8 +75,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
       </SecondaryText>}
 
       <div
-        className="flex flex-col bg-slate-200 dark:bg-slate-700/80 w-full gap-2 p-4 rounded-xl"
-        onClick={toggleExpand}
+        className="flex flex-col bg-slate-50 border dark:border-slate-600 border-slate-300 dark:bg-slate-700/80 w-full gap-4 p-4 rounded-xl"
       >
         <div className="flex flex-row items-center justify-between" >
           <p className="text-xs" >{season.name}</p>
@@ -85,6 +85,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
               className="w-6 h-6 bg-slate-300 dark:bg-slate-600 rounded-full items-center justify-center flex flex-col"
               animate={{ rotate: isExpanded ? 90 : 0 }}
               transition={{ duration: 0.25 }}
+              onClick={toggleExpand}
             >
               <ChevronRight className="w-4 h-4" />
             </motion.button>
@@ -93,13 +94,13 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
 
         <div className="flex flex-row items-center divide-x divide-slate-100 dark:divide-slate-600/60" >
           <div className="flex flex-col items-center w-full text-center flex-1 justify-start" >
-            <p className="font-bold" >{tries ?? "-"}</p>
+            <p className="font-bold" >{tries ?? "0"}</p>
             <SecondaryText className="text-center text-wrap text-xs truncate" >Tries</SecondaryText>
           </div>
 
           <div className="flex flex-col items-center text-center flex-1 justify-start" >
-            <p className="font-bold" >{passes ?? "-"}</p>
-            <SecondaryText className="text-center text-xs truncate" >Passes</SecondaryText>
+            <p className="font-bold" >{points ?? "0"}</p>
+            <SecondaryText className="text-center text-xs truncate" >Points</SecondaryText>
           </div>
 
           {/* <div className="flex flex-col items-center text-center flex-1 justify-start" >
@@ -108,7 +109,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
         </div> */}
 
           <div className="flex flex-col items-center text-center flex-1 justify-start" >
-            <p className="font-bold" >{minutesPlayed ?? "-"}</p>
+            <p className="font-bold" >{minutesPlayed ?? "0"}</p>
             <SecondaryText className="text-center text-xs truncate" >Minutes Played</SecondaryText>
           </div>
         </div>
@@ -140,6 +141,19 @@ type StatsTrayProps = {
 
 function StatsTray({ player, season, stats }: StatsTrayProps) {
 
+  const categories: string[] = useMemo(() => {
+    const seen: Set<string> = new Set();
+
+    stats.forEach((s) => {
+      const { definition } = s;
+      if (definition?.category && !seen.has(definition.category)) {
+        seen.add(definition.category);
+      }
+    });
+
+    return [...seen];
+  }, [stats]);
+
   if (stats.length === 0) {
     return (
       <NoContentCard
@@ -150,57 +164,16 @@ function StatsTray({ player, season, stats }: StatsTrayProps) {
   }
 
   return (
-    <div>
-      {stats.map((s) => {
-        return <StatRow
-          label={s.action}
-          value={s.action_count}
-        />
-      })}
-    </div>
-  )
-}
-
-type StatRowProps = {
-  label?: string,
-  value?: string | number
-}
-
-function StatRow({ label, value }: StatRowProps) {
-
-  const fixCapitalization = (name: string) => {
-
-    if (name.includes("PlayerId")) {
-      return;
-    }
-
-    return name
-      // Replace underscores with spaces
-      .replace(/_/g, ' ')
-      // Add space before capital letters (if not at the start)
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      // Capitalize each word
-      .replace(/\b\w/g, char => char.toUpperCase());
-  };
-
-  const toPercentageIfFraction = (value: string | number) => {
-    const num = Number(value);
-
-    // Not a valid number
-    if (isNaN(num)) return value;
-
-    // If between 0 and 1 (inclusive), treat as fraction → percentage
-    if (num?.toString().startsWith('0.')) {
-      return `${Math.floor(num * 100)}%`;
-    }
-
-    return num;
-  };
-
-  return (
-    <div className="flex p-1 flex-row items-center justify-between" >
-      <SecondaryText>{label ? fixCapitalization(label) : '-'}</SecondaryText>
-      <p className="text-sm font-medium" >{value ? toPercentageIfFraction(value) : '-'}</p>
+    <div className="flex flex-col gap-2" >
+      <div  className="flex flex-col gap-2" >
+        {categories.map((c, index) => {
+          return <SportActionCategoryList 
+            categoryName={c}
+            stats={stats}
+            key={index}
+          />
+        })}
+      </div>
     </div>
   )
 }

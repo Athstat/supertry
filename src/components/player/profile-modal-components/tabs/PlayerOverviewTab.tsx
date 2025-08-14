@@ -8,12 +8,11 @@ import PlayerTeamCard from '../PlayerTeamCard';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { IProAthlete } from '../../../../types/athletes';
 import { usePlayerData } from '../../provider/PlayerDataProvider';
-import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Dumbbell } from 'lucide-react';
 import SecondaryText from '../../../shared/SecondaryText';
 import { isNumeric } from '../../../../utils/stringUtils';
-import RelatedPlayersList from '../RelatedPlayersList';
+import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 
 type Props = {
   player: IProAthlete;
@@ -77,9 +76,11 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       )}
 
-      <CoachScrummyPlayerReport
-        player={player}
-      />
+      <Experimental>
+        <CoachScrummyPlayerReport
+          player={player}
+        />
+      </Experimental>
 
       {currentSeason && (
         <PlayerSeasonStatsCard
@@ -96,9 +97,9 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       </Experimental>}
 
-      <RelatedPlayersList 
+      {/* <RelatedPlayersList 
         player={player}
-      />
+      /> */}
 
     </div>
   );
