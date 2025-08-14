@@ -15,6 +15,7 @@ import AuthUserDataProvider from "../components/auth/AuthUserDataProvider";
 import FormErrorText from "../components/shared/FormError";
 import NoContentCard from "../components/shared/NoContentMessage";
 import { useAuth } from "../contexts/AuthContext";
+import { requestPushPermissionsAfterLogin } from "../utils/bridgeUtils";
 
 export function CompleteProfileScreen() {
 
@@ -32,7 +33,7 @@ export function CompleteProfileScreen() {
 
 
 function ScreenContent() {
-  
+
 
   const navigate = useNavigate();
 
@@ -45,9 +46,9 @@ function ScreenContent() {
   const [errors, setErrors] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const {refreshAuthUser} = useAuth();
+  const { refreshAuthUser } = useAuth();
 
-  const {emailTaken, isLoading: isEmailValidatorLoading} = useEmailUniqueValidator(formData.email);
+  const { emailTaken, isLoading: isEmailValidatorLoading } = useEmailUniqueValidator(formData.email);
 
   const isEmailTaken = !isEmailValidatorLoading && emailTaken;
 
@@ -105,10 +106,11 @@ function ScreenContent() {
         username: formData.username
       }
 
-      const {data: res, error} = await authService.claimGuestAccount(data);
+      const { data: res, error } = await authService.claimGuestAccount(data);
 
       if (res) {
         await refreshAuthUser();
+        requestPushPermissionsAfterLogin();
         navigate("/dashboard");
         return;
       }
@@ -214,7 +216,7 @@ function ScreenContent() {
                   <p className="mt-1 text-sm text-red-500">{errors.email}</p>
                 )}
 
-                {isEmailTaken && <FormErrorText error="Email is already taken by another user" /> }
+                {isEmailTaken && <FormErrorText error="Email is already taken by another user" />}
               </div>
 
               {/* Password Field */}
