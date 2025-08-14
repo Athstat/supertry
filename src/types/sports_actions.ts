@@ -14,7 +14,7 @@ export type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConceded
     "TurnoversConceded" | "TurnoversWon" | "LineoutsWonSteal" | "CarriesMadeGainLine" | "LineoutsWon" |
     "Tries" | "Carries" | "DefendersBeaten" | "Metres" | "MinutesPlayed" | "Assists" | "LineBreaks" |
     "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" |
-    "RetainedKicks" | "PenaltyGoalsScored" | "ConversionsScored" | "RedCards" | "DropGoalsScored"
+    "RetainedKicks" | "PenaltyGoalsScored" | "ConversionsScored" | "RedCards" | "DropGoalsScored" | 'minutes_played_total'
 
 /** Helper function to get a stat */
 export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregatedStats?: SportAction[]) => {
