@@ -102,7 +102,7 @@ function ActionItem({ sportAction }: ItemProps) {
                     handleMouseEnter(e);
                 }}
                 onMouseLeave={() => setShowTooltip(false)}
-                className='hover:bg-slate-300/40 cursor-pointer px-4 py-1 rounded-xl flex flex-row items-center justify-between'
+                className='hover:bg-slate-300/40 dark:hover:bg-slate-600 cursor-pointer px-4 py-1 rounded-xl flex flex-row items-center justify-between'
             >
 
                 <div>

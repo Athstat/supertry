@@ -75,7 +75,7 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
       </SecondaryText>}
 
       <div
-        className="flex flex-col bg-slate-50 border border-slate-300 dark:bg-slate-700/80 w-full gap-4 p-4 rounded-xl"
+        className="flex flex-col bg-slate-50 border dark:border-slate-600 border-slate-300 dark:bg-slate-700/80 w-full gap-4 p-4 rounded-xl"
       >
         <div className="flex flex-row items-center justify-between" >
           <p className="text-xs" >{season.name}</p>
