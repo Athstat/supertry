@@ -57,7 +57,7 @@ export default function FixtureScreen() {
     {
       label: "Team Stats",
       tabKey: "team-stats",
-      disabled: !teamActions || teamActions.length === 0
+      disabled: !teamActions || teamActions.length === 0 || !gameKickedOff
     },
     {
       label: "Kick Off",
@@ -141,7 +141,7 @@ export default function FixtureScreen() {
               </TabViewPage>
 
               <TabViewPage className="flex flex-col gap-5" tabKey="team-stats" >
-                {teamActions && <FixtureHeadToHeadStats teamActions={teamActions} fixture={fixture} />}
+                {teamActions && gameKickedOff && <FixtureHeadToHeadStats teamActions={teamActions} fixture={fixture} />}
               </TabViewPage>
 
               <TabViewPage tabKey="motm" >
