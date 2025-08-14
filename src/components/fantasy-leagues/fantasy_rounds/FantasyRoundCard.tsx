@@ -123,6 +123,12 @@ export default function FantasyRoundCard({
                   Join this league to create a team
                 </span>
               </div>
+            ) : hasUserTeam ? (
+              <AthletesRow
+                athletesCount={(userTeam?.athletes || []).length}
+                athletes={userTeam?.athletes || []}
+                onPlayerClick={onPlayerClick}
+              />
             ) : round.is_open ? (
               <div className="w-full flex flex-col items-center justify-center gap-2">
                 <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -141,7 +147,7 @@ export default function FantasyRoundCard({
             )}
           </div>
 
-          <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 border-t pt-2">
             Total teams: {totalTeams}
             {topTeamName ? ` • Top team: ${topTeamName}` : ''}
           </p>
