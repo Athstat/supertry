@@ -3,7 +3,6 @@ import { SportAction } from '../../types/sports_actions'
 import { shouldShowSportAction } from '../../utils/sportsActionUtils';
 import SecondaryText from '../shared/SecondaryText';
 import { useClickOutside } from '../../hooks/useClickOutside';
-import { useSmartBack } from '../../hooks/useSmartBack';
 import { useHoverCoordinates } from '../../hooks/useSmartMouseHover';
 import TooltipCard from '../shared/Tooltip';
 

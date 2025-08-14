@@ -83,7 +83,7 @@ function HeadToHeadItem ({stat} : HeadToHeadProps) {
             <div className="flex flex-1 items-center justify-start" >
                 <p className={twMerge("h-full rounded-xl w-10 flex flex-col items-center justify-center",
                     homeTeamWonCategory && "bg-blue-700 text-white"
-                )} >{homeValue}</p>
+                )} >{homeValue ?? '-'}</p>
             </div>
 
             <div className="flex flex-[3] items-center justify-center text-center " >
@@ -93,7 +93,7 @@ function HeadToHeadItem ({stat} : HeadToHeadProps) {
             <div className="flex flex-1  items-center justify-end" >
                 <p className={twMerge("h-full rounded-xl w-10 flex flex-col items-center justify-center",
                     awayTeamWonCategory && "bg-blue-700 text-white"
-                )} >{awayValue}</p>
+                )} >{awayValue ?? '-'}</p>
             </div>
         </div>
     )
