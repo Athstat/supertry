@@ -11,6 +11,9 @@ import { seasonService } from '../../services/seasonsService';
 import { fantasyTeamService } from '../../services/fantasyTeamService';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
+import { TeamFormation } from '../team/TeamFormation';
+import TeamSubstituteCard from '../my-team/TeamSubstituteCard';
+import { TeamPlayerCard } from '../team/TeamPlayerCard';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -28,7 +31,8 @@ export default function ViewMyTeam({
   const [captainAthleteId, setCaptainAthleteId] = useState<string | undefined>(
     () => team.athletes?.find(a => a.is_captain)?.athlete_id
   );
-  const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
+  // Allow storing either pro or fantasy athlete shapes for the profile modal
+  const [playerModalPlayer, setPlayerModalPlayer] = useState<any>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
   const [players, setPlayers] = useState<IProAthlete[]>([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -39,6 +43,7 @@ export default function ViewMyTeam({
     position?: Position | null;
   }>({ open: false, slot: null, position: null });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('edit');
 
   const totalSpent = team.athletes.reduce((sum, player) => sum + (player.price || 0), 0);
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
@@ -196,9 +201,33 @@ export default function ViewMyTeam({
           <div className="flex flex-col">
             <p className="font-bold text-xl">My Team</p>
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-              Viewing your team for {leagueRound?.title}
+              Your team for {leagueRound?.title}
             </p>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setViewMode('edit')}
+            className={`${
+              viewMode === 'edit'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('pitch')}
+            className={`${
+              viewMode === 'pitch'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+          >
+            Pitch
+          </button>
         </div>
       </div>
 
@@ -224,8 +253,8 @@ export default function ViewMyTeam({
         </div>
       </div>
 
-      {/* Save changes - only show when editing */}
-      {isEditing && (
+      {/* Save changes - only show when editing and in edit view */}
+      {isEditing && viewMode === 'edit' && (
         <div className="mt-3">
           <PrimaryButton
             className="w-full"
@@ -240,67 +269,118 @@ export default function ViewMyTeam({
         </div>
       )}
 
-      {/* 2x3 grid of slots with player cards */}
-      <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
-        {positions.map((p, index) => {
-          const slot = index + 1;
-          const athlete = athletesBySlot[slot];
-          return (
-            <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0">
-              <div className="w-full min-w-0 aspect-square overflow-hidden p-2 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center">
-                {athlete ? (
-                  <div className="w-full h-full">
-                    <PlayerGameCard
-                      player={athlete}
-                      className="w-full h-full"
-                      blockGlow
+      {viewMode === 'edit' ? (
+        // 2x3 grid of slots with player cards
+        <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
+          {positions.map((p, index) => {
+            const slot = index + 1;
+            const athlete = athletesBySlot[slot];
+            return (
+              <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0">
+                <div className="w-full min-w-0 aspect-square overflow-hidden p-2 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center">
+                  {athlete ? (
+                    <div className="w-full h-full">
+                      <PlayerGameCard
+                        player={athlete}
+                        className="w-full h-full"
+                        blockGlow
+                        onClick={() => {
+                          console.log('clicked player: ', athlete);
+                          setPlayerModalPlayer(athlete);
+                          setShowPlayerModal(true);
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center w-full h-full rounded-lg bg-white/40 dark:bg-gray-900/20">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{p.name}</span>
+                    </div>
+                  )}
+                </div>
+
+                {athlete && (
+                  <div className="mt-2 flex flex-col gap-2">
+                    <button
+                      className={`${
+                        captainAthleteId === athlete.athlete_id
+                          ? 'text-xs w-full rounded-lg py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
+                          : 'text-xs w-full rounded-lg py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
+                      }`}
                       onClick={() => {
-                        console.log('clicked player: ', athlete);
-                        setPlayerModalPlayer(athlete);
-                        setShowPlayerModal(true);
+                        if (captainAthleteId !== athlete.athlete_id)
+                          setCaptainAthleteId(athlete.athlete_id);
                       }}
-                    />
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center w-full h-full rounded-lg bg-white/40 dark:bg-gray-900/20">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{p.name}</span>
+                      disabled={isSaving || captainAthleteId === athlete.athlete_id}
+                    >
+                      {captainAthleteId === athlete.athlete_id ? 'Captain' : 'Make Captain'}
+                    </button>
+
+                    <button
+                      className="text-xs w-full rounded-lg py-1.5 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60"
+                      onClick={() => {
+                        const pos = toPosition(positions[index], index);
+                        setSwapState({ open: true, slot, position: pos });
+                      }}
+                      disabled={isSaving || !leagueRound?.is_open}
+                    >
+                      Swap
+                    </button>
                   </div>
                 )}
               </div>
+            );
+          })}
+        </div>
+      ) : (
+        // Pitch view
+        <div className="mt-4">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+              Team Formation
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium mb-4">
+              Greyed out players are not playing in this round's games
+            </p>
+            <TeamFormation
+              players={Object.values(editableAthletesBySlot)
+                .filter((p): p is IFantasyTeamAthlete => Boolean(p))
+                .map(p => ({ ...p!, is_starting: p!.slot !== 6 }))}
+              onPlayerClick={(player: IFantasyTeamAthlete) => {
+                setPlayerModalPlayer(player);
+                setShowPlayerModal(true);
+              }}
+            />
+          </div>
 
-              {athlete && (
-                <div className="mt-2 flex flex-col gap-2">
-                  <button
-                    className={`${
-                      captainAthleteId === athlete.athlete_id
-                        ? 'text-xs w-full rounded-lg py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
-                        : 'text-xs w-full rounded-lg py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                    }`}
-                    onClick={() => {
-                      if (captainAthleteId !== athlete.athlete_id)
-                        setCaptainAthleteId(athlete.athlete_id);
-                    }}
-                    disabled={isSaving || captainAthleteId === athlete.athlete_id}
-                  >
-                    {captainAthleteId === athlete.athlete_id ? 'Captain' : 'Make Captain'}
-                  </button>
-
-                  <button
-                    className="text-xs w-full rounded-lg py-1.5 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60"
-                    onClick={() => {
-                      const pos = toPosition(positions[index], index);
-                      setSwapState({ open: true, slot, position: pos });
-                    }}
-                    disabled={isSaving || !leagueRound?.is_open}
-                  >
-                    Swap
-                  </button>
-                </div>
-              )}
+          {/* Super Substitute */}
+          {Object.values(editableAthletesBySlot).some(p => p && p.slot === 6) && (
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+                <span>Super Substitute</span>
+                <span className="ml-2 text-orange-500 text-sm px-2 py-0.5 rounded-full">
+                  Special
+                </span>
+              </h2>
+              <div className="rounded-xl p-4 w-40">
+                {Object.values(editableAthletesBySlot)
+                  .filter((player): player is IFantasyTeamAthlete => Boolean(player))
+                  .filter(player => player.slot === 6)
+                  .map(player => (
+                    <TeamPlayerCard
+                      key={player.id}
+                      player={player}
+                      onClick={() => {
+                        setPlayerModalPlayer(player);
+                        setShowPlayerModal(true);
+                      }}
+                      className="md:w-44 md:h-56 w-32 h-40"
+                    />
+                  ))}
+              </div>
             </div>
-          );
-        })}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Player profile modal */}
       {playerModalPlayer && (

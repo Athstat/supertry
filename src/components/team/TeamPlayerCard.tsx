@@ -1,14 +1,14 @@
-import { twMerge } from "tailwind-merge";
-import { useFetch } from "../../hooks/useFetch";
-import { athleteService } from "../../services/athletes/athleteService";
-import { useState } from "react";
-import { formatPosition } from "../../utils/athleteUtils";
-import FormIndicator from "../shared/FormIndicator";
-import TeamLogo from "./TeamLogo";
-import { Info } from "lucide-react";
-import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import { useAtomValue } from "jotai";
-import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
+import { twMerge } from 'tailwind-merge';
+import { useFetch } from '../../hooks/useFetch';
+import { athleteService } from '../../services/athletes/athleteService';
+import { useState } from 'react';
+import { formatPosition } from '../../utils/athleteUtils';
+import FormIndicator from '../shared/FormIndicator';
+import TeamLogo from './TeamLogo';
+import { CircleDollarSign, Info } from 'lucide-react';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
+import { useAtomValue } from 'jotai';
+import { fantasyLeagueAtom } from '../../state/fantasy/fantasyLeague.atoms';
 
 type Props = {
   player: IFantasyTeamAthlete;
@@ -16,16 +16,16 @@ type Props = {
   className?: string;
 };
 
-type CardTier = "gold" | "silver" | "bronze" | "blue";
+type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
 
-/** Renders a athlete fantasy card that is either gold, silver or 
+/** Renders a athlete fantasy card that is either gold, silver or
  * bronze depending on the power ranking of the player */
 
 export function TeamPlayerCard({ player, onClick, className }: Props) {
   const [imageError, setIamgeError] = useState<string>();
 
   const { data: playerInfo, isLoading } = useFetch(
-    "athletes",
+    'athletes',
     player.tracking_id,
     athleteService.getAthleteById
   );
@@ -33,15 +33,15 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
   const league = useAtomValue(fantasyLeagueAtom);
 
   const { data: pointsBreakDown, isLoading: pointsLoading } = useFetch(
-    "points-breakdown",
+    'points-breakdown',
 
     {
-      leagueId: league?.official_league_id ?? "fallback-ofid",
+      leagueId: league?.official_league_id ?? 'fallback-ofid',
       round: league?.start_round ?? -1,
-      trackingId: playerInfo?.tracking_id ?? "fallback-tid",
+      trackingId: playerInfo?.tracking_id ?? 'fallback-tid',
     },
-    async ({ }) => {
-      return []
+    async ({}) => {
+      return [];
     }
   );
 
@@ -49,7 +49,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
     return (
       <div
         className={twMerge(
-          "group relative bg-slate-800 animate-pulse rounded-lg flex flex-col h-[280px] w-[200px]",
+          'group relative bg-slate-800 animate-pulse rounded-lg flex flex-col h-[280px] w-[200px]',
           className
         )}
       />
@@ -59,41 +59,46 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
 
   const pr = playerInfo.power_rank_rating ?? 0;
   const cardTier: CardTier =
-    pr <= 69 ? "bronze"
-      : pr > 70 && pr < 80 ? "silver"
-        : pr >= 90 ? "blue" : "gold";
+    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
 
   const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
 
   const totalPoints = pointsBreakDown
     ? pointsBreakDown.reduce((res, action) => {
-      return res + 0;
-    }, 0)
+        return res + 0;
+      }, 0)
     : 0;
 
   const isAvailable = playerInfo.available;
+
+  console.log('Player team card', player);
 
   return (
     <div className="">
       <div
         onClick={onClick}
         className={twMerge(
-          "group relative shadow-xl rounded-lg flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden transform-style-3d",
-          cardTier === "gold" &&
-          "bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ",
-          cardTier === "silver" &&
-          "bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600",
-          cardTier === "bronze" &&
-          "bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white",
-          cardTier === "blue" &&
-          "bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white",
+          'group relative shadow-xl rounded-lg flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden transform-style-3d',
+          cardTier === 'gold' && 'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
+          cardTier === 'silver' && 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
+          cardTier === 'bronze' &&
+            'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
+          cardTier === 'blue' &&
+            'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
           className
         )}
       >
-        {!isAvailable && <div className="top-0 left-0 absolute w-full h-full bg-black/50 z-10" ></div>}
+        {!isAvailable && (
+          <div className="top-0 left-0 absolute w-full h-full bg-black/50 z-10"></div>
+        )}
+        {/* Player Price */}
+        <div className="absolute top-2 left-2 z-[5] flex gap-1">
+          <CircleDollarSign className="w-4 h-fit" />
+          <h3 className="text-xs font-bold truncate flex-1">{player.price}</h3>
+        </div>
         {/* Team Logo */}
         <div className="absolute top-2 right-2 z-10">
-          <TeamLogo className="w-8 h-8" url={player.team_logo} />
+          <TeamLogo className="w-8 h-8" url={player.athlete.team.image_url} />
         </div>
 
         {/* Player Image */}
@@ -101,7 +106,7 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
           {player.image_url && !imageError && (
             <img
               src={player.image_url}
-              onError={() => setIamgeError("Image failed to load")}
+              onError={() => setIamgeError('Image failed to load')}
               className="w-full object-scale-down object-top"
             />
           )}
@@ -110,30 +115,27 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
         {/* Player Details */}
         <div
           className={twMerge(
-            "p-3  flex-[1] ",
-            cardTier === "gold" && "bg-yellow-500/10",
-            cardTier === "silver" && "bg-gray-500/10",
-            cardTier === "bronze" && "bg-amber-900/10",
-            cardTier === "blue" && "bg-blue-900/10",
+            'p-3  flex-[1] ',
+            cardTier === 'gold' && 'bg-yellow-500/10',
+            cardTier === 'silver' && 'bg-gray-500/10',
+            cardTier === 'bronze' && 'bg-amber-900/10',
+            cardTier === 'blue' && 'bg-blue-900/10'
           )}
         >
           {/* Player name and form */}
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-xs font-bold truncate flex-1">
-              {player.player_name}
-            </h3>
-            {playerInfo.form &&
-              (playerInfo.form === "UP" || playerInfo.form === "DOWN") && (
-                <FormIndicator form={playerInfo.form} />
-              )}
+            <h3 className="text-xs font-bold truncate flex-1">{player.player_name}</h3>
+            {playerInfo.form && (playerInfo.form === 'UP' || playerInfo.form === 'DOWN') && (
+              <FormIndicator form={playerInfo.form} />
+            )}
           </div>
 
           {/* Position and Rating */}
           <div className="flex justify-between items-center text-sm mb-2">
-            <div className="text-xs truncate">
-              {formatPosition(player.position_class ?? "")}
+            <div className="text-xs truncate">{formatPosition(player.position_class ?? '')}</div>
+            <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">
+              PR {statValue(pr)}
             </div>
-            <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">PR {statValue(pr)}</div>
           </div>
 
           {/* Stats Grid */}
@@ -157,9 +159,11 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
       {!pointsLoading && (
         <div className=" flex flex-row mt-2 gap-1 items-center justify-center">
           <p className="text-white font-medium">{totalPoints.toFixed(1)}</p>
-          {!isAvailable && <div>
-            <Info className="w-4 h-4 text-yellow-50" />
-          </div>}
+          {!isAvailable && (
+            <div>
+              <Info className="w-4 h-4 text-yellow-50" />
+            </div>
+          )}
         </div>
       )}
 
@@ -168,7 +172,6 @@ export function TeamPlayerCard({ player, onClick, className }: Props) {
           <p className="bg-slate-400/40 rounded-xl w-4 h-4 animate-pulse"></p>
         </div>
       )}
-
     </div>
   );
 }
