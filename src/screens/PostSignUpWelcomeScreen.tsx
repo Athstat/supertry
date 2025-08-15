@@ -106,7 +106,7 @@ export default function PostSignUpWelcomeScreen() {
   );
 }
 
-const tabs: IOnboardingTab[] = [
+export const tabs: IOnboardingTab[] = [
   {
     title: 'Welcome to The Scrum',
     description:
