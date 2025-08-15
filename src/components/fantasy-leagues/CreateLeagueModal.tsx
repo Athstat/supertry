@@ -32,7 +32,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
 
   const [form, setForm] = useState<CreateLeagueForm>({
     title: '',
-    season_id: '695fa717-1448-5080-8f6f-64345a714b10',
+    season_id: 'f46d0bec-99ac-54e8-a028-d40a16cee244',
     is_private: false,
   });
 
