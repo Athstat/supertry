@@ -33,6 +33,7 @@ export interface IFantasyLeagueRound {
   total_gameweeks?: number;
   current_gameweek?: number;
   fantasy_league_group_id: string;
+  is_hidden: boolean;
 }
 
 export type IFantasyLeagueTeam = {

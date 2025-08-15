@@ -1,5 +1,6 @@
 import { useFetch } from '../../hooks/useFetch';
 import { useAuthUser } from '../../hooks/useAuthUser';
+import { useLeaguesNeedingTeam } from '../../hooks/useLeaguesNeedingTeam';
 import { leagueService } from '../../services/leagueService';
 import { useNavigate } from 'react-router-dom';
 import { LoadingState } from '../ui/LoadingState';
@@ -9,11 +10,14 @@ import { activeLeaguesFilter } from '../../utils/leaguesUtils';
 const MyWeekPanel = () => {
   const user = useAuthUser();
   const navigate = useNavigate();
+  const { firstNeedingTeam, isLoading: isLoadingNeedingTeam } = useLeaguesNeedingTeam();
   const { data: leagues, isLoading: isLoadingLeagues } = useFetch(
     'all-leagues',
     null,
     leagueService.getAllLeagues
   );
+
+  console.log('leagues needing teams: ', firstNeedingTeam);
 
   // Get the first active league
   const activeLeague = activeLeaguesFilter(leagues || [])[0];
@@ -26,8 +30,27 @@ const MyWeekPanel = () => {
       activeLeague ? leagueService.fetchParticipatingTeams(activeLeague.id) : Promise.resolve([])
   );
 
-  if (isLoadingLeagues || isLoadingTeams) {
+  if (isLoadingLeagues || isLoadingTeams || isLoadingNeedingTeam) {
     return <LoadingState />;
+  }
+
+  // If there's a joined league with an open round where the user has no team yet, prompt to create
+  if (firstNeedingTeam) {
+    return (
+      <div className="rounded-xl overflow-hidden bg-gradient-to-br from-primary-700 to-primary-900 via-primary-800 text-white flex flex-col items-center justify-center p-6">
+        <h2 className="text-xl font-bold mb-2">{firstNeedingTeam.title}</h2>
+        <p className="mb-4">You haven't picked your team for {firstNeedingTeam.title} yet</p>
+        <button
+          className="bg-gradient-to-r from-white to-gray-200 via-gray-50 text-primary-800 hover:bg-opacity-90 hover:cursor-pointer font-semibold px-6 py-2 rounded-lg transition-colors"
+          onClick={() => {
+            const groupId = firstNeedingTeam.fantasy_league_group_id;
+            navigate(`/league/${groupId}?tabKey=my-team`);
+          }}
+        >
+          Pick Your Team
+        </button>
+      </div>
+    );
   }
 
   if (!activeLeague || !leagueTeams) {
