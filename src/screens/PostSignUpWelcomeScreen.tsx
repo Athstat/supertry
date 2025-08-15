@@ -95,7 +95,7 @@ const tabs: IOnboardingTab[] = [
     title: 'Welcome to The Scrum',
     description:
       'You’ve made the squad! From here on, it’s all tries, conversions, and bragging rights — with far fewer bruises than the real thing. Time to lace up and dive in.',
-    imageUrl: '/public/images/onboarding/Scrummy Background Gradient.png',
+    imageUrl: '/images/onboarding/Scrummy Background Gradient.png',
   },
 
   {
