@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IOnboardingTab } from '../types/onboarding';
 import PageView from './PageView';
 import OnboardingTab from '../components/onboarding/OnboardingTab';
@@ -33,6 +33,22 @@ export default function PostSignUpWelcomeScreen() {
   const handleSkipToDashboard = () => {
     navigate('/dashboard');
   };
+
+  // Preload all onboarding images on mount so tab switches are instant
+  useEffect(() => {
+    const urls = Array.from(
+      new Set(
+        tabs
+          .map((t) => t.imageUrl)
+          .filter((u): u is string => typeof u === 'string' && u.length > 0)
+      )
+    );
+    urls.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+      img.onerror = () => console.warn('Preload failed:', url);
+    });
+  }, []);
 
   return (
     <PageView className="flex flex-col w-full h-screen overflow-hidden white">
