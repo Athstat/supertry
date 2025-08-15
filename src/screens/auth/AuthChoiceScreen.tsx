@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, MotionProps } from 'framer-motion';
 import ScrummyLogo from '../../components/branding/scrummy_logo';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
+import { tabs as onboardingTabs } from '../PostSignUpWelcomeScreen';
 
 // Button animation variants
 const buttonVariants = {
@@ -25,6 +27,22 @@ export function AuthChoiceScreen() {
   // const [error, ] = useState<string | null>(null);
 
   const { handleGuestLogin, isLoading, error } = useGuestLogin();
+
+  // Preload onboarding images as early as the auth choice screen
+  useEffect(() => {
+    const urls = Array.from(
+      new Set(
+        onboardingTabs
+          .map((t) => t.imageUrl)
+          .filter((u): u is string => typeof u === 'string' && u.length > 0)
+      )
+    );
+    urls.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+      img.onerror = () => console.warn('Preload failed:', url);
+    });
+  }, []);
 
   // Check if running in mobile WebView
   const isMobileWebView = () => {
