@@ -13,7 +13,7 @@ export default function MyTeams() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
     'fantasy-rounds'
   );
-  const { refreshRounds, sortedRounds } = useFantasyLeagueGroup();
+  const { refreshRounds, sortedRounds, currentRound } = useFantasyLeagueGroup();
   const [selectedRound, setSelectedRound] = useState<IFantasyLeagueRound | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<IFantasyLeagueTeam | null>(null);
   const [isFetchingTeams, setIsFetchingTeams] = useState<boolean>(false);
@@ -98,7 +98,7 @@ export default function MyTeams() {
     if (tabScene === 'fantasy-rounds') {
       return (
         <FantasyRoundsList
-          rounds={sortedRounds}
+          rounds={currentRound ? [currentRound] : []}
           handleCreateTeam={handleCreateTeam}
           handlePlayerClick={handlePlayerClick}
           handleViewTeam={handleViewTeam}

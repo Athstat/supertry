@@ -111,6 +111,12 @@ function FixtureListView({ round }: FixtureListProps) {
 
   const games = fetchedGames ?? [];
 
+  const upcomingGames = games.filter(game => {
+    return game?.kickoff_time > new Date();
+  });
+
+  console.log('games: ', games);
+
   if (isLoading) {
     return (
       <div className="flex w-full flex-col gap-2">
@@ -125,10 +131,10 @@ function FixtureListView({ round }: FixtureListProps) {
 
   return (
     <Fragment>
-      {games && <GroupedFixturesList fixtures={games} />}
+      {upcomingGames && <GroupedFixturesList fixtures={upcomingGames} />}
 
-      {games.length === 0 && (
-        <NoContentCard message={`There are no related games for ${round.title}`} />
+      {upcomingGames.length === 0 && (
+        <NoContentCard message={`There are no upcoming games for ${round.title}`} />
       )}
     </Fragment>
   );
