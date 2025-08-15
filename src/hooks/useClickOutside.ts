@@ -5,11 +5,11 @@ import { useEffect } from "react";
  * will be passed
  */
 
-export function useClickOutside<T extends HTMLElement>(ref: React.RefObject<T>, handler?: () => void) {
+export function useClickOutside<T extends HTMLElement>(ref: React.MutableRefObject<T | undefined | null>, handler?: () => void) {
     
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (ref.current && !ref.current.contains(event.target as Node)) {
+            if (ref && ref.current && !ref.current.contains(event.target as Node)) {
                 if (handler) {
                     handler();
                 }
