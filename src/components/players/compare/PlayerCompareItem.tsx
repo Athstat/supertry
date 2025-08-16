@@ -103,11 +103,10 @@ export default function PlayersCompareItem({ player }: Props) {
             />}
 
             {/* Player Icons Row */}
-            {!isLoading && starRatings && actions && (
+            {!isLoading && starRatings && actions && currSeason && (
                 <PlayerIconsRow
                     player={player}
-                    starRatings={starRatings}
-                    seasonStats={actions}
+                    season={currSeason}
                     size="sm"
                 />
             )}
