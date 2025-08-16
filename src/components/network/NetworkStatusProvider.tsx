@@ -33,18 +33,18 @@ export default function NetworkStatusProvider({children} : Props) {
         return (
             <div className={twMerge(
                 'flex lg:max-w-1/4 flex-1 items-center text-center gap-6 p-6 justify-start w-full flex-col h-screen overflow-hidden',
-                'bg-red-50'
+                'bg-red-50 dark:bg-black'
             )} >
 
                 <div>
                     <ScrummyLogoHorizontal />
                 </div>
 
-                <WifiOff className='w-32 h-32' />
-                <h1 className='font-bold text-3xl' >Whopps!</h1>
+                <WifiOff className='w-32 h-32 dark:text-white' />
+                <h1 className='font-bold text-3xl dark:text-white' >Whopps!</h1>
 
                 <div className='w-full flex flex-col items-center justify-center' >
-                    <p className='lg:w-1/3' >
+                    <p className='lg:w-1/3 dark:text-white' >
                         You have have lost connection to the Scrum! Please check your internet connection and try again. 
                         If issue persists, wait a few minutes before trying again.
                     </p>

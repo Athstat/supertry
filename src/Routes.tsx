@@ -36,6 +36,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
 import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
+import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -356,7 +357,14 @@ const AppRoutes = () => {
       <Route
         path="/onboarding/join-league"
         element={
-          <JoinLeagueOnboardingScreen/>
+          <JoinLeagueOnboardingScreen />
+        }
+      />
+
+      <Route
+        path="/invite-steps"
+        element={
+          <InviteStepsScreen />
         }
       />
 
