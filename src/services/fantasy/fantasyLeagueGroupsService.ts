@@ -1,6 +1,6 @@
 import { RestPromise } from "../../types/auth";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
-import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
+import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasyLeagueGroupStanding, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
 import { IFixture } from "../../types/games";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
@@ -287,5 +287,26 @@ export const fantasyLeagueGroupsService = {
 
         return [];
     },
+
+    /** Fetches the standings for a league */
+    getGroupStandings: async (leagueId: string) : Promise<FantasyLeagueGroupStanding[]> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/standings`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasyLeagueGroupStanding[];
+            }
+
+        } catch (err) {
+            console.log("Error getting league standings");
+        }
+
+        return [];
+    }  
 
 }
