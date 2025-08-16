@@ -38,12 +38,10 @@ export default function PostSignUpWelcomeScreen() {
   useEffect(() => {
     const urls = Array.from(
       new Set(
-        tabs
-          .map((t) => t.imageUrl)
-          .filter((u): u is string => typeof u === 'string' && u.length > 0)
+        tabs.map(t => t.imageUrl).filter((u): u is string => typeof u === 'string' && u.length > 0)
       )
     );
-    urls.forEach((url) => {
+    urls.forEach(url => {
       const img = new Image();
       img.src = url;
       img.onerror = () => console.warn('Preload failed:', url);
