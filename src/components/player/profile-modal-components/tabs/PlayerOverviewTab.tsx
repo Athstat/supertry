@@ -76,18 +76,18 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       )}
 
-      <Experimental>
+      {/* <Experimental>
         <CoachScrummyPlayerReport
           player={player}
         />
-      </Experimental>
+      </Experimental> */}
 
-      {currentSeason && (
+      {/* {currentSeason && (
         <PlayerSeasonStatsCard
           player={player}
           season={currentSeason}
         />
-      )}
+      )} */}
 
 
       {currentSeason && <Experimental>
