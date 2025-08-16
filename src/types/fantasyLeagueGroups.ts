@@ -42,3 +42,13 @@ export type EditFantasyLeagueGroupReq = {
     is_private: boolean,
     description?: string
 }
+
+/** Represents single league standing record */
+export type FantasyLeagueGroupStanding = {
+    user_id: string,
+    first_name?: string,
+    last_name?: string,
+    username?: string,
+    total_score?: number,
+    rank: number
+}
