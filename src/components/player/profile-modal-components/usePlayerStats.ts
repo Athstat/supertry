@@ -31,9 +31,11 @@ export default function usePlayerStats(player: IProAthlete) {
     seasons.length > 0 ? seasons[0] : undefined
   );
 
-  const seasonPlayerStats = playerStats.filter((p) => {
-    return p.season_id === currSeason?.id
-  })
+  const seasonPlayerStats = useMemo(() => {
+    return playerStats.filter((p) => {
+      return p.season_id === currSeason?.id
+    })
+  }, [playerStats]);
 
   const groupedStats = useMemo(() => {
     return groupSportActions(seasonPlayerStats)

@@ -63,7 +63,8 @@ export const djangoAthleteService = {
                         athlete_id: a.athlete_id,
                         action_count: a.action_count,
                         season_id: a.season_id,
-                        season: a.season
+                        season: a.season,
+                        definition: a.definition
                     }
                 })
 
