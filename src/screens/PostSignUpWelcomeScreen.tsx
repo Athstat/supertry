@@ -27,6 +27,9 @@ export default function PostSignUpWelcomeScreen() {
   };
 
   const handleProceedWithLeagues = () => {
+    try {
+      localStorage.setItem('league_tab', 'discover');
+    } catch {}
     navigate('/leagues');
   };
 
