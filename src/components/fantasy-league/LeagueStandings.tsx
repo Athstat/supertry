@@ -1,5 +1,5 @@
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { FantasyLeagueGroupMember, FantasyLeagueGroupStanding } from "../../types/fantasyLeagueGroups";
+import { FantasyLeagueGroupStanding } from "../../types/fantasyLeagueGroups";
 import { Table2, User } from "lucide-react";
 import { } from "lucide-react";
 import SecondaryText from "../shared/SecondaryText";
@@ -11,7 +11,7 @@ import { ErrorState } from "../ui/ErrorState";
 
 export function LeagueStandings() {
 
-  const { members, userMemberRecord, league } = useFantasyLeagueGroup();
+  const { userMemberRecord, league } = useFantasyLeagueGroup();
   const fetchKey = league && `/fantasy-league-groups/${league.id}/standings`;
   const { data: fetchedStandings, isLoading, error } = useSWR(fetchKey, () => fantasyLeagueGroupsService.getGroupStandings(league?.id ?? ''));
 
