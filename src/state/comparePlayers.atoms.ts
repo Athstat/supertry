@@ -3,6 +3,7 @@
 import { atom } from "jotai";
 import { IProAthlete, PlayerCompareMode } from "../types/athletes";
 import { IComparePlayerStats, ICompareStarRatingsStats } from "../types/comparePlayers";
+import { SportActionDefinition } from "../types/sports_actions";
 
 /** Holds the players to compare */
 export const comparePlayersAtom = atom<IProAthlete[]>([]);
@@ -56,6 +57,8 @@ export const statCategoriesCollapsedAtom = atom<{
     defending: false,
     kicking: false
 });
+
+
 
 /** Object that holds all compare player feature atoms */
 export const comparePlayersAtomGroup = {

@@ -11,6 +11,7 @@ import ChatProvider from './contexts/ChatContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AuthTokenProvider from './components/auth/providers/AuthTokenProvider';
 import NetworkStatusProvider from './components/network/NetworkStatusProvider';
+import SportActionsDefinitionsProvider from './components/stats/SportActionsDefinitionsProvider';
 
 function App() {
   const [, setError] = useState<Error | null>(null);
@@ -30,19 +31,21 @@ function App() {
             <AuthProvider>
               <ChatProvider>
                 <AthleteProvider>
-                  <PlayerProfileProvider>
-                    <AppStateProvider>
-                      <ErrorBoundary
-                        onError={(err, errorInfo) => {
-                          console.error('Root level error caught:', err, errorInfo);
-                          setError(err);
-                        }}
-                        fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
-                      >
-                        <AppRoutes />
-                      </ErrorBoundary>
-                    </AppStateProvider>
-                  </PlayerProfileProvider>
+                  <SportActionsDefinitionsProvider>
+                    <PlayerProfileProvider>
+                      <AppStateProvider>
+                        <ErrorBoundary
+                          onError={(err, errorInfo) => {
+                            console.error('Root level error caught:', err, errorInfo);
+                            setError(err);
+                          }}
+                          fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
+                        >
+                          <AppRoutes />
+                        </ErrorBoundary>
+                      </AppStateProvider>
+                    </PlayerProfileProvider>
+                  </SportActionsDefinitionsProvider>
                 </AthleteProvider>
               </ChatProvider>
             </AuthProvider>
