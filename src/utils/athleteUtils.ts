@@ -1,4 +1,4 @@
-import { PointsBreakdownItem } from "../services/athletes/athleteService";
+// import { PointsBreakdownItem } from "../services/athletes/athleteService";
 import { IProAthlete, IAthleteSeasonStarRatings } from "../types/athletes";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { SortField, SortDirection } from "../types/playerSorting";
@@ -28,34 +28,34 @@ export const formatPosition = (inStr: string) => {
 }
 
 function nameMatches(query: string, target: string) {
-  // Normalize strings: convert to lowercase, remove diacritics, and remove apostrophes
-  const normalizeString = (str: string) => {
-    return str
-      .toLowerCase()
-      .normalize('NFD') // Decompose combined characters into base + diacritics
-      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (combining diacritical marks)
-      .replace(/'/g, ''); // Remove apostrophes
-  };
+    // Normalize strings: convert to lowercase, remove diacritics, and remove apostrophes
+    const normalizeString = (str: string) => {
+        return str
+            .toLowerCase()
+            .normalize('NFD') // Decompose combined characters into base + diacritics
+            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (combining diacritical marks)
+            .replace(/'/g, ''); // Remove apostrophes
+    };
 
-  const normalizedQuery = normalizeString(query);
-  const normalizedTarget = normalizeString(target);
+    const normalizedQuery = normalizeString(query);
+    const normalizedTarget = normalizeString(target);
 
-  let queryIndex = 0; // Pointer for the normalized query string
-  let targetIndex = 0; // Pointer for the normalized target string
+    let queryIndex = 0; // Pointer for the normalized query string
+    let targetIndex = 0; // Pointer for the normalized target string
 
-  // Iterate through the normalized target string
-  while (queryIndex < normalizedQuery.length && targetIndex < normalizedTarget.length) {
-    // If the current characters match, move to the next character in the query
-    if (normalizedQuery[queryIndex] === normalizedTarget[targetIndex]) {
-      queryIndex++;
+    // Iterate through the normalized target string
+    while (queryIndex < normalizedQuery.length && targetIndex < normalizedTarget.length) {
+        // If the current characters match, move to the next character in the query
+        if (normalizedQuery[queryIndex] === normalizedTarget[targetIndex]) {
+            queryIndex++;
+        }
+        // Always move to the next character in the target string
+        targetIndex++;
     }
-    // Always move to the next character in the target string
-    targetIndex++;
-  }
 
-  // If all characters in the normalized query were found in order within the normalized target,
-  // then queryIndex will be equal to the length of the normalized query.
-  return queryIndex === normalizedQuery.length;
+    // If all characters in the normalized query were found in order within the normalized target,
+    // then queryIndex will be equal to the length of the normalized query.
+    return queryIndex === normalizedQuery.length;
 };
 
 
@@ -79,7 +79,7 @@ export function formatAction(actionName: string) {
     return res
 }
 
-export const getGroupedActions = (breakdown: PointsBreakdownItem[]) => {
+export const getGroupedActions = (breakdown: any[]) => {
     if (!breakdown || !breakdown.length) return [];
 
     const groupedActions = breakdown.reduce((result: any, item) => {
@@ -243,7 +243,7 @@ export function athleteSorter(athletes: IProAthlete[], sortType: SortField | und
 }
 
 export function athleteSearchFilter(athletes: IProAthlete[], query: string | undefined) {
-    
+
     const buff = [...athletes];
     if (!query) return buff;
 
@@ -260,8 +260,11 @@ export function getAthletesSummary(athletes: IProAthlete[]) {
     const uniquePositions = new Set<string>();
 
     athletes.forEach((athlete) => {
-        if (!seenTeamIds.has(athlete.team.athstat_id)) {
-            seenTeamIds.add(athlete.team.athstat_id);
+
+        if (!athlete.team) return;
+
+        if (!seenTeamIds.has(athlete.team?.athstat_id)) {
+            seenTeamIds.add(athlete.team?.athstat_id);
             teams.push(athlete.team);
         }
 
@@ -270,7 +273,7 @@ export function getAthletesSummary(athletes: IProAthlete[]) {
         }
     });
 
-    const positions =Array.of(...uniquePositions);
+    const positions = Array.of(...uniquePositions);
 
 
     return { teams, positions };
@@ -295,7 +298,33 @@ export function isStatActionBest(
         .filter((val): val is number => val !== undefined);
 
     if (allValues.length < 1) return false;
-    
+
+    const maxValue = Math.max(...allValues);
+    return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
+}
+
+export function isSportActionBest(
+    value: number | undefined,
+    statDisplayName: string | undefined,
+    comparePlayerStats: IComparePlayerStats[]
+): boolean {
+    if (value === undefined || statDisplayName === undefined) return false;
+
+    const allValues = comparePlayerStats
+        .map(playerStat => {
+
+            console.log("Player Actions at some point ", playerStat);
+            
+            const stat = playerStat.stats.find((s) => {
+                return s.definition?.display_name === statDisplayName
+            })
+
+            return stat?.action_count;
+        })
+        .filter((val): val is number => val !== undefined);
+
+    if (allValues.length < 1) return false;
+
     const maxValue = Math.max(...allValues);
     return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
 }
@@ -316,7 +345,7 @@ export function isStarRatingBest(
         .filter((val): val is number => val !== undefined);
 
     if (allValues.length <= 1) return false;
-    
+
     const maxValue = Math.max(...allValues);
     return value === maxValue && allValues.filter(v => v === maxValue).length === 1;
 }

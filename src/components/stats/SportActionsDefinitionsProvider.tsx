@@ -6,6 +6,7 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import { sportActionsService } from '../../services/sportActionsService';
 import { ReactNode, useEffect, useMemo } from 'react';
 import ScrummyLoadingState from '../ui/ScrummyLoadingState';
+import { SportActionDefinition } from '../../types/sports_actions';
 
 type Props = {
     children?: ReactNode
@@ -68,8 +69,19 @@ export function useSportActions() {
     }, [defintions]);
 
     const uiDefintions = useMemo(() => {
+        
+        const seenDisplayNames: string[] = [];
+        
         return defintions.filter((d) => {
-            return d.show_on_ui == true
+            const showOnUI = d.show_on_ui == true;
+            const hasBeenSeen =  d.display_name && seenDisplayNames.includes(d.display_name);
+
+            if (showOnUI && !hasBeenSeen && d.display_name) {
+                seenDisplayNames.push(d.display_name);
+                return true;
+            }
+
+            return false
         })
     }, [defintions]);
 
