@@ -11,6 +11,7 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import { FantasyLeagueGroupCard } from './league_card_small/FantasyLeagueGroupCard';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface UserCreatedLeaguesSectionProps {
   onLeagueCreated?: () => void;
@@ -28,6 +29,7 @@ export default function UserCreatedLeaguesSection({
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const {authUser} = useAuth();
 
   const navigate = useNavigate();
 
@@ -67,16 +69,14 @@ export default function UserCreatedLeaguesSection({
     e.stopPropagation();
     // Native share (Web Share API) with fallback to clipboard
     const baseUrl = (import.meta as any)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
-    const deepLink = `${baseUrl}/league/${league.id}`;
+    const inviteInstructions = `${baseUrl}/invite-steps?league_name=${league.title}&user_name=${authUser?.first_name || authUser?.username}&join_code=${league.entry_code}`;
 
     const shareMessage =
       `You’ve been invited to join a rugby league: “${league.title}”\n\n` +
       `🏉 Step 1: Install the app\n` +
       `👉 Download for iOS: https://apps.apple.com/za/app/scrummy-fantasy-rugby/id6744964910\n` +
       `👉 Download for Android: https://play.google.com/store/apps/details?id=com.scrummy&hl=en_ZA\n\n` +
-      `📲 Step 2: Open the app, tap “Join a League”, and enter this code: ${league.entry_code}\n\n` +
-      `Already have the app?\n` +
-      `Just click here to join instantly: ${deepLink}`;
+      `📲 Step 2: Open the app, tap “Join a League”, and enter this code: ${league.entry_code}\n\n. New to SCRUMMY? Just click here to get started ${inviteInstructions}`;
 
     // Ensure there are no leading blank lines
     //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
@@ -84,7 +84,9 @@ export default function UserCreatedLeaguesSection({
     // Share ONLY the composed message text (no title/url),
     // so the share sheet doesn't prepend extra lines.
     const shareData: ShareData = {
-      title: shareMessage,
+      title: `You’ve been invited to join a rugby league: “${league.title}`,
+      text: shareMessage,
+      url: inviteInstructions
     };
 
     if (navigator.share) {
