@@ -119,8 +119,8 @@ export function WelcomeScreen() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
-              Welcome to SCRUMMY
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white text-center">
+              2025 WOMEN'S WORLD CUP IS HERE
             </h1>
           </motion.div>
 
@@ -129,10 +129,10 @@ export function WelcomeScreen() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
           >
-            <p className="mt-3 lg:text-xl text-gray-300 text-center">
-              You've officially joined the scrum! Don't worry, it's less bruises and more bragging
-              rights from here.
+            <p className="mt-3 text-md lg:text-lg text-gray-300 text-center">
+              Pick 6 Players, Compete Globally, Invite Your Friends, Play Free
             </p>
+
           </motion.div>
 
           <motion.div
