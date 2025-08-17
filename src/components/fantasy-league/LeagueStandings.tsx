@@ -23,8 +23,6 @@ export function LeagueStandings() {
     { revalidateOnFocus: false }
   );
 
-  console.log('standings: ', standings);
-
   // Map totals per user_id from standings
   const totalsByUserId = useMemo(() => {
     const map: Record<string, number> = {};
