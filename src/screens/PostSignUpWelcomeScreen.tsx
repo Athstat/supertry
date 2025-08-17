@@ -9,6 +9,7 @@ import TabProgressDots from '../components/shared/TabProgressDots';
 import SecondaryText from '../components/shared/SecondaryText';
 
 export default function PostSignUpWelcomeScreen() {
+  const featuredLeagueId = 'c50b2d32-fdf1-4480-88d4-219cdd87cab0';
   const [currIndex, setIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -132,6 +133,14 @@ function IntialWelcomeScreen() {
         </SecondaryText>
 
       </div>
+    </div>
+  )
+}
+
+function JoinFeatureLeagueScreen() {
+  return (
+    <div>
+
     </div>
   )
 }
