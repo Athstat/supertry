@@ -105,15 +105,15 @@ export default function PlayerListItem({
           <p className="text-sm dark:text-gray-200">{(player.power_rank_rating || 0).toFixed(1)}</p>
         </div>
         {/* Stats placeholders - using power_rank_rating as a fallback */}
-        {/* <div className="w-14 flex justify-center px-2">
+        <div className="hidden w-14 md:flex justify-center px-2">
           {renderStatDots(Math.round((player.power_rank_rating || 0) / 20), 'bg-red-500')}
         </div>
-        <div className="w-14 flex justify-center px-2">
+        <div className="hidden w-14 md:flex justify-center px-2">
           {renderStatDots(Math.round((player.power_rank_rating || 0) / 25), 'bg-blue-500')}
         </div>
-        <div className="w-14 flex justify-center px-2">
+        <div className="hidden w-14 md:flex justify-center px-2">
           {renderStatDots(Math.round((player.power_rank_rating || 0) / 33), 'bg-green-500')}
-        </div> */}
+        </div>
       </div>
 
       <WarningPopup open={showWarning} onClose={toggleWarning}>
