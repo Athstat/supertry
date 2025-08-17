@@ -8,11 +8,11 @@ import { ErrorState } from '../components/ui/ErrorState';
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  setAuth: (accessToken: string, user: DjangoAuthUser) => void;
-  logout: () => void;
-  authUser: DjangoAuthUser | undefined;
-  isLoading: boolean;
-  refreshAuthUser: KeyedMutator<DjangoAuthUser | undefined>;
+  setAuth: (accessToken: string, user: DjangoAuthUser) => void,
+  logout: () => void,
+  authUser: DjangoAuthUser | undefined,
+  isLoading: boolean, 
+  refreshAuthUser: KeyedMutator<DjangoAuthUser | undefined>
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,38 +38,39 @@ declare global {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { accessToken, setAcessToken, saveUserInfoToLocalStorage, clearAccessTokenAndUser } =
-    useAuthToken();
+  
+  const {
+    accessToken,
+    setAcessToken,
+    saveUserInfoToLocalStorage,
+    clearAccessTokenAndUser
+  } = useAuthToken();
 
   const fetchKey = accessToken ? '/auth-user' : null;
-  const {
-    data: authUser,
-    isLoading,
-    error,
-    mutate,
-  } = useSWR(fetchKey, () => authService.whoami(accessToken));
+  const {data: authUser, isLoading, error, mutate} = useSWR(fetchKey, () => authService.whoami(accessToken));
 
-  const setAuth = useCallback(
-    (token: string, user: DjangoAuthUser) => {
-      setAcessToken(token);
-      saveUserInfoToLocalStorage(user);
-    },
-    [setAcessToken, saveUserInfoToLocalStorage]
-  );
+  const setAuth = useCallback((token: string, user: DjangoAuthUser) => {
+    setAcessToken(token);
+    saveUserInfoToLocalStorage(user);
+  }, [setAcessToken, saveUserInfoToLocalStorage]);
 
   const logout = useCallback(() => {
     clearAccessTokenAndUser();
   }, [clearAccessTokenAndUser]);
 
   if (isLoading) {
-    return <ScrummyLoadingState />;
+    return (
+      <ScrummyLoadingState />
+    )
   }
 
   if (error) {
-    return <ErrorState error="Authentication Error" message={error} />;
+    return (
+      <ErrorState error='Authentication Error' message={error} />
+    )
   }
 
-  //console.log("Auth User here is the auth user ", authUser);
+  console.log("Auth User here is the auth user ", authUser);
 
   return (
     <AuthContext.Provider
@@ -79,12 +80,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         isAuthenticated: authUser !== undefined,
         isLoading,
-        refreshAuthUser: mutate,
+        refreshAuthUser: mutate
       }}
     >
       {children}
     </AuthContext.Provider>
-  );
+  )
 }
 
 export function useAuth() {
