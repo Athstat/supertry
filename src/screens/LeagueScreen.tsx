@@ -107,19 +107,19 @@ function Content() {
         </div>
       </div>
 
-      <div
+      {/* <div
         onClick={navigateToLeagues}
         className="flex flex-row hover:text-blue-500 cursor-pointer items-center"
       >
         <ArrowLeft />
         Back
-      </div>
+      </div> */}
 
-      <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
+      {/* <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
         <StatCard label="Members" value={members?.length ?? '-'} className="flex-1" />
 
         <StatCard label="Current Round" value={currentRound?.title} className="flex-1" />
-      </div>
+      </div> */}
 
       <TabView tabHeaderItems={headerItems}>
         <TabViewPage tabKey="my-team">

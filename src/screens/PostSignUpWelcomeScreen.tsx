@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { IOnboardingTab } from '../types/onboarding';
-import PageView from './PageView';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 
@@ -53,7 +52,7 @@ export default function PostSignUpWelcomeScreen() {
   }, []);
 
   return (
-    <PageView className="flex dark:bg-black flex-col w-full p-2 h-[100vh] overflow-y-hidden white">
+    <div className="flex dark:bg-black flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
 
       <div className='flex flex-col overflow-y-auto no-scrollbar' >
         {currIndex === 0 && (
@@ -82,6 +81,21 @@ export default function PostSignUpWelcomeScreen() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="flex flex-col items-center justify-center p-4"
             >
+              <RallyFriendsScreen />
+            </motion.div>
+          </AnimatePresence>
+        )}
+
+        {currIndex === 2 && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currIndex}
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '-100%' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="flex flex-col items-center justify-center p-4"
+            >
               <WelcomeCTAScreen />
             </motion.div>
           </AnimatePresence>
@@ -95,20 +109,27 @@ export default function PostSignUpWelcomeScreen() {
             onClick={handleNextIndex}
             className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
           >
-            {'Get Started!'}
+            {'Continue'}
           </PrimaryButton>
         )}
 
         {/* Progress Dots */}
         <TabProgressDots items={tabs} currIndex={currIndex} setIndex={setIndex} />
       </div>
-    </PageView>
+    </div>
   );
 }
 
 export const tabs: IOnboardingTab[] = [
   {
-    title: 'Welcome to The Scrum',
+    title: 'Learn About SCRUMMY coins',
+    description:
+      'You’ve made the squad! From here on, it’s all tries, conversions, and bragging rights — with far fewer bruises than the real thing. Time to lace up and dive in.',
+    imageUrl: '/images/onboarding/Scrummy Background Gradient.png',
+  },
+
+  {
+    title: 'Rally Your Friends',
     description:
       'You’ve made the squad! From here on, it’s all tries, conversions, and bragging rights — with far fewer bruises than the real thing. Time to lace up and dive in.',
     imageUrl: '/images/onboarding/Scrummy Background Gradient.png',
@@ -134,7 +155,7 @@ function IntialWelcomeScreen() {
 
       <div>
         <img
-          src={'/public/images/onboarding/Compare Players.png'}
+          src={'/images/onboarding/Compare Players.png'}
           className='rounded-xl'
         />
       </div>
@@ -143,13 +164,49 @@ function IntialWelcomeScreen() {
       {/* Cline implement this */}
 
       <div className='' >
-        <h1 className='text-lg text-center font-extrabold' >Lets Get You Warmed Up!</h1>
+        <h1 className='text-lg text-center font-extrabold' >Use your SCRUMMY coins to pick your favourite players!</h1>
       </div>
 
       <div className='flex flex-col items-center text-center justify-center' >
         {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
         <SecondaryText className='text-lg text-center' >
           You have 240 coins - talent is everywhere if you look closely and lots of data to analyse to chose your Dream Team
+        </SecondaryText>
+
+      </div>
+    </div>
+  )
+}
+
+
+function RallyFriendsScreen() {
+
+
+  return (
+    <div className='flex flex-col gap-4 h-full overflow-y-auto items-center justify-start' >
+
+      <ScrummyLogo className='w-32 h-32' />
+
+      <div>
+        <img
+          src={'/images/onboarding/Create Your Own Leagues.png'}
+          className='rounded-xl'
+        />
+      </div>
+
+      {/* Coins Floating Glowings in Yellow */}
+      {/* Cline implement this */}
+
+      <div className='' >
+        <h1 className='text-lg text-center font-extrabold' >Rally Your Friends</h1>
+      </div>
+
+      <div className='flex flex-col items-center text-center justify-center' >
+        {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
+        <SecondaryText className='text-lg text-center' >
+          Create your own league, invite friends, and compete for "scrum" bragging rights.
+          SCRUMMY has in depth player analytics and live updates on games, teams and everything
+          you need for a fantasy rugby battle
         </SecondaryText>
 
       </div>
@@ -189,7 +246,9 @@ function WelcomeCTAScreen() {
 
   if (!featuredLeague || featuredPlayers.length === 0) {
     return (
-      <div className='text-center flex flex-col gap-4 h-full justify-center overflow-y-auto' >
+      <div className='textflex flex-col gap-4 h-full items-center justify-start' >
+
+        <ScrummyLogo className='w-52 h-52 ' />
 
         <div className='grid grid-cols-3 flex-wrap gap-4' >
           {top5Athletes.map((a) => {
@@ -238,56 +297,62 @@ function WelcomeCTAScreen() {
   }
 
   return (
-    <div className='flex flex-col gap-8 h-full overflow-x-auto items-center' >
+    <div className='relative flex flex-col gap-4 h-full w-full overflow-x-auto items-center' >
 
-      <div className='grid grid-cols-3 gap-4' >
-        {featuredPlayers.map((a) => {
-          return (
-            <PlayerGameCard
-              player={a}
-              key={a.tracking_id}
-              className='h-[150px]'
-              hideTeamLogo
-              hidePrice
-            />
-          )
-        })}
-      </div>
+      {/* Content */}
+      <div className="relative z-10 flex flex-col gap-4 items-center">
+        <ScrummyLogo className='w-56 h-56 lg:w-72 lg:h-72' />
 
-      <div className='flex flex-col gap-2' >
-        <h1 className='text-2xl font-extrabold text-center' >Women's World Cup Is Here</h1>
-
-        <div className='flex flex-col items-center text-center font-semibold text-md' >
-          <SecondaryText>Pick your dream team of 5 Players, Compete Globaly and with Friends!</SecondaryText>
+        <div className='grid grid-cols-3 gap-2' >
+          {featuredPlayers.slice(3).map((a ) => {
+            return (
+              <PlayerGameCard
+                player={a}
+                className='h-[150px] md:h-[250px]'
+                hideTeamLogo
+                hidePrice
+                key={a.tracking_id}
+              />
+            )
+          })}
         </div>
+
+        <div className='flex flex-col gap-2' >
+          <h1 className='text-2xl font-extrabold text-center' >Women's World Cup Is Here</h1>
+
+          <div className='flex flex-col items-center text-center font-semibold text-md' >
+            <SecondaryText>You are now ready to go, lets get your starting with creating your first team and picking your players</SecondaryText>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <PrimaryButton
+            onClick={handleStartBuilding}
+            isLoading={isJoining}
+            disabled={isJoining}
+            className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
+          >
+            Start Picking Your Players
+          </PrimaryButton>
+
+          <button
+            onClick={handleLookAround}
+            disabled={isJoining}
+            className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
+          >
+            Look Around First
+          </button>
+        </div>
+
+        {error && <Toast
+          message={error}
+          onClose={clearError}
+          duration={3000}
+          isVisible={error !== undefined}
+          type='error'
+        />}
+
       </div>
-
-      <div className="flex flex-col items-center justify-center">
-        <PrimaryButton
-          onClick={handleStartBuilding}
-          isLoading={isJoining}
-          disabled={isJoining}
-          className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
-        >
-          Start Building Your Team
-        </PrimaryButton>
-
-        <button
-          onClick={handleLookAround}
-          disabled={isJoining}
-          className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
-        >
-          Look Around First
-        </button>
-      </div>
-
-      {error && <Toast
-        message={error}
-        onClose={clearError}
-        duration={3000}
-        isVisible={error !== undefined}
-        type='error'
-      />}
 
     </div>
   )
