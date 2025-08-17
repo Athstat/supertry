@@ -115,6 +115,8 @@ function FixtureListView({ round }: FixtureListProps) {
     return game?.kickoff_time > new Date();
   });
 
+  console.log('games: ', games);
+
   if (isLoading) {
     return (
       <div className="flex w-full flex-col gap-2">
