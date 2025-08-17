@@ -53,45 +53,42 @@ export default function PostSignUpWelcomeScreen() {
   }, []);
 
   return (
-    <PageView className="flex dark:bg-black flex-col w-full p-4 h-screen overflow-y-hidden items-center justify-center white">
+    <PageView className="flex dark:bg-black flex-col w-full p-2 h-[100vh] overflow-y-hidden white">
 
-      {currIndex === 1 && <div className="flex flex-row w-full h-20 items-center justify-center">
-        <ScrummyLogo className="h-20" />
-      </div>}
+      <div className='flex flex-col overflow-y-auto no-scrollbar' >
+        {currIndex === 0 && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currIndex}
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '-100%' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="flex flex-col items-center justify-center p-4"
+            >
+              <IntialWelcomeScreen />
+            </motion.div>
+          </AnimatePresence>
 
+        )}
 
-      {currIndex === 0 && (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currIndex}
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '-100%' }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="flex flex-col items-center justify-center p-4"
-          >
-            <IntialWelcomeScreen />
-          </motion.div>
-        </AnimatePresence>
+        {currIndex === 1 && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currIndex}
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '-100%' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="flex flex-col items-center justify-center p-4"
+            >
+              <WelcomeCTAScreen />
+            </motion.div>
+          </AnimatePresence>
 
-      )}
+        )}
 
-      {currIndex === 1 && (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currIndex}
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '-100%' }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="flex flex-col items-center justify-center p-4"
-          >
-            <WelcomeCTAScreen />
-          </motion.div>
-        </AnimatePresence>
-
-      )}
-
+      </div>
       <div className="flex flex-1  w-full p-4 justify-end flex-col gap-4 items-center">
         {!isWelcomeComplete && (
           <PrimaryButton
@@ -131,19 +128,28 @@ function IntialWelcomeScreen() {
 
 
   return (
-    <div className='flex flex-col gap-4 h-full overflow-y-auto items-center justify-center' >
+    <div className='flex flex-col gap-4 h-full overflow-y-auto items-center justify-start' >
 
-      <ScrummyLogo className='w-44 h-44' />
+      <ScrummyLogo className='w-32 h-32' />
 
-      <div className='' >
-        <h1 className='text-4xl text-center font-extrabold' >Welcome to SCRUMMY!</h1>
+      <div>
+        <img
+          src={'/public/images/onboarding/Compare Players.png'}
+          className='rounded-xl'
+        />
       </div>
 
-      <div className='flex flex-col items-center' >
+      {/* Coins Floating Glowings in Yellow */}
+      {/* Cline implement this */}
 
+      <div className='' >
+        <h1 className='text-lg text-center font-extrabold' >Lets Get You Warmed Up!</h1>
+      </div>
+
+      <div className='flex flex-col items-center text-center justify-center' >
+        {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
         <SecondaryText className='text-lg text-center' >
-          You've officially joined the scrum!
-          Don't worry, it's less bruises and more bragging rights from here.
+          You have 240 coins - talent is everywhere if you look closely and lots of data to analyse to chose your Dream Team
         </SecondaryText>
 
       </div>
@@ -222,7 +228,7 @@ function WelcomeCTAScreen() {
             onClick={handleLookAround}
             disabled={isJoining}
             className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
-            >
+          >
             Look Around First
           </button>
         </div>
