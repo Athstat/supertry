@@ -12,6 +12,7 @@ import { useAthletes } from '../contexts/AthleteContext';
 import { PlayerGameCard } from '../components/player/PlayerGameCard';
 import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
 import { Toast } from '../components/ui/Toast';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function PostSignUpWelcomeScreen() {
 
@@ -65,11 +66,35 @@ export default function PostSignUpWelcomeScreen() {
 
 
       {currIndex === 0 && (
-        <IntialWelcomeScreen />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currIndex}
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '-100%' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="flex flex-col items-center justify-center p-4"
+          >
+            <IntialWelcomeScreen />
+          </motion.div>
+        </AnimatePresence>
+
       )}
 
       {currIndex === 1 && (
-        <WelcomeCTAScreen />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currIndex}
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '-100%' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="flex flex-col items-center justify-center p-4"
+          >
+            <WelcomeCTAScreen />
+          </motion.div>
+        </AnimatePresence>
+
       )}
 
       <div className="flex flex-1  w-full p-4 justify-end flex-col gap-4 items-center">
@@ -137,7 +162,7 @@ function WelcomeCTAScreen() {
   const { athletes } = useAthletes();
   const navigate = useNavigate();
 
-  const {isLoading: isJoining, handleJoinLeague, error, clearError} = useJoinLeague();
+  const { isLoading: isJoining, handleJoinLeague, error, clearError } = useJoinLeague();
 
   const top5Athletes = useMemo(() => {
     return [...athletes].sort((a, b) => {
@@ -152,7 +177,7 @@ function WelcomeCTAScreen() {
         `/league/${featuredLeague.id}?hint=my_team`
       )
     } else {
-      navigate('leagues?active_tab=discover')
+      navigate('/leagues?active_tab=discover')
     }
 
   }
@@ -182,7 +207,7 @@ function WelcomeCTAScreen() {
         </div>
 
         <div>
-          <p>You have 240 SCRUMMY coins, to build your dream team of rugby 5 players, and compete globally or play with your friends!</p>
+          <p>Pick your team of 5 players, and compete globally and play with your friends!</p>
         </div>
 
 
@@ -210,11 +235,7 @@ function WelcomeCTAScreen() {
   }
 
   return (
-    <div className='flex flex-col gap-6 h-full overflow-x-auto items-center' >
-
-      <div>
-        <h1 className='text-4xl font-extrabold text-center' >Women's World Cup Is Here</h1>
-      </div>
+    <div className='flex flex-col gap-8 h-full overflow-x-auto items-center' >
 
       <div className='grid grid-cols-3 flex-wrap gap-4' >
         {top5Athletes.map((a) => {
@@ -228,10 +249,12 @@ function WelcomeCTAScreen() {
         })}
       </div>
 
-      <div className='flex flex-col items-center font-semibold text-md' >
-        <p>Pick 5 Players</p>
-        <p>Compete Globaly</p>
-        <p>Play Free</p>
+      <div className='flex flex-col gap-2' >
+        <h1 className='text-2xl font-extrabold text-center' >Women's World Cup Is Here</h1>
+
+        <div className='flex flex-col items-center text-center font-semibold text-md' >
+          <SecondaryText>Pick your dream team of 5 Players, Compete Globaly and with Friends!</SecondaryText>
+        </div>
       </div>
 
       <div className="flex flex-col items-center justify-center">
@@ -253,7 +276,7 @@ function WelcomeCTAScreen() {
         </button>
       </div>
 
-      {error && <Toast 
+      {error && <Toast
         message={error}
         onClose={clearError}
         duration={3000}

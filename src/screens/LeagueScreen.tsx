@@ -14,6 +14,7 @@ import LeagueCommissionerTab from '../components/fantasy-league/commissioner/Lea
 import MyTeams from '../components/fantasy-leagues/MyTeams';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { useShareLeague } from '../hooks/leagues/useShareLeague';
+import { useQueryState } from '../hooks/useQueryState';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -30,6 +31,8 @@ function Content() {
   const navigate = useNavigate();
   const { handleShare } = useShareLeague(league);
 
+  const [hint, setHint] = useQueryState('hint');
+
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />;
   }
@@ -45,6 +48,14 @@ function Content() {
       label: 'My Teams',
       tabKey: 'my-team',
       className: 'flex-1',
+      onClick: () => {
+        if (hint === 'my-team') {
+          setHint('select-round')
+        }
+      },
+
+      hintText: 'Click on My Team Tab, to get started',
+      isHinted: hint === 'my-team'
     },
 
     {

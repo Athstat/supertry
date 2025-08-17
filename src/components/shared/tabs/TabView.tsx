@@ -124,7 +124,10 @@ export type TabViewHeaderItem = {
   tabKey: string;
   disabled?: boolean;
   className?: string;
-  loading?: boolean
+  loading?: boolean;
+  onClick?: () => void;
+  isHinted?: boolean,
+  hintText?: string
 };
 
 function TabViewButton({ label, tabKey, disabled = false, className }: TabViewHeaderItem) {
@@ -137,12 +140,14 @@ function TabViewButton({ label, tabKey, disabled = false, className }: TabViewHe
   if (disabled) return <></>;
 
   return (
-    <TabButton
-      active={currentTabKey === tabKey}
-      onClick={() => handleTabClick(tabKey)}
-      className={className}
-    >
-      {label}
-    </TabButton>
+    <>
+      <TabButton
+        active={currentTabKey === tabKey}
+        onClick={() => handleTabClick(tabKey)}
+        className={className}
+      >
+        {label}
+      </TabButton>
+    </>
   );
 }
