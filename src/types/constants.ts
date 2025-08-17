@@ -8,3 +8,6 @@ export const AFRICA_CUP = "sr-1";
 export const MAX_TEAM_BUDGET = 240;
 
 export const MAX_COMPARE_PLAYERS = 10;
+
+export const APP_GOOGLE_PLAYSTORE_LINK = 'https://play.google.com/store/apps/details?id=com.scrummy&pcampaignid=web_share';
+export const APP_IOS_APPSTORE_LINK = 'https://apps.apple.com/us/app/scrummy-fantasy-rugby/id6744964910';
