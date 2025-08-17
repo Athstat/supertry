@@ -1,14 +1,17 @@
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { FantasyLeagueGroupMember } from '../../types/fantasyLeagueGroups';
+import { FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
 import { Table2, User } from 'lucide-react';
 import {} from 'lucide-react';
 import SecondaryText from '../shared/SecondaryText';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
+import RoundedCard from '../shared/RoundedCard';
+import { ErrorState } from '../ui/ErrorState';
 import { useMemo } from 'react';
 
 export function LeagueStandings() {
   const { members, userMemberRecord, league } = useFantasyLeagueGroup();
+  const fetchKey = league && `/fantasy-league-groups/${league.id}/standings`;
 
   const groupId = league?.id;
 
@@ -22,6 +25,8 @@ export function LeagueStandings() {
     () => fantasyLeagueGroupsService.getGroupStandings(groupId as string),
     { revalidateOnFocus: false }
   );
+
+  console.log('standings: ', standings);
 
   // Map totals per user_id from standings
   const totalsByUserId = useMemo(() => {
@@ -47,7 +52,44 @@ export function LeagueStandings() {
     });
   }, [members, totalsByUserId]);
 
+  console.log('sortedMembers: ', sortedMembers);
+
   // Handle loading/error states
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-4 animate-pulse">
+        <RoundedCard className="border-none h-8 w-1/3 lg:w-1/4" />
+
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-2">
+            <RoundedCard className="border-none h-8 w-32" />
+            <RoundedCard className="border-none h-8 w-20" />
+          </div>
+
+          <RoundedCard className="border-none h-8 w-20" />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <RoundedCard className="border-none h-12 w-full" />
+          <RoundedCard className="border-none h-12 w-full" />
+          <RoundedCard className="border-none h-12 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <ErrorState
+          error="Whoops, Failed to load league standings"
+          message="Something wen't wrong please try again"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row items-center justify-between">
@@ -122,8 +164,7 @@ function LeagueStandingsRow({ member, index, isUser, totalPoints }: StandingsPro
         )}
 
         <div>
-          <p>{member.user.username ?? member.user.first_name}</p>
-          {/* <p>{member.user.first_name}</p> */}
+          <p>{member.user.username || member.user.first_name}</p>
         </div>
       </div>
 
@@ -133,3 +174,4 @@ function LeagueStandingsRow({ member, index, isUser, totalPoints }: StandingsPro
     </div>
   );
 }
+

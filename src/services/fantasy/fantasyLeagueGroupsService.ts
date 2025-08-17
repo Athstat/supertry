@@ -4,6 +4,7 @@ import {
   EditFantasyLeagueGroupReq,
   FantasyLeagueGroup,
   FantasyLeagueGroupMember,
+  FantasyLeagueGroupStanding,
   NewFantasyLeagueGroupReq,
 } from '../../types/fantasyLeagueGroups';
 import { IFixture } from '../../types/games';
@@ -272,22 +273,9 @@ export const fantasyLeagueGroupsService = {
     return [];
   },
 
-  /**
-   * Fetch per-user total points standings for a group across all its rounds.
-   */
-  getGroupStandings: async (
-    leagueId: string
-  ): Promise<
-    {
-      user_id: string;
-      username?: string;
-      first_name?: string;
-      last_name?: string;
-      total_points: number;
-    }[]
-  > => {
+  /** Fetches the standings for a league */
+  getGroupStandings: async (leagueId: string): Promise<FantasyLeagueGroupStanding[]> => {
     try {
-      // Use trailing slash to match standardized convention and avoid duplicate requests
       const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/standings`);
 
       const res = await fetch(uri, {
@@ -295,12 +283,13 @@ export const fantasyLeagueGroupsService = {
       });
 
       if (res.ok) {
-        return (await res.json()) as any[];
+        return (await res.json()) as FantasyLeagueGroupStanding[];
       }
     } catch (err) {
-      console.log('Error fetching group standings ', err);
+      console.log('Error getting league standings');
     }
 
     return [];
   },
 };
+

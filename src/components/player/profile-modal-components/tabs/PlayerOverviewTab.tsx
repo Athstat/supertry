@@ -5,14 +5,12 @@ import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import PlayerInfoCard from '../PlayerInfoCard';
 import PlayerTeamCard from '../PlayerTeamCard';
-import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { IProAthlete } from '../../../../types/athletes';
 import { usePlayerData } from '../../provider/PlayerDataProvider';
 import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Dumbbell } from 'lucide-react';
 import SecondaryText from '../../../shared/SecondaryText';
 import { isNumeric } from '../../../../utils/stringUtils';
-import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 
 type Props = {
   player: IProAthlete;
@@ -76,18 +74,18 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       )}
 
-      <Experimental>
+      {/* <Experimental>
         <CoachScrummyPlayerReport
           player={player}
         />
-      </Experimental>
+      </Experimental> */}
 
-      {currentSeason && (
+      {/* {currentSeason && (
         <PlayerSeasonStatsCard
           player={player}
           season={currentSeason}
         />
-      )}
+      )} */}
 
 
       {currentSeason && <Experimental>

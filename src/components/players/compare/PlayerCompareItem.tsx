@@ -24,6 +24,7 @@ export default function PlayersCompareItem({ player }: Props) {
 
     const [_, startTransition] = useTransition();
 
+
     const {
         seasonPlayerStats: actions,
         loadingPlayerStats: loadingActions,
@@ -70,24 +71,26 @@ export default function PlayersCompareItem({ player }: Props) {
 
     const isLoading = loadingActions || loadingStarRatings;
 
-    const tries = getPlayerAggregatedStat("Tries", actions)?.action_count;
-    const assits = getPlayerAggregatedStat("Assists", actions)?.action_count;
-    const passes = getPlayerAggregatedStat("Passes", actions)?.action_count;
-    const tacklesMade = getPlayerAggregatedStat("TacklesMade", actions)?.action_count;
-    const tackleSuccess = getPlayerAggregatedStat("TackleSuccess", actions)?.action_count;
-    const turnoversWon = getPlayerAggregatedStat("TurnoversWon", actions)?.action_count;
-    const turnovers = getPlayerAggregatedStat("TurnoversConceded", actions)?.action_count;
-    const defendersBeaten = getPlayerAggregatedStat("DefendersBeaten", actions)?.action_count;
-    const kicksFromHand = getPlayerAggregatedStat("KicksFromHand", actions)?.action_count;
-    const kicksFromHandMetres = getPlayerAggregatedStat("KicksFromHandMetres", actions)?.action_count;
-    const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', actions)?.action_count;
-    const pentalyGoalsScored = getPlayerAggregatedStat('PenaltyGoalsScored', actions)?.action_count;
-    const conversionsScored = getPlayerAggregatedStat('ConversionsScored', actions)?.action_count;
-    const points = getPlayerAggregatedStat('Points', actions)?.action_count;
-    const carries = getPlayerAggregatedStat('Carries', actions)?.action_count;
-    const redCards = getPlayerAggregatedStat('RedCards', actions)?.action_count;
-    const linebreaks = getPlayerAggregatedStat('LineBreaks', actions)?.action_count;
-    const dropGoalsScored = getPlayerAggregatedStat("DropGoalsScored", actions)?.action_count;
+    const tries = getPlayerAggregatedStat("tries", actions)?.action_count;
+    const assits = getPlayerAggregatedStat("try_assists", actions)?.action_count;
+    const passes = getPlayerAggregatedStat("passes", actions)?.action_count;
+    const tacklesMade = getPlayerAggregatedStat("tackles", actions)?.action_count;
+    const tackleSuccess = getPlayerAggregatedStat("tackle_success", actions)?.action_count;
+    const turnoversWon = getPlayerAggregatedStat("turnover_won", actions)?.action_count;
+    const turnovers = getPlayerAggregatedStat("turnovers_conceded", actions)?.action_count;
+    const defendersBeaten = getPlayerAggregatedStat("defenders_beaten", actions)?.action_count;
+    const kicksFromHand = getPlayerAggregatedStat("kicks_from_hand", actions)?.action_count;
+    const kicksFromHandMetres = getPlayerAggregatedStat("kick_metres", actions)?.action_count;
+    const minutesPlayedTotal = getPlayerAggregatedStat('minutes_played_total', actions)?.action_count;
+    const pentalyGoalsScored = getPlayerAggregatedStat('penalty_goals', actions)?.action_count;
+    const conversionsScored = getPlayerAggregatedStat('conversion_goals', actions)?.action_count;
+    const points = getPlayerAggregatedStat('points', actions)?.action_count;
+    const carryMetres = getPlayerAggregatedStat('carries_metres', actions)?.action_count;
+    const dominantCarries = getPlayerAggregatedStat('carry_dominant', actions)?.action_count;
+    const redCards = getPlayerAggregatedStat('red_cards', actions)?.action_count;
+    const yellowCards = getPlayerAggregatedStat('yellow_cards', actions)?.action_count;
+    const linebreaks = getPlayerAggregatedStat('Line_breaks', actions)?.action_count;
+    const dropGoalsScored = getPlayerAggregatedStat("drop_goals_converted", actions)?.action_count;
 
     return (
         <div className="flex flex-col gap-2 w-[calc(50%-0.25rem)] md:flex-1 md:min-w-[200px] md:max-w-[300px] flex-shrink-0">
@@ -103,11 +106,10 @@ export default function PlayersCompareItem({ player }: Props) {
             />}
 
             {/* Player Icons Row */}
-            {!isLoading && starRatings && actions && (
+            {!isLoading && starRatings && actions && currSeason && (
                 <PlayerIconsRow
                     player={player}
-                    starRatings={starRatings}
-                    seasonStats={actions}
+                    season={currSeason}
                     size="sm"
                 />
             )}
@@ -133,8 +135,8 @@ export default function PlayersCompareItem({ player }: Props) {
                         },
                         {
                             label: "Minutes Played",
-                            value: minutesPlayed,
-                            isGreen: isStatActionBest(player, minutesPlayed, "MinutesPlayed", comparePlayersStats)
+                            value: minutesPlayedTotal,
+                            isGreen: isStatActionBest(player, minutesPlayedTotal, 'minutes_played_total', comparePlayersStats)
                         },
                         {
                             label: "Attacking Rating",
@@ -172,27 +174,27 @@ export default function PlayersCompareItem({ player }: Props) {
                         {
                             label: "Tries",
                             value: tries,
-                            isGreen: isStatActionBest(player, tries, "Tries", comparePlayersStats)
+                            isGreen: isStatActionBest(player, tries, "tries", comparePlayersStats)
                         },
                         {
                             label: "Points",
                             value: points,
-                            isGreen: isStatActionBest(player, tries, "Points", comparePlayersStats)
+                            isGreen: isStatActionBest(player, tries, "points", comparePlayersStats)
                         },
                         {
                             label: "Assists",
                             value: assits,
-                            isGreen: isStatActionBest(player, assits, "Assists", comparePlayersStats)
+                            isGreen: isStatActionBest(player, assits, "try_assists", comparePlayersStats)
                         },
                         {
                             label: "Passes",
                             value: passes,
-                            isGreen: isStatActionBest(player, passes, "Passes", comparePlayersStats)
+                            isGreen: isStatActionBest(player, passes, "passes", comparePlayersStats)
                         },
                         {
                             label: "Turnovers",
                             value: turnovers,
-                            isGreen: isStatActionBest(player, turnovers, "TurnoversConceded", comparePlayersStats)
+                            isGreen: isStatActionBest(player, turnovers, "turnovers_conceded", comparePlayersStats)
                         },
                         {
                             label: "Defenders Beaten",
@@ -200,14 +202,19 @@ export default function PlayersCompareItem({ player }: Props) {
                             isGreen: isStatActionBest(player, turnovers, "DefendersBeaten", comparePlayersStats)
                         },
                         {
-                            label: "Carries",
-                            value: carries,
-                            isGreen: isStatActionBest(player, turnovers, "Carries", comparePlayersStats)
+                            label: "Dominant Carries",
+                            value: dominantCarries,
+                            isGreen: isStatActionBest(player, turnovers, "carries", comparePlayersStats)
+                        },
+                        {
+                            label: "Carry Metres",
+                            value: carryMetres,
+                            isGreen: isStatActionBest(player, turnovers, "carries_metres", comparePlayersStats)
                         },
                         {
                             label: "Line Breaks",
                             value: linebreaks,
-                            isGreen: isStatActionBest(player, turnovers, "LineBreaks", comparePlayersStats)
+                            isGreen: isStatActionBest(player, turnovers, "line_breaks", comparePlayersStats)
                         }
                     ]}
                 />
@@ -230,7 +237,7 @@ export default function PlayersCompareItem({ player }: Props) {
                         {
                             label: "Tackles Made",
                             value: tacklesMade,
-                            isGreen: isStatActionBest(player, tacklesMade, "TacklesMade", comparePlayersStats)
+                            isGreen: isStatActionBest(player, tacklesMade, "tackles_made", comparePlayersStats)
                         },
                         {
                             label: "Tackle Success",
@@ -240,13 +247,19 @@ export default function PlayersCompareItem({ player }: Props) {
                         {
                             label: "Turnovers Won",
                             value: turnoversWon,
-                            isGreen: isStatActionBest(player, turnoversWon, "TurnoversWon", comparePlayersStats)
+                            isGreen: isStatActionBest(player, turnoversWon, "turnovers_won", comparePlayersStats)
                         },
 
                         {
                             label: "Red Cards",
                             value: redCards,
-                            isGreen: isStatActionBest(player, turnoversWon, "RedCards", comparePlayersStats)
+                            isGreen: isStatActionBest(player, turnoversWon, "red_cards", comparePlayersStats)
+                        },
+
+                        {
+                            label: "Yellow Cards",
+                            value: yellowCards,
+                            isGreen: isStatActionBest(player, turnoversWon, "yellow_cards", comparePlayersStats)
                         }
                     ]}
                 />
@@ -264,27 +277,27 @@ export default function PlayersCompareItem({ player }: Props) {
                         {
                             label: "Penalty Goals Scored",
                             value: pentalyGoalsScored,
-                            isGreen: isStatActionBest(player, kicksFromHand, 'PenaltyGoalsScored', comparePlayersStats)
+                            isGreen: isStatActionBest(player, kicksFromHand, 'penalty_goals', comparePlayersStats)
                         },
                         {
                             label: "Conversions Scored",
                             value: conversionsScored,
-                            isGreen: isStatActionBest(player, kicksFromHand, 'ConversionsScored', comparePlayersStats)
+                            isGreen: isStatActionBest(player, kicksFromHand, 'conversion_goals', comparePlayersStats)
                         },
                         {
                             label: "Drop Goals",
                             value: dropGoalsScored,
-                            isGreen: isStatActionBest(player, kicksFromHand, 'DropGoalsScored', comparePlayersStats)
+                            isGreen: isStatActionBest(player, kicksFromHand, 'drop_goals_converted', comparePlayersStats)
                         },
                         {
                             label: "Kicks From Hand",
                             value: kicksFromHand,
-                            isGreen: isStatActionBest(player, kicksFromHand, "KicksFromHand", comparePlayersStats)
+                            isGreen: isStatActionBest(player, kicksFromHand, "kicks_from_hand", comparePlayersStats)
                         },
                         {
                             label: "Metres",
                             value: kicksFromHandMetres,
-                            isGreen: isStatActionBest(player, kicksFromHandMetres, "KicksFromHandMetres", comparePlayersStats)
+                            isGreen: isStatActionBest(player, kicksFromHandMetres, "kick_metres", comparePlayersStats)
                         },
                         {
                             label: "Points Kicking",

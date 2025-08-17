@@ -1,3 +1,4 @@
+import { normaliseSportsActionName } from "../utils/sportsActionUtils"
 import { IProSeason } from "./season"
 
 export type SportAction = {
@@ -14,7 +15,8 @@ export type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConceded
     "TurnoversConceded" | "TurnoversWon" | "LineoutsWonSteal" | "CarriesMadeGainLine" | "LineoutsWon" |
     "Tries" | "Carries" | "DefendersBeaten" | "Metres" | "MinutesPlayed" | "Assists" | "LineBreaks" |
     "LineoutSuccess" | "RetainedKicks" | "KicksFromHandMetres" | "KicksFromHand" |
-    "RetainedKicks" | "PenaltyGoalsScored" | "ConversionsScored" | "RedCards" | "DropGoalsScored" | 'minutes_played_total'
+    "RetainedKicks" | "PenaltyGoalsScored" | "ConversionsScored" | "RedCards" | "DropGoalsScored" | 'minutes_played_total' | string
+    | ""
 
 /** Helper function to get a stat */
 export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregatedStats?: SportAction[]) => {
@@ -24,7 +26,7 @@ export const getPlayerAggregatedStat = (key: PlayerAggregateStatAction, aggregat
     }
 
     const filteredList = aggregatedStats.filter(stat => {
-        return stat.action.toLowerCase() === key.toLowerCase();
+        return stat.definition?.action_name === key.toLowerCase();
     });
 
     if (filteredList.length > 0) {
