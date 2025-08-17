@@ -149,6 +149,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex sm:items-center sm:justify-center overflow-y-auto">
+      
       <div className="bg-white dark:bg-dark-800 w-full max-w-4xl sm:mx-auto sm:my-4 shadow-xl h-full sm:h-auto sm:max-h-[calc(100vh-2rem)] flex flex-col rounded-none sm:rounded-lg">
         {/* Modal header */}
         <ModalHeader selectedPosition={selectedPosition} onClose={onClose} />

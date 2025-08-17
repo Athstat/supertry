@@ -25,10 +25,10 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
   });
 
   return (
-    <div className="px-6 py-4 border-b dark:border-gray-700">
+    <div className="px-6 py-0 border-b dark:border-gray-700">
       {/* Teams filter */}
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 ">
           Teams:
         </p>
         <div className="relative">
