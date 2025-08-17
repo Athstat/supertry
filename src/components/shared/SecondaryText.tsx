@@ -9,7 +9,7 @@ type Props = {
 export default function SecondaryText({children, className} : Props) {
   return (
     <p className={twMerge(
-        "text-slate-500 dark:text-slate-400 text-sm",
+        "text-slate-600 dark:text-slate-400 text-sm",
         className
     )} >
         {children}
