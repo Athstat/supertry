@@ -39,7 +39,7 @@ export default function MovingRugbyPitch({
     return (
         <div className={twMerge(
             "w-full h-[600px] overflow-hidden relative border-4",
-            retro ? "border-amber-800" : "border-green-700",
+            retro ? "border-green-900" : "border-green-700",
             className
         )}>
             {/* Retro film grain overlay */}

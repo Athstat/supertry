@@ -104,8 +104,8 @@ export function WelcomeScreen() {
 
   return (
 
-    <MovingRugbyPitch className='h-[100vh] overflow-y-auto flex flex-col items-center justify-center' >
-      <div className="flex z-50 bg-green-950/70 flex-col items-center justify-center h-full px-4">
+    <MovingRugbyPitch className='h-[100vh] overflow-hidden flex flex-col items-center justify-center' >
+      <div className="flex z-50 bg-green-950/90 flex-col items-center overflow-y-auto justify-center h-[100vh] px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -3,6 +3,7 @@ import { DjangoAuthUser } from '../../../types/auth';
 import { authTokenService } from '../../../services/auth/authTokenService';
 import { useBrudgeAuthV2 } from '../../../hooks/useBridgeAuth';
 import ScrummyLoadingState from '../../ui/ScrummyLoadingState';
+import { logoutFromBridge } from '../../../utils/bridgeUtils';
 
 type AuthTokenContextProps = {
   /** The auth token for the current login session */
@@ -89,6 +90,7 @@ export default function AuthTokenProvider({ children }: Props) {
     authTokenService.clearAccessToken();
     authTokenService.clearUserTokens();
     authTokenService.cleanupKeycloakTokens();
+    logoutFromBridge();
   };
 
   if (isLoading) {
