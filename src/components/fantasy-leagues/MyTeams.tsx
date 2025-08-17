@@ -8,6 +8,7 @@ import { leagueService } from '../../services/leagueService';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import FantasyRoundsList from './FantasyRoundsList';
+import { Gender, IProAthlete } from '../../types/athletes';
 
 export default function MyTeams() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -158,10 +159,20 @@ export default function MyTeams() {
           onClose={() => setSelectedPlayer(null)}
           player={{
             ...selectedPlayer,
-            id: selectedPlayer.athlete_id,
-            name: selectedPlayer.player_name,
+            tracking_id: selectedPlayer.athlete_id,
+            athstat_firstname: selectedPlayer.player_name,
+            gender: selectedPlayer.gender as Gender,
+            hidden: false,
             position: selectedPlayer.position,
-            team: selectedPlayer.team_name || '',
+            team_id: selectedPlayer.athlete_team_id ?? '',
+            team: {
+              athstat_name: selectedPlayer.team_name || '',
+              athstat_id: selectedPlayer.athlete_team_id ?? '',
+              image_url: selectedPlayer.team_logo,
+              source_id: '',
+              organization: '1',
+              sport: '1'
+            },
             image_url: selectedPlayer.image_url,
             power_rank_rating: selectedPlayer.power_rank_rating,
           }}
