@@ -34,7 +34,7 @@ export default function InviteStepsScreen() {
     }
 
     return (
-        <PageView className='dark:bg-black w-full h-[100vh] overflow-y-auto p-4 gap-4 flex flex-col items-center ' >
+        <div className='dark:bg-black dark:text-white w-[100%] lg:px-[30%] pb-20 h-[100vh] overflow-y-auto p-4 gap-4 flex flex-col items-center ' >
 
             <div className='flex flex-row items-center justify-center h-20' >
                 <ScrummyLogoHorizontal />
@@ -132,6 +132,6 @@ export default function InviteStepsScreen() {
                 />
             </div>
 
-        </PageView>
+        </div>
     )
 }
