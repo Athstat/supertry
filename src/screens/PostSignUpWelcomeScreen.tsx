@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IOnboardingTab } from '../types/onboarding';
 import PageView from './PageView';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
@@ -7,9 +7,14 @@ import ScrummyLogo from '../components/branding/scrummy_logo';
 import { useNavigate } from 'react-router-dom';
 import TabProgressDots from '../components/shared/TabProgressDots';
 import SecondaryText from '../components/shared/SecondaryText';
+import { useOnboarding } from '../components/onboarding/OnboardingDataProvider';
+import { useAthletes } from '../contexts/AthleteContext';
+import { PlayerGameCard } from '../components/player/PlayerGameCard';
+import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
+import { Toast } from '../components/ui/Toast';
 
 export default function PostSignUpWelcomeScreen() {
-  const featuredLeagueId = 'c50b2d32-fdf1-4480-88d4-219cdd87cab0';
+
   const [currIndex, setIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -26,16 +31,16 @@ export default function PostSignUpWelcomeScreen() {
     }
   };
 
-  const handleProceedWithLeagues = () => {
-    try {
-      localStorage.setItem('league_tab', 'discover');
-    } catch { }
-    navigate('/leagues');
-  };
+  // const handleProceedWithLeagues = () => {
+  //   try {
+  //     localStorage.setItem('league_tab', 'discover');
+  //   } catch { }
+  //   navigate('/leagues');
+  // };
 
-  const handleSkipToDashboard = () => {
-    navigate('/dashboard');
-  };
+  // const handleSkipToDashboard = () => {
+  //   navigate('/dashboard');
+  // };
 
   // Preload all onboarding images on mount so tab switches are instant
   useEffect(() => {
@@ -63,32 +68,18 @@ export default function PostSignUpWelcomeScreen() {
         <IntialWelcomeScreen />
       )}
 
+      {currIndex === 1 && (
+        <WelcomeCTAScreen />
+      )}
+
       <div className="flex flex-1  w-full p-4 justify-end flex-col gap-4 items-center">
         {!isWelcomeComplete && (
           <PrimaryButton
             onClick={handleNextIndex}
             className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
           >
-            {'Continue'}
+            {'Get Started!'}
           </PrimaryButton>
-        )}
-
-        {isWelcomeComplete && (
-          <div className="flex flex-col items-center justify-center">
-            <PrimaryButton
-              onClick={handleProceedWithLeagues}
-              className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
-            >
-              Get Started With Leagues
-            </PrimaryButton>
-
-            <button
-              onClick={handleSkipToDashboard}
-              className="rounded-3xl text-slate-700 w-fit p-4 h-10 w-22 px-10 py-2"
-            >
-              Look Around First
-            </button>
-          </div>
         )}
 
         {/* Progress Dots */}
@@ -116,6 +107,9 @@ export const tabs: IOnboardingTab[] = [
 
 
 function IntialWelcomeScreen() {
+
+
+
   return (
     <div className='flex flex-col gap-4 h-full overflow-y-auto items-center justify-center' >
 
@@ -137,9 +131,135 @@ function IntialWelcomeScreen() {
   )
 }
 
-function JoinFeatureLeagueScreen() {
+function WelcomeCTAScreen() {
+
+  const { featuredLeague, featuredPlayers } = useOnboarding();
+  const { athletes } = useAthletes();
+  const navigate = useNavigate();
+
+  const {isLoading: isJoining, handleJoinLeague, error, clearError} = useJoinLeague();
+
+  const top5Athletes = useMemo(() => {
+    return [...athletes].sort((a, b) => {
+      return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+    }).slice(0, 6);
+  }, [athletes]);
+
+  const handleStartBuilding = async () => {
+    if (featuredLeague) {
+      await handleJoinLeague(
+        featuredLeague,
+        `/league/${featuredLeague.id}?hint=my_team`
+      )
+    } else {
+      navigate('leagues?active_tab=discover')
+    }
+
+  }
+
+  const handleLookAround = () => {
+    navigate('/dashboard');
+  }
+
+  if (!featuredLeague || featuredPlayers.length === 0) {
+    return (
+      <div className='text-center flex flex-col gap-4 h-full justify-center overflow-y-auto' >
+
+        <div className='grid grid-cols-3 flex-wrap gap-4' >
+          {top5Athletes.map((a) => {
+            return (
+              <PlayerGameCard
+                player={a}
+                key={a.tracking_id}
+                className='h-[150px]'
+              />
+            )
+          })}
+        </div>
+
+        <div>
+          <h1 className='text-3xl font-bold  ' >Building Your Team</h1>
+        </div>
+
+        <div>
+          <p>You have 240 SCRUMMY coins, to build your dream team of rugby 5 players, and compete globally or play with your friends!</p>
+        </div>
+
+
+        <div className="flex flex-col items-center justify-center">
+          <PrimaryButton
+            onClick={handleStartBuilding}
+            isLoading={isJoining}
+            disabled={isJoining}
+            className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
+          >
+            Start Building Your Team
+          </PrimaryButton>
+
+          <button
+            onClick={handleLookAround}
+            disabled={isJoining}
+            className="rounded-3xl text-slate-700 w-fit p-4 h-10 w-22 px-10 py-2"
+          >
+            Look Around First
+          </button>
+        </div>
+
+      </div>
+    )
+  }
+
   return (
-    <div>
+    <div className='flex flex-col gap-6 h-full overflow-x-auto items-center' >
+
+      <div>
+        <h1 className='text-4xl font-extrabold text-center' >Women's World Cup Is Here</h1>
+      </div>
+
+      <div className='grid grid-cols-3 flex-wrap gap-4' >
+        {top5Athletes.map((a) => {
+          return (
+            <PlayerGameCard
+              player={a}
+              key={a.tracking_id}
+              className='h-[150px]'
+            />
+          )
+        })}
+      </div>
+
+      <div className='flex flex-col items-center font-semibold text-md' >
+        <p>Pick 5 Players</p>
+        <p>Compete Globaly</p>
+        <p>Play Free</p>
+      </div>
+
+      <div className="flex flex-col items-center justify-center">
+        <PrimaryButton
+          onClick={handleStartBuilding}
+          isLoading={isJoining}
+          disabled={isJoining}
+          className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
+        >
+          Start Building Your Team
+        </PrimaryButton>
+
+        <button
+          onClick={handleLookAround}
+          disabled={isJoining}
+          className="rounded-3xl text-slate-700 w-fit p-4 h-10 w-22 px-10 py-2"
+        >
+          Look Around First
+        </button>
+      </div>
+
+      {error && <Toast 
+        message={error}
+        onClose={clearError}
+        duration={3000}
+        isVisible={error !== undefined}
+        type='error'
+      />}
 
     </div>
   )

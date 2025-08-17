@@ -36,8 +36,16 @@ export default function OnboardingDataProvider({ children }: Props) {
 /** Provides data for the onboarding screen */
 function ProviderContent({ children }: Props) {
 
-    const featuredLeagueId: string = 'c50b2d32-fdf1-4480-88d4-219cdd87cab0';
-    const featuredPlayersId: string[] = [];
+    const featuredLeagueId: string = 'f49b2adf-3902-4e6e-ac26-d3bfb54fff7d';
+    
+    const featuredPlayersId: string[] = [
+        '3c7fb106-d5ea-5b30-8821-78687959f5bb',
+        'ec22d71b-88a8-5945-8af7-cd9abdf4dbe2',
+        '53db0e08-74c9-599e-a206-765c10ae44d1',
+        '6de5a876-e9aa-5697-91df-df9988e69699',
+        '52272d81-d403-5e62-83d3-9e3e9b4acef0',
+        'f9d1fec6-d805-5694-ba61-b7f98b1a844c',
+    ];
 
     const setFeaturedLeague = useSetAtom(featuredLeagueAtom);
     const setFeaturedPlayers = useSetAtom(featuredPlayersAtom);
@@ -83,9 +91,13 @@ async function featuredPlayersFetcher(ids: string[]) {
         if (res) {
             players.push(res);
         }
+
+        console.log("Whats up with the API?? ", res);
     });
 
     await Promise.all(promises);
+
+    return players;
 }
 
 
