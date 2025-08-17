@@ -55,6 +55,7 @@ function TabViewInner({
   tabKeySearchParam = 'tabKey',
   initialTabKey,
 }: TabInnerProps) {
+
   const { currentTabKey, navigate } = useTabView();
   const location = useLocation();
 
@@ -64,20 +65,23 @@ function TabViewInner({
 
   useEffect(() => {
     if (currentTabKey === undefined) {
+      
       // Try to get tab from URL
-      const params = new URLSearchParams(location.search);
-      const tabFromUrl = params.get(tabKeySearchParam);
-      const tabExists = enabledTabs.some(tab => tab.tabKey === tabFromUrl);
-      if (tabFromUrl && tabExists) {
-        navigate(tabFromUrl);
+      // const params = new URLSearchParams(location.search);
+      // const tabFromUrl = params.get(tabKeySearchParam);
+      // const tabExists = enabledTabs.some(tab => tab.tabKey === tabFromUrl);
+
+      if (initialTabKey) {
+        navigate(initialTabKey);
       } else {
         const firstTab = enabledTabs.length > 0 ? enabledTabs[0] : undefined;
         if (firstTab) {
           navigate(firstTab.tabKey);
         }
       }
+
     }
-  }, [location.search]);
+  }, [location.search, initialTabKey]);
 
   return (
     <div className={twMerge('w-full flex flex-col gap-5', className)}>

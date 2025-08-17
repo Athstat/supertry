@@ -3,8 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Plus, Trophy } from 'lucide-react';
-import { StatCard } from '../components/shared/StatCard';
+import { Plus, Trophy } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
@@ -27,11 +26,11 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-  const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
-  const navigate = useNavigate();
+  const { league, userMemberRecord, isMember } = useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);
 
-  const [hint, setHint] = useQueryState('hint');
+  const [ journey ] = useQueryState('journey');
+  const initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />;
@@ -47,15 +46,7 @@ function Content() {
     {
       label: 'My Teams',
       tabKey: 'my-team',
-      className: 'flex-1',
-      onClick: () => {
-        if (hint === 'my-team') {
-          setHint('select-round')
-        }
-      },
-
-      hintText: 'Click on My Team Tab, to get started',
-      isHinted: hint === 'my-team'
+      className: 'flex-1'
     },
 
     {
@@ -77,10 +68,6 @@ function Content() {
       className: 'flex-1',
     },
   ];
-
-  const navigateToLeagues = () => {
-    navigate('/leagues');
-  };
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4">
@@ -121,7 +108,7 @@ function Content() {
         <StatCard label="Current Round" value={currentRound?.title} className="flex-1" />
       </div> */}
 
-      <TabView tabHeaderItems={headerItems}>
+      <TabView initialTabKey={initialTabKey} tabHeaderItems={headerItems}>
         <TabViewPage tabKey="my-team">
           <MyTeams />
         </TabViewPage>

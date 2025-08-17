@@ -8,7 +8,8 @@ import { leagueService } from '../../services/leagueService';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import FantasyRoundsList from './FantasyRoundsList';
-import { Gender, IProAthlete } from '../../types/athletes';
+import { Gender } from '../../types/athletes';
+import { useQueryState } from '../../hooks/useQueryState';
 
 export default function MyTeams() {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -23,6 +24,18 @@ export default function MyTeams() {
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
   const [refreshKey, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | null>(null);
+
+  const [journey, setJourney] = useQueryState('journey');
+
+  useEffect(() => {
+
+    if (journey === 'team-creation' && currentRound) {
+      console.log("Current Tab ", currentRound);
+      setSelectedRound(currentRound);
+      setTabScene('creating-team');
+    }
+
+  }, [journey, currentRound, setTabScene]);
 
   // Handler for player click in FantasyRoundCard
   const handlePlayerClick = (player: IFantasyTeamAthlete) => {
@@ -112,6 +125,9 @@ export default function MyTeams() {
           onViewTeam={() => setTabScene('team-created')}
           onTeamCreated={(team: IFantasyLeagueTeam) => {
             // Optimistically update the teams for the current round
+
+            setJourney("")
+
             if (selectedRound) {
               setRoundIdToTeams(prev => ({
                 ...prev,

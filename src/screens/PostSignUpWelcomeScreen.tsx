@@ -232,7 +232,7 @@ function WelcomeCTAScreen() {
     if (featuredLeague) {
       await handleJoinLeague(
         featuredLeague,
-        `/league/${featuredLeague.id}?hint=my_team`
+        `/league/${featuredLeague.id}?journey=team-creation`
       )
     } else {
       navigate('/leagues?active_tab=discover')
