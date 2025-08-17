@@ -23,11 +23,6 @@ export default function MyTeams() {
   const [refreshKey, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | null>(null);
 
-  // Debug effect to log when selectedPlayer changes
-  useEffect(() => {
-    console.log('Selected player changed:', selectedPlayer);
-  }, [selectedPlayer]);
-
   // Handler for player click in FantasyRoundCard
   const handlePlayerClick = (player: IFantasyTeamAthlete) => {
     console.log('handlePlayerClick called with player:', player);
