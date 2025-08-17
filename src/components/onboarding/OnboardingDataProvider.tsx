@@ -39,12 +39,12 @@ function ProviderContent({ children }: Props) {
     const featuredLeagueId: string = 'f49b2adf-3902-4e6e-ac26-d3bfb54fff7d';
     
     const featuredPlayersId: string[] = [
-        '3c7fb106-d5ea-5b30-8821-78687959f5bb',
-        'ec22d71b-88a8-5945-8af7-cd9abdf4dbe2',
-        '53db0e08-74c9-599e-a206-765c10ae44d1',
-        '6de5a876-e9aa-5697-91df-df9988e69699',
-        '52272d81-d403-5e62-83d3-9e3e9b4acef0',
-        'f9d1fec6-d805-5694-ba61-b7f98b1a844c',
+        '37c4c9b3-be01-5528-917d-bd5ccaff006c',
+        '93fd4fb3-100e-5ae3-b79d-d61fa4296d5d',
+        'b5ee73ca-4552-5b63-80d2-f0b5a5d3c9e2',
+        '98e07186-679e-5582-adf7-0f88f810b3dc',
+        'b932bcae-fae8-51b3-8056-8fdd897e8c56',
+        '29121545-2609-569f-b0e0-227fc9d626ab',
     ];
 
     const setFeaturedLeague = useSetAtom(featuredLeagueAtom);

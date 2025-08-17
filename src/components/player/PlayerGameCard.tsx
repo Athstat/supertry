@@ -16,6 +16,8 @@ type Props = {
   onClick?: () => void;
   className?: string;
   blockGlow?: boolean;
+  hideTeamLogo?: boolean;
+  hidePrice?: boolean
 };
 
 
@@ -25,7 +27,7 @@ type Props = {
  *
  * does not rely on team context */
 
-export function PlayerGameCard({ player, name, onClick, className, blockGlow }: Props) {
+export function PlayerGameCard({ player, name, onClick, className, blockGlow, hideTeamLogo = false, hidePrice = false }: Props) {
   const selectedPlayers = useAtomValue(comparePlayersAtom);
 
   const [imageError, setImageError] = useState<boolean>(false);
@@ -63,17 +65,17 @@ export function PlayerGameCard({ player, name, onClick, className, blockGlow }: 
           <div className="top-0 left-0 absolute w-full h-full bg-black/50 z-10"></div>
         )}
         {/* Player Price */}
-        <div className="absolute top-2 left-2 z-[5] flex gap-1">
+        {!hidePrice && <div className="absolute top-2 left-2 z-[5] flex gap-1">
           <CircleDollarSign className="w-4 h-fit" />
           <h3 className="text-xs font-bold truncate flex-1">{player.price}</h3>
-        </div>
+        </div>}
         {/* Team Logo */}
-        <div className="absolute top-2 right-2 z-[5]">
+        {!hideTeamLogo && <div className="absolute top-2 right-2 z-[5]">
           <TeamLogo
             className="w-8 h-8 dark:text-white/40"
             url={player.team?.image_url ?? player.athlete.team.image_url}
           />
-        </div>
+        </div>}
 
         {/* Player Image */}
         <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">

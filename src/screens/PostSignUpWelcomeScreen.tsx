@@ -17,11 +17,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 export default function PostSignUpWelcomeScreen() {
 
   const [currIndex, setIndex] = useState(0);
-  const navigate = useNavigate();
-
-  const isIndexValid = currIndex >= 0 && currIndex < tabs.length;
-  const currTab = isIndexValid ? tabs[currIndex] : undefined;
-
   const isWelcomeComplete = currIndex === tabs.length - 1;
 
   const handleNextIndex = () => {
@@ -58,7 +53,7 @@ export default function PostSignUpWelcomeScreen() {
   }, []);
 
   return (
-    <PageView className="flex flex-col w-full p-4 h-screen overflow-y-hidden items-center justify-center white">
+    <PageView className="flex dark:bg-black flex-col w-full p-4 h-screen overflow-y-hidden items-center justify-center white">
 
       {currIndex === 1 && <div className="flex flex-row w-full h-20 items-center justify-center">
         <ScrummyLogo className="h-20" />
@@ -197,6 +192,8 @@ function WelcomeCTAScreen() {
                 player={a}
                 key={a.tracking_id}
                 className='h-[150px]'
+                hideTeamLogo
+                hidePrice
               />
             )
           })}
@@ -224,8 +221,8 @@ function WelcomeCTAScreen() {
           <button
             onClick={handleLookAround}
             disabled={isJoining}
-            className="rounded-3xl text-slate-700 w-fit p-4 h-10 w-22 px-10 py-2"
-          >
+            className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
+            >
             Look Around First
           </button>
         </div>
@@ -237,13 +234,15 @@ function WelcomeCTAScreen() {
   return (
     <div className='flex flex-col gap-8 h-full overflow-x-auto items-center' >
 
-      <div className='grid grid-cols-3 flex-wrap gap-4' >
-        {top5Athletes.map((a) => {
+      <div className='grid grid-cols-3 gap-4' >
+        {featuredPlayers.map((a) => {
           return (
             <PlayerGameCard
               player={a}
               key={a.tracking_id}
               className='h-[150px]'
+              hideTeamLogo
+              hidePrice
             />
           )
         })}
@@ -270,7 +269,7 @@ function WelcomeCTAScreen() {
         <button
           onClick={handleLookAround}
           disabled={isJoining}
-          className="rounded-3xl text-slate-700 w-fit p-4 h-10 w-22 px-10 py-2"
+          className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
         >
           Look Around First
         </button>
