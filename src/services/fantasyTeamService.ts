@@ -89,7 +89,7 @@ export const fantasyTeamService = {
         const userInfo = await authService.getUserInfo();
         userId = userInfo?.kc_id || 'default-user-id';
       }
-      
+
       // Use the correct endpoint for fetching user teams
       const url = getUri(`/api/v1/fantasy-teams/user-teams/${userId}`);
 
@@ -108,6 +108,33 @@ export const fantasyTeamService = {
       return Array.isArray(data) ? data : [];
     } catch (error) {
       console.error('Error in fetchUserTeams:', error);
+      throw error; // Re-throw to be handled by the caller
+    }
+  },
+
+  /**
+   * Fetch all league teams for the current user
+   */
+  fetchUserLeagueTeams: async (userId: string, leagueId: string): Promise<any> => {
+    try {
+      // Use unified endpoint with trailing slash and league filter as query param
+      const url = getUri(`/api/v1/fantasy-teams/user-teams/${userId}/?league_id=${leagueId}`);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: getAuthHeader(),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to fetch team:', errorText);
+        throw new Error(`Failed to fetch team: ${errorText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error in fetchUserLeagueTeams:', error);
       throw error; // Re-throw to be handled by the caller
     }
   },
@@ -180,7 +207,7 @@ export const fantasyTeamService = {
     if (!teamId) {
       return [];
     }
-    
+
     try {
       // Make API request to get team athletes
       const uri = getUri(`/api/v1/fantasy-athletes/fantasy-team-athletes/${teamId}/`);
