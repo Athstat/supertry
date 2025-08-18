@@ -31,7 +31,9 @@ export default function UpcomingFixturesSection() {
     'd313fbf5-c721-569b-975d-d9ec242a6f19',
   ];
 
-  const { seasons, currSeason, setCurrSeason } = useSupportedSeasons({ wantedSeasonsId: seasonIds });
+  const { seasons, currSeason, setCurrSeason } = useSupportedSeasons({
+    wantedSeasonsId: seasonIds,
+  });
 
   const [selectedFixture, setSelectedFixture] = useState<IFixture | null>(null);
   const [showPredictModal, setShowPredictModal] = useState(false);
@@ -42,45 +44,46 @@ export default function UpcomingFixturesSection() {
     return <ErrorState message="Failed to fetch upcoming matches" />;
   }
 
-  fixtures = (fixtures ?? []).filter(f => {
-    return currSeason ? f.league_id === currSeason?.id : true;
-  }).sort((a, b) =>
-    a.kickoff_time && b.kickoff_time
-      ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
-      : 0
-  );
+  fixtures = (fixtures ?? [])
+    .filter(f => {
+      return currSeason ? f.league_id === currSeason?.id : true;
+    })
+    .sort((a, b) =>
+      a.kickoff_time && b.kickoff_time
+        ? new Date(a.kickoff_time).valueOf() - new Date(b.kickoff_time).valueOf()
+        : 0
+    );
 
   // Sort fixtures by date and time
   const sortedFixtures = Array.isArray(fixtures)
     ? fixtures
-      .filter(f => {
-        const notCompleted = f.game_status !== 'completed';
+        .filter(f => {
+          const notCompleted = f.game_status !== 'completed';
 
-        return notCompleted;
-      })
-      .slice(0, 5)
+          return notCompleted;
+        })
+        .slice(0, 5)
     : [];
 
-  const last10 = [...fixtures].slice(
-    fixtures.length - 11, fixtures.length
-  ).sort((a, b) =>
-    a.kickoff_time && b.kickoff_time
-      ? new Date(b.kickoff_time).valueOf() - new Date(a.kickoff_time).valueOf()
-      : 0
-  );
+  const last10 = [...fixtures]
+    .slice(fixtures.length - 11, fixtures.length)
+    .sort((a, b) =>
+      a.kickoff_time && b.kickoff_time
+        ? new Date(b.kickoff_time).valueOf() - new Date(a.kickoff_time).valueOf()
+        : 0
+    );
 
   const handleClickPredict = (fixture: IFixture) => {
     setSelectedFixture(fixture);
     setShowPredictModal(true);
-  }
+  };
 
   if (last10.length === 0 && sortedFixtures.length == 0) {
     return;
   }
 
   return (
-    <div className='flex flex-col gap-4' >
-      
+    <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
           <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
@@ -97,8 +100,8 @@ export default function UpcomingFixturesSection() {
       <PilledSeasonFilterBar
         seasons={seasons}
         onChange={(sId?: string) => {
-          const szn = seasons.find((f) => f.id === sId);
-          setCurrSeason(szn)
+          const szn = seasons.find(f => f.id === sId);
+          setCurrSeason(szn);
         }}
         value={currSeason?.id}
         sortDesc
@@ -106,9 +109,8 @@ export default function UpcomingFixturesSection() {
       />
 
       {sortedFixtures.length === 0 ? (
-
         <div className="flex space-x-4 overflow-x-auto pb-2">
-          {last10.map((fixture) => {
+          {last10.map(fixture => {
             return (
               <UpcomingFixtureCard
                 fixture={fixture}
@@ -120,7 +122,7 @@ export default function UpcomingFixturesSection() {
         </div>
       ) : (
         <div className="flex space-x-4 overflow-x-auto pb-2">
-          {sortedFixtures.map((fixture) => {
+          {sortedFixtures.map(fixture => {
             return (
               <UpcomingFixtureCard
                 fixture={fixture}
@@ -148,33 +150,32 @@ export default function UpcomingFixturesSection() {
 }
 
 type Props = {
-  fixture: IFixture,
-  onClickPredict?: (fixture: IFixture) => void
-}
+  fixture: IFixture;
+  onClickPredict?: (fixture: IFixture) => void;
+};
 
 function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
-
   const { push } = useRouter();
 
   const handleClickChat = () => {
-    push(`/fixtures/${fixture.game_id}#chat`)
-  }
+    push(`/fixtures/${fixture.game_id}#chat`);
+  };
 
   const handleClickPredict = () => {
     if (onClickPredict) {
       onClickPredict(fixture);
     }
-  }
+  };
 
   const { game_status } = fixtureSumary(fixture);
-  const gameCompleted = game_status === "completed";
+  const gameCompleted = game_status === 'completed';
 
   return (
     <div
       className="min-w-[320px] cursor-pointer  bg-white hover:bg-slate-200 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 hover:dark:bg-gray-800/70 rounded-xl overflow-hidden text-white"
       onClick={() => {
         if (gameCompleted && onClickPredict) {
-          onClickPredict(fixture)
+          onClickPredict(fixture);
         }
       }}
     >
@@ -204,7 +205,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>}
-            <SecondaryText className='' >{fixture.team_score}</SecondaryText>
+            <SecondaryText className="">{fixture.team_score}</SecondaryText>
           </div>
 
           {/* Match Info (centered) */}
@@ -214,10 +215,14 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
                 <p className="text-xs text-gray-700 dark:text-gray-300 text-center">
                   {format(new Date(fixture.kickoff_time), 'E, d MMM')}
                 </p>
-                {!gameCompleted && <p className="text-lg font-bold my-1 text-center text-gray-900 dark:text-white">
-                  {format(new Date(fixture.kickoff_time), 'HH:mm')}
-                </p>}
-                {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400 text-center">vs</p>}
+                {!gameCompleted && (
+                  <p className="text-lg font-bold my-1 text-center text-gray-900 dark:text-white">
+                    {format(new Date(fixture.kickoff_time), 'HH:mm')}
+                  </p>
+                )}
+                {!gameCompleted && (
+                  <p className="text-xs text-gray-600 dark:text-gray-400 text-center">vs</p>
+                )}
                 {gameCompleted && <SecondaryText>Final</SecondaryText>}
               </>
             )}
@@ -239,11 +244,11 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.opposition_team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>}
-            <SecondaryText className='' >{fixture.opposition_score}</SecondaryText>
+            <SecondaryText className="">{fixture.opposition_score}</SecondaryText>
           </div>
         </div>
 
-        <div className="flex space-x-2">
+        {/* <div className="flex space-x-2">
           {!gameCompleted && <button
             className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
             onClick={handleClickPredict}
@@ -256,13 +261,13 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
           >
             <span>Chat</span>
             {/* <span className="w-2 h-2 bg-blue-500 rounded-full"></span> */}
-          </button>
-        </div>
+        {/* </button>
+        </div> */}
 
-        { }
+        {}
       </div>
     </div>
-  )
+  );
 }
 
 // Prediction Modal Component
@@ -333,7 +338,8 @@ function PredictionModal({
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
-            className="w-20 h-20" url={fixture.team.image_url}
+            className="w-20 h-20"
+            url={fixture.team.image_url}
             teamName={fixture.team.athstat_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">

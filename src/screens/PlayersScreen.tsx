@@ -161,12 +161,12 @@ export const PlayerScreenContent = () => {
               sortDirection={sortDirection}
               onSort={handleSortByField}
             />
-
+            {/* 
             <PlayersCompareButton
               className={twMerge(
                 isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700'
               )}
-            />
+            /> */}
           </div>
         </div>
 
