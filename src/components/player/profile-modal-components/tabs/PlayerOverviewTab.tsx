@@ -16,6 +16,20 @@ type Props = {
   player: IProAthlete;
 }
 
+// Converts centimeters to feet and inches string, e.g., 170 -> 5'7"
+function cmToFeetInches(cm: number): string {
+  const totalInches = cm / 2.54;
+  const feet = Math.floor(totalInches / 12);
+  const inches = Math.round(totalInches - feet * 12);
+  return `${feet}'${inches}"`;
+}
+
+// Converts kilograms to pounds string, rounded to nearest pound
+function kgToLbs(kg: number): string {
+  const lbs = Math.round(kg * 2.2046226218);
+  return `${lbs} lbs`;
+}
+
 /** Renders a player profile overview tab */
 export default function PlayerOverviewTab({ player }: Props) {
 
@@ -50,12 +64,12 @@ export default function PlayerOverviewTab({ player }: Props) {
         <div className='flex flex-row items-center gap-2' >
 
           {player.height && <PlayerInfoCard
-            value={`${player.height} cm`}
+            value={`${player.height} cm / ${cmToFeetInches(player.height)}`}
             label={'Height'}
           />}
 
           {player.weight && <PlayerInfoCard
-            value={`${player.weight} kg`}
+            value={`${player.weight} kg / ${kgToLbs(player.weight)}`}
             label={'Weight'}
           />}
         </div>
@@ -102,3 +116,4 @@ export default function PlayerOverviewTab({ player }: Props) {
     </div>
   );
 };
+
