@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
-import { CardTier } from "../../types/cardTiers";
-import ScrummyLogo from "../branding/scrummy_logo";
+import { useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { CardTier } from '../../types/cardTiers';
+import ScrummyLogo from '../branding/scrummy_logo';
 
 type Props = {
   url?: string;
@@ -9,6 +9,7 @@ type Props = {
   alt?: string;
   showPrBackground?: boolean;
   playerPr?: number;
+  teamId?: string;
   isCaptain?: boolean;
 };
 
@@ -18,25 +19,73 @@ export default function PlayerMugshot({
   alt,
   showPrBackground,
   playerPr,
+  teamId,
   isCaptain = false,
 }: Props) {
   const imageUrl = url;
-  const [error, setError] = useState(false);
+  const teamFallbackUrl = teamId
+    ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${teamId}-ph-removebg-preview.png`
+    : null;
+  // Start with main URL; if absent, try team fallback; if that fails, show ScrummyLogo
+  const [src, setSrc] = useState<string | null>(imageUrl ?? teamFallbackUrl);
 
-  if (error || !url) {
+  // Keep src in sync when url or teamId changes
+  useEffect(() => {
+    setSrc(imageUrl ?? teamFallbackUrl ?? null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageUrl, teamFallbackUrl]);
+
+  const handleError = () => {
+    // If primary fails, try team fallback (if available). If that also fails, show ScrummyLogo
+    if (src && imageUrl && src === imageUrl) {
+      if (teamFallbackUrl) {
+        setSrc(teamFallbackUrl);
+      } else {
+        setSrc(null);
+      }
+    } else if (src && teamFallbackUrl && src === teamFallbackUrl) {
+      setSrc(null);
+    } else {
+      setSrc(null);
+    }
+  };
+
+  const pr = playerPr ?? 0;
+  const cardTier: CardTier =
+    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+
+  // If both sources failed, show ScrummyLogo inside a neutral circle
+  if (!src) {
     return (
-      <div className={twMerge(
-        "w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full",
-        className
-      )}>
+      <div
+        className={twMerge(
+          'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2',
+          className
+        )}
+      >
         <ScrummyLogo className="opacity-30" />
       </div>
     );
   }
 
-  const pr = playerPr ?? 0;
-  const cardTier: CardTier =
-    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+  // If using the team fallback image, use the neutral gray circle container (like previous fallback UI)
+  if (teamFallbackUrl && src === teamFallbackUrl) {
+    return (
+      <div
+        className={twMerge(
+          'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2',
+          className
+        )}
+      >
+        <img
+          src={src}
+          alt={alt ?? 'team_logo'}
+          onError={handleError}
+          className="w-full h-full object-contain"
+        />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -63,9 +112,9 @@ export default function PlayerMugshot({
       )}
     >
       <img
-        src={imageUrl}
+        src={src}
         alt={alt ?? 'team_logo'}
-        onError={() => setError(true)}
+        onError={handleError}
         className="w-full h-full object-contain"
       />
     </div>

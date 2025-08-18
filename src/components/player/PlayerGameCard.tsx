@@ -5,7 +5,7 @@ import TeamLogo from '../team/TeamLogo';
 import { IProAthlete } from '../../types/athletes';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrummyDarkModeLogo, ScrummyLightModeLogo } from '../branding/scrummy_logo';
 import { CircleDollarSign } from 'lucide-react';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
@@ -22,6 +22,8 @@ type Props = {
   priceClassName?: string;
   teamLogoClassName?: string;
   detailsClassName?: string;
+  // Optional override for background frame image styling (to avoid cropping in specific contexts)
+  frameClassName?: string;
 };
 
 /** Renders a athlete game card that is either gold, silver or
@@ -40,10 +42,32 @@ export function PlayerGameCard({
   priceClassName,
   teamLogoClassName,
   detailsClassName,
+  frameClassName,
 }: Props) {
   const selectedPlayers = useAtomValue(comparePlayersAtom);
 
-  const [imageError, setImageError] = useState<boolean>(false);
+  // Image fallback chain: primary player image -> team logo -> Scrummy logo
+  const primaryImageUrl = player.image_url ?? null;
+  const teamFallbackUrl = player.team_id
+    ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${player.team_id}-ph-removebg-preview.png`
+    : null;
+  const [src, setSrc] = useState<string | null>(primaryImageUrl ?? teamFallbackUrl);
+
+  useEffect(() => {
+    setSrc(primaryImageUrl ?? teamFallbackUrl ?? null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [primaryImageUrl, teamFallbackUrl]);
+
+  const handleImageError = () => {
+    if (src && primaryImageUrl && src === primaryImageUrl) {
+      if (teamFallbackUrl) setSrc(teamFallbackUrl);
+      else setSrc(null);
+    } else if (src && teamFallbackUrl && src === teamFallbackUrl) {
+      setSrc(null);
+    } else {
+      setSrc(null);
+    }
+  };
 
   const shouldGlow = selectedPlayers.some(a => a.tracking_id === player.tracking_id);
 
@@ -67,6 +91,8 @@ export function PlayerGameCard({
   };
   const frameSrc = frameByPosition[positionClass] || '/player_card_backgrounds/back-bg.png';
 
+  //console.log('placeholder: ', player);
+
   return (
     <div className="h-full w-full">
       <div
@@ -83,7 +109,10 @@ export function PlayerGameCard({
           src={frameSrc}
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+          className={twMerge(
+            'absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none',
+            frameClassName
+          )}
         />
 
         {!isAvailable && (
@@ -100,28 +129,37 @@ export function PlayerGameCard({
         {!hideTeamLogo && (
           <div className={twMerge('absolute top-2 right-2 z-[5]', teamLogoClassName)}>
             <TeamLogo
-              className="w-8 h-8 dark:text-white/40"
+              className="w-10 h-10 dark:text-white/40"
               url={player.team?.image_url ?? player.athlete.team.image_url}
             />
           </div>
         )}
 
         {/* Foreground Content Wrapper */}
-        {/* Player Image */}
+        {/* Player Image with fallbacks */}
         <div className="relative flex-[3] overflow-hidden z-[1]">
-          {!imageError && player.image_url && (
+          {src && src === primaryImageUrl && (
             <img
-              src={player.image_url}
+              src={src}
               alt={''}
               className="w-full object-scale-down object-top"
-              onError={() => setImageError(true)}
+              onError={handleImageError}
             />
           )}
 
-          {(imageError || !player.image_url) && (
+          {src && teamFallbackUrl && src === teamFallbackUrl && (
+            <div className="flex flex-col items-center justify-center w-full h-full translate-y-12 translate-x-0 p-5">
+              <img
+                src={src}
+                alt={''}
+                className="w-full object-scale-down object-top"
+                onError={handleImageError}
+              />
+            </div>
+          )}
+
+          {!src && (
             <div className="flex flex-col items-center justify-center w-full h-full translate-y-7">
-              {/* Force light-mode logo regardless of theme, no background */}
-              {/* <ScrummyLightModeLogo className="w-24 h-24 opacity-30" /> */}
               <ScrummyDarkModeLogo className="w-24 h-24 opacity-30" />
             </div>
           )}

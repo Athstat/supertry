@@ -21,40 +21,46 @@ export default function FeaturedPlayersCarousel() {
     'd313fbf5-c721-569b-975d-d9ec242a6f19',
   ];
 
-  const { seasons, currSeason, setCurrSeason, isLoading: seasonsLoading } = useSupportedSeasons({ wantedSeasonsId: wantedSeasons });
+  const {
+    seasons,
+    currSeason,
+    setCurrSeason,
+    isLoading: seasonsLoading,
+  } = useSupportedSeasons({ wantedSeasonsId: wantedSeasons });
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
 
   const key = currSeason ? swrFetchKeys.getAllSeasonAthletes(currSeason) : undefined;
-  const { data: fetchedPlayers, isLoading: playersLoading } = useSWR(key, () => seasonService.getSeasonAthletes(currSeason?.id ?? "fallback"));
+  const { data: fetchedPlayers, isLoading: playersLoading } = useSWR(key, () =>
+    seasonService.getSeasonAthletes(currSeason?.id ?? 'fallback')
+  );
 
   const players = (fetchedPlayers ?? []).filter(p => {
     return (p.power_rank_rating ?? 0) > 60;
   });
 
-  const {shuffledArr: shuffledPlayers} = useDeterministicShuffle(players, {
-    shuffleWindow: 1000 * 60 * 5
+  const { shuffledArr: shuffledPlayers } = useDeterministicShuffle(players, {
+    shuffleWindow: 1000 * 60 * 5,
   });
 
   const handlePlayerClick = (player: IProAthlete) => {
     setPlayerModalPlayer(player);
     setShowPlayerModal(true);
-  }
+  };
 
   const handleClosePlayerModal = () => {
     setShowPlayerModal(false);
     setPlayerModalPlayer(undefined);
-  }
+  };
 
   const handleChangeSeason = (seasonId: string) => {
     setCurrSeason(() => {
-      return seasons.find((s) => s.id === seasonId);
-    })
+      return seasons.find(s => s.id === seasonId);
+    });
   };
 
   return (
     <div className="w-full">
-
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-base font-medium flex items-center gap-2">
           <Users className="w-4 h-4 text-primary-500" />
@@ -62,13 +68,14 @@ export default function FeaturedPlayersCarousel() {
         </h3>
         <button
           onClick={() => navigate('/players')}
-          className="text-sm text-primary-700 hover:text-primary-600 flex flex-row items-center gap-1">
+          className="text-sm text-primary-700 hover:text-primary-600 flex flex-row items-center gap-1"
+        >
           View All
-          <ArrowRight className='w-4 h-4' />
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
 
-      <div className='flex flex-col gap-2'>
+      <div className="flex flex-col gap-2">
         <PilledSeasonFilterBar
           seasons={seasons}
           value={currSeason?.id}
@@ -78,33 +85,27 @@ export default function FeaturedPlayersCarousel() {
           sortDesc
         />
 
-        {playersLoading || seasonsLoading && (
-          <div className='flex flex-row items-center gap-2' >
-            <div className='bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse' >
-            </div>
-            <div className='bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse' >
-            </div>
-            <div className='bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse' >
-            </div>
-            <div className='bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse' >
-            </div>
-            <div className='bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse' >
-            </div>
-          </div>
-        )}
-
-        {/* Player cards carousel - showing featured players only */}
-        {!playersLoading && !seasonsLoading && <div className="flex space-x-3 items-center justify-start overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
-          {shuffledPlayers.map(player => (
-            <div key={player.tracking_id} className="pl-1 flex-shrink-0">
-              <FeaturePlayerCard
-                player={player}
-                onClick={handlePlayerClick}
-              />
+        {playersLoading ||
+          (seasonsLoading && (
+            <div className="flex flex-row items-center gap-2">
+              <div className="bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse"></div>
+              <div className="bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse"></div>
+              <div className="bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse"></div>
+              <div className="bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse"></div>
+              <div className="bg-slate-200 dark:bg-slate-700/20 w-24 h-24 rounded-full animate-pulse"></div>
             </div>
           ))}
-        </div>}
 
+        {/* Player cards carousel - showing featured players only */}
+        {!playersLoading && !seasonsLoading && (
+          <div className="flex space-x-3 items-center justify-start overflow-x-auto -mx-4 px-4 snap-x snap-mandatory no-scrollbar">
+            {shuffledPlayers.map(player => (
+              <div key={player.tracking_id} className="pl-1 flex-shrink-0">
+                <FeaturePlayerCard player={player} onClick={handlePlayerClick} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {playerModalPlayer && (
@@ -116,45 +117,42 @@ export default function FeaturedPlayersCarousel() {
       )}
     </div>
   );
-};
-
-type FeaturePlayerProp = {
-  player: IProAthlete,
-  onClick?: (player: IProAthlete) => void
 }
 
-function FeaturePlayerCard({ player, onClick }: FeaturePlayerProp) {
+type FeaturePlayerProp = {
+  player: IProAthlete;
+  onClick?: (player: IProAthlete) => void;
+};
 
+function FeaturePlayerCard({ player, onClick }: FeaturePlayerProp) {
   const handleClick = () => {
     if (onClick) {
       onClick(player);
     }
-  }
+  };
 
   const { ref, inView } = useInView({ triggerOnce: true });
 
   return (
-    <div
-      className="flex flex-col items-center gap-1"
-      onClick={handleClick}
-      ref={ref}
-    >
-      {inView && <Fragment>
-        <PlayerMugshot
-          url={player.image_url}
-          className='w-24 h-24'
-          playerPr={player.power_rank_rating}
-          showPrBackground
-        />
+    <div className="flex flex-col items-center gap-1" onClick={handleClick} ref={ref}>
+      {inView && (
+        <Fragment>
+          <PlayerMugshot
+            url={player.image_url}
+            className="w-24 h-24"
+            playerPr={player.power_rank_rating}
+            teamId={player.team_id}
+            showPrBackground
+          />
 
-        <p className='text-xs truncate' >
-          {player.athstat_firstname && player.athstat_firstname[0]}. {player.athstat_lastname}
-        </p>
-      </Fragment>}
+          <p className="text-xs truncate">
+            {player.athstat_firstname && player.athstat_firstname[0]}. {player.athstat_lastname}
+          </p>
+        </Fragment>
+      )}
     </div>
-  )
+  );
 }
-
 
 // const [players, setPlayers] = useState<IProAthlete[]>([]);
 //   const [loading, setLoading] = useState(true);

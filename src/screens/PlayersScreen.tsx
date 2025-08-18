@@ -161,12 +161,12 @@ export const PlayerScreenContent = () => {
               sortDirection={sortDirection}
               onSort={handleSortByField}
             />
-
+            {/* 
             <PlayersCompareButton
               className={twMerge(
                 isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700'
               )}
-            />
+            /> */}
           </div>
         </div>
 
@@ -252,7 +252,7 @@ function PlayerCardItem({ player, onClick }: ItemProps) {
           onClick={onClick}
           className="h-[250px] lg:h-[300px]"
           // Players screen specific spacing tweaks
-          priceClassName="top-14 left-4"
+          priceClassName="top-14 left-5"
           teamLogoClassName="top-7 right-2"
           detailsClassName="px-6 pb-10"
         />
