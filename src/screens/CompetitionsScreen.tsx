@@ -17,6 +17,36 @@ export default function CompetitionsScreen() {
 
     seasons = seasons ?? [];
 
+    // Custom priority: force specific competitions to the top in this order
+    const priorityOrder = new Map<string, number>([
+        ["Women International 2025", 0],
+        ["Womens Rugby World Cup 2025", 1],
+    ]);
+
+    // Order competitions to show upcoming first, then past
+    const now = new Date();
+    seasons.sort((a, b) => {
+        const aPri = priorityOrder.has(a.name) ? (priorityOrder.get(a.name) as number) : Number.POSITIVE_INFINITY;
+        const bPri = priorityOrder.has(b.name) ? (priorityOrder.get(b.name) as number) : Number.POSITIVE_INFINITY;
+
+        if (aPri !== bPri) return aPri - bPri;
+
+        const aStart = new Date(a.start_date as unknown as string).getTime();
+        const bStart = new Date(b.start_date as unknown as string).getTime();
+        const aEnd = new Date(a.end_date as unknown as string).getTime();
+        const bEnd = new Date(b.end_date as unknown as string).getTime();
+
+        const aUpcoming = aEnd >= now.getTime();
+        const bUpcoming = bEnd >= now.getTime();
+
+        // Upcoming first
+        if (aUpcoming && !bUpcoming) return -1;
+        if (!aUpcoming && bUpcoming) return 1;
+
+        // Within same bucket, sort by start date ascending
+        return aStart - bStart;
+    });
+
     return (
         <PageView className="p-4 flex flex-col gap-4" >
             <div className="flex flex-row items-center gap-2 " >

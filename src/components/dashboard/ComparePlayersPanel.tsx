@@ -18,35 +18,29 @@ import { ArrowLeftRight } from 'lucide-react';
 import { useDeterministicShuffle } from '../../hooks/useShuffle';
 
 export default function ComparePlayersPanel() {
-
   return (
     <PlayerCompareProvider>
       <PanelContent />
     </PlayerCompareProvider>
-  )
-
+  );
 }
 
-
 function PanelContent() {
-
   const navigate = useNavigate();
   const minimumRatings = 85;
   let { athletes, isLoading } = useAthletes();
 
+  const selectedPlayers = useAtomValue(comparePlayersAtomGroup.comparePlayersAtom);
 
-  const selectedPlayers = useAtomValue(
-    comparePlayersAtomGroup.comparePlayersAtom
-  )
-
-  const { clearSelections, addOrRemovePlayer, removePlayer, showCompareModal } = usePlayerCompareActions();
+  const { clearSelections, addOrRemovePlayer, removePlayer, showCompareModal } =
+    usePlayerCompareActions();
   const [searchQuery, setSearchQuery] = useState('');
 
-  let {shuffledArr: shuffledAthletes, triggerShuffle} = useDeterministicShuffle(athletes);
+  let { shuffledArr: shuffledAthletes, triggerShuffle } = useDeterministicShuffle(athletes);
 
-  shuffledAthletes = shuffledAthletes.filter((f) => {
+  shuffledAthletes = shuffledAthletes.filter(f => {
     return (f.power_rank_rating ?? 0) > minimumRatings;
-  })
+  });
 
   const handlePlayerClick = (player: IProAthlete) => {
     addOrRemovePlayer(player);
@@ -55,7 +49,7 @@ function PanelContent() {
   const handleShuffle = () => {
     triggerShuffle();
     clearSelections();
-  }
+  };
 
   const filteredPlayers = shuffledAthletes.filter(player => {
     const query = searchQuery.toLowerCase();
@@ -74,7 +68,6 @@ function PanelContent() {
           Compare Players
         </h3>
         <div className="flex gap-2">
-
           <button
             onClick={handleShuffle}
             className="text-xs px-3 py-1 flex flex-row items-center gap-1 rounded-xl bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800 border border-primary-200 dark:border-primary-700 transition"
@@ -90,7 +83,6 @@ function PanelContent() {
           >
             View All
           </button>
-
         </div>
       </div>
 
@@ -102,13 +94,11 @@ function PanelContent() {
           </div>
 
           <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
-
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
               {selectedPlayers.length === 0
                 ? 'Select players to compare'
                 : `Selected ${selectedPlayers.length} players`}
             </p>
-
 
             {selectedPlayers.length > 0 && (
               <div className="flex flex-wrap gap-2">
@@ -124,7 +114,7 @@ function PanelContent() {
                       onClick={() => removePlayer(player)}
                       className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-lg font-bold"
                     >
-                      <X className='w-4 h-4' />
+                      <X className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
@@ -133,12 +123,9 @@ function PanelContent() {
           </div>
 
           {selectedPlayers.length > 0 && (
-            <PrimaryButton 
-              className='mb-4' 
-              onClick={showCompareModal}
-            >
+            <PrimaryButton className="mb-4" onClick={showCompareModal}>
               Compare
-              <ArrowLeftRight className='w-4 h-4' />
+              <ArrowLeftRight className="w-4 h-4" />
             </PrimaryButton>
           )}
 
@@ -154,8 +141,9 @@ function PanelContent() {
                   'h-[200px] cursor-pointer transition-all',
                   'hover:ring-2 hover:ring-primary-500 dark:hover:ring-primary-400',
                   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
-                  'ring-2 ring-primary-500 dark:ring-primary-400'
+                    'ring-2 ring-primary-500 dark:ring-primary-400'
                 )}
+                detailsClassName="px-4 pb-8"
               />
             ))}
           </div>
@@ -165,4 +153,4 @@ function PanelContent() {
       </div>
     </div>
   );
-};
+}
