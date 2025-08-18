@@ -276,7 +276,7 @@ export default function ViewMyTeam({
             const athlete = athletesBySlot[slot];
             return (
               <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0">
-                <div className="w-full min-w-0 aspect-square overflow-hidden p-2 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center">
+                <div className="w-full min-w-0 h-60 flex items-center justify-center bg-transparent">
                   {athlete ? (
                     <div className="w-full h-full">
                       <PlayerGameCard
@@ -288,6 +288,9 @@ export default function ViewMyTeam({
                           setPlayerModalPlayer(athlete);
                           setShowPlayerModal(true);
                         }}
+                        detailsClassName="pl-6 pr-6 pb-7"
+                        priceClassName="top-12 left-6"
+                        teamLogoClassName="top-4 right-2"
                       />
                     </div>
                   ) : (
