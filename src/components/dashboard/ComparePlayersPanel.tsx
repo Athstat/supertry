@@ -145,7 +145,6 @@ function PanelContent() {
                 onClick={() => handlePlayerClick(player)}
                 className={twMerge(
                   'h-[260px] cursor-pointer transition-all',
-                  'hover:ring-2 hover:ring-primary-500 dark:hover:ring-primary-400',
                   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
                     'ring-2 ring-primary-500 dark:ring-primary-400'
                 )}

@@ -73,7 +73,7 @@ export default function PlayerMugshot({
     return (
       <div
         className={twMerge(
-          'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2',
+          'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2 ',
           className
         )}
       >
@@ -81,7 +81,7 @@ export default function PlayerMugshot({
           src={src}
           alt={alt ?? 'team_logo'}
           onError={handleError}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain translate-y-4"
         />
       </div>
     );
