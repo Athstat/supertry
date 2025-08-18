@@ -280,9 +280,11 @@ function WelcomeCTAScreen() {
   const { isLoading: isJoining, handleJoinLeague, error, clearError } = useJoinLeague();
 
   const top5Athletes = useMemo(() => {
-    return [...athletes].sort((a, b) => {
+    return [...athletes]
+    .filter((a) => a.image_url)
+    .sort((a, b) => {
       return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
-    }).slice(0, 6);
+    }).slice(0, 3);
   }, [athletes]);
 
   const handleStartBuilding = async () => {
@@ -303,7 +305,7 @@ function WelcomeCTAScreen() {
 
   if (!featuredLeague || featuredPlayers.length === 0) {
     return (
-      <div className='textflex flex-col gap-4 h-full items-center justify-start' >
+      <div className='text-center flex flex-col gap-4 h-full items-center justify-start' >
 
         <ScrummyLogo className='w-52 h-52 ' />
 

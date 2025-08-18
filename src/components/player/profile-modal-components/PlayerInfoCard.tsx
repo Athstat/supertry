@@ -17,7 +17,7 @@ export default function PlayerInfoCard({value, label, className} : Props) {
                 className
             )
         } >
-            <p className='font-semibold' >{value}</p>
+            <p className='font-semibold dark:text-white' >{value}</p>
             <SecondaryText className='text-xs truncate dark:text-slate-300' >{label}</SecondaryText>
         </div>
     )

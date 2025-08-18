@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { seasonService } from "../services/seasonsService";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IProSeason } from "../types/season";
 
 /** Provides reusable logic for fetching
@@ -27,6 +27,10 @@ export function useSupportedSeasons({ wantedSeasonsId = [] }: Options = {}) {
 
     const [currSeason, setCurrSeason] = useState<IProSeason>();
 
+    const fantasySupportedSeasons = useMemo(() => {
+        return seasons.filter((s) => s.fantasy_supported === true);
+    }, [seasons]);
+
     useEffect(() => {
         if (seasons.length > 0) {
             setCurrSeason(seasons[0]);
@@ -38,6 +42,7 @@ export function useSupportedSeasons({ wantedSeasonsId = [] }: Options = {}) {
         seasons,
         currSeason,
         setCurrSeason,
+        fantasySupportedSeasons
     };
 }
 

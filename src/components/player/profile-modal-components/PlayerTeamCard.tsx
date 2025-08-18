@@ -20,7 +20,7 @@ export default function PlayerTeamCard({player} : Props) {
             />
 
             <div className="flex flex-col" >
-                <p className="text-sm font-semibold" >{player.team?.athstat_name}</p>
+                <p className="text-sm font-semibold dark:text-white" >{player.team?.athstat_name}</p>
                 {player.position && player.position_class && <SecondaryText className="dark:text-slate-300 text-xs" >{formatPosition(player.position)} | {formatPosition(player.position_class)}</SecondaryText>}
             </div>
         </div>

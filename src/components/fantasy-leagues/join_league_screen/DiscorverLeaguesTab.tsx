@@ -5,6 +5,7 @@ import { swrFetchKeys } from "../../../utils/swrKeys";
 import { useState } from "react";
 import useSWR from "swr";
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
+import OfficialLeaguesSection from "./OfficialLeaguesSection";
 
 
 export default function DiscorverLeaguesTab() {
@@ -60,6 +61,9 @@ export default function DiscorverLeaguesTab() {
                 </div>
             ) : (
                 <>
+                    <OfficialLeaguesSection
+                        leagues={discoverLeagues}
+                    />
                     <JoinLeagueActiveLeaguesSection
                         leagues={discoverLeagues}
                     />

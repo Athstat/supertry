@@ -1,7 +1,7 @@
 import { DjangoAuthUser } from "./auth";
 import { IProSeason } from "./season";
 
-export type FantasyLeagueGroupType = "user_created" | "system_created";
+export type FantasyLeagueGroupType = "user_created" | "system_created" | 'official_league';
 
 export type FantasyLeagueGroup = {
     id: string,
