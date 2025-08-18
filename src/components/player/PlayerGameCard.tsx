@@ -36,7 +36,7 @@ export function PlayerGameCard({ player, className, onClick, hidePrice = false, 
   return (
     <div
       className={twMerge(
-        'max-w-[200px] cursor-pointer max-h-[250px] ',
+        'min-w-[180px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px] cursor-pointer max-h-[250px] ',
         'flex items-center justify-center relative text-white dark:text-white',
         className
       )}
@@ -50,7 +50,7 @@ export function PlayerGameCard({ player, className, onClick, hidePrice = false, 
         <img
           src={frameSrc}
           className={twMerge(
-            'object-contain min-w-[200px] max-w-[200px]',
+            'object-contain min-w-[180px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px]',
             frameClassName
           )}
         />

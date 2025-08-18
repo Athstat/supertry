@@ -31,9 +31,10 @@ function ProviderContent({ children }: Props) {
   const featuredLeagueId: string = import.meta.env.VITE_FEATURE_LEAGUE_GROUP_ID ?? '';
 
   const featuredPlayersId: string[] = [
+    'b5ee73ca-4552-5b63-80d2-f0b5a5d3c9e2',
     '37c4c9b3-be01-5528-917d-bd5ccaff006c',
-    'c280f4d7-87fe-5bec-a099-473ebd78f41f',
-    '1188cb47-a7cd-571d-8f96-676691517662',
+    // 'c280f4d7-87fe-5bec-a099-473ebd78f41f',
+    // '1188cb47-a7cd-571d-8f96-676691517662',
   ];
 
   const setFeaturedLeague = useSetAtom(featuredLeagueAtom);

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { getTeamJerseyImage } from '../../utils/athleteUtils'
 import { twMerge } from 'tailwind-merge';
-import ScrummyLogo from '../branding/scrummy_logo';
+import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 
 type Props = {
     teamId?: string
@@ -12,9 +12,9 @@ export default function TeamJersey({ teamId }: Props) {
     const imageUrl = teamId ? getTeamJerseyImage(teamId) : undefined;
     const [error, setError] = useState<boolean>(false);
 
-    if (error) {
+    if (error || imageUrl === undefined) {
         return (
-            <ScrummyLogo 
+            <ScrummyDarkModeLogo
                 className='opacity-20 grayscale'
             />
         )
