@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
-import ScrummyLogo, { ScrummyDarkModeLogo } from '../../components/branding/scrummy_logo';
+import { ScrummyLightModeLogo } from '../../components/branding/scrummy_logo';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import SecondaryText from '../../components/shared/SecondaryText';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
@@ -105,14 +105,14 @@ export function WelcomeScreen() {
   return (
 
     <MovingRugbyPitch className='h-[100vh] overflow-hidden flex flex-col items-center justify-center' >
-      <div className="flex z-50 bg-green-950/90 flex-col items-center overflow-y-auto justify-center h-[100vh] px-4">
+      <div className="flex z-50 bg-green-700/90 flex-col items-center overflow-y-auto justify-center h-[100vh] px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full max-w-md flex flex-col gap-2 items-center"
         >
-          <ScrummyDarkModeLogo className="w-60 h-60 md:w-60 md:h-60 -mb-5" />
+          <ScrummyLightModeLogo className="w-60 h-60 md:w-60 md:h-60 -mb-5" />
 
           <motion.div
             initial={{ opacity: 0 }}

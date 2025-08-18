@@ -65,7 +65,7 @@ export default function PostSignUpWelcomeScreen() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="flex flex-col items-center justify-center p-4"
             >
-              <IntialWelcomeScreen />
+              <InitialWelcomeScreen />
             </motion.div>
           </AnimatePresence>
 
@@ -81,12 +81,28 @@ export default function PostSignUpWelcomeScreen() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="flex flex-col items-center justify-center p-4"
             >
+              <BudgetingWelcomeScreen />
+            </motion.div>
+          </AnimatePresence>
+
+        )}
+
+        {currIndex === 2 && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currIndex}
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '-100%' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="flex flex-col items-center justify-center p-4"
+            >
               <RallyFriendsScreen />
             </motion.div>
           </AnimatePresence>
         )}
 
-        {currIndex === 2 && (
+        {currIndex === 3 && (
           <AnimatePresence mode="wait">
             <motion.div
               key={currIndex}
@@ -135,6 +151,14 @@ export const tabs: IOnboardingTab[] = [
     imageUrl: '/images/onboarding/Scrummy Background Gradient.png',
   },
 
+
+  {
+    title: 'Rally Your Friends',
+    description:
+      'You’ve made the squad! From here on, it’s all tries, conversions, and bragging rights — with far fewer bruises than the real thing. Time to lace up and dive in.',
+    imageUrl: '/images/onboarding/Scrummy Background Gradient.png',
+  },
+
   {
     title: 'Last Onboarding Screen',
     description:
@@ -144,8 +168,41 @@ export const tabs: IOnboardingTab[] = [
 ];
 
 
-function IntialWelcomeScreen() {
+function InitialWelcomeScreen() {
 
+
+  return (
+    <div className='flex flex-col gap-4 h-full overflow-y-auto items-center justify-start' >
+
+      <ScrummyLogo className='w-52 h-52' />
+
+      {/* <div>
+        <img
+          src={'/images/onboarding/Compare Players.png'}
+          className='rounded-xl'
+        />
+      </div> */}
+
+      {/* Coins Floating Glowings in Yellow */}
+      {/* Cline implement this */}
+
+      <div className='' >
+        <h1 className='text-2xl text-center font-extrabold' >Let's get you warmed up to join the SCRUM!</h1>
+      </div>
+
+      <div className='flex flex-col items-center text-center justify-center' >
+        {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
+        <SecondaryText className='text-lg text-center' >
+          {/* You have 240 coins - talent is everywhere if you look closely and lots of data to analyse to chose your Dream Team */}
+          Don't worry, it's less bruises and more bragging rights from here
+        </SecondaryText>
+
+      </div>
+    </div>
+  )
+}
+
+function BudgetingWelcomeScreen() {
 
 
   return (
@@ -164,7 +221,7 @@ function IntialWelcomeScreen() {
       {/* Cline implement this */}
 
       <div className='' >
-        <h1 className='text-lg text-center font-extrabold' >Use your SCRUMMY coins to pick your favourite players!</h1>
+        <h1 className='text-lg text-center font-extrabold' >Use your SCRUMMY coins to pick your favorite players!</h1>
       </div>
 
       <div className='flex flex-col items-center text-center justify-center' >
@@ -204,9 +261,9 @@ function RallyFriendsScreen() {
       <div className='flex flex-col items-center text-center justify-center' >
         {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
         <SecondaryText className='text-lg text-center' >
-          Create your own league, invite friends, and compete for "scrum" bragging rights.
-          SCRUMMY has in depth player analytics and live updates on games, teams and everything
-          you need for a fantasy rugby battle
+          Create your own league, invite friends, and compete for bragging rights.
+          SCRUMMY has in-depth player analytics, live updates, and everything
+          you need for fantasy rugby
         </SecondaryText>
 
       </div>
@@ -297,14 +354,14 @@ function WelcomeCTAScreen() {
   }
 
   return (
-    <div className='relative flex flex-col gap-4 h-full w-full overflow-x-auto items-center' >
+    <div className='relative flex flex-col gap-6 h-full w-full overflow-x-auto items-center' >
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col gap-4 items-center">
+      <div className="relative z-10 flex flex-col gap-6 items-center">
         <ScrummyLogo className='w-56 h-56 lg:w-72 lg:h-72' />
 
         <div className='grid grid-cols-3 gap-2' >
-          {featuredPlayers.slice(3).map((a ) => {
+          {featuredPlayers.slice(3).map((a) => {
             return (
               <PlayerGameCard
                 player={a}
@@ -317,11 +374,11 @@ function WelcomeCTAScreen() {
           })}
         </div>
 
-        <div className='flex flex-col gap-2' >
-          <h1 className='text-2xl font-extrabold text-center' >Women's World Cup Is Here</h1>
+        <div className='flex flex-col gap-4' >
+          <h1 className='text-3xl font-black text-center' >The 2025 Women's World Cup Is Here!</h1>
 
           <div className='flex flex-col items-center text-center font-semibold text-md' >
-            <SecondaryText>You are now ready to go, lets get your starting with creating your first team and picking your players</SecondaryText>
+            <SecondaryText className='text-md' >You are now ready to go!</SecondaryText>
           </div>
         </div>
 
@@ -332,16 +389,16 @@ function WelcomeCTAScreen() {
             disabled={isJoining}
             className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
           >
-            Start Picking Your Players
+            Start Picking Your Team
           </PrimaryButton>
 
-          <button
+          {/* <button
             onClick={handleLookAround}
             disabled={isJoining}
             className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
           >
             Look Around First
-          </button>
+          </button> */}
         </div>
 
         {error && <Toast
