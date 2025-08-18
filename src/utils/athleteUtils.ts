@@ -314,7 +314,7 @@ export function isSportActionBest(
         .map(playerStat => {
 
             console.log("Player Actions at some point ", playerStat);
-            
+
             const stat = playerStat.stats.find((s) => {
                 return s.definition?.display_name === statDisplayName
             })
@@ -367,4 +367,22 @@ export function isPowerRatingBest(
 
 
     return maxVal === athlete.power_rank_rating;
+}
+
+/** Get Frame Src by the given position class */
+export function getPositionFrameBackground(positionClass: string) {
+
+    positionClass = positionClass.toLowerCase();
+
+    const frameByPosition: Record<string, string> = {
+        'front-row': '/player_card_backgrounds/front-row-bg.png',
+        'second-row': '/player_card_backgrounds/second-row-bg.png',
+        'back-row': '/player_card_backgrounds/back-row-bg.png',
+        'half-back': '/player_card_backgrounds/half-back-bg.png',
+        back: '/player_card_backgrounds/back-bg.png',
+    };
+    const frameSrc = frameByPosition[positionClass] || '/player_card_backgrounds/back-bg.png';
+
+    return frameSrc ?? '/player_card_backgrounds/front-row-bg.png';
+
 }
