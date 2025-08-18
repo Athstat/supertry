@@ -344,7 +344,6 @@ function WelcomeCTAScreen() {
         <div className="grid grid-cols-3 gap-2">
           {featuredPlayers
             .filter(a => hasValidImageUrl(a.image_url))
-            .slice(3)
             .map(a => {
               return (
                 <PlayerGameCard
