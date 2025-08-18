@@ -6,6 +6,7 @@ import FormIndicator from '../../shared/FormIndicator';
 import renderStatDots from './renderStatDots';
 import { useState } from 'react';
 import { WarningPopup } from '../../shared/WarningPopup';
+import { ScrummyLightModeLogo } from '../../branding/scrummy_logo';
 
 type Props = {
   index?: number;
@@ -30,6 +31,7 @@ export default function PlayerListItem({
 
   const [showWarning, setShowWarning] = useState(false);
   const toggleWarning = () => setShowWarning(!showWarning);
+  const [imageError, setImageError] = useState(false);
 
   const handleClickPlayer = () => {
     if (cannotAfford) {
@@ -50,18 +52,17 @@ export default function PlayerListItem({
             'opacity-40 bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700'
         )}
       >
-        {/* Player image/initials - hidden on mobile */}
-        <div className="sm:flex w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center mr-4">
-          {player.image_url ? (
+        {/* Player image with fallback logo */}
+        <div className="sm:flex w-16 h-16 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center mr-4 overflow-hidden">
+          {player.image_url && !imageError ? (
             <img
               src={player.image_url}
               alt={player.player_name}
-              className="w-16 h-16 rounded-full object-contain"
+              className="w-16 h-16 rounded-full object-cover"
+              onError={() => setImageError(true)}
             />
           ) : (
-            <span className="text-white text-xs font-semibold">
-              {player.player_name?.charAt(0) || '?'}
-            </span>
+            <ScrummyLightModeLogo className="w-9 h-9 opacity-70" />
           )}
         </div>
         {/* Player info */}

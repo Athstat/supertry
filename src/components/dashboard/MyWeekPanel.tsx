@@ -70,7 +70,7 @@ const MyWeekPanel = () => {
         <button
           className="bg-gradient-to-r from-white to-gray-200 via-gray-50 text-primary-800 hover:bg-opacity-90 hover:cursor-pointer font-semibold px-6 py-2 rounded-lg transition-colors"
           onClick={() =>
-            navigate(`/${activeLeague.official_league_id}/create-team`, {
+            navigate(`/leagues`, {
               state: { league: activeLeague },
             })
           }
