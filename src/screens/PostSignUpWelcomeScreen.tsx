@@ -187,7 +187,7 @@ function InitialWelcomeScreen() {
       {/* Cline implement this */}
 
       <div className='' >
-        <h1 className='text-2xl text-center font-extrabold' >Let's get you warmed up to join the SCRUM!</h1>
+        <h1 className='text-2xl text-center font-extrabold dark:text-white' >Let's get you warmed up to join the SCRUM!</h1>
       </div>
 
       <div className='flex flex-col items-center text-center justify-center' >
@@ -201,7 +201,7 @@ function InitialWelcomeScreen() {
     </div>
   )
 }
-
+ 
 function BudgetingWelcomeScreen() {
 
 
@@ -377,7 +377,7 @@ function WelcomeCTAScreen() {
         </div>
 
         <div className='flex flex-col gap-4' >
-          <h1 className='text-3xl font-black text-center' >The 2025 Women's World Cup Is Here!</h1>
+          <h1 className='text-3xl font-black text-center dark:text-white' >The 2025 Women's World Cup Is Here!</h1>
 
           <div className='flex flex-col items-center text-center font-semibold text-md' >
             <SecondaryText className='text-md' >You are now ready to go!</SecondaryText>
