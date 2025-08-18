@@ -52,23 +52,31 @@ export function PlayerGameCard({ player, className }: Props) {
         <div className='z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' >
 
           <div className=' w-10 flex flex-row items-center justify-center h-10 absolute right-0' >
-            {player.team?.image_url && <TeamLogo 
+            {player.team?.image_url && <TeamLogo
               url={player.team.image_url}
               className='w-8 h-8'
             />}
           </div>
 
           <div className='min-h-[140px] relative aspect-[3/4] overflow-hidden max-h-[140px] min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
-            
+
             {!playerImageErr && <img
               src={player.image_url}
-              className='w-full h-full object-cover object-top'
+              className={twMerge(
+                'w-full h-full object-cover object-top',
+                "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
+                "[mask - repeat:no-repeat] [mask-size:100%_100%]",
+                "[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
+                "[-webkit-mask-repeat:no-repeat]",
+                "[-webkit-mask-size:100%_100%"
+              )}
               onError={() => setPlayerImageErr(true)}
             />}
 
             {playerImageErr && (
               <ScrummyLogo className='grayscale opacity-10 h-[100px] w-[100px] ' />
             )}
+
 
           </div>
 
