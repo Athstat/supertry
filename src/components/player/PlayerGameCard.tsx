@@ -34,7 +34,7 @@ export function PlayerGameCard({ player, className }: Props) {
   return (
     <div
       className={twMerge(
-        'bg-red-500 max-w-[200px] max-h-[300px]',
+        'bg-red-500 max-w-[250px] max-h-[300px]',
         'flex items-center justify-center relative',
         className
       )}
@@ -58,11 +58,11 @@ export function PlayerGameCard({ player, className }: Props) {
             />}
           </div>
 
-          <div className='min-h-[140px] overflow-clip max-h-[140px] min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
+          <div className='min-h-[140px] relative aspect-[3/4] overflow-hidden max-h-[140px] min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
             
             {!playerImageErr && <img
               src={player.image_url}
-              className='object-scale-down z-30 h-full w-full'
+              className='w-full h-full object-cover object-top'
               onError={() => setPlayerImageErr(true)}
             />}
 
