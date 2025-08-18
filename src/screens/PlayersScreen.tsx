@@ -1,56 +1,53 @@
-import { useState, useCallback, useMemo, Fragment } from "react";
-import { useAthletes } from "../contexts/AthleteContext";
-import { useDebounced } from "../hooks/useDebounced";
+import { useState, useCallback, useMemo, Fragment } from 'react';
+import { useAthletes } from '../contexts/AthleteContext';
+import { useDebounced } from '../hooks/useDebounced';
 
 // Components
-import { PlayerSearch } from "../components/players/PlayerSearch";
-import { PlayerFilters } from "../components/players/PlayerFilters";
-import { PlayerSort } from "../components/players/PlayerSort";
-import { LoadingState } from "../components/ui/LoadingState";
-import { ErrorState } from "../components/ui/ErrorState";
-import { EmptyState } from "../components/players/EmptyState";
-import { PlayerGameCard } from "../components/player/PlayerGameCard";
-import PageView from "./PageView";
-import { Users, X } from "lucide-react";
-import PlayersCompareButton from "../components/player/PlayerScreenCompareButton";
-import { twMerge } from "tailwind-merge";
-import PlayersScreenCompareStatus from "../components/players/compare/PlayersScreenCompareStatus";
-import PlayerCompareModal from "../components/players/compare/PlayerCompareModal";
-import PlayerProfileModal from "../components/player/PlayerProfileModal";
-import { SortDirection, SortField } from "../types/playerSorting";
-import { IProAthlete } from "../types/athletes";
-import { IProTeam } from "../types/team";
-import TeamLogo from "../components/team/TeamLogo";
-import RoundedCard from "../components/shared/RoundedCard";
-import SecondaryText from "../components/shared/SecondaryText";
-import { useQueryState } from "../hooks/useQueryState";
-import useAthleteFilter from "../hooks/useAthleteFilter";
-import PlayerCompareProvider from "../components/players/compare/PlayerCompareProvider";
-import { usePlayerCompareActions } from "../hooks/usePlayerCompare";
-import { useAtomValue } from "jotai";
-import { comparePlayersAtomGroup } from "../state/comparePlayers.atoms";
-import { useInView } from "react-intersection-observer";
+import { PlayerSearch } from '../components/players/PlayerSearch';
+import { PlayerFilters } from '../components/players/PlayerFilters';
+import { PlayerSort } from '../components/players/PlayerSort';
+import { LoadingState } from '../components/ui/LoadingState';
+import { ErrorState } from '../components/ui/ErrorState';
+import { EmptyState } from '../components/players/EmptyState';
+import { PlayerGameCard } from '../components/player/PlayerGameCard';
+import PageView from './PageView';
+import { Users, X } from 'lucide-react';
+import PlayersScreenCompareStatus from '../components/players/compare/PlayersScreenCompareStatus';
+import PlayerCompareModal from '../components/players/compare/PlayerCompareModal';
+import PlayerProfileModal from '../components/player/PlayerProfileModal';
+import { SortDirection, SortField } from '../types/playerSorting';
+import { IProAthlete } from '../types/athletes';
+import { IProTeam } from '../types/team';
+import TeamLogo from '../components/team/TeamLogo';
+import RoundedCard from '../components/shared/RoundedCard';
+import SecondaryText from '../components/shared/SecondaryText';
+import { useQueryState } from '../hooks/useQueryState';
+import useAthleteFilter from '../hooks/useAthleteFilter';
+import PlayerCompareProvider from '../components/players/compare/PlayerCompareProvider';
+import { usePlayerCompareActions } from '../hooks/usePlayerCompare';
+import { useAtomValue } from 'jotai';
+import { comparePlayersAtomGroup } from '../state/comparePlayers.atoms';
+import { useInView } from 'react-intersection-observer';
 
 export function PlayersScreen() {
   return (
     <PlayerCompareProvider>
       <PlayerScreenContent />
     </PlayerCompareProvider>
-  )
+  );
 }
 
 export const PlayerScreenContent = () => {
-
   const { athletes, error, isLoading, refreshAthletes, positions, teams } = useAthletes();
 
   // const [activeTab, setActiveTab] = useState<SortTab>("all");
-  const [sortField, setSortField] = useState<SortField>("power_rank_rating");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [sortField, setSortField] = useState<SortField>('power_rank_rating');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-  const [searchQuery, setSearchQuery] = useQueryState("query", {init: ""});
+  const [searchQuery, setSearchQuery] = useQueryState('query', { init: '' });
   const [positionFilter, setPositionFilter] = useQueryState('position');
 
-  const [teamIdFilter, setTeamIdFilter] = useQueryState("team_id");
+  const [teamIdFilter, setTeamIdFilter] = useQueryState('team_id');
   const selectedTeam = teams.find(t => t.athstat_id === teamIdFilter);
 
   // Use debounced search for better performance
@@ -61,7 +58,7 @@ export const PlayerScreenContent = () => {
   }, [positionFilter]);
 
   const selectedTeamIds = useMemo(() => {
-    return selectedTeam ? [selectedTeam.athstat_id] : []
+    return selectedTeam ? [selectedTeam.athstat_id] : [];
   }, [selectedTeam]);
 
   // Use optimized filtering hook
@@ -82,26 +79,24 @@ export const PlayerScreenContent = () => {
   const handleClosePlayerModal = () => {
     setPlayerModalPlayer(undefined);
     setShowPlayerModal(false);
-  }
+  };
 
-  const isPickingPlayers = useAtomValue(
-    comparePlayersAtomGroup.isCompareModePicking
-  );
+  const isPickingPlayers = useAtomValue(comparePlayersAtomGroup.isCompareModePicking);
 
   const { addOrRemovePlayer } = usePlayerCompareActions();
 
   // Handle player selection with useCallback for better performance
-  const handlePlayerClick = useCallback((player: IProAthlete) => {
-
-    if (isPickingPlayers) {
-      addOrRemovePlayer(player);
-    } else {
-      setPlayerModalPlayer(player);
-      setShowPlayerModal(true);
-    }
-
-  }, [isPickingPlayers]);
-
+  const handlePlayerClick = useCallback(
+    (player: IProAthlete) => {
+      if (isPickingPlayers) {
+        addOrRemovePlayer(player);
+      } else {
+        setPlayerModalPlayer(player);
+        setShowPlayerModal(true);
+      }
+    },
+    [isPickingPlayers]
+  );
 
   // Handle search filtering
   const handleSearch = (query: string) => {
@@ -121,7 +116,7 @@ export const PlayerScreenContent = () => {
 
   // Handle position filter change
   const handlePositionFilter = (position: string) => {
-    setPositionFilter(position === positionFilter ? "" : position);
+    setPositionFilter(position === positionFilter ? '' : position);
   };
 
   // Handle team filter change
@@ -131,28 +126,24 @@ export const PlayerScreenContent = () => {
 
   // Clear all filters
   const clearFilters = () => {
-    setPositionFilter("");
-    setTeamIdFilter("");
-    setSearchQuery("");
+    setPositionFilter('');
+    setTeamIdFilter('');
+    setSearchQuery('');
   };
 
   return (
-    <Fragment
-    >
-      <PageView className="px-5 flex flex-col gap-3 md:w-[80%] lg:w-[60%]">
-
+    <Fragment>
+      <PageView className="px-5 flex flex-col items-center justify-center gap-3 md:w-[80%] lg:w-[60%]">
         {/* Search and Filter Header */}
-        <div className="flex flex-row gap-2 items-center" >
+        <div className="flex flex-row gap-2 items-center w-full">
           <Users />
-          <h1 className="text-2xl font-bold" >Players</h1>
+          <h1 className="text-2xl font-bold">Players</h1>
         </div>
-        <PlayerSearch searchQuery={searchQuery ?? ""} onSearch={handleSearch} />
-        <div className="flex flex-col gap-1">
-
+        <PlayerSearch searchQuery={searchQuery ?? ''} onSearch={handleSearch} />
+        <div className="flex flex-col w-full gap-1">
           {/* <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} /> */}
 
           <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
-
             <PlayerFilters
               positionFilter={positionFilter ?? ''}
               teamFilter={selectedTeam}
@@ -168,33 +159,37 @@ export const PlayerScreenContent = () => {
               sortDirection={sortDirection}
               onSort={handleSortByField}
             />
-
+            {/* 
             <PlayersCompareButton
-              className={twMerge(isPickingPlayers && "bg-gradient-to-r from-primary-600 to-blue-700")}
-            />
+              className={twMerge(
+                isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700'
+              )}
+            /> */}
           </div>
         </div>
 
-        {
-          <PlayersScreenCompareStatus />
-        }
+        {<PlayersScreenCompareStatus />}
 
         {/* Selected Team Section */}
         <div>
-          {selectedTeam && <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2" >
-            <TeamLogo
-              teamName={selectedTeam.athstat_name}
-              url={selectedTeam.image_url}
-              className="w-5 h-5"
-            />
+          {selectedTeam && (
+            <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2">
+              <TeamLogo
+                teamName={selectedTeam.athstat_name}
+                url={selectedTeam.image_url}
+                className="w-5 h-5"
+              />
 
-            <p>{selectedTeam.athstat_name}</p>
+              <p>{selectedTeam.athstat_name}</p>
 
-            <button onClick={() => setTeamIdFilter("")} >
-              <SecondaryText> <X className="w-4 h-4" /> </SecondaryText>
-            </button>
-
-          </RoundedCard>}
+              <button onClick={() => setTeamIdFilter('')}>
+                <SecondaryText>
+                  {' '}
+                  <X className="w-4 h-4" />{' '}
+                </SecondaryText>
+              </button>
+            </RoundedCard>
+          )}
         </div>
 
         {/* Loading State - for initial load */}
@@ -209,17 +204,12 @@ export const PlayerScreenContent = () => {
         )}
 
         {/* Empty State */}
-        {isEmpty && (
-          <EmptyState
-            searchQuery={searchQuery}
-            onClearSearch={() => handleSearch("")}
-          />
-        )}
+        {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
 
         {/* Player Grid */}
         {!isLoading && !error && !isFiltering && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {filteredAthletes.map((player) => (
+          <div className="grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 md:gap-y-3">
+            {filteredAthletes.map(player => (
               <PlayerCardItem
                 player={player}
                 onClick={() => handlePlayerClick(player)}
@@ -231,40 +221,40 @@ export const PlayerScreenContent = () => {
 
         <PlayerCompareModal />
 
-        {playerModalPlayer && <PlayerProfileModal
-          onClose={handleClosePlayerModal}
-          player={playerModalPlayer}
-          isOpen={playerModalPlayer !== undefined && showPlayerModal}
-
-        />}
-
+        {playerModalPlayer && (
+          <PlayerProfileModal
+            onClose={handleClosePlayerModal}
+            player={playerModalPlayer}
+            isOpen={playerModalPlayer !== undefined && showPlayerModal}
+          />
+        )}
       </PageView>
-
-
     </Fragment>
   );
 };
 
 type ItemProps = {
-  player: IProAthlete,
-  onClick: () => void
-}
+  player: IProAthlete;
+  onClick: () => void;
+};
 
 function PlayerCardItem({ player, onClick }: ItemProps) {
-
-  const { ref, inView } = useInView({triggerOnce: true});
+  const { ref, inView } = useInView({ triggerOnce: true });
 
   return (
-    <div
-      ref={ref}
-    >
-      {inView && <PlayerGameCard
-        key={player.tracking_id}
-        player={player}
-        onClick={onClick}
-        className="h-[250px] lg:h-[300px]"
-      />}
+    <div ref={ref}>
+      {inView && (
+        <PlayerGameCard
+          key={player.tracking_id}
+          player={player}
+          onClick={onClick}
+          className=""
+          // Players screen specific spacing tweaks
+          priceClassName="top-14 left-5"
+          teamLogoClassName="top-7 right-2"
+          detailsClassName="px-6 pb-10"
+        />
+      )}
     </div>
-  )
-
+  );
 }

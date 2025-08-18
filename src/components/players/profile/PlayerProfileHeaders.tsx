@@ -6,6 +6,7 @@ import { StatTab } from '../../../screens/PlayerProfileScreen';
 import FormIndicator from '../../shared/FormIndicator';
 import { twMerge } from 'tailwind-merge';
 import { useState, useEffect } from 'react';
+import { ScrummyDarkModeLogo } from '../../branding/scrummy_logo';
 
 type Props = {
     player: RugbyPlayer,
@@ -17,6 +18,29 @@ export default function PlayerProfileHeader({ player, activeTab, handleTabClick 
 
     const { push } = useRouter();
     const [shrink, setShrink] = useState(false);
+
+    // Mirror PlayerGameCard fallback image chain
+    const primaryImageUrl = player.image_url ?? null;
+    const teamFallbackUrl = player.team_id
+        ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${player.team_id}-ph-removebg-preview.png`
+        : null;
+    const [src, setSrc] = useState<string | null>(primaryImageUrl ?? teamFallbackUrl);
+
+    useEffect(() => {
+        setSrc(primaryImageUrl ?? teamFallbackUrl ?? null);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [primaryImageUrl, teamFallbackUrl]);
+
+    const handleImageError = () => {
+        if (src && primaryImageUrl && src === primaryImageUrl) {
+            if (teamFallbackUrl) setSrc(teamFallbackUrl);
+            else setSrc(null);
+        } else if (src && teamFallbackUrl && src === teamFallbackUrl) {
+            setSrc(null);
+        } else {
+            setSrc(null);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -54,15 +78,18 @@ export default function PlayerProfileHeader({ player, activeTab, handleTabClick 
                             "w-16 h-16 rounded-full overflow-hidden border-2 border-white/20 transition-all duration-300 ease-in-out",
                             !shrink && "w-24 h-24"
                         )}>
-                            <img
-                                src={player.image_url}
-                                alt={player.player_name}
-                                className="w-full h-full object-cover object-top"
-                                onError={(e) => {
-                                    (e.target as HTMLImageElement).src =
-                                        "https://media.istockphoto.com/id/1300502861/vector/running-rugby-player-with-ball-isolated-vector-illustration.jpg?s=612x612&w=0&k=20&c=FyedZs7MwISSOdcpQDUyhPQmaWtP08cow2lnofPLgeE=";
-                                }}
-                            />
+                            {src ? (
+                                <img
+                                    src={src}
+                                    alt={player.player_name}
+                                    className="w-full h-full object-cover object-top"
+                                    onError={handleImageError}
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-white/5">
+                                    <ScrummyDarkModeLogo className="w-2/3 h-2/3 opacity-50" />
+                                </div>
+                            )}
                         </div>
                         <div>
                             <div className='flex flex-row items-center gap-2' >

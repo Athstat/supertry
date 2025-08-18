@@ -1,3 +1,5 @@
+import { IProTeam } from "./team";
+
 export type IFantasyTeamAthlete = {
   id: number,
   team_id: number,
@@ -42,6 +44,7 @@ export type IFantasyTeamAthlete = {
   total_points?: number,
   is_captain?: boolean,
   is_super_sub?: boolean
+  team?: IProTeam;
 }
 
 export interface IFantasyTeamSubmission {

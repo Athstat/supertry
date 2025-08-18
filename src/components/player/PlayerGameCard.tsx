@@ -1,14 +1,11 @@
-import { twMerge } from 'tailwind-merge';
-import { formatPosition } from '../../utils/athleteUtils';
-import FormIndicator from '../shared/FormIndicator';
-import TeamLogo from '../team/TeamLogo';
-import { CardTier, IProAthlete } from '../../types/athletes';
-import { useAtomValue } from 'jotai';
-import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
-import { useState } from 'react';
-import ScrummyLogo from '../branding/scrummy_logo';
-import { CircleDollarSign } from 'lucide-react';
+import { getPositionFrameBackground } from '../../utils/athleteUtils';
+import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
+import { twMerge } from 'tailwind-merge';
+import TeamLogo from '../team/TeamLogo';
+import { useState } from 'react';
+import TeamJersey from './TeamJersey';
+import { CircleDollarSign } from 'lucide-react';
 
 type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -17,132 +14,98 @@ type Props = {
   className?: string;
   blockGlow?: boolean;
   hideTeamLogo?: boolean;
-  hidePrice?: boolean
+  hidePrice?: boolean;
+  // Optional style overrides for specific screens (e.g., PlayersScreen)
+  priceClassName?: string;
+  teamLogoClassName?: string;
+  detailsClassName?: string;
+  // Optional override for background frame image styling (to avoid cropping in specific contexts)
+  frameClassName?: string;
 };
-
-
 
 /** Renders a athlete game card that is either gold, silver or
  * bronze depending on the power ranking of the player
  *
  * does not rely on team context */
 
-export function PlayerGameCard({ player, name, onClick, className, blockGlow, hideTeamLogo = false, hidePrice = false }: Props) {
-  const selectedPlayers = useAtomValue(comparePlayersAtom);
-
-  const [imageError, setImageError] = useState<boolean>(false);
-
-  const shouldGlow = selectedPlayers.some((a) => (
-    a.tracking_id === player.tracking_id
-  ));
-
-
-  const pr = player.power_rank_rating ?? 0;
-  const cardTier: CardTier =
-    pr <= 69 ? 'bronze' : pr >= 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
-
-  const statValue = (val: number) => Math.min(99, Math.max(0, Math.floor(val)));
-
-  const isAvailable = true;
+export function PlayerGameCard({ player, className, onClick, hidePrice = false, frameClassName }: Props) {
+  const frameSrc = getPositionFrameBackground(player.position_class ?? '');
+  const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
   return (
-    <div className="h-full w-full">
-      <div
-        onClick={onClick}
-        className={twMerge(
-          'group relative shadow-xl rounded-lg flex flex-col h-full transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden transform-style-3d text-white',
-          cardTier === 'gold' && 'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
-          cardTier === 'silver' && 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
-          cardTier === 'bronze' &&
-          'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
-          cardTier === 'blue' &&
-          'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
-          shouldGlow && !blockGlow && 'animate-glow border border-yellow-500',
-          className
-        )}
-      >
-        {!isAvailable && (
-          <div className="top-0 left-0 absolute w-full h-full bg-black/50 z-10"></div>
-        )}
-        {/* Player Price */}
-        {!hidePrice && <div className="absolute top-2 left-2 z-[5] flex gap-1">
-          <CircleDollarSign className="w-4 h-fit" />
-          <h3 className="text-xs font-bold truncate flex-1">{player.price}</h3>
-        </div>}
-        {/* Team Logo */}
-        {!hideTeamLogo && <div className="absolute top-2 right-2 z-[5]">
-          <TeamLogo
-            className="w-8 h-8 dark:text-white/40"
-            url={player.team?.image_url ?? player.athlete.team.image_url}
-          />
-        </div>}
+    <div
+      className={twMerge(
+        'min-w-[180px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px] cursor-pointer max-h-[250px] ',
+        'flex items-center justify-center relative text-white dark:text-white',
+        className
+      )}
 
-        {/* Player Image */}
-        <div className="relative flex-[3] overflow-hidden bg-gradient-to-b from-transparent to-black/20">
+      onClick={onClick}
+    >
 
-          {!imageError && player.image_url && <img
-            src={player.image_url}
-            alt={""}
-            className="w-full object-scale-down object-top"
-            onError={() => setImageError(true)}
-          />}
-
-          {imageError || !player.image_url && (
-            <div className='flex flex-col items-center justify-center w-full h-full' >
-              <ScrummyLogo className='w-32 h-32 opacity-20 grayscale ' />
-            </div>
-          )}
-
-        </div>
-
-        {/* Player Details */}
-        <div
+      {/* Card Container */}
+      <div className='relative'>
+        {/* Card */}
+        <img
+          src={frameSrc}
           className={twMerge(
-            'p-3 flex-[1]',
-            cardTier === 'gold' && 'bg-yellow-500/10',
-            cardTier === 'silver' && 'bg-gray-500/10',
-            cardTier === 'bronze' && 'bg-amber-900/10',
-            cardTier === 'blue' && 'bg-blue-900/10'
+            'object-contain min-w-[180px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px]',
+            frameClassName
           )}
-        >
-          {/* Player name and form */}
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <h3 className="text-xs text-left font-bold truncate flex-1">{player.player_name}</h3>
-            {player.form && (player.form === 'UP' || player.form === 'DOWN') && (
-              <FormIndicator form={player.form} />
+        />
+
+        {/* Player Image - Positioned absolutely and centered on the card */}
+        <div className='z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' >
+
+          <div className=' w-10 flex flex-row items-center justify-center h-10 absolute right-0' >
+            {player.team?.image_url && <TeamLogo
+              url={player.team.image_url}
+              className='w-8 h-8'
+            />}
+          </div>
+
+          {!hidePrice && <div className=' w-10 flex flex-row items-center justify-center h-10 absolute left-0' >
+            <div className='flex flex-row items-center gap-1' >
+              <CircleDollarSign className='w-3 h-3' />
+              <p className='text-[10px]' >{player.price}</p>
+            </div>
+          </div>}
+
+          <div className='min-h-[140px] max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
+
+            {!playerImageErr && <img
+              src={player.image_url}
+              className={twMerge(
+                'min-h-[120px] max-h-[120px] min-w-[120px] max-w-[120px] object-cover object-top',
+                "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
+                "[mask - repeat:no-repeat] [mask-size:100%_100%]",
+                "[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
+                "[-webkit-mask-repeat:no-repeat]",
+                "[-webkit-mask-size:100%_100%"
+              )}
+              onError={() => setPlayerImageErr(true)}
+            />}
+
+            {playerImageErr && (
+              <TeamJersey
+                teamId={player.team?.athstat_id}
+              />
             )}
+
+
           </div>
 
-          {/* Position and Rating */}
-          <div className="flex justify-between items-center text-sm">
-            <div className="font-bold text-xs truncate">
-              {formatPosition(player.position ?? '')}
-            </div>
-            <div className="text-xs font-medium flex flex-row items-center justify-end text-nowrap">
-              PR {statValue(pr)}
-            </div>
+          <div className='flex flex-col items-center p-1 justify-center' >
+            <p className='text-xs truncate max-w-[130px]' >{player.player_name}</p>
           </div>
 
-          {/* Position and Rating */}
-          <div className="text-xs mt-1 text-left truncate">{name}</div>
-
-          {/* Stats Grid */}
-          {/* <div className="grid grid-cols-3 gap-1 text-xs">
-            <div className="flex justify-between">
-              <span>ATT</span>
-              <span>{statValue(player.ball_carrying ?? 0)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>DEF</span>
-              <span>{statValue(player.tackling ?? 0)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>KCK</span>
-              <span>{statValue(player.points_kicking ?? 0)}</span>
-            </div>
-          </div> */}
+          <div className='flex text-xs flex-row items-center justify-center gap-2' >
+            <p className='font-bold' >{player.power_rank_rating && Math.floor(player.power_rank_rating)}</p>
+            <p>{player.position}</p>
+          </div>
         </div>
       </div>
+
     </div>
-  );
+  )
 }

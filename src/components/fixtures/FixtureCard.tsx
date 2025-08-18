@@ -55,14 +55,14 @@ export default function FixtureCard({
         onClick={toogle}
         className={twMerge(
           'p-4 flex cursor-pointer justify-center flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
-          className,
+          className
         )}
       >
         {
           <div className="w-full items-center justify-center flex flex-col">
             {showCompetition && competition_name && (
               <p className="text-[10px] lg:text-sm text-gray-600 dark:text-slate-400">
-                {competition_name}, { fixture.extra_info ?? `Week ${round}`}
+                {competition_name}, {fixture.extra_info ?? `Week ${round}`}
               </p>
             )}
             {showVenue && (
@@ -75,12 +75,13 @@ export default function FixtureCard({
           <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
             <div className="flex flex-row gap-2 items-center w-full justify-start">
               <div className="flex flex-col gap-4 items-center w-full justify-start">
-                {showLogos && <TeamLogo
-                  url={fixture.team.image_url}
-                  teamName={fixture.team.athstat_name}
-                  className="w-10 h-10"
-                />
-                }
+                {showLogos && (
+                  <TeamLogo
+                    url={fixture.team.image_url}
+                    teamName={fixture.team.athstat_name}
+                    className="w-10 h-10"
+                  />
+                )}
 
                 <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
                   {fixture.team.athstat_name}
@@ -146,9 +147,7 @@ export default function FixtureCard({
         </div>
 
         {/* Voting Section */}
-        <ProFixtureVotingBox
-          fixture={fixture}
-        />
+        {/* <ProFixtureVotingBox fixture={fixture} /> */}
 
         {message && (
           <WarningCard>
@@ -156,7 +155,6 @@ export default function FixtureCard({
             <p className="text-xs truncate">{message}</p>
           </WarningCard>
         )}
-
       </div>
       <FixtureCardModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
