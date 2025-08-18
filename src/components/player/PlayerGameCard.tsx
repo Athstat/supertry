@@ -4,7 +4,8 @@ import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
 import { useState } from 'react';
-import ScrummyLogo from '../branding/scrummy_logo';
+import TeamJersey from './TeamJersey';
+import { CircleDollarSign } from 'lucide-react';
 
 type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -27,17 +28,19 @@ type Props = {
  *
  * does not rely on team context */
 
-export function PlayerGameCard({ player, className }: Props) {
+export function PlayerGameCard({ player, className, onClick, hidePrice = false }: Props) {
   const frameSrc = getPositionFrameBackground(player.position_class ?? '');
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
   return (
     <div
       className={twMerge(
-        'bg-red-500 max-w-[250px] max-h-[300px]',
-        'flex items-center justify-center relative',
+        'min-w-[200px] cursor-pointer max-h-[250px] ',
+        'flex items-center justify-center relative text-white dark:text-white',
         className
       )}
+
+      onClick={onClick}
     >
 
       {/* Card Container */}
@@ -58,12 +61,19 @@ export function PlayerGameCard({ player, className }: Props) {
             />}
           </div>
 
-          <div className='min-h-[140px] relative aspect-[3/4] overflow-hidden max-h-[140px] min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
+          {!hidePrice && <div className=' w-10 flex flex-row items-center justify-center h-10 absolute left-0' >
+            <div className='flex flex-row items-center gap-1' >
+              <CircleDollarSign className='w-3 h-3' />
+              <p className='text-[10px]' >{player.price}</p>
+            </div>
+          </div>}
+
+          <div className='min-h-[140px] max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
 
             {!playerImageErr && <img
               src={player.image_url}
               className={twMerge(
-                'w-full h-full object-cover object-top',
+                'min-h-[120px] max-h-[120px] min-w-[120px] max-w-[120px] object-cover object-top',
                 "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
                 "[mask - repeat:no-repeat] [mask-size:100%_100%]",
                 "[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
@@ -74,7 +84,9 @@ export function PlayerGameCard({ player, className }: Props) {
             />}
 
             {playerImageErr && (
-              <ScrummyLogo className='grayscale opacity-10 h-[100px] w-[100px] ' />
+              <TeamJersey
+                teamId={player.team?.athstat_id}
+              />
             )}
 
 

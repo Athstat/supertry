@@ -386,3 +386,12 @@ export function getPositionFrameBackground(positionClass: string) {
     return frameSrc ?? '/player_card_backgrounds/front-row-bg.png';
 
 }
+
+
+export function getTeamJerseyImage(teamId: string) {
+    const teamFallbackUrl = teamId
+        ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${teamId}-ph-removebg-preview.png`
+        : undefined;
+
+    return teamFallbackUrl;
+}
