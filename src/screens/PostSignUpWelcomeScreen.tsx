@@ -227,7 +227,7 @@ function BudgetingWelcomeScreen() {
       <div className='flex flex-col items-center text-center justify-center' >
         {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
         <SecondaryText className='text-lg text-center' >
-          You have 240 coins - talent is everywhere if you look closely and lots of data to analyse to chose your Dream Team
+          You have 240 coins - talent is everywhere, pick the top 6 players to create your Dream Team. Use SCRUMMY data to chose carefully!
         </SecondaryText>
 
       </div>
