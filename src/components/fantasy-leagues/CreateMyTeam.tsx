@@ -22,7 +22,7 @@ export default function CreateMyTeam({
   leagueRound,
   leagueConfig,
   onTeamCreated,
-  onViewTeam
+  onViewTeam,
 }: {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
@@ -35,7 +35,7 @@ export default function CreateMyTeam({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [players, setPlayers] = useState<IProAthlete[]>([]);
-  
+
   const [captainId, setCaptainId] = useState<string | null>(null);
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete | undefined>(undefined);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
@@ -77,7 +77,7 @@ export default function CreateMyTeam({
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
         const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
-          .filter((a) => {
+          .filter(a => {
             return a.power_rank_rating && a.power_rank_rating > 50;
           })
           .sort((a, b) => {
@@ -228,15 +228,15 @@ export default function CreateMyTeam({
 
   return (
     <div className="w-full py-4">
-
-
-      {leagueRound && <div className="flex flex-row items-center justify-between mb-5">
-        <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
-          <div className="flex flex-col">
-            <p className="font-bold text-xl">{leagueRound?.title}</p>
+      {leagueRound && (
+        <div className="flex flex-row items-center justify-between mb-5">
+          <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
+            <div className="flex flex-col">
+              <p className="font-bold text-xl">{leagueRound?.title}</p>
+            </div>
           </div>
         </div>
-      </div>}
+      )}
 
       {/* Top stats row */}
       <div className="grid grid-cols-2 gap-3">
@@ -296,7 +296,11 @@ export default function CreateMyTeam({
                     setIsModalOpen(true);
                   }
                 }}
-                className="aspect-square overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center"
+                className={`${
+                  selected
+                    ? 'w-full h-60 p-0 bg-transparent border-0 rounded-none overflow-visible flex items-center justify-center'
+                    : 'w-full h-60 overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center'
+                }`}
               >
                 {selected ? (
                   <PlayerGameCard
@@ -304,6 +308,9 @@ export default function CreateMyTeam({
                     name={p.name}
                     className="w-full h-full"
                     blockGlow
+                    detailsClassName="pl-6 pr-6 pb-7"
+                    priceClassName="top-12 left-6"
+                    teamLogoClassName="top-4 right-2"
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center">
