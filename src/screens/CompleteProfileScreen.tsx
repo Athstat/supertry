@@ -38,10 +38,10 @@ function ScreenContent() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: "tiger_blast",
-    email: "tiger@email.com",
-    password: "12345678",
-    confirmPassword: "12345678",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);

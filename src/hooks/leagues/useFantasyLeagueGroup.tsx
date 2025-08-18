@@ -22,7 +22,7 @@ export function useFantasyLeagueGroup() {
       const aStart = a.start_round;
       const bStart = b.start_round;
 
-      return (bStart ?? 0) - (aStart ?? 0);
+      return (aStart ?? 0) - (bStart ?? 0);
     });
   }, [rounds]);
 

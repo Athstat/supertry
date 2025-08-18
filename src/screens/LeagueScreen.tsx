@@ -1,10 +1,9 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import FantasyLeagueGroupDataProvider from '../components/fantasy-league/providers/FantasyLeagueGroupDataProvider';
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Plus, Trophy } from 'lucide-react';
-import { StatCard } from '../components/shared/StatCard';
+import { Plus, Trophy } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
@@ -14,6 +13,7 @@ import LeagueCommissionerTab from '../components/fantasy-league/commissioner/Lea
 import MyTeams from '../components/fantasy-leagues/MyTeams';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { useShareLeague } from '../hooks/leagues/useShareLeague';
+import { useQueryState } from '../hooks/useQueryState';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -26,9 +26,11 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-  const { league, members, userMemberRecord, currentRound, isMember } = useFantasyLeagueGroup();
-  const navigate = useNavigate();
+  const { league, userMemberRecord, isMember } = useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);
+
+  const [ journey ] = useQueryState('journey');
+  const initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
 
   if (!league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />;
@@ -44,7 +46,7 @@ function Content() {
     {
       label: 'My Teams',
       tabKey: 'my-team',
-      className: 'flex-1',
+      className: 'flex-1'
     },
 
     {
@@ -66,10 +68,6 @@ function Content() {
       className: 'flex-1',
     },
   ];
-
-  const navigateToLeagues = () => {
-    navigate('/leagues');
-  };
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4">
@@ -96,21 +94,21 @@ function Content() {
         </div>
       </div>
 
-      <div
+      {/* <div
         onClick={navigateToLeagues}
         className="flex flex-row hover:text-blue-500 cursor-pointer items-center"
       >
         <ArrowLeft />
         Back
-      </div>
+      </div> */}
 
-      <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
+      {/* <div className="flex flex-row flex-wrap overflow-hidden items-center gap-2">
         <StatCard label="Members" value={members?.length ?? '-'} className="flex-1" />
 
         <StatCard label="Current Round" value={currentRound?.title} className="flex-1" />
-      </div>
+      </div> */}
 
-      <TabView tabHeaderItems={headerItems}>
+      <TabView initialTabKey={initialTabKey} tabHeaderItems={headerItems}>
         <TabViewPage tabKey="my-team">
           <MyTeams />
         </TabViewPage>

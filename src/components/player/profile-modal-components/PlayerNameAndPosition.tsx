@@ -19,12 +19,12 @@ export default function PlayerNameAndPosition({ player }: Props) {
       <div className='flex flex-row items-center justify-between' >
         
         <div>
-          <p className='font-semibold text-lg' >{player.player_name}</p>
+          <p className='font-semibold text-lg dark:text-white' >{player.player_name}</p>
           <SecondaryText>{player.position && formatPosition(player.position)}</SecondaryText>
         </div>
 
         {player.power_rank_rating && <div className='flex flex-col items-center gap-0' >
-          <p className='font-bold text-xl' >{Math.floor(player.power_rank_rating)}</p>
+          <p className='font-bold text-xl dark:text-white' >{Math.floor(player.power_rank_rating)}</p>
         </div>}
       </div>
 

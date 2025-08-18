@@ -111,9 +111,11 @@ function FixtureListView({ round }: FixtureListProps) {
 
   const games = fetchedGames ?? [];
 
-  const upcomingGames = games.filter(game => {
-    return game?.kickoff_time > new Date();
-  });
+  // const upcomingGames = games.filter(game => {
+  //   return new Date(game?.kickoff_time ?? new Date()) > new Date();
+  // });
+
+  const upcomingGames = games;
 
   console.log('games: ', games);
 

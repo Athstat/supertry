@@ -1,5 +1,6 @@
 import React from "react";
 import { alphabeticalComparator } from "../../utils/stringUtils";
+import TeamLogo from "../team/TeamLogo";
 
 interface Team {
   id: string;
@@ -24,10 +25,10 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
   });
 
   return (
-    <div className="px-6 py-4 border-b dark:border-gray-700">
+    <div className="px-6 py-0 border-b dark:border-gray-700">
       {/* Teams filter */}
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 ">
           Teams:
         </p>
         <div className="relative">
@@ -42,7 +43,7 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
                 key={team.id}
                 onClick={() => toggleTeamFilter(team.id)}
                 className={`
-                px-3 py-1.5 rounded-full text-xs font-medium transition shrink-0
+                px-3 py-1.5 flex flex-row items-center gap-2 rounded-full text-xs font-medium transition shrink-0
                 ${
                   teamFilter.includes(team.id)
                     ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border border-green-500 shadow-sm"
@@ -51,12 +52,13 @@ const TeamFilter: React.FC<TeamFilterProps> = ({
               `}
               >
                 {team.logo && (
-                  <img
-                    src={team.logo}
-                    alt={team.name}
-                    className="w-4 h-4 inline mr-1"
+                  <TeamLogo 
+                    url={team.logo}
+                    teamName={team.name}
+                    className="w-5 h-5"
                   />
                 )}
+
                 {team.name}
               </button>
             ))}

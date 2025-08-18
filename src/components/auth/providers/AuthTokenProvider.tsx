@@ -3,6 +3,7 @@ import { DjangoAuthUser } from "../../../types/auth";
 import { authTokenService } from "../../../services/auth/authTokenService";
 import { useBrudgeAuthV2 } from "../../../hooks/useBridgeAuth";
 import ScrummyLoadingState from "../../ui/ScrummyLoadingState";
+import { logoutFromBridge } from "../../../utils/bridgeUtils";
 
 type AuthTokenContextProps = {
     /** The auth token for the current login session */
@@ -18,7 +19,7 @@ type AuthTokenContextProps = {
     saveUserInfoToLocalStorage: (user: DjangoAuthUser) => void,
 
     clearAccessTokenAndUser: () => void
-} 
+}
 
 const AuthTokenContext = createContext<AuthTokenContextProps | undefined>(undefined);
 
@@ -32,10 +33,10 @@ type Props = {
  * below the component
  */
 
-export default function AuthTokenProvider({children} : Props) {
+export default function AuthTokenProvider({ children }: Props) {
 
     const [accessToken, setAccessToken] = useState<string>();
-    const {getSavedAccessTokenFromMobile, saveAccessTokenToMobile} = useBrudgeAuthV2();
+    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = useBrudgeAuthV2();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -46,7 +47,7 @@ export default function AuthTokenProvider({children} : Props) {
 
             setIsLoading(true);
             const tokenFromBridge = await getSavedAccessTokenFromMobile();
-            
+
             if (tokenFromBridge) {
                 console.log("Access Token from bridge ", tokenFromBridge);
                 setAccessToken(tokenFromBridge);
@@ -54,9 +55,9 @@ export default function AuthTokenProvider({children} : Props) {
                 setIsLoading(false);
                 return;
             }
-            
+
             const tokenFromLocalStorage = authTokenService.getAccessToken();
-            
+
             if (tokenFromLocalStorage) {
                 console.log("Access Token from storage ", tokenFromLocalStorage);
                 setAccessToken(tokenFromLocalStorage);
@@ -83,16 +84,18 @@ export default function AuthTokenProvider({children} : Props) {
         authTokenService.saveUserToLocalStorage(user);
     }
 
-    const getUserInfoFromLocalStorage = () : DjangoAuthUser | undefined => {
+    const getUserInfoFromLocalStorage = (): DjangoAuthUser | undefined => {
         return authTokenService.getUserFromLocalStorage();
     }
+
 
     const handleClearAuthTokenAndUser = () => {
         setAccessToken(undefined);
         authTokenService.clearAccessToken();
         authTokenService.clearUserTokens();
         authTokenService.cleanupKeycloakTokens();
-    }
+        logoutFromBridge();
+    };
 
     if (isLoading) {
         return <ScrummyLoadingState />
@@ -114,7 +117,7 @@ export default function AuthTokenProvider({children} : Props) {
 }
 
 /** Provides auth token functionality */
-export function useAuthToken() : AuthTokenContextProps {
+export function useAuthToken(): AuthTokenContextProps {
     const context = useContext(AuthTokenContext);
 
     if (!context) {

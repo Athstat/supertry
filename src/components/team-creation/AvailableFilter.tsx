@@ -108,7 +108,9 @@ export default function AvailableFilter({
           type="checkbox"
         />
         <label htmlFor="checkbox_input" className="p-0 m-0 h-fit">
-          Show Confirmed Players Only
+          <p className="text-xs" >
+            Confirmed Players Only
+          </p>
         </label>
       </div>
 

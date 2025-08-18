@@ -1,26 +1,53 @@
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { FantasyLeagueGroupStanding } from "../../types/fantasyLeagueGroups";
-import { Table2, User } from "lucide-react";
-import { } from "lucide-react";
-import SecondaryText from "../shared/SecondaryText";
-import useSWR from "swr";
-import { fantasyLeagueGroupsService } from "../../services/fantasy/fantasyLeagueGroupsService";
-import RoundedCard from "../shared/RoundedCard";
-import { ErrorState } from "../ui/ErrorState";
-
+import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { FantasyLeagueGroupMember } from '../../types/fantasyLeagueGroups';
+import { Table2, User } from 'lucide-react';
+import {} from 'lucide-react';
+import SecondaryText from '../shared/SecondaryText';
+import useSWR from 'swr';
+import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
+import RoundedCard from '../shared/RoundedCard';
+import { ErrorState } from '../ui/ErrorState';
+import { useMemo } from 'react';
 
 export function LeagueStandings() {
 
   const { userMemberRecord, league } = useFantasyLeagueGroup();
   const fetchKey = league && `/fantasy-league-groups/${league.id}/standings`;
-  const { data: fetchedStandings, isLoading, error } = useSWR(fetchKey, () => fantasyLeagueGroupsService.getGroupStandings(league?.id ?? ''));
 
-  // const userTeamRef = useRef<HTMLTableRowElement>(null);
-  // const tableRef = useRef<HTMLDivElement>(null);
+  const groupId = league?.id;
 
-  // const ROW_HEIGHT = 64;
-  // const HEADER_HEIGHT = 56;
-  // const TABLE_HEIGHT = ROW_HEIGHT * 6 + HEADER_HEIGHT + 100;
+  // Fetch group standings (backend aggregated totals)
+  const {
+    data: standings,
+    isLoading,
+    error,
+  } = useSWR(fetchKey, () => fantasyLeagueGroupsService.getGroupStandings(groupId as string),
+    { revalidateOnFocus: false }
+  );
+
+  // Map totals per user_id from standings
+  const totalsByUserId = useMemo(() => {
+    const map: Record<string, number> = {};
+    if (!Array.isArray(standings)) return map;
+    for (const row of standings) {
+      if (!row?.user_id) continue;
+      map[row.user_id] = row.total_score ?? 0;
+    }
+    return map;
+  }, [standings]);
+
+  // Sort members by total points desc
+  const sortedMembers = useMemo(() => {
+    return [...members].sort((a, b) => {
+      const ta = totalsByUserId[a.user_id] ?? 0;
+      const tb = totalsByUserId[b.user_id] ?? 0;
+      if (tb !== ta) return tb - ta;
+      // Tie-breaker: username or first_name from the nested user object
+      const an = a.user?.username || a.user?.first_name || '';
+      const bn = b.user?.username || b.user?.first_name || '';
+      return an.localeCompare(bn);
+    });
+  }, [members, totalsByUserId]);
 
   // Handle team row click
 

@@ -1,6 +1,8 @@
 import { PlayerForm } from './rugbyPlayer';
 import { IProTeam } from './team';
 
+export type Gender = 'M' | 'F';
+
 /** Type Defination for a professional player */
 export type IProAthlete = {
   tracking_id: string;
@@ -26,8 +28,8 @@ export type IProAthlete = {
   external_source?: string;
   best_match_iaaid?: string;
   unified_id?: string;
-  hidden?: string;
-  gender: 'M' | 'F';
+  hidden?: boolean;
+  gender: Gender;
   price?: number;
   power_rank_rating?: number;
   region?: string;

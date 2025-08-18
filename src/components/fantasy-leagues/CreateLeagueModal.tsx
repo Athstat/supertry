@@ -16,15 +16,7 @@ interface CreateLeagueModalProps {
 }
 
 export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModalProps) {
-  const { isLoading, seasons } = useSupportedSeasons({
-    wantedSeasonsId: [
-      '695fa717-1448-5080-8f6f-64345a714b10',
-      'b5cae2ff-d123-5f12-a771-5faa6d40e967',
-      '1bbbaf06-0506-562e-ad66-439e15eab25a',
-      'f325f714-7447-5572-add4-fb811fcd6e30',
-      'f46d0bec-99ac-54e8-a028-d40a16cee244',
-    ],
-  });
+  const { isLoading, fantasySupportedSeasons: seasons } = useSupportedSeasons();
 
   const navigate = useNavigate();
   const [isSubmiting, setSubmiting] = useState<boolean>(false);
