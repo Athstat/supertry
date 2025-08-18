@@ -81,7 +81,7 @@ export default function PlayerMugshot({
           src={src}
           alt={alt ?? 'team_logo'}
           onError={handleError}
-          className="w-full h-full object-contain translate-y-4"
+          className="w-full h-full object-contain"
         />
       </div>
     );
