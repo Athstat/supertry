@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
-import { ScrummyLightModeLogo } from '../../components/branding/scrummy_logo';
+import { ScrummyDarkModeLogo, ScrummyLightModeLogo } from '../../components/branding/scrummy_logo';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import SecondaryText from '../../components/shared/SecondaryText';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
@@ -13,12 +13,7 @@ export function WelcomeScreen() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  const {
-    isLoading,
-    error,
-    handleGuestLogin,
-    deviceId
-  } = useGuestLogin('/post-signup-welcome');
+  const { isLoading, error, handleGuestLogin, deviceId } = useGuestLogin('/post-signup-welcome');
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -99,12 +94,11 @@ export function WelcomeScreen() {
   // };
 
   const navigateToSignin = () => {
-    navigate("/signin");
-  }
+    navigate('/signin');
+  };
 
   return (
-
-    <MovingRugbyPitch className='h-[100vh] overflow-hidden flex flex-col items-center justify-center' >
+    <MovingRugbyPitch className="h-[100vh] overflow-hidden flex flex-col items-center justify-center">
       <div className="flex z-50 bg-green-700/90 flex-col items-center overflow-y-auto justify-center h-[100vh] px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -112,7 +106,7 @@ export function WelcomeScreen() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md flex flex-col gap-2 items-center"
         >
-          <ScrummyLightModeLogo className="w-60 h-60 md:w-60 md:h-60 -mb-5" />
+          <ScrummyDarkModeLogo className="w-60 h-60 md:w-60 md:h-60 -mb-5" />
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -132,41 +126,42 @@ export function WelcomeScreen() {
             <p className="mt-3 text-md lg:text-lg text-gray-300 text-center">
               Pick 6 Players, Compete Globally, Invite Your Friends, Play Free
             </p>
-
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className='flex flex-1 flex-col gap-4 items-center justify-center p-4 w-full' >
-
-            {deviceId && <PrimaryButton
-              className='w-full py-3 animate-glow'
-              onClick={handleGuestLogin}
-              isLoading={isLoading}
-            >
-              Get Started!
-            </PrimaryButton>}
+            className="flex flex-1 flex-col gap-4 items-center justify-center p-4 w-full"
+          >
+            {deviceId && (
+              <PrimaryButton
+                className="w-full py-3 animate-glow"
+                onClick={handleGuestLogin}
+                isLoading={isLoading}
+              >
+                Get Started!
+              </PrimaryButton>
+            )}
 
             {error && <ErrorMessage message={error} />}
 
-            {!deviceId && <PrimaryButton onClick={navigateToSignin} className='w-full py-3 animate-glow' >
-              Sign In
-            </PrimaryButton>}
+            {!deviceId && (
+              <PrimaryButton onClick={navigateToSignin} className="w-full py-3 animate-glow">
+                Sign In
+              </PrimaryButton>
+            )}
 
             {deviceId && (
-              <div onClick={navigateToSignin} >
-                <SecondaryText className='underline cursor-pointer text-slate-300' >
+              <div onClick={navigateToSignin}>
+                <SecondaryText className="underline cursor-pointer text-slate-300">
                   Already Part of The Scrum? Sign In
                 </SecondaryText>
               </div>
             )}
-
           </motion.div>
         </motion.div>
       </div>
     </MovingRugbyPitch>
-
   );
 }
