@@ -97,7 +97,7 @@ export function PlayerGameCard({ player, className, onClick, hidePrice = false, 
           </div>
 
           <div className='flex flex-col items-center p-1 justify-center' >
-            <p className='text-xs text-center' >{player.player_name}</p>
+            <p className='text-xs truncate max-w-[130px]' >{player.player_name}</p>
           </div>
 
           <div className='flex text-xs flex-row items-center justify-center gap-2' >
