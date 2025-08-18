@@ -22,6 +22,8 @@ type Props = {
   priceClassName?: string;
   teamLogoClassName?: string;
   detailsClassName?: string;
+  // Optional override for background frame image styling (to avoid cropping in specific contexts)
+  frameClassName?: string;
 };
 
 /** Renders a athlete game card that is either gold, silver or
@@ -40,6 +42,7 @@ export function PlayerGameCard({
   priceClassName,
   teamLogoClassName,
   detailsClassName,
+  frameClassName,
 }: Props) {
   const selectedPlayers = useAtomValue(comparePlayersAtom);
 
@@ -106,7 +109,10 @@ export function PlayerGameCard({
           src={frameSrc}
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+          className={twMerge(
+            'absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none',
+            frameClassName
+          )}
         />
 
         {!isAvailable && (
@@ -123,7 +129,7 @@ export function PlayerGameCard({
         {!hideTeamLogo && (
           <div className={twMerge('absolute top-2 right-2 z-[5]', teamLogoClassName)}>
             <TeamLogo
-              className="w-8 h-8 dark:text-white/40"
+              className="w-10 h-10 dark:text-white/40"
               url={player.team?.image_url ?? player.athlete.team.image_url}
             />
           </div>
