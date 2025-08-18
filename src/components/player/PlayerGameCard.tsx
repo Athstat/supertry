@@ -186,7 +186,7 @@ export function PlayerGameCard({
           </div>
 
           {/* Position and Rating */}
-          <div className="text-xs mt-1 text-left truncate">{name}</div>
+          <div className="text-xs mt-1 text-center truncate">{name}</div>
 
           {/* Stats Grid */}
           {/* <div className="grid grid-cols-3 gap-1 text-xs">
