@@ -5,8 +5,7 @@ import TeamLogo from '../team/TeamLogo';
 import { IProAthlete } from '../../types/athletes';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
-import { useEffect, useState } from 'react';
-import { ScrummyDarkModeLogo, ScrummyLightModeLogo } from '../branding/scrummy_logo';
+import PlayerImageWithFallback from '../shared/PlayerImageWithFallback';
 import { CircleDollarSign } from 'lucide-react';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 
@@ -46,28 +45,7 @@ export function PlayerGameCard({
 }: Props) {
   const selectedPlayers = useAtomValue(comparePlayersAtom);
 
-  // Image fallback chain: primary player image -> team logo -> Scrummy logo
-  const primaryImageUrl = player.image_url ?? null;
-  const teamFallbackUrl = player.team_id
-    ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${player.team_id}-ph-removebg-preview.png`
-    : null;
-  const [src, setSrc] = useState<string | null>(primaryImageUrl ?? teamFallbackUrl);
-
-  useEffect(() => {
-    setSrc(primaryImageUrl ?? teamFallbackUrl ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [primaryImageUrl, teamFallbackUrl]);
-
-  const handleImageError = () => {
-    if (src && primaryImageUrl && src === primaryImageUrl) {
-      if (teamFallbackUrl) setSrc(teamFallbackUrl);
-      else setSrc(null);
-    } else if (src && teamFallbackUrl && src === teamFallbackUrl) {
-      setSrc(null);
-    } else {
-      setSrc(null);
-    }
-  };
+  // Fallback handled by PlayerImageWithFallback
 
   const shouldGlow = selectedPlayers.some(a => a.tracking_id === player.tracking_id);
 
@@ -138,31 +116,16 @@ export function PlayerGameCard({
         {/* Foreground Content Wrapper */}
         {/* Player Image with fallbacks */}
         <div className="relative flex-[3] overflow-hidden z-[1]">
-          {src && src === primaryImageUrl && (
-            <img
-              src={src}
-              alt={''}
-              className="w-full object-scale-down object-top"
-              onError={handleImageError}
-            />
-          )}
-
-          {src && teamFallbackUrl && src === teamFallbackUrl && (
-            <div className="flex flex-col items-center justify-center w-full h-full translate-y-12 translate-x-0 p-5">
-              <img
-                src={src}
-                alt={''}
-                className="w-full object-scale-down object-top"
-                onError={handleImageError}
-              />
-            </div>
-          )}
-
-          {!src && (
-            <div className="flex flex-col items-center justify-center w-full h-full translate-y-7">
-              <ScrummyDarkModeLogo className="w-24 h-24 opacity-30" />
-            </div>
-          )}
+          <PlayerImageWithFallback
+            primarySrc={player.image_url}
+            teamId={(player as any).team_id}
+            alt={player.player_name}
+            primaryImgClassName="w-full object-scale-down object-top"
+            teamWrapperClassName="flex flex-col items-center justify-center w-full h-full translate-y-12 translate-x-0 p-5"
+            teamImgClassName="w-full object-scale-down object-top"
+            scrummyWrapperClassName="flex flex-col items-center justify-center w-full h-full translate-y-7"
+            scrummyClassName="w-24 h-24 opacity-30"
+          />
         </div>
 
         {/* Player Details */}
