@@ -7,13 +7,11 @@ import { Home } from 'lucide-react';
 import { HeroSection } from '../components/dashboard';
 
 export function DashboardScreen() {
-
   return (
     <PageView className="flex flex-col space-y-6 p-4">
-
-      <div className='flex flex-row items-center gap-2' >
+      <div className="flex flex-row items-center gap-2">
         <Home />
-        <p className='text-xl font-extrabold' >Dashboard</p>
+        <p className="text-xl font-extrabold">Dashboard</p>
       </div>
 
       <HeroSection />
@@ -22,7 +20,7 @@ export function DashboardScreen() {
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <ComparePlayersPanel />
-      <MyWeekPanel />
+      {/* <MyWeekPanel /> */}
       {/* <MyTeamsSection /> */}
     </PageView>
   );
