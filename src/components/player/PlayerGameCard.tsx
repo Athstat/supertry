@@ -6,7 +6,7 @@ import { IProAthlete } from '../../types/athletes';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtom } from '../../state/comparePlayers.atoms';
 import { useState } from 'react';
-import { ScrummyLightModeLogo } from '../branding/scrummy_logo';
+import { ScrummyDarkModeLogo, ScrummyLightModeLogo } from '../branding/scrummy_logo';
 import { CircleDollarSign } from 'lucide-react';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 
@@ -119,9 +119,10 @@ export function PlayerGameCard({
           )}
 
           {(imageError || !player.image_url) && (
-            <div className="flex flex-col items-center justify-center w-full h-full translate-y-5">
+            <div className="flex flex-col items-center justify-center w-full h-full translate-y-7">
               {/* Force light-mode logo regardless of theme, no background */}
-              <ScrummyLightModeLogo className="w-24 h-24 opacity-30" />
+              {/* <ScrummyLightModeLogo className="w-24 h-24 opacity-30" /> */}
+              <ScrummyDarkModeLogo className="w-24 h-24 opacity-30" />
             </div>
           )}
         </div>
