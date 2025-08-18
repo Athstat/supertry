@@ -135,7 +135,7 @@ export const PlayerScreenContent = () => {
     <Fragment>
       <PageView className="px-5 flex flex-col items-center justify-center gap-3 md:w-[80%] lg:w-[60%]">
         {/* Search and Filter Header */}
-        <div className="flex flex-row gap-2 items-center">
+        <div className="flex flex-row gap-2 items-center w-full">
           <Users />
           <h1 className="text-2xl font-bold">Players</h1>
         </div>
@@ -208,7 +208,7 @@ export const PlayerScreenContent = () => {
 
         {/* Player Grid */}
         {!isLoading && !error && !isFiltering && (
-          <div className="grid items-center justify-center grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-2 md:gap-y-3">
+          <div className="grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 md:gap-y-3">
             {filteredAthletes.map(player => (
               <PlayerCardItem
                 player={player}
