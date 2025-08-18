@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import FantasyLeagueGroupDataProvider from '../components/fantasy-league/providers/FantasyLeagueGroupDataProvider';
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';

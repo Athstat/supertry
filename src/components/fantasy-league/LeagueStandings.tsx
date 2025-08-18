@@ -1,5 +1,5 @@
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
+import { FantasyLeagueGroupMember, FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
 import { Table2, User } from 'lucide-react';
 import {} from 'lucide-react';
 import SecondaryText from '../shared/SecondaryText';
@@ -20,9 +20,7 @@ export function LeagueStandings() {
     data: standings,
     isLoading,
     error,
-  } = useSWR(
-    groupId ? ['group-standings', groupId] : null,
-    () => fantasyLeagueGroupsService.getGroupStandings(groupId as string),
+  } = useSWR(fetchKey, () => fantasyLeagueGroupsService.getGroupStandings(groupId as string),
     { revalidateOnFocus: false }
   );
 
@@ -32,7 +30,7 @@ export function LeagueStandings() {
     if (!Array.isArray(standings)) return map;
     for (const row of standings) {
       if (!row?.user_id) continue;
-      map[row.user_id] = row.total_points ?? 0;
+      map[row.user_id] = row.total_score ?? 0;
     }
     return map;
   }, [standings]);
