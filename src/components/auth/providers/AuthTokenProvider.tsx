@@ -91,10 +91,12 @@ export default function AuthTokenProvider({ children }: Props) {
 
     const handleClearAuthTokenAndUser = () => {
         setAccessToken(undefined);
+        
+        logoutFromBridge();
+
         authTokenService.clearAccessToken();
         authTokenService.clearUserTokens();
         authTokenService.cleanupKeycloakTokens();
-        logoutFromBridge();
     };
 
     if (isLoading) {

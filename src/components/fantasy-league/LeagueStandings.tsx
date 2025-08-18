@@ -1,5 +1,5 @@
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { FantasyLeagueGroupMember } from '../../types/fantasyLeagueGroups';
+import { FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
 import { Table2, User } from 'lucide-react';
 import {} from 'lucide-react';
 import SecondaryText from '../shared/SecondaryText';
@@ -11,19 +11,21 @@ import { useMemo } from 'react';
 
 export function LeagueStandings() {
 
-  const { userMemberRecord, league } = useFantasyLeagueGroup();
+  const { userMemberRecord, league, members } = useFantasyLeagueGroup();
   const fetchKey = league && `/fantasy-league-groups/${league.id}/standings`;
 
   const groupId = league?.id;
 
   // Fetch group standings (backend aggregated totals)
   const {
-    data: standings,
+    data: fetchedStandings,
     isLoading,
     error,
   } = useSWR(fetchKey, () => fantasyLeagueGroupsService.getGroupStandings(groupId as string),
     { revalidateOnFocus: false }
   );
+
+  const standings = fetchedStandings ?? [];
 
   // Map totals per user_id from standings
   const totalsByUserId = useMemo(() => {
@@ -34,7 +36,7 @@ export function LeagueStandings() {
       map[row.user_id] = row.total_score ?? 0;
     }
     return map;
-  }, [standings]);
+  }, [fetchedStandings]);
 
   // Sort members by total points desc
   const sortedMembers = useMemo(() => {
@@ -84,8 +86,6 @@ export function LeagueStandings() {
       />
     </div>
   }
-
-  const standings = fetchedStandings ?? [];
 
   return (
     <div className="flex flex-col gap-4" >
