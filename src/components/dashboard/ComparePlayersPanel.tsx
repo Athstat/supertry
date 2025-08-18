@@ -137,20 +137,22 @@ function PanelContent() {
 
           {isLoading && <LoadingState />}
 
-          <div className="grid grid-cols-2 md:grid-cols-3">
+          <div className="grid grid-cols-2 gap-2">
             {filteredPlayers.slice(0, 6).map(player => (
               <PlayerGameCard
                 key={player.tracking_id}
                 player={player}
                 onClick={() => handlePlayerClick(player)}
-                className={twMerge(
-                  'h-[260px] cursor-pointer transition-all',
-                  selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
-                    'ring-2 ring-primary-500 dark:ring-primary-400'
-                )}
-                priceClassName="top-14 left-5"
-                teamLogoClassName="top-8 right-2"
-                frameClassName="object-contain object-center"
+                // className={twMerge(
+                //   'h-[260px] cursor-pointer transition-all',
+                //   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
+                //     'ring-2 ring-primary-500 dark:ring-primary-400'
+                // )}
+
+                // // className='max-w-[100px]'
+                // priceClassName="top-14 left-5"
+                // teamLogoClassName="top-8 right-2"
+                frameClassName=" min-w-[190px] max-w-[190px]"
                 detailsClassName="px-6 pb-12"
               />
             ))}
