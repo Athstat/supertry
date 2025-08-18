@@ -51,7 +51,7 @@ export const PlayerFilters = ({
 
       {/* Filters Dropdown */}
       {showFilters && (
-        <div className=" absolute left-0 mt-2 w-96 bg-white dark:bg-dark-800 rounded-lg shadow-lg z-30 border dark:border-slate-700 p-4 overflow-y-auto">
+        <div className=" absolute left-0 mt-2 w-96 bg-white dark:bg-dark-800 rounded-lg shadow-lg z-50 border dark:border-slate-700 p-4 overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium text-gray-900 dark:text-gray-100">
               Filters
