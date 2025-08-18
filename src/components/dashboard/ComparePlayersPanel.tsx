@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 // import PlayerCompareModal from '../players/compare/PlayerCompareModal'; // old compare modal
-import { twMerge } from 'tailwind-merge';
 import { PlayerSearch } from '../players/PlayerSearch';
 import { Infinity } from 'lucide-react';
 // import { X } from 'lucide-react'; // used in old selectedPlayers pill list
@@ -61,7 +60,7 @@ function PanelContent() {
     const query = searchQuery.toLowerCase();
     return (
       player.player_name?.toLowerCase().includes(query) ||
-      player.team.athstat_name?.toLowerCase().includes(query) ||
+      player.team?.athstat_name?.toLowerCase().includes(query) ||
       player.position_class?.toLowerCase().includes(query)
     );
   });
@@ -92,10 +91,11 @@ function PanelContent() {
         </div>
       </div>
 
-      <div className="rounded-xl bg-white  dark:bg-gray-900 overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-slate-700">
-        <div className="p-4">
+      <div className="rounded-xl flex flex-col items-center justify-center bg-white  dark:bg-gray-900 overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-slate-700">
+        <div className="w-full flex flex-col items-center justify-center">
+          
           {/* Player Search */}
-          <div className="mb-4">
+          <div className="mb-4 w-full p-2">
             <PlayerSearch searchQuery={searchQuery} onSearch={setSearchQuery} />
           </div>
 
@@ -137,20 +137,22 @@ function PanelContent() {
 
           {isLoading && <LoadingState />}
 
-          <div className="grid grid-cols-2 md:grid-cols-3">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 w-full">
             {filteredPlayers.slice(0, 6).map(player => (
               <PlayerGameCard
                 key={player.tracking_id}
                 player={player}
                 onClick={() => handlePlayerClick(player)}
-                className={twMerge(
-                  'h-[260px] cursor-pointer transition-all',
-                  selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
-                    'ring-2 ring-primary-500 dark:ring-primary-400'
-                )}
-                priceClassName="top-14 left-5"
-                teamLogoClassName="top-8 right-2"
-                frameClassName="object-contain object-center"
+                // className={twMerge(
+                //   'h-[260px] cursor-pointer transition-all',
+                //   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
+                //     'ring-2 ring-primary-500 dark:ring-primary-400'
+                // )}
+
+                // // className='max-w-[100px]'
+                // priceClassName="top-14 left-5"
+                // teamLogoClassName="top-8 right-2"
+                frameClassName=" min-w-[185px] max-w-[185px]"
                 detailsClassName="px-6 pb-12"
               />
             ))}
