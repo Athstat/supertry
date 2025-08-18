@@ -12,8 +12,6 @@ import { EmptyState } from '../components/players/EmptyState';
 import { PlayerGameCard } from '../components/player/PlayerGameCard';
 import PageView from './PageView';
 import { Users, X } from 'lucide-react';
-import PlayersCompareButton from '../components/player/PlayerScreenCompareButton';
-import { twMerge } from 'tailwind-merge';
 import PlayersScreenCompareStatus from '../components/players/compare/PlayersScreenCompareStatus';
 import PlayerCompareModal from '../components/players/compare/PlayerCompareModal';
 import PlayerProfileModal from '../components/player/PlayerProfileModal';

@@ -33,90 +33,79 @@ export function PlayerGameCard({ player, className, onClick, hidePrice = false, 
   const frameSrc = getPositionFrameBackground(player.position_class ?? '');
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
-  const { ref, inView } = useInView({ triggerOnce: true })
-
-  // if (!inView) return;
-
   return (
     <div
-      ref={ref}
+      className={twMerge(
+        'max-w-[200px] cursor-pointer max-h-[250px] ',
+        'flex items-center justify-center relative text-white dark:text-white',
+        className
+      )}
+
+      onClick={onClick}
     >
 
+      {/* Card Container */}
+      <div className='relative'>
+        {/* Card */}
+        <img
+          src={frameSrc}
+          className={twMerge(
+            'object-contain min-w-[200px] max-w-[200px]',
+            frameClassName
+          )}
+        />
 
-      {inView && <div
-        className={twMerge(
-          'max-w-[200px] cursor-pointer max-h-[250px] ',
-          'flex items-center justify-center relative text-white dark:text-white',
-          className
-        )}
+        {/* Player Image - Positioned absolutely and centered on the card */}
+        <div className='z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' >
 
-        onClick={onClick}
-      >
+          <div className=' w-10 flex flex-row items-center justify-center h-10 absolute right-0' >
+            {player.team?.image_url && <TeamLogo
+              url={player.team.image_url}
+              className='w-8 h-8'
+            />}
+          </div>
 
-        {/* Card Container */}
-        <div className='relative'>
-          {/* Card */}
-          <img
-            src={frameSrc}
-            className={twMerge(
-              'object-contain min-w-[200px] max-w-[200px]',
-              frameClassName
-            )}
-          />
-
-          {/* Player Image - Positioned absolutely and centered on the card */}
-          <div className='z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' >
-
-            <div className=' w-10 flex flex-row items-center justify-center h-10 absolute right-0' >
-              {player.team?.image_url && <TeamLogo
-                url={player.team.image_url}
-                className='w-8 h-8'
-              />}
+          {!hidePrice && <div className=' w-10 flex flex-row items-center justify-center h-10 absolute left-0' >
+            <div className='flex flex-row items-center gap-1' >
+              <CircleDollarSign className='w-3 h-3' />
+              <p className='text-[10px]' >{player.price}</p>
             </div>
+          </div>}
 
-            {!hidePrice && <div className=' w-10 flex flex-row items-center justify-center h-10 absolute left-0' >
-              <div className='flex flex-row items-center gap-1' >
-                <CircleDollarSign className='w-3 h-3' />
-                <p className='text-[10px]' >{player.price}</p>
-              </div>
-            </div>}
+          <div className='min-h-[140px] max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
 
-            <div className='min-h-[140px] max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]' >
-
-              {!playerImageErr && <img
-                src={player.image_url}
-                className={twMerge(
-                  'min-h-[120px] max-h-[120px] min-w-[120px] max-w-[120px] object-cover object-top',
-                  "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
-                  "[mask - repeat:no-repeat] [mask-size:100%_100%]",
-                  "[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
-                  "[-webkit-mask-repeat:no-repeat]",
-                  "[-webkit-mask-size:100%_100%"
-                )}
-                onError={() => setPlayerImageErr(true)}
-              />}
-
-              {playerImageErr && (
-                <TeamJersey
-                  teamId={player.team?.athstat_id}
-                />
+            {!playerImageErr && <img
+              src={player.image_url}
+              className={twMerge(
+                'min-h-[120px] max-h-[120px] min-w-[120px] max-w-[120px] object-cover object-top',
+                "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
+                "[mask - repeat:no-repeat] [mask-size:100%_100%]",
+                "[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
+                "[-webkit-mask-repeat:no-repeat]",
+                "[-webkit-mask-size:100%_100%"
               )}
+              onError={() => setPlayerImageErr(true)}
+            />}
+
+            {playerImageErr && (
+              <TeamJersey
+                teamId={player.team?.athstat_id}
+              />
+            )}
 
 
-            </div>
+          </div>
 
-            <div className='flex flex-col items-center p-1 justify-center' >
-              <p className='text-xs text-center' >{player.player_name}</p>
-            </div>
+          <div className='flex flex-col items-center p-1 justify-center' >
+            <p className='text-xs text-center' >{player.player_name}</p>
+          </div>
 
-            <div className='flex text-xs flex-row items-center justify-center gap-2' >
-              <p className='font-bold' >{player.power_rank_rating && Math.floor(player.power_rank_rating)}</p>
-              <p>{player.position}</p>
-            </div>
+          <div className='flex text-xs flex-row items-center justify-center gap-2' >
+            <p className='font-bold' >{player.power_rank_rating && Math.floor(player.power_rank_rating)}</p>
+            <p>{player.position}</p>
           </div>
         </div>
-
-      </div>}
+      </div>
 
     </div>
   )
