@@ -72,7 +72,7 @@ export default function FixtureScreen() {
     {
       label: "Chat",
       tabKey: "chat",
-      disabled: false
+      disabled: true
     },
     {
       label: "Team Rosters",
