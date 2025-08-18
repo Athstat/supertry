@@ -92,9 +92,10 @@ function PanelContent() {
       </div>
 
       <div className="rounded-xl flex flex-col items-center justify-center bg-white  dark:bg-gray-900 overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-slate-700">
-        <div className="p-4 w-full flex flex-col items-center justify-center">
+        <div className="w-full flex flex-col items-center justify-center">
+          
           {/* Player Search */}
-          <div className="mb-4 w-full">
+          <div className="mb-4 w-full p-2">
             <PlayerSearch searchQuery={searchQuery} onSearch={setSearchQuery} />
           </div>
 
@@ -136,7 +137,7 @@ function PanelContent() {
 
           {isLoading && <LoadingState />}
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 w-full">
             {filteredPlayers.slice(0, 6).map(player => (
               <PlayerGameCard
                 key={player.tracking_id}
@@ -151,7 +152,7 @@ function PanelContent() {
                 // // className='max-w-[100px]'
                 // priceClassName="top-14 left-5"
                 // teamLogoClassName="top-8 right-2"
-                frameClassName=" min-w-[190px] max-w-[190px]"
+                frameClassName=" min-w-[185px] max-w-[185px]"
                 detailsClassName="px-6 pb-12"
               />
             ))}

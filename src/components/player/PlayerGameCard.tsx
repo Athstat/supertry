@@ -6,7 +6,6 @@ import TeamLogo from '../team/TeamLogo';
 import { useState } from 'react';
 import TeamJersey from './TeamJersey';
 import { CircleDollarSign } from 'lucide-react';
-import { useInView } from 'react-intersection-observer';
 
 type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
