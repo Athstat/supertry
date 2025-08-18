@@ -1,5 +1,5 @@
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { FantasyLeagueGroupMember, FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
+import { FantasyLeagueGroupMember } from '../../types/fantasyLeagueGroups';
 import { Table2, User } from 'lucide-react';
 import {} from 'lucide-react';
 import SecondaryText from '../shared/SecondaryText';
