@@ -35,27 +35,29 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       {/* Image space - hidden on mobile */}
       <div className="flex-1 pr-4">Player / Team</div>
       {/* <div className="w-12 text-center flex items-center justify-center transition">FRM</div> */}
-      
+
+
       <button
         onClick={() => onSort("price")}
-        className={`text-left flex items-center justify-start w-10 transition ${
-          sortBy === "price" ? "text-green-600" : ""
-        }`}
+        className={`text-left flex items-center justify-start w-12 transition ${sortBy === "price" ? "text-green-600" : ""
+          }`}
       >
         <CircleDollarSign className="w-5 h-fit" />
         {renderSortIndicator("price", "ml-0")}
       </button>
+
       <button
         onClick={() => onSort("rating")}
-        className={`w-16 text-right flex items-center justify-start transition ${
-          sortBy === "rating" ? "text-green-600" : ""
-        }`}
+        className={`w-12 text-right flex items-center justify-start transition ${sortBy === "rating" ? "text-green-600" : ""
+          }`}
       >
         PR {renderSortIndicator("rating")}
       </button>
+
+
       <button
         onClick={() => onSort("attack")}
-        className={`w-14 text-left flex items-center justify-start transition ${
+        className={`hidden w-14 text-left md:flex items-center justify-start transition ${
           sortBy === "attack" ? "text-green-600" : ""
         }`}
       >
@@ -63,7 +65,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </button>
       <button
         onClick={() => onSort("defense")}
-        className={`w-14 text-left flex items-center justify-start transition ${
+        className={`hidden w-14 text-left md:flex items-center justify-start transition ${
           sortBy === "defense" ? "text-green-600" : ""
         }`}
       >
@@ -71,7 +73,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       </button>
       <button
         onClick={() => onSort("kicking")}
-        className={`w-14 text-left flex items-center justify-start transition ${
+        className={`hidden w-14 text-left md:flex items-center justify-start transition ${
           sortBy === "kicking" ? "text-green-600" : ""
         }`}
       >

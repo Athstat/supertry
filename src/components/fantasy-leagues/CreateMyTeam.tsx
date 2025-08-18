@@ -14,7 +14,7 @@ import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { ArrowLeft, Check, Loader } from 'lucide-react';
+import { Check, Loader } from 'lucide-react';
 import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
 
@@ -22,8 +22,7 @@ export default function CreateMyTeam({
   leagueRound,
   leagueConfig,
   onTeamCreated,
-  onViewTeam,
-  onBack,
+  onViewTeam
 }: {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
@@ -229,24 +228,16 @@ export default function CreateMyTeam({
 
   return (
     <div className="w-full py-4">
-      <div className="flex flex-row items-center justify-between mb-5">
+
+
+      {leagueRound && <div className="flex flex-row items-center justify-between mb-5">
         <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
-          <button
-            type="button"
-            onClick={() => onBack && onBack()}
-            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="Back to rounds"
-          >
-            <ArrowLeft />
-          </button>
           <div className="flex flex-col">
-            <p className="font-bold text-xl">Create Team</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-              Create your team for {leagueRound?.title}
-            </p>
+            <p className="font-bold text-xl">{leagueRound?.title}</p>
           </div>
         </div>
-      </div>
+      </div>}
+
       {/* Top stats row */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800/70 p-3">

@@ -8,5 +8,6 @@ export type IProSeason = {
     data_source?: string,
     source_id?: string,
     web_supported?: boolean,
-    competition_id: number
+    competition_id: number,
+    fantasy_supported?: boolean
 }

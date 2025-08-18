@@ -1,20 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Trophy } from 'lucide-react';
 import LeagueTabs from '../components/fantasy-leagues/LeagueTabs';
 import MyLeaguesTab from '../components/fantasy-leagues/join_league_screen/MyLeaguesTab';
 import DiscorverLeaguesTab from '../components/fantasy-leagues/join_league_screen/DiscorverLeaguesTab';
 import JoinLeagueByCodeTab from '../components/fantasy-leagues/join_league_screen/JoinByCodeTab';
+import { useQueryState } from '../hooks/useQueryState';
 
 export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
-  const [activeTab, setActiveTab] = useState<'my' | 'discover' | 'code'>(() => {
-    const saved = localStorage.getItem('league_tab');
-    return (saved as 'my' | 'discover' | 'code') || 'my';
+  const [activeTab, setActiveTab] = useQueryState<'my' | 'discover' | 'code'>('active_tab', {
+    init: 'my'
   });
-
-  useEffect(() => {
-    localStorage.setItem('league_tab', activeTab);
-  }, [activeTab]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,7 +30,7 @@ export function FantasyLeaguesScreen() {
         </div>
       </div>
 
-      <LeagueTabs value={activeTab} onChange={setActiveTab} className="mb-4 sm:mb-6" />
+      <LeagueTabs value={activeTab ?? 'my'} onChange={setActiveTab} className="mb-4 sm:mb-6" />
 
       {/* {leagueOnTheClock && (
         <div className="mb-4 sm:mb-6">

@@ -6,7 +6,7 @@ type Options = {
     cleanUp?: boolean
 }
 
-export function useQueryState(key: string, options?: Options) {
+export function useQueryState<T>(key: string, options?: Options) {
 
     const init = options?.init;
     // const cleanUp = options?.cleanUp;
@@ -48,7 +48,7 @@ export function useQueryState(key: string, options?: Options) {
     //     }
     // }, []);
 
-    return [value, setValue] as const;
+    return [value as T, setValue] as const;
 }
 
 export function useQueryValue(key: string) {

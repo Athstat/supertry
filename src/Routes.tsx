@@ -37,6 +37,7 @@ import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
 import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
+import OnboardingDataProvider from './components/onboarding/OnboardingDataProvider';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -288,7 +289,9 @@ const AppRoutes = () => {
         path="/post-signup-welcome"
         element={
           <ProtectedRoute>
-            <PostSignUpWelcomeScreen />
+            <OnboardingDataProvider>
+              <PostSignUpWelcomeScreen />
+            </OnboardingDataProvider>
           </ProtectedRoute>
         }
       />
