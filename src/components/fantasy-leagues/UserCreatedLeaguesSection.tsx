@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Users } from 'lucide-react';
+import { Plus, Trophy, Users } from 'lucide-react';
 import { LoadingState } from '../ui/LoadingState';
 import { useNavigate } from 'react-router-dom';
 import { IUserCreatedLeague } from '../../types/userCreatedLeague';
@@ -138,7 +138,7 @@ export default function UserCreatedLeaguesSection({
       ) : myLeagues.length === 0 ? (
         <div className="text-center flex flex-col items-center justify-center py-8 bg-gray-50 dark:border-slate-800 dark:bg-slate-800/50 rounded-lg px-6">
           
-          <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <Trophy className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             You haven't created a league yet

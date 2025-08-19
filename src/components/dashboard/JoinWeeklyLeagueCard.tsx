@@ -3,36 +3,37 @@ import { useNavigate } from 'react-router-dom';
 import { useFetch } from '../../hooks/useFetch';
 import { leagueService } from '../../services/leagueService';
 import { activeLeaguesFilter } from '../../utils/leaguesUtils';
-import { differenceInDays } from 'date-fns';
 
 const JoinWeeklyLeagueCard = () => {
   const navigate = useNavigate();
 
   // Fetch all leagues
-  const { data: leagues, isLoading } = useFetch('all-leagues', null, leagueService.getAllLeagues);
+  const { isLoading } = useFetch('all-leagues', null, leagueService.getAllLeagues);
 
   // Get the next active league
-  const activeLeagues = activeLeaguesFilter(leagues || []);
+  const activeLeagues = activeLeaguesFilter([]);
   const nextLeague = activeLeagues[0];
 
   // Calculate time left until league starts
   const getTimeLeft = () => {
-    if (!nextLeague?.join_deadline) return 'No leagues available';
+    // if (nextLeague.start_date) return 'No leagues available';
 
-    const today = new Date();
-    const deadline = new Date(nextLeague.join_deadline);
-    const daysDiff = differenceInDays(deadline, today);
+    // const today = new Date();
+    // const deadline = new Date(nextLeague.join_deadline);
+    // const daysDiff = differenceInDays(deadline, today);
 
-    if (daysDiff < 0) return 'League has started';
-    if (daysDiff === 0) return 'Today';
-    if (daysDiff === 1) return '1 day left';
-    return `${daysDiff} days left`;
+    // if (daysDiff < 0) return 'League has started';
+    // if (daysDiff === 0) return 'Today';
+    // if (daysDiff === 1) return '1 day left';
+    // return `${daysDiff} days left`;
+
+    return ''
   };
 
   // Get participant count
   const getParticipantCount = () => {
     if (!nextLeague) return '0 joined';
-    return `${nextLeague.participants_count || 0} joined`;
+    return ``;
   };
 
   if (isLoading) {
@@ -87,29 +88,3 @@ const JoinWeeklyLeagueCard = () => {
 };
 
 export default JoinWeeklyLeagueCard;
-
-type BannerProps = {
-  link?: string
-}
-
-export function HeroImageBanner({link = "/images/africa_banner.jpg"} : BannerProps) {
-  return (
-    <div className="w-full h-48 lg:h-72 overflow-clip bg-slate-100 dark:border-slate-700 rounded-xl relative">
-      <img
-        src={link}
-        alt="Africa Cup Banner"
-        className="w-full object-center"
-      />
-      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent px-6 py-4 flex flex-col items-start">
-        <h3
-          className="text-white text-lg font-bold drop-shadow-xl mb-2"
-          style={{
-        textShadow:
-          '0 4px 24px #000, 0 2px 8px #000, 0 1px 0 #000, 2px 2px 8px #000, -2px 2px 8px #000'
-          }}
-        >
-        </h3>
-      </div>
-    </div>
-  )
-}
