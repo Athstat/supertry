@@ -11,6 +11,9 @@ import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Dumbbell } from 'lucide-react';
 import SecondaryText from '../../../shared/SecondaryText';
 import { isNumeric } from '../../../../utils/stringUtils';
+import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
+import RelatedPlayersList from '../RelatedPlayersList';
+import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 
 type Props = {
   player: IProAthlete;
@@ -88,11 +91,9 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       )}
 
-      {/* <Experimental>
-        <CoachScrummyPlayerReport
-          player={player}
-        />
-      </Experimental> */}
+      <CoachScrummyPlayerReport
+        player={player}
+      />
 
       {/* {currentSeason && (
         <PlayerSeasonStatsCard
@@ -109,9 +110,11 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       </Experimental>}
 
-      {/* <RelatedPlayersList 
-        player={player}
-      /> */}
+      {/* <Experimental>
+        <RelatedPlayersList
+          player={player}
+        />
+      </Experimental> */}
 
     </div>
   );

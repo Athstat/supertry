@@ -32,7 +32,7 @@ function Content() {
   const [ journey ] = useQueryState('journey');
   const initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
 
-  if (!league) {
+  if (!league && !league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />;
   }
 

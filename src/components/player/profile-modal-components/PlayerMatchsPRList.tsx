@@ -22,11 +22,11 @@ export default function PlayerMatchsPRList({ player }: Props) {
         () => powerRankingsService.getPastMatchsPowerRankings(player.tracking_id ?? "", 10)
     );
 
-    const matchesPR: any[] = data ?? [];
+    const matchesPR: SingleMatchPowerRanking[] = data ?? [];
 
     if (isLoading) return <LoadingState />
 
-    if (matchesPR.length === 0 && !matchesPR) {
+    if (matchesPR.length === 0) {
         return <></>
     }
 
@@ -62,8 +62,8 @@ export default function PlayerMatchsPRList({ player }: Props) {
                 <PillTag className="py-0.5 px-3 text-sm text-slate-600 dark:text-slate-400" >Lost {matchesLost}</PillTag>
                 {matchesDrawn ?  <PillTag>Draw {matchesDrawn}</PillTag> : null}
             </div>
-            {matchesPR.map((matchPr) => {
-                return <PlayerSingleMatchPrCard singleMatchPr={matchPr} />
+            {matchesPR.map((matchPr, index) => {
+                return <PlayerSingleMatchPrCard key={index} singleMatchPr={matchPr} />
             })}
         </div>
     )
