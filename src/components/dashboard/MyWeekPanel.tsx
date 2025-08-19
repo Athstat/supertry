@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoadingState } from '../ui/LoadingState';
 import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { activeLeaguesFilter } from '../../utils/leaguesUtils';
+import { useOnboarding } from '../../components/onboarding/OnboardingDataProvider';
 
 const MyWeekPanel = () => {
   const user = useAuthUser();
@@ -14,6 +15,12 @@ const MyWeekPanel = () => {
     null,
     leagueService.getAllLeagues
   );
+
+  const { featuredLeague } = useOnboarding();
+
+  console.log('featuredLeague', featuredLeague);
+
+  console.log('env check', import.meta.env.VITE_FEATURE_LEAGUE_GROUP_ID);
 
   // Get the first active league
   const activeLeague = activeLeaguesFilter(leagues || [])[0];

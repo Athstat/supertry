@@ -29,6 +29,9 @@ export default function OnboardingDataProvider({ children }: Props) {
 /** Provides data for the onboarding screen */
 function ProviderContent({ children }: Props) {
   const featuredLeagueId: string = import.meta.env.VITE_FEATURE_LEAGUE_GROUP_ID ?? '';
+  const apiTest: string = import.meta.env.VITE_API_BASE_URL ?? '';
+
+  console.log('apiTest', apiTest);
 
   const featuredPlayersId: string[] = [
     'b5ee73ca-4552-5b63-80d2-f0b5a5d3c9e2',
