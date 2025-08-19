@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 type BannerProps = {
-  link?: string
+  link?: string,
+  onClick?: () => void
 }
 
-export default function HeroImageBanner({ link = "/images/africa_banner.jpg" }: BannerProps) {
+export default function HeroImageBanner({ link = "/images/africa_banner.jpg", onClick }: BannerProps) {
 
   const [error, setError] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -30,6 +31,7 @@ export default function HeroImageBanner({ link = "/images/africa_banner.jpg" }: 
           setError(true);
         }}
         loading={'lazy'}
+        onClick={onClick}
       />}
       {/* <div className="absolute bottom-0 left-0 w-full bg-gradient-to-tpx-6 py-4 flex flex-col items-start">
         <h3

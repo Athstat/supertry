@@ -3,7 +3,8 @@ import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSec
 import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
-import { HeroImageBanner } from '../components/dashboard/JoinWeeklyLeagueCard';
+import HeroImageBanner from '../components/dashboard/HeroImageBanner';
+import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 
 export function DashboardScreen() {
   return (
@@ -21,6 +22,8 @@ export function DashboardScreen() {
       />
 
       <FeaturedPlayersCarousel />
+
+      {/* <FeaturedFantasyLeagueGroups /> */}
 
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
