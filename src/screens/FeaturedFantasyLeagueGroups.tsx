@@ -48,7 +48,7 @@ export default function FeaturedFantasyLeagueGroups() {
 
     const handleGoToLeagueCreation = () => {
         navigate('/leagues?active_tab=my', {
-            state: {showCreateLeagueModal: true}
+            state: { showCreateLeagueModal: true }
         });
     }
 
@@ -56,12 +56,22 @@ export default function FeaturedFantasyLeagueGroups() {
         navigate(`/league/${league.id}`);
     }
 
+    const handleViewAllLeagues = () => {
+        navigate(`/leagues`);
+    }
+
     return (
         <div className="flex flex-col gap-4" >
 
-            <div className="flex flex-row items-center gap-2" >
-                <Trophy className="w-4 h-4 text-blue-400" />
-                <h2>Fantasy Leagues</h2>
+            <div className="flex flex-row items-center justify-between gap-2" >
+                <div className="flex flex-row items-center gap-2" >
+                    <Trophy className="w-4 h-4 text-blue-400" />
+                    <h2>Fantasy Leagues</h2>
+                </div>
+
+                <div className="text-blue-500" >
+                    <p onClick={handleViewAllLeagues} >View All</p>
+                </div>
             </div>
 
             <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
@@ -78,13 +88,13 @@ export default function FeaturedFantasyLeagueGroups() {
                 <RoundedCard
                     className="min-h-[150px] text-slate-700 dark:text-slate-400 hover:text-black hover:dark:text-white p-4 max-h-[150px] lg:min-h-[160px] lg:max-h-[160px] min-w-[90%] bg-slate-50 hover:bg-white dark:bg-slate-800/60 hover:dark:bg-slate-800 flex flex-col items-center justify-center text-center gap-2"
                     onClick={handleGoToLeagueCreation}
-                >   
+                >
                     <p>
-                        <PlusCircle className="" />
+                        <Trophy className="" />
                     </p>
 
-                    <p>
-                        Create your own fantasy league and invite friends to join to battle it out!
+                    <p className="text-xs" >
+                        Discover leagues, Join, or Create your own fantasy league and invite friends to join to battle it out!
                     </p>
                 </RoundedCard>
             </div>

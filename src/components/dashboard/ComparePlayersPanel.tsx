@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart } from 'lucide-react';
+import { BarChart, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -67,11 +67,14 @@ function PanelContent() {
 
   return (
     <div>
+
       <div className="flex justify-between items-center mb-3">
+
         <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
-          <BarChart className="w-4 h-4 text-primary-700 dark:text-primary-400" />
+          <Users className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           Players
         </h3>
+
         <div className="flex gap-2">
           <button
             onClick={handleShuffle}
@@ -91,11 +94,12 @@ function PanelContent() {
         </div>
       </div>
 
-      <div className="rounded-xl flex flex-col items-center justify-center bg-white  dark:bg-gray-900 overflow-hidden shadow-md dark:shadow-none border border-gray-200 dark:border-slate-700">
+      <div className="rounded-xl w-full flex flex-col items-center justify-center ">
+
         <div className="w-full flex flex-col items-center justify-center">
-          
+
           {/* Player Search */}
-          <div className="mb-4 w-full p-2">
+          <div className="mb-4 w-full">
             <PlayerSearch searchQuery={searchQuery} onSearch={setSearchQuery} />
           </div>
 
@@ -136,37 +140,38 @@ function PanelContent() {
           )} */}
 
           {isLoading && <LoadingState />}
-
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 w-full">
-            {filteredPlayers.slice(0, 6).map(player => (
-              <PlayerGameCard
-                key={player.tracking_id}
-                player={player}
-                onClick={() => handlePlayerClick(player)}
-                // className={twMerge(
-                //   'h-[260px] cursor-pointer transition-all',
-                //   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
-                //     'ring-2 ring-primary-500 dark:ring-primary-400'
-                // )}
-
-                // // className='max-w-[100px]'
-                // priceClassName="top-14 left-5"
-                // teamLogoClassName="top-8 right-2"
-                frameClassName=" min-w-[185px] max-w-[185px]"
-                detailsClassName="px-6 pb-12"
-              />
-            ))}
-          </div>
-          {/* <PlayerCompareModal /> */}
-
-          {activePlayer && (
-            <PlayerProfileModal
-              player={activePlayer}
-              isOpen={profileOpen}
-              onClose={() => setProfileOpen(false)}
-            />
-          )}
         </div>
+
+        <div className="flex flex-row items-center justify-center flex-wrap gap-2 w-full">
+          {filteredPlayers.slice(0, 6).map(player => (
+            <PlayerGameCard
+              key={player.tracking_id}
+              player={player}
+              onClick={() => handlePlayerClick(player)}
+              // className={twMerge(
+              //   'h-[260px] cursor-pointer transition-all',
+              //   selectedPlayers.some(p => p.tracking_id === player.tracking_id) &&
+              //     'ring-2 ring-primary-500 dark:ring-primary-400'
+              // )}
+
+              // // className='max-w-[100px]'
+              // priceClassName="top-14 left-5"
+              // teamLogoClassName="top-8 right-2"
+              className=' flex-1'
+              frameClassName=" min-w-[180px] max-w-[180px]"
+              detailsClassName="px-6 pb-12"
+            />
+          ))}
+        </div>
+        {/* <PlayerCompareModal /> */}
+
+        {activePlayer && (
+          <PlayerProfileModal
+            player={activePlayer}
+            isOpen={profileOpen}
+            onClose={() => setProfileOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

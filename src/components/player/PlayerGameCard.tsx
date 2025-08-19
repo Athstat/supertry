@@ -43,7 +43,7 @@ export function PlayerGameCard({
   return (
     <div
       className={twMerge(
-        'min-w-[180px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px] cursor-pointer max-h-[250px] ',
+        'min-w-[170px] max-w-[170px] lg:min-w-[200px] lg:max-w-[200px] cursor-pointer max-h-[250px] ',
         'flex items-center justify-center relative text-white dark:text-white',
         className
       )}
@@ -55,7 +55,7 @@ export function PlayerGameCard({
         <img
           src={frameSrc}
           className={twMerge(
-            'object-contain min-w-[180px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px]',
+            'object-contain min-w-[170px] max-w-[170px] lg:min-w-[200px] lg:max-w-[200px]',
             frameClassName
           )}
           onLoad={() => setFrameLoaded(true)}
@@ -75,12 +75,12 @@ export function PlayerGameCard({
             {player.team?.image_url && <TeamLogo url={player.team.image_url} className="w-8 h-8" />}
           </div>
 
-          <div className="min-h-[140px] max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]">
+          <div className="min-h-[140px] max-h-[140px] lg:min-h-[140px] lg:max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]">
             {!playerImageErr && (
               <img
                 src={player.image_url}
                 className={twMerge(
-                  'min-h-[120px] max-h-[120px] min-w-[120px] max-w-[120px] object-cover object-top',
+                  'min-h-[100px] max-h-[100px] min-w-[100px] max-w-[100px] lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px] object-cover object-top',
                   '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
                   '[mask - repeat:no-repeat] [mask-size:100%_100%]',
                   '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',

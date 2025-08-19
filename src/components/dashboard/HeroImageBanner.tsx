@@ -16,7 +16,7 @@ export default function HeroImageBanner({ link = "/images/africa_banner.jpg", on
     <div className="w-full overflow-clip bg-white dark:border-slate-800 rounded-xl relative">
 
       {isLoading && (
-        <div className="w-full h-44 overflow-clip bg-slate-300 dark:bg-slate-800/60 animate-pulse dark:border-slate-800 rounded-xl relative">
+        <div className="w-full h-32 overflow-clip bg-slate-white dark:bg-slate-800/60 animate-pulse dark:border-slate-800 rounded-xl relative">
         </div>
       )}
 
