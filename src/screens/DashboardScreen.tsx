@@ -25,7 +25,7 @@ export function DashboardScreen() {
       {/* <HeroSection /> */}
 
       <HeroImageBanner 
-        link={'/public/images/wwc_2025_banner.jpg'}
+        link={'/images/wwc_2025_banner.jpg'}
         onClick={handleBannerClick}
       />
 
@@ -36,7 +36,7 @@ export function DashboardScreen() {
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <ComparePlayersPanel />
-      {/* <MyWeekPanel /> */}
+      <MyWeekPanel />
       {/* <MyTeamsSection /> */}
     </PageView>
   );

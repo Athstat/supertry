@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, subHours } from 'date-fns';
 import { gamesService } from '../../services/gamesService';
 import { IFixture } from '../../types/games';
 import useSWR, { mutate } from 'swr';
@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import SecondaryText from '../shared/SecondaryText';
 import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
 import { PilledSeasonFilterBar } from '../match_center/MatcheSeasonFilterBar';
+import { useQueryState } from '../../hooks/useQueryState';
 
 export default function UpcomingFixturesSection() {
   let {
@@ -29,12 +30,13 @@ export default function UpcomingFixturesSection() {
     '695fa717-1448-5080-8f6f-64345a714b10',
   ];
 
-  const { seasons, currSeason, setCurrSeason } = useSupportedSeasons({
-    wantedSeasonsId: seasonIds,
-  });
+  // const { seasons, currSeason, setCurrSeason } = useSupportedSeasons({
+  //   wantedSeasonsId: seasonIds,
+  // });
 
   const [selectedFixture, setSelectedFixture] = useState<IFixture | null>(null);
   const [showPredictModal, setShowPredictModal] = useState(false);
+  const [season, setSeason] = useQueryState('pcid', { init: 'all' });
 
   if (isLoading) return <LoadingState />;
 
@@ -42,9 +44,19 @@ export default function UpcomingFixturesSection() {
     return <ErrorState message="Failed to fetch upcoming matches" />;
   }
 
-  fixtures = (fixtures ?? [])
+  fixtures = fixtures ?? [];
+
+  const seasons: { name: string; id: string }[] = [];
+
+  fixtures.forEach(f => {
+    if (!seasons.some(c => c.id === f.league_id) && f.competition_name && f.league_id) {
+      seasons.push({ name: f.competition_name, id: f.league_id });
+    }
+  });
+
+  fixtures
     .filter(f => {
-      return currSeason ? f.league_id === currSeason?.id : true;
+      return !season || season === 'all' ? true : f.league_id === season;
     })
     .sort((a, b) =>
       a.kickoff_time && b.kickoff_time
@@ -52,33 +64,74 @@ export default function UpcomingFixturesSection() {
         : 0
     );
 
+  const upcomingFixtures = fixtures
+    .filter(f => {
+      const kickoff = f.kickoff_time;
+
+      if (kickoff) {
+        const now = subHours(new Date(), 2).valueOf();
+        return now < new Date(kickoff).valueOf();
+      }
+
+      return false;
+    })
+    .sort((a, b) => {
+      const aE = new Date(a.kickoff_time ?? new Date());
+      const bE = new Date(b.kickoff_time ?? new Date());
+
+      return aE.valueOf() - bE.valueOf();
+    })
+    .slice(0, 5);
+
+  const pastFixtures = fixtures
+    .filter(f => {
+      const kickoff = f.kickoff_time;
+
+      if (kickoff) {
+        const now = new Date().valueOf();
+        return now > new Date(kickoff).valueOf();
+      }
+
+      return false;
+    })
+    .sort((a, b) => {
+      const aE = new Date(a.kickoff_time ?? new Date());
+      const bE = new Date(b.kickoff_time ?? new Date());
+
+      return bE.valueOf() - aE.valueOf();
+    });
+
+  console.log('upcomingFixtures: ', upcomingFixtures);
+
   // Sort fixtures by date and time
-  const sortedFixtures = Array.isArray(fixtures)
-    ? fixtures
-        .filter(f => {
-          const notCompleted = f.game_status !== 'completed';
+  // const sortedFixtures = Array.isArray(fixtures)
+  //   ? fixtures
+  //       .filter(f => {
+  //         const notCompleted = f.game_status !== 'completed';
 
-          return notCompleted;
-        })
-        .slice(0, 5)
-    : [];
+  //         return notCompleted;
+  //       })
+  //       .slice(0, 5)
+  //   : [];
 
-  const last10 = [...fixtures]
-    .slice(fixtures.length - 11, fixtures.length)
-    .sort((a, b) =>
-      a.kickoff_time && b.kickoff_time
-        ? new Date(b.kickoff_time).valueOf() - new Date(a.kickoff_time).valueOf()
-        : 0
-    );
+  // console.log('sortedFixtures: ', sortedFixtures);
+
+  // const last10 = [...fixtures]
+  //   .slice(fixtures.length - 11, fixtures.length)
+  //   .sort((a, b) =>
+  //     a.kickoff_time && b.kickoff_time
+  //       ? new Date(b.kickoff_time).valueOf() - new Date(a.kickoff_time).valueOf()
+  //       : 0
+  //   );
 
   const handleClickPredict = (fixture: IFixture) => {
     setSelectedFixture(fixture);
     setShowPredictModal(true);
   };
 
-  if (last10.length === 0 && sortedFixtures.length == 0) {
-    return;
-  }
+  // if (last10.length === 0 && sortedFixtures.length == 0) {
+  //   return;
+  // }
 
   return (
     <div className="flex flex-col gap-4">
@@ -106,9 +159,9 @@ export default function UpcomingFixturesSection() {
         hideAllOption
       /> */}
 
-      {sortedFixtures.length === 0 ? (
+      {upcomingFixtures.length > 0 ? (
         <div className="flex space-x-4 overflow-x-auto pb-2">
-          {last10.map(fixture => {
+          {upcomingFixtures.map(fixture => {
             return (
               <UpcomingFixtureCard
                 fixture={fixture}
@@ -120,7 +173,7 @@ export default function UpcomingFixturesSection() {
         </div>
       ) : (
         <div className="flex space-x-4 overflow-x-auto pb-2">
-          {sortedFixtures.map(fixture => {
+          {pastFixtures.map(fixture => {
             return (
               <UpcomingFixtureCard
                 fixture={fixture}
@@ -246,21 +299,23 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
           </div>
         </div>
 
-        {/* <div className="flex space-x-2">
-          {!gameCompleted && <button
-            className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
-            onClick={handleClickPredict}
-          >
-            Predict
-          </button>}
+        <div className="flex space-x-2">
+          {!gameCompleted && (
+            <button
+              className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
+              onClick={handleClickPredict}
+            >
+              Predict
+            </button>
+          )}
           <button
             className="flex-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-slate-300 dark:border-slate-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
             onClick={handleClickChat}
           >
-            <span>Chat</span>
+            <span>Details</span>
             {/* <span className="w-2 h-2 bg-blue-500 rounded-full"></span> */}
-        {/* </button>
-        </div> */}
+          </button>
+        </div>
 
         {}
       </div>

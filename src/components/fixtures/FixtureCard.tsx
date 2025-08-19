@@ -147,7 +147,7 @@ export default function FixtureCard({
         </div>
 
         {/* Voting Section */}
-        {/* <ProFixtureVotingBox fixture={fixture} /> */}
+        <ProFixtureVotingBox fixture={fixture} />
 
         {message && (
           <WarningCard>
