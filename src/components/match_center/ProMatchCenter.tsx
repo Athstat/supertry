@@ -52,6 +52,8 @@ export default function ProMatchCenter() {
     return searchMatches && seasonMatches;
   });
 
+  console.log('filteredFixtures', filteredFixtures);
+
   const pastFixtures = filteredFixtures
     .filter(f => {
       const kickoff = f.kickoff_time;
