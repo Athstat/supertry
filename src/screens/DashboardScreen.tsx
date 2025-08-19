@@ -36,7 +36,7 @@ export function DashboardScreen() {
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <ComparePlayersPanel />
-      <MyWeekPanel />
+      {/* <MyWeekPanel /> */}
       {/* <MyTeamsSection /> */}
     </PageView>
   );
