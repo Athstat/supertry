@@ -27,8 +27,6 @@ export default function UpcomingFixturesSection() {
 
   const seasonIds = [
     '695fa717-1448-5080-8f6f-64345a714b10',
-    'b5cae2ff-d123-5f12-a771-5faa6d40e967',
-    'd313fbf5-c721-569b-975d-d9ec242a6f19',
   ];
 
   const { seasons, currSeason, setCurrSeason } = useSupportedSeasons({
@@ -97,7 +95,7 @@ export default function UpcomingFixturesSection() {
         </button>
       </div>
 
-      <PilledSeasonFilterBar
+      {/* <PilledSeasonFilterBar
         seasons={seasons}
         onChange={(sId?: string) => {
           const szn = seasons.find(f => f.id === sId);
@@ -106,7 +104,7 @@ export default function UpcomingFixturesSection() {
         value={currSeason?.id}
         sortDesc
         hideAllOption
-      />
+      /> */}
 
       {sortedFixtures.length === 0 ? (
         <div className="flex space-x-4 overflow-x-auto pb-2">

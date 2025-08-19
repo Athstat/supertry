@@ -16,9 +16,7 @@ export default function FeaturedPlayersCarousel() {
   const navigate = useNavigate();
 
   const wantedSeasons = [
-    '695fa717-1448-5080-8f6f-64345a714b10',
-    'b5cae2ff-d123-5f12-a771-5faa6d40e967',
-    'd313fbf5-c721-569b-975d-d9ec242a6f19',
+    '695fa717-1448-5080-8f6f-64345a714b10'
   ];
 
   const {
@@ -76,14 +74,14 @@ export default function FeaturedPlayersCarousel() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <PilledSeasonFilterBar
+        {/* <PilledSeasonFilterBar
           seasons={seasons}
           value={currSeason?.id}
           onChange={handleChangeSeason}
           hideAllOption
           isLoading={seasonsLoading}
           sortDesc
-        />
+        /> */}
 
         {playersLoading ||
           (seasonsLoading && (
