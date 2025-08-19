@@ -13,9 +13,17 @@ type Props = {
 };
 export default function RelatedPlayersList({ player }: Props) {
   const teamMatesKey = swrFetchKeys.getAthleteTeamMates(player.tracking_id);
-  const { data: teamMates, isLoading } = useSWR(teamMatesKey, () =>
+  const { data, isLoading } = useSWR(teamMatesKey, () =>
     djangoAthleteService.getAthleteTeamMates(player.tracking_id)
   );
+
+  const teamMates = [...data ?? []]
+    .filter((p) => {
+      return p.tracking_id !== player.tracking_id
+    })
+    .sort((a, b) => {
+      return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+    })
 
   if (isLoading) {
     return (
@@ -40,10 +48,10 @@ export default function RelatedPlayersList({ player }: Props) {
         <p>{player.team?.athstat_name} Team Mates</p>
       </SecondaryText>
 
-      <div className="flex flex-row overflow-x-auto gap-2">
+      <div className="flex flex-row no-scrollbar overflow-x-auto gap-2">
         <TeamLogo
           teamName={player.team?.athstat_name}
-          url={player.athlete?.team.image_url}
+          url={(player as any).athlete?.team.image_url ?? player.team?.image_url}
           className="w-20 h-20 flex-shrink-0"
           key={player.team?.athstat_id}
         />
