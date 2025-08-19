@@ -55,7 +55,7 @@ export function PlayerGameCard({
         <img
           src={frameSrc}
           className={twMerge(
-            'object-contain min-w-[170px] max-w-[170px] lg:min-w-[200px] lg:max-w-[200px]',
+            'object-contain min-w-[190px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px]',
             frameClassName
           )}
           onLoad={() => setFrameLoaded(true)}
