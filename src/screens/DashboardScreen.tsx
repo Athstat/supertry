@@ -4,9 +4,16 @@ import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCaro
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
 import HeroImageBanner from '../components/dashboard/HeroImageBanner';
-import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
+import { useNavigate } from 'react-router-dom';
 
 export function DashboardScreen() {
+
+  const navigate = useNavigate();
+
+  const handleBannerClick = () => {
+    navigate('/leagues');
+  }
+
   return (
     <PageView className="flex flex-col space-y-6 p-4">
       
@@ -19,6 +26,7 @@ export function DashboardScreen() {
 
       <HeroImageBanner 
         link={'/public/images/wwc_2025_banner.jpg'}
+        onClick={handleBannerClick}
       />
 
       <FeaturedPlayersCarousel />

@@ -23,7 +23,7 @@ export default function HeroImageBanner({ link = "/images/africa_banner.jpg", on
       {!error && <img
         src={link}
         alt="Africa Cup Banner"
-        className="w-full h-full object-center"
+        className="w-full h-full object-center cursor-pointer hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out"
         onAbort={() => setLoading(false)}
         onLoad={() => setLoading(false)}
         onError={() => {
