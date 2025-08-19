@@ -254,7 +254,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>}
-            <SecondaryText className="">{fixture.team_score}</SecondaryText>
+            <SecondaryText className="">{ game_status === "in_progress" && fixture.team_score }</SecondaryText>
           </div>
 
           {/* Match Info (centered) */}
@@ -293,7 +293,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.opposition_team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>}
-            <SecondaryText className="">{fixture.opposition_score}</SecondaryText>
+            <SecondaryText className="">{ game_status === "in_progress" && fixture.opposition_score}</SecondaryText>
           </div>
         </div>
 
