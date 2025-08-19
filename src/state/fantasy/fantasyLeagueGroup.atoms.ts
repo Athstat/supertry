@@ -15,8 +15,6 @@ export const currGroupMemberAtom = atom<FantasyLeagueGroupMember | undefined>(ge
 
   const authUser = authService.getUserInfoSync();
 
-  console.log('members: ', members);
-  console.log('authUser: ', authUser);
   return members.find(m => m.user_id === authUser?.kc_id);
 });
 
