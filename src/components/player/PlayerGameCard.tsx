@@ -38,6 +38,8 @@ export function PlayerGameCard({
   const frameSrc = getPositionFrameBackground(player.position_class ?? '');
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
+  const [isFrameLoaded, setFrameLoaded] = useState(false);
+
   return (
     <div
       className={twMerge(
@@ -56,10 +58,11 @@ export function PlayerGameCard({
             'object-contain min-w-[180px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px]',
             frameClassName
           )}
+          onLoad={() => setFrameLoaded(true)}
         />
 
         {/* Player Image - Positioned absolutely and centered on the card */}
-        <div className="z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        {isFrameLoaded && <div className="z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           {!hidePrice && (
             <div className=" w-10 flex flex-row items-center justify-center h-10 absolute left-0">
               <div className="flex flex-row items-center gap-1">
@@ -101,7 +104,7 @@ export function PlayerGameCard({
             </p>
             <p>{player.position}</p>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
