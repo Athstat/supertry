@@ -103,8 +103,6 @@ export default function UpcomingFixturesSection() {
       return bE.valueOf() - aE.valueOf();
     });
 
-  console.log('upcomingFixtures: ', upcomingFixtures);
-
   // Sort fixtures by date and time
   // const sortedFixtures = Array.isArray(fixtures)
   //   ? fixtures
