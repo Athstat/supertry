@@ -25,6 +25,9 @@ const hasValidImageUrl = (u?: string | null): boolean => {
 export default function PostSignUpWelcomeScreen() {
   const [currIndex, setIndex] = useState(0);
   const isWelcomeComplete = currIndex === tabs.length - 1;
+  // Access data needed to preload player images for the final screen
+  const { featuredPlayers } = useOnboarding();
+  const { athletes } = useAthletes();
 
   const handleNextIndex = () => {
     if (currIndex < tabs.length - 1) {
@@ -58,6 +61,41 @@ export default function PostSignUpWelcomeScreen() {
       img.onerror = () => console.warn('Preload failed:', url);
     });
   }, []);
+
+  // Preload images for the NEXT index so when the user advances it's instant
+  useEffect(() => {
+    const nextIndex = currIndex + 1;
+    const urls: string[] = [];
+
+    if (nextIndex === 1) {
+      // Preload BudgetingWelcomeScreen image
+      urls.push('/images/onboarding/Compare Players.png');
+    } else if (nextIndex === 2) {
+      // Preload RallyFriendsScreen image
+      urls.push('/images/onboarding/Create Your Own Leagues.png');
+    } else if (nextIndex === 3) {
+      // Preload WelcomeCTAScreen player images
+      const hasPlayers = Array.isArray(featuredPlayers) && featuredPlayers.length > 0;
+      const nextPlayers = hasPlayers
+        ? [...featuredPlayers].slice(0, 2)
+        : [...athletes]
+            .filter(a => hasValidImageUrl(a.image_url))
+            .sort((a, b) => (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0))
+            .slice(0, 3);
+
+      nextPlayers.forEach(p => {
+        if (hasValidImageUrl(p.image_url)) {
+          urls.push(p.image_url!);
+        }
+      });
+    }
+
+    const unique = Array.from(new Set(urls));
+    unique.forEach(url => {
+      const img = new Image();
+      img.src = url;
+    });
+  }, [currIndex, featuredPlayers, athletes]);
 
   return (
     <div className="flex dark:bg-black flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
