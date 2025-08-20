@@ -35,7 +35,7 @@ function ProviderContent({ children }: Props) {
 
   const featuredPlayersId: string[] = [
     'd703ed99-a89d-57b0-babd-f200b44fc274',
-    '93fd4fb3-100e-5ae3-b79d-d61fa4296d5d',
+    'b932bcae-fae8-51b3-8056-8fdd897e8c56',
     // 'c280f4d7-87fe-5bec-a099-473ebd78f41f',
     // '1188cb47-a7cd-571d-8f96-676691517662',
   ];
