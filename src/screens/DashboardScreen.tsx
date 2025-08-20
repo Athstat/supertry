@@ -6,6 +6,7 @@ import { Home } from 'lucide-react';
 import HeroImageBanner from '../components/dashboard/HeroImageBanner';
 import { useNavigate } from 'react-router-dom';
 import MyWeekPanel from '../components/dashboard/MyWeekPanel';
+import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -25,9 +26,9 @@ export function DashboardScreen() {
 
       <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} />
 
-      <FeaturedPlayersCarousel />
+      {/* <FeaturedPlayersCarousel /> */}
 
-      {/* <FeaturedFantasyLeagueGroups /> */}
+      <FeaturedFantasyLeagueGroups />
 
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
