@@ -8,6 +8,8 @@ import SecondaryText from '../../components/shared/SecondaryText';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
 import { ErrorMessage } from '../../components/ui/ErrorState';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
+import { FEATURED_PLAYER_IDS } from '../../components/onboarding/OnboardingDataProvider';
+import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -21,6 +23,43 @@ export function WelcomeScreen() {
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
+
+  // Preload top featured player images as early as possible
+  useEffect(() => {
+    let cancelled = false;
+    const preload = async () => {
+      try {
+        const ids = FEATURED_PLAYER_IDS.slice(0, 2);
+        const players = await Promise.all(
+          ids.map(async id => {
+            try {
+              return await djangoAthleteService.getAthleteById(id);
+            } catch {
+              return null;
+            }
+          })
+        );
+
+        if (cancelled) return;
+
+        players
+          .filter((p): p is NonNullable<typeof p> => !!p && typeof p.image_url === 'string')
+          .forEach(p => {
+            const url = p.image_url?.trim();
+            if (!url) return;
+            const img = new Image();
+            img.src = url;
+          });
+      } catch {
+        // silent fail - preloading is best-effort
+      }
+    };
+
+    preload();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // const googleLogin = useGoogleLogin({
   //   onSuccess: async tokenResponse => {

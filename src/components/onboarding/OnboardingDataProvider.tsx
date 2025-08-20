@@ -12,6 +12,14 @@ import { ScopeProvider } from 'jotai-scope';
 const featuredPlayersAtom = atom<IProAthlete[]>([]);
 const featuredLeagueAtom = atom<FantasyLeagueGroup>();
 
+// Export so other screens (e.g., WelcomeScreen) can preload assets
+export const FEATURED_PLAYER_IDS: string[] = [
+  'd703ed99-a89d-57b0-babd-f200b44fc274',
+  'b932bcae-fae8-51b3-8056-8fdd897e8c56',
+  // 'c280f4d7-87fe-5bec-a099-473ebd78f41f',
+  // '1188cb47-a7cd-571d-8f96-676691517662',
+];
+
 type Props = {
   children?: ReactNode;
 };
@@ -33,19 +41,12 @@ function ProviderContent({ children }: Props) {
 
   console.log('apiTest', apiTest);
 
-  const featuredPlayersId: string[] = [
-    'd703ed99-a89d-57b0-babd-f200b44fc274',
-    'b932bcae-fae8-51b3-8056-8fdd897e8c56',
-    // 'c280f4d7-87fe-5bec-a099-473ebd78f41f',
-    // '1188cb47-a7cd-571d-8f96-676691517662',
-  ];
-
   const setFeaturedLeague = useSetAtom(featuredLeagueAtom);
   const setFeaturedPlayers = useSetAtom(featuredPlayersAtom);
 
   const playersKey = `/onboarding/featured-players/${featuredLeagueId.length}`;
   const { data: players, isLoading: loadingPlayers } = useSWR(playersKey, () =>
-    featuredPlayersFetcher(featuredPlayersId)
+    featuredPlayersFetcher(FEATURED_PLAYER_IDS)
   );
 
   const groupKey = swrFetchKeys.getFantasyLeagueGroupById(featuredLeagueId);
