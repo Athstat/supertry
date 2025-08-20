@@ -45,6 +45,7 @@ export type IProAthlete = {
   available?: boolean;
   team_id: string;
   team?: IProTeam;
+  scouting_report?: string
 };
 
 export type IAthleteSeasonStarRatings = {

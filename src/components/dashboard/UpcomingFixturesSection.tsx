@@ -221,7 +221,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
 
   return (
     <div
-      className="min-w-[320px] cursor-pointer  bg-white hover:bg-slate-200 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 hover:dark:bg-gray-800/70 rounded-xl overflow-hidden text-white"
+      className="min-w-[350px] max-w-[350px] cursor-pointer  bg-white hover:bg-slate-200 border border-slate-300 dark:border-slate-700 dark:bg-gray-800/40 hover:dark:bg-gray-800/70 rounded-xl overflow-hidden text-white"
       onClick={() => {
         if (gameCompleted && onClickPredict) {
           onClickPredict(fixture);
@@ -244,17 +244,17 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               <TeamLogo
                 url={fixture.team.image_url}
                 teamName={fixture.team.athstat_name}
-                className="w-10 h-10"
+                className="w-8 h-8 lg:h-10 lg:w-10"
               />
             </div>
             <p
-              className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
+              className="text-xs font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
               title={fixture.team.athstat_name}
             >
               {fixture.team.athstat_name}
             </p>
-            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Home</p>}
-            <SecondaryText className="">{fixture.team_score}</SecondaryText>
+            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400"></p>}
+            <SecondaryText className="">{ game_status === "in_progress" && fixture.team_score }</SecondaryText>
           </div>
 
           {/* Match Info (centered) */}
@@ -283,31 +283,31 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               <TeamLogo
                 url={fixture.opposition_team.image_url}
                 teamName={fixture.opposition_team.athstat_name}
-                className="w-10 h-10"
+                className="w-8 h-8 lg:h-10 lg:w-10"
               />
             </div>
             <p
-              className="text-sm font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
+              className="text-xs font-medium truncate w-full text-center whitespace-nowrap overflow-hidden text-gray-900 dark:text-white"
               title={fixture.opposition_team.athstat_name}
             >
               {fixture.opposition_team.athstat_name}
             </p>
-            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400">Away</p>}
-            <SecondaryText className="">{fixture.opposition_score}</SecondaryText>
+            {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400"></p>}
+            <SecondaryText className="">{ game_status === "in_progress" && fixture.opposition_score}</SecondaryText>
           </div>
         </div>
 
         <div className="flex space-x-2">
           {!gameCompleted && (
             <button
-              className="flex-1 bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-2 rounded-md text-sm font-medium transition-colors"
+              className="flex-1  bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-1.5 rounded-md text-xs font-medium transition-colors"
               onClick={handleClickPredict}
             >
               Predict
             </button>
           )}
           <button
-            className="flex-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-slate-300 dark:border-slate-700 text-gray-900 dark:text-white py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+            className="flex-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-slate-300 dark:border-slate-700 text-gray-900 dark:text-white py-1.5 rounded-md text-xs font-medium flex items-center justify-center gap-2 transition-colors"
             onClick={handleClickChat}
           >
             <span>Details</span>

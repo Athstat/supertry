@@ -341,7 +341,7 @@ function WelcomeCTAScreen() {
     <div className="relative flex flex-col gap-6 h-full w-full overflow-x-auto items-center">
       {/* Content */}
       <div className="relative z-10 flex flex-col gap-6 items-center">
-        <ScrummyLogo className="w-56 h-56 lg:w-72 lg:h-72" />
+        <ScrummyLogo className="w-44 h-44 lg:w-72 lg:h-72" />
 
         <div className="grid grid-cols-2 gap-2">
           {top2Players

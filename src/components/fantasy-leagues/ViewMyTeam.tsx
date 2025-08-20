@@ -20,12 +20,14 @@ export default function ViewMyTeam({
   team,
   onBack,
   onTeamUpdated,
+  onEditChange,
 }: {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
   team: IFantasyLeagueTeam;
   onBack?: () => void;
   onTeamUpdated: () => Promise<void>;
+  onEditChange?: (isEditing: boolean) => void;
 }) {
   const [captainAthleteId, setCaptainAthleteId] = useState<string | undefined>(
     () => team.athletes?.find(a => a.is_captain)?.athlete_id
@@ -66,6 +68,8 @@ export default function ViewMyTeam({
     });
     return map;
   });
+
+  const [swapPlayer, setSwapPlayer] = useState<IProAthlete | undefined>(undefined);
 
   useEffect(() => {
     // When team changes from parent, reset editable state
@@ -110,6 +114,22 @@ export default function ViewMyTeam({
     editableAthletesBySlot,
     positions.length,
   ]);
+
+  // Notify parent when edit state changes
+  useEffect(() => {
+    if (onEditChange) onEditChange(isEditing);
+  }, [isEditing, onEditChange]);
+
+  // Cancel: revert to original team state
+  const handleCancelEdits = () => {
+    // rebuild from original team props
+    const map: Record<number, IFantasyTeamAthlete | undefined> = {};
+    (team.athletes || []).forEach(a => {
+      if (a?.slot != null) map[a.slot] = { ...(a as IFantasyTeamAthlete) };
+    });
+    setEditableAthletesBySlot(map);
+    setCaptainAthleteId(originalCaptainAthleteId);
+  };
 
   const selectedCount = (team.athletes || []).length;
 
@@ -252,11 +272,19 @@ export default function ViewMyTeam({
         </div>
       </div>
 
-      {/* Save changes - only show when editing and in edit view */}
+      {/* Save/Cancel - only show when editing and in edit view */}
       {isEditing && viewMode === 'edit' && (
-        <div className="mt-3">
+        <div className="mt-3 flex gap-2">
+          <button
+            type="button"
+            onClick={handleCancelEdits}
+            disabled={isSaving}
+            className="w-1/2 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40"
+          >
+            Cancel
+          </button>
           <PrimaryButton
-            className="w-full"
+            className="w-1/2"
             disabled={isSaving || !leagueRound?.is_open}
             onClick={buildPayloadAndSave}
           >
@@ -301,7 +329,7 @@ export default function ViewMyTeam({
                 </div>
 
                 {athlete && (
-                  <div className="mt-2 flex flex-col gap-2">
+                  <div className="mt-7 flex flex-col gap-2">
                     <button
                       className={`${
                         captainAthleteId === athlete.athlete_id
@@ -322,6 +350,7 @@ export default function ViewMyTeam({
                       onClick={() => {
                         const pos = toPosition(positions[index], index);
                         setSwapState({ open: true, slot, position: pos });
+                        setSwapPlayer(athlete);
                       }}
                       disabled={isSaving || !leagueRound?.is_open}
                     >
@@ -401,8 +430,8 @@ export default function ViewMyTeam({
         <PlayerSelectionModal
           visible={swapState.open}
           selectedPosition={swapState.position}
-          players={players}
-          remainingBudget={9999}
+          players={players.filter(p => p.tracking_id !== swapPlayer?.tracking_id)}
+          remainingBudget={budgetRemaining + (swapPlayer?.price || 0)}
           selectedPlayers={Object.entries(editableAthletesBySlot)
             .filter(([s]) => Number(s) !== swapState.slot)
             .map(

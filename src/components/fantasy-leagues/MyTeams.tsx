@@ -11,7 +11,11 @@ import FantasyRoundsList from './FantasyRoundsList';
 import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
 
-export default function MyTeams() {
+export default function MyTeams({
+  onEditChange,
+}: {
+  onEditChange?: (isEditing: boolean) => void;
+}) {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
     'fantasy-rounds'
   );
@@ -28,14 +32,22 @@ export default function MyTeams() {
   const [journey, setJourney] = useQueryState('journey');
 
   useEffect(() => {
-
     if (journey === 'team-creation' && currentRound) {
-      console.log("Current Tab ", currentRound);
+      console.log('Current Tab ', currentRound);
       setSelectedRound(currentRound);
       setTabScene('creating-team');
     }
-
   }, [journey, currentRound, setTabScene]);
+
+  // Notify parent when entering/leaving creation flow
+  useEffect(() => {
+    if (!onEditChange) return;
+    onEditChange(tabScene === 'creating-team');
+    // Reset to not editing when leaving creating-team
+    return () => {
+      onEditChange(false);
+    };
+  }, [tabScene, onEditChange]);
 
   // Handler for player click in FantasyRoundCard
   const handlePlayerClick = (player: IFantasyTeamAthlete) => {
@@ -126,7 +138,7 @@ export default function MyTeams() {
           onTeamCreated={(team: IFantasyLeagueTeam) => {
             // Optimistically update the teams for the current round
 
-            setJourney("")
+            setJourney('');
 
             if (selectedRound) {
               setRoundIdToTeams(prev => ({
@@ -151,6 +163,7 @@ export default function MyTeams() {
           leagueConfig={leagueConfig}
           team={selectedTeam}
           onBack={() => setTabScene('fantasy-rounds')}
+          onEditChange={onEditChange}
           onTeamUpdated={async () => {
             if (selectedRound?.id) {
               return fetchTeamsForCurrentRound(selectedRound.id);
@@ -187,7 +200,7 @@ export default function MyTeams() {
               image_url: selectedPlayer.team_logo,
               source_id: '',
               organization: '1',
-              sport: '1'
+              sport: '1',
             },
             image_url: selectedPlayer.image_url,
             power_rank_rating: selectedPlayer.power_rank_rating,
