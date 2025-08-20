@@ -35,9 +35,6 @@ export const PlayerList: React.FC<PlayerListProps> = ({
     showPlayerProfile(player, { roundId: roundId?.toString() });
   };
 
-  console.log('players: ', players);
-  console.log('availableTeams: ', availableTeams);
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center p-10">
@@ -63,11 +60,11 @@ export const PlayerList: React.FC<PlayerListProps> = ({
 
   const teamIds = availableTeams.map(t => t.id);
 
-  console.log('PlayerList - Available team IDs:', teamIds);
-  console.log(
-    'PlayerList - Sample player team_ids:',
-    players.slice(0, 3).map(p => ({ name: p.player_name, team_id: p.team_id }))
-  );
+  // console.log('PlayerList - Available team IDs:', teamIds);
+  // console.log(
+  //   'PlayerList - Sample player team_ids:',
+  //   players.slice(0, 3).map(p => ({ name: p.player_name, team_id: p.team_id }))
+  // );
 
   /** Bias is used to sort affordable players first
    * and unaffordable players last
@@ -98,12 +95,12 @@ export const PlayerList: React.FC<PlayerListProps> = ({
       return affordabilityBias(a) - affordabilityBias(b);
     });
 
-  console.log(
-    'PlayerList - Filtered players count:',
-    availablePlayers.length,
-    'out of',
-    players.length
-  );
+  // console.log(
+  //   'PlayerList - Filtered players count:',
+  //   availablePlayers.length,
+  //   'out of',
+  //   players.length
+  // );
 
   return (
     <>

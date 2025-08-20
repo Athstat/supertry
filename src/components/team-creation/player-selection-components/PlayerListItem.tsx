@@ -58,7 +58,7 @@ export default function PlayerListItem({
             <img
               src={player.image_url}
               alt={player.player_name}
-              className="w-16 h-16 rounded-full object-cover"
+              className="w-16 h-16 rounded-full object-cover object-top translate-y-[5%]"
               onError={() => setImageError(true)}
             />
           ) : (
@@ -74,7 +74,9 @@ export default function PlayerListItem({
             </div>
           </div>
           <div className="flex flex-col gap-0 lg:flex-col">
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{player.team?.athstat_name || 'No team'}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              {player.team?.athstat_name || 'No team'}
+            </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {formatPosition(player.position || selectedPosition.name)}
             </p>
