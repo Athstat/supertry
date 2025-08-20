@@ -342,7 +342,7 @@ export default function CreateMyTeam({
                         const copy = { ...prev } as Record<string, IProAthlete>;
                         delete copy[p.name];
                         return copy;
-                      });
+                      });    
                       if (captainId === selected.tracking_id) setCaptainId(null);
                     }}
                   >
