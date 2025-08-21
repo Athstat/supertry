@@ -25,7 +25,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
   const [form, setForm] = useState<CreateLeagueForm>({
     title: '',
     season_id: seasons.length > 0 ? seasons[0].id : 'c4c29ce1-8669-5f51-addc-cbed01ce9bd0',
-    is_private: false,
+    is_private: false, 
     description: ''
   });
 
