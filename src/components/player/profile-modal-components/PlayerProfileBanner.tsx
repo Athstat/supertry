@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { CardTier, IProAthlete } from '../../../types/athletes';
 import { ScrummyDarkModeLogo } from '../../branding/scrummy_logo';
+import { CircleDollarSign } from 'lucide-react';
 
 interface Props {
   player: IProAthlete;
@@ -38,7 +39,7 @@ export default function PlayerProfileBanner({ player }: Props) {
   return (
     <div
       className={twMerge(
-        'flex flex-row overflow-clip object-contain items-end rounded-xl bg-blue-500 justify-center w-full h-[200px]',
+        'relative flex flex-row overflow-clip object-contain items-end rounded-xl bg-blue-500 justify-center w-full h-[200px]',
         cardTier === 'gold' && 'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
         cardTier === 'silver' && 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
         cardTier === 'bronze' &&
@@ -48,6 +49,12 @@ export default function PlayerProfileBanner({ player }: Props) {
         cardTier === 'blue' && 'animate-glow'
       )}
     >
+      {player.price !== undefined && (
+        <div className="absolute top-2 left-2 z-40 flex flex-row items-center gap-1 bg-black/10 text-white rounded-md px-2 py-1">
+          <CircleDollarSign className="w-4 h-4" />
+          <p className="text-sm font-bold">{player.price}</p>
+        </div>
+      )}
       {src ? (
         src === teamFallbackUrl ? (
           <div className="w-full h-full flex items-center justify-center">
