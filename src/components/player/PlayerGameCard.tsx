@@ -62,49 +62,53 @@ export function PlayerGameCard({
         />
 
         {/* Player Image - Positioned absolutely and centered on the card */}
-        {isFrameLoaded && <div className="z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          {!hidePrice && (
-            <div className=" w-10 flex flex-row items-center justify-center h-10 absolute left-0">
-              <div className="flex flex-row items-center gap-1">
-                <CircleDollarSign className="w-3 h-3" />
-                <p className="text-[12px] font-bold">{player.price}</p>
+        {isFrameLoaded && (
+          <div className="z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            {!hidePrice && (
+              <div className=" w-10 flex flex-row items-center justify-center h-10 absolute left-0">
+                <div className="flex flex-row items-center gap-1">
+                  <CircleDollarSign className="w-3 h-3" />
+                  <p className="text-[12px] font-bold">{player.price}</p>
+                </div>
               </div>
-            </div>
-          )}
-          <div className=" w-10 flex flex-row items-center justify-center h-10 absolute right-0">
-            {player.team?.image_url && <TeamLogo url={player.team.image_url} className="w-8 h-8" />}
-          </div>
-
-          <div className="min-h-[140px] max-h-[140px] lg:min-h-[140px] lg:max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]">
-            {!playerImageErr && (
-              <img
-                src={player.image_url}
-                className={twMerge(
-                  'min-h-[100px] max-h-[100px] min-w-[100px] max-w-[100px] lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px] object-cover object-top',
-                  '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
-                  '[mask - repeat:no-repeat] [mask-size:100%_100%]',
-                  '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
-                  '[-webkit-mask-repeat:no-repeat]',
-                  '[-webkit-mask-size:100%_100%'
-                )}
-                onError={() => setPlayerImageErr(true)}
-              />
             )}
+            <div className=" w-10 flex flex-row items-center justify-center h-10 absolute right-0">
+              {player.team?.image_url && (
+                <TeamLogo url={player.team.image_url} className="w-8 h-8" />
+              )}
+            </div>
 
-            {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />}
-          </div>
+            <div className="min-h-[140px] max-h-[140px] lg:min-h-[140px] lg:max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]">
+              {!playerImageErr && (
+                <img
+                  src={player.image_url}
+                  className={twMerge(
+                    'min-h-[100px] max-h-[100px] min-w-[100px] max-w-[100px] lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px] object-cover object-top',
+                    '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                    '[mask - repeat:no-repeat] [mask-size:100%_100%]',
+                    '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                    '[-webkit-mask-repeat:no-repeat]',
+                    '[-webkit-mask-size:100%_100%'
+                  )}
+                  onError={() => setPlayerImageErr(true)}
+                />
+              )}
 
-          <div className="flex flex-col items-center p-1 justify-center">
-            <p className="text-xs truncate max-w-[130px]">{player.player_name}</p>
-          </div>
+              {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />}
+            </div>
 
-          <div className="flex text-xs flex-row items-center justify-center gap-2">
-            <p className="font-bold">
-              {player.power_rank_rating && Math.floor(player.power_rank_rating)}
-            </p>
-            <p>{player.position}</p>
+            <div className="flex flex-col items-center p-1 justify-center">
+              <p className="text-xs truncate max-w-[130px]">{player.player_name}</p>
+            </div>
+
+            <div className="flex text-xs flex-row items-center justify-center gap-2">
+              <p className="font-bold">
+                {player.power_rank_rating && Math.floor(player.power_rank_rating)}
+              </p>
+              <p>{player.position}</p>
+            </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );
