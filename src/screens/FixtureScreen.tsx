@@ -6,7 +6,6 @@ import { fixtureSumary, summerizeGameStatus } from '../utils/fixtureUtils';
 import { Minus } from 'lucide-react';
 import { ArrowLeft } from 'lucide-react';
 import FixtureScreenOverview from '../components/fixtures/FixtureScreenOverview';
-import { ErrorState } from '../components/ui/ErrorState';
 import useSWR from 'swr';
 import { gamesService } from '../services/gamesService';
 import { LoadingState } from '../components/ui/LoadingState';
@@ -22,6 +21,7 @@ import FixtureChat from '../components/fixtures/FixtureChat';
 import GameHighlightsCard from '../components/video/GameHighlightsCard';
 import { ProMotmVotingBox } from '../components/pro/motm';
 import ProFixtureVotingBox from '../components/fixtures/voting/ProFixtureVotingBox';
+import { ErrorState } from '../components/ui/ErrorState';
 
 export default function FixtureScreen() {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export default function FixtureScreen() {
   if (isLoading) return <LoadingState />;
 
   if (!fetchedFixture)
-    return <ErrorState message="Failed to load match information, so match doesn't exist???" />;
+    return <ErrorState error='Whoops!' message="Failed to load match information" />;
 
   if (!fixtureId) return <ErrorState message="Match was not found" />;
 

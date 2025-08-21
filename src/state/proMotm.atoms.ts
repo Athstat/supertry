@@ -9,7 +9,7 @@ export const proGameMotmVotesAtom = atom<IProMotmVote[]>([]);
 
 export const userProMotmVoteAtom = atom<IProMotmVote | undefined>((get) => {
     const allVotes = get(proGameMotmVotesAtom);
-    const userId = authService.getUserInfo()?.id;
+    const userId = authService.getUserInfoSync()?.kc_id;
     
     const userVote = allVotes.find((v) => {
         return v.user_id === userId;
