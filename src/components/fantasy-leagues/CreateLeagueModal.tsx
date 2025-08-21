@@ -24,8 +24,9 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
 
   const [form, setForm] = useState<CreateLeagueForm>({
     title: '',
-    season_id: 'f46d0bec-99ac-54e8-a028-d40a16cee244',
-    is_private: false,
+    season_id: seasons.length > 0 ? seasons[0].id : 'c4c29ce1-8669-5f51-addc-cbed01ce9bd0',
+    is_private: false, 
+    description: ''
   });
 
   const handleSubmitForm = async () => {
@@ -94,7 +95,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
             }
           />
 
-          <SeasonInput
+          {/* <SeasonInput
             value={seasons.find(s => s.id === form.season_id)}
             onChange={s =>
               setForm({
@@ -103,7 +104,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
               })
             }
             options={seasons}
-          />
+          /> */}
 
           <LeagueVisibilityInput
             value={form.is_private ? 'private' : 'public'}

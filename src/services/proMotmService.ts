@@ -6,7 +6,7 @@ export const proMotmService = {
 
     createVote: async (data: INewProMotm) => {
         try {
-            const uri = getUri(`/api/v1/games/motm-votes`);
+            const uri = getUri(`/api/v1/games/${data.game_id}/motm-votes`);
 
             const res = await fetch(uri, {
                 method: 'POST',
