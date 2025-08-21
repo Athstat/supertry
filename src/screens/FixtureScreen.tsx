@@ -71,7 +71,7 @@ export default function FixtureScreen() {
       disabled: false,
     },
     {
-      label: 'Top Dawg',
+      label: 'Top Player',
       tabKey: 'motm',
       disabled: false,
     },
