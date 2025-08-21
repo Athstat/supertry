@@ -259,7 +259,7 @@ export default function CreateMyTeam({
       </div>
 
       {/* Save button */}
-      <div className="mt-3">
+      <div className="mt-3 relative z-[50]">
         <PrimaryButton
           className="w-full"
           disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
@@ -306,7 +306,7 @@ export default function CreateMyTeam({
                   <PlayerGameCard
                     player={selected}
                     name={p.name}
-                    className="w-full h-full"
+                    className="w-full h-full "
                     blockGlow
                     detailsClassName="pl-6 pr-6 pb-7"
                     priceClassName="top-12 left-6"
@@ -321,7 +321,7 @@ export default function CreateMyTeam({
               </button>
 
               {selected && (
-                <div className="mt-2 flex flex-col gap-2">
+                <div className="mt-4 flex flex-col gap-2 z-50">
                   <button
                     className={`${
                       captainId === selected.tracking_id
