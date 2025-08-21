@@ -20,31 +20,28 @@ interface UserCreatedLeaguesSectionProps {
 export default function UserCreatedLeaguesSection({
   onLeagueCreated,
 }: UserCreatedLeaguesSectionProps) {
-
-
   const key = swrFetchKeys.getMyLeagueGroups();
-  let { data: myLeagues, isLoading, mutate} = useSWR(key, () =>
-    fantasyLeagueGroupsService.getMyCreatedLeagues()
-  );
+  let {
+    data: myLeagues,
+    isLoading,
+    mutate,
+  } = useSWR(key, () => fantasyLeagueGroupsService.getMyCreatedLeagues());
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
 
   const navigate = useNavigate();
 
   const toggleShowModal = () => setShowCreateModal(prev => !prev);
 
-
   const handleLeagueCreated = async (newLeague: FantasyLeagueGroup) => {
-
     mutate(() => fantasyLeagueGroupsService.getMyCreatedLeagues());
 
     // Notify parent component to refresh all leagues
     if (onLeagueCreated) {
       onLeagueCreated();
     }
-
   };
 
   const handleLeagueClick = (league: FantasyLeagueGroup) => {
@@ -86,7 +83,7 @@ export default function UserCreatedLeaguesSection({
     const shareData: ShareData = {
       title: `You’ve been invited to join a rugby league: “${league.title}`,
       text: shareMessage,
-      url: inviteInstructions
+      url: inviteInstructions,
     };
 
     if (navigator.share) {
@@ -117,16 +114,12 @@ export default function UserCreatedLeaguesSection({
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
-        
         <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
           My Leagues
         </h2>
 
         {myLeagues.length > 0 && (
-          <PrimaryButton
-            onClick={toggleShowModal}
-            className='w-fit'
-          >
+          <PrimaryButton onClick={toggleShowModal} className="w-fit">
             <Plus className="w-4 h-4" />
             Create
           </PrimaryButton>
@@ -137,33 +130,30 @@ export default function UserCreatedLeaguesSection({
         <LoadingState message="Loading your leagues..." />
       ) : myLeagues.length === 0 ? (
         <div className="text-center flex flex-col items-center justify-center py-8 bg-gray-50 dark:border-slate-800 dark:bg-slate-800/50 rounded-lg px-6">
-          
           <Trophy className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          
+
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            You haven't created a league yet
+            You haven't created any leagues yet
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Create your first fantasy league and invite friends to join
           </p>
 
-          <PrimaryButton
-            onClick={toggleShowModal}
-            className='w-fit'
-          >
+          <PrimaryButton onClick={toggleShowModal} className="w-fit">
             <Plus />
             Create Your First League
           </PrimaryButton>
-          
         </div>
       ) : (
         <div className="space-y-3">
           {myLeagues.map((league, index) => {
-            return <FantasyLeagueGroupCard 
-              leagueGroup={league}
-              key={league.id}
-              onClick={handleLeagueClick}
-            />
+            return (
+              <FantasyLeagueGroupCard
+                leagueGroup={league}
+                key={league.id}
+                onClick={handleLeagueClick}
+              />
+            );
           })}
         </div>
       )}
