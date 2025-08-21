@@ -274,22 +274,24 @@ export default function ViewMyTeam({
 
       {/* Save/Cancel - only show when editing and in edit view */}
       {isEditing && viewMode === 'edit' && (
-        <div className="mt-3 flex gap-2">
-          <button
-            type="button"
-            onClick={handleCancelEdits}
-            disabled={isSaving}
-            className="w-1/2 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40"
-          >
-            Cancel
-          </button>
-          <PrimaryButton
-            className="w-1/2"
-            disabled={isSaving || !leagueRound?.is_open}
-            onClick={buildPayloadAndSave}
-          >
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </PrimaryButton>
+        <div className="mt-3 flex-col gap-2  relative z-[50]">
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handleCancelEdits}
+              disabled={isSaving}
+              className="w-1/2 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40"
+            >
+              Cancel
+            </button>
+            <PrimaryButton
+              className="w-1/2"
+              disabled={isSaving || !leagueRound?.is_open}
+              onClick={buildPayloadAndSave}
+            >
+              {isSaving ? 'Saving...' : 'Save Changes'}
+            </PrimaryButton>
+          </div>
           {saveError && (
             <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
           )}
@@ -306,10 +308,10 @@ export default function ViewMyTeam({
               <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0 ">
                 <div className="w-full min-w-0 h-60 flex items-center justify-center bg-transparent">
                   {athlete ? (
-                    <div className="w-full flex flex-col items-center justify-center h-full">
+                    <div className="w-full h-full flex items-center justify-center">
                       <PlayerGameCard
                         player={athlete}
-                        className="w-full h-full"
+                        className="mx-auto"
                         blockGlow
                         onClick={() => {
                           console.log('clicked player: ', athlete);
@@ -329,7 +331,7 @@ export default function ViewMyTeam({
                 </div>
 
                 {athlete && (
-                  <div className="mt-7 flex flex-col gap-2">
+                  <div className="mt-4 flex flex-col gap-2 z-50">
                     <button
                       className={`${
                         captainAthleteId === athlete.athlete_id
@@ -392,12 +394,12 @@ export default function ViewMyTeam({
                   Special
                 </span>
               </h2>
-              <div className="rounded-xl p-4 w-40">
+              <div className="rounded-xl p-4 w-40 pt-12">
                 {Object.values(editableAthletesBySlot)
                   .filter((player): player is IFantasyTeamAthlete => Boolean(player))
                   .filter(player => player.slot === 6)
                   .map(player => (
-                    <TeamPlayerCard
+                    <PlayerGameCard
                       key={player.id}
                       player={player}
                       onClick={() => {
@@ -497,7 +499,7 @@ export default function ViewMyTeam({
               </div>
               <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Updated!</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Your team changes have been saved for {leagueRound?.title}.
+                Your team changes have been saved for {leagueRound?.title}
               </p>
               <PrimaryButton
                 className="w-full"
