@@ -1,13 +1,13 @@
 export type INewProMotm = {
-    gameId: string,
-    userId: string,
-    athleteId: string,
-    teamId: string
+    game_id: string,
+    user_id: string,
+    athlete_id: string,
+    team_id: string
 }
 
 export type IEditProMotm = {
-    athleteId: string,
-    teamId: string
+    athlete_id: string,
+    team_id: string
 }
 
 export type IProMotmVote = {

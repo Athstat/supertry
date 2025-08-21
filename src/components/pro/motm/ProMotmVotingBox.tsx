@@ -89,10 +89,10 @@ export function ProMotmVotingBoxContent({ fixture }: ContentProps) {
                         </div>
                         <div>
                             <h3 className="font-bold text-lg text-primary-800 dark:text-primary-200">
-                                Top Dawg Voting Coming Soon! 😤
+                                Player of the Game
                             </h3>
                             <SecondaryText className="text-primary-700 dark:text-primary-300">
-                                Get ready to vote for your Top Dawg of the Match
+                                Vote for your <strong>SCRUMMY</strong> player of the match 🔥🏉
                             </SecondaryText>
                         </div>
                     </div>
@@ -121,12 +121,12 @@ export function ProMotmVotingBoxContent({ fixture }: ContentProps) {
 
                     <div className="text-center">
                         <SecondaryText className="text-sm">
-                            Check out the team rosters below to see who might be your Top Dawg! 🏆
+                            Check out the team rosters below to see who might be your Man of The Game! 🏆
                         </SecondaryText>
                     </div>
                 </div>
                 
-                <FixtureRosters rosters={candidates} fixture={fixture} />
+                <FixtureRosters fixture={fixture} />
             </div>
         );
     }

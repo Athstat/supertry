@@ -12,8 +12,10 @@ import { proMotmService } from "../../../services/proMotmService";
 import { mutate } from "swr";
 import { useState } from "react";
 import { Loader } from "lucide-react";
-import { authService } from "../../../services/authService";
 import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
+import { useAuth } from "../../../contexts/AuthContext";
+import PlayerMugshot from "../../shared/PlayerMugshot";
+import { formatPosition } from "../../../utils/athleteUtils";
 
 type Props = {
     roster: IRosterItem[];
@@ -30,7 +32,7 @@ export function ProMotmVotingCandidateList({ roster }: Props) {
                 .map((r) => {
                     return <ProMotmVotingCandidateListItem
                         candidate={r}
-                        key={r.athlete_id}
+                        key={r.athlete.tracking_id}
                     />;
                 })}
         </div>
@@ -49,10 +51,12 @@ export function ProMotmVotingCandidateListItem({ candidate }: ItemProps) {
 
     const allVotes = useAtomValue(proGameMotmVotesAtom);
 
-    const candidateVoteTally = getProAthleteMotmVoteTally(allVotes, candidate.athlete_id);
+    const candidateVoteTally = getProAthleteMotmVoteTally(allVotes, candidate.athlete.tracking_id);
 
     const hasUserVoted = useAtomValue(hasUserSubmittedProMotmAtom);
-    const hasUserVotedForCandidate = userVote && userVote.athlete_id === candidate.athlete_id;
+    const hasUserVotedForCandidate = userVote && userVote.athlete_id === candidate.athlete.tracking_id;
+
+    const {authUser} = useAuth();
 
     const onVote = async () => {
         if (!gameId) return;
@@ -61,20 +65,20 @@ export function ProMotmVotingCandidateListItem({ candidate }: ItemProps) {
         setIsSendingVote(true);
         setIsLoading(true);
 
-        const userId = authService.getUserInfo()?.id ?? "fallback-id";
+        const userId = authUser?.kc_id ?? "fallback-id";
 
         try {
             if (hasUserVoted) {
                 await proMotmService.editUserGameVote(gameId, userId, {
-                    athleteId: candidate.athlete_id,
-                    teamId: candidate.team_id
+                    athlete_id: candidate.athlete.tracking_id,
+                    team_id: candidate.team_id
                 });
             } else {
                 await proMotmService.createVote({
-                    gameId: gameId,
-                    userId: userId,
-                    athleteId: candidate.athlete_id,
-                    teamId: candidate.team_id
+                    game_id: gameId,
+                    user_id: userId,
+                    athlete_id: candidate.athlete.tracking_id,
+                    team_id: candidate.team_id
                 });
             }
 
@@ -95,10 +99,18 @@ export function ProMotmVotingCandidateListItem({ candidate }: ItemProps) {
                 <p>{candidate.player_number || "-"}</p>
             </div>
 
+            <div>
+                <PlayerMugshot 
+                    playerPr={candidate.athlete.power_rank_rating}
+                    url={candidate.athlete.image_url}
+                    showPrBackground
+                />
+            </div>
+
             <div className="flex w-[50%] flex-col items-start">
-                <p>{candidate.athstat_firstname} {candidate.athstat_lastname}</p>
+                <p>{candidate.athlete.athstat_firstname} {candidate.athlete.athstat_lastname}</p>
                 <SecondaryText className="text-xs md:text-sm flex flex-col gap-1">
-                    {!hasUserVoted ? candidate.position ?? "" : null}
+                    {!hasUserVoted ? (candidate.athlete.position_class ? formatPosition(candidate.athlete.position_class) : "")  : null}
                     {hasUserVoted && (
                         <p className="">
                             {candidateVoteTally} {candidateVoteTally === 1 ? "Vote" : "Votes"}
