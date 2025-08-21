@@ -305,7 +305,7 @@ export default function ViewMyTeam({
             const slot = index + 1;
             const athlete = athletesBySlot[slot];
             return (
-              <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0">
+              <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0 ">
                 <div className="w-full min-w-0 h-60 flex items-center justify-center bg-transparent">
                   {athlete ? (
                     <div className="w-full h-full flex items-center justify-center">
@@ -335,8 +335,8 @@ export default function ViewMyTeam({
                     <button
                       className={`${
                         captainAthleteId === athlete.athlete_id
-                          ? 'text-xs w-full rounded-lg py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
-                          : 'text-xs w-full rounded-lg py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
+                          ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
+                          : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
                       }`}
                       onClick={() => {
                         if (captainAthleteId !== athlete.athlete_id)
@@ -348,7 +348,7 @@ export default function ViewMyTeam({
                     </button>
 
                     <button
-                      className="text-xs w-full rounded-lg py-1.5 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60"
+                      className="text-xs w-full rounded-lg py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60"
                       onClick={() => {
                         const pos = toPosition(positions[index], index);
                         setSwapState({ open: true, slot, position: pos });

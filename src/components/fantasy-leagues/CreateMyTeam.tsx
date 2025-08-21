@@ -284,7 +284,7 @@ export default function CreateMyTeam({
         {positions.map((p, index) => {
           const selected = selectedPlayers[p.name];
           return (
-            <div key={p.position_class} className="flex flex-col w-full">
+            <div key={p.position_class} className="flex flex-col gap-4 w-full">
               <button
                 onClick={() => {
                   const pos = toPosition(p, index);
@@ -325,8 +325,8 @@ export default function CreateMyTeam({
                   <button
                     className={`${
                       captainId === selected.tracking_id
-                        ? 'text-xs w-full rounded-lg py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
-                        : 'text-xs w-full rounded-lg py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
+                        ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
+                        : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
                     }`}
                     onClick={() => {
                       if (captainId !== selected.tracking_id) setCaptainId(selected.tracking_id);
@@ -336,13 +336,13 @@ export default function CreateMyTeam({
                     {captainId === selected.tracking_id ? 'Captain' : 'Set as Captain'}
                   </button>
                   <button
-                    className="text-xs w-full rounded-lg py-1.5 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 hover:bg-red-100 dark:hover:bg-red-900/50"
+                    className="text-xs w-full rounded-lg py-2 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 hover:bg-red-100 dark:hover:bg-red-900/50"
                     onClick={() => {
                       setSelectedPlayers(prev => {
                         const copy = { ...prev } as Record<string, IProAthlete>;
                         delete copy[p.name];
                         return copy;
-                      });
+                      });    
                       if (captainId === selected.tracking_id) setCaptainId(null);
                     }}
                   >
