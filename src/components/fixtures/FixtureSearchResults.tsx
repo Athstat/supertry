@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { IBoxScoreItem } from "../../types/boxScore"
+import { GameSportAction, IBoxScoreItem } from "../../types/boxScore"
 import { IFixture } from "../../types/games";
 import { athleteSearchPredicate, formatPosition } from "../../utils/athleteUtils";
 import PlayerMugshot from "../shared/PlayerMugshot";
-import PlayerFixtureStatsModal from "./PlayerFixtureStatsModal";
+import useSWR from "swr";
+import { djangoAthleteService } from "../../services/athletes/djangoAthletesService";
 
 type Props = {
     search: string,
@@ -31,39 +32,51 @@ export default function FixtureSearchResults({ search, boxScore, fixture }: Prop
 }
 
 type ResultItemProps = {
-    bs: IBoxScoreItem,
+    bs: GameSportAction,
     fixture: IFixture
 }
 
 function ResultItem({ bs, fixture }: ResultItemProps) {
 
-    const teamName = bs.athlete.team.athstat_id === fixture.team.athstat_id ?
-        fixture.team.athstat_name : fixture.competition_name;
+    const teamName = bs.team_id === fixture.team.athstat_id ?
+        fixture.team.athstat_name : fixture.opposition_team.athstat_name;
 
     const [show, setShow] = useState(false);
     const toggle = () => setShow(!show);
+
+    const athleteKey = `/athlete/${bs.athlete_id}`;
+    const {data: athlete, isLoading} = useSWR(athleteKey, () => djangoAthleteService.getAthleteById(bs.athlete_id));
     
+    if (isLoading) {
+        return (
+            <div>
+                <p>Hie</p>
+            </div>
+        )
+    }
+
+    if (!athlete) return;
+
     return (
         <>
             <div onClick={toggle}  className="flex gap-3 flex-row items-center p-3 hover:bg-slate-200 rounded-xl dark:hover:bg-slate-800/40" >
                 <div>
-                    <PlayerMugshot url={bs.athlete.image_url} className="w-14 h-14" />
+                    <PlayerMugshot url={athlete.image_url} className="w-14 h-14" />
                 </div>
                 <div >
-                    <p className="font-medium" >{bs.athlete.athstat_firstname} {bs.athlete.athstat_lastname}</p>
+                    <p className="font-medium" >{athlete.athstat_firstname} {athlete.athstat_lastname}</p>
                     <div className="dark:text-slate-400 text-slate-700 text-sm" >
-                        <p>{teamName} · {formatPosition(bs.athlete.position ?? "")}</p>
+                        <p>{teamName} · {formatPosition(athlete.position ?? "")}</p>
                     </div>
                 </div>
             </div>
 
-            <PlayerFixtureStatsModal
+            {/* <PlayerFixtureStatsModal
                 boxScoreRecord={bs}
                 fixture={fixture}
                 open={show}
                 onClose={toggle}
-                
-            />
+            /> */}
 
         </>
     )
