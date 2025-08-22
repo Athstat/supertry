@@ -19,6 +19,11 @@ export default function PlayersCompareButton({ className }: Props) {
         comparePlayersAtomGroup.isCompareModePicking
     );
 
+    // Hide sticky compare button if modal is open
+    const isCompareModalOpen = useAtomValue(
+        comparePlayersAtomGroup.isCompareModeModal
+    );
+
 
     const {startPicking, stopPicking} = usePlayerCompareActions();
 
@@ -45,9 +50,9 @@ export default function PlayersCompareButton({ className }: Props) {
                 <p>Compare</p>
             </button>
 
-            {isSticky && !isPicking && (
+            {isSticky && !isPicking && !isCompareModalOpen && (
                 <Sticky className="" >
-                    <div className="z-10 bottom-20 fixed px-4 py-2  flex flex-col items-center justify-center gap-1 w-full  left-0" >
+                    <div className="z-[1000] bottom-20 fixed px-4 py-2  flex flex-col items-center justify-center gap-1 w-full  left-0" >
 
                         <PrimaryButton
                             onClick={handleOnClick}

@@ -1,417 +1,151 @@
-import { twMerge } from "tailwind-merge";
-import { IProAthlete } from "../../../types/athletes";
-import { getPlayerAggregatedStat } from "../../../types/sports_actions";
-import usePlayerStats from "../../player/profile-modal-components/usePlayerStats";
-import PlayerCompareSeasonPicker from "./PlayerCompareSeasonPicker";
-import PlayerCompareItemHeader from "./PlayerCompareItemHeader";
-import { useEffect, useTransition } from "react";
-import { useAtom } from "jotai";
-import { comparePlayersAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, statCategoriesCollapsedAtom } from "../../../state/comparePlayers.atoms";
-import { isStatActionBest, isStarRatingBest, isPowerRatingBest } from "../../../utils/athleteUtils";
-import { Crosshair, Shield, Zap, Star } from "lucide-react";
-import PlayerIconsRow from "./PlayerIconsRow";
+import { IProAthlete } from '../../../types/athletes';
+import { getPlayerAggregatedStat } from '../../../types/sports_actions';
+import usePlayerStats from '../../player/profile-modal-components/usePlayerStats';
+import PlayerCompareSeasonPicker from './PlayerCompareSeasonPicker';
+import PlayerCompareItemHeader from './PlayerCompareItemHeader';
+import { useEffect, useTransition } from 'react';
+import { useAtom } from 'jotai';
+import {
+  comparePlayersStarRatingsAtom,
+  comparePlayersStatsAtom,
+} from '../../../state/comparePlayers.atoms';
+import PlayerIconsRow from './PlayerIconsRow';
+ 
+import PlayerSeasonStatsTray from '../../stats/PlayerSeasonStatsTray';
 
 type Props = {
-    player: IProAthlete;
+  player: IProAthlete;
 };
 
 export default function PlayersCompareItem({ player }: Props) {
+  const [comparePlayersStats, setComparePlayersStats] = useAtom(comparePlayersStatsAtom);
+  const [comparePlayersStarRatings, setComparePlayerRatings] = useAtom(
+    comparePlayersStarRatingsAtom
+  );
 
-    const [comparePlayers] = useAtom(comparePlayersAtom);
-    const [comparePlayersStats, setComparePlayersStats] = useAtom(comparePlayersStatsAtom);
-    const [comparePlayersStarRatings, setComparePlayerRatings] = useAtom(comparePlayersStarRatingsAtom);
-    const [statCategoriesCollapsed, setStatCategoriesCollapsed] = useAtom(statCategoriesCollapsedAtom);
+  const [_, startTransition] = useTransition();
 
-    const [_, startTransition] = useTransition();
+  const {
+    seasonPlayerStats: actions,
+    loadingPlayerStats: loadingActions,
+    seasons,
+    currSeason,
+    setCurrSeason,
+    starRatings,
+    loadingStarRatings,
+  } = usePlayerStats(player);
 
+  console.log('player: ', player);
 
-    const {
-        seasonPlayerStats: actions,
-        loadingPlayerStats: loadingActions,
-        seasons,
-        currSeason,
-        setCurrSeason,
-        starRatings,
-        loadingStarRatings
-    } = usePlayerStats(player);
+  useEffect(() => {
+    if (loadingActions || loadingStarRatings) return;
 
-    useEffect(() => {
+    startTransition(() => {
+      const newStats = comparePlayersStats.filter(f => {
+        return !(f.athlete.tracking_id === player.tracking_id);
+      });
 
-        if (loadingActions || loadingStarRatings) return;
+      newStats.push({
+        athlete: player,
+        stats: actions,
+      });
 
-        startTransition(() => {
-            const newStats = comparePlayersStats.filter((f) => {
-                return !(f.athlete.tracking_id === player.tracking_id);
-            });
+      setComparePlayersStats(newStats);
 
-            newStats.push({
-                athlete: player,
-                stats: actions
-            });
+      const newStarRatings = comparePlayersStarRatings.filter(s => {
+        return !(s.athlete.tracking_id === player.tracking_id);
+      });
 
-            setComparePlayersStats(newStats);
+      if (starRatings) {
+        newStarRatings.push({
+          athlete: player,
+          stats: starRatings,
+        });
+      }
 
-            const newStarRatings = comparePlayersStarRatings.filter((s) => {
-                return !(s.athlete.tracking_id === player.tracking_id);
-            });
+      setComparePlayerRatings(newStarRatings);
+    });
 
-            if (starRatings) {
-                newStarRatings.push({
-                    athlete: player,
-                    stats: starRatings
-                });
-            }
+    return () => {};
+  }, [actions, starRatings]);
 
-            setComparePlayerRatings(newStarRatings)
-        })
+  const isLoading = loadingActions || loadingStarRatings || !currSeason;
 
-        return () => { };
+  const tries = getPlayerAggregatedStat('tries', actions)?.action_count;
+  const minutesPlayedTotal = getPlayerAggregatedStat('minutes_played_total', actions)?.action_count;
+  const points = getPlayerAggregatedStat('points', actions)?.action_count;
+  
 
-    }, [actions, starRatings]);
+  return (
+    <div className="flex flex-col gap-2 w-[calc(50%-0.25rem)] md:flex-1 md:min-w-[200px] md:max-w-[300px] flex-shrink-0">
+      <PlayerCompareItemHeader player={player} />
 
-    const isLoading = loadingActions || loadingStarRatings;
+      {seasons && (
+        <PlayerCompareSeasonPicker
+          seasons={seasons}
+          setCurrSeason={setCurrSeason}
+          currSeason={currSeason}
+        />
+      )}
 
-    const tries = getPlayerAggregatedStat("tries", actions)?.action_count;
-    const assits = getPlayerAggregatedStat("try_assists", actions)?.action_count;
-    const passes = getPlayerAggregatedStat("passes", actions)?.action_count;
-    const tacklesMade = getPlayerAggregatedStat("tackles", actions)?.action_count;
-    const tackleSuccess = getPlayerAggregatedStat("tackle_success", actions)?.action_count;
-    const turnoversWon = getPlayerAggregatedStat("turnover_won", actions)?.action_count;
-    const turnovers = getPlayerAggregatedStat("turnovers_conceded", actions)?.action_count;
-    const defendersBeaten = getPlayerAggregatedStat("defenders_beaten", actions)?.action_count;
-    const kicksFromHand = getPlayerAggregatedStat("kicks_from_hand", actions)?.action_count;
-    const kicksFromHandMetres = getPlayerAggregatedStat("kick_metres", actions)?.action_count;
-    const minutesPlayedTotal = getPlayerAggregatedStat('minutes_played_total', actions)?.action_count;
-    const pentalyGoalsScored = getPlayerAggregatedStat('penalty_goals', actions)?.action_count;
-    const conversionsScored = getPlayerAggregatedStat('conversion_goals', actions)?.action_count;
-    const points = getPlayerAggregatedStat('points', actions)?.action_count;
-    const carryMetres = getPlayerAggregatedStat('carries_metres', actions)?.action_count;
-    const dominantCarries = getPlayerAggregatedStat('carry_dominant', actions)?.action_count;
-    const redCards = getPlayerAggregatedStat('red_cards', actions)?.action_count;
-    const yellowCards = getPlayerAggregatedStat('yellow_cards', actions)?.action_count;
-    const linebreaks = getPlayerAggregatedStat('Line_breaks', actions)?.action_count;
-    const dropGoalsScored = getPlayerAggregatedStat("drop_goals_converted", actions)?.action_count;
+      {/* Player Icons Row */}
+      {!isLoading && starRatings && actions && currSeason && (
+        <PlayerIconsRow player={player} season={currSeason} size="sm" />
+      )}
 
-    return (
-        <div className="flex flex-col gap-2 w-[calc(50%-0.25rem)] md:flex-1 md:min-w-[200px] md:max-w-[300px] flex-shrink-0">
-
-            <PlayerCompareItemHeader
-                player={player}
-            />
-
-            {seasons && <PlayerCompareSeasonPicker
-                seasons={seasons}
-                setCurrSeason={setCurrSeason}
-                currSeason={currSeason}
-            />}
-
-            {/* Player Icons Row */}
-            {!isLoading && starRatings && actions && currSeason && (
-                <PlayerIconsRow
-                    player={player}
-                    season={currSeason}
-                    size="sm"
-                />
-            )}
-
-
-
-
-            {!isLoading && <div className="flex flex-col gap-4" >
-
-                {/* OVERALLS Section */}
-                <StatCategory
-                    title="OVERALLS"
-                    categoryKey="overalls"
-                    icon={<Star className="w-4 h-4" />}
-                    mainScore={player.power_rank_rating || 0}
-                    isCollapsed={statCategoriesCollapsed.overalls}
-                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, overalls: !prev.overalls }))}
-                    stats={[
-                        {
-                            label: "Power Ranking",
-                            value: player.power_rank_rating,
-                            isGreen: isPowerRatingBest(player, comparePlayers)
-                        },
-                        {
-                            label: "Minutes Played",
-                            value: minutesPlayedTotal,
-                            isGreen: isStatActionBest(player, minutesPlayedTotal, 'minutes_played_total', comparePlayersStats)
-                        },
-                        {
-                            label: "Attacking Rating",
-                            value: starRatings?.scoring,
-                            isGreen: isStarRatingBest(player, starRatings?.scoring, "scoring", comparePlayersStarRatings)
-                        },
-                        {
-                            label: "Scoring Rating",
-                            value: starRatings?.scoring,
-                            isGreen: isStarRatingBest(player, starRatings?.scoring, "scoring", comparePlayersStarRatings)
-                        },
-                        {
-                            label: "Defensive Rating",
-                            value: starRatings?.defence,
-                            isGreen: isStarRatingBest(player, starRatings?.defence, "defence", comparePlayersStarRatings)
-                        },
-                        {
-                            label: "Kicking Rating",
-                            value: starRatings?.kicking,
-                            isGreen: isStarRatingBest(player, starRatings?.kicking, "kicking", comparePlayersStarRatings)
-                        }
-                    ]}
-                />
-
-                {/* ATTACKING Section */}
-                <StatCategory
-                    title="ATTACKING"
-                    categoryKey="attacking"
-                    icon={<Zap className="w-4 h-4" />}
-                    mainScore={starRatings?.scoring || 0}
-                    isMainBest={isStarRatingBest(player, starRatings?.scoring, "scoring", comparePlayersStarRatings)}
-                    isCollapsed={statCategoriesCollapsed.attacking}
-                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, attacking: !prev.attacking }))}
-                    stats={[
-                        {
-                            label: "Tries",
-                            value: tries,
-                            isGreen: isStatActionBest(player, tries, "tries", comparePlayersStats)
-                        },
-                        {
-                            label: "Points",
-                            value: points,
-                            isGreen: isStatActionBest(player, tries, "points", comparePlayersStats)
-                        },
-                        {
-                            label: "Assists",
-                            value: assits,
-                            isGreen: isStatActionBest(player, assits, "try_assists", comparePlayersStats)
-                        },
-                        {
-                            label: "Passes",
-                            value: passes,
-                            isGreen: isStatActionBest(player, passes, "passes", comparePlayersStats)
-                        },
-                        {
-                            label: "Turnovers",
-                            value: turnovers,
-                            isGreen: isStatActionBest(player, turnovers, "turnovers_conceded", comparePlayersStats)
-                        },
-                        {
-                            label: "Defenders Beaten",
-                            value: defendersBeaten,
-                            isGreen: isStatActionBest(player, turnovers, "DefendersBeaten", comparePlayersStats)
-                        },
-                        {
-                            label: "Dominant Carries",
-                            value: dominantCarries,
-                            isGreen: isStatActionBest(player, turnovers, "carries", comparePlayersStats)
-                        },
-                        {
-                            label: "Carry Metres",
-                            value: carryMetres,
-                            isGreen: isStatActionBest(player, turnovers, "carries_metres", comparePlayersStats)
-                        },
-                        {
-                            label: "Line Breaks",
-                            value: linebreaks,
-                            isGreen: isStatActionBest(player, turnovers, "line_breaks", comparePlayersStats)
-                        }
-                    ]}
-                />
-
-                {/* DEFENDING Section */}
-                <StatCategory
-                    title="DEFENDING"
-                    categoryKey="defending"
-                    icon={<Shield className="w-4 h-4" />}
-                    mainScore={starRatings?.defence || 0}
-                    isMainBest={isStarRatingBest(player, starRatings?.defence, "defence", comparePlayersStarRatings)}
-                    isCollapsed={statCategoriesCollapsed.defending}
-                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, defending: !prev.defending }))}
-                    stats={[
-                        {
-                            label: "Strength",
-                            value: starRatings?.strength,
-                            isGreen: isStarRatingBest(player, starRatings?.strength, "strength", comparePlayersStarRatings)
-                        },
-                        {
-                            label: "Tackles Made",
-                            value: tacklesMade,
-                            isGreen: isStatActionBest(player, tacklesMade, "tackles_made", comparePlayersStats)
-                        },
-                        {
-                            label: "Tackle Success",
-                            value: tackleSuccess ? (tackleSuccess * 100) : undefined,
-                            isGreen: isStatActionBest(player, tackleSuccess ? (tackleSuccess * 100) : undefined, "TackleSuccess", comparePlayersStats)
-                        },
-                        {
-                            label: "Turnovers Won",
-                            value: turnoversWon,
-                            isGreen: isStatActionBest(player, turnoversWon, "turnovers_won", comparePlayersStats)
-                        },
-
-                        {
-                            label: "Red Cards",
-                            value: redCards,
-                            isGreen: isStatActionBest(player, turnoversWon, "red_cards", comparePlayersStats)
-                        },
-
-                        {
-                            label: "Yellow Cards",
-                            value: yellowCards,
-                            isGreen: isStatActionBest(player, turnoversWon, "yellow_cards", comparePlayersStats)
-                        }
-                    ]}
-                />
-
-                {/* KICKING Section */}
-                <StatCategory
-                    title="KICKING"
-                    categoryKey="kicking"
-                    icon={<Crosshair className="w-4 h-4" />}
-                    mainScore={starRatings?.kicking || 0}
-                    isMainBest={isStarRatingBest(player, starRatings?.kicking, "kicking", comparePlayersStarRatings)}
-                    isCollapsed={statCategoriesCollapsed.kicking}
-                    onToggle={() => setStatCategoriesCollapsed(prev => ({ ...prev, kicking: !prev.kicking }))}
-                    stats={[
-                        {
-                            label: "Penalty Goals Scored",
-                            value: pentalyGoalsScored,
-                            isGreen: isStatActionBest(player, kicksFromHand, 'penalty_goals', comparePlayersStats)
-                        },
-                        {
-                            label: "Conversions Scored",
-                            value: conversionsScored,
-                            isGreen: isStatActionBest(player, kicksFromHand, 'conversion_goals', comparePlayersStats)
-                        },
-                        {
-                            label: "Drop Goals",
-                            value: dropGoalsScored,
-                            isGreen: isStatActionBest(player, kicksFromHand, 'drop_goals_converted', comparePlayersStats)
-                        },
-                        {
-                            label: "Kicks From Hand",
-                            value: kicksFromHand,
-                            isGreen: isStatActionBest(player, kicksFromHand, "kicks_from_hand", comparePlayersStats)
-                        },
-                        {
-                            label: "Metres",
-                            value: kicksFromHandMetres,
-                            isGreen: isStatActionBest(player, kicksFromHandMetres, "kick_metres", comparePlayersStats)
-                        },
-                        {
-                            label: "Points Kicking",
-                            value: starRatings?.points_kicking,
-                            isGreen: isStarRatingBest(player, starRatings?.points_kicking, "points_kicking", comparePlayersStarRatings)
-                        },
-                        {
-                            label: "Infield Kicking",
-                            value: starRatings?.infield_kicking,
-                            isGreen: isStarRatingBest(player, starRatings?.infield_kicking, "infield_kicking", comparePlayersStarRatings)
-                        },
-                    ]}
-                />
-
-            </div>}
-
-            {isLoading && <div className="w-full h-screen rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>}
-        </div>
-    );
-}
-
-
-
-type StatCategoryProps = {
-    title: string;
-    categoryKey: string;
-    icon: React.ReactNode;
-    mainScore?: number;
-    isMainBest?: boolean;
-    isCollapsed: boolean;
-    onToggle: () => void;
-    stats: Array<{
-        label: string;
-        value?: number;
-        isGreen?: boolean;
-    }>;
-};
-
-function StatCategory({ title, icon, isMainBest, isCollapsed, onToggle, stats }: StatCategoryProps) {
-
-    const statsContent = (
-        <div className="flex flex-col gap-1 mt-2">
-            {stats.map((stat, index) => (
-                <StatLabel
-                    key={index}
-                    label={stat.label}
-                    value={stat.value}
-                    isGreen={stat.isGreen}
-                />
-            ))}
-        </div>
-    );
-
-    return (
-        <div className="bg-slate-300 border border-slate-300 dark:border-slate-600 dark:bg-slate-800/40 p-1 rounded-md">
-            <div
-                onClick={onToggle}
-                className={twMerge(
-                    "w-full cursor-pointer px-2 py-2 flex flex-row items-center justify-between rounded-md bg-slate-100 dark:bg-slate-700/60",
-                    isMainBest && "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
-                )}
-            >
-                <div className="flex flex-row items-center gap-1">
-                    {icon}
-                    <span className="text-xs font-bold dark:text-white uppercase">{title}</span>
-                </div>
-
-                <div className="flex flex-row items-center gap-2">
-
-                    {!isCollapsed ? (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                        </svg>
-                    ) : (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                    )}
-                </div>
+      {currSeason ? (
+        <div className="flex flex-col gap-4">
+          {/* Player Statistics Card (same structure as PlayerSeasonStatsCard) */}
+          <div className="flex flex-col bg-slate-50 border dark:border-slate-600 border-slate-300 dark:bg-slate-700/80 w-full gap-3 p-3 rounded-xl">
+            <div className="flex flex-row items-center justify-between">
+              <p className="text-xs">{currSeason.name}</p>
+              {/* expanded by default; no toggle */}
             </div>
 
-            {!isCollapsed && statsContent}
+            <div className="flex flex-col gap-2 items-start">
+              <div className="flex flex-col items-start">
+                <p className="font-bold leading-tight">{tries ?? '0'}</p>
+                <span className="text-xs text-slate-500">Tries</span>
+              </div>
+              <div className="flex flex-col items-start">
+                <p className="font-bold leading-tight">{points ?? '0'}</p>
+                <span className="text-xs text-slate-500">Points</span>
+              </div>
+              <div className="flex flex-col items-start">
+                <p className="font-bold leading-tight">{minutesPlayedTotal ?? '0'}</p>
+                <span className="text-xs text-slate-500">Minutes Played</span>
+              </div>
+            </div>
+
+            <div>
+              <PlayerSeasonStatsTray
+                player={player}
+                season={currSeason}
+                stats={actions ?? []}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
         </div>
-    );
-}
-
-type StatLabelProp = {
-    label?: string;
-    value?: number;
-    isGreen?: boolean;
-};
-
-function StatLabel({ label, value, isGreen }: StatLabelProp) {
-    const hasVal = value !== undefined;
-    const valueFixed = value?.toFixed(1);
-
-    return (
-        <div className={twMerge(
-            "flex flex-row items-center justify-between py-2 px-3 rounded",
-            isGreen ? "bg-gradient-to-r from-blue-700 to-blue-600 border border-blue-700 text-white"
-                : "bg-slate-100 dark:bg-slate-700/40 border-slate-100 dark:border-slate-600"
-        )}>
-            <span className={twMerge(
-                "text-xs font-medium text-slate-600 dark:text-slate-300",
-                isGreen && " text-white dark:text-white"
-            )}>
-                {label}
-            </span>
-            <span className={twMerge(
-                "text-sm font-bold text-slate-600 dark:text-white",
-                isGreen && "text-white"
-            )}>
-                {hasVal ? valueFixed?.endsWith(".0") ? value : valueFixed : "-"}
-            </span>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col bg-slate-50 border dark:border-slate-600 border-slate-300 dark:bg-slate-700/80 w-full gap-3 p-3 rounded-xl">
+            <div className="flex flex-row items-center justify-between">
+              <div className="w-24 h-4 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="w-16 h-5 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
+              <div className="w-16 h-5 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
+              <div className="w-24 h-5 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="w-full h-24 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
+            </div>
+          </div>
         </div>
-    )
+      )}
+
+      {/* page-level skeleton removed; tray handles loading */}
+    </div>
+  );
 }
