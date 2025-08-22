@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart, Users } from 'lucide-react';
+import { ArrowLeftRight, BarChart, Users, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -17,6 +17,8 @@ import { comparePlayersAtomGroup } from '../../state/comparePlayers.atoms';
 // import PrimaryButton from '../shared/buttons/PrimaryButton'; // old compare button
 // import { ArrowLeftRight } from 'lucide-react'; // old compare button icon
 import { useDeterministicShuffle } from '../../hooks/useShuffle';
+import PrimaryButton from '../shared/buttons/PrimaryButton';
+import PlayerCompareModal from '../players/compare/PlayerCompareModal';
 
 export default function ComparePlayersPanel() {
   return (
@@ -33,8 +35,9 @@ function PanelContent() {
 
   const selectedPlayers = useAtomValue(comparePlayersAtomGroup.comparePlayersAtom);
 
-  // const { clearSelections, addOrRemovePlayer, removePlayer, showCompareModal } = usePlayerCompareActions(); // old compare logic
-  const { clearSelections } = usePlayerCompareActions();
+  const { clearSelections, addOrRemovePlayer, removePlayer, showCompareModal } =
+    usePlayerCompareActions(); // old compare logic
+  //const { clearSelections } = usePlayerCompareActions();
   const [searchQuery, setSearchQuery] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
   const [activePlayer, setActivePlayer] = useState<IProAthlete | null>(null);
@@ -46,9 +49,9 @@ function PanelContent() {
   });
 
   const handlePlayerClick = (player: IProAthlete) => {
-    // addOrRemovePlayer(player); // old compare selection behavior
+    addOrRemovePlayer(player); // old compare selection behavior
     setActivePlayer(player);
-    setProfileOpen(true);
+    //setProfileOpen(true);
   };
 
   const handleShuffle = () => {
@@ -67,9 +70,7 @@ function PanelContent() {
 
   return (
     <div>
-
       <div className="flex justify-between items-center mb-3">
-
         <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
           <Users className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           Players
@@ -95,15 +96,13 @@ function PanelContent() {
       </div>
 
       <div className="rounded-xl w-full flex flex-col items-center justify-center ">
-
         <div className="w-full flex flex-col items-center justify-center">
-
           {/* Player Search */}
           <div className="mb-4 w-full">
             <PlayerSearch searchQuery={searchQuery} onSearch={setSearchQuery} />
           </div>
 
-          {/* <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+          <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
               {selectedPlayers.length === 0
                 ? 'Select players to compare'
@@ -130,14 +129,14 @@ function PanelContent() {
                 ))}
               </div>
             )}
-          </div> */}
+          </div>
 
-          {/* {selectedPlayers.length > 0 && (
+          {selectedPlayers.length > 0 && (
             <PrimaryButton className="mb-4" onClick={showCompareModal}>
               Compare
               <ArrowLeftRight className="w-4 h-4" />
             </PrimaryButton>
-          )} */}
+          )}
 
           {isLoading && <LoadingState />}
         </div>
@@ -157,21 +156,21 @@ function PanelContent() {
               // // className='max-w-[100px]'
               // priceClassName="top-14 left-5"
               // teamLogoClassName="top-8 right-2"
-              className=' flex-1'
+              className=" flex-1"
               frameClassName=" min-w-[180px] max-w-[180px]"
               detailsClassName="px-6 pb-12"
             />
           ))}
         </div>
-        {/* <PlayerCompareModal /> */}
+        <PlayerCompareModal />
 
-        {activePlayer && (
+        {/* {activePlayer && (
           <PlayerProfileModal
             player={activePlayer}
             isOpen={profileOpen}
             onClose={() => setProfileOpen(false)}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

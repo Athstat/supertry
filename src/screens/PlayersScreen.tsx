@@ -28,6 +28,8 @@ import { usePlayerCompareActions } from '../hooks/usePlayerCompare';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtomGroup } from '../state/comparePlayers.atoms';
 import { useInView } from 'react-intersection-observer';
+import PlayersCompareButton from '../components/player/PlayerScreenCompareButton';
+import { twMerge } from 'tailwind-merge';
 
 export function PlayersScreen() {
   return (
@@ -159,12 +161,12 @@ export const PlayerScreenContent = () => {
               sortDirection={sortDirection}
               onSort={handleSortByField}
             />
-            {/* 
+
             <PlayersCompareButton
               className={twMerge(
                 isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700'
               )}
-            /> */}
+            />
           </div>
         </div>
 
