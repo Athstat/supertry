@@ -12,6 +12,7 @@ type Props = {
   stats: SportAction[];
   forceCanonicalOrder?: boolean;
   isLoading?: boolean;
+  highlightRowLeaders?: boolean;
 };
 
 /**
@@ -19,10 +20,22 @@ type Props = {
  * Extracted from PlayerSeasonStatsCard to ensure identical rendering in other contexts
  * such as the Compare modal.
  */
-export default function PlayerSeasonStatsTray({ player, season, stats, forceCanonicalOrder, isLoading }: Props) {
+export default function PlayerSeasonStatsTray({ player, season, stats, forceCanonicalOrder, isLoading, highlightRowLeaders }: Props) {
   const { categories: allCategories } = useSportActions();
   const categories: string[] = useMemo(() => {
-    if (forceCanonicalOrder) return allCategories;
+    const hidden = new Set(["Set Piece", "Tactical Kicking"]);
+    const reorderWithGeneralFirst = (arr: string[]) => {
+      const filtered = arr.filter(c => !hidden.has(c));
+      if (filtered.includes("General")) {
+        return ["General", ...filtered.filter(c => c !== "General")];
+      }
+      return filtered;
+    };
+
+    if (forceCanonicalOrder) {
+      return reorderWithGeneralFirst(allCategories);
+    }
+
     const seen: Set<string> = new Set();
     stats.forEach(s => {
       const { definition } = s;
@@ -30,7 +43,8 @@ export default function PlayerSeasonStatsTray({ player, season, stats, forceCano
         seen.add(definition.category);
       }
     });
-    return [...seen].sort((a, b) => a.localeCompare(b));
+    const sorted = [...seen].sort((a, b) => a.localeCompare(b));
+    return reorderWithGeneralFirst(sorted);
   }, [stats, forceCanonicalOrder, allCategories]);
 
   if (isLoading) {
@@ -60,6 +74,7 @@ export default function PlayerSeasonStatsTray({ player, season, stats, forceCano
             categoryName={category}
             stats={stats}
             forceCanonicalOrder={forceCanonicalOrder}
+            highlightLeaders={highlightRowLeaders}
           />
         ))}
       </div>
