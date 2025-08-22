@@ -219,15 +219,15 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
           handleMouseEnter(e);
         }}
         onMouseLeave={() => setShowTooltip(false)}
-        className={`hover:bg-slate-300/40 dark:hover:bg-slate-600 cursor-pointer px-0 py-1 rounded-xl flex flex-row items-center justify-between`}
+        className={`hover:bg-slate-300/40 dark:hover:bg-slate-600 cursor-pointer px-0 py-1 rounded-xl flex flex-row items-center justify-between h-12 sm:h-12 leading-tight`}
       >
-        <div className="text-left">
-          <SecondaryText className="">{definition?.display_name}</SecondaryText>
+        <div className="text-left flex-1 pr-2">
+          <SecondaryText className="whitespace-normal break-words overflow-hidden">{definition?.display_name}</SecondaryText>
         </div>
 
-        <div className="text-left">
+        <div className="text-left flex-none">
           <p
-            className={`${isLeader ? 'font-semibold bg-primary-200 dark:bg-primary-300/20 px-1 rounded' : ''}`}
+            className={`${isLeader ? 'font-semibold bg-primary-200 dark:bg-primary-700 px-1 rounded' : ''}`}
           >
             {processActionCount() ?? 0}
           </p>

@@ -3,7 +3,7 @@ import { X, User, Coins, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatPosition } from '../../../utils/athleteUtils';
 import { PlayerGameCard } from '../../player/PlayerGameCard';
 import { useAtom } from 'jotai';
-import { showComparePlayerInfo } from '../../../state/comparePlayers.atoms';
+import { openInfoTrackingIdAtom } from '../../../state/comparePlayers.atoms';
 import Collapsable from '../../shared/containers/Collapsable';
 import SecondaryText from '../../shared/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
@@ -17,8 +17,15 @@ type Props = {
 };
 
 export default function PlayerCompareItemHeader({ player }: Props) {
-  const [showInfo, setShowInfo] = useAtom(showComparePlayerInfo);
-  const toggleShowInfo = () => setShowInfo(!showInfo);
+  const [openInfoIds, setOpenInfoIds] = useAtom(openInfoTrackingIdAtom);
+  const showInfo = openInfoIds.has(player.tracking_id);
+  const toggleShowInfo = () =>
+    setOpenInfoIds((prev: Set<string>) => {
+      const next = new Set<string>(prev);
+      if (next.has(player.tracking_id)) next.delete(player.tracking_id);
+      else next.add(player.tracking_id);
+      return next;
+    });
 
   const { movePlayerLeft, movePlayerRight, removePlayer } = usePlayerCompareActions();
 
@@ -65,6 +72,8 @@ export default function PlayerCompareItemHeader({ player }: Props) {
         open={showInfo}
         toggle={toggleShowInfo}
         icon={<User className="w-4 h-4" />}
+        overlay
+        overlayClassName="top-full"
       >
         <div className="flex flex-col text-sm p-1 divide-y gap-2 divide-slate-100 dark:divide-slate-700">
           <div>
