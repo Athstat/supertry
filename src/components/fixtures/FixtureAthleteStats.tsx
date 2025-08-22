@@ -1,10 +1,10 @@
+import { djangoAthleteService } from "../../services/athletes/djangoAthletesService"
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { GameSportAction } from "../../types/boxScore"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { Table2 } from "lucide-react"
 import useSWR from "swr"
-import { djangoAthleteService } from "../../services/athletes/djangoAthletesService"
 import RoundedCard from "../shared/RoundedCard"
 import PlayerMugshot from "../shared/PlayerMugshot"
 import SecondaryText from "../shared/SecondaryText"
@@ -17,7 +17,7 @@ type Props = {
 export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
 
     const { gameKickedOff } = fixtureSumary(fixture);
-    // const [search, setSearch] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
 
     const athleteIds = useMemo(() => {
         const ids: string[] = [];
