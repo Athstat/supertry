@@ -32,9 +32,9 @@ export default function FixtureScreen() {
     gamesService.getGameById(fixtureId ?? '')
   );
 
-  const boxscoreKey = fixtureId ? `fixtures/${fixtureId}/boxscore` : null;
-  const { data: boxScore, isLoading: loadingBoxScore } = useSWR(boxscoreKey, () =>
-    boxScoreService.getBoxScoreByGameId(fixtureId ?? '')
+  const sportsActionsKey = fixtureId ? `fixtures/${fixtureId}/sports-actions` : null;
+  const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
+    boxScoreService.getSportActionsByGameId(fixtureId ?? '')
   );
 
   const teamActionsKey = fixtureId ? `fixtures/${fixtureId}/team-actions` : null;
@@ -42,7 +42,7 @@ export default function FixtureScreen() {
     gamesService.getGameTeamActions(fixtureId ?? '')
   );
 
-  const isLoading = loadingFixture || loadingBoxScore || loadingTeamActions;
+  const isLoading = loadingFixture || loadingSportsActions || loadingTeamActions;
 
   if (isLoading) return <LoadingState />;
 
@@ -58,7 +58,7 @@ export default function FixtureScreen() {
     {
       label: 'Athlete Stats',
       tabKey: 'athletes-stats',
-      disabled: !boxScore || boxScore.length === 0,
+      disabled: sportActions?.length === 0 || !sportActions,
     },
     {
       label: 'Team Stats',
@@ -137,12 +137,12 @@ export default function FixtureScreen() {
       {/* {boxScore && <FixtureScreenTab />} */}
       <FixtureScreenHeader fixture={fixture} />
 
-      {!loadingBoxScore && (
+      {!loadingSportsActions && (
         <PageView className="p-4">
           <TabView tabHeaderItems={tabItems}>
             <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
-              {boxScore && <FixtureAthleteStats boxScore={boxScore} fixture={fixture} />}
+              {sportActions && <FixtureAthleteStats sportActions={sportActions} fixture={fixture} />}
             </TabViewPage>
 
             <TabViewPage className="flex flex-col gap-5" tabKey="kick-off">
@@ -178,7 +178,7 @@ export default function FixtureScreen() {
 
       <div className="flex flex-col p-4 gap-5">
         {/* Overview Component */}
-        {loadingBoxScore && <LoadingState />}
+        {loadingSportsActions && <LoadingState />}
       </div>
     </div>
   );
