@@ -15,8 +15,6 @@ type AthleteStatsModalProps = {
 
 export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxScoreRecord: bs }: AthleteStatsModalProps) {
 
-
-
   const fixPosition = (inStr: string) => {
     const parts = inStr.split("-");
     let outStr = "";
