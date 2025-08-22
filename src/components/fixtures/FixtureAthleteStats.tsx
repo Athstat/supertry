@@ -53,6 +53,8 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
 
     if (!gameKickedOff) return;
 
+    if (athleteActions.length === 0) return;
+
     return (
 
         <div className="flex flex-col gap-3 w-full" >
@@ -97,15 +99,7 @@ function AthleteBoxscoreRecord({ athlete, index }: { athlete: AthleteBoxscoreIte
     const key = `/athletes/${athlete.athlete_id}`;
     const { data: info, isLoading: loadingInfo } = useSWR(key, () => djangoAthleteService.getAthleteById(athlete.athlete_id));
 
-    if (loadingInfo) {
-        return (
-            <RoundedCard
-                className="h-[80px] rounded-xl animate-pulse border-none"
-            />
-        )
-    }
-
-    if (!info) return;
+    // if (info) return;
 
     const tries = useMemo(() => {
         return athlete.actions.find(p => p.action === 'tries');
@@ -119,6 +113,16 @@ function AthleteBoxscoreRecord({ athlete, index }: { athlete: AthleteBoxscoreIte
         return athlete.actions.find(p => p.action === 'minutes_played_total');
     }, [athlete]);
 
+    if (loadingInfo) {
+        return (
+            <RoundedCard
+                className="h-[80px] rounded-xl animate-pulse border-none"
+            />
+        )
+    }
+
+    if (!info) return;
+
     return (
         <div className="p-2" >
 
@@ -130,14 +134,14 @@ function AthleteBoxscoreRecord({ athlete, index }: { athlete: AthleteBoxscoreIte
                     </div>}
 
                     <PlayerMugshot
-                        url={info.image_url}
-                        playerPr={info.power_rank_rating}
+                        url={info?.image_url}
+                        playerPr={info?.power_rank_rating}
                         showPrBackground
                         className="w-10 h-10 lg:w-14 lg:h-14"
                     />
 
                     <div>
-                        <p className="font-semibold" >{info.player_name}</p>
+                        <p className="font-semibold" >{info?.player_name}</p>
                     </div>
                 </div>
 
