@@ -3,7 +3,6 @@
 import { atom } from "jotai";
 import { IProAthlete, PlayerCompareMode } from "../types/athletes";
 import { IComparePlayerStats, ICompareStarRatingsStats } from "../types/comparePlayers";
-import { SportActionDefinition } from "../types/sports_actions";
 
 /** Holds the players to compare */
 export const comparePlayersAtom = atom<IProAthlete[]>([]);
@@ -16,6 +15,9 @@ export const comparePlayersStarRatingsAtom = atom<ICompareStarRatingsStats[]>([]
 
 /** Holds a boolean whether player info should be showed or not */
 export const showComparePlayerInfo = atom<boolean>(false);
+
+/** Holds a set of tracking_ids for players whose Info dropdowns are open. */
+export const openInfoTrackingIdAtom = atom<Set<string>>(new Set<string>());
 
 /** Holds a string representing the state of the player compare 
  * which can either be none, picking and modal */
@@ -66,6 +68,7 @@ export const comparePlayersAtomGroup = {
     comparePlayersStatsAtom,
     comparePlayersStarRatingsAtom,
     showComparePlayerInfo,
+    openInfoTrackingIdAtom,
     compareModeAtom,
     isCompareModePicking,
     isCompareModeModal,

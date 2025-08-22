@@ -1,5 +1,4 @@
 import { IProAthlete } from '../../../types/athletes';
-import { getPlayerAggregatedStat } from '../../../types/sports_actions';
 import usePlayerStats from '../../player/profile-modal-components/usePlayerStats';
 import PlayerCompareSeasonPicker from './PlayerCompareSeasonPicker';
 import PlayerCompareItemHeader from './PlayerCompareItemHeader';
@@ -71,9 +70,7 @@ export default function PlayersCompareItem({ player }: Props) {
 
   const isLoading = loadingActions || loadingStarRatings || !currSeason;
 
-  const tries = getPlayerAggregatedStat('tries', actions)?.action_count;
-  const minutesPlayedTotal = getPlayerAggregatedStat('minutes_played_total', actions)?.action_count;
-  const points = getPlayerAggregatedStat('points', actions)?.action_count;
+  // Top stats are shown within the 'General' category rows; no bespoke summary needed
   
 
   return (
@@ -102,20 +99,7 @@ export default function PlayersCompareItem({ player }: Props) {
               {/* expanded by default; no toggle */}
             </div>
 
-            <div className="flex flex-col gap-2 items-start">
-              <div className="flex flex-col items-start">
-                <p className="font-bold leading-tight">{tries ?? '0'}</p>
-                <span className="text-xs text-slate-500">Tries</span>
-              </div>
-              <div className="flex flex-col items-start">
-                <p className="font-bold leading-tight">{points ?? '0'}</p>
-                <span className="text-xs text-slate-500">Points</span>
-              </div>
-              <div className="flex flex-col items-start">
-                <p className="font-bold leading-tight">{minutesPlayedTotal ?? '0'}</p>
-                <span className="text-xs text-slate-500">Minutes Played</span>
-              </div>
-            </div>
+            {/* Summary removed; 'General' category appears first and includes Tries, Points, Minutes as aligned rows */}
 
             <div>
               <PlayerSeasonStatsTray
@@ -123,6 +107,8 @@ export default function PlayersCompareItem({ player }: Props) {
                 season={currSeason}
                 stats={actions ?? []}
                 isLoading={isLoading}
+                forceCanonicalOrder
+                highlightRowLeaders
               />
             </div>
           </div>
