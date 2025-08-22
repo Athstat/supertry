@@ -1,4 +1,5 @@
 import { IProAthlete } from "./athletes"
+import { SportActionDefinition } from "./sports_actions"
 
 export type IBoxScoreItem = {
     athlete_id: string,
@@ -34,4 +35,16 @@ export type IBoxScoreItem = {
     dropgoalsscored: number,
     points: number,
     minutesplayed: number
+}
+
+export type GameSportAction = {
+    action: string,
+    game_id: string,
+    athlete_id: string,
+    action_count: number,
+    team_id: string,
+    hidden: boolean,
+    points?: number,
+    data_source: string,
+    definition?: SportActionDefinition
 }
