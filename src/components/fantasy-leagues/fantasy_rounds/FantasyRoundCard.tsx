@@ -61,7 +61,7 @@ export default function FantasyRoundCard({
 
   const isLocked = round && isLeagueRoundLocked(round);
 
-  if (isLocked && !isMember) {
+  if (isLocked && !hasUserTeam) {
     return <FantasyRoundLockedState
       round={round}
     />
