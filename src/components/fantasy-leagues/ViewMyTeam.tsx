@@ -13,6 +13,7 @@ import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { TeamFormation } from '../team/TeamFormation';
 import { TeamPlayerCard } from '../team/TeamPlayerCard';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -185,12 +186,12 @@ export default function ViewMyTeam({
           };
         })
         .filter(Boolean) as {
-        athlete_id: string;
-        slot: number;
-        purchase_price: number;
-        is_starting: boolean;
-        is_captain: boolean;
-      }[];
+          athlete_id: string;
+          slot: number;
+          purchase_price: number;
+          is_starting: boolean;
+          is_captain: boolean;
+        }[];
 
       console.log('athletesPayload: ', athletesPayload);
 
@@ -204,6 +205,16 @@ export default function ViewMyTeam({
       setIsSaving(false);
     }
   };
+
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+
+  // if (isLocked) {
+  //   return (
+  //     <div>
+
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="w-full py-4">
@@ -228,22 +239,20 @@ export default function ViewMyTeam({
           <button
             type="button"
             onClick={() => setViewMode('edit')}
-            className={`${
-              viewMode === 'edit'
+            className={`${viewMode === 'edit'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+              } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
           >
             Edit
           </button>
           <button
             type="button"
             onClick={() => setViewMode('pitch')}
-            className={`${
-              viewMode === 'pitch'
+            className={`${viewMode === 'pitch'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+              } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
           >
             Pitch
           </button>
@@ -333,11 +342,10 @@ export default function ViewMyTeam({
                 {athlete && (
                   <div className="mt-4 flex flex-col gap-2 z-50">
                     <button
-                      className={`${
-                        captainAthleteId === athlete.athlete_id
+                      className={`${captainAthleteId === athlete.athlete_id
                           ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
                           : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                      }`}
+                        }`}
                       onClick={() => {
                         if (captainAthleteId !== athlete.athlete_id)
                           setCaptainAthleteId(athlete.athlete_id);
