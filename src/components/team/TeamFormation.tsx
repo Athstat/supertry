@@ -1,7 +1,6 @@
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import RugbyPitch from '../shared/RugbyPitch';
-import { TeamPlayerCard } from './TeamPlayerCard';
 
 interface TeamFormationProps {
   players: IFantasyTeamAthlete[];
@@ -21,7 +20,7 @@ export function TeamFormation({ players, onPlayerClick }: TeamFormationProps) {
     <div className="relative h-auto lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
       <RugbyPitch />
 
-      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-6 lg:px-[10%]">
+      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2  lg:p-6 lg:px-[10%]">
         {/* Front Row - Top */}
         {positionGroups['Front Row'].map(player => (
           <PlayerGameCard

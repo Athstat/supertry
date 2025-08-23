@@ -26,12 +26,13 @@ export default function TeamJersey({ teamId }: Props) {
         <img
             src={imageUrl}
             className={twMerge(
-                'min-h-[100px] max-h-[100px] min-w-[100px] max-w-[100px] object-cover object-center translate-',
-                "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
-                "[mask - repeat:no-repeat] [mask-size:100%_100%]",
-                "[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
-                "[-webkit-mask-repeat:no-repeat]",
-                "[-webkit-mask-size:100%_100%"
+                    'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px]  object-cover object-top',
+                    'lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px]',
+                    '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                    '[mask - repeat:no-repeat] [mask-size:100%_100%]',
+                    '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                    '[-webkit-mask-repeat:no-repeat]',
+                    '[-webkit-mask-size:100%_100%'
             )}
             onError={() => setError(true)}
         />

@@ -228,7 +228,7 @@ export default function ViewMyTeam({
             <ArrowLeft />
           </button>
           <div className="flex flex-col">
-            <p className="font-bold text-xl">My Team</p>
+            <p className="font-bold text-md">My Team</p>
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
               Your team for {leagueRound?.title}
             </p>
