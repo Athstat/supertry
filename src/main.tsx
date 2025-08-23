@@ -11,6 +11,10 @@ import "./index.css";
 //   sendDefaultPii: true
 // });
 
+if (import.meta.env.VITE_APP_ENV === 'qa') {
+  window.location.replace('https://scrummy-app.ai');
+}
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>

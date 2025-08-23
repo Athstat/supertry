@@ -101,3 +101,14 @@ export type ICreateFantasyTeamAthleteItem = {
 export type AthleteWithTrackingId = {
   tracking_id?: string
 }
+
+/** Represents an athlete points breakdown item */
+export type FantasyAthletePointsBreakdownItem = {
+  pk?: string,
+  action: string,
+  action_count: number,
+  score?: number,
+  round: number,
+  game: string,
+  athlete: string
+}

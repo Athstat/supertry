@@ -1,4 +1,4 @@
-import { Trophy, Zap, ChevronRight, Award } from 'lucide-react';
+import { Trophy, Zap, ChevronRight, Award, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
@@ -11,6 +11,9 @@ import RoundedCard from '../../shared/RoundedCard';
 import { useMemo } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
+import { twMerge } from 'tailwind-merge';
+import { useTabView } from '../../shared/tabs/TabView';
 
 type Props = {
   round: IFantasyLeagueRound;
@@ -56,16 +59,23 @@ export default function FantasyRoundCard({
   const totalPoints = (userTeam?.athletes || []).reduce((sum, a) => sum + (a.score ?? 0), 0);
   const userRank = userTeam?.rank ?? userTeam?.position;
 
+  const isLocked = round && isLeagueRoundLocked(round);
+
+  if (isLocked && !hasUserTeam) {
+    return <FantasyRoundLockedState
+      round={round}
+    />
+  }
+
   return (
     <div ref={ref}>
       {isLoading ? (
-        <RoundedCard className="w-full h-[100px] rounded-xl border-none animate-pulse" />
+        <RoundedCard className="w-full bg-slate-300 h-[100px] rounded-xl border-none animate-pulse" />
       ) : (
         <motion.div
           ref={ref}
-          className={`w-full p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 ${
-            hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
-          }`}
+          className={`w-full p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 ${hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
+            }`}
           onClick={() => {
             console.log('onClick called');
 
@@ -76,26 +86,30 @@ export default function FantasyRoundCard({
           whileHover={
             hasUserTeam && onViewTeam
               ? {
-                  scale: 1.02,
-                  transition: { type: 'spring', stiffness: 300 },
-                }
+                scale: 1.02,
+                transition: { type: 'spring', stiffness: 300 },
+              }
               : {}
           }
         >
           {/* Header: title left, status + chevron right */}
           <div className="flex items-start justify-between gap-3">
-            <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {round.title}
-            </h3>
+            <div className='flex flex-row items-center gap-1' >
+
+              {isLocked && <Lock className='w-4 h-4' />}
+              <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {round.title}
+              </h3>
+              
+            </div>
             <div className="flex items-center gap-2">
               <span
-                className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${
-                  round.is_open
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                }`}
+                className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${!isLocked
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                  }`}
               >
-                {round.is_open ? 'Open' : 'Locked'}
+                {!isLocked ? 'Open' : 'Locked'}
               </span>
               <ChevronRight className="text-gray-400" />
             </div>
@@ -134,9 +148,9 @@ export default function FantasyRoundCard({
                 <span className="text-sm text-gray-600 dark:text-gray-400">
                   No team yet for this round
                 </span>
-                <PrimaryButton className="px-3 py-1" onClick={onCreateTeam}>
+                {<PrimaryButton className="px-3 py-1" onClick={onCreateTeam}>
                   Create Team
-                </PrimaryButton>
+                </PrimaryButton>}
               </div>
             ) : (
               <div className="w-full flex items-center justify-center">
@@ -155,6 +169,56 @@ export default function FantasyRoundCard({
       )}
     </div>
   );
+}
+
+type LockedStateProps = {
+  round: IFantasyLeagueRound
+}
+
+function FantasyRoundLockedState({ round }: LockedStateProps) {
+
+  // const 
+
+  const {navigate} = useTabView();
+
+  const handleViewStandings = () => {
+    navigate('standings');
+  }
+
+  return (
+    <RoundedCard className='flex flex-col p-4 gap-4' >
+      <div className='flex flex-row items-center gap-2 justify-between' >
+        <div className='flex flex-row items-center gap-1' >
+          <Lock className='w-4 h-4' />
+          <p className='font-bold text-md' >{round.title}</p>
+        </div>
+
+          <div className="flex items-center gap-2">
+            <span
+              className={twMerge(
+                'text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium',
+                'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+              )}
+            >
+              {'Locked'}
+            </span>
+          </div>
+      </div>
+
+      <div>
+        <p className="text-sm text-gray-900 dark:text-gray-100">
+          Whoops! You can't pick your team for <strong>{round.title}</strong>, the round has been locked!
+        </p>
+      </div>
+
+      <div>
+        <PrimaryButton
+          className=''
+          onClick={handleViewStandings}
+        >View Standings</PrimaryButton>
+      </div>
+    </RoundedCard>
+  )
 }
 
 type AthletesRowProps = {
