@@ -15,9 +15,9 @@ export default function SbrMatchCenter() {
 
     const key = 'sbr-fixtures';
     let { data: fixtures, isLoading } = useSWR(key, () => sbrService.getAllFixtures());
-    const [season, setSeason] = useQueryState('sbrcs', { init: 'all' });
-    const [search, setSearch] = useQueryState('proq');
-    const [focus, setFocus] = useQueryState('sbrfcs');
+    const [season, setSeason] = useQueryState<string | undefined>('sbrcs', { init: 'all' });
+    const [search, setSearch] = useQueryState<string | undefined>('proq');
+    const [focus, setFocus] = useQueryState<string | undefined>('sbrfcs');
 
     const toggleFocus = () => {
         if (focus === 'upcoming') {
@@ -86,7 +86,7 @@ export default function SbrMatchCenter() {
 
     return (
         <div className='flex flex-col gap-4' >
-            <h1 className='font-bold text-lg' >Sbr Games</h1>
+            <h1 className='font-bold text-lg' >School Boy Rugby</h1>
 
             <MatchCenterSearchBar 
                 value={search}

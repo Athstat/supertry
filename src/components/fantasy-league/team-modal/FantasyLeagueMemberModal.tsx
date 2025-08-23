@@ -27,7 +27,7 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
     const canPeek = currentRound && isLeagueRoundLocked(currentRound);
 
     const fetchKey = canPeek ? `/fantasy-league-rounds/${currentRound.id}/user-teams/${member.user_id}` : null;
-    const { data: roundTeam, isLoading } = useSWR(fetchKey, () => leagueService.getUserRoundTeam(currentRound?.id ?? 0, member.user_id));
+    const { data: roundTeam, isLoading, error } = useSWR(fetchKey, () => leagueService.getUserRoundTeam(currentRound?.id ?? 0, member.user_id));
 
     if (isLoading) {
         return <DialogModal
@@ -74,16 +74,26 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
         </DialogModal>
     }
 
-    if (!roundTeam) {
+    if (roundTeam === undefined || error || roundTeam?.athletes?.length === undefined) {
         return (
-            <NoContentCard
-                className={`${member.user.first_name || member.user.username} doesn't have a team for this round, ${currentRound?.title}`}
-            />
+            <DialogModal
+                open={isOpen}
+                onClose={onClose}
+                key={member.user_id}
+                title={`${member.user.username || member.user.first_name} - ${currentRound?.title}`}
+                className="gap-4 flex flex-col p-0 no-scrollbar"
+                outerCon="p-4 lg:p-8 no-scrollbar"
+                hw="lg:w-[40%] no-scrollbar"
+            >
+                <NoContentCard
+                    message={`${member.user.first_name || member.user.username} doesn't have a team for this round, ${currentRound?.title}`}  
+                />
+            </DialogModal>
         )
     }
 
     const overallScore = roundTeam ? roundTeam?.overall_score : 0;
-    const teamValue = roundTeam ? roundTeam?.athletes.reduce((sum, a) => {
+    const teamValue = roundTeam ? roundTeam?.athletes?.reduce((sum, a) => {
         return sum + (a.purchase_price ?? 0);
     }, 0) : 0;
 
@@ -103,13 +113,13 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
                 <StatCard
                     label="Round"
                     value={currentRound?.title}
-                    // icon={<Trophy className="w-4 h-4" />}
+                // icon={<Trophy className="w-4 h-4" />}
                 />
 
                 <StatCard
                     label="Rank"
                     value={roundTeam?.rank}
-                    // icon={<ChartBarIncreasing className="w-4 h-4" />}
+                // icon={<ChartBarIncreasing className="w-4 h-4" />}
                 />
 
                 <StatCard
@@ -120,7 +130,7 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
                 <StatCard
                     label="Team Value"
                     value={teamValue ? Math.floor(teamValue) : 0}
-                    // icon={<CircleDollarSignIcon className="w-4 h-4" />}
+                // icon={<CircleDollarSignIcon className="w-4 h-4" />}
                 />
             </div>
 
@@ -153,7 +163,7 @@ function TeamAthletesGridView({ roundTeam }: TeamAthletesViewProps) {
 
             <div className="flex flex-row  min-h-[920px] max-h-[920px] items-center justify-center flex-wrap absolute top-0 left-0" >
 
-                {roundTeam?.athletes.map((a) => {
+                {roundTeam?.athletes?.map((a) => {
                     return (
                         <div className="flex flex-col gap-2 items-center justify-center" >
                             <PlayerGameCard

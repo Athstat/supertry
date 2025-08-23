@@ -92,7 +92,7 @@ export default function ProMatchCenter() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="font-bold text-lg">Pro Games</h1>
+      <h1 className="font-bold text-lg">Professional Rugby</h1>
 
       <MatchCenterSearchBar
         value={search}
