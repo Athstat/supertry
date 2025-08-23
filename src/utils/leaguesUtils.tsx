@@ -84,6 +84,18 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
   return now.valueOf() > deadline.valueOf();
 }
 
+export function isLeagueRoundLocked(leagueRound: IFantasyLeagueRound) {
+  
+  const {join_deadline} = leagueRound;
+  
+  if (!join_deadline) return false;
+
+  const now = new Date();
+  const deadline = new Date(join_deadline);
+
+  return now.valueOf() >= deadline.valueOf();
+}
+
 export function isLeagueGroupLocked(joinDeadline: Date | null | undefined) {
   if (!joinDeadline) return false;
 

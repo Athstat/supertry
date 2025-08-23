@@ -12,7 +12,8 @@ import { fantasyTeamService } from '../../services/fantasyTeamService';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { TeamFormation } from '../team/TeamFormation';
-import { TeamPlayerCard } from '../team/TeamPlayerCard';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import { FantasyTeamAthleteCard } from '../team/FantasyTeamAthleteCard';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -44,7 +45,7 @@ export default function ViewMyTeam({
     position?: Position | null;
   }>({ open: false, slot: null, position: null });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('edit');
+  const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
 
   const totalSpent = team.athletes.reduce((sum, player) => sum + (player.price || 0), 0);
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
@@ -185,12 +186,12 @@ export default function ViewMyTeam({
           };
         })
         .filter(Boolean) as {
-        athlete_id: string;
-        slot: number;
-        purchase_price: number;
-        is_starting: boolean;
-        is_captain: boolean;
-      }[];
+          athlete_id: string;
+          slot: number;
+          purchase_price: number;
+          is_starting: boolean;
+          is_captain: boolean;
+        }[];
 
       console.log('athletesPayload: ', athletesPayload);
 
@@ -205,6 +206,16 @@ export default function ViewMyTeam({
     }
   };
 
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+
+  // if (isLocked) {
+  //   return (
+  //     <div>
+
+  //     </div>
+  //   )
+  // }
+
   return (
     <div className="w-full py-4">
       <div className="flex flex-row items-center justify-between mb-5">
@@ -218,7 +229,7 @@ export default function ViewMyTeam({
             <ArrowLeft />
           </button>
           <div className="flex flex-col">
-            <p className="font-bold text-xl">My Team</p>
+            <p className="font-bold text-md">My Team</p>
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
               Your team for {leagueRound?.title}
             </p>
@@ -228,22 +239,20 @@ export default function ViewMyTeam({
           <button
             type="button"
             onClick={() => setViewMode('edit')}
-            className={`${
-              viewMode === 'edit'
+            className={`${viewMode === 'edit'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+              } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
           >
             Edit
           </button>
           <button
             type="button"
             onClick={() => setViewMode('pitch')}
-            className={`${
-              viewMode === 'pitch'
+            className={`${viewMode === 'pitch'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+              } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
           >
             Pitch
           </button>
@@ -333,11 +342,10 @@ export default function ViewMyTeam({
                 {athlete && (
                   <div className="mt-4 flex flex-col gap-2 z-50">
                     <button
-                      className={`${
-                        captainAthleteId === athlete.athlete_id
+                      className={`${captainAthleteId === athlete.athlete_id
                           ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
                           : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                      }`}
+                        }`}
                       onClick={() => {
                         if (captainAthleteId !== athlete.athlete_id)
                           setCaptainAthleteId(athlete.athlete_id);
@@ -374,7 +382,7 @@ export default function ViewMyTeam({
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium mb-4">
               Greyed out players are not playing in this round's games
             </p>
-            <TeamFormation
+            {leagueRound && <TeamFormation
               players={Object.values(editableAthletesBySlot)
                 .filter((p): p is IFantasyTeamAthlete => Boolean(p))
                 .map(p => ({ ...p!, is_starting: p!.slot !== 6 }))}
@@ -382,11 +390,13 @@ export default function ViewMyTeam({
                 setPlayerModalPlayer(player);
                 setShowPlayerModal(true);
               }}
-            />
+
+              round={leagueRound}
+            />}
           </div>
 
           {/* Super Substitute */}
-          {Object.values(editableAthletesBySlot).some(p => p && p.slot === 6) && (
+          {leagueRound && Object.values(editableAthletesBySlot).some(p => p && p.slot === 6) && (
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
                 <span>Super Substitute</span>
@@ -399,14 +409,14 @@ export default function ViewMyTeam({
                   .filter((player): player is IFantasyTeamAthlete => Boolean(player))
                   .filter(player => player.slot === 6)
                   .map(player => (
-                    <PlayerGameCard
-                      key={player.id}
+                    <FantasyTeamAthleteCard
                       player={player}
-                      onClick={() => {
-                        setPlayerModalPlayer(player);
+                      onPlayerClick={(p) => {
+                        setPlayerModalPlayer(p);
                         setShowPlayerModal(true);
                       }}
-                      className="md:w-44 md:h-56 w-32 h-40"
+                      round={leagueRound}
+                      pointsClassName='text-black dark:text-white'
                     />
                   ))}
               </div>
