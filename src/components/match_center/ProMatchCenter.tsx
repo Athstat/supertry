@@ -17,9 +17,9 @@ export default function ProMatchCenter() {
   const key = 'pro-fixtures';
   let { data: fixtures, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
 
-  const [season, setSeason] = useQueryState('pcid', { init: 'all' });
-  const [search, setSearch] = useQueryState('proq');
-  const [focus, setFocus] = useQueryState('focus');
+  const [season, setSeason] = useQueryState<string | undefined>('pcid', { init: 'all' });
+  const [search, setSearch] = useQueryState<string | undefined>('proq');
+  const [focus, setFocus] = useQueryState<string | undefined>('focus');
 
   const toggleFocus = () => {
     if (focus === 'upcoming') {
@@ -100,7 +100,7 @@ export default function ProMatchCenter() {
         placeholder="Search Pro Games, Seasons ..."
       />
 
-      <PilledSeasonFilterBar seasons={seasons} onChange={setSeason} value={season} />
+      {/* <PilledSeasonFilterBar seasons={seasons} onChange={setSeason} value={season} /> */}
 
       <UpcomingFixturesSection
         upcomingFixtures={upcomingFixtures}

@@ -106,8 +106,15 @@ export default function FixtureCard({
             {!hideDate && kickoff_time && (
               <p className="text-xs">{format(kickoff_time, 'dd, MMM yyyy')}</p>
             )}
-            {kickoff_time && (
+            {kickoff_time && game_status !== 'in_progress' && (
               <p className="text-sm font-semibold">{format(kickoff_time, 'h:mm a')}</p>
+            )}
+
+            {game_status === 'in_progress' && (
+              <div className='flex flex-row items-center gap-1' >
+                <div className="w-2 h-2 bg-red-500 dark:bg-red-400 rounded-full " />
+                <span className="text-xs text-red-500 dark:text-red-400 font-bold">LIVE</span>
+              </div>
             )}
           </div>
 

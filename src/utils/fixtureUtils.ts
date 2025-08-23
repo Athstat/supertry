@@ -120,10 +120,7 @@ export function filterPastFixtures(fixtures: IFixture[], limit?: number) {
     
     return fixtures.filter((f) => {
       if (f.kickoff_time) {
-        return (
-          f.game_status === "complete" ||
-          new Date(f.kickoff_time).valueOf() < dateNow.valueOf()
-        );
+        return (f.game_status === "complete");
       }
 
       return false;
