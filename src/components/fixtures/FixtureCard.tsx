@@ -112,7 +112,7 @@ export default function FixtureCard({
 
             {game_status === 'in_progress' && (
               <div className='flex flex-row items-center gap-1' >
-                <div className="w-2 h-2 bg-red-500 dark:bg-red-400 rounded-full " />
+                <div className="w-2 h-2 bg-red-500 animate-pulse dark:bg-red-400 rounded-full " />
                 <span className="text-xs text-red-500 dark:text-red-400 font-bold">LIVE</span>
               </div>
             )}
@@ -202,7 +202,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
       <div className="flex flex-row items-center justify-center dark:text-white">
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
-            className="w-20 h-20"
+            className="w-14 h-14 lg:w-20 lg:h-20"
             url={fixture.team.image_url}
             teamName={fixture.team.athstat_name}
           />
@@ -218,7 +218,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
-            className="w-20 h-20"
+            className="w-14 h-14 lg:w-20 lg:h-20"
             teamName={fixture.opposition_team.athstat_name}
             url={fixture.opposition_team.image_url ?? fixture.opposition_team.image_url}
           />
@@ -231,7 +231,7 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
       <div className="flex flex-row items-center justify-center p-3">
         <button
           onClick={goToFullMatchDetails}
-          className="underline text-blue-400 dark:text-blue-200 hover:text-blue-500"
+          className="underline text-blue-600  dark:text-blue-200 hover:text-blue-500"
         >
           View Full Match Details
         </button>
