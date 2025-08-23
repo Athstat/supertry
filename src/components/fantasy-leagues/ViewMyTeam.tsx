@@ -44,7 +44,7 @@ export default function ViewMyTeam({
     position?: Position | null;
   }>({ open: false, slot: null, position: null });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('edit');
+  const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
 
   const totalSpent = team.athletes.reduce((sum, player) => sum + (player.price || 0), 0);
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
@@ -381,7 +381,7 @@ export default function ViewMyTeam({
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium mb-4">
               Greyed out players are not playing in this round's games
             </p>
-            <TeamFormation
+            {leagueRound && <TeamFormation
               players={Object.values(editableAthletesBySlot)
                 .filter((p): p is IFantasyTeamAthlete => Boolean(p))
                 .map(p => ({ ...p!, is_starting: p!.slot !== 6 }))}
@@ -389,7 +389,9 @@ export default function ViewMyTeam({
                 setPlayerModalPlayer(player);
                 setShowPlayerModal(true);
               }}
-            />
+
+              round={leagueRound}
+            />}
           </div>
 
           {/* Super Substitute */}
