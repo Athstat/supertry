@@ -61,8 +61,6 @@ export default function FantasyRoundCard({
 
   const isLocked = round && isLeagueRoundLocked(round);
 
-
-
   return (
     <div ref={ref}>
       {isLoading ? (
