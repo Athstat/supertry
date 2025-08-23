@@ -1,9 +1,6 @@
-import useSWR from 'swr';
-import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { PlayerGameCard } from '../player/PlayerGameCard';
-import RugbyPitch from '../shared/RugbyPitch';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
-import { fantasyAthleteService } from '../../services/fantasy/fantasyAthleteService';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
+import RugbyPitch from '../shared/RugbyPitch';
 import { FantasyTeamAthleteCard } from './FantasyTeamAthleteCard';
 
 interface TeamFormationProps {
@@ -25,10 +22,11 @@ export function TeamFormation({ players, onPlayerClick, round }: TeamFormationPr
     <div className="relative h-[900px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
       <RugbyPitch />
 
-      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2  lg:p-6 lg:px-[10%]">
+      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-0 lg:px-[10%]">
         {/* Front Row - Top */}
         {positionGroups['Front Row'].map(player => (
           <FantasyTeamAthleteCard
+            key={player.id}
             player={player}
             onPlayerClick={onPlayerClick}
             round={round}
@@ -38,6 +36,7 @@ export function TeamFormation({ players, onPlayerClick, round }: TeamFormationPr
         {/* Second Row - Left Side */}
         {positionGroups['Second Row'].map(player => (
           <FantasyTeamAthleteCard
+            key={player.id}
             player={player}
             onPlayerClick={onPlayerClick}
             round={round}
@@ -47,6 +46,7 @@ export function TeamFormation({ players, onPlayerClick, round }: TeamFormationPr
         {/* Back Row - Center Left */}
         {positionGroups['Back Row'].map(player => (
           <FantasyTeamAthleteCard
+            key={player.id}
             player={player}
             onPlayerClick={onPlayerClick}
             round={round}
@@ -55,6 +55,7 @@ export function TeamFormation({ players, onPlayerClick, round }: TeamFormationPr
 
         {positionGroups['Halfback'].map(player => (
           <FantasyTeamAthleteCard
+            key={player.id}
             player={player}
             onPlayerClick={onPlayerClick}
             round={round}
@@ -64,6 +65,7 @@ export function TeamFormation({ players, onPlayerClick, round }: TeamFormationPr
         {/* Back - Right Side */}
         {positionGroups['Back'].map(player => (
           <FantasyTeamAthleteCard
+            key={player.id}
             player={player}
             onPlayerClick={onPlayerClick}
             round={round}
@@ -73,4 +75,3 @@ export function TeamFormation({ players, onPlayerClick, round }: TeamFormationPr
     </div>
   );
 }
-

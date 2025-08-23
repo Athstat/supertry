@@ -1,18 +1,23 @@
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
+import { FantasyLeagueGroupMember, FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
 import { Table2, User } from 'lucide-react';
-import {} from 'lucide-react';
+import { } from 'lucide-react';
 import SecondaryText from '../shared/SecondaryText';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import RoundedCard from '../shared/RoundedCard';
 import { ErrorState } from '../ui/ErrorState';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
 
 export function LeagueStandings() {
 
   const { userMemberRecord, league, members } = useFantasyLeagueGroup();
   const fetchKey = league && `/fantasy-league-groups/${league.id}/standings`;
+
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
   const groupId = league?.id;
 
@@ -37,19 +42,6 @@ export function LeagueStandings() {
     }
     return map;
   }, [fetchedStandings]);
-
-  // Sort members by total points desc
-  const sortedMembers = useMemo(() => {
-    return [...members].sort((a, b) => {
-      const ta = totalsByUserId[a.user_id] ?? 0;
-      const tb = totalsByUserId[b.user_id] ?? 0;
-      if (tb !== ta) return tb - ta;
-      // Tie-breaker: username or first_name from the nested user object
-      const an = a.user?.username || a.user?.first_name || '';
-      const bn = b.user?.username || b.user?.first_name || '';
-      return an.localeCompare(bn);
-    });
-  }, [members, totalsByUserId]);
 
   // Handle team row click
 
@@ -80,11 +72,21 @@ export function LeagueStandings() {
 
   if (error) {
     return <div>
-      <ErrorState 
+      <ErrorState
         error="Whoops, Failed to load league standings"
         message="Something wen't wrong please try again"
       />
     </div>
+  }
+
+  const handleSelectMember = (member: FantasyLeagueGroupMember) => {
+    setSelectedMember(member);
+    setShowModal(true);
+  }
+
+  const handleCloseMemberModal = () => {
+    setSelectedMember(undefined);
+    setShowModal(false);
   }
 
   return (
@@ -119,12 +121,22 @@ export function LeagueStandings() {
 
       </div>
       {standings.map((member, index) => {
-        return <LeagueStandingsRow
-          member={member}
-          key={index}
-          index={index}
-          isUser={userMemberRecord?.user_id === member.user_id}
-        />
+        return (
+          <div onClick={() => {
+            const mRecord = members.find(m => m.user_id === member.user_id);
+
+            if (mRecord) {
+              handleSelectMember(mRecord);
+            }
+          }} >
+            <LeagueStandingsRow
+              member={member}
+              key={index}
+              index={index}
+              isUser={userMemberRecord?.user_id === member.user_id}
+            />
+          </div>
+        )
       })}
 
       <div>
@@ -133,6 +145,14 @@ export function LeagueStandings() {
           <p>Invite</p>
         </PrimaryButton>} */}
       </div>
+
+      {selectedMember && showModal &&
+        <FantasyLeagueMemberModal
+          member={selectedMember}
+          isOpen={showModal}
+          onClose={handleCloseMemberModal}
+        />
+      }
 
     </div>
   );
@@ -145,7 +165,6 @@ type StandingsProps = {
 }
 
 function LeagueStandingsRow({ member, isUser }: StandingsProps) {
-
 
   return (
     <div className="flex flex-row rounded-xl cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-800/60  p-3 items-center gap-2 justify-between" >
