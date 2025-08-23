@@ -13,7 +13,8 @@ type Props = {
 }
 
 /** Renders a list of rounds */
-export default function FantasyRoundsList({ rounds, handleCreateTeam, handleViewTeam, handlePlayerClick, refreshRounds}: Props) {
+export default function FantasyRoundsList({ rounds, handleCreateTeam, handleViewTeam, handlePlayerClick, refreshRounds }: Props) {
+
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-col items-start justify-start">

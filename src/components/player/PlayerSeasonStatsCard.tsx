@@ -5,14 +5,13 @@ import useSWR from "swr"
 import { swrFetchKeys } from "../../utils/swrKeys"
 import { djangoAthleteService } from "../../services/athletes/djangoAthletesService"
 import RoundedCard from "../shared/RoundedCard"
-import { getPlayerAggregatedStat, SportAction } from "../../types/sports_actions"
+import { getPlayerAggregatedStat } from "../../types/sports_actions"
 import SecondaryText from "../shared/SecondaryText"
 import { Activity } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { useInView } from "react-intersection-observer"
-import NoContentCard from "../shared/NoContentMessage"
 import { AnimatePresence, motion } from "framer-motion"
-import SportActionCategoryList from "../stats/SportActionCategoryList"
+import PlayerSeasonStatsTray from "../stats/PlayerSeasonStatsTray"
 
 type Props = {
   player: IProAthlete,
@@ -124,56 +123,11 @@ export default function PlayerSeasonStatsCard({ player, season, hideTitle = fals
               transition={{ duration: 0.4, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              <StatsTray player={player} stats={actions} season={season} />
+              <PlayerSeasonStatsTray player={player} stats={actions} season={season} />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
     </motion.div>
-  )
-}
-
-type StatsTrayProps = {
-  player: IProAthlete,
-  stats: SportAction[],
-  season: IProSeason
-}
-
-function StatsTray({ player, season, stats }: StatsTrayProps) {
-
-  const categories: string[] = useMemo(() => {
-    const seen: Set<string> = new Set();
-
-    stats.forEach((s) => {
-      const { definition } = s;
-      if (definition?.category && !seen.has(definition.category)) {
-        seen.add(definition.category);
-      }
-    });
-
-    return [...seen];
-  }, [stats]);
-
-  if (stats.length === 0) {
-    return (
-      <NoContentCard
-        messageClassName="w-full"
-        message={`${player.player_name}'s stats for ${season.name} are not available`}
-      />
-    )
-  }
-
-  return (
-    <div className="flex flex-col gap-2" >
-      <div  className="flex flex-col gap-2" >
-        {categories.map((c, index) => {
-          return <SportActionCategoryList 
-            categoryName={c}
-            stats={stats}
-            key={index}
-          />
-        })}
-      </div>
-    </div>
   )
 }

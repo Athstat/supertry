@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { IProAthlete } from '../../../types/athletes';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { groupSportActions } from '../../../services/athletes/athleteService';
 import { IProSeason } from '../../../types/season';
 
@@ -31,15 +31,20 @@ export default function usePlayerStats(player: IProAthlete) {
     seasons.length > 0 ? seasons[0] : undefined
   );
 
+  // Ensure currSeason is set once seasons are fetched
+  useEffect(() => {
+    if (!currSeason && seasons.length > 0) {
+      setCurrSeason(seasons[0]);
+    }
+  }, [seasons, currSeason]);
+
   const seasonPlayerStats = useMemo(() => {
-    return playerStats.filter((p) => {
-      return p.season_id === currSeason?.id
-    })
-  }, [playerStats]);
+    return playerStats.filter((p) => p.season_id === currSeason?.id);
+  }, [playerStats, currSeason]);
 
   const groupedStats = useMemo(() => {
-    return groupSportActions(seasonPlayerStats)
-  }, [seasons, playerStats]);
+    return groupSportActions(seasonPlayerStats);
+  }, [seasonPlayerStats]);
 
   const { starRatings, isLoading: loadingStarRatings, error: starRatingsErros } =
     useAthleteStarRatings(player, currSeason?.id ?? null);

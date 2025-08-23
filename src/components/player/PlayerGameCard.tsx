@@ -43,7 +43,8 @@ export function PlayerGameCard({
   return (
     <div
       className={twMerge(
-        'min-w-[170px] max-w-[170px] lg:min-w-[200px] lg:max-w-[200px] cursor-pointer max-h-[250px] ',
+        'min-w-[160px] max-w-[160px]  cursor-pointer max-h-[250px] ',
+        'lg:min-w-[200px] lg:max-w-[200px]',
         'flex items-center justify-center relative text-white dark:text-white',
         className
       )}
@@ -55,7 +56,8 @@ export function PlayerGameCard({
         <img
           src={frameSrc}
           className={twMerge(
-            'object-contain min-w-[190px] max-w-[190px] lg:min-w-[200px] lg:max-w-[200px]',
+            'object-contain min-w-[170px] max-w-[170px] ',
+            'lg:min-w-[200px] lg:max-w-[200px]',
             frameClassName
           )}
           onLoad={() => setFrameLoaded(true)}
@@ -64,6 +66,7 @@ export function PlayerGameCard({
         {/* Player Image - Positioned absolutely and centered on the card */}
         {isFrameLoaded && (
           <div className="z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            
             {!hidePrice && (
               <div className=" w-10 flex flex-row items-center justify-center h-10 absolute left-0">
                 <div className="flex flex-row items-center gap-1">
@@ -72,18 +75,26 @@ export function PlayerGameCard({
                 </div>
               </div>
             )}
-            <div className=" w-10 flex flex-row items-center justify-center h-10 absolute right-0">
+
+            <div className={twMerge(
+              " w-8 flex flex-row items-center justify-center h-10 absolute right-0",
+              'lg:w-10'
+            )}>
               {player.team?.image_url && (
-                <TeamLogo url={player.team.image_url} className="w-8 h-8" />
+                <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
               )}
             </div>
 
-            <div className="min-h-[140px] max-h-[140px] lg:min-h-[140px] lg:max-h-[140px] relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center max-w-[140px]">
+            <div className={twMerge(
+              "min-h-[100px] max-h-[100px] max-w-[100px]  relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center ",
+              'lg:min-h-[140px] lg:max-h-[140px] lg:max-w-[140px]'
+            )}>
               {!playerImageErr && (
                 <img
                   src={player.image_url}
                   className={twMerge(
-                    'min-h-[100px] max-h-[100px] min-w-[100px] max-w-[100px] lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px] object-cover object-top',
+                    'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px]  object-cover object-top',
+                    'lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px]',
                     '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
                     '[mask - repeat:no-repeat] [mask-size:100%_100%]',
                     '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
@@ -98,10 +109,10 @@ export function PlayerGameCard({
             </div>
 
             <div className="flex flex-col items-center p-1 justify-center">
-              <p className="text-xs truncate max-w-[130px]">{player.player_name}</p>
+              <p className="text-[10px] lg:text-xs truncate max-w-[100px] lg:max-w-[130px]">{player.player_name}</p>
             </div>
 
-            <div className="flex text-xs flex-row items-center justify-center gap-2">
+            <div className="flex text-[10px] lg:text-xs flex-row items-center justify-center gap-2">
               <p className="font-bold">
                 {player.power_rank_rating && Math.floor(player.power_rank_rating)}
               </p>
