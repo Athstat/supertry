@@ -13,6 +13,7 @@ import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { TeamFormation } from '../team/TeamFormation';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import { FantasyTeamAthleteCard } from '../team/FantasyTeamAthleteCard';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -395,7 +396,7 @@ export default function ViewMyTeam({
           </div>
 
           {/* Super Substitute */}
-          {Object.values(editableAthletesBySlot).some(p => p && p.slot === 6) && (
+          {leagueRound && Object.values(editableAthletesBySlot).some(p => p && p.slot === 6) && (
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
                 <span>Super Substitute</span>
@@ -408,14 +409,14 @@ export default function ViewMyTeam({
                   .filter((player): player is IFantasyTeamAthlete => Boolean(player))
                   .filter(player => player.slot === 6)
                   .map(player => (
-                    <PlayerGameCard
-                      key={player.id}
+                    <FantasyTeamAthleteCard
                       player={player}
-                      onClick={() => {
-                        setPlayerModalPlayer(player);
+                      onPlayerClick={(p) => {
+                        setPlayerModalPlayer(p);
                         setShowPlayerModal(true);
                       }}
-                      className="md:w-44 md:h-56 w-32 h-40"
+                      round={leagueRound}
+                      pointsClassName='text-black dark:text-white'
                     />
                   ))}
               </div>

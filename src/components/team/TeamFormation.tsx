@@ -4,6 +4,7 @@ import { PlayerGameCard } from '../player/PlayerGameCard';
 import RugbyPitch from '../shared/RugbyPitch';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { fantasyAthleteService } from '../../services/fantasy/fantasyAthleteService';
+import { FantasyTeamAthleteCard } from './FantasyTeamAthleteCard';
 
 interface TeamFormationProps {
   players: IFantasyTeamAthlete[];
@@ -73,46 +74,3 @@ export function TeamFormation({ players, onPlayerClick, round }: TeamFormationPr
   );
 }
 
-type TeamPlayerCardProp = {
-  player: IFantasyTeamAthlete,
-  onPlayerClick?: (player: IFantasyTeamAthlete) => void,
-  round: IFantasyLeagueRound
-}
-
-function FantasyTeamAthleteCard({ player, onPlayerClick, round }: TeamPlayerCardProp) {
-
-  const handlePlayerClick = () => {
-    if (onPlayerClick) {
-      onPlayerClick(player);
-    }
-  }
-
-  const key = `/fantasy-team/${player.team_id}/athlete-points-breakdown/${player.id}`
-  const { data: pointItems, isLoading } = useSWR(key, () => fantasyAthleteService.getRoundPointsBreakdown(
-    player.athlete_id,
-    round.start_round ?? 0,
-    round.season_id
-  ));
-
-  console.log(round);
-
-  const totalPoints = pointItems?.reduce((prev, curr) => {
-    return prev + (curr.score ?? 0);
-  }, 0) ?? 0;
-
-  return (
-    <div className='flex flex-col items-center justify-start' >
-
-      <PlayerGameCard
-        key={player.id}
-        player={player}
-        onClick={handlePlayerClick}
-        className="max-h-[230px]"
-      />
-
-      {!isLoading && <p className='text-white h-3 font-bold' >{Math.floor(totalPoints)}</p>}
-
-      {isLoading && <p className='text-white font-bold w-3 h-3 rounded-full animate-pulse bg-white/50' ></p>}
-    </div>
-  )
-}
