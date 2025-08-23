@@ -81,7 +81,7 @@ export function PlayerGameCard({
               'lg:w-10'
             )}>
               {player.team?.image_url && (
-                <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
+                <TeamLogo url={player.team.image_url} className="w-4 h-4 lg:w-8 lg:h-8" />
               )}
             </div>
 

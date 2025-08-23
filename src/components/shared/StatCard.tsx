@@ -16,10 +16,11 @@ export function StatCard({ label, value, icon, valueClassName, className }: Stat
 
   return (
     <div className={twMerge(
-      "bg-gray-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-2xl p-4 transition-all duration-300 hover:shadow-md",
+      "bg-gray-200 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-2",
       className
     )}>
-      <div className="flex items-center gap-0 mb-0">
+     
+      <div className="flex items-center gap-1 mb-0">
         {icon}
         <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
           {label}
@@ -27,7 +28,7 @@ export function StatCard({ label, value, icon, valueClassName, className }: Stat
       </div>
 
       <div className="flex items-center">
-        <div className={twMerge("text-md font-semibold dark:text-gray-100 mr-2", valueClassName)}>
+        <div className={twMerge("text-sm font-semibold dark:text-gray-100 mr-2", valueClassName)}>
           {value}
         </div>
       </div>
