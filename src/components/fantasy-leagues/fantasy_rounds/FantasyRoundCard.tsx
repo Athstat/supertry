@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { useInView } from 'react-intersection-observer';
 import { leagueService } from '../../../services/leagueService';
 import RoundedCard from '../../shared/RoundedCard';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
@@ -61,111 +61,117 @@ export default function FantasyRoundCard({
 
   const isLocked = round && isLeagueRoundLocked(round);
 
-  if (isLocked && !hasUserTeam) {
-    return <FantasyRoundLockedState
-      round={round}
-    />
-  }
-
   return (
     <div ref={ref}>
       {isLoading ? (
         <RoundedCard className="w-full bg-slate-300 h-[100px] rounded-xl border-none animate-pulse" />
       ) : (
-        <motion.div
-          ref={ref}
-          className={`w-full p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 ${hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
-            }`}
-          onClick={() => {
-            console.log('onClick called');
 
-            if (onViewTeam && userTeam) {
-              onViewTeam(userTeam, round);
-            }
-          }}
-          whileHover={
-            hasUserTeam && onViewTeam
-              ? {
-                scale: 1.02,
-                transition: { type: 'spring', stiffness: 300 },
+        <Fragment>
+
+          {(isLocked && !hasUserTeam && !isLoading) ? (
+            <FantasyRoundLockedState
+              round={round}
+            />
+          ) : (
+            <motion.div
+              ref={ref}
+              className={`w-full p-4 rounded-2xl bg-white dark:bg-gray-800/60 border border-slate-300 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-200 ${hasUserTeam && onViewTeam ? 'cursor-pointer' : ''
+                }`}
+              onClick={() => {
+                console.log('onClick called');
+
+                if (onViewTeam && userTeam) {
+                  onViewTeam(userTeam, round);
+                }
+              }}
+              whileHover={
+                hasUserTeam && onViewTeam
+                  ? {
+                    scale: 1.02,
+                    transition: { type: 'spring', stiffness: 300 },
+                  }
+                  : {}
               }
-              : {}
-          }
-        >
-          {/* Header: title left, status + chevron right */}
-          <div className="flex items-start justify-between gap-3">
-            <div className='flex flex-row items-center gap-1' >
+            >
+              {/* Header: title left, status + chevron right */}
+              <div className="flex items-start justify-between gap-3">
+                <div className='flex flex-row items-center gap-1' >
 
-              {isLocked && <Lock className='w-4 h-4' />}
-              <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {round.title}
-              </h3>
-              
-            </div>
-            <div className="flex items-center gap-2">
-              <span
-                className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${!isLocked
-                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                  }`}
-              >
-                {!isLocked ? 'Open' : 'Locked'}
-              </span>
-              <ChevronRight className="text-gray-400" />
-            </div>
-          </div>
+                  {isLocked && <Lock className='w-4 h-4' />}
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    {round.title}
+                  </h3>
 
-          {/* Points & Rank pills under title if user has a team */}
-          {hasUserTeam && (
-            <div className="mt-2 flex flex-row items-center flex-wrap gap-2">
-              <div className="text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                <Zap className="w-3.5 h-3.5" />
-                <span>Points {totalPoints.toFixed(0)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${!isLocked
+                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                      : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                      }`}
+                  >
+                    {!isLocked ? 'Open' : 'Locked'}
+                  </span>
+                  <ChevronRight className="text-gray-400" />
+                </div>
               </div>
-              <div className="text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                <Trophy className="w-3.5 h-3.5" />
-                <span>{userRank ? `Rank #${userRank}` : 'Not ranked yet'}</span>
+
+              {/* Points & Rank pills under title if user has a team */}
+              {hasUserTeam && (
+                <div className="mt-2 flex flex-row items-center flex-wrap gap-2">
+                  <div className="text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>Points {totalPoints.toFixed(0)}</span>
+                  </div>
+                  <div className="text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                    <Trophy className="w-3.5 h-3.5" />
+                    <span>{userRank ? `Rank #${userRank}` : 'Not ranked yet'}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Athletes row or Create CTA */}
+              <div className="mt-4">
+                {!isMember ? (
+                  <div className="w-full flex flex-col items-center justify-center gap-2">
+                    <span className="text-md text-gray-900 dark:text-gray-100">
+                      Join this league to create a team
+                    </span>
+                  </div>
+                ) : hasUserTeam ? (
+                  <AthletesRow
+                    athletesCount={(userTeam?.athletes || []).length}
+                    athletes={userTeam?.athletes || []}
+                    onPlayerClick={onPlayerClick}
+                  />
+                ) : round.is_open ? (
+                  <div className="w-full flex flex-col items-center justify-center gap-2">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      No team yet for this round
+                    </span>
+                    {<PrimaryButton className="px-3 py-1" onClick={onCreateTeam}>
+                      Create Team
+                    </PrimaryButton>}
+                  </div>
+                ) : (
+                  <div className="w-full flex items-center justify-center">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      No team for this round
+                    </span>
+                  </div>
+                )}
               </div>
-            </div>
+
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 border-t pt-2">
+                Total teams: {totalTeams}
+                {topTeamName ? ` • Top team: ${topTeamName}` : ''}
+              </p>
+            </motion.div>
           )}
 
-          {/* Athletes row or Create CTA */}
-          <div className="mt-4">
-            {!isMember ? (
-              <div className="w-full flex flex-col items-center justify-center gap-2">
-                <span className="text-md text-gray-900 dark:text-gray-100">
-                  Join this league to create a team
-                </span>
-              </div>
-            ) : hasUserTeam ? (
-              <AthletesRow
-                athletesCount={(userTeam?.athletes || []).length}
-                athletes={userTeam?.athletes || []}
-                onPlayerClick={onPlayerClick}
-              />
-            ) : round.is_open ? (
-              <div className="w-full flex flex-col items-center justify-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  No team yet for this round
-                </span>
-                {<PrimaryButton className="px-3 py-1" onClick={onCreateTeam}>
-                  Create Team
-                </PrimaryButton>}
-              </div>
-            ) : (
-              <div className="w-full flex items-center justify-center">
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  No team for this round
-                </span>
-              </div>
-            )}
-          </div>
+        </Fragment>
 
-          <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 border-t pt-2">
-            Total teams: {totalTeams}
-            {topTeamName ? ` • Top team: ${topTeamName}` : ''}
-          </p>
-        </motion.div>
       )}
     </div>
   );
@@ -179,7 +185,7 @@ function FantasyRoundLockedState({ round }: LockedStateProps) {
 
   // const 
 
-  const {navigate} = useTabView();
+  const { navigate } = useTabView();
 
   const handleViewStandings = () => {
     navigate('standings');
@@ -193,16 +199,16 @@ function FantasyRoundLockedState({ round }: LockedStateProps) {
           <p className='font-bold text-md' >{round.title}</p>
         </div>
 
-          <div className="flex items-center gap-2">
-            <span
-              className={twMerge(
-                'text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium',
-                'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-              )}
-            >
-              {'Locked'}
-            </span>
-          </div>
+        <div className="flex items-center gap-2">
+          <span
+            className={twMerge(
+              'text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium',
+              'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+            )}
+          >
+            {'Locked'}
+          </span>
+        </div>
       </div>
 
       <div>
