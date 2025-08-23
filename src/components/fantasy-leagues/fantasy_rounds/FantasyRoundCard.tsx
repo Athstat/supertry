@@ -61,7 +61,7 @@ export default function FantasyRoundCard({
 
   const isLocked = round && isLeagueRoundLocked(round);
 
-  if (isLocked) {
+  if (isLocked && !isMember) {
     return <FantasyRoundLockedState
       round={round}
     />
@@ -70,7 +70,7 @@ export default function FantasyRoundCard({
   return (
     <div ref={ref}>
       {isLoading ? (
-        <RoundedCard className="w-full h-[100px] rounded-xl border-none animate-pulse" />
+        <RoundedCard className="w-full bg-slate-300 h-[100px] rounded-xl border-none animate-pulse" />
       ) : (
         <motion.div
           ref={ref}
@@ -94,17 +94,22 @@ export default function FantasyRoundCard({
         >
           {/* Header: title left, status + chevron right */}
           <div className="flex items-start justify-between gap-3">
-            <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {round.title}
-            </h3>
+            <div className='flex flex-row items-center gap-1' >
+
+              {isLocked && <Lock className='w-4 h-4' />}
+              <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {round.title}
+              </h3>
+              
+            </div>
             <div className="flex items-center gap-2">
               <span
-                className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${round.is_open
+                className={`text-xs md:text-sm inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium ${!isLocked
                   ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                   : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                   }`}
               >
-                {round.is_open ? 'Open' : 'Locked'}
+                {!isLocked ? 'Open' : 'Locked'}
               </span>
               <ChevronRight className="text-gray-400" />
             </div>
