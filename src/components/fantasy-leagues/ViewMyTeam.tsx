@@ -12,7 +12,6 @@ import { fantasyTeamService } from '../../services/fantasyTeamService';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { TeamFormation } from '../team/TeamFormation';
-import { TeamPlayerCard } from '../team/TeamPlayerCard';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 
 export default function ViewMyTeam({

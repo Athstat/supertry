@@ -13,6 +13,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { twMerge } from 'tailwind-merge';
+import { useTabView } from '../../shared/tabs/TabView';
 
 type Props = {
   round: IFantasyLeagueRound;
@@ -170,8 +171,17 @@ type LockedStateProps = {
 }
 
 function FantasyRoundLockedState({ round }: LockedStateProps) {
+
+  // const 
+
+  const {navigate} = useTabView();
+
+  const handleViewStandings = () => {
+    navigate('standings');
+  }
+
   return (
-    <RoundedCard className='flex flex-col p-4 gap-2' >
+    <RoundedCard className='flex flex-col p-4 gap-4' >
       <div className='flex flex-row items-center gap-2 justify-between' >
         <div className='flex flex-row items-center gap-1' >
           <Lock className='w-4 h-4' />
@@ -194,6 +204,13 @@ function FantasyRoundLockedState({ round }: LockedStateProps) {
         <p className="text-sm text-gray-900 dark:text-gray-100">
           Whoops! You can't pick your team for <strong>{round.title}</strong>, the round has been locked!
         </p>
+      </div>
+
+      <div>
+        <PrimaryButton
+          className=''
+          onClick={handleViewStandings}
+        >View Standings</PrimaryButton>
       </div>
     </RoundedCard>
   )

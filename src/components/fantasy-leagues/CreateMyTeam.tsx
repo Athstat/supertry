@@ -17,7 +17,6 @@ import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
 import { Check, Loader } from 'lucide-react';
 import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
-import { isLeagueLocked, isLeagueRoundLocked } from '../../utils/leaguesUtils';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -45,8 +44,6 @@ export default function CreateMyTeam({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  const isLocked= leagueRound && isLeagueRoundLocked(leagueRound);
 
   const totalSpent = Object.values(selectedPlayers).reduce(
     (sum, player) => sum + (player.price || 0),
