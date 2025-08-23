@@ -14,8 +14,6 @@ import { VotingOptionBar } from '../shared/bars/VotingOptionBar';
 import { fixtureSumary } from '../../utils/fixtureUtils';
 import { useNavigate } from 'react-router-dom';
 import SecondaryText from '../shared/SecondaryText';
-import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
-import { PilledSeasonFilterBar } from '../match_center/MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
 
 export default function UpcomingFixturesSection() {
@@ -218,6 +216,9 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
 
   const { game_status } = fixtureSumary(fixture);
   const gameCompleted = game_status === 'completed';
+  const gameLive = game_status === 'in_progress';
+
+  const canVote = game_status === 'fixture';
 
   return (
     <div
@@ -229,7 +230,8 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
       }}
     >
       <div className="p-4">
-        <div className="text-center mb-3 text-sm text-slate-700 dark:text-gray-300">
+
+        <div className="text-center mb-3 flex-1 text-sm text-slate-700 dark:text-gray-300">
           {fixture.competition_name && (
             <p className="text-[10px]">
               {fixture.competition_name}, {fixture.venue}
@@ -254,7 +256,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400"></p>}
-            <SecondaryText className="">{ game_status === "in_progress" && fixture.team_score }</SecondaryText>
+            <SecondaryText className="">{game_status === "in_progress" && fixture.team_score}</SecondaryText>
           </div>
 
           {/* Match Info (centered) */}
@@ -264,14 +266,23 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
                 <p className="text-xs text-gray-700 dark:text-gray-300 text-center">
                   {format(new Date(fixture.kickoff_time), 'E, d MMM')}
                 </p>
-                {!gameCompleted && (
+                {game_status === 'fixture' && (
                   <p className="text-lg font-bold my-1 text-center text-gray-900 dark:text-white">
                     {format(new Date(fixture.kickoff_time), 'HH:mm')}
                   </p>
                 )}
-                {!gameCompleted && (
+
+                {gameLive && (
+                  <div className='flex flex-row items-center gap-1' >
+                    <div className="w-2 h-2 bg-red-500 dark:bg-red-400 rounded-full " />
+                    <span className="text-xs text-red-500 dark:text-red-400 font-bold">LIVE</span>
+                  </div>
+                )}
+
+                {game_status === 'fixture' && (
                   <p className="text-xs text-gray-600 dark:text-gray-400 text-center">vs</p>
                 )}
+
                 {gameCompleted && <SecondaryText>Final</SecondaryText>}
               </>
             )}
@@ -293,12 +304,12 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
               {fixture.opposition_team.athstat_name}
             </p>
             {!gameCompleted && <p className="text-xs text-gray-600 dark:text-gray-400"></p>}
-            <SecondaryText className="">{ game_status === "in_progress" && fixture.opposition_score}</SecondaryText>
+            <SecondaryText className="">{game_status === "in_progress" && fixture.opposition_score}</SecondaryText>
           </div>
         </div>
 
         <div className="flex space-x-2">
-          {!gameCompleted && (
+          {canVote && (
             <button
               className="flex-1  bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-600 text-white py-1.5 rounded-md text-xs font-medium transition-colors"
               onClick={handleClickPredict}
@@ -315,7 +326,7 @@ function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
           </button>
         </div>
 
-        {}
+        { }
       </div>
     </div>
   );
