@@ -1,4 +1,6 @@
+import { IProAthlete } from './athletes';
 import { IFantasyTeamAthlete } from './fantasyTeamAthlete';
+import { IProTeam } from './team';
 
 export interface ISeason {
   id: string;
@@ -52,3 +54,45 @@ export type IFantasyLeagueTeam = {
   last_name: string;
   athletes: IFantasyTeamAthlete[];
 };
+
+
+export type FantasyLeagueTeamWithAthletes = {
+  id: 1,
+  team: {
+    id: number,
+    user_id: string,
+    manager_name: string,
+    club_id: number,
+    league_id: string,
+    official_league_id: string,
+    created_at: Date,
+    updated_at: Date
+    name: string,
+    created_date: string,
+    team_value: number,
+    balance: number,
+    club: number,
+    official_league: string
+  },
+  fantasyLeague: IFantasyLeagueRound,
+  team_id: number,
+  athletes: {
+    id: number,
+    team_id: number,
+    athlete: IProAthlete,
+    purchase_date?: Date,
+    purchase_price: number,
+    is_starting: boolean,
+    slot: number,
+    score: number,
+    is_captain: boolean,
+    is_super_sub: boolean
+  }[]
+  position?: string,
+  position_change: number,
+  overall_score: number,
+  is_admin?: boolean,
+  join_date?: Date,
+  rank: number,
+  league: number
+}

@@ -8,7 +8,7 @@ import SbrMatchCenter from '../components/match_center/SbrMatchCenter';
 export default function FixturesScreen() {
 
   const fixtureOptions = ["PRO", "SBR"]
-  const [fixtureContext, setFixtureContext] = useQueryState('sc', { init: fixtureOptions[0] })
+  const [fixtureContext, setFixtureContext] = useQueryState<string | undefined>('sc', { init: fixtureOptions[0] })
 
   return (
     <PageView className="dark:text-white lg:w-[60%] p-4 md:p-6 flex flex-col gap-4">

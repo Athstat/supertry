@@ -10,7 +10,7 @@ export function Sticky({children, className} : Props) {
 
     return (
         <div className={twMerge(
-            "sticky w-full top-16 bg-white dark:bg-dark-800 z-[999]",
+            "sticky w-full top-16 bg-white dark:bg-dark-800 z-[100]",
             className
         )}>
             {children}

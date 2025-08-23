@@ -1,4 +1,4 @@
-import { IFantasyLeagueRound, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../types/leagueConfig';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { analytics } from './anayticsService';
@@ -359,5 +359,23 @@ export const leagueService = {
       console.error('Error in getAllSeasons:', error);
       return [];
     }
+  },
+
+  getUserRoundTeam: async (leagueRoundId: string | number, userId: string) : Promise<FantasyLeagueTeamWithAthletes | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-leagues/${leagueRoundId}/user-teams/${userId}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as FantasyLeagueTeamWithAthletes
+      }
+
+    } catch (err) {
+      console.log("Error fetching user's round team ", err);
+    }
+
+    return undefined;
   }
 };
