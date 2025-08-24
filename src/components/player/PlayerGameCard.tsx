@@ -7,6 +7,13 @@ import { useState } from 'react';
 import TeamJersey from './TeamJersey';
 import { CircleDollarSign } from 'lucide-react';
 import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
+import PlayerIconsRow from '../players/compare/PlayerIconsRow';
+import { getPlayerIcons, PlayerIcon } from '../../utils/playerIcons';
+import PlayerIconComponent from '../players/compare/PlayerIconComponent';
+import { swrFetchKeys } from '../../utils/swrKeys';
+import useSWR from 'swr';
+import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import { usePlayerData } from './provider/PlayerDataProvider';
 
 type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -41,7 +48,7 @@ export function PlayerGameCard({
 
   const [isFrameLoaded, setFrameLoaded] = useState(false);
 
-  console.log('frameSrc: ', frameSrc);
+  //console.log('Player: ', player);
 
   const getBorderColor = () => {
     switch (frameSrc) {
@@ -60,6 +67,46 @@ export function PlayerGameCard({
     }
   };
 
+  const { sortedSeasons, currentSeason } = usePlayerData();
+  const hasSeason = !!currentSeason;
+
+  //console.log('sortedSeasons: ', sortedSeasons);
+
+  // Pre-declare fetchers for SWR; safe because key will be null when season not ready
+  const fetchSeasonStats = () =>
+    djangoAthleteService.getAthleteSeasonStats(player.tracking_id, currentSeason!.id);
+  const fetchSeasonStars = () =>
+    djangoAthleteService.getAthleteSeasonStarRatings(player.tracking_id, currentSeason!.id);
+
+  const statsKey = hasSeason
+    ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, currentSeason!.id)
+    : null;
+  const { data: actions, isLoading: loadingStats } = useSWR(statsKey, fetchSeasonStats);
+
+  const starsKey = hasSeason
+    ? swrFetchKeys.getAthleteSeasonStars(player.tracking_id, currentSeason!.id)
+    : null;
+  const { data: starRatings, isLoading: loadingStars } = useSWR(starsKey, fetchSeasonStars);
+
+  const isLoading = !hasSeason || loadingStars || loadingStats;
+
+  // const playerIcons = hasSeason
+  //   ? getPlayerIcons(player as IProAthlete, starRatings ?? null, actions ?? [])
+  //   : [];
+
+  const icons = ['Diamond In the Ruff', 'Scrum Master', 'Rookie'];
+
+  // Function to get a random number of icons (1, 2, or 3)
+  const getRandomIconCount = () => Math.floor(Math.random() * 3) + 1;
+
+  // Function to get an array of unique random icons
+  const getRandomIcons = (count: number) => {
+    const shuffled = [...icons].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
+  const playerIcons = getRandomIcons(getRandomIconCount());
+
   return (
     <div
       className={twMerge(
@@ -71,7 +118,7 @@ export function PlayerGameCard({
       onClick={onClick}
     >
       {/* Card Container */}
-      <div className="relative">
+      <div className="relative isolate z-0">
         {/* Card */}
         <img
           src={frameSrc}
@@ -82,6 +129,18 @@ export function PlayerGameCard({
           )}
           onLoad={() => setFrameLoaded(true)}
         />
+
+        {/* Icons rail - overlay; doesn't affect layout */}
+        <div
+          className="absolute top-16 left-[5px] lg:left-[-14px] flex flex-col items-center gap-2 z-10 pointer-events-none"
+          aria-hidden="true"
+        >
+          {playerIcons.map((iconName, index) => (
+            <div key={`${iconName}-${index}`} className="pointer-events-auto drop-shadow">
+              <PlayerIconComponent iconName={iconName} size={'xs'} />
+            </div>
+          ))}
+        </div>
 
         {/* Player Image - Positioned absolutely and centered on the card */}
         {isFrameLoaded && (
@@ -96,6 +155,8 @@ export function PlayerGameCard({
                 <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
               )}
             </div>
+
+            {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
 
             <div
               className={twMerge(
