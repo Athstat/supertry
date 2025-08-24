@@ -5,15 +5,15 @@ import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
 import { useState } from 'react';
 import TeamJersey from './TeamJersey';
-import { CircleDollarSign } from 'lucide-react';
+//import { CircleDollarSign } from 'lucide-react';
 import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
-import PlayerIconsRow from '../players/compare/PlayerIconsRow';
-import { getPlayerIcons, PlayerIcon } from '../../utils/playerIcons';
+// import PlayerIconsRow from '../players/compare/PlayerIconsRow';
+//import { getPlayerIcons, PlayerIcon } from '../../utils/playerIcons';
 import PlayerIconComponent from '../players/compare/PlayerIconComponent';
-import { swrFetchKeys } from '../../utils/swrKeys';
-import useSWR from 'swr';
-import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
-import { usePlayerData } from './provider/PlayerDataProvider';
+// import { swrFetchKeys } from '../../utils/swrKeys';
+// import useSWR from 'swr';
+// import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+// import { usePlayerData } from './provider/PlayerDataProvider';
 
 type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -67,28 +67,28 @@ export function PlayerGameCard({
     }
   };
 
-  const { sortedSeasons, currentSeason } = usePlayerData();
-  const hasSeason = !!currentSeason;
+  // const { sortedSeasons, currentSeason } = usePlayerData();
+  // const hasSeason = !!currentSeason;
 
   //console.log('sortedSeasons: ', sortedSeasons);
 
   // Pre-declare fetchers for SWR; safe because key will be null when season not ready
-  const fetchSeasonStats = () =>
-    djangoAthleteService.getAthleteSeasonStats(player.tracking_id, currentSeason!.id);
-  const fetchSeasonStars = () =>
-    djangoAthleteService.getAthleteSeasonStarRatings(player.tracking_id, currentSeason!.id);
+  // const fetchSeasonStats = () =>
+  //   djangoAthleteService.getAthleteSeasonStats(player.tracking_id, currentSeason!.id);
+  // const fetchSeasonStars = () =>
+  //   djangoAthleteService.getAthleteSeasonStarRatings(player.tracking_id, currentSeason!.id);
 
-  const statsKey = hasSeason
-    ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, currentSeason!.id)
-    : null;
-  const { data: actions, isLoading: loadingStats } = useSWR(statsKey, fetchSeasonStats);
+  // const statsKey = hasSeason
+  //   ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, currentSeason!.id)
+  //   : null;
+  // const { data: actions, isLoading: loadingStats } = useSWR(statsKey, fetchSeasonStats);
 
-  const starsKey = hasSeason
-    ? swrFetchKeys.getAthleteSeasonStars(player.tracking_id, currentSeason!.id)
-    : null;
-  const { data: starRatings, isLoading: loadingStars } = useSWR(starsKey, fetchSeasonStars);
+  // const starsKey = hasSeason
+  //   ? swrFetchKeys.getAthleteSeasonStars(player.tracking_id, currentSeason!.id)
+  //   : null;
+  // const { data: starRatings, isLoading: loadingStars } = useSWR(starsKey, fetchSeasonStars);
 
-  const isLoading = !hasSeason || loadingStars || loadingStats;
+  // const isLoading = !hasSeason || loadingStars || loadingStats;
 
   // const playerIcons = hasSeason
   //   ? getPlayerIcons(player as IProAthlete, starRatings ?? null, actions ?? [])
@@ -212,7 +212,7 @@ export function PlayerGameCard({
               </div>
             </div>
 
-            <div className="flex text-[10px] lg:text-xs flex-row items-center justify-center gap-2">
+            <div className="flex text-[10px] -mt-1 lg:text-xs flex-row items-center justify-center gap-2">
               <p className="font-bold">{player.position}</p>
               <ScrummyDarkModeLogo className="w-8 h-8" />
             </div>
