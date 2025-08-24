@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { comparePlayersStatsAtom } from '../../state/comparePlayers.atoms';
 import { SportAction } from '../../types/sports_actions';
@@ -152,6 +152,36 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
   const compareStats = useAtomValue(comparePlayersStatsAtom);
 
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [isHoverable, setIsHoverable] = useState(false);
+
+  useEffect(() => {
+    const mm =
+      typeof window !== 'undefined' && 'matchMedia' in window
+        ? window.matchMedia('(hover: hover) and (pointer: fine)')
+        : null;
+    const update = () => setIsHoverable(!!mm?.matches);
+    update();
+    // Safari compatibility: addListener/removeListener fallback
+    // @ts-ignore
+    mm?.addEventListener ? mm.addEventListener('change', update) : mm?.addListener?.(update);
+    return () => {
+      // @ts-ignore
+      mm?.removeEventListener
+        ? mm.removeEventListener('change', update)
+        : mm?.removeListener?.(update);
+    };
+  }, []);
+
+  // Auto-hide tooltip on any scroll/touchmove to avoid sticky tooltips while scrolling
+  useEffect(() => {
+    const hide = () => setShowTooltip(false);
+    window.addEventListener('scroll', hide, true); // capture to catch nested scroll containers
+    window.addEventListener('touchmove', hide, { passive: true } as any);
+    return () => {
+      window.removeEventListener('scroll', hide, true);
+      window.removeEventListener('touchmove', hide as any);
+    };
+  }, []);
 
   const { coordinates, handleMouseEnter } = useHoverCoordinates(
     () => {},
@@ -215,14 +245,20 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
         ref={ref}
         onClick={toggleTooltip}
         onMouseEnter={e => {
+          if (!isHoverable) return;
           setShowTooltip(true);
           handleMouseEnter(e);
         }}
-        onMouseLeave={() => setShowTooltip(false)}
-        className={`hover:bg-slate-300/40 dark:hover:bg-slate-600 cursor-pointer px-0 py-1 rounded-xl flex flex-row items-center justify-between h-12 sm:h-12 leading-tight`}
+        onMouseLeave={() => {
+          if (!isHoverable) return;
+          setShowTooltip(false);
+        }}
+        className={`${isHoverable ? 'hover:bg-slate-300/40 dark:hover:bg-slate-600' : ''} cursor-pointer px-0 py-1 rounded-xl flex flex-row items-center justify-between h-12 sm:h-12 leading-tight`}
       >
         <div className="text-left flex-1 pr-2">
-          <SecondaryText className="whitespace-normal break-words overflow-hidden">{definition?.display_name}</SecondaryText>
+          <SecondaryText className="whitespace-normal break-words overflow-hidden">
+            {definition?.display_name}
+          </SecondaryText>
         </div>
 
         <div className="text-left flex-none">
