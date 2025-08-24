@@ -6,6 +6,7 @@ import TeamLogo from '../team/TeamLogo';
 import { useState } from 'react';
 import TeamJersey from './TeamJersey';
 import { CircleDollarSign } from 'lucide-react';
+import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 
 type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -40,6 +41,25 @@ export function PlayerGameCard({
 
   const [isFrameLoaded, setFrameLoaded] = useState(false);
 
+  console.log('frameSrc: ', frameSrc);
+
+  const getBorderColor = () => {
+    switch (frameSrc) {
+      case '/player_card_backgrounds/front-row-bg.png':
+        return 'hsl(0, 100%, 27%)';
+      case '/player_card_backgrounds/half-back-bg.png':
+        return 'hsl(39, 100%, 35%)';
+      case '/player_card_backgrounds/back-bg.png':
+        return 'hsl(148, 100%, 27%)';
+      case '/player_card_backgrounds/second-row-bg.png':
+        return 'hsl(210, 100%, 30%)';
+      case '/player_card_backgrounds/back-row-bg.png':
+        return 'hsl(181, 94%, 19%)';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div
       className={twMerge(
@@ -65,35 +85,29 @@ export function PlayerGameCard({
 
         {/* Player Image - Positioned absolutely and centered on the card */}
         {isFrameLoaded && (
-          <div className="z-30 overflow-clip absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            
-            {!hidePrice && (
-              <div className=" w-10 flex flex-row items-center justify-center h-10 absolute left-0">
-                <div className="flex flex-row items-center gap-1">
-                  <CircleDollarSign className="w-3 h-3" />
-                  <p className="text-[12px] font-bold">{player.price}</p>
-                </div>
-              </div>
-            )}
-
-            <div className={twMerge(
-              " w-8 flex flex-row items-center justify-center h-10 absolute right-0",
-              'lg:w-10'
-            )}>
+          <div className="z-30 overflow-clip absolute pt-2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div
+              className={twMerge(
+                ' w-8 flex flex-row items-center justify-center h-10 absolute top-3 right-0',
+                'lg:w-10'
+              )}
+            >
               {player.team?.image_url && (
-                <TeamLogo url={player.team.image_url} className="w-4 h-4 lg:w-8 lg:h-8" />
+                <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
               )}
             </div>
 
-            <div className={twMerge(
-              "min-h-[100px] max-h-[100px] max-w-[100px]  relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center ",
-              'lg:min-h-[140px] lg:max-h-[140px] lg:max-w-[140px]'
-            )}>
+            <div
+              className={twMerge(
+                'min-h-[100px] max-h-[100px] max-w-[100px]  relative aspect-[3/4] overflow-hidden min-w-[140px] flex flex-col items-center justify-center ',
+                'lg:min-h-[140px] lg:max-h-[140px] lg:max-w-[140px] relative'
+              )}
+            >
               {!playerImageErr && (
                 <img
                   src={player.image_url}
                   className={twMerge(
-                    'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px]  object-cover object-top',
+                    'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px]  object-cover object-top scale-150',
                     'lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px]',
                     '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
                     '[mask - repeat:no-repeat] [mask-size:100%_100%]',
@@ -106,17 +120,40 @@ export function PlayerGameCard({
               )}
 
               {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />}
+
+              <div className="flex flex-col absolute bottom-0 items-center p-1 justify-center">
+                <p className="text-[15px] lg:text-xs truncate max-w-[100px] lg:max-w-[130px]">
+                  {player.player_name}
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-col items-center p-1 justify-center">
-              <p className="text-[10px] lg:text-xs truncate max-w-[100px] lg:max-w-[130px]">{player.player_name}</p>
+            <div className="w-full flex flex-row items-center justify-center">
+              <div
+                className="w-full flex flex-row items-center justify-center "
+                style={{
+                  width: '90%',
+                  border: '1px solid ' + getBorderColor(),
+                  borderRadius: '2px',
+                }}
+              >
+                <div
+                  className="flex flex-col items-center w-full"
+                  style={{ borderRight: '1px solid ' + getBorderColor() }}
+                >
+                  <p className="text-sm font-bold">{player.price}</p>
+                  <p className="text-xs">Value</p>
+                </div>
+                <div className="flex flex-col items-center w-full">
+                  <p className="text-sm font-bold">{player.power_rank_rating}</p>
+                  <p className="text-xs">PR</p>
+                </div>
+              </div>
             </div>
 
             <div className="flex text-[10px] lg:text-xs flex-row items-center justify-center gap-2">
-              <p className="font-bold">
-                {player.power_rank_rating && Math.floor(player.power_rank_rating)}
-              </p>
-              <p>{player.position}</p>
+              <p className="font-bold">{player.position}</p>
+              <ScrummyDarkModeLogo className="w-8 h-8" />
             </div>
           </div>
         )}
