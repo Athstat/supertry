@@ -28,6 +28,9 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
     const { data: roundTeam, isLoading, error } = useSWR(fetchKey, () => leagueService.getUserRoundTeam(currentRound?.id ?? 0, member.user_id));
 
     const [selectPlayer, setSelectedPlayer] = useState<IProAthlete>();
+    const onClosePointsBreakdown = () => {
+        setSelectedPlayer(undefined);
+    }
 
     if (isLoading) {
         return <DialogModal
@@ -114,6 +117,7 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
                     athlete={selectPlayer}
                     team={roundTeam}
                     round={currentRound}
+                    onClose={onClosePointsBreakdown}
                 />
             )}
 

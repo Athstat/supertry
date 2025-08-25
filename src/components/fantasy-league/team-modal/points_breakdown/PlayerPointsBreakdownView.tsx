@@ -9,14 +9,16 @@ import { FantasyAthletePointsBreakdownItem } from "../../../../types/fantasyTeam
 import { useSportActions } from "../../../stats/SportActionsDefinitionsProvider"
 import { twMerge } from "tailwind-merge"
 import { ChevronLeft } from "lucide-react"
+import { useEffect, useRef } from "react"
 
 type Props = {
     athlete: IProAthlete,
     team: IFantasyLeagueTeam | FantasyLeagueTeamWithAthletes,
-    round: IFantasyLeagueRound
+    round: IFantasyLeagueRound,
+    onClose?: () => void
 }
 
-export default function PlayerPointsBreakdownView({ athlete, round }: Props) {
+export default function PlayerPointsBreakdownView({ athlete, round, onClose }: Props) {
 
     const { pointItems, totalPoints, isLoading } = useAthletePointsBreakdown(
         athlete,
@@ -24,12 +26,22 @@ export default function PlayerPointsBreakdownView({ athlete, round }: Props) {
         round.season_id
     );
 
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.scrollIntoView({
+                behavior: 'instant'
+            });
+        }
+    }, [athlete]);
+
     return (
-        <div className="flex flex-col gap-4" >
+        <div className="flex flex-col gap-4" ref={ref} >
             <div className="flex flex-row truncate items-center gap-2" >
 
                 <div>
-                    <button className="w-8 h-8 flex flex-col rounded-full items-center justify-center hover:bg-slate-200 hover:dark:bg-slate-700/60" >
+                    <button onClick={onClose} className="w-8 h-8 flex flex-col rounded-full items-center justify-center hover:bg-slate-200 hover:dark:bg-slate-700/60" >
                         <ChevronLeft className="w-6 h-6" />
                     </button>
                 </div>
@@ -105,7 +117,7 @@ export default function PlayerPointsBreakdownView({ athlete, round }: Props) {
                         )
                     })}
 
-                    <RoundedCard className="border-none bg-transparent dark:bg-transparent hover:bg-transparent hover:dark:bg-transparent flex py-2 px-4 flex-row items-center justify-between" >
+                    <RoundedCard className="border-none shadow-none bg-transparent dark:bg-transparent hover:bg-transparent hover:dark:bg-transparent flex py-2 px-4 flex-row items-center justify-between" >
                         <div>
                             <p className="font-bold" >
                                 Total
@@ -139,7 +151,7 @@ function PlayerPointBreakdownItem({ pointItem }: BreakdownItemProps) {
     const displayName = deff ? deff.display_name : formatPosition(pointItem.action);
 
     return (
-        <RoundedCard className="border-none flex py-2 px-4 flex-row items-center justify-between" >
+        <RoundedCard className="border-none hover:shadow-none bg-slate-100 shadow-none flex py-2 px-4 flex-row items-center justify-between" >
             <div>
                 <SecondaryText>
                     {displayName} ({pointItem.action_count})
