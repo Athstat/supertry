@@ -48,6 +48,8 @@ export const authService = {
         body: JSON.stringify({ device_id: deviceId }),
       });
 
+      console.log('Device auth response: ', res);
+
       if (res.ok) {
         const json = (await res.json()) as DjangoDeviceAuthRes;
 

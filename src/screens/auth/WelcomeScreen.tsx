@@ -17,6 +17,8 @@ export function WelcomeScreen() {
 
   const { isLoading, error, handleGuestLogin, deviceId } = useGuestLogin('/post-signup-welcome');
 
+  console.log('Device ID: ', deviceId);
+
   // Redirect to dashboard if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
@@ -173,25 +175,29 @@ export function WelcomeScreen() {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="flex flex-1 flex-col gap-4 items-center justify-center p-4 w-full"
           >
-            {deviceId && (
+            {!deviceId && (
               <PrimaryButton
                 className="w-full py-3 animate-glow"
                 onClick={handleGuestLogin}
                 isLoading={isLoading}
               >
-                Get Started!
+                Get Started!!!
               </PrimaryButton>
             )}
 
             {error && <ErrorMessage message={error} />}
 
-            {!deviceId && (
-              <PrimaryButton onClick={navigateToSignin} className="w-full py-3 animate-glow">
+            {deviceId && (
+              <PrimaryButton
+                onClick={handleGuestLogin}
+                isLoading={isLoading}
+                className="w-full py-3 animate-glow"
+              >
                 Sign In
               </PrimaryButton>
             )}
 
-            {deviceId && (
+            {!deviceId && (
               <div onClick={navigateToSignin}>
                 <SecondaryText className="underline cursor-pointer text-slate-300">
                   Already Part of The Scrum? Sign In
