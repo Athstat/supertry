@@ -1,3 +1,4 @@
+import { IProAthlete } from "../../../../types/athletes"
 import { FantasyLeagueTeamWithAthletes } from "../../../../types/fantasyLeague"
 import { formatPosition } from "../../../../utils/athleteUtils"
 import { PlayerGameCard } from "../../../player/PlayerGameCard"
@@ -6,10 +7,11 @@ import RugbyPitch from "../../../shared/RugbyPitch"
 import SecondaryText from "../../../shared/SecondaryText"
 
 type TeamAthletesViewProps = {
-    roundTeam: FantasyLeagueTeamWithAthletes
+    roundTeam: FantasyLeagueTeamWithAthletes,
+    onClickPlayer?: (player: IProAthlete) => void
 }
 
-export function TeamAthletesGridView({ roundTeam }: TeamAthletesViewProps) {
+export function TeamAthletesGridView({ roundTeam, onClickPlayer }: TeamAthletesViewProps) {
     return (
         <div className="bg-green-600 overflow-clip min-h-[920px] max-h-[920px] relative rounded-xl" >
             <RugbyPitch count={6} />
@@ -17,10 +19,18 @@ export function TeamAthletesGridView({ roundTeam }: TeamAthletesViewProps) {
             <div className="flex flex-row  min-h-[920px] max-h-[920px] items-center justify-center flex-wrap absolute top-0 left-0" >
 
                 {roundTeam?.athletes?.map((a) => {
+
+                    const handleClick = () => {
+                        if (onClickPlayer) {
+                            onClickPlayer(a.athlete);
+                        }
+                    }
+
                     return (
                         <div className="flex flex-col gap-2 items-center justify-center" >
                             <PlayerGameCard
                                 player={a.athlete}
+                                onClick={handleClick}
                             />
 
                             <p className="font-bold text-white" >{Math.floor(a.score ?? 0)}</p>

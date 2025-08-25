@@ -1,22 +1,30 @@
+import { IProAthlete } from '../../../../types/athletes'
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../../types/fantasyLeague'
 import { StatCard } from '../../../shared/StatCard'
 import { TeamAthletesGridView } from './TeamAthletesGridView'
 
 type Props = {
     roundTeam: FantasyLeagueTeamWithAthletes,
-    currentRound: IFantasyLeagueRound
+    currentRound: IFantasyLeagueRound,
+    onSelectPlayer?: (player: IProAthlete) => void
 }
 
 /** Render team overview view */
-export default function TeamOverviewView({ roundTeam, currentRound }: Props) {
+export default function TeamOverviewView({ roundTeam, currentRound, onSelectPlayer }: Props) {
 
     const overallScore = roundTeam ? roundTeam?.overall_score : 0;
     const teamValue = roundTeam ? roundTeam?.athletes?.reduce((sum, a) => {
         return sum + (a.purchase_price ?? 0);
     }, 0) : 0;
 
+    const handleClickPlayer = (player: IProAthlete) => {
+        if (onSelectPlayer) {
+            onSelectPlayer(player);
+        }
+    }
+
     return (
-        <div>
+        <div className='flex flex-col gap-4' >
             <div className="grid grid-cols-2 gap-2" >
 
                 <StatCard
@@ -49,6 +57,7 @@ export default function TeamOverviewView({ roundTeam, currentRound }: Props) {
 
             {roundTeam && <TeamAthletesGridView
                 roundTeam={roundTeam}
+                onClickPlayer={handleClickPlayer}
             />}
         </div>
     )

@@ -5,15 +5,12 @@ import { isLeagueRoundLocked } from "../../../utils/leaguesUtils"
 import DialogModal from "../../shared/DialogModal"
 import { leagueService } from "../../../services/leagueService"
 import { StatCard } from "../../shared/StatCard"
-import { PlayerGameCard } from "../../player/PlayerGameCard"
-import RugbyPitch from "../../shared/RugbyPitch"
-import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague"
-import PlayerMugshot from "../../shared/PlayerMugshot"
-import { formatPosition } from "../../../utils/athleteUtils"
-import SecondaryText from "../../shared/SecondaryText"
 import RoundedCard from "../../shared/RoundedCard"
 import NoContentCard from "../../shared/NoContentMessage"
-import { TeamAthletesGridView } from "./team_overview/TeamAthletesGridView"
+import TeamOverviewView from "./team_overview/TeamOverviewView"
+import PlayerPointsBreakdownView from "./points_breakdown/PlayerPointsBreakdownView"
+import { useState } from "react"
+import { IProAthlete } from "../../../types/athletes"
 
 type Props = {
     isOpen?: boolean,
@@ -29,6 +26,8 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
 
     const fetchKey = canPeek ? `/fantasy-league-rounds/${currentRound.id}/user-teams/${member.user_id}` : null;
     const { data: roundTeam, isLoading, error } = useSWR(fetchKey, () => leagueService.getUserRoundTeam(currentRound?.id ?? 0, member.user_id));
+
+    const [selectPlayer, setSelectedPlayer] = useState<IProAthlete>();
 
     if (isLoading) {
         return <DialogModal
@@ -93,61 +92,30 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
         )
     }
 
-    const overallScore = roundTeam ? roundTeam?.overall_score : 0;
-    const teamValue = roundTeam ? roundTeam?.athletes?.reduce((sum, a) => {
-        return sum + (a.purchase_price ?? 0);
-    }, 0) : 0;
-
     return (
         <DialogModal
             open={isOpen}
             onClose={onClose}
             key={member.user_id}
             title={`${member.user.username || member.user.first_name} - ${currentRound?.title}`}
-            className="gap-4 flex flex-col p-0 no-scrollbar"
+            className="gap-4 flex flex-col p-0 no-scrollbar min-h-[90vh]"
             outerCon="p-4 lg:p-8 no-scrollbar"
             hw="lg:w-[40%] no-scrollbar"
         >
 
-            <div className="grid grid-cols-2 gap-2" >
-
-                <StatCard
-                    label="Round"
-                    value={currentRound?.title}
-                // icon={<Trophy className="w-4 h-4" />}
-                />
-
-                <StatCard
-                    label="Rank"
-                    value={roundTeam?.rank}
-                // icon={<ChartBarIncreasing className="w-4 h-4" />}
-                />
-
-                <StatCard
-                    label="Points"
-                    value={overallScore ? Math.floor(overallScore) : 0}
-                />
-
-                <StatCard
-                    label="Team Value"
-                    value={teamValue ? Math.floor(teamValue) : 0}
-                // icon={<CircleDollarSignIcon className="w-4 h-4" />}
-                />
-            </div>
-
-            {/* <TeamFormation 
-                players={}
-            /> */}
-
-            {roundTeam && <TeamAthletesGridView
+            {currentRound && !selectPlayer && <TeamOverviewView 
                 roundTeam={roundTeam}
+                currentRound={currentRound}
+                onSelectPlayer={setSelectedPlayer}
             />}
 
-
-            {/* {roundTeam && <TeamAthletesListView
-                roundTeam={roundTeam}
-            />} */}
-
+            {( selectPlayer && currentRound &&
+                <PlayerPointsBreakdownView 
+                    athlete={selectPlayer}
+                    team={roundTeam}
+                    round={currentRound}
+                />
+            )}
 
         </DialogModal>
     )
