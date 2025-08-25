@@ -13,7 +13,7 @@ import { formatPosition } from "../../../utils/athleteUtils"
 import SecondaryText from "../../shared/SecondaryText"
 import RoundedCard from "../../shared/RoundedCard"
 import NoContentCard from "../../shared/NoContentMessage"
-import { TeamAthletesGridView } from "./views/TeamAthletesGridView"
+import { TeamAthletesGridView } from "./team_overview/TeamAthletesGridView"
 
 type Props = {
     isOpen?: boolean,
