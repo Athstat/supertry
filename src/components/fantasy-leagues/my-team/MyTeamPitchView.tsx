@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { FantasyTeamAthleteCard } from '../../team/FantasyTeamAthleteCard';
 import { TeamFormation } from '../../team/TeamFormation';
+import { PlayerActionModal } from '../../team/PlayerActionModal';
+import PlayerProfileModal from '../../player/PlayerProfileModal';
+import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal';
 
 type Props = {
     leagueRound: IFantasyLeagueRound,
-    editableAthletesBySlot: Record<number, IFantasyTeamAthlete | undefined>
+    editableAthletesBySlot: Record<number, IFantasyTeamAthlete | undefined>,
+    team: IFantasyLeagueTeam
 }
 
 /** Renders my team pitch view */
-export default function MyTeamPitchView({ leagueRound, editableAthletesBySlot }: Props) {
+export default function MyTeamPitchView({ leagueRound, editableAthletesBySlot, team }: Props) {
 
     const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
@@ -20,6 +24,35 @@ export default function MyTeamPitchView({ leagueRound, editableAthletesBySlot }:
 
     const handlePlayerClick = (player: IFantasyTeamAthlete) => {
         setSelectedPlayer(player);
+        setShowActionModal(true);
+    }
+
+    const handleCloseActionModal = () => {
+        setShowActionModal(false);
+        setSelectedPlayer(undefined);
+    }
+
+    const handleViewProfile = () => {
+        setShowActionModal(false);
+        setShowPointsModal(false);
+
+        setShowProfileModal(true);
+    }
+
+    const handleViewPointsBreakdown = () => {
+        setShowActionModal(false);
+        setShowProfileModal(false);
+
+        setShowPointsModal(true);
+    }
+
+    const handleCloseProfileModal = () => {
+        setShowProfileModal(false);
+        setShowActionModal(true);
+    }
+
+    const handleClosePointsModal = () => {
+        setShowPointsModal(false);
         setShowActionModal(true);
     }
 
@@ -69,6 +102,34 @@ export default function MyTeamPitchView({ leagueRound, editableAthletesBySlot }:
                     </div>
                 </div>
             )}
+
+            {selectedPlayer && showActionModal && <PlayerActionModal
+                player={selectedPlayer}
+                onViewPointsBreakdown={handleViewPointsBreakdown}
+                onClose={handleCloseActionModal}
+                onViewProfile={handleViewProfile}
+            />}
+
+            {selectedPlayer && showProfileModal && (
+                <PlayerProfileModal
+                    player={selectedPlayer}
+                    isOpen={showProfileModal}
+                    onClose={handleCloseProfileModal}
+                />
+            )
+            }
+
+            {selectedPlayer && showPointsModal && (
+                <PointsBreakdownModal
+                    isOpen={showPointsModal}
+                    athlete={selectedPlayer}
+                    team={team}
+                    round={leagueRound}
+                    onClose={handleClosePointsModal}
+                />
+            )
+
+            }
         </div>
     )
 }

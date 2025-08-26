@@ -129,6 +129,7 @@ export default function ViewMyTeam({
           {leagueRound && <MyTeamPitchView
             editableAthletesBySlot={editableAthletesBySlot}
             leagueRound={leagueRound}
+            team={team}
           />}
         </Fragment>
       )}

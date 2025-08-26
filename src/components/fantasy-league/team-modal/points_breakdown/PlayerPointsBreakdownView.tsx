@@ -5,14 +5,15 @@ import PlayerMugshot from "../../../shared/PlayerMugshot"
 import SecondaryText from "../../../shared/SecondaryText"
 import { useAthletePointsBreakdown } from "../../../../hooks/fantasy/useAthletePointsBreakdown"
 import RoundedCard from "../../../shared/RoundedCard"
-import { FantasyAthletePointsBreakdownItem } from "../../../../types/fantasyTeamAthlete"
+import { FantasyAthletePointsBreakdownItem, IFantasyTeamAthlete } from "../../../../types/fantasyTeamAthlete"
 import { useSportActions } from "../../../stats/SportActionsDefinitionsProvider"
 import { twMerge } from "tailwind-merge"
 import { ChevronLeft } from "lucide-react"
 import { useEffect, useRef } from "react"
+import NoContentCard from "../../../shared/NoContentMessage"
 
 type Props = {
-    athlete: IProAthlete,
+    athlete: IProAthlete | IFantasyTeamAthlete,
     team: IFantasyLeagueTeam | FantasyLeagueTeamWithAthletes,
     round: IFantasyLeagueRound,
     onClose?: () => void
@@ -40,11 +41,11 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
         <div className="flex flex-col gap-4" ref={ref} >
             <div className="flex flex-row truncate items-center gap-2" >
 
-                <div>
+                {onClose && <div>
                     <button onClick={onClose} className="w-8 h-8 flex flex-col rounded-full items-center justify-center hover:bg-slate-200 hover:dark:bg-slate-700/60" >
                         <ChevronLeft className="w-6 h-6" />
                     </button>
-                </div>
+                </div>}
 
                 <PlayerMugshot
                     playerPr={athlete.power_rank_rating}
@@ -106,7 +107,7 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
             )}
 
 
-            {!isLoading && pointItems && (
+            {!isLoading && pointItems !== undefined && (
                 <div className="flex flex-col gap-2" >
                     {pointItems.map((p, index) => {
                         return (
@@ -116,6 +117,12 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
                             />
                         )
                     })}
+
+                    {pointItems.length === 0 && (
+                        <NoContentCard 
+                            message={`${athlete.player_name} has not scored points in ${round.title} yet`}
+                        />
+                    )}
 
                     <RoundedCard className="border-none shadow-none bg-transparent dark:bg-transparent hover:bg-transparent hover:dark:bg-transparent flex py-2 px-4 flex-row items-center justify-between" >
                         <div>
