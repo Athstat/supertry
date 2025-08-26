@@ -10,14 +10,15 @@ import { ErrorMessage } from '../../components/ui/ErrorState';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
 import { FEATURED_PLAYER_IDS } from '../../components/onboarding/OnboardingDataProvider';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import { useDeviceId } from '../../hooks/useDeviceId';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  const { isLoading, error, handleGuestLogin, deviceId } = useGuestLogin('/post-signup-welcome');
+  const { isLoading, error, handleGuestLogin } = useGuestLogin('/post-signup-welcome');
 
-  console.log('Device ID: ', deviceId);
+  const { deviceId } = useDeviceId();
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -136,6 +137,10 @@ export function WelcomeScreen() {
 
   const navigateToSignin = () => {
     navigate('/signin');
+  };
+
+  const logSomething = () => {
+    console.log('Something');
   };
 
   return (

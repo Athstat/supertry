@@ -110,80 +110,47 @@ function normalizeDeviceIdStrict(id: string): string {
 }
 
 /**
- * Get the device ID from the native bridge with strict requirements.
- * Throws DeviceIdUnavailableError on any failure. Never generates a UUID here.
- */
-async function getMobileDeviceIdStrict(): Promise<string> {
-  console.log('[getDeviceId] Mobile environment detected; resolving device ID via bridge');
-
-  await waitForBridgeOrTimeout(10000);
-
-  const bridge = getBridge();
-
-  if (!bridge || typeof bridge.getDeviceId !== 'function') {
-    throw new DeviceIdUnavailableError('Bridge.getDeviceId not available');
-  }
-
-  try {
-    const deviceIdPromise: Promise<string> = Promise.resolve(bridge.getDeviceId());
-    const timeoutPromise = new Promise<string>((_, reject) => {
-      setTimeout(() => {
-        reject(new DeviceIdUnavailableError('Device ID request timeout after 5 seconds'));
-      }, 5000);
-    });
-
-    const rawId = await Promise.race([deviceIdPromise, timeoutPromise]);
-    const normalized = normalizeDeviceIdStrict(rawId);
-    console.log('[getDeviceId] Obtained device ID from bridge', normalized);
-    return normalized;
-  } catch (err) {
-    if (err instanceof DeviceIdUnavailableError) {
-      throw err;
-    }
-    console.error('[getDeviceId] Error retrieving device ID from bridge:', err);
-    throw new DeviceIdUnavailableError('Bridge getDeviceId failed');
-  }
-}
-
-/**
  * Get the device ID - either from mobile app (strict) or generate/retrieve for web
  * @returns Promise<string> The device ID
  */
 export async function getDeviceId(): Promise<string> {
   // Mobile: must return native device ID or throw. No UUID fallback.
   if (isMobileApp()) {
-    return getMobileDeviceIdStrict();
+    console.log('Mobile environment detected; resolving device ID via bridge');
+
+    const mobileDeviceId = window.deviceId;
+    console.log('Mobile device ID: ', mobileDeviceId);
+
+    if (!mobileDeviceId) {
+      throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
+    }
+    return mobileDeviceId;
   }
 
-  // Web browser: use localStorage (unchanged behavior)
-  let deviceId = localStorage.getItem('device_id');
+  console.log('Web environment detected; resolving device ID from localStorage');
 
-  if (!deviceId) {
+  // Web browser: use localStorage
+  let webDeviceId = localStorage.getItem('device_id');
+
+  if (!webDeviceId) {
     // Generate a new device ID
     if (
       typeof crypto !== 'undefined' &&
       (crypto as Crypto & { randomUUID?: () => string }).randomUUID
     ) {
-      deviceId = (crypto as Crypto & { randomUUID: () => string }).randomUUID();
+      webDeviceId = (crypto as Crypto & { randomUUID: () => string }).randomUUID();
     } else {
       // Fallback for older browsers
-      deviceId = `web_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+      webDeviceId = `web_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
     }
 
-    // Format and store the device ID
-    deviceId = formatDeviceId(deviceId);
-    localStorage.setItem('device_id', deviceId);
-    console.log('[getDeviceId] Generated new device ID for web');
-  } else {
-    // Format the existing device ID just to be safe
-    const formattedId = formatDeviceId(deviceId);
-    if (formattedId !== deviceId) {
-      localStorage.setItem('device_id', formattedId);
-      deviceId = formattedId;
-    }
+    localStorage.setItem('device_id', webDeviceId);
+    console.log('New device ID for web: ', webDeviceId);
   }
 
-  return deviceId;
+  console.log('deviceId exists in local storage: ', webDeviceId);
+
+  return webDeviceId;
 }
 
 /**
@@ -204,11 +171,6 @@ export function formatDeviceId(id: string): string {
 
   // Limit length to avoid issues
   formatted = formatted.substring(0, 64);
-
-  // If the formatting removed too much, use a fallback
-  if (formatted.length < 8) {
-    formatted = 'device_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
-  }
 
   return formatted;
 }
