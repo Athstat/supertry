@@ -4,9 +4,6 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import DialogModal from "../shared/DialogModal";
 import PlayerMugshot from "../shared/PlayerMugshot";
-import useSWR from "swr";
-import { swrFetchKeys } from "../../utils/swrKeys";
-import { djangoAthleteService } from "../../services/athletes/djangoAthletesService";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -23,9 +20,10 @@ export function PlayerActionModal({
   onViewPointsBreakdown
 }: PlayerActionModalProps) {
 
-  const key = swrFetchKeys.getAthleteById(player.tracking_id);
-  const { data: info, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteById(player.tracking_id));
+  // const key = swrFetchKeys.getAthleteById(player.tracking_id);
+  // const { data: info, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteById(player.tracking_id));
 
+  const isLoading = false;
   const isSub = !player.is_starting;
 
   return (
