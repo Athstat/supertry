@@ -10,6 +10,7 @@ import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 // import PlayerIconsRow from '../players/compare/PlayerIconsRow';
 //import { getPlayerIcons, PlayerIcon } from '../../utils/playerIcons';
 import PlayerIconComponent from '../players/compare/PlayerIconComponent';
+import Experimental from '../shared/ab_testing/Experimental';
 // import { swrFetchKeys } from '../../utils/swrKeys';
 // import useSWR from 'swr';
 // import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
@@ -135,11 +136,13 @@ export function PlayerGameCard({
           className="absolute top-16 left-[5px] lg:left-[-14px] flex flex-col items-center gap-2 z-10 pointer-events-none"
           aria-hidden="true"
         >
-          {playerIcons.map((iconName, index) => (
-            <div key={`${iconName}-${index}`} className="pointer-events-auto drop-shadow">
-              <PlayerIconComponent iconName={iconName} size={'xs'} />
-            </div>
-          ))}
+          <Experimental>
+            {playerIcons.map((iconName, index) => (
+              <div key={`${iconName}-${index}`} className="pointer-events-auto drop-shadow">
+                <PlayerIconComponent iconName={iconName} size={'xs'} />
+              </div>
+            ))}
+          </Experimental>
         </div>
 
         {/* Player Image - Positioned absolutely and centered on the card */}
@@ -202,11 +205,11 @@ export function PlayerGameCard({
                   className="flex flex-col items-center w-full"
                   style={{ borderRight: '1px solid ' + getBorderColor() }}
                 >
-                  <p className="text-sm font-bold">{player.price}</p>
+                  <p className="text-xs font-bold">{player.price}</p>
                   <p className="text-xs">Value</p>
                 </div>
                 <div className="flex flex-col items-center w-full">
-                  <p className="text-sm font-bold">{player.power_rank_rating}</p>
+                  <p className="text-xs font-bold">{player.power_rank_rating}</p>
                   <p className="text-xs">PR</p>
                 </div>
               </div>

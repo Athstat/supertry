@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import CreateMyTeam from './CreateMyTeam';
-import ViewMyTeam from './ViewMyTeam';
+import ViewMyTeam from './my-team/ViewMyTeam';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
