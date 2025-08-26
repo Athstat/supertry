@@ -30,7 +30,7 @@ export function PlayerActionModal({
     <DialogModal
       open={true}
       title={player.player_name}
-      hw={"max-w-[80%] min-w-[80%] lg:max-w-[50%] lg:min-w-[50%]"}
+      hw={"max-w-[95%] min-w-[95%] lg:max-w-[50%] lg:min-w-[50%]"}
       onClose={onClose}
     >
 
@@ -94,10 +94,10 @@ export function PlayerActionModal({
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-2">
           <button
             onClick={() => onViewPointsBreakdown(player)}
-            className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/30 dark:hover:bg-dark-700/60 transition-colors text-gray-800 dark:text-gray-200"
+            className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-slate-200 hover:bg-gray-100 dark:bg-slate-700/30 dark:hover:bg-dark-700/60 transition-colors text-gray-800 dark:text-gray-200"
           >
             {/* <Trophy
               size={24}
@@ -108,7 +108,7 @@ export function PlayerActionModal({
 
           {<button
             onClick={() => onViewProfile(player)}
-            className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/30 dark:hover:bg-dark-700/60 transition-colors text-gray-800 dark:text-gray-200"
+            className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-slate-200 hover:bg-gray-100 dark:bg-slate-700/30 dark:hover:bg-dark-700/60 transition-colors text-gray-800 dark:text-gray-200"
           >
             {/* <Users
               size={24}
