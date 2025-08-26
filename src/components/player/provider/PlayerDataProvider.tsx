@@ -8,10 +8,11 @@ import useSWR from 'swr'
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService'
 import DialogModal from '../../shared/DialogModal'
 import RoundedCard from '../../shared/RoundedCard'
+import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete'
 
 type Props = {
     children?: ReactNode,
-    player: IProAthlete
+    player: IProAthlete | IFantasyTeamAthlete
 }
 
 /** Provides a players data and stats down to child components */
@@ -40,12 +41,16 @@ function ProviderInner({ children, player }: Props) {
     const setSeasons = useSetAtom(playerSeasonsAtom);
 
     const seasonFetchKey = swrFetchKeys.getAthleteSeasons(player.tracking_id);
-    const { data: seasons, isLoading } = useSWR(seasonFetchKey, () => djangoAthleteService.getAthleteSeasons(player.tracking_id));
+    const { data: seasons, isLoading: loadingSeasons } = useSWR(seasonFetchKey, () => djangoAthleteService.getAthleteSeasons(player.tracking_id));
 
+    const playerKey = swrFetchKeys.getAthleteById(player.tracking_id);
+    const {data: fetchedPlayer, isLoading: loadingPlayer} = useSWR(playerKey, () => djangoAthleteService.getAthleteById(player.tracking_id))
+
+    const isLoading = loadingPlayer || loadingSeasons;
 
     useEffect(() => {
 
-        if (player) setPlayer(player);
+        if (fetchedPlayer) setPlayer(fetchedPlayer);
         if (seasons) setSeasons(seasons);
 
     }, [player, seasons]);

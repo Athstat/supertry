@@ -1,4 +1,3 @@
-import { IProAthlete } from '../../../types/athletes';
 import { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
@@ -6,13 +5,15 @@ import PowerRankingTab from './tabs/PowerRankingTab';
 import PowerRankingChartTab from './tabs/PRChartTab';
 import PilledTabView from '../../shared/tabs/PilledTabView';
 import PlayerStatsTab from './tabs/PlayerStatsTab';
+import { usePlayerData } from '../provider/PlayerDataProvider';
 
 
 type Props = {
-  player: IProAthlete;
 }
 
-export function PlayerProfileModalTabContent({ player }: Props) {
+export function PlayerProfileModalTabContent({}: Props) {
+
+  const {player} = usePlayerData();
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -30,6 +31,8 @@ export function PlayerProfileModalTabContent({ player }: Props) {
       tabKey: "power-ranking"
     }
   ]
+
+  if (!player) return;
 
   return (
     <div className=''>
