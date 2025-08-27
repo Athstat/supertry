@@ -119,5 +119,17 @@ export const swrFetchKeys = {
 
     getSportActionsDefinitions: () => {
         return '/sport-actions-definitions';
+    },
+
+    getAthleteById: (id: string) => {
+        return `/athletes/${id}`;
+    },
+
+    getUserFantasyLeagueRoundTeam: (leagueId: string, roundId: string| number, userId: string) => {
+        return `/fantasy-league-groups/${leagueId}/round/${roundId}/user/${userId}`;
+    },
+
+    getFantasyLeagueGroupStandings: (leagueGroupId: string) => {
+        return `/fantasy-league-group/${leagueGroupId}/standings`;
     }
 }

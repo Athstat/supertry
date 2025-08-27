@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { CardTier } from '../../types/cardTiers';
 import ScrummyLogo from '../branding/scrummy_logo';
+import TeamJersey from '../player/TeamJersey';
 
 type Props = {
   url?: string;
@@ -22,33 +23,14 @@ export default function PlayerMugshot({
   teamId,
   isCaptain = false,
 }: Props) {
-  const imageUrl = url;
+
   const teamFallbackUrl = teamId
     ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${teamId}-ph-removebg-preview.png`
     : null;
   // Start with main URL; if absent, try team fallback; if that fails, show ScrummyLogo
-  const [src, setSrc] = useState<string | null>(imageUrl ?? teamFallbackUrl);
+  const [error, setError] = useState(false);
+  const src = url;
 
-  // Keep src in sync when url or teamId changes
-  useEffect(() => {
-    setSrc(imageUrl ?? teamFallbackUrl ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageUrl, teamFallbackUrl]);
-
-  const handleError = () => {
-    // If primary fails, try team fallback (if available). If that also fails, show ScrummyLogo
-    if (src && imageUrl && src === imageUrl) {
-      if (teamFallbackUrl) {
-        setSrc(teamFallbackUrl);
-      } else {
-        setSrc(null);
-      }
-    } else if (src && teamFallbackUrl && src === teamFallbackUrl) {
-      setSrc(null);
-    } else {
-      setSrc(null);
-    }
-  };
 
   const pr = playerPr ?? 0;
   const cardTier: CardTier =
@@ -79,8 +61,7 @@ export default function PlayerMugshot({
       >
         <img
           src={src}
-          alt={alt ?? 'team_logo'}
-          onError={handleError}
+          alt={''}
           className="w-full h-full object-contain"
         />
       </div>
@@ -95,28 +76,37 @@ export default function PlayerMugshot({
           ? 'border-yellow-500 border-2 shadow-[0_0_8px_rgba(245,158,11,0.8)]'
           : 'border-slate-400 dark:border-slate-800',
         cardTier === 'gold' &&
-          showPrBackground &&
-          'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
+        showPrBackground &&
+        'bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 ',
         cardTier === 'silver' &&
-          showPrBackground &&
-          'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
+        showPrBackground &&
+        'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600',
         cardTier === 'bronze' &&
-          showPrBackground &&
-          'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
+        showPrBackground &&
+        'bg-gradient-to-br from-amber-600 via-amber-800 to-amber-900 text-white',
         cardTier === 'blue' &&
-          showPrBackground &&
-          'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
+        showPrBackground &&
+        'bg-gradient-to-br from-purple-600 via-blue-800 to-purple-900 text-white',
         'hover:bg-gradient-to-br hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 hover:text-white',
         'transition-all delay-100',
         className
       )}
     >
-      <img
+      {!error && <img
         src={src}
-        alt={alt ?? 'team_logo'}
-        onError={handleError}
+        alt={''}
+        onError={() => setError(true)}
         className="w-full h-full object-contain"
-      />
+      />}
+
+      {error && (
+        <TeamJersey
+          teamId={teamId}
+          className={twMerge(
+            'w-full h-full object-contain',
+          )}
+        />
+      )}
     </div>
   );
 }

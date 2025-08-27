@@ -1,3 +1,4 @@
+import { Gender } from "./athletes";
 import { IProTeam } from "./team";
 
 export type IFantasyTeamAthlete = {
@@ -23,7 +24,7 @@ export type IFantasyTeamAthlete = {
   height?: number,
   weight?: number,
   hidden?: boolean,
-  gender?: "M" | "F",
+  gender?: Gender,
   price?: number,
   power_rank_rating?: number,
   region?: string,

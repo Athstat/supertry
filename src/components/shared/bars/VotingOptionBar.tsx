@@ -131,7 +131,7 @@ export function VotingOptionsResults({hasScores, votedAwayTeam, votedHomeTeam, a
                 <p className="text-[8px] lg:text-xs mt-1">
                     {homeTeamWon ? `${homeTeam} won ${homeScore}-${awayScore}` :
                         awayTeamWon ? `${awayTeam} won ${awayScore}-${homeScore}` :
-                            `Match drawn ${hasScores}-${awayScore}`}
+                            `Match drawn ${homeScore}-${awayScore}`}
                 </p>
             )}
         </div>
