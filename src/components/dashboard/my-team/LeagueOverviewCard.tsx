@@ -103,12 +103,12 @@ function Content({ league }: Props) {
             >
                 <div className='flex flex-row items-center justify-between' >
                     <div className='flex flex-row items-center gap-2' >
-                        <Trophy className='w-6 h-6' />
-                        <p className='font-bold text-lg' >{league.title}</p>
+                        {/* <Trophy className='w-6 h-6' /> */}
+                        <p className='font-bold ' >{league.title}</p>
                     </div>
                 </div>
 
-                <div className='flex font-semibold flex-row items-center gap-2' >
+                <div className='flex text-xs font-semibold flex-row items-center gap-2' >
                     {currentRound && <p className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
                         <p className='' >{currentRound.title}</p>
                     </p>}
