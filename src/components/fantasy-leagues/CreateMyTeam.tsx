@@ -17,6 +17,8 @@ import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
 import { Check, Info, Loader } from 'lucide-react';
 import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
+import { useAtomValue } from 'jotai';
+import { isGuestUserAtom } from '../../state/authUser.atoms';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -71,6 +73,8 @@ export default function CreateMyTeam({
   const { leagueId } = useParams();
 
   const navigate = useNavigate();
+
+  const isGuestAccount = useAtomValue(isGuestUserAtom);
 
   console.log('leagueRound: ', leagueRound);
 
@@ -428,7 +432,11 @@ export default function CreateMyTeam({
                 className="w-full"
                 onClick={() => {
                   setShowSuccessModal(false);
-                  setShowClaimAccountModal(true);
+                  if (isGuestAccount) {
+                    setShowClaimAccountModal(true);
+                  } else if (onViewTeam) {
+                    onViewTeam();
+                  }
                 }}
               >
                 Let's Go!
@@ -455,7 +463,7 @@ export default function CreateMyTeam({
                   className="w-full rounded-lg py-2"
                   onClick={() => {
                     setShowClaimAccountModal(false);
-                    navigate('/complete-profile');
+                    navigate('/profile');
                   }}
                 >
                   Go to Profile

@@ -53,6 +53,8 @@ export const authService = {
       if (res.ok) {
         const json = (await res.json()) as DjangoDeviceAuthRes;
 
+        console.log('Device auth json response: ', json);
+
         authTokenService.saveGuesAccountTokens(json.token, json.user);
         return { data: json };
       }
