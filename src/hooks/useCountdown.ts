@@ -17,7 +17,7 @@ export function useCountdown(startMillis: number) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [timeLeft, startMillis]);
 
   const days = Math.floor(timeLeft / (60 * 60 * 24));
   const hours = Math.floor((timeLeft % (60 * 60 * 24)) / (60 * 60));

@@ -156,7 +156,7 @@ export default function UpcomingFixturesSection() {
       /> */}
 
       {upcomingFixtures.length > 0 ? (
-        <div className="flex space-x-4 overflow-x-auto pb-2">
+        <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-2">
           {upcomingFixtures.map(fixture => {
             return (
               <UpcomingFixtureCard

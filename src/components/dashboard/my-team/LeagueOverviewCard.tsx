@@ -245,7 +245,8 @@ function TeamOverview({ team }: OverviewProps) {
             <div className='flex  flex-row items-center justify-between' >
 
                 <div className='flex flex-row items-center gap-2' >
-                    <Shield className='w-4 h-4' />
+                    {!isLocked && <Shield className='w-4 h-4' />}
+                    {isLocked && <Lock className='w-4 h-4' />}
                     <p className='font-bold' >My Team</p>
                 </div>
 
