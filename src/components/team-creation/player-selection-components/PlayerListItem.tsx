@@ -42,6 +42,8 @@ export default function PlayerListItem({
     }
   };
 
+  if (!((player.power_rank_rating ?? 0) > 0) || !((player.price ?? 0) > 0)) return;
+
   return (
     <>
       <div
