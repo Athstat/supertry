@@ -21,7 +21,6 @@ import PlayerMugshot from '../../shared/PlayerMugshot'
 import { IProAthlete } from '../../../types/athletes'
 import { twMerge } from 'tailwind-merge'
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal'
-import JoinLeagueDeadlineCountdown from '../../fantasy-leagues/JoinLeagueDeadlineContdown'
 import { useCountdown } from '../../../hooks/useCountdown'
 import { epochDiff } from '../../../utils/dateUtils'
 
@@ -99,7 +98,7 @@ function Content({ league }: Props) {
         <div className='flex  flex-col gap-4' >
 
             <BlueGradientCard
-                className='flex cursor-pointer flex-col p-6 gap-4 hover:from-blue-700 hover:dark:from-blue-700'
+                className='flex cursor-pointer flex-col p-6 gap-4 '
                 onClick={goToLeague}
             >
                 <div className='flex flex-row items-center justify-between' >
@@ -125,16 +124,16 @@ function Content({ league }: Props) {
 
                 <div>
 
-                    { showCountDown && <div className='flex flex-col gap-2' >
+                    {showCountDown && <div className='flex flex-col gap-2' >
 
-                        <p className='font-medium text-lg' >{currentRound?.title } Deadline</p>
+                        {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
                         <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
                             {timeBlocks.map(block => (
                                 <div
                                     key={block.label}
-                                    className="p-2 sm:p-3 md:min-w-[80px] items-center justify-center flex flex-col rounded-xl bg-slate-50/50 dark:bg-white/10 border border-slate-200 dark:border-white/10"
+                                    className="p-2 sm:p-3 md:min-w-[80px] items-center justify-center flex flex-col rounded-xl bg-white/10 dark:bg-white/10 border border-white/10 dark:border-white/10"
                                 >
-                                    <p className="font-bold text-lg sm:text-xl md:text-2xl">
+                                    <p className="font-bold text-sm sm:text-xl md:text-2xl">
                                         {block.value.toString().padStart(2, '0')}
                                     </p>
                                     <p className="text-[10px] sm:text-xs dark:text-primary-100">{block.label}</p>
@@ -143,7 +142,10 @@ function Content({ league }: Props) {
                         </div>
                     </div>}
 
+
+
                 </div>
+
             </BlueGradientCard>
 
             {!locked && !userTeam && (
@@ -177,7 +179,7 @@ function NotTeamCreated() {
 
     return (
         <RoundedCard className='p-6 text-center h-[200px] gap-4 border-dotted border-4 flex flex-col items-center justify-center' >
-            <SecondaryText className='text-base' >You haven't picked a team for {currentRound.title} yet. Don't miss out on the action</SecondaryText>
+            <SecondaryText className='text-base' >You haven't picked a team for {currentRound.title} yet</SecondaryText>
 
             <PrimaryButton onClick={goToCreateTeam} className='w-fit px-6 py-2' >
                 Pick Team
@@ -222,7 +224,7 @@ function TeamOverview({ team }: OverviewProps) {
     const isLocked = currentRound && isLeagueRoundLocked(currentRound);
 
     const [showPointsModal, setShowPointsModal] = useState(false);
-    const [showProfileModal, setShowProfileModal] = useState(false);
+    // const [showProfileModal, setShowProfileModal] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
 
     const navigate = useNavigate();
@@ -241,7 +243,7 @@ function TeamOverview({ team }: OverviewProps) {
     }
 
     return (
-        <RoundedCard className='p-4 flex flex-col' >
+        <RoundedCard className='bg-transparent hover:bg-transparent bg-none shadow-none dark:bg-none dark:bg-transparent hover:dark:bg-transparent border-none flex flex-col' >
             <div className='flex  flex-row items-center justify-between' >
 
                 <div className='flex flex-row items-center gap-2' >
@@ -277,8 +279,9 @@ function TeamOverview({ team }: OverviewProps) {
                                 className='w-20 h-20'
                                 showPrBackground
                                 playerPr={95}
+                                key={a.athlete.tracking_id}
                             />
-                            <p className='text-xs' >{a.athlete.player_name}</p>
+                            <p className='text-xs text-center truncate text-nowrap' >{a.athlete.player_name}</p>
                             {isLocked && <p className='rounded-xl text-xs flex flex-row items-center justify-center w-[60px]text-white' >{a.score ?? '0'}</p>}
                         </div>
                     )

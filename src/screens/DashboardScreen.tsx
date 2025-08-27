@@ -1,6 +1,5 @@
 import PageView from './PageView';
 import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
-import FeaturedPlayersCarousel from '../components/dashboard/FeaturedPlayersCarousel';
 import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
 import HeroImageBanner from '../components/dashboard/HeroImageBanner';

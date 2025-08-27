@@ -1,4 +1,4 @@
-import { PlusCircle, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
