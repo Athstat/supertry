@@ -235,7 +235,7 @@ type AthletesRowProps = {
 
 function AthletesRow({ athletes, onPlayerClick }: AthletesRowProps) {
   return (
-    <div className="max-w-full overflow-x-auto pb-1">
+    <div className="max-w-full overflow-x-auto no-scrollbar pb-1">
       <div className="whitespace-nowrap scroll-smooth space-x-4 flex pr-2">
         {athletes.map(a => (
           <div
@@ -258,6 +258,8 @@ function AthletesRow({ athletes, onPlayerClick }: AthletesRowProps) {
                 showPrBackground
                 url={a.image_url}
                 isCaptain={a.is_captain}
+                teamId={a.athlete_team_id}
+                className='w-14 h-14'
               />
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400 max-w-14 truncate">

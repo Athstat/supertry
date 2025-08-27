@@ -368,6 +368,10 @@ export const leagueService = {
         headers: getAuthHeader()
       });
 
+      if (res.status === 400) {
+        return undefined;
+      }
+
       if (res.ok) {
         return (await res.json()) as FantasyLeagueTeamWithAthletes
       }

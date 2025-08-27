@@ -1,4 +1,4 @@
-import { PlusCircle, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
@@ -7,6 +7,7 @@ import { useAuth } from "../contexts/AuthContext";
 import RoundedCard from "../components/shared/RoundedCard";
 import { useNavigate } from "react-router-dom";
 import { FantasyLeagueGroup } from "../types/fantasyLeagueGroups";
+import LeagueOverviewCard from "../components/dashboard/my-team/LeagueOverviewCard";
 
 export default function FeaturedFantasyLeagueGroups() {
 
@@ -19,6 +20,8 @@ export default function FeaturedFantasyLeagueGroups() {
     const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
         return (league.type === 'official_league' || league.creator_id === authUser?.kc_id);
     });
+
+    const featuredLeague = officialLeagues.length > 0 ? officialLeagues[0] : undefined;
 
     if (isLoading) {
         return (
@@ -73,6 +76,12 @@ export default function FeaturedFantasyLeagueGroups() {
                     <p onClick={handleViewAllLeagues} >View All</p>
                 </div>
             </div>
+
+            {featuredLeague && (
+                <LeagueOverviewCard 
+                    league={featuredLeague}
+                />
+            )}
 
             <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
                 {officialLeagues.map((leagueGroup) => {

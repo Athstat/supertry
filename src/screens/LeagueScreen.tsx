@@ -14,7 +14,7 @@ import MyTeams from '../components/fantasy-leagues/MyTeams';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { useShareLeague } from '../hooks/leagues/useShareLeague';
 import { useQueryState } from '../hooks/useQueryState';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function FantasyLeagueScreen() {
@@ -32,8 +32,10 @@ function Content() {
   const { handleShare } = useShareLeague(league);
   const navigate = useNavigate();
 
-  const [journey] = useQueryState('journey');
-  const initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
+  const [journey ] = useQueryState('journey');
+
+  let initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
+  initialTabKey = journey === 'my-team' ? 'my-team' : initialTabKey;
 
   // Hooks must be declared before any early returns
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -78,6 +80,7 @@ function Content() {
   const navigateToLeagues = () => {
     navigate('/leagues');
   };
+
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4">
