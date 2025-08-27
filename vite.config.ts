@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
         '10.0.2.2',
         'scrummy-app.ai',
         'scrummy-qa.onrender.com',
+        'scrummy-qa-2.onrender.com',
         '.ngrok.io',
         '.ngrok-free.app',
         '.loca.lt',
@@ -63,6 +64,7 @@ export default defineConfig(({ mode }) => {
         '10.0.2.2',
         'scrummy-app.ai',
         'scrummy-qa.onrender.com',
+        'scrummy-qa-2.onrender.com',
       ],
     },
   };
