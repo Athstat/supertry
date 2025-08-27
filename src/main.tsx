@@ -1,8 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
-import "./index.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import './index.css';
 
 // Sentry.init({
 //   dsn: "https://edd4351604211158f5090f44afa67627@o4509354186702848.ingest.us.sentry.io/4509617556619264",
@@ -11,12 +11,7 @@ import "./index.css";
 //   sendDefaultPii: true
 // });
 
-if (import.meta.env.VITE_APP_ENV === 'qa') {
-  window.location.replace('https://scrummy-app.ai');
-}
-
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <App />
   </BrowserRouter>
