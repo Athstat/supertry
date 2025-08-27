@@ -4,7 +4,7 @@ import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { Position } from '../../types/position';
 import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { seasonService } from '../../services/seasonsService';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import { IProAthlete } from '../../types/athletes';
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -14,7 +14,7 @@ import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { Check, Loader } from 'lucide-react';
+import { Check, Info, Loader } from 'lucide-react';
 import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
 
@@ -44,6 +44,7 @@ export default function CreateMyTeam({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showClaimAccountModal, setShowClaimAccountModal] = useState(false);
 
   const totalSpent = Object.values(selectedPlayers).reduce(
     (sum, player) => sum + (player.price || 0),
@@ -68,6 +69,8 @@ export default function CreateMyTeam({
   const selectedRoundId = useMemo(() => leagueRound?.id, [leagueRound?.id]);
 
   const { leagueId } = useParams();
+
+  const navigate = useNavigate();
 
   console.log('leagueRound: ', leagueRound);
 
@@ -342,7 +345,7 @@ export default function CreateMyTeam({
                         const copy = { ...prev } as Record<string, IProAthlete>;
                         delete copy[p.name];
                         return copy;
-                      });    
+                      });
                       if (captainId === selected.tracking_id) setCaptainId(null);
                     }}
                   >
@@ -425,13 +428,50 @@ export default function CreateMyTeam({
                 className="w-full"
                 onClick={() => {
                   setShowSuccessModal(false);
-                  if (onViewTeam) {
-                    onViewTeam();
-                  }
+                  setShowClaimAccountModal(true);
                 }}
               >
                 Let's Go!
               </PrimaryButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Claim/Complete Account Modal */}
+      {showClaimAccountModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+          <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 mb-4">
+                <Info className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Complete Your Account</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Claim your account to secure your team, and manage your profile and notifications
+              </p>
+              <div className="flex flex-col gap-2">
+                <PrimaryButton
+                  className="w-full rounded-lg py-2"
+                  onClick={() => {
+                    setShowClaimAccountModal(false);
+                    navigate('/complete-profile');
+                  }}
+                >
+                  Go to Profile
+                </PrimaryButton>
+                <PrimaryButton
+                  className="w-full rounded-lg py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700"
+                  onClick={() => {
+                    setShowClaimAccountModal(false);
+                    if (onViewTeam) {
+                      onViewTeam();
+                    }
+                  }}
+                >
+                  Maybe later
+                </PrimaryButton>
+              </div>
             </div>
           </div>
         </div>

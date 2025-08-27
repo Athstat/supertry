@@ -116,8 +116,7 @@ function normalizeDeviceIdStrict(id: string): string {
 export async function getDeviceId(): Promise<string> {
   // Mobile: must return native device ID or throw. No UUID fallback.
   if (isMobileApp()) {
-    console.log('Mobile environment detected; resolving device ID via bridge');
-
+    console.log('Mobile detected; using window.deviceId...');
     const mobileDeviceId = window.deviceId;
     console.log('Mobile device ID: ', mobileDeviceId);
 
@@ -127,7 +126,7 @@ export async function getDeviceId(): Promise<string> {
     return mobileDeviceId;
   }
 
-  console.log('Web environment detected; resolving device ID from localStorage');
+  console.log('Web detected; using deviceId from localStorage or creating a new one...');
 
   // Web browser: use localStorage
   let webDeviceId = localStorage.getItem('device_id');

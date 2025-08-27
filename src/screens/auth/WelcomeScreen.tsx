@@ -139,10 +139,6 @@ export function WelcomeScreen() {
     navigate('/signin');
   };
 
-  const logSomething = () => {
-    console.log('Something');
-  };
-
   return (
     <MovingRugbyPitch className="h-[100vh] overflow-hidden flex flex-col items-center justify-center">
       <div className="flex z-50 bg-green-700/90 flex-col items-center overflow-y-auto justify-center h-[100vh] px-4">

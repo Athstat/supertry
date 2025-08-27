@@ -81,23 +81,25 @@ export const authService = {
     try {
       console.log('Starting to claim guest account ');
       const userInfo = await authService.whoami();
-      console.log('Who am i', userInfo);
 
       if (!userInfo || !authService.isGuestAccount()) {
         return { error: { message: 'Not a guest account or not logged in' } };
       }
 
-      if (data.username) {
-        const isUsernameValid = validateUsername(data.username);
+      // was causing claim account to hang
+      // if (data.username) {
+      //   console.log('Who am i', userInfo);
+      //   const isUsernameValid = validateUsername(data.username);
+      //   console.log('isUsernameValid', isUsernameValid);
 
-        if (!isUsernameValid)
-          return {
-            error: {
-              error: 'Invalid Username',
-              message: `Username ${data.username} is invalid`,
-            },
-          };
-      }
+      //   if (!isUsernameValid)
+      //     return {
+      //       error: {
+      //         error: 'Invalid Username',
+      //         message: `Username ${data.username} is invalid`,
+      //       },
+      //     };
+      // }
 
       const isEmailValid = emailValidator(data.email);
 
