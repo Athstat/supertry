@@ -5,6 +5,8 @@ import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
 import { useState } from 'react';
 import TeamJersey from './TeamJersey';
+import darkModeLogo from '../branding/assets/logo_dark_mode.svg';
+
 //import { CircleDollarSign } from 'lucide-react';
 import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 // import PlayerIconsRow from '../players/compare/PlayerIconsRow';
@@ -193,7 +195,7 @@ export function PlayerGameCard({
               <div
                 className="w-full flex flex-row items-center justify-center "
                 style={{
-                  width: '90%',
+                  width: '100%',
                   border: '1px solid ' + getBorderColor(),
                   borderRadius: '2px',
                 }}
@@ -214,7 +216,7 @@ export function PlayerGameCard({
 
             <div className="flex text-[10px] -mt-1 lg:text-xs flex-row items-center justify-center gap-2">
               <p className="font-bold">{player.position}</p>
-              <ScrummyDarkModeLogo className="w-8 h-8" />
+              <img className="w-8 h-8" src={darkModeLogo} alt="scrummy_logo" />
             </div>
           </div>
         )}
