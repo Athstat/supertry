@@ -280,6 +280,7 @@ function TeamOverview({ team }: OverviewProps) {
                                 showPrBackground
                                 playerPr={95}
                                 key={a.athlete.tracking_id}
+                                teamId={a.athlete.team_id}
                             />
                             <p className='text-xs text-center truncate text-nowrap' >{a.athlete.player_name}</p>
                             {isLocked && <p className='rounded-xl text-xs flex flex-row items-center justify-center w-[60px]text-white' >{a.score ?? '0'}</p>}

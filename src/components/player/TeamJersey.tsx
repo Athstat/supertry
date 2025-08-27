@@ -4,10 +4,11 @@ import { twMerge } from 'tailwind-merge';
 import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 
 type Props = {
-    teamId?: string
+    teamId?: string,
+    className?: string
 }
 
-export default function TeamJersey({ teamId }: Props) {
+export default function TeamJersey({ teamId, className }: Props) {
 
     const imageUrl = teamId ? getTeamJerseyImage(teamId) : undefined;
     const [error, setError] = useState<boolean>(false);
@@ -32,7 +33,8 @@ export default function TeamJersey({ teamId }: Props) {
                     '[mask - repeat:no-repeat] [mask-size:100%_100%]',
                     '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
                     '[-webkit-mask-repeat:no-repeat]',
-                    '[-webkit-mask-size:100%_100%'
+                    '[-webkit-mask-size:100%_100%',
+                    className
             )}
             onError={() => setError(true)}
         />
