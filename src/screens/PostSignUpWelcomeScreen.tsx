@@ -323,55 +323,55 @@ function WelcomeCTAScreen() {
     navigate('/dashboard');
   };
 
-  if (!featuredLeague || featuredPlayers.length === 0) {
-    return (
-      <div className="text-center flex flex-col gap-4 h-full items-center justify-start">
-        <ScrummyLogo className="w-52 h-52 " />
+  // if (!featuredLeague || featuredPlayers.length === 0) {
+  //   return (
+  //     <div className="text-center flex flex-col gap-4 h-full items-center justify-start">
+  //       <ScrummyLogo className="w-52 h-52 " />
 
-        <div className="grid grid-cols-3 flex-wrap gap-4">
-          {top5Athletes.map(a => {
-            return (
-              <PlayerGameCard
-                player={a}
-                key={a.tracking_id}
-                className="h-[200px]"
-                hideTeamLogo
-                hidePrice
-                detailsClassName="pb-0"
-              />
-            );
-          })}
-        </div>
+  //       <div className="grid grid-cols-3 flex-wrap gap-4">
+  //         {top5Athletes.map(a => {
+  //           return (
+  //             <PlayerGameCard
+  //               player={a}
+  //               key={a.tracking_id}
+  //               className="h-[200px]"
+  //               hideTeamLogo
+  //               hidePrice
+  //               detailsClassName="pb-0"
+  //             />
+  //           );
+  //         })}
+  //       </div>
 
-        <div>
-          <h1 className="text-3xl font-bold  ">Building Your Team</h1>
-        </div>
+  //       <div>
+  //         <h1 className="text-3xl font-bold  ">Building Your Team</h1>
+  //       </div>
 
-        <div>
-          <p>Pick your team of 5 players, and compete globally and play with your friends!</p>
-        </div>
+  //       <div>
+  //         <p>Pick your team of 5 players, and compete globally and play with your friends!</p>
+  //       </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <PrimaryButton
-            onClick={handleStartBuilding}
-            isLoading={isJoining}
-            disabled={isJoining}
-            className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
-          >
-            Start Building Your Team
-          </PrimaryButton>
+  //       <div className="flex flex-col items-center justify-center">
+  //         <PrimaryButton
+  //           onClick={handleStartBuilding}
+  //           isLoading={isJoining}
+  //           disabled={isJoining}
+  //           className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
+  //         >
+  //           Start Building Your Team
+  //         </PrimaryButton>
 
-          <button
-            onClick={handleLookAround}
-            disabled={isJoining}
-            className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
-          >
-            Look Around First
-          </button>
-        </div>
-      </div>
-    );
-  }
+  //         <button
+  //           onClick={handleLookAround}
+  //           disabled={isJoining}
+  //           className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
+  //         >
+  //           Look Around First
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const top2Players = [...featuredPlayers].slice(0, 2);
 
@@ -388,7 +388,7 @@ function WelcomeCTAScreen() {
               return (
                 <PlayerGameCard
                   player={a}
-                  frameClassName=''
+                  frameClassName=""
                   detailsClassName=""
                   hideTeamLogo
                   hidePrice
@@ -418,13 +418,13 @@ function WelcomeCTAScreen() {
             Start Picking Your Team
           </PrimaryButton>
 
-          {/* <button
+          <button
             onClick={handleLookAround}
             disabled={isJoining}
             className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
           >
             Look Around First
-          </button> */}
+          </button>
         </div>
 
         {error && (
