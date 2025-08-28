@@ -1,13 +1,8 @@
-import { djangoAthleteService } from "../../services/athletes/djangoAthletesService"
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { GameSportAction } from "../../types/boxScore"
 import { useMemo, useState } from "react"
 import { Table2 } from "lucide-react"
-import useSWR from "swr"
-import RoundedCard from "../shared/RoundedCard"
-import PlayerMugshot from "../shared/PlayerMugshot"
-import SecondaryText from "../shared/SecondaryText"
 import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
 
 type Props = {
@@ -51,7 +46,7 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
 
             <BoxscoreTable
                 title="Defense"
-                columnHeaders={[{ lable: "Tkls" }, { lable: "Dom Tkls" }, { lable: "T/0s Won" }]}
+                columnHeaders={[{ lable: "Tkls" }, { lable: "DT" }, { lable: "T/0s Won" }]}
                 list={defenseList}
             />
 
@@ -123,6 +118,10 @@ function defenseBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
         const [bTackles] = b.stats;
 
         return (bTackles ?? 0) - (tackles ?? 0)
+    }).filter((a) => {
+        const [x, b, c] = a.stats;
+
+        return x > 0;
     });
 
 
@@ -156,6 +155,10 @@ function kickingBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
         const [bConversion_goals] = b.stats;
 
         return (bConversion_goals ?? 0) - (conversion_goals ?? 0)
+    }).filter((a) => {
+        const [x, b, c] = a.stats;
+        
+        return (x > 0) || (b > 0) || (c > 0)
     });
 
 

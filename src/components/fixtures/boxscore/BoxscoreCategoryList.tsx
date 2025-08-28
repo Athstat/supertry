@@ -35,9 +35,9 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
 
             {title && <h1 className="font-bold text-lg " >{title}</h1>}
 
-            <div className="flex flex-col  dark:border-slate-700/30 border gap-2 rounded-lg overflow-clip dark:bg-slate-700/20  bg-slate-100 " >
+            <div className="flex flex-col  dark:border-slate-700/30 border gap-2 rounded-lg overflow-clip dark:bg-slate-700/20  bg-gray-100 border-gray-300 " >
 
-                <div className="flex border-b text-slate-700 dark:text-slate-400 dark:bg-slate-700/20  bg-slate-100 dark:border-slate-700/40 p-3 flex-row w-full items-center justify-between" >
+                <div className="flex border-b text-slate-700 dark:text-slate-400 dark:bg-slate-700/20  bg-gray-300 dark:border-slate-700/40 p-3 flex-row w-full items-center justify-between" >
 
                     <div>
                         <p className="font-semibold text-sm" >Player</p>
@@ -53,7 +53,7 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
                     </div>
                 </div>
 
-                <div className="flex divide-y dark:divide-gray-700/30 flex-col" >
+                <div className="flex divide-y dark:divide-gray-700/30 divide-gray-300 flex-col" >
                     {list.map((i, index) => {
 
                         if (index > maxIndex) return;
@@ -113,11 +113,11 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
                         url={info?.image_url}
                         playerPr={info?.power_rank_rating}
                         showPrBackground
-                        className="w-10 h-10 lg:w-14 lg:h-14"
+                        className="w-8 h-8 lg:w-14 lg:h-14"
                     />
 
                     <div>
-                        <p className="text-sm" >{info?.player_name}</p>
+                        <p className="text-sm truncate" >{`${info.player_name}`}</p>
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
 
                     {item.stats.map((s) => {
                         return (
-                            <p className="w-[40px] text-start" >{s}</p>
+                            <p className="w-[40px] text-sm text-start" >{s}</p>
                         )
                     })}
                 </SecondaryText>
