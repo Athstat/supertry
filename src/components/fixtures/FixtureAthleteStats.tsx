@@ -32,7 +32,8 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
 
     return (
 
-        <div className="flex flex-col gap-3 w-full" >
+        <div className="flex flex-col gap-4 w-full" >
+            
             <div className="flex flex-row items-center justify-start gap-2" >
                 <Table2 />
                 <h1 className="font-bold text-lg" >Boxscore</h1>

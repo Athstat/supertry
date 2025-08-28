@@ -5,6 +5,7 @@ import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../shared/SecondaryText"
 import { useState } from "react"
 import { twMerge } from "tailwind-merge"
+import NoContentCard from "../../shared/NoContentMessage"
 
 export type BoxscoreListRecordItem = {
     athleteId: string,
@@ -66,6 +67,14 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
                         )
                     })}
 
+                    {list.length === 0 && (
+                        <div>
+                            <NoContentCard 
+                                message={`Whoops, no ${title} stats yet!`}
+                            />
+                        </div>
+                    )}
+
                 </div>
             </div>
 
@@ -103,7 +112,7 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
 
             <div className="flex flex-row items-center justify-between gap-2" >
 
-                <div className="flex flex-row items-center gap-4" >
+                <div className="flex flex-row overflow-hidden items-center gap-4" >
 
                     {/* {index !== undefined && <SecondaryText>
                         {index + 1}
@@ -113,11 +122,11 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
                         url={info?.image_url}
                         playerPr={info?.power_rank_rating}
                         showPrBackground
-                        className="w-8 h-8 lg:w-14 lg:h-14"
+                        className="min-w-8 min-h-8 max-w-8 max-h-8 lg:w-14 lg:h-14"
                     />
 
-                    <div>
-                        <p className="text-sm truncate" >{`${info.player_name}`}</p>
+                    <div className="truncate" >
+                        <p className="text-sm lg:text-base truncate" >{`${info.player_name}`}</p>
                     </div>
                 </div>
 
