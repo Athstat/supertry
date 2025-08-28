@@ -56,6 +56,11 @@ export default function FixtureScreen() {
 
   const tabItems: TabViewHeaderItem[] = [
     {
+      label: 'Boxscore',
+      tabKey: 'athletes-stats',
+      disabled: !sportActions || sportActions.length === 0,
+    },
+    {
       label: 'Team Stats',
       tabKey: 'team-stats',
       disabled: !teamActions || teamActions.length === 0 || !gameKickedOff,
@@ -64,11 +69,6 @@ export default function FixtureScreen() {
       label: 'Kick Off',
       tabKey: 'kick-off',
       disabled: false,
-    },
-    {
-      label: 'Boxscore',
-      tabKey: 'athletes-stats',
-      disabled: !sportActions || sportActions.length === 0,
     },
     {
       label: 'Top Player',

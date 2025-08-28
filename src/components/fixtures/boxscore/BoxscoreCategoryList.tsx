@@ -3,10 +3,12 @@ import { djangoAthleteService } from "../../../services/athletes/djangoAthletesS
 import PlayerMugshot from "../../shared/PlayerMugshot"
 import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../shared/SecondaryText"
+import { useState } from "react"
+import { twMerge } from "tailwind-merge"
 
-type BoxscoreListRecordItem = {
+export type BoxscoreListRecordItem = {
     athleteId: string,
-    stats: (string | number)[]
+    stats: number[]
 }
 
 type BoxscoreHeader = {
@@ -22,38 +24,51 @@ type BoxscoreCategoryListProps = {
 }
 
 /** Renders a boxscore table */
-export function BoxscoreTable({columnHeaders: statHeaders, list, title} : BoxscoreCategoryListProps) {
+export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: BoxscoreCategoryListProps) {
+
+    const [showMore, setShowMore] = useState(false);
+    const maxIndex = showMore ? list.length - 1 : 4;
+
     return (
-        
-        <div className="flex flex-row items-center justify-between" >
-            
-            {title && <h1>{title}</h1>}
-            
-            <div>
-                <div>
-                    <p>Athlete</p>
+        <div className="flex flex-col gap-2" >
+
+
+            {title && <h1 className="font-bold text-lg " >{title}</h1>}
+
+            <div className="flex flex-col  dark:border-slate-700/30 border gap-2 rounded-lg overflow-clip dark:bg-slate-800/40  bg-slate-100 " >
+
+                <div className="flex border-b text-slate-700 dark:text-slate-400 dark:bg-slate-800/30  bg-slate-100 dark:border-slate-700/40 p-4 flex-row w-full items-center justify-between" >
+
+                    <div>
+                        <p className="font-semibold" >Player</p>
+                    </div>
+
+                    <div className="flex  flex-row items-center justify-start gap-4 px-2" >
+
+                        {statHeaders.map((h, index) => {
+                            return (
+                                <p key={index} className="w-[40px] text-tart text-sm" >{h.lable}</p>
+                            )
+                        })}
+                    </div>
                 </div>
 
-                <div className="flex flex-row items-center gap-2" >
+                <div className="flex divide-y dark:divide-gray-700/30 flex-col" >
+                    {list.map((i, index) => {
 
-                    {statHeaders.map((h, index) => {
+                        if (index > maxIndex) return;
+
                         return (
-                            <p key={index} className="w-[40px] text-end" >{h.lable}</p>
+                            <AthleteBoxscoreRecord
+                                item={i}
+                                index={index}
+                            />
                         )
                     })}
+
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4" >
-                {list.map((i, index) => {
-                    return (
-                        <AthleteBoxscoreRecord
-                            item={i}
-                            index={index}
-                        />
-                    )
-                })}
-            </div>
         </div>
 
     )
@@ -64,9 +79,9 @@ type AthleteBoxscoreItemProps = {
     index: number
 }
 
-function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps ) {
+function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
 
-    const {athleteId} = item;
+    const { athleteId } = item;
     const key = `/athletes/${athleteId}`;
     const { data: info, isLoading: loadingInfo } = useSWR(key, () => djangoAthleteService.getAthleteById(athleteId));
 
@@ -81,14 +96,18 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps ) {
     if (!info) return;
 
     return (
-        <div className="p-2" >
+        <div className={twMerge(
+            "p-2",
+            // index % 2 == 1 && "dark:bg-slate-800/40  bg-slate-100"
+        )} >
 
             <div className="flex flex-row items-center justify-between gap-2" >
-                <div className="flex flex-row items-center gap-2" >
 
-                    {index !== undefined && <div>
+                <div className="flex flex-row items-center gap-4" >
+
+                    {/* {index !== undefined && <SecondaryText>
                         {index + 1}
-                    </div>}
+                    </SecondaryText>} */}
 
                     <PlayerMugshot
                         url={info?.image_url}
@@ -98,15 +117,15 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps ) {
                     />
 
                     <div>
-                        <p className="font-semibold" >{info?.player_name}</p>
+                        <p className="text-sm" >{info?.player_name}</p>
                     </div>
                 </div>
 
-                <SecondaryText className="flex text-base font-medium flex-row items-center" >
+                <SecondaryText className="flex text-base gap-4 font-medium flex-row items-center" >
 
                     {item.stats.map((s) => {
                         return (
-                            <p className="w-[40px] text-end" >{s}</p>
+                            <p className="w-[40px] text-start" >{s}</p>
                         )
                     })}
                 </SecondaryText>
