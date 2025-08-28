@@ -27,8 +27,6 @@ export function FantasyTeamAthleteCard({ player, onPlayerClick, round, pointsCla
     round.season_id
   ));
 
-  console.log(round);
-
   const totalPoints = pointItems?.reduce((prev, curr) => {
     return prev + (curr.score ?? 0);
   }, 0) ?? 0;

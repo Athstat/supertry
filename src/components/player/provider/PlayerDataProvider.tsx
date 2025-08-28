@@ -53,7 +53,7 @@ function ProviderInner({ children, player }: Props) {
         if (fetchedPlayer) setPlayer(fetchedPlayer);
         if (seasons) setSeasons(seasons);
 
-    }, [player, seasons]);
+    }, [player, seasons, fetchedPlayer]);
 
     if (isLoading) {
         return <DialogModal
