@@ -35,19 +35,19 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
 
             {title && <h1 className="font-bold text-lg " >{title}</h1>}
 
-            <div className="flex flex-col  dark:border-slate-700/30 border gap-2 rounded-lg overflow-clip dark:bg-slate-800/40  bg-slate-100 " >
+            <div className="flex flex-col  dark:border-slate-700/30 border gap-2 rounded-lg overflow-clip dark:bg-slate-700/20  bg-slate-100 " >
 
-                <div className="flex border-b text-slate-700 dark:text-slate-400 dark:bg-slate-800/30  bg-slate-100 dark:border-slate-700/40 p-4 flex-row w-full items-center justify-between" >
+                <div className="flex border-b text-slate-700 dark:text-slate-400 dark:bg-slate-700/20  bg-slate-100 dark:border-slate-700/40 p-3 flex-row w-full items-center justify-between" >
 
                     <div>
-                        <p className="font-semibold" >Player</p>
+                        <p className="font-semibold text-sm" >Player</p>
                     </div>
 
                     <div className="flex  flex-row items-center justify-start gap-4 px-2" >
 
                         {statHeaders.map((h, index) => {
                             return (
-                                <p key={index} className="w-[40px] text-tart text-sm" >{h.lable}</p>
+                                <p key={index} className="w-[40px] truncate text-tart text-sm" >{h.lable}</p>
                             )
                         })}
                     </div>
