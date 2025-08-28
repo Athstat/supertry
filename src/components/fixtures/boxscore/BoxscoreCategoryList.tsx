@@ -36,9 +36,9 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
 
             {title && <h1 className="font-bold text-lg " >{title}</h1>}
 
-            <div className="flex flex-col  dark:border-slate-700/30 border gap-2 rounded-lg overflow-clip dark:bg-slate-700/20  bg-gray-100 border-gray-300 " >
+            <div className="flex flex-col  dark:border-slate-700/30 border gap-2 rounded-lg overflow-clip dark:bg-slate-700/20  bg-gray-50 border-gray-300 " >
 
-                <div className="flex border-b text-slate-700 dark:text-slate-400 dark:bg-slate-700/20  bg-gray-300 dark:border-slate-700/40 p-3 flex-row w-full items-center justify-between" >
+                <div className="flex border-b text-slate-700 dark:text-slate-400 dark:bg-slate-700/20  bg-gray-200 dark:border-slate-700/40 p-3 flex-row w-full items-center justify-between" >
 
                     <div>
                         <p className="font-semibold text-sm" >Player</p>
@@ -97,7 +97,7 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
     if (loadingInfo) {
         return (
             <RoundedCard
-                className="h-[80px] rounded-xl animate-pulse border-none"
+                className="h-[50px] border-t border-slate-600 bg-slate-100 dark:bg-slate-700/30 mb-1 rounded-none animate-pulse border-none"
             />
         )
     }
