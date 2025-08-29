@@ -48,8 +48,12 @@ export const authService = {
         body: JSON.stringify({ device_id: deviceId }),
       });
 
+      console.log('Device auth response: ', res);
+
       if (res.ok) {
         const json = (await res.json()) as DjangoDeviceAuthRes;
+
+        console.log('Device auth json response: ', json);
 
         authTokenService.saveGuesAccountTokens(json.token, json.user);
         return { data: json };
@@ -79,23 +83,25 @@ export const authService = {
     try {
       console.log('Starting to claim guest account ');
       const userInfo = await authService.whoami();
-      console.log('Who am i', userInfo);
 
       if (!userInfo || !authService.isGuestAccount()) {
         return { error: { message: 'Not a guest account or not logged in' } };
       }
 
-      if (data.username) {
-        const isUsernameValid = validateUsername(data.username);
+      // was causing claim account to hang
+      // if (data.username) {
+      //   console.log('Who am i', userInfo);
+      //   const isUsernameValid = validateUsername(data.username);
+      //   console.log('isUsernameValid', isUsernameValid);
 
-        if (!isUsernameValid)
-          return {
-            error: {
-              error: 'Invalid Username',
-              message: `Username ${data.username} is invalid`,
-            },
-          };
-      }
+      //   if (!isUsernameValid)
+      //     return {
+      //       error: {
+      //         error: 'Invalid Username',
+      //         message: `Username ${data.username} is invalid`,
+      //       },
+      //     };
+      // }
 
       const isEmailValid = emailValidator(data.email);
 

@@ -16,3 +16,11 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare global {
+  interface Window {
+    deviceId?: string;
+  }
+}
+
+export {}; // This file needs to be a module

@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         output: {
-          assetFileNames: (assetInfo) => {
+          assetFileNames: assetInfo => {
             // Optimize image assets
             if (assetInfo.name && /\.(png|jpe?g|gif|svg|webp|avif)$/i.test(assetInfo.name)) {
               return 'assets/images/[name]-[hash][extname]';
@@ -22,15 +22,25 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg', '**/*.webp', '**/*.avif'],
+    assetsInclude: [
+      '**/*.png',
+      '**/*.jpg',
+      '**/*.jpeg',
+      '**/*.gif',
+      '**/*.svg',
+      '**/*.webp',
+      '**/*.avif',
+    ],
     server: {
       historyApiFallback: true,
       host: true,
       allowedHosts: [
         'localhost',
         '127.0.0.1',
+        '10.0.2.2',
         'scrummy-app.ai',
         'scrummy-qa.onrender.com',
+        'scrummy-qa-2.onrender.com',
         '.ngrok.io',
         '.ngrok-free.app',
         '.loca.lt',
@@ -51,8 +61,10 @@ export default defineConfig(({ mode }) => {
       allowedHosts: [
         'supertry.onrender.com',
         'localhost',
+        '10.0.2.2',
         'scrummy-app.ai',
         'scrummy-qa.onrender.com',
+        'scrummy-qa-2.onrender.com',
       ],
     },
   };

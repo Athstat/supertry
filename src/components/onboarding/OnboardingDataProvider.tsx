@@ -39,7 +39,7 @@ function ProviderContent({ children }: Props) {
   const featuredLeagueId: string = import.meta.env.VITE_FEATURE_LEAGUE_GROUP_ID ?? '';
   const apiTest: string = import.meta.env.VITE_API_BASE_URL ?? '';
 
-  console.log('apiTest', apiTest);
+  //console.log('apiTest', apiTest);
 
   const setFeaturedLeague = useSetAtom(featuredLeagueAtom);
   const setFeaturedPlayers = useSetAtom(featuredPlayersAtom);
@@ -82,7 +82,7 @@ async function featuredPlayersFetcher(ids: string[]) {
       players.push(res);
     }
 
-    console.log('Whats up with the API?? ', res);
+    //console.log('Whats up with the API?? ', res);
   });
 
   await Promise.all(promises);
