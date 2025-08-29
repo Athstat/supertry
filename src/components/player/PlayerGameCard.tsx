@@ -134,7 +134,7 @@ export function PlayerGameCard({
         />
 
         {/* Icons rail - overlay; doesn't affect layout */}
-        <div
+        {/* <div
           className="absolute top-16 left-[5px] lg:left-[-14px] flex flex-col items-center gap-2 z-10 pointer-events-none"
           aria-hidden="true"
         >
@@ -145,7 +145,7 @@ export function PlayerGameCard({
               </div>
             ))}
           </Experimental>
-        </div>
+        </div> */}
 
         {/* Player Image - Positioned absolutely and centered on the card */}
         {isFrameLoaded && (
