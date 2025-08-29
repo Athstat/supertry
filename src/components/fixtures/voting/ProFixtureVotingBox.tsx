@@ -19,7 +19,7 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
   const team_name = team.athstat_name;
   const opposition_team_name = opposition_team.athstat_name;
 
-  const matchFinal = game_status === 'completed' && team_score && opposition_score;
+  const matchFinal = game_status === 'completed' && team_score !== undefined && opposition_score !== undefined;
 
   const homeTeamWon = matchFinal ? team_score > opposition_score : false;
   const awayTeamWon = matchFinal ? team_score < opposition_score : false;

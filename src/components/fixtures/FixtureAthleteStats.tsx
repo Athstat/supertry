@@ -1,13 +1,9 @@
-import { djangoAthleteService } from "../../services/athletes/djangoAthletesService"
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { GameSportAction } from "../../types/boxScore"
 import { useMemo, useState } from "react"
 import { Table2 } from "lucide-react"
-import useSWR from "swr"
-import RoundedCard from "../shared/RoundedCard"
-import PlayerMugshot from "../shared/PlayerMugshot"
-import SecondaryText from "../shared/SecondaryText"
+import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
 
 type Props = {
     fixture: IFixture,
@@ -19,138 +15,154 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
     const { gameKickedOff } = fixtureSumary(fixture);
     const [search, setSearch] = useState<string>("");
 
-    const athleteIds = useMemo(() => {
-        const ids: string[] = [];
-        sportActions.forEach((sa) => {
-
-            if (!ids.includes(sa.athlete_id)) {
-                ids.push(sa.athlete_id);
-            }
-
-        });
-
-        return ids;
+    const attackList = useMemo(() => {
+        return attackBoxscoreList(sportActions);
     }, [sportActions]);
 
-    const athleteActions: AthleteBoxscoreItem[] = useMemo(() => {
+    const defenseList = useMemo(() => {
+        return defenseBoxscoreList(sportActions);
+    }, [sportActions]);
 
-        return athleteIds.map((id) => {
-            return {
-                athlete_id: id,
-                actions: sportActions.filter((sa) => {
-                    return sa.athlete_id === id
-                })
-            }
-        }).sort((a, b) => {
-            const pointsA = a.actions.find(p => p.action === 'points')?.action_count;
-            const pointsB = b.actions.find(p => p.action === 'points')?.action_count;
-
-            return (pointsB ? Number(pointsB) : 0) - (pointsA ? Number(pointsA) : 0);
-        });
-    }, [athleteIds, sportActions]);
-
+    const kickingList = useMemo(() => {
+        return kickingBoxscoreList(sportActions);
+    }, [sportActions]);
 
 
     if (!gameKickedOff) return;
 
-    if (athleteActions.length === 0) return;
-
     return (
 
-        <div className="flex flex-col gap-3 w-full" >
+        <div className="flex flex-col gap-4 w-full" >
+            
             <div className="flex flex-row items-center justify-start gap-2" >
                 <Table2 />
                 <h1 className="font-bold text-lg" >Boxscore</h1>
             </div>
 
-            <div className="flex flex-row items-center justify-between" >
-                <div>
-                    <p>Athlete</p>
-                </div>
-
-                <div className="flex flex-row items-center gap-2" >
-                    <p className="w-[40px] text-end" >Pts</p>
-                    <p className="w-[40px] text-end" >Tries</p>
-                    <p className="w-[40px] text-end" >Mins</p>
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-4" >
-                {athleteActions.map((a, index) => {
-                    return (
-                        <AthleteBoxscoreRecord
-                            athlete={a}
-                            index={index}
-                        />
-                    )
-                })}
-            </div>
-        </div>
-    )
-}
-
-type AthleteBoxscoreItem = {
-    athlete_id: string,
-    actions: GameSportAction[]
-}
-
-function AthleteBoxscoreRecord({ athlete, index }: { athlete: AthleteBoxscoreItem, index?: number }) {
-
-    const key = `/athletes/${athlete.athlete_id}`;
-    const { data: info, isLoading: loadingInfo } = useSWR(key, () => djangoAthleteService.getAthleteById(athlete.athlete_id));
-
-    // if (info) return;
-
-    const tries = useMemo(() => {
-        return athlete.actions.find(p => p.action === 'tries');
-    }, [athlete]);
-
-    const points = useMemo(() => {
-        return athlete.actions.find(p => p.action === 'points');
-    }, [athlete]);
-
-    const minutes = useMemo(() => {
-        return athlete.actions.find(p => p.action === 'minutes_played_total');
-    }, [athlete]);
-
-    if (loadingInfo) {
-        return (
-            <RoundedCard
-                className="h-[80px] rounded-xl animate-pulse border-none"
+            <BoxscoreTable
+                title="Attacking"
+                columnHeaders={[{ lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
+                list={attackList}
             />
-        )
-    }
 
-    if (!info) return;
+            <BoxscoreTable
+                title="Defense"
+                columnHeaders={[{ lable: "Tkls" }, { lable: "DT" }, { lable: "T/0s Won" }]}
+                list={defenseList}
+            />
 
-    return (
-        <div className="p-2" >
+            <BoxscoreTable
+                title="Kicking"
+                columnHeaders={[{ lable: "Convs" }, { lable: "DG" }, { lable: "PK" }]}
+                list={kickingList}
+            />
 
-            <div className="flex flex-row items-center justify-between gap-2" >
-                <div className="flex flex-row items-center gap-2" >
-
-                    {index !== undefined && <div>
-                        {index + 1}
-                    </div>}
-
-                    <PlayerMugshot
-                        url={info?.image_url}
-                        playerPr={info?.power_rank_rating}
-                        showPrBackground
-                        className="w-10 h-10 lg:w-14 lg:h-14"
-                    />
-
-                    <div>
-                        <p className="font-semibold" >{info?.player_name}</p>
-                    </div>
-                </div>
-
-                <SecondaryText className="flex text-base font-medium flex-row items-center" >
-                    <p className="w-[40px] text-end" >{Math.floor(points?.action_count ?? 0)}</p>
-                    <p className="w-[40px] text-end" >{Math.floor(tries?.action_count ?? 0)}</p>
-                    <p className="w-[40px] text-end" >{Math.floor(minutes?.action_count ?? 0)}</p>
-                </SecondaryText>
-            </div>
         </div>
     )
+}
+
+function attackBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id)) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const tries = stats.find((b) => b.action === "tries")?.action_count;
+        const points = stats.find((b) => b.action === "points")?.action_count;
+        const passes = stats.find((b) => b.action === "carry_dominant")?.action_count;
+
+        return {
+            stats: [Math.floor(tries ?? 0), Math.floor(points ?? 0), Math.floor(passes ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [, points] = a.stats;
+        const [, bPoints] = b.stats;
+
+        return (bPoints ?? 0) - (points ?? 0)
+    });
+
+
+    return athleteStats;
+
+}
+
+
+function defenseBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id)) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const tackles = stats.find((b) => b.action === "tackles")?.action_count;
+        const dominantTackles = stats.find((b) => b.action === "dominant_tackles")?.action_count;
+        const turnoversWon = stats.find((b) => b.action === "turnover_won")?.action_count;
+
+        return {
+            stats: [Math.floor(tackles ?? 0), Math.floor(dominantTackles ?? 0), Math.floor(turnoversWon ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [tackles] = a.stats;
+        const [bTackles] = b.stats;
+
+        return (bTackles ?? 0) - (tackles ?? 0)
+    }).filter((a) => {
+        const [x, b, c] = a.stats;
+
+        return x > 0;
+    });
+
+
+    return athleteStats;
+
+}
+
+
+function kickingBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id)) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const conversion_goals = stats.find((b) => b.action === "conversion_goals")?.action_count;
+        const drop_goals_scored = stats.find((b) => b.action === "drop_goals_converted")?.action_count;
+        const penalty_goals = stats.find((b) => b.action === "kick_penalty_good")?.action_count;
+
+        return {
+            stats: [Math.floor(conversion_goals ?? 0), Math.floor(drop_goals_scored ?? 0), Math.floor(penalty_goals ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [conversion_goals] = a.stats;
+        const [bConversion_goals] = b.stats;
+
+        return (bConversion_goals ?? 0) - (conversion_goals ?? 0)
+    }).filter((a) => {
+        const [x, b, c] = a.stats;
+        
+        return (x > 0) || (b > 0) || (c > 0)
+    });
+
+
+    return athleteStats;
+
 }

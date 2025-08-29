@@ -8,7 +8,7 @@ import {
   Mail,
   Sparkles,
   Star,
-  Target
+  Target,
 } from 'lucide-react';
 import { PlayerIcon, PLAYER_ICONS, getIconColorScheme } from '../../../utils/playerIcons';
 import { useState } from 'react';
@@ -25,7 +25,7 @@ import SecondaryText from '../../shared/SecondaryText';
 
 type Props = {
   iconName: PlayerIcon;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xs';
 };
 
 export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
@@ -36,20 +36,22 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
   const sizeClasses = {
     sm: 'w-6 h-6 p-1',
     md: 'w-8 h-8 p-1.5',
-    lg: 'w-10 h-10 p-2'
+    lg: 'w-10 h-10 p-2',
+    xs: 'w-4 h-4 p-1',
   };
 
   const iconSizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-5 h-5',
-    lg: 'w-6 h-6'
+    lg: 'w-6 h-6',
+    xs: 'w-3 h-3',
   };
 
   const handleMouseEnter = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const viewport = {
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
     };
 
     // Calculate optimal position to avoid viewport edges
@@ -83,7 +85,7 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
 
   const renderIcon = () => {
     const iconProps = {
-      className: `${iconSizeClasses[size]} text-white`
+      className: `${iconSizeClasses[size]} text-white`,
     };
 
     switch (iconData.iconType) {
@@ -145,31 +147,32 @@ export default function PlayerIconComponent({ iconName, size = 'md' }: Props) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="transform -rotate-45">
-        {renderIcon()}
-      </div>
+      <div className="transform -rotate-45">{renderIcon()}</div>
 
       {/* Portal-based Tooltip */}
-      {showTooltip && createPortal(
-        <div
-          className="fixed z-[9999] pointer-events-none"
-          style={{
-            left: tooltipPosition.x,
-            top: tooltipPosition.y,
-            transform: 'translate(-50%, -100%)'
-          }}
-        >
-          <div className="bg-white dark:bg-slate-900 text-slate-700 dark:text-white px-3 py-2 rounded-lg shadow-xl border border-slate-400 dark:border-slate-600 whitespace-nowrap">
-            <div className="text-sm font-bold text-center">{iconData.name}</div>
-            <SecondaryText className="text-xs text-center mt-1 max-w-[200px] whitespace-normal">{iconData.description}</SecondaryText>
-            {/* Tooltip Arrow */}
-            <div className="absolute top-full left-1/2 transform -translate-x-1/2">
-              <div className="border-4 border-transparent border-t-slate-800 dark:border-t-slate-900"></div>
+      {showTooltip &&
+        createPortal(
+          <div
+            className="fixed z-30 pointer-events-none"
+            style={{
+              left: tooltipPosition.x,
+              top: tooltipPosition.y,
+              transform: 'translate(-50%, -100%)',
+            }}
+          >
+            <div className="bg-white dark:bg-slate-900 text-slate-700 dark:text-white px-3 py-2 rounded-lg shadow-xl border border-slate-400 dark:border-slate-600 whitespace-nowrap">
+              <div className="text-sm font-bold text-center">{iconData.name}</div>
+              <SecondaryText className="text-xs text-center mt-1 max-w-[200px] whitespace-normal">
+                {iconData.description}
+              </SecondaryText>
+              {/* Tooltip Arrow */}
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2">
+                <div className="border-4 border-transparent border-t-slate-800 dark:border-t-slate-900"></div>
+              </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

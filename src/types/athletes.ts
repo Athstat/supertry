@@ -29,7 +29,7 @@ export type IProAthlete = {
   best_match_iaaid?: string;
   unified_id?: string;
   hidden?: boolean;
-  gender: Gender;
+  gender?: Gender;
   price?: number;
   power_rank_rating?: number;
   region?: string;

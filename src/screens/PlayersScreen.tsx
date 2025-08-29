@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, Fragment } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAthletes } from '../contexts/AthleteContext';
 import { useDebounced } from '../hooks/useDebounced';
 
@@ -41,25 +42,26 @@ export function PlayersScreen() {
 
 export const PlayerScreenContent = () => {
   const { athletes, error, isLoading, refreshAthletes, positions, teams } = useAthletes();
+  const [params, setParams] = useSearchParams();
 
   // const [activeTab, setActiveTab] = useState<SortTab>("all");
   const [sortField, setSortField] = useState<SortField>('power_rank_rating');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-  const [searchQuery, setSearchQuery] = useQueryState('query', { init: '' });
-  const [positionFilter, setPositionFilter] = useQueryState('position');
+  const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
+  const [positionFilter, setPositionFilter] = useQueryState<string | undefined>('position');
 
-  const [teamIdFilter, setTeamIdFilter] = useQueryState('team_id');
+  const [teamIdFilter, setTeamIdFilter] = useQueryState<string | undefined>('team_id');
   const selectedTeam = teams.find(t => t.athstat_id === teamIdFilter);
 
   // Use debounced search for better performance
   const debouncedSearchQuery = useDebounced(searchQuery, 300);
 
-  const selectedPositions = useMemo(() => {
+  const selectedPositions: string[] = useMemo(() => {
     return positionFilter ? [positionFilter] : [];
   }, [positionFilter]);
 
-  const selectedTeamIds = useMemo(() => {
+  const selectedTeamIds: string[] = useMemo(() => {
     return selectedTeam ? [selectedTeam.athstat_id] : [];
   }, [selectedTeam]);
 
@@ -126,11 +128,14 @@ export const PlayerScreenContent = () => {
     setTeamIdFilter(team.athstat_id);
   };
 
-  // Clear all filters
+  // Clear all filters (batch in a single URLSearchParams update)
   const clearFilters = () => {
-    setPositionFilter('');
-    setTeamIdFilter('');
-    setSearchQuery('');
+    console.log('clearing filters');
+    const next = new URLSearchParams(params);
+    next.delete('position');
+    next.delete('team_id');
+    next.delete('query');
+    setParams(next, { replace: true });
   };
 
   return (

@@ -4,16 +4,16 @@ import PlayerProfileModalTabContent from './profile-modal-components/PlayerProfi
 import PlayerDataProvider from './provider/PlayerDataProvider';
 import DialogModal from '../shared/DialogModal';
 import { IProAthlete } from '../../types/athletes';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 
 interface Props {
-  player: IProAthlete;
+  player: IProAthlete | IFantasyTeamAthlete;
   isOpen: boolean;
   onClose: () => void;
   roundId?: string;
 }
 
 export default function PlayerProfileModal({ player, isOpen, onClose }: Props) {
-  console.log('Player: ', player);
 
   return (
     <PlayerDataProvider player={player}>
@@ -26,13 +26,13 @@ export default function PlayerProfileModal({ player, isOpen, onClose }: Props) {
         hw="w-[96%] max-h-[96vh] min-h-[96vh] md:w-[60%] lg:w-[40%]"
       >
         {/* Modal header with player image and close button */}
-        <PlayerProfileBanner player={player} />
+        <PlayerProfileBanner />
 
         {/* Stats Summary */}
-        <PlayerNameAndPosition player={player} />
+        <PlayerNameAndPosition />
 
         <div className="flex-1 ">
-          <PlayerProfileModalTabContent player={player} />
+          <PlayerProfileModalTabContent />
         </div>
       </DialogModal>
     </PlayerDataProvider>
