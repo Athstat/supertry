@@ -46,7 +46,7 @@ function Content({ league }: Props) {
 
     const diff = epochDiff(currentRound?.join_deadline ?? new Date());
 
-    const { days, hours, seconds, minutes } = useCountdown(diff);
+    const { days, hours, seconds, minutes, isCountdownFinished } = useCountdown(10000);
 
     const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
         league.id,
@@ -85,14 +85,16 @@ function Content({ league }: Props) {
         navigate(`/league/${league.id}`);
     }
 
-    const timeBlocks = [
-        { value: days, label: 'Days' },
-        { value: hours, label: 'Hours' },
-        { value: minutes, label: 'Minutes' },
-        { value: seconds, label: 'Seconds' },
-    ];
+    const timeBlocks = useMemo(() => {
+        return [
+            { value: days, label: 'Days' },
+            { value: hours, label: 'Hours' },
+            { value: minutes, label: 'Minutes' },
+            { value: seconds, label: 'Seconds' },
+        ];
+    }, [days, hours, minutes, seconds]);
 
-    const showCountDown = !(days === 0 && hours === 0 && minutes === 0 && seconds === 0);
+    const showCountDown = !isCountdownFinished;
 
     return (
         <div className='flex  flex-col gap-4' >
@@ -118,7 +120,7 @@ function Content({ league }: Props) {
                     </div>
 
                     {locked && <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
-                        <p>Points - {userTeam?.overall_score ?? 0}</p>
+                        <p>Points {userTeam?.overall_score ?? 0}</p>
                     </div>}
                 </div>
 
@@ -142,7 +144,11 @@ function Content({ league }: Props) {
                         </div>
                     </div>}
 
-
+                    {isCountdownFinished && (
+                        <div>
+                            <p className='text-sm' >Tick tock, time’s up! The gates are closed, and your fantasy fate? Oh, it’s coming for better or way, way worse. 😎</p>
+                        </div>
+                    )}
 
                 </div>
 

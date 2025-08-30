@@ -11,7 +11,7 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         if (!league) return;
 
         const baseUrl = (import.meta as any)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
-        const inviteInstructions = `${baseUrl}/invite-steps?league_name=${encodeURIComponent(league?.title ?? '')}&user_name=${encodeURIComponent(username ?? '')}&join_code=${encodeURIComponent(league?.entry_code ?? '')}`;
+        const inviteInstructions = encodeURI(`${baseUrl}/invite-steps?league_name=${league?.title ?? ''}&user_name=${username ?? ''}&join_code=${league?.entry_code ?? ''}`);
 
         const shareMessage =
             `You’ve been invited to join a rugby fantasy league: “${league?.title} on SCRUMMY ${username ? ` by ${username}` : ''}”\n\n` +
