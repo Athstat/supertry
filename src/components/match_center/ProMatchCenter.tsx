@@ -60,7 +60,7 @@ export default function ProMatchCenter() {
 
       if (kickoff) {
         const now = new Date().valueOf();
-        return now > new Date(kickoff).valueOf();
+        return now > new Date(kickoff).valueOf() && f.game_status !== 'in_progress' ;
       }
 
       return false;
