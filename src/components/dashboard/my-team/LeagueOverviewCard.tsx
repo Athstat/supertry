@@ -46,7 +46,7 @@ function Content({ league }: Props) {
 
     const diff = epochDiff(currentRound?.join_deadline ?? new Date());
 
-    const { days, hours, seconds, minutes, isCountdownFinished } = useCountdown(10000);
+    const { days, hours, seconds, minutes, isCountdownFinished } = useCountdown(diff);
 
     const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
         league.id,
