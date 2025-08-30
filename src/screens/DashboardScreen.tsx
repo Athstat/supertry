@@ -6,6 +6,7 @@ import HeroImageBanner from '../components/dashboard/HeroImageBanner';
 import { useNavigate } from 'react-router-dom';
 import MyWeekPanel from '../components/dashboard/MyWeekPanel';
 import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
+import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export function DashboardScreen() {
 
       {/* <FeaturedPlayersCarousel /> */}
 
+      <ClaimAccountNoticeCard />
       <FeaturedFantasyLeagueGroups />
 
       {/* <ActionList /> */}
