@@ -9,6 +9,7 @@ import RoundedCard from '../shared/RoundedCard';
 import { ErrorState } from '../ui/ErrorState';
 import { useMemo, useState } from 'react';
 import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
+import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
 
 export function LeagueStandings() {
 
@@ -92,6 +93,11 @@ export function LeagueStandings() {
   return (
     <div className="flex flex-col gap-4" >
 
+      {userMemberRecord && (
+        <ClaimAccountNoticeCard reasonNum={2} />
+      )}
+
+
       <div className="flex flex-row items-center justify-between" >
 
         <div className="flex flex-row items-center gap-2" >
@@ -107,6 +113,7 @@ export function LeagueStandings() {
         </div>
 
       </div>
+
 
       <div className="flex flex-row items-center p-3 justify-between" >
 

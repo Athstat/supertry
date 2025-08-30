@@ -6,8 +6,12 @@ import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../shared/SecondaryText";
 import { CircleUserRound } from "lucide-react";
 
+type Props = {
+    reasonNum?: number
+}
+
 /** Renders card to alert the user to claim their account */
-export default function ClaimAccountNoticeCard() {
+export default function ClaimAccountNoticeCard({reasonNum = 1} : Props) {
 
     const { authUser } = useAuth();
     const isGuest = isGuestUser(authUser);
@@ -28,7 +32,7 @@ export default function ClaimAccountNoticeCard() {
                     <CircleUserRound />
                     <h1 className="font-bold text-lg" >Claim Your Account</h1>
                 </div>
-                <SecondaryText className="text-sm" >Unlock full access and secure your place in the Scrum! Save your progress, sync your data across devices and never miss a ruck!</SecondaryText>
+                <SecondaryText className="text-sm" >{claimAccountReasons[reasonNum] ?? claimAccountReasons[1]}</SecondaryText>
             </div>
 
             <PrimaryButton
@@ -41,4 +45,10 @@ export default function ClaimAccountNoticeCard() {
         </RoundedCard>
     )
 
+}
+
+
+const claimAccountReasons: Record<number, string> = {
+    1: 'Unlock full access and secure your place in the Scrum! Save your progress, sync your data across devices and never miss a ruck!',
+    2: "Leave your mark in the Scrum! Claim your account and make sure your mates recognise you on the standings. Your game, your name! Let everyone know who's topping the table."
 }
