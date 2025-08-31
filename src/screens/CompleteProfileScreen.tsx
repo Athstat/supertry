@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Mail, User, X } from 'lucide-react';
+import { ArrowLeft, Mail, User, UserCircle, X } from 'lucide-react';
 import { authService } from '../services/authService';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 import RoundedCard from '../components/shared/RoundedCard';
@@ -18,6 +18,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
 import SecondaryText from '../components/shared/SecondaryText';
 import PageView from './PageView';
+import { ErrorMessage } from '../components/ui/ErrorState';
+import { emailValidator } from '../utils/stringUtils';
+import { validatePassword } from '../utils/authUtils';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -171,7 +174,7 @@ function ScreenContent() {
 
       <div className="flex flex-col items-center justify-center w-full">
         <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
-        <p className='dark:text-white font-medium text-xl' >Claim your Profile</p>
+        <p className='dark:text-white font-medium text-xl' >Claim your SCRUMMY Profile</p>
       </div>
 
 
@@ -187,6 +190,15 @@ function ScreenContent() {
 
       {step === 2 && (
         <CreatePasswordStep
+          onNextStep={handleGoNextStep}
+          onPreviousStep={handleGoPreviousStep}
+          form={formData}
+          setForm={setFormData}
+        />
+      )}
+
+      {step === 3 && (
+        <ConfirmationStep
           onNextStep={handleGoNextStep}
           onPreviousStep={handleGoPreviousStep}
           form={formData}
@@ -221,19 +233,33 @@ type StepProps = {
 
 function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
 
+  const [error, setError] = useState<string>();
+  const { isLoading: loadingEmailCheck, emailTaken } = useEmailUniqueValidator(form.email);
+  const isFormComplete = !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username);
+
   const handleNextStep = () => {
     if (form.username && form.email && onNextStep) {
+
+      if (!emailValidator(form.email)) {
+        setError(`Please enter a valid email, '${form.email}' is not a valid email.`);
+        return;
+      }
+
       onNextStep();
     }
   }
 
   return (
     <form
-      className='flex flex-col gap-2 w-full'
+      className='flex flex-col gap-4 w-full'
       onSubmit={(e) => {
         e.preventDefault(); handleNextStep();
       }}
     >
+
+      <div className='w-full flex flex-col mt-4 items-center justify-center' >
+        <SecondaryText>Create a username for your account</SecondaryText>
+      </div>
 
       <InputField
         className='w-full'
@@ -243,63 +269,103 @@ function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
         value={form.username}
       />
 
-      <InputField
-        className='w-full'
-        label='Email'
-        placeholder='Email'
-        onChange={(v) => setForm({ ...form, email: v ?? '' })}
-        value={form.email}
-      />
+      <div className='flex flex-col' >
+
+        <InputField
+          className='w-full'
+          label='Email'
+          placeholder='Email'
+          onChange={(v) => setForm({ ...form, email: v ?? '' })}
+          value={form.email}
+          type='email'
+        />
+
+        {emailTaken && <ErrorMessage message='Email is registered with another account' />}
+      </div>
 
       <PrimaryButton
+        disabled={!isFormComplete}
       >
         Continue
       </PrimaryButton>
+
+      {error && (
+        <ErrorMessage message={error} />
+      )}
     </form>
   )
 }
 
 
 function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
+
+  const [error, setError] = useState<string>();
+  const isFormComplete = Boolean(form.confirmPassword) && Boolean(form.password) && form.password === form.confirmPassword;
+
   const handleNextStep = () => {
     if (form.password && form.confirmPassword && onNextStep) {
+
+      if (form.password !== form.confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      }
+
+      const [isPasswordValid, reason] = validatePassword(form.password);
+
+      if (!isPasswordValid) {
+        setError(reason);
+        return;
+      }
+
       onNextStep();
     }
   }
 
   return (
     <form
-      className='flex flex-col gap-2 w-full'
+      className='flex flex-col gap-4 w-full'
       onSubmit={(e) => {
         e.preventDefault(); handleNextStep();
       }}
     >
 
-      <InputField
+      <div className='w-full flex flex-col mt-4 items-center justify-center' >
+        <SecondaryText>Create a Password for your account</SecondaryText>
+      </div>
+
+      <PasswordInputField
         className='w-full'
         label='Password'
         placeholder='Password'
-        onChange={(v) => setForm({ ...form, username: v ?? '' })}
+        onChange={(v) => setForm({ ...form, password: v ?? '' })}
         value={form.password}
+
       />
 
-      <InputField
+      <PasswordInputField
         className='w-full'
         label='Confirm Password'
         placeholder='Confirm Password'
-        onChange={(v) => setForm({ ...form, email: v ?? '' })}
+        onChange={(v) => setForm({ ...form, confirmPassword: v ?? '' })}
         value={form.confirmPassword}
       />
 
       <PrimaryButton
+        disabled={!isFormComplete}
       >
         Continue
       </PrimaryButton>
+
+      {error && (
+        <ErrorMessage
+          message={error}
+        />
+      )}
     </form>
   )
 }
 
-function ConfirmationStep({ form, onNextStep }: StepProps) {
+function ConfirmationStep({ form, onNextStep, setForm }: StepProps) {
   const handleNextStep = () => {
     if (form.username && form.email && onNextStep) {
       onNextStep();
@@ -308,31 +374,34 @@ function ConfirmationStep({ form, onNextStep }: StepProps) {
 
   return (
     <form
-      className='flex flex-col gap-2 w-full'
+      className='flex flex-col gap-6 w-full'
       onSubmit={(e) => {
         e.preventDefault(); handleNextStep();
       }}
     >
 
-      <InputField
-        className='w-full'
-        label='Username'
-        placeholder='What should we call you?'
-        onChange={(v) => setForm({ ...form, username: v ?? '' })}
-        value={form.username}
-      />
+      <div className='w-full flex flex-col items-center justify-center' >
+        <SecondaryText>Confirm Your Details</SecondaryText>
+      </div>
 
-      <InputField
-        className='w-full'
-        label='Email'
-        placeholder='Email'
-        onChange={(v) => setForm({ ...form, email: v ?? '' })}
-        value={form.email}
-      />
+      <RoundedCard className='p-4' >
+        <div className='flex flex-row items-center gap-2' >
+          
+          <div>
+            <UserCircle  className='w-10 h-10' />
+          </div>
+
+          <div>
+            <h1 className='text-2xl font-semibold' >{form.username}</h1>
+            <SecondaryText>{form.email}</SecondaryText>
+          </div>
+        </div>
+      </RoundedCard>
 
       <PrimaryButton
+        className='animate-glow'
       >
-        Continue
+        Claim Account 🔥
       </PrimaryButton>
     </form>
   )
