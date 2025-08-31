@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Mail, User } from 'lucide-react';
+import { ArrowLeft, Mail, User, X } from 'lucide-react';
 import { authService } from '../services/authService';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 import RoundedCard from '../components/shared/RoundedCard';
@@ -16,6 +16,8 @@ import FormErrorText from '../components/shared/FormError';
 import NoContentCard from '../components/shared/NoContentMessage';
 import { useAuth } from '../contexts/AuthContext';
 import { requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
+import SecondaryText from '../components/shared/SecondaryText';
+import PageView from './PageView';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -42,6 +44,10 @@ function ScreenContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
+
+  const [step, setStep
+
+  ] = useState<number>(1);
 
   const { emailTaken, isLoading: isEmailValidatorLoading } = useEmailUniqueValidator(
     formData.email
@@ -130,128 +136,204 @@ function ScreenContent() {
     }
   };
 
+  const handleCancel = () => {
+    navigate(-1);
+  }
+
+  const handleGoNextStep = () => {
+    if (step < 3) {
+      setStep(prev => prev + 1);
+    }
+  }
+
+  const handleGoPreviousStep = () => {
+    if (step > 1) {
+      setStep(prev => prev - 1);
+    }
+  }
+
   if (!isGuestUserAtom) {
     return <NoContentCard className="Account has already been claimed" />;
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-dark-850">
+    <div className="flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto bg-gray-50 dark:bg-dark-850">
       {/* Header */}
-      <div className="bg-white dark:bg-dark-800/70 border-b dark:border-slate-700 border-slate-100 shadow-sm">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="mr-4 p-2 -ml-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+
+      <div className='flex flex-row w-full items-center justify-between' >
+        <div></div>
+        <div>
+          <button onClick={handleCancel} className='w-10 h-10 cursor-pointer hover:bg-slate-200 hover:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl' >
+            <X className='text-black dark:text-white' />
           </button>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Complete Your Profile
-          </h1>
         </div>
       </div>
 
       <div className="flex flex-col items-center justify-center w-full">
         <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
+        <p className='dark:text-white font-medium text-xl' >Claim your Profile</p>
       </div>
+
 
       {/* Content */}
-      <div className="flex-1 px-4 py-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-md mx-auto"
-        >
-          <RoundedCard className="rounded-lg dark:bg-slate-800/50 dark:border-slate-600 p-6 shadow-sm">
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Complete your profile to enhance your experience and access your teams from any
-              device.
-            </p>
+      {step === 1 && (
+        <EmailUsernameStep
+          onNextStep={handleGoNextStep}
+          onPreviousStep={handleGoPreviousStep}
+          form={formData}
+          setForm={setFormData}
+        />
+      )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Username Field */}
-              <div>
-                <InputField
-                  label="Username*"
-                  placeholder="Username"
-                  value={formData.username}
-                  onChange={v => handleInputChange('username', v ?? '')}
-                  required
-                  id="username"
-                  icon={<User className="w-4 h-4" />}
-                />
+      {step === 2 && (
+        <CreatePasswordStep
+          onNextStep={handleGoNextStep}
+          onPreviousStep={handleGoPreviousStep}
+          form={formData}
+          setForm={setFormData}
+        />
+      )}
 
-                {errors?.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
-              </div>
+      {step > 1 && (
+        <button onClick={handleGoPreviousStep} >
+          <SecondaryText>Go  Back</SecondaryText>
+        </button>
+      )}
+      { }
 
-              {/* Email Field */}
-              <div className="flex flex-col gap-1">
-                <InputField
-                  label="Email*"
-                  placeholder="Email"
-                  required
-                  value={formData.email}
-                  onChange={v => handleInputChange('email', v?.toLowerCase() ?? '')}
-                  id="email"
-                  type="email"
-                  icon={<Mail className="w-4 h-4" />}
-                />
-                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-
-                {isEmailTaken && <FormErrorText error="Email is already taken by another user" />}
-              </div>
-
-              {/* Password Field */}
-              <div>
-                <PasswordInputField
-                  label="Password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={v => handleInputChange('password', v ?? '')}
-                  id="password"
-                />
-
-                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-              </div>
-
-              {/* Confirm Password Field */}
-              <div>
-                <PasswordInputField
-                  label="Confirm Password"
-                  placeholder="Confirm Password"
-                  value={formData.confirmPassword}
-                  onChange={v => handleInputChange('confirmPassword', v ?? '')}
-                  id="confirm-password"
-                />
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
-                )}
-              </div>
-
-              {/* Submit Error */}
-              {submitError && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm"
-                >
-                  {submitError}
-                </motion.div>
-              )}
-
-              {/* Submit Button */}
-              <PrimaryButton
-                type="submit"
-                disbabled={isSubmitting || isEmailTaken || isEmailValidatorLoading}
-                isLoading={isSubmitting}
-                className="py-4"
-              >
-                <span>Complete Profile</span>
-              </PrimaryButton>
-            </form>
-          </RoundedCard>
-        </motion.div>
-      </div>
     </div>
   );
+}
+
+type ClaimAccountForm = {
+  username: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+}
+
+type StepProps = {
+  onNextStep?: () => void,
+  form: ClaimAccountForm,
+  onPreviousStep?: () => void,
+  setForm: (form: ClaimAccountForm) => void
+}
+
+function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
+
+  const handleNextStep = () => {
+    if (form.username && form.email && onNextStep) {
+      onNextStep();
+    }
+  }
+
+  return (
+    <form
+      className='flex flex-col gap-2 w-full'
+      onSubmit={(e) => {
+        e.preventDefault(); handleNextStep();
+      }}
+    >
+
+      <InputField
+        className='w-full'
+        label='Username'
+        placeholder='What should we call you?'
+        onChange={(v) => setForm({ ...form, username: v ?? '' })}
+        value={form.username}
+      />
+
+      <InputField
+        className='w-full'
+        label='Email'
+        placeholder='Email'
+        onChange={(v) => setForm({ ...form, email: v ?? '' })}
+        value={form.email}
+      />
+
+      <PrimaryButton
+      >
+        Continue
+      </PrimaryButton>
+    </form>
+  )
+}
+
+
+function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
+  const handleNextStep = () => {
+    if (form.password && form.confirmPassword && onNextStep) {
+      onNextStep();
+    }
+  }
+
+  return (
+    <form
+      className='flex flex-col gap-2 w-full'
+      onSubmit={(e) => {
+        e.preventDefault(); handleNextStep();
+      }}
+    >
+
+      <InputField
+        className='w-full'
+        label='Password'
+        placeholder='Password'
+        onChange={(v) => setForm({ ...form, username: v ?? '' })}
+        value={form.password}
+      />
+
+      <InputField
+        className='w-full'
+        label='Confirm Password'
+        placeholder='Confirm Password'
+        onChange={(v) => setForm({ ...form, email: v ?? '' })}
+        value={form.confirmPassword}
+      />
+
+      <PrimaryButton
+      >
+        Continue
+      </PrimaryButton>
+    </form>
+  )
+}
+
+function ConfirmationStep({ form, onNextStep }: StepProps) {
+  const handleNextStep = () => {
+    if (form.username && form.email && onNextStep) {
+      onNextStep();
+    }
+  }
+
+  return (
+    <form
+      className='flex flex-col gap-2 w-full'
+      onSubmit={(e) => {
+        e.preventDefault(); handleNextStep();
+      }}
+    >
+
+      <InputField
+        className='w-full'
+        label='Username'
+        placeholder='What should we call you?'
+        onChange={(v) => setForm({ ...form, username: v ?? '' })}
+        value={form.username}
+      />
+
+      <InputField
+        className='w-full'
+        label='Email'
+        placeholder='Email'
+        onChange={(v) => setForm({ ...form, email: v ?? '' })}
+        value={form.email}
+      />
+
+      <PrimaryButton
+      >
+        Continue
+      </PrimaryButton>
+    </form>
+  )
 }
