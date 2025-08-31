@@ -117,5 +117,7 @@ declare module "lucide-react" {
   export const Binoculars : CIP;
   export const Activity : CIP;
   export const CircleUserRound : CIP;
+  export const BadgeCheck : CIP;
+  export const KeyRound : CIP;
 }
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserCircle, X } from 'lucide-react';
+import { User, UserCircle, X } from 'lucide-react';
 import { authService } from '../services/authService';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 import RoundedCard from '../components/shared/RoundedCard';
@@ -19,6 +19,9 @@ import { ErrorMessage } from '../components/ui/ErrorState';
 import { emailValidator } from '../utils/stringUtils';
 import { validatePassword } from '../utils/authUtils';
 import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
+import FormStepIndicator from '../components/shared/forms/FormStepIndicator';
+import { KeyRound } from 'lucide-react';
+import { BadgeCheck } from 'lucide-react';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -41,104 +44,12 @@ function ScreenContent() {
     password: '',
     confirmPassword: '',
   });
-  const [errors, setErrors] = useState<any>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
-  const { refreshAuthUser } = useAuth();
 
-  const [step, setStep
 
-  ] = useState<number>(1);
-
-  const { emailTaken, isLoading: isEmailValidatorLoading } = useEmailUniqueValidator(
-    formData.email
-  );
-
-  const isEmailTaken = !isEmailValidatorLoading && emailTaken;
-
-  const validateForm = () => {
-    const newErrors: any = {};
-
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      console.log('Validation failed');
-      return;
-    } else {
-      console.log('Passed Validation');
-    }
-
-    setIsSubmitting(true);
-    setSubmitError('');
-
-    try {
-      const data: ClaimGuestAccountReq = {
-        email: formData.email,
-        password: formData.password,
-        username: formData.username,
-      };
-
-      const { data: res, error } = await authService.claimGuestAccount(data);
-
-      if (res) {
-        await refreshAuthUser();
-        requestPushPermissionsAfterLogin();
-        navigate('/dashboard');
-        return;
-      }
-
-      setErrors(error?.message);
-    } catch (error: any) {
-      console.error('Error claiming account:', error);
-      let errorMessage = error.message || 'Failed to complete profile. Please try again.';
-
-      if (errorMessage.includes('string did not match')) {
-        errorMessage =
-          'Your username contains invalid characters. Use only letters, numbers, and underscores.';
-      }
-
-      setSubmitError(errorMessage);
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error for this field when user types
-    if (errors[field]) {
-      setErrors((prev: any) => ({ ...prev, [field]: '' }));
-    }
-  };
+  const [step, setStep] = useState<number>(1);
 
   const handleCancel = () => {
-    navigate(-1);
+    navigate('/profile');
   }
 
   const handleGoNextStep = () => {
@@ -166,7 +77,7 @@ function ScreenContent() {
         <div className='flex flex-row w-full items-center justify-between' >
           <div></div>
           <div>
-            <button onClick={handleCancel} className='w-10 h-10 cursor-pointer hover:bg-slate-200 hover:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl' >
+            <button onClick={handleCancel} className='w-10 h-10 cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl' >
               <X className='text-black dark:text-white' />
             </button>
           </div>
@@ -175,6 +86,30 @@ function ScreenContent() {
         <div className="flex flex-col items-center justify-center w-full">
           <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
           <p className='dark:text-white font-medium text-xl' >Claim your SCRUMMY Profile</p>
+        </div>
+
+
+        <div className='flex  flex-row items-center justify-center gap-2' >
+          <FormStepIndicator
+            label='Profile'
+            icon={<User />}
+            isCurrent={step === 1}
+            isCompleted={step > 1}
+          />
+
+          <FormStepIndicator
+            label='Password'
+            icon={<KeyRound />}
+            isCurrent={step === 2}
+            isCompleted={step > 2}
+          />
+
+          <FormStepIndicator
+            label='Confirm'
+            icon={<BadgeCheck />}
+            isCurrent={step === 3}
+            isCompleted={step > 3}
+          />
         </div>
 
 
@@ -367,19 +302,93 @@ function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
   )
 }
 
-function ConfirmationStep({ form, onNextStep, setForm }: StepProps) {
-  const handleNextStep = () => {
-    if (form.username && form.email && onNextStep) {
-      onNextStep();
+function ConfirmationStep({ form}: StepProps) {
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const { refreshAuthUser } = useAuth();
+
+  const [errors, setErrors] = useState<any>();
+  const navigate = useNavigate();
+
+  const validateForm = () => {
+    const newErrors: any = {};
+
+    if (!form.username.trim()) {
+      newErrors.username = 'Username is required';
     }
-  }
+
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+
+    if (!form.password) {
+      newErrors.password = 'Password is required';
+    } else if (form.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+    }
+
+    if (!form.confirmPassword) {
+      newErrors.confirmPassword = 'Please confirm your password';
+    } else if (form.password !== form.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      console.log('Validation failed');
+      return;
+    } else {
+      console.log('Passed Validation');
+    }
+
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const data: ClaimGuestAccountReq = {
+        email: form.email,
+        password: form.password,
+        username: form.username,
+      };
+
+      const { data: res, error } = await authService.claimGuestAccount(data);
+
+      if (res) {
+        await refreshAuthUser();
+        requestPushPermissionsAfterLogin();
+        navigate('/dashboard');
+        return;
+      }
+
+      setErrors(error?.message);
+    } catch (error: any) {
+      console.error('Error claiming account:', error);
+      let errorMessage = error.message || 'Failed to complete profile. Please try again.';
+
+      if (errorMessage.includes('string did not match')) {
+        errorMessage =
+          'Your username contains invalid characters. Use only letters, numbers, and underscores.';
+      }
+
+      setSubmitError(errorMessage);
+      setIsSubmitting(false);
+    }
+  };
+
 
   return (
     <form
       className='flex flex-col gap-6 w-full'
-      onSubmit={(e) => {
-        e.preventDefault(); handleNextStep();
-      }}
+      onSubmit={handleSubmit}
     >
 
       <div className='w-full flex flex-col items-center justify-center' >
@@ -401,10 +410,16 @@ function ConfirmationStep({ form, onNextStep, setForm }: StepProps) {
       </RoundedCard>
 
       <PrimaryButton
-        className='animate-glow'
+        disabled={isSubmitting}
+        isLoading={isSubmitting}
+        className='animate-glow py-4'
       >
         Claim Account 🔥
       </PrimaryButton>
+
+      {(submitError) && (
+        <ErrorMessage message={(submitError)} />
+      )}
     </form>
   )
 }
