@@ -120,7 +120,7 @@ function Content({ league }: Props) {
                     </div>
 
                     {locked && <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
-                        <p>Points {userTeam?.overall_score ?? 0}</p>
+                        <p>Points {(userTeam?.overall_score.toFixed(0)) ?? 0}</p>
                     </div>}
                 </div>
 
@@ -289,7 +289,7 @@ function TeamOverview({ team }: OverviewProps) {
                                 teamId={a.athlete.team_id}
                             />
                             <p className='text-xs text-center truncate text-nowrap' >{a.athlete.player_name}</p>
-                            {isLocked && <p className='rounded-xl text-xs flex flex-row items-center justify-center w-[60px]text-white' >{a.score ?? '0'}</p>}
+                            {isLocked && <p className='rounded-xl text-xs flex flex-row items-center justify-center w-[60px]text-white' >{a.score ? a.score.toFixed(0) : '0'}</p>}
                         </div>
                     )
                 })}
