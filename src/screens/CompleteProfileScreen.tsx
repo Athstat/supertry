@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Mail, User, UserCircle, X } from 'lucide-react';
+import { UserCircle, X } from 'lucide-react';
 import { authService } from '../services/authService';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 import RoundedCard from '../components/shared/RoundedCard';
@@ -12,15 +11,14 @@ import { useEmailUniqueValidator } from '../hooks/useEmailUniqueValidator';
 import { authUserAtom, isGuestUserAtom } from '../state/authUser.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import AuthUserDataProvider from '../components/auth/AuthUserDataProvider';
-import FormErrorText from '../components/shared/FormError';
 import NoContentCard from '../components/shared/NoContentMessage';
 import { useAuth } from '../contexts/AuthContext';
 import { requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
 import SecondaryText from '../components/shared/SecondaryText';
-import PageView from './PageView';
 import { ErrorMessage } from '../components/ui/ErrorState';
 import { emailValidator } from '../utils/stringUtils';
 import { validatePassword } from '../utils/authUtils';
+import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -160,60 +158,64 @@ function ScreenContent() {
   }
 
   return (
-    <div className="flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto bg-gray-50 dark:bg-dark-850">
-      {/* Header */}
+    <ScrummyMatrixBackground>
 
-      <div className='flex flex-row w-full items-center justify-between' >
-        <div></div>
-        <div>
-          <button onClick={handleCancel} className='w-10 h-10 cursor-pointer hover:bg-slate-200 hover:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl' >
-            <X className='text-black dark:text-white' />
-          </button>
+      <div className="flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto">
+        {/* Header */}
+
+        <div className='flex flex-row w-full items-center justify-between' >
+          <div></div>
+          <div>
+            <button onClick={handleCancel} className='w-10 h-10 cursor-pointer hover:bg-slate-200 hover:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl' >
+              <X className='text-black dark:text-white' />
+            </button>
+          </div>
         </div>
+
+        <div className="flex flex-col items-center justify-center w-full">
+          <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
+          <p className='dark:text-white font-medium text-xl' >Claim your SCRUMMY Profile</p>
+        </div>
+
+
+        {/* Content */}
+        {step === 1 && (
+          <EmailUsernameStep
+            onNextStep={handleGoNextStep}
+            onPreviousStep={handleGoPreviousStep}
+            form={formData}
+            setForm={setFormData}
+          />
+        )}
+
+        {step === 2 && (
+          <CreatePasswordStep
+            onNextStep={handleGoNextStep}
+            onPreviousStep={handleGoPreviousStep}
+            form={formData}
+            setForm={setFormData}
+          />
+        )}
+
+        {step === 3 && (
+          <ConfirmationStep
+            onNextStep={handleGoNextStep}
+            onPreviousStep={handleGoPreviousStep}
+            form={formData}
+            setForm={setFormData}
+          />
+        )}
+
+        {step > 1 && (
+          <button onClick={handleGoPreviousStep} >
+            <SecondaryText>Go  Back</SecondaryText>
+          </button>
+        )}
+        { }
+
       </div>
 
-      <div className="flex flex-col items-center justify-center w-full">
-        <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
-        <p className='dark:text-white font-medium text-xl' >Claim your SCRUMMY Profile</p>
-      </div>
-
-
-      {/* Content */}
-      {step === 1 && (
-        <EmailUsernameStep
-          onNextStep={handleGoNextStep}
-          onPreviousStep={handleGoPreviousStep}
-          form={formData}
-          setForm={setFormData}
-        />
-      )}
-
-      {step === 2 && (
-        <CreatePasswordStep
-          onNextStep={handleGoNextStep}
-          onPreviousStep={handleGoPreviousStep}
-          form={formData}
-          setForm={setFormData}
-        />
-      )}
-
-      {step === 3 && (
-        <ConfirmationStep
-          onNextStep={handleGoNextStep}
-          onPreviousStep={handleGoPreviousStep}
-          form={formData}
-          setForm={setFormData}
-        />
-      )}
-
-      {step > 1 && (
-        <button onClick={handleGoPreviousStep} >
-          <SecondaryText>Go  Back</SecondaryText>
-        </button>
-      )}
-      { }
-
-    </div>
+    </ScrummyMatrixBackground>
   );
 }
 
@@ -386,9 +388,9 @@ function ConfirmationStep({ form, onNextStep, setForm }: StepProps) {
 
       <RoundedCard className='p-4' >
         <div className='flex flex-row items-center gap-2' >
-          
+
           <div>
-            <UserCircle  className='w-10 h-10' />
+            <UserCircle className='w-10 h-10' />
           </div>
 
           <div>
