@@ -12,6 +12,7 @@ import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
 import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
 import { twMerge } from 'tailwind-merge';
 import { useQueryState } from '../../hooks/useQueryState';
+import LeagueStandingsFilterSelector from './standings/LeagueStandingsFilterSelector';
 
 export function LeagueStandings() {
 
@@ -22,7 +23,7 @@ export function LeagueStandings() {
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
-  const [roundFilterId, setRoundFilterId] = useQueryState('round_filter', {init: 'overall'});
+  const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', {init: 'overall'});
   
   
   // const filteredRound: {label: string, id: string} = useMemo(() => {
@@ -126,6 +127,11 @@ export function LeagueStandings() {
         </div>
 
       </div>
+
+      <LeagueStandingsFilterSelector 
+        value={roundFilterId}
+        onChange={(v) => setRoundFilterId(v)}
+      />
 
 
       <div className="flex flex-row items-center p-3 justify-between" >

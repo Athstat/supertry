@@ -46,11 +46,11 @@ function Content() {
   }
 
   const headerItems: TabViewHeaderItem[] = [
-    {
-      label: 'Overview',
-      tabKey: 'overview',
-      className: 'flex-1',
-    },
+    // {
+    //   label: 'Overview',
+    //   tabKey: 'overview',
+    //   className: 'flex-1',
+    // },
     {
       label: 'Standings',
       tabKey: 'standings',
