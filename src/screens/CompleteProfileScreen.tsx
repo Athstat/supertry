@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Mail, User } from 'lucide-react';
+import { User, UserCircle, X } from 'lucide-react';
 import { authService } from '../services/authService';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 import RoundedCard from '../components/shared/RoundedCard';
@@ -12,10 +11,17 @@ import { useEmailUniqueValidator } from '../hooks/useEmailUniqueValidator';
 import { authUserAtom, isGuestUserAtom } from '../state/authUser.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import AuthUserDataProvider from '../components/auth/AuthUserDataProvider';
-import FormErrorText from '../components/shared/FormError';
 import NoContentCard from '../components/shared/NoContentMessage';
 import { useAuth } from '../contexts/AuthContext';
 import { requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
+import SecondaryText from '../components/shared/SecondaryText';
+import { ErrorMessage } from '../components/ui/ErrorState';
+import { emailValidator } from '../utils/stringUtils';
+import { validatePassword } from '../utils/authUtils';
+import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
+import FormStepIndicator from '../components/shared/forms/FormStepIndicator';
+import { KeyRound } from 'lucide-react';
+import { BadgeCheck } from 'lucide-react';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -38,39 +44,295 @@ function ScreenContent() {
     password: '',
     confirmPassword: '',
   });
-  const [errors, setErrors] = useState<any>({});
+
+
+  const [step, setStep] = useState<number>(1);
+
+  const handleCancel = () => {
+    navigate('/profile');
+  }
+
+  const handleGoNextStep = () => {
+    if (step < 3) {
+      setStep(prev => prev + 1);
+    }
+  }
+
+  const handleGoPreviousStep = () => {
+    if (step > 1) {
+      setStep(prev => prev - 1);
+    }
+  }
+
+  if (!isGuestUserAtom) {
+    return <NoContentCard className="Account has already been claimed" />;
+  }
+
+  return (
+    <ScrummyMatrixBackground>
+
+      <div className="flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto">
+        {/* Header */}
+
+        <div className='flex flex-row w-full items-center justify-between' >
+          <div></div>
+          <div>
+            <button onClick={handleCancel} className='w-10 h-10 cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl' >
+              <X className='text-black dark:text-white' />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center w-full">
+          <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
+          <p className='dark:text-white font-medium text-xl' >Claim your SCRUMMY Profile</p>
+        </div>
+
+
+        <div className='flex  flex-row items-center justify-center gap-2' >
+          <FormStepIndicator
+            label='Profile'
+            icon={<User />}
+            isCurrent={step === 1}
+            isCompleted={step > 1}
+          />
+
+          <FormStepIndicator
+            label='Password'
+            icon={<KeyRound />}
+            isCurrent={step === 2}
+            isCompleted={step > 2}
+          />
+
+          <FormStepIndicator
+            label='Confirm'
+            icon={<BadgeCheck />}
+            isCurrent={step === 3}
+            isCompleted={step > 3}
+          />
+        </div>
+
+
+        {/* Content */}
+        {step === 1 && (
+          <EmailUsernameStep
+            onNextStep={handleGoNextStep}
+            onPreviousStep={handleGoPreviousStep}
+            form={formData}
+            setForm={setFormData}
+          />
+        )}
+
+        {step === 2 && (
+          <CreatePasswordStep
+            onNextStep={handleGoNextStep}
+            onPreviousStep={handleGoPreviousStep}
+            form={formData}
+            setForm={setFormData}
+          />
+        )}
+
+        {step === 3 && (
+          <ConfirmationStep
+            onNextStep={handleGoNextStep}
+            onPreviousStep={handleGoPreviousStep}
+            form={formData}
+            setForm={setFormData}
+          />
+        )}
+
+        {step > 1 && (
+          <button onClick={handleGoPreviousStep} >
+            <SecondaryText>Go  Back</SecondaryText>
+          </button>
+        )}
+        { }
+
+      </div>
+
+    </ScrummyMatrixBackground>
+  );
+}
+
+type ClaimAccountForm = {
+  username: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+}
+
+type StepProps = {
+  onNextStep?: () => void,
+  form: ClaimAccountForm,
+  onPreviousStep?: () => void,
+  setForm: (form: ClaimAccountForm) => void
+}
+
+function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
+
+  const [error, setError] = useState<string>();
+  const { isLoading: loadingEmailCheck, emailTaken } = useEmailUniqueValidator(form.email);
+  const isFormComplete = !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username);
+
+  const handleNextStep = () => {
+    if (form.username && form.email && onNextStep) {
+
+      if (!emailValidator(form.email)) {
+        setError(`Please enter a valid email, '${form.email}' is not a valid email.`);
+        return;
+      }
+
+      onNextStep();
+    }
+  }
+
+  return (
+    <form
+      className='flex flex-col gap-4 w-full'
+      onSubmit={(e) => {
+        e.preventDefault(); handleNextStep();
+      }}
+    >
+
+      <div className='w-full flex flex-col mt-4 items-center justify-center' >
+        <SecondaryText>Create a username for your account</SecondaryText>
+      </div>
+
+      <InputField
+        className='w-full'
+        label='Username'
+        placeholder='What should we call you?'
+        onChange={(v) => setForm({ ...form, username: v ?? '' })}
+        value={form.username}
+      />
+
+      <div className='flex flex-col' >
+
+        <InputField
+          className='w-full'
+          label='Email'
+          placeholder='Email'
+          onChange={(v) => setForm({ ...form, email: v ?? '' })}
+          value={form.email}
+          type='email'
+        />
+
+        {emailTaken && <ErrorMessage message='Email is registered with another account' />}
+      </div>
+
+      <PrimaryButton
+        disabled={!isFormComplete}
+      >
+        Continue
+      </PrimaryButton>
+
+      {error && (
+        <ErrorMessage message={error} />
+      )}
+    </form>
+  )
+}
+
+
+function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
+
+  const [error, setError] = useState<string>();
+  const isFormComplete = Boolean(form.confirmPassword) && Boolean(form.password) && form.password === form.confirmPassword;
+
+  const handleNextStep = () => {
+    if (form.password && form.confirmPassword && onNextStep) {
+
+      if (form.password !== form.confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      }
+
+      const [isPasswordValid, reason] = validatePassword(form.password);
+
+      if (!isPasswordValid) {
+        setError(reason);
+        return;
+      }
+
+      onNextStep();
+    }
+  }
+
+  return (
+    <form
+      className='flex flex-col gap-4 w-full'
+      onSubmit={(e) => {
+        e.preventDefault(); handleNextStep();
+      }}
+    >
+
+      <div className='w-full flex flex-col mt-4 items-center justify-center' >
+        <SecondaryText>Create a Password for your account</SecondaryText>
+      </div>
+
+      <PasswordInputField
+        className='w-full'
+        label='Password'
+        placeholder='Password'
+        onChange={(v) => setForm({ ...form, password: v ?? '' })}
+        value={form.password}
+
+      />
+
+      <PasswordInputField
+        className='w-full'
+        label='Confirm Password'
+        placeholder='Confirm Password'
+        onChange={(v) => setForm({ ...form, confirmPassword: v ?? '' })}
+        value={form.confirmPassword}
+      />
+
+      <PrimaryButton
+        disabled={!isFormComplete}
+      >
+        Continue
+      </PrimaryButton>
+
+      {error && (
+        <ErrorMessage
+          message={error}
+        />
+      )}
+    </form>
+  )
+}
+
+function ConfirmationStep({ form}: StepProps) {
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
 
-  const { emailTaken, isLoading: isEmailValidatorLoading } = useEmailUniqueValidator(
-    formData.email
-  );
-
-  const isEmailTaken = !isEmailValidatorLoading && emailTaken;
+  const [errors, setErrors] = useState<any>();
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors: any = {};
 
-    if (!formData.username.trim()) {
+    if (!form.username.trim()) {
       newErrors.username = 'Username is required';
     }
 
-    if (!formData.email.trim()) {
+    if (!form.email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       newErrors.email = 'Please enter a valid email';
     }
 
-    if (!formData.password) {
+    if (!form.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
+    } else if (form.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
     }
 
-    if (!formData.confirmPassword) {
+    if (!form.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
+    } else if (form.password !== form.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
@@ -93,9 +355,9 @@ function ScreenContent() {
 
     try {
       const data: ClaimGuestAccountReq = {
-        email: formData.email,
-        password: formData.password,
-        username: formData.username,
+        email: form.email,
+        password: form.password,
+        username: form.username,
       };
 
       const { data: res, error } = await authService.claimGuestAccount(data);
@@ -122,136 +384,42 @@ function ScreenContent() {
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error for this field when user types
-    if (errors[field]) {
-      setErrors((prev: any) => ({ ...prev, [field]: '' }));
-    }
-  };
-
-  if (!isGuestUserAtom) {
-    return <NoContentCard className="Account has already been claimed" />;
-  }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-dark-850">
-      {/* Header */}
-      <div className="bg-white dark:bg-dark-800/70 border-b dark:border-slate-700 border-slate-100 shadow-sm">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="mr-4 p-2 -ml-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-          </button>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Complete Your Profile
-          </h1>
+    <form
+      className='flex flex-col gap-6 w-full'
+      onSubmit={handleSubmit}
+    >
+
+      <div className='w-full flex flex-col items-center justify-center' >
+        <SecondaryText>Confirm Your Details</SecondaryText>
+      </div>
+
+      <RoundedCard className='p-4' >
+        <div className='flex flex-row items-center gap-2' >
+
+          <div>
+            <UserCircle className='w-10 h-10' />
+          </div>
+
+          <div>
+            <h1 className='text-2xl font-semibold' >{form.username}</h1>
+            <SecondaryText>{form.email}</SecondaryText>
+          </div>
         </div>
-      </div>
+      </RoundedCard>
 
-      <div className="flex flex-col items-center justify-center w-full">
-        <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
-      </div>
+      <PrimaryButton
+        disabled={isSubmitting}
+        isLoading={isSubmitting}
+        className='animate-glow py-4'
+      >
+        Claim Account 🔥
+      </PrimaryButton>
 
-      {/* Content */}
-      <div className="flex-1 px-4 py-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-md mx-auto"
-        >
-          <RoundedCard className="rounded-lg dark:bg-slate-800/50 dark:border-slate-600 p-6 shadow-sm">
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Complete your profile to enhance your experience and access your teams from any
-              device.
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Username Field */}
-              <div>
-                <InputField
-                  label="Username*"
-                  placeholder="Username"
-                  value={formData.username}
-                  onChange={v => handleInputChange('username', v ?? '')}
-                  required
-                  id="username"
-                  icon={<User className="w-4 h-4" />}
-                />
-
-                {errors?.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
-              </div>
-
-              {/* Email Field */}
-              <div className="flex flex-col gap-1">
-                <InputField
-                  label="Email*"
-                  placeholder="Email"
-                  required
-                  value={formData.email}
-                  onChange={v => handleInputChange('email', v?.toLowerCase() ?? '')}
-                  id="email"
-                  type="email"
-                  icon={<Mail className="w-4 h-4" />}
-                />
-                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-
-                {isEmailTaken && <FormErrorText error="Email is already taken by another user" />}
-              </div>
-
-              {/* Password Field */}
-              <div>
-                <PasswordInputField
-                  label="Password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={v => handleInputChange('password', v ?? '')}
-                  id="password"
-                />
-
-                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-              </div>
-
-              {/* Confirm Password Field */}
-              <div>
-                <PasswordInputField
-                  label="Confirm Password"
-                  placeholder="Confirm Password"
-                  value={formData.confirmPassword}
-                  onChange={v => handleInputChange('confirmPassword', v ?? '')}
-                  id="confirm-password"
-                />
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
-                )}
-              </div>
-
-              {/* Submit Error */}
-              {submitError && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm"
-                >
-                  {submitError}
-                </motion.div>
-              )}
-
-              {/* Submit Button */}
-              <PrimaryButton
-                type="submit"
-                disbabled={isSubmitting || isEmailTaken || isEmailValidatorLoading}
-                isLoading={isSubmitting}
-                className="py-4"
-              >
-                <span>Complete Profile</span>
-              </PrimaryButton>
-            </form>
-          </RoundedCard>
-        </motion.div>
-      </div>
-    </div>
-  );
+      {(submitError) && (
+        <ErrorMessage message={(submitError)} />
+      )}
+    </form>
+  )
 }

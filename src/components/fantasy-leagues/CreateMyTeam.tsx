@@ -19,6 +19,9 @@ import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
 import { useAtomValue } from 'jotai';
 import { isGuestUserAtom } from '../../state/authUser.atoms';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import NoContentCard from '../shared/NoContentMessage';
+import { useTabView } from '../shared/tabs/TabView';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -73,6 +76,7 @@ export default function CreateMyTeam({
   const { leagueId } = useParams();
 
   const navigate = useNavigate();
+  const { navigate: tabNavigate } = useTabView();
 
   const isGuestAccount = useAtomValue(isGuestUserAtom);
 
@@ -233,6 +237,24 @@ export default function CreateMyTeam({
     );
   }
 
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+
+  const handleGoToStandings = () => {
+    tabNavigate('standings');
+  }
+
+  if (isLocked) {
+    return (
+      <div className='flex flex-col items-center justify-center gap-1' >
+        <NoContentCard
+          message="Whoops! Round has been locked, you can't pick your team now"
+        />
+
+        <PrimaryButton onClick={handleGoToStandings} className='w-fit' >View Standings</PrimaryButton>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full py-4">
       {leagueRound && (
@@ -303,11 +325,10 @@ export default function CreateMyTeam({
                     setIsModalOpen(true);
                   }
                 }}
-                className={`${
-                  selected
+                className={`${selected
                     ? 'w-full h-60 p-0 bg-transparent border-0 rounded-none overflow-visible flex items-center justify-center'
                     : 'w-full h-60 overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center'
-                }`}
+                  }`}
               >
                 {selected ? (
                   <PlayerGameCard
@@ -330,11 +351,10 @@ export default function CreateMyTeam({
               {selected && (
                 <div className="mt-4 flex flex-col gap-2 z-50">
                   <button
-                    className={`${
-                      captainId === selected.tracking_id
+                    className={`${captainId === selected.tracking_id
                         ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
                         : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                    }`}
+                      }`}
                     onClick={() => {
                       if (captainId !== selected.tracking_id) setCaptainId(selected.tracking_id);
                     }}
