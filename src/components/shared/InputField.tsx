@@ -70,10 +70,11 @@ type PasswordInputProps = {
     label?: string,
     placeholder?: string,
     id?: string,
-    minLength?: number
+    minLength?: number,
+    className?: string
 }
 
-export function PasswordInputField({value, onChange, placeholder, label, id, minLength} : PasswordInputProps) {
+export function PasswordInputField({value, onChange, placeholder, label, id, minLength, className} : PasswordInputProps) {
 
     const [showPassword, setShowPassword] = useState<boolean>(false); 
 
@@ -100,6 +101,7 @@ export function PasswordInputField({value, onChange, placeholder, label, id, min
                     {!showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
             }
+            className={className}
         />
     )
 }

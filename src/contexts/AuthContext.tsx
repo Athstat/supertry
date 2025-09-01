@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearAccessTokenAndUser
   } = useAuthToken();
 
-  const fetchKey = accessToken ? '/auth-user' : null;
+  const fetchKey = accessToken ? `/auth-user/${atob(accessToken)}` : null;
   const {data: authUser, isLoading, error, mutate} = useSWR(fetchKey, () => authService.whoami(accessToken));
 
   const setAuth = useCallback((token: string, user: DjangoAuthUser) => {
