@@ -12,6 +12,7 @@ import { PlayerGameCard } from '../components/player/PlayerGameCard';
 import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
 import { Toast } from '../components/ui/Toast';
 import { AnimatePresence, motion } from 'framer-motion';
+import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
 
 // Helper to ensure we only render players with valid image URLs
 const hasValidImageUrl = (u?: string | null): boolean => {
@@ -98,7 +99,8 @@ export default function PostSignUpWelcomeScreen() {
   }, [currIndex, featuredPlayers, athletes]);
 
   return (
-    <div className="flex dark:bg-black flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
+    <ScrummyMatrixBackground>
+          <div className="flex dark:bg-black flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
       <div className="flex flex-col overflow-y-auto no-scrollbar">
         {currIndex === 0 && (
           <AnimatePresence mode="wait">
@@ -174,6 +176,7 @@ export default function PostSignUpWelcomeScreen() {
         <TabProgressDots items={tabs} currIndex={currIndex} setIndex={setIndex} />
       </div>
     </div>
+    </ScrummyMatrixBackground>
   );
 }
 
