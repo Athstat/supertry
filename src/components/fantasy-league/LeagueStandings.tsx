@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react';
 import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
 import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
 import { twMerge } from 'tailwind-merge';
+import { useQueryState } from '../../hooks/useQueryState';
 
 export function LeagueStandings() {
 
@@ -20,6 +21,17 @@ export function LeagueStandings() {
 
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
+
+  const [roundFilterId, setRoundFilterId] = useQueryState('round_filter', {init: 'overall'});
+  
+  
+  // const filteredRound: {label: string, id: string} = useMemo(() => {
+    
+  //   if (roundFilterId === undefined || roundFilterId === 'overall') {
+
+  //   }
+    
+  // }, [roundFilterId]);
 
   const groupId = league?.id;
 
