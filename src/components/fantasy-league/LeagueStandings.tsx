@@ -13,77 +13,44 @@ import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
 import { twMerge } from 'tailwind-merge';
 import { useQueryState } from '../../hooks/useQueryState';
 import LeagueStandingsFilterSelector from './standings/LeagueStandingsFilterSelector';
+import { leagueService } from '../../services/leagueService';
 
 export function LeagueStandings() {
 
   const { userMemberRecord, league, members } = useFantasyLeagueGroup();
-  const fetchKey = league && `/fantasy-league-groups/${league.id}/standings`;
-
 
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
-  const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', {init: 'overall'});
-  
-  
+  const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: 'overall' });
+
+
   // const filteredRound: {label: string, id: string} = useMemo(() => {
-    
+
   //   if (roundFilterId === undefined || roundFilterId === 'overall') {
 
   //   }
-    
+
   // }, [roundFilterId]);
 
   const groupId = league?.id;
+  const fetchKey = useMemo(() => {
+    return league && `/fantasy-league-groups/${league.id}/standings/${roundFilterId}`;
+  }, [roundFilterId]);
+
 
   // Fetch group standings (backend aggregated totals)
   const {
     data: fetchedStandings,
     isLoading,
     error,
-  } = useSWR(fetchKey, () => fantasyLeagueGroupsService.getGroupStandings(groupId as string),
+  } = useSWR(fetchKey, () => leagueStandingsFetcher(groupId as string, roundFilterId ?? ''),
     { revalidateOnFocus: false }
   );
 
   const standings = fetchedStandings ?? [];
 
-  // Map totals per user_id from standings
-  const totalsByUserId = useMemo(() => {
-    const map: Record<string, number> = {};
-    if (!Array.isArray(standings)) return map;
-    for (const row of standings) {
-      if (!row?.user_id) continue;
-      map[row.user_id] = row.total_score ?? 0;
-    }
-    return map;
-  }, [fetchedStandings]);
-
   // Handle team row click
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col gap-4 animate-pulse" >
-        <RoundedCard className="border-none h-8 w-1/3 lg:w-1/4" />
-
-        <div className="flex flex-row items-center justify-between" >
-          <div className="flex flex-row items-center gap-2" >
-            <RoundedCard className="border-none h-8 w-32" />
-            <RoundedCard className="border-none h-8 w-20" />
-          </div>
-
-          <RoundedCard className="border-none h-8 w-20" />
-        </div>
-
-        <div className="flex flex-col gap-2" >
-          <RoundedCard className="border-none h-12 w-full" />
-          <RoundedCard className="border-none h-12 w-full" />
-          <RoundedCard className="border-none h-12 w-full" />
-
-        </div>
-
-      </div>
-    )
-  }
 
   if (error) {
     return <div>
@@ -128,7 +95,7 @@ export function LeagueStandings() {
 
       </div>
 
-      <LeagueStandingsFilterSelector 
+      <LeagueStandingsFilterSelector
         value={roundFilterId}
         onChange={(v) => setRoundFilterId(v)}
       />
@@ -146,6 +113,27 @@ export function LeagueStandings() {
         </div>
 
       </div>
+
+      {isLoading && <div className="flex flex-col gap-4 animate-pulse" >
+        <RoundedCard className="border-none h-8 w-1/3 lg:w-1/4" />
+
+        <div className="flex flex-row items-center justify-between" >
+          <div className="flex flex-row items-center gap-2" >
+            <RoundedCard className="border-none h-8 w-32" />
+            <RoundedCard className="border-none h-8 w-20" />
+          </div>
+
+          <RoundedCard className="border-none h-8 w-20" />
+        </div>
+
+        <div className="flex flex-col gap-2" >
+          <RoundedCard className="border-none h-12 w-full" />
+          <RoundedCard className="border-none h-12 w-full" />
+          <RoundedCard className="border-none h-12 w-full" />
+
+        </div>
+
+      </div>}
 
       <div className='divide-y-2 dark:divide-slate-600/40 divide-slate-400/40' >
 
@@ -202,7 +190,7 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
       case 1:
         return "🏅 Gold"
         break;
-      
+
       case 2:
         return '🥈 Silver';
       case 3:
@@ -243,4 +231,23 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
       </div>
     </div>
   )
+}
+
+async function leagueStandingsFetcher(groupId: string, roundId: string | "overall"): Promise<FantasyLeagueGroupStanding[]> {
+  if (roundId === 'overall' || !roundId) {
+    return await fantasyLeagueGroupsService.getGroupStandings(groupId);
+  }
+
+  const teams = await leagueService.fetchParticipatingTeams(roundId);
+
+  return teams.map((t) => {
+    return {
+      first_name: t.first_name,
+      last_name: t.last_name,
+      user_id: t.user_id,
+      username: t.first_name,
+      rank: t.rank,
+      total_score: t.overall_score
+    }
+  })
 }

@@ -8,7 +8,7 @@ type Props = {
     onChange: (v?: string) => void
 }
 
-export default function LeagueStandingsFilterSelector({value} : Props) {
+export default function LeagueStandingsFilterSelector({value, onChange} : Props) {
   
   const {rounds} = useFantasyLeagueGroup();
   
@@ -29,11 +29,13 @@ export default function LeagueStandingsFilterSelector({value} : Props) {
         className={twMerge(
           'dark:bg-slate-800/80 bg-slate-200 px-6 py-2 rounded-xl'
         )}
+        value={value}
+        onChange={(v) => onChange(v.target.value)}
       >
-        {currentOption && <option id={currentOption.id} key={currentOption.id} >{currentOption.lable}</option>}
+        {currentOption && <option value={currentOption.id} key={currentOption.id} >{currentOption.lable}</option>}
 
         {otherOptions.map((o) => {
-          return <option id={o.id} key={o.id} >{o.lable}</option>
+          return <option value={o.id} key={o.id} >{o.lable}</option>
         })}
       </select>
 
