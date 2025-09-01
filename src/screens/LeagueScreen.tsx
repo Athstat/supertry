@@ -16,6 +16,7 @@ import { useShareLeague } from '../hooks/leagues/useShareLeague';
 import { useQueryState } from '../hooks/useQueryState';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LeagueOverviewTab from '../components/fantasy-league/LeagueOverviewTab';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -32,7 +33,7 @@ function Content() {
   const { handleShare } = useShareLeague(league);
   const navigate = useNavigate();
 
-  const [journey ] = useQueryState('journey');
+  const [journey] = useQueryState('journey');
 
   let initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
   initialTabKey = journey === 'my-team' ? 'my-team' : initialTabKey;
@@ -45,6 +46,11 @@ function Content() {
   }
 
   const headerItems: TabViewHeaderItem[] = [
+    {
+      label: 'Overview',
+      tabKey: 'overview',
+      className: 'flex-1',
+    },
     {
       label: 'Standings',
       tabKey: 'standings',
@@ -151,6 +157,10 @@ function Content() {
 
         <TabViewPage tabKey="commissioner">
           <LeagueCommissionerTab />
+        </TabViewPage>
+
+        <TabViewPage tabKey='overview' >
+          <LeagueOverviewTab />
         </TabViewPage>
       </TabView>
     </PageView>
