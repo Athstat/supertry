@@ -10,6 +10,7 @@ import { ErrorState } from '../ui/ErrorState';
 import { useMemo, useState } from 'react';
 import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
 import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
+import { twMerge } from 'tailwind-merge';
 
 export function LeagueStandings() {
 
@@ -127,24 +128,29 @@ export function LeagueStandings() {
         </div>
 
       </div>
-      {standings.map((member, index) => {
-        return (
-          <div onClick={() => {
-            const mRecord = members.find(m => m.user_id === member.user_id);
 
-            if (mRecord) {
-              handleSelectMember(mRecord);
-            }
-          }} >
-            <LeagueStandingsRow
-              member={member}
-              key={index}
-              index={index}
-              isUser={userMemberRecord?.user_id === member.user_id}
-            />
-          </div>
-        )
-      })}
+      <div className='divide-y-2 dark:divide-slate-600/40 divide-slate-400/40' >
+
+        {standings.map((member, index) => {
+          return (
+            <div onClick={() => {
+              const mRecord = members.find(m => m.user_id === member.user_id);
+
+              if (mRecord) {
+                handleSelectMember(mRecord);
+              }
+            }} >
+              <LeagueStandingsRow
+                member={member}
+                key={index}
+                index={index}
+                isUser={userMemberRecord?.user_id === member.user_id}
+              />
+            </div>
+          )
+        })}
+
+      </div>
 
       <div>
         {/* {isMember && <PrimaryButton onClick={handleShare} className="" >
@@ -173,8 +179,30 @@ type StandingsProps = {
 
 function LeagueStandingsRow({ member, isUser }: StandingsProps) {
 
+  const badge = useMemo(() => {
+    switch (member.rank) {
+      case 1:
+        return "🏅 Gold"
+        break;
+      
+      case 2:
+        return '🥈 Silver';
+      case 3:
+        return '🥉 Bronze'
+
+      default:
+        return undefined;
+        break;
+    }
+
+    return undefined;
+  }, [member]);
+
   return (
-    <div className="flex flex-row rounded-xl cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-800/60  p-3 items-center gap-2 justify-between" >
+    <div className={twMerge(
+      "flex flex-row  cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-800/60  p-3 items-center gap-2 justify-between",
+      isUser && 'bg-blue-500 text-white'
+    )} >
 
       <div className="flex flex-row items-center gap-2" >
         <p className="w-10" >{member.rank}</p>
@@ -183,9 +211,11 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
           <User className="w-4 h-4 text-white" />
         </div>}
 
-        <div>
+        <div className='flex flex-row items-center gap-2' >
           <p>{member.username ?? member.first_name}</p>
           {/* <p>{member.user.first_name}</p> */}
+
+          {badge && <div className='bg-slate-200 dark:bg-slate-700/60 text-sm px-2 rounded-full' >{badge}</div>}
         </div>
 
       </div>
