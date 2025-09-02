@@ -12,7 +12,7 @@ import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
 import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
 import { twMerge } from 'tailwind-merge';
 import { useQueryState } from '../../hooks/useQueryState';
-import LeagueStandingsFilterSelector from './standings/LeagueStandingsFilterSelector';
+import LeagueStandingsFilterSelector, { SelectedWeekIndicator } from './standings/LeagueStandingsFilterSelector';
 import { leagueService } from '../../services/leagueService';
 
 export function LeagueStandings() {
@@ -91,13 +91,18 @@ export function LeagueStandings() {
             <Plus className="w-4 h-4" />
             Invite
           </PrimaryButton> */}
+
+          <LeagueStandingsFilterSelector
+            value={roundFilterId}
+            onChange={(v) => setRoundFilterId(v)}
+          />
         </div>
+
 
       </div>
 
-      <LeagueStandingsFilterSelector
+      <SelectedWeekIndicator 
         value={roundFilterId}
-        onChange={(v) => setRoundFilterId(v)}
       />
 
 
@@ -185,6 +190,9 @@ type StandingsProps = {
 
 function LeagueStandingsRow({ member, isUser }: StandingsProps) {
 
+  const { members } = useFantasyLeagueGroup();
+  const memberRecord = members.find((m) => m.user_id === member.user_id);
+
   const badge = useMemo(() => {
     switch (member.rank) {
       case 1:
@@ -218,7 +226,7 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
         </div>}
 
         <div className='flex flex-row items-center gap-2' >
-          <p>{member.username ?? member.first_name}</p>
+          <p>{memberRecord?.user.username ?? member.username ?? member.first_name}</p>
           {/* <p>{member.user.first_name}</p> */}
 
           {badge && <div className='bg-slate-200 dark:bg-slate-700/60 text-sm px-2 rounded-full' >{badge}</div>}
