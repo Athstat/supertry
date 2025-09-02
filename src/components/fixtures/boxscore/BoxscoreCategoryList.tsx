@@ -3,7 +3,7 @@ import { djangoAthleteService } from "../../../services/athletes/djangoAthletesS
 import PlayerMugshot from "../../shared/PlayerMugshot"
 import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../shared/SecondaryText"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import NoContentCard from "../../shared/NoContentMessage"
 
@@ -21,14 +21,25 @@ type BoxscoreHeader = {
 type BoxscoreCategoryListProps = {
     columnHeaders: BoxscoreHeader[],
     list: BoxscoreListRecordItem[],
-    title?: string
+    title?: string,
+    noContentMessage?: string
 }
 
 /** Renders a boxscore table */
-export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: BoxscoreCategoryListProps) {
+export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noContentMessage }: BoxscoreCategoryListProps) {
 
-    const [showMore, setShowMore] = useState(false);
-    const maxIndex = showMore ? list.length - 1 : 4;
+    // const [showMore, setShowMore] = useState(false);
+    const maxIndex = list.length - 1;
+
+    const [notRenderedCount, setNotRenderedCount] = useState(0);
+
+    const onRenderAthlete = useCallback(() => {
+        setNotRenderedCount(prev => prev += 1)
+    }, [setNotRenderedCount]);
+
+    useEffect(() => {
+        setNotRenderedCount(0);
+    }, [list]);
 
     return (
         <div className="flex flex-col gap-2" >
@@ -63,14 +74,16 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
                             <AthleteBoxscoreRecord
                                 item={i}
                                 index={index}
+                                key={i.athleteId}
+                                onFailRender={onRenderAthlete}
                             />
                         )
                     })}
 
-                    {list.length === 0 && (
+                    {(list.length === 0 || (list.length > 0 && notRenderedCount >= list.length )) && (
                         <div>
-                            <NoContentCard 
-                                message={`Whoops, no ${title} stats yet!`}
+                            <NoContentCard
+                                message={noContentMessage || `Whoops, no ${title} stats yet!`}
                             />
                         </div>
                     )}
@@ -85,14 +98,25 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
 
 type AthleteBoxscoreItemProps = {
     item: BoxscoreListRecordItem,
-    index: number
+    index: number,
+    onFailRender?: () => void
 }
 
-function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
+function AthleteBoxscoreRecord({ item, onFailRender }: AthleteBoxscoreItemProps) {
 
     const { athleteId } = item;
     const key = `/athletes/${athleteId}`;
-    const { data: info, isLoading: loadingInfo } = useSWR(key, () => djangoAthleteService.getAthleteById(athleteId));
+    const { data: info, isLoading: loadingInfo, } = useSWR(key, () => djangoAthleteService.getAthleteById(athleteId), {
+        revalidateOnFocus: false
+    });
+
+    useEffect(() => {
+
+        if (!info && onFailRender && !loadingInfo) {
+            onFailRender();
+        }
+
+    }, [info, onFailRender, loadingInfo]);
 
     if (loadingInfo) {
         return (
@@ -103,6 +127,9 @@ function AthleteBoxscoreRecord({ item, index }: AthleteBoxscoreItemProps) {
     }
 
     if (!info) return;
+
+
+
 
     return (
         <div className={twMerge(
