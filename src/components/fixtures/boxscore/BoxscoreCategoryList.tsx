@@ -6,7 +6,6 @@ import SecondaryText from "../../shared/SecondaryText"
 import { useCallback, useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import NoContentCard from "../../shared/NoContentMessage"
-import { IProAthlete } from "../../../types/athletes"
 
 export type BoxscoreListRecordItem = {
     athleteId: string,
@@ -29,7 +28,7 @@ type BoxscoreCategoryListProps = {
 /** Renders a boxscore table */
 export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noContentMessage }: BoxscoreCategoryListProps) {
 
-    const [showMore, setShowMore] = useState(false);
+    // const [showMore, setShowMore] = useState(false);
     const maxIndex = list.length - 1;
 
     const [notRenderedCount, setNotRenderedCount] = useState(0);
@@ -103,7 +102,7 @@ type AthleteBoxscoreItemProps = {
     onFailRender?: () => void
 }
 
-function AthleteBoxscoreRecord({ item, index, onFailRender }: AthleteBoxscoreItemProps) {
+function AthleteBoxscoreRecord({ item, onFailRender }: AthleteBoxscoreItemProps) {
 
     const { athleteId } = item;
     const key = `/athletes/${athleteId}`;
