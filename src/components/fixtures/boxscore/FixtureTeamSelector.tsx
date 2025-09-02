@@ -19,7 +19,7 @@ export default function FixtureTeamSelector({ fixture }: Props) {
   }
 
   return (
-    <div className="bg-white flex border border-slate-700 flex-row items-center gap-2 dark:bg-slate-800/40 shadow-lg rounded-xl overflow-clip" >
+    <div className="bg-white flex border border-slate-300 dark:border-slate-700 flex-row items-center gap-2 dark:bg-slate-800/40 shadow-lg rounded-xl overflow-clip" >
 
       <SingleTeamButton
         team={fixture.team}
@@ -52,7 +52,7 @@ function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
 
       onClick={onClick}
       className={twMerge(
-        "flex flex-1 flex-row justify-center cursor-pointer px-4 py-2.5 border-b-2 border-transparent  items-center gap-2",
+        "flex flex-1 flex-row truncate justify-center cursor-pointer px-4 py-2.5 border-b-2 border-transparent  items-center gap-2",
         value.athstat_id === team.athstat_id && 'border-blue-500 text-blue-500'
       )}
 
@@ -65,7 +65,7 @@ function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
       />
 
       <SecondaryText className={twMerge(
-        "font-medium text-base",
+        "font-medium truncate text-nowrap lg:text-base",
         value.athstat_id === team.athstat_id && 'border-blue-500 text-blue-500'
       )} >
         {team.athstat_name}
