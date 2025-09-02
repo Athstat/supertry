@@ -1,5 +1,4 @@
 import { User } from 'lucide-react';
-import { useMemo } from 'react'
 import { twMerge } from 'tailwind-merge';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { FantasyLeagueGroupMember, FantasyLeagueGroupStanding } from '../../../types/fantasyLeagueGroups';
@@ -94,24 +93,24 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
     const { members } = useFantasyLeagueGroup();
     const memberRecord = members.find((m) => m.user_id === member.user_id);
 
-    const badge = useMemo(() => {
-        switch (member.rank) {
-            case 1:
-                return "🏅 Gold"
-                break;
+    // const badge = useMemo(() => {
+    //     switch (member.rank) {
+    //         case 1:
+    //             return "🏅 Gold"
+    //             break;
 
-            case 2:
-                return '🥈 Silver';
-            case 3:
-                return '🥉 Bronze'
+    //         case 2:
+    //             return '🥈 Silver';
+    //         case 3:
+    //             return '🥉 Bronze'
 
-            default:
-                return undefined;
-                break;
-        }
+    //         default:
+    //             return undefined;
+    //             break;
+    //     }
 
-        return undefined;
-    }, [member]);
+    //     return undefined;
+    // }, [member]);
 
     return (
         <div className={twMerge(
@@ -130,7 +129,7 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
                     <p>{memberRecord?.user.username ?? member.username ?? member.first_name}</p>
                     {/* <p>{member.user.first_name}</p> */}
 
-                    {badge && <div className='bg-slate-200 dark:bg-slate-700/60 text-sm px-2 rounded-full' >{badge}</div>}
+                    {/* {badge && <div className='bg-slate-200 dark:bg-slate-700/60 text-sm px-2 rounded-full' >{badge}</div>} */}
                 </div>
 
             </div>
