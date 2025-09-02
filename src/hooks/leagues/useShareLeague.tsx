@@ -13,7 +13,7 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         const baseUrl = (import.meta as any)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
         const inviteInstructions = encodeURI(`${baseUrl}/invite-steps?league_name=${league?.title ?? ''}&user_name=${username ?? ''}&join_code=${league?.entry_code ?? ''}`);
 
-        const shareMessage =`${inviteInstructions}`;
+        const shareMessage =`You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n${inviteInstructions}`;
 
         // Ensure there are no leading blank lines
         //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
@@ -21,9 +21,9 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         // Share ONLY the composed message text (no title/url),
         // so the share sheet doesn't prepend extra lines.
         const shareData: ShareData = {
-            title: `🔥 You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n`,
-            text: "",
-            url: inviteInstructions
+            title: `SCRUMMY Fantasy League Invite`,
+            text: `🔥 You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n\n${inviteInstructions}`,
+            // url: inviteInstructions
         };
 
 
