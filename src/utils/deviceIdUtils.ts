@@ -115,14 +115,21 @@ function normalizeDeviceIdStrict(id: string): string {
  */
 export async function getDeviceId(): Promise<string> {
   // Mobile: must return native device ID or throw. No UUID fallback.
+  
   if (isMobileApp()) {
+    
     console.log('Mobile detected; using window.deviceId...');
-    const mobileDeviceId = window.deviceId;
+    let mobileDeviceId = window.deviceId ?? localStorage.getItem('device_id');
     console.log('Mobile device ID: ', mobileDeviceId);
 
     if (!mobileDeviceId) {
-      throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
+      // throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
+      console.log('Unable to obtain mobile device ID, defaulting to random UUID');
+      mobileDeviceId = `mobile_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
     }
+
+    localStorage.setItem('device_id', mobileDeviceId);
+
     return mobileDeviceId;
   }
 
