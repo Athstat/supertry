@@ -103,7 +103,9 @@ function AthleteBoxscoreRecord({ item, index, onFailRender }: AthleteBoxscoreIte
 
     const { athleteId } = item;
     const key = `/athletes/${athleteId}`;
-    const { data: info, isLoading: loadingInfo } = useSWR(key, () => djangoAthleteService.getAthleteById(athleteId));
+    const { data: info, isLoading: loadingInfo, } = useSWR(key, () => djangoAthleteService.getAthleteById(athleteId), {
+        revalidateOnFocus: false
+    });
 
     useEffect(() => {
 
