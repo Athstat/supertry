@@ -21,6 +21,10 @@ export default function FeaturedFantasyLeagueGroups() {
         return (league.type === 'official_league' || league.creator_id === authUser?.kc_id);
     });
 
+    const otherLeagues = (fetchedLeagues ?? []).filter((l) => {
+        return (l.type !== 'official_league')
+    });
+
     const featuredLeague = officialLeagues.length > 0 ? officialLeagues[0] : undefined;
 
     if (isLoading) {
@@ -84,7 +88,7 @@ export default function FeaturedFantasyLeagueGroups() {
             )}
 
             <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
-                {officialLeagues.map((leagueGroup) => {
+                {otherLeagues.map((leagueGroup) => {
                     return (
                         <FantasyLeagueOverviewCard
                             leagueGroup={leagueGroup}
