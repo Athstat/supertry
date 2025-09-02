@@ -4,7 +4,6 @@ import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
 import HeroImageBanner from '../components/dashboard/HeroImageBanner';
 import { useNavigate } from 'react-router-dom';
-import MyWeekPanel from '../components/dashboard/MyWeekPanel';
 import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 
@@ -34,7 +33,7 @@ export function DashboardScreen() {
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
       <ComparePlayersPanel />
-      <MyWeekPanel />
+      {/* <MyWeekPanel /> */}
       {/* <MyTeamsSection /> */}
     </PageView>
   );
