@@ -13,17 +13,21 @@ export default function FeaturedFantasyLeagueGroups() {
 
     const navigate = useNavigate();
     const key = swrFetchKeys.getAllPublicFantasyLeagues();
-    const { data: fetchedLeagues, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeagues());
+    const { data: fetchedLeagues, isLoading: loadingPublic } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeagues());
+
+    const mineKey = swrFetchKeys.getMyLeagueGroups();
+    const {data: mineLeagueGroups, isLoading: loadingMine} = useSWR(mineKey, () => fantasyLeagueGroupsService.getJoinedLeagues());
+
+    const isLoading = loadingPublic || loadingMine;
 
     const { authUser } = useAuth();
 
     const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
-        return (league.type === 'official_league' || league.creator_id === authUser?.kc_id);
+        return (league.type === 'official_league');
     });
 
-    const otherLeagues = (fetchedLeagues ?? []).filter((l) => {
-        return (l.type !== 'official_league')
-    });
+    const otherLeagues = (mineLeagueGroups ?? [])
+        .filter(l => !officialLeagues.includes(l));
 
     const featuredLeague = officialLeagues.length > 0 ? officialLeagues[0] : undefined;
 
@@ -107,7 +111,7 @@ export default function FeaturedFantasyLeagueGroups() {
                     </p>
 
                     <p className="text-xs" >
-                        Discover leagues, Join, or Create your own fantasy league and invite friends to join to battle it out!
+                        Create your own Fantasy League and Invite Friends!
                     </p>
                 </RoundedCard>
             </div>
