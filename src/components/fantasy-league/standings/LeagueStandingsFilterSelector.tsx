@@ -1,13 +1,12 @@
-import { useMemo } from "react";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup"
-import { getLeagueStandingsFilterItems } from "../../../utils/standingsUtils";
 import { twMerge } from "tailwind-merge";
 import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter";
+import { Fragment } from "react/jsx-runtime";
+import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 
 type Props = {
 }
 
-export default function LeagueStandingsFilterSelector({  }: Props) {
+export default function LeagueStandingsFilterSelector({ }: Props) {
 
   const {
     roundFilterId: value,
@@ -38,22 +37,19 @@ export default function LeagueStandingsFilterSelector({  }: Props) {
 }
 
 type SelectedWeekIndicatorProps = {
-  value?: string
 }
 
-export function SelectedWeekIndicator({ value }: SelectedWeekIndicatorProps) {
+export function SelectedWeekIndicator({ }: SelectedWeekIndicatorProps) {
 
-  const { rounds } = useFantasyLeagueGroup();
-
-  const options = useMemo(() => {
-    return getLeagueStandingsFilterItems(rounds);
-  }, [rounds]);
-
-  const currentOption = options.find((p) => p.id === value);
+  const { currentOption } = useLeagueRoundStandingsFilter();
 
   return (
-    <div className="text-white" >
-      {currentOption?.lable}
-    </div>
+    <Fragment>
+      {<div className="text-white" >
+        <p className="font-bold text-lg" >
+          {currentOption?.lable} Rankings
+        </p>
+      </div>}
+    </Fragment>
   )
 }

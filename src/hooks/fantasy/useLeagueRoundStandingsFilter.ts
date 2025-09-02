@@ -15,12 +15,12 @@ export function useLeagueRoundStandingsFilter() {
     }, [rounds]);
 
     const currentOption = useMemo(() => {
-        return options.find((p) => p.id === roundFilterId);
+        return options.find((p) => p.id?.toString() === roundFilterId);
     }, [options, roundFilterId])
 
     const otherOptions = useMemo(() => {
         return options.filter((p) => {
-            return p.id !== roundFilterId;
+            return p.id?.toString() !== roundFilterId;
         });
     }, [options, roundFilterId]);
 

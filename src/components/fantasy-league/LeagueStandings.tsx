@@ -24,14 +24,6 @@ export function LeagueStandings() {
 
   const {roundFilterId} = useLeagueRoundStandingsFilter();
 
-  // const filteredRound: {label: string, id: string} = useMemo(() => {
-
-  //   if (roundFilterId === undefined || roundFilterId === 'overall') {
-
-  //   }
-
-  // }, [roundFilterId]);
-
   const groupId = league?.id;
   const fetchKey = useMemo(() => {
     return league && `/fantasy-league-groups/${league.id}/standings/${roundFilterId}`;
@@ -97,9 +89,8 @@ export function LeagueStandings() {
 
       </div>
 
-      <SelectedWeekIndicator 
-        value={roundFilterId}
-      />
+      <SelectedWeekIndicator  />
+      
 
 
       <div className="flex flex-row items-center p-3 justify-between" >
