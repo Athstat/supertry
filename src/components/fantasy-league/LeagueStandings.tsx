@@ -11,9 +11,9 @@ import { useMemo, useState } from 'react';
 import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
 import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
 import { twMerge } from 'tailwind-merge';
-import { useQueryState } from '../../hooks/useQueryState';
 import LeagueStandingsFilterSelector, { SelectedWeekIndicator } from './standings/LeagueStandingsFilterSelector';
 import { leagueService } from '../../services/leagueService';
+import { useLeagueRoundStandingsFilter } from '../../hooks/fantasy/useLeagueRoundStandingsFilter';
 
 export function LeagueStandings() {
 
@@ -22,8 +22,7 @@ export function LeagueStandings() {
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
-  const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: 'overall' });
-
+  const {roundFilterId} = useLeagueRoundStandingsFilter();
 
   // const filteredRound: {label: string, id: string} = useMemo(() => {
 
@@ -92,10 +91,7 @@ export function LeagueStandings() {
             Invite
           </PrimaryButton> */}
 
-          <LeagueStandingsFilterSelector
-            value={roundFilterId}
-            onChange={(v) => setRoundFilterId(v)}
-          />
+          <LeagueStandingsFilterSelector/>
         </div>
 
 

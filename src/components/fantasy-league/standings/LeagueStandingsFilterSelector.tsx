@@ -2,25 +2,19 @@ import { useMemo } from "react";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup"
 import { getLeagueStandingsFilterItems } from "../../../utils/standingsUtils";
 import { twMerge } from "tailwind-merge";
+import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter";
 
 type Props = {
-  value?: string,
-  onChange: (v?: string) => void
 }
 
-export default function LeagueStandingsFilterSelector({ value, onChange }: Props) {
+export default function LeagueStandingsFilterSelector({  }: Props) {
 
-  const { rounds } = useFantasyLeagueGroup();
-
-  const options = useMemo(() => {
-    return getLeagueStandingsFilterItems(rounds);
-  }, [rounds]);
-
-  const currentOption = options.find((p) => p.id === value);
-
-  const otherOptions = options.filter((p) => {
-    return p.id !== value;
-  });
+  const {
+    roundFilterId: value,
+    setRoundFilterId: onChange,
+    otherOptions,
+    currentOption
+  } = useLeagueRoundStandingsFilter();
 
   return (
     <div>
