@@ -1,7 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter";
 import { Fragment } from "react/jsx-runtime";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 
 type Props = {
 }
