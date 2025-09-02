@@ -44,7 +44,7 @@ export function SelectedWeekIndicator({ }: SelectedWeekIndicatorProps) {
 
   return (
     <Fragment>
-      {<div className="text-white" >
+      {<div className="" >
         <p className="font-bold text-lg" >
           {currentOption?.lable} Rankings
         </p>
