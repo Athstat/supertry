@@ -3,7 +3,6 @@ import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
 import { FantasyLeagueOverviewCard } from "../components/fantasy-leagues/league_dashboard_ui/FantasyLeagueOverviewCard";
-import { useAuth } from "../contexts/AuthContext";
 import RoundedCard from "../components/shared/RoundedCard";
 import { useNavigate } from "react-router-dom";
 import { FantasyLeagueGroup } from "../types/fantasyLeagueGroups";
@@ -20,7 +19,6 @@ export default function FeaturedFantasyLeagueGroups() {
 
     const isLoading = loadingPublic || loadingMine;
 
-    const { authUser } = useAuth();
 
     const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
         return (league.type === 'official_league');
