@@ -5,6 +5,7 @@ export function useDeviceId() {
   const [deviceId, setDeviceId] = useState<string>();
 
   useEffect(() => {
+
     const fetcher = async () => {
       setDeviceId(await getDeviceId());
     };
