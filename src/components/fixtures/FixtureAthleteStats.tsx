@@ -4,6 +4,9 @@ import { GameSportAction } from "../../types/boxScore"
 import { useMemo, useState } from "react"
 import { Table2 } from "lucide-react"
 import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
+import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
+import { IProTeam } from "../../types/team"
+import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
 
 type Props = {
     fixture: IFixture,
@@ -14,6 +17,7 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
 
     const { gameKickedOff } = fixtureSumary(fixture);
     const [search, setSearch] = useState<string>("");
+    
 
     const attackList = useMemo(() => {
         return attackBoxscoreList(sportActions);
@@ -38,6 +42,10 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
                 <Table2 />
                 <h1 className="font-bold text-lg" >Boxscore</h1>
             </div>
+
+            <FixtureTeamSelector 
+                fixture={fixture}
+            />
 
             <BoxscoreTable
                 title="Attacking"
