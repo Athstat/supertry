@@ -55,7 +55,7 @@ export default function LeagueStandingsTable({isLoading, standings, handleSelect
                 </div>
             }
 
-            <div className='divide-y-2 dark:divide-slate-700/40 divide-slate-300/50' >
+            <div className='divide-y dark:divide-slate-700/20 divide-slate-300/40' >
 
                 {standings.map((member, index) => {
                     return (
