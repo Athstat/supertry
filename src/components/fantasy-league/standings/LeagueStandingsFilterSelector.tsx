@@ -1,6 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter";
 import { Fragment } from "react/jsx-runtime";
+import SecondaryText from "../../shared/SecondaryText";
 
 type Props = {
 }
@@ -45,9 +46,9 @@ export function SelectedWeekIndicator({ }: SelectedWeekIndicatorProps) {
   return (
     <Fragment>
       {<div className="" >
-        <p className="font-bold text-lg" >
+        <SecondaryText className="font-medium text-md" >
           {currentOption?.lable} Rankings
-        </p>
+        </SecondaryText>
       </div>}
     </Fragment>
   )
