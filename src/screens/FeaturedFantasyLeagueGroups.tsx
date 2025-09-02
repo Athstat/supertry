@@ -1,4 +1,4 @@
-import { Trophy } from "lucide-react";
+import { Plus, Trophy } from "lucide-react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
@@ -105,11 +105,11 @@ export default function FeaturedFantasyLeagueGroups() {
                     onClick={handleGoToLeagueCreation}
                 >
                     <p>
-                        <Trophy className="" />
+                        <Plus className="" />
                     </p>
 
                     <p className="text-xs" >
-                        Create your own Fantasy League and Invite Friends!
+                        Join or Create Your own Fantasy League and Invite Friends!
                     </p>
                 </RoundedCard>
             </div>
