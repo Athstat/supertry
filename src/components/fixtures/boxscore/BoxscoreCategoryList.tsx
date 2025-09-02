@@ -21,14 +21,15 @@ type BoxscoreHeader = {
 type BoxscoreCategoryListProps = {
     columnHeaders: BoxscoreHeader[],
     list: BoxscoreListRecordItem[],
-    title?: string
+    title?: string,
+    noContentMessage?: string
 }
 
 /** Renders a boxscore table */
-export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: BoxscoreCategoryListProps) {
+export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noContentMessage }: BoxscoreCategoryListProps) {
 
     const [showMore, setShowMore] = useState(false);
-    const maxIndex = showMore ? list.length - 1 : 4;
+    const maxIndex = list.length - 1;
 
     return (
         <div className="flex flex-col gap-2" >
@@ -63,6 +64,7 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
                             <AthleteBoxscoreRecord
                                 item={i}
                                 index={index}
+                                key={i.athleteId}
                             />
                         )
                     })}
@@ -70,7 +72,7 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title }: Boxsc
                     {list.length === 0 && (
                         <div>
                             <NoContentCard 
-                                message={`Whoops, no ${title} stats yet!`}
+                                message={noContentMessage || `Whoops, no ${title} stats yet!`}
                             />
                         </div>
                     )}
