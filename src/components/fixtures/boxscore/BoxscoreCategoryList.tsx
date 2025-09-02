@@ -38,6 +38,10 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noConte
         setNotRenderedCount(prev => prev += 1)
     }, [setNotRenderedCount]);
 
+    useEffect(() => {
+        setNotRenderedCount(0);
+    }, [list]);
+
     return (
         <div className="flex flex-col gap-2" >
 
