@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import { getDeviceId } from '../utils/deviceIdUtils';
 
+type DeviceIdData = {
+  realDeviceId: string;
+  storedDeviceId: string;
+};
+
 export function useDeviceId() {
-  const [deviceId, setDeviceId] = useState<string>();
+  const [deviceId, setDeviceId] = useState<DeviceIdData>();
 
   useEffect(() => {
-
     const fetcher = async () => {
-      setDeviceId(await getDeviceId());
+      const idData = await getDeviceId();
+      setDeviceId(idData);
     };
 
     fetcher();

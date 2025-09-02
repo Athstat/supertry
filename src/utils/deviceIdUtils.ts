@@ -113,24 +113,23 @@ function normalizeDeviceIdStrict(id: string): string {
  * Get the device ID - either from mobile app (strict) or generate/retrieve for web
  * @returns Promise<string> The device ID
  */
-export async function getDeviceId(): Promise<string> {
+export async function getDeviceId(): Promise<{ realDeviceId: string; storedDeviceId: string }> {
   // Mobile: must return native device ID or throw. No UUID fallback.
-  
-  if (isMobileApp()) {
-    
-    console.log('Mobile detected; using window.deviceId...');
-    let mobileDeviceId = window.deviceId ?? localStorage.getItem('device_id');
-    console.log('Mobile device ID: ', mobileDeviceId);
 
-    if (!mobileDeviceId) {
-      // throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
-      console.log('Unable to obtain mobile device ID, defaulting to random UUID');
-      mobileDeviceId = `mobile_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+  if (isMobileApp()) {
+    console.log('Mobile detected...');
+
+    const storedDeviceId = localStorage.getItem('device_id') || '';
+    const realDeviceId = window.deviceId || '';
+
+    console.log('Stored device ID: ', storedDeviceId);
+    console.log('Real device ID: ', realDeviceId);
+
+    if (!storedDeviceId && !realDeviceId) {
+      throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
     }
 
-    localStorage.setItem('device_id', mobileDeviceId);
-
-    return mobileDeviceId;
+    return { realDeviceId, storedDeviceId };
   }
 
   console.log('Web detected; using deviceId from localStorage or creating a new one...');
@@ -156,7 +155,8 @@ export async function getDeviceId(): Promise<string> {
 
   console.log('deviceId exists in local storage: ', webDeviceId);
 
-  return webDeviceId;
+  // For web, both real and stored device IDs are the same
+  return { realDeviceId: webDeviceId, storedDeviceId: webDeviceId };
 }
 
 /**
