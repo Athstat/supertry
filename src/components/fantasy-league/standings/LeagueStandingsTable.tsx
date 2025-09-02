@@ -19,7 +19,7 @@ export default function LeagueStandingsTable({isLoading, standings, handleSelect
 
     return (
         <div className=' rounded-xl ' >
-            <div className="flex bg-slate-200/50 dark:bg-slate-800/40 flex-row items-center p-3 justify-between" >
+            <div className="flex  flex-row items-center p-3 justify-between" >
 
                 <div className="flex flex-row items-center gap-2" >
                     <SecondaryText className="text-md w-10" >Rank</SecondaryText>
@@ -55,7 +55,7 @@ export default function LeagueStandingsTable({isLoading, standings, handleSelect
                 </div>
             }
 
-            <div className='divide-y-2 dark:divide-slate-700/40 divide-slate-400/40' >
+            <div className='divide-y-2 dark:divide-slate-700/40 divide-slate-300/50' >
 
                 {standings.map((member, index) => {
                     return (
