@@ -36,9 +36,14 @@ interface SocialAuthData {
   name?: string;
 }
 
+type DeviceIdData = {
+  realDeviceId: string;
+  storedDeviceId: string;
+};
+
 export const authService = {
   /** Authenticates a guest user using their device's id */
-  async authenticateAsGuestUser(deviceId: string): RestPromise<DjangoDeviceAuthRes> {
+  async authenticateAsGuestUser(deviceId: DeviceIdData): RestPromise<DjangoDeviceAuthRes> {
     try {
       const uri = getUri('/api/v1/auth/device');
 
