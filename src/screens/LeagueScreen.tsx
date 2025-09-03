@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Plus, Trophy } from 'lucide-react';
+import { ArrowLeft, Share2, Trophy } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
@@ -14,7 +14,7 @@ import MyTeams from '../components/fantasy-leagues/MyTeams';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { useShareLeague } from '../hooks/leagues/useShareLeague';
 import { useQueryState } from '../hooks/useQueryState';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LeagueOverviewTab from '../components/fantasy-league/LeagueOverviewTab';
 
@@ -63,11 +63,11 @@ function Content() {
       className: 'flex-1',
     },
 
-    {
-      label: 'Fixtures',
-      tabKey: 'fixtures',
-      className: 'flex-1',
-    },
+    // {
+    //   label: 'Fixtures',
+    //   tabKey: 'fixtures',
+    //   className: 'flex-1',
+    // },
 
     {
       label: 'Commissioner',
@@ -76,11 +76,11 @@ function Content() {
       disabled: !userMemberRecord || userMemberRecord.is_admin == false,
     },
 
-    {
-      label: 'Info',
-      tabKey: 'info',
-      className: 'flex-1',
-    },
+    // {
+    //   label: 'Info',
+    //   tabKey: 'info',
+    //   className: 'flex-1',
+    // },
   ];
 
   const navigateToLeagues = () => {
@@ -107,7 +107,8 @@ function Content() {
 
               {isMember && (
                 <PrimaryButton onClick={handleShare}>
-                  <Plus className="w-4 h-4" />
+                  {/* <Plus className="w-4 h-4" /> */}
+                  <Share2 className="w-4 h-4" />
                   Invite
                 </PrimaryButton>
               )}
