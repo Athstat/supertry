@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Share2, Trophy } from 'lucide-react';
+import { ArrowLeft, Globe, Share2, Trophy } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
@@ -29,7 +29,7 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-  const { league, userMemberRecord, isMember } = useFantasyLeagueGroup();
+  const { league, userMemberRecord, isMember, isOfficialLeague } = useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);
   const navigate = useNavigate();
 
@@ -94,7 +94,7 @@ function Content() {
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-col items-start gap-2">
             <div className="flex flex-row items-center gap-2">
-              <Trophy />
+              {isOfficialLeague ? <Globe /> : <Trophy />}
               <p className="font-bold text-xl">{league?.title}</p>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
