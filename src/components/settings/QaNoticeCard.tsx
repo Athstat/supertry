@@ -1,4 +1,3 @@
-import { TestTube } from "lucide-react";
 import { isInProduction } from "../../utils/webUtils"
 import WarningCard from "../shared/WarningCard";
 import { twMerge } from "tailwind-merge";
