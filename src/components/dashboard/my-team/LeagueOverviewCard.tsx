@@ -8,7 +8,7 @@ import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLea
 import { leagueService } from '../../../services/leagueService'
 import { LoadingState } from '../../ui/LoadingState'
 import BlueGradientCard from '../../shared/BlueGradientCard'
-import { ArrowRight, Lock, Trophy } from 'lucide-react'
+import { ArrowRight, Lock } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils'
 import RoundedCard from '../../shared/RoundedCard'
@@ -21,8 +21,6 @@ import PlayerMugshot from '../../shared/PlayerMugshot'
 import { IProAthlete } from '../../../types/athletes'
 import { twMerge } from 'tailwind-merge'
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal'
-import { useCountdown } from '../../../hooks/useCountdown'
-import { epochDiff } from '../../../utils/dateUtils'
 import LeagueRoundCountdown from '../../fantasy-league/LeagueCountdown'
 
 type Props = {
