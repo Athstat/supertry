@@ -1,14 +1,11 @@
+import { DeviceIdPair } from "../../types/device";
 import { isInProduction } from "../webUtils";
 import { DeviceIdUnavailableError } from "./exceptions";
 
-/** Represents a mobile device id pair */
-export type MobileDeviceIdPair = {
-    realDeviceId: string,
-    storedDeviceId?: string
-}
+
 
 /** Returns the mobile device id */
-export function getMobileDeviceId(): MobileDeviceIdPair {
+export function getMobileDeviceId(): DeviceIdPair {
 
     const isProd = isInProduction();
 
@@ -21,7 +18,7 @@ export function getMobileDeviceId(): MobileDeviceIdPair {
 }
 
 /** On QA the test flight app is always guarenteed to return a real device id */
-function getQaMobileDeviceId(): MobileDeviceIdPair {
+function getQaMobileDeviceId(): DeviceIdPair {
     console.log('Mobile detected...');
 
     const storedDeviceId = localStorage.getItem('device_id') || '';
@@ -38,7 +35,7 @@ function getQaMobileDeviceId(): MobileDeviceIdPair {
 }
 
 /** Handles getting the mobile device id on prod, and defaults incase no device id is found */
-function getProdMobileDeviceId(): MobileDeviceIdPair {
+function getProdMobileDeviceId(): DeviceIdPair {
     
     console.log("Retrieving mobile device ID using prod solution")
     let mobileDeviceId = window.deviceId ?? localStorage.getItem('device_id');
