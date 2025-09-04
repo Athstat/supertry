@@ -2,17 +2,12 @@
  * Device ID utilities for both mobile app (via WebView) and web browser
  */
 
-import { DjangoAuthUser } from '../types/auth';
+import { DjangoAuthUser } from '../../types/auth';
+import { DeviceIdUnavailableError } from './exceptions';
 
 /**
  * Error thrown when a device ID cannot be obtained on mobile.
  */
-export class DeviceIdUnavailableError extends Error {
-  constructor(message = 'Unable to obtain mobile device ID') {
-    super(message);
-    this.name = 'DeviceIdUnavailableError';
-  }
-}
 
 /**
  * Internal: get the injected bridge if available (supports both cases)
