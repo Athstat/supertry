@@ -9,6 +9,7 @@ import ClaimGuestAccountBox from '../components/auth/ClaimGuestAccountBox';
 import LogoutButton from '../components/auth/LogoutButton';
 import DeleteAccountButton from '../components/auth/DeleteAccountButton';
 import Experimental from '../components/shared/ab_testing/Experimental';
+import QaNoticeCard from '../components/settings/QaNoticeCard';
 
 export function UserProfileScreen() {
 
@@ -56,6 +57,8 @@ function Content() {
         )}
 
         <LicensingModal />
+
+        <QaNoticeCard />
 
         {/* Logout Button */}
         <LogoutButton

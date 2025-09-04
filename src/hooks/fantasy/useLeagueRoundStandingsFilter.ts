@@ -6,13 +6,14 @@ import { useQueryState } from "../useQueryState";
 /** Hook that provides data and logic for league standings filtering */
 export function useLeagueRoundStandingsFilter() {
 
-    const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: 'overall' });
+    const { sortedRounds } = useFantasyLeagueGroup();
+    const defaultFilterVal = 'overall';
+    const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: defaultFilterVal });
 
-    const { rounds } = useFantasyLeagueGroup();
 
     const options = useMemo(() => {
-        return getLeagueStandingsFilterItems(rounds);
-    }, [rounds]);
+        return getLeagueStandingsFilterItems(sortedRounds);
+    }, [sortedRounds]);
 
     const currentOption = useMemo(() => {
         return options.find((p) => p.id?.toString() === roundFilterId);
@@ -28,7 +29,7 @@ export function useLeagueRoundStandingsFilter() {
     return {
         currentOption,
         otherOptions,
-        rounds,
+        rounds: sortedRounds,
         roundFilterId,
         setRoundFilterId
     }

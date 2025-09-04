@@ -1,3 +1,4 @@
+import BetaTag from "../branding/BetaTag";
 import ScrummyLogo from "../branding/scrummy_logo";
 import ScrummyMatrixBackground from "../shared/ScrummyMatrixBackground";
 
@@ -20,9 +21,16 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
               {title}
             </h1>
 
-            {subtitle && (
-              <p className="mt-2 text-gray-600 dark:text-gray-400">{subtitle}</p>
-            )}
+            <div className="flex flex-row items-center gap-1" >
+
+              {subtitle && (
+                <p className=" text-gray-600 dark:text-gray-400">{subtitle}</p>
+              )}
+
+              <BetaTag />
+            </div>
+
+
           </div>
           {children}
         </div>

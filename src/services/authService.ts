@@ -20,7 +20,7 @@ import {
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
 import { validateUsername } from '../utils/authUtils';
-import { isGuestEmail } from '../utils/deviceIdUtils';
+import { isGuestEmail } from '../utils/deviceId/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
 import { analytics } from './anayticsService';
 import { logger } from './logger';
