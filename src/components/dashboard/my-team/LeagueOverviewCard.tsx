@@ -8,7 +8,7 @@ import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLea
 import { leagueService } from '../../../services/leagueService'
 import { LoadingState } from '../../ui/LoadingState'
 import BlueGradientCard from '../../shared/BlueGradientCard'
-import { ArrowRight, Lock, Trophy } from 'lucide-react'
+import { ArrowRight, Lock } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils'
 import RoundedCard from '../../shared/RoundedCard'
@@ -21,8 +21,7 @@ import PlayerMugshot from '../../shared/PlayerMugshot'
 import { IProAthlete } from '../../../types/athletes'
 import { twMerge } from 'tailwind-merge'
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal'
-import { useCountdown } from '../../../hooks/useCountdown'
-import { epochDiff } from '../../../utils/dateUtils'
+import LeagueRoundCountdown from '../../fantasy-league/LeagueCountdown'
 
 type Props = {
     league: FantasyLeagueGroup
@@ -43,10 +42,6 @@ function Content({ league }: Props) {
 
     const { authUser } = useAuth();
     const { currentRound } = useFantasyLeagueGroup();
-
-    const diff = epochDiff(currentRound?.join_deadline ?? new Date());
-
-    const { days, hours, seconds, minutes, isCountdownFinished } = useCountdown(diff);
 
     const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
         league.id,
@@ -85,16 +80,11 @@ function Content({ league }: Props) {
         navigate(`/league/${league.id}`);
     }
 
-    const timeBlocks = useMemo(() => {
-        return [
-            { value: days, label: 'Days' },
-            { value: hours, label: 'Hours' },
-            { value: minutes, label: 'Minutes' },
-            { value: seconds, label: 'Seconds' },
-        ];
-    }, [days, hours, minutes, seconds]);
+    const dateNow = new Date();
+    const deadline = new Date(currentRound?.join_deadline ?? new Date());
+    const hasDeadlinePassed = dateNow.valueOf() >= deadline.valueOf();
 
-    const showCountDown = !isCountdownFinished;
+    const showCountDown = currentRound?.join_deadline && !hasDeadlinePassed;
 
     return (
         <div className='flex  flex-col gap-4' >
@@ -126,25 +116,11 @@ function Content({ league }: Props) {
 
                 <div>
 
-                    {showCountDown && <div className='flex flex-col gap-2' >
+                    {showCountDown && <LeagueRoundCountdown 
+                        leagueRound={currentRound}
+                    />}
 
-                        {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
-                        <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
-                            {timeBlocks.map(block => (
-                                <div
-                                    key={block.label}
-                                    className="p-2 sm:p-3 md:min-w-[80px] items-center justify-center flex flex-col rounded-xl bg-white/10 dark:bg-white/10 border border-white/10 dark:border-white/10"
-                                >
-                                    <p className="font-bold text-sm sm:text-xl md:text-2xl">
-                                        {block.value.toString().padStart(2, '0')}
-                                    </p>
-                                    <p className="text-[10px] sm:text-xs dark:text-primary-100">{block.label}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>}
-
-                    {isCountdownFinished && (
+                    {hasDeadlinePassed && (
                         <div>
                             <p className='text-sm' >Tick tock, time’s up! The gates are closed, and your fantasy fate? Oh, it’s coming for better or way, way worse. 😎</p>
                         </div>
@@ -225,7 +201,6 @@ type OverviewProps = {
 
 function TeamOverview({ team }: OverviewProps) {
 
-    console.log('Where is this team from ', team);
     const { currentRound } = useFantasyLeagueGroup();
     const isLocked = currentRound && isLeagueRoundLocked(currentRound);
 

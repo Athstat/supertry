@@ -62,6 +62,10 @@ export function useFantasyLeagueGroup() {
     return fetched;
   };
 
+  const isOfficialLeague = useMemo(() => {
+    return league?.type === 'official_league';
+  }, [league]);
+
   return {
     league,
     members,
@@ -73,5 +77,6 @@ export function useFantasyLeagueGroup() {
     isAdminMember: userMemberRecord?.is_admin === true,
     mutateLeague,
     refreshRounds,
+    isOfficialLeague
   };
 }

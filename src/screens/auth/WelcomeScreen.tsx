@@ -10,6 +10,7 @@ import { ErrorMessage } from '../../components/ui/ErrorState';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
 import { FEATURED_PLAYER_IDS } from '../../components/onboarding/OnboardingDataProvider';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import BetaTag from '../../components/branding/BetaTag';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -178,13 +179,14 @@ export function WelcomeScreen() {
               onClick={handleGuestLogin}
               isLoading={isLoading}
             >
-              Get Started!!!
+              <p>Get Started!</p>
+              <BetaTag className='bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none' />
             </PrimaryButton>
 
             {error && <ErrorMessage message={error} />}
 
             <div onClick={navigateToSignin}>
-              <SecondaryText className="underline cursor-pointer text-slate-300">
+              <SecondaryText className="underline cursor-pointer text-white">
                 Already Part of The Scrum? Sign In
               </SecondaryText>
             </div>

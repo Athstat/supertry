@@ -4,6 +4,7 @@ import { StandingsFilterItem } from "../types/standings";
 /** Gets League Standings Filter Items */
 export function getLeagueStandingsFilterItems(rounds: IFantasyLeagueRound[]): StandingsFilterItem[] {
 
+
     return [
         {
             lable: "Overall",

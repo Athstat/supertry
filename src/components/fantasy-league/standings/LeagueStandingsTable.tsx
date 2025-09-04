@@ -4,6 +4,7 @@ import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGr
 import { FantasyLeagueGroupMember, FantasyLeagueGroupStanding } from '../../../types/fantasyLeagueGroups';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
+import { useMemo } from 'react';
 
 
 type Props = {
@@ -59,7 +60,9 @@ export default function LeagueStandingsTable({isLoading, standings, handleSelect
 
                 {standings.map((member, index) => {
                     return (
-                        <div onClick={() => {
+                        <div 
+                            key={index}
+                        onClick={() => {
                             const mRecord = members.find(m => m.user_id === member.user_id);
 
                             if (mRecord) {
@@ -68,7 +71,7 @@ export default function LeagueStandingsTable({isLoading, standings, handleSelect
                         }} >
                             <LeagueStandingsRow
                                 member={member}
-                                key={index}
+                                key={member.user_id}
                                 index={index}
                                 isUser={userMemberRecord?.user_id === member.user_id}
                             />
@@ -93,24 +96,24 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
     const { members } = useFantasyLeagueGroup();
     const memberRecord = members.find((m) => m.user_id === member.user_id);
 
-    // const badge = useMemo(() => {
-    //     switch (member.rank) {
-    //         case 1:
-    //             return "🏅 Gold"
-    //             break;
+    const badge = useMemo(() => {
+        switch (member.rank) {
+            case 1:
+                return "🏅"
+                break;
 
-    //         case 2:
-    //             return '🥈 Silver';
-    //         case 3:
-    //             return '🥉 Bronze'
+            case 2:
+                return '🥈';
+            case 3:
+                return '🥉'
 
-    //         default:
-    //             return undefined;
-    //             break;
-    //     }
+            default:
+                return undefined;
+                break;
+        }
 
-    //     return undefined;
-    // }, [member]);
+        return undefined;
+    }, [member]);
 
     return (
         <div className={twMerge(
@@ -119,7 +122,10 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
         )} >
 
             <div className="flex flex-row items-center gap-2" >
-                <p className="w-10" >{member.rank}</p>
+                <div className='flex flex-row' >
+                    {/* {badge && <div className='text-sm' >{badge}</div>} */}
+                    <p className="w-10" >{member.rank} {badge} </p>
+                </div>
 
                 {isUser && <div className=" w-6 h-6 bg-blue-500 rounded-xl flex flex-col items-center justify-center" >
                     <User className="w-4 h-4 text-white" />
@@ -129,7 +135,7 @@ function LeagueStandingsRow({ member, isUser }: StandingsProps) {
                     <p>{memberRecord?.user.username ?? member.username ?? member.first_name}</p>
                     {/* <p>{member.user.first_name}</p> */}
 
-                    {/* {badge && <div className='bg-slate-200 dark:bg-slate-700/60 text-sm px-2 rounded-full' >{badge}</div>} */}
+                    
                 </div>
 
             </div>
