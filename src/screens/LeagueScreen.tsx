@@ -46,11 +46,11 @@ function Content() {
   }
 
   const headerItems: TabViewHeaderItem[] = [
-    // {
-    //   label: 'Overview',
-    //   tabKey: 'overview',
-    //   className: 'flex-1',
-    // },
+    {
+      label: 'Overview',
+      tabKey: 'overview',
+      className: 'flex-1',
+    },
     {
       label: 'Standings',
       tabKey: 'standings',
@@ -63,11 +63,11 @@ function Content() {
       className: 'flex-1',
     },
 
-    // {
-    //   label: 'Fixtures',
-    //   tabKey: 'fixtures',
-    //   className: 'flex-1',
-    // },
+    {
+      label: 'Fixtures',
+      tabKey: 'fixtures',
+      className: 'flex-1',
+    },
 
     {
       label: 'Commissioner',
@@ -76,11 +76,11 @@ function Content() {
       disabled: !userMemberRecord || userMemberRecord.is_admin == false,
     },
 
-    // {
-    //   label: 'Info',
-    //   tabKey: 'info',
-    //   className: 'flex-1',
-    // },
+    {
+      label: 'Info',
+      tabKey: 'info',
+      className: 'flex-1',
+    },
   ];
 
   const navigateToLeagues = () => {
