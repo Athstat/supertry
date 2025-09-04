@@ -201,7 +201,6 @@ type OverviewProps = {
 
 function TeamOverview({ team }: OverviewProps) {
 
-    console.log('Where is this team from ', team);
     const { currentRound } = useFantasyLeagueGroup();
     const isLocked = currentRound && isLeagueRoundLocked(currentRound);
 

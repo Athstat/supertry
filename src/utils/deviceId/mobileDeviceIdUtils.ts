@@ -2,8 +2,6 @@ import { DeviceIdPair } from "../../types/device";
 import { isInProduction } from "../webUtils";
 import { DeviceIdUnavailableError } from "./exceptions";
 
-
-
 /** Returns the mobile device id */
 export function getMobileDeviceId(): DeviceIdPair {
 
@@ -19,7 +17,8 @@ export function getMobileDeviceId(): DeviceIdPair {
 
 /** On QA the test flight app is always guarenteed to return a real device id */
 function getQaMobileDeviceId(): DeviceIdPair {
-    console.log('Mobile detected...');
+
+    console.log("Retrieving mobile device ID using QA method")
 
     const storedDeviceId = localStorage.getItem('device_id') || '';
     const realDeviceId = window.deviceId || '';
@@ -34,10 +33,10 @@ function getQaMobileDeviceId(): DeviceIdPair {
     return { realDeviceId, storedDeviceId };
 }
 
-/** Handles getting the mobile device id on prod, and defaults incase no device id is found */
+/** Fix we have on QA to solve 'Device Id not found issue'*/
 function getProdMobileDeviceId(): DeviceIdPair {
     
-    console.log("Retrieving mobile device ID using prod solution")
+    console.log("Retrieving mobile device ID using prod method")
     let mobileDeviceId = window.deviceId ?? localStorage.getItem('device_id');
 
     console.log('Mobile device ID: ', mobileDeviceId);
