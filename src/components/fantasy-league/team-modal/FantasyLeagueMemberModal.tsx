@@ -9,11 +9,12 @@ import RoundedCard from "../../shared/RoundedCard"
 import NoContentCard from "../../shared/NoContentMessage"
 import TeamOverviewView from "./team_overview/TeamOverviewView"
 import PlayerPointsBreakdownView from "./points_breakdown/PlayerPointsBreakdownView"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { IProAthlete } from "../../../types/athletes"
 import { Lock } from "lucide-react"
 import SecondaryText from "../../shared/SecondaryText"
 import { useAuth } from "../../../contexts/AuthContext"
+import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter"
 
 type Props = {
     isOpen?: boolean,
@@ -24,14 +25,29 @@ type Props = {
 /** Renders a fantasy league group members team on a modal */
 export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Props) {
 
-    const { currentRound } = useFantasyLeagueGroup();
+    const { currentRound, rounds } = useFantasyLeagueGroup();
+    const {roundFilterId} = useLeagueRoundStandingsFilter();
+
+    const filteredRound = useMemo(() => {
+        if (roundFilterId === "overall" || roundFilterId === undefined) {
+            return currentRound;
+        }
+
+        const fRound = rounds.find((r) => {
+            console.log("Comparison to be made ", `${r.id.toString()} === ${roundFilterId}`)
+            return r.id.toString() === roundFilterId;
+        });
+
+        return fRound || currentRound;
+    }, [roundFilterId, currentRound, rounds]);
+
     const { authUser } = useAuth();
     const isUser = authUser?.kc_id === member.user_id;
 
-    const canPeek = isUser || (currentRound && isLeagueRoundLocked(currentRound));
+    const canPeek = isUser || (filteredRound && isLeagueRoundLocked(filteredRound));
 
-    const fetchKey = canPeek ? `/fantasy-league-rounds/${currentRound?.id}/user-teams/${member.user_id}` : null;
-    const { data: roundTeam, isLoading, error } = useSWR(fetchKey, () => leagueService.getUserRoundTeam(currentRound?.id ?? 0, member.user_id));
+    const fetchKey = canPeek ? `/fantasy-league-rounds/${filteredRound?.id}/user-teams/${member.user_id}` : null;
+    const { data: roundTeam, isLoading, error } = useSWR(fetchKey, () => leagueService.getUserRoundTeam(filteredRound?.id ?? 0, member.user_id));
 
     const [selectPlayer, setSelectedPlayer] = useState<IProAthlete>();
     const onClosePointsBreakdown = () => {
@@ -43,7 +59,7 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
             open={isOpen}
             onClose={onClose}
             key={member.user_id}
-            title={`${member.user.username || member.user.first_name} - ${currentRound?.title}`}
+            title={`${member.user.username || member.user.first_name} - ${filteredRound?.title}`}
             className="gap-4 flex flex-col p-0 no-scrollbar"
             outerCon="p-4 lg:p-8 no-scrollbar"
             hw="lg:w-[40%] no-scrollbar"
@@ -89,7 +105,7 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
                 open={isOpen}
                 onClose={onClose}
                 key={member.user_id}
-                title={`${member.user.username || member.user.first_name} - ${currentRound?.title}`}
+                title={`${member.user.username || member.user.first_name} - ${filteredRound?.title}`}
                 className="p-4 text-center no-scrollbar flex flex-col items-center justify-center w-full h-full gap-4"
                 outerCon="p-4 lg:p-8 no-scrollbar"
                 hw="lg:w-[40%] no-scrollbar min-h-[90vh]"
@@ -113,7 +129,7 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
                 open={isOpen}
                 onClose={onClose}
                 key={member.user_id}
-                title={`${member.user.username || member.user.first_name} - ${currentRound?.title}`}
+                title={`${member.user.username || member.user.first_name} - ${filteredRound?.title}`}
                 className="gap-4 flex flex-col items-center justify-center w-full h-full p-0 no-scrollbar"
                 outerCon="p-4 lg:p-8 no-scrollbar"
                 hw="lg:w-[40%] no-scrollbar lg:w-[40%] no-scrollbar min-h-[90vh]"
@@ -130,23 +146,23 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
             open={isOpen}
             onClose={onClose}
             key={member.user_id}
-            title={`${member.user.username || member.user.first_name} - ${currentRound?.title}`}
+            title={`${member.user.username || member.user.first_name} - ${filteredRound?.title}`}
             className="gap-4 flex flex-col p-0 no-scrollbar min-h-[90vh]"
             outerCon="p-4 lg:p-8 no-scrollbar"
             hw="lg:w-[40%] no-scrollbar"
         >
 
-            {currentRound && !selectPlayer && <TeamOverviewView
+            {filteredRound && !selectPlayer && <TeamOverviewView
                 roundTeam={roundTeam}
-                currentRound={currentRound}
+                currentRound={filteredRound}
                 onSelectPlayer={setSelectedPlayer}
             />}
 
-            {(selectPlayer && currentRound &&
+            {(selectPlayer && filteredRound &&
                 <PlayerPointsBreakdownView
                     athlete={selectPlayer}
                     team={roundTeam}
-                    round={currentRound}
+                    round={filteredRound}
                     onClose={onClosePointsBreakdown}
                 />
             )}

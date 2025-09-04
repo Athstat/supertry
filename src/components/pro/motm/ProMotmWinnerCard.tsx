@@ -36,28 +36,7 @@ export default function ProMotmWinnerCard({ fixture }: Props) {
     // If no votes, select first player alphabetically
     let winner;
 
-    if (votesDesc.length === 0) {
-        if (candidates.length === 0) {
-            return (
-                <div className="flex flex-col items-center gap-4 p-6 bg-slate-100 dark:bg-slate-800 rounded-xl">
-                    <Trophy className="w-12 h-12 text-slate-400" />
-                    <div className="text-center">
-                        <h3 className="font-semibold text-lg">No Players Available</h3>
-                        <SecondaryText>No players available for Top Dawg selection</SecondaryText>
-                    </div>
-                </div>
-            );
-        }
-
-        // Sort candidates alphabetically by full name and pick the first one
-        const sortedCandidates = [...candidates].sort((a, b) => {
-            const nameA = `${a.athlete.athstat_firstname} ${a.athlete.athstat_lastname}`.toLowerCase();
-            const nameB = `${b.athlete.athstat_firstname} ${b.athlete.athstat_lastname}`.toLowerCase();
-            return nameA.localeCompare(nameB);
-        });
-
-        winner = sortedCandidates[0];
-    } else {
+    if (votesDesc.length > 0) {
         // Find winner from votes
         winner = candidates.find((c) => {
             return votesDesc[0].athlete_id === c.athlete.tracking_id;
@@ -70,7 +49,7 @@ export default function ProMotmWinnerCard({ fixture }: Props) {
                 <Trophy className="w-12 h-12 text-slate-400" />
                 <div className="text-center">
                     <h3 className="font-semibold text-lg">No Winner</h3>
-                    <SecondaryText>Unable to determine Top Dawg of the Match</SecondaryText>
+                    <SecondaryText>No one was voted Top Player of the Match</SecondaryText>
                 </div>
             </div>
         );
@@ -93,7 +72,7 @@ export default function ProMotmWinnerCard({ fixture }: Props) {
                                 <div className="absolute -inset-1 bg-amber-400/30 rounded-full blur"></div>
                                 <Trophy className="w-8 h-8 text-amber-100" />
                             </div>
-                            <h2 className="text-sm font-bold text-amber-100">Top Dawg Of the Match</h2>
+                            <h2 className="text-sm font-bold text-amber-100"> <strong>SCRUMMY</strong> Player Of the Match</h2>
                         </div>
 
                         {/* Larger Player Image */}

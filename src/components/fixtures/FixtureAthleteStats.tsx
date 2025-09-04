@@ -4,6 +4,8 @@ import { GameSportAction } from "../../types/boxScore"
 import { useMemo, useState } from "react"
 import { Table2 } from "lucide-react"
 import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
+import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
+import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
 
 type Props = {
     fixture: IFixture,
@@ -15,28 +17,41 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
     const { gameKickedOff } = fixtureSumary(fixture);
     const [search, setSearch] = useState<string>("");
 
+    const { selectedTeamId } = useBoxscoreFilter(fixture);
+
+
     const attackList = useMemo(() => {
-        return attackBoxscoreList(sportActions);
-    }, [sportActions]);
+        return attackBoxscoreList(sportActions, selectedTeamId);
+    }, [sportActions, selectedTeamId]);
 
     const defenseList = useMemo(() => {
-        return defenseBoxscoreList(sportActions);
-    }, [sportActions]);
+        return defenseBoxscoreList(sportActions, selectedTeamId);
+    }, [sportActions, selectedTeamId]);
 
     const kickingList = useMemo(() => {
-        return kickingBoxscoreList(sportActions);
-    }, [sportActions]);
+        return kickingBoxscoreList(sportActions, selectedTeamId);
+    }, [sportActions, selectedTeamId]);
+
+    const disciplineList = useMemo(() => {
+        return disciplineBoxscoreList(sportActions, selectedTeamId);
+    }, [sportActions, selectedTeamId]);
 
 
     if (!gameKickedOff) return;
 
     return (
 
-        <div className="flex flex-col gap-4 w-full" >
-            
-            <div className="flex flex-row items-center justify-start gap-2" >
-                <Table2 />
-                <h1 className="font-bold text-lg" >Boxscore</h1>
+        <div className="flex flex-col gap-8 w-full" >
+
+            <div className="flex flex-col gap-4" >
+                <div className="flex flex-row items-center justify-start gap-2" >
+                    <Table2 />
+                    <h1 className="font-bold text-lg" >Boxscore</h1>
+                </div>
+
+                <FixtureTeamSelector
+                    fixture={fixture}
+                />
             </div>
 
             <BoxscoreTable
@@ -57,15 +72,22 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
                 list={kickingList}
             />
 
+            <BoxscoreTable
+                title="Discipline"
+                columnHeaders={[{ lable: "Red" }, { lable: "Yellow" }]}
+                list={disciplineList}
+                noContentMessage="Whoops, clean game detected"
+            />
+
         </div>
     )
 }
 
-function attackBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
+function attackBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
     const athleteIds: string[] = [];
 
     bs.forEach((b) => {
-        if (!athleteIds.includes(b.athlete_id)) {
+        if (!athleteIds.includes(b.athlete_id) && b.team_id === teamId) {
             athleteIds.push(b.athlete_id);
         }
     });
@@ -94,11 +116,11 @@ function attackBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
 }
 
 
-function defenseBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
+function defenseBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
     const athleteIds: string[] = [];
 
     bs.forEach((b) => {
-        if (!athleteIds.includes(b.athlete_id)) {
+        if (!athleteIds.includes(b.athlete_id) && b.team_id === teamId) {
             athleteIds.push(b.athlete_id);
         }
     });
@@ -131,11 +153,11 @@ function defenseBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
 }
 
 
-function kickingBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
+function kickingBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
     const athleteIds: string[] = [];
 
     bs.forEach((b) => {
-        if (!athleteIds.includes(b.athlete_id)) {
+        if (!athleteIds.includes(b.athlete_id) && teamId === b.team_id) {
             athleteIds.push(b.athlete_id);
         }
     });
@@ -158,8 +180,44 @@ function kickingBoxscoreList(bs: GameSportAction[]): BoxscoreListRecordItem[] {
         return (bConversion_goals ?? 0) - (conversion_goals ?? 0)
     }).filter((a) => {
         const [x, b, c] = a.stats;
-        
+
         return (x > 0) || (b > 0) || (c > 0)
+    });
+
+
+    return athleteStats;
+
+}
+
+function disciplineBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id) && teamId === b.team_id) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const red_cards = stats.find((b) => b.action === "red_cards")?.action_count;
+        const yellow_cards = stats.find((b) => b.action === "yellow_cards")?.action_count;
+
+        return {
+            stats: [Math.floor(red_cards ?? 0), Math.floor(yellow_cards ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [redCards] = a.stats;
+        const [bRedCards] = b.stats;
+
+        return (bRedCards ?? 0) - (redCards ?? 0)
+
+    }).filter((a) => {
+        const [x, b] = a.stats;
+
+        return (x > 0) || (b > 0);
     });
 
 

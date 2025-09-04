@@ -20,7 +20,7 @@ import {
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
 import { validateUsername } from '../utils/authUtils';
-import { isGuestEmail } from '../utils/deviceIdUtils';
+import { isGuestEmail } from '../utils/deviceId/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
 import { analytics } from './anayticsService';
 import { logger } from './logger';
@@ -36,9 +36,14 @@ interface SocialAuthData {
   name?: string;
 }
 
+type DeviceIdData = {
+  realDeviceId: string;
+  storedDeviceId: string;
+};
+
 export const authService = {
   /** Authenticates a guest user using their device's id */
-  async authenticateAsGuestUser(deviceId: string): RestPromise<DjangoDeviceAuthRes> {
+  async authenticateAsGuestUser(deviceId: DeviceIdData): RestPromise<DjangoDeviceAuthRes> {
     try {
       const uri = getUri('/api/v1/auth/device');
 

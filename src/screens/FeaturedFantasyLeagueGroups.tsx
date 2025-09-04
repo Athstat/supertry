@@ -1,9 +1,8 @@
-import { Trophy } from "lucide-react";
+import { Plus, Trophy } from "lucide-react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
 import { FantasyLeagueOverviewCard } from "../components/fantasy-leagues/league_dashboard_ui/FantasyLeagueOverviewCard";
-import { useAuth } from "../contexts/AuthContext";
 import RoundedCard from "../components/shared/RoundedCard";
 import { useNavigate } from "react-router-dom";
 import { FantasyLeagueGroup } from "../types/fantasyLeagueGroups";
@@ -13,13 +12,20 @@ export default function FeaturedFantasyLeagueGroups() {
 
     const navigate = useNavigate();
     const key = swrFetchKeys.getAllPublicFantasyLeagues();
-    const { data: fetchedLeagues, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeagues());
+    const { data: fetchedLeagues, isLoading: loadingPublic } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeagues());
 
-    const { authUser } = useAuth();
+    const mineKey = swrFetchKeys.getMyLeagueGroups();
+    const {data: mineLeagueGroups, isLoading: loadingMine} = useSWR(mineKey, () => fantasyLeagueGroupsService.getJoinedLeagues());
+
+    const isLoading = loadingPublic || loadingMine;
+
 
     const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
-        return (league.type === 'official_league' || league.creator_id === authUser?.kc_id);
+        return (league.type === 'official_league');
     });
+
+    const otherLeagues = (mineLeagueGroups ?? [])
+        .filter(l => !officialLeagues.includes(l));
 
     const featuredLeague = officialLeagues.length > 0 ? officialLeagues[0] : undefined;
 
@@ -84,7 +90,7 @@ export default function FeaturedFantasyLeagueGroups() {
             )}
 
             <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
-                {officialLeagues.map((leagueGroup) => {
+                {otherLeagues.map((leagueGroup) => {
                     return (
                         <FantasyLeagueOverviewCard
                             leagueGroup={leagueGroup}
@@ -99,11 +105,11 @@ export default function FeaturedFantasyLeagueGroups() {
                     onClick={handleGoToLeagueCreation}
                 >
                     <p>
-                        <Trophy className="" />
+                        <Plus className="" />
                     </p>
 
                     <p className="text-xs" >
-                        Discover leagues, Join, or Create your own fantasy league and invite friends to join to battle it out!
+                        Join or Create Your own Fantasy League and Invite Friends!
                     </p>
                 </RoundedCard>
             </div>

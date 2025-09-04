@@ -22,6 +22,7 @@ import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackgroun
 import FormStepIndicator from '../components/shared/forms/FormStepIndicator';
 import { KeyRound } from 'lucide-react';
 import { BadgeCheck } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -71,7 +72,10 @@ function ScreenContent() {
   return (
     <ScrummyMatrixBackground>
 
-      <div className="flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto">
+      <div className={twMerge(
+        "flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto",
+        "lg:px-[25%]"
+      )}>
         {/* Header */}
 
         <div className='flex flex-row w-full items-center justify-between' >

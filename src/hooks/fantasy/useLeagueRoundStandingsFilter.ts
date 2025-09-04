@@ -1,0 +1,36 @@
+import { useMemo } from "react";
+import { getLeagueStandingsFilterItems } from "../../utils/standingsUtils";
+import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
+import { useQueryState } from "../useQueryState";
+
+/** Hook that provides data and logic for league standings filtering */
+export function useLeagueRoundStandingsFilter() {
+
+    const { sortedRounds } = useFantasyLeagueGroup();
+    const defaultFilterVal = 'overall';
+    const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: defaultFilterVal });
+
+
+    const options = useMemo(() => {
+        return getLeagueStandingsFilterItems(sortedRounds);
+    }, [sortedRounds]);
+
+    const currentOption = useMemo(() => {
+        return options.find((p) => p.id?.toString() === roundFilterId);
+    }, [options, roundFilterId])
+
+    const otherOptions = useMemo(() => {
+        return options.filter((p) => {
+            return p.id?.toString() !== roundFilterId;
+        });
+    }, [options, roundFilterId]);
+
+
+    return {
+        currentOption,
+        otherOptions,
+        rounds: sortedRounds,
+        roundFilterId,
+        setRoundFilterId
+    }
+}

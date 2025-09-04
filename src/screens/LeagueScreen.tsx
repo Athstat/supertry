@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Plus, Trophy } from 'lucide-react';
+import { ArrowLeft, Globe, Share2, Trophy } from 'lucide-react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
@@ -14,8 +14,9 @@ import MyTeams from '../components/fantasy-leagues/MyTeams';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { useShareLeague } from '../hooks/leagues/useShareLeague';
 import { useQueryState } from '../hooks/useQueryState';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LeagueOverviewTab from '../components/fantasy-league/LeagueOverviewTab';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -28,11 +29,11 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-  const { league, userMemberRecord, isMember } = useFantasyLeagueGroup();
+  const { league, userMemberRecord, isMember, isOfficialLeague } = useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);
   const navigate = useNavigate();
 
-  const [journey ] = useQueryState('journey');
+  const [journey] = useQueryState('journey');
 
   let initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
   initialTabKey = journey === 'my-team' ? 'my-team' : initialTabKey;
@@ -45,6 +46,11 @@ function Content() {
   }
 
   const headerItems: TabViewHeaderItem[] = [
+    {
+      label: 'Overview',
+      tabKey: 'overview',
+      className: 'flex-1',
+    },
     {
       label: 'Standings',
       tabKey: 'standings',
@@ -88,7 +94,7 @@ function Content() {
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-col items-start gap-2">
             <div className="flex flex-row items-center gap-2">
-              <Trophy />
+              {isOfficialLeague ? <Globe /> : <Trophy />}
               <p className="font-bold text-xl">{league?.title}</p>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
@@ -101,7 +107,8 @@ function Content() {
 
               {isMember && (
                 <PrimaryButton onClick={handleShare}>
-                  <Plus className="w-4 h-4" />
+                  {/* <Plus className="w-4 h-4" /> */}
+                  <Share2 className="w-4 h-4" />
                   Invite
                 </PrimaryButton>
               )}
@@ -151,6 +158,10 @@ function Content() {
 
         <TabViewPage tabKey="commissioner">
           <LeagueCommissionerTab />
+        </TabViewPage>
+
+        <TabViewPage tabKey='overview' >
+          <LeagueOverviewTab />
         </TabViewPage>
       </TabView>
     </PageView>

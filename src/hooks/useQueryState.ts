@@ -14,10 +14,10 @@ export function useQueryState<T>(key: string, options?: Options) {
   const value = params.get(key) ?? init;
 
   const setValue = useCallback(
-    (newValue: string) => {
+    (newValue?: string) => {
       const newParams = new URLSearchParams(params);
 
-      if (newValue === '') {
+      if (newValue === '' || newValue === undefined) {
         newParams.delete(key);
       } else {
         newParams.set(key, newValue);

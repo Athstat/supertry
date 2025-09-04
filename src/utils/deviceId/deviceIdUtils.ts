@@ -2,17 +2,15 @@
  * Device ID utilities for both mobile app (via WebView) and web browser
  */
 
-import { DjangoAuthUser } from '../types/auth';
+import { DjangoAuthUser } from '../../types/auth';
+import { DeviceIdPair } from '../../types/device';
+import { DeviceIdUnavailableError } from './exceptions';
+import { getMobileDeviceId } from './mobileDeviceIdUtils';
+import { getWebDeviceId } from './webDeviceIdUtils';
 
 /**
  * Error thrown when a device ID cannot be obtained on mobile.
  */
-export class DeviceIdUnavailableError extends Error {
-  constructor(message = 'Unable to obtain mobile device ID') {
-    super(message);
-    this.name = 'DeviceIdUnavailableError';
-  }
-}
 
 /**
  * Internal: get the injected bridge if available (supports both cases)
@@ -113,50 +111,14 @@ function normalizeDeviceIdStrict(id: string): string {
  * Get the device ID - either from mobile app (strict) or generate/retrieve for web
  * @returns Promise<string> The device ID
  */
-export async function getDeviceId(): Promise<string> {
-  // Mobile: must return native device ID or throw. No UUID fallback.
-  
+export async function getDeviceId(): Promise<DeviceIdPair> {
+
   if (isMobileApp()) {
-    
-    console.log('Mobile detected; using window.deviceId...');
-    let mobileDeviceId = window.deviceId ?? localStorage.getItem('device_id');
-    console.log('Mobile device ID: ', mobileDeviceId);
-
-    if (!mobileDeviceId) {
-      // throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
-      console.log('Unable to obtain mobile device ID, defaulting to random UUID');
-      mobileDeviceId = `mobile_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
-    }
-
-    localStorage.setItem('device_id', mobileDeviceId);
-
-    return mobileDeviceId;
+    return getMobileDeviceId();
   }
 
-  console.log('Web detected; using deviceId from localStorage or creating a new one...');
+  return getWebDeviceId();
 
-  // Web browser: use localStorage
-  let webDeviceId = localStorage.getItem('device_id');
-
-  if (!webDeviceId) {
-    // Generate a new device ID
-    if (
-      typeof crypto !== 'undefined' &&
-      (crypto as Crypto & { randomUUID?: () => string }).randomUUID
-    ) {
-      webDeviceId = (crypto as Crypto & { randomUUID: () => string }).randomUUID();
-    } else {
-      // Fallback for older browsers
-      webDeviceId = `web_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
-    }
-
-    localStorage.setItem('device_id', webDeviceId);
-    console.log('New device ID for web: ', webDeviceId);
-  }
-
-  console.log('deviceId exists in local storage: ', webDeviceId);
-
-  return webDeviceId;
 }
 
 /**
