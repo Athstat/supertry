@@ -9,6 +9,7 @@ import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague";
 import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 import TeamOverviewView from "../team-modal/team_overview/TeamOverviewView";
 import UserTeamOverview from "./UserTeamOverview";
+import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
 
 
 export default function LeagueOverviewTab() {
@@ -48,6 +49,8 @@ export default function LeagueOverviewTab() {
             {userTeam && currentRound && <UserRoundScoringUpdate leagueRound={currentRound} userTeam={userTeam} />}
 
             { currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
+
+            {currentRound && <LeagueRoundFixturesOverview leagueRound={currentRound} />}
         </div>
     )
 }

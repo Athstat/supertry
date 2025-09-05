@@ -6,6 +6,7 @@ import { Shield } from "lucide-react"
 import { Table } from "lucide-react"
 import LeagueRoundCountdown from "../LeagueCountdown"
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils"
+import { useTabView } from "../../shared/tabs/TabView"
 
 type Props = {
     leagueRound: IFantasyLeagueRound,
@@ -14,6 +15,16 @@ type Props = {
 
 export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) {
 
+    const { navigate } = useTabView();
+    const isLocked = isLeagueRoundLocked(leagueRound);
+
+    const handleViewTeam = () => {
+        navigate('my-team');
+    }
+
+    const handleViewStandings = () => {
+        navigate('standings');
+    }
 
     return (
         <div>
@@ -22,7 +33,10 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
                 <div className="flex flex-row w-full items-center justify-between" >
                     <div>
                         <h3 className="font-bold text-xl" >{userTeam.team.name}</h3>
-                        <p>{leagueRound.title}</p>
+                        <div className="flex flex-row items-center gap-1" >
+                            {isLocked && <Lock className="w-4 h-4" />}
+                            <p>{leagueRound.title}</p>
+                        </div>
                     </div>
 
                     <div>
@@ -43,20 +57,17 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
                 </div> */}
 
                 <div className="flex flex-row items-center justify-center gap-2" >
-                    <TranslucentButton>
+                    <TranslucentButton onClick={handleViewTeam} >
                         <Shield className='w-4 h-4' />
                         View Team
                     </TranslucentButton>
 
-                    <TranslucentButton  >
+                    <TranslucentButton onClick={handleViewStandings} >
                         <Table className='w-4 h-4' />
                         Standings
                     </TranslucentButton>
                 </div>
 
-                {!userTeam && (
-                    <p>You haven't picked your team for {leagueRound.title} yet!</p>
-                )}
             </BlueGradientCard>
         </div>
     )
@@ -69,6 +80,16 @@ type NoTeamProps = {
 export function NoTeamRoundOverviewCard({ leagueRound }: NoTeamProps) {
 
     const hasLocked = isLeagueRoundLocked(leagueRound);
+    const { navigate } = useTabView();
+
+
+    const handlePickTeam = () => {
+        navigate('my-team');
+    }
+
+    const handleViewStandings = () => {
+        navigate('standings');
+    }
 
     return (
         <div>
@@ -93,7 +114,9 @@ export function NoTeamRoundOverviewCard({ leagueRound }: NoTeamProps) {
                 </div>}
 
                 {!hasLocked && <div className="flex flex-row items-center justify-center gap-2" >
-                    <TranslucentButton>
+                    <TranslucentButton
+                        onClick={handlePickTeam}
+                    >
                         {/* <Shield className='w-4 h-4' /> */}
                         Pick Team
                         <ArrowRight className="w-4 h-4" />
@@ -101,7 +124,9 @@ export function NoTeamRoundOverviewCard({ leagueRound }: NoTeamProps) {
                 </div>}
 
                 {hasLocked && <div className="flex flex-row items-center justify-center gap-2" >
-                    <TranslucentButton>
+                    <TranslucentButton
+                        onClick={handleViewStandings}
+                    >
                         {/* <Shield className='w-4 h-4' /> */}
                         View Standings
                         <ArrowRight className="w-4 h-4" />
