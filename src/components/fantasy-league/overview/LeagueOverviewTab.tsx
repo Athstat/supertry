@@ -10,6 +10,7 @@ import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 import TeamOverviewView from "../team-modal/team_overview/TeamOverviewView";
 import UserTeamOverview from "./UserTeamOverview";
 import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
+import Experimental from "../../shared/ab_testing/Experimental";
 
 
 export default function LeagueOverviewTab() {
@@ -50,7 +51,9 @@ export default function LeagueOverviewTab() {
 
             { currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
 
+            <Experimental>
             {currentRound && <LeagueRoundFixturesOverview leagueRound={currentRound} />}
+            </Experimental>
         </div>
     )
 }

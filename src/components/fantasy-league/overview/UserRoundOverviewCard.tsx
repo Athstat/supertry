@@ -44,9 +44,9 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
                     </div>
                 </div>
 
-                {/* <div className="flex flex-row items-center justify-center gap-6" >
+                {isLocked && Boolean(userTeam.rank) && <div className="flex flex-row items-center justify-center gap-6" >
                     <div className="flex flex-col items-center justify-center " >
-                        <p className="font-bold text-4xl" >{userTeam.overall_score}</p>
+                        <p className="font-bold text-4xl" >{userTeam.overall_score || '0'}</p>
                         <p className="text-xs" >Round Score</p>
                     </div>
 
@@ -54,7 +54,13 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
                         <p className="font-bold text-4xl" >{userTeam.rank || '-'}</p>
                         <p className="text-xs" >Rank</p>
                     </div>
-                </div> */}
+                </div>}
+
+                {!isLocked && (
+                    <LeagueRoundCountdown 
+                        leagueRound={leagueRound}
+                    />
+                )}
 
                 <div className="flex flex-row items-center justify-center gap-2" >
                     <TranslucentButton onClick={handleViewTeam} >

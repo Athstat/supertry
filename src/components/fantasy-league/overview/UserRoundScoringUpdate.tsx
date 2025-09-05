@@ -18,12 +18,12 @@ export default function UserRoundScoringUpdate({ userTeam, leagueRound }: Props)
             <div className="flex flex-col gap-1" >
                 <div className="flex flex-row items-center gap-2 justify-between" >
                     <SecondaryText>Score</SecondaryText>
-                    <p className="font-bold" >{userTeam.overall_score}</p>
+                    <p className="font-medium" >{userTeam.overall_score || '-'}</p>
                 </div>
 
                 <div className="flex flex-row items-center gap-2 justify-between" >
                     <SecondaryText>Rank</SecondaryText>
-                    <p className="font-bold" >{userTeam.rank || '-'}</p>
+                    <p className="font-medium" >{userTeam.rank || '-'}</p>
                 </div>
             </div>
         </RoundedCard>
