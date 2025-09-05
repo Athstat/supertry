@@ -110,13 +110,13 @@ export function NoTeamRoundOverviewCard({ leagueRound }: NoTeamProps) {
                 </div>
 
                 {!hasLocked && <div className="flex flex-col gap-3" >
-                    <p>You haven't picked a team yet!</p>
+                    <p>You haven't picked a team yet</p>
 
                     <LeagueRoundCountdown leagueRound={leagueRound} />
                 </div>}
 
                 {hasLocked && <div>
-                    <p>The Fantasy gates have closed! You didn't create a team for this round.</p>
+                    <p>🙈 Oops! The gates just closed and you didn't set a team this round. Don't worry — you'll be back on the next round.</p>
                 </div>}
 
                 {!hasLocked && <div className="flex flex-row items-center justify-center gap-2" >
