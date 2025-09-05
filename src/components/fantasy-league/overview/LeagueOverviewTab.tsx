@@ -2,31 +2,17 @@ import useSWR from "swr";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup"
 import { swrFetchKeys } from "../../../utils/swrKeys";
-import BlueGradientCard from "../../shared/BlueGradientCard";
 import { leagueService } from "../../../services/leagueService";
 import RoundedCard from "../../shared/RoundedCard";
 import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from "./UserRoundOverviewCard";
+import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague";
+import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 
 
 export default function LeagueOverviewTab() {
-  return (
-    <div className="flex flex-col gap-4" >
 
-        <div>
-            <div>
-                <h2 className="font-bold text-lg" >Overview</h2>
-            </div>
-        </div>
-
-        <LeagueRoundSummary />
-    </div>
-  )
-}
-
-function LeagueRoundSummary() {
-    
-    const {currentRound} = useFantasyLeagueGroup();
-    const {authUser} = useAuth();
+    const { currentRound } = useFantasyLeagueGroup();
+    const { authUser } = useAuth();
 
     const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
         currentRound?.fantasy_league_group_id ?? '',
@@ -34,27 +20,54 @@ function LeagueRoundSummary() {
         authUser?.kc_id
     );
 
-    const {data: userTeam, isLoading} = useSWR(key, () => leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? ''))
+    const { data: userTeam, isLoading } = useSWR(key, () => leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? ''))
 
     if (isLoading) {
         return (
-            <RoundedCard className="p-4 h-[150px] border-none animate-pulse" >
+            <div>
+                <RoundedCard className="p-4 h-[150px] border-none animate-pulse" >
 
-            </RoundedCard>
+                </RoundedCard>
+            </div>
         )
     }
 
+    return (
+        <div className="flex flex-col gap-4" >
+
+            <div>
+                <div>
+                    <h2 className="font-bold text-lg" >Overview</h2>
+                </div>
+            </div>
+
+            <LeagueRoundSummary userTeam={userTeam} />
+
+            {userTeam && currentRound && <UserRoundScoringUpdate leagueRound={currentRound} userTeam={userTeam} />}
+        </div>
+    )
+}
+
+type RoundSummaryProps = {
+    userTeam?: FantasyLeagueTeamWithAthletes
+}
+
+function LeagueRoundSummary({ userTeam }: RoundSummaryProps) {
+
+    const { currentRound } = useFantasyLeagueGroup();
+
+
     if (!currentRound) return;
-    
+
     if (userTeam) {
-        return <UserRoundOverviewCard 
+        return <UserRoundOverviewCard
             leagueRound={currentRound}
             userTeam={userTeam}
         />
     }
 
     return (
-        <NoTeamRoundOverviewCard 
+        <NoTeamRoundOverviewCard
             leagueRound={currentRound}
         />
     )
