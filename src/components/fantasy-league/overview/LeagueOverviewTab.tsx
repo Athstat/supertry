@@ -7,6 +7,8 @@ import RoundedCard from "../../shared/RoundedCard";
 import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from "./UserRoundOverviewCard";
 import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague";
 import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
+import TeamOverviewView from "../team-modal/team_overview/TeamOverviewView";
+import UserTeamOverview from "./UserTeamOverview";
 
 
 export default function LeagueOverviewTab() {
@@ -44,6 +46,8 @@ export default function LeagueOverviewTab() {
             <LeagueRoundSummary userTeam={userTeam} />
 
             {userTeam && currentRound && <UserRoundScoringUpdate leagueRound={currentRound} userTeam={userTeam} />}
+
+            { currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
         </div>
     )
 }
