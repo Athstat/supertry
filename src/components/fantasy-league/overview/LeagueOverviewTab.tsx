@@ -7,7 +7,6 @@ import RoundedCard from "../../shared/RoundedCard";
 import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from "./UserRoundOverviewCard";
 import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague";
 import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
-import TeamOverviewView from "../team-modal/team_overview/TeamOverviewView";
 import UserTeamOverview from "./UserTeamOverview";
 import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
 import Experimental from "../../shared/ab_testing/Experimental";
