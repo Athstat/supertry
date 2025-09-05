@@ -76,18 +76,7 @@ export type FantasyLeagueTeamWithAthletes = {
   },
   fantasyLeague: IFantasyLeagueRound,
   team_id: number,
-  athletes: {
-    id: number,
-    team_id: number,
-    athlete: IProAthlete,
-    purchase_date?: Date,
-    purchase_price: number,
-    is_starting: boolean,
-    slot: number,
-    score: number,
-    is_captain: boolean,
-    is_super_sub: boolean
-  }[]
+  athletes: IDetailedFantasyAthlete[]
   position?: string,
   position_change: number,
   overall_score: number,
@@ -95,4 +84,17 @@ export type FantasyLeagueTeamWithAthletes = {
   join_date?: Date,
   rank: number,
   league: number
+}
+
+export type IDetailedFantasyAthlete = {
+  id: number,
+  team_id: number,
+  athlete: IProAthlete,
+  purchase_date?: Date,
+  purchase_price: number,
+  is_starting: boolean,
+  slot: number,
+  score: number,
+  is_captain: boolean,
+  is_super_sub: boolean
 }

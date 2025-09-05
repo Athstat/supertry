@@ -41,3 +41,22 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
         </button>
     )
 }
+
+/** Renders a trnaslucent button */
+export function TranslucentButton(props : Props) {
+    return (
+        <PrimaryButton
+            onClick={props.onClick}
+            disabled={props.disabled}
+            disbabled={props.disbabled}
+            isLoading={props.isLoading}
+            type={props.type}
+            className={twMerge(
+                'bg-blue-100/10 dark:bg-blue-100/10  border-white/20',
+                props.className
+            )}
+        >
+            {props.children}
+        </PrimaryButton>
+    )
+}
