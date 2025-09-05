@@ -15,6 +15,7 @@ import { Lock } from "lucide-react"
 import SecondaryText from "../../shared/SecondaryText"
 import { useAuth } from "../../../contexts/AuthContext"
 import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter"
+import LeagueRoundCountdown from "../LeagueCountdown"
 
 type Props = {
     isOpen?: boolean,
@@ -26,7 +27,7 @@ type Props = {
 export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Props) {
 
     const { currentRound, rounds } = useFantasyLeagueGroup();
-    const {roundFilterId} = useLeagueRoundStandingsFilter();
+    const { roundFilterId } = useLeagueRoundStandingsFilter();
 
     const filteredRound = useMemo(() => {
         if (roundFilterId === "overall" || roundFilterId === undefined) {
@@ -109,7 +110,7 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
                 className="p-4 text-center no-scrollbar flex flex-col items-center justify-center w-full h-full gap-4"
                 outerCon="p-4 lg:p-8 no-scrollbar"
                 hw="lg:w-[40%] no-scrollbar min-h-[90vh]"
-            >   
+            >
 
                 <SecondaryText>
                     <Lock className="w-20 h-20" />
@@ -118,6 +119,15 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
                 <SecondaryText>
                     No Peeking! <strong>{member.user.username || member.user.first_name}'s</strong> lineup unlocks after the {currentRound?.title} deadline
                 </SecondaryText>
+
+
+                {filteredRound && (
+                    <SecondaryText>
+                        <LeagueRoundCountdown
+                            leagueRound={filteredRound}
+                        />
+                    </SecondaryText>
+                )}
 
             </DialogModal>
         )
