@@ -16,7 +16,7 @@ import { useShareLeague } from '../hooks/leagues/useShareLeague';
 import { useQueryState } from '../hooks/useQueryState';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LeagueOverviewTab from '../components/fantasy-league/LeagueOverviewTab';
+import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverviewTab';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -46,11 +46,11 @@ function Content() {
   }
 
   const headerItems: TabViewHeaderItem[] = [
-    // {
-    //   label: 'Overview',
-    //   tabKey: 'overview',
-    //   className: 'flex-1',
-    // },
+    {
+      label: 'Overview',
+      tabKey: 'overview',
+      className: 'flex-1',
+    },
     {
       label: 'Standings',
       tabKey: 'standings',

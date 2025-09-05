@@ -6,11 +6,12 @@ import { TeamAthletesGridView } from './TeamAthletesGridView'
 type Props = {
     roundTeam: FantasyLeagueTeamWithAthletes,
     currentRound: IFantasyLeagueRound,
-    onSelectPlayer?: (player: IProAthlete) => void
+    onSelectPlayer?: (player: IProAthlete) => void,
+    hideStats?: boolean
 }
 
 /** Render team overview view */
-export default function TeamOverviewView({ roundTeam, currentRound, onSelectPlayer }: Props) {
+export default function TeamOverviewView({ roundTeam, currentRound, onSelectPlayer, hideStats = false }: Props) {
 
     const overallScore = roundTeam ? roundTeam?.overall_score : 0;
     const teamValue = roundTeam ? roundTeam?.athletes?.reduce((sum, a) => {
@@ -25,7 +26,7 @@ export default function TeamOverviewView({ roundTeam, currentRound, onSelectPlay
 
     return (
         <div className='flex flex-col gap-4' >
-            <div className="grid grid-cols-2 gap-2" >
+            {!hideStats && <div className="grid grid-cols-2 gap-2" >
 
                 <StatCard
                     label="Round"
@@ -49,7 +50,7 @@ export default function TeamOverviewView({ roundTeam, currentRound, onSelectPlay
                     value={teamValue ? Math.floor(teamValue) : 0}
                 // icon={<CircleDollarSignIcon className="w-4 h-4" />}
                 />
-            </div>
+            </div>}
 
             {/* <TeamFormation 
                         players={}
