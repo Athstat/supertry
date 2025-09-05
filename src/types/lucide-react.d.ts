@@ -120,5 +120,6 @@ declare module "lucide-react" {
   export const BadgeCheck : CIP;
   export const KeyRound : CIP;
   export const FlaskConical : CIP;
+  export const Table : CIP;
 }
 

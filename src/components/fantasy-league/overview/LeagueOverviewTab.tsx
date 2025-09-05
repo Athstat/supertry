@@ -1,10 +1,11 @@
 import useSWR from "swr";
-import { useAuth } from "../../contexts/AuthContext";
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup"
-import { swrFetchKeys } from "../../utils/swrKeys";
-import BlueGradientCard from "../shared/BlueGradientCard";
-import { leagueService } from "../../services/leagueService";
-import RoundedCard from "../shared/RoundedCard";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup"
+import { swrFetchKeys } from "../../../utils/swrKeys";
+import BlueGradientCard from "../../shared/BlueGradientCard";
+import { leagueService } from "../../../services/leagueService";
+import RoundedCard from "../../shared/RoundedCard";
+import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from "./UserRoundOverviewCard";
 
 
 export default function LeagueOverviewTab() {
@@ -45,17 +46,16 @@ function LeagueRoundSummary() {
 
     if (!currentRound) return;
     
-    return (
-        <div>
-            <BlueGradientCard className="p-4" >
-                <div className="flex flex-row items-center" >
-                    <h3 className="font-bold text-xl" >{currentRound.title}</h3>
-                </div>
+    if (userTeam) {
+        return <UserRoundOverviewCard 
+            leagueRound={currentRound}
+            userTeam={userTeam}
+        />
+    }
 
-                {!userTeam && (
-                    <p>You haven't picked your team for {currentRound.title} yet!</p>
-                )}
-            </BlueGradientCard>
-        </div>
+    return (
+        <NoTeamRoundOverviewCard 
+            leagueRound={currentRound}
+        />
     )
 }
