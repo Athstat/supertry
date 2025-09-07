@@ -5,7 +5,7 @@ import { ISbrFixture } from "../types/sbr";
 export function fixtureSumary(fixture: IFixture) {
     const { team_score, kickoff_time, game_status, opposition_score } = fixture;
 
-    const matchFinal = game_status === "completed" && team_score && opposition_score;
+    const matchFinal = game_status === "completed" && team_score !== undefined && opposition_score !== undefined;
     const hasNotStarted = game_status === 'fixture';
 
     const homeTeamWon = matchFinal ? team_score > opposition_score : false;
