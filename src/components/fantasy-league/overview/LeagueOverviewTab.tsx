@@ -9,7 +9,6 @@ import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague";
 import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 import UserTeamOverview from "./UserTeamOverview";
 import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
-import Experimental from "../../shared/ab_testing/Experimental";
 
 
 export default function LeagueOverviewTab() {
@@ -50,9 +49,9 @@ export default function LeagueOverviewTab() {
 
             { currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
 
-            <Experimental>
+            {/* <Experimental> */}
             {currentRound && <LeagueRoundFixturesOverview leagueRound={currentRound} />}
-            </Experimental>
+            {/* </Experimental> */}
         </div>
     )
 }

@@ -63,7 +63,7 @@ function PlayerItem({ athlete, onClick }: PlayerItemProps) {
     return (
         <div onClick={onClick} className="flex flex-col items-center justify-center gap-2" >
             <PlayerGameCard player={athlete.athlete} />
-            <p>{athlete.score || '-'}</p>
+            <p>{athlete.score ? Math.floor(athlete.score) : '-'}</p>
         </div>
     )
 }
