@@ -46,8 +46,8 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
 
                 {isLocked && Boolean(userTeam.rank) && <div className="flex flex-row items-center justify-center gap-6" >
                     <div className="flex flex-col items-center justify-center " >
-                        <p className="font-bold text-4xl" >{userTeam.overall_score || '0'}</p>
-                        <p className="text-xs" >Round Score</p>
+                        <p className="font-bold text-4xl" >{Math.floor(userTeam.overall_score) || '0'}</p>
+                        <p className="text-xs" >Points</p>
                     </div>
 
                     <div className="flex flex-col items-center justify-center " >

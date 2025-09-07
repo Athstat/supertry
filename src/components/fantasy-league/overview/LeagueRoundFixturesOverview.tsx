@@ -16,7 +16,7 @@ export default function LeagueRoundFixturesOverview({ leagueRound }: Props) {
         fantasyLeagueGroupsService.getGroupRoundGames(leagueRound.fantasy_league_group_id, leagueRound.id)
     );
 
-    const games = fetchedGames ?? [];
+    const games = (fetchedGames ?? []);
 
     return (
         <div className="flex flex-col gap-4" >

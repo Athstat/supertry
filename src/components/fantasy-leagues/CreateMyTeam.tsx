@@ -22,6 +22,11 @@ import { isGuestUserAtom } from '../../state/authUser.atoms';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import NoContentCard from '../shared/NoContentMessage';
 import { useTabView } from '../shared/tabs/TabView';
+import {
+  teamPresetsService,
+  TeamPreset,
+  CreatePresetPayload,
+} from '../../services/fantasy/teamPresetsService';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -50,6 +55,10 @@ export default function CreateMyTeam({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showClaimAccountModal, setShowClaimAccountModal] = useState(false);
+  // Presets
+  const [presets, setPresets] = useState<TeamPreset[]>([]);
+  const [isLoadingPresets, setIsLoadingPresets] = useState(false);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('');
 
   const totalSpent = Object.values(selectedPlayers).reduce(
     (sum, player) => sum + (player.price || 0),
@@ -105,6 +114,28 @@ export default function CreateMyTeam({
     };
 
     loadAthletes();
+  }, [leagueRound]);
+
+  // Load saved team presets for the season (scoped to current user)
+  useEffect(() => {
+    const loadPresets = async () => {
+      if (!leagueRound) return;
+      try {
+        setIsLoadingPresets(true);
+        const userInfo = await authService.getUserInfo();
+        if (!userInfo?.kc_id) return;
+        const res = await teamPresetsService.list({
+          userId: userInfo.kc_id,
+          seasonId: Number(leagueRound.season_id as any),
+        });
+        setPresets(res);
+      } catch (e) {
+        console.error('Failed to load team presets', e);
+      } finally {
+        setIsLoadingPresets(false);
+      }
+    };
+    loadPresets();
   }, [leagueRound]);
 
   const positions = [
@@ -241,18 +272,84 @@ export default function CreateMyTeam({
 
   const handleGoToStandings = () => {
     tabNavigate('standings');
-  }
+  };
+
+  // Build preset athlete payload from current selection
+  const buildPresetAthletes = () => {
+    return positions
+      .map((p, index) => {
+        const selected = selectedPlayers[p.name];
+        if (!selected) return undefined;
+        const isSuperSub = p.isSpecial === true;
+        return {
+          athlete_id: selected.tracking_id,
+          purchase_price: selected.price || 0,
+          is_starting: !isSuperSub,
+          slot: index + 1,
+          is_captain: selected.tracking_id === captainId || false,
+        };
+      })
+      .filter(Boolean) as any[];
+  };
+
+  const handleSavePreset = async () => {
+    if (Object.keys(selectedPlayers).length !== 6) {
+      showToast('Complete your team before saving a preset', 'info');
+      return;
+    }
+    try {
+      const userInfo = await authService.getUserInfo();
+      if (!userInfo?.kc_id) {
+        showToast('You must be logged in to save a preset');
+        return;
+      }
+      const payload: CreatePresetPayload = {
+        user_id: userInfo.kc_id,
+        name: `Preset ${presets.length + 1}`,
+        season_id: Number(leagueRound?.season_id as any),
+        athletes: buildPresetAthletes(),
+      };
+      const created = await teamPresetsService.create(payload);
+      setPresets(prev => [created, ...prev]);
+      setSelectedPresetId(created.id);
+      showToast('Preset saved', 'success');
+    } catch (e) {
+      console.error('Failed to save preset', e);
+      showToast('Failed to save preset');
+    }
+  };
+
+  const applyPresetById = (id: string) => {
+    const preset = presets.find(p => p.id === id);
+    if (!preset) return;
+    const next: Record<string, IProAthlete> = {};
+    let nextCaptain: string | null = null;
+
+    preset.athletes.forEach(item => {
+      const index = (item.slot ?? 1) - 1;
+      const pos = positions[index];
+      const ath = players.find(a => a.tracking_id === item.athlete_id);
+      if (pos && ath) {
+        next[pos.name] = ath;
+        if (item.is_captain) nextCaptain = item.athlete_id;
+      }
+    });
+
+    setSelectedPlayers(next);
+    setCaptainId(nextCaptain);
+    showToast('Preset applied', 'success');
+  };
 
   if (isLocked) {
     return (
-      <div className='flex flex-col items-center justify-center gap-1' >
-        <NoContentCard
-          message="Whoops! Round has been locked, you can't pick your team now"
-        />
+      <div className="flex flex-col items-center justify-center gap-1">
+        <NoContentCard message="Whoops! Round has been locked, you can't pick your team now" />
 
-        <PrimaryButton onClick={handleGoToStandings} className='w-fit' >View Standings</PrimaryButton>
+        <PrimaryButton onClick={handleGoToStandings} className="w-fit">
+          View Standings
+        </PrimaryButton>
       </div>
-    )
+    );
   }
 
   return (
@@ -287,8 +384,38 @@ export default function CreateMyTeam({
         </div>
       </div>
 
-      {/* Save button */}
-      <div className="mt-3 relative z-[50]">
+      {/* Presets + Save */}
+      <div className="mt-3 relative z-[50] space-y-3">
+        {/* Preset dropdown and save-as-preset */}
+        <div className="flex items-center gap-2">
+          <select
+            className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
+            value={selectedPresetId}
+            onChange={e => {
+              const id = e.target.value;
+              setSelectedPresetId(id);
+              if (id) applyPresetById(id);
+            }}
+          >
+            <option value="">
+              {isLoadingPresets ? 'Loading presets...' : 'Choose a saved team...'}
+            </option>
+            {presets.map(p => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+
+          <button
+            className="rounded-lg px-3 py-2 border bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-60"
+            onClick={handleSavePreset}
+            disabled={Object.keys(selectedPlayers).length !== 6}
+          >
+            Save as preset
+          </button>
+        </div>
+
         <PrimaryButton
           className="w-full"
           disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
@@ -325,10 +452,11 @@ export default function CreateMyTeam({
                     setIsModalOpen(true);
                   }
                 }}
-                className={`${selected
+                className={`${
+                  selected
                     ? 'w-full h-60 p-0 bg-transparent border-0 rounded-none overflow-visible flex items-center justify-center'
                     : 'w-full h-60 overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center'
-                  }`}
+                }`}
               >
                 {selected ? (
                   <PlayerGameCard
@@ -351,10 +479,11 @@ export default function CreateMyTeam({
               {selected && (
                 <div className="mt-4 flex flex-col gap-2 z-50">
                   <button
-                    className={`${captainId === selected.tracking_id
+                    className={`${
+                      captainId === selected.tracking_id
                         ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
                         : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                      }`}
+                    }`}
                     onClick={() => {
                       if (captainId !== selected.tracking_id) setCaptainId(selected.tracking_id);
                     }}
@@ -399,7 +528,7 @@ export default function CreateMyTeam({
             setIsModalOpen(false);
           }}
           onClose={() => setIsModalOpen(false)}
-          roundId={parseInt(selectedRoundId || '0')}
+          roundId={Number(selectedRoundId ?? 0)}
           roundStart={leagueRound?.start_round ?? undefined}
           roundEnd={leagueRound?.end_round ?? undefined}
           leagueId={leagueId}
