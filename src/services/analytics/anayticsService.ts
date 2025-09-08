@@ -9,24 +9,24 @@ import { IFixture } from '../../types/games';
 amplitude.init('7a73614db43ac3fb1e4c8b8e24a280eb', { autocapture: true });
 
 function track(event: string, eventInfo?: Record<string, any>) {
-    
-    if (!isInProduction()) {
-        console.log(`Skipped recording event ${event} because app is not in production`);
-        return;
-    }
-    
-    const { agent } = getDeviceInfo();
-    const user = authService.getUserInfoSync();
+
+  if (!isInProduction()) {
+    console.log(`Skipped recording event ${event} because app is not in production`);
+    return;
+  }
+
+  const { agent } = getDeviceInfo();
+  const user = authService.getUserInfoSync();
 
 
-    const res = amplitude.track(event, {
-        ...eventInfo,
-        timeStamp: new Date(),
-        device: agent,
-        source: getCurrentPath(),
-        weekNumber: getWeekFromLaunch(),
-        userId: user ? user.kc_id : null
-    });
+  const res = amplitude.track(event, {
+    ...eventInfo,
+    timeStamp: new Date(),
+    device: agent,
+    source: getCurrentPath(),
+    weekNumber: getWeekFromLaunch(),
+    userId: user ? user.kc_id : null
+  });
 
   console.log('Amplitude Res ', res);
 }
@@ -39,9 +39,9 @@ function trackPageVisit(route: string) {
 }
 
 function trackUserSignUp(method: string, referrer?: string) {
-  
+
   console.log("Tried to do a user signed up ", method);
-  
+
   track('User_Signed_Up', {
     signUpMethod: method,
     referrer: referrer,
@@ -127,13 +127,23 @@ function trackComparedPlayers(players: IProAthlete[]) {
   })
 }
 
-function trackOpenedPlayerProfile(player: IProAthlete, source?: string) {
+function trackOpenedPlayerProfile(playerId: string, source?: string) {
   track('Opened_Player_Profile', {
-    playerId: player.tracking_id,
-    playerName: player.player_name,
-    position: player.position,
+    playerId: playerId,
     source: source
   })
+}
+
+function trackClosedPlayerProfile(playerId: string, startTime: Date, endTime: Date) {
+  const duration = startTime && endTime ? new Date(endTime).valueOf() - new Date(startTime).valueOf() : 0;
+  const durationSeconds = duration / (1000);
+
+  console.log(`User spent ${durationSeconds}s on the player profile modal`);
+
+  track('Closed_Player_Profile', {
+    playerId: playerId,
+    durationSeconds: durationSeconds
+  });
 }
 
 function trackChangedNotificationPreference(old: string, new_preff: string) {
@@ -171,5 +181,5 @@ export const analytics = {
   trackOpenedPlayerProfile,
   trackFixtureCardClicked,
   trackChangedNotificationPreference,
-  
+  trackClosedPlayerProfile
 };

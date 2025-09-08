@@ -8,20 +8,20 @@ export const authAnalytics = {
     trackClaimGuestAccountCompleted: (startTime: Date, endTime: Date) => {
 
         const duration = startTime && endTime ? new Date(endTime).valueOf() - new Date(startTime).valueOf() : 0;
-        const durationMinutes = duration / 1000;
+        const durationSeconds = duration / (1000 * 60);
 
         analytics.track('Claim_Guest_Account_Completed', {
-            durationMinutes,
+            durationSeconds,
             durationEpoch: duration
         });
     },
 
     trackClaimGuestAccountCanceled: (startTime: Date, endTime: Date, lastStep: number) => {
         const duration = startTime && endTime ? new Date(endTime).valueOf() - new Date(startTime).valueOf() : 0;
-        const durationMinutes = duration / 1000;
+        const durationSeconds = duration / (1000 * 60);
 
         analytics.track('Claim_Guest_Account_Canceled', {
-            durationMinutes,
+            durationSeconds,
             durationEpoch: duration,
             lastStep: lastStep
         });
