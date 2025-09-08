@@ -14,7 +14,7 @@ import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { Check, Info, Loader } from 'lucide-react';
+import { Check, Info, Loader, Plus } from 'lucide-react';
 import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
 import { useAtomValue } from 'jotai';
@@ -27,6 +27,7 @@ import {
   TeamPreset,
   CreatePresetPayload,
 } from '../../services/fantasy/teamPresetsService';
+import { Bookmark } from 'lucide-react';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -59,6 +60,11 @@ export default function CreateMyTeam({
   const [presets, setPresets] = useState<TeamPreset[]>([]);
   const [isLoadingPresets, setIsLoadingPresets] = useState(false);
   const [selectedPresetId, setSelectedPresetId] = useState<string>('');
+  // Save Preset Modal
+  const [showPresetModal, setShowPresetModal] = useState(false);
+  const [presetName, setPresetName] = useState('');
+  const [makeDefault, setMakeDefault] = useState(true);
+  const [savingPreset, setSavingPreset] = useState(false);
 
   const totalSpent = Object.values(selectedPlayers).reduce(
     (sum, player) => sum + (player.price || 0),
@@ -97,9 +103,9 @@ export default function CreateMyTeam({
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
         const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
-          .filter(a => {
-            return a.power_rank_rating && a.power_rank_rating > 50;
-          })
+          // .filter(a => {
+          //   return a.power_rank_rating && a.power_rank_rating > 50;
+          // })
           .sort((a, b) => {
             return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
           });
@@ -116,7 +122,7 @@ export default function CreateMyTeam({
     loadAthletes();
   }, [leagueRound]);
 
-  // Load saved team presets for the season (scoped to current user)
+  // Load saved team presets for the season/league group (scoped to current user)
   useEffect(() => {
     const loadPresets = async () => {
       if (!leagueRound) return;
@@ -126,7 +132,7 @@ export default function CreateMyTeam({
         if (!userInfo?.kc_id) return;
         const res = await teamPresetsService.list({
           userId: userInfo.kc_id,
-          seasonId: Number(leagueRound.season_id as any),
+          fantasyLeagueGroupId: leagueRound.fantasy_league_group_id,
         });
         setPresets(res);
       } catch (e) {
@@ -137,6 +143,76 @@ export default function CreateMyTeam({
     };
     loadPresets();
   }, [leagueRound]);
+
+  // Auto-load default preset or fallback to last submitted team when creating a new team
+  useEffect(() => {
+    const tryAutoLoad = async () => {
+      if (!leagueRound) return;
+      // Only auto-apply if user hasn't selected anyone yet
+      if (Object.keys(selectedPlayers).length > 0) return;
+
+      try {
+        const user = await authService.getUserInfo();
+        if (!user?.kc_id) return;
+
+        // 1) Try default preset for this league group
+        const defaults = await teamPresetsService.list({
+          userId: user.kc_id,
+          fantasyLeagueGroupId: leagueRound.fantasy_league_group_id,
+          isDefault: true,
+        });
+
+        if (defaults && defaults.length > 0) {
+          const preset = defaults[0];
+          // Map preset athletes to builder selection
+          const next: Record<string, IProAthlete> = {};
+          let nextCaptain: string | null = null;
+
+          preset.athletes.forEach(item => {
+            const index = (item.slot ?? 1) - 1;
+            const pos = positions[index];
+            const ath = players.find(a => a.tracking_id === item.athlete_id);
+            if (pos && ath) {
+              next[pos.name] = ath;
+              if (item.is_captain) nextCaptain = item.athlete_id;
+            }
+          });
+
+          if (Object.keys(next).length > 0) {
+            setSelectedPlayers(next);
+            setCaptainId(nextCaptain);
+            return;
+          }
+        }
+
+        // 2) Fallback to last submitted team for this round (auto-carry on backend should have our team)
+        const teamWithAthletes = await leagueService.getUserRoundTeam(leagueRound.id, user.kc_id);
+        if (teamWithAthletes && Array.isArray(teamWithAthletes.athletes)) {
+          const next: Record<string, IProAthlete> = {};
+          let nextCaptain: string | null = null;
+          teamWithAthletes.athletes.forEach(a => {
+            const index = (a.slot ?? 1) - 1;
+            const pos = positions[index];
+            // a.athlete is IProAthlete per FantasyLeagueTeamWithAthletes type
+            const ath = (a as any).athlete as IProAthlete | undefined;
+            if (pos && ath) {
+              next[pos.name] = ath;
+              if ((a as any).is_captain) nextCaptain = ath.tracking_id;
+            }
+          });
+          if (Object.keys(next).length > 0) {
+            setSelectedPlayers(next);
+            setCaptainId(nextCaptain);
+          }
+        }
+      } catch (e) {
+        console.error('Auto-load default/fallback failed', e);
+      }
+    };
+
+    tryAutoLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [leagueRound, players]);
 
   const positions = [
     { name: 'Front Row', position_class: 'front-row' },
@@ -268,6 +344,16 @@ export default function CreateMyTeam({
     );
   }
 
+  if (!leagueRound) {
+    return (
+      <div className="flex flex-col items-center justify-center p-4">
+        <h2 className="text-xl font-bold mb-2">Error</h2>
+        <p className="text-gray-600 mb-4">League round information is missing</p>
+        <PrimaryButton onClick={() => window.history.back()}>Go Back</PrimaryButton>
+      </div>
+    );
+  }
+
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
   const handleGoToStandings = () => {
@@ -298,6 +384,7 @@ export default function CreateMyTeam({
       return;
     }
     try {
+      setSavingPreset(true);
       const userInfo = await authService.getUserInfo();
       if (!userInfo?.kc_id) {
         showToast('You must be logged in to save a preset');
@@ -305,17 +392,26 @@ export default function CreateMyTeam({
       }
       const payload: CreatePresetPayload = {
         user_id: userInfo.kc_id,
-        name: `Preset ${presets.length + 1}`,
-        season_id: Number(leagueRound?.season_id as any),
+        name:
+          presetName?.trim() ||
+          (leagueRound?.title ? `${leagueRound.title} Team` : `Preset ${presets.length + 1}`),
+        fantasy_league_group_id: leagueRound?.fantasy_league_group_id,
+        is_default: makeDefault,
         athletes: buildPresetAthletes(),
       };
       const created = await teamPresetsService.create(payload);
       setPresets(prev => [created, ...prev]);
       setSelectedPresetId(created.id);
-      showToast('Preset saved', 'success');
+      showToast(
+        makeDefault ? 'Default preset updated for this league.' : 'Preset saved',
+        'success'
+      );
+      setShowPresetModal(false);
     } catch (e) {
       console.error('Failed to save preset', e);
       showToast('Failed to save preset');
+    } finally {
+      setSavingPreset(false);
     }
   };
 
@@ -339,8 +435,8 @@ export default function CreateMyTeam({
     setCaptainId(nextCaptain);
     showToast('Preset applied', 'success');
   };
-
-  if (isLocked) {
+  //isLocked
+  if (false) {
     return (
       <div className="flex flex-col items-center justify-center gap-1">
         <NoContentCard message="Whoops! Round has been locked, you can't pick your team now" />
@@ -386,8 +482,70 @@ export default function CreateMyTeam({
 
       {/* Presets + Save */}
       <div className="mt-3 relative z-[50] space-y-3">
+        {/* Floating Save-as-Preset FAB */}
+        {Object.keys(selectedPlayers).length === 6 && budgetRemaining >= 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              setPresetName(leagueRound?.title ? `${leagueRound.title} Team` : 'My Team');
+              setMakeDefault(true);
+              setShowPresetModal(true);
+            }}
+            className="fixed bottom-20 right-4 z-[60] rounded-full w-14 h-14 bg-blue-600 text-white shadow-lg flex items-center justify-center hover:bg-blue-700 active:scale-95"
+            aria-label="Save team as preset"
+          >
+            <Bookmark className="w-6 h-6" />
+          </button>
+        )}
+
+        {/* Save Preset Modal */}
+        {showPresetModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+              <h2 className="text-xl font-bold mb-4 dark:text-gray-100">Save Team as Preset</h2>
+
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Preset name
+              </label>
+              <input
+                value={presetName}
+                onChange={e => setPresetName(e.target.value)}
+                className="w-full mb-4 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="My Team – Week 3"
+              />
+
+              <label className="inline-flex items-center gap-2 mb-4">
+                <input
+                  type="checkbox"
+                  checked={makeDefault}
+                  onChange={e => setMakeDefault(e.target.checked)}
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Make this the default preset for this league
+                </span>
+              </label>
+
+              <div className="flex gap-2 justify-end">
+                <button
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200"
+                  onClick={() => setShowPresetModal(false)}
+                  disabled={savingPreset}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+                  onClick={handleSavePreset}
+                  disabled={savingPreset}
+                >
+                  {savingPreset ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Preset dropdown and save-as-preset */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <select
             className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
             value={selectedPresetId}
@@ -414,7 +572,7 @@ export default function CreateMyTeam({
           >
             Save as preset
           </button>
-        </div>
+        </div> */}
 
         <PrimaryButton
           className="w-full"

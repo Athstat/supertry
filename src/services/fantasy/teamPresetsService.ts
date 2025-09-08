@@ -15,6 +15,7 @@ export type TeamPreset = {
   fantasy_league_group_id?: string | null;
   name: string;
   athletes: PresetAthleteItem[];
+  is_default?: boolean;
   created_at?: string;
   updated_at?: string;
 };
@@ -24,6 +25,7 @@ export type CreatePresetPayload = {
   name: string;
   season_id?: number | null;
   fantasy_league_group_id?: string | null;
+  is_default?: boolean;
   athletes: PresetAthleteItem[];
 };
 
@@ -47,11 +49,17 @@ async function http<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
 }
 
 export const teamPresetsService = {
-  async list(params: { userId: string; seasonId?: number; fantasyLeagueGroupId?: string }) {
+  async list(params: {
+    userId: string;
+    seasonId?: number;
+    fantasyLeagueGroupId?: string;
+    isDefault?: boolean;
+  }) {
     const query = buildQuery({
       user_id: params.userId,
       season_id: params.seasonId,
       fantasy_league_group_id: params.fantasyLeagueGroupId,
+      is_default: params.isDefault ? 1 : undefined,
     });
     const uri = getUri(`/api/v1/fantasy-teams/presets${query}`);
     return http<TeamPreset[]>(uri, {

@@ -84,6 +84,8 @@ export const seasonService = {
         headers: getAuthHeader(),
       });
 
+      //console.log('res: ', await res.json());
+
       if (res.ok) {
         return (await res.json()) as IProAthlete[];
       }
