@@ -2,6 +2,7 @@ import * as amplitude from '@amplitude/analytics-browser';
 import { authService } from './authService';
 import { getDeviceInfo, getWeekFromLaunch, isInProduction } from '../utils/webUtils';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../types/fantasyLeague';
+import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
 
 amplitude.init('7a73614db43ac3fb1e4c8b8e24a280eb', { autocapture: true });
 
@@ -92,11 +93,12 @@ function trackTeamCreationCompleted(leagueRound?: IFantasyLeagueRound, team?: IF
   });
 }
 
-function trackFriendInvitesSent(method: string, teamId?: string) {
-  track('Team_Invite_Sent', {
+function trackFriendInvitesSent(method: string, leagueGroup: FantasyLeagueGroup) {
+  track('League_Invite_Sent', {
     friendCount: null,
     inviteMethod: method,
-    teamId: teamId,
+    leagueGroupId: leagueGroup.id,
+    leagueGroupName: leagueGroup.title,
   });
 }
 
