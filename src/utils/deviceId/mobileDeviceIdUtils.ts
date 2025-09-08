@@ -35,19 +35,21 @@ function getQaMobileDeviceId(): DeviceIdPair {
 
 /** Fix we have on QA to solve 'Device Id not found issue'*/
 function getProdMobileDeviceId(): DeviceIdPair {
-    
-    console.log("Retrieving mobile device ID using prod method")
-    let mobileDeviceId = window.deviceId ?? localStorage.getItem('device_id');
 
-    console.log('Mobile device ID: ', mobileDeviceId);
+    console.log("Retrieving mobile device ID using prod method");
 
-    if (!mobileDeviceId) {
+    let realDeviceId = window.deviceId || '';
+    let storedId = localStorage.getItem('device_id') || '';
+
+    console.log('Real device ID: ', realDeviceId);
+
+    if (!realDeviceId && !storedId) {
         // throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
         console.log('Unable to obtain mobile device ID, defaulting to random UUID');
-        mobileDeviceId = `mobile_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+        storedId = `mobile_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
     }
 
-    localStorage.setItem('mobile device_id', mobileDeviceId);
+    localStorage.setItem('device_id', storedId);
 
-    return {storedDeviceId: mobileDeviceId, realDeviceId: mobileDeviceId};
+    return { storedDeviceId: storedId, realDeviceId: realDeviceId };
 }
