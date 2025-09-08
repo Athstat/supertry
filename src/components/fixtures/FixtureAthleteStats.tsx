@@ -1,11 +1,13 @@
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { GameSportAction } from "../../types/boxScore"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Table2 } from "lucide-react"
 import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
 import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
 import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
+import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics"
+import { useInView } from "react-intersection-observer"
 
 type Props = {
     fixture: IFixture,
@@ -18,6 +20,15 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
     const [search, setSearch] = useState<string>("");
 
     const { selectedTeamId } = useBoxscoreFilter(fixture);
+    const {ref, inView} = useInView({triggerOnce: true});
+
+    useEffect(() => {
+        
+        if (inView) {
+            fixtureAnalytics.trackViewedBoxscore(fixture);
+        }
+
+    }, [fixture, inView]);
 
 
     const attackList = useMemo(() => {
@@ -41,7 +52,7 @@ export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
 
     return (
 
-        <div className="flex flex-col gap-8 w-full" >
+        <div ref={ref} className="flex flex-col gap-8 w-full" >
 
             <div className="flex flex-col gap-4" >
                 <div className="flex flex-row items-center justify-start gap-2" >

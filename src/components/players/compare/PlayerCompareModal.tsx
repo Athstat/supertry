@@ -20,7 +20,9 @@ export default function PlayerCompareModal({}: Props) {
   const  {closeCompareModal} = usePlayerCompareActions();
 
   useEffect(() => {
-    analytics.trackComparedPlayers(selectedPlayers);
+    if (selectedPlayers.length > 0) {
+      analytics.trackComparedPlayers(selectedPlayers);
+    }
   }, [selectedPlayers]);
 
   // Preload images when modal is open

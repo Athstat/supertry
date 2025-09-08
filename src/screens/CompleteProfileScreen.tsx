@@ -23,7 +23,6 @@ import FormStepIndicator from '../components/shared/forms/FormStepIndicator';
 import { KeyRound } from 'lucide-react';
 import { BadgeCheck } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
-import { analytics } from '../services/analytics/anayticsService';
 import { authAnalytics } from '../services/analytics/authAnalytics';
 
 export function CompleteProfileScreen() {
@@ -41,7 +40,7 @@ export function CompleteProfileScreen() {
 function ScreenContent() {
 
   authAnalytics.trackClaimGuestAccountStarted();
-  
+
   const navigate = useNavigate();
   const [startTime] = useState(new Date());
 
@@ -324,7 +323,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
 
-  const [errors, setErrors] = useState<any>();
+  const [setErrors] = useState<any>();
   const navigate = useNavigate();
 
   const validateForm = () => {
