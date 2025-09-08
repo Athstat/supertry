@@ -25,11 +25,11 @@ export default function SmallFixtureCard({ fixture }: Props) {
                         <div className="flex flex-row items-center gap-2" >
 
                             <TeamLogo
-                                url={fixture.team.image_url}
-                                teamName={fixture.team.athstat_name}
+                                url={fixture.team?.image_url}
+                                teamName={fixture.team?.athstat_name}
                                 className="w-8 h-8"
                             />
-                            <p className="text-sm" >{fixture.team.athstat_name}</p>
+                            <p className="text-sm" >{fixture.team?.athstat_name}</p>
                         </div>
 
                         <div>
@@ -41,11 +41,11 @@ export default function SmallFixtureCard({ fixture }: Props) {
                         <div className="flex flex-row items-center gap-2" >
 
                             <TeamLogo
-                                url={fixture.opposition_team.image_url}
-                                teamName={fixture.opposition_team.athstat_name}
+                                url={fixture.opposition_team?.image_url}
+                                teamName={fixture?.opposition_team?.athstat_name}
                                 className="w-8 h-8"
                             />
-                            <p className="text-sm" >{fixture.opposition_team.athstat_name}</p>
+                            <p className="text-sm" >{fixture?.opposition_team?.athstat_name}</p>
                         </div>
 
                         
