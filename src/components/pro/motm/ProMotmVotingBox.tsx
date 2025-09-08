@@ -50,23 +50,23 @@ export function ProMotmVotingBoxContent({ fixture }: ContentProps) {
 
     const tabItems: TabViewHeaderItem[] = [
         {
-            label: `${fixture.team.athstat_name}`,
+            label: `${fixture?.team?.athstat_name}`,
             tabKey: 'home_team',
             className: "flex-1 text-xs md:text-sm"
         },
         {
-            label: `${fixture.opposition_team.athstat_name}`,
+            label: `${fixture?.opposition_team?.athstat_name}`,
             tabKey: 'away_team',
             className: "flex-1 text-xs md:text-sm"
         }
     ];
 
     const homeCandidates = candidates.filter((r) => {
-        return r.team_id === fixture.team.athstat_id;
+        return r.team_id === fixture?.team?.athstat_id;
     });
 
     const awayCandidates = candidates.filter((r) => {
-        return r.team_id === fixture.opposition_team.athstat_id;
+        return r.team_id === fixture?.opposition_team?.athstat_id;
     });
 
     if (candidates.length === 0) {
