@@ -3,8 +3,8 @@ import { IProTeam } from "./team";
 
 export type IFixture = {
   game_id: string,
-  team: IProTeam,
-  opposition_team: IProTeam,
+  team?: IProTeam,
+  opposition_team?: IProTeam,
   team_score?: number,
   opposition_score?: number,
   venue?: string,
