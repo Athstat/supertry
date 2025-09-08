@@ -13,7 +13,10 @@ export default function FixtureTeamSelector({ fixture }: Props) {
 
   const { selectedTeam: value, setSelectedTeamId } = useBoxscoreFilter(fixture);
 
-  const onSelectTeam = (t: IProTeam) => {
+  const onSelectTeam = (t?: IProTeam) => {
+
+    if (!t) return;
+
     console.log("Selecting team ", t.athstat_name);
     setSelectedTeamId(t.athstat_id);
   }
@@ -21,19 +24,19 @@ export default function FixtureTeamSelector({ fixture }: Props) {
   return (
     <div className="bg-white flex border border-slate-300 dark:border-slate-700 flex-row items-center gap-2 dark:bg-slate-800/40 shadow-lg rounded-xl overflow-clip" >
 
-      <SingleTeamButton
+      { fixture.team && value && <SingleTeamButton
         team={fixture.team}
         onClick={() => onSelectTeam(fixture.team)}
         value={value}
         fixture={fixture}
-      />
+      />}
 
-      <SingleTeamButton
+      { fixture.opposition_team && value && <SingleTeamButton
         team={fixture.opposition_team}
         onClick={() => onSelectTeam(fixture.opposition_team)}
         value={value}
         fixture={fixture}
-      />
+      />}
 
     </div>
   )

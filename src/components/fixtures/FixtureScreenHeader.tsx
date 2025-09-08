@@ -23,7 +23,7 @@ export function FixtureScreenHeader({ fixture }: Props) {
                 <div className="flex z-30 flex-row w-full items-center shadow-lg shadow-black/10 dark:shadow-black justify-center py-2 lg:px-[15%] bg-white dark:bg-dark-800 h-16 px-4" >
                     
                 <div className="flex-1 flex flex-row items-center justify-between "  >
-                        <TeamLogo className="h-10 w-10" url={fixture.team.image_url} teamName={fixture.team.athstat_name} />
+                        <TeamLogo className="h-10 w-10" url={fixture?.team?.image_url} teamName={fixture?.team?.athstat_name} />
                         <p  className="text-md font-bold"  >{fixture.team_score}</p>
                     </div>
 
@@ -34,7 +34,7 @@ export function FixtureScreenHeader({ fixture }: Props) {
 
                     <div className="flex-1 flex flex-row items-center justify-between " >
                         <p className="text-md font-bold" >{fixture.opposition_score}</p>
-                        <TeamLogo className="h-10 w-10" url={fixture.opposition_team.image_url} teamName={fixture.opposition_team.athstat_name} />
+                        <TeamLogo className="h-10 w-10" url={fixture?.opposition_team?.image_url} teamName={fixture?.opposition_team?.athstat_name} />
                     </div>
                 </div>
             </Sticky>}
