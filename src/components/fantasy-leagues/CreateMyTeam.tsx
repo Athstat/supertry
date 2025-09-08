@@ -27,7 +27,7 @@ import {
   TeamPreset,
   CreatePresetPayload,
 } from '../../services/fantasy/teamPresetsService';
-import { analytics } from '../../services/anayticsService';
+import { analytics } from '../../services/analytics/anayticsService';
 
 export default function CreateMyTeam({
   leagueRound,

@@ -1,7 +1,7 @@
 import { Copy } from "lucide-react";
 import ScrummyLogo from "../components/branding/scrummy_logo";
 import { useAuthUser } from "../hooks/useAuthUser";
-import { analytics } from "../services/anayticsService";
+import { analytics } from "../services/analytics/anayticsService";
 
 export default function InviteFriendsScreen() {
 

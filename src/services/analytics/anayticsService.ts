@@ -1,8 +1,10 @@
 import * as amplitude from '@amplitude/analytics-browser';
-import { authService } from './authService';
-import { getDeviceInfo, getWeekFromLaunch, isInProduction } from '../utils/webUtils';
-import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../types/fantasyLeague';
-import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
+import { authService } from '../authService';
+import { getDeviceInfo, getWeekFromLaunch, isInProduction } from '../../utils/webUtils';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
+import { IProAthlete } from '../../types/athletes';
+import { IFixture } from '../../types/games';
 
 amplitude.init('7a73614db43ac3fb1e4c8b8e24a280eb', { autocapture: true });
 
@@ -109,6 +111,50 @@ function trackFriendInvitesReceived(method: string, userId?: string) {
   });
 }
 
+function trackOnboardingSkipped() {
+  track('Onboarding_Skipped');
+}
+
+function trackOnboardingCtaContinued(nextUrl: string) {
+  track('Onboarding_CTA_Continued', {
+    nextUrl
+  });
+}
+
+function trackComparedPlayers(players: IProAthlete[]) {
+  track("Compared_Players", {
+    playerIds: players.map((p) => p.tracking_id)
+  })
+}
+
+function trackOpenedPlayerProfile(player: IProAthlete, source?: string) {
+  track('Opened_Player_Profile', {
+    playerId: player.tracking_id,
+    playerName: player.player_name,
+    position: player.position,
+    source: source
+  })
+}
+
+function trackChangedNotificationPreference(old: string, new_preff: string) {
+  track('Changed_Notification_Preference', {
+    previous_preference: old,
+    new_preference: new_preff
+  })
+}
+
+function trackFixtureCardClicked(fixture: IFixture) {
+
+  const dateNow = new Date();
+
+  track('Fixture_Card_Clicked', {
+    game_id: fixture.game_id,
+    title: fixture.team && fixture.opposition_team ? `${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}` : undefined,
+    game_status: fixture.game_status,
+    EpochFromKickoff: fixture.kickoff_time ? (new Date(fixture.kickoff_time).valueOf() - dateNow.valueOf()) : undefined
+  });
+}
+
 export const analytics = {
   track,
   trackPageVisit,
@@ -119,4 +165,11 @@ export const analytics = {
   trackTeamCreationCompleted,
   trackFriendInvitesSent,
   trackFriendInvitesReceived,
+  trackOnboardingSkipped,
+  trackOnboardingCtaContinued,
+  trackComparedPlayers,
+  trackOpenedPlayerProfile,
+  trackFixtureCardClicked,
+  trackChangedNotificationPreference,
+  
 };

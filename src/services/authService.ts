@@ -22,7 +22,7 @@ import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUt
 import { validateUsername } from '../utils/authUtils';
 import { isGuestEmail } from '../utils/deviceId/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
-import { analytics } from './anayticsService';
+import { analytics } from './analytics/anayticsService';
 import { logger } from './logger';
 import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService';
 import { mutate } from 'swr';

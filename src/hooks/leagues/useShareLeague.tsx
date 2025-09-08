@@ -1,5 +1,5 @@
 import { useAuth } from "../../contexts/AuthContext";
-import { analytics } from "../../services/anayticsService";
+import { analytics } from "../../services/analytics/anayticsService";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
 export function useShareLeague(league?: FantasyLeagueGroup) {
