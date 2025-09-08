@@ -1,13 +1,14 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { authService } from './authService';
 import { getDeviceInfo, getWeekFromLaunch, isInProduction } from '../utils/webUtils';
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../types/fantasyLeague';
 
 amplitude.init('7a73614db43ac3fb1e4c8b8e24a280eb', { autocapture: true });
 
 function track(event: string, eventInfo?: Record<string, any>) {
     
     if (!isInProduction()) {
-        // console.log(`Skipped recording event ${event} because app is not in production`);
+        console.log(`Skipped recording event ${event} because app is not in production`);
         return;
     }
     
@@ -15,7 +16,7 @@ function track(event: string, eventInfo?: Record<string, any>) {
     const user = authService.getUserInfoSync();
 
 
-    amplitude.track(event, {
+    const res = amplitude.track(event, {
         ...eventInfo,
         timeStamp: new Date(),
         device: agent,
@@ -24,7 +25,7 @@ function track(event: string, eventInfo?: Record<string, any>) {
         userId: user ? user.kc_id : null
     });
 
-  console.log('ER');
+  console.log('Amplitude Res ', res);
 }
 
 function trackPageVisit(route: string) {
@@ -35,6 +36,9 @@ function trackPageVisit(route: string) {
 }
 
 function trackUserSignUp(method: string, referrer?: string) {
+  
+  console.log("Tried to do a user signed up ", method);
+  
   track('User_Signed_Up', {
     signUpMethod: method,
     referrer: referrer,
@@ -46,6 +50,9 @@ function trackUserLogout() {
 }
 
 function trackUserSignIn(method: string, referrer?: string) {
+
+  console.log("Tracking user sign in ", method);
+
   track('User_Signed_In', {
     referrer: referrer,
     method: method,
@@ -59,18 +66,29 @@ export function getCurrentPath() {
   return null;
 }
 
-function trackTeamCreationStarted(leagueId: string, officialLeagueId: string) {
+function trackTeamCreationStarted(leagueRound?: IFantasyLeagueRound) {
+
+  console.log("Team Creation Started, we are creating team ", leagueRound);
+
+  if (!leagueRound) return;
+
   track('Team_Started', {
-    leagueId: leagueId,
-    officialLeagueId: officialLeagueId,
+    leagueId: leagueRound.id,
+    officialLeagueId: leagueRound.official_league_id,
+    leagueGroupId: leagueRound.fantasy_league_group_id
   });
 }
 
-function trackTeamCreationCompleted(leagueId: string, teamId: string, officialLeagueId: string) {
+function trackTeamCreationCompleted(leagueRound?: IFantasyLeagueRound, team?: IFantasyLeagueTeam) {
+
+  if (!leagueRound || !team) return;
+
   track('Team_Created', {
-    leagueId: leagueId,
-    officialLeagueId: officialLeagueId,
-    teamId: teamId,
+    leagueId: leagueRound.id,
+    officialLeagueId: leagueRound.official_league_id,
+    teamId: team.id,
+    team_name: team.team_name,
+    team_athletes: team.athletes.map((a) => a.athlete_id)
   });
 }
 

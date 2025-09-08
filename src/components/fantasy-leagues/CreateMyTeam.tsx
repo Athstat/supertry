@@ -27,6 +27,7 @@ import {
   TeamPreset,
   CreatePresetPayload,
 } from '../../services/fantasy/teamPresetsService';
+import { analytics } from '../../services/anayticsService';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -40,6 +41,8 @@ export default function CreateMyTeam({
   onViewTeam?: () => void;
   onBack?: () => void;
 }) {
+
+  
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, IProAthlete>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -94,6 +97,9 @@ export default function CreateMyTeam({
   useEffect(() => {
     const loadAthletes = async () => {
       if (!leagueRound) return;
+
+      analytics.trackTeamCreationStarted(leagueRound);
+
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
         const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
@@ -230,6 +236,8 @@ export default function CreateMyTeam({
 
       // Show success modal
       setShowSuccessModal(true);
+
+      analytics.trackTeamCreationCompleted(leagueRound, createdTeam);
 
       // If parent wants to handle success, notify it
       if (onTeamCreated) {

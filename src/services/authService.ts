@@ -167,7 +167,7 @@ export const authService = {
 
       if (response.ok) {
         const json = (await response.json()) as DjangoRegisterRes;
-
+        analytics.trackUserSignUp('Email');
         authTokenService.saveLoginTokens(json.token, json.user);
         return { data: json };
       }
@@ -210,6 +210,7 @@ export const authService = {
         const json = (await res.json()) as DjangoLoginRes;
 
         authTokenService.saveLoginTokens(json.token, json.user);
+        analytics.trackUserSignIn('Email');
         return { data: json, message: 'Login Successful' };
       }
 
@@ -221,7 +222,7 @@ export const authService = {
         return { message: 'Incorrect password' };
       }
 
-      analytics.trackUserSignIn('Email');
+      
     } catch (error) {
       logger.error('Error loging in user with email ', email, ' error: ', error);
       console.log('Login Error ', error);
