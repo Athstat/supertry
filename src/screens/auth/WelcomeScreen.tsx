@@ -179,8 +179,8 @@ export function WelcomeScreen() {
               onClick={handleGuestLogin}
               isLoading={isLoading}
             >
-              <p>Get Started!</p>
-              <BetaTag className='bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none' />
+              <p>Get Started!!!</p>
+              <BetaTag className="bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none" />
             </PrimaryButton>
 
             {error && <ErrorMessage message={error} />}
