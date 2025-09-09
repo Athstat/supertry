@@ -1,7 +1,7 @@
-import { format, subHours } from 'date-fns';
+import { subHours } from 'date-fns';
 import { gamesService } from '../../services/gamesService';
 import { IFixture } from '../../types/games';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import { LoadingState } from '../ui/LoadingState';
 import { ErrorState } from '../ui/ErrorState';
 import { Calendar } from 'lucide-react';
@@ -82,8 +82,8 @@ export default function UpcomingFixturesSection() {
       const kickoff = f.kickoff_time;
 
       if (kickoff) {
-        const now = new Date().valueOf();
-        return now > new Date(kickoff).valueOf();
+        const {game_status} = f;
+        return game_status === 'completed' || game_status === 'result';
       }
 
       return false;
@@ -121,6 +121,10 @@ export default function UpcomingFixturesSection() {
     setShowPredictModal(true);
   };
 
+  const handleViewAllFixtures = () => {
+    push('/fixtures#upcoming-matches')
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
@@ -129,7 +133,7 @@ export default function UpcomingFixturesSection() {
           Fixtures
         </h3>
         <button
-          onClick={() => push('/fixtures#upcoming-matches')}
+          onClick={handleViewAllFixtures}
           className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
         >
           View All
@@ -186,20 +190,28 @@ export default function UpcomingFixturesSection() {
         </div>
       )}
 
-      <div>
-        <SecondaryText>Past Fixtures</SecondaryText>
-      </div>
+      {pastFixtures.length > 0 && (
+        <Fragment>
+          <div>
+            <SecondaryText>Past Fixtures</SecondaryText>
+          </div>
 
-      <div className="flex flex-col gap-2 pb-2">
-        {[...pastFixtures].slice(0, 3).map(fixture => {
-          return (
-            <SmallFixtureCard
-              fixture={fixture}
-              key={fixture.game_id}
-            />
-          );
-        })}
-      </div>
+          <div className="flex flex-col gap-2 pb-2">
+            {[...pastFixtures].slice(0, 3).map(fixture => {
+              return (
+                <SmallFixtureCard
+                  fixture={fixture}
+                  key={fixture.game_id}
+                />
+              );
+            })}
+          </div>
+
+          <div className='flex flex-row items-center justify-center' >
+            <button onClick={handleViewAllFixtures} className='text-blue-500' >View All Fixtures</button>
+          </div>
+        </Fragment>
+      )}
     </div>
   );
 }
