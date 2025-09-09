@@ -10,10 +10,11 @@ import { twMerge } from "tailwind-merge"
 import ProFixtureVotingBox from "./voting/ProFixtureVotingBox"
 
 type Props = {
-    fixture: IFixture
+    fixture: IFixture,
+    className?: string
 }
 
-export default function SmallFixtureCard({ fixture }: Props) {
+export default function SmallFixtureCard({ fixture, className }: Props) {
 
     const { hasNotStarted, matchFinal } = fixtureSumary(fixture);
     const [showModal, setShowModal] = useState(false);
@@ -31,7 +32,8 @@ export default function SmallFixtureCard({ fixture }: Props) {
                 onClick={handleClick}
                 className={twMerge(
                     'border dark:border-slate-700 cursor-pointer dark:bg-slate-800/20  rounded-xl p-6 flex flex-col gap-4',
-                    'hover:bg-white dark:hover:bg-slate-800/40'
+                    'hover:bg-white dark:hover:bg-slate-800/40',
+                    className
                 )}
             >
                 <div>
@@ -53,7 +55,7 @@ export default function SmallFixtureCard({ fixture }: Props) {
                             </div>
 
                             <div>
-                                {!hasNotStarted ? <p>{fixture.team_score}</p> : ''}
+                                {hasNotStarted ? <p>{fixture.team_score}</p> : ''}
                             </div>
                         </div>
 
@@ -71,7 +73,7 @@ export default function SmallFixtureCard({ fixture }: Props) {
 
 
                             <div>
-                                {!hasNotStarted ? <p>{fixture.opposition_score}</p> : ''}
+                                {hasNotStarted ? <p>{fixture.opposition_score}</p> : ''}
                             </div>
                         </div>
                     </div>
@@ -84,7 +86,7 @@ export default function SmallFixtureCard({ fixture }: Props) {
 
                 </div>
 
-                <ProFixtureVotingBox fixture={fixture} />
+                <ProFixtureVotingBox className="mt-0" fixture={fixture} />
             </div>
 
             <FixtureCardModal 

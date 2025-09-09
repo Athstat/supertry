@@ -126,7 +126,7 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
             hasUserVoted={votedHomeTeam}
             voteCount={homeVotes.length}
             votePercentage={homePerc}
-            title={`${team_name}`}
+            title={`${team_name} Win`}
             onClick={() => handleVote('home_team')}
             isGreen={!!(votedHomeTeam && matchFinal && homeTeamWon)}
             isRed={!!(votedHomeTeam && matchFinal && awayTeamWon)}
@@ -136,7 +136,7 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
             hasUserVoted={votedAwayTeam}
             voteCount={awayVotes.length}
             votePercentage={awayPerc}
-            title={`${opposition_team_name}`}
+            title={`${opposition_team_name} Win`}
             onClick={() => handleVote('away_team')}
             isGreen={!!(votedAwayTeam && matchFinal && awayTeamWon)}
             isRed={!!(votedAwayTeam && matchFinal && homeTeamWon)}
