@@ -16,7 +16,7 @@ type Props = {
 
 export default function SmallFixtureCard({ fixture, className }: Props) {
 
-    const { hasNotStarted, matchFinal } = fixtureSumary(fixture);
+    const { matchFinal, gameKickedOff } = fixtureSumary(fixture);
     const [showModal, setShowModal] = useState(false);
 
     const toggle = () => setShowModal(prev => !prev);
@@ -55,7 +55,7 @@ export default function SmallFixtureCard({ fixture, className }: Props) {
                             </div>
 
                             <div>
-                                {hasNotStarted ? <p>{fixture.team_score}</p> : ''}
+                                {gameKickedOff ? <p>{fixture.team_score}</p> : ''}
                             </div>
                         </div>
 
@@ -73,7 +73,7 @@ export default function SmallFixtureCard({ fixture, className }: Props) {
 
 
                             <div>
-                                {hasNotStarted ? <p>{fixture.opposition_score}</p> : ''}
+                                {gameKickedOff ? <p>{fixture.opposition_score}</p> : ''}
                             </div>
                         </div>
                     </div>

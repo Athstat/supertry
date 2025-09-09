@@ -11,7 +11,7 @@ export function fixtureSumary(fixture: IFixture) {
     const homeTeamWon = matchFinal ? team_score > opposition_score : false;
     const awayTeamWon = matchFinal ? team_score < opposition_score : false;
 
-    const gameKickedOff = kickoff_time !== undefined && (new Date(kickoff_time) < new Date());
+    const gameKickedOff = kickoff_time !== undefined && (new Date(kickoff_time) < new Date()) && game_status !== 'fixture';
     
     return {gameKickedOff, homeTeamWon, awayTeamWon, game_status, hasNotStarted, matchFinal};
 }
