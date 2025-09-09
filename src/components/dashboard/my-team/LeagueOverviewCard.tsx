@@ -174,7 +174,7 @@ function NotTeamCreated() {
 
             <div className='flex flex-row items-center gap-2' >
                 <Info className='w-4 h-4' />
-                <p className='text-base' >You haven't picked a team for {currentRound.title} yet</p>
+                <p className='text-xs' >You haven't picked a team for {currentRound.title} yet</p>
             </div>
 
             <PrimaryButton onClick={goToCreateTeam} className='w-fit text-xs' >
