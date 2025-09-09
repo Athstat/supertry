@@ -16,7 +16,7 @@ export function DashboardScreen() {
   };
 
   return (
-    <PageView className="flex flex-col space-y-12 p-4">
+    <PageView className="flex flex-col space-y-8 p-4">
       <div className="flex flex-row items-center gap-2">
         <Home />
         <p className="text-xl font-extrabold">Dashboard</p>
