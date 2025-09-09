@@ -7,6 +7,8 @@ import { notificationService } from '../../services/notificationsService';
 import DialogModal from '../shared/DialogModal';
 import { authService } from '../../services/authService';
 import { ErrorState } from '../ui/ErrorState';
+import { analytics } from '../../services/analytics/anayticsService';
+import { useAuth } from '../../contexts/AuthContext';
 
 type Props = {
   databaseUser: DjangoAuthUser;
@@ -54,7 +56,9 @@ type GameUpdatesProps = {
   user: DjangoAuthUser;
 };
 
-function GameUpdatesSection({ user }: GameUpdatesProps) {
+function GameUpdatesSection({user}: GameUpdatesProps) {
+
+  const {refreshAuthUser} = useAuth();
 
   const [selection, setSelection] = useState<GameUpdatesPreference>(
     user.game_updates_preference ?? 'key-updates'
@@ -86,7 +90,15 @@ function GameUpdatesSection({ user }: GameUpdatesProps) {
         setIsSaving(true);
 
         await notificationService.updateGameUpdatesPreferences(selection);
-        await authService.updateUserInfo();
+        authService.updateUserInfo()
+        const newUserInfo = await refreshAuthUser();
+
+        analytics.trackChangedNotificationPreference(
+          user.game_updates_preference ?? 'key-updates',
+          selection
+        );
+
+        setSelection(newUserInfo?.game_updates_preference ?? selection);
 
       } catch (err) {
         setError("Something wen't wrong");

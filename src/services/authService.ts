@@ -22,7 +22,7 @@ import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUt
 import { validateUsername } from '../utils/authUtils';
 import { isGuestEmail } from '../utils/deviceId/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
-import { analytics } from './anayticsService';
+import { analytics } from './analytics/anayticsService';
 import { logger } from './logger';
 import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService';
 import { mutate } from 'swr';
@@ -167,7 +167,7 @@ export const authService = {
 
       if (response.ok) {
         const json = (await response.json()) as DjangoRegisterRes;
-
+        analytics.trackUserSignUp('Email');
         authTokenService.saveLoginTokens(json.token, json.user);
         return { data: json };
       }
@@ -210,6 +210,7 @@ export const authService = {
         const json = (await res.json()) as DjangoLoginRes;
 
         authTokenService.saveLoginTokens(json.token, json.user);
+        analytics.trackUserSignIn('Email');
         return { data: json, message: 'Login Successful' };
       }
 
@@ -221,7 +222,7 @@ export const authService = {
         return { message: 'Incorrect password' };
       }
 
-      analytics.trackUserSignIn('Email');
+      
     } catch (error) {
       logger.error('Error loging in user with email ', email, ' error: ', error);
       console.log('Login Error ', error);

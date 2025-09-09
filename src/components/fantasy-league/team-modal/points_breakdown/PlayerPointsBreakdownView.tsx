@@ -11,6 +11,7 @@ import { twMerge } from "tailwind-merge"
 import { ChevronLeft } from "lucide-react"
 import { useEffect, useRef } from "react"
 import NoContentCard from "../../../shared/NoContentMessage"
+import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytics"
 
 type Props = {
     athlete: IProAthlete | IFantasyTeamAthlete,
@@ -28,6 +29,16 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
     );
 
     const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        
+        athleteAnalytics.trackPointsBreakdownViewed(
+            athlete.tracking_id,
+            round.official_league_id,
+            round.start_round ?? 0
+        );
+
+    }, [athlete, round]);
 
     useEffect(() => {
         if (ref.current) {

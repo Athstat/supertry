@@ -1,4 +1,5 @@
 import { useAuth } from "../../contexts/AuthContext";
+import { analytics } from "../../services/analytics/anayticsService";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
 export function useShareLeague(league?: FantasyLeagueGroup) {
@@ -28,7 +29,11 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
 
 
         if (navigator.share) {
-            navigator.share(shareData).catch(err => {
+            navigator.share(shareData)
+            .then(() => {
+                analytics.trackFriendInvitesSent('League_Invite_Button', league);
+            })
+            .catch(err => {
                 console.error('Share failed:', err);
                 // Fallback to clipboard if share dismissed or fails
                 navigator.clipboard

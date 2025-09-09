@@ -1,6 +1,6 @@
 /** Service for logging errors. For now it just loggs to the console */
 
-import { analytics } from "./anayticsService";
+import { analytics } from "./analytics/anayticsService";
 
 
 function error(message?: any, ...optionalParams: any[]) {

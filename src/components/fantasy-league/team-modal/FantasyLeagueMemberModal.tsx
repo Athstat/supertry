@@ -35,7 +35,6 @@ export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Pr
         }
 
         const fRound = rounds.find((r) => {
-            console.log("Comparison to be made ", `${r.id.toString()} === ${roundFilterId}`)
             return r.id.toString() === roundFilterId;
         });
 

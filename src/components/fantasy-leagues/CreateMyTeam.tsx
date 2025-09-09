@@ -28,6 +28,9 @@ import {
   CreatePresetPayload,
 } from '../../services/fantasy/teamPresetsService';
 
+import { analytics } from '../../services/analytics/anayticsService';
+import Experimental from '../shared/ab_testing/Experimental';
+
 export default function CreateMyTeam({
   leagueRound,
   leagueConfig,
@@ -40,6 +43,8 @@ export default function CreateMyTeam({
   onViewTeam?: () => void;
   onBack?: () => void;
 }) {
+
+  
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, IProAthlete>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -94,6 +99,9 @@ export default function CreateMyTeam({
   useEffect(() => {
     const loadAthletes = async () => {
       if (!leagueRound) return;
+
+      analytics.trackTeamCreationStarted(leagueRound);
+
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
         const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
@@ -230,6 +238,8 @@ export default function CreateMyTeam({
 
       // Show success modal
       setShowSuccessModal(true);
+
+      analytics.trackTeamCreationCompleted(leagueRound, createdTeam);
 
       // If parent wants to handle success, notify it
       if (onTeamCreated) {
@@ -385,55 +395,60 @@ export default function CreateMyTeam({
       </div>
 
       {/* Presets + Save */}
-      <div className="mt-3 relative z-[50] space-y-3">
-        {/* Preset dropdown and save-as-preset */}
-        <div className="flex items-center gap-2">
-          <select
-            className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
-            value={selectedPresetId}
-            onChange={e => {
-              const id = e.target.value;
-              setSelectedPresetId(id);
-              if (id) applyPresetById(id);
-            }}
-          >
-            <option value="">
-              {isLoadingPresets ? 'Loading presets...' : 'Choose a saved team...'}
-            </option>
-            {presets.map(p => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
+      <Experimental>
 
-          <button
-            className="rounded-lg px-3 py-2 border bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-60"
-            onClick={handleSavePreset}
-            disabled={Object.keys(selectedPlayers).length !== 6}
+
+        <div className="mt-3 relative z-[50] space-y-3">
+          {/* Preset dropdown and save-as-preset */}
+          <div className="flex items-center gap-2">
+            <select
+              className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
+              value={selectedPresetId}
+              onChange={e => {
+                const id = e.target.value;
+                setSelectedPresetId(id);
+                if (id) applyPresetById(id);
+              }}
+            >
+              <option value="">
+                {isLoadingPresets ? 'Loading presets...' : 'Choose a saved team...'}
+              </option>
+              {presets.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+
+            <button
+              className="rounded-lg px-3 py-2 border bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-60"
+              onClick={handleSavePreset}
+              disabled={Object.keys(selectedPlayers).length !== 6}
+            >
+              Save as preset
+            </button>
+          </div>
+
+          <PrimaryButton
+            className="w-full"
+            disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
+            onClick={handleSave}
           >
-            Save as preset
-          </button>
+            {isSaving ? 'Saving...' : 'Save'}
+          </PrimaryButton>
+          {saveError && (
+            <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
+          )}
+
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            isVisible={toast.isVisible}
+            onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+          />
         </div>
 
-        <PrimaryButton
-          className="w-full"
-          disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
-          onClick={handleSave}
-        >
-          {isSaving ? 'Saving...' : 'Save'}
-        </PrimaryButton>
-        {saveError && (
-          <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
-        )}
-
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          isVisible={toast.isVisible}
-          onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
-        />
-      </div>
+      </Experimental>
 
       {/* 2x3 grid of position slots */}
       <div className="mt-4 grid grid-cols-2 gap-4">
@@ -452,11 +467,10 @@ export default function CreateMyTeam({
                     setIsModalOpen(true);
                   }
                 }}
-                className={`${
-                  selected
+                className={`${selected
                     ? 'w-full h-60 p-0 bg-transparent border-0 rounded-none overflow-visible flex items-center justify-center'
                     : 'w-full h-60 overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center'
-                }`}
+                  }`}
               >
                 {selected ? (
                   <PlayerGameCard
@@ -479,11 +493,10 @@ export default function CreateMyTeam({
               {selected && (
                 <div className="mt-4 flex flex-col gap-2 z-50">
                   <button
-                    className={`${
-                      captainId === selected.tracking_id
+                    className={`${captainId === selected.tracking_id
                         ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
                         : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                    }`}
+                      }`}
                     onClick={() => {
                       if (captainId !== selected.tracking_id) setCaptainId(selected.tracking_id);
                     }}
