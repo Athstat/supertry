@@ -147,6 +147,9 @@ function trackClosedPlayerProfile(playerId: string, startTime: Date, endTime: Da
 }
 
 function trackChangedNotificationPreference(old: string, new_preff: string) {
+  
+  console.log("User changed preference from", old, "to", new_preff);
+  
   track('Changed_Notification_Preference', {
     previous_preference: old,
     new_preference: new_preff

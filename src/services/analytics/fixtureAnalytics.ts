@@ -10,20 +10,20 @@ export const fixtureAnalytics = {
 
     trackViewedBoxscore: (fixture: IFixture) => {
         analytics.track('Viewed_Fixture_Boxscore', {
-            game_id: fixture.game_id
+            gameId: fixture.game_id
         })
     },
 
-    trackPlacedMotmVote: (fixture: IFixture, playerId: string) => {
+    trackPlacedMotmVote: (fixtureId: string, playerId: string) => {
         analytics.track('Placed_Motm_Vote', {
             votedForPlayerId: playerId,
-            fixtureId: fixture.game_id
+            gameId: fixtureId
         })
     },
 
     trackMadeFixturePrediction: (fixture: IFixture, side: string, teamId: string) => {
         analytics.track('Made_Fixture_Prediction', {
-            game_id: fixture.game_id,
+            gameId: fixture.game_id,
             side, teamId
         })
     }
