@@ -1,4 +1,5 @@
-import { GameUpdatesPreference } from "./notifications";
+import { DeviceIdPair } from './device';
+import { GameUpdatesPreference } from './notifications';
 
 export interface Country {
   code: string;
@@ -10,7 +11,7 @@ export interface Team {
   id: string;
   name: string;
   logo?: string;
-  code?: string
+  code?: string;
 }
 
 export interface SignUpForm {
@@ -72,139 +73,139 @@ export interface BridgeUserData {
   onesignal_id?: string;
 }
 
-
 export type DatabaseUser = {
-  kc_id: string,
-  email: string,
-  first_name?: string,
-  last_name?: string,
-  us_state?: string,
-  verification_state?: string,
-  athcoin_balance?: string,
-  geolocation_allowed?: boolean,
-  device_id?: string,
-  pref_payout?: string,
-  game_updates_preference: GameUpdatesPreference
-}
+  kc_id: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  us_state?: string;
+  verification_state?: string;
+  athcoin_balance?: string;
+  geolocation_allowed?: boolean;
+  device_id?: string;
+  pref_payout?: string;
+  game_updates_preference: GameUpdatesPreference;
+};
 
 export type ScrummyUser = {
-  kc_id: string,
-  "email": string,
-  "first_name": string,
-  "last_name"?: string,
-  "us_state"?: string,
-  "verification_state": string,
-  "athcoin_balance": number,
-  "geolocation_allowed": boolean,
-  "device_id"?: string,
-  "pref_payout"?: string,
-  "game_updates_preference": string,
-  "username"?: string,
-}
+  kc_id: string;
+  email: string;
+  first_name: string;
+  last_name?: string;
+  us_state?: string;
+  verification_state: string;
+  athcoin_balance: number;
+  geolocation_allowed: boolean;
+  device_id?: string;
+  pref_payout?: string;
+  game_updates_preference: string;
+  username?: string;
+};
 
 export type UserPasswordStatus = {
-  has_password: boolean
-}
+  has_password: boolean;
+};
 
 export type UserPasswordStatusRes = {
-  status?: UserPasswordStatus,
-  message: string
-}
+  status?: UserPasswordStatus;
+  message: string;
+};
 
-export type VerificationState = "verified" | "pending" | "guest";
+export type VerificationState = 'verified' | 'pending' | 'guest';
 
 export type DjangoAuthUser = {
-  kc_id: string,
-  email: string,
-  first_name: string,
-  last_name: string,
-  username?: string,
-  game_updates_preference?: GameUpdatesPreference,
-  pref_payout?: string,
-  device_id?: string,
-  verification_state: VerificationState,
-  is_claimed_account: boolean
-}
+  kc_id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  username?: string;
+  game_updates_preference?: GameUpdatesPreference;
+  pref_payout?: string;
+  // Server returns device_id as a string; some client spots previously treated it as a pair.
+  // Use a union to be backward compatible and avoid type errors.
+  device_id?: string | DeviceIdPair;
+  verification_state: VerificationState;
+  is_claimed_account: boolean;
+};
 
 export type DjangoLoginRes = {
-  token: string,
-  email: string,
-  user: DjangoAuthUser
-}
+  token: string;
+  email: string;
+  user: DjangoAuthUser;
+};
 
 export type ThrowableRes<T> = {
-  message?: string,
-  data?: T
-}
+  message?: string;
+  data?: T;
+};
 
 export type RestPromise<T> = Promise<{
-  error?: RestError,
-  data?: T
-}>
-
+  error?: RestError;
+  data?: T;
+}>;
 
 export type DeviceAuthenticationRequest = {
-  device_id: string
-}
+  device_id: string;
+};
 
 export type DjangoDeviceAuthRes = {
-  token: string,
-  is_device_account: boolean,
-  user: DjangoAuthUser
-  has_email: boolean
-}
+  token: string;
+  is_device_account: boolean;
+  user: DjangoAuthUser;
+  has_email: boolean;
+};
 
 export type RestError = {
-  error?: string,
-  message: string
-}
+  error?: string;
+  message: string;
+};
 
 export type ClaimGuestAccountReq = {
-  email: string,
-  password: string,
-  username?: string,
-  first_name?: string,
-  last_name?: string
-}
+  email: string;
+  password: string;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+};
 
 export type ClaimGuestAccountResult = {
-  message: string,
-  user: DjangoAuthUser
-}
+  message: string;
+  user: DjangoAuthUser;
+};
 
 export type RegisterUserReq = {
-  email: string,
-  password: string,
-  username: string,
-  first_name?: string,
-  last_name?: string
-}
+  email: string;
+  password: string;
+  username: string;
+  first_name?: string;
+  last_name?: string;
+};
 
 export type DjangoRegisterRes = {
-  user: DjangoAuthUser,
-  token: string,
-  message?: string
-}
+  user: DjangoAuthUser;
+  token: string;
+  message?: string;
+};
 
 export type RequestPasswordResetRes = {
-  message: string
-}
+  message: string;
+};
 
 export type ResetPasswordRes = {
-  email: string,
-  message: string
-}
+  email: string;
+  message: string;
+};
 
 export type PasswordResetTokenIntrospect = {
-  created_at: string,
-  expires_at: string,
-  user_id: string
-}
+  created_at: string;
+  expires_at: string;
+  user_id: string;
+};
 
 export type RequestEmailVerificationRes = {
-  message: string
-}
+  message: string;
+};
 
 export type VerifyEmailRes = {
-  message: string
-}
+  message: string;
+};
