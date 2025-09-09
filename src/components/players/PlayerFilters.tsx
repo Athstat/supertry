@@ -4,6 +4,7 @@ import { IProTeam } from '../../types/team';
 import TeamLogo from '../team/TeamLogo';
 import { twMerge } from 'tailwind-merge';
 import { formatPosition } from '../../utils/athleteUtils';
+import { athleteAnalytics } from '../../services/analytics/athleteAnalytics';
 
 interface PlayerFiltersProps {
   positionFilter: string;
@@ -69,6 +70,7 @@ export const PlayerFilters = ({
                 <button
                   key={position}
                   onClick={() => {
+                    athleteAnalytics.trackPlayerFilterApplied('Position', position);
                     onPositionFilter(position);
                     setShowFilters(!showFilters);
                   }}
@@ -93,6 +95,7 @@ export const PlayerFilters = ({
                 <button
                   key={team.athstat_id}
                   onClick={() => {
+                    athleteAnalytics.trackPlayerFilterApplied('Team', team.athstat_id);
                     onTeamFilter(team);
                     setShowFilters(!showFilters);
                   }}

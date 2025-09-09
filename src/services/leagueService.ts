@@ -1,7 +1,7 @@
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../types/leagueConfig';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
-import { analytics } from './anayticsService';
+import { analytics } from './analytics/anayticsService';
 import { fantasyTeamService } from './fantasyTeamService';
 import { authService } from './authService';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';

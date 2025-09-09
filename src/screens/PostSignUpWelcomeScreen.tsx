@@ -13,6 +13,7 @@ import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
 import { Toast } from '../components/ui/Toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
+import { analytics } from '../services/analytics/anayticsService';
 
 // Helper to ensure we only render players with valid image URLs
 const hasValidImageUrl = (u?: string | null): boolean => {
@@ -316,13 +317,18 @@ function WelcomeCTAScreen() {
 
   const handleStartBuilding = async () => {
     if (featuredLeague) {
-      await handleJoinLeague(featuredLeague, `/league/${featuredLeague.id}?journey=team-creation`);
+      const nextUrl = `/league/${featuredLeague.id}?journey=team-creation`;
+      analytics.trackOnboardingCtaContinued(nextUrl);
+      await handleJoinLeague(featuredLeague, nextUrl);
     } else {
-      navigate('/leagues?active_tab=discover');
+      const nextUrl = '/leagues?active_tab=discover';
+      analytics.trackOnboardingCtaContinued(nextUrl);
+      navigate(nextUrl);
     }
   };
 
   const handleLookAround = () => {
+    analytics.trackOnboardingSkipped();
     navigate('/dashboard');
   };
 

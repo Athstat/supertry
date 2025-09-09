@@ -5,6 +5,7 @@ import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../shared/SecondaryText";
 import { CircleUserRound } from "lucide-react";
+import { authAnalytics } from "../../../services/analytics/authAnalytics";
 
 type Props = {
     reasonNum?: number
@@ -21,6 +22,7 @@ export default function ClaimAccountNoticeCard({reasonNum = 1} : Props) {
     if (!isGuest || !authUser) return;
 
     const handleGoToClaimAccount = () => {
+        authAnalytics.trackClickedClaimAccountCTA();
         navigate(`/complete-profile`);
     }
 
