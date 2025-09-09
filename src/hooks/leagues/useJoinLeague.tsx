@@ -2,6 +2,7 @@ import { useState } from "react";
 import { fantasyLeagueGroupsService } from "../../services/fantasy/fantasyLeagueGroupsService";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import { useNavigate } from "react-router-dom";
+import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 
 /** Hook that provides a function to a league */
 export function useJoinLeague() {
@@ -22,6 +23,8 @@ export function useJoinLeague() {
             );
 
             if (res.data) {
+
+                fantasyAnalytics.trackJoinedLeagueByCode(league.id);
 
                 if (nextUrl) {
                     navigate(nextUrl, {
