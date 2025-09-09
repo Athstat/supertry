@@ -23,6 +23,7 @@ import FormStepIndicator from '../components/shared/forms/FormStepIndicator';
 import { KeyRound } from 'lucide-react';
 import { BadgeCheck } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { authAnalytics } from '../services/analytics/authAnalytics';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -37,7 +38,11 @@ export function CompleteProfileScreen() {
 }
 
 function ScreenContent() {
+
+  authAnalytics.trackClaimGuestAccountStarted();
+
   const navigate = useNavigate();
+  const [startTime] = useState(new Date());
 
   const [formData, setFormData] = useState({
     username: '',
@@ -50,6 +55,8 @@ function ScreenContent() {
   const [step, setStep] = useState<number>(1);
 
   const handleCancel = () => {
+    const endTime = new Date();
+    authAnalytics.trackClaimGuestAccountCanceled(startTime, endTime,step);
     navigate('/profile');
   }
 
@@ -124,6 +131,7 @@ function ScreenContent() {
             onPreviousStep={handleGoPreviousStep}
             form={formData}
             setForm={setFormData}
+            startTime={startTime}
           />
         )}
 
@@ -133,6 +141,7 @@ function ScreenContent() {
             onPreviousStep={handleGoPreviousStep}
             form={formData}
             setForm={setFormData}
+            startTime={startTime}
           />
         )}
 
@@ -142,6 +151,7 @@ function ScreenContent() {
             onPreviousStep={handleGoPreviousStep}
             form={formData}
             setForm={setFormData}
+            startTime={startTime}
           />
         )}
 
@@ -169,7 +179,8 @@ type StepProps = {
   onNextStep?: () => void,
   form: ClaimAccountForm,
   onPreviousStep?: () => void,
-  setForm: (form: ClaimAccountForm) => void
+  setForm: (form: ClaimAccountForm) => void,
+  startTime: Date
 }
 
 function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
@@ -306,13 +317,13 @@ function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
   )
 }
 
-function ConfirmationStep({ form}: StepProps) {
+function ConfirmationStep({ form, startTime }: StepProps) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
 
-  const [errors, setErrors] = useState<any>();
+  const [setErrors] = useState<any>();
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -367,6 +378,10 @@ function ConfirmationStep({ form}: StepProps) {
       const { data: res, error } = await authService.claimGuestAccount(data);
 
       if (res) {
+        authAnalytics.trackClaimGuestAccountCompleted(
+          startTime,
+          new Date()
+        )
         await refreshAuthUser();
         requestPushPermissionsAfterLogin();
         navigate('/dashboard');
