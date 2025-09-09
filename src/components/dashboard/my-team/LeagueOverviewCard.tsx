@@ -8,7 +8,7 @@ import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLea
 import { leagueService } from '../../../services/leagueService'
 import { LoadingState } from '../../ui/LoadingState'
 import BlueGradientCard from '../../shared/BlueGradientCard'
-import { ArrowRight, Lock } from 'lucide-react'
+import { ArrowRight, Info, Lock, Plus, Trophy } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils'
 import RoundedCard from '../../shared/RoundedCard'
@@ -22,13 +22,14 @@ import { IProAthlete } from '../../../types/athletes'
 import { twMerge } from 'tailwind-merge'
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal'
 import LeagueRoundCountdown from '../../fantasy-league/LeagueCountdown'
+import WarningCard from '../../shared/WarningCard'
 
 type Props = {
     league: FantasyLeagueGroup
 }
 
 /** Renders a league overview card */
-export default function LeagueOverviewCard({ league }: Props) {
+export default function SmallLeagueOverviewCard({ league }: Props) {
 
     return (
         <FantasyLeagueGroupDataProvider leagueId={league.id} >
@@ -89,25 +90,38 @@ function Content({ league }: Props) {
     return (
         <div className='flex  flex-col gap-4' >
 
-            <BlueGradientCard
-                className='flex cursor-pointer flex-col p-6 gap-4 '
-                onClick={goToLeague}
-            >
-                <div className='flex flex-row items-center justify-between' >
-                    <div className='flex flex-row items-center gap-2' >
-                        {/* <Trophy className='w-6 h-6' /> */}
-                        <p className='font-bold ' >{league.title}</p>
-                    </div>
+            <div className='flex flex-row items-center justify-between' >
+                <div className='flex flex-row items-center gap-2' >
+                    <Trophy className='w-5 h-5' />
+                    <h1 className='font-bold' >{league.title}</h1>
                 </div>
 
+                <div>
+                    <button onClick={goToLeague} >
+                        <ArrowRight />
+                    </button>
+                </div>
+            </div>
+
+            <BlueGradientCard
+                className='flex cursor-pointer flex-col p-6 gap-2 '
+                onClick={goToLeague}
+            >
+                {userTeam && <div className='flex flex-row items-center justify-between' >
+                    <div className='flex flex-row items-center gap-2' >
+                        <Shield className='w-6 h-6' />
+                        <p className='font-bold ' >{userTeam?.team.name}</p>
+                    </div>
+                </div>}
+
                 <div className='flex text-xs font-semibold flex-row items-center gap-2' >
-                    {currentRound && <p className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
+                    {currentRound && userStanding && <p className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
                         <p className='' >{currentRound.title}</p>
                     </p>}
 
-                    <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
+                    {userStanding && <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
                         <p>Overall Rank #{userStanding?.rank}</p>
-                    </div>
+                    </div>}
 
                     {locked && <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
                         <p>Points {(userTeam?.overall_score.toFixed(0)) ?? 0}</p>
@@ -116,7 +130,7 @@ function Content({ league }: Props) {
 
                 <div>
 
-                    {showCountDown && <LeagueRoundCountdown 
+                    {showCountDown && <LeagueRoundCountdown
                         leagueRound={currentRound}
                     />}
 
@@ -138,11 +152,6 @@ function Content({ league }: Props) {
                 <NotTeamCreatedLeagueLocked />
             )}
 
-
-            {userTeam && (
-                <TeamOverview team={userTeam} />
-            )}
-
         </div>
     )
 }
@@ -160,14 +169,19 @@ function NotTeamCreated() {
     }
 
     return (
-        <RoundedCard className='p-6 text-center h-[200px] gap-4 border-dotted border-4 flex flex-col items-center justify-center' >
-            <SecondaryText className='text-base' >You haven't picked a team for {currentRound.title} yet</SecondaryText>
+        <WarningCard className='px-4 py-2 text-center gap-4  flex flex-row items-center justify-between' >
 
-            <PrimaryButton onClick={goToCreateTeam} className='w-fit px-6 py-2' >
-                Pick Team
+            <div className='flex flex-row items-center gap-2' >
+                <Info className='w-4 h-4' />
+                <p className='text-base' >You haven't picked a team for {currentRound.title} yet</p>
+            </div>
+
+            <PrimaryButton onClick={goToCreateTeam} className='w-fit text-xs' >
+                <p>Pick Team</p>
+                <Plus className='w-4 h-4' />
             </PrimaryButton>
 
-        </RoundedCard>
+        </WarningCard>
     )
 }
 
