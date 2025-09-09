@@ -15,9 +15,9 @@ export const athleteAnalytics = {
         });
     },
 
-    trackPointsBreakdownViewed: (playerId: string) => {
+    trackPointsBreakdownViewed: (playerId: string, seasonId: string, roundNumber: number,) => {
         analytics.track('View_Points_Breakdown', {
-            playerId: playerId
+            playerId, seasonId, roundNumber
         })
     }
 }

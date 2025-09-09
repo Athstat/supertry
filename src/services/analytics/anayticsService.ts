@@ -18,15 +18,18 @@ function track(event: string, eventInfo?: Record<string, any>) {
   const { agent } = getDeviceInfo();
   const user = authService.getUserInfoSync();
 
-
-  const res = amplitude.track(event, {
+  const reqBody = {
     ...eventInfo,
     timeStamp: new Date(),
     device: agent,
     source: getCurrentPath(),
     weekNumber: getWeekFromLaunch(),
     userId: user ? user.kc_id : null
-  });
+  }
+
+  console.log("Logging Event ", reqBody);
+
+  const res = amplitude.track(event, reqBody);
 
   console.log('Amplitude Res ', res);
 }
@@ -147,9 +150,9 @@ function trackClosedPlayerProfile(playerId: string, startTime: Date, endTime: Da
 }
 
 function trackChangedNotificationPreference(old: string, new_preff: string) {
-  
+
   console.log("User changed preference from", old, "to", new_preff);
-  
+
   track('Changed_Notification_Preference', {
     previous_preference: old,
     new_preference: new_preff
