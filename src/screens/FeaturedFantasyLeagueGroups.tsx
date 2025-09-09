@@ -1,31 +1,21 @@
-import { Plus, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
-import { FantasyLeagueOverviewCard } from "../components/fantasy-leagues/league_dashboard_ui/FantasyLeagueOverviewCard";
 import RoundedCard from "../components/shared/RoundedCard";
-import { useNavigate } from "react-router-dom";
-import { FantasyLeagueGroup } from "../types/fantasyLeagueGroups";
 import SmallLeagueOverviewCard from "../components/dashboard/my-team/LeagueOverviewCard";
 
 export default function FeaturedFantasyLeagueGroups() {
 
-    const navigate = useNavigate();
     const key = swrFetchKeys.getAllPublicFantasyLeagues();
     const { data: fetchedLeagues, isLoading: loadingPublic } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeagues());
 
-    const mineKey = swrFetchKeys.getMyLeagueGroups();
-    const {data: mineLeagueGroups, isLoading: loadingMine} = useSWR(mineKey, () => fantasyLeagueGroupsService.getJoinedLeagues());
-
-    const isLoading = loadingPublic || loadingMine;
+    const isLoading = loadingPublic;
 
 
     const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
         return (league.type === 'official_league');
     });
-
-    const otherLeagues = (mineLeagueGroups ?? [])
-        .filter(l => !officialLeagues.includes(l));
 
     const featuredLeague = officialLeagues.length > 0 ? officialLeagues[0] : undefined;
 
@@ -53,20 +43,6 @@ export default function FeaturedFantasyLeagueGroups() {
 
     if (officialLeagues.length === 0) {
         return;
-    }
-
-    const handleGoToLeagueCreation = () => {
-        navigate('/leagues?active_tab=my', {
-            state: { showCreateLeagueModal: true }
-        });
-    }
-
-    const handleClickLeague = (league: FantasyLeagueGroup) => {
-        navigate(`/league/${league.id}`);
-    }
-
-    const handleViewAllLeagues = () => {
-        navigate(`/leagues`);
     }
 
     return (
