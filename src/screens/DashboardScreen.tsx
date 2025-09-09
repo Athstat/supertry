@@ -1,11 +1,12 @@
 import PageView from './PageView';
 import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
-import ComparePlayersPanel from '../components/dashboard/ComparePlayersPanel';
 import { Home } from 'lucide-react';
 import HeroImageBanner from '../components/dashboard/HeroImageBanner';
 import { useNavigate } from 'react-router-dom';
 import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
+import { TranslucentButton } from '../components/shared/buttons/PrimaryButton';
+import RoundedCard from '../components/shared/RoundedCard';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -32,9 +33,19 @@ export function DashboardScreen() {
 
       {/* <ActionList /> */}
       <UpcomingFixturesSection />
-      <ComparePlayersPanel />
+      {/* <ComparePlayersPanel /> */}
       {/* <MyWeekPanel /> */}
       {/* <MyTeamsSection /> */}
+
+      <RoundedCard  className='flex flex-col gap-4 p-4' >
+
+        <div className='flex flex-col gap-1' >
+          <h1 className='font-bold text-lg' >Dominate the SCRUMM</h1>
+          <p>Leagues are live! 🎉 Create your own, join one, and challenge your friends. Invite your crew and see who really rules the game!</p>
+        </div>
+
+        <TranslucentButton onClick={handleBannerClick} >Take Me There</TranslucentButton>
+      </RoundedCard>
     </PageView>
   );
 }
