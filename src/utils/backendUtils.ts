@@ -8,7 +8,7 @@ const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL;
 /** Completes an api url */
 export function getUri(endPoint: string) {
   // In dev, return a relative path so Vite's proxy forwards to Django (avoids CORS and emulator host issues)
-  //if (DEV) return endPoint;
+  if (DEV) return endPoint;
   return `${BACKEND_SERVER_URL}${endPoint}`;
 }
 

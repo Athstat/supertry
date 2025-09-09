@@ -27,6 +27,7 @@ import { logger } from './logger';
 import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService';
 import { mutate } from 'swr';
 import { swrFetchKeys } from '../utils/swrKeys';
+import { DeviceIdPair } from '../types/device';
 
 // OAuth types
 interface SocialAuthData {
@@ -291,7 +292,7 @@ export const authService = {
     try {
       const user = await authService.whoami();
 
-      console.log('userrrr: ', user);
+      console.log('User Info: ', user);
 
       if (user) {
         authTokenService.saveUserToLocalStorage(user);
@@ -301,6 +302,45 @@ export const authService = {
       return user;
     } catch (error) {
       console.log('Error updating user info ', error);
+    }
+
+    return undefined;
+  },
+
+  /** Updates user realDeviceId and storedDeviceId on the backend and refreshes local cache */
+  updateUserDeviceId: async (deviceId: DeviceIdPair) => {
+    try {
+      const token = authTokenService.getAccessToken();
+      if (!token) {
+        return undefined;
+      }
+
+      const uri = getUri('/api/v1/auth/me/device');
+      const res = await fetch(uri, {
+        method: 'POST',
+        headers: getAuthHeader(),
+        body: JSON.stringify({
+          realDeviceId: deviceId.realDeviceId,
+          storedDeviceId: deviceId.storedDeviceId,
+        }),
+      });
+
+      if (res.ok) {
+        const updatedUser = (await res.json()) as DjangoAuthUser;
+        authTokenService.saveUserToLocalStorage(updatedUser);
+        await mutate(swrFetchKeys.getAuthUserProfileKey());
+        return updatedUser;
+      }
+
+      // Log server error body if available
+      try {
+        const errJson = await res.json();
+        logger.error('Failed to update device ids', errJson);
+      } catch {
+        logger.error('Failed to update device ids', res.status);
+      }
+    } catch (error) {
+      console.log('Error updating user device ids ', error);
     }
 
     return undefined;
