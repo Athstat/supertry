@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Trophy } from 'lucide-react';
-import ShowcaseLeagueSection from '../components/fantasy-leagues/join_league_screen/ShowcaseLeagueSection';
+import ShowcaseLeagueSection from '../components/fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
 import useSWR from 'swr';
 import { LoadingState } from '../components/ui/LoadingState';
 import PageView from './PageView';

@@ -1,8 +1,9 @@
 import { ArrowRight, Globe } from "lucide-react"
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup"
-import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups"
-import FantasyLeagueGroupDataProvider from "../../fantasy-league/providers/FantasyLeagueGroupDataProvider"
-import SecondaryText from "../../shared/SecondaryText"
+import { useFantasyLeagueGroup } from "../../../../hooks/leagues/useFantasyLeagueGroup"
+import { FantasyLeagueGroup } from "../../../../types/fantasyLeagueGroups"
+import FantasyLeagueGroupDataProvider from "../../../fantasy-league/providers/FantasyLeagueGroupDataProvider"
+import SecondaryText from "../../../shared/SecondaryText"
+import LearnScrummyNoticeCard from "../../../branding/help/LearnScrummyNoticeCard"
 
 type Props = {
   leagueGroup: FantasyLeagueGroup
@@ -44,6 +45,8 @@ function Content() {
           </button>
         </div>
       </div>
+
+      <LearnScrummyNoticeCard />
     </div>
   )
 }
