@@ -14,7 +14,9 @@ export function FantasyLeaguesScreen() {
 
   const key = `/user-joined-leagues`;
   const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
-    key, () => fantasyLeagueGroupsService.getJoinedLeagues());
+    key, () => fantasyLeagueGroupsService.getJoinedLeagues(), {
+      revalidateIfStale: false
+    });
 
   useEffect(() => {
     window.scrollTo(0, 0);

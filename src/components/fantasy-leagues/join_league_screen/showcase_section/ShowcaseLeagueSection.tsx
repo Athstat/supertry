@@ -12,6 +12,7 @@ import { swrFetchKeys } from "../../../../utils/swrKeys"
 import { LoadingState } from "../../../ui/LoadingState"
 import { LeagueRoundSummary } from "../../../fantasy-league/overview/LeagueOverviewTab"
 import { useNavigate } from "react-router-dom"
+import { useMemo } from "react"
 
 type Props = {
   leagueGroup: FantasyLeagueGroup
@@ -34,11 +35,13 @@ function Content() {
 
   const { authUser } = useAuth();
 
-  const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
-    currentRound?.fantasy_league_group_id ?? '',
-    currentRound?.id ?? '',
-    authUser?.kc_id
-  );
+  const key = useMemo(() => {
+    return swrFetchKeys.getUserFantasyLeagueRoundTeam(
+      currentRound?.fantasy_league_group_id ?? '',
+      currentRound?.id ?? '',
+      authUser?.kc_id
+    );
+  }, [currentRound, currentRound, authUser]);
 
   const { data: userTeam, isLoading } = useSWR(key, () => leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? ''))
 

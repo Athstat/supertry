@@ -1,12 +1,7 @@
-import { format } from "date-fns";
-import { motion } from "framer-motion";
-import { Check, Users, Calendar, ChevronRight } from "lucide-react";
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups";
-import useSWR from "swr";
-import { swrFetchKeys } from "../../../utils/swrKeys";
-import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
-import { useAuth } from "../../../contexts/AuthContext";
+
 import RoundedCard from "../../shared/RoundedCard";
+import { ChevronRight } from "lucide-react";
 
 type Props = {
     leagueGroup: FantasyLeagueGroup,
@@ -15,12 +10,7 @@ type Props = {
 }
 
 /** Renders a fantasy league group card */
-export function FantasyLeagueGroupHorizontalCard({ leagueGroup, custom = 0, onClick }: Props) {
-
-    const key = swrFetchKeys.getLeagueGroupMembers(leagueGroup.id);
-    const { data: members, isLoading: loadingMembers } = useSWR(key, () => fantasyLeagueGroupsService.getGroupMembers(leagueGroup.id));
-
-    const membersCount = members ? members.length : '-';
+export function FantasyLeagueGroupHorizontalCard({ leagueGroup, onClick }: Props) {
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
@@ -40,32 +30,25 @@ export function FantasyLeagueGroupHorizontalCard({ leagueGroup, custom = 0, onCl
         // }
     };
 
-    const formatCreatedDate = (dateString: string | Date) => {
-        const date = new Date(dateString);
-        return format(date, 'MMM d, yyyy');
-    };
-
     const handleOnClick = () => {
         if (onClick) {
             onClick(leagueGroup);
         }
     }
 
-    const { authUser } = useAuth();
-
-    const isJoined = (members ?? []).find((m) => {
-        return m.user.kc_id === authUser?.kc_id
-    }) !== undefined;
-
     return (
-        <RoundedCard className="py-2 px-4 border none" >
+        <RoundedCard 
+            onClick={handleOnClick}
+            className="py-2 cursor-pointer px-4 border none flex flex-row items-center justify-between" 
+        >
 
 
             {/* Header Row */}
             <div className="flex justify-between items-start">
+                
                 <div className="flex-1 flex min-w-0 flex-col">
 
-                    <div className="flex flex-row items-center gap-12" >
+                    <div className="flex flex-row items-center gap-2" >
 
                         {/* <Trophy /> */}
 
@@ -74,16 +57,24 @@ export function FantasyLeagueGroupHorizontalCard({ leagueGroup, custom = 0, onCl
                         </h3>
                     </div>
 
-                    <div>
+                    <div className="flex flex-row items-center gap-1" >
                         {leagueGroup.season.name && (
-                            <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide truncate">
                                 {leagueGroup.season.name}
                             </p>
                         )}
+
+                        {getStatusBadge()}
                     </div>
 
                 </div>
 
+            </div>
+
+            <div className="" >
+                <button onClick={handleOnClick} >
+                    <ChevronRight className="w-4 h-4" />
+                </button>
             </div>
 
         </RoundedCard>
@@ -108,7 +99,7 @@ const Badge = ({ variant, children }: { variant: string; children: React.ReactNo
     };
 
     return (
-        <span className={`px-2 py-1 text-xs rounded-full font-medium ${getVariantClasses()}`}>
+        <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${getVariantClasses()}`}>
             {children}
         </span>
     );

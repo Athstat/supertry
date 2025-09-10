@@ -16,7 +16,11 @@ export default function OtherLeaguesSection({ joinedLeagues }: Props) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const toggle = () => setShowCreateModal(prev => !prev);
 
-    const onCreateLeague = (league: FantasyLeagueGroup) => {
+    const handleCreateLeague = (league: FantasyLeagueGroup) => {
+        navigate(`/league/${league.id}`);
+    }
+
+    const handleClickLeagueCard = (league: FantasyLeagueGroup) => {
         navigate(`/league/${league.id}`);
     }
 
@@ -37,12 +41,13 @@ export default function OtherLeaguesSection({ joinedLeagues }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4" >
+            <div className="flex flex-col gap-2" >
                 {joinedLeagues.map((l) => {
                     return (
                         <FantasyLeagueGroupHorizontalCard
                             leagueGroup={l}
                             key={l.id}
+                            onClick={handleClickLeagueCard}
                         />
                     )
                 })}
@@ -51,7 +56,7 @@ export default function OtherLeaguesSection({ joinedLeagues }: Props) {
             {showCreateModal && (
                 <CreateLeagueModal 
                     isOpen={showCreateModal}
-                    onLeagueCreated={onCreateLeague}
+                    onLeagueCreated={handleCreateLeague}
                     onClose={toggle}
                 />
             )}
