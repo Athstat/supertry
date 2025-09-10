@@ -47,7 +47,7 @@ export default function LeagueOverviewTab() {
 
             {userTeam && currentRound && <UserRoundScoringUpdate leagueRound={currentRound} userTeam={userTeam} />}
 
-            { currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
+            {currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
 
             {/* <Experimental> */}
             {currentRound && <LeagueRoundFixturesOverview leagueRound={currentRound} />}
@@ -58,22 +58,29 @@ export default function LeagueOverviewTab() {
 
 type RoundSummaryProps = {
     userTeam?: FantasyLeagueTeamWithAthletes,
-    currentRound: IFantasyLeagueRound
+    currentRound: IFantasyLeagueRound,
+    onPickTeam?: () => void,
+    onViewTeam?: () => void,
+    onViewStandings?: () => void
 }
 
-export function LeagueRoundSummary({ userTeam, currentRound }: RoundSummaryProps) {
+export function LeagueRoundSummary({ userTeam, currentRound, onPickTeam, onViewStandings, onViewTeam }: RoundSummaryProps) {
 
 
     if (userTeam) {
         return <UserRoundOverviewCard
             leagueRound={currentRound}
             userTeam={userTeam}
+            onViewStandings={onViewStandings}
+            onViewTeam={onViewTeam}
         />
     }
 
     return (
         <NoTeamRoundOverviewCard
             leagueRound={currentRound}
+            onHandleViewStandings={onViewStandings}
+            onPickTeam={onPickTeam}
         />
     )
 }

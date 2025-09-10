@@ -57,6 +57,18 @@ function Content() {
     navigate(`/league/${league.id}`);
   }
 
+  const handlePickTeam = () => {
+    navigate(`/league/${league.id}?journey=team-creation`);
+  }
+
+  const handleViewStandings = () => {
+    navigate(`/league/${league.id}?journey=standings`)
+  };
+
+  const handleViewTeam = () => {
+    navigate(`/league/${league.id}?journey=my-team`);
+  }
+
   return (
     <div className="flex flex-col gap-4" >
       <div className="flex flex-row items-center gap-2 justify-between" >
@@ -78,11 +90,13 @@ function Content() {
 
       <LearnScrummyNoticeCard />
 
-      {currentRound && <LeagueRoundSummary
+      { currentRound && <LeagueRoundSummary
         userTeam={userTeam}
         currentRound={currentRound}
-      />
-      }
+        onPickTeam={handlePickTeam}
+        onViewStandings={handleViewStandings}
+        onViewTeam={handleViewTeam}
+      /> }
 
       {currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
     </div>

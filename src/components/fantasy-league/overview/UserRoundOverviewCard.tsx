@@ -10,20 +10,31 @@ import { useTabView } from "../../shared/tabs/TabView"
 
 type Props = {
     leagueRound: IFantasyLeagueRound,
-    userTeam: FantasyLeagueTeamWithAthletes
+    userTeam: FantasyLeagueTeamWithAthletes,
+    onViewStandings?: ( ) => void,
+    onViewTeam?: () => void
 }
 
-export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) {
+export default function UserRoundOverviewCard({ leagueRound, userTeam, onViewTeam, onViewStandings }: Props) {
 
     const { navigate } = useTabView();
     const isLocked = isLeagueRoundLocked(leagueRound);
 
     const handleViewTeam = () => {
-        navigate('my-team');
+        if (onViewTeam) {
+            onViewTeam()
+        } else {
+            navigate('my-team');
+        }
     }
 
     const handleViewStandings = () => {
-        navigate('standings');
+
+        if (onViewStandings) {
+            onViewStandings();
+            navigate('standings');
+        }
+
     }
 
     return (
@@ -80,21 +91,32 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
 }
 
 type NoTeamProps = {
-    leagueRound: IFantasyLeagueRound
+    leagueRound: IFantasyLeagueRound,
+    onPickTeam?: () => void,
+    onHandleViewStandings?: () => void
 }
 
-export function NoTeamRoundOverviewCard({ leagueRound }: NoTeamProps) {
+export function NoTeamRoundOverviewCard({ leagueRound, onPickTeam, onHandleViewStandings }: NoTeamProps) {
 
     const hasLocked = isLeagueRoundLocked(leagueRound);
     const { navigate } = useTabView();
 
 
     const handlePickTeam = () => {
-        navigate('my-team');
+
+        if (onPickTeam) {
+            onPickTeam();
+        } else {   
+            navigate('my-team');
+        }
     }
 
     const handleViewStandings = () => {
-        navigate('standings');
+        if (onHandleViewStandings) {
+            onHandleViewStandings();
+        } else {
+            navigate('standings');
+        }
     }
 
     return (
