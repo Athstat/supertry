@@ -1,52 +1,56 @@
 import { useEffect } from 'react';
 import { Trophy } from 'lucide-react';
-import LeagueTabs from '../components/fantasy-leagues/LeagueTabs';
-import MyLeaguesTab from '../components/fantasy-leagues/join_league_screen/MyLeaguesTab';
-import DiscorverLeaguesTab from '../components/fantasy-leagues/join_league_screen/DiscorverLeaguesTab';
-import JoinLeagueByCodeTab from '../components/fantasy-leagues/join_league_screen/JoinByCodeTab';
-import { useQueryState } from '../hooks/useQueryState';
+import ShowcaseLeagueSection from '../components/fantasy-leagues/join_league_screen/ShowcaseLeagueSection';
+import useSWR from 'swr';
+import { LoadingState } from '../components/ui/LoadingState';
+import PageView from './PageView';
+import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
 
 export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
-  const [activeTab, setActiveTab] = useQueryState<'my' | 'discover' | 'code'>('active_tab', {
-    init: 'my'
-  });
+  // const [activeTab, setActiveTab] = useQueryState<'my' | 'discover' | 'code'>('active_tab', {
+  //   init: 'my'
+  // });
+
+  const key = `/user-joined-leagues`;
+  const {data: fetchedLeagues, isLoading: loadingUserLeagues} = useSWR(
+    key, () => fantasyLeagueGroupsService.getJoinedLeagues());
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const leagues = (fetchedLeagues ?? []);
+  const isLoading = loadingUserLeagues;
+
+  const showcaseLeague = leagues.find((l) => {
+    return l.type === 'official_league';
+  });
+  
+  console.log(leagues);
+
+  if (isLoading) {
+    return <LoadingState />
+  }
+
   return (
-    <div className="container dark:text-white mx-auto px-4 sm:px-6 py-6 max-w-3xl">
-      <div className="flex items-center mb-4 gap-2 sm:mb-6 justify-between">
+    <PageView className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
+      
+      {/* <div className="flex items-center mb-4 gap-2 sm:mb-6 justify-between">
 
         <div className='flex flex-row gap-2 items-center justify-center' >
-          <Trophy className='dark:text-white' />
-          <h1 className="text-2xl sm:text-3xl font-bold dark:text-white flex-1">Fantasy Leagues</h1>
+          <Trophy className='dark:text-white w-4 h-4' />
+          <h1 className="font-bold dark:text-white flex-1">Fantasy Leagues</h1>
         </div>
 
         <div>
-          {/* <FantasyLeagueScreenCTA /> */}
         </div>
-      </div>
+      </div> */}
 
-      <LeagueTabs value={activeTab ?? 'my'} onChange={setActiveTab} className="mb-4 sm:mb-6" />
-
-      {/* {leagueOnTheClock && (
-        <div className="mb-4 sm:mb-6">
-          <JoinLeagueDeadlineCountdown league={leagueOnTheClock} onViewLeague={handleLeagueClick} />
-        </div>
-      )} */}
-
-      {activeTab === 'my' && (
-        <MyLeaguesTab />
-      )}
-
-      {activeTab === 'discover' && (
-        <DiscorverLeaguesTab />
-      )}
-
-      {activeTab === 'code' && <JoinLeagueByCodeTab />}
-    </div>
+      {showcaseLeague && <ShowcaseLeagueSection
+        leagueGroup={showcaseLeague}
+      />}
+      
+    </PageView>
   );
 }
