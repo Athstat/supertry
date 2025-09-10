@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverviewTab';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
+import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -50,32 +51,32 @@ function Content() {
     {
       label: 'Overview',
       tabKey: 'overview',
-      className: 'flex-1',
+      className: 'w-fit',
     },
     {
       label: 'Standings',
       tabKey: 'standings',
-      className: 'flex-1',
+      className: 'w-fit',
     },
 
     {
       label: 'My Teams',
       tabKey: 'my-team',
-      className: 'flex-1',
+      className: 'w-fit',
     },
 
     {
       label: 'Commissioner',
       tabKey: 'commissioner',
-      className: 'flex-1',
+      className: 'w-fit',
       disabled: !userMemberRecord || userMemberRecord.is_admin == false,
     },
 
     {
       label: 'Info',
       tabKey: 'info',
-      className: 'flex-1',
-    },
+      className: 'w-fit',
+    }
   ];
 
   const navigateToLeagues = () => {
@@ -112,6 +113,8 @@ function Content() {
         </div>
 
       </div>
+
+      <LearnScrummyNoticeCard />
 
       {/* <div
         onClick={navigateToLeagues}
