@@ -169,7 +169,7 @@ export function PlayerGameCard({
                 'lg:min-h-[140px] lg:max-h-[140px] lg:max-w-[140px] relative'
               )}
             >
-              {!playerImageErr && (
+              {/* {!playerImageErr && (
                 <img
                   src={player.image_url}
                   className={twMerge(
@@ -183,9 +183,10 @@ export function PlayerGameCard({
                   )}
                   onError={() => setPlayerImageErr(true)}
                 />
-              )}
+              )} */}
 
-              {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />}
+              {/* {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />} */}
+              <TeamJersey teamId={player.team?.athstat_id} />
 
               <div className="flex flex-col absolute bottom-0 items-center p-1 justify-center">
                 <p className="text-[15px] lg:text-xs truncate max-w-[100px] lg:max-w-[130px]">
