@@ -5,7 +5,7 @@ import { swrFetchKeys } from "../../../utils/swrKeys";
 import { leagueService } from "../../../services/leagueService";
 import RoundedCard from "../../shared/RoundedCard";
 import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from "./UserRoundOverviewCard";
-import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague";
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 import UserTeamOverview from "./UserTeamOverview";
 import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
@@ -43,7 +43,7 @@ export default function LeagueOverviewTab() {
                 </div>
             </div>
 
-            <LeagueRoundSummary userTeam={userTeam} />
+            {currentRound && <LeagueRoundSummary userTeam={userTeam} currentRound={currentRound} />}
 
             {userTeam && currentRound && <UserRoundScoringUpdate leagueRound={currentRound} userTeam={userTeam} />}
 
@@ -57,15 +57,12 @@ export default function LeagueOverviewTab() {
 }
 
 type RoundSummaryProps = {
-    userTeam?: FantasyLeagueTeamWithAthletes
+    userTeam?: FantasyLeagueTeamWithAthletes,
+    currentRound: IFantasyLeagueRound
 }
 
-function LeagueRoundSummary({ userTeam }: RoundSummaryProps) {
+export function LeagueRoundSummary({ userTeam, currentRound }: RoundSummaryProps) {
 
-    const { currentRound } = useFantasyLeagueGroup();
-
-
-    if (!currentRound) return;
 
     if (userTeam) {
         return <UserRoundOverviewCard

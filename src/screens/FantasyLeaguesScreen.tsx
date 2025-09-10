@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { Trophy } from 'lucide-react';
 import ShowcaseLeagueSection from '../components/fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
 import useSWR from 'swr';
 import { LoadingState } from '../components/ui/LoadingState';
 import PageView from './PageView';
 import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
+import OtherLeaguesSection from '../components/fantasy-leagues/join_league_screen/other_leagues_section/OtherLeaguesSection';
 
 export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
@@ -13,7 +13,7 @@ export function FantasyLeaguesScreen() {
   // });
 
   const key = `/user-joined-leagues`;
-  const {data: fetchedLeagues, isLoading: loadingUserLeagues} = useSWR(
+  const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
     key, () => fantasyLeagueGroupsService.getJoinedLeagues());
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export function FantasyLeaguesScreen() {
   const showcaseLeague = leagues.find((l) => {
     return l.type === 'official_league';
   });
-  
+
   console.log(leagues);
 
   if (isLoading) {
@@ -34,8 +34,8 @@ export function FantasyLeaguesScreen() {
   }
 
   return (
-    <PageView className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
-      
+    <PageView className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl flex flex-col gap-8">
+
       {/* <div className="flex items-center mb-4 gap-2 sm:mb-6 justify-between">
 
         <div className='flex flex-row gap-2 items-center justify-center' >
@@ -50,7 +50,12 @@ export function FantasyLeaguesScreen() {
       {showcaseLeague && <ShowcaseLeagueSection
         leagueGroup={showcaseLeague}
       />}
-      
+
+      <OtherLeaguesSection
+        joinedLeagues={leagues}
+      />
+
+
     </PageView>
   );
 }
