@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import ShowcaseLeagueSection from '../components/fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
 import useSWR from 'swr';
 import { LoadingState } from '../components/ui/LoadingState';
@@ -23,9 +23,17 @@ export function FantasyLeaguesScreen() {
   const leagues = (fetchedLeagues ?? []);
   const isLoading = loadingUserLeagues;
 
-  const showcaseLeague = leagues.find((l) => {
-    return l.type === 'official_league';
-  });
+  const showcaseLeague = useMemo(() => {
+    return leagues.find((l) => {
+      return l.type === 'official_league';
+    });
+  }, [leagues]);
+
+  const otherLeagues = useMemo(() => {
+    return leagues.filter((l) => {
+      return l.id !== showcaseLeague?.id
+    })
+  }, [showcaseLeague, leagues]);
 
   console.log(leagues);
 
@@ -52,7 +60,7 @@ export function FantasyLeaguesScreen() {
       />}
 
       <OtherLeaguesSection
-        joinedLeagues={leagues}
+        joinedLeagues={otherLeagues}
       />
 
 

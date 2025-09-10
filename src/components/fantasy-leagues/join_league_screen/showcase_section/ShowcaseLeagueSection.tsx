@@ -11,7 +11,6 @@ import { leagueService } from "../../../../services/leagueService"
 import { swrFetchKeys } from "../../../../utils/swrKeys"
 import { LoadingState } from "../../../ui/LoadingState"
 import { LeagueRoundSummary } from "../../../fantasy-league/overview/LeagueOverviewTab"
-import OtherLeaguesSection from "../other_leagues_section/OtherLeaguesSection"
 
 type Props = {
   leagueGroup: FantasyLeagueGroup
@@ -52,7 +51,7 @@ function Content() {
   }
 
   return (
-    <div className="flex flex-col gap-2" >
+    <div className="flex flex-col gap-4" >
       <div className="flex flex-row items-center gap-2 justify-between" >
 
         <div>
