@@ -17,7 +17,7 @@ export function getMobileDeviceId(): DeviceIdPair {
 function getQaMobileDeviceId(): DeviceIdPair {
   console.log('Retrieving mobile device ID using QA method');
 
-  const storedDeviceId = localStorage.getItem('device_id') || '';
+  const storedDeviceId = localStorage.getItem('device_id') || localStorage.getItem('mobile device_id') || '';
   const realDeviceId = window.deviceId || '';
 
   console.log('Stored device ID: ', storedDeviceId);
@@ -34,7 +34,7 @@ function getQaMobileDeviceId(): DeviceIdPair {
 function getProdMobileDeviceId(): DeviceIdPair {
   console.log('Retrieving mobile device ID using prod method');
 
-  let storedDeviceId = localStorage.getItem('device_id') || '';
+  let storedDeviceId = localStorage.getItem('device_id') || localStorage.getItem('mobile device_id') || '';
   let realDeviceId = window.deviceId || '';
 
   console.log('Stored device ID: ', storedDeviceId);
