@@ -121,5 +121,6 @@ declare module "lucide-react" {
   export const KeyRound : CIP;
   export const FlaskConical : CIP;
   export const Table : CIP;
+  export const Tv : CIP;
 }
 

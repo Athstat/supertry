@@ -180,7 +180,7 @@ type ModalProps = {
   fixture: IFixture;
 };
 
-function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
+export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
   const title = `${fixture?.team?.athstat_name} vs ${fixture?.opposition_team?.athstat_name}`;
 
   const navigate = useNavigate();

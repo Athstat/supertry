@@ -8,27 +8,23 @@ import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLea
 import { leagueService } from '../../../services/leagueService'
 import { LoadingState } from '../../ui/LoadingState'
 import BlueGradientCard from '../../shared/BlueGradientCard'
-import { ArrowRight, Lock } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { ArrowRight, Info, Lock, Plus, Trophy } from 'lucide-react'
+import { useMemo } from 'react'
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils'
 import RoundedCard from '../../shared/RoundedCard'
-import { FantasyLeagueTeamWithAthletes } from '../../../types/fantasyLeague'
 import SecondaryText from '../../shared/SecondaryText'
 import PrimaryButton from '../../shared/buttons/PrimaryButton'
 import { useNavigate } from 'react-router-dom'
 import { Shield } from 'lucide-react'
-import PlayerMugshot from '../../shared/PlayerMugshot'
-import { IProAthlete } from '../../../types/athletes'
-import { twMerge } from 'tailwind-merge'
-import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal'
 import LeagueRoundCountdown from '../../fantasy-league/LeagueCountdown'
+import WarningCard from '../../shared/WarningCard'
 
 type Props = {
     league: FantasyLeagueGroup
 }
 
 /** Renders a league overview card */
-export default function LeagueOverviewCard({ league }: Props) {
+export default function SmallLeagueOverviewCard({ league }: Props) {
 
     return (
         <FantasyLeagueGroupDataProvider leagueId={league.id} >
@@ -89,34 +85,53 @@ function Content({ league }: Props) {
     return (
         <div className='flex  flex-col gap-4' >
 
-            <BlueGradientCard
-                className='flex cursor-pointer flex-col p-6 gap-4 '
-                onClick={goToLeague}
-            >
-                <div className='flex flex-row items-center justify-between' >
-                    <div className='flex flex-row items-center gap-2' >
-                        {/* <Trophy className='w-6 h-6' /> */}
-                        <p className='font-bold ' >{league.title}</p>
-                    </div>
+            <div className='flex flex-row items-center justify-between' >
+                <div className='flex flex-row items-center gap-2' >
+                    <Trophy className='w-5 h-5' />
+                    <h1 className='font-bold' >{league.title}</h1>
                 </div>
 
+                <div>
+                    <button onClick={goToLeague} >
+                        <ArrowRight />
+                    </button>
+                </div>
+            </div>
+
+            <BlueGradientCard
+                className='flex cursor-pointer flex-col p-6 gap-2 '
+                onClick={goToLeague}
+            >
+                {userTeam && <div className='flex flex-row items-center justify-between' >
+                    <div className='flex flex-row items-center gap-2' >
+                        <Shield className='w-6 h-6' />
+                        <p className='font-bold ' >{userTeam?.team.name}</p>
+                    </div>
+                </div>}
+
                 <div className='flex text-xs font-semibold flex-row items-center gap-2' >
-                    {currentRound && <p className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
+                    {currentRound && userStanding && <p className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
                         <p className='' >{currentRound.title}</p>
                     </p>}
 
-                    <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
+                    {userStanding && <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
                         <p>Overall Rank #{userStanding?.rank}</p>
-                    </div>
+                    </div>}
 
                     {locked && <div className='bg-primary-50 px-2 py-0.5 rounded-xl text-blue-500' >
                         <p>Points {(userTeam?.overall_score.toFixed(0)) ?? 0}</p>
                     </div>}
+
+                    {!userStanding && currentRound &&  !hasDeadlinePassed && (
+                        <div>
+                            <p className='text-lg font-medium' >⏰ {currentRound.title} Deadline</p>
+                        </div>
+                    )}
                 </div>
 
                 <div>
 
-                    {showCountDown && <LeagueRoundCountdown 
+                    {showCountDown && <LeagueRoundCountdown
                         leagueRound={currentRound}
                     />}
 
@@ -138,11 +153,6 @@ function Content({ league }: Props) {
                 <NotTeamCreatedLeagueLocked />
             )}
 
-
-            {userTeam && (
-                <TeamOverview team={userTeam} />
-            )}
-
         </div>
     )
 }
@@ -160,14 +170,19 @@ function NotTeamCreated() {
     }
 
     return (
-        <RoundedCard className='p-6 text-center h-[200px] gap-4 border-dotted border-4 flex flex-col items-center justify-center' >
-            <SecondaryText className='text-base' >You haven't picked a team for {currentRound.title} yet</SecondaryText>
+        <WarningCard className='px-4 py-2 text-center gap-4  flex flex-row items-center justify-between' >
 
-            <PrimaryButton onClick={goToCreateTeam} className='w-fit px-6 py-2' >
-                Pick Team
+            <div className='flex flex-row items-center gap-2' >
+                <Info className='w-4 h-4' />
+                <p className='text-xs text-left' >You haven't picked a team for {currentRound.title} yet</p>
+            </div>
+
+            <PrimaryButton onClick={goToCreateTeam} className='w-fit text-xs' >
+                <p>Pick Team</p>
+                <Plus className='w-4 h-4' />
             </PrimaryButton>
 
-        </RoundedCard>
+        </WarningCard>
     )
 }
 
@@ -195,91 +210,3 @@ function NotTeamCreatedLeagueLocked() {
     )
 }
 
-type OverviewProps = {
-    team: FantasyLeagueTeamWithAthletes
-}
-
-function TeamOverview({ team }: OverviewProps) {
-
-    const { currentRound } = useFantasyLeagueGroup();
-    const isLocked = currentRound && isLeagueRoundLocked(currentRound);
-
-    const [showPointsModal, setShowPointsModal] = useState(false);
-    // const [showProfileModal, setShowProfileModal] = useState(false);
-    const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
-
-    const navigate = useNavigate();
-    const goToMyTeam = () => {
-        navigate(`/league/${currentRound?.fantasy_league_group_id}?journey=my-team`);
-    }
-
-    const handleClickPlayer = (a: IProAthlete) => {
-        setSelectedPlayer(a);
-        setShowPointsModal(true);
-    }
-
-    const handleClosePointsModal = () => {
-        setShowPointsModal(false);
-        setSelectedPlayer(undefined);
-    }
-
-    return (
-        <RoundedCard className='bg-transparent hover:bg-transparent bg-none shadow-none dark:bg-none dark:bg-transparent hover:dark:bg-transparent border-none flex flex-col' >
-            <div className='flex  flex-row items-center justify-between' >
-
-                <div className='flex flex-row items-center gap-2' >
-                    {!isLocked && <Shield className='w-4 h-4' />}
-                    {isLocked && <Lock className='w-4 h-4' />}
-                    <p className='font-bold' >My Team</p>
-                </div>
-
-                <div className='flex flex-row items-center gap-1 cursor-pointer text-blue-500 hover:text-blue-600 dark:hover:text-blue-400' onClick={goToMyTeam}>
-                    View <ArrowRight className='w-4 h-4' />
-                </div>
-            </div>
-
-
-            <div className='flex flex-row items-center overflow-x-auto no-scrollbar gap-4' >
-                {team.athletes?.map((a) => {
-
-                    const onClick = () => {
-                        handleClickPlayer(a.athlete);
-                    }
-
-                    return (
-                        <div
-                            className={twMerge(
-                                'flex flex-col px-4 w-[150px] h-[150px] rounded-xl',
-                                'p-2 gap-2 items-center justify-center'
-                            )}
-
-                            onClick={onClick}
-                        >
-                            <PlayerMugshot
-                                url={a.athlete.image_url}
-                                className='w-20 h-20'
-                                showPrBackground
-                                playerPr={95}
-                                key={a.athlete.tracking_id}
-                                teamId={a.athlete.team_id}
-                            />
-                            <p className='text-xs text-center truncate text-nowrap' >{a.athlete.player_name}</p>
-                            {isLocked && <p className='rounded-xl text-xs flex flex-row items-center justify-center w-[60px]text-white' >{a.score ? a.score.toFixed(0) : '0'}</p>}
-                        </div>
-                    )
-                })}
-            </div>
-
-            {showPointsModal && selectedPlayer && currentRound && (
-                <PointsBreakdownModal
-                    onClose={handleClosePointsModal}
-                    isOpen={showPointsModal}
-                    athlete={selectedPlayer}
-                    team={team}
-                    round={currentRound}
-                />
-            )}
-
-        </RoundedCard>
-    )
-}
