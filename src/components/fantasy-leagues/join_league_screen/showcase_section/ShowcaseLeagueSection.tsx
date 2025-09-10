@@ -11,6 +11,7 @@ import { leagueService } from "../../../../services/leagueService"
 import { swrFetchKeys } from "../../../../utils/swrKeys"
 import { LoadingState } from "../../../ui/LoadingState"
 import { LeagueRoundSummary } from "../../../fantasy-league/overview/LeagueOverviewTab"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   leagueGroup: FantasyLeagueGroup
@@ -18,8 +19,6 @@ type Props = {
 
 /** Renders the showcase league section */
 export default function ShowcaseLeagueSection({ leagueGroup }: Props) {
-
-
 
   return (
     <FantasyLeagueGroupDataProvider leagueId={leagueGroup.id} >
@@ -30,6 +29,7 @@ export default function ShowcaseLeagueSection({ leagueGroup }: Props) {
 
 function Content() {
 
+  const navigate = useNavigate();
   const { league, currentRound } = useFantasyLeagueGroup();
 
   const { authUser } = useAuth();
@@ -50,6 +50,10 @@ function Content() {
     )
   }
 
+  const goToLeague = () => {
+    navigate(`/league/${league.id}`);
+  }
+
   return (
     <div className="flex flex-col gap-4" >
       <div className="flex flex-row items-center gap-2 justify-between" >
@@ -63,7 +67,7 @@ function Content() {
         </div>
 
         <div>
-          <button>
+          <button onClick={goToLeague} className="hover:bg-slate-200 hover:dark:bg-slate-800 w-10 h-10 flex flex-col items-center justify-center rounded-xl" >
             <ArrowRight className="" />
           </button>
         </div>
