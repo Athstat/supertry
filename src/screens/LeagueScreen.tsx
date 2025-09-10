@@ -17,6 +17,7 @@ import { useQueryState } from '../hooks/useQueryState';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverviewTab';
+import PilledTabView from '../components/shared/tabs/PilledTabView';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -29,7 +30,7 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-  const { league, userMemberRecord, isMember, isOfficialLeague } = useFantasyLeagueGroup();
+  const { league, userMemberRecord, isMember, isOfficialLeague, currentRound } = useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);
   const navigate = useNavigate();
 
@@ -64,12 +65,6 @@ function Content() {
     },
 
     {
-      label: 'Fixtures',
-      tabKey: 'fixtures',
-      className: 'flex-1',
-    },
-
-    {
       label: 'Commissioner',
       tabKey: 'commissioner',
       className: 'flex-1',
@@ -98,7 +93,7 @@ function Content() {
               <p className="font-bold text-xl">{league?.title}</p>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-              {league?.season.name}
+              {currentRound?.title}
             </p>
           </div>
           {!isEditing && (
@@ -116,13 +111,6 @@ function Content() {
           )}
         </div>
 
-        <div
-          onClick={navigateToLeagues}
-          className="flex flex-row hover:text-blue-500 cursor-pointer items-center mt-5"
-        >
-          <ArrowLeft />
-          Back to leagues
-        </div>
       </div>
 
       {/* <div
@@ -139,7 +127,7 @@ function Content() {
         <StatCard label="Current Round" value={currentRound?.title} className="flex-1" />
       </div> */}
 
-      <TabView initialTabKey={initialTabKey} tabHeaderItems={headerItems}>
+      <PilledTabView initialTabKey={initialTabKey} tabHeaderItems={headerItems}>
         <TabViewPage tabKey="my-team">
           <MyTeams onEditChange={setIsEditing} />
         </TabViewPage>
@@ -163,7 +151,7 @@ function Content() {
         <TabViewPage tabKey='overview' >
           <LeagueOverviewTab />
         </TabViewPage>
-      </TabView>
+      </PilledTabView>
     </PageView>
   );
 }
