@@ -43,8 +43,6 @@ export default function CreateMyTeam({
   onViewTeam?: () => void;
   onBack?: () => void;
 }) {
-
-  
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, IProAthlete>>({});
   const [activePosition, setActivePosition] = useState<Position | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -396,10 +394,9 @@ export default function CreateMyTeam({
 
       {/* Presets + Save */}
 
-
-        <div className="mt-3 relative z-[50] space-y-3">
-          {/* Preset dropdown and save-as-preset */}
-          {/* <div className="flex items-center gap-2">
+      <div className="mt-3 relative z-[50] space-y-3">
+        {/* Preset dropdown and save-as-preset */}
+        {/* <div className="flex items-center gap-2">
             <select
               className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
               value={selectedPresetId}
@@ -428,25 +425,24 @@ export default function CreateMyTeam({
             </button>
           </div> */}
 
-          <PrimaryButton
-            className="w-full"
-            disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
-            onClick={handleSave}
-          >
-            {isSaving ? 'Saving...' : 'Save'}
-          </PrimaryButton>
-          {saveError && (
-            <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
-          )}
+        <PrimaryButton
+          className="w-full"
+          disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
+          onClick={handleSave}
+        >
+          {isSaving ? 'Saving...' : 'Save'}
+        </PrimaryButton>
+        {saveError && (
+          <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
+        )}
 
-          <Toast
-            message={toast.message}
-            type={toast.type}
-            isVisible={toast.isVisible}
-            onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
-          />
-        </div>
-
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          isVisible={toast.isVisible}
+          onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+        />
+      </div>
 
       {/* 2x3 grid of position slots */}
       <div className="mt-4 grid grid-cols-2 gap-4">
@@ -465,10 +461,11 @@ export default function CreateMyTeam({
                     setIsModalOpen(true);
                   }
                 }}
-                className={`${selected
+                className={`${
+                  selected
                     ? 'w-full h-60 p-0 bg-transparent border-0 rounded-none overflow-visible flex items-center justify-center'
                     : 'w-full h-60 overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center'
-                  }`}
+                }`}
               >
                 {selected ? (
                   <PlayerGameCard
@@ -491,10 +488,11 @@ export default function CreateMyTeam({
               {selected && (
                 <div className="mt-4 flex flex-col gap-2 z-50">
                   <button
-                    className={`${captainId === selected.tracking_id
+                    className={`${
+                      captainId === selected.tracking_id
                         ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
                         : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                      }`}
+                    }`}
                     onClick={() => {
                       if (captainId !== selected.tracking_id) setCaptainId(selected.tracking_id);
                     }}
@@ -568,7 +566,7 @@ export default function CreateMyTeam({
               </div>
               <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Joining the Scrum...</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Please wait while we save your team.
+                Please wait while we save your team
               </p>
             </div>
           </div>
@@ -586,7 +584,7 @@ export default function CreateMyTeam({
               <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Your team has been successfully submitted
-                {leagueRound ? ` to ${leagueRound.title}` : ''}.
+                {leagueRound ? ` to ${leagueRound.title}` : ''}
               </p>
               <PrimaryButton
                 className="w-full"
