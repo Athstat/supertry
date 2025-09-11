@@ -9,6 +9,7 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
     const {data: report, isLoading, error} = useSWR(key, () => fantasyAthleteService.getRoundSquadReport(teamId, trackingId));
 
     const isAvailable = report && report.availability === "AVAILABLE";
+    const notAvailable = report && report.availability === "TEAM_NOT_PLAYING";
 
     const reportText = useMemo(() => {
         if (report) {
@@ -32,6 +33,7 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
         isLoading,
         report,
         reportText,
-        error
+        error,
+        notAvailable
     }
 }

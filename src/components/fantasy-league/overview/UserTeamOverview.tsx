@@ -4,6 +4,9 @@ import PlayerPointsBreakdownView from "../team-modal/points_breakdown/PlayerPoin
 import { IProAthlete } from "../../../types/athletes"
 import DialogModal from "../../shared/DialogModal"
 import TeamJersey from "../../player/TeamJersey"
+import { usePlayerSquadReport } from "../../../hooks/fantasy/usePlayerSquadReport"
+import { twMerge } from "tailwind-merge"
+import SecondaryText from "../../shared/SecondaryText"
 
 type Props = {
     userTeam: FantasyLeagueTeamWithAthletes,
@@ -38,6 +41,7 @@ export default function UserTeamOverview({ userTeam, leagueRound: currentRound }
                             return <PlayerItem
                                 key={a.athlete.tracking_id}
                                 onClick={() => onSelectPlayer(a)} athlete={a}
+                                team={userTeam}
                             />
                         })}
                     </div>
@@ -63,13 +67,35 @@ export default function UserTeamOverview({ userTeam, leagueRound: currentRound }
 
 type PlayerItemProps = {
     athlete: IDetailedFantasyAthlete,
-    onClick?: () => void
+    onClick?: () => void,
+    team: FantasyLeagueTeamWithAthletes
 }
 
-function PlayerItem({ athlete, onClick }: PlayerItemProps) {
+function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
+
+    console.log(athlete);
+    const { report, reportText, isAvailable, isLoading, notAvailable } = usePlayerSquadReport(team.id, athlete.athlete.tracking_id);
+
+    if (isLoading) {
+        return (
+            <div
+                onClick={onClick}
+                className={twMerge(
+                    "flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col",
+                    
+                )}
+            ></div>
+        )
+    }
+
     return (
-        <div onClick={onClick} className="flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col" >
-            
+        <div
+            onClick={onClick}
+            className={twMerge(
+                "flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col",
+                notAvailable && 'border-yellow-500 dark:border-yellow-900'
+            )}
+        >
             <div className="h-[60%] w-full flex flex-col items-center justify-center" >
                 <TeamJersey
                     teamId={athlete.athlete.team_id}
@@ -78,9 +104,11 @@ function PlayerItem({ athlete, onClick }: PlayerItemProps) {
                 />
             </div>
 
+
+
             <div className="text-center bg-white dark:bg-slate-800/60 truncate border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center " >
                 <p className="text-[10px] text-center truncate" >{athlete.athlete.athstat_lastname}</p>
-                <p className="text-[10px]" >{athlete.score ? Math.floor(athlete.score) : '-'}</p>
+                <SecondaryText className="text-[10px]" >{athlete.score ? Math.floor(athlete.score) : reportText}</SecondaryText>
             </div>
         </div>
     )
