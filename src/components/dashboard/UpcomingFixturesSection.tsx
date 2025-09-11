@@ -164,7 +164,8 @@ export default function UpcomingFixturesSection() {
                 <SmallFixtureCard
                   fixture={fixture}
                   key={fixture.game_id}
-                  className='min-w-[90%]'
+                  className='min-w-[85%]'
+                  hideVotingBox
                 />
               );
             })}
@@ -184,6 +185,7 @@ export default function UpcomingFixturesSection() {
                 fixture={fixture}
                 key={fixture.game_id}
                 className='min-w-[85%]'
+                hideVotingBox
               />
             );
           })}
@@ -202,6 +204,7 @@ export default function UpcomingFixturesSection() {
                 <SmallFixtureCard
                   fixture={fixture}
                   key={fixture.game_id}
+                  hideVotingBox
                 />
               );
             })}

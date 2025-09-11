@@ -122,5 +122,8 @@ declare module "lucide-react" {
   export const FlaskConical : CIP;
   export const Table : CIP;
   export const Tv : CIP;
+  export const Video : CIP;
+  export const BadgeInfo : CIP;
+  export const TriangleAlert : CIP;
 }
 

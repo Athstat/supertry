@@ -118,12 +118,13 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     const participatingTeamsId = new Set<string>();
 
     roundFixtures.forEach(rf => {
-      if (!participatingTeamsId.has(rf.team.athstat_id)) {
-        participatingTeamsId.add(rf.team.athstat_id);
+      if (!participatingTeamsId.has(rf?.team?.athstat_id ?? '')) {
+        participatingTeamsId.add(rf?.team?.athstat_id ?? '');
       }
 
-      if (!participatingTeamsId.has(rf.opposition_team.athstat_id)) {
-        participatingTeamsId.add(rf.opposition_team.athstat_id);
+      if (!participatingTeamsId.has(rf?.opposition_team?.athstat_id ?? '')) {
+        participatingTeamsId.add(rf?.opposition_team
+          ?.athstat_id ?? '');
       }
     });
 

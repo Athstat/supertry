@@ -104,7 +104,6 @@ function Content({ league }: Props) {
             >
                 {userTeam && <div className='flex flex-row items-center justify-between' >
                     <div className='flex flex-row items-center gap-2' >
-                        <Shield className='w-6 h-6' />
                         <p className='font-bold ' >{userTeam?.team.name}</p>
                     </div>
                 </div>}
@@ -177,8 +176,8 @@ function NotTeamCreated() {
                 <p className='text-xs text-left' >You haven't picked a team for {currentRound.title} yet</p>
             </div>
 
-            <PrimaryButton onClick={goToCreateTeam} className='w-fit text-xs' >
-                <p>Pick Team</p>
+            <PrimaryButton onClick={goToCreateTeam} className='w-fit text-xs px-2' >
+                {/* <p className='text-[10px]' >Pick Team</p> */}
                 <Plus className='w-4 h-4' />
             </PrimaryButton>
 

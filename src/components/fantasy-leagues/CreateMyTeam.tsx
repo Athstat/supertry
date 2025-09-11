@@ -395,12 +395,11 @@ export default function CreateMyTeam({
       </div>
 
       {/* Presets + Save */}
-      <Experimental>
 
 
         <div className="mt-3 relative z-[50] space-y-3">
           {/* Preset dropdown and save-as-preset */}
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <select
               className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
               value={selectedPresetId}
@@ -427,7 +426,7 @@ export default function CreateMyTeam({
             >
               Save as preset
             </button>
-          </div>
+          </div> */}
 
           <PrimaryButton
             className="w-full"
@@ -448,7 +447,6 @@ export default function CreateMyTeam({
           />
         </div>
 
-      </Experimental>
 
       {/* 2x3 grid of position slots */}
       <div className="mt-4 grid grid-cols-2 gap-4">
@@ -544,7 +542,7 @@ export default function CreateMyTeam({
           roundId={Number(selectedRoundId ?? 0)}
           roundStart={leagueRound?.start_round ?? undefined}
           roundEnd={leagueRound?.end_round ?? undefined}
-          leagueId={leagueId}
+          leagueId={leagueRound?.official_league_id}
         />
       )}
 

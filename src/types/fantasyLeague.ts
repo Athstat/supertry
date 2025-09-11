@@ -1,6 +1,5 @@
 import { IProAthlete } from './athletes';
 import { IFantasyTeamAthlete } from './fantasyTeamAthlete';
-import { IProTeam } from './team';
 
 export interface ISeason {
   id: string;
@@ -57,7 +56,7 @@ export type IFantasyLeagueTeam = {
 
 
 export type FantasyLeagueTeamWithAthletes = {
-  id: 1,
+  id: number,
   team: {
     id: number,
     user_id: string,
@@ -97,4 +96,12 @@ export type IDetailedFantasyAthlete = {
   score: number,
   is_captain: boolean,
   is_super_sub: boolean
+}
+export type IFantasyLeagueScoringOverview = {
+  average_points_scored?: number,
+  highest_points_scored?: number,
+  lowest_points_scored?: number,
+  total_number_of_partipants?: number,
+  user_score?: number,
+  user_email?: string
 }

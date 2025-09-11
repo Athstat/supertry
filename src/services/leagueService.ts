@@ -1,7 +1,6 @@
-import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound, IFantasyLeagueScoringOverview, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../types/leagueConfig';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
-import { analytics } from './analytics/anayticsService';
 import { fantasyTeamService } from './fantasyTeamService';
 import { authService } from './authService';
 import { ICreateFantasyTeamAthleteItem } from '../types/fantasyTeamAthlete';
@@ -294,8 +293,6 @@ export const leagueService = {
         throw new Error(`Failed to join league: ${response.status} ${response.statusText}`);
       }
 
-      analytics.trackTeamCreationCompleted(league.id, teamToJoin.id, league.official_league_id);
-
       return await response.json();
     } catch (error) {
       console.error('Error in leagueService.joinLeague:', error);
@@ -378,6 +375,24 @@ export const leagueService = {
 
     } catch (err) {
       console.log("Error fetching user's round team ", err);
+    }
+
+    return undefined;
+  },
+
+  getRoundScoringOverview: async (leagueRoundId: string | number) : Promise<IFantasyLeagueScoringOverview | undefined> => {
+    
+    try {
+      const uri = getUri(`/api/v1/fantasy-leagues/${leagueRoundId}/scoring/overview`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as IFantasyLeagueScoringOverview;
+      }
+    } catch (err) {
+      console.log("Failed to fetch scoring overview for fantasy league round");
     }
 
     return undefined;
