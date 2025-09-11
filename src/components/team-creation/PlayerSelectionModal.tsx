@@ -18,6 +18,7 @@ import AvailableFilter from './AvailableFilter';
 import { AthleteWithTrackingId } from '../../types/fantasyTeamAthlete';
 import { IProAthlete } from '../../types/athletes';
 import useSWR from 'swr';
+import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 
 interface PlayerSelectionModalProps {
   visible: boolean;
@@ -56,10 +57,13 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   const [filterAvailable, setFilterAvailable] = useState(false);
 
   // Only fetch fixtures if leagueId is provided (TeamCreationScreen)
-  const fetchKey = leagueId ? `games/${leagueId}` : null;
-  const { data: fixtureData, isLoading: loadingFixtures } = useSWR(fetchKey, () => gamesService.getGamesByLeagueId(leagueId ?? ""));
+  const {currentRound} = useFantasyLeagueGroup();
+  const fetchKey = currentRound ? `leagues-rounds/${currentRound?.id}/related-games` : null;
 
-  console.log('Players: ', players);
+  const { data: fixtureData, isLoading: loadingFixtures } = useSWR(fetchKey, () => gamesService.getGamesByLeagueId(currentRound?.id ?? ''));
+
+  console.log(currentRound);
+  console.log("Games ", fixtureData);
 
   // Get available teams for filter
   const allTeams = useAvailableTeams(players);
@@ -118,12 +122,13 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     const participatingTeamsId = new Set<string>();
 
     roundFixtures.forEach(rf => {
-      if (!participatingTeamsId.has(rf.team.athstat_id)) {
-        participatingTeamsId.add(rf.team.athstat_id);
+      if (!participatingTeamsId.has(rf?.team?.athstat_id ?? '')) {
+        participatingTeamsId.add(rf?.team?.athstat_id ?? '');
       }
 
-      if (!participatingTeamsId.has(rf.opposition_team.athstat_id)) {
-        participatingTeamsId.add(rf.opposition_team.athstat_id);
+      if (!participatingTeamsId.has(rf?.opposition_team?.athstat_id ?? '')) {
+        participatingTeamsId.add(rf?.opposition_team
+          ?.athstat_id ?? '');
       }
     });
 

@@ -3,7 +3,7 @@ import { Plus, Trophy, Users } from 'lucide-react';
 import { LoadingState } from '../ui/LoadingState';
 import { useNavigate } from 'react-router-dom';
 import { IUserCreatedLeague } from '../../types/userCreatedLeague';
-import CreateLeagueModal from './CreateLeagueModal';
+import CreateLeagueForm from './CreateLeagueModal';
 import { Toast } from '../ui/Toast';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
@@ -167,7 +167,7 @@ export default function UserCreatedLeaguesSection({
         duration={3000}
       />
 
-      <CreateLeagueModal
+      <CreateLeagueForm
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onLeagueCreated={handleLeagueCreated}

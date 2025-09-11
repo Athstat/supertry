@@ -5,10 +5,13 @@ import { swrFetchKeys } from "../../../utils/swrKeys";
 import { leagueService } from "../../../services/leagueService";
 import RoundedCard from "../../shared/RoundedCard";
 import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from "./UserRoundOverviewCard";
-import { FantasyLeagueTeamWithAthletes } from "../../../types/fantasyLeague";
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 import UserTeamOverview from "./UserTeamOverview";
 import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
+import { GamePlayHelpButton } from "../../branding/help/LearnScrummyNoticeCard";
+import LeagueRoundCountdown from "../LeagueCountdown";
+import BlueGradientCard from "../../shared/BlueGradientCard";
 
 
 export default function LeagueOverviewTab() {
@@ -37,17 +40,21 @@ export default function LeagueOverviewTab() {
     return (
         <div className="flex flex-col gap-4" >
 
-            <div>
+            <div className="flex flex-row items-center justify-between" >
                 <div>
                     <h2 className="font-bold text-lg" >Overview</h2>
                 </div>
+
+                <div>
+                    <GamePlayHelpButton />
+                </div>
             </div>
 
-            <LeagueRoundSummary userTeam={userTeam} />
+            {currentRound && <LeagueRoundSummary showCountdownOnly userTeam={userTeam} currentRound={currentRound} />}
 
             {userTeam && currentRound && <UserRoundScoringUpdate leagueRound={currentRound} userTeam={userTeam} />}
 
-            { currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
+            {currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
 
             {/* <Experimental> */}
             {currentRound && <LeagueRoundFixturesOverview leagueRound={currentRound} />}
@@ -57,26 +64,43 @@ export default function LeagueOverviewTab() {
 }
 
 type RoundSummaryProps = {
-    userTeam?: FantasyLeagueTeamWithAthletes
+    userTeam?: FantasyLeagueTeamWithAthletes,
+    currentRound: IFantasyLeagueRound,
+    onPickTeam?: () => void,
+    onViewTeam?: () => void,
+    onViewStandings?: () => void,
+    showCountdownOnly?: boolean
 }
 
-function LeagueRoundSummary({ userTeam }: RoundSummaryProps) {
+export function LeagueRoundSummary({ userTeam, currentRound, onPickTeam, onViewStandings, onViewTeam, showCountdownOnly }: RoundSummaryProps) {
 
-    const { currentRound } = useFantasyLeagueGroup();
-
-
-    if (!currentRound) return;
 
     if (userTeam) {
+
+        if (showCountdownOnly) {
+            return (
+                <BlueGradientCard className="flex flex-col gap-1" >
+                    <p>⏰ {currentRound.title} - Deadline</p>
+                    <LeagueRoundCountdown
+                        leagueRound={currentRound}
+                    />
+                </BlueGradientCard>
+            )
+        }
+
         return <UserRoundOverviewCard
             leagueRound={currentRound}
             userTeam={userTeam}
+            onViewStandings={onViewStandings}
+            onViewTeam={onViewTeam}
         />
     }
 
     return (
         <NoTeamRoundOverviewCard
             leagueRound={currentRound}
+            onHandleViewStandings={onViewStandings}
+            onPickTeam={onPickTeam}
         />
     )
 }

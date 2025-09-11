@@ -10,20 +10,31 @@ import { useTabView } from "../../shared/tabs/TabView"
 
 type Props = {
     leagueRound: IFantasyLeagueRound,
-    userTeam: FantasyLeagueTeamWithAthletes
+    userTeam: FantasyLeagueTeamWithAthletes,
+    onViewStandings?: ( ) => void,
+    onViewTeam?: () => void
 }
 
-export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) {
+export default function UserRoundOverviewCard({ leagueRound, userTeam, onViewTeam, onViewStandings }: Props) {
 
     const { navigate } = useTabView();
     const isLocked = isLeagueRoundLocked(leagueRound);
 
     const handleViewTeam = () => {
-        navigate('my-team');
+        if (onViewTeam) {
+            onViewTeam()
+        } else {
+            navigate('my-team');
+        }
     }
 
     const handleViewStandings = () => {
-        navigate('standings');
+
+        if (onViewStandings) {
+            onViewStandings();
+            navigate('standings');
+        }
+
     }
 
     return (
@@ -32,15 +43,11 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
 
                 <div className="flex flex-row w-full items-center justify-between" >
                     <div>
-                        <h3 className="font-bold text-xl" >{userTeam.team.name}</h3>
+                        <h3 className="font-bold " >{userTeam.team.name}</h3>
                         <div className="flex flex-row items-center gap-1" >
                             {isLocked && <Lock className="w-4 h-4" />}
-                            <p>{leagueRound.title}</p>
+                            <p className="text-sm" >{leagueRound.title}</p>
                         </div>
-                    </div>
-
-                    <div>
-                        <ArrowRight className="w-4 h-4" />
                     </div>
                 </div>
 
@@ -80,21 +87,32 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam }: Props) 
 }
 
 type NoTeamProps = {
-    leagueRound: IFantasyLeagueRound
+    leagueRound: IFantasyLeagueRound,
+    onPickTeam?: () => void,
+    onHandleViewStandings?: () => void
 }
 
-export function NoTeamRoundOverviewCard({ leagueRound }: NoTeamProps) {
+export function NoTeamRoundOverviewCard({ leagueRound, onPickTeam, onHandleViewStandings }: NoTeamProps) {
 
     const hasLocked = isLeagueRoundLocked(leagueRound);
     const { navigate } = useTabView();
 
 
     const handlePickTeam = () => {
-        navigate('my-team');
+
+        if (onPickTeam) {
+            onPickTeam();
+        } else {   
+            navigate('my-team');
+        }
     }
 
     const handleViewStandings = () => {
-        navigate('standings');
+        if (onHandleViewStandings) {
+            onHandleViewStandings();
+        } else {
+            navigate('standings');
+        }
     }
 
     return (
