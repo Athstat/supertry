@@ -113,3 +113,18 @@ export type FantasyAthletePointsBreakdownItem = {
   game: string,
   athlete: string
 }
+
+type PlayerSquadAvailability = "AVAILABLE" | "TEAM_NOT_PLAYING";
+
+export type SquadReportItem = {
+  athlete_id: string,
+  player_name: string,
+  image_url: string,
+  team_id: string,
+  team_name: string,
+  team_image_url: string,
+  game_id: string,
+  home_team_name: string,
+  away_team_name: string,
+  availability: PlayerSquadAvailability
+}

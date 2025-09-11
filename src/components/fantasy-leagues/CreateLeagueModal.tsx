@@ -3,11 +3,13 @@ import DialogModal from '../shared/DialogModal';
 import InputField, { TextField } from '../shared/InputField';
 import LeagueVisibilityInput from './ui/LeagueVisibilityInput';
 import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
-import SeasonInput from './ui/SeasonInput';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../ui/ErrorState';
+import TabView, { TabViewHeaderItem, TabViewPage } from '../shared/tabs/TabView';
+import JoinLeagueByCode from './JoinLeagueByCode';
+import SecondaryText from '../shared/SecondaryText';
 
 interface CreateLeagueModalProps {
   isOpen: boolean;
@@ -16,6 +18,48 @@ interface CreateLeagueModalProps {
 }
 
 export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModalProps) {
+
+  const tabs: TabViewHeaderItem[] = [
+    {
+      label: 'Create League',
+      tabKey: 'create',
+      className: 'flex-1'
+    },
+
+    {
+      label: 'Join By Code',
+      tabKey: 'join',
+      className: 'flex-1'
+    }
+  ]
+
+  return (
+    <DialogModal
+      title="Create/Join Fantasy League"
+      className='min-h-[90vh]'
+      onClose={onClose}
+      open={isOpen}
+    >
+      <TabView tabHeaderItems={tabs} >
+        <TabViewPage tabKey='create' >
+          <CreateLeagueForm />
+        </TabViewPage>
+
+        <TabViewPage tabKey='join' className='flex flex-col gap-4' >
+          <div className='flex flex-col' >
+            <p className='font-bold text-xl' >Join League</p>
+            <SecondaryText>
+              Got a code from your crew? Pop it in here to get started.
+            </SecondaryText>
+          </div>
+          <JoinLeagueByCode />
+        </TabViewPage>
+      </TabView>
+    </DialogModal>
+  );
+}
+
+function CreateLeagueForm() {
   const { isLoading, fantasySupportedSeasons: seasons } = useSupportedSeasons();
 
   const navigate = useNavigate();
@@ -25,7 +69,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
   const [form, setForm] = useState<CreateLeagueForm>({
     title: '',
     season_id: seasons.length > 0 ? seasons[0].id : 'c4c29ce1-8669-5f51-addc-cbed01ce9bd0',
-    is_private: false, 
+    is_private: false,
     description: ''
   });
 
@@ -52,7 +96,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
   };
 
   return (
-    <DialogModal open={isOpen} onClose={onClose} title="Create Fantasy League">
+    <div>
       {isLoading && (
         <div className="flex flex-col gap-2">
           <div className="w-full h-10 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
@@ -123,7 +167,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
           {error && <ErrorState error="Whoops" message={error} />}
         </form>
       )}
-    </DialogModal>
+    </div>
   );
 }
 

@@ -6,8 +6,8 @@ import { useQueryState } from "../useQueryState";
 /** Hook that provides data and logic for league standings filtering */
 export function useLeagueRoundStandingsFilter() {
 
-    const { sortedRounds } = useFantasyLeagueGroup();
-    const defaultFilterVal = 'overall';
+    const { sortedRounds, currentRound } = useFantasyLeagueGroup();
+    const defaultFilterVal = currentRound?.id;
     const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: defaultFilterVal });
 
 

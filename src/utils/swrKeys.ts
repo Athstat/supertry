@@ -132,5 +132,13 @@ export const swrFetchKeys = {
 
     getFantasyLeagueGroupStandings: (leagueGroupId: string) => {
         return `/fantasy-league-group/${leagueGroupId}/standings`;
+    },
+
+    getPlayerSquadReport: (teamId: string | number, trackingId: string) => {
+        return `/fantasy-league-teams/${teamId}/athletes/${trackingId}/squad-report`;
+    },
+
+    getLeagueRoundScoringOverview: (leagueRoundId: string | number) => {
+        return `/fantasy-league-rounds/${leagueRoundId}/scoring-overview`;
     }
 }

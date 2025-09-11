@@ -5,13 +5,16 @@ import { ISbrFixture } from "../types/sbr";
 export function fixtureSumary(fixture: IFixture) {
     const { team_score, kickoff_time, game_status, opposition_score } = fixture;
 
-    const matchFinal = game_status === "completed" && team_score !== undefined && opposition_score !== undefined;
+    const matchFinal = 
+        (game_status === "completed" || game_status === 'result') 
+        && (team_score !== undefined && opposition_score !== undefined);
+        
     const hasNotStarted = game_status === 'fixture';
 
     const homeTeamWon = matchFinal ? team_score > opposition_score : false;
     const awayTeamWon = matchFinal ? team_score < opposition_score : false;
 
-    const gameKickedOff = kickoff_time !== undefined && (new Date(kickoff_time) < new Date());
+    const gameKickedOff = kickoff_time !== undefined && (new Date(kickoff_time) < new Date()) && game_status !== 'fixture';
     
     return {gameKickedOff, homeTeamWon, awayTeamWon, game_status, hasNotStarted, matchFinal};
 }
