@@ -39,8 +39,6 @@ export const gamesService = {
   getGamesByLeagueId: async (leagueId: string): Promise<IFixture[]> => {
     const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/related-games`);
 
-    console.log('gamesbyid: ', leagueId);
-
     try {
       const res = await fetch(uri, {
         headers: getAuthHeader(),

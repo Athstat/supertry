@@ -323,7 +323,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
 
-  const [setErrors] = useState<any>();
+  const [errors, setErrors] = useState<any>();
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -432,6 +432,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
         disabled={isSubmitting}
         isLoading={isSubmitting}
         className='animate-glow py-4'
+        type='submit'
       >
         Claim Account 🔥
       </PrimaryButton>
