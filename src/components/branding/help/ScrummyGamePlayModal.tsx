@@ -10,6 +10,7 @@ type Props = {
 }
 
 export default function ScrummyGamePlayModal({ isOpen, onClose }: Props) {
+
     const [selectedTopic, setSelectedTopic] = useState<GameplayTopic | null>(null);
 
     const handleTopicSelect = (topic: GameplayTopic) => {

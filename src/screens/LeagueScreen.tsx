@@ -3,8 +3,8 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import { ArrowLeft, Globe, Share2, Trophy } from 'lucide-react';
-import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
+import { Globe, Share2, Trophy } from 'lucide-react';
+import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
@@ -78,10 +78,6 @@ function Content() {
       className: 'w-fit',
     }
   ];
-
-  const navigateToLeagues = () => {
-    navigate('/leagues');
-  };
 
 
   return (

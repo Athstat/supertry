@@ -5,6 +5,7 @@ import PrimaryButton from "../../../shared/buttons/PrimaryButton"
 import { useState } from "react"
 import CreateLeagueModal from "../../CreateLeagueModal"
 import { useNavigate } from "react-router-dom"
+import { GamePlayHelpButton } from "../../../branding/help/LearnScrummyNoticeCard"
 
 type Props = {
     joinedLeagues: FantasyLeagueGroup[]
@@ -33,7 +34,7 @@ export default function OtherLeaguesSection({ joinedLeagues }: Props) {
                     <p className="text-lg font-semibold" >Joined Leagues</p>
                 </div>
 
-                <div>
+                <div className="flex flex-row items-center gap-1" >
                     <PrimaryButton onClick={toggle} className="w-fit text-sm" >
                         <p>Create/Join</p> 
                         <Plus className="w-4 h-4" />

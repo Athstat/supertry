@@ -544,7 +544,7 @@ export default function CreateMyTeam({
           roundId={Number(selectedRoundId ?? 0)}
           roundStart={leagueRound?.start_round ?? undefined}
           roundEnd={leagueRound?.end_round ?? undefined}
-          leagueId={leagueId}
+          leagueId={leagueRound?.official_league_id}
         />
       )}
 

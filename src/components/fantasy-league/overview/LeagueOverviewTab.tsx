@@ -9,6 +9,7 @@ import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../typ
 import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 import UserTeamOverview from "./UserTeamOverview";
 import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
+import { GamePlayHelpButton } from "../../branding/help/LearnScrummyNoticeCard";
 
 
 export default function LeagueOverviewTab() {
@@ -37,9 +38,13 @@ export default function LeagueOverviewTab() {
     return (
         <div className="flex flex-col gap-4" >
 
-            <div>
+            <div className="flex flex-row items-center justify-between" >
                 <div>
                     <h2 className="font-bold text-lg" >Overview</h2>
+                </div>
+
+                <div>
+                    <GamePlayHelpButton />
                 </div>
             </div>
 
