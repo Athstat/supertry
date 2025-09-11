@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { athleteAnalytics } from "../../services/analytics/athleteAnalytics";
 
 type SortField = "power_rank_rating" | "player_name" | "form";
 type SortDirection = "asc" | "desc";
@@ -16,6 +17,12 @@ export const PlayerSort = ({
   onSort,
 }: PlayerSortProps) => {
   const [showSortOptions, setShowSortOptions] = useState(false);
+
+  const handleOnSort = useCallback((field: SortField, direction: SortDirection) => {
+    athleteAnalytics.trackPlayerSortApplied(field, direction);
+    onSort(field, direction);
+  }, [onSort]);
+
 
   return (
     <div className="relative">
@@ -57,7 +64,7 @@ export const PlayerSort = ({
             </h3>
             <button
               onClick={() => {
-                onSort("power_rank_rating", "desc");
+                handleOnSort("power_rank_rating", "desc");
                 setShowSortOptions(false);
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-sm ${
@@ -70,7 +77,7 @@ export const PlayerSort = ({
             </button>
             <button
               onClick={() => {
-                onSort("power_rank_rating", "asc");
+                handleOnSort("power_rank_rating", "asc");
                 setShowSortOptions(false);
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-sm ${
@@ -83,7 +90,7 @@ export const PlayerSort = ({
             </button>
             <button
               onClick={() => {
-                onSort("player_name", "asc");
+                handleOnSort("player_name", "asc");
                 setShowSortOptions(false);
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-sm ${
@@ -96,7 +103,7 @@ export const PlayerSort = ({
             </button>
             <button
               onClick={() => {
-                onSort("player_name", "desc");
+                handleOnSort("player_name", "desc");
                 setShowSortOptions(false);
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-sm ${
@@ -110,7 +117,7 @@ export const PlayerSort = ({
 
             <button
               onClick={() => {
-                onSort("form", "desc");
+                handleOnSort("form", "desc");
                 setShowSortOptions(false);
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-sm ${
@@ -124,7 +131,7 @@ export const PlayerSort = ({
 
             <button
               onClick={() => {
-                onSort("form", "asc");
+                handleOnSort("form", "asc");
                 setShowSortOptions(false);
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-sm ${

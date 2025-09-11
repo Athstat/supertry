@@ -8,6 +8,7 @@ import { authService } from '../../services/authService';
 import { useAuth } from '../../contexts/AuthContext';
 import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../utils/firstVisitUtils';
 import { useGoogleLogin } from '@react-oauth/google';
+import Experimental from '../../components/shared/ab_testing/Experimental';
 
 // Check if running in mobile WebView
 const isMobileWebView = () => {
@@ -128,7 +129,7 @@ export function SignInScreen() {
       )}
 
       <AuthLayout title="Welcome back" subtitle="Sign in to your account">
-        <div className="mt-8 space-y-6">
+        <div className="mt-8 space-y-3">
           {/* Google Sign In Button */}
 
           {/* <Experimental>
@@ -200,8 +201,10 @@ export function SignInScreen() {
           </Experimental> */}
 
           <EmailPasswordLoginBox />
-
-          {<GuestLoginBox />}
+          
+          <Experimental>
+            <GuestLoginBox />
+          </Experimental>
 
           {/* Error Display */}
           {error && (
@@ -219,7 +222,7 @@ export function SignInScreen() {
               Don't have an account?{' '}
               <Link
                 to="/signup"
-                className="text-primary-600 dark:text-primary-400 font-medium hover:underline"
+                className="text-primary-600 underline dark:text-primary-400 font-medium hover:underline"
               >
                 Sign up
               </Link>

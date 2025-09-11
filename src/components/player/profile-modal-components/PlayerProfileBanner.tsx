@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { CardTier, IProAthlete } from '../../../types/athletes';
+import { CardTier } from '../../../types/athletes';
 import { ScrummyDarkModeLogo } from '../../branding/scrummy_logo';
 import { CircleDollarSign } from 'lucide-react';
+import { usePlayerData } from '../provider/PlayerDataProvider';
 
-interface Props {
-  player: IProAthlete;
-}
+interface Props {}
 
-export default function PlayerProfileBanner({ player }: Props) {
+export default function PlayerProfileBanner({}: Props) {
+  const { player } = usePlayerData();
+
   // Fallback chain like PlayerGameCard
-  const primaryImageUrl = player.image_url ?? null;
-  const teamFallbackUrl = player.team_id
+  const primaryImageUrl = player?.image_url ?? null;
+  const teamFallbackUrl = player?.team_id
     ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${player.team_id}-ph-removebg-preview.png`
     : null;
   const [src, setSrc] = useState<string | null>(primaryImageUrl ?? teamFallbackUrl);
@@ -32,9 +33,11 @@ export default function PlayerProfileBanner({ player }: Props) {
     }
   };
 
-  const pr = player.power_rank_rating ?? 0;
+  const pr = player?.power_rank_rating ?? 0;
   const cardTier: CardTier =
     pr <= 69 ? 'bronze' : pr >= 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+
+  if (!player) return;
 
   return (
     <div
@@ -49,13 +52,24 @@ export default function PlayerProfileBanner({ player }: Props) {
         cardTier === 'blue' && 'animate-glow'
       )}
     >
-      {player.price !== undefined && (
+      {player?.price !== undefined && (
         <div className="absolute top-2 left-2 z-40 flex flex-row items-center gap-1 bg-black/10 text-white rounded-md px-2 py-1">
           <CircleDollarSign className="w-4 h-4" />
-          <p className="text-sm font-bold">{player.price}</p>
+          <p className="text-sm font-bold">{player?.price}</p>
         </div>
       )}
-      {src ? (
+      {teamFallbackUrl ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <img
+            src={teamFallbackUrl}
+            className="h-[200px] translate-y-12"
+            onError={handleImageError}
+          />
+        </div>
+      ) : (
+        <ScrummyDarkModeLogo className="h-[200px] w-[200px] grayscale opacity-30" />
+      )}
+      {/* {src ? (
         src === teamFallbackUrl ? (
           <div className="w-full h-full flex items-center justify-center">
             <img src={src} className="h-[200px] translate-y-12" onError={handleImageError} />
@@ -65,7 +79,7 @@ export default function PlayerProfileBanner({ player }: Props) {
         )
       ) : (
         <ScrummyDarkModeLogo className="h-[200px] w-[200px] grayscale opacity-30" />
-      )}
+      )} */}
     </div>
   );
 }

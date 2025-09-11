@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
-import { ScrummyDarkModeLogo, ScrummyLightModeLogo } from '../../components/branding/scrummy_logo';
+import { ScrummyDarkModeLogo } from '../../components/branding/scrummy_logo';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import SecondaryText from '../../components/shared/SecondaryText';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
@@ -10,12 +10,13 @@ import { ErrorMessage } from '../../components/ui/ErrorState';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
 import { FEATURED_PLAYER_IDS } from '../../components/onboarding/OnboardingDataProvider';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import BetaTag from '../../components/branding/BetaTag';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  const { isLoading, error, handleGuestLogin, deviceId } = useGuestLogin('/post-signup-welcome');
+  const { isLoading, error, handleGuestLogin } = useGuestLogin('/post-signup-welcome');
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -173,31 +174,22 @@ export function WelcomeScreen() {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="flex flex-1 flex-col gap-4 items-center justify-center p-4 w-full"
           >
-            {deviceId && (
-              <PrimaryButton
-                className="w-full py-3 animate-glow"
-                onClick={handleGuestLogin}
-                isLoading={isLoading}
-              >
-                Get Started!
-              </PrimaryButton>
-            )}
+            <PrimaryButton
+              className="w-full py-3 animate-glow"
+              onClick={handleGuestLogin}
+              isLoading={isLoading}
+            >
+              <p>Get Started!!!</p>
+              <BetaTag className="bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none" />
+            </PrimaryButton>
 
             {error && <ErrorMessage message={error} />}
 
-            {!deviceId && (
-              <PrimaryButton onClick={navigateToSignin} className="w-full py-3 animate-glow">
-                Sign In
-              </PrimaryButton>
-            )}
-
-            {deviceId && (
-              <div onClick={navigateToSignin}>
-                <SecondaryText className="underline cursor-pointer text-slate-300">
-                  Already Part of The Scrum? Sign In
-                </SecondaryText>
-              </div>
-            )}
+            <div onClick={navigateToSignin}>
+              <SecondaryText className="underline cursor-pointer text-white">
+                Already Part of The Scrum? Sign In
+              </SecondaryText>
+            </div>
           </motion.div>
         </motion.div>
       </div>

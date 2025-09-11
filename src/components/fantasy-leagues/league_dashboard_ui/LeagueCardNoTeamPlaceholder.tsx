@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { analytics } from "../../../services/anayticsService";
+import { analytics } from "../../../services/analytics/anayticsService";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { isLeagueLocked } from "../../../utils/leaguesUtils";

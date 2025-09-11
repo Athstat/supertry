@@ -6,6 +6,8 @@ import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
 import { useImagePreloader } from "../../../hooks/useImagePreloader";
+import { useEffect } from "react";
+import { analytics } from "../../../services/analytics/anayticsService";
 
 type Props = {
 }
@@ -16,6 +18,12 @@ export default function PlayerCompareModal({}: Props) {
   const open = useAtomValue(comparePlayersAtomGroup.isCompareModeModal);
 
   const  {closeCompareModal} = usePlayerCompareActions();
+
+  useEffect(() => {
+    if (selectedPlayers.length > 0) {
+      analytics.trackComparedPlayers(selectedPlayers);
+    }
+  }, [selectedPlayers]);
 
   // Preload images when modal is open
   useImagePreloader({ players: selectedPlayers, enabled: open });

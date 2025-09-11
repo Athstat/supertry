@@ -1,4 +1,5 @@
 import { useAuth } from "../../contexts/AuthContext";
+import { analytics } from "../../services/analytics/anayticsService";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
 export function useShareLeague(league?: FantasyLeagueGroup) {
@@ -11,14 +12,9 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         if (!league) return;
 
         const baseUrl = (import.meta as any)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
-        const inviteInstructions = `${baseUrl}/invite-steps?league_name=${encodeURIComponent(league?.title ?? '')}&user_name=${encodeURIComponent(username ?? '')}&join_code=${encodeURIComponent(league?.entry_code ?? '')}`;
+        const inviteInstructions = encodeURI(`${baseUrl}/invite-steps?league_name=${league?.title ?? ''}&user_name=${username ?? ''}&join_code=${league?.entry_code ?? ''}`);
 
-        const shareMessage =
-            `You’ve been invited to join a rugby fantasy league: “${league?.title} on SCRUMMY ${username ? ` by ${username}` : ''}”\n\n` +
-            `🏉 Step 1: Install the app\n` +
-            `👉 Download for iOS: https://apps.apple.com/za/app/scrummy-fantasy-rugby/id6744964910\n` +
-            `👉 Download for Android: https://play.google.com/store/apps/details?id=com.scrummy&hl=en_ZA\n\n` +
-            `📲 Step 2: Open the app, tap “Join a League”, and enter this code: ${league?.entry_code}. New to SCRUMMY? Just click here to get started ${inviteInstructions}`;
+        const shareMessage =`You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n${inviteInstructions}`;
 
         // Ensure there are no leading blank lines
         //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
@@ -26,14 +22,18 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         // Share ONLY the composed message text (no title/url),
         // so the share sheet doesn't prepend extra lines.
         const shareData: ShareData = {
-            title: `Join ${league?.title} on SCRUMMY`,
-            text: shareMessage,
-            url: inviteInstructions
+            title: `SCRUMMY Fantasy League Invite`,
+            text: `🔥 You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n\n${inviteInstructions}`,
+            // url: inviteInstructions
         };
 
 
         if (navigator.share) {
-            navigator.share(shareData).catch(err => {
+            navigator.share(shareData)
+            .then(() => {
+                analytics.trackFriendInvitesSent('League_Invite_Button', league);
+            })
+            .catch(err => {
                 console.error('Share failed:', err);
                 // Fallback to clipboard if share dismissed or fails
                 navigator.clipboard

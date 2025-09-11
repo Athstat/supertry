@@ -13,13 +13,7 @@ export default function LeagueFixturesTab() {
   const { sortedRounds, currentRound } = useFantasyLeagueGroup();
 
   const [selectedRoundId, setSelectedRoundId] = useState<number | undefined>(() => {
-    const index = sortedRounds.findIndex(r => r.id === currentRound?.id);
-
-    if (index === -1) {
-      return undefined;
-    }
-
-    return index;
+    return sortedRounds.findIndex((r) => (r.start_round ?? 0) === (currentRound?.start_round ?? 0))
   });
 
   const isIndexValid =
@@ -116,8 +110,6 @@ function FixtureListView({ round }: FixtureListProps) {
   // });
 
   const upcomingGames = games;
-
-  console.log('games: ', games);
 
   if (isLoading) {
     return (

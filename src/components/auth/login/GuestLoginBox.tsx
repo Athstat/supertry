@@ -2,10 +2,12 @@ import { User } from "lucide-react";
 import { ErrorState } from "../../ui/ErrorState";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { useGuestLogin } from "../../../hooks/auth/useGuestLogin";
+import { useDeviceId } from "../../../hooks/useDeviceId";
 
 export default function GuestLoginBox() {
 
-    const {deviceId, handleGuestLogin, error, isLoading} = useGuestLogin();
+    const {deviceId} = useDeviceId();
+    const {handleGuestLogin, error, isLoading} = useGuestLogin();
     if (!deviceId) return;
 
     return (

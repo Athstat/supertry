@@ -12,6 +12,12 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import AuthTokenProvider from './components/auth/providers/AuthTokenProvider';
 import NetworkStatusProvider from './components/network/NetworkStatusProvider';
 import SportActionsDefinitionsProvider from './components/stats/SportActionsDefinitionsProvider';
+import { useSyncDeviceId } from './hooks/auth/useSyncDeviceId';
+
+function DeviceIdSync() {
+  useSyncDeviceId();
+  return null;
+}
 
 function App() {
   const [, setError] = useState<Error | null>(null);
@@ -20,15 +26,14 @@ function App() {
   // Auth redirects are now handled by AuthContext and route guards
 
   return (
-
     <GoogleOAuthProvider
       clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id'}
     >
       <ThemeProvider>
         <NetworkStatusProvider>
           <AuthTokenProvider>
-
             <AuthProvider>
+              <DeviceIdSync />
               <ChatProvider>
                 <AthleteProvider>
                   <SportActionsDefinitionsProvider>
@@ -49,7 +54,6 @@ function App() {
                 </AthleteProvider>
               </ChatProvider>
             </AuthProvider>
-
           </AuthTokenProvider>
         </NetworkStatusProvider>
       </ThemeProvider>

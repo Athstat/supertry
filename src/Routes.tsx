@@ -62,7 +62,9 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to={nextRoute} />;
   }
 
-  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
+  return <RouteErrorBoundary>
+    {children}
+  </RouteErrorBoundary>;
 };
 
 const AppRoutes = () => {

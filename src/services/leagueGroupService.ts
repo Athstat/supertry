@@ -6,6 +6,7 @@ import {
   IJoinLeagueGroup,
   ILeagueGroupJoinError,
 } from '../types/leagueGroup';
+import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
 
 export const leagueGroupService = {
   /**
@@ -194,5 +195,28 @@ export const leagueGroupService = {
       await navigator.clipboard.writeText(message);
       // You might want to show a toast notification here
     }
+  },
+
+
+  /** Returns all the leagues the user has joined */
+  getUserJoinedLeagueGroups: async (): Promise<FantasyLeagueGroup[]> => {
+    try {
+      
+      const uri = getUri('/api/v1/league-groups/joined');
+      const response = await fetch(uri, {
+        method: 'GET',
+        headers: getAuthHeader(),
+      });
+
+      if (response.ok) {
+        return await response.json();
+      }
+
+    } catch (error) {
+      console.error('Error in getUserLeagueGroups:', error);
+    }
+    
+    return [];
+
   },
 };

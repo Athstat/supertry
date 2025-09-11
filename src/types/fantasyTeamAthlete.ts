@@ -1,3 +1,4 @@
+import { Gender } from "./athletes";
 import { IProTeam } from "./team";
 
 export type IFantasyTeamAthlete = {
@@ -23,7 +24,7 @@ export type IFantasyTeamAthlete = {
   height?: number,
   weight?: number,
   hidden?: boolean,
-  gender?: "M" | "F",
+  gender?: Gender,
   price?: number,
   power_rank_rating?: number,
   region?: string,
@@ -111,4 +112,19 @@ export type FantasyAthletePointsBreakdownItem = {
   round: number,
   game: string,
   athlete: string
+}
+
+type PlayerSquadAvailability = "AVAILABLE" | "TEAM_NOT_PLAYING";
+
+export type SquadReportItem = {
+  athlete_id: string,
+  player_name: string,
+  image_url: string,
+  team_id: string,
+  team_name: string,
+  team_image_url: string,
+  game_id: string,
+  home_team_name: string,
+  away_team_name: string,
+  availability: PlayerSquadAvailability
 }

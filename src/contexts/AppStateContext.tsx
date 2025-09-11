@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { useAthletes } from './AthleteContext';
-import { analytics } from '../services/anayticsService';
+import { analytics } from '../services/analytics/anayticsService';
 import { useLocation } from 'react-router-dom';
 import {
   isAppStateValid,

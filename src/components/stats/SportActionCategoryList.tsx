@@ -253,7 +253,7 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
           if (!isHoverable) return;
           setShowTooltip(false);
         }}
-        className={`${isHoverable ? 'hover:bg-slate-300/40 dark:hover:bg-slate-600' : ''} cursor-pointer px-0 py-1 rounded-xl flex flex-row items-center justify-between h-12 sm:h-12 leading-tight`}
+        className={`${isHoverable ? 'hover:bg-slate-300/40 dark:hover:bg-slate-600' : ''} ${isLeader ? 'font-semibold bg-primary-200 dark:bg-primary-700 px-1 rounded' : ''} cursor-pointer px-0 py-1 rounded-xl flex flex-row items-center justify-between h-12 sm:h-12 leading-tight`}
       >
         <div className="text-left flex-1 pr-2">
           <SecondaryText className="whitespace-normal break-words overflow-hidden">
@@ -262,11 +262,7 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
         </div>
 
         <div className="text-left flex-none">
-          <p
-            className={`${isLeader ? 'font-semibold bg-primary-200 dark:bg-primary-700 px-1 rounded' : ''}`}
-          >
-            {processActionCount() ?? 0}
-          </p>
+          <p>{processActionCount() ?? 0}</p>
         </div>
       </div>
 

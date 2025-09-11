@@ -13,19 +13,25 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import WarningCard from '../shared/WarningCard';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
 type JoinLeagueByCodeProps = {
 }
 
 export default function JoinLeagueByCode({ }: JoinLeagueByCodeProps) {
 
-  const [code, setCode] = useQueryState('code');
 
-  const isCodeValid = code && code?.length >= 6
+  const [code, setCode] = useQueryState<string>('code');
+
+  const isCodeValid = code && code?.length >= 6;
 
   const fetchKey = code ? swrFetchKeys.getLeaguesByEntryCode(code) : null;
   const { data: leagues, isLoading: loadingLeagues, error } = useSWR(fetchKey, () => fantasyLeagueGroupsService.getLeagueByEntryCode(code ?? ""));
 
+  useEffect(() => {
+    fantasyAnalytics.trackAttemptedJoinLeagueByCode();
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">

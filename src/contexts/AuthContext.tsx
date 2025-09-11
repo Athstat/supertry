@@ -5,6 +5,7 @@ import useSWR, { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
+import { analytics } from '../services/analytics/anayticsService';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -46,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearAccessTokenAndUser
   } = useAuthToken();
 
-  const fetchKey = accessToken ? '/auth-user' : null;
+  const fetchKey = accessToken ? `/auth-user/${atob(accessToken)}` : null;
   const {data: authUser, isLoading, error, mutate} = useSWR(fetchKey, () => authService.whoami(accessToken));
 
   const setAuth = useCallback((token: string, user: DjangoAuthUser) => {
@@ -56,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     clearAccessTokenAndUser();
+    analytics.trackUserLogout();
   }, [clearAccessTokenAndUser]);
 
   if (isLoading) {

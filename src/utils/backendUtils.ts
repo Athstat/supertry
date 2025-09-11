@@ -1,10 +1,14 @@
 import { authTokenService } from '../services/auth/authTokenService';
 
-// Updated to use Django server instead of Node.js server
-const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'; // Django default port
+const DEV = import.meta.env.DEV;
+//const BACKEND_SERVER_URL = DEV ? '' : import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'; // Django default port
+
+const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL;
 
 /** Completes an api url */
 export function getUri(endPoint: string) {
+  // In dev, return a relative path so Vite's proxy forwards to Django (avoids CORS and emulator host issues)
+  //if (DEV) return endPoint;
   return `${BACKEND_SERVER_URL}${endPoint}`;
 }
 
@@ -33,16 +37,18 @@ export function applicationJsonHeader() {
 
 export async function pingServer() {
   try {
-
     const uri = getUri(`/api/v1/ping`);
     const res = await fetch(uri);
 
     if (res.ok) {
-      return (await res.json()) as {ping: string}
+      return (await res.json()) as { ping: string };
     }
-
   } catch (err) {
-    console.log("Failed to reach server at ", getUri(''), err);
+    console.log(
+      'Failed to reach server at ',
+      DEV ? '(dev relative via Vite proxy)' : getUri(''),
+      err
+    );
   }
 
   return undefined;

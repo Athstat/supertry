@@ -11,3 +11,12 @@ export const MAX_COMPARE_PLAYERS = 10;
 
 export const APP_GOOGLE_PLAYSTORE_LINK = 'https://play.google.com/store/apps/details?id=com.scrummy&pcampaignid=web_share';
 export const APP_IOS_APPSTORE_LINK = 'https://apps.apple.com/us/app/scrummy-fantasy-rugby/id6744964910';
+
+export const FANTASY_TEAM_POSITIONS = [
+    { name: 'Front Row', position_class: 'front-row' },
+    { name: 'Second Row', position_class: 'second-row' },
+    { name: 'Back Row', position_class: 'back-row' },
+    { name: 'Halfback', position_class: 'half-back' },
+    { name: 'Back', position_class: 'back' },
+    { name: 'Super Sub', position_class: 'super-sub', isSpecial: true },
+  ];

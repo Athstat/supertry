@@ -16,10 +16,10 @@ type Props = {
 export default function ProFixtureVotingBox({ fixture, className }: Props) {
   const { team_score, game_status, opposition_score, team, opposition_team } = fixture;
 
-  const team_name = team.athstat_name;
-  const opposition_team_name = opposition_team.athstat_name;
+  const team_name = team?.athstat_name;
+  const opposition_team_name = opposition_team?.athstat_name;
 
-  const matchFinal = game_status === 'completed' && team_score && opposition_score;
+  const matchFinal = game_status === 'completed' && team_score !== undefined && opposition_score !== undefined;
 
   const homeTeamWon = matchFinal ? team_score > opposition_score : false;
   const awayTeamWon = matchFinal ? team_score < opposition_score : false;
@@ -105,8 +105,8 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
 
       {gameKickedOff && (
         <VotingOptionsResults
-          homeTeam={fixture.team.athstat_name}
-          awayTeam={fixture.opposition_team.athstat_name}
+          homeTeam={team?.athstat_name || ''}
+          awayTeam={opposition_team?.athstat_name || ''}
           hasScores={fixture.game_status === 'completed'}
           homeTeamWon={homeTeamWon}
           awayTeamWon={awayTeamWon}
@@ -126,7 +126,7 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
             hasUserVoted={votedHomeTeam}
             voteCount={homeVotes.length}
             votePercentage={homePerc}
-            title={`${team_name}`}
+            title={`${team_name} Win`}
             onClick={() => handleVote('home_team')}
             isGreen={!!(votedHomeTeam && matchFinal && homeTeamWon)}
             isRed={!!(votedHomeTeam && matchFinal && awayTeamWon)}
@@ -136,7 +136,7 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
             hasUserVoted={votedAwayTeam}
             voteCount={awayVotes.length}
             votePercentage={awayPerc}
-            title={`${opposition_team_name}`}
+            title={`${opposition_team_name} Win`}
             onClick={() => handleVote('away_team')}
             isGreen={!!(votedAwayTeam && matchFinal && awayTeamWon)}
             isRed={!!(votedAwayTeam && matchFinal && homeTeamWon)}

@@ -8,7 +8,8 @@ import { IComparePlayerStats, ICompareStarRatingsStats } from "../types/compareP
 import { getPlayerAggregatedStat, PlayerAggregateStatAction } from "../types/sports_actions";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
-export const formatPosition = (inStr: string) => {
+export const formatPosition = (inStr?: string) => {
+    inStr = inStr ?? '';
     const parts = inStr.split("-");
     let outStr = "";
 

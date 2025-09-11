@@ -16,6 +16,7 @@ import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
 import { useAuth } from "../../../contexts/AuthContext";
 import PlayerMugshot from "../../shared/PlayerMugshot";
 import { formatPosition } from "../../../utils/athleteUtils";
+import { fixtureAnalytics } from "../../../services/analytics/fixtureAnalytics";
 
 type Props = {
     roster: IRosterItem[];
@@ -81,6 +82,8 @@ export function ProMotmVotingCandidateListItem({ candidate }: ItemProps) {
                     team_id: candidate.team_id
                 });
             }
+
+            fixtureAnalytics.trackPlacedMotmVote(candidate.game_id, candidate.athlete.tracking_id);
 
             // Revalidate vote cache
             const fetchKey = `pro-game-motm-votes/${gameId}`;

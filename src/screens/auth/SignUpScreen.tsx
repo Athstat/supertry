@@ -4,7 +4,7 @@ import { Mail, ArrowRight, User } from 'lucide-react';
 import { AuthLayout } from '../../components/auth/AuthLayout';
 import { RegisterUserReq, SignUpForm } from '../../types/auth';
 import { useAuth } from '../../contexts/AuthContext';
-import { analytics } from '../../services/anayticsService';
+import { analytics } from '../../services/analytics/anayticsService';
 import { emailValidator } from '../../utils/stringUtils';
 import { requestPushPermissionsAfterLogin } from '../../utils/bridgeUtils';
 import InputField, { PasswordInputField } from '../../components/shared/InputField';

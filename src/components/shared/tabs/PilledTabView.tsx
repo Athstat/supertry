@@ -126,9 +126,9 @@ export function PilledTabButton({ active, onClick, children, className }: TabBut
     return (
         <button
             onClick={onClick}
-            className={twMerge(`px-4 py-1.5 w-fit font-medium bg-slate-200 dark:bg-slate-700 text-nowrap dark:text-slate-200 rounded-xl text-xs md:text-sm lg:text-base ${active
-                ? "bg-blue-600 dark:bg-blue-600 text-white dark:blue-blue-500 dark:text-white"
-                : " text-gray-600 hover:text-gray-900"
+            className={twMerge(`px-4 py-1.5 border w-fit font-medium dark:border-slate-600 bg-slate-200 dark:bg-slate-700/40 text-nowrap dark:text-slate-200 rounded-xl text-xs md:text-sm lg:text-base ${active
+                ? "bg-blue-600 border-blue-500 dark:border-blue-500 dark:bg-blue-600 text-white dark:blue-blue-500 dark:text-white"
+                : " text-gray-600 hover:text-gray-900 "
                 }`, className)}
             aria-label={`View ${children} tab`}
             tabIndex={0}

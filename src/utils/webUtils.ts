@@ -1,6 +1,6 @@
 /** returns true if app in production */
 export function isInProduction() {
-    return import.meta.env.MODE === 'production';
+    return import.meta.env.VITE_APP_ENV === 'production';
 }
 
 /** Gets the users device info */

@@ -1,15 +1,20 @@
-import { getPositionFrameBackground } from '../../utils/athleteUtils';
+import { getPositionFrameBackground, getTeamJerseyImage } from '../../utils/athleteUtils';
 import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import TeamJersey from './TeamJersey';
+import darkModeLogo from '../branding/assets/logo_dark_mode.svg';
+
 //import { CircleDollarSign } from 'lucide-react';
 import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 // import PlayerIconsRow from '../players/compare/PlayerIconsRow';
 //import { getPlayerIcons, PlayerIcon } from '../../utils/playerIcons';
 import PlayerIconComponent from '../players/compare/PlayerIconComponent';
+import Experimental from '../shared/ab_testing/Experimental';
+import { usePlayerSquadReport } from '../../hooks/fantasy/usePlayerSquadReport';
 // import { swrFetchKeys } from '../../utils/swrKeys';
 // import useSWR from 'swr';
 // import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
@@ -47,6 +52,9 @@ export function PlayerGameCard({
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
   const [isFrameLoaded, setFrameLoaded] = useState(false);
+
+  const location = useLocation();
+  const isPlayersScreen = location.pathname.startsWith('/players');
 
   //console.log('Player: ', player);
 
@@ -107,6 +115,19 @@ export function PlayerGameCard({
 
   const playerIcons = getRandomIcons(getRandomIconCount());
 
+  let imageUrl;
+  if (player.athlete) {
+    imageUrl = player.athlete.team?.athstat_id
+      ? getTeamJerseyImage(player.athlete.team?.athstat_id)
+      : undefined;
+  } else {
+    imageUrl = player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
+  }
+
+  const teamId = player.athlete?.team?.athstat_id || player.team?.athstat_id;
+
+  const { notAvailable } = usePlayerSquadReport(teamId, player.tracking_id);
+
   return (
     <div
       className={twMerge(
@@ -131,16 +152,18 @@ export function PlayerGameCard({
         />
 
         {/* Icons rail - overlay; doesn't affect layout */}
-        <div
+        {/* <div
           className="absolute top-16 left-[5px] lg:left-[-14px] flex flex-col items-center gap-2 z-10 pointer-events-none"
           aria-hidden="true"
         >
-          {playerIcons.map((iconName, index) => (
-            <div key={`${iconName}-${index}`} className="pointer-events-auto drop-shadow">
-              <PlayerIconComponent iconName={iconName} size={'xs'} />
-            </div>
-          ))}
-        </div>
+          <Experimental>
+            {playerIcons.map((iconName, index) => (
+              <div key={`${iconName}-${index}`} className="pointer-events-auto drop-shadow">
+                <PlayerIconComponent iconName={iconName} size={'xs'} />
+              </div>
+            ))}
+          </Experimental>
+        </div> */}
 
         {/* Player Image - Positioned absolutely and centered on the card */}
         {isFrameLoaded && (
@@ -151,9 +174,16 @@ export function PlayerGameCard({
                 'lg:w-10'
               )}
             >
-              {player.team?.image_url && (
-                <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
-              )}
+              {player.athlete
+                ? player.athlete.team?.image_url && (
+                    <TeamLogo
+                      url={player.athlete.team.image_url}
+                      className="w-6 h-6 lg:w-8 lg:h-8"
+                    />
+                  )
+                : player.team?.image_url && (
+                    <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
+                  )}
             </div>
 
             {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
@@ -164,7 +194,7 @@ export function PlayerGameCard({
                 'lg:min-h-[140px] lg:max-h-[140px] lg:max-w-[140px] relative'
               )}
             >
-              {!playerImageErr && (
+              {/* {!playerImageErr && (
                 <img
                   src={player.image_url}
                   className={twMerge(
@@ -178,9 +208,30 @@ export function PlayerGameCard({
                   )}
                   onError={() => setPlayerImageErr(true)}
                 />
-              )}
+              )} */}
+              {/* {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />} */}
 
-              {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />}
+              <img
+                src={imageUrl}
+                className={twMerge(
+                  'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px]  object-cover object-top translate-y-[5%]',
+                  'lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px]',
+                  '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                  '[mask - repeat:no-repeat] [mask-size:100%_100%]',
+                  '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                  '[-webkit-mask-repeat:no-repeat]',
+                  '[-webkit-mask-size:100%_100%',
+                  notAvailable && !isPlayersScreen && 'grayscale opacity-50'
+                )}
+                onError={() => setPlayerImageErr(true)}
+              />
+              {notAvailable && !isPlayersScreen && (
+                <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
+                  <span className="bg-black/70 text-white text-xs lg:text-sm font-semibold px-2 py-1 rounded">
+                    Not Playing ⚠️
+                  </span>
+                </div>
+              )}
 
               <div className="flex flex-col absolute bottom-0 items-center p-1 justify-center">
                 <p className="text-[15px] lg:text-xs truncate max-w-[100px] lg:max-w-[130px]">
@@ -193,7 +244,7 @@ export function PlayerGameCard({
               <div
                 className="w-full flex flex-row items-center justify-center "
                 style={{
-                  width: '90%',
+                  width: '100%',
                   border: '1px solid ' + getBorderColor(),
                   borderRadius: '2px',
                 }}
@@ -202,11 +253,11 @@ export function PlayerGameCard({
                   className="flex flex-col items-center w-full"
                   style={{ borderRight: '1px solid ' + getBorderColor() }}
                 >
-                  <p className="text-sm font-bold">{player.price}</p>
+                  <p className="text-xs font-bold">{player.price}</p>
                   <p className="text-xs">Value</p>
                 </div>
                 <div className="flex flex-col items-center w-full">
-                  <p className="text-sm font-bold">{player.power_rank_rating}</p>
+                  <p className="text-xs font-bold">{player.power_rank_rating}</p>
                   <p className="text-xs">PR</p>
                 </div>
               </div>
@@ -214,7 +265,7 @@ export function PlayerGameCard({
 
             <div className="flex text-[10px] -mt-1 lg:text-xs flex-row items-center justify-center gap-2">
               <p className="font-bold">{player.position}</p>
-              <ScrummyDarkModeLogo className="w-8 h-8" />
+              <img className="w-8 h-8" src={darkModeLogo} alt="scrummy_logo" />
             </div>
           </div>
         )}

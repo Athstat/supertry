@@ -12,6 +12,8 @@ import { PlayerGameCard } from '../components/player/PlayerGameCard';
 import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
 import { Toast } from '../components/ui/Toast';
 import { AnimatePresence, motion } from 'framer-motion';
+import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
+import { analytics } from '../services/analytics/anayticsService';
 
 // Helper to ensure we only render players with valid image URLs
 const hasValidImageUrl = (u?: string | null): boolean => {
@@ -98,7 +100,8 @@ export default function PostSignUpWelcomeScreen() {
   }, [currIndex, featuredPlayers, athletes]);
 
   return (
-    <div className="flex dark:bg-black flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
+    <ScrummyMatrixBackground>
+          <div className="flex dark:bg-black flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
       <div className="flex flex-col overflow-y-auto no-scrollbar">
         {currIndex === 0 && (
           <AnimatePresence mode="wait">
@@ -174,6 +177,7 @@ export default function PostSignUpWelcomeScreen() {
         <TabProgressDots items={tabs} currIndex={currIndex} setIndex={setIndex} />
       </div>
     </div>
+    </ScrummyMatrixBackground>
   );
 }
 
@@ -313,65 +317,70 @@ function WelcomeCTAScreen() {
 
   const handleStartBuilding = async () => {
     if (featuredLeague) {
-      await handleJoinLeague(featuredLeague, `/league/${featuredLeague.id}?journey=team-creation`);
+      const nextUrl = `/league/${featuredLeague.id}?journey=team-creation`;
+      analytics.trackOnboardingCtaContinued(nextUrl);
+      await handleJoinLeague(featuredLeague, nextUrl);
     } else {
-      navigate('/leagues?active_tab=discover');
+      const nextUrl = '/leagues?active_tab=discover';
+      analytics.trackOnboardingCtaContinued(nextUrl);
+      navigate(nextUrl);
     }
   };
 
   const handleLookAround = () => {
+    analytics.trackOnboardingSkipped();
     navigate('/dashboard');
   };
 
-  if (!featuredLeague || featuredPlayers.length === 0) {
-    return (
-      <div className="text-center flex flex-col gap-4 h-full items-center justify-start">
-        <ScrummyLogo className="w-52 h-52 " />
+  // if (!featuredLeague || featuredPlayers.length === 0) {
+  //   return (
+  //     <div className="text-center flex flex-col gap-4 h-full items-center justify-start">
+  //       <ScrummyLogo className="w-52 h-52 " />
 
-        <div className="grid grid-cols-3 flex-wrap gap-4">
-          {top5Athletes.map(a => {
-            return (
-              <PlayerGameCard
-                player={a}
-                key={a.tracking_id}
-                className="h-[200px]"
-                hideTeamLogo
-                hidePrice
-                detailsClassName="pb-0"
-              />
-            );
-          })}
-        </div>
+  //       <div className="grid grid-cols-3 flex-wrap gap-4">
+  //         {top5Athletes.map(a => {
+  //           return (
+  //             <PlayerGameCard
+  //               player={a}
+  //               key={a.tracking_id}
+  //               className="h-[200px]"
+  //               hideTeamLogo
+  //               hidePrice
+  //               detailsClassName="pb-0"
+  //             />
+  //           );
+  //         })}
+  //       </div>
 
-        <div>
-          <h1 className="text-3xl font-bold  ">Building Your Team</h1>
-        </div>
+  //       <div>
+  //         <h1 className="text-3xl font-bold  ">Building Your Team</h1>
+  //       </div>
 
-        <div>
-          <p>Pick your team of 5 players, and compete globally and play with your friends!</p>
-        </div>
+  //       <div>
+  //         <p>Pick your team of 5 players, and compete globally and play with your friends!</p>
+  //       </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <PrimaryButton
-            onClick={handleStartBuilding}
-            isLoading={isJoining}
-            disabled={isJoining}
-            className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
-          >
-            Start Building Your Team
-          </PrimaryButton>
+  //       <div className="flex flex-col items-center justify-center">
+  //         <PrimaryButton
+  //           onClick={handleStartBuilding}
+  //           isLoading={isJoining}
+  //           disabled={isJoining}
+  //           className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
+  //         >
+  //           Start Building Your Team
+  //         </PrimaryButton>
 
-          <button
-            onClick={handleLookAround}
-            disabled={isJoining}
-            className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
-          >
-            Look Around First
-          </button>
-        </div>
-      </div>
-    );
-  }
+  //         <button
+  //           onClick={handleLookAround}
+  //           disabled={isJoining}
+  //           className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
+  //         >
+  //           Look Around First
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const top2Players = [...featuredPlayers].slice(0, 2);
 
@@ -388,7 +397,7 @@ function WelcomeCTAScreen() {
               return (
                 <PlayerGameCard
                   player={a}
-                  frameClassName=''
+                  frameClassName=""
                   detailsClassName=""
                   hideTeamLogo
                   hidePrice
@@ -418,13 +427,13 @@ function WelcomeCTAScreen() {
             Start Picking Your Team
           </PrimaryButton>
 
-          {/* <button
+          <button
             onClick={handleLookAround}
             disabled={isJoining}
             className="rounded-3xl text-slate-700 dark:text-slate-200 w-fit p-4 h-10 w-22 px-10 py-2"
           >
             Look Around First
-          </button> */}
+          </button>
         </div>
 
         {error && (

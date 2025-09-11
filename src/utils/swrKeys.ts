@@ -119,5 +119,26 @@ export const swrFetchKeys = {
 
     getSportActionsDefinitions: () => {
         return '/sport-actions-definitions';
+    },
+
+    getAthleteById: (id: string) => {
+        return `/athletes/${id}`;
+    },
+
+    getUserFantasyLeagueRoundTeam: (leagueId: string, roundId: string| number, userId?: string) => {
+        userId = userId ? userId: authService.getUserInfoSync()?.kc_id;
+        return `/fantasy-league-groups/${leagueId}/round/${roundId}/user/${userId}`;
+    },
+
+    getFantasyLeagueGroupStandings: (leagueGroupId: string) => {
+        return `/fantasy-league-group/${leagueGroupId}/standings`;
+    },
+
+    getPlayerSquadReport: (teamId: string | number, trackingId: string) => {
+        return `/fantasy-league-teams/${teamId}/athletes/${trackingId}/squad-report`;
+    },
+
+    getLeagueRoundScoringOverview: (leagueRoundId: string | number) => {
+        return `/fantasy-league-rounds/${leagueRoundId}/scoring-overview`;
     }
 }

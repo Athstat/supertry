@@ -10,6 +10,7 @@ import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
 import GameHighlightsCard from '../video/GameHighlightsCard';
 import ProFixtureVotingBox from './voting/ProFixtureVotingBox';
+import { analytics } from '../../services/analytics/anayticsService';
 type Props = {
   fixture: IFixture;
   className?: string;
@@ -47,12 +48,17 @@ export default function FixtureCard({
   const [showModal, setShowModal] = useState(false);
   const toogle = () => setShowModal(!showModal);
 
+  const handleClick = () =>{
+    toogle();
+    analytics.trackFixtureCardClicked(fixture);
+  }
+
   const { gameKickedOff } = fixtureSumary(fixture);
 
   return (
     <>
       <div
-        onClick={toogle}
+        onClick={handleClick}
         className={twMerge(
           'p-4 flex cursor-pointer justify-center flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
           className
@@ -77,14 +83,14 @@ export default function FixtureCard({
               <div className="flex flex-col gap-4 items-center w-full justify-start">
                 {showLogos && (
                   <TeamLogo
-                    url={fixture.team.image_url}
-                    teamName={fixture.team.athstat_name}
+                    url={fixture?.team?.image_url}
+                    teamName={fixture?.team?.athstat_name}
                     className="w-10 h-10"
                   />
                 )}
 
                 <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
-                  {fixture.team.athstat_name}
+                  {fixture?.team?.athstat_name}
                 </p>
               </div>
 
@@ -134,8 +140,8 @@ export default function FixtureCard({
               <div className="flex flex-col gap-4 items-center w-full justify-end">
                 {showLogos && (
                   <TeamLogo
-                    url={fixture.opposition_team.image_url ?? fixture.opposition_team.image_url}
-                    teamName={fixture.opposition_team.athstat_name}
+                    url={fixture?.opposition_team?.image_url ?? fixture?.opposition_team?.image_url}
+                    teamName={fixture?.opposition_team?.athstat_name}
                     className="w-10 h-10"
                   />
                 )}
@@ -146,7 +152,7 @@ export default function FixtureCard({
                     awayTeamWon && ''
                   )}
                 >
-                  {fixture.opposition_team.athstat_name}
+                  {fixture?.opposition_team?.athstat_name}
                 </p>
               </div>
             </div>
@@ -174,8 +180,8 @@ type ModalProps = {
   fixture: IFixture;
 };
 
-function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
-  const title = `${fixture.team.athstat_name} vs ${fixture.opposition_team.athstat_name}`;
+export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
+  const title = `${fixture?.team?.athstat_name} vs ${fixture?.opposition_team?.athstat_name}`;
 
   const navigate = useNavigate();
 
@@ -203,11 +209,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
             className="w-14 h-14 lg:w-20 lg:h-20"
-            url={fixture.team.image_url}
-            teamName={fixture.team.athstat_name}
+            url={fixture?.team?.image_url}
+            teamName={fixture?.team?.athstat_name}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
-            {fixture.team.athstat_name}
+            {fixture?.team?.athstat_name}
           </p>
         </div>
 
@@ -219,11 +225,11 @@ function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
           <TeamLogo
             className="w-14 h-14 lg:w-20 lg:h-20"
-            teamName={fixture.opposition_team.athstat_name}
-            url={fixture.opposition_team.image_url ?? fixture.opposition_team.image_url}
+            teamName={fixture?.opposition_team?.athstat_name}
+            url={fixture?.opposition_team?.image_url ?? fixture?.opposition_team?.image_url}
           />
           <p className="text-xs md:text-sm lg:text-base dark:text-white text-wrap text-center">
-            {fixture.opposition_team.athstat_name}
+            {fixture?.opposition_team?.athstat_name}
           </p>
         </div>
       </div>

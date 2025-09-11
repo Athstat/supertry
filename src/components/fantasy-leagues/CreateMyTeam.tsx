@@ -4,7 +4,7 @@ import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { Position } from '../../types/position';
 import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { seasonService } from '../../services/seasonsService';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import { IProAthlete } from '../../types/athletes';
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -14,9 +14,22 @@ import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { leagueService } from '../../services/leagueService';
 import { authService } from '../../services/authService';
 import { ICreateFantasyTeamAthleteItem } from '../../types/fantasyTeamAthlete';
-import { Check, Loader } from 'lucide-react';
+import { Check, Info, Loader } from 'lucide-react';
 import { Toast } from '../ui/Toast';
 import { LoadingState } from '../ui/LoadingState';
+import { useAtomValue } from 'jotai';
+import { isGuestUserAtom } from '../../state/authUser.atoms';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import NoContentCard from '../shared/NoContentMessage';
+import { useTabView } from '../shared/tabs/TabView';
+import {
+  teamPresetsService,
+  TeamPreset,
+  CreatePresetPayload,
+} from '../../services/fantasy/teamPresetsService';
+
+import { analytics } from '../../services/analytics/anayticsService';
+import Experimental from '../shared/ab_testing/Experimental';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -44,6 +57,11 @@ export default function CreateMyTeam({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showClaimAccountModal, setShowClaimAccountModal] = useState(false);
+  // Presets
+  const [presets, setPresets] = useState<TeamPreset[]>([]);
+  const [isLoadingPresets, setIsLoadingPresets] = useState(false);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('');
 
   const totalSpent = Object.values(selectedPlayers).reduce(
     (sum, player) => sum + (player.price || 0),
@@ -69,11 +87,19 @@ export default function CreateMyTeam({
 
   const { leagueId } = useParams();
 
+  const navigate = useNavigate();
+  const { navigate: tabNavigate } = useTabView();
+
+  const isGuestAccount = useAtomValue(isGuestUserAtom);
+
   console.log('leagueRound: ', leagueRound);
 
   useEffect(() => {
     const loadAthletes = async () => {
       if (!leagueRound) return;
+
+      analytics.trackTeamCreationStarted(leagueRound);
+
       try {
         //const athletes = await seasonService.getSeasonAthletes(leagueId);
         const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
@@ -94,6 +120,28 @@ export default function CreateMyTeam({
     };
 
     loadAthletes();
+  }, [leagueRound]);
+
+  // Load saved team presets for the season (scoped to current user)
+  useEffect(() => {
+    const loadPresets = async () => {
+      if (!leagueRound) return;
+      try {
+        setIsLoadingPresets(true);
+        const userInfo = await authService.getUserInfo();
+        if (!userInfo?.kc_id) return;
+        const res = await teamPresetsService.list({
+          userId: userInfo.kc_id,
+          seasonId: Number(leagueRound.season_id as any),
+        });
+        setPresets(res);
+      } catch (e) {
+        console.error('Failed to load team presets', e);
+      } finally {
+        setIsLoadingPresets(false);
+      }
+    };
+    loadPresets();
   }, [leagueRound]);
 
   const positions = [
@@ -189,6 +237,8 @@ export default function CreateMyTeam({
       // Show success modal
       setShowSuccessModal(true);
 
+      analytics.trackTeamCreationCompleted(leagueRound, createdTeam);
+
       // If parent wants to handle success, notify it
       if (onTeamCreated) {
         onTeamCreated(createdTeam);
@@ -226,6 +276,90 @@ export default function CreateMyTeam({
     );
   }
 
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+
+  const handleGoToStandings = () => {
+    tabNavigate('standings');
+  };
+
+  // Build preset athlete payload from current selection
+  const buildPresetAthletes = () => {
+    return positions
+      .map((p, index) => {
+        const selected = selectedPlayers[p.name];
+        if (!selected) return undefined;
+        const isSuperSub = p.isSpecial === true;
+        return {
+          athlete_id: selected.tracking_id,
+          purchase_price: selected.price || 0,
+          is_starting: !isSuperSub,
+          slot: index + 1,
+          is_captain: selected.tracking_id === captainId || false,
+        };
+      })
+      .filter(Boolean) as any[];
+  };
+
+  const handleSavePreset = async () => {
+    if (Object.keys(selectedPlayers).length !== 6) {
+      showToast('Complete your team before saving a preset', 'info');
+      return;
+    }
+    try {
+      const userInfo = await authService.getUserInfo();
+      if (!userInfo?.kc_id) {
+        showToast('You must be logged in to save a preset');
+        return;
+      }
+      const payload: CreatePresetPayload = {
+        user_id: userInfo.kc_id,
+        name: `Preset ${presets.length + 1}`,
+        season_id: Number(leagueRound?.season_id as any),
+        athletes: buildPresetAthletes(),
+      };
+      const created = await teamPresetsService.create(payload);
+      setPresets(prev => [created, ...prev]);
+      setSelectedPresetId(created.id);
+      showToast('Preset saved', 'success');
+    } catch (e) {
+      console.error('Failed to save preset', e);
+      showToast('Failed to save preset');
+    }
+  };
+
+  const applyPresetById = (id: string) => {
+    const preset = presets.find(p => p.id === id);
+    if (!preset) return;
+    const next: Record<string, IProAthlete> = {};
+    let nextCaptain: string | null = null;
+
+    preset.athletes.forEach(item => {
+      const index = (item.slot ?? 1) - 1;
+      const pos = positions[index];
+      const ath = players.find(a => a.tracking_id === item.athlete_id);
+      if (pos && ath) {
+        next[pos.name] = ath;
+        if (item.is_captain) nextCaptain = item.athlete_id;
+      }
+    });
+
+    setSelectedPlayers(next);
+    setCaptainId(nextCaptain);
+    showToast('Preset applied', 'success');
+  };
+
+  if (isLocked) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-1">
+        <NoContentCard message="Whoops! Round has been locked, you can't pick your team now" />
+
+        <PrimaryButton onClick={handleGoToStandings} className="w-fit">
+          View Standings
+        </PrimaryButton>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full py-4">
       {leagueRound && (
@@ -258,8 +392,39 @@ export default function CreateMyTeam({
         </div>
       </div>
 
-      {/* Save button */}
-      <div className="mt-3 relative z-[50]">
+      {/* Presets + Save */}
+
+      <div className="mt-3 relative z-[50] space-y-3">
+        {/* Preset dropdown and save-as-preset */}
+        {/* <div className="flex items-center gap-2">
+            <select
+              className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
+              value={selectedPresetId}
+              onChange={e => {
+                const id = e.target.value;
+                setSelectedPresetId(id);
+                if (id) applyPresetById(id);
+              }}
+            >
+              <option value="">
+                {isLoadingPresets ? 'Loading presets...' : 'Choose a saved team...'}
+              </option>
+              {presets.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+
+            <button
+              className="rounded-lg px-3 py-2 border bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-60"
+              onClick={handleSavePreset}
+              disabled={Object.keys(selectedPlayers).length !== 6}
+            >
+              Save as preset
+            </button>
+          </div> */}
+
         <PrimaryButton
           className="w-full"
           disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
@@ -342,7 +507,7 @@ export default function CreateMyTeam({
                         const copy = { ...prev } as Record<string, IProAthlete>;
                         delete copy[p.name];
                         return copy;
-                      });    
+                      });
                       if (captainId === selected.tracking_id) setCaptainId(null);
                     }}
                   >
@@ -372,10 +537,10 @@ export default function CreateMyTeam({
             setIsModalOpen(false);
           }}
           onClose={() => setIsModalOpen(false)}
-          roundId={parseInt(selectedRoundId || '0')}
+          roundId={Number(selectedRoundId ?? 0)}
           roundStart={leagueRound?.start_round ?? undefined}
           roundEnd={leagueRound?.end_round ?? undefined}
-          leagueId={leagueId}
+          leagueId={leagueRound?.official_league_id}
         />
       )}
 
@@ -401,7 +566,7 @@ export default function CreateMyTeam({
               </div>
               <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Joining the Scrum...</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Please wait while we save your team.
+                Please wait while we save your team
               </p>
             </div>
           </div>
@@ -419,19 +584,60 @@ export default function CreateMyTeam({
               <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Your team has been successfully submitted
-                {leagueRound ? ` to ${leagueRound.title}` : ''}.
+                {leagueRound ? ` to ${leagueRound.title}` : ''}
               </p>
               <PrimaryButton
                 className="w-full"
                 onClick={() => {
                   setShowSuccessModal(false);
-                  if (onViewTeam) {
+                  if (isGuestAccount) {
+                    setShowClaimAccountModal(true);
+                  } else if (onViewTeam) {
                     onViewTeam();
                   }
                 }}
               >
                 Let's Go!
               </PrimaryButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Claim/Complete Account Modal */}
+      {showClaimAccountModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+          <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 mb-4">
+                <Info className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Complete Your Account</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Claim your account to secure your team, and manage your profile and notifications
+              </p>
+              <div className="flex flex-col gap-2">
+                <PrimaryButton
+                  className="w-full rounded-lg py-2"
+                  onClick={() => {
+                    setShowClaimAccountModal(false);
+                    navigate('/profile');
+                  }}
+                >
+                  Go to Profile
+                </PrimaryButton>
+                <PrimaryButton
+                  className="w-full rounded-lg py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700"
+                  onClick={() => {
+                    setShowClaimAccountModal(false);
+                    if (onViewTeam) {
+                      onViewTeam();
+                    }
+                  }}
+                >
+                  Maybe later
+                </PrimaryButton>
+              </div>
             </div>
           </div>
         </div>

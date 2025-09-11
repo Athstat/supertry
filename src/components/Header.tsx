@@ -4,12 +4,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
 import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
+import { useAppState } from "../contexts/AppStateContext";
+import { isInProduction } from "../utils/webUtils";
+import BetaTag from "./branding/BetaTag";
 
 export function Header() {
   
   const navigate = useNavigate();
   const location = useLocation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const isInQa = isInProduction() !== true;
 
   const handleProfileClick = () => {
     navigate("/profile");
@@ -38,6 +43,8 @@ export function Header() {
             >
               <ScrummyLogoHorizontal className="" />
             </div>
+
+            { isInQa && <BetaTag />}
           </div>
 
           <div className="flex items-center gap-4">

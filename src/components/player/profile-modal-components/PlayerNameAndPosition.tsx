@@ -1,17 +1,20 @@
-import { IProAthlete } from '../../../types/athletes';
 import SecondaryText from '../../shared/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
+import { usePlayerData } from '../provider/PlayerDataProvider';
 
 type Props = {
-  player: IProAthlete;
 };
 
-export default function PlayerNameAndPosition({ player }: Props) {
+export default function PlayerNameAndPosition({}: Props) {
   // console.log('player: ', player);
 
   // const starRatings = useAtomValue(playerProfileCurrStarRatings);
   // const stats = useAtomValue(playerProfileCurrStatsAtom);
 
+  const {player} = usePlayerData();
+
+  if (!player) return;
+  
   return (
     <>
       <div className="flex flex-row items-center justify-between">

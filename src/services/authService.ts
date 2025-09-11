@@ -20,13 +20,14 @@ import {
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
 import { validateUsername } from '../utils/authUtils';
-import { isGuestEmail } from '../utils/deviceIdUtils';
+import { isGuestEmail } from '../utils/deviceId/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
-import { analytics } from './anayticsService';
+import { analytics } from './analytics/anayticsService';
 import { logger } from './logger';
 import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService';
 import { mutate } from 'swr';
 import { swrFetchKeys } from '../utils/swrKeys';
+import { DeviceIdPair } from '../types/device';
 
 // OAuth types
 interface SocialAuthData {
@@ -36,9 +37,14 @@ interface SocialAuthData {
   name?: string;
 }
 
+type DeviceIdData = {
+  realDeviceId: string;
+  storedDeviceId: string;
+};
+
 export const authService = {
   /** Authenticates a guest user using their device's id */
-  async authenticateAsGuestUser(deviceId: string): RestPromise<DjangoDeviceAuthRes> {
+  async authenticateAsGuestUser(deviceId: DeviceIdData): RestPromise<DjangoDeviceAuthRes> {
     try {
       const uri = getUri('/api/v1/auth/device');
 
@@ -48,8 +54,12 @@ export const authService = {
         body: JSON.stringify({ device_id: deviceId }),
       });
 
+      console.log('Device auth response: ', res);
+
       if (res.ok) {
         const json = (await res.json()) as DjangoDeviceAuthRes;
+
+        console.log('Device auth json response: ', json);
 
         authTokenService.saveGuesAccountTokens(json.token, json.user);
         return { data: json };
@@ -79,23 +89,25 @@ export const authService = {
     try {
       console.log('Starting to claim guest account ');
       const userInfo = await authService.whoami();
-      console.log('Who am i', userInfo);
 
       if (!userInfo || !authService.isGuestAccount()) {
         return { error: { message: 'Not a guest account or not logged in' } };
       }
 
-      if (data.username) {
-        const isUsernameValid = validateUsername(data.username);
+      // was causing claim account to hang
+      // if (data.username) {
+      //   console.log('Who am i', userInfo);
+      //   const isUsernameValid = validateUsername(data.username);
+      //   console.log('isUsernameValid', isUsernameValid);
 
-        if (!isUsernameValid)
-          return {
-            error: {
-              error: 'Invalid Username',
-              message: `Username ${data.username} is invalid`,
-            },
-          };
-      }
+      //   if (!isUsernameValid)
+      //     return {
+      //       error: {
+      //         error: 'Invalid Username',
+      //         message: `Username ${data.username} is invalid`,
+      //       },
+      //     };
+      // }
 
       const isEmailValid = emailValidator(data.email);
 
@@ -156,7 +168,7 @@ export const authService = {
 
       if (response.ok) {
         const json = (await response.json()) as DjangoRegisterRes;
-
+        analytics.trackUserSignUp('Email');
         authTokenService.saveLoginTokens(json.token, json.user);
         return { data: json };
       }
@@ -199,6 +211,7 @@ export const authService = {
         const json = (await res.json()) as DjangoLoginRes;
 
         authTokenService.saveLoginTokens(json.token, json.user);
+        analytics.trackUserSignIn('Email');
         return { data: json, message: 'Login Successful' };
       }
 
@@ -210,7 +223,7 @@ export const authService = {
         return { message: 'Incorrect password' };
       }
 
-      analytics.trackUserSignIn('Email');
+      
     } catch (error) {
       logger.error('Error loging in user with email ', email, ' error: ', error);
       console.log('Login Error ', error);
@@ -280,7 +293,7 @@ export const authService = {
     try {
       const user = await authService.whoami();
 
-      console.log('userrrr: ', user);
+      console.log('User Info: ', user);
 
       if (user) {
         authTokenService.saveUserToLocalStorage(user);
@@ -290,6 +303,46 @@ export const authService = {
       return user;
     } catch (error) {
       console.log('Error updating user info ', error);
+    }
+
+    return undefined;
+  },
+
+  /** Updates user realDeviceId and storedDeviceId on the backend and refreshes local cache */
+  updateUserDeviceId: async (deviceId: DeviceIdPair) => {
+    try {
+      const token = authTokenService.getAccessToken();
+      if (!token) {
+        return undefined;
+      }
+
+      const uri = getUri('/api/v1/auth/me/device');
+      const res = await fetch(uri, {
+        method: 'POST',
+        headers: getAuthHeader(),
+        body: JSON.stringify({
+          realDeviceId: deviceId.realDeviceId,
+          storedDeviceId: deviceId.storedDeviceId,
+        }),
+      });
+
+      if (res.ok) {
+        const updatedUser = (await res.json()) as DjangoAuthUser;
+        console.log('Updated user (device sync): ', updatedUser);
+        authTokenService.saveUserToLocalStorage(updatedUser);
+        await mutate(swrFetchKeys.getAuthUserProfileKey());
+        return updatedUser;
+      }
+
+      // Log server error body if available
+      try {
+        const errJson = await res.json();
+        logger.error('Failed to update device ids', errJson);
+      } catch {
+        logger.error('Failed to update device ids', res.status);
+      }
+    } catch (error) {
+      console.log('Error updating user device ids ', error);
     }
 
     return undefined;
