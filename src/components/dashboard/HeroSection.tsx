@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import BlueGradientCard from "../shared/BlueGradientCard";
+import PrimaryButton from "../shared/buttons/PrimaryButton";
+import NewTag from "../branding/NewTag";
 
 type Props = {
 };
@@ -8,25 +10,37 @@ export function HeroSection({ }: Props) {
   const navigate = useNavigate();
   const navigateToLeagues = () => navigate("/leagues");
 
-  return (
-    <BlueGradientCard className="rounded-2xl p-4 mb-6 text-white cursor-pointer hover:animate-glow hover:to-blue-950  transition-all ease-in delay-300">
-        <div onClick={navigateToLeagues} className="flex flex-col gap-2 p-3">
+  const termsAndConditionsLink = "https://scrummy-app.com/#/scrum6-rules";
 
-          <h1 className="text-lg lg:text-xl font-bold">
-            New Feature Drop!
-          </h1>
+  return (
+    <BlueGradientCard className="cursor-pointer">
+      <div className="flex flex-col gap-4 p-3">
+
+        <div>
+          <div>
+
+            <h1 className="text-lg lg:text-xl font-bold">
+              SCRUM6 Challenge is LIVE!
+            </h1>
+          </div>
 
           <p className="text-md opacity-90">
-            Create your own league - live now! Invite your friends. Set the rules. Battle for glory.
+            Climb the leaderboard, crack the Top 3, and score a Rugby Swag Bag. 🏉🔥
           </p>
-
-          <button
-            className="bg-white w-fit text-primary-600 px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center gap-2"
-          >
-            Take Me There
-          </button>
-
         </div>
+
+        <p>⏰ Open now → Closes Sat, 9/13 @ 12:01 AM EST</p>
+
+        <div className="flex flex-row items-center gap-2" >
+
+          <PrimaryButton onClick={navigateToLeagues} className="w-fit bg-white text-blue-500 hover:bg-white hover:text-blue-600 dark:bg-white dark:text-blue-500 hover:dark:bg-white hover:dark:text-blue-600">
+            Take Me There
+          </PrimaryButton>
+
+          <a href={termsAndConditionsLink} target="blank" className="hover:font-medium ease-out delay-300" >Terms & Conditions</a>
+        </div>
+
+      </div>
 
       {/* {leagueOnTheClock && (
         <JoinDeadlineCountdown
