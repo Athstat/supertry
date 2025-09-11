@@ -23,7 +23,6 @@ export default function ViewMyTeam({
   onTeamUpdated: () => Promise<void>;
   onEditChange?: (isEditing: boolean) => void;
 }) {
-
   const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
 
   const totalSpent = team.athletes.reduce((sum, player) => sum + (player.price || 0), 0);
@@ -39,8 +38,8 @@ export default function ViewMyTeam({
 
   const selectedCount = (team.athletes || []).length;
 
-
-  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+  //const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+  const isLocked = false;
 
   return (
     <div className="w-full py-4">
@@ -71,19 +70,19 @@ export default function ViewMyTeam({
               'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 dark:border-slate-700',
               viewMode === 'edit' && 'bg-blue-600 text-white',
               isLocked && 'opacity-60 cursor-not-allowed'
-
             )}
           >
             <p>Edit</p>
-            {isLocked && <Lock className='w-4 h-4' />}
+            {isLocked && <Lock className="w-4 h-4" />}
           </button>
           <button
             type="button"
             onClick={() => setViewMode('pitch')}
-            className={`${viewMode === 'pitch'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-              } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+            className={`${
+              viewMode === 'pitch'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
           >
             Pitch
           </button>
@@ -126,11 +125,13 @@ export default function ViewMyTeam({
       ) : (
         // Pitch view
         <Fragment>
-          {leagueRound && <MyTeamPitchView
-            editableAthletesBySlot={editableAthletesBySlot}
-            leagueRound={leagueRound}
-            team={team}
-          />}
+          {leagueRound && (
+            <MyTeamPitchView
+              editableAthletesBySlot={editableAthletesBySlot}
+              leagueRound={leagueRound}
+              team={team}
+            />
+          )}
         </Fragment>
       )}
     </div>
