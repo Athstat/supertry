@@ -43,15 +43,11 @@ export default function UserRoundOverviewCard({ leagueRound, userTeam, onViewTea
 
                 <div className="flex flex-row w-full items-center justify-between" >
                     <div>
-                        <h3 className="font-bold text-xl" >{userTeam.team.name}</h3>
+                        <h3 className="font-bold " >{userTeam.team.name}</h3>
                         <div className="flex flex-row items-center gap-1" >
                             {isLocked && <Lock className="w-4 h-4" />}
-                            <p>{leagueRound.title}</p>
+                            <p className="text-sm" >{leagueRound.title}</p>
                         </div>
-                    </div>
-
-                    <div>
-                        <ArrowRight className="w-4 h-4" />
                     </div>
                 </div>
 

@@ -11,10 +11,11 @@ import ProFixtureVotingBox from "./voting/ProFixtureVotingBox"
 
 type Props = {
     fixture: IFixture,
-    className?: string
+    className?: string,
+    hideVotingBox?: boolean
 }
 
-export default function SmallFixtureCard({ fixture, className }: Props) {
+export default function SmallFixtureCard({ fixture, className, hideVotingBox }: Props) {
 
     const { matchFinal, gameKickedOff } = fixtureSumary(fixture);
     const [showModal, setShowModal] = useState(false);
@@ -37,7 +38,7 @@ export default function SmallFixtureCard({ fixture, className }: Props) {
                 )}
             >
                 <div>
-                    <SecondaryText>{fixture.competition_name} - Week {fixture.round}</SecondaryText>
+                    <SecondaryText className="text-xs lg:text-sm" >{fixture.competition_name} - Week {fixture.round}</SecondaryText>
                 </div>
 
                 <div className="flex flex-row items-center gap-2 divide-x dark:divide-slate-700" >
@@ -49,13 +50,13 @@ export default function SmallFixtureCard({ fixture, className }: Props) {
                                 <TeamLogo
                                     url={fixture.team?.image_url}
                                     teamName={fixture.team?.athstat_name}
-                                    className="w-8 h-8"
+                                    className="w-5 h-5"
                                 />
-                                <p className="text-sm" >{fixture.team?.athstat_name}</p>
+                                <p className="text-xs lg:text-sm" >{fixture.team?.athstat_name}</p>
                             </div>
 
                             <div>
-                                {gameKickedOff ? <p>{fixture.team_score}</p> : ''}
+                                {gameKickedOff ? <p className="text-sm" >{fixture.team_score}</p> : ''}
                             </div>
                         </div>
 
@@ -65,28 +66,28 @@ export default function SmallFixtureCard({ fixture, className }: Props) {
                                 <TeamLogo
                                     url={fixture.opposition_team?.image_url}
                                     teamName={fixture?.opposition_team?.athstat_name}
-                                    className="w-8 h-8"
+                                    className="w-5 h-5"
                                 />
-                                <p className="text-sm" >{fixture?.opposition_team?.athstat_name}</p>
+                                <p className="text-xs lg:text-sm" >{fixture?.opposition_team?.athstat_name}</p>
                             </div>
 
 
 
                             <div>
-                                {gameKickedOff ? <p>{fixture.opposition_score}</p> : ''}
+                                {gameKickedOff ? <p className="text-sm" >{fixture.opposition_score}</p> : ''}
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex text-xs flex-col w-1/3 p-2 items-center justify-center" >
-                        {!matchFinal && fixture.kickoff_time && <SecondaryText className="text-xs" >{format(fixture.kickoff_time, 'HH:mm')}</SecondaryText>}
-                        {matchFinal && <SecondaryText className="text-xs" >Final</SecondaryText>}
-                        {fixture.kickoff_time && <SecondaryText className="text-xs" >{format(fixture.kickoff_time, 'dd MMM yyy')}</SecondaryText>}
+                    <div className="flex text-[10px] lg:text-xs text-center flex-col w-1/3 p-2 items-center justify-center" >
+                        {!matchFinal && fixture.kickoff_time && <SecondaryText className="text-[10px] lg:text-xs" >{format(fixture.kickoff_time, 'HH:mm')}</SecondaryText>}
+                        {matchFinal && <SecondaryText className="text-[10px] lg:text-xs" >Final</SecondaryText>}
+                        {fixture.kickoff_time && <SecondaryText className="text-[10px] lg:text-xs" >{format(fixture.kickoff_time, 'dd MMM yyy')}</SecondaryText>}
                     </div>
 
                 </div>
 
-                <ProFixtureVotingBox className="mt-0" fixture={fixture} />
+                {!hideVotingBox && <ProFixtureVotingBox className="mt-0" fixture={fixture} />}
             </div>
 
             <FixtureCardModal 

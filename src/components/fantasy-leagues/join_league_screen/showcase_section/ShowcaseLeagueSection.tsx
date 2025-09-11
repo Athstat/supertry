@@ -74,11 +74,12 @@ function Content() {
       <div className="flex flex-row items-center gap-2 justify-between" >
 
         <div>
+          <p className="font-bold text-2xl">{currentRound?.title}</p>
+
           <div className="flex flex-row items-center gap-1" >
-            <Globe className='' />
-            <p className="font-semibold text-lg" >{league.title}</p>
+            <Globe className='w-4 h-4' />
+            <p className="" >{league.title}</p>
           </div>
-          <SecondaryText>{currentRound?.title}</SecondaryText>
         </div>
 
         <div>
@@ -90,15 +91,21 @@ function Content() {
 
       <LearnScrummyNoticeCard />
 
-      { currentRound && <LeagueRoundSummary
+      {currentRound && <LeagueRoundSummary
         userTeam={userTeam}
         currentRound={currentRound}
         onPickTeam={handlePickTeam}
         onViewStandings={handleViewStandings}
         onViewTeam={handleViewTeam}
-      /> }
+      />}
 
-      {currentRound && userTeam && <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />}
+      {currentRound && userTeam && (
+        <UserTeamOverview
+          userTeam={userTeam}
+          leagueRound={currentRound}
+          onManageTeam={handleViewTeam}
+        />
+      )}
     </div>
   )
 }

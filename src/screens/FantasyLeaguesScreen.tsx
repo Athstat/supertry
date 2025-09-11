@@ -31,13 +31,13 @@ export function FantasyLeaguesScreen() {
     });
   }, [leagues]);
 
+  console.log("Showcase Leagues ", showcaseLeague);
+
   const otherLeagues = useMemo(() => {
     return leagues.filter((l) => {
       return l.id !== showcaseLeague?.id
     })
   }, [showcaseLeague, leagues]);
-
-  console.log(leagues);
 
   if (isLoading) {
     return <LoadingState />

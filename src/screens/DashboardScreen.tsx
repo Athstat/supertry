@@ -5,7 +5,7 @@ import HeroImageBanner from '../components/dashboard/HeroImageBanner';
 import { useNavigate } from 'react-router-dom';
 import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
-import { TranslucentButton } from '../components/shared/buttons/PrimaryButton';
+import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
 
@@ -52,7 +52,7 @@ export function DashboardScreen() {
           <p>Leagues are live! 🎉 Create your own, join one, and challenge your friends. Invite your crew and see who really rules the game!</p>
         </div>
 
-        <TranslucentButton onClick={handleBannerClick} >Take Me There</TranslucentButton>
+        <PrimaryButton onClick={handleBannerClick} >Take Me There</PrimaryButton>
       </RoundedCard>
     </PageView>
   );

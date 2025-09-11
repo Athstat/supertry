@@ -13,7 +13,7 @@ import { useTabView } from "../../shared/tabs/TabView"
 type Props = {
     userTeam: FantasyLeagueTeamWithAthletes,
     leagueRound: IFantasyLeagueRound,
-    onManageTeam: () => void
+    onManageTeam?: () => void
 }
 
 export default function UserTeamOverview({ userTeam, leagueRound: currentRound, onManageTeam }: Props) {
@@ -131,7 +131,7 @@ function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
 
 
             <div className={twMerge(
-                "text-center bg-white dark:bg-slate-800/60 truncate border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center ",
+                "text-center bg-white p-2 dark:bg-slate-800/60 truncate border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center ",
                 notAvailable && 'bg-yellow-200 dark:bg-yellow-900/30'
             )} >
                 <p className="text-[10px] text-center truncate" >{athlete.athlete.athstat_lastname}</p>
