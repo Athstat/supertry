@@ -1,4 +1,4 @@
-import { getPositionFrameBackground } from '../../utils/athleteUtils';
+import { getPositionFrameBackground, getTeamJerseyImage } from '../../utils/athleteUtils';
 import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { twMerge } from 'tailwind-merge';
@@ -110,6 +110,15 @@ export function PlayerGameCard({
 
   const playerIcons = getRandomIcons(getRandomIconCount());
 
+  let imageUrl;
+  if (player.athlete) {
+    imageUrl = player.athlete.team?.athstat_id
+      ? getTeamJerseyImage(player.athlete.team?.athstat_id)
+      : undefined;
+  } else {
+    imageUrl = player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
+  }
+
   return (
     <div
       className={twMerge(
@@ -156,9 +165,16 @@ export function PlayerGameCard({
                 'lg:w-10'
               )}
             >
-              {player.team?.image_url && (
-                <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
-              )}
+              {player.athlete
+                ? player.athlete.team?.image_url && (
+                    <TeamLogo
+                      url={player.athlete.team.image_url}
+                      className="w-6 h-6 lg:w-8 lg:h-8"
+                    />
+                  )
+                : player.team?.image_url && (
+                    <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
+                  )}
             </div>
 
             {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
@@ -184,9 +200,21 @@ export function PlayerGameCard({
                   onError={() => setPlayerImageErr(true)}
                 />
               )} */}
-
               {/* {playerImageErr && <TeamJersey teamId={player.team?.athstat_id} />} */}
-              <TeamJersey teamId={player.team?.athstat_id} />
+
+              <img
+                src={imageUrl}
+                className={twMerge(
+                  'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px]  object-cover object-top translate-y-[5%]',
+                  'lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px]',
+                  '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                  '[mask - repeat:no-repeat] [mask-size:100%_100%]',
+                  '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                  '[-webkit-mask-repeat:no-repeat]',
+                  '[-webkit-mask-size:100%_100%'
+                )}
+                onError={() => setPlayerImageErr(true)}
+              />
 
               <div className="flex flex-col absolute bottom-0 items-center p-1 justify-center">
                 <p className="text-[15px] lg:text-xs truncate max-w-[100px] lg:max-w-[130px]">
