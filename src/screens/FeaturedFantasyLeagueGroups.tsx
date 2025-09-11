@@ -1,31 +1,21 @@
-import { Plus, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
-import { FantasyLeagueOverviewCard } from "../components/fantasy-leagues/league_dashboard_ui/FantasyLeagueOverviewCard";
 import RoundedCard from "../components/shared/RoundedCard";
-import { useNavigate } from "react-router-dom";
-import { FantasyLeagueGroup } from "../types/fantasyLeagueGroups";
-import LeagueOverviewCard from "../components/dashboard/my-team/LeagueOverviewCard";
+import SmallLeagueOverviewCard from "../components/dashboard/my-team/LeagueOverviewCard";
 
 export default function FeaturedFantasyLeagueGroups() {
 
-    const navigate = useNavigate();
     const key = swrFetchKeys.getAllPublicFantasyLeagues();
     const { data: fetchedLeagues, isLoading: loadingPublic } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeagues());
 
-    const mineKey = swrFetchKeys.getMyLeagueGroups();
-    const {data: mineLeagueGroups, isLoading: loadingMine} = useSWR(mineKey, () => fantasyLeagueGroupsService.getJoinedLeagues());
-
-    const isLoading = loadingPublic || loadingMine;
+    const isLoading = loadingPublic;
 
 
     const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
         return (league.type === 'official_league');
     });
-
-    const otherLeagues = (mineLeagueGroups ?? [])
-        .filter(l => !officialLeagues.includes(l));
 
     const featuredLeague = officialLeagues.length > 0 ? officialLeagues[0] : undefined;
 
@@ -55,41 +45,16 @@ export default function FeaturedFantasyLeagueGroups() {
         return;
     }
 
-    const handleGoToLeagueCreation = () => {
-        navigate('/leagues?active_tab=my', {
-            state: { showCreateLeagueModal: true }
-        });
-    }
-
-    const handleClickLeague = (league: FantasyLeagueGroup) => {
-        navigate(`/league/${league.id}`);
-    }
-
-    const handleViewAllLeagues = () => {
-        navigate(`/leagues`);
-    }
-
     return (
         <div className="flex flex-col gap-4" >
 
-            <div className="flex flex-row items-center justify-between gap-2" >
-                <div className="flex flex-row items-center gap-2" >
-                    <Trophy className="w-4 h-4 text-blue-400" />
-                    <h2>Fantasy Leagues</h2>
-                </div>
-
-                <div className="text-blue-500" >
-                    <p onClick={handleViewAllLeagues} >View All</p>
-                </div>
-            </div>
-
             {featuredLeague && (
-                <LeagueOverviewCard 
+                <SmallLeagueOverviewCard 
                     league={featuredLeague}
                 />
             )}
 
-            <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
+            {/* <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
                 {otherLeagues.map((leagueGroup) => {
                     return (
                         <FantasyLeagueOverviewCard
@@ -112,7 +77,7 @@ export default function FeaturedFantasyLeagueGroups() {
                         Join or Create Your own Fantasy League and Invite Friends!
                     </p>
                 </RoundedCard>
-            </div>
+            </div> */}
         </div>
     )
 }

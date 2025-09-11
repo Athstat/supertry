@@ -11,6 +11,10 @@ import { twMerge } from "tailwind-merge"
 import { ChevronLeft } from "lucide-react"
 import { useEffect, useRef } from "react"
 import NoContentCard from "../../../shared/NoContentMessage"
+import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytics"
+import { usePlayerSquadReport } from "../../../../hooks/fantasy/usePlayerSquadReport"
+import WarningCard from "../../../shared/WarningCard"
+import { TriangleAlert } from "lucide-react"
 
 type Props = {
     athlete: IProAthlete | IFantasyTeamAthlete,
@@ -19,15 +23,29 @@ type Props = {
     onClose?: () => void
 }
 
-export default function PlayerPointsBreakdownView({ athlete, round, onClose }: Props) {
+export default function PlayerPointsBreakdownView({ athlete, round, onClose, team }: Props) {
 
-    const { pointItems, totalPoints, isLoading } = useAthletePointsBreakdown(
+    const {isLoading: loadingSquadReport, isAvailable, notAvailable, reportText} = usePlayerSquadReport(team.id, athlete.tracking_id);
+
+    const { pointItems, totalPoints, isLoading: loadingPointsBreakdown } = useAthletePointsBreakdown(
         athlete,
         round.start_round ?? 0,
         round.season_id
     );
 
+    const isLoading = loadingPointsBreakdown || loadingSquadReport;
+
     const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        
+        athleteAnalytics.trackPointsBreakdownViewed(
+            athlete.tracking_id,
+            round.official_league_id,
+            round.start_round ?? 0
+        );
+
+    }, [athlete, round]);
 
     useEffect(() => {
         if (ref.current) {
@@ -72,8 +90,18 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
 
             </div>
 
+            {notAvailable && reportText && (
+                <WarningCard className="flex flex-row items-center gap-2" >
+                    <TriangleAlert className="min-w-6 min-h-6" />
+                    <p className="text-sm" >
+                        <strong>{athlete.player_name}'s</strong> team is not playing in this round, ({round.title}), and will therefore not score any points for you.
+                    </p>
+                </WarningCard>
+            )} 
+
             <div>
                 <p className="font-semibold text-lg" >Points Breakdown</p>
+                {isAvailable && reportText && <SecondaryText>{reportText}</SecondaryText>}
             </div>
 
             {isLoading && (

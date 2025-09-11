@@ -31,6 +31,7 @@ export function TeamAthletesGridView({ roundTeam, onClickPlayer }: TeamAthletesV
                             <PlayerGameCard
                                 player={a.athlete}
                                 onClick={handleClick}
+                                key={a.athlete.tracking_id}
                             />
 
                             <p className="font-bold text-white" >{Math.floor(a.score ?? 0)}</p>

@@ -4,11 +4,13 @@ import TabView, { TabViewHeaderItem, TabViewPage } from "../shared/tabs/TabView"
 import { LoadingState } from "../ui/LoadingState";
 import { FixtureRosterList } from "./FixtureRosterList"
 import { gamesService } from "../../services/gamesService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IProAthlete } from "../../types/athletes";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import NoContentCard from "../shared/NoContentMessage";
 import { fixtureSumary } from "../../utils/fixtureUtils";
+import { useInView } from "react-intersection-observer";
+import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics";
 
 type Props = {
     fixture: IFixture,
@@ -25,6 +27,16 @@ export default function FixtureRosters({ fixture }: Props) {
 
     const {game_status} = fixtureSumary(fixture);
     const gameComplete = game_status === "completed";
+    
+    const {ref, inView} = useInView();
+
+    useEffect(() => {
+
+        if (inView) {
+            fixtureAnalytics.trackViewedTeamLineups(fixture);
+        }
+
+    }, [fixture, inView]);
 
     const toggleModal = () => {
         setShowModal(prev => !prev);
@@ -72,7 +84,7 @@ export default function FixtureRosters({ fixture }: Props) {
     }
 
     return (
-        <div className="flex flex-col" >
+        <div ref={ref} className="flex flex-col" >
             <TabView tabHeaderItems={tabs}>
 
                 <TabViewPage className="p-4" tabKey="home-team">

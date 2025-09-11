@@ -10,6 +10,7 @@ import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
 import GameHighlightsCard from '../video/GameHighlightsCard';
 import ProFixtureVotingBox from './voting/ProFixtureVotingBox';
+import { analytics } from '../../services/analytics/anayticsService';
 type Props = {
   fixture: IFixture;
   className?: string;
@@ -47,12 +48,17 @@ export default function FixtureCard({
   const [showModal, setShowModal] = useState(false);
   const toogle = () => setShowModal(!showModal);
 
+  const handleClick = () =>{
+    toogle();
+    analytics.trackFixtureCardClicked(fixture);
+  }
+
   const { gameKickedOff } = fixtureSumary(fixture);
 
   return (
     <>
       <div
-        onClick={toogle}
+        onClick={handleClick}
         className={twMerge(
           'p-4 flex cursor-pointer justify-center flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
           className
@@ -174,7 +180,7 @@ type ModalProps = {
   fixture: IFixture;
 };
 
-function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
+export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
   const title = `${fixture?.team?.athstat_name} vs ${fixture?.opposition_team?.athstat_name}`;
 
   const navigate = useNavigate();

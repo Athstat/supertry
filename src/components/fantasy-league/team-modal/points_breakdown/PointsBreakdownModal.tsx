@@ -1,8 +1,11 @@
+import { useEffect } from "react"
 import { IProAthlete } from "../../../../types/athletes"
 import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../../types/fantasyLeague"
 import { IFantasyTeamAthlete } from "../../../../types/fantasyTeamAthlete"
 import DialogModal from "../../../shared/DialogModal"
 import PlayerPointsBreakdownView from "./PlayerPointsBreakdownView"
+import { analytics } from "../../../../services/analytics/anayticsService"
+import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytics"
 
 type Props = {
     athlete: IProAthlete | IFantasyTeamAthlete,
@@ -14,6 +17,17 @@ type Props = {
 
 /** Renders a points breakdown modal */
 export default function PointsBreakdownModal({athlete, team, round, onClose, isOpen} : Props) {
+  
+  useEffect(() => {
+    
+    athleteAnalytics.trackPointsBreakdownViewed(
+      athlete.tracking_id,
+      round.official_league_id,
+      round.start_round ?? 0
+    );
+
+  }, [round, athlete]);
+  
   return (
     <DialogModal
         open={isOpen}
