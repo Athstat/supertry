@@ -1,13 +1,12 @@
 import { twMerge } from 'tailwind-merge';
 import { Position } from '../../../types/position';
 import { IProAthlete } from '../../../types/athletes';
-import { formatPosition, getTeamJerseyImage } from '../../../utils/athleteUtils';
+import { formatPosition } from '../../../utils/athleteUtils';
 import FormIndicator from '../../shared/FormIndicator';
 import renderStatDots from './renderStatDots';
 import { useState } from 'react';
 import { WarningPopup } from '../../shared/WarningPopup';
 import { ScrummyLightModeLogo } from '../../branding/scrummy_logo';
-import TeamJersey from '../../player/TeamJersey';
 
 type Props = {
   index?: number;
@@ -45,10 +44,6 @@ export default function PlayerListItem({
 
   if (!((player.power_rank_rating ?? 0) > 0) || !((player.price ?? 0) > 0)) return;
 
-  const imageUrl = player.team?.athstat_id
-    ? getTeamJerseyImage(player.team?.athstat_id)
-    : undefined;
-
   return (
     <>
       <div
@@ -61,7 +56,7 @@ export default function PlayerListItem({
       >
         {/* Player image with fallback logo */}
         <div className="sm:flex w-16 h-16 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center mr-4 overflow-hidden">
-          {/* {player.image_url && !imageError ? (
+          {player.image_url && !imageError ? (
             <img
               src={player.image_url}
               alt={player.player_name}
@@ -70,13 +65,7 @@ export default function PlayerListItem({
             />
           ) : (
             <ScrummyLightModeLogo className="w-9 h-9 opacity-70" />
-          )} */}
-          <img
-            src={imageUrl}
-            alt={player.player_name}
-            className="w-16 h-16 rounded-full object-cover object-top translate-y-[5%]"
-            onError={() => setImageError(true)}
-          />
+          )}
         </div>
         {/* Player info */}
         <div className="flex-1 min-w-0 pr-4">
