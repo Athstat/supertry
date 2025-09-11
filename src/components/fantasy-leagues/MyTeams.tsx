@@ -63,7 +63,6 @@ export default function MyTeams({
 
   // Handler for viewing an existing team
   const handleViewTeam = (team: IFantasyLeagueTeam, round: IFantasyLeagueRound) => {
-    console.log('handleViewTeam called with team:', team);
     setSelectedTeam(team);
     setSelectedRound(round);
     setTabScene('team-created');
