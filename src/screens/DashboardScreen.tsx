@@ -8,6 +8,7 @@ import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeC
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
+import { HeroSection } from '../components/dashboard';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -30,9 +31,9 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      {/* <HeroSection /> */}
+      <HeroSection />
 
-      <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} />
+      {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}
 
       {/* <FeaturedPlayersCarousel /> */}
 
