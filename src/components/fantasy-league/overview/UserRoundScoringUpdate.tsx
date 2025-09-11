@@ -9,6 +9,9 @@ type Props = {
 
 /** Renders an overview of a players team points! */
 export default function UserRoundScoringUpdate({ userTeam, leagueRound }: Props) {
+    
+// Lets fetch round scoring analysis
+    
     return (
         <RoundedCard className="border-none p-4" >
             <div>
