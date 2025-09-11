@@ -110,9 +110,14 @@ export function PlayerGameCard({
 
   const playerIcons = getRandomIcons(getRandomIconCount());
 
-  const imageUrl = player.athlete.team?.athstat_id
-    ? getTeamJerseyImage(player.athlete.team?.athstat_id)
-    : undefined;
+  let imageUrl;
+  if (player.athlete) {
+    imageUrl = player.athlete.team?.athstat_id
+      ? getTeamJerseyImage(player.athlete.team?.athstat_id)
+      : undefined;
+  } else {
+    imageUrl = player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
+  }
 
   return (
     <div
@@ -160,9 +165,16 @@ export function PlayerGameCard({
                 'lg:w-10'
               )}
             >
-              {player.athlete.team?.image_url && (
-                <TeamLogo url={player.athlete.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
-              )}
+              {player.athlete
+                ? player.athlete.team?.image_url && (
+                    <TeamLogo
+                      url={player.athlete.team.image_url}
+                      className="w-6 h-6 lg:w-8 lg:h-8"
+                    />
+                  )
+                : player.team?.image_url && (
+                    <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
+                  )}
             </div>
 
             {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
