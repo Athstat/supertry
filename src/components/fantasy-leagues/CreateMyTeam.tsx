@@ -395,27 +395,7 @@ export default function CreateMyTeam({
       </div>
 
       {/* Presets + Save */}
-      <div className="mt-3 relative z-[50] space-y-3">
-        {/* Preset dropdown and save-as-preset */}
-        {/* <div className="flex items-center gap-2">
-          <select
-            className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
-            value={selectedPresetId}
-            onChange={e => {
-              const id = e.target.value;
-              setSelectedPresetId(id);
-              if (id) applyPresetById(id);
-            }}
-          >
-            <option value="">
-              {isLoadingPresets ? 'Loading presets...' : 'Choose a saved team...'}
-            </option>
-            {presets.map(p => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
+
 
         <div className="mt-3 relative z-[50] space-y-3">
           {/* Preset dropdown and save-as-preset */}
@@ -453,9 +433,19 @@ export default function CreateMyTeam({
             disabled={isSaving || Object.keys(selectedPlayers).length !== 6 || !leagueRound}
             onClick={handleSave}
           >
-            Save as preset
-          </button>
-        </div> */}
+            {isSaving ? 'Saving...' : 'Save'}
+          </PrimaryButton>
+          {saveError && (
+            <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
+          )}
+
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            isVisible={toast.isVisible}
+            onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+          />
+        </div>
 
 
       {/* 2x3 grid of position slots */}
