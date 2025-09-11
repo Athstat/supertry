@@ -31,7 +31,8 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-  const { league, userMemberRecord, isMember, isOfficialLeague, currentRound } = useFantasyLeagueGroup();
+  const { league, userMemberRecord, isMember, isOfficialLeague, currentRound } =
+    useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);
   const navigate = useNavigate();
 
@@ -76,9 +77,10 @@ function Content() {
       label: 'Info',
       tabKey: 'info',
       className: 'w-fit',
-    }
+    },
   ];
 
+  console.log('current round: ', currentRound);
 
   return (
     <PageView className="dark:text-white p-4 flex flex-col gap-4">
@@ -107,7 +109,6 @@ function Content() {
             </div>
           )}
         </div>
-
       </div>
 
       <LearnScrummyNoticeCard />
@@ -147,7 +148,7 @@ function Content() {
           <LeagueCommissionerTab />
         </TabViewPage>
 
-        <TabViewPage tabKey='overview' >
+        <TabViewPage tabKey="overview">
           <LeagueOverviewTab />
         </TabViewPage>
       </PilledTabView>
