@@ -7,14 +7,18 @@ import TeamJersey from "../../player/TeamJersey"
 import { usePlayerSquadReport } from "../../../hooks/fantasy/usePlayerSquadReport"
 import { twMerge } from "tailwind-merge"
 import SecondaryText from "../../shared/SecondaryText"
+import { ArrowRight } from "lucide-react"
+import { useTabView } from "../../shared/tabs/TabView"
 
 type Props = {
     userTeam: FantasyLeagueTeamWithAthletes,
-    leagueRound: IFantasyLeagueRound
+    leagueRound: IFantasyLeagueRound,
+    onManageTeam: () => void
 }
 
-export default function UserTeamOverview({ userTeam, leagueRound: currentRound }: Props) {
+export default function UserTeamOverview({ userTeam, leagueRound: currentRound, onManageTeam }: Props) {
 
+    const {navigate} = useTabView();
     const [selectPlayer, setSelectPlayer] = useState<IProAthlete>();
 
     const onClosePointsBreakdown = () => {
@@ -25,15 +29,32 @@ export default function UserTeamOverview({ userTeam, leagueRound: currentRound }
         setSelectPlayer(a.athlete);
     }
 
+    const handleManageTeam = () => {
+        if (onManageTeam) {
+            onManageTeam();
+        } else {
+            navigate('my-team');
+        }
+
+    }
+ 
     console.log("User Team ", userTeam);
 
     return (
         <div className="flex flex-col gap-4" >
 
-            <div>
+            <div className="flex flex-row items-center justify-between" >
                 <div>
                     <p className="font-bold" >Squad</p>
                 </div>
+
+                <div>
+                    <button onClick={handleManageTeam} className="flex text-primary-500 text-sm flex-row items-center gap-2" >
+                        <p>Manage</p>
+                        <ArrowRight className="w-4 h-4" />
+                    </button>
+                </div>
+
             </div>
             {currentRound && userTeam && (
                 <div className="w-full relative max-h-[200px]rounded-xl" >
@@ -75,7 +96,7 @@ type PlayerItemProps = {
 
 function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
 
-    const { report, reportText, isAvailable, isLoading, notAvailable } = usePlayerSquadReport(team.id, athlete.athlete.tracking_id);
+    const { reportText, isLoading, notAvailable } = usePlayerSquadReport(team.id, athlete.athlete.tracking_id);
 
     if (isLoading) {
         return (
