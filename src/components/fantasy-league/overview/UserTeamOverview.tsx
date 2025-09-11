@@ -108,47 +108,37 @@ function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
 
   if (isLoading) {
     return (
-      <div
-        onClick={onClick}
-        className={twMerge(
-          'flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col'
-        )}
-      ></div>
-    );
-  }
-
-  console.log('Team Id ', team.id);
-
-  return (
-    <div
-      onClick={onClick}
-      className={twMerge(
-        'flex border cursor-pointer dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col',
-        notAvailable &&
-          'border-yellow-600 dark:border-yellow-900 bg-yellow-100 dark:bg-yellow-600/20 opacity-80'
-      )}
-    >
-      <div className="h-[60%] w-full flex flex-col items-center justify-center">
-        <TeamJersey
-          teamId={athlete.athlete.team_id}
-          className="max-h-10 min-h-10 object-contain"
-          hideFade
-        />
-      </div>
-
-      <div
-        className={twMerge(
-          'text-center bg-white p-2 dark:bg-slate-800/60 truncate border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center ',
-          notAvailable && 'bg-yellow-200 dark:bg-yellow-900/30'
-        )}
-      >
-        <p className="text-[10px] text-center truncate">{athlete.athlete.athstat_lastname}</p>
-        <SecondaryText
-          className={twMerge('text-[10px]', notAvailable && 'text-yellow-600 dark:text-yellow-200')}
+        <div
+            onClick={onClick}
+            className={twMerge(
+                "flex border cursor-pointer dark:border-slate-700 min-w-[90px] max-w-[90px] h-[120px] rounded-xl overflow-clip p-0 flex-col",
+                notAvailable && 'border-yellow-600 dark:border-yellow-900 bg-yellow-100 dark:bg-yellow-600/20 opacity-80'
+            )}
         >
-          {athlete.score ? Math.floor(athlete.score) : reportText}
-        </SecondaryText>
-      </div>
-    </div>
-  );
+            <div className="h-[60%] w-full flex flex-col items-center justify-center" >
+                <TeamJersey
+                    teamId={athlete.athlete.team_id}
+                    className="max-h-10 min-h-10 object-contain lg:max-h-10 lg:min-h-10"
+                    hideFade
+                />
+            </div>
+
+
+
+            <div className={twMerge(
+                "text-center bg-white p-2 dark:bg-slate-800/60 border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center ",
+                notAvailable && 'bg-yellow-200 dark:bg-yellow-900/30'
+            )} >
+                <p className="text-[10px] text-center text-nowrap truncate max-w-full" >{athlete.athlete.athstat_lastname}</p>
+                <SecondaryText
+                    className={twMerge(
+                        "text-[10px] text-nowrap truncate",
+                        notAvailable && 'text-yellow-600 dark:text-yellow-200'
+                    )}
+                >
+                    {athlete.score ? Math.floor(athlete.score) : reportText}
+                </SecondaryText>
+            </div>
+        </div>
+    )
 }
