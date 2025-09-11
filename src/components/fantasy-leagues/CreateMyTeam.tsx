@@ -387,7 +387,7 @@ export default function CreateMyTeam({
       {/* Presets + Save */}
       <div className="mt-3 relative z-[50] space-y-3">
         {/* Preset dropdown and save-as-preset */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <select
             className="flex-1 border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700"
             value={selectedPresetId}
@@ -414,7 +414,7 @@ export default function CreateMyTeam({
           >
             Save as preset
           </button>
-        </div>
+        </div> */}
 
         <PrimaryButton
           className="w-full"
