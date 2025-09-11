@@ -5,6 +5,7 @@ import { LoadingState } from '../components/ui/LoadingState';
 import PageView from './PageView';
 import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
 import OtherLeaguesSection from '../components/fantasy-leagues/join_league_screen/other_leagues_section/OtherLeaguesSection';
+import RoundedCard from '../components/shared/RoundedCard';
 
 export function FantasyLeaguesScreen() {
   // Tabs state (persist between visits)
@@ -15,8 +16,8 @@ export function FantasyLeaguesScreen() {
   const key = `/user-joined-leagues`;
   const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
     key, () => fantasyLeagueGroupsFetcher(), {
-      revalidateIfStale: false
-    });
+    revalidateIfStale: false
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,7 +41,32 @@ export function FantasyLeaguesScreen() {
   }, [showcaseLeague, leagues]);
 
   if (isLoading) {
-    return <LoadingState />
+    return (
+      <div className='p-6 flex flex-col gap-6' >
+        <div>
+          <div className='flex flex-col gap-1' >
+            <RoundedCard className='w-[100px] h-[25px] rounded-xl border-none' />
+            <RoundedCard className='w-[60px] h-[20px] rounded-xl border-none' />
+          </div>
+        </div>
+
+        <div className='flex flex-col gap-2' >
+          <RoundedCard className='w-full h-[200px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[70px] border-none rounded-xl animate-pulse' />
+        </div>
+
+        <div className='flex flex-col gap-3' >
+          <div className='flex flex-row items-center justify-between' >
+            <RoundedCard className='w-[100px] h-[30px] border-none rounded-xl animate-pulse' />
+            <RoundedCard className='w-[40px] h-[30px] border-none rounded-xl animate-pulse' />
+          </div>
+          <RoundedCard className='w-full h-[60px] mt-5 border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -73,7 +99,7 @@ export function FantasyLeaguesScreen() {
 async function fantasyLeagueGroupsFetcher() {
   const joinedLeagues = await fantasyLeagueGroupsService.getJoinedLeagues();
   const mineLeagues = await fantasyLeagueGroupsService.getMyCreatedLeagues();
-  
+
   const aggregate = [...mineLeagues, ...joinedLeagues];
 
   return aggregate;
