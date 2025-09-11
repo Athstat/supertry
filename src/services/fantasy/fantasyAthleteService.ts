@@ -29,6 +29,7 @@ export const fantasyAthleteService = {
     getRoundSquadReport: async (teamId: number | string, trackingId: string) : Promise<SquadReportItem | undefined> => {
         try {
             const uri = getUri(`/api/v1/fantasy-teams/${teamId}/squad-report/${trackingId}`);
+            console.log("URI ", uri);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

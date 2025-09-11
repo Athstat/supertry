@@ -25,6 +25,8 @@ export default function UserTeamOverview({ userTeam, leagueRound: currentRound }
         setSelectPlayer(a.athlete);
     }
 
+    console.log("User Team ", userTeam);
+
     return (
         <div className="flex flex-col gap-4" >
 
@@ -73,7 +75,6 @@ type PlayerItemProps = {
 
 function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
 
-    console.log(athlete);
     const { report, reportText, isAvailable, isLoading, notAvailable } = usePlayerSquadReport(team.id, athlete.athlete.tracking_id);
 
     if (isLoading) {
@@ -82,18 +83,20 @@ function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
                 onClick={onClick}
                 className={twMerge(
                     "flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col",
-                    
+
                 )}
             ></div>
         )
     }
 
+    console.log("Team Id ", team.id)
+
     return (
         <div
             onClick={onClick}
             className={twMerge(
-                "flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col",
-                notAvailable && 'border-yellow-500 dark:border-yellow-900'
+                "flex border cursor-pointer dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col",
+                notAvailable && 'border-yellow-600 dark:border-yellow-900 bg-yellow-100 dark:bg-yellow-600/20 opacity-80'
             )}
         >
             <div className="h-[60%] w-full flex flex-col items-center justify-center" >
@@ -106,9 +109,19 @@ function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
 
 
 
-            <div className="text-center bg-white dark:bg-slate-800/60 truncate border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center " >
+            <div className={twMerge(
+                "text-center bg-white dark:bg-slate-800/60 truncate border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center ",
+                notAvailable && 'bg-yellow-200 dark:bg-yellow-900/30'
+            )} >
                 <p className="text-[10px] text-center truncate" >{athlete.athlete.athstat_lastname}</p>
-                <SecondaryText className="text-[10px]" >{athlete.score ? Math.floor(athlete.score) : reportText}</SecondaryText>
+                <SecondaryText
+                    className={twMerge(
+                        "text-[10px]",
+                        notAvailable && 'text-yellow-600 dark:text-yellow-200'
+                    )}
+                >
+                    {athlete.score ? Math.floor(athlete.score) : reportText}
+                </SecondaryText>
             </div>
         </div>
     )

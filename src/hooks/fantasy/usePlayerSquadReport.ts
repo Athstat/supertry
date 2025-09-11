@@ -21,7 +21,7 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
                 return `vs ${opponent}`;
             }
 
-            return 'Not Available'
+            return 'Not Playing ⚠️'
         }
 
         return undefined;

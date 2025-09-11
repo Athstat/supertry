@@ -57,7 +57,7 @@ export type IFantasyLeagueTeam = {
 
 
 export type FantasyLeagueTeamWithAthletes = {
-  id: 1,
+  id: number,
   team: {
     id: number,
     user_id: string,
