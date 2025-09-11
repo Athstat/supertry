@@ -10,6 +10,8 @@ import UserRoundScoringUpdate from "./UserRoundScoringUpdate";
 import UserTeamOverview from "./UserTeamOverview";
 import LeagueRoundFixturesOverview from "./LeagueRoundFixturesOverview";
 import { GamePlayHelpButton } from "../../branding/help/LearnScrummyNoticeCard";
+import LeagueRoundCountdown from "../LeagueCountdown";
+import BlueGradientCard from "../../shared/BlueGradientCard";
 
 
 export default function LeagueOverviewTab() {
@@ -48,7 +50,7 @@ export default function LeagueOverviewTab() {
                 </div>
             </div>
 
-            {currentRound && <LeagueRoundSummary userTeam={userTeam} currentRound={currentRound} />}
+            {currentRound && <LeagueRoundSummary showCountdownOnly userTeam={userTeam} currentRound={currentRound} />}
 
             {userTeam && currentRound && <UserRoundScoringUpdate leagueRound={currentRound} userTeam={userTeam} />}
 
@@ -66,13 +68,26 @@ type RoundSummaryProps = {
     currentRound: IFantasyLeagueRound,
     onPickTeam?: () => void,
     onViewTeam?: () => void,
-    onViewStandings?: () => void
+    onViewStandings?: () => void,
+    showCountdownOnly?: boolean
 }
 
-export function LeagueRoundSummary({ userTeam, currentRound, onPickTeam, onViewStandings, onViewTeam }: RoundSummaryProps) {
+export function LeagueRoundSummary({ userTeam, currentRound, onPickTeam, onViewStandings, onViewTeam, showCountdownOnly }: RoundSummaryProps) {
 
 
     if (userTeam) {
+
+        if (showCountdownOnly) {
+            return (
+                <BlueGradientCard className="flex flex-col gap-1" >
+                    <p>⏰ {currentRound.title} - Deadline</p>
+                    <LeagueRoundCountdown
+                        leagueRound={currentRound}
+                    />
+                </BlueGradientCard>
+            )
+        }
+
         return <UserRoundOverviewCard
             leagueRound={currentRound}
             userTeam={userTeam}
