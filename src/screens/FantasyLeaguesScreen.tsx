@@ -14,7 +14,7 @@ export function FantasyLeaguesScreen() {
 
   const key = `/user-joined-leagues`;
   const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
-    key, () => fantasyLeagueGroupsService.getJoinedLeagues(), {
+    key, () => fantasyLeagueGroupsFetcher(), {
       revalidateIfStale: false
     });
 
@@ -68,4 +68,13 @@ export function FantasyLeaguesScreen() {
 
     </PageView>
   );
+}
+
+async function fantasyLeagueGroupsFetcher() {
+  const joinedLeagues = await fantasyLeagueGroupsService.getJoinedLeagues();
+  const mineLeagues = await fantasyLeagueGroupsService.getMyCreatedLeagues();
+  
+  const aggregate = [...mineLeagues, ...joinedLeagues];
+
+  return aggregate;
 }
