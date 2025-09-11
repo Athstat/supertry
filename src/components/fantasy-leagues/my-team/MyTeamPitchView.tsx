@@ -8,128 +8,119 @@ import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal';
 
 type Props = {
-    leagueRound: IFantasyLeagueRound,
-    editableAthletesBySlot: Record<number, IFantasyTeamAthlete | undefined>,
-    team: IFantasyLeagueTeam
-}
+  leagueRound: IFantasyLeagueRound;
+  editableAthletesBySlot: Record<number, IFantasyTeamAthlete | undefined>;
+  team: IFantasyLeagueTeam;
+};
 
 /** Renders my team pitch view */
 export default function MyTeamPitchView({ leagueRound, editableAthletesBySlot, team }: Props) {
+  const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
-    const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showPointsModal, setShowPointsModal] = useState(false);
 
-    const [showActionModal, setShowActionModal] = useState(false);
-    const [showProfileModal, setShowProfileModal] = useState(false);
-    const [showPointsModal, setShowPointsModal] = useState(false);
+  const handlePlayerClick = (player: IFantasyTeamAthlete) => {
+    setSelectedPlayer(player);
+    setShowActionModal(true);
+  };
 
-    const handlePlayerClick = (player: IFantasyTeamAthlete) => {
-        setSelectedPlayer(player);
-        setShowActionModal(true);
-    }
+  const handleCloseActionModal = () => {
+    setShowActionModal(false);
+    setSelectedPlayer(undefined);
+  };
 
-    const handleCloseActionModal = () => {
-        setShowActionModal(false);
-        setSelectedPlayer(undefined);
-    }
+  const handleViewProfile = () => {
+    setShowActionModal(false);
+    setShowPointsModal(false);
 
-    const handleViewProfile = () => {
-        setShowActionModal(false);
-        setShowPointsModal(false);
+    setShowProfileModal(true);
+  };
 
-        setShowProfileModal(true);
-    }
+  const handleViewPointsBreakdown = () => {
+    setShowActionModal(false);
+    setShowProfileModal(false);
 
-    const handleViewPointsBreakdown = () => {
-        setShowActionModal(false);
-        setShowProfileModal(false);
+    setShowPointsModal(true);
+  };
 
-        setShowPointsModal(true);
-    }
+  const handleCloseProfileModal = () => {
+    setShowProfileModal(false);
+    setShowActionModal(true);
+  };
 
-    const handleCloseProfileModal = () => {
-        setShowProfileModal(false);
-        setShowActionModal(true);
-    }
+  const handleClosePointsModal = () => {
+    setShowPointsModal(false);
+    setShowActionModal(true);
+  };
 
-    const handleClosePointsModal = () => {
-        setShowPointsModal(false);
-        setShowActionModal(true);
-    }
+  const starters = Object.values(editableAthletesBySlot)
+    .filter((p): p is IFantasyTeamAthlete => Boolean(p))
+    .map(p => ({ ...p!, is_starting: p!.slot !== 6 }));
 
-    const starters = Object.values(editableAthletesBySlot)
-        .filter((p): p is IFantasyTeamAthlete => Boolean(p))
-        .map(p => ({ ...p!, is_starting: p!.slot !== 6 }));
+  const superSub = Object.values(editableAthletesBySlot)
+    .filter((player): player is IFantasyTeamAthlete => Boolean(player))
+    .find(player => player.slot === 6);
 
-    const superSub = Object.values(editableAthletesBySlot)
-        .filter((player): player is IFantasyTeamAthlete => Boolean(player))
-        .find(player => player.slot === 6);
+  return (
+    <div className="mt-4">
+      <div>
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Team Formation</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium mb-4">
+          Greyed out players are not playing in this round's games
+        </p>
+        {leagueRound && starters.length > 0 && (
+          <TeamFormation players={starters} onPlayerClick={handlePlayerClick} round={leagueRound} />
+        )}
+      </div>
 
-    return (
-        <div className="mt-4">
-            <div>
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-                    Team Formation
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium mb-4">
-                    Greyed out players are not playing in this round's games
-                </p>
-                {leagueRound && starters.length > 0 && <TeamFormation
-                    players={starters}
-                    onPlayerClick={handlePlayerClick}
-
-                    round={leagueRound}
-                />}
-            </div>
-
-            {/* Super Substitute */}
-            {leagueRound && Object.values(editableAthletesBySlot).some(p => p && p.slot === 6) && (
-                <div className="mt-8">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
-                        <span>Super Substitute</span>
-                        <span className="ml-2 text-orange-500 text-sm px-2 py-0.5 rounded-full">
-                            Special
-                        </span>
-                    </h2>
-                    <div className="rounded-xl p-4 w-40 pt-12">
-                        {superSub &&
-                            <FantasyTeamAthleteCard
-                                player={superSub}
-                                onPlayerClick={handlePlayerClick}
-                                round={leagueRound}
-                                pointsClassName='text-black dark:text-white'
-                            />
-                        }
-                    </div>
-                </div>
+      {/* Super Substitute */}
+      {leagueRound && Object.values(editableAthletesBySlot).some(p => p && p.slot === 6) && (
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+            <span>Super Substitute</span>
+            <span className="ml-2 text-orange-500 text-sm px-2 py-0.5 rounded-full">Special</span>
+          </h2>
+          <div className="rounded-xl p-4 w-40 pt-12">
+            {superSub && (
+              <FantasyTeamAthleteCard
+                player={superSub}
+                onPlayerClick={handlePlayerClick}
+                round={leagueRound}
+                pointsClassName="text-black dark:text-white"
+              />
             )}
-
-            {selectedPlayer && showActionModal && <PlayerActionModal
-                player={selectedPlayer}
-                onViewPointsBreakdown={handleViewPointsBreakdown}
-                onClose={handleCloseActionModal}
-                onViewProfile={handleViewProfile}
-            />}
-
-            {selectedPlayer && showProfileModal && (
-                <PlayerProfileModal
-                    player={selectedPlayer}
-                    isOpen={showProfileModal}
-                    onClose={handleCloseProfileModal}
-                />
-            )
-            }
-
-            {selectedPlayer && showPointsModal && (
-                <PointsBreakdownModal
-                    isOpen={showPointsModal}
-                    athlete={selectedPlayer}
-                    team={team}
-                    round={leagueRound}
-                    onClose={handleClosePointsModal}
-                />
-            )
-
-            }
+          </div>
         </div>
-    )
+      )}
+
+      {selectedPlayer && showActionModal && (
+        <PlayerActionModal
+          player={selectedPlayer}
+          onViewPointsBreakdown={handleViewPointsBreakdown}
+          onClose={handleCloseActionModal}
+          onViewProfile={handleViewProfile}
+        />
+      )}
+
+      {selectedPlayer && showProfileModal && (
+        <PlayerProfileModal
+          player={selectedPlayer}
+          isOpen={showProfileModal}
+          onClose={handleCloseProfileModal}
+        />
+      )}
+
+      {selectedPlayer && showPointsModal && (
+        <PointsBreakdownModal
+          isOpen={showPointsModal}
+          athlete={selectedPlayer}
+          team={team}
+          round={leagueRound}
+          onClose={handleClosePointsModal}
+        />
+      )}
+    </div>
+  );
 }

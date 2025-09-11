@@ -4,6 +4,7 @@ import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import TeamJersey from './TeamJersey';
 import darkModeLogo from '../branding/assets/logo_dark_mode.svg';
 
@@ -13,6 +14,7 @@ import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 //import { getPlayerIcons, PlayerIcon } from '../../utils/playerIcons';
 import PlayerIconComponent from '../players/compare/PlayerIconComponent';
 import Experimental from '../shared/ab_testing/Experimental';
+import { usePlayerSquadReport } from '../../hooks/fantasy/usePlayerSquadReport';
 // import { swrFetchKeys } from '../../utils/swrKeys';
 // import useSWR from 'swr';
 // import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
@@ -50,6 +52,9 @@ export function PlayerGameCard({
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
   const [isFrameLoaded, setFrameLoaded] = useState(false);
+
+  const location = useLocation();
+  const isPlayersScreen = location.pathname.startsWith('/players');
 
   //console.log('Player: ', player);
 
@@ -118,6 +123,10 @@ export function PlayerGameCard({
   } else {
     imageUrl = player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
   }
+
+  const teamId = player.athlete?.team?.athstat_id || player.team?.athstat_id;
+
+  const { notAvailable } = usePlayerSquadReport(teamId, player.tracking_id);
 
   return (
     <div
@@ -211,10 +220,18 @@ export function PlayerGameCard({
                   '[mask - repeat:no-repeat] [mask-size:100%_100%]',
                   '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
                   '[-webkit-mask-repeat:no-repeat]',
-                  '[-webkit-mask-size:100%_100%'
+                  '[-webkit-mask-size:100%_100%',
+                  notAvailable && !isPlayersScreen && 'grayscale opacity-50'
                 )}
                 onError={() => setPlayerImageErr(true)}
               />
+              {notAvailable && !isPlayersScreen && (
+                <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
+                  <span className="bg-black/70 text-white text-xs lg:text-sm font-semibold px-2 py-1 rounded">
+                    Not Playing ⚠️
+                  </span>
+                </div>
+              )}
 
               <div className="flex flex-col absolute bottom-0 items-center p-1 justify-center">
                 <p className="text-[15px] lg:text-xs truncate max-w-[100px] lg:max-w-[130px]">
