@@ -15,6 +15,7 @@ import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { twMerge } from 'tailwind-merge';
 import { useTabView } from '../../shared/tabs/TabView';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
+import { usePlayerSquadReport } from '../../../hooks/fantasy/usePlayerSquadReport';
 
 type Props = {
   round: IFantasyLeagueRound;
@@ -223,6 +224,52 @@ function FantasyRoundLockedState({ round }: LockedStateProps) {
   );
 }
 
+type AthleteMugshotItemProps = {
+  a: IFantasyTeamAthlete;
+  onPlayerClick?: (player: IFantasyTeamAthlete) => void;
+};
+
+function AthleteMugshotItem({ a, onPlayerClick }: AthleteMugshotItemProps) {
+  const teamId = a.athlete_team_id ?? '';
+  const { notAvailable } = usePlayerSquadReport(teamId as string | number, a.tracking_id);
+
+  return (
+    <div
+      className="items-center flex flex-col gap-1 cursor-pointer hover:opacity-80 transition-opacity"
+      onClick={e => {
+        e.stopPropagation();
+        onPlayerClick?.(a);
+      }}
+    >
+      <div className="relative">
+        {a.is_captain && (
+          <div className="absolute -top-0 -left-0 z-10 bg-yellow-500 rounded-full p-1">
+            <Award className="w-3 h-3 text-white" />
+          </div>
+        )}
+        <div className="relative">
+          <PlayerMugshot
+            playerPr={a.power_rank_rating}
+            showPrBackground
+            url={getTeamJerseyImage(a.athlete_team_id ?? '')}
+            isCaptain={a.is_captain}
+            teamId={a.athlete_team_id}
+            className={twMerge('w-14 h-14', notAvailable && 'grayscale opacity-60')}
+          />
+          {notAvailable && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+              <span className="bg-black/70 text-white text-[10px] font-semibold px-2 py-1 rounded-full">
+                ⚠️
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+      <p className="text-xs text-gray-600 dark:text-gray-400 max-w-14 truncate">{a.player_name}</p>
+    </div>
+  );
+}
+
 type AthletesRowProps = {
   athletes: IFantasyTeamAthlete[];
   athletesCount: number;
@@ -234,35 +281,7 @@ function AthletesRow({ athletes, onPlayerClick }: AthletesRowProps) {
     <div className="max-w-full overflow-x-auto no-scrollbar pb-1">
       <div className="whitespace-nowrap scroll-smooth space-x-4 flex pr-2">
         {athletes.map(a => (
-          <div
-            key={a.tracking_id}
-            className="items-center flex flex-col gap-1 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={e => {
-              e.stopPropagation();
-              console.log('Player clicked:', a);
-              onPlayerClick?.(a);
-            }}
-          >
-            <div className="relative">
-              {a.is_captain && (
-                <div className="absolute -top-0 -left-0 z-10 bg-yellow-500 rounded-full p-1">
-                  <Award className="w-3 h-3 text-white" />
-                </div>
-              )}
-              {/*a.image_url*/}
-              <PlayerMugshot
-                playerPr={a.power_rank_rating}
-                showPrBackground
-                url={getTeamJerseyImage(a.athlete.team?.athstat_id ?? '')}
-                isCaptain={a.is_captain}
-                teamId={a.athlete_team_id}
-                className="w-14 h-14"
-              />
-            </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400 max-w-14 truncate">
-              {a.player_name}
-            </p>
-          </div>
+          <AthleteMugshotItem key={a.tracking_id} a={a} onPlayerClick={onPlayerClick} />
         ))}
       </div>
     </div>
