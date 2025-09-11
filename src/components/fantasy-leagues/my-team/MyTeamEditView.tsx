@@ -13,6 +13,7 @@ import { Loader, Check } from 'lucide-react';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PrimaryButton from '../../shared/buttons/PrimaryButton';
 import PlayerSelectionModal from '../../team-creation/PlayerSelectionModal';
+import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -206,7 +207,7 @@ export default function MyTeamEditView({
     }
   };
 
-  // const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
   return (
     <Fragment>
@@ -269,7 +270,7 @@ export default function MyTeamEditView({
                     className={`${
                       captainAthleteId === athlete.athlete_id
                         ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
-                        : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
+                        : `text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 ${isLocked ? '' : 'hover:bg-blue-100 dark:hover:bg-blue-900/50'}`
                     }`}
                     onClick={() => {
                       if (captainAthleteId !== athlete.athlete_id)
@@ -283,7 +284,7 @@ export default function MyTeamEditView({
                   </button>
 
                   <button
-                    className="text-xs w-full rounded-lg py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60"
+                    className={`text-xs w-full rounded-lg py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 ${isLocked ? '' : 'hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60'}`}
                     onClick={() => {
                       const pos = toPosition(positions[index], index);
                       setSwapState({ open: true, slot, position: pos });

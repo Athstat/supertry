@@ -38,8 +38,7 @@ export default function ViewMyTeam({
 
   const selectedCount = (team.athletes || []).length;
 
-  //const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
-  const isLocked = false;
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
   return (
     <div className="w-full py-4">
@@ -68,8 +67,7 @@ export default function ViewMyTeam({
             className={twMerge(
               'px-3 py-1.5 rounded-lg text-sm flex flex-row items-center gap-2 font-medium border border-gray-200 dark:border-gray-700`',
               'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 dark:border-slate-700',
-              viewMode === 'edit' && 'bg-blue-600 text-white',
-              isLocked && 'opacity-60 cursor-not-allowed'
+              viewMode === 'edit' && 'bg-blue-600 text-white'
             )}
           >
             <p>Edit</p>
