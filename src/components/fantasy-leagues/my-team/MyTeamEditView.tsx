@@ -14,6 +14,7 @@ import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PrimaryButton from '../../shared/buttons/PrimaryButton';
 import PlayerSelectionModal from '../../team-creation/PlayerSelectionModal';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
+import { calculateTeamTotalSpent } from '../../../utils/athleteUtils';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -58,7 +59,7 @@ export default function MyTeamEditView({
   }>({ open: false, slot: null, position: null });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const totalSpent = team.athletes.reduce((sum, player) => sum + (player.price || 0), 0);
+  const totalSpent = team ? calculateTeamTotalSpent(team) : 0;
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
 
   const [editableAthletesBySlot, setEditableAthletesBySlot] = useState<
@@ -241,11 +242,12 @@ export default function MyTeamEditView({
           const slot = index + 1;
           const athlete = athletesBySlot[slot];
           return (
-            <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0 ">
+            <div key={slot || athlete?.tracking_id} className="flex flex-col w-full min-w-0 ">
               <div className="w-full min-w-0 h-60 flex items-center justify-center bg-transparent">
                 {athlete ? (
                   <div className="w-full h-full flex items-center justify-center">
                     <PlayerGameCard
+                      key={athlete.tracking_id}
                       player={athlete}
                       className="mx-auto"
                       blockGlow

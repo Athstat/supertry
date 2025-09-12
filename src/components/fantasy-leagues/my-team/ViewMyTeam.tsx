@@ -7,6 +7,7 @@ import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import MyTeamPitchView from './MyTeamPitchView';
 import MyTeamEditView from './MyTeamEditView';
 import { twMerge } from 'tailwind-merge';
+import { calculateTeamTotalSpent } from '../../../utils/athleteUtils';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -25,7 +26,7 @@ export default function ViewMyTeam({
 }) {
   const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
 
-  const totalSpent = team.athletes.reduce((sum, player) => sum + (player.price || 0), 0);
+  const totalSpent = team ? calculateTeamTotalSpent(team) : 0;
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
 
   const editableAthletesBySlot = useMemo(() => {
