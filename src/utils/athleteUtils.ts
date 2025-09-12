@@ -6,6 +6,7 @@ import { PlayerForm } from "../types/rugbyPlayer";
 import { IProTeam } from "../types/team";
 import { IComparePlayerStats, ICompareStarRatingsStats } from "../types/comparePlayers";
 import { getPlayerAggregatedStat, PlayerAggregateStatAction } from "../types/sports_actions";
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueTeam } from "../types/fantasyLeague";
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr?: string) => {
@@ -395,4 +396,9 @@ export function getTeamJerseyImage(teamId: string) {
         : undefined;
 
     return teamFallbackUrl;
+}
+
+/** Calculates the total amount of spent aquiring a team */
+export function calculateTeamTotalSpent(team: FantasyLeagueTeamWithAthletes | IFantasyLeagueTeam) {
+    return team.athletes.reduce((sum, player) => sum + (player.purchase_price || 0), 0)
 }

@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import { Shield } from 'lucide-react'
 import LeagueRoundCountdown from '../../fantasy-league/LeagueCountdown'
 import WarningCard from '../../shared/WarningCard'
+import NewTag from '../../branding/NewTag'
 
 type Props = {
     league: FantasyLeagueGroup
@@ -89,6 +90,7 @@ function Content({ league }: Props) {
                 <div className='flex flex-row items-center gap-2' >
                     <Trophy className='w-5 h-5' />
                     <h1 className='font-bold' >{league.title}</h1>
+                    <NewTag />
                 </div>
 
                 <div>
