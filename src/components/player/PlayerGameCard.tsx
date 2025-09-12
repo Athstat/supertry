@@ -3,7 +3,7 @@ import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import TeamJersey from './TeamJersey';
 import darkModeLogo from '../branding/assets/logo_dark_mode.svg';
@@ -115,16 +115,19 @@ export function PlayerGameCard({
 
   const playerIcons = getRandomIcons(getRandomIconCount());
 
-  let imageUrl;
-  if (player.athlete) {
-    imageUrl = player.athlete.team?.athstat_id
-      ? getTeamJerseyImage(player.athlete.team?.athstat_id)
-      : undefined;
-  } else {
-    imageUrl = player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
-  }
+  let imageUrl = useMemo(() => {
+    if (player.athlete) {
+      return player.athlete.team?.athstat_id
+        ? getTeamJerseyImage(player.athlete.team?.athstat_id)
+        : undefined;
+    } else {
+      return player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
+    }
+  }, [player]);
 
-  const teamId = player.athlete?.team?.athstat_id || player.team?.athstat_id;
+  const teamId = useMemo(() => {
+    return player.athlete?.team?.athstat_id || player.team?.athstat_id;
+  }, [player]);
 
   const { notAvailable } = usePlayerSquadReport(teamId, player.tracking_id);
 
@@ -176,14 +179,14 @@ export function PlayerGameCard({
             >
               {player.athlete
                 ? player.athlete.team?.image_url && (
-                    <TeamLogo
-                      url={player.athlete.team.image_url}
-                      className="w-6 h-6 lg:w-8 lg:h-8"
-                    />
-                  )
+                  <TeamLogo
+                    url={player.athlete.team.image_url}
+                    className="w-6 h-6 lg:w-8 lg:h-8"
+                  />
+                )
                 : player.team?.image_url && (
-                    <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
-                  )}
+                  <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
+                )}
             </div>
 
             {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
