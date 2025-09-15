@@ -171,6 +171,11 @@ function trackFixtureCardClicked(fixture: IFixture) {
   });
 }
 
+/** Tracks the first visit of a user to the app */
+function trackFirstUserVisit() {
+  track('First_User_Visit');
+}
+
 export const analytics = {
   track,
   trackPageVisit,
@@ -187,5 +192,6 @@ export const analytics = {
   trackOpenedPlayerProfile,
   trackFixtureCardClicked,
   trackChangedNotificationPreference,
-  trackClosedPlayerProfile
+  trackClosedPlayerProfile,
+  trackFirstUserVisit
 };
