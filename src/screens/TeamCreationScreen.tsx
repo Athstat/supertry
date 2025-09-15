@@ -152,7 +152,6 @@ export function TeamCreationScreen() {
     if (!showSuccessModal) return;
     if (
       isBridgeAvailable() &&
-      !isGuest &&
       !localStorage.getItem('onesignal_id') &&
       !requestedPushAfterSuccess
     ) {
@@ -160,7 +159,7 @@ export function TeamCreationScreen() {
       requestPushPermissions().catch(err => console.error('Push permission error:', err));
       setRequestedPushAfterSuccess(true);
     }
-  }, [showSuccessModal, isGuest, requestedPushAfterSuccess]);
+  }, [showSuccessModal, requestedPushAfterSuccess]);
 
   // Use our centralized team creation state hook
   const {
