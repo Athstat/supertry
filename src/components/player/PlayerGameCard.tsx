@@ -143,7 +143,8 @@ export function PlayerGameCard({
     leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
   );
 
-  const playerId = player.athlete_id || player.athlete.tracking_id;
+  console.log('player: ', player);
+  const playerId = player.athlete_id || player.athlete?.tracking_id || player.tracking_id;
 
   const { notAvailable } = usePlayerSquadReport(userTeam?.id, playerId);
 

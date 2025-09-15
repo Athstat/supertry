@@ -16,6 +16,7 @@ import { twMerge } from 'tailwind-merge';
 import { useTabView } from '../../shared/tabs/TabView';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
 import { usePlayerSquadReport } from '../../../hooks/fantasy/usePlayerSquadReport';
+import { swrFetchKeys } from '../../../utils/swrKeys';
 
 type Props = {
   round: IFantasyLeagueRound;
@@ -230,8 +231,20 @@ type AthleteMugshotItemProps = {
 };
 
 function AthleteMugshotItem({ a, onPlayerClick }: AthleteMugshotItemProps) {
-  const teamId = a.athlete_team_id ?? '';
-  const { notAvailable } = usePlayerSquadReport(teamId as string | number, a.tracking_id);
+  const { currentRound } = useFantasyLeagueGroup();
+  const { authUser } = useAuth();
+
+  const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
+    currentRound?.fantasy_league_group_id ?? '',
+    currentRound?.id ?? '',
+    authUser?.kc_id
+  );
+
+  const { data: userTeam } = useSWR(key, () =>
+    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
+  );
+
+  const { notAvailable } = usePlayerSquadReport(userTeam?.id, a.tracking_id);
 
   return (
     <div
@@ -258,7 +271,7 @@ function AthleteMugshotItem({ a, onPlayerClick }: AthleteMugshotItemProps) {
           />
           {notAvailable && (
             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-              <span className="bg-black/70 text-white text-[10px] font-semibold px-2 py-1 rounded-full">
+              <span className="bg-black/70 text-white text-[10px] font-semibold px-1 py-1 rounded-full">
                 ⚠️
               </span>
             </div>
