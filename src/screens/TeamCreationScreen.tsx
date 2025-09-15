@@ -1,5 +1,4 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { isBridgeAvailable, requestPushPermissions } from '../utils/bridgeUtils';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
@@ -118,7 +117,6 @@ export function TeamCreationScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null);
-  const [requestedPushAfterSuccess, setRequestedPushAfterSuccess] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
@@ -146,20 +144,6 @@ export function TeamCreationScreen() {
       });
     }
   }, [isAuthenticated]);
-
-  // Prompt push notifications while success modal is open (mobile only, not guest, idempotent)
-  useEffect(() => {
-    if (!showSuccessModal) return;
-    if (
-      isBridgeAvailable() &&
-      !localStorage.getItem('onesignal_id') &&
-      !requestedPushAfterSuccess
-    ) {
-      // Fire-and-forget; do not block UI
-      requestPushPermissions().catch(err => console.error('Push permission error:', err));
-      setRequestedPushAfterSuccess(true);
-    }
-  }, [showSuccessModal, requestedPushAfterSuccess]);
 
   // Use our centralized team creation state hook
   const {
