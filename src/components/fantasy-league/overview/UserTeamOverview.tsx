@@ -15,7 +15,6 @@ import { ArrowRight } from 'lucide-react';
 import { useTabView } from '../../shared/tabs/TabView';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
 
-
 type Props = {
   userTeam: FantasyLeagueTeamWithAthletes;
   leagueRound: IFantasyLeagueRound;
@@ -131,7 +130,7 @@ function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
       )}
     >
       <div className="h-[60%] w-full flex flex-col items-center justify-center">
-       {/* <TeamJersey
+        {/* <TeamJersey
           teamId={athlete.athlete.team_id}
           className="max-h-10 min-h-10 object-contain"
           hideFade

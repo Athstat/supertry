@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { requestPushPermissions } from '../utils/bridgeUtils';
+import { isBridgeAvailable, requestPushPermissions } from '../utils/bridgeUtils';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
@@ -50,7 +50,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
-  }
+  };
 
   // return (
   //   <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
@@ -118,11 +118,14 @@ export function TeamCreationScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTeamId, setCreatedTeamId] = useState<string | null>(null);
+  const [requestedPushAfterSuccess, setRequestedPushAfterSuccess] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
-  const league = location.state?.league ? (location.state?.league as IFantasyLeagueRound) : undefined;
+  const league = location.state?.league
+    ? (location.state?.league as IFantasyLeagueRound)
+    : undefined;
   const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } =
     useTeamCreationGuard(league);
   const [isGuest, setIsGuest] = useState(false);
@@ -133,8 +136,6 @@ export function TeamCreationScreen() {
   const isLocked = isTeamCreationLocked;
 
   useEffect(() => {
-    requestPushPermissions();
-
     // Check if user is a guest and get user info
     if (isAuthenticated) {
       const info = authService.getUserInfoSync();
@@ -145,6 +146,20 @@ export function TeamCreationScreen() {
       });
     }
   }, [isAuthenticated]);
+
+  // Prompt push notifications while success modal is open (mobile only, not guest, idempotent)
+  useEffect(() => {
+    if (!showSuccessModal) return;
+    if (
+      isBridgeAvailable() &&
+      !localStorage.getItem('onesignal_id') &&
+      !requestedPushAfterSuccess
+    ) {
+      // Fire-and-forget; do not block UI
+      requestPushPermissions().catch(err => console.error('Push permission error:', err));
+      setRequestedPushAfterSuccess(true);
+    }
+  }, [showSuccessModal, requestedPushAfterSuccess]);
 
   // Use our centralized team creation state hook
   const {
