@@ -30,7 +30,6 @@ import {
 
 import { analytics } from '../../services/analytics/anayticsService';
 import Experimental from '../shared/ab_testing/Experimental';
-import { isBridgeAvailable, requestPushPermissions } from '../../utils/bridgeUtils';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -63,7 +62,6 @@ export default function CreateMyTeam({
   const [presets, setPresets] = useState<TeamPreset[]>([]);
   const [isLoadingPresets, setIsLoadingPresets] = useState(false);
   const [selectedPresetId, setSelectedPresetId] = useState<string>('');
-  const [requestedPushAfterSuccess, setRequestedPushAfterSuccess] = useState(false);
 
   const totalSpent = Object.values(selectedPlayers).reduce(
     (sum, player) => sum + (player.price || 0),
@@ -123,20 +121,6 @@ export default function CreateMyTeam({
 
     loadAthletes();
   }, [leagueRound]);
-
-  // Prompt push notifications while success modal is open (mobile only, not guest, not already granted)
-  useEffect(() => {
-    if (!showSuccessModal) return;
-    if (
-      isBridgeAvailable() &&
-      !localStorage.getItem('onesignal_id') &&
-      !requestedPushAfterSuccess
-    ) {
-      // Fire-and-forget; do not block UI
-      requestPushPermissions().catch(err => console.error('Push permission error:', err));
-      setRequestedPushAfterSuccess(true);
-    }
-  }, [showSuccessModal, requestedPushAfterSuccess]);
 
   // Load saved team presets for the season (scoped to current user)
   useEffect(() => {

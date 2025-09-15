@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
@@ -8,6 +8,8 @@ import MyTeamPitchView from './MyTeamPitchView';
 import MyTeamEditView from './MyTeamEditView';
 import { twMerge } from 'tailwind-merge';
 import { calculateTeamTotalSpent } from '../../../utils/athleteUtils';
+import PushOptInModal from '../../ui/PushOptInModal';
+import { isBridgeAvailable, requestPushPermissions } from '../../../utils/bridgeUtils';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -40,6 +42,23 @@ export default function ViewMyTeam({
   const selectedCount = (team.athletes || []).length;
 
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+
+  // Push opt-in prompt state
+  const [showPushModal, setShowPushModal] = useState(false);
+
+  // Show "Enable push" modal on ViewMyTeam if not enabled and supported
+  useEffect(() => {
+    try {
+      const hasPushId = !!localStorage.getItem('onesignal_id');
+      const dismissed = localStorage.getItem('push_optin_dismissed') === 'true';
+
+      if (isBridgeAvailable() && !hasPushId && !dismissed) {
+        setShowPushModal(true);
+      }
+    } catch {
+      // If localStorage not available, do nothing
+    }
+  }, []);
 
   return (
     <div className="w-full py-4">
@@ -133,6 +152,25 @@ export default function ViewMyTeam({
           )}
         </Fragment>
       )}
+
+      <PushOptInModal
+        visible={showPushModal}
+        onEnable={async () => {
+          try {
+            await requestPushPermissions();
+          } catch (e) {
+            console.error('Push permission error:', e);
+          } finally {
+            setShowPushModal(false);
+          }
+        }}
+        onNotNow={() => {
+          try {
+            localStorage.setItem('push_optin_dismissed', 'true');
+          } catch {}
+          setShowPushModal(false);
+        }}
+      />
     </div>
   );
 }
