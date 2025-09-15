@@ -28,7 +28,7 @@ export default function UserRoundScoringUpdate({ userTeam, leagueRound }: Props)
         )
     }
 
-    const highestPointsScored = scoringOverview?.average_points_scored;
+    const highestPointsScored = scoringOverview?.highest_points_scored;
     const averagePointsScored = scoringOverview?.average_points_scored;
     const userScore = scoringOverview?.user_score;
 

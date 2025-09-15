@@ -1,27 +1,22 @@
-import { useNavigate } from "react-router-dom";
-import BlueGradientCard from "../shared/BlueGradientCard";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
-import NewTag from "../branding/NewTag";
+import { useNavigate } from 'react-router-dom';
+import BlueGradientCard from '../shared/BlueGradientCard';
+import PrimaryButton from '../shared/buttons/PrimaryButton';
+import NewTag from '../branding/NewTag';
 
-type Props = {
-};
+type Props = {};
 
-export function HeroSection({ }: Props) {
+export function HeroSection({}: Props) {
   const navigate = useNavigate();
-  const navigateToLeagues = () => navigate("/leagues");
+  const navigateToLeagues = () => navigate('/leagues');
 
-  const termsAndConditionsLink = "https://scrummy-app.com/#/scrum6-rules";
+  const termsAndConditionsLink = 'https://scrummy-app.com/#/scrum6-rules';
 
   return (
     <BlueGradientCard className="cursor-pointer">
       <div className="flex flex-col gap-4 p-3">
-
         <div>
           <div>
-
-            <h1 className="text-lg lg:text-xl font-bold">
-              SCRUM6 Challenge is LIVE!
-            </h1>
+            <h1 className="text-lg lg:text-xl font-bold">SCRUM6 Challenge is LIVE!</h1>
           </div>
 
           <p className="text-md opacity-90">
@@ -29,17 +24,22 @@ export function HeroSection({ }: Props) {
           </p>
         </div>
 
-        <p>⏰ Open now → Closes Sat, 9/13 @ 12:01 AM EST</p>
-
-        <div className="flex flex-row items-center gap-2" >
-
-          <PrimaryButton onClick={navigateToLeagues} className="w-fit bg-white text-blue-500 hover:bg-white hover:text-blue-600 dark:bg-white dark:text-blue-500 hover:dark:bg-white hover:dark:text-blue-600">
+        <div className="flex flex-row items-center gap-2">
+          <PrimaryButton
+            onClick={navigateToLeagues}
+            className="w-fit bg-white text-blue-500 hover:bg-white hover:text-blue-600 dark:bg-white dark:text-blue-500 hover:dark:bg-white hover:dark:text-blue-600"
+          >
             Take Me There
           </PrimaryButton>
 
-          <a href={termsAndConditionsLink} target="blank" className="hover:font-medium ease-out delay-300" >Terms & Conditions</a>
+          <a
+            href={termsAndConditionsLink}
+            target="blank"
+            className="hover:font-medium ease-out delay-300"
+          >
+            Terms & Conditions
+          </a>
         </div>
-
       </div>
 
       {/* {leagueOnTheClock && (
@@ -48,7 +48,6 @@ export function HeroSection({ }: Props) {
           league={leagueOnTheClock}
         />
       )} */}
-
     </BlueGradientCard>
   );
 }
@@ -84,7 +83,6 @@ export function HeroSection({ }: Props) {
 //     navigateToLeagueScreen(league);
 //   }
 
-
 //   return (
 //     <div className="flex flex-col p-4 gap-4 sm:gap-6">
 //       <div onClick={handleClickCard} className="space-y-2 sm:space-y-4 cursor-pointer">
@@ -106,7 +104,6 @@ export function HeroSection({ }: Props) {
 //             : <>{" "}in <strong>{hours}:{minutes}:{seconds}</strong></>
 //           }
 //         </p>
-
 
 //       </div>
 

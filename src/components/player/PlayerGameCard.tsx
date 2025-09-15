@@ -15,6 +15,11 @@ import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 import PlayerIconComponent from '../players/compare/PlayerIconComponent';
 import Experimental from '../shared/ab_testing/Experimental';
 import { usePlayerSquadReport } from '../../hooks/fantasy/usePlayerSquadReport';
+import useSWR from 'swr';
+import { leagueService } from '../../services/leagueService';
+import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { useAuth } from '../../contexts/AuthContext';
+import { swrFetchKeys } from '../../utils/swrKeys';
 // import { swrFetchKeys } from '../../utils/swrKeys';
 // import useSWR from 'swr';
 // import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
@@ -125,11 +130,23 @@ export function PlayerGameCard({
     }
   }, [player]);
 
-  const teamId = useMemo(() => {
-    return player.athlete?.team?.athstat_id || player.team?.athstat_id;
-  }, [player]);
+  const { currentRound } = useFantasyLeagueGroup();
+  const { authUser } = useAuth();
 
-  const { notAvailable } = usePlayerSquadReport(teamId, player.tracking_id);
+  const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
+    currentRound?.fantasy_league_group_id ?? '',
+    currentRound?.id ?? '',
+    authUser?.kc_id
+  );
+
+  const { data: userTeam } = useSWR(key, () =>
+    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
+  );
+
+  console.log('player: ', player);
+  const playerId = player.athlete_id || player.athlete?.tracking_id || player.tracking_id;
+
+  const { notAvailable } = usePlayerSquadReport(userTeam?.id, playerId);
 
   return (
     <div
@@ -179,14 +196,14 @@ export function PlayerGameCard({
             >
               {player.athlete
                 ? player.athlete.team?.image_url && (
-                  <TeamLogo
-                    url={player.athlete.team.image_url}
-                    className="w-6 h-6 lg:w-8 lg:h-8"
-                  />
-                )
+                    <TeamLogo
+                      url={player.athlete.team.image_url}
+                      className="w-6 h-6 lg:w-8 lg:h-8"
+                    />
+                  )
                 : player.team?.image_url && (
-                  <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
-                )}
+                    <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
+                  )}
             </div>
 
             {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
