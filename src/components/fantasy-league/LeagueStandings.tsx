@@ -3,7 +3,7 @@ import {
   FantasyLeagueGroupMember,
   FantasyLeagueGroupStanding,
 } from '../../types/fantasyLeagueGroups';
-import { Table2 } from 'lucide-react';
+import { Table2, EyeOff } from 'lucide-react';
 import {} from 'lucide-react';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
@@ -91,12 +91,24 @@ export function LeagueStandings() {
 
       <SelectedWeekIndicator />
 
-      <LeagueStandingsTable
-        standings={standings}
-        isLoading={isLoading}
-        handleSelectMember={handleSelectMember}
-        hideUserScore={isGuest}
-      />
+      <div className="relative">
+        <div className={`${isGuest ? 'blur-[3px] pointer-events-none select-none' : ''}`}>
+          <LeagueStandingsTable
+            standings={standings}
+            isLoading={isLoading}
+            handleSelectMember={handleSelectMember}
+          />
+        </div>
+
+        {isGuest && (
+          <div className="absolute inset-0 z-10 flex justify-center h-40 top-20">
+            <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-md rounded-xl p-6 flex flex-col items-center gap-3 text-center mx-4">
+              <EyeOff className="w-10 h-10 text-slate-700 dark:text-slate-300" />
+              <p className="font-medium">Claim your account to view scores</p>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div>
         {/* {isMember && <PrimaryButton onClick={handleShare} className="" >
