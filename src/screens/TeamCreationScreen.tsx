@@ -380,10 +380,15 @@ export function TeamCreationScreen() {
 
   if (userTeam && hasCreatedTeam) {
     const handleViewTeam = () => {
-      const uri = `/my-team/${userTeam.team_id}`;
-      navigate(uri, {
-        state: { teamWithRank: rankedUserTeam, leagueInfo: league, team: userTeam },
-      });
+      const groupId = league?.fantasy_league_group_id;
+      const roundId = league?.id;
+      const teamId = userTeam?.team_id;
+      if (groupId && roundId && teamId) {
+        navigate(`/league/${groupId}?journey=my-team&roundId=${roundId}&teamId=${teamId}`);
+      } else {
+        // Fallback: at least switch to My Team tab if we can't build a deep link
+        navigate(`/league/${officialLeagueId}?journey=my-team`);
+      }
     };
 
     return (
@@ -474,7 +479,15 @@ export function TeamCreationScreen() {
         }}
         onViewTeam={() => {
           setShowSuccessModal(false);
-          navigate('/my-teams');
+          const groupId = league?.fantasy_league_group_id;
+          const roundId = league?.id;
+          const teamId = createdTeamId;
+          if (groupId && roundId && teamId) {
+            navigate(`/league/${groupId}?journey=my-team&roundId=${roundId}&teamId=${teamId}`);
+          } else {
+            // Fallback: at least switch to My Team tab in the league
+            navigate(`/league/${officialLeagueId}?journey=my-team`);
+          }
         }}
       />
     </TeamCreationContainer>
