@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft, Lock, Table2, Users } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
@@ -64,16 +64,16 @@ export default function ViewMyTeam({
     <div className="w-full py-4">
       <div className="flex flex-row items-center justify-between mb-5">
         <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
-          <button
+          {/* <button
             type="button"
             onClick={() => onBack && onBack()}
             className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
             aria-label="Back to rounds"
           >
             <ArrowLeft />
-          </button>
+          </button> */}
           <div className="flex flex-col">
-            <p className="font-bold text-md">My Team</p>
+            <p className="font-bold text-xl">My Team</p>
             <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
               Your team for {leagueRound?.title}
             </p>
