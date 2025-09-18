@@ -402,3 +402,7 @@ export function getTeamJerseyImage(teamId: string) {
 export function calculateTeamTotalSpent(team: FantasyLeagueTeamWithAthletes | IFantasyLeagueTeam) {
     return team.athletes.reduce((sum, player) => sum + (player.purchase_price || 0), 0)
 }
+
+
+
+
