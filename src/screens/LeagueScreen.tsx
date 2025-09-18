@@ -61,7 +61,7 @@ function Content() {
     },
 
     {
-      label: 'My Teams',
+      label: 'My Team',
       tabKey: 'my-team',
       className: 'w-fit',
     },
