@@ -10,6 +10,7 @@ import { twMerge } from 'tailwind-merge';
 import { calculateTeamTotalSpent } from '../../../utils/athleteUtils';
 import PushOptInModal from '../../ui/PushOptInModal';
 import { isBridgeAvailable, requestPushPermissions } from '../../../utils/bridgeUtils';
+import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -26,20 +27,11 @@ export default function ViewMyTeam({
   onTeamUpdated: () => Promise<void>;
   onEditChange?: (isEditing: boolean) => void;
 }) {
+
   const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
 
-  const totalSpent = team ? calculateTeamTotalSpent(team) : 0;
+  const {totalSpent, slots, selectedCount} = useFantasyLeagueTeam();
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
-
-  const editableAthletesBySlot = useMemo(() => {
-    const map: Record<number, IFantasyTeamAthlete | undefined> = {};
-    (team.athletes || []).forEach(a => {
-      if (a?.slot != null) map[a.slot] = { ...a } as IFantasyTeamAthlete;
-    });
-    return map;
-  }, [team]);
-
-  const selectedCount = (team.athletes || []).length;
 
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
@@ -145,7 +137,7 @@ export default function ViewMyTeam({
         <Fragment>
           {leagueRound && (
             <MyTeamPitchView
-              editableAthletesBySlot={editableAthletesBySlot}
+              
               leagueRound={leagueRound}
               team={team}
             />

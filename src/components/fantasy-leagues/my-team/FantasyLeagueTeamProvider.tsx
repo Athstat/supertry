@@ -12,6 +12,7 @@ type Props = {
     children?: ReactNode
 }
 
+/** Provides team athlete data and fantasy league team data to be provided  */
 export default function FantasyLeagueTeamProvider({ team, children }: Props) {
 
     const atoms = [fantasyLeagueTeamAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom];
@@ -41,9 +42,10 @@ function InnerProvider({ team, children }: Props) {
 
                 const slot: IFantasyLeagueTeamSlot = {
                     position: p,
-                    slotNumber: index,
+                    slotNumber: index + 1,
                     athlete: slotAthlete,
-                    purchasePrice: slotAthlete?.purchase_price ?? 0
+                    purchasePrice: slotAthlete?.purchase_price ?? 0,
+                    is_starting: (index + 1) !== 6
                 }
 
                 return slot;
@@ -67,11 +69,17 @@ export function useFantasyLeagueTeam() {
     const [teamAthletes] = useAtom(fantasyTeamAthletesAtom);
     const [slots, setSlots] = useAtom(fantasyTeamSlotsAtom);
 
-    const totalTeamPurchaseValue: number = useMemo(() => {
+    const totalSpent: number = useMemo(() => {
         return slots.reduce((sum, s) => {
             return sum + (s.purchasePrice ?? 0);
         }, 0);
     }, [teamAthletes]);
+
+    const selectedCount = useMemo(() => {
+        return slots.reduce((sum, s) => {
+            return sum + (s.athlete ? 1 : 0);
+        }, 0)
+    }, [slots]);
 
     const removePlayerAtSlot = useCallback((slotNumber: number) => {
 
@@ -119,8 +127,9 @@ export function useFantasyLeagueTeam() {
         slots, setSlots,
         teamAthletes,
         team, setTeam,
-        totalTeamPurchaseValue,
+        totalSpent,
         removePlayerAtSlot,
-        setPlayerAtSlot
+        setPlayerAtSlot,
+        selectedCount
     }
 }

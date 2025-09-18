@@ -11,6 +11,7 @@ import FantasyRoundsList from './FantasyRoundsList';
 import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
 import { LoadingState } from '../ui/LoadingState';
+import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
 
 export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: boolean) => void }) {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -22,7 +23,7 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
         if (journeyInitial === 'my-team' && hasDirectTeamTarget) {
           return 'team-created';
         }
-      } catch {}
+      } catch { }
       return 'fantasy-rounds';
     }
   );
@@ -213,19 +214,21 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
 
     if (tabScene === 'team-created' && selectedRound && selectedTeam) {
       return (
-        <ViewMyTeam
-          leagueRound={selectedRound}
-          leagueConfig={leagueConfig}
-          team={selectedTeam}
-          onBack={() => setTabScene('fantasy-rounds')}
-          onEditChange={onEditChange}
-          onTeamUpdated={async () => {
-            if (selectedRound?.id) {
-              return fetchTeamsForCurrentRound(selectedRound.id);
-            }
-            return Promise.resolve();
-          }}
-        />
+        <FantasyLeagueTeamProvider team={selectedTeam} >
+          <ViewMyTeam
+            leagueRound={selectedRound}
+            leagueConfig={leagueConfig}
+            team={selectedTeam}
+            onBack={() => setTabScene('fantasy-rounds')}
+            onEditChange={onEditChange}
+            onTeamUpdated={async () => {
+              if (selectedRound?.id) {
+                return fetchTeamsForCurrentRound(selectedRound.id);
+              }
+              return Promise.resolve();
+            }}
+          />
+        </FantasyLeagueTeamProvider>
       );
     }
 
