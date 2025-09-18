@@ -30,7 +30,7 @@ export default function ViewMyTeam({
 
   const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
 
-  const {totalSpent, slots, selectedCount} = useFantasyLeagueTeam();
+  const {totalSpent, selectedCount} = useFantasyLeagueTeam();
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
 
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
@@ -137,7 +137,6 @@ export default function ViewMyTeam({
         <Fragment>
           {leagueRound && (
             <MyTeamPitchView
-              
               leagueRound={leagueRound}
               team={team}
             />

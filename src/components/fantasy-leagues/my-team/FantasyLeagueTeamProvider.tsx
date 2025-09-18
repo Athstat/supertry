@@ -36,16 +36,19 @@ function InnerProvider({ team, children }: Props) {
 
             const teamAthletes: IFantasyTeamAthlete[] = team.athletes;
 
+            console.log("Team Athletes Size: ", teamAthletes);
+
             const slots = defaultFantasyPositions.map((p, index) => {
 
-                const slotAthlete = teamAthletes.find((a) => a.slot === index);
+                const slotAthlete = teamAthletes.find((a) => a.slot === index + 1);
+                const slotNumber = slotAthlete?.slot ?? (index + 1);
 
                 const slot: IFantasyLeagueTeamSlot = {
                     position: p,
-                    slotNumber: index + 1,
+                    slotNumber: slotNumber,
                     athlete: slotAthlete,
                     purchasePrice: slotAthlete?.purchase_price ?? 0,
-                    is_starting: (index + 1) !== 6
+                    is_starting: slotNumber !== 6
                 }
 
                 return slot;
