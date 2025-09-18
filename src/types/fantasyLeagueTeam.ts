@@ -26,5 +26,6 @@ export const defaultFantasyPositions: IFantasyPosition[] = [
 export type IFantasyLeagueTeamSlot = {
     slotNumber: number,
     position: IFantasyPosition,
-    athlete?: IFantasyTeamAthlete
+    athlete?: IFantasyTeamAthlete,
+    purchasePrice?: number
 }
