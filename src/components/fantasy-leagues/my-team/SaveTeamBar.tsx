@@ -5,6 +5,7 @@ import { fantasyTeamService } from "../../../services/fantasyTeamService";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { Check, Loader } from "lucide-react";
+import { Toast } from "../../ui/Toast";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -22,7 +23,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
     const {
         changesDetected,
         resetToOriginalTeam,
-        isTeamFull, slots, team
+        isTeamFull, slots, team, teamCaptain
     } = useFantasyLeagueTeam();
 
     const isEditing = useMemo(() => {
@@ -39,6 +40,11 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
         if (isLocked) return;
 
         if (!team) return;
+
+        if (!teamCaptain) {
+            setSaveError('Ooops! You forgot to set a captain');
+            return;
+        }
 
         try {
             setIsSaving(true);
@@ -102,10 +108,16 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                         {isSaving ? 'Saving...' : 'Save Changes'}
                     </PrimaryButton>
                 </div>
-                {saveError && (
-                    <div className="mt-2 text-sm text-red-600 dark:text-red-400">{saveError}</div>
-                )}
             </div>}
+
+            {saveError && (
+                <Toast 
+                    message={saveError}
+                    isVisible={Boolean(saveError)}
+                    type="error"
+                    onClose={() => setSaveError(undefined)}
+                />
+            )}
 
             {/* Success Modal */}
             {

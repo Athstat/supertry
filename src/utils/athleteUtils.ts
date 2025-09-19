@@ -404,7 +404,7 @@ export function calculateTeamTotalSpent(team: FantasyLeagueTeamWithAthletes | IF
 }
 
 export function hashFantasyTeamAthlete(a: IFantasyTeamAthlete) {
-    const aEntry = `${a.athlete_id}-${a.is_captain}-${a.is_starting}-${a.price}`;
+    const aEntry = `${a.athlete_id}-${a.is_captain ? 'is_captain' : 'not-captain'}-${a.is_starting}-${a.price}`;
     return aEntry;
 }
 

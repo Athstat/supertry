@@ -114,36 +114,31 @@ export function useFantasyLeagueTeam() {
 
         setSlots(newSlots);
 
-        return {playerRemoved};
+        return { playerRemoved };
 
     }, [slots, setSlots]);
 
     const setPlayerAtSlot = useCallback((slotNumber: number, athlete: IProAthlete) => {
-        console.log("About to run function to set a player on a slot", team);
         if (!team) return;
 
         const newSlots: IFantasyLeagueTeamSlot[] = slots.map((s) => {
-            
-            console.log("Current slot ", s);
-            
-            if (s.slotNumber !== slotNumber) return s;
 
-            console.log("Slot Matches");
+            if (s.slotNumber !== slotNumber) return s;
 
             const newSlot = {
                 ...s,
                 athlete: {
                     ...athlete,
+                    is_captain: s.isCaptain,
                     team_id: team?.id,
                     purchase_price: athlete.price ?? 0,
                     slot: s.slotNumber,
                     id: new Date().valueOf(), // temporal id,
-                    athlete_id: athlete.tracking_id
-                },
-                purchasePrice: athlete.price
-            }
+                    athlete_id: athlete.tracking_id,
 
-            console.log("New player slot to be set ", newSlot);
+                },
+                purchasePrice: athlete.price,
+            }
 
             return newSlot;
         });
@@ -161,7 +156,10 @@ export function useFantasyLeagueTeam() {
 
             return {
                 ...s,
-                athlete: athlete,
+                athlete: {
+                    ...athlete,
+                    is_captain: s.isCaptain
+                },
                 purchasePrice: athlete.price
             }
         });
@@ -185,22 +183,39 @@ export function useFantasyLeagueTeam() {
             if (!wasSlotAndPlayerFound) return prev;
 
             return prev.map((s) => {
+                const slotAthlete = s.athlete;
+
+                if (!slotAthlete) {
+                    return {
+                        ...s,
+                        isCaptain: false
+                    };
+                }
+
                 if (s.slotNumber !== slotNumber) {
                     return {
                         ...s,
+                        athlete: {
+                            ...slotAthlete,
+                            is_captain: false
+                        },
                         isCaptain: false
                     }
                 }
 
                 return {
                     ...s,
+                    athlete: {
+                        ...slotAthlete,
+                        is_captain: true
+                    },
                     isCaptain: true
                 }
             });
 
         });
 
-    }, [setSlots]);
+    }, [setSlots, slots]);
 
     const resetToOriginalTeam = useCallback(() => {
 
