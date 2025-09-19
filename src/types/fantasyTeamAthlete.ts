@@ -3,7 +3,7 @@ import { IProTeam } from "./team";
 
 export type IFantasyTeamAthlete = {
   id: number,
-  team_id: number,
+  team_id: number | string,
   athlete_id: string,
   purchase_price: number,
   purchase_date?: Date,

@@ -44,8 +44,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
   onClose,
   roundId,
   roundStart,
-  roundEnd,
-  leagueId,
+  roundEnd
 }) => {
   // State for filtering and sorting
   const [searchQuery, setSearchQuery] = useState('');
