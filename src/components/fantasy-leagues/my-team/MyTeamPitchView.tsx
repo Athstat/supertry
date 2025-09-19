@@ -81,7 +81,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
           {!isTeamFull && (
             <WarningCard className='text-sm' >
               <p>
-                You have empty slot {emptySlotCount <= 1 ? '' : 's'} on your team. Click on <strong>'Edit'</strong> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
+                You have empty slot{emptySlotCount <= 1 ? '' : 's'} on your team. Click on <strong>'Edit'</strong> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
               </p>
             </WarningCard>
           )}
