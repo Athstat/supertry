@@ -58,7 +58,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
   };
 
   const starters = slots
-    .filter((p) => Boolean(p.athlete) && p.slotNumber !== 6)
+    .filter((p) => p.slotNumber !== 6)
     .map(p => ({ ...p!, is_starting: p!.slotNumber !== 6 }));
 
   const superSubSlot = slots

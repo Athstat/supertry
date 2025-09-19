@@ -1,6 +1,7 @@
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot } from '../../types/fantasyLeagueTeam';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
+import { EmptyPlayerCard } from '../fantasy-leagues/my-team/EditableTeamSlotItem';
 import RugbyPitch from '../shared/RugbyPitch';
 import { FantasyTeamAthleteCard } from './FantasyTeamAthleteCard';
 
@@ -21,7 +22,12 @@ export function TeamFormation({ players: slots, onPlayerClick, round }: TeamForm
 
         {slots.map((s) => {
 
-          if (!s.athlete) return;
+          if (!s.athlete) {
+            return <EmptyPlayerCard
+            slot={s}
+            />
+          };
+          
           const player = s.athlete; 
 
           return (

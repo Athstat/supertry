@@ -81,7 +81,7 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
               />
             </div>
           ) : (
-            <EmptySlotCard
+            <EmptyFantasyTeamSlotCard
               slot={slot}
               onClickSlot={onAddPlayerToEmptySlot}
             />
@@ -134,10 +134,11 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
 
 type EmptySlotCardProps = {
   slot: IFantasyLeagueTeamSlot,
-  onClickSlot?: (slot: IFantasyLeagueTeamSlot) => void
+  onClickSlot?: (slot: IFantasyLeagueTeamSlot) => void,
+  className?: string
 }
 
-function EmptySlotCard({ slot, onClickSlot }: EmptySlotCardProps) {
+export function EmptyFantasyTeamSlotCard({ slot, onClickSlot, className }: EmptySlotCardProps) {
 
   const handleClickSlot = () => {
     if (onClickSlot) {
@@ -150,7 +151,8 @@ function EmptySlotCard({ slot, onClickSlot }: EmptySlotCardProps) {
       onClick={handleClickSlot}
       className={twMerge(
         "flex flex-col cursor-pointer hover:dark:bg-slate-800/40 dark:bg-slate-800/20 rounded-xl border-4 border-slate-500/30 items-center justify-center border-dotted w-full h-full",
-        "bg-white hover:bg-gray-100"
+        "bg-white hover:bg-gray-100",
+        className
       )}
     >
       <span className="text-3xl">+</span>
@@ -158,6 +160,33 @@ function EmptySlotCard({ slot, onClickSlot }: EmptySlotCardProps) {
     </div>
   )
 }
+
+export function EmptyPlayerCard({ slot, onClickSlot, className }: EmptySlotCardProps) {
+
+  const handleClickSlot = () => {
+    if (onClickSlot) {
+      onClickSlot(slot);
+    }
+  }
+
+  return (
+    <div
+      onClick={handleClickSlot}
+      className={twMerge(
+        "flex flex-col cursor-pointer hover:dark:bg-slate-800/40 dark:bg-slate-800/20 rounded-xl border-4 border-slate-500/30 items-center justify-center border-dotted w-full h-full",
+        "bg-white hover:bg-gray-100",
+        'min-w-[160px] max-w-[160px]  cursor-pointer max-h-[250px] ',
+        'lg:min-w-[200px] lg:max-w-[200px]',
+        'flex items-center justify-center relative text-white dark:text-white',
+        className
+      )}
+    >
+      <span className="text-3xl">+</span>
+      <span className="mt-2 text-xs text-gray-500 dark:text-gray-400">{slot.position.name}</span>
+    </div>
+  )
+}
+
 
 // onClick={() => {
 //   const pos = toPosition(positions[index], index);
