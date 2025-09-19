@@ -36,6 +36,8 @@ export default function ViewMyTeam({
   // Push opt-in prompt state
   const [showPushModal, setShowPushModal] = useState(false);
 
+
+
   // Show "Enable push" modal on ViewMyTeam if not enabled and supported
   useEffect(() => {
     try {

@@ -26,6 +26,8 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
         isTeamFull, slots, team, teamCaptain
     } = useFantasyLeagueTeam();
 
+    console.log("Selected team and full data structure ", team);
+
     const isEditing = useMemo(() => {
         return changesDetected;
     }, [changesDetected]);
