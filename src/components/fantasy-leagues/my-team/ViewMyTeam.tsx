@@ -109,7 +109,7 @@ export default function ViewMyTeam({
         </div>
         <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800/70 p-3">
           <div className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            Budget
+            Total Spent
           </div>
           {leagueConfig && (
             <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
