@@ -8,6 +8,7 @@ import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import WarningCard from '../../shared/WarningCard';
+import { useMyTeamView } from './MyTeamStateProvider';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -23,6 +24,8 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
   const [showActionModal, setShowActionModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
+
+  const {navigate: navigateViewMode} = useMyTeamView();
 
   const handlePlayerClick = (player: IFantasyTeamAthlete) => {
     setSelectedPlayer(player);
@@ -68,6 +71,10 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
 
   const emptySlotCount = 6 - selectedCount;
 
+  const handleGoToEdit = () => {
+    navigateViewMode("edit");
+  }
+
   return (
     <div className="mt-4">
       <div>
@@ -81,7 +88,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
           {!isTeamFull && (
             <WarningCard className='text-sm' >
               <p>
-                You have empty slot{emptySlotCount <= 1 ? '' : 's'} on your team. Click on <strong>'Edit'</strong> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
+                You have empty slot{emptySlotCount <= 1 ? '' : 's'} on your team. Click on <span className='underline cursor-pointer text-blue-500 hover:text-blue-600' onClick={handleGoToEdit} >Edit</span> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
               </p>
             </WarningCard>
           )}
