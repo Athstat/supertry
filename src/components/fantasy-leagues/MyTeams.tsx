@@ -11,7 +11,6 @@ import FantasyRoundsList from './FantasyRoundsList';
 import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
 import { LoadingState } from '../ui/LoadingState';
-import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
 import MyTeamViewStateProvider from './my-team/MyTeamStateProvider';
 
 export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: boolean) => void }) {

@@ -222,7 +222,7 @@ export default function CreateMyTeam({
       console.log('Join league response:', response);
       // Best-effort mapping to IFantasyLeagueTeam
       const createdTeam: IFantasyLeagueTeam = {
-        id: response?.team?.id ?? response?.id ?? '',
+        id: response?.id || response?.team?.id || '' ,
         team_id: String(response?.team?.id ?? response?.id ?? ''),
         league_id: Number(leagueRound.id),
         rank: response?.team?.rank ?? 0,
