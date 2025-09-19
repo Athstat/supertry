@@ -7,6 +7,7 @@ import { PlayerActionModal } from '../../team/PlayerActionModal';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
+import WarningCard from '../../shared/WarningCard';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -15,8 +16,8 @@ type Props = {
 
 /** Renders my team pitch view */
 export default function MyTeamPitchView({ leagueRound, team }: Props) {
-  
-  const {slots} = useFantasyLeagueTeam();
+
+  const { slots, isTeamFull, selectedCount } = useFantasyLeagueTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
   const [showActionModal, setShowActionModal] = useState(false);
@@ -65,13 +66,27 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
     .filter((player) => Boolean(player.athlete))
     .find(player => player.slotNumber === 6);
 
+  const emptySlotCount = 6 - selectedCount;
+
   return (
     <div className="mt-4">
       <div>
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Team Formation</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium mb-4">
-          Greyed out players are not playing in this round's games
-        </p>
+
+        <div className='mb-4 flex flex-col gap-0' >
+          <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium">
+            Greyed out players are not playing in this round's games
+          </p>
+
+          {!isTeamFull && (
+            <WarningCard className='text-sm' >
+              <p>
+                You have empty slot {emptySlotCount <= 1 ? '' : 's'} on your team. Click on <strong>'Edit'</strong> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
+              </p>
+            </WarningCard>
+          )}
+        </div>
+
         {leagueRound && starters.length > 0 && (
           <TeamFormation players={starters} onPlayerClick={handlePlayerClick} round={leagueRound} />
         )}

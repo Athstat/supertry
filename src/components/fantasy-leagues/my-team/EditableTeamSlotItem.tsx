@@ -181,8 +181,8 @@ export function EmptyPlayerCard({ slot, onClickSlot, className }: EmptySlotCardP
         className
       )}
     >
-      <span className="text-3xl">+</span>
-      <span className="mt-2 text-xs text-gray-500 dark:text-gray-400">{slot.position.name}</span>
+      <span className="mt-2 text-base text-gray-500 dark:text-gray-400">{slot.position.name}</span>
+      <SecondaryText className="text-xs">Empty</SecondaryText>
     </div>
   )
 }
