@@ -12,17 +12,15 @@ import PlayerSelectionModal from '../../team-creation/PlayerSelectionModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import { IFantasyLeagueTeamSlot } from '../../../types/fantasyLeagueTeam';
 import { EditableTeamSlotItem } from './EditableTeamSlotItem';
-import SaveTeamBar from './SaveTeamBar';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
   team: IFantasyLeagueTeam;
-  onTeamUpdated: () => Promise<void>;
   onEditChange?: (isEditing: boolean) => void;
 };
 /** Renders My Team Edit Grid */
-export default function MyTeamEditView({ leagueConfig,leagueRound, onTeamUpdated }: Props) {
+export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
 
   const {
     slots,
@@ -144,10 +142,6 @@ export default function MyTeamEditView({ leagueConfig,leagueRound, onTeamUpdated
   return (
     <Fragment>
       
-      {leagueRound && <SaveTeamBar 
-        leagueRound={leagueRound}
-        onTeamUpdated={onTeamUpdated}
-      />}
       <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
 
         {slots.map((s) => {

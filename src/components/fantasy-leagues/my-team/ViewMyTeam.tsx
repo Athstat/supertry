@@ -1,22 +1,20 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Lock, Table2, Users } from 'lucide-react';
+import { Fragment, useEffect, useState } from 'react';
+import { Lock } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
-import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import MyTeamPitchView from './MyTeamPitchView';
 import MyTeamEditView from './MyTeamEditView';
 import { twMerge } from 'tailwind-merge';
-import { calculateTeamTotalSpent } from '../../../utils/athleteUtils';
 import PushOptInModal from '../../ui/PushOptInModal';
 import { isBridgeAvailable, requestPushPermissions } from '../../../utils/bridgeUtils';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
+import SaveTeamBar from './SaveTeamBar';
 
 export default function ViewMyTeam({
   leagueRound,
   leagueConfig,
   team,
-  onBack,
   onTeamUpdated,
   onEditChange,
 }: {
@@ -31,7 +29,6 @@ export default function ViewMyTeam({
   const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
 
   const {totalSpent, selectedCount} = useFantasyLeagueTeam();
-  const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
 
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
@@ -121,6 +118,11 @@ export default function ViewMyTeam({
         </div>
       </div>
 
+      {leagueRound && <SaveTeamBar 
+        leagueRound={leagueRound}
+        onTeamUpdated={onTeamUpdated}
+      />}
+
       {viewMode === 'edit' ? (
         // 2x3 grid of slots with player cards
         <Fragment>
@@ -128,7 +130,6 @@ export default function ViewMyTeam({
             leagueConfig={leagueConfig}
             leagueRound={leagueRound}
             team={team}
-            onTeamUpdated={onTeamUpdated}
             onEditChange={onEditChange}
           />
         </Fragment>

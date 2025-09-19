@@ -30,11 +30,10 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
   const { refreshRounds, sortedRounds, currentRound } = useFantasyLeagueGroup();
   const [selectedRound, setSelectedRound] = useState<IFantasyLeagueRound | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<IFantasyLeagueTeam | null>(null);
-  const [isFetchingTeams, setIsFetchingTeams] = useState<boolean>(false);
-  const [roundIdToTeams, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
-  const [showCreationSuccessModal, setShowCreationSuccessModal] = useState<boolean>(false);
+  const [, setIsFetchingTeams] = useState<boolean>(false);
+  const [, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
-  const [refreshKey, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
+  const [, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | null>(null);
 
   const [journey, setJourney] = useQueryState('journey');
