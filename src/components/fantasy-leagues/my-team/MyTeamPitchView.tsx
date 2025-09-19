@@ -9,6 +9,7 @@ import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdo
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import WarningCard from '../../shared/WarningCard';
 import { useMyTeamView } from './MyTeamStateProvider';
+import { EmptyPlayerCard } from './EditableTeamSlotItem';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -66,7 +67,6 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
     .map(p => ({ ...p!, is_starting: p!.slotNumber !== 6 }));
 
   const superSubSlot = slots
-    .filter((player) => Boolean(player.athlete))
     .find(player => player.slotNumber === 6);
 
   const emptySlotCount = 6 - selectedCount;
@@ -100,19 +100,26 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
       </div>
 
       {/* Super Substitute */}
-      {leagueRound && superSubSlot?.athlete && (
+      {leagueRound && superSubSlot && (
         <div className="mt-8">
+         
           <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
             <span>Super Substitute</span>
             <span className="ml-2 text-orange-500 text-sm px-2 py-0.5 rounded-full">Special</span>
           </h2>
-          <div className="rounded-xl p-4 w-40 pt-12">
-            {superSubSlot && (
+          
+          <div className="rounded-xl p-4 w-40 ">
+            {superSubSlot.athlete ? (
               <FantasyTeamAthleteCard
                 player={superSubSlot.athlete}
                 onPlayerClick={handlePlayerClick}
                 round={leagueRound}
                 pointsClassName="text-black dark:text-white"
+              />
+            ) : (
+              <EmptyPlayerCard 
+                slot={superSubSlot}
+                className='h-[100px]'
               />
             )}
           </div>
