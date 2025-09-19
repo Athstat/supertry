@@ -1,6 +1,6 @@
 import { Fragment } from 'react/jsx-runtime';
-import { FANTASY_TEAM_POSITIONS } from '../../../types/constants';
-import { AthleteWithTrackingId, IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
+import { FANTASY_TEAM_POSITIONS, MAX_TEAM_BUDGET } from '../../../types/constants';
+import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { PlayerGameCard } from '../../player/PlayerGameCard';
 import { useEffect, useMemo, useState } from 'react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
@@ -9,12 +9,17 @@ import { seasonService } from '../../../services/seasonsService';
 import { IProAthlete } from '../../../types/athletes';
 import { Position } from '../../../types/position';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
-import { Loader, Check } from 'lucide-react';
+import { Loader, Check, X } from 'lucide-react';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PrimaryButton from '../../shared/buttons/PrimaryButton';
 import PlayerSelectionModal from '../../team-creation/PlayerSelectionModal';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
-import { calculateTeamTotalSpent } from '../../../utils/athleteUtils';
+import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
+import { IFantasyLeagueTeamSlot } from '../../../types/fantasyLeagueTeam';
+import { useFantasyLeague } from '../../fantasy-league/useFantasyLeague';
+import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import SecondaryText from '../../shared/SecondaryText';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -31,9 +36,18 @@ export default function MyTeamEditView({
   onEditChange,
   onTeamUpdated,
 }: Props) {
+
+  const {
+    slots, removePlayerAtSlot,
+    setPlayerAtSlot, teamCaptain,
+    totalSpent, setTeamCaptainAtSlot,
+    resetToOriginalTeam, originalSlots,
+    originalCaptain, setOldPlayerAtSlot
+  } = useFantasyLeagueTeam();
+
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IFantasyTeamAthlete>();
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const positions = FANTASY_TEAM_POSITIONS;
+  const [swapPlayer, setSwapPlayer] = useState<IFantasyTeamAthlete>();
 
   const handlePlayerClick = (player: IFantasyTeamAthlete) => {
     setPlayerModalPlayer(player);
@@ -45,95 +59,39 @@ export default function MyTeamEditView({
     setPlayerModalPlayer(undefined);
   };
 
-  const [captainAthleteId, setCaptainAthleteId] = useState<string | undefined>(
-    () => team.athletes?.find(a => a.is_captain)?.athlete_id
-  );
-
   const [players, setPlayers] = useState<IProAthlete[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
+
   const [swapState, setSwapState] = useState<{
     open: boolean;
     slot: number | null;
     position?: Position | null;
   }>({ open: false, slot: null, position: null });
+
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  const totalSpent = team ? calculateTeamTotalSpent(team) : 0;
-  const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
-
-  const [editableAthletesBySlot, setEditableAthletesBySlot] = useState<
-    Record<number, IFantasyTeamAthlete | undefined>
-  >(() => {
-    const map: Record<number, IFantasyTeamAthlete | undefined> = {};
-    (team.athletes || []).forEach(a => {
-      if (a?.slot != null) map[a.slot] = { ...a } as IFantasyTeamAthlete;
-    });
-    return map;
-  });
-
-  const [swapPlayer, setSwapPlayer] = useState<IProAthlete | undefined | IFantasyTeamAthlete>(
-    undefined
-  );
-
-  useEffect(() => {
-    // When team changes from parent, reset editable state
-    const map: Record<number, IFantasyTeamAthlete | undefined> = {};
-    (team.athletes || []).forEach(a => {
-      if (a?.slot != null) map[a.slot] = { ...a } as IFantasyTeamAthlete;
-    });
-    setEditableAthletesBySlot(map);
-    setCaptainAthleteId(team.athletes?.find(a => a.is_captain)?.athlete_id);
-  }, [team.athletes]);
-
-  const athletesBySlot = editableAthletesBySlot;
-
-  // Original (non-edited) snapshot from props for diff detection
-  const originalAthletesBySlot = useMemo(() => {
-    const map: Record<number, IFantasyTeamAthlete | undefined> = {};
-    (team.athletes || []).forEach(a => {
-      if (a?.slot != null) map[a.slot] = a as IFantasyTeamAthlete;
-    });
-    return map;
-  }, [team.athletes]);
-
-  const originalCaptainAthleteId = useMemo(
-    () => team.athletes?.find(a => a.is_captain)?.athlete_id,
-    [team.athletes]
-  );
+  const budgetRemaining = (leagueConfig?.team_budget || MAX_TEAM_BUDGET) - totalSpent;
 
   const isEditing = useMemo(() => {
     // Captain changed?
-    if (captainAthleteId !== originalCaptainAthleteId) return true;
+    if (teamCaptain?.tracking_id !== originalCaptain?.tracking_id) return true;
+
     // Any slot player changed?
-    for (let i = 1; i <= positions.length; i++) {
-      const orig = originalAthletesBySlot[i]?.athlete_id || undefined;
-      const curr = editableAthletesBySlot[i]?.athlete_id || undefined;
+    for (let i = 1; i <= slots.length; i++) {
+      const slot = slots[i];
+      const ogSlot = originalSlots[i];
+
+      const orig = ogSlot?.athlete?.athlete_id || undefined;
+      const curr = slot?.athlete?.athlete_id || undefined;
       if (orig !== curr) return true;
     }
     return false;
-  }, [
-    captainAthleteId,
-    originalCaptainAthleteId,
-    originalAthletesBySlot,
-    editableAthletesBySlot,
-    positions.length,
-  ]);
 
-  // Notify parent when edit state changes
-  useEffect(() => {
-    if (onEditChange) onEditChange(isEditing);
-  }, [isEditing, onEditChange]);
+  }, [teamCaptain, originalSlots, originalCaptain, slots]);
 
   // Cancel: revert to original team state
   const handleCancelEdits = () => {
-    // rebuild from original team props
-    const map: Record<number, IFantasyTeamAthlete | undefined> = {};
-    (team.athletes || []).forEach(a => {
-      if (a?.slot != null) map[a.slot] = { ...(a as IFantasyTeamAthlete) };
-    });
-    setEditableAthletesBySlot(map);
-    setCaptainAthleteId(originalCaptainAthleteId);
+    resetToOriginalTeam();
   };
 
   // Load season players for swapping
@@ -175,25 +133,28 @@ export default function MyTeamEditView({
     try {
       setIsSaving(true);
       setSaveError(undefined);
-      const athletesPayload = Object.entries(editableAthletesBySlot)
-        .map(([slotStr, a]) => {
-          const slot = Number(slotStr);
+      const athletesPayload = slots
+        .filter(s => Boolean(s.athlete))
+        .map((s) => {
+          const slot = s.slotNumber;
+          const a = s.athlete;
+
           if (!a) return undefined;
           return {
             athlete_id: a.athlete_id,
             slot,
-            purchase_price: (a as any).price || a.purchase_price || 0,
+            purchase_price: s.purchasePrice || (a as any).price || a.purchase_price || 0,
             is_starting: slot !== 6,
-            is_captain: a.athlete_id === captainAthleteId,
+            is_captain: s.isCaptain,
           };
         })
         .filter(Boolean) as {
-        athlete_id: string;
-        slot: number;
-        purchase_price: number;
-        is_starting: boolean;
-        is_captain: boolean;
-      }[];
+          athlete_id: string;
+          slot: number;
+          purchase_price: number;
+          is_starting: boolean;
+          is_captain: boolean;
+        }[];
 
       console.log('athletesPayload: ', athletesPayload);
 
@@ -208,7 +169,47 @@ export default function MyTeamEditView({
     }
   };
 
-  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+  const handleSetCaptain = (slotNumber: number) => {
+    setTeamCaptainAtSlot(slotNumber);
+  }
+
+  const handleSwapPlayer = (newAthlete: IProAthlete) => {
+    if (!swapState || !swapState.slot) return;
+
+    setPlayerAtSlot(swapState.slot, newAthlete);
+    setSwapState({ open: false, slot: null, position: null });
+  }
+
+  const handleIntiateSwap = (slot: IFantasyLeagueTeamSlot) => {
+    const pos = toPosition(slot.position, slot.slotNumber - 1);
+    setSwapState({ open: true, slot: slot.slotNumber, position: pos });
+
+    if (slot.athlete) {
+      setSwapPlayer(slot.athlete);
+    }
+  }
+
+  const handleCancelSwap = () => {
+    setSwapPlayer(undefined);
+
+    setSwapState({
+      open: false,
+      slot: null,
+      position: undefined
+    });
+
+  }
+
+  const handleAddPlayerOnEmptySlot = (slot: IFantasyLeagueTeamSlot) => {
+    // Set slot state
+    const pos = toPosition(slot.position, slot.slotNumber - 1);
+    setSwapState({
+      open: true,
+      slot: slot.slotNumber,
+      position: pos
+    })
+
+  }
 
   return (
     <Fragment>
@@ -238,169 +239,265 @@ export default function MyTeamEditView({
       )}
 
       <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
-        {positions.map((p, index) => {
-          const slot = index + 1;
-          const athlete = athletesBySlot[slot];
+
+        {slots.map((s) => {
           return (
-            <div key={slot || athlete?.tracking_id} className="flex flex-col w-full min-w-0 ">
-              <div className="w-full min-w-0 h-60 flex items-center justify-center bg-transparent">
-                {athlete ? (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <PlayerGameCard
-                      key={athlete.tracking_id}
-                      player={athlete}
-                      className="mx-auto"
-                      blockGlow
-                      onClick={() => {
-                        handlePlayerClick(athlete);
-                      }}
-                      detailsClassName="pl-6 pr-6 pb-7"
-                      priceClassName="top-12 left-6"
-                      teamLogoClassName="top-4 right-2"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center w-full h-full rounded-lg bg-white/40 dark:bg-gray-900/20">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{p.name}</span>
-                  </div>
-                )}
-              </div>
-
-              {athlete && (
-                <div className="mt-4 flex flex-col gap-2 z-50">
-                  <button
-                    className={`${
-                      captainAthleteId === athlete.athlete_id
-                        ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
-                        : `text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 ${isLocked ? '' : 'hover:bg-blue-100 dark:hover:bg-blue-900/50'}`
-                    }`}
-                    onClick={() => {
-                      if (captainAthleteId !== athlete.athlete_id)
-                        setCaptainAthleteId(athlete.athlete_id);
-                    }}
-                    disabled={
-                      isSaving || captainAthleteId === athlete.athlete_id || !leagueRound?.is_open
-                    }
-                  >
-                    {captainAthleteId === athlete.athlete_id ? 'Captain' : 'Make Captain'}
-                  </button>
-
-                  <button
-                    className={`text-xs w-full rounded-lg py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 ${isLocked ? '' : 'hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60'}`}
-                    onClick={() => {
-                      const pos = toPosition(positions[index], index);
-                      setSwapState({ open: true, slot, position: pos });
-                      setSwapPlayer(athlete);
-                    }}
-                    disabled={isSaving || !leagueRound?.is_open}
-                  >
-                    Swap
-                  </button>
-                </div>
-              )}
-            </div>
+            <EditableTeamSlotItem
+              key={s.slotNumber}
+              slot={s}
+              onPlayerClick={handlePlayerClick}
+              onInitiateSwap={handleIntiateSwap}
+              onAddPlayerToEmptySlot={handleAddPlayerOnEmptySlot}
+            />
           );
         })}
       </div>
 
+
+
       {/* Player profile modal */}
-      {playerModalPlayer && (
-        <PlayerProfileModal
-          player={playerModalPlayer}
-          isOpen={showProfileModal}
-          onClose={handleClosePlayerProfileModal}
-        />
-      )}
+      {
+        playerModalPlayer && (
+          <PlayerProfileModal
+            player={playerModalPlayer}
+            isOpen={showProfileModal}
+            onClose={handleClosePlayerProfileModal}
+          />
+        )
+      }
 
       {/* Swap selection modal */}
-      {swapState.open && swapState.slot != null && swapState.position && (
-        <PlayerSelectionModal
-          visible={swapState.open}
-          selectedPosition={swapState.position}
-          players={players.filter(p => p.tracking_id !== swapPlayer?.tracking_id)}
-          remainingBudget={budgetRemaining + (swapPlayer?.price || 0)}
-          selectedPlayers={Object.entries(editableAthletesBySlot)
-            .filter(([s]) => Number(s) !== swapState.slot)
-            .map(
-              ([, a]) => ({ tracking_id: a?.tracking_id || a?.athlete_id }) as AthleteWithTrackingId
-            )}
-          handlePlayerSelect={(athlete: IProAthlete) => {
-            setEditableAthletesBySlot(prev => {
-              const updated = { ...prev };
-              const slot = swapState.slot!;
-              const current = updated[slot];
-              updated[slot] = {
-                ...(current || ({} as IFantasyTeamAthlete)),
-                athlete_id: athlete.tracking_id,
-                tracking_id: athlete.tracking_id,
-                player_name: athlete.player_name || 'Unknown Player',
-                image_url: athlete.image_url,
-                position: athlete.position || current?.position || '',
-                price: athlete.price || 0,
-                points: athlete.power_rank_rating || 0,
-                team: athlete.team?.athstat_name || 'Unknown Team',
-                form: athlete.form || 'NEUTRAL',
-                power_rank_rating: athlete.power_rank_rating,
-                team_logo: athlete.team?.image_url,
-                slot,
-                is_captain: (current?.athlete_id || '') === captainAthleteId,
-              } as unknown as IFantasyTeamAthlete;
-              return updated;
-            });
-            setSwapState({ open: false, slot: null, position: null });
-          }}
-          onClose={() => setSwapState({ open: false, slot: null, position: null })}
-          roundId={parseInt(String(leagueRound?.id || '0'))}
-          roundStart={leagueRound?.start_round ?? undefined}
-          roundEnd={leagueRound?.end_round ?? undefined}
-          leagueId={String(leagueRound?.official_league_id || '')}
-        />
-      )}
+      {
+        swapState.open && swapState.slot != null && swapState.position && (
+          <PlayerSelectionModal
+            visible={swapState.open}
+            selectedPosition={swapState.position}
+            players={players.filter(p => p.tracking_id !== swapPlayer?.tracking_id)}
+            remainingBudget={budgetRemaining + (swapPlayer?.purchase_price || 0)}
+            selectedPlayers={
+              slots
+                .filter(s => Boolean(s.athlete))
+                .map((s) => {
+                  return { tracking_id: s.athlete?.tracking_id ?? '' }
+                })
+            }
+
+            handlePlayerSelect={handleSwapPlayer}
+            onClose={handleCancelSwap}
+            roundId={parseInt(String(leagueRound?.id || '0'))}
+            roundStart={leagueRound?.start_round ?? undefined}
+            roundEnd={leagueRound?.end_round ?? undefined}
+            leagueId={String(leagueRound?.official_league_id || '')}
+          />
+        )
+      }
 
       {/* Loading Modal */}
-      {isSaving && !showSuccessModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-          <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full text-primary-500 dark:text-primary-400">
-                <Loader className="w-10 h-10 animate-spin" />
+      {
+        isSaving && !showSuccessModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+            <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full text-primary-500 dark:text-primary-400">
+                  <Loader className="w-10 h-10 animate-spin" />
+                </div>
+                <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Saving</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Please wait while we save your team...
+                </p>
               </div>
-              <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Saving</h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Please wait while we save your team...
-              </p>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Success Modal */}
-      {showSuccessModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-          <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
-                <Check size={32} />
+      {
+        showSuccessModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+            <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
+                  <Check size={32} />
+                </div>
+                <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Updated!</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Your team changes have been saved for {leagueRound?.title}
+                </p>
+                <PrimaryButton
+                  className="w-full"
+                  onClick={() => {
+                    setShowSuccessModal(false);
+                    if (onTeamUpdated) {
+                      onTeamUpdated();
+                    }
+                  }}
+                >
+                  Great!
+                </PrimaryButton>
               </div>
-              <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Updated!</h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Your team changes have been saved for {leagueRound?.title}
-              </p>
-              <PrimaryButton
-                className="w-full"
-                onClick={() => {
-                  setShowSuccessModal(false);
-                  if (onTeamUpdated) {
-                    onTeamUpdated();
-                  }
-                }}
-              >
-                Great!
-              </PrimaryButton>
             </div>
           </div>
-        </div>
-      )}
-    </Fragment>
+        )
+      }
+    </Fragment >
   );
 }
+
+type SlotProps = {
+  slot: IFantasyLeagueTeamSlot,
+  onPlayerClick?: (player: IFantasyTeamAthlete) => void;
+  disabled?: boolean;
+  onInitiateSwap?: (slot: IFantasyLeagueTeamSlot) => void;
+  onAddPlayerToEmptySlot?: (slot: IFantasyLeagueTeamSlot) => void;
+}
+
+function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiateSwap, onAddPlayerToEmptySlot }: SlotProps) {
+
+  const { currentRound } = useFantasyLeagueGroup();
+  const { setTeamCaptainAtSlot, removePlayerAtSlot } = useFantasyLeagueTeam();
+  const athlete = slot.athlete;
+
+  const isCurrPlayerCaptain = slot.isCaptain;
+
+  const handlePlayerClick = () => {
+    if (onPlayerClick && slot.athlete) {
+      onPlayerClick(slot.athlete);
+    }
+  }
+
+  const handleSetCaptain = () => {
+    setTeamCaptainAtSlot(slot.slotNumber);
+  }
+
+  const handleInitiateSwap = () => {
+    if (onInitiateSwap) {
+      onInitiateSwap(slot);
+    }
+  }
+
+  const handleClearSlot = () => {
+    removePlayerAtSlot(slot.slotNumber);
+  }
+
+  const cannotSelectCaptain = disabled || isCurrPlayerCaptain;
+  const isLocked = currentRound && isLeagueRoundLocked(currentRound);
+
+  return (
+    <Fragment>
+
+      <div key={athlete?.tracking_id} className="flex flex-col w-full min-w-0 p-2">
+        <div className="w-full min-w-0 h-60 flex items-center justify-center bg-transparent">
+          {athlete ? (
+            <div className="w-full h-full flex flex-col items-center justify-center">
+
+              <div className=' flex w-full flex-row items-center justify-between' >
+                <SecondaryText>{slot.position.name}</SecondaryText>
+                <div>
+                  <button
+                    onClick={handleClearSlot}
+                    className='dark:bg-slate-700/60 bg-slate-200 hover:dark:bg-slate-700 w-6 h-6 rounded-md flex flex-col items-center justify-center'
+                  >
+                    <X className='w-4 h-4 text-slate-700 dark:text-white' />
+                  </button>
+                </div>
+              </div>
+
+              <PlayerGameCard
+                key={athlete.tracking_id}
+                player={athlete}
+                className="mx-auto"
+                blockGlow
+                onClick={handlePlayerClick}
+                detailsClassName="pl-6 pr-6 pb-7"
+                priceClassName="top-12 left-6"
+                teamLogoClassName="top-4 right-2"
+              />
+            </div>
+          ) : (
+            <EmptySlotCard
+              slot={slot}
+              onClickSlot={onAddPlayerToEmptySlot}
+            />
+          )}
+        </div>
+
+        {athlete && (
+          <div className="mt-4 flex flex-col gap-2 z-50">
+            <button
+              className={`${isCurrPlayerCaptain
+                ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
+                : `text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 ${isLocked ? '' : 'hover:bg-blue-100 dark:hover:bg-blue-900/50'}`
+                }`}
+              onClick={handleSetCaptain}
+              disabled={cannotSelectCaptain}
+            >
+              {isCurrPlayerCaptain ? 'Captain' : 'Make Captain'}
+            </button>
+
+            <button
+              className={`text-xs w-full rounded-lg py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 ${isLocked ? '' : 'hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60'}`}
+              onClick={handleInitiateSwap}
+              disabled={disabled}
+            >
+              Swap
+            </button>
+          </div>
+        )}
+
+        {!athlete && (
+          <div className="mt-4 flex flex-col gap-2 z-50">
+            <button
+              className={`text-xs w-full rounded-lg py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 ${isLocked ? '' : 'hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60'}`}
+              onClick={() => {
+                if (onAddPlayerToEmptySlot) {
+                  onAddPlayerToEmptySlot(slot)
+                }
+              }}
+              disabled={disabled}
+            >
+              Add Player
+            </button>
+          </div>
+        )}
+      </div>
+
+    </Fragment>
+  )
+}
+
+type EmptySlotCardProps = {
+  slot: IFantasyLeagueTeamSlot,
+  onClickSlot?: (slot: IFantasyLeagueTeamSlot) => void
+}
+
+function EmptySlotCard({ slot, onClickSlot }: EmptySlotCardProps) {
+
+  const handleClickSlot = () => {
+    if (onClickSlot) {
+      onClickSlot(slot);
+    }
+  }
+
+  return (
+    <div
+      onClick={handleClickSlot}
+      className={twMerge(
+        "flex flex-col cursor-pointer hover:dark:bg-slate-800/40 dark:bg-slate-800/20 rounded-xl border-4 border-slate-500/30 items-center justify-center border-dotted w-full h-full",
+        "bg-white hover:bg-gray-100"
+      )}
+    >
+      <span className="text-3xl">+</span>
+      <span className="mt-2 text-xs text-gray-500 dark:text-gray-400">{slot.position.name}</span>
+    </div>
+  )
+}
+
+// onClick={() => {
+//   const pos = toPosition(positions[index], index);
+//   setSwapState({ open: true, slot: slotNumber, position: pos });
+
+//   if (s.athlete) {
+//     setSwapPlayer(s.athlete);
+//   }
+// }}

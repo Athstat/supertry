@@ -28,5 +28,6 @@ export type IFantasyLeagueTeamSlot = {
     position: IFantasyPosition,
     athlete?: IFantasyTeamAthlete,
     purchasePrice?: number,
-    is_starting: boolean
+    is_starting: boolean,
+    isCaptain?: boolean
 }

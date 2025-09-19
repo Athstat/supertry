@@ -115,7 +115,7 @@ export default function ViewMyTeam({
           </div>
           {leagueConfig && (
             <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              {budgetRemaining}/{leagueConfig?.team_budget}
+              {totalSpent}/{leagueConfig?.team_budget}
             </div>
           )}
         </div>

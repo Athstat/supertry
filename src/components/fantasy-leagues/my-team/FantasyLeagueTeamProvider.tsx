@@ -6,6 +6,7 @@ import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
 import { IProAthlete } from "../../../types/athletes"
+import { MAX_TEAM_BUDGET } from "../../../types/constants"
 
 type Props = {
     team: IFantasyLeagueTeam,
@@ -48,7 +49,8 @@ function InnerProvider({ team, children }: Props) {
                     slotNumber: slotNumber,
                     athlete: slotAthlete,
                     purchasePrice: slotAthlete?.purchase_price ?? 0,
-                    is_starting: slotNumber !== 6
+                    is_starting: slotNumber !== 6,
+                    isCaptain: slotAthlete?.is_captain
                 }
 
                 return slot;
@@ -74,9 +76,13 @@ export function useFantasyLeagueTeam() {
 
     const totalSpent: number = useMemo(() => {
         return slots.reduce((sum, s) => {
-            return sum + (s.purchasePrice ?? 0);
+            const nextSum = sum + (s.purchasePrice ?? 0);
+            return nextSum;
+            // if (nextSum > MAX_TEAM_BUDGET) return MAX_TEAM_BUDGET
+            // else return nextSum;
+
         }, 0);
-    }, [teamAthletes]);
+    }, [slots]);
 
     const selectedCount = useMemo(() => {
         return slots.reduce((sum, s) => {
@@ -87,22 +93,23 @@ export function useFantasyLeagueTeam() {
     const removePlayerAtSlot = useCallback((slotNumber: number) => {
 
         const newSlots = slots.map((s) => {
-            if (s.slotNumber === slotNumber) return s;
+            if (s.slotNumber !== slotNumber) return s;
 
             return {
                 ...s,
                 athlete: undefined,
-                purchasePrice: undefined
+                purchasePrice: 0,
+                isCaptain: false
             }
 
         });
 
         setSlots(newSlots);
 
-    }, [slots, slots]);
+    }, [slots, setSlots]);
 
     const setPlayerAtSlot = useCallback((slotNumber: number, athlete: IProAthlete) => {
-        
+
         if (!team) return;
 
         const newSlots: IFantasyLeagueTeamSlot[] = slots.map((s) => {
@@ -126,6 +133,105 @@ export function useFantasyLeagueTeam() {
 
     }, [slots, setSlots]);
 
+    const setOldPlayerAtSlot = useCallback((slotNumber: number, athlete: IFantasyTeamAthlete) => {
+
+        if (!team) return;
+
+        const newSlots: IFantasyLeagueTeamSlot[] = slots.map((s) => {
+            if (s.slotNumber !== slotNumber) return s;
+
+            return {
+                ...s,
+                athlete: athlete,
+                purchasePrice: athlete.price
+            }
+        });
+
+        setSlots(newSlots);
+
+    }, [slots, setSlots]);
+
+
+    const teamCaptain = useMemo(() => {
+        const foundAthlete = slots.find((s) => s.athlete && s.isCaptain);
+        return foundAthlete?.athlete;
+    }, [slots]);
+
+    const setTeamCaptainAtSlot = useCallback((slotNumber: number) => {
+
+        setSlots(prev => {
+
+            const wasSlotAndPlayerFound = prev.find((s) => Boolean(s.athlete) && s.slotNumber === slotNumber);
+
+            if (!wasSlotAndPlayerFound) return prev;
+
+            return prev.map((s) => {
+                if (s.slotNumber !== slotNumber) {
+                    return {
+                        ...s,
+                        isCaptain: false
+                    }
+                }
+
+                return {
+                    ...s,
+                    isCaptain: true
+                }
+            });
+
+        });
+
+    }, [setSlots]);
+
+    const resetToOriginalTeam = useCallback(() => {
+
+        const slots = defaultFantasyPositions.map((p, index) => {
+
+            const slotAthlete = teamAthletes.find((a) => a.slot === index + 1);
+            const slotNumber = slotAthlete?.slot ?? (index + 1);
+
+            const slot: IFantasyLeagueTeamSlot = {
+                position: p,
+                slotNumber: slotNumber,
+                athlete: slotAthlete,
+                purchasePrice: slotAthlete?.purchase_price ?? 0,
+                is_starting: slotNumber !== 6,
+                isCaptain: slotAthlete?.is_captain
+            }
+
+            return slot;
+        });
+
+        setSlots(slots);
+    }, [slots, setSlots, teamAthletes]);
+
+    const originalSlots = useMemo(() => {
+        const slots = defaultFantasyPositions.map((p, index) => {
+
+            const slotAthlete = teamAthletes.find((a) => a.slot === index + 1);
+            const slotNumber = slotAthlete?.slot ?? (index + 1);
+
+            const slot: IFantasyLeagueTeamSlot = {
+                position: p,
+                slotNumber: slotNumber,
+                athlete: slotAthlete,
+                purchasePrice: slotAthlete?.purchase_price ?? 0,
+                is_starting: slotNumber !== 6,
+                isCaptain: slotAthlete?.is_captain
+            }
+
+            return slot;
+        });
+
+
+        return slots;
+
+    }, [slots, teamAthletes]);
+
+    const originalCaptain = useMemo(() => {
+        return originalSlots.find((s) => s.isCaptain === true)?.athlete;
+    }, [originalSlots]);
+
     return {
         slots, setSlots,
         teamAthletes,
@@ -133,6 +239,12 @@ export function useFantasyLeagueTeam() {
         totalSpent,
         removePlayerAtSlot,
         setPlayerAtSlot,
-        selectedCount
+        selectedCount,
+        teamCaptain,
+        setTeamCaptainAtSlot,
+        resetToOriginalTeam,
+        originalSlots,
+        originalCaptain,
+        setOldPlayerAtSlot
     }
 }
