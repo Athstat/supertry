@@ -40,9 +40,9 @@ export function useMyTeamView() {
     const [mode, setMode] = useAtom(myTeamModeAtom);
 
     const navigate = useCallback((tab: MyTeamViewMode) => {
-        if (mode !== tab) {
-            setMode(tab);
-        }
+
+        setMode(tab);
+
     }, [mode, setMode]);
 
     const viewMode = mode;

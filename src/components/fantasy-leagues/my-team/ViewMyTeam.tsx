@@ -10,6 +10,7 @@ import PushOptInModal from '../../ui/PushOptInModal';
 import { isBridgeAvailable, requestPushPermissions } from '../../../utils/bridgeUtils';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import SaveTeamBar from './SaveTeamBar';
+import { useMyTeamView } from './MyTeamStateProvider';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -26,7 +27,7 @@ export default function ViewMyTeam({
   onEditChange?: (isEditing: boolean) => void;
 }) {
 
-  const [viewMode, setViewMode] = useState<'edit' | 'pitch'>('pitch');
+  const {viewMode, navigate: setViewMode} = useMyTeamView();
 
   const {totalSpent, selectedCount} = useFantasyLeagueTeam();
 
@@ -76,7 +77,7 @@ export default function ViewMyTeam({
             className={twMerge(
               'px-3 py-1.5 rounded-lg text-sm flex flex-row items-center gap-2 font-medium border border-gray-200 dark:border-gray-700`',
               'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 dark:border-slate-700',
-              viewMode === 'edit' && 'bg-blue-600 text-white'
+              viewMode === 'edit' && 'bg-blue-600 dark:bg-blue-600 text-white'
             )}
           >
             <p>Edit</p>

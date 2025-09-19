@@ -12,6 +12,7 @@ import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
 import { LoadingState } from '../ui/LoadingState';
 import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
+import MyTeamViewStateProvider from './my-team/MyTeamStateProvider';
 
 export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: boolean) => void }) {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -213,7 +214,7 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
 
     if (tabScene === 'team-created' && selectedRound && selectedTeam) {
       return (
-        <FantasyLeagueTeamProvider team={selectedTeam} >
+        <MyTeamViewStateProvider team={selectedTeam} >
           <ViewMyTeam
             leagueRound={selectedRound}
             leagueConfig={leagueConfig}
@@ -227,7 +228,7 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
               return Promise.resolve();
             }}
           />
-        </FantasyLeagueTeamProvider>
+        </MyTeamViewStateProvider>
       );
     }
 
