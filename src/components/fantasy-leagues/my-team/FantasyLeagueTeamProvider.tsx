@@ -6,7 +6,7 @@ import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
 import { IProAthlete } from "../../../types/athletes"
-import { MAX_TEAM_BUDGET } from "../../../types/constants"
+import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils/athleteUtils"
 
 type Props = {
     team: IFantasyLeagueTeam,
@@ -30,9 +30,15 @@ export default function FantasyLeagueTeamProvider({ team, children }: Props) {
 
 function InnerProvider({ team, children }: Props) {
 
+    const setTeam = useSetAtom(fantasyLeagueTeamAtom);
     const setSlots = useSetAtom(fantasyTeamSlotsAtom);
 
     useEffect(() => {
+
+        if (team) {
+            setTeam(team);
+        }
+
         if (team.athletes) {
 
             const teamAthletes: IFantasyTeamAthlete[] = team.athletes;
@@ -92,9 +98,11 @@ export function useFantasyLeagueTeam() {
 
     const removePlayerAtSlot = useCallback((slotNumber: number) => {
 
+        let playerRemoved = false;
+
         const newSlots = slots.map((s) => {
             if (s.slotNumber !== slotNumber) return s;
-
+            playerRemoved = true;
             return {
                 ...s,
                 athlete: undefined,
@@ -106,16 +114,23 @@ export function useFantasyLeagueTeam() {
 
         setSlots(newSlots);
 
+        return {playerRemoved};
+
     }, [slots, setSlots]);
 
     const setPlayerAtSlot = useCallback((slotNumber: number, athlete: IProAthlete) => {
-
+        console.log("About to run function to set a player on a slot", team);
         if (!team) return;
 
         const newSlots: IFantasyLeagueTeamSlot[] = slots.map((s) => {
+            
+            console.log("Current slot ", s);
+            
             if (s.slotNumber !== slotNumber) return s;
 
-            return {
+            console.log("Slot Matches");
+
+            const newSlot = {
                 ...s,
                 athlete: {
                     ...athlete,
@@ -127,11 +142,15 @@ export function useFantasyLeagueTeam() {
                 },
                 purchasePrice: athlete.price
             }
+
+            console.log("New player slot to be set ", newSlot);
+
+            return newSlot;
         });
 
         setSlots(newSlots);
 
-    }, [slots, setSlots]);
+    }, [slots, setSlots, team]);
 
     const setOldPlayerAtSlot = useCallback((slotNumber: number, athlete: IFantasyTeamAthlete) => {
 
@@ -232,6 +251,28 @@ export function useFantasyLeagueTeam() {
         return originalSlots.find((s) => s.isCaptain === true)?.athlete;
     }, [originalSlots]);
 
+    const changesDetected = useMemo(() => {
+        let oldAthletes = (team?.athletes) ?? [];
+        let newAthletes: IFantasyTeamAthlete[] = [];
+
+        slots.forEach((s) => {
+            if (s.athlete) {
+                newAthletes.push(s.athlete);
+            }
+        });
+
+        oldAthletes = sortFantasyTeamAthletes(oldAthletes);
+        newAthletes = sortFantasyTeamAthletes(newAthletes);
+
+        const oldAthletesHash = hashFantasyTeamAthletes(oldAthletes);
+        const newAthletesHash = hashFantasyTeamAthletes(newAthletes);
+
+        return oldAthletesHash !== newAthletesHash;
+
+    }, [team, slots]);
+
+    const isTeamFull = useMemo(() => selectedCount === 6, [selectedCount]);
+
     return {
         slots, setSlots,
         teamAthletes,
@@ -245,6 +286,8 @@ export function useFantasyLeagueTeam() {
         resetToOriginalTeam,
         originalSlots,
         originalCaptain,
-        setOldPlayerAtSlot
+        setOldPlayerAtSlot,
+        changesDetected,
+        isTeamFull
     }
 }

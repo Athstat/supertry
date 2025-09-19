@@ -403,6 +403,21 @@ export function calculateTeamTotalSpent(team: FantasyLeagueTeamWithAthletes | IF
     return team.athletes.reduce((sum, player) => sum + (player.purchase_price || 0), 0)
 }
 
+export function hashFantasyTeamAthlete(a: IFantasyTeamAthlete) {
+    const aEntry = `${a.athlete_id}-${a.is_captain}-${a.is_starting}-${a.price}`;
+    return aEntry;
+}
 
+export function hashFantasyTeamAthletes(athletes: IFantasyTeamAthlete[]) {
+    return athletes.reduce((hash, a) => {
+        const aEntry = hashFantasyTeamAthlete(a);
 
+        return hash === "" ? hash + `${aEntry}` : hash + `:${aEntry}`;
+    }, "");
+}
 
+export function sortFantasyTeamAthletes(athletes: IFantasyTeamAthlete[]) {
+    return athletes.sort((a, b) => {
+        return a.slot - b.slot;
+    })
+}
