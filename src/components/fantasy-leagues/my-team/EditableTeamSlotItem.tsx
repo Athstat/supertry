@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Lock, X } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
@@ -25,13 +25,14 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
   const athlete = slot.athlete;
 
   const isCurrPlayerCaptain = slot.isCaptain;
+  const isLocked = currentRound && isLeagueRoundLocked(currentRound);
 
   const handlePlayerClick = () => {
     if (onPlayerClick && slot.athlete) {
       onPlayerClick(slot.athlete);
     }
   }
-
+  
   const handleSetCaptain = () => {
     setTeamCaptainAtSlot(slot.slotNumber);
   }
@@ -43,11 +44,13 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
   }
 
   const handleClearSlot = () => {
+    if (isLocked) {
+      return;
+    }
     removePlayerAtSlot(slot.slotNumber);
   }
 
   const cannotSelectCaptain = disabled || isCurrPlayerCaptain;
-  const isLocked = currentRound && isLeagueRoundLocked(currentRound);
 
   return (
     <Fragment>
@@ -57,17 +60,23 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
           {athlete ? (
             <div className="w-full h-full flex flex-col items-center justify-center">
 
-              <div className=' flex w-full flex-row items-center justify-between' >
+              {<div className={twMerge(
+                'flex w-full flex-row items-center justify-between'
+              )} >
                 <SecondaryText>{slot.position.name}</SecondaryText>
                 <div>
                   <button
                     onClick={handleClearSlot}
-                    className='dark:bg-slate-700/60 bg-slate-200 hover:dark:bg-slate-700 w-6 h-6 rounded-md flex flex-col items-center justify-center'
+                    className={twMerge(
+                      'dark:bg-slate-700/60 bg-slate-200 hover:dark:bg-slate-700 w-6 h-6 rounded-md flex flex-col items-center justify-center',
+                      isLocked && 'opacity-25'
+                    )}
                   >
-                    <X className='w-4 h-4 text-slate-700 dark:text-white' />
+                    {!isLocked && <X className='w-4 h-4 text-slate-700 dark:text-white' />}
+                    {isLocked && <Lock className='w-4 h-4 text-slate-700 dark:text-white' />}
                   </button>
                 </div>
-              </div>
+              </div>}
 
               <PlayerGameCard
                 key={athlete.tracking_id}
@@ -88,7 +97,7 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
           )}
         </div>
 
-        {athlete && (
+        {athlete && !isLocked && (
           <div className="mt-4 flex flex-col gap-2 z-50">
             <button
               className={`${isCurrPlayerCaptain
@@ -111,7 +120,7 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
           </div>
         )}
 
-        {!athlete && (
+        {!athlete && !isLocked && (
           <div className="mt-4 flex flex-col gap-2 z-50">
             <button
               className={`text-xs w-full rounded-lg py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 ${isLocked ? '' : 'hover:bg-purple-100 dark:hover:bg-purple-900/50 disabled:opacity-60'}`}

@@ -12,6 +12,8 @@ import PlayerSelectionModal from '../../team-creation/PlayerSelectionModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import { IFantasyLeagueTeamSlot } from '../../../types/fantasyLeagueTeam';
 import { EditableTeamSlotItem } from './EditableTeamSlotItem';
+import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
+import WarningCard from '../../shared/WarningCard';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -51,6 +53,7 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
   }>({ open: false, slot: null, position: null });
 
   const budgetRemaining = (leagueConfig?.team_budget || MAX_TEAM_BUDGET) - totalSpent;
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
 
   // Load season players for swapping
@@ -142,6 +145,13 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
   return (
     <Fragment>
       
+      {isLocked && leagueRound && <WarningCard>
+        <p>
+          Team selection for <strong>{leagueRound.title}</strong> has been locked. You can
+          no longer make changes to your lineup after the deadline has passed
+        </p>
+      </WarningCard>}
+
       <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
 
         {slots.map((s) => {
