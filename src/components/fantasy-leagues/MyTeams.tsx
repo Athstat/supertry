@@ -12,6 +12,8 @@ import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
 import { LoadingState } from '../ui/LoadingState';
 import MyTeamViewStateProvider from './my-team/MyTeamStateProvider';
+import { analytics } from '../../services/analytics/anayticsService';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
 export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: boolean) => void }) {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -39,6 +41,10 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
   const [journey, setJourney] = useQueryState('journey');
   const [roundIdParam] = useQueryState('roundId');
   const [teamIdParam] = useQueryState('teamId');
+
+  useEffect(() => {
+    fantasyAnalytics.trackVisitedMyTeamsTab();
+  }, []);
 
   useEffect(() => {
     if (journey === 'team-creation' && currentRound) {

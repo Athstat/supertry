@@ -12,6 +12,10 @@ import PlayerSelectionModal from '../../team-creation/PlayerSelectionModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import { IFantasyLeagueTeamSlot } from '../../../types/fantasyLeagueTeam';
 import { EditableTeamSlotItem } from './EditableTeamSlotItem';
+import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
+import WarningCard from '../../shared/WarningCard';
+import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
+import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -27,6 +31,8 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
     setPlayerAtSlot, totalSpent,
     
   } = useFantasyLeagueTeam();
+
+  const {league} = useFantasyLeagueGroup();
 
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IFantasyTeamAthlete>();
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -51,7 +57,14 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
   }>({ open: false, slot: null, position: null });
 
   const budgetRemaining = (leagueConfig?.team_budget || MAX_TEAM_BUDGET) - totalSpent;
+  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
+  useEffect(() => {
+    fantasyAnalytics.trackVisitedEditTeamTab(
+      league?.id,
+      leagueRound?.id
+    );
+  }, []);
 
   // Load season players for swapping
   useEffect(() => {
@@ -96,6 +109,8 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
     console.log("Yey, so we passed the test bro");
     setPlayerAtSlot(swapState.slot, newAthlete);
     setSwapState({ open: false, slot: null, position: null });
+
+    fantasyAnalytics.trackUsedSwapPlayerFeature();
   }
 
   const handleIntiateSwap = (slot: IFantasyLeagueTeamSlot) => {
@@ -142,6 +157,13 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
   return (
     <Fragment>
       
+      {isLocked && leagueRound && <WarningCard className='text-sm' >
+        <p>
+          Team selection for <strong>{leagueRound.title}</strong> has been locked. You can
+          no longer make changes to your lineup after the deadline has passed
+        </p>
+      </WarningCard>}
+
       <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
 
         {slots.map((s) => {

@@ -6,6 +6,7 @@ import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { Check, Loader } from "lucide-react";
 import { Toast } from "../../ui/Toast";
+import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -35,6 +36,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
     // Cancel: revert to original team state
     const handleCancelEdits = () => {
         resetToOriginalTeam();
+        fantasyAnalytics.trackCanceledTeamEdits();
     };
 
 
@@ -81,6 +83,8 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             await onTeamUpdated();
             setIsSaving(false);
             setShowSuccessModal(true);
+
+            fantasyAnalytics.trackSaveTeamEdits();
         } catch (e) {
             console.error('Failed to update fantasy team', e);
             setSaveError('Failed to update team. Please try again.');
