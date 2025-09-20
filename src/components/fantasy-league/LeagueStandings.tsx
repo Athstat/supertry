@@ -8,7 +8,7 @@ import {} from 'lucide-react';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { ErrorState } from '../ui/ErrorState';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
 import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
 import LeagueStandingsFilterSelector, {
@@ -19,6 +19,7 @@ import { useLeagueRoundStandingsFilter } from '../../hooks/fantasy/useLeagueRoun
 import LeagueStandingsTable from './standings/LeagueStandingsTable';
 import { useAuth } from '../../contexts/AuthContext';
 import { isGuestUser } from '../../utils/deviceId/deviceIdUtils';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
 export function LeagueStandings() {
   const { userMemberRecord, league } = useFantasyLeagueGroup();
@@ -45,6 +46,10 @@ export function LeagueStandings() {
   });
 
   const standings = fetchedStandings ?? [];
+
+  useEffect(() => {
+    fantasyAnalytics.trackViewedStandingsTab();
+  }, []);
 
   // Handle team row click
 

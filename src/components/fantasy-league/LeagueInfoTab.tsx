@@ -6,8 +6,9 @@ import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPick
 import { Hash } from 'lucide-react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { Copy } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Toast } from '../ui/Toast';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
 export default function LeagueInfoTab() {
 
@@ -17,6 +18,10 @@ export default function LeagueInfoTab() {
     })
 
     const [message, setMessage] = useState<string>();
+
+    useEffect(() => {
+        fantasyAnalytics.trackViewedLeagueInfo();
+    }, []);
 
     const handleCopyEntryCode = () => {
 
