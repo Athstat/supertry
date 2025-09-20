@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { FantasyTeamAthleteCard } from '../../team/FantasyTeamAthleteCard';
@@ -10,6 +10,7 @@ import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import WarningCard from '../../shared/WarningCard';
 import { useMyTeamView } from './MyTeamStateProvider';
 import { EmptyPlayerCard } from './EditableTeamSlotItem';
+import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -27,6 +28,10 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
   const [showPointsModal, setShowPointsModal] = useState(false);
 
   const {navigate: navigateViewMode} = useMyTeamView();
+
+  useEffect(() => {
+    fantasyAnalytics.trackVisitedTeamPitchView();
+  }, []);
 
   const handlePlayerClick = (player: IFantasyTeamAthlete) => {
     setSelectedPlayer(player);

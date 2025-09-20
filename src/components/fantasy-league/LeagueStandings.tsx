@@ -66,6 +66,7 @@ export function LeagueStandings() {
 
   const handleSelectMember = (member: FantasyLeagueGroupMember) => {
     setSelectedMember(member);
+    fantasyAnalytics.trackClickedRowOnLeagueStandings();
     setShowModal(true);
   };
 

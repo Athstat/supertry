@@ -8,6 +8,7 @@ import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { PlayerGameCard } from "../../player/PlayerGameCard";
 import SecondaryText from "../../shared/SecondaryText";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
+import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
 
 type SlotProps = {
   slot: IFantasyLeagueTeamSlot,
@@ -48,6 +49,8 @@ export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiate
       return;
     }
     removePlayerAtSlot(slot.slotNumber);
+
+    fantasyAnalytics.trackClearedTeamSlot();
   }
 
   const cannotSelectCaptain = disabled || isCurrPlayerCaptain;

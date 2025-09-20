@@ -11,7 +11,7 @@ export const fantasyAnalytics = {
         analytics.track('Attempted_Join_League_By_Code');
     },
 
-    trackEditTeamTabVisit: (leagueGroupId: string, leagueRoundId: string | number) => {
+    trackVisitedEditTeamTab: (leagueGroupId?: string, leagueRoundId?: string | number) => {
         analytics.track('Visited_Edit_Team_Tab', {
             leagueRound: leagueRoundId,
             leagueGroupId: leagueGroupId
@@ -30,7 +30,7 @@ export const fantasyAnalytics = {
         analytics.track('Save_Team_Edits');
     },
 
-    trackVisitedMyTeamsTabs: () => {
+    trackVisitedMyTeamsTab: () => {
         analytics.track('Visited_My_Teams_Tab');
     },
 
@@ -64,5 +64,9 @@ export const fantasyAnalytics = {
         analytics.track('Visited_League_Screen', {
             leagueGroupId
         })
+    },
+
+    trackClickedRowOnLeagueStandings: () => {
+        analytics.track('Clicked_User_Record_On_Standings');
     }
 }
