@@ -157,7 +157,7 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
   return (
     <Fragment>
       
-      {isLocked && leagueRound && <WarningCard>
+      {isLocked && leagueRound && <WarningCard className='text-sm' >
         <p>
           Team selection for <strong>{leagueRound.title}</strong> has been locked. You can
           no longer make changes to your lineup after the deadline has passed
