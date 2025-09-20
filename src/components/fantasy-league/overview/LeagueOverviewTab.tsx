@@ -12,9 +12,11 @@ import LeagueRoundFixturesOverview from './LeagueRoundFixturesOverview';
 import { GamePlayHelpButton } from '../../branding/help/LearnScrummyNoticeCard';
 import LeagueRoundCountdown from '../LeagueCountdown';
 import BlueGradientCard from '../../shared/BlueGradientCard';
+import { useEffect } from 'react';
+import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 
 export default function LeagueOverviewTab() {
-  const { currentRound } = useFantasyLeagueGroup();
+  const { currentRound, league } = useFantasyLeagueGroup();
   const { authUser } = useAuth();
 
   const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
@@ -27,6 +29,10 @@ export default function LeagueOverviewTab() {
     leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
   );
   console.log('userTeam: ', userTeam);
+
+  useEffect(() => {
+    fantasyAnalytics.trackVisitedLeagueOverviewScreen(league?.id);
+  }, []);
 
   if (isLoading) {
     return (
