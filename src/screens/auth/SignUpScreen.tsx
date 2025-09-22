@@ -11,6 +11,10 @@ import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
 import FormErrorText from '../../components/shared/FormError';
 import { authService } from '../../services/authService';
+import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
+import AppleOAuthBox from '../../components/auth/oauth/AppleOAuthBox';
+import GoogleOAuthBox from '../../components/auth/oauth/GoogleOAuthBox';
+import Experimental from '../../components/shared/ab_testing/Experimental';
 
 export function SignUpScreen() {
   const navigate = useNavigate();
@@ -83,6 +87,7 @@ export function SignUpScreen() {
         username: form.username,
       };
 
+      const { data: res, error } = await authService.registerUser(registerData);
       const { data: res, error } = await authService.registerUser(registerData);
 
       if (res) {
@@ -198,6 +203,23 @@ export function SignUpScreen() {
           </div>
         )}
         {/* Steps 2 and 3 removed - country and team selection no longer needed */}
+
+        <Experimental>
+          <div className="relative flex items-center justify-center">
+            <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
+            <div className="text-sm px-2 text-gray-500 dark:text-gray-400 ">or</div>
+            <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
+          </div>
+        </Experimental>
+
+        <Experimental>
+          <GoogleOAuthBox />
+          <AppleOAuthBox />
+        </Experimental>
+
+        <Experimental>
+          <GuestLoginBox />
+        </Experimental>
 
         <div className="text-center">
           <p className="text-gray-600 dark:text-gray-400">
