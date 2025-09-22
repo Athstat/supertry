@@ -103,7 +103,7 @@ export function WelcomeScreen() {
             className="flex flex-1 flex-col gap-4 items-center justify-center p-4 w-full"
           >
             <PrimaryButton
-              className="w-full py-3"
+              className="w-full py-3 animate-glow"
               onClick={navigateToSignin}
             >
               <p>Sign In</p>
@@ -120,7 +120,7 @@ export function WelcomeScreen() {
             </Experimental>
 
             <GuestLoginBox 
-              className='bg-transparent text-slate-200 dark:text-slate-200 hover:text-white dark:hover:text-white dark:bg-transparent border-none underline hover:bg-transparent hover:dark:bg-transparent'
+              className='bg-transparent py-0 text-slate-200 dark:text-slate-200 hover:text-white dark:hover:text-white dark:bg-transparent border-none underline hover:bg-transparent hover:dark:bg-transparent'
               hideIcon
             />
 
