@@ -1,12 +1,12 @@
-import { motion } from "framer-motion"
-import { buttonVariants } from "../../shared/buttons/MotionButton"
 import { twMerge } from "tailwind-merge"
 import { useGoogleLogin } from "@react-oauth/google"
 import { authService } from "../../../services/authService"
 import { isFirstVisitCompleted, markFirstVisitCompleted } from "../../../utils/firstVisitUtils"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ErrorMessage } from "../../ui/ErrorState"
+import PrimaryButton from "../../shared/buttons/PrimaryButton"
+import { useAuth } from "../../../contexts/AuthContext"
 
 type Props = {
     className?: string
@@ -19,6 +19,8 @@ export default function GoogleOAuthBox({ className }: Props) {
     const [error, setError] = useState<string | null>();
     const navigate = useNavigate();
 
+    const {setAuth} = useAuth();
+
     const googleLogin = useGoogleLogin({
         onSuccess: async tokenResponse => {
             try {
@@ -28,11 +30,15 @@ export default function GoogleOAuthBox({ className }: Props) {
                 // But since our backend expects an ID token, we'll use the authorization code
                 const result = await authService.googleOAuth(tokenResponse.code);
 
-                if (result.error) {
-                    setError(result.error.message || 'Google sign-in failed');
+                if (result.error || !result.data) {
+                    setError(result?.error?.message || 'Whoops!! Failed to Sign In with Google');
                     setIsLoading(false);
                     return;
                 }
+
+                const {token, user} = result.data;
+
+                setAuth(token, user);
 
                 // Check if this is the first completed visit
                 const firstVisitCompleted = isFirstVisitCompleted();
@@ -58,14 +64,15 @@ export default function GoogleOAuthBox({ className }: Props) {
     });
 
     return (
-        <motion.div variants={buttonVariants} initial="initial" whileHover="hover" whileTap="tap">
-            <button
+        <Fragment >
+            <PrimaryButton
                 onClick={() => googleLogin()}
                 disabled={isLoading}
                 className={twMerge(
-                    "w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white flex items-center justify-center space-x-2 px-4 py-3 rounded-md shadow-md hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium border border-gray-300 dark:border-gray-600 transition-all duration-200",
+                    "w-full bg-white dark:bg-gray-800/80 text-gray-900 dark:text-white flex items-center justify-center space-x-2 px-4 py-3 rounded-xl shadow-md hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium border border-gray-300 dark:border-gray-600 transition-all duration-200",
                     className
                 )}
+                isLoading={isLoading}
             >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
@@ -86,12 +93,12 @@ export default function GoogleOAuthBox({ className }: Props) {
                     />
                 </svg>
                 <span>Continue with Google</span>
-            </button>
+            </PrimaryButton>
 
             {error && (
                 <ErrorMessage message={error} />
             )}
-            
-        </motion.div>
+
+        </Fragment>
     )
 }
