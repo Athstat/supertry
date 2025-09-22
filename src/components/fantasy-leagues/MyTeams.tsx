@@ -11,6 +11,9 @@ import FantasyRoundsList from './FantasyRoundsList';
 import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
 import { LoadingState } from '../ui/LoadingState';
+import MyTeamViewStateProvider from './my-team/MyTeamStateProvider';
+import { analytics } from '../../services/analytics/anayticsService';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
 export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: boolean) => void }) {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
@@ -22,23 +25,26 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
         if (journeyInitial === 'my-team' && hasDirectTeamTarget) {
           return 'team-created';
         }
-      } catch {}
+      } catch { }
       return 'fantasy-rounds';
     }
   );
   const { refreshRounds, sortedRounds, currentRound } = useFantasyLeagueGroup();
   const [selectedRound, setSelectedRound] = useState<IFantasyLeagueRound | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<IFantasyLeagueTeam | null>(null);
-  const [isFetchingTeams, setIsFetchingTeams] = useState<boolean>(false);
-  const [roundIdToTeams, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
-  const [showCreationSuccessModal, setShowCreationSuccessModal] = useState<boolean>(false);
+  const [, setIsFetchingTeams] = useState<boolean>(false);
+  const [, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
-  const [refreshKey, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
+  const [, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | null>(null);
 
   const [journey, setJourney] = useQueryState('journey');
   const [roundIdParam] = useQueryState('roundId');
   const [teamIdParam] = useQueryState('teamId');
+
+  useEffect(() => {
+    fantasyAnalytics.trackVisitedMyTeamsTab();
+  }, []);
 
   useEffect(() => {
     if (journey === 'team-creation' && currentRound) {
@@ -213,19 +219,21 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
 
     if (tabScene === 'team-created' && selectedRound && selectedTeam) {
       return (
-        <ViewMyTeam
-          leagueRound={selectedRound}
-          leagueConfig={leagueConfig}
-          team={selectedTeam}
-          onBack={() => setTabScene('fantasy-rounds')}
-          onEditChange={onEditChange}
-          onTeamUpdated={async () => {
-            if (selectedRound?.id) {
-              return fetchTeamsForCurrentRound(selectedRound.id);
-            }
-            return Promise.resolve();
-          }}
-        />
+        <MyTeamViewStateProvider team={selectedTeam} >
+          <ViewMyTeam
+            leagueRound={selectedRound}
+            leagueConfig={leagueConfig}
+            team={selectedTeam}
+            onBack={() => setTabScene('fantasy-rounds')}
+            onEditChange={onEditChange}
+            onTeamUpdated={async () => {
+              if (selectedRound?.id) {
+                return fetchTeamsForCurrentRound(selectedRound.id);
+              }
+              return Promise.resolve();
+            }}
+          />
+        </MyTeamViewStateProvider>
       );
     }
 

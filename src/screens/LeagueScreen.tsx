@@ -14,11 +14,11 @@ import MyTeams from '../components/fantasy-leagues/MyTeams';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import { useShareLeague } from '../hooks/leagues/useShareLeague';
 import { useQueryState } from '../hooks/useQueryState';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverviewTab';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
+import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -34,7 +34,6 @@ function Content() {
   const { league, userMemberRecord, isMember, isOfficialLeague, currentRound } =
     useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);
-  const navigate = useNavigate();
 
   const [journey] = useQueryState('journey');
 
@@ -43,6 +42,10 @@ function Content() {
 
   // Hooks must be declared before any early returns
   const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  useEffect(() => {
+    fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
+  }, []);
 
   if (!league && !league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />;

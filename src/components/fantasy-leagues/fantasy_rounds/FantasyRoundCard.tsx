@@ -39,6 +39,9 @@ export default function FantasyRoundCard({
   );
 
   const teams = fetchedTeams ?? [];
+
+  console.log("Fetched Teams for league ", teams);
+  
   const { authUser: currentUser } = useAuth();
   const { isMember } = useFantasyLeagueGroup();
 
