@@ -69,7 +69,7 @@ export default function GoogleOAuthBox({ className }: Props) {
                 onClick={() => googleLogin()}
                 disabled={isLoading}
                 className={twMerge(
-                    "w-full bg-white dark:bg-gray-800/80 text-gray-900 dark:text-white flex items-center justify-center space-x-2 px-4 py-3 rounded-xl shadow-md hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium border border-gray-300 dark:border-gray-600 transition-all duration-200",
+                    "w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center space-x-2 px-4 py-3 rounded-xl shadow-md hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-800 font-medium border border-gray-300 dark:border-gray-800 transition-all duration-200",
                     className
                 )}
                 isLoading={isLoading}
