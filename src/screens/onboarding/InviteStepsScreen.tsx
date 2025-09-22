@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryValue } from '../../hooks/useQueryState';
 import PageView from '../PageView';
 import ScrummyLogoHorizontal from '../../components/branding/scrummy_logo_horizontal';
@@ -11,6 +11,7 @@ import { Copy, Lock } from 'lucide-react';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import { InfoCard } from '../../components/shared/StatCard';
 import { Toast } from '../../components/ui/Toast';
+import { analytics } from '../../services/analytics/anayticsService';
 
 /** Renders Screen to help show the user's how to except invitations
  * for the app
@@ -58,6 +59,28 @@ export default function InviteStepsScreen() {
       return null;
     }
   })();
+
+  // Track landing with UTM context
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const utm = {
+        utm_source: params.get('utm_source') || undefined,
+        utm_medium: params.get('utm_medium') || undefined,
+        utm_campaign: params.get('utm_campaign') || undefined,
+        utm_id: params.get('utm_id') || undefined,
+        utm_term: params.get('utm_term') || undefined,
+        utm_content: params.get('utm_content') || undefined,
+        has_one_link: !!oneLinkUrl,
+        league_name: leagueName || undefined,
+        user_name: userName || undefined,
+        join_code: (joinCode ?? '').toUpperCase() || undefined,
+      };
+      analytics.track('[Marketing] Invite Steps Viewed', utm);
+    } catch (e) {
+      // no-op
+    }
+  }, [oneLinkUrl, leagueName, userName, joinCode]);
 
   const handleCopyEntryCode = () => {
     if (joinCode) {
