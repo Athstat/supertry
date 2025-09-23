@@ -6,15 +6,17 @@ import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { IProAthlete } from '../../types/athletes';
 import { IFixture } from '../../types/games';
 
-amplitude.init('7a73614db43ac3fb1e4c8b8e24a280eb', {
+//console.log('Amplitude API Key ', import.meta.env.VITE_AMPLITUDE_API_KEY);
+
+amplitude.init(import.meta.env.VITE_AMPLITUDE_API_KEY, {
   defaultTracking: true,
 });
 
 function track(event: string, eventInfo?: Record<string, any>) {
-  if (!isInProduction()) {
-    console.log(`Skipped recording event ${event} because app is not in production`);
-    return;
-  }
+  // if (!isInProduction()) {
+  //   console.log(`Skipped recording event ${event} because app is not in production`);
+  //   return;
+  // }
 
   const { agent } = getDeviceInfo();
   const user = authService.getUserInfoSync();
@@ -194,5 +196,5 @@ export const analytics = {
   trackFixtureCardClicked,
   trackChangedNotificationPreference,
   trackClosedPlayerProfile,
-  trackFirstUserVisit
+  trackFirstUserVisit,
 };

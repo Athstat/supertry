@@ -27,7 +27,9 @@ export default function InviteStepsScreen() {
 
   // Optional AppsFlyer OneLink support: if VITE_AF_ONELINK_BASE_URL is set,
   // we build a single OneLink URL that preserves UTMs and extra context.
-  const oneLinkBase = (import.meta as any)?.env?.VITE_AF_ONELINK_BASE_URL as string | undefined;
+  const oneLinkBase = import.meta.env.VITE_AF_ONELINK_BASE_URL;
+
+  //console.log('oneLinkBase', oneLinkBase);
 
   const oneLinkUrl = (() => {
     if (!oneLinkBase) return null;
@@ -59,6 +61,8 @@ export default function InviteStepsScreen() {
       return null;
     }
   })();
+
+  //console.log('oneLinkUrl', oneLinkUrl);
 
   // Track landing with UTM context
   useEffect(() => {
