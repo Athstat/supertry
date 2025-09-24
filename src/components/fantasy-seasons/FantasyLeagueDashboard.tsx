@@ -1,12 +1,18 @@
 import { useEffect, useMemo } from 'react';
-import ShowcaseLeagueSection from '../components/fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
 import useSWR from 'swr';
-import PageView from './PageView';
-import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
-import OtherLeaguesSection from '../components/fantasy-leagues/join_league_screen/other_leagues_section/OtherLeaguesSection';
-import RoundedCard from '../components/shared/RoundedCard';
+import { IFantasySeason } from '../../types/fantasy/fantasySeason';
+import PageView from '../../screens/PageView';
+import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
+import OtherLeaguesSection from '../fantasy-leagues/join_league_screen/other_leagues_section/OtherLeaguesSection';
+import ShowcaseLeagueSection from '../fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
+import RoundedCard from '../shared/RoundedCard';
 
-export function FantasyLeaguesScreen() {
+type Props = {
+  fantasySeason: IFantasySeason
+}
+
+/** Serves a dashboard for a fantasy season */
+export function FantasySeasonDashboard({fantasySeason} : Props) {
   // Tabs state (persist between visits)
   // const [activeTab, setActiveTab] = useQueryState<'my' | 'discover' | 'code'>('active_tab', {
   //   init: 'my'
@@ -14,7 +20,7 @@ export function FantasyLeaguesScreen() {
 
   const key = `/user-joined-leagues`;
   const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
-    key, () => fantasyLeagueGroupsFetcher(), {
+    key, () => fantasyLeagueGroupsFetcher(fantasySeason.id), {
     revalidateIfStale: false
   });
 
@@ -22,7 +28,7 @@ export function FantasyLeaguesScreen() {
     window.scrollTo(0, 0);
   }, []);
 
-  const leagues = (fetchedLeagues ?? []);
+  const leagues = useMemo(() => (fetchedLeagues ?? []), [fetchedLeagues]);
   const isLoading = loadingUserLeagues;
 
   const showcaseLeague = useMemo(() => {
@@ -95,9 +101,9 @@ export function FantasyLeaguesScreen() {
   );
 }
 
-async function fantasyLeagueGroupsFetcher() {
-  const joinedLeagues = await fantasyLeagueGroupsService.getJoinedLeagues();
-  const mineLeagues = await fantasyLeagueGroupsService.getMyCreatedLeagues();
+async function fantasyLeagueGroupsFetcher(seasonId: string) {
+  const joinedLeagues = await fantasyLeagueGroupsService.getJoinedLeagues(seasonId);
+  const mineLeagues = await fantasyLeagueGroupsService.getMyCreatedLeagues(seasonId);
 
   const aggregate = [...mineLeagues, ...joinedLeagues];
 

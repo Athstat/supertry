@@ -84,10 +84,11 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
-    getMyCreatedLeagues: async (): Promise<FantasyLeagueGroup[]> => {
+    getMyCreatedLeagues: async (seasonId?: string): Promise<FantasyLeagueGroup[]> => {
         try {
 
-            const uri = getUri(`/api/v1/fantasy-league-groups/mine`);
+            const queryParams = seasonId ? `?season_id${seasonId}` : '';
+            const uri = getUri(`/api/v1/fantasy-league-groups/mine${queryParams}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
@@ -103,10 +104,11 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
-    getJoinedLeagues: async (): Promise<FantasyLeagueGroup[]> => {
+    getJoinedLeagues: async (seasonId?: string): Promise<FantasyLeagueGroup[]> => {
         try {
 
-            const uri = getUri(`/api/v1/fantasy-league-groups/joined`);
+            const queryParams = seasonId ? `?season_id${seasonId}` : '';
+            const uri = getUri(`/api/v1/fantasy-league-groups/joined${queryParams}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
@@ -289,7 +291,7 @@ export const fantasyLeagueGroupsService = {
     },
 
     /** Fetches the standings for a league */
-    getGroupStandings: async (leagueId: string) : Promise<FantasyLeagueGroupStanding[]> => {
+    getGroupStandings: async (leagueId: string): Promise<FantasyLeagueGroupStanding[]> => {
         try {
 
             const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/standings`);
@@ -307,6 +309,6 @@ export const fantasyLeagueGroupsService = {
         }
 
         return [];
-    }  
+    }
 
 }
