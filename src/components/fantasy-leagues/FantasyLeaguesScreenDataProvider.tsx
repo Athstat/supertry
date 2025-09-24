@@ -1,5 +1,5 @@
 import { Fragment, ReactNode, useEffect } from "react"
-import { fantasySeasonsAtom, SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY, selectedFantasySeasonAtom } from "../../state/fantasy/fantasyLeagueScreen.atoms"
+import { fantasySeasonsAtom, SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY } from "../../state/fantasy/fantasyLeagueScreen.atoms"
 import { ScopeProvider } from "jotai-scope"
 import useSWR from "swr"
 import { swrFetchKeys } from "../../utils/swrKeys"
@@ -15,8 +15,7 @@ type Props = {
 export default function FantasyLeaguesScreenDataProvider({ children }: Props) {
 
     const atoms = [
-        fantasySeasonsAtom,
-        selectedFantasySeasonAtom
+        fantasySeasonsAtom
     ]
 
     return (
