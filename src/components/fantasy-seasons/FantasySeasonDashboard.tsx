@@ -18,7 +18,8 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
   //   init: 'my'
   // });
 
-  const key = `/user-joined-leagues`;
+  const key = `/user-joined-leagues/${fantasySeason.id}`;
+  
   const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
     key, () => fantasyLeagueGroupsFetcher(fantasySeason.id), {
     revalidateIfStale: false
@@ -47,7 +48,7 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
 
   if (isLoading) {
     return (
-      <div className='p-6 flex flex-col gap-6' >
+      <div className='flex flex-col gap-6' >
         <div>
           <div className='flex flex-col gap-1' >
             <RoundedCard className='w-[100px] h-[25px] rounded-xl border-none' />
@@ -75,7 +76,7 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
   }
 
   return (
-    <PageView className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl flex flex-col gap-8">
+    <PageView className="container mx-auto max-w-3xl flex flex-col gap-8">
 
       {/* <div className="flex items-center mb-4 gap-2 sm:mb-6 justify-between">
 

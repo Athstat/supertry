@@ -55,7 +55,24 @@ function InnerProvider({ children }: Props) {
         if (lastSavedValue && !selectedFantasySeasonId) {
             setSelectedFantasySeasonId(lastSavedValue)
         }
+    },
+        [
+            seasonsFetched, setFantasySeasons,
+            selectedFantasySeasonId, setSelectedFantasySeasonId
+        ]
+    );
 
+    /** Sync selected fantasy season id */
+    useEffect(() => {
+
+        if (selectedFantasySeasonId) {
+            localStorage.setItem(
+                SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY,
+                selectedFantasySeasonId
+            )
+        } else {
+            localStorage.removeItem(SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY);
+        }
 
         return () => {
             localStorage.setItem(
@@ -63,12 +80,8 @@ function InnerProvider({ children }: Props) {
                 selectedFantasySeasonId
             )
         }
-    },
-        [
-            seasonsFetched, setFantasySeasons,
-            selectedFantasySeasonId, setSelectedFantasySeasonId
-        ]
-    );
+
+    }, [selectedFantasySeasonId]);
 
     if (isLoading) {
         <LoadingState />

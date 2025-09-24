@@ -7,7 +7,7 @@ export const fantasySeasonsService = {
     getAllFantasySeasons: async (is_active?: boolean): Promise<IFantasySeason[]> => {
         try {
             const queryParams = is_active ? `?is_active=${is_active}` : '';
-            const uri = getUri(`/api/fantasy-seasons${queryParams}`);
+            const uri = getUri(`/api/v1/fantasy-seasons${queryParams}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

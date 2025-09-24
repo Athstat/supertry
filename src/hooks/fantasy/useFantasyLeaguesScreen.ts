@@ -20,14 +20,24 @@ export function useFantasyLeaguesScreen() {
         return foundSeason;
     }, [selectedFantasySeasonId, fantasySeasons]);
 
-    const setSelectedSeason = useCallback((season: IFantasySeason) => {
-        setSelectedFantasySeasonId(season.id);
+    const setSelectedSeason = useCallback((season?: IFantasySeason) => {
+        
+        if (season) {
+            setSelectedFantasySeasonId(season.id);
+            return;
+        } else {
+            setSelectedFantasySeasonId(undefined);
+            return;
+        }
+
     }, [setSelectedFantasySeasonId]);
 
 
     return {
         selectedSeason,
         selectedFantasySeasonId,
-        setSelectedSeason
+        setSelectedSeason,
+        fantasySeasons,
+        setSelectedFantasySeasonId
     }
 }

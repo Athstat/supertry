@@ -87,7 +87,7 @@ export const fantasyLeagueGroupsService = {
     getMyCreatedLeagues: async (seasonId?: string): Promise<FantasyLeagueGroup[]> => {
         try {
 
-            const queryParams = seasonId ? `?season_id${seasonId}` : '';
+            const queryParams = seasonId ? `?season_id=${seasonId}` : '';
             const uri = getUri(`/api/v1/fantasy-league-groups/mine${queryParams}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
@@ -107,7 +107,7 @@ export const fantasyLeagueGroupsService = {
     getJoinedLeagues: async (seasonId?: string): Promise<FantasyLeagueGroup[]> => {
         try {
 
-            const queryParams = seasonId ? `?season_id${seasonId}` : '';
+            const queryParams = seasonId ? `?season_id=${seasonId}` : '';
             const uri = getUri(`/api/v1/fantasy-league-groups/joined${queryParams}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
