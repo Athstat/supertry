@@ -5,7 +5,7 @@ import PrimaryButton from "../../../shared/buttons/PrimaryButton"
 import { useState } from "react"
 import CreateLeagueModal from "../../CreateLeagueModal"
 import { useNavigate } from "react-router-dom"
-import { GamePlayHelpButton } from "../../../branding/help/LearnScrummyNoticeCard"
+import NoContentCard from "../../../shared/NoContentMessage"
 
 type Props = {
     joinedLeagues: FantasyLeagueGroup[]
@@ -32,6 +32,7 @@ export default function OtherLeaguesSection({ joinedLeagues }: Props) {
                 <div className="flex flex-row items-center gap-2" >
                     <Trophy className="" />
                     <p className="text-lg font-semibold" >Joined Leagues</p>
+                    {/* <GamePlayHelpButton className="" iconHw="w-4 h-4" /> */}
                 </div>
 
                 <div className="flex flex-row items-center gap-1" >
@@ -53,6 +54,12 @@ export default function OtherLeaguesSection({ joinedLeagues }: Props) {
                     )
                 })}
             </div>
+
+            {joinedLeagues.length === 0 && (
+                <NoContentCard 
+                    message="You haven't joined any leagues yet 👀!"
+                />
+            )}
 
             {showCreateModal && (
                 <CreateLeagueModal 

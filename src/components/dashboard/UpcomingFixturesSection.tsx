@@ -12,7 +12,11 @@ import SmallFixtureCard from '../fixtures/SmallFixtureCard';
 import SecondaryText from '../shared/SecondaryText';
 import { Tv } from 'lucide-react';
 
-export default function UpcomingFixturesSection() {
+type Props = {
+  hideTitleBar?: boolean
+}
+
+export default function UpcomingFixturesSection({hideTitleBar} : Props) {
   let {
     data: fixtures,
     isLoading,
@@ -127,7 +131,7 @@ export default function UpcomingFixturesSection() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between items-center">
+      {!hideTitleBar && <div className="flex justify-between items-center">
         <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
           <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           Fixtures
@@ -138,7 +142,7 @@ export default function UpcomingFixturesSection() {
         >
           View All
         </button>
-      </div>
+      </div>}
 
       {/* <PilledSeasonFilterBar
         seasons={seasons}
