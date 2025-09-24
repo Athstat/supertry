@@ -36,7 +36,7 @@ export default function OtherLeaguesSection({ joinedLeagues }: Props) {
                 </div>
 
                 <div className="flex flex-row items-center gap-1" >
-                    <PrimaryButton onClick={toggle} className="w-fit text-sm" >
+                    <PrimaryButton onClick={toggle} className="w-fit text-sm bg-primary-500 dark:bg-primary-600" >
                         <p>Create/Join</p> 
                         <Plus className="w-4 h-4" />
                     </PrimaryButton>

@@ -33,9 +33,7 @@ function InnerProvider({ children }: Props) {
     const setFantasySeasons = useSetAtom(fantasySeasonsAtom);
 
     const seasonsKey = swrFetchKeys.getActiveFantasySeasons()
-    const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () => fantasySeasonsService.getAllFantasySeasons(true), {
-        revalidateOnFocus: false
-    });
+    const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () => fantasySeasonsService.getAllFantasySeasons(true));
 
     const [selectedFantasySeasonId, setSelectedFantasySeasonId] = useQueryState<string>(
         SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY

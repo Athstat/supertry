@@ -66,12 +66,12 @@ return (
         <div
             onClick={onSelect}
             className={twMerge(
-                'font-semibold cursor-pointer border px-4 py-1 bg-slate-100 dark:bg-slate-800/40 rounded-2xl',
+                'font-semibold cursor-pointer border px-4 py-1.5 bg-slate-100 dark:bg-slate-800/40 rounded-2xl',
                 isSelected && 'border-primary-400 bg-blue-500 dark:bg-blue-500 text-white',
                 !isSelected && 'text-slate-700 dark:text-slate-400 border-slate-300 dark:border-gray-800'
             )}
         >
-            <p className="text-xs" >{getShortName()}</p>
+            <p className="text-sm" >{getShortName()}</p>
         </div>
     )
 }
