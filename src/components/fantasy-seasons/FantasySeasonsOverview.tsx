@@ -6,9 +6,10 @@ import { fantasySeasonsService } from "../../services/fantasy/fantasySeasonsServ
 import SecondaryText from "../shared/SecondaryText";
 import FantasyLeagueGroupDataProvider from "../fantasy-league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { Trophy } from "lucide-react";
+import { ChevronRight, Trophy } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import UpcomingFixturesSection from "../dashboard/UpcomingFixturesSection";
+import LearnScrummyNoticeCard from "../branding/help/LearnScrummyNoticeCard";
 
 /** Component rendered when there are not selected fantasy season pages */
 export default function FantasySeasonsOverview() {
@@ -16,12 +17,14 @@ export default function FantasySeasonsOverview() {
     const { fantasySeasons } = useFantasyLeaguesScreen();
 
     return (
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-4" >
             <div>
                 <h1 className="font-bold text-lg" >Overview</h1>
             </div>
 
-            <div className="flex flex-col gap-2" >
+            <LearnScrummyNoticeCard />
+
+            <div className="flex flex-col mt-3 gap-2" >
                 {fantasySeasons.map((s, index) => {
                     return (
                         <FantasySeasonCard
@@ -32,7 +35,9 @@ export default function FantasySeasonsOverview() {
                 })}
             </div>
 
-            <div>
+
+
+            <div className="mt-6" >
                 <h1 className="font-bold text-lg" >Fixtures</h1>
             </div>
 
@@ -75,25 +80,32 @@ function FantasySeasonCard({ fantasySeason, index }: FantasySeasonCardProps) {
 
     return (
         <FantasyLeagueGroupDataProvider leagueId={featureGroup?.id} >
-            <RoundedCard onClick={onClick} className="p-4 cursor-pointer" >
+            <RoundedCard onClick={onClick} className="p-4 flex flex-col gap-4 dark:bg-slate-800/40 cursor-pointer" >
 
-                <div className="flex flex-row items-center gap-2" >
-                    <div className={twMerge(
-                        'round-xl border rounded-xl w-fit p-4',
-                        colours[index % colours.length]
-                    )} >
-                        <Trophy />
-                    </div>
-
-                    <div  >
-                        <h1 className="font-semibold" >{fantasySeason.name}</h1>
-                        <div className="flex flex-row items-center gap-0" >
-                            <SecondaryText className="" >{featureGroup?.title}・</SecondaryText>
-
-                            <CurrentRoundIndicator />
+                <div className="flex flex-row justify-between items-center gap-2" >
+                    <div className="flex flex-row items-center gap-2" >
+                        <div className={twMerge(
+                            'round-xl border rounded-xl w-fit p-4',
+                            colours[index % colours.length]
+                        )} >
+                            <Trophy className="w-4 h-4" />
                         </div>
+
+                        <div  >
+                            <h1 className="font-semibold text-sm lg:text-base" >{fantasySeason.name}</h1>
+                            <div className="flex flex-row text-xs items-center gap-0" >
+                                <SecondaryText className="" >{featureGroup?.title}・</SecondaryText>
+
+                                <CurrentRoundIndicator />
+                            </div>
+                        </div>
+
                     </div>
+
+                    <ChevronRight />
                 </div>
+
+                {/* <PrimaryButton className="py-1 text-sm" >Play</PrimaryButton> */}
             </RoundedCard>
         </FantasyLeagueGroupDataProvider>
     )

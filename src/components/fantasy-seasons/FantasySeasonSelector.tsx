@@ -13,7 +13,7 @@ export default function FantasySeasonSelector() {
 
 
 
-            <div className="flex flex-row items-center flex-nowrap overflow-x-auto text-nowrap" >
+            <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2" >
 
                 <ListItem
                     isSelected={selectedSeason === undefined}
@@ -66,12 +66,12 @@ return (
         <div
             onClick={onSelect}
             className={twMerge(
-                'font-semibold cursor-pointer border-b pb-2',
-                isSelected && 'border-primary-500  text-primary-500',
-                !isSelected && 'text-slate-500 dark:text-slate-400 border-transparent border-b- border-gray-700'
+                'font-semibold cursor-pointer border px-4 py-1 bg-slate-100 dark:bg-slate-800/40 rounded-2xl',
+                isSelected && 'border-primary-400 bg-blue-500 dark:bg-blue-500 text-white',
+                !isSelected && 'text-slate-700 dark:text-slate-400 border-slate-300 dark:border-gray-800'
             )}
         >
-            <p className="text-sm px-2" >{getShortName()}</p>
+            <p className="text-xs" >{getShortName()}</p>
         </div>
     )
 }

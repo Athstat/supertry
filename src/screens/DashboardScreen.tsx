@@ -1,14 +1,12 @@
 import PageView from './PageView';
 import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
 import { Home } from 'lucide-react';
-import HeroImageBanner from '../components/dashboard/HeroImageBanner';
 import { useNavigate } from 'react-router-dom';
 import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
-import { HeroSection } from '../components/dashboard';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -31,7 +29,7 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      <HeroSection />
+      {/* <HeroSection /> */}
 
       {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}
 
