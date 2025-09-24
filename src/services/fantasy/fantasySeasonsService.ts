@@ -43,7 +43,7 @@ export const fantasySeasonsService = {
 
     getFantasySeasonFeaturedLeagues: async (id: string) : Promise<FantasyLeagueGroup[]> => {
         try {
-            const uri = getUri(`/api/v1/fantasy-seasons/${id}`);
+            const uri = getUri(`/api/v1/fantasy-seasons/${id}/fantasy-league-groups/featured`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

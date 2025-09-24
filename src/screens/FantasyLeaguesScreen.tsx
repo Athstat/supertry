@@ -5,6 +5,7 @@ import FantasyLeaguesScreenDataProvider from "../components/fantasy-leagues/Fant
 import FantasySeasonSelector from "../components/fantasy-seasons/FantasySeasonSelector";
 import { useFantasyLeaguesScreen } from "../hooks/fantasy/useFantasyLeaguesScreen";
 import { FantasySeasonDashboard } from "../components/fantasy-seasons/FantasySeasonDashboard";
+import FantasySeasonsOverview from "../components/fantasy-seasons/FantasySeasonsOverview";
 
 
 export function FantasyLeaguesScreen() {
@@ -35,6 +36,10 @@ function InnnerScreen() {
 
       {selectedSeason && (
         <FantasySeasonDashboard fantasySeason={selectedSeason} />
+      )}
+
+      {!selectedSeason && (
+        <FantasySeasonsOverview  />
       )}
     </PageView>
   )
