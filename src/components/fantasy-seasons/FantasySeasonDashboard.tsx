@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
-import PageView from '../../screens/PageView';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import OtherLeaguesSection from '../fantasy-leagues/join_league_screen/other_leagues_section/OtherLeaguesSection';
 import ShowcaseLeagueSection from '../fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
@@ -76,7 +75,7 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
   }
 
   return (
-    <PageView className="container mx-auto max-w-3xl flex flex-col gap-8">
+    <div className="flex flex-col gap-8">
 
       {/* <div className="flex items-center mb-4 gap-2 sm:mb-6 justify-between">
 
@@ -98,7 +97,7 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
       />
 
 
-    </PageView>
+    </div>
   );
 }
 
