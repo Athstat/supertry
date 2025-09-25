@@ -10,6 +10,8 @@ import { ErrorState } from '../ui/ErrorState';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../shared/tabs/TabView';
 import JoinLeagueByCode from './JoinLeagueByCode';
 import SecondaryText from '../shared/SecondaryText';
+import { useFantasyLeaguesScreen } from '../../hooks/fantasy/useFantasyLeaguesScreen';
+import SeasonInput from './ui/SeasonInput';
 
 interface CreateLeagueModalProps {
   isOpen: boolean;
@@ -66,9 +68,11 @@ function CreateLeagueForm() {
   const [isSubmiting, setSubmiting] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
 
+  const {selectedSeason} = useFantasyLeaguesScreen();
+
   const [form, setForm] = useState<CreateLeagueForm>({
     title: '',
-    season_id: seasons.length > 0 ? seasons[0].id : 'c4c29ce1-8669-5f51-addc-cbed01ce9bd0',
+    season_id: (selectedSeason ? selectedSeason?.id : undefined) ?? seasons.length > 0 ? seasons[0]?.id : 'c4c29ce1-8669-5f51-addc-cbed01ce9bd0',
     is_private: false,
     description: ''
   });
@@ -77,7 +81,10 @@ function CreateLeagueForm() {
     setSubmiting(true);
 
     try {
-      const res = await fantasyLeagueGroupsService.createGroup(form);
+      const res = await fantasyLeagueGroupsService.createGroup({
+        ...form,
+        season_id: selectedSeason?.id ?? form.season_id
+      });
       if (res.data) {
         navigate(`/league/${res.data.id}`, {
           state: {
@@ -139,16 +146,16 @@ function CreateLeagueForm() {
             }
           />
 
-          {/* <SeasonInput
-            value={seasons.find(s => s.id === form.season_id)}
+          <SeasonInput
+            value={selectedSeason}
             onChange={s =>
               setForm({
                 ...form,
                 season_id: s.id,
               })
             }
-            options={seasons}
-          /> */}
+            options={selectedSeason ? [selectedSeason] : []}
+          />
 
           <LeagueVisibilityInput
             value={form.is_private ? 'private' : 'public'}
