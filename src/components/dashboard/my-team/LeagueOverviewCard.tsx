@@ -8,7 +8,7 @@ import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLea
 import { leagueService } from '../../../services/leagueService';
 import { LoadingState } from '../../ui/LoadingState';
 import BlueGradientCard from '../../shared/BlueGradientCard';
-import { Info, Lock, Plus, Trophy } from 'lucide-react';
+import { ArrowRight, Info, Lock, Plus, Trophy } from 'lucide-react';
 import { useMemo } from 'react';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import RoundedCard from '../../shared/RoundedCard';
@@ -91,9 +91,9 @@ function Content({ league }: Props) {
         </div>
 
         <div>
-          {/* <button onClick={goToLeague}>
+          <button onClick={goToLeague}>
             <ArrowRight />
-          </button> */}
+          </button>
         </div>
       </div>
 
