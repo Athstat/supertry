@@ -21,8 +21,8 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
   
   const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
     key, () => fantasyLeagueGroupsFetcher(fantasySeason.id), {
-    revalidateIfStale: false
-  });
+      revalidateOnFocus: false
+    });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,10 +40,10 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
   console.log("Showcase Leagues ", showcaseLeague);
 
   const otherLeagues = useMemo(() => {
-    return leagues.filter((l) => {
-      return l.id !== showcaseLeague?.id
+    return leagues.filter(() => {
+      return true;
     })
-  }, [showcaseLeague, leagues]);
+  }, [leagues]);
 
   if (isLoading) {
     return (

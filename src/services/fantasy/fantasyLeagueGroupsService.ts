@@ -9,7 +9,7 @@ export const fantasyLeagueGroupsService = {
 
     getAllPublicLeagues: async (): Promise<FantasyLeagueGroup[]> => {
         try {
-
+            
             const uri = getUri(`/api/v1/fantasy-league-groups/public`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()

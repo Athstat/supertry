@@ -55,7 +55,7 @@ function ListItem({ isSelected, title, onSelect }: ItemProps) {
         }
 
         if (title === "United Rugby Championship 25/26") {
-            return "URC 24/25";
+            return "URC 25/26";
         }
 
         return title;
