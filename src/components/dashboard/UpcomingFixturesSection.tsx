@@ -1,24 +1,25 @@
 import { subHours } from 'date-fns';
 import { gamesService } from '../../services/gamesService';
-import { IFixture } from '../../types/games';
 import useSWR from 'swr';
 import { LoadingState } from '../ui/LoadingState';
 import { ErrorState } from '../ui/ErrorState';
 import { Calendar } from 'lucide-react';
 import { useRouter } from '../../hooks/useRoter';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { useQueryState } from '../../hooks/useQueryState';
 import SmallFixtureCard from '../fixtures/SmallFixtureCard';
 import SecondaryText from '../shared/SecondaryText';
 import { Tv } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
-  hideTitleBar?: boolean
+  hideTitleBar?: boolean,
+  hidePastFixtures?: boolean
 }
 
-export default function UpcomingFixturesSection({hideTitleBar} : Props) {
-  let {
-    data: fixtures,
+export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures }: Props) {
+  const {
+    data: fetchedFixtures,
     isLoading,
     error,
   } = useSWR('pro-fixtures', () => gamesService.getAllSupportedGames());
@@ -32,9 +33,7 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
   //   wantedSeasonsId: seasonIds,
   // });
 
-  const [selectedFixture, setSelectedFixture] = useState<IFixture | null>(null);
-  const [showPredictModal, setShowPredictModal] = useState(false);
-  const [season, setSeason] = useQueryState('pcid', { init: 'all' });
+  const [season,] = useQueryState('pcid', { init: 'all' });
 
   if (isLoading) return <LoadingState />;
 
@@ -42,7 +41,7 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
     return <ErrorState message="Failed to fetch upcoming matches" />;
   }
 
-  fixtures = fixtures ?? [];
+  const fixtures = fetchedFixtures ?? [];
 
   const seasons: { name: string; id: string }[] = [];
 
@@ -86,7 +85,7 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
       const kickoff = f.kickoff_time;
 
       if (kickoff) {
-        const {game_status} = f;
+        const { game_status } = f;
         return game_status === 'completed' || game_status === 'result';
       }
 
@@ -120,11 +119,6 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
       return bE.valueOf() - aE.valueOf();
     });
 
-  const handleClickPredict = (fixture: IFixture) => {
-    setSelectedFixture(fixture);
-    setShowPredictModal(true);
-  };
-
   const handleViewAllFixtures = () => {
     push('/fixtures#upcoming-matches')
   }
@@ -132,7 +126,7 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
   return (
     <div className="flex flex-col gap-4">
       {!hideTitleBar && <div className="flex justify-between items-center">
-        <h3 className="text-base font-medium flex items-center gap-2 text-gray-900 dark:text-gray-100">
+        <h3 className="text-lg font-bold flex items-center gap-2 text-gray-900 dark:text-gray-100">
           <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
           Fixtures
         </h3>
@@ -182,7 +176,10 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
         <SecondaryText>Upcoming Fixtures</SecondaryText>
       </div>
       {upcomingFixtures.length > 0 && (
-        <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-2">
+        <div className={twMerge(
+          "flex space-x-4 overflow-x-auto no-scrollbar pb-2",
+          hidePastFixtures && 'flex flex-col space-x-0 gap-4'
+        )}>
           {upcomingFixtures.map(fixture => {
             return (
               <SmallFixtureCard
@@ -196,7 +193,7 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
         </div>
       )}
 
-      {pastFixtures.length > 0 && (
+      {!hidePastFixtures && pastFixtures.length > 0 && (
         <Fragment>
           <div>
             <SecondaryText>Past Fixtures</SecondaryText>
@@ -213,12 +210,12 @@ export default function UpcomingFixturesSection({hideTitleBar} : Props) {
               );
             })}
           </div>
-
-          <div className='flex flex-row items-center justify-center' >
-            <button onClick={handleViewAllFixtures} className='text-blue-500' >View All Fixtures</button>
-          </div>
         </Fragment>
       )}
+
+      <div className='flex flex-row items-center justify-center' >
+        <button onClick={handleViewAllFixtures} className='text-blue-500' >View All Fixtures</button>
+      </div>
     </div>
   );
 }

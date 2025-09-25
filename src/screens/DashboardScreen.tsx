@@ -39,7 +39,9 @@ export function DashboardScreen() {
       <FeaturedFantasyLeagueGroups />
 
       {/* <ActionList /> */}
-      <UpcomingFixturesSection />
+      <UpcomingFixturesSection 
+        hidePastFixtures
+      />
       {/* <ComparePlayersPanel /> */}
       {/* <MyWeekPanel /> */}
       {/* <MyTeamsSection /> */}
