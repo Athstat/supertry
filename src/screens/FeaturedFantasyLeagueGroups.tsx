@@ -48,7 +48,7 @@ export default function FeaturedFantasyLeagueGroups() {
 
             {officialLeagues.length > 0 && (
                 <>
-                    {(officialLeagues.reverse()).map((featuredLeague) => {
+                    {(officialLeagues.slice(1)).map((featuredLeague) => {
                         return (
                             <SmallLeagueOverviewCard
                                 league={featuredLeague}

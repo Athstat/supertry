@@ -146,7 +146,7 @@ function Content({ league }: Props) {
         </div>
       </BlueGradientCard>
 
-      {!locked && !userTeam && <NotTeamCreated />}
+      {!locked && !userTeam && !isLoading && <NotTeamCreated />}
 
       {locked && !userTeam && <NotTeamCreatedLeagueLocked />}
     </div>
