@@ -2,7 +2,6 @@ import { ArrowRight, Globe } from 'lucide-react';
 import { useFantasyLeagueGroup } from '../../../../hooks/leagues/useFantasyLeagueGroup';
 import { FantasyLeagueGroup } from '../../../../types/fantasyLeagueGroups';
 import FantasyLeagueGroupDataProvider from '../../../fantasy-league/providers/FantasyLeagueGroupDataProvider';
-import SecondaryText from '../../../shared/SecondaryText';
 import LearnScrummyNoticeCard from '../../../branding/help/LearnScrummyNoticeCard';
 import UserTeamOverview from '../../../fantasy-league/overview/UserTeamOverview';
 import useSWR from 'swr';
@@ -40,7 +39,7 @@ function Content() {
       currentRound?.id ?? '',
       authUser?.kc_id
     );
-  }, [currentRound, currentRound, authUser]);
+  }, [currentRound, authUser]);
 
   const { data: userTeam, isLoading } = useSWR(key, () =>
     leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
