@@ -12,7 +12,6 @@ import { LoadingState } from '../../../ui/LoadingState';
 import { LeagueRoundSummary } from '../../../fantasy-league/overview/LeagueOverviewTab';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
-import NewTag from '../../../branding/NewTag';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -82,7 +81,7 @@ function Content() {
           <div className="flex flex-row items-center gap-1">
             <Globe className="w-4 h-4" />
             <p className="">{league.title}</p>
-            <NewTag />
+            {/* <NewTag /> */}
           </div>
         </div>
 
