@@ -12,12 +12,10 @@ export default function FeaturedFantasyLeagueGroups() {
 
     const isLoading = loadingPublic;
 
-
     const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
         return (league.type === 'official_league');
     });
 
-    const featuredLeague = officialLeagues.length > 0 ? officialLeagues[0] : undefined;
 
     if (isLoading) {
         return (
@@ -48,10 +46,16 @@ export default function FeaturedFantasyLeagueGroups() {
     return (
         <div className="flex flex-col gap-4" >
 
-            {featuredLeague && (
-                <SmallLeagueOverviewCard 
-                    league={featuredLeague}
-                />
+            {officialLeagues.length > 0 && (
+                <>
+                    {(officialLeagues.reverse()).map((featuredLeague) => {
+                        return (
+                            <SmallLeagueOverviewCard
+                                league={featuredLeague}
+                            />
+                        )
+                    })}
+                </>
             )}
 
             {/* <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
