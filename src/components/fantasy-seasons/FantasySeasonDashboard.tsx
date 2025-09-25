@@ -20,7 +20,9 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
   const key = `/user-joined-leagues/${fantasySeason.id}`;
   
   const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
-    key, () => fantasyLeagueGroupsFetcher(fantasySeason.id));
+    key, () => fantasyLeagueGroupsFetcher(fantasySeason.id), {
+      revalidateOnFocus: false
+    });
 
   useEffect(() => {
     window.scrollTo(0, 0);
