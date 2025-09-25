@@ -1,53 +1,39 @@
 import { useNavigate } from 'react-router-dom';
 import BlueGradientCard from '../shared/BlueGradientCard';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
-import NewTag from '../branding/NewTag';
 
-type Props = {};
 
-export function HeroSection({}: Props) {
+export function HeroSection() {
+
   const navigate = useNavigate();
-  const navigateToLeagues = () => navigate('/leagues');
-
-  const termsAndConditionsLink = 'https://scrummy-app.com/#/scrum6-rules';
+  const onClick = () => {
+    navigate(`/leagues?season_id=9e74bed3-9ea2-5f41-a906-434d0d3e8f4e`)
+  }
 
   return (
-    <BlueGradientCard className="cursor-pointer">
+    <BlueGradientCard
+      onClick={onClick}
+      className="cursor-pointer from-purple-900 to-blue-800 dark:from-violet-700 dark:to-blue-800 hover:dark:from-primary-700 hover:dark:to-violet-700 overflow-clip transition-all ease-in duration-1000"
+    >
       <div className="flex flex-col gap-4 p-3">
-        <div>
+
+        <div className='flex flex-col gap-1'>
           <div>
-            <h1 className="text-lg lg:text-xl font-bold">SCRUM6 Challenge is LIVE!</h1>
+            <h1 className="text-lg lg:text-xl font-bold">URC is back! Your rivals are preparing 🔥</h1>
           </div>
 
-          <p className="text-md opacity-90">
-            Climb the leaderboard, crack the Top 3, and score a Rugby Swag Bag. 🏉🔥
+          <p className="text-sm opacity-90">
+            Time to scrum down, build your squad, and take on your mates. Pick your team, invite your friend, and let the battles begin.
           </p>
         </div>
 
-        <div className="flex flex-row items-center gap-2">
-          <PrimaryButton
-            onClick={navigateToLeagues}
-            className="w-fit bg-white text-blue-500 hover:bg-white hover:text-blue-600 dark:bg-white dark:text-blue-500 hover:dark:bg-white hover:dark:text-blue-600"
-          >
-            Take Me There
-          </PrimaryButton>
-
-          <a
-            href={termsAndConditionsLink}
-            target="blank"
-            className="hover:font-medium ease-out delay-300"
-          >
-            Terms & Conditions
-          </a>
-        </div>
       </div>
 
       {/* {leagueOnTheClock && (
         <JoinDeadlineCountdown
-          onViewLeague={onViewLeague}
-          league={leagueOnTheClock}
+        onViewLeague={onViewLeague}
+        league={leagueOnTheClock}
         />
-      )} */}
+        )} */}
     </BlueGradientCard>
   );
 }
