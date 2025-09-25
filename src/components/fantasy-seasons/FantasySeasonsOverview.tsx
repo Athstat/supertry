@@ -37,7 +37,7 @@ export default function FantasySeasonsOverview() {
 
 
 
-            <div className="mt-6" >
+            <div className="mt-10" >
                 <h1 className="font-bold text-lg" >Fixtures</h1>
             </div>
 
