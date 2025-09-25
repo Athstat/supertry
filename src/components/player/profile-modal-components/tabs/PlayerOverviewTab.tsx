@@ -51,7 +51,7 @@ export default function PlayerOverviewTab({ player }: Props) {
 
         {nationalityIsValid && <PlayerInfoCard
           value={`${player.nationality}`}
-          label={player.birth_place ? `From ${player.birth_place}` : 'Nationality'}
+          label={player.birth_place ? `From ${player.birth_place}` : 'National Team'}
         />}
       </div>
 
