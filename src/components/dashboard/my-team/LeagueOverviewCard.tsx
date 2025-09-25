@@ -15,10 +15,8 @@ import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
 import PrimaryButton from '../../shared/buttons/PrimaryButton';
 import { useNavigate } from 'react-router-dom';
-import { Shield } from 'lucide-react';
 import LeagueRoundCountdown from '../../fantasy-league/LeagueCountdown';
 import WarningCard from '../../shared/WarningCard';
-import NewTag from '../../branding/NewTag';
 
 type Props = {
   league: FantasyLeagueGroup;
@@ -69,7 +67,7 @@ function Content({ league }: Props) {
     }
 
     return undefined;
-  }, [standings]);
+  }, [standings, authUser]);
 
   const locked = currentRound && isLeagueRoundLocked(currentRound);
 
@@ -89,7 +87,7 @@ function Content({ league }: Props) {
         <div className="flex flex-row items-center gap-2">
           <Trophy className="w-5 h-5" />
           <h1 className="font-bold">{league.title}</h1>
-          <NewTag />
+          {/* <NewTag /> */}
         </div>
 
         <div>
@@ -100,10 +98,10 @@ function Content({ league }: Props) {
       </div>
 
       <BlueGradientCard className="flex cursor-pointer flex-col p-6 gap-2 " onClick={goToLeague}>
-        {userTeam && (
+        {(currentRound &&
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center gap-2">
-              <p className="font-bold ">{authUser?.username}</p>
+              <p className="font-bold ">{league.season.name} - {currentRound?.title}</p>
             </div>
           </div>
         )}
@@ -148,7 +146,7 @@ function Content({ league }: Props) {
         </div>
       </BlueGradientCard>
 
-      {!locked && !userTeam && <NotTeamCreated />}
+      {!locked && !userTeam && !isLoading && <NotTeamCreated />}
 
       {locked && !userTeam && <NotTeamCreatedLeagueLocked />}
     </div>
