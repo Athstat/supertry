@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import PushOptInModal from '../components/ui/PushOptInModal';
 import { isBridgeAvailable, requestPushPermissions } from '../utils/bridgeUtils';
 import { authService } from '../services/authService';
+import { HeroSection2 } from '../components/dashboard/HeroSection2';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -72,7 +73,12 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      <HeroSection />
+      <div>
+        <HeroSection />
+        <div className="mt-3">
+          <HeroSection2 />
+        </div>
+      </div>
 
       {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}
 
