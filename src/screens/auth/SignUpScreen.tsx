@@ -101,7 +101,6 @@ export function SignUpScreen() {
 
         return;
       }
-
       setError(error?.message ?? '');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
