@@ -6,13 +6,11 @@ import { RegisterUserReq, SignUpForm } from '../../types/auth';
 import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/analytics/anayticsService';
 import { emailValidator } from '../../utils/stringUtils';
-import { requestPushPermissionsAfterLogin } from '../../utils/bridgeUtils';
 import InputField, { PasswordInputField } from '../../components/shared/InputField';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
 import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
 import FormErrorText from '../../components/shared/FormError';
 import { authService } from '../../services/authService';
-
 
 export function SignUpScreen() {
   const navigate = useNavigate();
@@ -21,7 +19,6 @@ export function SignUpScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  
   const [form, setForm] = useState<SignUpForm>({
     email: '',
     password: '',
@@ -30,8 +27,10 @@ export function SignUpScreen() {
     nationality: undefined,
     favoriteTeam: undefined,
   });
-  
-  const {emailTaken, isLoading: isEmailUniqueValidatorLoading} = useEmailUniqueValidator(form.email);
+
+  const { emailTaken, isLoading: isEmailUniqueValidatorLoading } = useEmailUniqueValidator(
+    form.email
+  );
   const isEmailTaken = !isLoading && emailTaken;
 
   const isAllFieldsComplete = form.email && form.username && form.password && form.confirmPassword;
@@ -63,7 +62,6 @@ export function SignUpScreen() {
       setError('Password should be atleast 8 characters long');
       return;
     }
-
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,22 +72,20 @@ export function SignUpScreen() {
     validateForm();
 
     try {
-      
       if (!form.username) {
-        setError("Username is required");
+        setError('Username is required');
         return;
       }
 
       const registerData: RegisterUserReq = {
         email: form.email,
         password: form.password,
-        username: form.username
-      }
+        username: form.username,
+      };
 
-      const {data:res, error} = await authService.registerUser(registerData);
+      const { data: res, error } = await authService.registerUser(registerData);
 
       if (res) {
-
         analytics.trackUserSignUp('Email');
 
         const authUser = res.user;
@@ -97,14 +93,12 @@ export function SignUpScreen() {
 
         setAuth(accessToken, authUser);
 
-        requestPushPermissionsAfterLogin();
         navigate('/post-signup-welcome', { replace: true });
-        
+
         return;
       }
 
-      setError(error?.message ?? "");
-      
+      setError(error?.message ?? '');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
       setIsLoading(false);
@@ -125,71 +119,78 @@ export function SignUpScreen() {
         {currentStep === 1 && (
           <div className="space-y-4">
             <div>
-                <InputField
-                  id="username"
-                  label='Username'
-                  placeholder='Username'
-                  type="text"
-                  required
-                  value={form.username}
-                  onChange={val =>
-                    setForm(prev => ({
-                      ...prev,
-                      username: val,
-                    }))
-                  }
-                  icon={<User className="h-5 w-5" />}
-                />
-                
+              <InputField
+                id="username"
+                label="Username"
+                placeholder="Username"
+                type="text"
+                required
+                value={form.username}
+                onChange={val =>
+                  setForm(prev => ({
+                    ...prev,
+                    username: val,
+                  }))
+                }
+                icon={<User className="h-5 w-5" />}
+              />
             </div>
 
-            <div className='flex flex-col gap-1' >
-                <InputField
-                  id="email"
-                  type="email"
-                  label='Email'
-                  placeholder='Email'
-                  required
-                  value={form.email}
-                  onChange={val => setForm(prev => ({ ...prev, email:val?.toLowerCase() ?? ""}))}
-                  icon={<Mail className="h-5 w-5" />}
-                />
-                
-                {isEmailTaken && <FormErrorText error='Email is already taken' />}
-            </div>
+            <div className="flex flex-col gap-1">
+              <InputField
+                id="email"
+                type="email"
+                label="Email"
+                placeholder="Email"
+                required
+                value={form.email}
+                onChange={val => setForm(prev => ({ ...prev, email: val?.toLowerCase() ?? '' }))}
+                icon={<Mail className="h-5 w-5" />}
+              />
 
-            <div>
-                <PasswordInputField
-                  id="password"
-                  label='Password'
-                  placeholder='Password'
-                  value={form.password}
-                  onChange={val => setForm(prev => ({ ...prev, password: val ?? "" }))}
-                  minLength={8}
-                />
+              {isEmailTaken && <FormErrorText error="Email is already taken" />}
             </div>
 
             <div>
-                <PasswordInputField
-                  id="confirmPassword"
-                  label='Confirm Password'
-                  placeholder='Confirm Password'
-                  value={form.confirmPassword}
-                  minLength={8}
-                  onChange={val =>
-                    setForm(prev => ({
-                      ...prev,
-                      confirmPassword: val ?? ""
-                    }))
-                  }
-                />
+              <PasswordInputField
+                id="password"
+                label="Password"
+                placeholder="Password"
+                value={form.password}
+                onChange={val => setForm(prev => ({ ...prev, password: val ?? '' }))}
+                minLength={8}
+              />
+            </div>
+
+            <div>
+              <PasswordInputField
+                id="confirmPassword"
+                label="Confirm Password"
+                placeholder="Confirm Password"
+                value={form.confirmPassword}
+                minLength={8}
+                onChange={val =>
+                  setForm(prev => ({
+                    ...prev,
+                    confirmPassword: val ?? '',
+                  }))
+                }
+              />
             </div>
 
             <PrimaryButton
               type="submit"
-              disabled={!(!isLoading && !isEmailTaken && !isEmailUniqueValidatorLoading && isAllFieldsComplete && isPasswordsMatch)}
+              disabled={
+                !(
+                  !isLoading &&
+                  !isEmailTaken &&
+                  !isEmailUniqueValidatorLoading &&
+                  isAllFieldsComplete &&
+                  isPasswordsMatch
+                )
+              }
               isLoading={isLoading}
-              className='py-3'
+              className="py-3"
             >
               {isLoading ? 'Creating Account...' : 'Complete Sign Up'}
               {!isLoading && <ArrowRight size={20} />}
