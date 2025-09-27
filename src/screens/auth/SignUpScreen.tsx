@@ -88,7 +88,6 @@ export function SignUpScreen() {
       };
 
       const { data: res, error } = await authService.registerUser(registerData);
-      const { data: res, error } = await authService.registerUser(registerData);
 
       if (res) {
         analytics.trackUserSignUp('Email');

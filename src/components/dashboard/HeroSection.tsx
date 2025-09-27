@@ -13,7 +13,7 @@ export function HeroSection() {
   return (
     <BlueGradientCard
       onClick={onClick}
-      className="cursor-pointer from-purple-900 to-blue-800 dark:from-violet-700 dark:to-blue-800 hover:dark:from-primary-700 hover:dark:to-violet-700 overflow-clip transition-all ease-in duration-1000"
+      className="cursor-pointer from-purple-900 to-blue-800 dark:from-violet-700 dark:to-violet-800 hover:dark:from-primary-700 hover:dark:to-violet-700 overflow-clip transition-all ease-in duration-1000"
     >
       <div className="flex flex-col gap-4 p-3">
         <div className="flex flex-col gap-1">
