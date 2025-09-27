@@ -8,7 +8,8 @@ import { useLocalStorage } from "../../../hooks/useLocalStorage"
 import { GrCircleQuestion } from "react-icons/gr"
 
 type Props = {
-    className?: string
+    className?: string,
+    iconHw?: string
 }
 
 /** Renders a notifice to learn the basics of scrummy to a user */
@@ -64,7 +65,7 @@ export default function LearnScrummyNoticeCard({ className }: Props) {
 }
 
 
-export function GamePlayHelpButton({ className }: Props) {
+export function GamePlayHelpButton({ className, iconHw }: Props) {
 
 
     const [showModal, setShowModal] = useState(false);
@@ -74,16 +75,16 @@ export function GamePlayHelpButton({ className }: Props) {
         toggleModal();
     }
 
-    const handleIgnoreMessage = () => {
-    }
-
     return (
         <div className={twMerge(
             className
         )} >
 
             <button onClick={toggleModal} >
-                <GrCircleQuestion className='w-6 h-6' />
+                <GrCircleQuestion className={twMerge(
+                    'w-6 h-6',
+                    iconHw
+                )} />
             </button>
 
 

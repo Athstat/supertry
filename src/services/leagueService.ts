@@ -207,6 +207,8 @@ export const leagueService = {
       }
 
       const responseData = await response.json();
+      console.log("Created Team ", responseData);
+      
       // Assuming responseData contains league and team info for analytics
       // analytics.trackTeamCreationCompleted(leagueId, responseData.team.id, responseData.league.official_league_id);
       return responseData;

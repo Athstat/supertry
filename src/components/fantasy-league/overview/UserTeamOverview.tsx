@@ -13,8 +13,8 @@ import { twMerge } from 'tailwind-merge';
 import SecondaryText from '../../shared/SecondaryText';
 import { ArrowRight } from 'lucide-react';
 import { useTabView } from '../../shared/tabs/TabView';
+import { useNavigate } from 'react-router-dom';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
-
 
 type Props = {
   userTeam: FantasyLeagueTeamWithAthletes;
@@ -28,6 +28,7 @@ export default function UserTeamOverview({
   onManageTeam,
 }: Props) {
   const { navigate } = useTabView();
+  const routerNavigate = useNavigate();
   const [selectPlayer, setSelectPlayer] = useState<IProAthlete>();
 
   const onClosePointsBreakdown = () => {
@@ -42,6 +43,13 @@ export default function UserTeamOverview({
     if (onManageTeam) {
       onManageTeam();
     } else {
+      const groupId = userTeam?.fantasyLeague?.fantasy_league_group_id;
+      const roundId = userTeam?.fantasyLeague?.id;
+      const teamId = (userTeam?.team_id ?? userTeam?.team?.id) as string | number | undefined;
+      if (groupId && roundId && teamId != null) {
+        routerNavigate(`/league/${groupId}?journey=my-team&roundId=${roundId}&teamId=${teamId}`);
+      }
+      // Also switch the TabView immediately when already inside the league screen
       navigate('my-team');
     }
   };
@@ -131,7 +139,7 @@ function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
       )}
     >
       <div className="h-[60%] w-full flex flex-col items-center justify-center">
-       {/* <TeamJersey
+        {/* <TeamJersey
           teamId={athlete.athlete.team_id}
           className="max-h-10 min-h-10 object-contain"
           hideFade

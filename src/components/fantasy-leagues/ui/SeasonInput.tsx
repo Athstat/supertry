@@ -1,9 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import { IProSeason } from '../../../types/season'
-import SecondaryText from '../../shared/SecondaryText';
 import { abbreviateSeasonName } from '../../players/compare/PlayerCompareSeasonPicker';
 import { Trophy } from 'lucide-react';
-import { format } from 'date-fns';
 
 type Props = {
     options: IProSeason[],
@@ -28,7 +26,7 @@ export default function SeasonInput({ options, value, onChange }: Props) {
                     return (
                         <div
                             className={twMerge(
-                                "flex flex-col gap-2 flex-1 min-w-[250px]  flex-nowrap p-3 border-2 cursor-pointer border-slate-200 dark:border-slate-700 rounded-lg",
+                                "flex flex-col gap-2 flex-1 min-w-[250px]  flex-nowrap p-5 border-2 cursor-pointer border-slate-200 dark:border-slate-700 rounded-lg",
                                 isSelected && "border-primary-500 dark:border-primary-700 bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/40 hover:dark:bg-primary-900/60",
                                 !isSelected && "hover:bg-slate-100 hover:dark:bg-slate-800"
                             )}
@@ -55,7 +53,7 @@ export default function SeasonInput({ options, value, onChange }: Props) {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col gap-1' >
+                            {/* <div className='flex flex-col gap-1' >
                                 <SecondaryText className={twMerge(
                                     // isSelected && 'text-blue-500'
                                 )} >{season.start_date ? `Starts ${format(season.start_date, 'MMMM yyyy')}` : ''}</SecondaryText>
@@ -63,7 +61,7 @@ export default function SeasonInput({ options, value, onChange }: Props) {
                                 <SecondaryText className={twMerge(
                                     // isSelected && 'text-blue-500'
                                 )} >{season.end_date ? `Ends ${format(season.end_date, 'MMMM yyyy')}` : ''}</SecondaryText>
-                            </div>
+                            </div> */}
                         </div>
                     )
                 })}

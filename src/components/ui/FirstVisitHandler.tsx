@@ -5,6 +5,7 @@ import { WelcomeScreen } from "../../screens/auth/WelcomeScreen";
 import { isFirstAppVisit, markAppVisited } from "../../utils/firstVisitUtils";
 import RouteErrorBoundary from "../RouteErrorBoundary";
 import { AuthChoiceScreen } from "../../screens/auth/AuthChoiceScreen";
+import { analytics } from "../../services/analytics/anayticsService";
 
 // First Visit handler component
 export function FirstVisitHandler() {
@@ -20,6 +21,7 @@ export function FirstVisitHandler() {
 
     // If this is the first visit, mark it
     if (firstVisit) {
+      analytics.trackFirstUserVisit();
       markAppVisited();
     }
   }, []);

@@ -3,6 +3,9 @@ import { IProTeam } from './team';
 
 export type Gender = 'M' | 'F';
 
+export type PositionClass = 'front-row' | 'second-row' | 'back-row'
+  | 'half-back' | 'back' | 'super-sub';
+
 /** Type Defination for a professional player */
 export type IProAthlete = {
   tracking_id: string;

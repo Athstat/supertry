@@ -13,7 +13,6 @@ import { ScopeProvider } from 'jotai-scope';
 import AuthUserDataProvider from '../components/auth/AuthUserDataProvider';
 import NoContentCard from '../components/shared/NoContentMessage';
 import { useAuth } from '../contexts/AuthContext';
-import { requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
 import SecondaryText from '../components/shared/SecondaryText';
 import { ErrorMessage } from '../components/ui/ErrorState';
 import { emailValidator } from '../utils/stringUtils';
@@ -38,7 +37,6 @@ export function CompleteProfileScreen() {
 }
 
 function ScreenContent() {
-
   authAnalytics.trackClaimGuestAccountStarted();
 
   const navigate = useNavigate();
@@ -51,26 +49,25 @@ function ScreenContent() {
     confirmPassword: '',
   });
 
-
   const [step, setStep] = useState<number>(1);
 
   const handleCancel = () => {
     const endTime = new Date();
-    authAnalytics.trackClaimGuestAccountCanceled(startTime, endTime,step);
+    authAnalytics.trackClaimGuestAccountCanceled(startTime, endTime, step);
     navigate('/profile');
-  }
+  };
 
   const handleGoNextStep = () => {
     if (step < 3) {
       setStep(prev => prev + 1);
     }
-  }
+  };
 
   const handleGoPreviousStep = () => {
     if (step > 1) {
       setStep(prev => prev - 1);
     }
-  }
+  };
 
   if (!isGuestUserAtom) {
     return <NoContentCard className="Account has already been claimed" />;
@@ -78,51 +75,53 @@ function ScreenContent() {
 
   return (
     <ScrummyMatrixBackground>
-
-      <div className={twMerge(
-        "flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto",
-        "lg:px-[25%]"
-      )}>
+      <div
+        className={twMerge(
+          'flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto',
+          'lg:px-[25%]'
+        )}
+      >
         {/* Header */}
 
-        <div className='flex flex-row w-full items-center justify-between' >
+        <div className="flex flex-row w-full items-center justify-between">
           <div></div>
           <div>
-            <button onClick={handleCancel} className='w-10 h-10 cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl' >
-              <X className='text-black dark:text-white' />
+            <button
+              onClick={handleCancel}
+              className="w-10 h-10 cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-700/80 flex flex-col items-center justify-center rounded-xl"
+            >
+              <X className="text-black dark:text-white" />
             </button>
           </div>
         </div>
 
         <div className="flex flex-col items-center justify-center w-full">
           <ScrummyLogo className="w-32 h-32 lg:w-48 lg:h-48" />
-          <p className='dark:text-white font-medium text-xl' >Claim your SCRUMMY Profile</p>
+          <p className="dark:text-white font-medium text-xl">Claim your SCRUMMY Profile</p>
         </div>
 
-
-        <div className='flex  flex-row items-center justify-center gap-2' >
+        <div className="flex  flex-row items-center justify-center gap-2">
           <FormStepIndicator
-            label='Profile'
+            label="Profile"
             icon={<User />}
             isCurrent={step === 1}
             isCompleted={step > 1}
           />
 
           <FormStepIndicator
-            label='Password'
+            label="Password"
             icon={<KeyRound />}
             isCurrent={step === 2}
             isCompleted={step > 2}
           />
 
           <FormStepIndicator
-            label='Confirm'
+            label="Confirm"
             icon={<BadgeCheck />}
             isCurrent={step === 3}
             isCompleted={step > 3}
           />
         </div>
-
 
         {/* Content */}
         {step === 1 && (
@@ -156,42 +155,39 @@ function ScreenContent() {
         )}
 
         {step > 1 && (
-          <button onClick={handleGoPreviousStep} >
-            <SecondaryText>Go  Back</SecondaryText>
+          <button onClick={handleGoPreviousStep}>
+            <SecondaryText>Go Back</SecondaryText>
           </button>
         )}
-        { }
-
+        {}
       </div>
-
     </ScrummyMatrixBackground>
   );
 }
 
 type ClaimAccountForm = {
-  username: string,
-  email: string,
-  password: string,
-  confirmPassword: string,
-}
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 type StepProps = {
-  onNextStep?: () => void,
-  form: ClaimAccountForm,
-  onPreviousStep?: () => void,
-  setForm: (form: ClaimAccountForm) => void,
-  startTime: Date
-}
+  onNextStep?: () => void;
+  form: ClaimAccountForm;
+  onPreviousStep?: () => void;
+  setForm: (form: ClaimAccountForm) => void;
+  startTime: Date;
+};
 
 function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
-
   const [error, setError] = useState<string>();
   const { isLoading: loadingEmailCheck, emailTaken } = useEmailUniqueValidator(form.email);
-  const isFormComplete = !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username);
+  const isFormComplete =
+    !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username);
 
   const handleNextStep = () => {
     if (form.username && form.email && onNextStep) {
-
       if (!emailValidator(form.email)) {
         setError(`Please enter a valid email, '${form.email}' is not a valid email.`);
         return;
@@ -199,66 +195,59 @@ function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
 
       onNextStep();
     }
-  }
+  };
 
   return (
     <form
-      className='flex flex-col gap-4 w-full'
-      onSubmit={(e) => {
-        e.preventDefault(); handleNextStep();
+      className="flex flex-col gap-4 w-full"
+      onSubmit={e => {
+        e.preventDefault();
+        handleNextStep();
       }}
     >
-
-      <div className='w-full flex flex-col mt-4 items-center justify-center' >
+      <div className="w-full flex flex-col mt-4 items-center justify-center">
         <SecondaryText>Create a username for your account</SecondaryText>
       </div>
 
       <InputField
-        className='w-full'
-        label='Username'
-        placeholder='What should we call you?'
-        onChange={(v) => setForm({ ...form, username: v ?? '' })}
+        className="w-full"
+        label="Username"
+        placeholder="What should we call you?"
+        onChange={v => setForm({ ...form, username: v ?? '' })}
         value={form.username}
       />
 
-      <div className='flex flex-col' >
-
+      <div className="flex flex-col">
         <InputField
-          className='w-full'
-          label='Email'
-          placeholder='Email'
-          onChange={(v) => setForm({ ...form, email: v ?? '' })}
+          className="w-full"
+          label="Email"
+          placeholder="Email"
+          onChange={v => setForm({ ...form, email: v ?? '' })}
           value={form.email}
-          type='email'
+          type="email"
         />
 
-        {emailTaken && <ErrorMessage message='Email is registered with another account' />}
+        {emailTaken && <ErrorMessage message="Email is registered with another account" />}
       </div>
 
-      <PrimaryButton
-        disabled={!isFormComplete}
-      >
-        Continue
-      </PrimaryButton>
+      <PrimaryButton disabled={!isFormComplete}>Continue</PrimaryButton>
 
-      {error && (
-        <ErrorMessage message={error} />
-      )}
+      {error && <ErrorMessage message={error} />}
     </form>
-  )
+  );
 }
 
-
 function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
-
   const [error, setError] = useState<string>();
-  const isFormComplete = Boolean(form.confirmPassword) && Boolean(form.password) && form.password === form.confirmPassword;
+  const isFormComplete =
+    Boolean(form.confirmPassword) &&
+    Boolean(form.password) &&
+    form.password === form.confirmPassword;
 
   const handleNextStep = () => {
     if (form.password && form.confirmPassword && onNextStep) {
-
       if (form.password !== form.confirmPassword) {
-        setError("Passwords do not match");
+        setError('Passwords do not match');
         return;
       }
 
@@ -271,54 +260,44 @@ function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
 
       onNextStep();
     }
-  }
+  };
 
   return (
     <form
-      className='flex flex-col gap-4 w-full'
-      onSubmit={(e) => {
-        e.preventDefault(); handleNextStep();
+      className="flex flex-col gap-4 w-full"
+      onSubmit={e => {
+        e.preventDefault();
+        handleNextStep();
       }}
     >
-
-      <div className='w-full flex flex-col mt-4 items-center justify-center' >
+      <div className="w-full flex flex-col mt-4 items-center justify-center">
         <SecondaryText>Create a Password for your account</SecondaryText>
       </div>
 
       <PasswordInputField
-        className='w-full'
-        label='Password'
-        placeholder='Password'
-        onChange={(v) => setForm({ ...form, password: v ?? '' })}
+        className="w-full"
+        label="Password"
+        placeholder="Password"
+        onChange={v => setForm({ ...form, password: v ?? '' })}
         value={form.password}
-
       />
 
       <PasswordInputField
-        className='w-full'
-        label='Confirm Password'
-        placeholder='Confirm Password'
-        onChange={(v) => setForm({ ...form, confirmPassword: v ?? '' })}
+        className="w-full"
+        label="Confirm Password"
+        placeholder="Confirm Password"
+        onChange={v => setForm({ ...form, confirmPassword: v ?? '' })}
         value={form.confirmPassword}
       />
 
-      <PrimaryButton
-        disabled={!isFormComplete}
-      >
-        Continue
-      </PrimaryButton>
+      <PrimaryButton disabled={!isFormComplete}>Continue</PrimaryButton>
 
-      {error && (
-        <ErrorMessage
-          message={error}
-        />
-      )}
+      {error && <ErrorMessage message={error} />}
     </form>
-  )
+  );
 }
 
 function ConfirmationStep({ form, startTime }: StepProps) {
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
@@ -378,12 +357,8 @@ function ConfirmationStep({ form, startTime }: StepProps) {
       const { data: res, error } = await authService.claimGuestAccount(data);
 
       if (res) {
-        authAnalytics.trackClaimGuestAccountCompleted(
-          startTime,
-          new Date()
-        )
+        authAnalytics.trackClaimGuestAccountCompleted(startTime, new Date());
         await refreshAuthUser();
-        requestPushPermissionsAfterLogin();
         navigate('/dashboard');
         return;
       }
@@ -403,26 +378,20 @@ function ConfirmationStep({ form, startTime }: StepProps) {
     }
   };
 
-
   return (
-    <form
-      className='flex flex-col gap-6 w-full'
-      onSubmit={handleSubmit}
-    >
-
-      <div className='w-full flex flex-col items-center justify-center' >
+    <form className="flex flex-col gap-6 w-full" onSubmit={handleSubmit}>
+      <div className="w-full flex flex-col items-center justify-center">
         <SecondaryText>Confirm Your Details</SecondaryText>
       </div>
 
-      <RoundedCard className='p-4' >
-        <div className='flex flex-row items-center gap-2' >
-
+      <RoundedCard className="p-4">
+        <div className="flex flex-row items-center gap-2">
           <div>
-            <UserCircle className='w-10 h-10' />
+            <UserCircle className="w-10 h-10" />
           </div>
 
           <div>
-            <h1 className='text-2xl font-semibold' >{form.username}</h1>
+            <h1 className="text-2xl font-semibold">{form.username}</h1>
             <SecondaryText>{form.email}</SecondaryText>
           </div>
         </div>
@@ -431,15 +400,13 @@ function ConfirmationStep({ form, startTime }: StepProps) {
       <PrimaryButton
         disabled={isSubmitting}
         isLoading={isSubmitting}
-        className='animate-glow py-4'
-        type='submit'
+        className="animate-glow py-4"
+        type="submit"
       >
         Claim Account 🔥
       </PrimaryButton>
 
-      {(submitError) && (
-        <ErrorMessage message={(submitError)} />
-      )}
+      {submitError && <ErrorMessage message={submitError} />}
     </form>
-  )
+  );
 }

@@ -1,5 +1,4 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { requestPushPermissions } from '../utils/bridgeUtils';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
@@ -50,7 +49,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
-  }
+  };
 
   // return (
   //   <PageView className="flex flex-col items-center justify-center p-4 h-[60vh] gap-8" >
@@ -122,7 +121,9 @@ export function TeamCreationScreen() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   const { officialLeagueId } = useParams<{ officialLeagueId: string }>();
-  const league = location.state?.league ? (location.state?.league as IFantasyLeagueRound) : undefined;
+  const league = location.state?.league
+    ? (location.state?.league as IFantasyLeagueRound)
+    : undefined;
   const { isTeamCreationLocked, hasCreatedTeam, rankedUserTeam, userTeam } =
     useTeamCreationGuard(league);
   const [isGuest, setIsGuest] = useState(false);
@@ -133,8 +134,6 @@ export function TeamCreationScreen() {
   const isLocked = isTeamCreationLocked;
 
   useEffect(() => {
-    requestPushPermissions();
-
     // Check if user is a guest and get user info
     if (isAuthenticated) {
       const info = authService.getUserInfoSync();
@@ -381,10 +380,15 @@ export function TeamCreationScreen() {
 
   if (userTeam && hasCreatedTeam) {
     const handleViewTeam = () => {
-      const uri = `/my-team/${userTeam.team_id}`;
-      navigate(uri, {
-        state: { teamWithRank: rankedUserTeam, leagueInfo: league, team: userTeam },
-      });
+      const groupId = league?.fantasy_league_group_id;
+      const roundId = league?.id;
+      const teamId = userTeam?.team_id;
+      if (groupId && roundId && teamId) {
+        navigate(`/league/${groupId}?journey=my-team&roundId=${roundId}&teamId=${teamId}`);
+      } else {
+        // Fallback: at least switch to My Team tab if we can't build a deep link
+        navigate(`/league/${officialLeagueId}?journey=my-team`);
+      }
     };
 
     return (
@@ -475,7 +479,15 @@ export function TeamCreationScreen() {
         }}
         onViewTeam={() => {
           setShowSuccessModal(false);
-          navigate('/my-teams');
+          const groupId = league?.fantasy_league_group_id;
+          const roundId = league?.id;
+          const teamId = createdTeamId;
+          if (groupId && roundId && teamId) {
+            navigate(`/league/${groupId}?journey=my-team&roundId=${roundId}&teamId=${teamId}`);
+          } else {
+            // Fallback: at least switch to My Team tab in the league
+            navigate(`/league/${officialLeagueId}?journey=my-team`);
+          }
         }}
       />
     </TeamCreationContainer>

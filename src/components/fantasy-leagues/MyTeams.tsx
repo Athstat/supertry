@@ -10,26 +10,41 @@ import PlayerProfileModal from '../player/PlayerProfileModal';
 import FantasyRoundsList from './FantasyRoundsList';
 import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
+import { LoadingState } from '../ui/LoadingState';
+import MyTeamViewStateProvider from './my-team/MyTeamStateProvider';
+import { analytics } from '../../services/analytics/anayticsService';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
-export default function MyTeams({
-  onEditChange,
-}: {
-  onEditChange?: (isEditing: boolean) => void;
-}) {
+export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: boolean) => void }) {
   const [tabScene, setTabScene] = useState<'fantasy-rounds' | 'creating-team' | 'team-created'>(
-    'fantasy-rounds'
+    () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const journeyInitial = params.get('journey');
+        const hasDirectTeamTarget = !!(params.get('teamId') || params.get('roundId'));
+        if (journeyInitial === 'my-team' && hasDirectTeamTarget) {
+          return 'team-created';
+        }
+      } catch { }
+      return 'fantasy-rounds';
+    }
   );
   const { refreshRounds, sortedRounds, currentRound } = useFantasyLeagueGroup();
   const [selectedRound, setSelectedRound] = useState<IFantasyLeagueRound | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<IFantasyLeagueTeam | null>(null);
-  const [isFetchingTeams, setIsFetchingTeams] = useState<boolean>(false);
-  const [roundIdToTeams, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
-  const [showCreationSuccessModal, setShowCreationSuccessModal] = useState<boolean>(false);
+  const [, setIsFetchingTeams] = useState<boolean>(false);
+  const [, setRoundIdToTeams] = useState<Record<string, IFantasyLeagueTeam[]>>({});
   const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>();
-  const [refreshKey, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
+  const [, setRefreshKey] = useState(0); // Add refresh key to force re-fetch
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | null>(null);
 
   const [journey, setJourney] = useQueryState('journey');
+  const [roundIdParam] = useQueryState('roundId');
+  const [teamIdParam] = useQueryState('teamId');
+
+  useEffect(() => {
+    fantasyAnalytics.trackVisitedMyTeamsTab();
+  }, []);
 
   useEffect(() => {
     if (journey === 'team-creation' && currentRound) {
@@ -38,6 +53,48 @@ export default function MyTeams({
       setTabScene('creating-team');
     }
   }, [journey, currentRound, setTabScene]);
+
+  // Deep-link: open a specific team directly in My Team tab
+  useEffect(() => {
+    const openDirectTeamView = async () => {
+      try {
+        if (journey !== 'my-team') return;
+        if (!(roundIdParam || teamIdParam)) return;
+
+        // Immediately switch to team-created and render a loader while fetching
+        setTabScene('team-created');
+
+        // Determine target round from param or fallback to currentRound
+        const targetRound =
+          (sortedRounds || []).find(r => String(r.id) === String(roundIdParam)) ||
+          currentRound ||
+          null;
+
+        if (!targetRound) return;
+
+        setSelectedRound(targetRound);
+
+        // If a teamId is provided, fetch teams for that round and select the matching one
+        if (teamIdParam) {
+          const teams = await leagueService.fetchParticipatingTeams(targetRound.id);
+          const team =
+            teams?.find(
+              t => String(t.id) === String(teamIdParam) || String(t.team_id) === String(teamIdParam)
+            ) || null;
+
+          if (team) {
+            setSelectedTeam(team);
+            setTabScene('team-created');
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Failed to open direct team view', e);
+      }
+    };
+
+    openDirectTeamView();
+  }, [journey, roundIdParam, teamIdParam, sortedRounds, currentRound]);
 
   // Notify parent when entering/leaving creation flow
   useEffect(() => {
@@ -115,6 +172,11 @@ export default function MyTeams({
 
   // Render the main content based on the current tab scene
   const renderContent = () => {
+    // When deep-linking into a specific team, show a loader until the team is ready
+    if (tabScene === 'team-created' && (!selectedRound || !selectedTeam)) {
+      return <LoadingState />;
+    }
+
     if (tabScene === 'fantasy-rounds') {
       return (
         <FantasyRoundsList
@@ -157,19 +219,21 @@ export default function MyTeams({
 
     if (tabScene === 'team-created' && selectedRound && selectedTeam) {
       return (
-        <ViewMyTeam
-          leagueRound={selectedRound}
-          leagueConfig={leagueConfig}
-          team={selectedTeam}
-          onBack={() => setTabScene('fantasy-rounds')}
-          onEditChange={onEditChange}
-          onTeamUpdated={async () => {
-            if (selectedRound?.id) {
-              return fetchTeamsForCurrentRound(selectedRound.id);
-            }
-            return Promise.resolve();
-          }}
-        />
+        <MyTeamViewStateProvider team={selectedTeam} >
+          <ViewMyTeam
+            leagueRound={selectedRound}
+            leagueConfig={leagueConfig}
+            team={selectedTeam}
+            onBack={() => setTabScene('fantasy-rounds')}
+            onEditChange={onEditChange}
+            onTeamUpdated={async () => {
+              if (selectedRound?.id) {
+                return fetchTeamsForCurrentRound(selectedRound.id);
+              }
+              return Promise.resolve();
+            }}
+          />
+        </MyTeamViewStateProvider>
       );
     }
 

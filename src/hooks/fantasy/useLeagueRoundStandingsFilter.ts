@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { getLeagueStandingsFilterItems } from "../../utils/standingsUtils";
 import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
 import { useQueryState } from "../useQueryState";
+import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 
 /** Hook that provides data and logic for league standings filtering */
 export function useLeagueRoundStandingsFilter() {
@@ -25,12 +26,17 @@ export function useLeagueRoundStandingsFilter() {
         });
     }, [options, roundFilterId]);
 
+    const handleSetRoundFilterId = useCallback((newValue?: string) => {
+        setRoundFilterId(newValue);
+        fantasyAnalytics.trackStandings_Week_Filter_Applied();
+    }, [setRoundFilterId]);
+
 
     return {
         currentOption,
         otherOptions,
         rounds: sortedRounds,
         roundFilterId,
-        setRoundFilterId
+        setRoundFilterId: handleSetRoundFilterId
     }
 }

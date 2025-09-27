@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, Fragment } from 'react';
+import { useState, useCallback, useMemo, Fragment, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAthletes } from '../contexts/AthleteContext';
 import { useDebounced } from '../hooks/useDebounced';
@@ -31,20 +31,78 @@ import { comparePlayersAtomGroup } from '../state/comparePlayers.atoms';
 import { useInView } from 'react-intersection-observer';
 import PlayersCompareButton from '../components/player/PlayerScreenCompareButton';
 import { twMerge } from 'tailwind-merge';
+import useSWR from 'swr';
+import { seasonService } from '../services/seasonsService';
+import { getAthletesSummary } from '../utils/athleteUtils';
+
+// Fantasy seasons: mirror FantasyLeaguesScreen behavior
+import FantasyLeaguesScreenDataProvider from '../components/fantasy-leagues/FantasyLeaguesScreenDataProvider';
+import PlayersSeasonSelector from '../components/fantasy-seasons/PlayersSeasonSelector';
+import { useFantasyLeaguesScreen } from '../hooks/fantasy/useFantasyLeaguesScreen';
 
 export function PlayersScreen() {
   return (
     <PlayerCompareProvider>
-      <PlayerScreenContent />
+      <FantasyLeaguesScreenDataProvider>
+        <PlayerScreenContent />
+      </FantasyLeaguesScreenDataProvider>
     </PlayerCompareProvider>
   );
 }
 
 export const PlayerScreenContent = () => {
-  const { athletes, error, isLoading, refreshAthletes, positions, teams } = useAthletes();
+  const { athletes, error, isLoading, refreshAthletes } = useAthletes();
   const [params, setParams] = useSearchParams();
 
-  // const [activeTab, setActiveTab] = useState<SortTab>("all");
+  // Use the same selected fantasy season as FantasyLeaguesScreen
+  const { selectedSeason, selectedFantasySeasonId } = useFantasyLeaguesScreen();
+
+  console.log('selectedSeason', selectedSeason);
+
+  const activeSeasonIdForFetch = useMemo(() => {
+    if (selectedSeason?.id) return selectedSeason.id;
+    if (selectedFantasySeasonId && selectedFantasySeasonId !== 'all')
+      return selectedFantasySeasonId;
+    return undefined;
+  }, [selectedSeason?.id, selectedFantasySeasonId]);
+
+  // Fetch players for the selected season when a season is chosen (Overview uses context athletes)
+  const {
+    data: seasonPlayers,
+    isLoading: loadingSeason,
+    error: errorSeason,
+    mutate: mutateSeason,
+  } = useSWR(
+    activeSeasonIdForFetch ? `seasons/${activeSeasonIdForFetch}/athletes` : null,
+    () => seasonService.getSeasonAthletes(activeSeasonIdForFetch!),
+    { revalidateOnFocus: false, dedupingInterval: 5 * 60 * 1000, keepPreviousData: true }
+  );
+
+  // Choose dataset by selection
+  const displayedAthletes: IProAthlete[] = useMemo(() => {
+    if (activeSeasonIdForFetch) return (seasonPlayers as unknown as IProAthlete[]) ?? [];
+    return athletes;
+  }, [activeSeasonIdForFetch, athletes, seasonPlayers]);
+
+  // Derive available teams/positions from the displayed dataset
+  const { teams: availableTeams, positions: availablePositions } = useMemo(() => {
+    return getAthletesSummary(displayedAthletes);
+  }, [displayedAthletes]);
+
+  // Active loading/error helpers and retry
+  const activeIsLoading = activeSeasonIdForFetch ? loadingSeason : isLoading;
+  const activeError: any = activeSeasonIdForFetch ? errorSeason : error;
+  const activeErrorMessage = activeError
+    ? typeof activeError === 'string'
+      ? activeError
+      : 'Failed to load players'
+    : null;
+
+  const retryActive = () => {
+    if (activeSeasonIdForFetch) mutateSeason();
+    else refreshAthletes();
+  };
+
   const [sortField, setSortField] = useState<SortField>('power_rank_rating');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
@@ -52,7 +110,14 @@ export const PlayerScreenContent = () => {
   const [positionFilter, setPositionFilter] = useQueryState<string | undefined>('position');
 
   const [teamIdFilter, setTeamIdFilter] = useQueryState<string | undefined>('team_id');
-  const selectedTeam = teams.find(t => t.athstat_id === teamIdFilter);
+  const selectedTeam = availableTeams.find(t => t.athstat_id === teamIdFilter);
+
+  // Ensure team filter remains valid when dataset changes
+  useEffect(() => {
+    if (teamIdFilter && !availableTeams.some(t => t.athstat_id === teamIdFilter)) {
+      setTeamIdFilter('');
+    }
+  }, [availableTeams, teamIdFilter]);
 
   // Use debounced search for better performance
   const debouncedSearchQuery = useDebounced(searchQuery, 300);
@@ -67,7 +132,7 @@ export const PlayerScreenContent = () => {
 
   // Use optimized filtering hook
   const { filteredAthletes, isFiltering } = useAthleteFilter({
-    athletes: athletes,
+    athletes: displayedAthletes,
     searchQuery: debouncedSearchQuery,
     selectedPositions: selectedPositions,
     selectedTeamIds: selectedTeamIds,
@@ -75,7 +140,7 @@ export const PlayerScreenContent = () => {
     sortDirection,
   });
 
-  const isEmpty = !isLoading && !isFiltering && filteredAthletes.length === 0;
+  const isEmpty = !activeIsLoading && !isFiltering && filteredAthletes.length === 0;
 
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
   const [showPlayerModal, setShowPlayerModal] = useState(false);
@@ -107,11 +172,6 @@ export const PlayerScreenContent = () => {
     setSearchQuery(query);
   };
 
-  // // Handle tab changes
-  // const handleTabChange = (tab: SortTab) => {
-  //   setActiveTab(tab);
-  // };
-
   // Handle sorting by field and direction
   const handleSortByField = (field: SortField, direction: SortDirection) => {
     setSortField(field);
@@ -130,7 +190,6 @@ export const PlayerScreenContent = () => {
 
   // Clear all filters (batch in a single URLSearchParams update)
   const clearFilters = () => {
-    console.log('clearing filters');
     const next = new URLSearchParams(params);
     next.delete('position');
     next.delete('team_id');
@@ -146,16 +205,20 @@ export const PlayerScreenContent = () => {
           <Users />
           <h1 className="text-2xl font-bold">Players</h1>
         </div>
+
+        {/* Fantasy Season Tabs - identical to Fantasy Leagues */}
+        <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2 w-full">
+          <PlayersSeasonSelector />
+        </div>
+
         <PlayerSearch searchQuery={searchQuery ?? ''} onSearch={handleSearch} />
         <div className="flex flex-col w-full gap-1">
-          {/* <PlayerScreenTabs activeTab={activeTab} onTabChange={handleTabChange} /> */}
-
           <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
             <PlayerFilters
               positionFilter={positionFilter ?? ''}
               teamFilter={selectedTeam}
-              availablePositions={positions}
-              availableTeams={teams}
+              availablePositions={availablePositions}
+              availableTeams={availableTeams}
               onPositionFilter={handlePositionFilter}
               onTeamFilter={handleTeamFilter}
               onClearFilters={clearFilters}
@@ -200,21 +263,21 @@ export const PlayerScreenContent = () => {
         </div>
 
         {/* Loading State - for initial load */}
-        {isLoading && <LoadingState message="Loading..." />}
+        {activeIsLoading && <LoadingState message="Loading..." />}
 
         {/* Filtering Loading State */}
-        {isFiltering && !isLoading && <LoadingState message="Searching..." />}
+        {isFiltering && !activeIsLoading && <LoadingState message="Searching..." />}
 
         {/* Error State */}
-        {error && !isLoading && !isFiltering && (
-          <ErrorState message={error} onRetry={refreshAthletes} />
+        {activeErrorMessage && !activeIsLoading && !isFiltering && (
+          <ErrorState message={activeErrorMessage} onRetry={retryActive} />
         )}
 
         {/* Empty State */}
         {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
 
         {/* Player Grid */}
-        {!isLoading && !error && !isFiltering && (
+        {!activeIsLoading && !activeError && !isFiltering && (
           <div className="grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 md:gap-y-3">
             {filteredAthletes.map(player => (
               <PlayerCardItem

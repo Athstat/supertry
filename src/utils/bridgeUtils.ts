@@ -439,3 +439,11 @@ export function requestNavigation(url: string): void {
     );
   }
 }
+
+/** Returns true if the app is running inside a mobile webview */
+export function isMobileWebView() : boolean{
+  return (
+    (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
+    window.ReactNativeWebView !== undefined
+  );
+};

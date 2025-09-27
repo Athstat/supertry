@@ -1,54 +1,41 @@
-import { useNavigate } from "react-router-dom";
-import BlueGradientCard from "../shared/BlueGradientCard";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
-import NewTag from "../branding/NewTag";
+import { useNavigate } from 'react-router-dom';
+import BlueGradientCard from '../shared/BlueGradientCard';
+import { SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY } from '../../state/fantasy/fantasyLeagueScreen.atoms';
 
-type Props = {
-};
-
-export function HeroSection({ }: Props) {
+export function HeroSection() {
   const navigate = useNavigate();
-  const navigateToLeagues = () => navigate("/leagues");
-
-  const termsAndConditionsLink = "https://scrummy-app.com/#/scrum6-rules";
+  const onClick = () => {
+    const key = SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY;
+    const seasonId = '9e74bed3-9ea2-5f41-a906-434d0d3e8f4e';
+    navigate(`/leagues?${key}=${seasonId}`);
+  };
 
   return (
-    <BlueGradientCard className="cursor-pointer">
+    <BlueGradientCard
+      onClick={onClick}
+      className="cursor-pointer from-purple-900 to-blue-800 dark:from-violet-700 dark:to-violet-800 hover:dark:from-primary-700 hover:dark:to-violet-700 overflow-clip transition-all ease-in duration-1000"
+    >
       <div className="flex flex-col gap-4 p-3">
-
-        <div>
+        <div className="flex flex-col gap-1">
           <div>
-
             <h1 className="text-lg lg:text-xl font-bold">
-              SCRUM6 Challenge is LIVE!
+              URC is back! Your rivals are preparing 🔥
             </h1>
           </div>
 
-          <p className="text-md opacity-90">
-            Climb the leaderboard, crack the Top 3, and score a Rugby Swag Bag. 🏉🔥
+          <p className="text-sm opacity-90">
+            Time to scrum down, build your squad, and take on your mates. Pick your team, invite
+            your friend, and let the battles begin.
           </p>
         </div>
-
-        <p>⏰ Open now → Closes Sat, 9/13 @ 12:01 AM EST</p>
-
-        <div className="flex flex-row items-center gap-2" >
-
-          <PrimaryButton onClick={navigateToLeagues} className="w-fit bg-white text-blue-500 hover:bg-white hover:text-blue-600 dark:bg-white dark:text-blue-500 hover:dark:bg-white hover:dark:text-blue-600">
-            Take Me There
-          </PrimaryButton>
-
-          <a href={termsAndConditionsLink} target="blank" className="hover:font-medium ease-out delay-300" >Terms & Conditions</a>
-        </div>
-
       </div>
 
       {/* {leagueOnTheClock && (
         <JoinDeadlineCountdown
-          onViewLeague={onViewLeague}
-          league={leagueOnTheClock}
+        onViewLeague={onViewLeague}
+        league={leagueOnTheClock}
         />
-      )} */}
-
+        )} */}
     </BlueGradientCard>
   );
 }
@@ -84,7 +71,6 @@ export function HeroSection({ }: Props) {
 //     navigateToLeagueScreen(league);
 //   }
 
-
 //   return (
 //     <div className="flex flex-col p-4 gap-4 sm:gap-6">
 //       <div onClick={handleClickCard} className="space-y-2 sm:space-y-4 cursor-pointer">
@@ -106,7 +92,6 @@ export function HeroSection({ }: Props) {
 //             : <>{" "}in <strong>{hours}:{minutes}:{seconds}</strong></>
 //           }
 //         </p>
-
 
 //       </div>
 
