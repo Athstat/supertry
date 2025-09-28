@@ -1,7 +1,8 @@
 /** Seasons Service */
 
 import { IProAthlete } from '../types/athletes';
-import { IFixture, ISeason, ITeam } from '../types/games';
+import { ISeasonRound } from '../types/fantasy/fantasySeason';
+import { IFixture, ITeam } from '../types/games';
 import { IProSeason } from '../types/season';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
@@ -93,4 +94,24 @@ export const seasonService = {
 
     return [];
   },
+
+
+  getSeasonRounds: async (seasonId: string): Promise<ISeasonRound[]> => {
+    
+    try {
+      const uri = getUri(`/api/v1/seasons/${seasonId}/rounds`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as ISeasonRound[];
+      }
+    } catch (err) {
+      logger.error('Error fetching season rounds ', err);
+    }
+
+    return [];
+
+  }
 };

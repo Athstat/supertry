@@ -125,8 +125,8 @@ export const swrFetchKeys = {
         return `/athletes/${id}`;
     },
 
-    getUserFantasyLeagueRoundTeam: (leagueId: string, roundId: string| number, userId?: string) => {
-        userId = userId ? userId: authService.getUserInfoSync()?.kc_id;
+    getUserFantasyLeagueRoundTeam: (leagueId: string, roundId: string | number, userId?: string) => {
+        userId = userId ? userId : authService.getUserInfoSync()?.kc_id;
         return `/fantasy-league-groups/${leagueId}/round/${roundId}/user/${userId}`;
     },
 
@@ -144,5 +144,9 @@ export const swrFetchKeys = {
 
     getActiveFantasySeasons: () => {
         return '/fantasy-seaons/active';
+    },
+
+    getSeasonRounds: (seasonId?: string) => {
+        return `/fantasy-seaons/${seasonId}/rounds`;
     }
 }
