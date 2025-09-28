@@ -5,6 +5,8 @@ import { twMerge } from "tailwind-merge"
 import { useState, useEffect } from "react"
 import { IRosterItem } from '../../../types/games';
 import FaceoffSlide from "./FaceoffSlide";
+import LineupsSlide from "./LineupsSlide";
+import LeadersSlide from "./LeadersSlide";
 import { gamesService } from '../../../services/gamesService';
 import useSWR from "swr"
 import Conditionally from "../../debug/Conditionally"
@@ -67,16 +69,6 @@ export default function GameStoryBoard({ game, className, onClose }: Props) {
         }
     };
 
-    // Tap/click navigation
-    const handleStoryClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        const { left, width } = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - left;
-        if (x < width / 2) {
-            prev();
-        } else {
-            next();
-        }
-    };
 
     // Fetch rosters for the fixture
     const fixtureId = game.game_id;
@@ -91,30 +83,67 @@ export default function GameStoryBoard({ game, className, onClose }: Props) {
 
     // Render slide content
     const renderSlide = () => {
-        if (current === 0) {
-            return (
-                <>
-                    <Conditionally condition={loadingRosters}>
-                        <LoadingState />
-                    </Conditionally>
-                    <Conditionally condition={!loadingRosters}>
-                        <FaceoffSlide
-                            homeTeam={homeTeam}
-                            awayTeam={awayTeam}
-                            homePlayers={homePlayers}
-                            awayPlayers={awayPlayers}
-                        />
-                    </Conditionally>
-                </>
-            );
+        if (loadingRosters) {
+            return <LoadingState />;
         }
-        // ...other slides
-        return (
-            <div className="flex flex-col items-center justify-center h-full">
-                <h2 className="text-2xl font-bold mb-4">{slides[current].title}</h2>
-                <div className="text-gray-500">Slide {current + 1} of {slides.length}</div>
-            </div>
-        );
+
+        switch (current) {
+            case 0: // Faceoff
+                return (
+                    <FaceoffSlide
+                        homeTeam={homeTeam}
+                        awayTeam={awayTeam}
+                        homePlayers={homePlayers}
+                        awayPlayers={awayPlayers}
+                    />
+                );
+            case 1: // Lineups
+                return (
+                    <LineupsSlide
+                        homeTeam={homeTeam}
+                        awayTeam={awayTeam}
+                        homePlayers={homePlayers}
+                        awayPlayers={awayPlayers}
+                    />
+                );
+            case 2: // Attacking Leaders
+                return (
+                    <LeadersSlide
+                        homeTeam={homeTeam}
+                        awayTeam={awayTeam}
+                        homePlayers={homePlayers}
+                        awayPlayers={awayPlayers}
+                        type="attacking"
+                    />
+                );
+            case 3: // Defensive Leaders
+                return (
+                    <LeadersSlide
+                        homeTeam={homeTeam}
+                        awayTeam={awayTeam}
+                        homePlayers={homePlayers}
+                        awayPlayers={awayPlayers}
+                        type="defensive"
+                    />
+                );
+            case 4: // Kicking Leaders
+                return (
+                    <LeadersSlide
+                        homeTeam={homeTeam}
+                        awayTeam={awayTeam}
+                        homePlayers={homePlayers}
+                        awayPlayers={awayPlayers}
+                        type="kicking"
+                    />
+                );
+            default:
+                return (
+                    <div className="flex flex-col items-center justify-center h-full">
+                        <h2 className="text-2xl font-bold mb-4">{slides[current]?.title || 'Unknown'}</h2>
+                        <div className="text-gray-500">Slide {current + 1} of {slides.length}</div>
+                    </div>
+                );
+        }
     };
 
     return (
@@ -176,12 +205,28 @@ export default function GameStoryBoard({ game, className, onClose }: Props) {
                             </button>
                         </div>
                     </div>
-                    {/* Slide content with tap/click navigation */}
-                    <div
-                        className="flex-1 flex items-center justify-center cursor-pointer relative"
-                        onClick={handleStoryClick}
-                    >
-                        {renderSlide()}
+                    {/* Slide content */}
+                    <div className="flex-1 relative overflow-hidden">
+                        {/* Navigation tap zones */}
+                        <div 
+                            className="absolute left-0 top-0 w-1/3 h-full z-10 cursor-pointer"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                prev();
+                            }}
+                        />
+                        <div 
+                            className="absolute right-0 top-0 w-1/3 h-full z-10 cursor-pointer"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                next();
+                            }}
+                        />
+                        
+                        {/* Slide content */}
+                        <div className="w-full h-full">
+                            {renderSlide()}
+                        </div>
                     </div>
                     {/* Navigation controls (desktop only) */}
                     <div className="hidden md:flex flex-row items-center justify-between px-8 pb-6">
