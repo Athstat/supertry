@@ -60,9 +60,10 @@ export const seasonService = {
     return [];
   },
 
-  getSeasonFixtures: async (seasonId: string): Promise<IFixture[]> => {
+  getSeasonFixtures: async (seasonId: string, round?: number | string): Promise<IFixture[]> => {
     try {
-      const uri = getUri(`/api/v1/seasons/${seasonId}/games`);
+      const queryParams = round ? `?round=${round}` : '';
+      const uri = getUri(`/api/v1/seasons/${seasonId}/games${queryParams}`);
       const res = await fetch(uri, {
         headers: getAuthHeader(),
       });

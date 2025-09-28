@@ -19,7 +19,7 @@ export function DashboardScreen() {
   };
 
   return (
-    <PageView className="flex flex-col space-y-8 p-4">
+    <PageView className="flex flex-col space-y-4 p-4">
 
       <div className='flex flex-row items-center justify-between' >
         <div className="flex flex-row items-center gap-2">
