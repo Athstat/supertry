@@ -8,6 +8,8 @@ import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
 import { HeroSection } from '../components/dashboard';
+import GameStoriesCarrousel from '../components/dashboard/stories/GameStoriesCarrousel';
+import Experimental from '../components/shared/ab_testing/Experimental';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -29,6 +31,10 @@ export function DashboardScreen() {
           <GamePlayHelpButton />
         </div>
       </div>
+
+      <Experimental>
+        <GameStoriesCarrousel />
+      </Experimental>
 
       <HeroSection />
 
