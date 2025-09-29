@@ -151,7 +151,7 @@ function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryCom
 
   return (
     <div className="fixed inset-0 z-[70] bg-black bg-opacity-90 flex items-center justify-center">
-      <div className="relative w-[97vh] max-w-sm mx-auto h-[97vh] border dark:border-slate-700 rounded-xl max-h-screen bg-gray-900 text-white overflow-hidden">
+      <div className="relative w-[98vh] max-w-sm mx-auto h-[98vh] border dark:border-slate-700 rounded-xl max-h-screen bg-gray-900 text-white overflow-hidden">
 
         <GameStoryHeader
           onClose={onClose}
@@ -199,7 +199,7 @@ function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryCom
           </button>
 
           <div className="flex flex-col items-center gap-1 text-xs text-gray-300">
-            <ScrummyDarkModeLogo className="grayscale w-14 h-14" />
+            <ScrummyDarkModeLogo className="grayscale w-14 h-14 lg:w-14 lg:h-14" />
           </div>
 
           <button
