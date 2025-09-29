@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { IFixture } from "../../../types/games";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
 import OverviewSlide from "./slides/OverviewSlide";
 import AttackLeadersSlide from "./slides/AttackLeadersSlide";
 import DefenseLeadersSlide from "./slides/DefenseLeadersSlide";
 import KickingLeadersSlide from "./slides/KickingLeadersSlide";
 import LineupsSlide from "./slides/LineupsSlide";
+import { PauseCircle } from "lucide-react";
+import { ScrummyDarkModeLogo } from "../../branding/scrummy_logo";
 
 interface GameStoryModalProps {
   games: IFixture[];
@@ -173,7 +175,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
               onClick={() => setPaused(!isPaused)}
               className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors text-xs font-bold"
             >
-              {isPaused ? '▶' : '⏸'}
+              {isPaused ? <PauseCircle /> : <PlayCircle />}
             </button>
             <button
               onClick={onClose}
@@ -212,7 +214,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
         </div>
 
         {/* Floating bottom navigation buttons */}
-        <div className="absolute bottom-6 left-4 right-4 z-20 flex items-center justify-between">
+        <div className="absolute bottom-0 pb-2 left-4 right-4 z-20  flex items-center justify-between">
           <button
             onClick={prevSlide}
             disabled={currentSlideIndex === 0}
@@ -225,16 +227,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
           </button>
 
           <div className="flex flex-col items-center gap-1 text-xs text-gray-300">
-            <div className="flex items-center gap-2">
-              <span>{currentSlideIndex + 1}</span>
-              <span>/</span>
-              <span>{SLIDES.length}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>Game {currentGameIndex + 1}</span>
-              <span>/</span>
-              <span>{games.length}</span>
-            </div>
+            <ScrummyDarkModeLogo className="grayscale w-14 h-14"  />
           </div>
 
           <button
