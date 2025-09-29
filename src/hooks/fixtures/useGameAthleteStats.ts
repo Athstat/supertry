@@ -19,6 +19,10 @@ export function useGameAthleteStats(fixture: IFixture, selectedTeamId?: string) 
         return (data ?? [])
     }, [data]);
 
+    console.log("Sports Actions ", sportActions.filter(s => s.team_id === '45c49225-bee0-5d61-b13a-1fe84e3a31c4') );
+
+    const isEmpty = sportActions.length === 0;
+
     const attackList = useMemo(() => {
         return attackBoxscoreList(sportActions, selectedTeamId ?? '');
     }, [sportActions, selectedTeamId]);
@@ -63,6 +67,7 @@ export function useGameAthleteStats(fixture: IFixture, selectedTeamId?: string) 
         defenseList,
         kickingList,
         disciplineList,
-        getStatLeader
+        getStatLeader,
+        isEmpty
     }
 }

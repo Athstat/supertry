@@ -62,37 +62,37 @@ function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryCom
   }, [currentGame, setCurrentGame]);
 
   // Auto-progress timer
-  useEffect(() => {
-    if (!open || isPaused) return;
+  // useEffect(() => {
+  //   if (!open || isPaused) return;
 
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          // Move to next slide or next game
-          setCurrentSlideIndex((slideIndex) => {
-            if (slideIndex >= SLIDES.length - 1) {
-              // Mark current game as viewed before moving to next
-              onStoryComplete(games[currentGameIndex]);
+  //   const interval = setInterval(() => {
+  //     setProgress((prev) => {
+  //       if (prev >= 100) {
+  //         // Move to next slide or next game
+  //         setCurrentSlideIndex((slideIndex) => {
+  //           if (slideIndex >= SLIDES.length - 1) {
+  //             // Mark current game as viewed before moving to next
+  //             onStoryComplete(games[currentGameIndex]);
 
-              // Move to next game or close if last game
-              if (currentGameIndex < games.length - 1) {
-                onGameChange(currentGameIndex + 1);
-                return 0;
-              } else {
-                onClose();
-                return 0;
-              }
-            }
-            return slideIndex + 1;
-          });
-          return 0;
-        }
-        return prev + 2; // Increase by 2% every 100ms (5 seconds total)
-      });
-    }, 100);
+  //             // Move to next game or close if last game
+  //             if (currentGameIndex < games.length - 1) {
+  //               onGameChange(currentGameIndex + 1);
+  //               return 0;
+  //             } else {
+  //               onClose();
+  //               return 0;
+  //             }
+  //           }
+  //           return slideIndex + 1;
+  //         });
+  //         return 0;
+  //       }
+  //       return prev + 2; // Increase by 2% every 100ms (5 seconds total)
+  //     });
+  //   }, 100);
 
-    return () => clearInterval(interval);
-  }, [open, isPaused, onClose, setProgress, setCurrentSlideIndex, onStoryComplete, games, currentGameIndex, onGameChange]);
+  //   return () => clearInterval(interval);
+  // }, [open, isPaused, onClose, setProgress, setCurrentSlideIndex, onStoryComplete, games, currentGameIndex, onGameChange]);
 
   // Reset progress when slide changes
   useEffect(() => {
