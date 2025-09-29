@@ -1,9 +1,7 @@
-import useSWR from "swr";
 import { IFixture } from "../../types/games"
 import TabView, { TabViewHeaderItem, TabViewPage } from "../shared/tabs/TabView"
 import { LoadingState } from "../ui/LoadingState";
 import { FixtureRosterList } from "./FixtureRosterList"
-import { gamesService } from "../../services/gamesService";
 import { useEffect, useState } from "react";
 import { IProAthlete } from "../../types/athletes";
 import PlayerProfileModal from "../player/PlayerProfileModal";
@@ -11,6 +9,7 @@ import NoContentCard from "../shared/NoContentMessage";
 import { fixtureSumary } from "../../utils/fixtureUtils";
 import { useInView } from "react-intersection-observer";
 import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics";
+import { useGameRosters } from "../../hooks/fixtures/useGameRosters";
 
 type Props = {
     fixture: IFixture,
@@ -18,9 +17,10 @@ type Props = {
 
 export default function FixtureRosters({ fixture }: Props) {
 
-    const fixtureId = fixture.game_id;
-    const rostersKey = fixtureId ? `fixtures/${fixtureId}/rosters` : null;
-    const { data: fetchedRosters, isLoading: loadingRosters } = useSWR(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
+    const {
+        rosters, isLoading: loadingRosters,
+        awayRoster, homeRoster 
+    } = useGameRosters(fixture);
 
     const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -60,17 +60,6 @@ export default function FixtureRosters({ fixture }: Props) {
             className: "flex-1 w-1/2"
         }
     ]
-
-    const rosters = fetchedRosters ?? [];
-
-    const awayRoster = rosters.filter((r) => {
-        return r.team_id === fixture?.opposition_team?.athstat_id;
-    });
-
-
-    const homeRoster = rosters.filter((r) => {
-        return r.team_id === fixture?.team?.athstat_id;
-    })
 
     const handleClickPlayer = (player: IProAthlete) => {
         setSelectedPlayer(player);
