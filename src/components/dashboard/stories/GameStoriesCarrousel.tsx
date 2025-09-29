@@ -10,7 +10,11 @@ import GameStoryModal from "./GameStoryModal";
 export default function GameStoriesCarrousel() {
 
   const { currentRound } = useDashboard();
-  const { games, isLoading } = useRoundGames(currentRound);
+  const { games: fetchedGames, isLoading } = useRoundGames(currentRound);
+  
+  const games = (fetchedGames.filter((g) => {
+    return g.game_status === 'completed'
+  }))
 
   const [currentGameIndex, setCurrentGameIndex] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -80,6 +84,8 @@ export default function GameStoriesCarrousel() {
       </div>
     )
   }
+
+  if (games.length === 0) return null;
 
   return (
     <div className="flex flex-col gap-2" >

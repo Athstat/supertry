@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import { IFixture } from "../../types/games";
 
 /** Holds a boolean value whether a story has been paused or not */
-const isPausedAtom = atom<boolean>(true);
+const isPausedAtom = atom<boolean>(false);
 
 /** Holds the progress of the story slides */
 const progressAtom = atom<number>(0);
