@@ -1,23 +1,26 @@
+import { Fragment, useState } from "react";
 import { useDashboard } from "../../../hooks/dashboard/useDashboard"
 import { useRoundGames } from "../../../hooks/fixtures/useRoundGames";
+import { IFixture } from "../../../types/games";
 import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../shared/SecondaryText";
+import GameStoryModal from "./GameStoryModal";
 
 /** Renders an instagram like game stories carrousel component */
 export default function GameStoriesCarrousel() {
 
   const { currentRound } = useDashboard();
-  const { isLoading } = useRoundGames(currentRound);
+  const { games, isLoading } = useRoundGames(currentRound);
 
-  // const [currentGame, setCurrentGame] = useState<IFixture>();
-  // const [showModal, setShowModal] = useState<boolean>(false);
+  const [currentGame, setCurrentGame] = useState<IFixture>();
+  const [showModal, setShowModal] = useState<boolean>(false);
 
-  // const toggle = () => setShowModal(prev => !prev);
+  const toggle = () => setShowModal(prev => !prev);
 
-  // const onClickStoryItem = (game: IFixture) => {
-  //   setCurrentGame(game);
-  //   toggle();
-  // }
+  const onClickStoryItem = (game: IFixture) => {
+    setCurrentGame(game);
+    toggle();
+  }
 
   if (isLoading) {
     return (
@@ -55,21 +58,72 @@ export default function GameStoriesCarrousel() {
         <SecondaryText className="font-semibold" >Game Stories @ {currentRound?.round_title}</SecondaryText>
       </div>
 
-      <div className="flex flex-row w-full items-center gap-2 no-scrollbar overflow-x-auto" >
-        
+      <div className="flex flex-row w-full items-center gap-3 no-scrollbar overflow-x-auto pb-2" >
+        {games.map((game) => (
+          <div
+            key={game.game_id}
+            onClick={() => onClickStoryItem(game)}
+            className="flex-shrink-0 cursor-pointer group"
+          >
+            <div className="relative">
+              {/* Story ring gradient */}
+              <div className="w-[72px] h-[72px] rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-400 p-[2px] group-hover:scale-105 transition-transform">
+                <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 p-[2px]">
+                  <div className="w-full h-full rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center relative overflow-hidden">
+                    {/* Team logos */}
+                    <div className="flex items-center justify-center w-full h-full">
+                      {game.team?.on_dark_image_url || game.team?.image_url ? (
+                        <div className="flex items-center justify-center space-x-1">
+                          <img 
+                            src={game.team.on_dark_image_url || game.team.image_url}
+                            alt={game.team.athstat_name}
+                            className="w-5 h-5 object-contain"
+                          />
+                          {game.opposition_team?.on_dark_image_url || game.opposition_team?.image_url ? (
+                            <img 
+                              src={game.opposition_team.on_dark_image_url || game.opposition_team.image_url}
+                              alt={game.opposition_team.athstat_name}
+                              className="w-5 h-5 object-contain"
+                            />
+                          ) : (
+                            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                          {game.team?.athstat_abbreviation || 'TM'}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Team names below */}
+            <div className="text-xs text-center mt-1 max-w-[72px]">
+              <div className="text-gray-700 dark:text-gray-300 font-medium truncate">
+                {game.team?.athstat_abbreviation || 'Team'}
+              </div>
+              <div className="text-gray-500 dark:text-gray-400 text-[10px] truncate">
+                vs {game.opposition_team?.athstat_abbreviation || 'Opp'}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* {showModal && (
+      {showModal && (
         <Fragment>
           {currentGame && (
-            <GameStoryBoard
+            <GameStoryModal
               game={currentGame}
               onClose={toggle}
               open={true}
             />
           )}
         </Fragment>
-      )} */}
+      )}
 
     </div>
   )
