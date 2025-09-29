@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { IFixture } from "../../../types/games";
-import { X, ChevronLeft, ChevronRight, PlayCircle, PauseCircle } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import OverviewSlide from "./slides/OverviewSlide";
 import AttackLeadersSlide from "./slides/AttackLeadersSlide";
 import DefenseLeadersSlide from "./slides/DefenseLeadersSlide";
@@ -148,9 +148,9 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setPaused(!isPaused)}
-              className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors"
+              className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors text-xs font-bold"
             >
-              {isPaused ? <PlayCircle size={16} /> : <PauseCircle size={16} />}
+              {isPaused ? '▶' : '⏸'}
             </button>
             <button 
               onClick={onClose}
@@ -184,8 +184,36 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
         </button>
 
         {/* Slide content */}
-        <div className="h-full pt-24">
+        <div className="h-full pt-24 pb-20">
           <CurrentSlideComponent game={game} />
+        </div>
+
+        {/* Floating bottom navigation buttons */}
+        <div className="absolute bottom-6 left-4 right-4 z-20 flex items-center justify-between">
+          <button 
+            onClick={prevSlide}
+            disabled={currentSlideIndex === 0}
+            className={`px-6 py-3 rounded-full bg-black bg-opacity-70 text-white font-medium transition-all ${
+              currentSlideIndex === 0 
+                ? 'opacity-50 cursor-not-allowed' 
+                : 'hover:bg-opacity-90'
+            }`}
+          >
+            ← Back
+          </button>
+          
+          <div className="flex items-center gap-2 text-sm text-gray-300">
+            <span>{currentSlideIndex + 1}</span>
+            <span>/</span>
+            <span>{SLIDES.length}</span>
+          </div>
+          
+          <button 
+            onClick={nextSlide}
+            className="px-6 py-3 rounded-full bg-black bg-opacity-70 text-white font-medium hover:bg-opacity-90 transition-all"
+          >
+            {currentSlideIndex === SLIDES.length - 1 ? 'Close' : 'Next →'}
+          </button>
         </div>
 
       </div>

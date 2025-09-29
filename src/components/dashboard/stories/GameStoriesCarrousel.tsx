@@ -113,7 +113,7 @@ export default function GameStoriesCarrousel() {
         ))}
       </div>
 
-      {showModal && (
+      {showModal && ( 
         <Fragment>
           {currentGame && (
             <GameStoryModal
