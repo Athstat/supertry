@@ -45,7 +45,7 @@ const mockLineup = {
 
 export default function LineupsSlide({ game }: LineupsSlideProps) {
   return (
-    <div className="h-full flex flex-col px-4 bg-gradient-to-b from-gray-800 to-gray-900 overflow-y-auto">
+    <div className="h-full flex flex-col px-4 bg-gradient-to-b from-gray-900 to-gray-900 overflow-y-auto">
       
       {/* Header */}
       <div className="text-center py-4 border-b border-gray-700 mb-4">
@@ -53,7 +53,6 @@ export default function LineupsSlide({ game }: LineupsSlideProps) {
           <Users size={20} className="text-blue-400" />
           <h2 className="text-lg font-bold">Starting Lineups</h2>
         </div>
-        <p className="text-xs text-gray-400">Expected Starting XV</p>
       </div>
 
       <div className="flex-1 grid grid-cols-2 gap-4">
@@ -61,7 +60,7 @@ export default function LineupsSlide({ game }: LineupsSlideProps) {
         {/* Home Team */}
         <div className="space-y-3">
           <div className="text-center">
-            <div className="w-8 h-8 mx-auto mb-2 bg-gray-700 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 mx-auto mb-2 bg-gray-700 rounded-full flex flex items-center justify-center">
               {game.team?.on_dark_image_url || game.team?.image_url ? (
                 <img 
                   src={game.team.on_dark_image_url || game.team.image_url}
@@ -75,7 +74,7 @@ export default function LineupsSlide({ game }: LineupsSlideProps) {
               )}
             </div>
             <h3 className="text-sm font-semibold text-center">
-              {game.team?.athstat_abbreviation || 'Home'}
+              {game.team?.athstat_name || 'Home'}
             </h3>
           </div>
           
@@ -87,7 +86,7 @@ export default function LineupsSlide({ game }: LineupsSlideProps) {
                     {player.number}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium truncate">{player.name}</div>
+                    <div className="text-sm truncate">{player.name}</div>
                     <div className="text-xs text-gray-400">{player.position}</div>
                   </div>
                 </div>
@@ -112,8 +111,8 @@ export default function LineupsSlide({ game }: LineupsSlideProps) {
                 </span>
               )}
             </div>
-            <h3 className="text-sm font-semibold text-center">
-              {game.opposition_team?.athstat_abbreviation || 'Away'}
+            <h3 className="text-sm  text-center">
+              {game.opposition_team?.athstat_name || 'Away'}
             </h3>
           </div>
           

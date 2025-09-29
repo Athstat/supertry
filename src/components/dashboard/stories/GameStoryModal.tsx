@@ -121,8 +121,8 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
   const CurrentSlideComponent = SLIDES[currentSlideIndex].component;
 
   return (
-    <div className="fixed inset-0 z-[70] bg-black bg-opacity-95 flex items-center justify-center">
-      <div className="relative w-full max-w-sm mx-auto h-full max-h-screen bg-gray-900 text-white overflow-hidden">
+    <div className="fixed inset-0 z-[70] bg-black bg-opacity-90 flex items-center justify-center">
+      <div className="relative w-[97vh] max-w-sm mx-auto h-[97vh] border dark:border-slate-700 rounded-xl max-h-screen bg-gray-900 text-white overflow-hidden">
 
         {/* Progress bars */}
         <div className="absolute top-4 left-4 right-4 z-20 flex gap-1">
@@ -146,7 +146,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
         <div className="absolute top-12 left-4 right-4 z-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[1px]">
-              <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
                 {currentGame.team?.on_dark_image_url || currentGame.team?.image_url ? (
                   <img
                     src={currentGame.team.on_dark_image_url || currentGame.team.image_url}
