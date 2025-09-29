@@ -3,8 +3,10 @@ import { gameStoryAtoms } from "../../state/dashboard/gameStory.atoms";
 import { useCallback } from "react";
 
 export function useGameStory() {
-    
+
     const [isPaused, setIsPaused] = useAtom(gameStoryAtoms.isPausedAtom);
+    const [currentSlideIndex, setCurrentSlideIndex] = useAtom(gameStoryAtoms.currentSlideIndexAtom);
+    const [progress, setProgress] = useAtom(gameStoryAtoms.progressAtom);
 
     const pauseStory = useCallback(() => {
         setIsPaused(true);
@@ -14,7 +16,7 @@ export function useGameStory() {
         setIsPaused(false);
     }, [setIsPaused]);
 
-    const togglePause = useCallback(( ) => {
+    const togglePause = useCallback(() => {
         setIsPaused(prev => !prev);
     }, [setIsPaused]);
 
@@ -23,6 +25,11 @@ export function useGameStory() {
         isPaused,
         pauseStory,
         resumeStory,
-        togglePause
+        togglePause,
+        progress,
+        setProgress,
+        currentSlideIndex,
+        setCurrentSlideIndex,
+        setIsPaused
     }
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { IFixture } from "../../../types/games";
 import { X, ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
 import OverviewSlide from "./slides/OverviewSlide";
@@ -8,8 +8,10 @@ import KickingLeadersSlide from "./slides/KickingLeadersSlide";
 import LineupsSlide from "./slides/LineupsSlide";
 import { PauseCircle } from "lucide-react";
 import { ScrummyDarkModeLogo } from "../../branding/scrummy_logo";
+import GameStoryProvider from "./GameStoryProvider";
+import { useGameStory } from "../../../hooks/dashboard/useGameStory";
 
-interface GameStoryModalProps {
+type GameStoryModalProps = {
   games: IFixture[];
   currentGameIndex: number;
   onClose: () => void;
@@ -27,9 +29,26 @@ const SLIDES = [
 ] as const;
 
 export default function GameStoryModal({ games, currentGameIndex, onClose, onGameChange, onStoryComplete, open }: GameStoryModalProps) {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [isPaused, setPaused] = useState(false);
+  return (
+    <GameStoryProvider>
+      <InnerModal 
+        currentGameIndex={currentGameIndex}
+        games={games}
+        onClose={onClose}
+        onGameChange={onGameChange}
+        onStoryComplete={onStoryComplete}
+        open={open}
+      />
+    </GameStoryProvider>
+  )
+}
+
+
+function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryComplete, open }: GameStoryModalProps) {
+  const {
+    isPaused, currentSlideIndex, setCurrentSlideIndex,
+    setProgress, progress, setIsPaused: setPaused
+  } = useGameStory();
 
   // Auto-progress timer
   useEffect(() => {
@@ -219,15 +238,15 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
             onClick={prevSlide}
             disabled={currentSlideIndex === 0}
             className={`px-6 py-3 rounded-full bg-black bg-opacity-70 text-white font-medium transition-all ${currentSlideIndex === 0
-                ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-opacity-90'
+              ? 'opacity-50 cursor-not-allowed'
+              : 'hover:bg-opacity-90'
               }`}
           >
             ← Back
           </button>
 
           <div className="flex flex-col items-center gap-1 text-xs text-gray-300">
-            <ScrummyDarkModeLogo className="grayscale w-14 h-14"  />
+            <ScrummyDarkModeLogo className="grayscale w-14 h-14" />
           </div>
 
           <button

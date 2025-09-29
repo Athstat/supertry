@@ -9,7 +9,10 @@ type Props = {
 /** Provides state to a game story component */
 export default function GameStoryProvider({children}: Props) {
 
-    const atoms = [gameStoryAtoms.isPausedAtom];
+    const atoms = [
+        gameStoryAtoms.isPausedAtom,
+        gameStoryAtoms.progressAtom
+    ];
 
     return (
         <ScopeProvider
