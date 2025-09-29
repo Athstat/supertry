@@ -7,12 +7,12 @@ import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeC
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
-import { HeroSection } from '../components/dashboard';
 import { useEffect, useState } from 'react';
 import PushOptInModal from '../components/ui/PushOptInModal';
 import { isBridgeAvailable, requestPushPermissions } from '../utils/bridgeUtils';
 import { authService } from '../services/authService';
-import { HeroSection2 } from '../components/dashboard/HeroSection2';
+import GameStoriesCarrousel from '../components/dashboard/stories/GameStoriesCarrousel';
+import Experimental from '../components/shared/ab_testing/Experimental';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -61,8 +61,9 @@ export function DashboardScreen() {
   };
 
   return (
-    <PageView className="flex flex-col space-y-8 p-4">
-      <div className="flex flex-row items-center justify-between">
+    <PageView className="flex flex-col space-y-4 p-4">
+
+      <div className='flex flex-row items-center justify-between' >
         <div className="flex flex-row items-center gap-2">
           <Home />
           <p className="text-xl font-extrabold">Dashboard</p>
@@ -73,12 +74,9 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      <div>
-        <HeroSection />
-        {/* <div className="mt-3">
-          <HeroSection2 />
-        </div> */}
-      </div>
+      <Experimental>
+        <GameStoriesCarrousel />
+      </Experimental>
 
       {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}
 
@@ -104,7 +102,7 @@ export function DashboardScreen() {
                     if (kcId) {
                       localStorage.setItem(`push_settings_note_seen_user_${kcId}`, 'true');
                     }
-                  } catch {}
+                  } catch {;}
                   setShowSettingsNote(false);
                 }}
                 className="px-4 py-2 rounded-lg"
@@ -150,7 +148,7 @@ export function DashboardScreen() {
                     setShowSettingsNote(true);
                   }
                 }
-              } catch {}
+              } catch {;}
             }
           } catch (e) {
             // swallow error and proceed to hide modal
@@ -168,7 +166,7 @@ export function DashboardScreen() {
                 setShowSettingsNote(true);
               }
             }
-          } catch {}
+          } catch {;}
           setShowPushModal(false);
         }}
       />
