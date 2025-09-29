@@ -1,12 +1,14 @@
+import { twMerge } from "tailwind-merge";
 import { useAthlete } from "../../../../hooks/athletes/useAthlete";
 import { GameSportAction } from "../../../../types/boxScore";
 import RoundedCard from "../../../shared/RoundedCard";
 
 type StatLeaderProps = {
-  leader: GameSportAction
+  leader: GameSportAction,
+  isDefense?: boolean
 }
 
-export function StatLeaderCard({ leader }: StatLeaderProps) {
+export function StatLeaderCard({ leader, isDefense = false }: StatLeaderProps) {
 
   const { athlete_id } = leader;
   const { athlete, isLoading } = useAthlete(athlete_id);
@@ -22,11 +24,17 @@ export function StatLeaderCard({ leader }: StatLeaderProps) {
   if (!athlete) return null;
 
   return (
-    <div className="flex items-center gap-4 bg-blue-700 border border-slate-800/40 rounded-xl p-4">
+    <div className={twMerge(
+      "flex items-center gap-4 bg-blue-700 border border-slate-800/40 rounded-xl p-4",
+      isDefense && 'bg-red-600/80 border-none'
+    )}>
 
       {/* Player image */}
       <div className="relative">
-        <div className="w-16 h-16 rounded-full overflow-hidden bg-blue-900">
+        <div className={twMerge(
+          "w-16 h-16 rounded-full overflow-hidden bg-blue-900",
+          isDefense && 'bg-red-900'
+        )}>
           <img
             src={athlete.image_url}
             alt={athlete.player_name}

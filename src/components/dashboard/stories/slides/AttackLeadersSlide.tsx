@@ -3,6 +3,7 @@ import { useGameAthleteStats } from "../../../../hooks/fixtures/useGameAthleteSt
 import { IFixture } from "../../../../types/games";
 import { useGameStory } from "../../../../hooks/dashboard/useGameStory";
 import { LoadingState } from "../../../ui/LoadingState";
+
 import { StatLeaderCard } from "./StatLeaderCard";
 
 interface AttackLeadersSlideProps {
