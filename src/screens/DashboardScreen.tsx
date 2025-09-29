@@ -150,8 +150,9 @@ export function DashboardScreen() {
                 }
               } catch {;}
             }
-          } catch (e) {
+          } catch {
             // swallow error and proceed to hide modal
+            ;
           } finally {
             setShowPushModal(false);
           }
