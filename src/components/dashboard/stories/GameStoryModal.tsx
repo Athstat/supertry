@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { IFixture } from "../../../types/games";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import OverviewSlide from "./slides/OverviewSlide";
@@ -41,7 +41,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
             if (slideIndex >= SLIDES.length - 1) {
               // Mark current game as viewed before moving to next
               onStoryComplete(games[currentGameIndex]);
-              
+
               // Move to next game or close if last game
               if (currentGameIndex < games.length - 1) {
                 onGameChange(currentGameIndex + 1);
@@ -67,13 +67,13 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
     setProgress(0);
   }, [currentSlideIndex]);
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     if (currentSlideIndex < SLIDES.length - 1) {
       setCurrentSlideIndex(currentSlideIndex + 1);
     } else {
       // Mark current game as viewed before moving to next
       onStoryComplete(games[currentGameIndex]);
-      
+
       // Move to next game or close if last game
       if (currentGameIndex < games.length - 1) {
         onGameChange(currentGameIndex + 1);
@@ -83,15 +83,15 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
         onClose();
       }
     }
-  };
+  }, [currentSlideIndex, onStoryComplete, games, currentGameIndex, onGameChange, onClose]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     if (currentSlideIndex > 0) {
       setCurrentSlideIndex(currentSlideIndex - 1);
     }
-  };
+  }, [setCurrentSlideIndex, currentSlideIndex]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'ArrowRight') nextSlide();
     if (e.key === 'ArrowLeft') prevSlide();
     if (e.key === 'Escape') onClose();
@@ -99,7 +99,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
       e.preventDefault();
       setPaused(!isPaused);
     }
-  };
+  }, [nextSlide, prevSlide, onClose, setPaused, isPaused]);
 
   useEffect(() => {
     if (open) {
@@ -111,7 +111,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [open, currentSlideIndex, isPaused]);
+  }, [open, currentSlideIndex, isPaused, handleKeyDown]);
 
   if (!open) return null;
 
@@ -121,18 +121,18 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
   return (
     <div className="fixed inset-0 z-[70] bg-black bg-opacity-95 flex items-center justify-center">
       <div className="relative w-full max-w-sm mx-auto h-full max-h-screen bg-gray-900 text-white overflow-hidden">
-        
+
         {/* Progress bars */}
         <div className="absolute top-4 left-4 right-4 z-20 flex gap-1">
           {SLIDES.map((_, index) => (
             <div key={index} className="flex-1 h-0.5 bg-gray-600 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-white rounded-full transition-all duration-100"
-                style={{ 
-                  width: index === currentSlideIndex 
-                    ? `${progress}%` 
-                    : index < currentSlideIndex 
-                      ? '100%' 
+                style={{
+                  width: index === currentSlideIndex
+                    ? `${progress}%`
+                    : index < currentSlideIndex
+                      ? '100%'
                       : '0%'
                 }}
               />
@@ -146,7 +146,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[1px]">
               <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
                 {currentGame.team?.on_dark_image_url || currentGame.team?.image_url ? (
-                  <img 
+                  <img
                     src={currentGame.team.on_dark_image_url || currentGame.team.image_url}
                     alt={currentGame.team.athstat_name}
                     className="w-5 h-5 object-contain"
@@ -167,15 +167,15 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => setPaused(!isPaused)}
               className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors text-xs font-bold"
             >
               {isPaused ? '▶' : '⏸'}
             </button>
-            <button 
+            <button
               onClick={onClose}
               className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors"
             >
@@ -185,7 +185,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
         </div>
 
         {/* Navigation areas - only on upper portion to allow scrolling */}
-        <button 
+        <button
           onClick={prevSlide}
           className="absolute left-0 top-0 w-1/3 h-32 z-10 flex items-center justify-start pl-4 opacity-0 hover:opacity-100 transition-opacity"
           disabled={currentSlideIndex === 0}
@@ -197,7 +197,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
           )}
         </button>
 
-        <button 
+        <button
           onClick={nextSlide}
           className="absolute right-0 top-0 w-1/3 h-32 z-10 flex items-center justify-end pr-4 opacity-0 hover:opacity-100 transition-opacity"
         >
@@ -213,18 +213,17 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
 
         {/* Floating bottom navigation buttons */}
         <div className="absolute bottom-6 left-4 right-4 z-20 flex items-center justify-between">
-          <button 
+          <button
             onClick={prevSlide}
             disabled={currentSlideIndex === 0}
-            className={`px-6 py-3 rounded-full bg-black bg-opacity-70 text-white font-medium transition-all ${
-              currentSlideIndex === 0 
-                ? 'opacity-50 cursor-not-allowed' 
+            className={`px-6 py-3 rounded-full bg-black bg-opacity-70 text-white font-medium transition-all ${currentSlideIndex === 0
+                ? 'opacity-50 cursor-not-allowed'
                 : 'hover:bg-opacity-90'
-            }`}
+              }`}
           >
             ← Back
           </button>
-          
+
           <div className="flex flex-col items-center gap-1 text-xs text-gray-300">
             <div className="flex items-center gap-2">
               <span>{currentSlideIndex + 1}</span>
@@ -237,8 +236,8 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
               <span>{games.length}</span>
             </div>
           </div>
-          
-          <button 
+
+          <button
             onClick={nextSlide}
             className="px-6 py-3 rounded-full bg-black bg-opacity-70 text-white font-medium hover:bg-opacity-90 transition-all"
           >
