@@ -207,9 +207,9 @@ export const PlayerScreenContent = () => {
         </div>
 
         {/* Fantasy Season Tabs - identical to Fantasy Leagues */}
-        <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2 w-full">
+        {/* <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2 w-full">
           <PlayersSeasonSelector />
-        </div>
+        </div> */}
 
         <PlayerSearch searchQuery={searchQuery ?? ''} onSearch={handleSearch} />
         <div className="flex flex-col w-full gap-1">
