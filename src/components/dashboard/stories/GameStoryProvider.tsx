@@ -11,7 +11,9 @@ export default function GameStoryProvider({children}: Props) {
 
     const atoms = [
         gameStoryAtoms.isPausedAtom,
-        gameStoryAtoms.progressAtom
+        gameStoryAtoms.progressAtom,
+        gameStoryAtoms.currentGameAtom,
+        gameStoryAtoms.currentSlideIndexAtom
     ];
 
     return (

@@ -1,15 +1,17 @@
 import { useEffect, useCallback } from "react";
 import { IFixture } from "../../../types/games";
-import { X, ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import OverviewSlide from "./slides/OverviewSlide";
 import AttackLeadersSlide from "./slides/AttackLeadersSlide";
 import DefenseLeadersSlide from "./slides/DefenseLeadersSlide";
 import KickingLeadersSlide from "./slides/KickingLeadersSlide";
 import LineupsSlide from "./slides/LineupsSlide";
-import { PauseCircle } from "lucide-react";
 import { ScrummyDarkModeLogo } from "../../branding/scrummy_logo";
 import GameStoryProvider from "./GameStoryProvider";
 import { useGameStory } from "../../../hooks/dashboard/useGameStory";
+import { useSetAtom } from "jotai";
+import { gameStoryAtoms } from "../../../state/dashboard/gameStory.atoms";
+import GameStoryHeader from "./GameStoryHeader";
 
 type GameStoryModalProps = {
   games: IFixture[];
@@ -29,9 +31,11 @@ const SLIDES = [
 ] as const;
 
 export default function GameStoryModal({ games, currentGameIndex, onClose, onGameChange, onStoryComplete, open }: GameStoryModalProps) {
+
   return (
     <GameStoryProvider>
-      <InnerModal 
+
+      <InnerModal
         currentGameIndex={currentGameIndex}
         games={games}
         onClose={onClose}
@@ -47,8 +51,15 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
 function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryComplete, open }: GameStoryModalProps) {
   const {
     isPaused, currentSlideIndex, setCurrentSlideIndex,
-    setProgress, progress, setIsPaused: setPaused
+    setProgress, setIsPaused: setPaused
   } = useGameStory();
+
+  const setCurrentGame = useSetAtom(gameStoryAtoms.currentGameAtom);
+  const currentGame = games[currentGameIndex];
+
+  useEffect(() => {
+    setCurrentGame(currentGame);
+  }, [currentGame, setCurrentGame]);
 
   // Auto-progress timer
   useEffect(() => {
@@ -81,12 +92,12 @@ function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryCom
     }, 100);
 
     return () => clearInterval(interval);
-  }, [open, isPaused, onClose]);
+  }, [open, isPaused, onClose, setProgress, setCurrentSlideIndex, onStoryComplete, games, currentGameIndex, onGameChange]);
 
   // Reset progress when slide changes
   useEffect(() => {
     setProgress(0);
-  }, [currentSlideIndex]);
+  }, [currentSlideIndex, setProgress]);
 
   const nextSlide = useCallback(() => {
     if (currentSlideIndex < SLIDES.length - 1) {
@@ -104,7 +115,7 @@ function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryCom
         onClose();
       }
     }
-  }, [currentSlideIndex, onStoryComplete, games, currentGameIndex, onGameChange, onClose]);
+  }, [currentSlideIndex, setCurrentSlideIndex, onStoryComplete, games, currentGameIndex, onGameChange, setProgress, onClose]);
 
   const prevSlide = useCallback(() => {
     if (currentSlideIndex > 0) {
@@ -136,74 +147,16 @@ function InnerModal({ games, currentGameIndex, onClose, onGameChange, onStoryCom
 
   if (!open) return null;
 
-  const currentGame = games[currentGameIndex];
   const CurrentSlideComponent = SLIDES[currentSlideIndex].component;
 
   return (
     <div className="fixed inset-0 z-[70] bg-black bg-opacity-90 flex items-center justify-center">
       <div className="relative w-[97vh] max-w-sm mx-auto h-[97vh] border dark:border-slate-700 rounded-xl max-h-screen bg-gray-900 text-white overflow-hidden">
 
-        {/* Progress bars */}
-        <div className="absolute top-4 left-4 right-4 z-20 flex gap-1">
-          {SLIDES.map((_, index) => (
-            <div key={index} className="flex-1 h-0.5 bg-gray-600 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-white rounded-full transition-all duration-100"
-                style={{
-                  width: index === currentSlideIndex
-                    ? `${progress}%`
-                    : index < currentSlideIndex
-                      ? '100%'
-                      : '0%'
-                }}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Header */}
-        <div className="absolute top-12 left-4 right-4 z-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[1px]">
-              <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
-                {currentGame.team?.on_dark_image_url || currentGame.team?.image_url ? (
-                  <img
-                    src={currentGame.team.on_dark_image_url || currentGame.team.image_url}
-                    alt={currentGame.team.athstat_name}
-                    className="w-5 h-5 object-contain"
-                  />
-                ) : (
-                  <span className="text-xs font-bold">
-                    {currentGame.team?.athstat_abbreviation || 'TM'}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm font-semibold">
-                {currentGame.team?.athstat_name || 'Team'} vs {currentGame.opposition_team?.athstat_name || 'Opposition'}
-              </div>
-              <div className="text-xs text-gray-400">
-                {SLIDES[currentSlideIndex].title}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPaused(!isPaused)}
-              className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors text-xs font-bold"
-            >
-              {isPaused ? <PauseCircle /> : <PlayCircle />}
-            </button>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors"
-            >
-              <X size={16} />
-            </button>
-          </div>
-        </div>
+        <GameStoryHeader
+          onClose={onClose}
+          currentGame={currentGame}
+        />
 
         {/* Navigation areas - only on upper portion to allow scrolling */}
         <button

@@ -7,6 +7,7 @@ export function useGameStory() {
     const [isPaused, setIsPaused] = useAtom(gameStoryAtoms.isPausedAtom);
     const [currentSlideIndex, setCurrentSlideIndex] = useAtom(gameStoryAtoms.currentSlideIndexAtom);
     const [progress, setProgress] = useAtom(gameStoryAtoms.progressAtom);
+    const [currentGame, setCurrentGame] = useAtom(gameStoryAtoms.currentGameAtom);
 
     const pauseStory = useCallback(() => {
         setIsPaused(true);
@@ -30,6 +31,8 @@ export function useGameStory() {
         setProgress,
         currentSlideIndex,
         setCurrentSlideIndex,
-        setIsPaused
+        setIsPaused,
+        currentGame,
+        setCurrentGame
     }
 }
