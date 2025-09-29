@@ -12,6 +12,7 @@ interface GameStoryModalProps {
   currentGameIndex: number;
   onClose: () => void;
   onGameChange: (index: number) => void;
+  onStoryComplete: (game: IFixture) => void;
   open: boolean;
 }
 
@@ -23,7 +24,7 @@ const SLIDES = [
   { id: 'kicking', title: 'Kicking Leaders', component: KickingLeadersSlide },
 ] as const;
 
-export default function GameStoryModal({ games, currentGameIndex, onClose, onGameChange, open }: GameStoryModalProps) {
+export default function GameStoryModal({ games, currentGameIndex, onClose, onGameChange, onStoryComplete, open }: GameStoryModalProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isPaused, setPaused] = useState(false);
@@ -38,6 +39,9 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
           // Move to next slide or next game
           setCurrentSlideIndex((slideIndex) => {
             if (slideIndex >= SLIDES.length - 1) {
+              // Mark current game as viewed before moving to next
+              onStoryComplete(games[currentGameIndex]);
+              
               // Move to next game or close if last game
               if (currentGameIndex < games.length - 1) {
                 onGameChange(currentGameIndex + 1);
@@ -67,6 +71,9 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
     if (currentSlideIndex < SLIDES.length - 1) {
       setCurrentSlideIndex(currentSlideIndex + 1);
     } else {
+      // Mark current game as viewed before moving to next
+      onStoryComplete(games[currentGameIndex]);
+      
       // Move to next game or close if last game
       if (currentGameIndex < games.length - 1) {
         onGameChange(currentGameIndex + 1);
@@ -136,7 +143,7 @@ export default function GameStoryModal({ games, currentGameIndex, onClose, onGam
         {/* Header */}
         <div className="absolute top-12 left-4 right-4 z-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-400 p-[1px]">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[1px]">
               <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
                 {currentGame.team?.on_dark_image_url || currentGame.team?.image_url ? (
                   <img 

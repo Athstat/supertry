@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useMemo } from "react";
 import { useDashboard } from "../../../hooks/dashboard/useDashboard"
 import { useRoundGames } from "../../../hooks/fixtures/useRoundGames";
 import { IFixture } from "../../../types/games";
@@ -14,14 +14,43 @@ export default function GameStoriesCarrousel() {
 
   const [currentGameIndex, setCurrentGameIndex] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [viewedGames, setViewedGames] = useState<Set<string>>(new Set());
 
   const toggle = () => setShowModal(prev => !prev);
 
+  // Check if a story has been viewed
+  const isStoryViewed = (game: IFixture) => {
+    const key = `game-story-viewed-${game.game_id}-${game.game_status}`;
+    return localStorage.getItem(key) === 'true' || viewedGames.has(key);
+  };
+
+  // Mark story as viewed
+  const markStoryAsViewed = (game: IFixture) => {
+    const key = `game-story-viewed-${game.game_id}-${game.game_status}`;
+    localStorage.setItem(key, 'true');
+    setViewedGames(prev => new Set(prev).add(key));
+  };
+
+  // Sort games: unviewed first, viewed at the end
+  const sortedGames = useMemo(() => {
+    return [...games].sort((a, b) => {
+      const aViewed = isStoryViewed(a);
+      const bViewed = isStoryViewed(b);
+      
+      if (aViewed === bViewed) return 0;
+      return aViewed ? 1 : -1;
+    });
+  }, [games, viewedGames]);
+
   const onClickStoryItem = (game: IFixture) => {
-    const gameIndex = games.findIndex(g => g.game_id === game.game_id);
+    const gameIndex = sortedGames.findIndex(g => g.game_id === game.game_id);
     setCurrentGameIndex(gameIndex);
     toggle();
   }
+
+  const handleStoryComplete = (game: IFixture) => {
+    markStoryAsViewed(game);
+  };
 
   if (isLoading) {
     return (
@@ -60,7 +89,7 @@ export default function GameStoriesCarrousel() {
       </div>
 
       <div className="flex flex-row w-full items-center gap-3 no-scrollbar overflow-x-auto pb-2" >
-        {games.map((game) => (
+        {sortedGames.map((game) => (
           <div
             key={game.game_id}
             onClick={() => onClickStoryItem(game)}
@@ -68,7 +97,11 @@ export default function GameStoriesCarrousel() {
           >
             <div className="relative">
               {/* Story ring gradient */}
-              <div className="w-[72px] h-[72px] rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[2px] group-hover:scale-105 transition-transform">
+              <div className={`w-[72px] h-[72px] rounded-full p-[2px] group-hover:scale-105 transition-transform ${
+                isStoryViewed(game) 
+                  ? 'bg-gray-400 dark:bg-gray-600' 
+                  : 'bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600'
+              }`}>
                 <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 p-[2px]">
                   <div className="w-full h-full rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center relative overflow-hidden">
                     {/* Team logos */}
@@ -117,10 +150,11 @@ export default function GameStoriesCarrousel() {
       {showModal && (
         <Fragment>
           <GameStoryModal
-            games={games}
+            games={sortedGames}
             currentGameIndex={currentGameIndex}
             onClose={toggle}
             onGameChange={setCurrentGameIndex}
+            onStoryComplete={handleStoryComplete}
             open={true}
           />
         </Fragment>
