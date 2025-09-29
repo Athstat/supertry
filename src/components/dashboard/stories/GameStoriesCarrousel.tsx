@@ -12,13 +12,14 @@ export default function GameStoriesCarrousel() {
   const { currentRound } = useDashboard();
   const { games, isLoading } = useRoundGames(currentRound);
 
-  const [currentGame, setCurrentGame] = useState<IFixture>();
+  const [currentGameIndex, setCurrentGameIndex] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const toggle = () => setShowModal(prev => !prev);
 
   const onClickStoryItem = (game: IFixture) => {
-    setCurrentGame(game);
+    const gameIndex = games.findIndex(g => g.game_id === game.game_id);
+    setCurrentGameIndex(gameIndex);
     toggle();
   }
 
@@ -113,15 +114,15 @@ export default function GameStoriesCarrousel() {
         ))}
       </div>
 
-      {showModal && ( 
+      {showModal && (
         <Fragment>
-          {currentGame && (
-            <GameStoryModal
-              game={currentGame}
-              onClose={toggle}
-              open={true}
-            />
-          )}
+          <GameStoryModal
+            games={games}
+            currentGameIndex={currentGameIndex}
+            onClose={toggle}
+            onGameChange={setCurrentGameIndex}
+            open={true}
+          />
         </Fragment>
       )}
 

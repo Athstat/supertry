@@ -8,8 +8,10 @@ import KickingLeadersSlide from "./slides/KickingLeadersSlide";
 import LineupsSlide from "./slides/LineupsSlide";
 
 interface GameStoryModalProps {
-  game: IFixture;
+  games: IFixture[];
+  currentGameIndex: number;
   onClose: () => void;
+  onGameChange: (index: number) => void;
   open: boolean;
 }
 
@@ -21,7 +23,7 @@ const SLIDES = [
   { id: 'kicking', title: 'Kicking Leaders', component: KickingLeadersSlide },
 ] as const;
 
-export default function GameStoryModal({ game, onClose, open }: GameStoryModalProps) {
+export default function GameStoryModal({ games, currentGameIndex, onClose, onGameChange, open }: GameStoryModalProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isPaused, setPaused] = useState(false);
@@ -33,11 +35,17 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          // Move to next slide
+          // Move to next slide or next game
           setCurrentSlideIndex((slideIndex) => {
             if (slideIndex >= SLIDES.length - 1) {
-              onClose();
-              return 0;
+              // Move to next game or close if last game
+              if (currentGameIndex < games.length - 1) {
+                onGameChange(currentGameIndex + 1);
+                return 0;
+              } else {
+                onClose();
+                return 0;
+              }
             }
             return slideIndex + 1;
           });
@@ -59,7 +67,14 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
     if (currentSlideIndex < SLIDES.length - 1) {
       setCurrentSlideIndex(currentSlideIndex + 1);
     } else {
-      onClose();
+      // Move to next game or close if last game
+      if (currentGameIndex < games.length - 1) {
+        onGameChange(currentGameIndex + 1);
+        setCurrentSlideIndex(0);
+        setProgress(0);
+      } else {
+        onClose();
+      }
     }
   };
 
@@ -93,6 +108,7 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
 
   if (!open) return null;
 
+  const currentGame = games[currentGameIndex];
   const CurrentSlideComponent = SLIDES[currentSlideIndex].component;
 
   return (
@@ -122,22 +138,22 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-400 p-[1px]">
               <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
-                {game.team?.on_dark_image_url || game.team?.image_url ? (
+                {currentGame.team?.on_dark_image_url || currentGame.team?.image_url ? (
                   <img 
-                    src={game.team.on_dark_image_url || game.team.image_url}
-                    alt={game.team.athstat_name}
+                    src={currentGame.team.on_dark_image_url || currentGame.team.image_url}
+                    alt={currentGame.team.athstat_name}
                     className="w-5 h-5 object-contain"
                   />
                 ) : (
                   <span className="text-xs font-bold">
-                    {game.team?.athstat_abbreviation || 'TM'}
+                    {currentGame.team?.athstat_abbreviation || 'TM'}
                   </span>
                 )}
               </div>
             </div>
             <div>
               <div className="text-sm font-semibold">
-                {game.team?.athstat_name || 'Team'} vs {game.opposition_team?.athstat_name || 'Opposition'}
+                {currentGame.team?.athstat_name || 'Team'} vs {currentGame.opposition_team?.athstat_name || 'Opposition'}
               </div>
               <div className="text-xs text-gray-400">
                 {SLIDES[currentSlideIndex].title}
@@ -185,7 +201,7 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
 
         {/* Slide content */}
         <div className="h-full pt-24 pb-20">
-          <CurrentSlideComponent game={game} />
+          <CurrentSlideComponent game={currentGame} />
         </div>
 
         {/* Floating bottom navigation buttons */}
@@ -202,17 +218,24 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
             ← Back
           </button>
           
-          <div className="flex items-center gap-2 text-sm text-gray-300">
-            <span>{currentSlideIndex + 1}</span>
-            <span>/</span>
-            <span>{SLIDES.length}</span>
+          <div className="flex flex-col items-center gap-1 text-xs text-gray-300">
+            <div className="flex items-center gap-2">
+              <span>{currentSlideIndex + 1}</span>
+              <span>/</span>
+              <span>{SLIDES.length}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span>Game {currentGameIndex + 1}</span>
+              <span>/</span>
+              <span>{games.length}</span>
+            </div>
           </div>
           
           <button 
             onClick={nextSlide}
             className="px-6 py-3 rounded-full bg-black bg-opacity-70 text-white font-medium hover:bg-opacity-90 transition-all"
           >
-            {currentSlideIndex === SLIDES.length - 1 ? 'Close' : 'Next →'}
+            {currentSlideIndex === SLIDES.length - 1 && currentGameIndex === games.length - 1 ? 'Close' : 'Next →'}
           </button>
         </div>
 
