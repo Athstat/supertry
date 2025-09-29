@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { IFixture } from "../../../types/games";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, PlayCircle, PauseCircle } from "lucide-react";
 import OverviewSlide from "./slides/OverviewSlide";
-import LineupsSlide from "./slides/LineupsSlide";
 import AttackLeadersSlide from "./slides/AttackLeadersSlide";
 import DefenseLeadersSlide from "./slides/DefenseLeadersSlide";
 import KickingLeadersSlide from "./slides/KickingLeadersSlide";
+import LineupsSlide from "./slides/LineupsSlide";
 
 interface GameStoryModalProps {
   game: IFixture;
@@ -96,7 +96,7 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
   const CurrentSlideComponent = SLIDES[currentSlideIndex].component;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
+    <div className="fixed inset-0 z-[70] bg-black bg-opacity-95 flex items-center justify-center">
       <div className="relative w-full max-w-sm mx-auto h-full max-h-screen bg-gray-900 text-white overflow-hidden">
         
         {/* Progress bars */}
@@ -145,18 +145,26 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
             </div>
           </div>
           
-          <button 
-            onClick={onClose}
-            className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors"
-          >
-            <X size={16} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setPaused(!isPaused)}
+              className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors"
+            >
+              {isPaused ? <PlayCircle size={16} /> : <PauseCircle size={16} />}
+            </button>
+            <button 
+              onClick={onClose}
+              className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-opacity-70 transition-colors"
+            >
+              <X size={16} />
+            </button>
+          </div>
         </div>
 
-        {/* Navigation areas */}
+        {/* Navigation areas - only on upper portion to allow scrolling */}
         <button 
           onClick={prevSlide}
-          className="absolute left-0 top-0 w-1/3 h-full z-10 flex items-center justify-start pl-4 opacity-0 hover:opacity-100 transition-opacity"
+          className="absolute left-0 top-0 w-1/3 h-32 z-10 flex items-center justify-start pl-4 opacity-0 hover:opacity-100 transition-opacity"
           disabled={currentSlideIndex === 0}
         >
           {currentSlideIndex > 0 && (
@@ -168,32 +176,18 @@ export default function GameStoryModal({ game, onClose, open }: GameStoryModalPr
 
         <button 
           onClick={nextSlide}
-          className="absolute right-0 top-0 w-1/3 h-full z-10 flex items-center justify-end pr-4 opacity-0 hover:opacity-100 transition-opacity"
+          className="absolute right-0 top-0 w-1/3 h-32 z-10 flex items-center justify-end pr-4 opacity-0 hover:opacity-100 transition-opacity"
         >
           <div className="w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center">
             <ChevronRight size={16} />
           </div>
         </button>
 
-        {/* Pause/play area */}
-        <button 
-          onClick={() => setPaused(!isPaused)}
-          className="absolute inset-x-1/3 top-0 h-full z-10"
-        />
-
         {/* Slide content */}
         <div className="h-full pt-24">
           <CurrentSlideComponent game={game} />
         </div>
 
-        {/* Pause indicator */}
-        {isPaused && (
-          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center z-30">
-            <div className="bg-black bg-opacity-70 rounded-lg px-4 py-2">
-              <span className="text-sm">Paused</span>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
