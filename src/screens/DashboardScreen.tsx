@@ -75,9 +75,9 @@ export function DashboardScreen() {
 
       <div>
         <HeroSection />
-        <div className="mt-3">
+        {/* <div className="mt-3">
           <HeroSection2 />
-        </div>
+        </div> */}
       </div>
 
       {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}

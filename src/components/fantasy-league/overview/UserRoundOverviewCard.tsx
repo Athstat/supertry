@@ -107,6 +107,7 @@ export function NoTeamRoundOverviewCard({
   onHandleViewStandings,
 }: NoTeamProps) {
   const hasLocked = isLeagueRoundLocked(leagueRound);
+  //const hasEnded = hasLeagueRoundEnded(leagueRound);
   const { navigate } = useTabView();
   const routerNavigate = useNavigate();
 
@@ -128,6 +129,8 @@ export function NoTeamRoundOverviewCard({
     }
   };
 
+  console.log('league round title: ', leagueRound.title);
+
   return (
     <div>
       <BlueGradientCard className="p-4 flex flex-col gap-4 w-full">
@@ -146,7 +149,16 @@ export function NoTeamRoundOverviewCard({
           </div>
         )}
 
-        {hasLocked && (
+        {hasLocked && leagueRound.title === 'Finals Week' && (
+          <div>
+            <p>
+              Oops! The deadline passed, and you didn’t set a team this round. No worries — get
+              ready for the next season!
+            </p>
+          </div>
+        )}
+
+        {hasLocked && leagueRound.title !== 'Finals Week' && (
           <div>
             <p>
               Whoops! The gates just closed and you didn't set a team this round. Don't worry —
