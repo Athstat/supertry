@@ -7,6 +7,7 @@ import LineupsSlide from "./slides/LineupsSlide";
 import OverviewSlide from "./slides/OverviewSlide";
 import { useGameStory } from "../../../hooks/dashboard/useGameStory";
 import { IFixture } from "../../../types/games";
+import { useNavigate } from "react-router-dom";
 
 const SLIDES = [
   { id: 'overview', title: 'Overview', component: OverviewSlide },
@@ -29,6 +30,12 @@ export default function GameStoryHeader({onClose } : Props) {
     setIsPaused: setPaused, progress,
     currentGame
   } = useGameStory();
+
+  const navigate = useNavigate();
+
+  const goToMoreDetails = () => {
+    navigate(`/fixtures/${currentGame?.game_id}`)
+  }
 
   if (!currentGame) return null;
 
@@ -55,7 +62,8 @@ export default function GameStoryHeader({onClose } : Props) {
       {/* Header */}
       <div className="absolute top-12 left-4 right-4 z-20 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[1px]">
+          
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[1px]"> 
             <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
               {currentGame.team?.on_dark_image_url || currentGame.team?.image_url ? (
                 <img
@@ -71,7 +79,7 @@ export default function GameStoryHeader({onClose } : Props) {
             </div>
           </div>
           <div>
-            <div className="text-sm font-semibold">
+            <div onClick={goToMoreDetails} className="text-sm font-semibold hover:underline cursor-pointer hover:text-blue-600">
               {currentGame.team?.athstat_name || 'Team'} vs {currentGame.opposition_team?.athstat_name || 'Opposition'}
             </div>
             <div className="text-xs text-gray-400">
