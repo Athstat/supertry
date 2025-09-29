@@ -39,12 +39,11 @@ export default function DefenseLeadersSlide({ game }: DefenseLeadersSlideProps) 
     <div className="h-full flex flex-col px-4 bg-gradient-to-b from-gray-900 to-gray-900 overflow-y-auto">
 
       {/* Header */}
-      <div className="text-center py-4 border-b border-gray-700 mb-6">
+      <div className="text-center py-4">
         <div className="flex items-center justify-center gap-2 mb-2">
           <BrickWall size={20} className="text-red-400" />
           <h2 className="text-lg font-bold">Defense Leaders</h2>
         </div>
-        <p className="text-xs text-gray-400">Top defensive performers</p>
       </div>
 
       <div className="flex flex-col gap-2" >

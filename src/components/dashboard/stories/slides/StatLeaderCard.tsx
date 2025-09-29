@@ -5,10 +5,11 @@ import RoundedCard from "../../../shared/RoundedCard";
 
 type StatLeaderProps = {
   leader: GameSportAction,
-  isDefense?: boolean
+  isDefense?: boolean,
+  isKicking?: boolean
 }
 
-export function StatLeaderCard({ leader, isDefense = false }: StatLeaderProps) {
+export function StatLeaderCard({ leader, isDefense = false, isKicking = false }: StatLeaderProps) {
 
   const { athlete_id } = leader;
   const { athlete, isLoading } = useAthlete(athlete_id);
@@ -20,20 +21,24 @@ export function StatLeaderCard({ leader, isDefense = false }: StatLeaderProps) {
       />
     )
   }
-
+  if (leader.action_count === 0) {return null;}
   if (!athlete) return null;
+
+
 
   return (
     <div className={twMerge(
       "flex items-center gap-4 bg-blue-700 border border-slate-800/40 rounded-xl p-4",
-      isDefense && 'bg-red-600/80 border-none'
+      isDefense && 'bg-red-600/80 border-none',
+      isKicking && 'bg-violet-800 border-none'
     )}>
 
       {/* Player image */}
       <div className="relative">
         <div className={twMerge(
           "w-16 h-16 rounded-full overflow-hidden bg-blue-900",
-          isDefense && 'bg-red-900'
+          isDefense && 'bg-red-900',
+          isKicking && 'bg-violet-500'
         )}>
           <img
             src={athlete.image_url}
@@ -45,10 +50,10 @@ export function StatLeaderCard({ leader, isDefense = false }: StatLeaderProps) {
 
       {/* Player info */}
       <div className="flex-1">
-        <div className="text-base font-semibold text-white">
+        <div className="text-sm font-semibold text-white">
           {athlete.player_name}
         </div>
-        <div className="text-xs text-white/80">
+        <div className="text-[10px] text-white/80">
           {athlete.team?.athstat_name}
         </div>
       </div>

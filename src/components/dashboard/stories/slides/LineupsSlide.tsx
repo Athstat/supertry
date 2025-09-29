@@ -6,6 +6,7 @@ import { Users } from "lucide-react";
 import PlayerMugshot from "../../../shared/PlayerMugshot";
 import SecondaryText from "../../../shared/SecondaryText";
 import { CaptainsArmBand } from "../../../fixtures/FixtureRosterList";
+import { LoadingState } from "../../../ui/LoadingState";
 
 interface LineupsSlideProps {
   game: IFixture;
@@ -23,6 +24,10 @@ export default function LineupsSlide({ game }: LineupsSlideProps) {
       resumeStory();
     }
   }, [isLoading, pauseStory, resumeStory]);
+
+  if (isLoading) {
+    return <LoadingState />
+  }
 
   return (
     <div className="h-full flex flex-col px-4 bg-gradient-to-b from-gray-900 to-gray-900 overflow-y-auto">
