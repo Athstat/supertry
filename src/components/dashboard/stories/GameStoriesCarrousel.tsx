@@ -68,7 +68,7 @@ export default function GameStoriesCarrousel() {
           >
             <div className="relative">
               {/* Story ring gradient */}
-              <div className="w-[72px] h-[72px] rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-400 p-[2px] group-hover:scale-105 transition-transform">
+              <div className="w-[72px] h-[72px] rounded-full bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600 p-[2px] group-hover:scale-105 transition-transform">
                 <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 p-[2px]">
                   <div className="w-full h-full rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center relative overflow-hidden">
                     {/* Team logos */}
