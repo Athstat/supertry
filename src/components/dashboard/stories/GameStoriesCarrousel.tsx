@@ -88,63 +88,71 @@ export default function GameStoriesCarrousel() {
         <SecondaryText className="font-semibold" >Game Stories @ {currentRound?.round_title}</SecondaryText>
       </div>
 
-      <div className="flex flex-row w-full items-center gap-3 no-scrollbar overflow-x-auto pb-2" >
-        {sortedGames.map((game) => (
-          <div
-            key={game.game_id}
-            onClick={() => onClickStoryItem(game)}
-            className="flex-shrink-0 cursor-pointer group"
-          >
-            <div className="relative">
-              {/* Story ring gradient */}
-              <div className={`w-[72px] h-[72px] rounded-full p-[2px] group-hover:scale-105 transition-transform ${
-                isStoryViewed(game) 
-                  ? 'bg-gray-400 dark:bg-gray-600' 
-                  : 'bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600'
-              }`}>
-                <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 p-[2px]">
-                  <div className="w-full h-full rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center relative overflow-hidden">
-                    {/* Team logos */}
-                    <div className="flex items-center justify-center w-full h-full">
-                      {game.team?.on_dark_image_url || game.team?.image_url ? (
-                        <div className="flex items-center justify-center space-x-1">
-                          <img 
-                            src={game.team.on_dark_image_url || game.team.image_url}
-                            alt={game.team.athstat_name}
-                            className="w-5 h-5 object-contain"
-                          />
-                          {game.opposition_team?.on_dark_image_url || game.opposition_team?.image_url ? (
+      <div className="relative">
+        {/* Left fade gradient */}
+        {/* <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white via-white/80 to-transparent dark:from-dark-850 dark:via-dark-850/70 dark:to-transparent z-10 pointer-events-none" /> */}
+        
+        {/* Right fade gradient */}
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white via-white/80 to-transparent dark:from-dark-850 dark:via-slate-850/70 dark:to-transparent z-10 pointer-events-none" />
+        
+        <div className="flex flex-row w-full items-center gap-3 no-scrollbar overflow-x-auto pb-2" >
+          {sortedGames.map((game) => (
+            <div
+              key={game.game_id}
+              onClick={() => onClickStoryItem(game)}
+              className="flex-shrink-0 cursor-pointer group"
+            >
+              <div className="relative">
+                {/* Story ring gradient */}
+                <div className={`w-[72px] h-[72px] rounded-full p-[2px] group-hover:scale-105 transition-transform ${
+                  isStoryViewed(game) 
+                    ? 'bg-gray-400 dark:bg-gray-600' 
+                    : 'bg-gradient-to-tr from-blue-400 via-blue-500 to-blue-600'
+                }`}>
+                  <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 p-[2px]">
+                    <div className="w-full h-full rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center relative overflow-hidden">
+                      {/* Team logos */}
+                      <div className="flex items-center justify-center w-full h-full">
+                        {game.team?.on_dark_image_url || game.team?.image_url ? (
+                          <div className="flex items-center justify-center space-x-1">
                             <img 
-                              src={game.opposition_team.on_dark_image_url || game.opposition_team.image_url}
-                              alt={game.opposition_team.athstat_name}
+                              src={game.team.on_dark_image_url || game.team.image_url}
+                              alt={game.team.athstat_name}
                               className="w-5 h-5 object-contain"
                             />
-                          ) : (
-                            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
-                          {game.team?.athstat_abbreviation || 'TM'}
-                        </div>
-                      )}
+                            {game.opposition_team?.on_dark_image_url || game.opposition_team?.image_url ? (
+                              <img 
+                                src={game.opposition_team.on_dark_image_url || game.opposition_team.image_url}
+                                alt={game.opposition_team.athstat_name}
+                                className="w-5 h-5 object-contain"
+                              />
+                            ) : (
+                              <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                            {game.team?.athstat_abbreviation || 'TM'}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            
-            {/* Team names below */}
-            <div className="text-xs text-center mt-1 max-w-[72px]">
-              <div className="text-gray-700 dark:text-gray-300 font-medium truncate">
-                {game.team?.athstat_abbreviation || 'Team'}
+              
+              {/* Team names below */}
+              <div className="text-xs text-center mt-1 max-w-[72px]">
+                <div className="text-gray-700 dark:text-gray-300 font-medium truncate">
+                  {game.team?.athstat_abbreviation || 'Team'}
+                </div>
+                <div className="text-gray-500 dark:text-gray-400 text-[10px] truncate">
+                  vs {game.opposition_team?.athstat_abbreviation || 'Opp'}
+                </div>
               </div>
-              <div className="text-gray-500 dark:text-gray-400 text-[10px] truncate">
-                vs {game.opposition_team?.athstat_abbreviation || 'Opp'}
-              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {showModal && (
