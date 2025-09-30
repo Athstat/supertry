@@ -537,17 +537,17 @@ export default function CreateMyTeam({
         })}
       </div>
 
-      {/* {isModalOpen && activePosition && (
+      {isModalOpen && activePosition && (
         <PlayerSelectionModal
           visible={isModalOpen}
           selectedPosition={activePosition}
           players={players}
           remainingBudget={
             (leagueConfig?.team_budget || 240) -
-            Object.values(selectedPlayers).reduce((sum, p) => sum + (p.price || 0), 0)
+            Object.values(selectedPlayers).reduce((sum, p) => sum + (p?.price || 0), 0)
           }
           selectedPlayers={Object.values(selectedPlayers).map(p => ({
-            tracking_id: p.tracking_id,
+            tracking_id: p?.tracking_id,
           }))}
           handlePlayerSelect={rugbyPlayer => {
             setSelectedPlayers(prev => ({ ...prev, [activePosition.name]: rugbyPlayer }));
@@ -559,9 +559,9 @@ export default function CreateMyTeam({
           roundEnd={leagueRound?.end_round ?? undefined}
           leagueId={leagueRound?.official_league_id}
         />
-      )} */}
+      )}
 
-      {activePosition && (
+      {/* {activePosition && (
         <PlayerPickerV2
           isOpen={isModalOpen}
           positionPool={activePosition.positionClass as (PositionClass | undefined)}
@@ -571,7 +571,7 @@ export default function CreateMyTeam({
           onClose={onClosePickerModal}
           targetLeagueRound={leagueRound}
         />
-      )}
+      )} */}
 
       {/* Player profile modal */}
       {playerModalPlayer && (
