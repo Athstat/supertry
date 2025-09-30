@@ -1,13 +1,12 @@
 import { useMemo } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker";
 import { IProAthlete } from "../../types/athletes";
-import PlayerMugshot from "../shared/PlayerMugshot";
 import RoundedCard from "../shared/RoundedCard";
 import SecondaryText from "../shared/SecondaryText";
 import { athleteSearchPredicate } from "../../utils/athleteUtils";
 import useSWR from "swr";
 import { seasonService } from "../../services/seasonsService";
-import { Info } from "lucide-react";
+import TeamJersey from "../player/TeamJersey";
 
 
 export default function PlayerPickerPlayerList() {
@@ -85,16 +84,17 @@ export default function PlayerPickerPlayerList() {
     }
 
     return (
-        <div className="bg-slate-50 rounded-xl border border-slate-50 p-2 mt-5" >
+        <div className="mt-5" >
             <div className="flex font-semibold p-2 flex-row items-center justify-between" >
-                <div>
+                
+                <div className="flex flex-row items-center gap-2 min-w-[200px]" >
                     <SecondaryText>Player</SecondaryText>
                 </div>
 
-                <div className="flex flex-row items-center gap-2 justify-between " >
+                <div className="flex-1 grid grid-cols-2 " >
                     <div>
                         <SecondaryText>
-                            PR
+                            P.Ranking
                         </SecondaryText>
                     </div>
 
@@ -124,15 +124,21 @@ type PlayerListItemProps = {
 
 function PlayerListItem({ player }: PlayerListItemProps) {
     return (
-        <div className="flex flex-row p-2 items-center gap-2" >
+        <div className="flex flex-row py-2 items-center gap-2" >
 
-            <div className="border-r flex flex-row items-center gap-2 w-[200px]" >
+            <div className="flex flex-row items-center gap-2 w-[200px]" >
                 
-                <Info className="w-4 h-4 text-slate-400" />
+                {/* <Info className="w-4 h-4 text-slate-400" /> */}
                 
-                <PlayerMugshot
+                {/* <PlayerMugshot
                     url={player.image_url}
                     className="w-10 h-10"
+                /> */}
+
+                <TeamJersey 
+                    teamId={player.team_id}
+                    className="min-h-8 max-h-8 min-w-8 max-w-8"
+                    hideFade
                 />
 
                 <div className="flex flex-col" >
@@ -141,9 +147,9 @@ function PlayerListItem({ player }: PlayerListItemProps) {
                 </div>
             </div>
 
-            <div className="flex flex-row items-center gap-2" >
-                <p>{player.power_rank_rating}</p>
-                <p>{player.price}</p>
+            <div className="grid grid-cols-2 gap-2 flex-1" >
+                <SecondaryText>{player.power_rank_rating ? Math.floor(player.power_rank_rating) : '-'}</SecondaryText>
+                <SecondaryText>{player.price}</SecondaryText>
             </div>
         </div>
     )
