@@ -39,9 +39,11 @@ const filterTeamsAtom = atom<IProTeam[]>([]);
 /** Holds the position class to select a player from */
 const positionPoolAtom = atom<string | FantasyPositionName | PositionClass>();
 
-const onSelectPlayerAtom = atom<(player: IProAthlete) => void>(
-    () => {}
-);
+const onSelectPlayerAtom = atom<(player: IProAthlete) => void>();
+
+const excludePlayersAtom = atom<(IProAthlete | IFantasyAthlete | IFantasyTeamAthlete | {tracking_id: string})[]>([]);
+
+const maxPlayerPriceAtom = atom<number>(240);
 
 export const playerPickerAtoms = {
     relatedGamesAtom,
@@ -49,5 +51,7 @@ export const playerPickerAtoms = {
     filterTeamsAtom,
     availableTeamsAtom,
     playerToBeReplacedAtom,
-    onSelectPlayerAtom
+    onSelectPlayerAtom,
+    excludePlayersAtom,
+    maxPlayerPriceAtom
 }

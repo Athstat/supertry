@@ -1,5 +1,8 @@
 import { useAtom, useAtomValue } from "jotai";
 import { playerPickerAtoms } from "../../state/playerPicker/playerPicker";
+import { remainingTeamBudgetAtom } from "../../state/myTeam.atoms";
+import { useQueryState } from "../useQueryState";
+import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 /** Provides a hook to interface with the player picker component */
 export function usePlayerPicker() {
@@ -9,6 +12,12 @@ export function usePlayerPicker() {
 
     const positionPool = useAtomValue(playerPickerAtoms.positionPoolAtom);
     const [relatedGames] = useAtomValue(playerPickerAtoms.relatedGamesAtom);
+    const leagueRound = useAtomValue(fantasyLeagueAtom);
+
+    const remaingBudget = useAtomValue(remainingTeamBudgetAtom);
+
+
+    const [searchQuery, setSearchQuery] = useQueryState<string>('player_query');
 
     return {
         onSelectPlayer,
@@ -16,6 +25,10 @@ export function usePlayerPicker() {
         setFilterTeams,
         availbleTeams,
         positionPool,
-        relatedGames
+        relatedGames,
+        remaingBudget,
+        searchQuery,
+        setSearchQuery,
+        leagueRound
     }
 }

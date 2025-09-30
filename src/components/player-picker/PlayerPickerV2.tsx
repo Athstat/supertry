@@ -4,20 +4,31 @@ import { IProAthlete, PositionClass } from "../../types/athletes"
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete"
 import { IFantasyAthlete } from "../../types/rugbyPlayer"
 import DialogModal from "../shared/DialogModal"
-import { useSetAtom } from "jotai"
 import { IFantasyLeagueRound } from "../../types/fantasyLeague"
 import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms"
-import { useEffect } from "react"
+import PlayerPickerHeader from "./PlayerPickerHeader"
+import PlayerPickerPlayerList from "./PlayerPickerPlayerList"
+import PlayerPickerDataProvider from "./PlayerPickerDataProvider"
 
 type Props = {
   playerToBeReplaced?: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
   positionPool?: PositionClass,
   onSelectPlayer?: (player: IProAthlete) => void,
-  targetLeagueRound?: IFantasyLeagueRound
+  targetLeagueRound?: IFantasyLeagueRound,
+  isOpen?: boolean,
+  title?: string,
+  remainingBudget?: number,
+  excludePlayers?: (IProAthlete | IFantasyAthlete | IFantasyTeamAthlete | {tracking_id: string})[],
+  onClose?: () => void
 }
 
 /** Renders player picker version 2, with improved stability */
-export default function PlayerPickerV2({ playerToBeReplaced, positionPool, onSelectPlayer, targetLeagueRound}: Props) {
+export default function PlayerPickerV2({ 
+  playerToBeReplaced, positionPool,
+  onSelectPlayer, targetLeagueRound,
+  isOpen, title, remainingBudget,
+  excludePlayers, onClose
+}: Props) {
   
   const atoms = [
     playerPickerAtoms.availableTeamsAtom,
@@ -26,55 +37,54 @@ export default function PlayerPickerV2({ playerToBeReplaced, positionPool, onSel
     playerPickerAtoms.positionPoolAtom,
     playerPickerAtoms.playerToBeReplacedAtom,
     playerPickerAtoms.onSelectPlayerAtom,
+    playerPickerAtoms.excludePlayersAtom,
+    playerPickerAtoms.maxPlayerPriceAtom,
     fantasyLeagueAtom
   ]
   
   return (
     <ScopeProvider atoms={atoms} >
-      <InnerPlayerPicker 
+      <PlayerPickerDataProvider
         playerToBeReplaced={playerToBeReplaced}
         positionPool={positionPool}
         onSelectPlayer={onSelectPlayer}
-        targetLeagueRound={targetLeagueRound}
-      />
+        leagueRound={targetLeagueRound}
+        title={title}
+        isOpen={isOpen}
+        excludePlayers={excludePlayers}
+        remainingBudget={remainingBudget}
+        onClose={onClose}
+      >
+        <InnerPlayerPicker 
+          title={title}
+          onClose={onClose}
+        />
+      </PlayerPickerDataProvider>
     </ScopeProvider>
   )
 }
 
-function InnerPlayerPicker({playerToBeReplaced, positionPool, targetLeagueRound, onSelectPlayer}: Props) {
-  
-  const setTargetRound = useSetAtom(fantasyLeagueAtom);
-  const setPositionPool = useSetAtom(playerPickerAtoms.positionPoolAtom);
-  const setPlayerToBeReplaced = useSetAtom(playerPickerAtoms.playerToBeReplacedAtom);
-  const setOnSelectPlayer = useSetAtom(playerPickerAtoms.onSelectPlayerAtom)
+type InnerPlayerPickerProps = {
+  title?: string,
+  onClose?: () => void
+}
 
-  useEffect(() => {
-    if (targetLeagueRound) {
-      setTargetRound(targetLeagueRound);
-    }
-  }, [targetLeagueRound, setTargetRound]);
+function InnerPlayerPicker({title, onClose}: InnerPlayerPickerProps) {
 
-  useEffect(() => {
-    if (positionPool) {
-      setPositionPool(positionPool);
-    }
-  }, [positionPool, setPositionPool]);
 
-  useEffect(() => {
-    if (playerToBeReplaced) {
-      setPlayerToBeReplaced(playerToBeReplaced);
-    }
-  }, [playerToBeReplaced, setPlayerToBeReplaced]);
-  
-  useEffect(() => {
-    if (onSelectPlayer) {
-      setOnSelectPlayer(onSelectPlayer);
-    }
-  }, [setOnSelectPlayer, onSelectPlayer]);
+  const dialogTitle = title ? title : 'Select Player'; 
 
   return (
-    <DialogModal>
-
+    <DialogModal
+      open={true}
+      title={dialogTitle}
+      onClose={onClose}
+      hw="min-h-[95vh]"
+      outerCon=""
+    >
+      <PlayerPickerHeader />
+      
+      <PlayerPickerPlayerList />
     </DialogModal>
   )
 }
