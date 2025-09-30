@@ -4,6 +4,7 @@ import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
 import RoundedCard from "../components/shared/RoundedCard";
 import SmallLeagueOverviewCard from "../components/dashboard/my-team/LeagueOverviewCard";
+import { hasLeagueGroupEnded } from "../utils/fantasy/leagueGroupsUtils";
 
 export default function FeaturedFantasyLeagueGroups() {
 
@@ -12,9 +13,21 @@ export default function FeaturedFantasyLeagueGroups() {
 
     const isLoading = loadingPublic;
 
-    const officialLeagues = (fetchedLeagues ?? []).filter((league) => {
-        return (league.type === 'official_league');
-    });
+    const officialLeagues = (fetchedLeagues ?? [])
+        .filter((league) => {
+            return (league.type === 'official_league');
+        })
+        .sort((a, b) => {
+
+            const isAEnded = hasLeagueGroupEnded(a);
+            const isBEnded = hasLeagueGroupEnded(b);
+
+            const aBias = isAEnded ? 0 : 1;
+            const bBias = isBEnded ? 0 : 1;
+
+            return bBias - aBias;
+        })
+    ;
 
 
     if (isLoading) {
@@ -39,49 +52,27 @@ export default function FeaturedFantasyLeagueGroups() {
         )
     }
 
-    if (officialLeagues.length === 0) {
-        return;
+    if (officialLeagues.length <= 0) {
+        console.log("No Official Leagues Available")
+        return null;
     }
 
     return (
         <div className="flex flex-col gap-4" >
+            {/* {firstOfficialLeague && (
+                <SmallLeagueOverviewCard
+                    league={firstOfficialLeague}
+                />
 
-            {officialLeagues.length > 0 && (
-                <>
-                    {(officialLeagues.slice(1)).map((featuredLeague) => {
-                        return (
-                            <SmallLeagueOverviewCard
-                                league={featuredLeague}
-                            />
-                        )
-                    })}
-                </>
-            )}
+            )} */}
 
-            {/* <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
-                {otherLeagues.map((leagueGroup) => {
-                    return (
-                        <FantasyLeagueOverviewCard
-                            leagueGroup={leagueGroup}
-                            className="max-w-[90%] min-w-[90%] min-h-[150px] max-h-[150px] lg:min-h-[160px] lg:max-h-[160px]"
-                            onClick={handleClickLeague}
-                        />
-                    )
-                })}
-
-                <RoundedCard
-                    className="min-h-[150px] text-slate-700 dark:text-slate-400 hover:text-black hover:dark:text-white p-4 max-h-[150px] lg:min-h-[160px] lg:max-h-[160px] min-w-[90%] bg-slate-50 hover:bg-white dark:bg-slate-800/60 hover:dark:bg-slate-800 flex flex-col items-center justify-center text-center gap-2"
-                    onClick={handleGoToLeagueCreation}
-                >
-                    <p>
-                        <Plus className="" />
-                    </p>
-
-                    <p className="text-xs" >
-                        Join or Create Your own Fantasy League and Invite Friends!
-                    </p>
-                </RoundedCard>
-            </div> */}
+            {officialLeagues.map((group) => {
+                return (
+                    <SmallLeagueOverviewCard 
+                        league={group}
+                    />
+                )
+            })}
         </div>
     )
 }
