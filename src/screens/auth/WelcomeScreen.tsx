@@ -8,9 +8,9 @@ import SecondaryText from '../../components/shared/SecondaryText';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
 import { ErrorMessage } from '../../components/ui/ErrorState';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
-import { FEATURED_PLAYER_IDS } from '../../components/onboarding/OnboardingDataProvider';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
 import BetaTag from '../../components/branding/BetaTag';
+import { FEATURED_PLAYER_IDS } from '../../types/constants';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -179,7 +179,7 @@ export function WelcomeScreen() {
               onClick={handleGuestLogin}
               isLoading={isLoading}
             >
-              <p>Get Started!!!</p>
+              <p>Get Started</p>
               <BetaTag className="bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none" />
             </PrimaryButton>
 
