@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague"
+import { TranslucentButton } from "../shared/buttons/PrimaryButton";
 
 type Props = {
     leagueRound: IFantasyLeagueRound
@@ -59,9 +60,12 @@ export default function LeagueRoundCountdown({ leagueRound }: Props) {
     }, [days, hours, minutes, seconds]);
 
     return (
-        <div className='flex flex-col gap-2' >
+        <div className='flex flex-col gap-2 py-2' >
 
             {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
+            <TranslucentButton className="flex hover:bg-blue-100/10 hover:dark:bg-blue-100/10  flex-row items-center p-1 justify-center" >
+                <p>{leagueRound?.title} Team Selection Deadline</p>
+            </TranslucentButton>
             <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
                 {timeBlocks.map(block => (
                     <div

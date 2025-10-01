@@ -5,7 +5,7 @@ import { SignInScreen } from './screens/auth/SignInScreen';
 import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
 import { ForgotPasswordScreen } from './screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
-import PostSignUpWelcomeScreen from './screens/PostSignUpWelcomeScreen';
+import OnBoardingScreen from './screens/OnboardingScreen';
 import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { FantasyLeaguesScreen } from './screens/FantasyLeaguesScreen';
@@ -295,7 +295,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <OnboardingDataProvider>
-              <PostSignUpWelcomeScreen />
+              <OnBoardingScreen />
             </OnboardingDataProvider>
           </ProtectedRoute>
         }

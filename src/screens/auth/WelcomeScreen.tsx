@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ScrummyDarkModeLogo } from '../../components/branding/scrummy_logo';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
-import { FEATURED_PLAYER_IDS } from '../../components/onboarding/OnboardingDataProvider';
-import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
-import BetaTag from '../../components/branding/BetaTag';
 import Experimental from '../../components/shared/ab_testing/Experimental';
 import GoogleOAuthBox from '../../components/auth/oauth/GoogleOAuthBox';
 import AppleOAuthBox from '../../components/auth/oauth/AppleOAuthBox';
-import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
+import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
+import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import BetaTag from '../../components/branding/BetaTag';
+import { FEATURED_PLAYER_IDS } from '../../types/constants';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -76,15 +76,15 @@ export function WelcomeScreen() {
         >
           <ScrummyDarkModeLogo className="w-60 h-60 md:w-60 md:h-60 -mb-5" />
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-            >
-              <h1 className="text-2xl md:text-4xl font-extrabold text-white text-center">
-                2025 WOMEN'S WORLD CUP IS HERE
-              </h1>
-            </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
+            <h1 className="text-2xl md:text-3xl font-extrabold text-white text-center">
+              IT'S ABOUT TO GET SCRUMMY
+            </h1>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -111,15 +111,15 @@ export function WelcomeScreen() {
             </PrimaryButton>
 
             <Experimental>
-              <GoogleOAuthBox 
+              <GoogleOAuthBox
                 className='dark:bg-slate-200 text-dark-900 dark:text-dark-900 border-none dark:hover:bg-white'
               />
-              <AppleOAuthBox 
+              <AppleOAuthBox
                 className='bg-white dark:bg-slate-200 text-dark-900 dark:text-dark-900 border-none dark:hover:bg-white'
               />
             </Experimental>
 
-            <GuestLoginBox 
+            <GuestLoginBox
               className='bg-transparent py-0 text-slate-200 dark:text-slate-200 hover:text-white dark:hover:text-white dark:bg-transparent border-none underline hover:bg-transparent hover:dark:bg-transparent'
               hideIcon
             />

@@ -12,11 +12,12 @@ import JoinLeagueByCode from './JoinLeagueByCode';
 import SecondaryText from '../shared/SecondaryText';
 import { useFantasyLeaguesScreen } from '../../hooks/fantasy/useFantasyLeaguesScreen';
 import SeasonInput from './ui/SeasonInput';
+import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 
 interface CreateLeagueModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLeagueCreated: (league: any) => void;
+  onLeagueCreated: (league: FantasyLeagueGroup) => void;
 }
 
 export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModalProps) {
@@ -39,6 +40,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
     <DialogModal
       title="Create/Join Fantasy League"
       className='min-h-[90vh]'
+      hw='lg:max-w-[65vh]'
       onClose={onClose}
       open={isOpen}
     >
