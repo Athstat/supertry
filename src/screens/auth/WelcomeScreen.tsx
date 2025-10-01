@@ -8,9 +8,9 @@ import SecondaryText from '../../components/shared/SecondaryText';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
 import { ErrorMessage } from '../../components/ui/ErrorState';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
-import { FEATURED_PLAYER_IDS } from '../../components/onboarding/OnboardingDataProvider';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
 import BetaTag from '../../components/branding/BetaTag';
+import { FEATURED_PLAYER_IDS } from '../../types/constants';
 
 export function WelcomeScreen() {
   const navigate = useNavigate();
@@ -153,8 +153,8 @@ export function WelcomeScreen() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white text-center">
-              2025 WOMEN'S WORLD CUP IS HERE
+            <h1 className="text-2xl md:text-3xl font-extrabold text-white text-center">
+              IT'S ABOUT TO GET SCRUMMY
             </h1>
           </motion.div>
 
@@ -179,7 +179,7 @@ export function WelcomeScreen() {
               onClick={handleGuestLogin}
               isLoading={isLoading}
             >
-              <p>Get Started!!!</p>
+              <p>Get Started</p>
               <BetaTag className="bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none" />
             </PrimaryButton>
 

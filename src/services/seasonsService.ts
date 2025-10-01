@@ -1,7 +1,7 @@
 /** Seasons Service */
 
 import { IProAthlete } from '../types/athletes';
-import { IFixture, ISeason, ITeam } from '../types/games';
+import { IFixture, ITeam } from '../types/games';
 import { IProSeason } from '../types/season';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';

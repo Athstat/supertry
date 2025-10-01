@@ -5,8 +5,9 @@ import useSWR from "swr"
 import { swrFetchKeys } from "../../utils/swrKeys"
 import { fantasySeasonsService } from "../../services/fantasy/fantasySeasonsService"
 import { useSetAtom } from "jotai"
-import { LoadingState } from "../ui/LoadingState"
 import { useQueryState } from "../../hooks/useQueryState"
+import RoundedCard from "../shared/RoundedCard"
+import PageView from "../../screens/PageView"
 
 type Props = {
     children?: ReactNode
@@ -82,7 +83,44 @@ function InnerProvider({ children }: Props) {
     }, [selectedFantasySeasonId]);
 
     if (isLoading) {
-        <LoadingState />
+        return (
+            <PageView className="p-4 mt-0 pt-0 flex flex-col gap-4 animate-pulse" >
+                <div className="flex flex-col gap-2" >
+                    <RoundedCard className="w-[150px] h-[30px] bg-slate-200 border-none rounded-xl " />
+                    <div className="flex flex-row items-center gap-2" >
+                        <RoundedCard className="w-[100px] h-[30px] rounded-full bg-slate-200 border-none " />
+                        <RoundedCard className="w-[100px] h-[30px] rounded-full bg-slate-200 border-none " />
+                        <RoundedCard className="w-[100px] h-[30px] rounded-full bg-slate-200 border-none " />
+                    </div>
+                </div>
+
+                <div>
+                    <RoundedCard className="w-[150px] h-[30px] bg-slate-200 border-none rounded-xl " />
+                </div>
+
+                <div className="flex flex-col gap-2" >
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                </div>
+
+                <div>
+                    <RoundedCard className="w-[150px] h-[30px] bg-slate-200 border-none rounded-xl " />
+                </div>
+
+                <div className="flex flex-row items-center gap-2 overflow-y-auto no-scrollbar" >
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                </div>
+
+                <div className="flex flex-col gap-2" >
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                </div>
+
+            </PageView>
+        )
     }
 
     return (

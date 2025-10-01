@@ -27,6 +27,7 @@ export default function FeaturedFantasyLeagueGroups() {
 
             return bBias - aBias;
         })
+        .filter((l) => !hasLeagueGroupEnded(l));
     ;
 
 
@@ -41,11 +42,7 @@ export default function FeaturedFantasyLeagueGroups() {
 
                 <div className="flex flex-row items-center gap-2 no-scrollbar overflow-x-auto" >
                     <RoundedCard
-                        className="border-none h-[150px] min-w-[90%] bg-slate-300/60 animate-pulse dark:bg-slate-800/60"
-                    />
-
-                    <RoundedCard
-                        className="border-none h-[150px] min-w-[90%] bg-slate-300/60 animate-pulse dark:bg-slate-800/60"
+                        className="border-none h-[150px] min-w-[100%] bg-slate-300/60 animate-pulse dark:bg-slate-800/60"
                     />
                 </div>
             </div>

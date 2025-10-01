@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IOnboardingTab } from '../types/onboarding';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import ScrummyLogo from '../components/branding/scrummy_logo';
@@ -6,7 +6,6 @@ import ScrummyLogo from '../components/branding/scrummy_logo';
 import { useNavigate } from 'react-router-dom';
 import TabProgressDots from '../components/shared/TabProgressDots';
 import SecondaryText from '../components/shared/SecondaryText';
-import { useOnboarding } from '../components/onboarding/OnboardingDataProvider';
 import { useAthletes } from '../contexts/AthleteContext';
 import { PlayerGameCard } from '../components/player/PlayerGameCard';
 import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
@@ -14,6 +13,7 @@ import { Toast } from '../components/ui/Toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
 import { analytics } from '../services/analytics/anayticsService';
+import { useOnboarding } from '../hooks/onboarding/useOnboarding';
 
 // Helper to ensure we only render players with valid image URLs
 const hasValidImageUrl = (u?: string | null): boolean => {
@@ -24,7 +24,8 @@ const hasValidImageUrl = (u?: string | null): boolean => {
   return trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/');
 };
 
-export default function PostSignUpWelcomeScreen() {
+/** Renders the onboarding screen */
+export default function OnBoardingScreen() {
   const [currIndex, setIndex] = useState(0);
   const isWelcomeComplete = currIndex === tabs.length - 1;
   // Access data needed to preload player images for the final screen
@@ -101,7 +102,7 @@ export default function PostSignUpWelcomeScreen() {
 
   return (
     <ScrummyMatrixBackground>
-          <div className="flex dark:bg-black flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
+      <div className="flex flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
       <div className="flex flex-col overflow-y-auto no-scrollbar">
         {currIndex === 0 && (
           <AnimatePresence mode="wait">
@@ -301,19 +302,9 @@ function RallyFriendsScreen() {
 
 function WelcomeCTAScreen() {
   const { featuredLeague, featuredPlayers } = useOnboarding();
-  const { athletes } = useAthletes();
   const navigate = useNavigate();
 
   const { isLoading: isJoining, handleJoinLeague, error, clearError } = useJoinLeague();
-
-  const top5Athletes = useMemo(() => {
-    return [...athletes]
-      .filter(a => hasValidImageUrl(a.image_url))
-      .sort((a, b) => {
-        return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
-      })
-      .slice(0, 3);
-  }, [athletes]);
 
   const handleStartBuilding = async () => {
     if (featuredLeague) {
@@ -409,7 +400,7 @@ function WelcomeCTAScreen() {
 
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-black text-center dark:text-white">
-            The 2025 Women's World Cup Is Here!
+            The URC Challenge Is Here!
           </h1>
 
           <div className="flex flex-col items-center text-center font-semibold text-md">
