@@ -153,8 +153,8 @@ export function WelcomeScreen() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white text-center">
-              2025 WOMEN'S WORLD CUP IS HERE
+            <h1 className="text-2xl md:text-3xl font-extrabold text-white text-center">
+              IT'S ABOUT TO GET SCRUMMY
             </h1>
           </motion.div>
 
