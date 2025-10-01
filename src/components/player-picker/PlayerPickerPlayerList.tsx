@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker";
 import { IProAthlete } from "../../types/athletes";
 import RoundedCard from "../shared/RoundedCard";
@@ -9,10 +9,16 @@ import { seasonService } from "../../services/seasonsService";
 import TeamJersey from "../player/TeamJersey";
 import { twMerge } from "tailwind-merge";
 import { useInView } from "react-intersection-observer";
+import { ChevronsUpDown, Info } from "lucide-react";
+import WarningCard from "../shared/WarningCard";
 
+
+type SortField = 'power_rank_rating' | 'price' | null;
+type SortDirection = 'asc' | 'desc' | null;
 
 export default function PlayerPickerPlayerList() {
-
+    const [sortField, setSortField] = useState<SortField>(null);
+    const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
     const { searchQuery, positionPool, availbleTeams, leagueRound, filterTeams } = usePlayerPicker();
 
@@ -21,16 +27,30 @@ export default function PlayerPickerPlayerList() {
 
     const athletes = useMemo(() => fetchedAthletes ?? [], [fetchedAthletes]);
 
+    const handleSort = (field: SortField) => {
+        if (sortField !== field) {
+            // Switching to a new field - start with ascending
+            setSortField(field);
+            setSortDirection('asc');
+        } else {
+            // Same field - cycle through states
+            if (sortDirection === 'asc') {
+                setSortDirection('desc');
+            } else if (sortDirection === 'desc') {
+                // Turn off sorting
+                setSortField(null);
+                setSortDirection(null);
+            }
+        }
+    };
+
     const filteredAthletes = useMemo(() => {
 
         const targetTeamIds = filterTeams ?
             filterTeams.map(t => t.athstat_id)
             : availbleTeams.map((t) => t.athstat_id);
 
-        return athletes
-            .sort((a, b) => {
-                return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0)
-            })
+        let result = athletes
             .filter((a) => {
                 return a.position_class === positionPool
             })
@@ -47,9 +67,33 @@ export default function PlayerPickerPlayerList() {
                 }
 
                 return true;
-            })
+            });
 
-    }, [athletes, positionPool, searchQuery, availbleTeams, filterTeams]);
+        // Apply sorting based on state
+        if (sortField && sortDirection) {
+            result = result.sort((a, b) => {
+                let aValue = 0;
+                let bValue = 0;
+
+                if (sortField === 'power_rank_rating') {
+                    aValue = a.power_rank_rating ?? 0;
+                    bValue = b.power_rank_rating ?? 0;
+                } else if (sortField === 'price') {
+                    aValue = a.price ?? 0;
+                    bValue = b.price ?? 0;
+                }
+
+                if (sortDirection === 'asc') {
+                    return aValue - bValue;
+                } else {
+                    return bValue - aValue;
+                }
+            });
+        }
+
+        return result;
+
+    }, [athletes, positionPool, searchQuery, availbleTeams, filterTeams, sortField, sortDirection]);
 
     const isLoading = loadingAthletes;
 
@@ -89,6 +133,12 @@ export default function PlayerPickerPlayerList() {
 
     return (
         <div className="" >
+
+            <WarningCard className="text-xs" >
+                <ChevronsUpDown className="w-4 h-4" />
+                <p>Players Sorted By <strong>{sortField === "power_rank_rating" ? "Power Ranking" : "Price"}</strong> in <strong>{sortDirection === "asc" ? "from Lowest to Highest" : "Highest to Lowest"}</strong>.</p>
+            </WarningCard>
+
             <div className="flex font-semibold p-2 flex-row items-center justify-between" >
 
                 <div className="flex flex-row  items-center gap-2 min-w-[200px]" >
@@ -96,14 +146,22 @@ export default function PlayerPickerPlayerList() {
                 </div>
 
                 <div className="grid grid-cols-2 w-[150px] gap-4" >
-                    <div>
+                    <div
+                        className="flex items-center gap-1 cursor-pointer hover:opacity-70 transition-opacity"
+                        onClick={() => handleSort('power_rank_rating')}
+                    >
                         <SecondaryText>
-                            P.Ranking
+                            PR
                         </SecondaryText>
+                        <ChevronsUpDown className="w-4 h-4 text-slate-700 dark:text-slate-400" />
                     </div>
 
-                    <div>
+                    <div
+                        className="flex items-center gap-1 cursor-pointer hover:opacity-70 transition-opacity"
+                        onClick={() => handleSort('price')}
+                    >
                         <SecondaryText>Price</SecondaryText>
+                        <ChevronsUpDown className="w-4 h-4 text-slate-700 dark:text-slate-400" />
                     </div>
                 </div>
             </div>
@@ -127,9 +185,9 @@ type PlayerListItemProps = {
 }
 
 function PlayerListItem({ player }: PlayerListItemProps) {
-    
-    const {inView, ref} = useInView({triggerOnce: true});
-    
+
+    const { inView, ref } = useInView({ triggerOnce: true });
+
     return (
         <div ref={ref} >
             {inView && (<div className="flex flex-row p-2 items-center justify-between gap-2" >
