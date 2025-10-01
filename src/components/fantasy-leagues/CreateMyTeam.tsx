@@ -537,7 +537,7 @@ export default function CreateMyTeam({
         })}
       </div>
 
-      {isModalOpen && activePosition && (
+      {/* {isModalOpen && activePosition && (
         <PlayerSelectionModal
           visible={isModalOpen}
           selectedPosition={activePosition}
@@ -559,9 +559,9 @@ export default function CreateMyTeam({
           roundEnd={leagueRound?.end_round ?? undefined}
           leagueId={leagueRound?.official_league_id}
         />
-      )}
+      )} */}
 
-      {/* {activePosition && (
+      {activePosition && (
         <PlayerPickerV2
           isOpen={isModalOpen}
           positionPool={activePosition.positionClass as (PositionClass | undefined)}
@@ -571,7 +571,7 @@ export default function CreateMyTeam({
           onClose={onClosePickerModal}
           targetLeagueRound={leagueRound}
         />
-      )} */}
+      )}
 
       {/* Player profile modal */}
       {playerModalPlayer && (

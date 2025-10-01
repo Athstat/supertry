@@ -87,11 +87,11 @@ export default function PlayerPickerPlayerList() {
         <div className="mt-5" >
             <div className="flex font-semibold p-2 flex-row items-center justify-between" >
                 
-                <div className="flex flex-row items-center gap-2 min-w-[200px]" >
+                <div className="flex flex-row  items-center gap-2 min-w-[200px]" >
                     <SecondaryText>Player</SecondaryText>
                 </div>
 
-                <div className="flex-1 grid grid-cols-2 " >
+                <div className="grid grid-cols-2 w-[150px] gap-4" >
                     <div>
                         <SecondaryText>
                             P.Ranking
@@ -104,7 +104,7 @@ export default function PlayerPickerPlayerList() {
                 </div>
             </div>
 
-            <div className="flex flex-col divide-y" >
+            <div className="flex flex-col divide-y dark:divide-slate-700" >
                 {filteredAthletes.map((a) => {
                     return (
                         <PlayerListItem
@@ -124,7 +124,7 @@ type PlayerListItemProps = {
 
 function PlayerListItem({ player }: PlayerListItemProps) {
     return (
-        <div className="flex flex-row py-2 items-center gap-2" >
+        <div className="flex flex-row p-2 items-center justify-between gap-2" >
 
             <div className="flex flex-row items-center gap-2 w-[200px]" >
                 
@@ -137,17 +137,17 @@ function PlayerListItem({ player }: PlayerListItemProps) {
 
                 <TeamJersey 
                     teamId={player.team_id}
-                    className="min-h-8 max-h-8 min-w-8 max-w-8"
+                    className="min-h-10 max-h-10 min-w-10 max-w-10"
                     hideFade
                 />
 
                 <div className="flex flex-col" >
-                    <p className="text-xs" >{player.player_name}</p>
+                    <p className="text-sm" >{player.player_name}</p>
                     <SecondaryText className="text-[10px]" >{player?.team?.athstat_name ?? player.position_class}</SecondaryText>
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 flex-1" >
+            <div className="grid grid-cols-2 gap-4 w-[150px]" >
                 <SecondaryText>{player.power_rank_rating ? Math.floor(player.power_rank_rating) : '-'}</SecondaryText>
                 <SecondaryText>{player.price}</SecondaryText>
             </div>

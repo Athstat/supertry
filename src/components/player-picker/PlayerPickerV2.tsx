@@ -9,6 +9,8 @@ import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms"
 import PlayerPickerHeader from "./PlayerPickerHeader"
 import PlayerPickerPlayerList from "./PlayerPickerPlayerList"
 import PlayerPickerDataProvider from "./PlayerPickerDataProvider"
+import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
+import { formatPosition } from "../../utils/athleteUtils"
 
 type Props = {
   playerToBeReplaced?: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
@@ -71,8 +73,9 @@ type InnerPlayerPickerProps = {
 
 function InnerPlayerPicker({title, onClose}: InnerPlayerPickerProps) {
 
-
-  const dialogTitle = title ? title : 'Select Player'; 
+  const {positionPool} = usePlayerPicker();
+  const positionName = formatPosition(positionPool);
+  const dialogTitle = title ? title : positionName ? `Select a ${positionName} Player` : 'Select A Player'; 
 
   return (
     <DialogModal
