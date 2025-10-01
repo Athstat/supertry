@@ -7,12 +7,8 @@ export default function FantasySeasonSelector() {
     const { fantasySeasons, selectedSeason, setSelectedSeason, setSelectedFantasySeasonId } = useFantasyLeaguesScreen();
 
 
-
     return (
         <div>
-
-
-
             <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2" >
 
                 <ListItem

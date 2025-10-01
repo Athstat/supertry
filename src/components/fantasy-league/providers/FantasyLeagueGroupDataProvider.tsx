@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react"
+import { Fragment, ReactNode, useEffect, useState } from "react"
 import { currGroupMemberAtom, fantasyLeagueGroupAtom, fantasyLeagueGroupMembersAtom, fantasyLeagueGroupRoundsAtom } from "../../../state/fantasy/fantasyLeagueGroup.atoms"
 import { ScopeProvider } from "jotai-scope"
 import { useSetAtom } from "jotai"
@@ -7,13 +7,15 @@ import useSWR from "swr"
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService"
 import { LoadingState } from "../../ui/LoadingState"
 import { useLocation } from "react-router-dom"
+import RoundedCard from "../../shared/RoundedCard"
 
 type Props = {
     children?: ReactNode,
-    leagueId?: string
+    leagueId?: string,
+    loadingFallback?: ReactNode
 }
 
-export default function FantasyLeagueGroupDataProvider({ children, leagueId }: Props) {
+export default function FantasyLeagueGroupDataProvider({ children, leagueId, loadingFallback }: Props) {
 
     const atoms = [
         fantasyLeagueGroupAtom,
@@ -24,7 +26,10 @@ export default function FantasyLeagueGroupDataProvider({ children, leagueId }: P
 
     return (
         <ScopeProvider atoms={atoms} >
-            <Fetcher leagueId={leagueId} >
+            <Fetcher
+                leagueId={leagueId}
+                loadingFallback={loadingFallback}
+            >
                 {children}
             </Fetcher>
         </ScopeProvider>
@@ -32,7 +37,7 @@ export default function FantasyLeagueGroupDataProvider({ children, leagueId }: P
 }
 
 
-function Fetcher({ children, leagueId }: Props) {
+function Fetcher({ children, leagueId, loadingFallback }: Props) {
 
     const setFantasyLeagueGroup = useSetAtom(fantasyLeagueGroupAtom);
     const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
@@ -58,7 +63,7 @@ function Fetcher({ children, leagueId }: Props) {
         if (members) setFantasyLeagueMembers(members);
         if (rounds) setFantasyLeagueGroupRounds(rounds);
 
-    }, [league, members, rounds]);
+    }, [league, members, rounds, setFantasyLeagueGroup, setFantasyLeagueGroupRounds, setFantasyLeagueMembers]);
 
     useEffect(() => {
 
@@ -72,11 +77,18 @@ function Fetcher({ children, leagueId }: Props) {
 
         reloadMembers();
 
-    }, [state]);
+    }, [leagueId, mutate, state]);
 
     if (isLoading) {
         return (
-            <LoadingState />
+            <Fragment>
+                {loadingFallback ? (
+                    <Fragment>
+                        <RoundedCard className="h-[100px] w-full rounded-xl border-none animate-pulse" >
+                        </RoundedCard>
+                    </Fragment>
+                ) : <LoadingState />}
+            </Fragment>
         )
     }
 
