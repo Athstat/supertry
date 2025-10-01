@@ -4,7 +4,7 @@ export const ERPC_COMPETITION_ID = "d313fbf5-c721-569b-975d-d9ec242a6f19";
 export const INVESTEC_CHAMPIONSHIP_CUP = "9a83c3bb-e99a-4255-ad58-73df4f4806c9";
 export const AFRICA_CUP = "sr-1";
 
-export const DEFAULT_FALLBACK_FEATURED_LEAGUE_ID = '9e74bed3-9ea2-5f41-a906-434d0d3e8f4e';
+export const DEFAULT_FALLBACK_FEATURED_LEAGUE_ID = '5e9098c5-9c37-4454-b04f-0ee9011c803f';
 
 export const FEATURED_PLAYER_IDS = [
   "447fac1b-cd71-59b2-a975-71b890e0eb3c"
