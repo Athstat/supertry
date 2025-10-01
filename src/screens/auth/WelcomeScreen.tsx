@@ -119,12 +119,13 @@ export function WelcomeScreen() {
               />
             </Experimental>
 
-            <GuestLoginBox
-              className='bg-transparent py-0 text-slate-200 dark:text-slate-200 hover:text-white dark:hover:text-white dark:bg-transparent border-none underline hover:bg-transparent hover:dark:bg-transparent'
-              hideIcon
-            />
-
           </motion.div>
+
+          <GuestLoginBox
+            className='bg-transparent py-0 text-slate-200 dark:text-slate-200 hover:text-white dark:hover:text-white dark:bg-transparent border-none underline hover:bg-transparent hover:dark:bg-transparent'
+            hideIcon
+          />
+          
         </motion.div>
 
       </div>
