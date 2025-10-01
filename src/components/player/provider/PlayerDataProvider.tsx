@@ -58,7 +58,7 @@ function ProviderInner({ children, player }: Props) {
     if (isLoading) {
         return <DialogModal
             open={true}
-            hw='min-h-[95%]'
+            hw='min-h-[95%] lg:w-[40%]'
             className='animate-pulse flex flex-col gap-4'
             title={player.player_name}
         >
