@@ -201,10 +201,7 @@ export function SignInScreen() {
           </Experimental> */}
 
           <EmailPasswordLoginBox />
-          
-          <Experimental>
-            <GuestLoginBox />
-          </Experimental>
+          <GuestLoginBox />
 
           {/* Error Display */}
           {error && (
