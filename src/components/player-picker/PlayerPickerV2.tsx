@@ -82,7 +82,8 @@ function InnerPlayerPicker({title, onClose}: InnerPlayerPickerProps) {
       open={true}
       title={dialogTitle}
       onClose={onClose}
-      hw="min-h-[95vh]"
+      hw="min-h-[95vh] lg:w-[60vh]"
+      className="flex flex-col gap-2"
       outerCon=""
     >
       <PlayerPickerHeader />

@@ -1,12 +1,13 @@
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import SearchBar from "../team-creation/player-selection-components/SearchBar";
+import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
 
 export default function PlayerPickerHeader() {
 
     const {searchQuery, setSearchQuery} = usePlayerPicker();
 
     return (
-        <div>
+        <div className="flex flex-col gap-2" >
             <div className="flex rounded-xl flex-row items-center gap-2 w-full" >
                 {/* <InputField 
                     className="w-full " 
@@ -20,6 +21,8 @@ export default function PlayerPickerHeader() {
                     placeholder="Search by Name"
                 />
             </div>
+
+            <PlayerPickerTeamFilterRow />
         </div>
     )
 }

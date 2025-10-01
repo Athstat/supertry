@@ -9,6 +9,7 @@ import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 import { IProAthlete, PositionClass } from "../../types/athletes";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { IFantasyAthlete } from "../../types/rugbyPlayer";
+import { swrFetchKeys } from "../../utils/swrKeys";
 
 type Props = {
     leagueRound?: IFantasyLeagueRound,
@@ -25,6 +26,14 @@ type Props = {
 
 /** A component that fetches the related games and makes them availble to downward children */
 export default function PlayerPickerDataProvider({ leagueRound, children, positionPool, playerToBeReplaced, onSelectPlayer, remainingBudget, excludePlayers }: Props) {
+    const round = leagueRound;
+    
+    const key =  round ? swrFetchKeys.getGroupRoundGames(round.fantasy_league_group_id, round.id) : null;
+    const { data: relatedGames, isLoading: loadingGames } = useSWR(key, () =>
+        fantasyLeagueGroupsService.getGroupRoundGames(round?.fantasy_league_group_id ?? '', round?.id ?? '')
+    );
+
+    const isLoading = loadingGames;
 
     const setTargetRound = useSetAtom(fantasyLeagueAtom);
     const setPositionPool = useSetAtom(playerPickerAtoms.positionPoolAtom);
@@ -69,14 +78,6 @@ export default function PlayerPickerDataProvider({ leagueRound, children, positi
             setExcludePlayers(excludePlayers);
         }
     }, [excludePlayers, setExcludePlayers]);
-
-    const gamesKey = leagueRound ? `/related-games/league-round/${leagueRound?.id}` : null;
-    const { data: relatedGames, isLoading: loadingGames } = useSWR(gamesKey, () => fantasyLeagueGroupsService.getGroupRoundGames(
-        leagueRound?.fantasy_league_group_id ?? '',
-        leagueRound?.start_round ?? 0
-    ));
-
-    const isLoading = loadingGames;
 
 
     useEffect(() => {

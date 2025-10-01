@@ -7,6 +7,7 @@ import { athleteSearchPredicate } from "../../utils/athleteUtils";
 import useSWR from "swr";
 import { seasonService } from "../../services/seasonsService";
 import TeamJersey from "../player/TeamJersey";
+import { twMerge } from "tailwind-merge";
 
 
 export default function PlayerPickerPlayerList() {
@@ -51,7 +52,7 @@ export default function PlayerPickerPlayerList() {
 
     if (isLoading) {
         return (
-            <div className="flex mt-5 flex-col gap-2" >
+            <div className="flex flex-col gap-2" >
                 <RoundedCard
                     className="animate-pulse h-[50px] rounded-xl border-none bg-slate-200"
                 />
@@ -84,7 +85,7 @@ export default function PlayerPickerPlayerList() {
     }
 
     return (
-        <div className="mt-5" >
+        <div className="" >
             <div className="flex font-semibold p-2 flex-row items-center justify-between" >
                 
                 <div className="flex flex-row  items-center gap-2 min-w-[200px]" >
@@ -137,7 +138,10 @@ function PlayerListItem({ player }: PlayerListItemProps) {
 
                 <TeamJersey 
                     teamId={player.team_id}
-                    className="min-h-10 max-h-10 min-w-10 max-w-10"
+                    className={twMerge(
+                        "min-h-10 max-h-10 min-w-10 max-w-10",
+                        "lg:min-h-10 lg:max-h-10 lg:min-w-10 lg:max-w-10"
+                    )}
                     hideFade
                 />
 
