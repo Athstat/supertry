@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import SearchBar from "../team-creation/player-selection-components/SearchBar";
 import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
@@ -5,6 +6,12 @@ import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
 export default function PlayerPickerHeader() {
 
     const {searchQuery, setSearchQuery} = usePlayerPicker();
+
+    useEffect(() => {
+        return () => {
+            setSearchQuery(undefined);
+        }
+    }, []);
 
     return (
         <div className="flex flex-col gap-2" >
