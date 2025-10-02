@@ -116,9 +116,8 @@ export function SignInScreen() {
             <AppleOAuthBox />
           </Experimental>
 
-          <Experimental>
-            <GuestLoginBox />
-          </Experimental>
+          <EmailPasswordLoginBox />
+          <GuestLoginBox />
 
           <div className="text-center">
             <p className="text-gray-600 dark:text-gray-400">

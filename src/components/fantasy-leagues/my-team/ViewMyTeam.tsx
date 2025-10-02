@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Lock } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
@@ -9,6 +9,8 @@ import { twMerge } from 'tailwind-merge';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import SaveTeamBar from './SaveTeamBar';
 import { useMyTeamView } from './MyTeamStateProvider';
+import PushOptInModal from '../../ui/PushOptInModal';
+import { requestPushPermissions } from '../../../utils/bridgeUtils';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -29,6 +31,9 @@ export default function ViewMyTeam({
   const { totalSpent, selectedCount } = useFantasyLeagueTeam();
 
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+
+  // Push opt-in prompt state
+  const [showPushModal, setShowPushModal] = useState(false);
 
   return (
     <div className="w-full py-4">
@@ -66,11 +71,10 @@ export default function ViewMyTeam({
           <button
             type="button"
             onClick={() => setViewMode('pitch')}
-            className={`${
-              viewMode === 'pitch'
+            className={`${viewMode === 'pitch'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+              } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
           >
             Pitch
           </button>
@@ -117,6 +121,27 @@ export default function ViewMyTeam({
           {leagueRound && <MyTeamPitchView leagueRound={leagueRound} team={team} />}
         </Fragment>
       )}
+
+      <PushOptInModal
+        visible={showPushModal}
+        onEnable={async () => {
+          try {
+            await requestPushPermissions();
+          } catch (e) {
+            console.error('Push permission error:', e);
+          } finally {
+            setShowPushModal(false);
+          }
+        }}
+        onNotNow={() => {
+          try {
+            localStorage.setItem('push_optin_dismissed', 'true');
+          } catch (err) {
+            console.log("Local Storage error ", err);
+          }
+          setShowPushModal(false);
+        }}
+      />
     </div>
   );
 }

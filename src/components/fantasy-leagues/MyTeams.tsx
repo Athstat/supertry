@@ -12,7 +12,6 @@ import { Gender } from '../../types/athletes';
 import { useQueryState } from '../../hooks/useQueryState';
 import { LoadingState } from '../ui/LoadingState';
 import MyTeamViewStateProvider from './my-team/MyTeamStateProvider';
-import { analytics } from '../../services/analytics/anayticsService';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
 export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: boolean) => void }) {
@@ -25,7 +24,7 @@ export default function MyTeams({ onEditChange }: { onEditChange?: (isEditing: b
         if (journeyInitial === 'my-team' && hasDirectTeamTarget) {
           return 'team-created';
         }
-      } catch { }
+      } catch(e) { console.log("Error with init tab scene ", e) }
       return 'fantasy-rounds';
     }
   );

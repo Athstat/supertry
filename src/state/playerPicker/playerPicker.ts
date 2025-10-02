@@ -30,7 +30,10 @@ const availableTeamsAtom = atom<IProTeam[]>((get) => {
     });
 
 
-    return uniqueTeams;
+    return uniqueTeams
+        .sort((a, b) => {
+            return a.athstat_name.localeCompare(b.athstat_name);
+        })
 });
 
 /** Holds teams to filter players by */
