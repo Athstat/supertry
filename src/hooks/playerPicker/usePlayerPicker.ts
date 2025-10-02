@@ -22,6 +22,7 @@ export function usePlayerPicker() {
     const [searchQuery, setSearchQuery] = useQueryState<string>('player_query');
 
     const maxPrice = useAtomValue(playerPickerAtoms.maxPlayerPriceAtom);
+    const playerToBeReplaced = useAtomValue(playerPickerAtoms.playerToBeReplacedAtom);
 
     return {
         onSelectPlayer,
@@ -35,6 +36,7 @@ export function usePlayerPicker() {
         setSearchQuery,
         leagueRound,
         excludePlayers,
-        maxPrice
+        maxPrice,
+        playerToBeReplaced
     }
 }

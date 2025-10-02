@@ -162,7 +162,9 @@ export default function ViewMyTeam({
         onNotNow={() => {
           try {
             localStorage.setItem('push_optin_dismissed', 'true');
-          } catch {}
+          } catch(err) {
+            console.log("Local Storage error ", err);
+          }
           setShowPushModal(false);
         }}
       />
