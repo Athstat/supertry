@@ -21,13 +21,14 @@ type Props = {
     onSelect?: (player: IProAthlete) => void
 }
 
-export default function PlayerPickerPlayerList({onSelect} : Props) {
+export default function PlayerPickerPlayerList({ onSelect }: Props) {
     const [sortField, setSortField] = useState<SortField>('power_rank_rating');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-    const { 
+    const {
         searchQuery, positionPool, availbleTeams,
-        leagueRound, filterTeams, excludePlayers
+        leagueRound, filterTeams, excludePlayers,
+        maxPrice
     } = usePlayerPicker();
 
     const key = leagueRound ? `/all-players` : null;
@@ -93,7 +94,7 @@ export default function PlayerPickerPlayerList({onSelect} : Props) {
                 }
 
                 return true;
-            });
+            })
 
         // Apply sorting based on state
         if (sortField && sortDirection) {
@@ -117,9 +118,20 @@ export default function PlayerPickerPlayerList({onSelect} : Props) {
             });
         }
 
+        result
+            .sort((a, b) => {
+                const isA_Affordable = (a?.price ?? 0) <= maxPrice;
+                const isB_Affordable = (b?.price ?? 0) <= maxPrice;
+
+                const aBias = isA_Affordable ? 0 : 1;
+                const bBias = isB_Affordable ? 0 : 1;
+
+                return (aBias - bBias);
+            })
+
         return result;
 
-    }, [athletes, positionPool, searchQuery, availbleTeams, filterTeams, sortField, sortDirection]);
+    }, [filterTeams, availbleTeams, athletes, sortField, sortDirection, positionPool, searchQuery, excludePlayers, maxPrice]);
 
     const isLoading = loadingAthletes;
 
@@ -226,7 +238,10 @@ type PlayerListItemProps = {
 function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerListItemProps) {
 
     // const infoButtonRef = useRef<HTMLDivElement | null>(null);
+    const { maxPrice } = usePlayerPicker();
     const { inView, ref } = useInView({ triggerOnce: true });
+
+    const isAffordable = (player?.price ?? 0) <= maxPrice;
 
     const handleViewPlayerProfile = () => {
         if (onViewPlayerProfile) {
@@ -235,14 +250,22 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
     }
 
     const handleSelectPlayer = useCallback(() => {
+
+        if (!isAffordable) {
+            return;
+        }
+
         if (onSelectPlayer) {
             onSelectPlayer(player);
             console.log("Player Selected");
         }
-    }, [onSelectPlayer, player])
+    }, [onSelectPlayer, player, isAffordable]);
 
     return (
-        <div ref={ref} className="flex hover:bg-slate-50 flex-row items-center" >
+        <div ref={ref} className={twMerge(
+            "flex hover:bg-slate-50 flex-row items-center",
+            !isAffordable && 'opacity-50'
+        )} >
 
             {inView && (
                 <Fragment>
@@ -273,7 +296,13 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
 
                             <div className="flex flex-col" >
                                 <p className="text-sm truncate" >{player.player_name}</p>
-                                <SecondaryText className="text-[10px]" >{player?.team?.athstat_name ?? player.position_class}</SecondaryText>
+                                {isAffordable && (<SecondaryText className="text-[10px]" >
+                                    {player?.team?.athstat_name ?? player.position_class}
+                                </SecondaryText>)}
+
+                                {!isAffordable && (
+                                    <p className="text-red-500 text-[10px] font-medium" >Can't Afford this Player</p>
+                                )}
                             </div>
                         </div>
 
