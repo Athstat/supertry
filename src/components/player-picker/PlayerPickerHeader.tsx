@@ -4,6 +4,7 @@ import SearchBar from "../team-creation/player-selection-components/SearchBar";
 import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
 import BlueGradientCard from "../shared/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
+import Experimental from "../shared/ab_testing/Experimental";
 
 export default function PlayerPickerHeader() {
 
@@ -18,14 +19,16 @@ export default function PlayerPickerHeader() {
     return (
         <div className="flex flex-col gap-2" >
 
-            <BlueGradientCard
-                className={twMerge(
-                    "flex flex-row items-center justify-center  py-2",
-                    "from-blue-600 to-purple-700"
-                )}
-            >
-                <p className="text-sm font-medium" >Budget ${maxPrice}</p>
-            </BlueGradientCard>
+            <Experimental>
+                <BlueGradientCard
+                    className={twMerge(
+                        "flex flex-row items-center justify-center  py-2",
+                        "from-blue-600 to-purple-700"
+                    )}
+                >
+                    <p className="text-sm font-medium" >Budget ${maxPrice}</p>
+                </BlueGradientCard>
+            </Experimental>
 
             <div className="flex rounded-xl flex-row items-center gap-2 w-full" >
                 {/* <InputField 

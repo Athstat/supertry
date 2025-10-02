@@ -5,11 +5,12 @@ import SecondaryText from "../shared/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import { twMerge } from "tailwind-merge";
 import { X } from "lucide-react";
+import { BudgetIndicator } from "../team-creation/AvailableFilter";
 
 
 export default function PlayerPickerTeamFilterRow() {
 
-    const { availbleTeams, filterTeams, setFilterTeams } = usePlayerPicker();
+    const { availbleTeams, filterTeams, setFilterTeams, maxPrice } = usePlayerPicker();
     const len = filterTeams.length;
 
     if (availbleTeams.length <= 0) {
@@ -22,17 +23,24 @@ export default function PlayerPickerTeamFilterRow() {
 
     return (
         <div className="flex flex-col gap-1" >
-            <div className="flex flex-row items-center gap-1" >
-                <SecondaryText>Filter By Team: </SecondaryText>
-                {len >= 1 && (
-                    <button onClick={handleClearFilter} className={twMerge(
-                        'bg-blue-500 dark:bg-blue-600 rounded-full px-3 py-1 text-[10px] flex flex-col items-center justify-center',
-                        'flex flex-row items-center gap-1'
-                    )} >
-                        <p>Clear ({len})</p>
-                        <X className="w-3 h-3" />
-                    </button>
-                )}
+
+            <div className="flex flex-row items-center justify-between " >
+
+                <div className="flex flex-row items-center gap-1" >
+                    <SecondaryText>Filter By Team: </SecondaryText>
+                    {len >= 1 && (
+                        <button onClick={handleClearFilter} className={twMerge(
+                            'bg-blue-500 dark:bg-blue-600 rounded-full px-3 py-1 text-[10px] flex flex-col items-center justify-center',
+                            'flex flex-row items-center gap-1'
+                        )} >
+                            <p>Clear ({len})</p>
+                            <X className="w-3 h-3" />
+                        </button>
+                    )}
+                </div>
+
+                <BudgetIndicator budget={maxPrice} maxBudget={240} />
+
             </div>
             <div className="flex flex-row items-center text-nowrap flex-nowrap gap-2 overflow-x-auto no-scrollbar" >
                 {availbleTeams.map((t) => {
