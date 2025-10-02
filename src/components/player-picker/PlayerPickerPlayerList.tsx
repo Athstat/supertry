@@ -9,7 +9,7 @@ import { seasonService } from "../../services/seasonsService";
 import TeamJersey from "../player/TeamJersey";
 import { twMerge } from "tailwind-merge";
 import { useInView } from "react-intersection-observer";
-import { ChevronsUpDown, Info } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import WarningCard from "../shared/WarningCard";
 
 

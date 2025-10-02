@@ -84,7 +84,7 @@ function InnerPlayerPicker({title, onClose}: InnerPlayerPickerProps) {
       onClose={onClose}
       hw="min-h-[95vh] lg:w-[60vh]"
       className="flex flex-col gap-2"
-      outerCon=""
+      outerCon="no-scrollbar"
     >
       <PlayerPickerHeader />
       
