@@ -16,6 +16,8 @@ export function usePlayerPicker() {
 
     const remaingBudget = useAtomValue(remainingTeamBudgetAtom);
 
+    const excludePlayers = useAtomValue(playerPickerAtoms.excludePlayersAtom);
+
 
     const [searchQuery, setSearchQuery] = useQueryState<string>('player_query');
 
@@ -29,6 +31,7 @@ export function usePlayerPicker() {
         remaingBudget,
         searchQuery,
         setSearchQuery,
-        leagueRound
+        leagueRound,
+        excludePlayers
     }
 }

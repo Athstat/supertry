@@ -25,7 +25,10 @@ export default function PlayerPickerPlayerList({onSelect} : Props) {
     const [sortField, setSortField] = useState<SortField>('power_rank_rating');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-    const { searchQuery, positionPool, availbleTeams, leagueRound, filterTeams } = usePlayerPicker();
+    const { 
+        searchQuery, positionPool, availbleTeams,
+        leagueRound, filterTeams, excludePlayers
+    } = usePlayerPicker();
 
     const key = leagueRound ? `/all-players` : null;
     const { data: fetchedAthletes, isLoading: loadingAthletes } = useSWR(key, () => seasonService.getSeasonAthletes(leagueRound?.season_id ?? ''));
@@ -80,6 +83,13 @@ export default function PlayerPickerPlayerList({onSelect} : Props) {
             .filter((a) => {
                 if (targetTeamIds.length > 0) {
                     return targetTeamIds.includes(a.team?.athstat_id ?? '');
+                }
+
+                return true;
+            })
+            .filter((a) => {
+                if (excludePlayers.find(p => p.tracking_id === a.tracking_id)) {
+                    return false;
                 }
 
                 return true;
