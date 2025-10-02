@@ -47,6 +47,10 @@ export default function PlayerPickerV2({
     fantasyLeagueAtom
   ]
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <ScopeProvider atoms={atoms} >
       <PlayerPickerDataProvider
@@ -63,6 +67,7 @@ export default function PlayerPickerV2({
         <InnerPlayerPicker
           title={title}
           onClose={onClose}
+          onSelect={onSelectPlayer}
         />
       </PlayerPickerDataProvider>
     </ScopeProvider>
@@ -71,10 +76,11 @@ export default function PlayerPickerV2({
 
 type InnerPlayerPickerProps = {
   title?: string,
-  onClose?: () => void
+  onClose?: () => void,
+  onSelect?: (player: IProAthlete) => void
 }
 
-function InnerPlayerPicker({ title, onClose }: InnerPlayerPickerProps) {
+function InnerPlayerPicker({ title, onClose, onSelect }: InnerPlayerPickerProps) {
 
   const { positionPool } = usePlayerPicker();
   const positionName = formatPosition(positionPool);
@@ -107,7 +113,9 @@ function InnerPlayerPicker({ title, onClose }: InnerPlayerPickerProps) {
     >
       <PlayerPickerHeader />
 
-      <PlayerPickerPlayerList />
+      <PlayerPickerPlayerList 
+        onSelect={onSelect}
+      />
       <PlayerPickerFAB
         onClick={handleClickFAB}
         show={!inView}
