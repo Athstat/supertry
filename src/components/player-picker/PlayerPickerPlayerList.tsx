@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker";
 import { IProAthlete } from "../../types/athletes";
 import RoundedCard from "../shared/RoundedCard";
@@ -9,8 +9,9 @@ import { seasonService } from "../../services/seasonsService";
 import TeamJersey from "../player/TeamJersey";
 import { twMerge } from "tailwind-merge";
 import { useInView } from "react-intersection-observer";
-import { ChevronsUpDown } from "lucide-react";
+import { BadgeInfo, ChevronsUpDown } from "lucide-react";
 import WarningCard from "../shared/WarningCard";
+import PlayerProfileModal from "../player/PlayerProfileModal";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;
@@ -26,6 +27,16 @@ export default function PlayerPickerPlayerList() {
     const { data: fetchedAthletes, isLoading: loadingAthletes } = useSWR(key, () => seasonService.getSeasonAthletes(leagueRound?.season_id ?? ''));
 
     const athletes = useMemo(() => fetchedAthletes ?? [], [fetchedAthletes]);
+
+    const [profileModalPlayer, setProfileModalPlayer] = useState<IProAthlete>();
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    const toggleModal = () => setShowModal(prev => !prev);
+
+    const handleViewPlayerProfile = (player: IProAthlete) => {
+        setProfileModalPlayer(player);
+        setShowModal(true);
+    }
 
     const handleSort = (field: SortField) => {
         if (sortField !== field) {
@@ -137,9 +148,10 @@ export default function PlayerPickerPlayerList() {
                 <p>Players Sorted By <strong>{sortField === "power_rank_rating" ? "Power Ranking" : "Price"}</strong> in <strong>{sortDirection === "asc" ? "from Lowest to Highest" : "Highest to Lowest"}</strong>.</p>
             </WarningCard>
 
-            <div className="flex font-semibold p-2 flex-row items-center justify-between" >
+            <div className="flex font-semibold py-2 flex-row items-center justify-between" >
 
-                <div className="flex flex-row  items-center gap-2 min-w-[200px]" >
+                <div className="flex flex-row  items-center justify-start gap-2 min-w-[230px]" >
+                    <SecondaryText className="max-w-[30px]" >Info</SecondaryText>
                     <SecondaryText>Player</SecondaryText>
                 </div>
 
@@ -170,56 +182,94 @@ export default function PlayerPickerPlayerList() {
                         <PlayerListItem
                             player={a}
                             key={a.tracking_id}
+                            onViewPlayerProfile={handleViewPlayerProfile}
+
                         />
                     )
                 })}
             </div>
+
+            {showModal && profileModalPlayer && (
+                <PlayerProfileModal
+                    player={profileModalPlayer}
+                    isOpen={showModal}
+                    onClose={toggleModal}
+                />
+            )}
         </div>
     )
 }
 
 type PlayerListItemProps = {
-    player: IProAthlete
+    player: IProAthlete,
+    onViewPlayerProfile?: (player: IProAthlete) => void,
 }
 
-function PlayerListItem({ player }: PlayerListItemProps) {
+function PlayerListItem({ player, onViewPlayerProfile }: PlayerListItemProps) {
 
+    // const infoButtonRef = useRef<HTMLDivElement | null>(null);
     const { inView, ref } = useInView({ triggerOnce: true });
+    const { onSelectPlayer } = usePlayerPicker();
+
+    const handleViewPlayerProfile = () => {
+        if (onViewPlayerProfile) {
+            onViewPlayerProfile(player);
+        }
+    }
+
+    console.log("On select player function ", onSelectPlayer);
+
+    const handleSelectPlayer = useCallback(() => {
+        if (onSelectPlayer) {
+            onSelectPlayer(player);
+            console.log("Player Selected");
+        }
+    }, [onSelectPlayer, player])
 
     return (
-        <div ref={ref} >
-            {inView && (<div className="flex flex-row p-2 items-center justify-between gap-2" >
+        <div ref={ref} className="flex hover:bg-slate-50 flex-row items-center" >
 
-                <div className="flex flex-row items-center gap-2 w-[200px]" >
+            {inView && (
+                <Fragment>
 
-                    {/* <Info className="w-4 h-4 text-slate-400" /> */}
-
-                    {/* <PlayerMugshot
-                    url={player.image_url}
-                    className="w-10 h-10"
-                /> */}
-
-                    <TeamJersey
-                        teamId={player.team_id}
-                        className={twMerge(
-                            "min-h-10 max-h-10 min-w-10 max-w-10",
-                            "lg:min-h-10 lg:max-h-10 lg:min-w-10 lg:max-w-10"
-                        )}
-                        key={player.tracking_id}
-                        hideFade
-                    />
-
-                    <div className="flex flex-col" >
-                        <p className="text-sm" >{player.player_name}</p>
-                        <SecondaryText className="text-[10px]" >{player?.team?.athstat_name ?? player.position_class}</SecondaryText>
+                    <div
+                        onClick={handleViewPlayerProfile}
+                        className="w-[30px] cursor-pointer"
+                    >
+                        <BadgeInfo className="w-4 h-4 text-slate-500 hover:text-blue-600" />
                     </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-4 w-[150px]" >
-                    <SecondaryText>{player.power_rank_rating ? Math.floor(player.power_rank_rating) : '-'}</SecondaryText>
-                    <SecondaryText>{player.price}</SecondaryText>
-                </div>
-            </div>)}
+                    <div
+                        onClick={handleSelectPlayer}
+                        className="flex cursor-pointer  flex-row py-2 items-center justify-between gap-2 w-full"
+                    >
+
+                        <div className="flex flex-row items-center gap-2 min-w-[200px]" >
+
+                            <TeamJersey
+                                teamId={player.team_id}
+                                className={twMerge(
+                                    "min-h-10 max-h-10 min-w-10 max-w-10",
+                                    "lg:min-h-10 lg:max-h-10 lg:min-w-10 lg:max-w-10"
+                                )}
+                                key={player.tracking_id}
+                                hideFade
+                            />
+
+                            <div className="flex flex-col" >
+                                <p className="text-sm truncate" >{player.player_name}</p>
+                                <SecondaryText className="text-[10px]" >{player?.team?.athstat_name ?? player.position_class}</SecondaryText>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 w-[150px]" >
+                            <SecondaryText>{player.power_rank_rating ? Math.floor(player.power_rank_rating) : '-'}</SecondaryText>
+                            <SecondaryText>{player.price}</SecondaryText>
+                        </div>
+                    </div>
+
+                </Fragment>
+            )}
         </div>
     )
 }

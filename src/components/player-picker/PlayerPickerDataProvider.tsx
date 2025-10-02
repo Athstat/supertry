@@ -62,9 +62,7 @@ export default function PlayerPickerDataProvider({ leagueRound, children, positi
     }, [playerToBeReplaced, setPlayerToBeReplaced]);
 
     useEffect(() => {
-        if (onSelectPlayer) {
-            setOnSelectPlayer(onSelectPlayer);
-        }
+        setOnSelectPlayer(onSelectPlayer);
     }, [setOnSelectPlayer, onSelectPlayer]);
 
     useEffect(() => {
