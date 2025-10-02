@@ -47,19 +47,13 @@ export default function PlayerPickerV2({
     fantasyLeagueAtom
   ]
 
-  if (!isOpen) {
-    return null;
-  }
-
   return (
     <ScopeProvider atoms={atoms} >
       <PlayerPickerDataProvider
         playerToBeReplaced={playerToBeReplaced}
         positionPool={positionPool}
-        onSelectPlayer={onSelectPlayer}
         leagueRound={targetLeagueRound}
         title={title}
-        isOpen={isOpen}
         excludePlayers={excludePlayers}
         remainingBudget={remainingBudget}
         onClose={onClose}
@@ -68,6 +62,7 @@ export default function PlayerPickerV2({
           title={title}
           onClose={onClose}
           onSelect={onSelectPlayer}
+          isOpen={isOpen}
         />
       </PlayerPickerDataProvider>
     </ScopeProvider>
@@ -77,10 +72,11 @@ export default function PlayerPickerV2({
 type InnerPlayerPickerProps = {
   title?: string,
   onClose?: () => void,
-  onSelect?: (player: IProAthlete) => void
+  onSelect?: (player: IProAthlete) => void,
+  isOpen?: boolean
 }
 
-function InnerPlayerPicker({ title, onClose, onSelect }: InnerPlayerPickerProps) {
+function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPickerProps) {
 
   const { positionPool } = usePlayerPicker();
   const positionName = formatPosition(positionPool);
@@ -103,7 +99,7 @@ function InnerPlayerPicker({ title, onClose, onSelect }: InnerPlayerPickerProps)
 
   return (
     <DialogModal
-      open={true}
+      open={isOpen}
       title={dialogTitle}
       onClose={onClose}
       hw="min-h-[95vh] lg:w-[60vh]"

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 import { Position } from '../../types/position';
-import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { seasonService } from '../../services/seasonsService';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
@@ -94,8 +93,6 @@ export default function CreateMyTeam({
 
   const isGuestAccount = useAtomValue(isGuestUserAtom);
 
-  console.log('leagueRound: ', leagueRound);
-
   useEffect(() => {
     const loadAthletes = async () => {
       if (!leagueRound) return;
@@ -122,7 +119,7 @@ export default function CreateMyTeam({
     };
 
     loadAthletes();
-  }, [leagueRound]);
+  }, [leagueId, leagueRound]);
 
   // Load saved team presets for the season (scoped to current user)
   useEffect(() => {
@@ -561,17 +558,16 @@ export default function CreateMyTeam({
         />
       )} */}
 
-      {activePosition && (
-        <PlayerPickerV2
-          isOpen={isModalOpen}
-          positionPool={activePosition.positionClass as (PositionClass | undefined)}
-          remainingBudget={remainingBudget}
-          excludePlayers={Object.values(selectedPlayers)}
-          onSelectPlayer={onSelectPlayer}
-          onClose={onClosePickerModal}
-          targetLeagueRound={leagueRound}
-        />
-      )}
+      <PlayerPickerV2
+        isOpen={isModalOpen && activePosition !== null}
+        positionPool={activePosition?.positionClass as (PositionClass | undefined)}
+        remainingBudget={remainingBudget}
+        excludePlayers={Object.values(selectedPlayers)}
+        onSelectPlayer={onSelectPlayer}
+        onClose={onClosePickerModal}
+        targetLeagueRound={leagueRound}
+      />
+
 
       {/* Player profile modal */}
       {playerModalPlayer && (

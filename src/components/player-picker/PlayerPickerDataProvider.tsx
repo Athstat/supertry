@@ -16,8 +16,6 @@ type Props = {
     children?: ReactNode,
     playerToBeReplaced?: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
     positionPool?: PositionClass,
-    onSelectPlayer?: (player: IProAthlete) => void,
-    isOpen?: boolean,
     title?: string,
     remainingBudget?: number,
     excludePlayers?: (IProAthlete | IFantasyAthlete | IFantasyTeamAthlete | { tracking_id: string })[],
@@ -25,7 +23,7 @@ type Props = {
 }
 
 /** A component that fetches the related games and makes them availble to downward children */
-export default function PlayerPickerDataProvider({ leagueRound, children, positionPool, playerToBeReplaced, onSelectPlayer, remainingBudget, excludePlayers }: Props) {
+export default function PlayerPickerDataProvider({ leagueRound, children, positionPool, playerToBeReplaced, remainingBudget, excludePlayers }: Props) {
     const round = leagueRound;
     
     const key =  round ? swrFetchKeys.getGroupRoundGames(round.fantasy_league_group_id, round.id) : null;
@@ -38,7 +36,6 @@ export default function PlayerPickerDataProvider({ leagueRound, children, positi
     const setTargetRound = useSetAtom(fantasyLeagueAtom);
     const setPositionPool = useSetAtom(playerPickerAtoms.positionPoolAtom);
     const setPlayerToBeReplaced = useSetAtom(playerPickerAtoms.playerToBeReplacedAtom);
-    const setOnSelectPlayer = useSetAtom(playerPickerAtoms.onSelectPlayerAtom);
     const setMaxPlayerPrice = useSetAtom(playerPickerAtoms.maxPlayerPriceAtom)
     const setExcludePlayers = useSetAtom(playerPickerAtoms.excludePlayersAtom);
     const setRelatedGames = useSetAtom(playerPickerAtoms.relatedGamesAtom);
@@ -60,10 +57,6 @@ export default function PlayerPickerDataProvider({ leagueRound, children, positi
             setPlayerToBeReplaced(playerToBeReplaced);
         }
     }, [playerToBeReplaced, setPlayerToBeReplaced]);
-
-    useEffect(() => {
-        setOnSelectPlayer(onSelectPlayer);
-    }, [setOnSelectPlayer, onSelectPlayer]);
 
     useEffect(() => {
         if (remainingBudget) {

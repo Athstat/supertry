@@ -17,7 +17,11 @@ import PlayerProfileModal from "../player/PlayerProfileModal";
 type SortField = 'power_rank_rating' | 'price' | null;
 type SortDirection = 'asc' | 'desc' | null;
 
-export default function PlayerPickerPlayerList() {
+type Props = {
+    onSelect?: (player: IProAthlete) => void
+}
+
+export default function PlayerPickerPlayerList({onSelect} : Props) {
     const [sortField, setSortField] = useState<SortField>('power_rank_rating');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
@@ -61,6 +65,9 @@ export default function PlayerPickerPlayerList() {
 
         let result = athletes
             .filter((a) => {
+                if (positionPool === "super-sub") {
+                    return true;
+                }
                 return a.position_class === positionPool
             })
             .filter((a) => {
@@ -183,7 +190,7 @@ export default function PlayerPickerPlayerList() {
                             player={a}
                             key={a.tracking_id}
                             onViewPlayerProfile={handleViewPlayerProfile}
-
+                            onSelectPlayer={onSelect}
                         />
                     )
                 })}
@@ -203,21 +210,19 @@ export default function PlayerPickerPlayerList() {
 type PlayerListItemProps = {
     player: IProAthlete,
     onViewPlayerProfile?: (player: IProAthlete) => void,
+    onSelectPlayer?: (player: IProAthlete) => void
 }
 
-function PlayerListItem({ player, onViewPlayerProfile }: PlayerListItemProps) {
+function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerListItemProps) {
 
     // const infoButtonRef = useRef<HTMLDivElement | null>(null);
     const { inView, ref } = useInView({ triggerOnce: true });
-    const { onSelectPlayer } = usePlayerPicker();
 
     const handleViewPlayerProfile = () => {
         if (onViewPlayerProfile) {
             onViewPlayerProfile(player);
         }
     }
-
-    console.log("On select player function ", onSelectPlayer);
 
     const handleSelectPlayer = useCallback(() => {
         if (onSelectPlayer) {
