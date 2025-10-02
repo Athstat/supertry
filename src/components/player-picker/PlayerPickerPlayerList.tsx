@@ -17,8 +17,8 @@ type SortField = 'power_rank_rating' | 'price' | null;
 type SortDirection = 'asc' | 'desc' | null;
 
 export default function PlayerPickerPlayerList() {
-    const [sortField, setSortField] = useState<SortField>(null);
-    const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+    const [sortField, setSortField] = useState<SortField>('power_rank_rating');
+    const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
     const { searchQuery, positionPool, availbleTeams, leagueRound, filterTeams } = usePlayerPicker();
 
@@ -37,9 +37,7 @@ export default function PlayerPickerPlayerList() {
             if (sortDirection === 'asc') {
                 setSortDirection('desc');
             } else if (sortDirection === 'desc') {
-                // Turn off sorting
-                setSortField(null);
-                setSortDirection(null);
+                setSortDirection('asc');
             }
         }
     };
