@@ -9,7 +9,11 @@ import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
 import { useEffect, useState } from 'react';
 import PushOptInModal from '../components/ui/PushOptInModal';
-import { isBridgeAvailable, requestPushPermissions } from '../utils/bridgeUtils';
+import {
+  isBridgeAvailable,
+  requestPushPermissions,
+  getPushPermissionStatus,
+} from '../utils/bridgeUtils';
 import { authService } from '../services/authService';
 import GameStoriesCarrousel from '../components/dashboard/stories/GameStoriesCarrousel';
 import Experimental from '../components/shared/ab_testing/Experimental';
@@ -18,6 +22,9 @@ export function DashboardScreen() {
   const navigate = useNavigate();
   const [showPushModal, setShowPushModal] = useState(false);
   const [showSettingsNote, setShowSettingsNote] = useState(false);
+  const [pushPermissionStatus, setPushPermissionStatus] = useState<
+    'granted' | 'denied' | 'prompt' | 'unknown'
+  >('unknown');
 
   useEffect(() => {
     let cancelled = false;
@@ -55,6 +62,30 @@ export function DashboardScreen() {
       cancelled = true;
     };
   }, []);
+
+  // Query push permission status on mount
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        if (!isBridgeAvailable()) return;
+        const status = await getPushPermissionStatus();
+        if (!cancelled) setPushPermissionStatus(status);
+      } catch {}
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Keep settings note in sync with denied/granted status
+  useEffect(() => {
+    if (pushPermissionStatus === 'denied') {
+      setShowSettingsNote(true);
+    } else if (pushPermissionStatus === 'granted') {
+      setShowSettingsNote(false);
+    }
+  }, [pushPermissionStatus]);
 
   const handleBannerClick = () => {
     navigate('/leagues');
@@ -97,6 +128,10 @@ export function DashboardScreen() {
             <div className="flex justify-end">
               <PrimaryButton
                 onClick={() => {
+                  if (pushPermissionStatus === 'denied') {
+                    // Permanent note: do not dismiss while OS-level notifications are disabled
+                    return;
+                  }
                   try {
                     const kcId = authService.getUserInfoSync()?.kc_id;
                     if (kcId) {
@@ -139,6 +174,7 @@ export function DashboardScreen() {
         onEnable={async () => {
           try {
             const granted = await requestPushPermissions();
+            setPushPermissionStatus(granted ? 'granted' : 'denied');
             if (!granted) {
               try {
                 const kcId = authService.getUserInfoSync()?.kc_id;
