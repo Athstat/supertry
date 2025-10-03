@@ -31,6 +31,10 @@ declare global {
         };
       }>;
       getDeviceId(): Promise<string>;
+      getPushPermissionStatus?(): Promise<{
+        status: 'granted' | 'denied' | 'prompt';
+        onesignal_id?: string;
+      }>;
       initializeAuth(): Promise<{
         isAuthenticated: boolean;
         tokens?: {
@@ -91,6 +95,10 @@ declare global {
         };
       }>;
       getDeviceId(): Promise<string>;
+      getPushPermissionStatus?(): Promise<{
+        status: 'granted' | 'denied' | 'prompt';
+        onesignal_id?: string;
+      }>;
       initializeAuth(): Promise<{
         isAuthenticated: boolean;
         tokens?: {
@@ -429,6 +437,30 @@ export function requestPushPermissionsAfterSignup(userId: string, email: string)
  * Request navigation in the mobile app WebView
  * @param url The URL to navigate to
  */
+export async function getPushPermissionStatus(): Promise<
+  'granted' | 'denied' | 'prompt' | 'unknown'
+> {
+  try {
+    if (!isBridgeAvailable()) {
+      return localStorage.getItem('onesignal_id') ? 'granted' : 'unknown';
+    }
+    const bridge: any = (window as any).ScrummyBridge || (window as any).scrummyBridge;
+    if (bridge && typeof bridge.getPushPermissionStatus === 'function') {
+      const res = await bridge.getPushPermissionStatus();
+      const status = res?.status as 'granted' | 'denied' | 'prompt' | undefined;
+      if (status === 'granted' && res?.onesignal_id) {
+        localStorage.setItem('onesignal_id', res.onesignal_id);
+      }
+      return status ?? (localStorage.getItem('onesignal_id') ? 'granted' : 'unknown');
+    }
+    // Fallback inference if native method not available
+    return localStorage.getItem('onesignal_id') ? 'granted' : 'prompt';
+  } catch (e) {
+    console.error('Error getting push permission status:', e);
+    return localStorage.getItem('onesignal_id') ? 'granted' : 'unknown';
+  }
+}
+
 export function requestNavigation(url: string): void {
   if (typeof window !== 'undefined' && window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
@@ -441,9 +473,9 @@ export function requestNavigation(url: string): void {
 }
 
 /** Returns true if the app is running inside a mobile webview */
-export function isMobileWebView() : boolean{
+export function isMobileWebView(): boolean {
   return (
     (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
     window.ReactNativeWebView !== undefined
   );
-};
+}
