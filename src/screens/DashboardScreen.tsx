@@ -14,6 +14,8 @@ import {
   isBridgeAvailable,
   requestPushPermissions,
   getPushPermissionStatus,
+  isMobileWebView,
+  openSystemNotificationSettings,
 } from '../utils/bridgeUtils';
 import { authService } from '../services/authService';
 import { HeroSection2 } from '../components/dashboard/HeroSection2';
@@ -104,6 +106,33 @@ export function DashboardScreen() {
         </div>
       </div>
 
+      {showSettingsNote && (
+        <div
+          role="alert"
+          className="-mx-4 px-4 py-3 border-y border-yellow-200 bg-yellow-50 text-yellow-900 dark:border-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-100"
+        >
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-sm">
+              <span className="font-semibold">Enable push notifications.</span> Notifications are
+              disabled. Turn them on to get match updates and alerts.
+            </div>
+            {isMobileWebView() && (
+              <PrimaryButton
+                className="shrink-0"
+                onClick={async () => {
+                  const opened = await openSystemNotificationSettings();
+                  if (!opened) {
+                    console.warn('Could not open system settings from web environment');
+                  }
+                }}
+              >
+                Go to settings
+              </PrimaryButton>
+            )}
+          </div>
+        </div>
+      )}
+
       <div>
         <HeroSection />
         {/* <div className="mt-3">
@@ -116,40 +145,6 @@ export function DashboardScreen() {
       {/* <FeaturedPlayersCarousel /> */}
 
       <ClaimAccountNoticeCard />
-
-      {showSettingsNote && (
-        <RoundedCard className="p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700">
-          <div className="flex flex-col gap-2">
-            <p className="font-semibold text-yellow-800 dark:text-yellow-200">
-              Enable push notifications
-            </p>
-            <p className="text-sm text-yellow-800/90 dark:text-yellow-300/90">
-              Notifications are currently disabled. To receive match updates and alerts, enable push
-              notifications for Scrummy in your phone settings.
-            </p>
-            <div className="flex justify-end">
-              <PrimaryButton
-                onClick={() => {
-                  if (pushPermissionStatus === 'denied') {
-                    // Permanent note: do not dismiss while OS-level notifications are disabled
-                    return;
-                  }
-                  try {
-                    const kcId = authService.getUserInfoSync()?.kc_id;
-                    if (kcId) {
-                      localStorage.setItem(`push_settings_note_seen_user_${kcId}`, 'true');
-                    }
-                  } catch {}
-                  setShowSettingsNote(false);
-                }}
-                className="px-4 py-2 rounded-lg"
-              >
-                OK
-              </PrimaryButton>
-            </div>
-          </div>
-        </RoundedCard>
-      )}
 
       <FeaturedFantasyLeagueGroups />
 
