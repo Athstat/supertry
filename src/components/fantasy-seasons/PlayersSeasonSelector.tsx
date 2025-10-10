@@ -7,7 +7,7 @@ export default function PlayersSeasonSelector() {
 
   return (
     <div>
-      <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2">
+      <div className="relative z-20 flex flex-row items-center no-scrollbar flex-nowrap overflow-visible text-nowrap gap-2 pb-2">
         <ListItem
           isSelected={selectedSeason === undefined}
           title={'ALL'}
@@ -57,9 +57,13 @@ function ListItem({ isSelected, title, onSelect }: ItemProps) {
     <div
       onClick={onSelect}
       className={twMerge(
-        'font-semibold cursor-pointer border px-4 py-1.5 bg-slate-100 dark:bg-slate-800/40 rounded-2xl',
-        isSelected && 'border-primary-400 bg-blue-500 dark:bg-blue-500 text-white',
-        !isSelected && 'text-slate-700 dark:text-slate-400 border-slate-300 dark:border-gray-800'
+        // Base glassmorphism to match FloatingSearchBar
+        'font-semibold cursor-pointer px-4 py-1.5 rounded-full backdrop-blur-md border bg-white/10 dark:bg-slate-900/40 border-white/15 dark:border-white/10 ring-1 ring-white/10 shadow-lg shadow-black/30 transition-colors',
+        // Selected pill: keep brand fill but retain glass affordances (border/ring/shadow)
+        isSelected &&
+          'text-white bg-blue-500/90 dark:bg-blue-500/90 border-blue-300/60 dark:border-white/20 ring-blue-300/40',
+        // Unselected pill text colors (same as FloatingSearchBar icons/text)
+        !isSelected && 'text-slate-800 dark:text-white/90'
       )}
     >
       <p className="text-sm">{getShortName()}</p>

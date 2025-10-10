@@ -35,7 +35,7 @@ export const PlayerFilters = ({
 
   return (
     <div className="">
-      <button
+      {/* <button
         onClick={() => setShowFilters(!showFilters)}
         className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-dark-800/40 rounded-lg text-gray-600 dark:text-gray-300 font-medium"
       >
@@ -50,7 +50,7 @@ export const PlayerFilters = ({
           size={20}
           className={`transform transition-transform ${showFilters ? 'rotate-180' : ''}`}
         />
-      </button>
+      </button> */}
 
       {/* Filters Dropdown */}
       {showFilters && variant === 'dropdown' && (
@@ -94,9 +94,9 @@ export const PlayerFilters = ({
           </div>
 
           {/* Team Filter */}
-          <div>
+          <div className="pb-4">
             <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Team</h4>
-            <div className="grid grid-cols-2 gap-2 max-h-60">
+            <div className="grid grid-cols-2 gap-2 max-h-60 pb-6">
               {availableTeams.map(team => (
                 <button
                   key={team.athstat_id}
@@ -162,7 +162,7 @@ export const PlayerFilters = ({
           {/* Team Filter */}
           <div>
             <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Team</h4>
-            <div className="grid grid-cols-2 gap-2 max-h-60">
+            <div className="grid grid-cols-2 gap-2 pb-2">
               {availableTeams.map(team => (
                 <button
                   key={team.athstat_id}

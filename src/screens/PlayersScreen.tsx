@@ -155,7 +155,7 @@ export const PlayerScreenContent = () => {
 
   const isPickingPlayers = useAtomValue(comparePlayersAtomGroup.isCompareModePicking);
 
-  const { addOrRemovePlayer } = usePlayerCompareActions();
+  const { addOrRemovePlayer, startPicking } = usePlayerCompareActions();
 
   // Handle player selection with useCallback for better performance
   const handlePlayerClick = useCallback(
@@ -210,13 +210,13 @@ export const PlayerScreenContent = () => {
         </div>
 
         {/* Fantasy Season Tabs - identical to Fantasy Leagues */}
-        <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2 w-full">
+        <div className="sticky top-16 z-40 w-full -mx-5 py-2 bg-transparent border-b-0 overflow-visible">
           <PlayersSeasonSelector />
         </div>
 
-        <PlayersCompareButton
+        {/* <PlayersCompareButton
           className={twMerge(isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700')}
-        />
+        /> */}
 
         {<PlayersScreenCompareStatus />}
 
@@ -284,6 +284,7 @@ export const PlayerScreenContent = () => {
         value={searchQuery ?? ''}
         onChange={handleSearch}
         onOpenControls={() => setControlsOpen(true)}
+        onOpenCompare={() => startPicking()}
       />
 
       <GlassBottomSheet isOpen={controlsOpen} onClose={() => setControlsOpen(false)}>
