@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, User } from 'lucide-react';
+import { Search, Filter, ArrowRight, User } from 'lucide-react';
 
 type Props = {
   value: string;
   onChange: (v: string) => void;
   onOpenControls: () => void;
   onOpenCompare?: () => void;
+  isComparePicking?: boolean;
   placeholder?: string;
   className?: string;
 };
@@ -16,6 +17,7 @@ export default function FloatingSearchBar({
   onChange,
   onOpenControls,
   onOpenCompare,
+  isComparePicking,
   placeholder = 'Search players...',
   className,
 }: Props) {
@@ -103,20 +105,28 @@ export default function FloatingSearchBar({
         aria-label="Enter compare mode"
         onClick={onOpenCompare ?? onOpenControls}
         className={[
-          'w-14 h-10 md:w-10 md:h-10',
+          // Size differs when showing two icons vs. single arrow
+          isComparePicking ? 'w-10 h-10 md:w-10 md:h-10' : 'w-14 h-10 md:w-10 md:h-10',
           'rounded-full',
-          'backdrop-blur-md',
           'flex items-center justify-center',
-          'bg-white/10 dark:bg-white/5',
-          'border border-white/20',
-          'hover:bg-white/20 active:scale-[0.98]',
+          // Style changes with compare mode
+          isComparePicking
+            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+            : 'backdrop-blur-md bg-white/10 dark:bg-white/5 border border-white/20 hover:bg-white/20',
+          'active:scale-[0.98]',
           'transition',
           'shadow-lg shadow-black/30',
         ].join(' ')}
       >
-        <User className="w-5 h-5 text-slate-800 dark:text-white/90" />
-        <span style={{ color: '#999' }}>|</span>
-        <User className="w-5 h-5 text-slate-800 dark:text-white/90" />
+        {isComparePicking ? (
+          <ArrowRight className="w-5 h-5 text-white" />
+        ) : (
+          <>
+            <User className="w-5 h-5 text-slate-800 dark:text-white/90" />
+            <span style={{ color: '#999' }}>|</span>
+            <User className="w-5 h-5 text-slate-800 dark:text-white/90" />
+          </>
+        )}
       </button>
     </motion.div>
   );
