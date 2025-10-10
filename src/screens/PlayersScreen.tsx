@@ -155,7 +155,7 @@ export const PlayerScreenContent = () => {
 
   const isPickingPlayers = useAtomValue(comparePlayersAtomGroup.isCompareModePicking);
 
-  const { addOrRemovePlayer, startPicking } = usePlayerCompareActions();
+  const { addOrRemovePlayer, startPicking, showCompareModal } = usePlayerCompareActions();
 
   // Handle player selection with useCallback for better performance
   const handlePlayerClick = useCallback(
@@ -284,7 +284,8 @@ export const PlayerScreenContent = () => {
         value={searchQuery ?? ''}
         onChange={handleSearch}
         onOpenControls={() => setControlsOpen(true)}
-        onOpenCompare={() => startPicking()}
+        onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
+        isComparePicking={isPickingPlayers}
       />
 
       <GlassBottomSheet isOpen={controlsOpen} onClose={() => setControlsOpen(false)}>

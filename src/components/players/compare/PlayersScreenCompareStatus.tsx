@@ -21,7 +21,7 @@ export default function PlayersScreenCompareStatus({}: Props) {
     <div>
       <div ref={sentinelRef} />
 
-      {isPicking && (
+      {/* {isPicking && (
         <WarningCard className="p-3 flex overflow-y-auto flex-col gap-4">
           <div className="flex flex-row gap-2 items-center w-full">
             <div className="flex flex-row items-center gap-2">
@@ -60,11 +60,11 @@ export default function PlayersScreenCompareStatus({}: Props) {
             <ArrowLeftRight className="w-4 h-4" />
           </PrimaryButton>
         </WarningCard>
-      )}
+      )} */}
 
-      {isSticky && isPicking && (
+      {isPicking && (
         <Sticky className="">
-          <div className="z-[1000] bottom-20 fixed py-2  flex flex-col gap-1 w-full items-center justify-center left-0">
+          <div className="z-[1000] bottom-32 fixed py-2  flex flex-col gap-1 w-full items-center justify-center left-0">
             <div className="flex flex-col bg-slate-200 gap-2 flex-wrap px-4 py-4 dark:bg-slate-800/95 rounded-xl w-[90%] lg:w-[50%]">
               <div className="flex flex-row items-center justify-between">
                 <p className="truncate">Click to Select Player</p>
@@ -94,16 +94,6 @@ export default function PlayersScreenCompareStatus({}: Props) {
                 </div>
               </div>
             </div>
-
-            {isPicking && (
-              <PrimaryButton
-                className="w-[90%] lg:w-[50%] flex flex-row items-center gap-1"
-                onClick={showCompareModal}
-              >
-                Compare Players
-                <ArrowLeftRight className="w-4 h-4" />
-              </PrimaryButton>
-            )}
           </div>
         </Sticky>
       )}
