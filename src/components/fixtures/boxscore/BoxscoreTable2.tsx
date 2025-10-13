@@ -42,7 +42,7 @@ function InnerTable() {
                 <p>{title}</p>
             </div>
 
-            <div className="w-ful flex flex-col overflow-x-scroll" >
+            <div className="w-ful flex flex-col overflow-x-scroll bg-white dark:bg-slate-800 " >
                 <div className="h-[40px] w-[100vh] overflow-visable flex flex-row items-center border-b-2 border-slate-200 dark:border-slate-700 border-t-2 " >
                     
                     {firstColumn && (
