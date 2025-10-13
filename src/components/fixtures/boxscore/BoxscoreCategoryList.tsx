@@ -133,13 +133,13 @@ function AthleteBoxscoreRecord({ item, onFailRender }: AthleteBoxscoreItemProps)
 
     return (
         <div className={twMerge(
-            "p-2",
+            "px-2",
             // index % 2 == 1 && "dark:bg-slate-800/40  bg-slate-100"
         )} >
 
-            <div className="flex flex-row items-center justify-between gap-2" >
+            <div className="flex flex-row items-center justify-between gap-2 " >
 
-                <div className="flex flex-row overflow-hidden items-center gap-4" >
+                <div className="flex py-2 flex-row border-r w-full overflow-hidden items-center gap-4" >
 
                     {/* {index !== undefined && <SecondaryText>
                         {index + 1}
@@ -157,14 +157,14 @@ function AthleteBoxscoreRecord({ item, onFailRender }: AthleteBoxscoreItemProps)
                     </div>
                 </div>
 
-                <SecondaryText className="flex text-base gap-4 font-medium flex-row items-center" >
+                <div className="flex text-base gap-4 font-medium flex-row items-center" >
 
                     {item.stats.map((s) => {
                         return (
-                            <p className="w-[40px] text-sm text-start" >{s}</p>
+                            <SecondaryText className="w-[40px] text-sm text-start" >{s}</SecondaryText>
                         )
                     })}
-                </SecondaryText>
+                </div>
             </div>
         </div>
     )

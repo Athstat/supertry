@@ -2,7 +2,6 @@ import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { GameSportAction } from "../../types/boxScore"
 import { useEffect, useMemo } from "react"
-import { Table2 } from "lucide-react"
 import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
 import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
 import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
@@ -52,13 +51,13 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
     return (
 
-        <div ref={ref} className="flex flex-col gap-8 w-full" >
+        <div ref={ref} className="flex flex-col gap-2 w-full" >
 
             <div className="flex flex-col gap-4" >
-                <div className="flex flex-row items-center justify-start gap-2" >
+                {/* <div className="flex flex-row items-center justify-start gap-2" >
                     <Table2 />
                     <h1 className="font-bold text-lg" >Boxscore</h1>
-                </div>
+                </div> */}
 
                 <FixtureTeamSelector
                     fixture={fixture}
