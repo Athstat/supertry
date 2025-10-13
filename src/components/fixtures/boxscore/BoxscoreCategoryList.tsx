@@ -6,17 +6,7 @@ import SecondaryText from "../../shared/SecondaryText"
 import { useCallback, useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import NoContentCard from "../../shared/NoContentMessage"
-
-export type BoxscoreListRecordItem = {
-    athleteId: string,
-    stats: number[]
-}
-
-type BoxscoreHeader = {
-    lable: string,
-    key?: string,
-    tooltip?: string
-}
+import { BoxscoreHeader, BoxscoreListRecordItem } from "../../../types/boxScore"
 
 type BoxscoreCategoryListProps = {
     columnHeaders: BoxscoreHeader[],
