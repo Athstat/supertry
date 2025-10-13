@@ -1,8 +1,8 @@
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
-import { GameSportAction } from "../../types/boxScore"
+import { BoxscoreListRecordItem, GameSportAction } from "../../types/boxScore"
 import { useEffect, useMemo } from "react"
-import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
+import { BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
 import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
 import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
 import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics"
@@ -67,25 +67,25 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
             <BoxscoreTable
                 title="Attacking"
                 columnHeaders={[{ lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
-                list={attackList}
+                records={attackList}
             />
 
             <BoxscoreTable
                 title="Defense"
                 columnHeaders={[{ lable: "Tkls" }, { lable: "DT" }, { lable: "T/0s Won" }]}
-                list={defenseList}
+                records={defenseList}
             />
 
             <BoxscoreTable
                 title="Kicking"
                 columnHeaders={[{ lable: "Convs" }, { lable: "DG" }, { lable: "PK" }]}
-                list={kickingList}
+                records={kickingList}
             />
 
             <BoxscoreTable
                 title="Discipline"
                 columnHeaders={[{ lable: "Red" }, { lable: "Yellow" }]}
-                list={disciplineList}
+                records={disciplineList}
                 noContentMessage="Whoops, clean game detected"
             />
 
