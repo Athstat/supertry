@@ -1,9 +1,8 @@
 import { ScopeProvider } from "jotai-scope"
 import { boxscoreTableAtoms } from "../../../state/fixtures/boxscore.atoms"
 import { BoxscoreHeader, BoxscoreListRecordItem } from "../../../types/boxScore"
-import { Fragment, ReactNode, useEffect } from "react"
+import { Fragment, ReactNode, useEffect, useMemo } from "react"
 import { useAtomValue, useSetAtom } from "jotai"
-import { title } from "process"
 
 type Props = {
     tableTitle?: string,
@@ -51,7 +50,7 @@ function InnerProvider({ children, columns, tableTitle, records, noContentMessag
         }
 
         if (tableTitle) {
-            setTitle(title);
+            setTitle(tableTitle);
         }
 
         if (records) {
@@ -83,10 +82,28 @@ export function useBoxscoreTable() {
     const title = useAtomValue(boxscoreTableAtoms.titleAtom);
     const noContentMessage = useAtomValue(boxscoreTableAtoms.noContentMessage);
 
+
+    const firstColumn = useMemo(() => {
+        if (columns.length >= 1) {
+            return columns[0];
+        } 
+    }, [columns]);
+
+    const secondaryColumns = useMemo(() => {
+        if (columns.length >= 2) {
+            const copy = [...columns];
+            return copy.slice(1, columns.length);
+        }
+
+        return [];
+    }, [columns]);
+
     return {
         columns,
         records,
         title,
-        noContentMessage
+        noContentMessage,
+        firstColumn, 
+        secondaryColumns
     }
 }

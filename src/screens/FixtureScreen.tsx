@@ -51,11 +51,11 @@ export default function FixtureScreen() {
   const { gameKickedOff } = fixtureSumary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
-    {
-      label: 'Kick Off',
-      tabKey: 'kick-off',
-      disabled: false,
-    },
+    // {
+    //   label: 'Kick Off',
+    //   tabKey: 'kick-off',
+    //   disabled: false,
+    // },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',

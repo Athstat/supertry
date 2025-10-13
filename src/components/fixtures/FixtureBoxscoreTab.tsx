@@ -7,6 +7,7 @@ import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
 import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
 import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics"
 import { useInView } from "react-intersection-observer"
+import BoxscoreTable2 from "./boxscore/BoxscoreTable2"
 
 type Props = {
     fixture: IFixture,
@@ -64,9 +65,9 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
                 />
             </div>
 
-            <BoxscoreTable
+            <BoxscoreTable2
                 title="Attacking"
-                columnHeaders={[{ lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
+                columns={[{ lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
                 records={attackList}
             />
 
