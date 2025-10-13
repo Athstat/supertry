@@ -2,7 +2,6 @@ import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { BoxscoreListRecordItem, GameSportAction } from "../../types/boxScore"
 import { useEffect, useMemo } from "react"
-import { BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
 import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
 import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
 import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics"
@@ -52,7 +51,7 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
     return (
 
-        <div ref={ref} className="flex flex-col gap-2 w-full" >
+        <div ref={ref} className="flex flex-col gap-4 w-full" >
 
             <div className="flex flex-col gap-4" >
                 {/* <div className="flex flex-row items-center justify-start gap-2" >
@@ -67,25 +66,25 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
             <BoxscoreTable2
                 title="Attacking"
-                columns={[{ lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
+                columns={[{ lable: "Player" }, { lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
                 records={attackList}
             />
 
-            <BoxscoreTable
+            <BoxscoreTable2
                 title="Defense"
-                columnHeaders={[{ lable: "Tkls" }, { lable: "DT" }, { lable: "T/0s Won" }]}
+                columns={[{ lable: "Player" }, { lable: "Tkls" }, { lable: "DT" }, { lable: "T/0s Won" }]}
                 records={defenseList}
             />
 
-            <BoxscoreTable
+            <BoxscoreTable2
                 title="Kicking"
-                columnHeaders={[{ lable: "Convs" }, { lable: "DG" }, { lable: "PK" }]}
+                columns={[{ lable: "Player" }, { lable: "Convs" }, { lable: "DG" }, { lable: "PK" }]}
                 records={kickingList}
             />
 
-            <BoxscoreTable
+            <BoxscoreTable2
                 title="Discipline"
-                columnHeaders={[{ lable: "Red" }, { lable: "Yellow" }]}
+                columns={[{ lable: "Player" }, { lable: "Red" }, { lable: "Yellow" }]}
                 records={disciplineList}
                 noContentMessage="Whoops, clean game detected"
             />

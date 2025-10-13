@@ -92,7 +92,7 @@ export function useBoxscoreTable() {
     const secondaryColumns = useMemo(() => {
         if (columns.length >= 2) {
             const copy = [...columns];
-            return copy.slice(1, columns.length);
+            return copy.slice(1);
         }
 
         return [];
