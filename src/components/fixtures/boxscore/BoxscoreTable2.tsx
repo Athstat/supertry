@@ -42,35 +42,38 @@ function InnerTable() {
                 <p>{title}</p>
             </div>
 
-            <div className="h-[40px] flex flex-row items-center border-b-2 border-slate-200 dark:border-slate-700 border-t-2 " >
-                {firstColumn && (
-                    <TableColumn
-                        index={0}
-                        column={firstColumn}
-                        className="w-[200px]  border-r-2 border-slate-100 dark:border-slate-700"
-                    />
-                )}
-
-                {secondaryColumns.map((column, index) => {
-                    return (
+            <div className="w-full overflow-y-auto flex-nowrap" >
+                <div className="h-[40px] max-w-full flex flex-row items-center border-b-2 border-slate-200 dark:border-slate-700 border-t-2 " >
+                    
+                    {firstColumn && (
                         <TableColumn
-                            column={column}
-                            index={index + 1}
-                            className="flex-1"
+                            index={0}
+                            column={firstColumn}
+                            className="min-w-[200px] border-r-2 border-slate-100 dark:border-slate-700"
                         />
-                    )
-                })}
-            </div>
+                    )}
 
-            <div className="flex flex-col divide-y-2 dark:divide-slate-700/30 divide-slate-1" >
-                {records.map((record, index) => {
-                    return (
-                        <TableRecord
-                            record={record}
-                            index={index}
-                        />
-                    )
-                })}
+                    {secondaryColumns.map((column, index) => {
+                        return (
+                            <TableColumn
+                                column={column}
+                                index={index + 1}
+                                className="min-w-[80px]"
+                            />
+                        )
+                    })}
+                </div>
+
+                <div className="flex w-full flex-nowrap flex-col divide-y-2 dark:divide-slate-700/30 divide-slate-1" >
+                    {records.map((record, index) => {
+                        return (
+                            <TableRecord
+                                record={record}
+                                index={index}
+                            />
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )
@@ -131,27 +134,27 @@ function TableRecord({ record, index, className }: TableRecordProps) {
 
     if (!show || !info) return;
 
-    const {athstat_firstname} = info;
+    const { athstat_firstname } = info;
 
-    const playerInitial = athstat_firstname && athstat_firstname.length >= 1 ? 
+    const playerInitial = athstat_firstname && athstat_firstname.length >= 1 ?
         `${athstat_firstname[0]}.` : "";
 
     const isEventhItem = ((index) % 2) === 0;
 
     return (
         <div className={twMerge(
-            ' flex flex-row min-h-full items-center justify-start',
+            'min-w-full flex flex-row flex-nowrap min-h-full items-center justify-start',
             isEventhItem && "bg-slate-100 dark:bg-slate-800/80",
             className
         )} >
-            <div className="flex w-[200px] px-2 py-2 flex-row border-r  items-center gap-1 dark:border-slate-600 border-slate-200 " >
+            <div className="flex min-w-[200px] px-2 py-2 flex-row border-r  items-center gap-1 dark:border-slate-600 border-slate-200 " >
                 <p>{playerInitial} {info?.athstat_lastname}</p>
             </div>
 
             {record.stats.map((stat) => {
                 return (
                     <div
-                        className="flex-1 flex flex-row items-center justify-start px-2"
+                        className="min-w-[80px] flex flex-row items-center justify-start px-2"
                     >
                         <SecondaryText className="font-semibold" >{stat}</SecondaryText>
                     </div>

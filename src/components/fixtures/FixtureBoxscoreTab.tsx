@@ -18,17 +18,20 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
     const { gameKickedOff } = fixtureSumary(fixture);
     // const [search, setSearch] = useState<string>("");
 
-    const { selectedTeamId } = useBoxscoreFilter(fixture);
-    const {ref, inView} = useInView({triggerOnce: true});
+    const { selectedTeamId, selectedTeam } = useBoxscoreFilter(fixture);
+    const { ref, inView } = useInView({ triggerOnce: true });
 
     useEffect(() => {
-        
+
         if (inView) {
             fixtureAnalytics.trackViewedBoxscore(fixture);
         }
 
     }, [fixture, inView]);
 
+    const allStatsList = useMemo(() => {
+        return allStatsBoxscoreList(sportActions, selectedTeamId);
+    }, [sportActions, selectedTeamId]);
 
     const attackList = useMemo(() => {
         return attackBoxscoreList(sportActions, selectedTeamId);
@@ -65,6 +68,17 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
             </div>
 
             <BoxscoreTable2
+                title={selectedTeam?.athstat_name}
+                columns={[
+                    { lable: "Player" }, { lable: "Tries" },
+                    { lable: "Pts" }, { lable: "Carr" },
+                    { lable: "Tckls" },
+                    { lable: "PCM" }
+                ]}
+                records={allStatsList}
+            />
+
+            <BoxscoreTable2
                 title="Attacking"
                 columns={[{ lable: "Player" }, { lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
                 records={attackList}
@@ -91,6 +105,46 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
         </div>
     )
+}
+
+function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id) && b.team_id === teamId) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const tries = stats.find((b) => b.action === "tries")?.action_count;
+        const points = stats.find((b) => b.action === "points")?.action_count;
+        const passes = stats.find((b) => b.action === "carry_dominant")?.action_count;
+        const tackles = stats.find((b) => b.action === "tackles")?.action_count;
+        const postContactMetres = stats.find((b) => b.action === "post_contact_metres")?.action_count;
+
+        return {
+            stats: [
+                Math.floor(tries ?? 0),
+                Math.floor(points ?? 0),
+                Math.floor(passes ?? 0),
+                Math.floor(tackles ?? 0),
+                Math.floor(postContactMetres ?? 0),
+            ],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [, points] = a.stats;
+        const [, bPoints] = b.stats;
+
+        return (bPoints ?? 0) - (points ?? 0)
+    });
+
+
+    return athleteStats;
+
 }
 
 function attackBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
