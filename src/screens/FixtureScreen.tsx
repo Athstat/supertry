@@ -5,7 +5,7 @@ import FixtureScreenOverview from '../components/fixtures/FixtureScreenOverview'
 import useSWR from 'swr';
 import { gamesService } from '../services/gamesService';
 import { LoadingState } from '../components/ui/LoadingState';
-import FixtureAthleteStats from '../components/fixtures/FixtureAthleteStats';
+import FixtureBoxscoreTab from '../components/fixtures/FixtureBoxscoreTab';
 import { boxScoreService } from '../services/boxScoreService';
 import { FixtureScreenHeader } from '../components/fixtures/FixtureScreenHeader';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
@@ -96,7 +96,7 @@ export default function FixtureScreen() {
 
             <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
-              {sportActions && (sportActions?.length ?? 0) > 0 && <FixtureAthleteStats sportActions={sportActions} fixture={fixture} />}
+              {sportActions && (sportActions?.length ?? 0) > 0 && <FixtureBoxscoreTab sportActions={sportActions} fixture={fixture} />}
             </TabViewPage>
 
             <TabViewPage className="flex flex-col gap-5" tabKey="kick-off">

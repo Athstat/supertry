@@ -1,7 +1,7 @@
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
 import { GameSportAction } from "../../types/boxScore"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { Table2 } from "lucide-react"
 import { BoxscoreListRecordItem, BoxscoreTable } from "./boxscore/BoxscoreCategoryList"
 import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
@@ -14,10 +14,10 @@ type Props = {
     sportActions: GameSportAction[]
 }
 
-export default function FixtureAthleteStats({ fixture, sportActions }: Props) {
+export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
     const { gameKickedOff } = fixtureSumary(fixture);
-    const [search, setSearch] = useState<string>("");
+    // const [search, setSearch] = useState<string>("");
 
     const { selectedTeamId } = useBoxscoreFilter(fixture);
     const {ref, inView} = useInView({triggerOnce: true});
@@ -153,7 +153,7 @@ function defenseBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLis
 
         return (bTackles ?? 0) - (tackles ?? 0)
     }).filter((a) => {
-        const [x, b, c] = a.stats;
+        const [x] = a.stats;
 
         return x > 0;
     });
