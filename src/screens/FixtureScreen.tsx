@@ -84,17 +84,17 @@ export default function FixtureScreen() {
   ];
 
   return (
-    <div className="dark:text-white flex flex-col">
+    <div className="dark:text-white w-full flex flex-col">
       <FixtureHero fixture={fixture} />
 
       {/* {boxScore && <FixtureScreenTab />} */}
       <FixtureScreenHeader fixture={fixture} />
 
       {!loadingSportsActions && (
-        <PageView className="p-4">
+        <PageView className="p-4 w-full">
           <TabView tabHeaderItems={tabItems}>
 
-            <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats">
+            <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
               {sportActions && (sportActions?.length ?? 0) > 0 && <FixtureBoxscoreTab sportActions={sportActions} fixture={fixture} />}
             </TabViewPage>

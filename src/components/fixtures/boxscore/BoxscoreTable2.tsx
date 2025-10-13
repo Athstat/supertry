@@ -34,7 +34,7 @@ function InnerTable() {
 
     return (
         <div
-            className="w-full rounded-2xl overflow-clip bg-white dark:bg-slate-800/60 border-2 dark:border-slate-800"
+            className="w-full overflow-hidden rounded-2xl bg-white dark:bg-slate-800/60 border-2 dark:border-slate-800"
         >
             <div
                 className="p-4 "
@@ -42,14 +42,14 @@ function InnerTable() {
                 <p>{title}</p>
             </div>
 
-            <div className="w-full overflow-y-auto flex-nowrap" >
-                <div className="h-[40px] max-w-full flex flex-row items-center border-b-2 border-slate-200 dark:border-slate-700 border-t-2 " >
+            <div className="w-ful flex flex-col overflow-x-scroll" >
+                <div className="h-[40px] w-[100vh] overflow-visable flex flex-row items-center border-b-2 border-slate-200 dark:border-slate-700 border-t-2 " >
                     
                     {firstColumn && (
                         <TableColumn
                             index={0}
                             column={firstColumn}
-                            className="min-w-[200px] border-r-2 border-slate-100 dark:border-slate-700"
+                            className="min-w-[200px] bg-white dark:bg-slate-800 sticky left-0 border-r-2 border-slate-100 dark:border-slate-700"
                         />
                     )}
 
@@ -58,13 +58,13 @@ function InnerTable() {
                             <TableColumn
                                 column={column}
                                 index={index + 1}
-                                className="min-w-[80px]"
+                                className="min-w-[80px] bg-white dark:bg-slate-800"
                             />
                         )
                     })}
                 </div>
 
-                <div className="flex w-full flex-nowrap flex-col divide-y-2 dark:divide-slate-700/30 divide-slate-1" >
+                <div className="flex w-[100vh] flex-nowrap flex-col divide-y-2 dark:divide-slate-700/30 divide-slate-1" >
                     {records.map((record, index) => {
                         return (
                             <TableRecord
@@ -144,10 +144,15 @@ function TableRecord({ record, index, className }: TableRecordProps) {
     return (
         <div className={twMerge(
             'min-w-full flex flex-row flex-nowrap min-h-full items-center justify-start',
-            isEventhItem && "bg-slate-100 dark:bg-slate-800/80",
+            isEventhItem && "bg-slate-100 dark:bg-slate-800",
+            !isEventhItem && "bg-white dark:bg-[#152134]",
             className
         )} >
-            <div className="flex min-w-[200px] px-2 py-2 flex-row border-r  items-center gap-1 dark:border-slate-600 border-slate-200 " >
+            <div className={twMerge(
+                "flex sticky left-0 min-w-[200px]  px-2 py-2 flex-row border-r  items-center gap-1 dark:border-slate-600 border-slate-200 ",
+                isEventhItem && "bg-slate-100 dark:bg-slate-800",
+                !isEventhItem && "bg-white dark:bg-[#152134]",
+            )} >
                 <p>{playerInitial} {info?.athstat_lastname}</p>
             </div>
 

@@ -54,9 +54,9 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
     return (
 
-        <div ref={ref} className="flex flex-col gap-4 w-full" >
+        <div ref={ref} className="flex flex-col w-full gap-4" >
 
-            <div className="flex flex-col gap-4" >
+            <div className="flex flex-col w-full gap-4" >
                 {/* <div className="flex flex-row items-center justify-start gap-2" >
                     <Table2 />
                     <h1 className="font-bold text-lg" >Boxscore</h1>
