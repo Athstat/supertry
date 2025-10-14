@@ -128,5 +128,6 @@ declare module "lucide-react" {
   export const PauseCircle : CIP;
   export const ChevronsUpDown : CIP;
   export const Repeat : CIP;
+  export const Sun : CIP;
 }
 
