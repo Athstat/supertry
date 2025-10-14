@@ -19,12 +19,12 @@ export default function FixtureHero({ fixture }: Props) {
   const { gameKickedOff } = fixtureSumary(fixture);
 
   return (
-    <div className="w-full rounded-none h-40 bg-gradient-to-br lg:px-[15%] ">
+    <div className="w-full rounded-none h-40 bg-gradient-to-br ">
       <div
         className={twMerge(
           "flex p-2 cursor-pointer w-full  flex-row items-center justify-start",
           "flex flex-row items-center justify-center",
-          " dark:bg-dark-800/30 relative"
+          // " dark:bg-dark-800/30 relative"
         )}
         onClick={() => navigate(-1)}
       >
@@ -39,9 +39,9 @@ export default function FixtureHero({ fixture }: Props) {
       </div>
 
       <div className={twMerge(
-        "flex p-4  dark:bg-[#0D0D0D] border-b-2 dark:border-slate-700/40 flex-row h-max items-center justify-center w-full ",
-        "dark:bg-gradient-to-r dark:from-gray-800/40 dark:via-[#0D0D0D] dark:to-gray-800/40",
-        "bg-gradient-to-r from-slate-100 via-white to-slate-100"
+        "flex p-4  dark:bg-[#0D0D0D]  dark:border-slate-700/40 flex-row h-max items-center justify-center w-full ",
+        // "dark:bg-gradient-to-r dark:from-gray-800/40 dark:via-[#0D0D0D] dark:to-gray-800/40",
+        // "bg-gradient-to-r from-slate-100 via-white to-slate-100"
       )}>
         <div className="flex flex-1 flex-col items-center justify-start gap-3">
           <TeamLogo
@@ -106,8 +106,8 @@ function MatchResultsInformation({ fixture }: Props) {
         {/* Home Team Score */}
 
         <div className={twMerge(
-          "dark:text-white opacity-70 flex-1 text-3xl lg:text-4xl  flex items-center justify-start",
-          homeTeamWon && "font-bold opacity-100"
+          "dark:text-white/50 font-black text-gray-800/40 opacity-70 flex-1 text-3xl lg:text-4xl  flex items-center justify-start",
+          homeTeamWon && "text-black opacity-100 dark:text-white"
         )}>
           <p>{fixture?.team_score}</p>
           {homeTeamWon && (<GoTriangleLeft />)}
@@ -119,8 +119,8 @@ function MatchResultsInformation({ fixture }: Props) {
 
         {/* Away Team Score */}
         <div className={twMerge(
-          "dark:text-white opacity-70 flex-1 text-3xl lg:text-4xl  flex items-center justify-end",
-          awayTeamWon && "font-bold opacity-100"
+          "dark:text-white/50 font-black text-gray-800/40 flex-1 text-3xl lg:text-4xl  flex items-center justify-end",
+          awayTeamWon && "text-black dark:text-white opacity-100"
         )}>
           <p>{fixture?.opposition_score}</p>
           {awayTeamWon && (<GoTriangleLeft />)}

@@ -33,7 +33,7 @@ function InnerTable() {
     const { title, firstColumn, secondaryColumns, records } = useBoxscoreTable();
 
     return (
-        <div className="w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50">
+        <div className="w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50">
             {/* Team Header */}
             {title && (
                 <div className="px-5 py-5 border-b border-slate-200 dark:border-slate-700/50 flex items-center justify-between bg-slate-50 dark:bg-slate-800/30">
@@ -45,13 +45,13 @@ function InnerTable() {
             )}
 
             {/* Table Container */}
-            <div className="w-full flex flex-col overflow-x-auto bg-white dark:bg-slate-800">
+            <div className="w-full flex flex-col overflow-x-auto bg-white dark:bg-[#111418]">
                 {/* Table Header */}
-                <div className="h-[44px] w-full min-w-fit flex flex-row items-center border-b border-slate-200 dark:border-slate-700/40 bg-slate-50 dark:bg-slate-800/40">
+                <div className="h-[44px] w-full min-w-fit flex flex-row items-center border-b border-slate-200 dark:border-slate-700/40 bg-white dark:bg-[#1a1e24]">
                     {firstColumn && (
                         <TableColumn
                             column={firstColumn}
-                            className="w-[180px] min-w-[180px] bg-slate-50 dark:bg-[#1E293B] sticky left-0 z-10 border-r border-slate-200 dark:border-slate-700/40"
+                            className="w-[180px] bg-white dark:bg-[#1a1e24]   min-w-[180px] sticky left-0 z-10 border-r border-slate-200 dark:border-slate-700/40"
                         />
                     )}
 
@@ -145,15 +145,15 @@ function TableRecord({ record, index, className }: TableRecordProps) {
     return (
         <div className={twMerge(
             'w-full min-w-fit flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 transition-colors',
-            !isEvenRow && "bg-white dark:bg-[#1E293B]",
-            isEvenRow && "bg-slate-100 dark:bg-[#27354d]",
+            !isEvenRow && "bg-white dark:bg-[#181e26]",
+            isEvenRow && "bg-slate-100 dark:bg-[#1c2534]",
             className
         )}>
             {/* Player Name Column - Sticky */}
             <div className={twMerge(
                 "flex sticky left-0 z-10 w-[180px] min-w-[180px] px-3 py-3 flex-row border-r border-slate-200 dark:border-slate-700/40 items-center gap-2",
-                !isEvenRow && "bg-white dark:bg-[#1E293B]",
-                isEvenRow && "bg-slate-100 dark:bg-[#27354d]",
+                !isEvenRow && "bg-white dark:bg-[#181e26]",
+                isEvenRow && "bg-slate-100 dark:bg-[#1c2534]",
             )}>
                 <p className="text-sm font-medium truncate">
                     {playerInitial} {info?.athstat_lastname}

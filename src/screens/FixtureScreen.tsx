@@ -91,13 +91,14 @@ export default function FixtureScreen() {
 
   return (
     <div className="dark:text-white w-full flex flex-col">
-      <FixtureHero fixture={fixture} />
 
-      {/* {boxScore && <FixtureScreenTab />} */}
-      <FixtureScreenHeader fixture={fixture} />
+
 
       {!loadingSportsActions && (
         <PageView className="w-full">
+          <FixtureHero fixture={fixture} />
+          <FixtureScreenHeader fixture={fixture} />
+
           <TabView tabHeaderItems={tabItems}>
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
