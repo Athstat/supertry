@@ -20,7 +20,7 @@ import { ErrorState } from '../components/ui/ErrorState';
 import FixtureHero from '../components/fixtures/FixtureHero';
 
 export default function FixtureScreen() {
-  
+
   const { fixtureId } = useParams();
 
   const fixtureKey = fixtureId ? `fixture/${fixtureId}` : null;
@@ -51,35 +51,41 @@ export default function FixtureScreen() {
   const { gameKickedOff } = fixtureSumary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
-    // {
-    //   label: 'Kick Off',
-    //   tabKey: 'kick-off',
-    //   disabled: false,
-    // },
+    {
+      label: 'Kick Off',
+      tabKey: 'kick-off',
+      disabled: false,
+      className: "flex-1"
+    },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
       disabled: !sportActions || sportActions.length === 0,
+      className: "flex-1"
     },
     {
       label: 'Team Stats',
       tabKey: 'team-stats',
       disabled: !teamActions || teamActions.length === 0 || !gameKickedOff,
+      className: "flex-1"
     },
     {
       label: 'Top Player',
       tabKey: 'motm',
       disabled: false,
+      className: "flex-1"
     },
     {
       label: 'Chat',
       tabKey: 'chat',
       disabled: true,
+      className: "flex-1"
     },
     {
       label: 'Team Rosters',
       tabKey: 'rosters',
       disabled: false,
+      className: "flex-1"
     },
   ];
 
