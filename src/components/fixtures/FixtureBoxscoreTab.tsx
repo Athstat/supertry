@@ -77,7 +77,9 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
                     { lable: "Carr" },
                     { lable: "Tckls" },
                     { lable: "Tckl%" },
-                    { lable: "PCM" }, { lable: "Ruck Arr" }
+                    { lable: "PCM" },
+                    { lable: "Ruck Arr" },
+                    {lable: "D.Beaten"}
                 ]}
                 records={allStatsList}
             />
@@ -131,6 +133,7 @@ function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLi
         const tackleSuccess = stats.find((b) => b.action === "tackle_success")?.action_count;
         const postContactMetres = stats.find((b) => b.action === "post_contact_metres")?.action_count;
         const ruckArrivals = stats.find((b) => b.action === "ruck_arrival")?.action_count;
+        const defendersBeaten = stats.find((b) => b.action === "defenders_beaten")?.action_count;
 
         const tacklingPerc = Math.floor((tackleSuccess ?? 0) * 100)
 
@@ -144,6 +147,7 @@ function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLi
                 tacklingPerc + "%",
                 Math.floor(postContactMetres ?? 0),
                 Math.floor(ruckArrivals ?? 0),
+                Math.floor(defendersBeaten ?? 0)
             ],
             athleteId: a
         }

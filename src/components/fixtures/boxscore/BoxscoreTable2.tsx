@@ -60,7 +60,7 @@ function InnerTable() {
                             <TableColumn
                                 key={column.key || index}
                                 column={column}
-                                className="flex-1 min-w-[60px] justify-center"
+                                className="flex-1 min-w-[80px] justify-center"
                             />
                         )
                     })}
@@ -166,7 +166,7 @@ function TableRecord({ record, index, className }: TableRecordProps) {
                     <div
                         key={statIndex}
                         className={twMerge(
-                            "flex-1 min-w-[60px] flex flex-row items-center justify-center px-3 py-3",
+                            "flex-1 min-w-[80px] flex flex-row items-center justify-center px-3 py-3",
                         )}
                     >
                         <SecondaryText className="font-medium text-sm">{stat}</SecondaryText>
