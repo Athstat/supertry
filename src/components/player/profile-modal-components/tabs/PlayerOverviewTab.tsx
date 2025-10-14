@@ -1,4 +1,3 @@
-
 import { calculateAge } from '../../../../utils/playerUtils';
 import PlayerIconsCard from '../PlayerIconsCard';
 import Experimental from '../../../shared/ab_testing/Experimental';
@@ -14,10 +13,11 @@ import { isNumeric } from '../../../../utils/stringUtils';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import RelatedPlayersList from '../RelatedPlayersList';
 import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
+import PowerRankingChartTab from './PRChartTab';
 
 type Props = {
   player: IProAthlete;
-}
+};
 
 // Converts centimeters to feet and inches string, e.g., 170 -> 5'7"
 function cmToFeetInches(cm: number): string {
@@ -35,65 +35,61 @@ function kgToLbs(kg: number): string {
 
 /** Renders a player profile overview tab */
 export default function PlayerOverviewTab({ player }: Props) {
-
   const { currentSeason } = usePlayerData();
-  const nationalityIsValid = player.nationality && !isNumeric(player.nationality ?? "");
+  const nationalityIsValid = player.nationality && !isNumeric(player.nationality ?? '');
 
   return (
     <div className="flex flex-col gap-4 pb-6">
+      <div className="flex flex-row items-center gap-2">
+        {player.date_of_birth && (
+          <PlayerInfoCard
+            value={`${calculateAge(player.date_of_birth)} Years`}
+            label={format(player.date_of_birth, 'dd MMMM yyyy')}
+          />
+        )}
 
-      <div className='flex flex-row items-center gap-2' >
-
-        {player.date_of_birth && <PlayerInfoCard
-          value={`${calculateAge(player.date_of_birth)} Years`}
-          label={format(player.date_of_birth, 'dd MMMM yyyy')}
-        />}
-
-        {nationalityIsValid && <PlayerInfoCard
-          value={`${player.nationality}`}
-          label={player.birth_place ? `From ${player.birth_place}` : 'National Team'}
-        />}
+        {nationalityIsValid && (
+          <PlayerInfoCard
+            value={`${player.nationality}`}
+            label={player.birth_place ? `From ${player.birth_place}` : 'National Team'}
+          />
+        )}
       </div>
 
       {player.team && <PlayerTeamCard player={player} />}
 
+      {player.height && player.weight && (
+        <div className="flex flex-col gap-2">
+          <SecondaryText className="flex flex-row items-center gap-2">
+            <Dumbbell className="w-4 h-4" />
+            <p>Physique</p>
+          </SecondaryText>
 
-      {player.height && player.weight && <div className='flex flex-col gap-2' >
-        <SecondaryText className='flex flex-row items-center gap-2' >
-          <Dumbbell className='w-4 h-4' />
-          <p>Physique</p>
-        </SecondaryText>
+          <div className="flex flex-row items-center gap-2">
+            {player.height && (
+              <PlayerInfoCard
+                value={`${player.height} cm / ${cmToFeetInches(player.height)}`}
+                label={'Height'}
+              />
+            )}
 
-        <div className='flex flex-row items-center gap-2' >
-
-          {player.height && <PlayerInfoCard
-            value={`${player.height} cm / ${cmToFeetInches(player.height)}`}
-            label={'Height'}
-          />}
-
-          {player.weight && <PlayerInfoCard
-            value={`${player.weight} kg / ${kgToLbs(player.weight)}`}
-            label={'Weight'}
-          />}
+            {player.weight && (
+              <PlayerInfoCard
+                value={`${player.weight} kg / ${kgToLbs(player.weight)}`}
+                label={'Weight'}
+              />
+            )}
+          </div>
         </div>
-
-      </div>}
+      )}
 
       {/* <PlayerIconsRow 
       player={player}
      /> */}
 
-      {currentSeason && (
-        <PlayerIconsRow
-          player={player}
-          season={currentSeason}
-          size='sm'
-        />
-      )}
+      {currentSeason && <PlayerIconsRow player={player} season={currentSeason} size="sm" />}
 
-      <CoachScrummyPlayerReport
-        player={player}
-      />
+      <CoachScrummyPlayerReport player={player} />
 
       {/* {currentSeason && (
         <PlayerSeasonStatsCard
@@ -102,13 +98,11 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       )} */}
 
-
-      {currentSeason && <Experimental>
-        <PlayerIconsCard
-          player={player}
-          season={currentSeason}
-        />
-      </Experimental>}
+      {currentSeason && (
+        <Experimental>
+          <PlayerIconsCard player={player} season={currentSeason} />
+        </Experimental>
+      )}
 
       {/* <Experimental>
         <RelatedPlayersList
@@ -116,7 +110,8 @@ export default function PlayerOverviewTab({ player }: Props) {
         />
       </Experimental> */}
 
+      {/* Power Ranking Chart */}
+      <PowerRankingChartTab player={player} />
     </div>
   );
-};
-
+}
