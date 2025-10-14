@@ -51,7 +51,7 @@ export type GameSportAction = {
 
 export type BoxscoreListRecordItem = {
     athleteId: string,
-    stats: number[]
+    stats: (number | string)[]
 }
 
 export type BoxscoreHeader = {

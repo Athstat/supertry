@@ -70,10 +70,14 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
             <BoxscoreTable2
                 title={selectedTeam?.athstat_name}
                 columns={[
-                    { lable: "Player" }, { lable: "Tries" },
-                    { lable: "Pts" }, { lable: "Carr" },
+                    { lable: "Player" },
+                    { lable: "Tries" },
+                    { lable: "Pts" },
+                    { lable: "Asst" },
+                    { lable: "Carr" },
                     { lable: "Tckls" },
-                    { lable: "PCM" }
+                    { lable: "Tckl%" },
+                    { lable: "PCM" }, { lable: "Ruck Arr" }
                 ]}
                 records={allStatsList}
             />
@@ -86,7 +90,7 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
             <BoxscoreTable2
                 title="Defense"
-                columns={[{ lable: "Player" }, { lable: "Tkls" }, { lable: "DT" }, { lable: "T/0s Won" }]}
+                columns={[{ lable: "Player" }, { lable: "Tkls" }, { lable: "Tkl%" }, { lable: "DT" }, { lable: "T/0s Won" }]}
                 records={defenseList}
             />
 
@@ -121,17 +125,25 @@ function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLi
 
         const tries = stats.find((b) => b.action === "tries")?.action_count;
         const points = stats.find((b) => b.action === "points")?.action_count;
+        const tryAssits = stats.find((b) => b.action === "try_assits")?.action_count;
         const passes = stats.find((b) => b.action === "carry_dominant")?.action_count;
         const tackles = stats.find((b) => b.action === "tackles")?.action_count;
+        const tackleSuccess = stats.find((b) => b.action === "tackle_success")?.action_count;
         const postContactMetres = stats.find((b) => b.action === "post_contact_metres")?.action_count;
+        const ruckArrivals = stats.find((b) => b.action === "ruck_arrival")?.action_count;
+
+        const tacklingPerc = Math.floor((tackleSuccess ?? 0) * 100)
 
         return {
             stats: [
                 Math.floor(tries ?? 0),
                 Math.floor(points ?? 0),
+                Math.floor(tryAssits ?? 0),
                 Math.floor(passes ?? 0),
-                Math.floor(tackles ?? 0),
+                `${Math.floor(tackles ?? 0)}`,
+                tacklingPerc + "%",
                 Math.floor(postContactMetres ?? 0),
+                Math.floor(ruckArrivals ?? 0),
             ],
             athleteId: a
         }
@@ -139,7 +151,7 @@ function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLi
         const [, points] = a.stats;
         const [, bPoints] = b.stats;
 
-        return (bPoints ?? 0) - (points ?? 0)
+        return ((bPoints as number) ?? 0) - ((points as number) ?? 0)
     });
 
 
@@ -193,22 +205,30 @@ function defenseBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLis
         const stats = bs.filter((b) => b.athlete_id === a);
 
         const tackles = stats.find((b) => b.action === "tackles")?.action_count;
+        const tackleSuccess = stats.find((b) => b.action === "tackle_success")?.action_count;
         const dominantTackles = stats.find((b) => b.action === "dominant_tackles")?.action_count;
         const turnoversWon = stats.find((b) => b.action === "turnover_won")?.action_count;
 
+        const tacklingPerc = Math.floor((tackleSuccess ?? 0) * 100)
+
         return {
-            stats: [Math.floor(tackles ?? 0), Math.floor(dominantTackles ?? 0), Math.floor(turnoversWon ?? 0)],
+            stats: [
+                Math.floor(tackles ?? 0),
+                `${tacklingPerc}%`,
+                Math.floor(dominantTackles ?? 0),
+                Math.floor(turnoversWon ?? 0)
+            ],
             athleteId: a
         }
     }).sort((a, b) => {
         const [tackles] = a.stats;
         const [bTackles] = b.stats;
 
-        return (bTackles ?? 0) - (tackles ?? 0)
+        return ((bTackles as number) ?? 0) - ((tackles as number) ?? 0)
     }).filter((a) => {
         const [x] = a.stats;
 
-        return x > 0;
+        return (x as number) > 0;
     });
 
 

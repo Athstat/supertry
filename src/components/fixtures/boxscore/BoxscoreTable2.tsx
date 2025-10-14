@@ -33,21 +33,21 @@ function InnerTable() {
     const { title, firstColumn, secondaryColumns, records } = useBoxscoreTable();
 
     return (
-        <div className="w-full overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50">
+        <div className="w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50">
             {/* Team Header */}
             {title && (
-                <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700/50 flex items-center justify-between bg-slate-50 dark:bg-slate-800/30">
+                <div className="px-5 py-5 border-b border-slate-200 dark:border-slate-700/50 flex items-center justify-between bg-slate-50 dark:bg-slate-800/30">
                     <p className="font-semibold text-base">{title}</p>
-                    <button className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
+                    {/* <button className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
                         All Stats
-                    </button>
+                    </button> */}
                 </div>
             )}
 
             {/* Table Container */}
             <div className="w-full flex flex-col overflow-x-auto bg-white dark:bg-slate-800">
                 {/* Table Header */}
-                <div className="h-[44px] w-full min-w-max flex flex-row items-center border-b border-slate-200 dark:border-slate-700/40 bg-slate-50 dark:bg-slate-800/40">
+                <div className="h-[44px] w-full min-w-fit flex flex-row items-center border-b border-slate-200 dark:border-slate-700/40 bg-slate-50 dark:bg-slate-800/40">
                     {firstColumn && (
                         <TableColumn
                             column={firstColumn}
@@ -67,7 +67,7 @@ function InnerTable() {
                 </div>
 
                 {/* Table Body */}
-                <div className="flex w-full min-w-max flex-col">
+                <div className="flex w-full min-w-fit flex-col">
                     {records.map((record, index) => {
                         return (
                             <TableRecord
@@ -144,7 +144,7 @@ function TableRecord({ record, index, className }: TableRecordProps) {
 
     return (
         <div className={twMerge(
-            'w-full min-w-max flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors',
+            'w-full min-w-fit flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors',
             !isEvenRow && "bg-white dark:bg-[#1E293B]",
             isEvenRow && "bg-slate-100 dark:bg-[#27354d]",
             className
@@ -152,6 +152,8 @@ function TableRecord({ record, index, className }: TableRecordProps) {
             {/* Player Name Column - Sticky */}
             <div className={twMerge(
                 "flex sticky left-0 z-10 w-[180px] min-w-[180px] px-3 py-3 flex-row border-r border-slate-200 dark:border-slate-700/40 items-center gap-2",
+                !isEvenRow && "bg-white dark:bg-[#1E293B]",
+                isEvenRow && "bg-slate-100 dark:bg-[#27354d]",
             )}>
                 <p className="text-sm font-medium truncate">
                     {playerInitial} {info?.athstat_lastname}
