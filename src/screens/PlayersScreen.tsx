@@ -64,7 +64,7 @@ export const PlayerScreenContent = () => {
     if (selectedSeason?.id) return selectedSeason.id;
     if (selectedFantasySeasonId && selectedFantasySeasonId !== 'all')
       return selectedFantasySeasonId;
-    return undefined;
+    return '9e74bed3-9ea2-5f41-a906-434d0d3e8f4e';
   }, [selectedSeason?.id, selectedFantasySeasonId]);
 
   // Fetch players for the selected season when a season is chosen (Overview uses context athletes)
@@ -210,9 +210,9 @@ export const PlayerScreenContent = () => {
         </div>
 
         {/* Fantasy Season Tabs - identical to Fantasy Leagues */}
-        <div className="sticky top-16 z-40 w-full -mx-5 py-2 bg-transparent border-b-0 overflow-visible">
+        {/* <div className="sticky top-16 z-40 w-full -mx-5 py-2 bg-transparent border-b-0 overflow-visible">
           <PlayersSeasonSelector />
-        </div>
+        </div> */}
 
         {/* <PlayersCompareButton
           className={twMerge(isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700')}

@@ -11,7 +11,7 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
     error,
   } = useSWR(key, () => fantasyAthleteService.getRoundSquadReport(teamId, trackingId));
 
-  console.log('report: ', report);
+  //console.log('report: ', report);
 
   //const isAvailable = report && report.availability === 'AVAILABLE';
   const isAvailable =

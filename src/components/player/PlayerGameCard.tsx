@@ -145,7 +145,9 @@ export function PlayerGameCard({
 
   const playerId = player.athlete_id || player.athlete?.tracking_id || player.tracking_id;
 
-  const { notAvailable } = usePlayerSquadReport(userTeam?.id, playerId);
+  const { notAvailable } = !isPlayersScreen
+    ? usePlayerSquadReport(userTeam?.id, playerId)
+    : { notAvailable: false };
 
   return (
     <div

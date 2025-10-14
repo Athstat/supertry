@@ -80,13 +80,9 @@ export function DashboardScreen() {
     };
   }, []);
 
-  // Keep settings note in sync with denied/granted status
+  // Keep settings note visible whenever notifications are not granted
   useEffect(() => {
-    if (pushPermissionStatus === 'denied') {
-      setShowSettingsNote(true);
-    } else if (pushPermissionStatus === 'granted') {
-      setShowSettingsNote(false);
-    }
+    setShowSettingsNote(pushPermissionStatus !== 'granted');
   }, [pushPermissionStatus]);
 
   const handleBannerClick = () => {
@@ -95,6 +91,32 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-8 p-4">
+      {isMobileWebView() && showSettingsNote && (
+        <div
+          role="alert"
+          className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-3 border-y border-yellow-200 bg-yellow-50 text-yellow-900 dark:border-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-100"
+        >
+          <div className="mx-auto max-w-[100vw] px-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-sm">
+              <span className="font-semibold">Enable push notifications.</span> Notifications are
+              disabled. Turn them on to get match updates and alerts.
+            </div>
+            {isMobileWebView() && (
+              <PrimaryButton
+                className="shrink-0"
+                onClick={async () => {
+                  const opened = await openSystemNotificationSettings();
+                  if (!opened) {
+                    console.warn('Could not open system settings from web environment');
+                  }
+                }}
+              >
+                Go to settings
+              </PrimaryButton>
+            )}
+          </div>
+        </div>
+      )}
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Home />
@@ -106,7 +128,7 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      {showSettingsNote && (
+      {!isMobileWebView() && showSettingsNote && (
         <div
           role="alert"
           className="-mx-4 px-4 py-3 border-y border-yellow-200 bg-yellow-50 text-yellow-900 dark:border-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-100"
