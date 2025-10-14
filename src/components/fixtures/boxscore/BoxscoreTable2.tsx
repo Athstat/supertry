@@ -33,41 +33,45 @@ function InnerTable() {
     const { title, firstColumn, secondaryColumns, records } = useBoxscoreTable();
 
     return (
-        <div
-            className="w-full overflow-hidden rounded-2xl bg-white dark:bg-slate-800/60 border-2 dark:border-slate-800"
-        >
-            <div
-                className="p-4 "
-            >
-                <p>{title}</p>
-            </div>
+        <div className="w-full overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50">
+            {/* Team Header */}
+            {title && (
+                <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700/50 flex items-center justify-between bg-slate-50 dark:bg-slate-800/30">
+                    <p className="font-semibold text-base">{title}</p>
+                    <button className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
+                        All Stats
+                    </button>
+                </div>
+            )}
 
-            <div className="w-ful flex flex-col overflow-x-scroll bg-white dark:bg-slate-800 " >
-                <div className="h-[40px] w-[100vh] overflow-visable flex flex-row items-center border-b-2 border-slate-200 dark:border-slate-700 border-t-2 " >
-                    
+            {/* Table Container */}
+            <div className="w-full flex flex-col overflow-x-auto bg-white dark:bg-slate-800">
+                {/* Table Header */}
+                <div className="h-[44px] min-w-max flex flex-row items-center border-b border-slate-200 dark:border-slate-700/40 bg-slate-50 dark:bg-slate-800/40">
                     {firstColumn && (
                         <TableColumn
-                            index={0}
                             column={firstColumn}
-                            className="min-w-[200px] bg-white dark:bg-slate-800 sticky left-0 border-r-2 border-slate-100 dark:border-slate-700"
+                            className="min-w-[180px] bg-slate-50 dark:bg-[#1E293B] sticky left-0 z-10 border-r border-slate-200 dark:border-slate-700/40"
                         />
                     )}
 
                     {secondaryColumns.map((column, index) => {
                         return (
                             <TableColumn
+                                key={column.key || index}
                                 column={column}
-                                index={index + 1}
-                                className="min-w-[80px] bg-white dark:bg-slate-800"
+                                className="min-w-[60px] justify-center"
                             />
                         )
                     })}
                 </div>
 
-                <div className="flex w-[100vh] flex-nowrap flex-col divide-y-2 dark:divide-slate-700/30 divide-slate-1" >
+                {/* Table Body */}
+                <div className="flex min-w-max flex-col">
                     {records.map((record, index) => {
                         return (
                             <TableRecord
+                                key={record.athleteId || index}
                                 record={record}
                                 index={index}
                             />
@@ -82,20 +86,17 @@ function InnerTable() {
 
 type TableColumnProps = {
     column: BoxscoreHeader,
-    index: number,
     className?: string
 }
-function TableColumn({ column, index, className }: TableColumnProps) {
-
-
+function TableColumn({ column, className }: TableColumnProps) {
     return (
-        <div key={column.key || index}
+        <div
             className={twMerge(
-                'px-2 py-1 h-full flex flex-row items-center justify-start',
+                'px-3 py-2 h-full flex flex-row items-center justify-start',
                 className
             )}
         >
-            <SecondaryText className="font-semibold text-sm " >{column.lable}</SecondaryText>
+            <SecondaryText className="font-bold text-xs uppercase tracking-wide">{column.lable}</SecondaryText>
         </div>
     )
 }
@@ -139,29 +140,38 @@ function TableRecord({ record, index, className }: TableRecordProps) {
     const playerInitial = athstat_firstname && athstat_firstname.length >= 1 ?
         `${athstat_firstname[0]}.` : "";
 
-    const isEventhItem = ((index) % 2) === 0;
+    const isEvenRow = ((index) % 2) === 0;
 
     return (
         <div className={twMerge(
-            'min-w-full flex flex-row flex-nowrap min-h-full items-center justify-start',
-            isEventhItem && "bg-slate-100 dark:bg-slate-800",
-            !isEventhItem && "bg-white dark:bg-[#152134]",
+            'min-w-full flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors',
+            isEvenRow && "bg-white dark:bg-slate-800/20",
+            !isEvenRow && "bg-slate-50 dark:bg-slate-800/40",
             className
-        )} >
+        )}>
+            {/* Player Name Column - Sticky */}
             <div className={twMerge(
-                "flex sticky left-0 min-w-[200px]  px-2 py-2 flex-row border-r  items-center gap-1 dark:border-slate-600 border-slate-200 ",
-                isEventhItem && "bg-slate-100 dark:bg-slate-800",
-                !isEventhItem && "bg-white dark:bg-[#152134]",
-            )} >
-                <p>{playerInitial} {info?.athstat_lastname}</p>
+                "flex sticky left-0 z-10 min-w-[180px] px-3 py-3 flex-row border-r border-slate-200 dark:border-slate-700/40 items-center gap-2",
+                isEvenRow && "bg-white dark:bg-[#1E293B]",
+                !isEvenRow && "bg-slate-50 dark:bg-[#27354d]",
+            )}>
+                <p className="text-sm font-medium truncate">
+                    {playerInitial} {info?.athstat_lastname}
+                </p>
             </div>
 
-            {record.stats.map((stat) => {
+            {/* Stats Columns */}
+            {record.stats.map((stat, statIndex) => {
                 return (
                     <div
-                        className="min-w-[80px] flex flex-row items-center justify-start px-2"
+                        key={statIndex}
+                        className={twMerge(
+                            "min-w-[60px] flex flex-row items-center justify-center px-3 py-3",
+                            isEvenRow && "bg-white dark:bg-[#1E293B]",
+                            !isEvenRow && "bg-slate-50 dark:bg-[#27354d]",
+                        )}
                     >
-                        <SecondaryText className="font-semibold" >{stat}</SecondaryText>
+                        <SecondaryText className="font-medium text-sm">{stat}</SecondaryText>
                     </div>
                 )
             })}
