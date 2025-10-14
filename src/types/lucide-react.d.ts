@@ -125,5 +125,6 @@ declare module "lucide-react" {
   export const Video : CIP;
   export const BadgeInfo : CIP;
   export const TriangleAlert : CIP;
+  export const Sun : CIP;
 }
 

@@ -6,30 +6,36 @@ import SecondaryText from "../../shared/SecondaryText"
 import { useCallback, useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import NoContentCard from "../../shared/NoContentMessage"
-
-export type BoxscoreListRecordItem = {
-    athleteId: string,
-    stats: number[]
-}
-
-type BoxscoreHeader = {
-    lable: string,
-    key?: string,
-    tooltip?: string
-}
+import { BoxscoreHeader, BoxscoreListRecordItem } from "../../../types/boxScore"
+import BoxscoreTableProvider, { useBoxscoreTable } from "./BoxscoreTableProvider"
 
 type BoxscoreCategoryListProps = {
     columnHeaders: BoxscoreHeader[],
-    list: BoxscoreListRecordItem[],
+    records: BoxscoreListRecordItem[],
     title?: string,
     noContentMessage?: string
 }
 
 /** Renders a boxscore table */
-export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noContentMessage }: BoxscoreCategoryListProps) {
+export function BoxscoreTable({ columnHeaders: columns, records, title, noContentMessage }: BoxscoreCategoryListProps) {
 
-    // const [showMore, setShowMore] = useState(false);
-    const maxIndex = list.length - 1;
+    return (
+        <BoxscoreTableProvider
+            columns={columns}
+            records={records}
+            tableTitle={title}
+            noContentMessage={noContentMessage}
+        >
+            <InnnerTable />
+        </BoxscoreTableProvider>
+    )
+
+}
+
+function InnnerTable() {
+
+    const {records, title, columns, noContentMessage} = useBoxscoreTable();
+    const maxIndex = records.length - 1;
 
     const [notRenderedCount, setNotRenderedCount] = useState(0);
 
@@ -39,7 +45,7 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noConte
 
     useEffect(() => {
         setNotRenderedCount(0);
-    }, [list]);
+    }, [records]);
 
     return (
         <div className="flex flex-col gap-2" >
@@ -57,7 +63,7 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noConte
 
                     <div className="flex  flex-row items-center justify-start gap-4 px-2" >
 
-                        {statHeaders.map((h, index) => {
+                        {columns.map((h, index) => {
                             return (
                                 <p key={index} className="w-[40px] truncate text-tart text-sm" >{h.lable}</p>
                             )
@@ -66,7 +72,7 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noConte
                 </div>
 
                 <div className="flex divide-y dark:divide-gray-700/30 divide-gray-300 flex-col" >
-                    {list.map((i, index) => {
+                    {records.map((i, index) => {
 
                         if (index > maxIndex) return;
 
@@ -80,7 +86,7 @@ export function BoxscoreTable({ columnHeaders: statHeaders, list, title, noConte
                         )
                     })}
 
-                    {(list.length === 0 || (list.length > 0 && notRenderedCount >= list.length )) && (
+                    {(records.length === 0 || (records.length > 0 && notRenderedCount >= records.length)) && (
                         <div>
                             <NoContentCard
                                 message={noContentMessage || `Whoops, no ${title} stats yet!`}
@@ -133,13 +139,13 @@ function AthleteBoxscoreRecord({ item, onFailRender }: AthleteBoxscoreItemProps)
 
     return (
         <div className={twMerge(
-            "p-2",
+            "px-2",
             // index % 2 == 1 && "dark:bg-slate-800/40  bg-slate-100"
         )} >
 
-            <div className="flex flex-row items-center justify-between gap-2" >
+            <div className="flex flex-row items-center justify-between gap-2 " >
 
-                <div className="flex flex-row overflow-hidden items-center gap-4" >
+                <div className="flex py-2 flex-row border-r w-full overflow-hidden items-center gap-4" >
 
                     {/* {index !== undefined && <SecondaryText>
                         {index + 1}
@@ -157,14 +163,14 @@ function AthleteBoxscoreRecord({ item, onFailRender }: AthleteBoxscoreItemProps)
                     </div>
                 </div>
 
-                <SecondaryText className="flex text-base gap-4 font-medium flex-row items-center" >
+                <div className="flex text-base gap-4 font-medium flex-row items-center" >
 
                     {item.stats.map((s) => {
                         return (
-                            <p className="w-[40px] text-sm text-start" >{s}</p>
+                            <SecondaryText className="w-[40px] text-sm text-start" >{s}</SecondaryText>
                         )
                     })}
-                </SecondaryText>
+                </div>
             </div>
         </div>
     )
