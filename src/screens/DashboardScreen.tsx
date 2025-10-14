@@ -80,13 +80,9 @@ export function DashboardScreen() {
     };
   }, []);
 
-  // Keep settings note in sync with denied/granted status
+  // Keep settings note visible whenever notifications are not granted
   useEffect(() => {
-    if (pushPermissionStatus === 'denied') {
-      setShowSettingsNote(true);
-    } else if (pushPermissionStatus === 'granted') {
-      setShowSettingsNote(false);
-    }
+    setShowSettingsNote(pushPermissionStatus !== 'granted');
   }, [pushPermissionStatus]);
 
   const handleBannerClick = () => {
