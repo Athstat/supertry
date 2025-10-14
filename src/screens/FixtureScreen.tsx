@@ -91,7 +91,7 @@ export default function FixtureScreen() {
       <FixtureScreenHeader fixture={fixture} />
 
       {!loadingSportsActions && (
-        <PageView className="p-4 w-full">
+        <PageView className="w-full">
           <TabView tabHeaderItems={tabItems}>
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
