@@ -144,7 +144,7 @@ function TableRecord({ record, index, className }: TableRecordProps) {
 
     return (
         <div className={twMerge(
-            'w-full min-w-fit flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors',
+            'w-full min-w-fit flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 transition-colors',
             !isEvenRow && "bg-white dark:bg-[#1E293B]",
             isEvenRow && "bg-slate-100 dark:bg-[#27354d]",
             className
