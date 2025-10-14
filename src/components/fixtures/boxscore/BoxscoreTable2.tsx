@@ -151,7 +151,7 @@ function TableRecord({ record, index, className }: TableRecordProps) {
         )}>
             {/* Player Name Column - Sticky */}
             <div className={twMerge(
-                "flex sticky left-0 z-10 w-[180px] min-w-[180px] px-3 py-3 flex-row border-r border-slate-200 dark:border-slate-700/40 items-center gap-2",
+                "flex sticky left-0 z-10 w-[180px] min-w-[180px] px-3 py-3 flex-row border-r-2 border-slate-200 dark:border-slate-700/40 items-center gap-2",
                 !isEvenRow && "bg-white dark:bg-[#181e26]",
                 isEvenRow && "bg-slate-100 dark:bg-[#1c2534]",
             )}>

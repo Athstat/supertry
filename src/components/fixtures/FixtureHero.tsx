@@ -19,11 +19,11 @@ export default function FixtureHero({ fixture }: Props) {
   const { gameKickedOff } = fixtureSumary(fixture);
 
   return (
-    <div className="w-full rounded-none h-40 bg-gradient-to-br ">
+    <div className="w-full rounded-none h-44 bg-gradient-to-br ">
       <div
         className={twMerge(
           "flex p-2 cursor-pointer w-full  flex-row items-center justify-start",
-          "flex flex-row items-center justify-center",
+          "flex flex-row items-center justify-center relative",
           // " dark:bg-dark-800/30 relative"
         )}
         onClick={() => navigate(-1)}
@@ -34,7 +34,7 @@ export default function FixtureHero({ fixture }: Props) {
         </div>
 
         <div>
-          <SecondaryText>{fixture.competition_name}, Week {fixture.round}</SecondaryText>
+          <SecondaryText className="text-xs" >{fixture.competition_name}, Week {fixture.round}</SecondaryText>
         </div>
       </div>
 
