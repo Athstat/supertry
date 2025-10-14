@@ -47,11 +47,11 @@ function InnerTable() {
             {/* Table Container */}
             <div className="w-full flex flex-col overflow-x-auto bg-white dark:bg-slate-800">
                 {/* Table Header */}
-                <div className="h-[44px] min-w-max flex flex-row items-center border-b border-slate-200 dark:border-slate-700/40 bg-slate-50 dark:bg-slate-800/40">
+                <div className="h-[44px] w-full min-w-max flex flex-row items-center border-b border-slate-200 dark:border-slate-700/40 bg-slate-50 dark:bg-slate-800/40">
                     {firstColumn && (
                         <TableColumn
                             column={firstColumn}
-                            className="min-w-[180px] bg-slate-50 dark:bg-[#1E293B] sticky left-0 z-10 border-r border-slate-200 dark:border-slate-700/40"
+                            className="w-[180px] min-w-[180px] bg-slate-50 dark:bg-[#1E293B] sticky left-0 z-10 border-r border-slate-200 dark:border-slate-700/40"
                         />
                     )}
 
@@ -60,14 +60,14 @@ function InnerTable() {
                             <TableColumn
                                 key={column.key || index}
                                 column={column}
-                                className="min-w-[60px] justify-center"
+                                className="flex-1 min-w-[60px] justify-center"
                             />
                         )
                     })}
                 </div>
 
                 {/* Table Body */}
-                <div className="flex min-w-max flex-col">
+                <div className="flex w-full min-w-max flex-col">
                     {records.map((record, index) => {
                         return (
                             <TableRecord
@@ -144,16 +144,14 @@ function TableRecord({ record, index, className }: TableRecordProps) {
 
     return (
         <div className={twMerge(
-            'min-w-full flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors',
-            isEvenRow && "bg-white dark:bg-slate-800/20",
-            !isEvenRow && "bg-slate-50 dark:bg-slate-800/40",
+            'w-full min-w-max flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors',
+            !isEvenRow && "bg-white dark:bg-[#1E293B]",
+            isEvenRow && "bg-slate-100 dark:bg-[#27354d]",
             className
         )}>
             {/* Player Name Column - Sticky */}
             <div className={twMerge(
-                "flex sticky left-0 z-10 min-w-[180px] px-3 py-3 flex-row border-r border-slate-200 dark:border-slate-700/40 items-center gap-2",
-                isEvenRow && "bg-white dark:bg-[#1E293B]",
-                !isEvenRow && "bg-slate-50 dark:bg-[#27354d]",
+                "flex sticky left-0 z-10 w-[180px] min-w-[180px] px-3 py-3 flex-row border-r border-slate-200 dark:border-slate-700/40 items-center gap-2",
             )}>
                 <p className="text-sm font-medium truncate">
                     {playerInitial} {info?.athstat_lastname}
@@ -166,9 +164,7 @@ function TableRecord({ record, index, className }: TableRecordProps) {
                     <div
                         key={statIndex}
                         className={twMerge(
-                            "min-w-[60px] flex flex-row items-center justify-center px-3 py-3",
-                            isEvenRow && "bg-white dark:bg-[#1E293B]",
-                            !isEvenRow && "bg-slate-50 dark:bg-[#27354d]",
+                            "flex-1 min-w-[60px] flex flex-row items-center justify-center px-3 py-3",
                         )}
                     >
                         <SecondaryText className="font-medium text-sm">{stat}</SecondaryText>
