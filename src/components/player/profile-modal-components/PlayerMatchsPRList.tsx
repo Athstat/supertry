@@ -3,7 +3,7 @@ import { powerRankingsService } from '../../../services/powerRankingsService';
 import { LoadingState } from '../../ui/LoadingState';
 import { SingleMatchPowerRanking } from '../../../types/powerRankings';
 import RoundedCard from '../../shared/RoundedCard';
-import { Calendar } from 'lucide-react';
+import { Calendar, ChevronRight } from 'lucide-react';
 import TeamLogo from '../../team/TeamLogo';
 import { twMerge } from 'tailwind-merge';
 import { format } from 'date-fns';
@@ -11,6 +11,12 @@ import PillTag from '../../shared/PillTap';
 import SecondaryText from '../../shared/SecondaryText';
 import { IProAthlete } from '../../../types/athletes';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { swrFetchKeys } from '../../../utils/swrKeys';
+import PlayerSeasonStatsTray from '../../stats/PlayerSeasonStatsTray';
+import { usePlayerData } from '../provider/PlayerDataProvider';
 
 type Props = {
   player: IProAthlete;
@@ -102,7 +108,25 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
     competition_name: season_name,
   } = singleMatchPr.game;
 
-  if (opposition_score === undefined || team_score === undefined || game_status !== 'completed') {
+  const { player } = usePlayerData();
+  const [isExpanded, setExpanded] = useState(false);
+
+  const key =
+    isExpanded && player
+      ? swrFetchKeys.getAthleteMatchStats(player.tracking_id, singleMatchPr.game.game_id)
+      : null;
+  const { data: matchStats, isLoading } = useSWR(key, () =>
+    player
+      ? djangoAthleteService.getAthleteMatchStats(player.tracking_id, singleMatchPr.game.game_id)
+      : Promise.resolve([])
+  );
+
+  if (
+    !player ||
+    opposition_score === undefined ||
+    team_score === undefined ||
+    game_status !== 'completed'
+  ) {
     return;
   }
 
@@ -124,11 +148,24 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
     navigate(`/fixtures/${singleMatchPr.game.game_id}`);
   };
 
+  const toggleExpand = () => {
+    setExpanded(prev => !prev);
+  };
+
   return (
-    <div className="flex flex-col gap-3 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md p-4 rounded-2xl ring-1 ring-white/10 shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.01]">
+    <div className="flex flex-col gap-3 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md p-4 rounded-2xl ring-1 ring-white/10 shadow-lg transition-all duration-200">
       {/* Match Info */}
       <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-3">
+        <motion.button
+          className="w-7 mr-2 h-7 bg-slate-300/50 dark:bg-slate-600/50 backdrop-blur-sm rounded-full items-center justify-center flex hover:bg-slate-300/70 dark:hover:bg-slate-600/70 transition-colors flex-shrink-0"
+          animate={{ rotate: isExpanded ? 90 : 0 }}
+          transition={{ duration: 0.25 }}
+          onClick={toggleExpand}
+        >
+          <ChevronRight className="w-4 h-4" />
+        </motion.button>
+
+        <div className="flex flex-row items-center gap-3 flex-1">
           <TeamLogo className="w-10 h-10 rounded-lg" url={oppositionImageUrl} />
           <div>
             <p className="font-semibold dark:text-white">vs {oppositionTeamName}</p>
@@ -182,6 +219,36 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
       <div className="dark:text-slate-400 text-xs text-slate-600">
         {kickoff_time ? format(kickoff_time, 'EEE dd MMM yyyy') : ''} • {season_name}
       </div>
+
+      {/* Expandable Stats Tray */}
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+          <motion.div
+            key="matchStatsTray"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            {isLoading && (
+              <div className="flex flex-col gap-2 mt-2">
+                <div className="w-full h-24 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+              </div>
+            )}
+            {matchStats && matchStats.length > 0 && (
+              <div className="mt-2">
+                <PlayerSeasonStatsTray
+                  player={player}
+                  stats={matchStats}
+                  season={{ name: season_name } as any}
+                  isLoading={isLoading}
+                />
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
