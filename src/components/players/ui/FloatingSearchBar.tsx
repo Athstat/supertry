@@ -51,7 +51,7 @@ export default function FloatingSearchBar({
         // Keep above BottomNav (z-50). We use z-[70]
         'z-[70]',
         // Offset from bottom to clear BottomNav (h-16) and give breathing room
-        'bottom-20 sm:bottom-8 md:bottom-10',
+        'bottom-20 sm:bottom-8 md:bottom-20',
         // Responsive width (viewport-based so it never overflows the screen)
         'w-[92vw] max-w-md md:max-w-lg',
         className ?? '',
