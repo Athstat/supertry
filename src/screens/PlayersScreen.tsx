@@ -58,14 +58,16 @@ export const PlayerScreenContent = () => {
   // Use the same selected fantasy season as FantasyLeaguesScreen
   const { selectedSeason, selectedFantasySeasonId } = useFantasyLeaguesScreen();
 
-  console.log('selectedSeason', selectedSeason);
+  //console.log('selectedSeason', selectedSeason);
 
   const activeSeasonIdForFetch = useMemo(() => {
-    if (selectedSeason?.id) return selectedSeason.id;
-    if (selectedFantasySeasonId && selectedFantasySeasonId !== 'all')
-      return selectedFantasySeasonId;
+    // if (selectedSeason?.id) return selectedSeason.id;
+    // if (selectedFantasySeasonId && selectedFantasySeasonId !== 'all')
+    //   return selectedFantasySeasonId;
     return '9e74bed3-9ea2-5f41-a906-434d0d3e8f4e';
   }, [selectedSeason?.id, selectedFantasySeasonId]);
+
+  console.log('activeSeasonIdForFetch', activeSeasonIdForFetch);
 
   // Fetch players for the selected season when a season is chosen (Overview uses context athletes)
   const {
