@@ -73,6 +73,7 @@ declare global {
         };
         error?: string;
       }>;
+      openNotificationSettings?(): Promise<{ success: boolean }>;
     };
     // Also support lowercase version (as injected by mobile app)
     scrummyBridge?: {
@@ -126,6 +127,7 @@ declare global {
         message?: string;
         authUrl?: string;
       }>;
+      openNotificationSettings?(): Promise<{ success: boolean }>;
     };
   }
 }
@@ -478,4 +480,24 @@ export function isMobileWebView(): boolean {
     (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
     window.ReactNativeWebView !== undefined
   );
+}
+
+export async function openSystemNotificationSettings(): Promise<boolean> {
+  try {
+    const bridge: any = (window as any).ScrummyBridge || (window as any).scrummyBridge;
+    if (bridge?.openNotificationSettings) {
+      const res = await bridge.openNotificationSettings();
+      return !!res?.success;
+    }
+    if (isMobileWebView() && (window as any).ReactNativeWebView) {
+      (window as any).ReactNativeWebView.postMessage(
+        JSON.stringify({ type: 'OPEN_NOTIFICATION_SETTINGS' })
+      );
+      return true;
+    }
+    return false;
+  } catch (e) {
+    console.error('Failed to open notification settings', e);
+    return false;
+  }
 }

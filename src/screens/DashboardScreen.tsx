@@ -13,6 +13,8 @@ import {
   isBridgeAvailable,
   requestPushPermissions,
   getPushPermissionStatus,
+  isMobileWebView,
+  openSystemNotificationSettings,
 } from '../utils/bridgeUtils';
 import { authService } from '../services/authService';
 import GameStoriesCarrousel from '../components/dashboard/stories/GameStoriesCarrousel';
@@ -78,13 +80,9 @@ export function DashboardScreen() {
     };
   }, []);
 
-  // Keep settings note in sync with denied/granted status
+  // Keep settings note visible whenever notifications are not granted
   useEffect(() => {
-    if (pushPermissionStatus === 'denied') {
-      setShowSettingsNote(true);
-    } else if (pushPermissionStatus === 'granted') {
-      setShowSettingsNote(false);
-    }
+    setShowSettingsNote(pushPermissionStatus !== 'granted');
   }, [pushPermissionStatus]);
 
   const handleBannerClick = () => {
@@ -93,8 +91,7 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-4 p-4">
-
-      <div className='flex flex-row items-center justify-between' >
+      <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Home />
           <p className="text-xl font-extrabold">Dashboard</p>
@@ -115,7 +112,7 @@ export function DashboardScreen() {
 
       <ClaimAccountNoticeCard />
 
-      {showSettingsNote && (
+      {/* {showSettingsNote && (
         <RoundedCard className="p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700">
           <div className="flex flex-col gap-2">
             <p className="font-semibold text-yellow-800 dark:text-yellow-200">
@@ -137,7 +134,7 @@ export function DashboardScreen() {
                     if (kcId) {
                       localStorage.setItem(`push_settings_note_seen_user_${kcId}`, 'true');
                     }
-                  } catch {;}
+                  } catch {}
                   setShowSettingsNote(false);
                 }}
                 className="px-4 py-2 rounded-lg"
@@ -147,7 +144,7 @@ export function DashboardScreen() {
             </div>
           </div>
         </RoundedCard>
-      )}
+      )} */}
 
       <FeaturedFantasyLeagueGroups />
 
@@ -184,11 +181,10 @@ export function DashboardScreen() {
                     setShowSettingsNote(true);
                   }
                 }
-              } catch {;}
+              } catch {}
             }
           } catch {
             // swallow error and proceed to hide modal
-            ;
           } finally {
             setShowPushModal(false);
           }
@@ -203,7 +199,7 @@ export function DashboardScreen() {
                 setShowSettingsNote(true);
               }
             }
-          } catch {;}
+          } catch {}
           setShowPushModal(false);
         }}
       />

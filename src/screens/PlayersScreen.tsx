@@ -4,7 +4,8 @@ import { useAthletes } from '../contexts/AthleteContext';
 import { useDebounced } from '../hooks/useDebounced';
 
 // Components
-import { PlayerSearch } from '../components/players/PlayerSearch';
+import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
+import GlassBottomSheet from '../components/ui/GlassBottomSheet';
 import { PlayerFilters } from '../components/players/PlayerFilters';
 import { PlayerSort } from '../components/players/PlayerSort';
 import { LoadingState } from '../components/ui/LoadingState';
@@ -63,7 +64,7 @@ export const PlayerScreenContent = () => {
     if (selectedSeason?.id) return selectedSeason.id;
     if (selectedFantasySeasonId && selectedFantasySeasonId !== 'all')
       return selectedFantasySeasonId;
-    return undefined;
+    return '9e74bed3-9ea2-5f41-a906-434d0d3e8f4e';
   }, [selectedSeason?.id, selectedFantasySeasonId]);
 
   // Fetch players for the selected season when a season is chosen (Overview uses context athletes)
@@ -140,6 +141,8 @@ export const PlayerScreenContent = () => {
     sortDirection,
   });
 
+  const [controlsOpen, setControlsOpen] = useState(false);
+
   const isEmpty = !activeIsLoading && !isFiltering && filteredAthletes.length === 0;
 
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
@@ -152,7 +155,7 @@ export const PlayerScreenContent = () => {
 
   const isPickingPlayers = useAtomValue(comparePlayersAtomGroup.isCompareModePicking);
 
-  const { addOrRemovePlayer } = usePlayerCompareActions();
+  const { addOrRemovePlayer, startPicking, showCompareModal } = usePlayerCompareActions();
 
   // Handle player selection with useCallback for better performance
   const handlePlayerClick = useCallback(
@@ -199,7 +202,7 @@ export const PlayerScreenContent = () => {
 
   return (
     <Fragment>
-      <PageView className="px-5 flex flex-col items-center justify-center gap-3 md:w-[80%] lg:w-[60%]">
+      <PageView className="px-5 flex flex-col items-center justify-center gap-3 md:w-[80%] lg:w-[60%] pb-28 md:pb-32">
         {/* Search and Filter Header */}
         <div className="flex flex-row gap-2 items-center w-full">
           <Users />
@@ -207,36 +210,13 @@ export const PlayerScreenContent = () => {
         </div>
 
         {/* Fantasy Season Tabs - identical to Fantasy Leagues */}
-        <div className="flex flex-row items-center no-scrollbar flex-nowrap overflow-x-auto text-nowrap gap-2 w-full">
+        {/* <div className="sticky top-16 z-40 w-full -mx-5 py-2 bg-transparent border-b-0 overflow-visible">
           <PlayersSeasonSelector />
-        </div>
+        </div> */}
 
-        <PlayerSearch searchQuery={searchQuery ?? ''} onSearch={handleSearch} />
-        <div className="flex flex-col w-full gap-1">
-          <div className="flex flex-row flex-wrap gap-2 relative overflow-visible">
-            <PlayerFilters
-              positionFilter={positionFilter ?? ''}
-              teamFilter={selectedTeam}
-              availablePositions={availablePositions}
-              availableTeams={availableTeams}
-              onPositionFilter={handlePositionFilter}
-              onTeamFilter={handleTeamFilter}
-              onClearFilters={clearFilters}
-            />
-
-            <PlayerSort
-              sortField={sortField}
-              sortDirection={sortDirection}
-              onSort={handleSortByField}
-            />
-
-            <PlayersCompareButton
-              className={twMerge(
-                isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700'
-              )}
-            />
-          </div>
-        </div>
+        {/* <PlayersCompareButton
+          className={twMerge(isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700')}
+        /> */}
 
         {<PlayersScreenCompareStatus />}
 
@@ -299,6 +279,36 @@ export const PlayerScreenContent = () => {
           />
         )}
       </PageView>
+
+      <FloatingSearchBar
+        value={searchQuery ?? ''}
+        onChange={handleSearch}
+        onOpenControls={() => setControlsOpen(true)}
+        onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
+        isComparePicking={isPickingPlayers}
+      />
+
+      <GlassBottomSheet isOpen={controlsOpen} onClose={() => setControlsOpen(false)}>
+        <div className="space-y-4">
+          <PlayerFilters
+            variant="inline"
+            positionFilter={positionFilter ?? ''}
+            teamFilter={selectedTeam}
+            availablePositions={availablePositions}
+            availableTeams={availableTeams}
+            onPositionFilter={handlePositionFilter}
+            onTeamFilter={handleTeamFilter}
+            onClearFilters={clearFilters}
+          />
+
+          <PlayerSort
+            variant="inline"
+            sortField={sortField}
+            sortDirection={sortDirection}
+            onSort={handleSortByField}
+          />
+        </div>
+      </GlassBottomSheet>
     </Fragment>
   );
 };
