@@ -3,17 +3,16 @@ import PlayerIconsCard from '../PlayerIconsCard';
 import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import PlayerInfoCard from '../PlayerInfoCard';
-import PlayerTeamCard from '../PlayerTeamCard';
 import { IProAthlete } from '../../../../types/athletes';
 import { usePlayerData } from '../../provider/PlayerDataProvider';
 import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
-import { Calendar, Ruler as RulerIcon, Dumbbell, Globe } from 'lucide-react';
+import { Calendar, Ruler, Dumbbell, Globe } from 'lucide-react';
 import { isNumeric } from '../../../../utils/stringUtils';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import RelatedPlayersList from '../RelatedPlayersList';
 import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
-import PowerRankingChartTab from './PRChartTab';
 import PlayerHeroCard from '../PlayerHeroCard';
+import NoContentCard from '../../../shared/NoContentMessage';
 
 type Props = {
   player: IProAthlete;
@@ -35,19 +34,12 @@ function kgToLbs(kg: number): string {
 
 /** Renders a player profile overview tab */
 export default function PlayerOverviewTab({ player }: Props) {
-  const { currentSeason } = usePlayerData();
+  const { currentSeason, sortedSeasons } = usePlayerData();
   const nationalityIsValid = player.nationality && !isNumeric(player.nationality ?? '');
 
   return (
     <div className="flex flex-col gap-6 pb-6">
-      {/* TIER 1: Hero Zone - Player Card */}
-      {/* <PlayerHeroCard player={player} /> */}
-      {/* Team & Position Card */}
-      {player.team && <PlayerTeamCard player={player} />}
-      {/* TIER 2: Performance Chart */}
-      <PowerRankingChartTab player={player} />
-
-      {/* TIER 3: Info Cluster */}
+      {/* TIER 1: Info Cluster */}
       <div className="flex flex-col gap-4">
         {/* Player Details Grid */}
         <div className="grid grid-cols-2 gap-3">
@@ -75,7 +67,7 @@ export default function PlayerOverviewTab({ player }: Props) {
           {player.height && (
             <PlayerInfoCard
               variant="glass"
-              icon={RulerIcon}
+              icon={Ruler}
               value={`${player.height} cm`}
               label={cmToFeetInches(player.height)}
             />
@@ -103,6 +95,27 @@ export default function PlayerOverviewTab({ player }: Props) {
           <PlayerIconsCard player={player} season={currentSeason} />
         </Experimental>
       )}
+
+      {/* Season Statistics */}
+      <div className="flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+          Season Statistics
+        </h3>
+
+        {currentSeason && <PlayerIconsRow player={player} season={currentSeason} size="sm" />}
+
+        {sortedSeasons.length === 0 && (
+          <NoContentCard message={`Career stats for ${player.player_name} are not available`} />
+        )}
+
+        {sortedSeasons.length > 0 && (
+          <div className="flex flex-col gap-4">
+            {sortedSeasons.map(s => {
+              return <PlayerSeasonStatsCard player={player} season={s} key={s.id} hideTitle />;
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
