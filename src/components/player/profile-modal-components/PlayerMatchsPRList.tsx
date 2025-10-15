@@ -49,24 +49,42 @@ export default function PlayerMatchsPRList({ player }: Props) {
   }, 0);
 
   return (
-    <div className="flex flex-col gap-4 py-6">
-      <SecondaryText className="text-lg font-medium flex flex-row items-center gap-1">
-        <Calendar />
-        Last {matchesPR.length} Matches
-      </SecondaryText>
+    <div className="flex flex-col gap-4">
+      {/* Header */}
+      <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+          <Calendar className="w-4 h-4" />
+          Last {matchesPR.length} Matches
+        </h3>
 
-      <div className="flex flex-row items-center gap-1">
-        <PillTag className="py-0.5 px-3 text-sm text-slate-600 dark:text-slate-400">
-          Won {matchesWon}
-        </PillTag>
-        <PillTag className="py-0.5 px-3 text-sm text-slate-600 dark:text-slate-400">
-          Lost {matchesLost}
-        </PillTag>
-        {matchesDrawn ? <PillTag>Draw {matchesDrawn}</PillTag> : null}
+        {/* Filter Pills */}
+        <div className="flex flex-row items-center gap-2">
+          <div className="px-3 py-1 rounded-full bg-green-500/20 backdrop-blur-sm ring-1 ring-green-500/30">
+            <span className="text-xs font-semibold text-green-600 dark:text-green-400">
+              Won {matchesWon}
+            </span>
+          </div>
+          <div className="px-3 py-1 rounded-full bg-red-500/20 backdrop-blur-sm ring-1 ring-red-500/30">
+            <span className="text-xs font-semibold text-red-600 dark:text-red-400">
+              Lost {matchesLost}
+            </span>
+          </div>
+          {matchesDrawn > 0 && (
+            <div className="px-3 py-1 rounded-full bg-slate-500/20 backdrop-blur-sm ring-1 ring-slate-500/30">
+              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                Draw {matchesDrawn}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
-      {matchesPR.map((matchPr, index) => {
-        return <PlayerSingleMatchPrCard key={index} singleMatchPr={matchPr} />;
-      })}
+
+      {/* Match Cards */}
+      <div className="flex flex-col gap-3">
+        {matchesPR.map((matchPr, index) => {
+          return <PlayerSingleMatchPrCard key={index} singleMatchPr={matchPr} />;
+        })}
+      </div>
     </div>
   );
 }
@@ -107,23 +125,24 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
   };
 
   return (
-    <RoundedCard className="flex flex-col gap-2 bg-slate-200 dark:bg-slate-700 p-4 border-none hover:dark:bg-slate-700/80">
+    <div className="flex flex-col gap-3 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md p-4 rounded-2xl ring-1 ring-white/10 shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.01]">
+      {/* Match Info */}
       <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <TeamLogo className="w-10 h-10" url={oppositionImageUrl} />
+        <div className="flex flex-row items-center gap-3">
+          <TeamLogo className="w-10 h-10 rounded-lg" url={oppositionImageUrl} />
           <div>
-            <p className="">vs {oppositionTeamName}</p>
+            <p className="font-semibold dark:text-white">vs {oppositionTeamName}</p>
             {wasDraw ? (
-              <p className="dark:text-slate-400 text-sm text-slate-700">
+              <p className="dark:text-slate-400 text-sm text-slate-600 font-medium">
                 D {team_score} - {opposition_score}
               </p>
             ) : (
               <p
                 className={twMerge(
-                  'text-sm',
+                  'text-sm font-bold',
                   athleteTeamWon
-                    ? 'font-bold dark:text-primary-500 text-primary-600'
-                    : 'dark:text-slate-300 text-slate-700'
+                    ? 'text-green-600 dark:text-green-400'
+                    : 'text-red-600 dark:text-red-400'
                 )}
               >
                 {athleteTeamWon ? 'W' : 'L'} {team_score} - {opposition_score}
@@ -131,45 +150,39 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
             )}
           </div>
         </div>
+
+        {/* Stats */}
         <div className="flex flex-row items-center gap-3">
           {singleMatchPr.minutes_played !== undefined && singleMatchPr.minutes_played !== null && (
-            <div className="flex flex-col items-center justify-center gap-0.5">
+            <div className="flex flex-col items-center justify-center">
               <p className="dark:text-slate-200 text-slate-900 text-sm font-semibold">
                 {singleMatchPr.minutes_played}'
               </p>
-              <p className="text-xs dark:text-slate-400 text-slate-800">Mins</p>
+              <p className="text-xs dark:text-slate-400 text-slate-600">mins</p>
             </div>
           )}
           {singleMatchPr.fantasy_points !== undefined && singleMatchPr.fantasy_points !== null && (
-            <div className="flex flex-col items-center justify-center gap-0.5">
+            <div className="flex flex-col items-center justify-center">
               <p className="dark:text-slate-200 text-slate-900 text-sm font-semibold">
                 {singleMatchPr.fantasy_points.toFixed(1)}
               </p>
-              <p className="text-xs dark:text-slate-400 text-slate-800">Pts</p>
+              <p className="text-xs dark:text-slate-400 text-slate-600">pts</p>
             </div>
           )}
-          <div className="flex flex-col items-center justify-center gap-0.5">
-            <p className=" dark:text-primary-400 text-primary-500 text-lg font-bold">
+          <div className="flex flex-col items-center justify-center px-2 py-1 rounded-lg bg-blue-500/20 ring-1 ring-blue-500/30">
+            <p className="dark:text-blue-400 text-blue-600 text-lg font-bold">
               {singleMatchPr.updated_power_ranking}
             </p>
-            <p className="text-xs dark:text-slate-400 text-slate-800">PR</p>
+            <p className="text-xs dark:text-blue-400 text-blue-600">PR</p>
           </div>
         </div>
       </div>
 
-      <div className="dark:text-slate-400 text-wrap text-xs text-slate-700">
-        {kickoff_time ? format(kickoff_time, 'EE dd MMMM yyy') : ''}, {season_name}
+      {/* Match Date & Competition */}
+      <div className="dark:text-slate-400 text-xs text-slate-600">
+        {kickoff_time ? format(kickoff_time, 'EEE dd MMM yyyy') : ''} • {season_name}
       </div>
-
-      <div className="flex flex-row items-center">
-        <button
-          onClick={goToMatchPage}
-          className="text-sm text-primary-500 hover:underline dark:text-primary-400"
-        >
-          View Match Details
-        </button>
-      </div>
-    </RoundedCard>
+    </div>
   );
 }
 
