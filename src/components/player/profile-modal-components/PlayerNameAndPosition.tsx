@@ -2,8 +2,7 @@ import SecondaryText from '../../shared/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
 import { usePlayerData } from '../provider/PlayerDataProvider';
 
-type Props = {
-};
+type Props = {};
 
 export default function PlayerNameAndPosition({}: Props) {
   // console.log('player: ', player);
@@ -11,10 +10,10 @@ export default function PlayerNameAndPosition({}: Props) {
   // const starRatings = useAtomValue(playerProfileCurrStarRatings);
   // const stats = useAtomValue(playerProfileCurrStatsAtom);
 
-  const {player} = usePlayerData();
+  const { player } = usePlayerData();
 
   if (!player) return;
-  
+
   return (
     <>
       <div className="flex flex-row items-center justify-between">
@@ -26,7 +25,7 @@ export default function PlayerNameAndPosition({}: Props) {
         {player.power_rank_rating && (
           <div className="flex flex-col items-center gap-0">
             <p className="font-bold text-xl dark:text-white">
-              {Math.floor(player.power_rank_rating)}
+              PR: {Math.floor(player.power_rank_rating)}
             </p>
           </div>
         )}
