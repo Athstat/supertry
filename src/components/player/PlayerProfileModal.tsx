@@ -42,7 +42,7 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
       onClose();
     }
 
-  }, [player, startTime]);
+  }, [onClose, player.tracking_id, startTime]);
 
   return (
     <PlayerDataProvider player={player}>

@@ -1,6 +1,8 @@
 import SecondaryText from '../../shared/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
 import { usePlayerData } from '../provider/PlayerDataProvider';
+import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
+import { AvailabilityIndicator } from '../../shared/FormIndicator';
 
 type Props = {
 };
@@ -23,13 +25,14 @@ export default function PlayerNameAndPosition({}: Props) {
           <SecondaryText>{player.position && formatPosition(player.position)}</SecondaryText>
         </div>
 
-        {player.power_rank_rating && (
-          <div className="flex flex-col items-center gap-0">
-            <p className="font-bold text-xl dark:text-white">
+          <div className="flex flex-row gap-2 items-center">
+            {player.power_rank_rating && <p className="font-bold text-xl dark:text-white">
               {Math.floor(player.power_rank_rating)}
-            </p>
+            </p>}
+
+            <AvailabilityIcon athlete={player} />
           </div>
-        )}
+
       </div>
 
       {/* Player Icons
