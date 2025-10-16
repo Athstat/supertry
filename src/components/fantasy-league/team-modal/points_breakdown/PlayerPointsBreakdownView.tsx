@@ -15,6 +15,7 @@ import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytic
 import { usePlayerSquadReport } from "../../../../hooks/fantasy/usePlayerSquadReport"
 import WarningCard from "../../../shared/WarningCard"
 import { TriangleAlert } from "lucide-react"
+import AvailabilityIcon, { AvailabilityText } from "../../../players/availability/AvailabilityIcon"
 
 type Props = {
     athlete: IProAthlete | IFantasyTeamAthlete,
@@ -25,7 +26,7 @@ type Props = {
 
 export default function PlayerPointsBreakdownView({ athlete, round, onClose, team }: Props) {
 
-    const {isLoading: loadingSquadReport, isAvailable, notAvailable, reportText} = usePlayerSquadReport(team.id, athlete.tracking_id);
+    const { isLoading: loadingSquadReport, isAvailable, notAvailable, reportText } = usePlayerSquadReport(team.id, athlete.tracking_id);
 
     const { pointItems, totalPoints, isLoading: loadingPointsBreakdown } = useAthletePointsBreakdown(
         athlete,
@@ -38,7 +39,7 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose, tea
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        
+
         athleteAnalytics.trackPointsBreakdownViewed(
             athlete.tracking_id,
             round.official_league_id,
@@ -90,14 +91,19 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose, tea
 
             </div>
 
-            {notAvailable && reportText && (
+            {/* {notAvailable && reportText && (
                 <WarningCard className="flex flex-row items-center gap-2" >
                     <TriangleAlert className="min-w-6 min-h-6" />
                     <p className="text-sm" >
                         <strong>{athlete.player_name}'s</strong> team is not playing in this round, ({round.title}), and will therefore not score any points for you.
                     </p>
                 </WarningCard>
-            )} 
+            )}  */}
+
+            <AvailabilityText
+                athlete={athlete}
+                className="p-2 text-sm"
+            />
 
             <div>
                 <p className="font-semibold text-lg" >Points Breakdown</p>
@@ -147,7 +153,7 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose, tea
                     })}
 
                     {pointItems.length === 0 && (
-                        <NoContentCard 
+                        <NoContentCard
                             message={`${athlete.player_name} has not scored points in ${round.title} yet`}
                         />
                     )}
@@ -177,7 +183,7 @@ function PlayerPointBreakdownItem({ pointItem }: BreakdownItemProps) {
 
     if (pointItem.action_count === 0) return;
 
-    const {defintions} = useSportActions();
+    const { defintions } = useSportActions();
     const deff = defintions.find((d) => {
         return d.action_name === pointItem.action;
     })

@@ -101,11 +101,11 @@ export function AvailabilityText({ athlete, className }: Props) {
 
     return (
         <WarningCard className={twMerge(
-            '',
+            'text-xs',
             className
         )} >
             <TriangleAlert className="min-w-5  min-h-5" />
-            <p className="text-xs" >
+            <p className="" >
                 {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match
                 against <a href={`/fixtures/${report.game?.game_id}`} className="underline cursor-pointer text-primary-500" >
                     <strong>{opposition?.athstat_name}</strong>
