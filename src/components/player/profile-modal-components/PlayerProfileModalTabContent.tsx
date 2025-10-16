@@ -4,10 +4,11 @@ import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PilledTabView from '../../shared/tabs/PilledTabView';
 import PlayerStatsTab from './tabs/PlayerStatsTab';
 import { usePlayerData } from '../provider/PlayerDataProvider';
+import { AvailabilityText } from '../../players/availability/AvailabilityIcon';
 
-type Props = {};
+/** Renders the tab view for the player profile modal */
+export function PlayerProfileModalTabContent() {
 
-export function PlayerProfileModalTabContent({}: Props) {
   const { player } = usePlayerData();
 
   const tabItems: TabViewHeaderItem[] = [
@@ -25,7 +26,12 @@ export function PlayerProfileModalTabContent({}: Props) {
   if (!player) return;
 
   return (
-    <div className="">
+    <div className='flex flex-col gap-4'>
+
+      <div>
+        <AvailabilityText athlete={player} />
+      </div>
+
       <PilledTabView tabHeaderItems={tabItems}>
         <TabViewPage tabKey="overview">
           <PlayerOverviewTab player={player} />

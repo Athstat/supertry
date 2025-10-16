@@ -4,9 +4,9 @@ import { usePlayerData } from '../provider/PlayerDataProvider';
 import TeamLogo from '../../team/TeamLogo';
 import FormIndicator from '../../shared/FormIndicator';
 
-type Props = {};
+import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
 
-export default function PlayerNameAndPosition({}: Props) {
+export default function PlayerNameAndPosition() {
   // console.log('player: ', player);
 
   // const starRatings = useAtomValue(playerProfileCurrStarRatings);
@@ -55,7 +55,9 @@ export default function PlayerNameAndPosition({}: Props) {
               </p>
             </div>
           )}
-        </div>
+            <AvailabilityIcon athlete={player} />
+          </div>
+
       </div>
 
       {/* Player Icons

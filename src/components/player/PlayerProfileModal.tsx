@@ -33,7 +33,8 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
     if (onClose) {
       onClose();
     }
-  }, [player, startTime]);
+
+  }, [onClose, player.tracking_id, startTime]);
 
   return (
     <PlayerDataProvider player={player}>
