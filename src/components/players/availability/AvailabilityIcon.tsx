@@ -6,6 +6,7 @@ import { IFantasyAthlete } from "../../../types/rugbyPlayer"
 import WarningCard from "../../shared/WarningCard"
 import { useMemo } from "react"
 import { IProTeam } from "../../../types/team"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
     athlete: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete
@@ -49,6 +50,7 @@ export default function AvailabilityIcon({ athlete }: Props) {
 /** Renders an Availability Text Report explaining the absense, usually to be placed on top of a card */
 export function AvailabilityText({ athlete }: Props) {
 
+    const navigate = useNavigate();
     const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id);
 
     const opposition = useMemo<IProTeam | undefined>(() => {
@@ -81,16 +83,27 @@ export function AvailabilityText({ athlete }: Props) {
         return;
     }
 
-    const notAvailable = report?.status === "NOT_AVAILABLE";
+    const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE";
 
     if (!notAvailable) {
         return;
     }
 
+    const handleViewGame = () => {
+        navigate(`/fixtures/${report.game?.game_id}`);
+    }
+
     return (
         <WarningCard>
             <TriangleAlert className="min-w-5  min-h-5" />
-            <p className="text-xs" >{athlete.player_name} is not on the team roster for the match against <strong>{opposition?.athstat_name}</strong>. Consider taking action if he is in your team</p>
+            <p className="text-xs" >
+                {athlete.player_name} is not on the team roster for the match 
+                against <span onClick={handleViewGame} className="underline cursor-pointer text-primary-500" >
+                        <strong>{opposition?.athstat_name}</strong>
+                    </span>
+                    . 
+                Consider taking action if he is in your team
+            </p>
         </WarningCard>
     )
 }
