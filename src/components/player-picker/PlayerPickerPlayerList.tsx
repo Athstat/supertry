@@ -12,6 +12,7 @@ import { useInView } from "react-intersection-observer";
 import { BadgeInfo, ChevronsUpDown } from "lucide-react";
 import WarningCard from "../shared/WarningCard";
 import PlayerProfileModal from "../player/PlayerProfileModal";
+import AvailabilityIcon from "../players/availability/AvailabilityIcon";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;
@@ -296,7 +297,15 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
                             />
 
                             <div className="flex flex-col" >
-                                <p className="text-sm truncate" >{player.player_name}</p>
+                                <div className="flex flex-row items-center gap-1" >
+                                    <p className="text-sm truncate" >{player.player_name}</p>
+                                    <AvailabilityIcon 
+                                        athlete={player}
+                                        iconClassName="w-2 h-2"
+                                        className="w-4 h-4 rounded-md"
+                                    />
+                                </div>
+                                
                                 {isAffordable && (<SecondaryText className="text-[10px]" >
                                     {player?.team?.athstat_name ?? player.position_class}
                                 </SecondaryText>)}

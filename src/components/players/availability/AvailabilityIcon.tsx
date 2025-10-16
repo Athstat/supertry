@@ -54,7 +54,7 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
 }
 
 /** Renders an Availability Text Report explaining the absense, usually to be placed on top of a card */
-export function AvailabilityText({ athlete }: Props) {
+export function AvailabilityText({ athlete, className }: Props) {
 
     const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id);
 
@@ -100,7 +100,10 @@ export function AvailabilityText({ athlete }: Props) {
     // }
 
     return (
-        <WarningCard>
+        <WarningCard className={twMerge(
+            '',
+            className
+        )} >
             <TriangleAlert className="min-w-5  min-h-5" />
             <p className="text-xs" >
                 {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match
