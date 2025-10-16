@@ -2,12 +2,9 @@ import SecondaryText from '../../shared/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
 import { usePlayerData } from '../provider/PlayerDataProvider';
 import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
-import { AvailabilityIndicator } from '../../shared/FormIndicator';
 
-type Props = {
-};
 
-export default function PlayerNameAndPosition({}: Props) {
+export default function PlayerNameAndPosition() {
   // console.log('player: ', player);
 
   // const starRatings = useAtomValue(playerProfileCurrStarRatings);
