@@ -6,7 +6,6 @@ import { IFantasyAthlete } from "../../../types/rugbyPlayer"
 import WarningCard from "../../shared/WarningCard"
 import { useMemo } from "react"
 import { IProTeam } from "../../../types/team"
-import { useNavigate } from "react-router-dom"
 import { isPastFixture } from "../../../utils/fixtureUtils"
 import { twMerge } from "tailwind-merge"
 
@@ -57,7 +56,6 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
 /** Renders an Availability Text Report explaining the absense, usually to be placed on top of a card */
 export function AvailabilityText({ athlete }: Props) {
 
-    const navigate = useNavigate();
     const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id);
 
     const opposition = useMemo<IProTeam | undefined>(() => {
@@ -97,18 +95,18 @@ export function AvailabilityText({ athlete }: Props) {
         return;
     }
 
-    const handleViewGame = () => {
-        navigate(`/fixtures/${report.game?.game_id}`);
-    }
+    // const handleViewGame = () => {
+    //     navigate(`/fixtures/${report.game?.game_id}`);
+    // }
 
     return (
         <WarningCard>
             <TriangleAlert className="min-w-5  min-h-5" />
             <p className="text-xs" >
                 {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match
-                against <span onClick={handleViewGame} className="underline cursor-pointer text-primary-500" >
+                against <a href={`/fixtures/${report.game?.game_id}`} className="underline cursor-pointer text-primary-500" >
                     <strong>{opposition?.athstat_name}</strong>
-                </span>
+                </a>
                 .
                 {!isPast && 'Consider taking action if he is in your team'}
             </p>
