@@ -1,4 +1,6 @@
+import { IFixture } from './games';
 import { PlayerForm } from './rugbyPlayer';
+import { IProSeason } from './season';
 import { IProTeam } from './team';
 
 export type Gender = 'M' | 'F';
@@ -70,3 +72,14 @@ export type IAthleteSeasonStarRatings = {
 
 export type PlayerCompareMode = "none" | "picking" | "modal";
 export type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
+
+export type PlayerAvailabilityStatus = "PENDING" | "TEAM_NOT_PLAYING" | "NOT_AVAILABLE" | "AVAILABLE";
+
+/** Represents a single fantasy season round availability report for a player */
+export type AthleteRoundAvailabilityReport = {
+  round_number?: number,
+  round_title?: string,
+  season?: IProSeason,
+  status: PlayerAvailabilityStatus,
+  game?: IFixture
+}

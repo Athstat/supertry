@@ -7,7 +7,6 @@ import {
 import PlayerPointsBreakdownView from '../team-modal/points_breakdown/PlayerPointsBreakdownView';
 import { IProAthlete } from '../../../types/athletes';
 import DialogModal from '../../shared/DialogModal';
-import TeamJersey from '../../player/TeamJersey';
 import { usePlayerSquadReport } from '../../../hooks/fantasy/usePlayerSquadReport';
 import { twMerge } from 'tailwind-merge';
 import SecondaryText from '../../shared/SecondaryText';
