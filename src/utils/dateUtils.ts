@@ -213,3 +213,14 @@ export function getLastWednesdayIfNotWednesday(pivot: Date) {
 
     return getPreviousDayOfWeek(pivot, 'Wednesday');
 }
+
+/** Returns true if the difference between two days is more than n days */
+export function checkDaysDiff(date1: Date, date2: Date, daysDiff: number) : boolean {
+    date1 = new Date(date1);
+    date2 = new Date(date2);
+
+    const minEpochDiff = daysDiff * 24 * 60 * 60 * 1000;
+    const epochDiff = date1.valueOf() - date2.valueOf();
+
+    return epochDiff > minEpochDiff;
+}

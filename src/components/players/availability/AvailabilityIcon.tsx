@@ -7,6 +7,7 @@ import WarningCard from "../../shared/WarningCard"
 import { useMemo } from "react"
 import { IProTeam } from "../../../types/team"
 import { useNavigate } from "react-router-dom"
+import { checkDaysDiff } from "../../../utils/dateUtils"
 
 type Props = {
     athlete: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete
@@ -83,7 +84,12 @@ export function AvailabilityText({ athlete }: Props) {
         return;
     }
 
-    const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE";
+    const isOldFixture = report.game?.kickoff_time && checkDaysDiff(new Date(), report.game.kickoff_time, 2);
+    const notAvailable = Boolean(report.game) && !isOldFixture && report?.status === "NOT_AVAILABLE";
+
+    if (isOldFixture) {
+        return;
+    }
 
     if (!notAvailable) {
         return;

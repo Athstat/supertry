@@ -3,6 +3,7 @@ import useSWR from 'swr';
 import { fantasyAthleteService } from '../../services/fantasy/fantasyAthleteService';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import { checkDaysDiff } from '../../utils/dateUtils';
 
 export function usePlayerSquadReport(teamId: string | number, trackingId: string) {
   const key = swrFetchKeys.getPlayerSquadReport(teamId, trackingId);
@@ -48,11 +49,18 @@ export function useGeneralPlayerAvailability(athleteId: string) {
 
   const firstReport = useMemo(() => {
     if (list && list?.length > 0) {
-      return list[0];
+      const report = list[0];
+      const isOldFixture = report?.game?.kickoff_time && checkDaysDiff(new Date(), report.game.kickoff_time, 2);
+      
+      if (!isOldFixture) {
+        return report;
+      }
     }
 
     return undefined;
   }, [list]);
+
+  
 
   return {
     report: firstReport,
