@@ -7,15 +7,17 @@ import WarningCard from "../../shared/WarningCard"
 import { useMemo } from "react"
 import { IProTeam } from "../../../types/team"
 import { useNavigate } from "react-router-dom"
-import { checkDaysDiff } from "../../../utils/dateUtils"
 import { isPastFixture } from "../../../utils/fixtureUtils"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
-    athlete: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete
+    athlete: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
+    iconClassName?: string,
+    className?: string
 }
 
 /** Renders an Availability Indicator Icon, usually to be placed on top of a card */
-export default function AvailabilityIcon({ athlete }: Props) {
+export default function AvailabilityIcon({ athlete, className, iconClassName }: Props) {
 
     const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id);
 
@@ -38,14 +40,17 @@ export default function AvailabilityIcon({ athlete }: Props) {
     }
 
     return (
-        <div>
-            <div className="flex flex-row items-center gap-2 justify-end" >
-                {/* <p className="text-xs" >Player Not Aviailable</p> */}
-                <div className="bg-yellow-100 dark:bg-yellow-900/40 hover:bg-yellow-400 border border-yellow-500 dark:border-yellow-700 w-7 h-7 rounded-xl flex flex-col items-center justify-center" >
-                    <TriangleAlert className="w-4 text-yellow-500 dark:text-yellow-500 h-4" />
-                </div>
+        <div >
+            <div className={twMerge(
+                "bg-yellow-100 dark:bg-yellow-900/40 hover:bg-yellow-400 border border-yellow-500 dark:border-yellow-700 w-7 h-7 rounded-xl flex flex-col items-center justify-center",
+                className
+            )} >
+                <TriangleAlert className={twMerge(
+                    "w-4 text-yellow-500 dark:text-yellow-500 h-4",
+                    iconClassName
+                )} />
             </div>
-        </div>
+        </div> 
     )
 }
 
@@ -85,13 +90,8 @@ export function AvailabilityText({ athlete }: Props) {
         return;
     }
 
-    const isOldFixture = report.game?.kickoff_time && checkDaysDiff(new Date(), report.game.kickoff_time, 2);
-    const notAvailable = Boolean(report.game) && !isOldFixture && report?.status === "NOT_AVAILABLE";
+    const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE";
     const isPast = isPastFixture(report.game)
-
-    if (isOldFixture) {
-        return;
-    }
 
     if (!notAvailable) {
         return;
@@ -105,11 +105,11 @@ export function AvailabilityText({ athlete }: Props) {
         <WarningCard>
             <TriangleAlert className="min-w-5  min-h-5" />
             <p className="text-xs" >
-                {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match 
+                {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match
                 against <span onClick={handleViewGame} className="underline cursor-pointer text-primary-500" >
-                        <strong>{opposition?.athstat_name}</strong>
-                    </span>
-                    . 
+                    <strong>{opposition?.athstat_name}</strong>
+                </span>
+                .
                 {!isPast && 'Consider taking action if he is in your team'}
             </p>
         </WarningCard>
