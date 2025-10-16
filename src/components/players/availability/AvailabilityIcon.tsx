@@ -8,6 +8,7 @@ import { useMemo } from "react"
 import { IProTeam } from "../../../types/team"
 import { useNavigate } from "react-router-dom"
 import { checkDaysDiff } from "../../../utils/dateUtils"
+import { isPastFixture } from "../../../utils/fixtureUtils"
 
 type Props = {
     athlete: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete
@@ -86,6 +87,7 @@ export function AvailabilityText({ athlete }: Props) {
 
     const isOldFixture = report.game?.kickoff_time && checkDaysDiff(new Date(), report.game.kickoff_time, 2);
     const notAvailable = Boolean(report.game) && !isOldFixture && report?.status === "NOT_AVAILABLE";
+    const isPast = isPastFixture(report.game)
 
     if (isOldFixture) {
         return;
@@ -103,12 +105,12 @@ export function AvailabilityText({ athlete }: Props) {
         <WarningCard>
             <TriangleAlert className="min-w-5  min-h-5" />
             <p className="text-xs" >
-                {athlete.player_name} is not on the team roster for the match 
+                {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match 
                 against <span onClick={handleViewGame} className="underline cursor-pointer text-primary-500" >
                         <strong>{opposition?.athstat_name}</strong>
                     </span>
                     . 
-                Consider taking action if he is in your team
+                {!isPast && 'Consider taking action if he is in your team'}
             </p>
         </WarningCard>
     )

@@ -5,18 +5,18 @@ import { ISbrFixture } from "../types/sbr";
 export function fixtureSumary(fixture: IFixture) {
     const { team_score, kickoff_time, game_status, opposition_score } = fixture;
 
-    const matchFinal = 
-        (game_status === "completed" || game_status === 'result') 
+    const matchFinal =
+        (game_status === "completed" || game_status === 'result')
         && (team_score !== undefined && opposition_score !== undefined);
-        
+
     const hasNotStarted = game_status === 'fixture';
 
     const homeTeamWon = matchFinal ? team_score > opposition_score : false;
     const awayTeamWon = matchFinal ? team_score < opposition_score : false;
 
     const gameKickedOff = kickoff_time !== undefined && (new Date(kickoff_time) < new Date()) && game_status !== 'fixture';
-    
-    return {gameKickedOff, homeTeamWon, awayTeamWon, game_status, hasNotStarted, matchFinal};
+
+    return { gameKickedOff, homeTeamWon, awayTeamWon, game_status, hasNotStarted, matchFinal };
 }
 
 export function summerizeGameStatus(fixture: IFixture) {
@@ -30,11 +30,11 @@ export function summerizeGameStatus(fixture: IFixture) {
     return "";
 }
 
-export function searchFixturesPredicate(fixture: IFixture ,query: string | undefined) {
+export function searchFixturesPredicate(fixture: IFixture, query: string | undefined) {
 
     if (query === "" || query === undefined) return true;
 
-    const {team, opposition_team} = fixture;
+    const { team, opposition_team } = fixture;
 
     if (!team || !opposition_team) return false;
 
@@ -48,7 +48,7 @@ export function searchFixturesPredicate(fixture: IFixture ,query: string | undef
     phrases.forEach((phrase: string) => {
 
         if (phrase === "") return false;
-         
+
         phrase = phrase.toLowerCase();
 
         const flag = phrase.startsWith(query);
@@ -61,7 +61,7 @@ export function searchFixturesPredicate(fixture: IFixture ,query: string | undef
 
 }
 
-export function searchSbrFixturesPredicate(fixture: ISbrFixture ,query: string | undefined) {
+export function searchSbrFixturesPredicate(fixture: ISbrFixture, query: string | undefined) {
 
     if (query === "" || query === undefined) return true;
 
@@ -75,7 +75,7 @@ export function searchSbrFixturesPredicate(fixture: ISbrFixture ,query: string |
     phrases.forEach((phrase: string) => {
 
         if (phrase === "") return false;
-         
+
         phrase = phrase.toLowerCase();
 
         const flag = phrase.startsWith(query);
@@ -123,45 +123,45 @@ export function createEmptyArray<T>(size: number, initVal: T): T[] {
 }
 
 export function filterPastFixtures(fixtures: IFixture[], limit?: number) {
-    
-    return fixtures.filter((f) => {
-      if (f.kickoff_time) {
-        return (f.game_status === "complete");
-      }
 
-      return false;
+    return fixtures.filter((f) => {
+        if (f.kickoff_time) {
+            return (f.game_status === "complete");
+        }
+
+        return false;
     })
-    .sort((a, b) =>
-      a.kickoff_time && b.kickoff_time
-        ? new Date(a.kickoff_time).valueOf() -
-          new Date(b.kickoff_time).valueOf()
-        : 0
-    )
-    .reverse()
-    .splice(0, limit ?? 30)
-    .reverse();
+        .sort((a, b) =>
+            a.kickoff_time && b.kickoff_time
+                ? new Date(a.kickoff_time).valueOf() -
+                new Date(b.kickoff_time).valueOf()
+                : 0
+        )
+        .reverse()
+        .splice(0, limit ?? 30)
+        .reverse();
 
 }
 
 
 export function filterUpcomingFixtures(fixtures: IFixture[], limit?: number) {
-    
-    const dateNow = new Date();
-    
-    return fixtures.filter((f) => {
-      if (f.kickoff_time) {
-        return new Date(f.kickoff_time).valueOf() > dateNow.valueOf();
-      }
 
-      return false;
+    const dateNow = new Date();
+
+    return fixtures.filter((f) => {
+        if (f.kickoff_time) {
+            return new Date(f.kickoff_time).valueOf() > dateNow.valueOf();
+        }
+
+        return false;
     })
-    .sort((a, b) =>
-      a.kickoff_time && b.kickoff_time
-        ? new Date(a.kickoff_time).valueOf() -
-          new Date(b.kickoff_time).valueOf()
-        : 0
-    )
-    .splice(0, limit ?? 20);
+        .sort((a, b) =>
+            a.kickoff_time && b.kickoff_time
+                ? new Date(a.kickoff_time).valueOf() -
+                new Date(b.kickoff_time).valueOf()
+                : 0
+        )
+        .splice(0, limit ?? 20);
 }
 
 /** Filters fixtures and returns fixtures that are with in a date range */
@@ -180,7 +180,7 @@ export function filterFixturesByDateRange(fixtures: IFixture[], dateRange: Date[
             const kickOff = new Date(f.kickoff_time);
             const kickOffEpoch = kickOff.valueOf();
 
-            return kickOffEpoch >= firstEpoch &&  kickOffEpoch <= lastEpoch;
+            return kickOffEpoch >= firstEpoch && kickOffEpoch <= lastEpoch;
         }
 
         return false;
@@ -188,12 +188,12 @@ export function filterFixturesByDateRange(fixtures: IFixture[], dateRange: Date[
 
 }
 
-export function searchProFixturePredicate(search: string, fixture: IFixture) : boolean {
+export function searchProFixturePredicate(search: string, fixture: IFixture): boolean {
     /** Returns true if a fixture meets the predicate given the search */
     // use things like, team name, venue, date, competition name, case insensitive
 
     if (!search || search.trim() === "") return true;
-    const {team, opposition_team} = fixture;
+    const { team, opposition_team } = fixture;
 
     if (!team || !opposition_team) return false;
 
@@ -227,18 +227,18 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
             .replace(" VS ", " vs ")
             .split(" vs ")
             .map(s => s.trim());
-            // Allow partial team name matches in either order using includes
-            if (team1 && team2 && team.athstat_name && opposition_team.athstat_name) {
-                const home = team.athstat_name.toLowerCase();
-                const away = opposition_team.athstat_name.toLowerCase();
+        // Allow partial team name matches in either order using includes
+        if (team1 && team2 && team.athstat_name && opposition_team.athstat_name) {
+            const home = team.athstat_name.toLowerCase();
+            const away = opposition_team.athstat_name.toLowerCase();
 
-                if (
+            if (
                 (home.includes(team1) && away.includes(team2)) ||
                 (away.includes(team1) && home.includes(team2))
-                ) {
+            ) {
                 return true;
-                }
             }
+        }
         if (team1 && team2 && team.athstat_name && opposition_team.athstat_name) {
             const home = team.athstat_name.toLowerCase();
             const away = opposition_team.athstat_name.toLowerCase();
@@ -288,9 +288,28 @@ export function searchProFixturePredicate(search: string, fixture: IFixture) : b
 }
 
 export function isProGameTBD(fixture: IFixture) {
-    const {team, opposition_team} = fixture;
+    const { team, opposition_team } = fixture;
 
     if (!team || !opposition_team) return true;
 
     return team.athstat_name === 'TBD' || opposition_team.athstat_name === 'TBD';
+}
+
+/** Returns true if a match is a past fixture */
+export function isPastFixture(fixture?: IFixture) : boolean {
+    
+    if (!fixture) {
+        return false;
+    }
+    
+    const { kickoff_time } = fixture;
+
+
+    if (kickoff_time) {
+        const nowEpoch = new Date().valueOf();
+        const gameEndEpoch = new Date(kickoff_time).valueOf() + 3 * 60 * 60 * 1000;
+        return nowEpoch > gameEndEpoch;
+    }
+
+    return false;
 }
