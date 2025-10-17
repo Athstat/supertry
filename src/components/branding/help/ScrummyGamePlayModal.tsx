@@ -26,7 +26,8 @@ export default function ScrummyGamePlayModal({ isOpen, onClose }: Props) {
             open={isOpen}
             onClose={onClose}
             title={selectedTopic ? selectedTopic.title : "How to Play Scrummy"}
-            hw="w-[95%] md:w-[85%] lg:w-[70%] min-h-[95vh]"
+            hw="w-[95%] md:w-[85%] lg:w-[70%] lg:max-w-[65vh] lg:min-w-[65vh]"
+            outerCon="no-scrollbar"
             className="w-full h-full mb-10"
         >
             {selectedTopic ? (

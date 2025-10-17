@@ -13,39 +13,31 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   roundId?: string;
-  source?: string
+  source?: string;
 }
 
 export default function PlayerProfileModal({ player, isOpen, onClose, source }: Props) {
-
   /** Holds the time stamp where the modal as opened, for analytics purposes */
   const [startTime, setStartTime] = useState(new Date());
 
   useEffect(() => {
-
     if (player && isOpen) {
       setStartTime(new Date());
-      analytics.trackOpenedPlayerProfile(player.tracking_id, source )
+      analytics.trackOpenedPlayerProfile(player.tracking_id, source);
     }
-
   }, [player, isOpen, source]);
 
   const handleCloseModal = useCallback(() => {
-
-    analytics.trackClosedPlayerProfile(
-      player.tracking_id,
-      startTime,
-      new Date()
-    );
+    analytics.trackClosedPlayerProfile(player.tracking_id, startTime, new Date());
 
     if (onClose) {
       onClose();
     }
 
-  }, [player, startTime]);
+  }, [onClose, player.tracking_id, startTime]);
 
   return (
-    <PlayerDataProvider player={player}>
+    <PlayerDataProvider onClose={handleCloseModal} player={player}>
       <DialogModal
         open={isOpen}
         className="p-0 flex flex-col gap-2 "

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, MotionProps } from 'framer-motion';
 import ScrummyLogo from '../../components/branding/scrummy_logo';
 import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
-import { tabs as onboardingTabs } from '../PostSignUpWelcomeScreen';
+import { tabs as onboardingTabs } from '../OnboardingScreen';
 
 // Button animation variants
 const buttonVariants = {

@@ -7,7 +7,6 @@ import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeC
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
-import { HeroSection } from '../components/dashboard';
 import { useEffect, useState } from 'react';
 import PushOptInModal from '../components/ui/PushOptInModal';
 import {
@@ -18,12 +17,12 @@ import {
   openSystemNotificationSettings,
 } from '../utils/bridgeUtils';
 import { authService } from '../services/authService';
-import { HeroSection2 } from '../components/dashboard/HeroSection2';
+import { logger } from '../services/logger';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
   const [showPushModal, setShowPushModal] = useState(false);
-  const [showSettingsNote, setShowSettingsNote] = useState(false);
+  const [, setShowSettingsNote] = useState(false);
   const [pushPermissionStatus, setPushPermissionStatus] = useState<
     'granted' | 'denied' | 'prompt' | 'unknown'
   >('unknown');
@@ -73,20 +72,18 @@ export function DashboardScreen() {
         if (!isBridgeAvailable()) return;
         const status = await getPushPermissionStatus();
         if (!cancelled) setPushPermissionStatus(status);
-      } catch {}
+      } catch (err) {
+        logger.error("Error with push optin ", err)
+      }
     })();
     return () => {
       cancelled = true;
     };
   }, []);
 
-  // Keep settings note in sync with denied/granted status
+  // Keep settings note visible whenever notifications are not granted
   useEffect(() => {
-    if (pushPermissionStatus === 'denied') {
-      setShowSettingsNote(true);
-    } else if (pushPermissionStatus === 'granted') {
-      setShowSettingsNote(false);
-    }
+    setShowSettingsNote(pushPermissionStatus !== 'granted');
   }, [pushPermissionStatus]);
 
   const handleBannerClick = () => {
@@ -94,7 +91,7 @@ export function DashboardScreen() {
   };
 
   return (
-    <PageView className="flex flex-col space-y-8 p-4">
+    <PageView className="flex flex-col space-y-4 p-4">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Home />
@@ -181,9 +178,11 @@ export function DashboardScreen() {
                     setShowSettingsNote(true);
                   }
                 }
-              } catch {}
+              } catch (err) {
+                logger.error("Error with push optin ", err)
+              }
             }
-          } catch (e) {
+          } catch {
             // swallow error and proceed to hide modal
           } finally {
             setShowPushModal(false);
@@ -199,7 +198,9 @@ export function DashboardScreen() {
                 setShowSettingsNote(true);
               }
             }
-          } catch {}
+          } catch (err) {
+            logger.error("Error with push optin ", err)
+          }
           setShowPushModal(false);
         }}
       />

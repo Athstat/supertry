@@ -60,7 +60,7 @@ function FantasySeasonCard({ fantasySeason, index }: FantasySeasonCardProps) {
 
     if (isLoading) {
         return (
-            <RoundedCard className="h-[100px] w-full rounded-xl border-none animate-pulse" >
+            <RoundedCard className="h-[80px] w-full rounded-xl border-none animate-pulse" >
             </RoundedCard>
         )
     }
@@ -79,7 +79,13 @@ function FantasySeasonCard({ fantasySeason, index }: FantasySeasonCardProps) {
     }
 
     return (
-        <FantasyLeagueGroupDataProvider leagueId={featureGroup?.id} >
+        <FantasyLeagueGroupDataProvider
+            leagueId={featureGroup?.id}
+            loadingFallback={<>
+                <RoundedCard className="h-[80px] w-full rounded-xl border-none animate-pulse" >
+                </RoundedCard>
+            </>}
+        >
             <RoundedCard onClick={onClick} className="p-4 flex flex-col gap-4 dark:bg-slate-800/40 cursor-pointer" >
 
                 <div className="flex flex-row justify-between items-center gap-2" >

@@ -5,7 +5,7 @@ import FixtureScreenOverview from '../components/fixtures/FixtureScreenOverview'
 import useSWR from 'swr';
 import { gamesService } from '../services/gamesService';
 import { LoadingState } from '../components/ui/LoadingState';
-import FixtureAthleteStats from '../components/fixtures/FixtureAthleteStats';
+import FixtureBoxscoreTab from '../components/fixtures/FixtureBoxscoreTab';
 import { boxScoreService } from '../services/boxScoreService';
 import { FixtureScreenHeader } from '../components/fixtures/FixtureScreenHeader';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
@@ -20,7 +20,7 @@ import { ErrorState } from '../components/ui/ErrorState';
 import FixtureHero from '../components/fixtures/FixtureHero';
 
 export default function FixtureScreen() {
-  
+
   const { fixtureId } = useParams();
 
   const fixtureKey = fixtureId ? `fixture/${fixtureId}` : null;
@@ -55,51 +55,58 @@ export default function FixtureScreen() {
       label: 'Kick Off',
       tabKey: 'kick-off',
       disabled: false,
+      className: "flex-1"
     },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
       disabled: !sportActions || sportActions.length === 0,
+      className: "flex-1"
     },
     {
       label: 'Team Stats',
       tabKey: 'team-stats',
       disabled: !teamActions || teamActions.length === 0 || !gameKickedOff,
+      className: "flex-1"
     },
     {
       label: 'Top Player',
       tabKey: 'motm',
       disabled: false,
+      className: "flex-1"
     },
     {
       label: 'Chat',
       tabKey: 'chat',
       disabled: true,
+      className: "flex-1"
     },
     {
       label: 'Team Rosters',
       tabKey: 'rosters',
       disabled: false,
+      className: "flex-1"
     },
   ];
 
   return (
-    <div className="dark:text-white flex flex-col">
-      <FixtureHero fixture={fixture} />
+    <div className="dark:text-white w-full flex flex-col">
 
-      {/* {boxScore && <FixtureScreenTab />} */}
-      <FixtureScreenHeader fixture={fixture} />
+
 
       {!loadingSportsActions && (
-        <PageView className="p-4">
+        <PageView className="w-full">
+          <FixtureHero fixture={fixture} />
+          <FixtureScreenHeader fixture={fixture} />
+
           <TabView tabHeaderItems={tabItems}>
 
-            <TabViewPage className="flex flex-col gap-5" tabKey="athletes-stats">
+            <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
-              {sportActions && (sportActions?.length ?? 0) > 0 && <FixtureAthleteStats sportActions={sportActions} fixture={fixture} />}
+              {sportActions && (sportActions?.length ?? 0) > 0 && <FixtureBoxscoreTab sportActions={sportActions} fixture={fixture} />}
             </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-5" tabKey="kick-off">
+            <TabViewPage className="flex flex-col gap-4 p-2" tabKey="kick-off">
               <FixtureScreenOverview fixture={fixture} />
               <GameHighlightsCard link={fixture.highlights_link} />
               <div className="flex flex-col">
@@ -111,7 +118,7 @@ export default function FixtureScreen() {
               </div>
             </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-5" tabKey="team-stats">
+            <TabViewPage className="flex flex-col gap-5 p-2" tabKey="team-stats">
               {teamActions && gameKickedOff && (
                 <FixtureHeadToHeadStats teamActions={teamActions} fixture={fixture} />
               )}

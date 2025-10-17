@@ -4,7 +4,6 @@ import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes, IFantasyLeagueRound 
 import { IFantasyTeamAthlete } from "../../../../types/fantasyTeamAthlete"
 import DialogModal from "../../../shared/DialogModal"
 import PlayerPointsBreakdownView from "./PlayerPointsBreakdownView"
-import { analytics } from "../../../../services/analytics/anayticsService"
 import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytics"
 
 type Props = {

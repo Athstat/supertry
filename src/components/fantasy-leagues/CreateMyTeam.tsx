@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 import { Position } from '../../types/position';
-import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { seasonService } from '../../services/seasonsService';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
-import { IProAthlete } from '../../types/athletes';
+import { IProAthlete, PositionClass } from '../../types/athletes';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 // import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
@@ -30,6 +29,8 @@ import {
 
 import { analytics } from '../../services/analytics/anayticsService';
 import Experimental from '../shared/ab_testing/Experimental';
+import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
+import { rugbyPlayers } from '../../data/rugbyPlayers';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -56,7 +57,7 @@ export default function CreateMyTeam({
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showClaimAccountModal, setShowClaimAccountModal] = useState(false);
   // Presets
   const [presets, setPresets] = useState<TeamPreset[]>([]);
@@ -64,7 +65,7 @@ export default function CreateMyTeam({
   const [selectedPresetId, setSelectedPresetId] = useState<string>('');
 
   const totalSpent = Object.values(selectedPlayers).reduce(
-    (sum, player) => sum + (player.price || 0),
+    (sum, player) => sum + (player?.price || 0),
     0
   );
   const budgetRemaining = (leagueConfig?.team_budget || 0) - totalSpent;
@@ -83,44 +84,42 @@ export default function CreateMyTeam({
     setTimeout(() => setToast(prev => ({ ...prev, isVisible: false })), 5000);
   };
 
-  const selectedRoundId = useMemo(() => leagueRound?.id, [leagueRound?.id]);
+  // const selectedRoundId = useMemo(() => leagueRound?.id, [leagueRound?.id]);
 
-  const { leagueId } = useParams();
+  // const { leagueId } = useParams();
 
   const navigate = useNavigate();
   const { navigate: tabNavigate } = useTabView();
 
   const isGuestAccount = useAtomValue(isGuestUserAtom);
 
-  console.log('leagueRound: ', leagueRound);
+  // useEffect(() => {
+  //   const loadAthletes = async () => {
+  //     if (!leagueRound) return;
 
-  useEffect(() => {
-    const loadAthletes = async () => {
-      if (!leagueRound) return;
+  //     analytics.trackTeamCreationStarted(leagueRound);
 
-      analytics.trackTeamCreationStarted(leagueRound);
+  //     try {
+  //       //const athletes = await seasonService.getSeasonAthletes(leagueId);
+  //       const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
+  //         .filter(a => {
+  //           return a.power_rank_rating && a.power_rank_rating > 50;
+  //         })
+  //         .sort((a, b) => {
+  //           return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+  //         });
 
-      try {
-        //const athletes = await seasonService.getSeasonAthletes(leagueId);
-        const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
-          .filter(a => {
-            return a.power_rank_rating && a.power_rank_rating > 50;
-          })
-          .sort((a, b) => {
-            return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
-          });
+  //       setPlayers(athletes);
+  //       console.log('athletes: ', athletes);
+  //     } catch (e) {
+  //       console.error('Failed to load athletes for season ', leagueId, e);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-        setPlayers(athletes);
-        console.log('athletes: ', athletes);
-      } catch (e) {
-        console.error('Failed to load athletes for season ', leagueId, e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadAthletes();
-  }, [leagueRound]);
+  //   loadAthletes();
+  // }, [leagueId, leagueRound]);
 
   // Load saved team presets for the season (scoped to current user)
   useEffect(() => {
@@ -253,6 +252,23 @@ export default function CreateMyTeam({
       setIsSubmitting(false);
     }
   };
+
+
+  const onSelectPlayer = useCallback((rugbyPlayer: IProAthlete) => {
+    if (activePosition) {
+      setSelectedPlayers(prev => ({ ...prev, [activePosition.name]: rugbyPlayer }));
+      setIsModalOpen(false);
+    }
+  }, [setIsModalOpen, activePosition]);
+
+  const onClosePickerModal = useCallback(() => {
+    setIsModalOpen(false)
+  }, [setIsModalOpen]);
+
+  const remainingBudget = useMemo(() => {
+    return (leagueConfig?.team_budget || 240) -
+      Object.values(selectedPlayers).reduce((sum, p) => sum + (p?.price || 0), 0)
+  }, [leagueConfig, selectedPlayers]);
 
   if (isLoading) {
     return (
@@ -461,11 +477,10 @@ export default function CreateMyTeam({
                     setIsModalOpen(true);
                   }
                 }}
-                className={`${
-                  selected
-                    ? 'w-full h-60 p-0 bg-transparent border-0 rounded-none overflow-visible flex items-center justify-center'
-                    : 'w-full h-60 overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center'
-                }`}
+                className={`${selected
+                  ? 'w-full h-60 p-0 bg-transparent border-0 rounded-none overflow-visible flex items-center justify-center'
+                  : 'w-full h-60 overflow-hidden p-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-gray-800/40 text-gray-400 dark:text-gray-500 flex items-center justify-center'
+                  }`}
               >
                 {selected ? (
                   <PlayerGameCard
@@ -488,11 +503,10 @@ export default function CreateMyTeam({
               {selected && (
                 <div className="mt-4 flex flex-col gap-2 z-50">
                   <button
-                    className={`${
-                      captainId === selected.tracking_id
-                        ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
-                        : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
-                    }`}
+                    className={`${captainId === selected.tracking_id
+                      ? 'text-xs w-full rounded-lg py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700'
+                      : 'text-xs w-full rounded-lg py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50'
+                      }`}
                     onClick={() => {
                       if (captainId !== selected.tracking_id) setCaptainId(selected.tracking_id);
                     }}
@@ -520,17 +534,17 @@ export default function CreateMyTeam({
         })}
       </div>
 
-      {isModalOpen && activePosition && (
+      {/* {isModalOpen && activePosition && (
         <PlayerSelectionModal
           visible={isModalOpen}
           selectedPosition={activePosition}
           players={players}
           remainingBudget={
             (leagueConfig?.team_budget || 240) -
-            Object.values(selectedPlayers).reduce((sum, p) => sum + (p.price || 0), 0)
+            Object.values(selectedPlayers).reduce((sum, p) => sum + (p?.price || 0), 0)
           }
           selectedPlayers={Object.values(selectedPlayers).map(p => ({
-            tracking_id: p.tracking_id,
+            tracking_id: p?.tracking_id,
           }))}
           handlePlayerSelect={rugbyPlayer => {
             setSelectedPlayers(prev => ({ ...prev, [activePosition.name]: rugbyPlayer }));
@@ -542,7 +556,18 @@ export default function CreateMyTeam({
           roundEnd={leagueRound?.end_round ?? undefined}
           leagueId={leagueRound?.official_league_id}
         />
-      )}
+      )} */}
+
+      <PlayerPickerV2
+        isOpen={isModalOpen && activePosition !== null}
+        positionPool={activePosition?.positionClass as (PositionClass | undefined)}
+        remainingBudget={remainingBudget}
+        excludePlayers={Object.values(selectedPlayers)}
+        onSelectPlayer={onSelectPlayer}
+        onClose={onClosePickerModal}
+        targetLeagueRound={leagueRound}
+      />
+
 
       {/* Player profile modal */}
       {playerModalPlayer && (
