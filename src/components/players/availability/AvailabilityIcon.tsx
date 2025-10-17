@@ -49,7 +49,7 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
                     iconClassName
                 )} />
             </div>
-        </div> 
+        </div>
     )
 }
 
@@ -84,10 +84,6 @@ export function AvailabilityText({ athlete, className }: Props) {
         return;
     }
 
-    if (report?.status === "TEAM_NOT_PLAYING") {
-        return;
-    }
-
     const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE";
     const isPast = isPastFixture(report.game)
 
@@ -105,14 +101,20 @@ export function AvailabilityText({ athlete, className }: Props) {
             className
         )} >
             <TriangleAlert className="min-w-5  min-h-5" />
-            <p className="" >
+            
+            {report.status == "NOT_AVAILABLE" && (<p className="text-xs" >
                 {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match
                 against <a href={`/fixtures/${report.game?.game_id}`} className="underline cursor-pointer text-primary-500" >
                     <strong>{opposition?.athstat_name}</strong>
                 </a>
                 .
                 {!isPast && 'Consider taking action if he is in your team'}
-            </p>
+            </p>)}
+
+            {report.status == "TEAM_NOT_PLAYING" && (<p className="text-xs" >
+                {athlete.player_name}'s {isPast ? 'was' : 'is'} team is not playing in this round 
+                {!isPast && ' Consider taking action if he is in your team'}
+            </p>)}
         </WarningCard>
     )
 }
