@@ -13,9 +13,19 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
 
   //console.log('report: ', report);
 
-  //const isAvailable = report && report.availability === 'AVAILABLE';
+  // Player is available if:
+  // - Explicitly marked as AVAILABLE (rosters not published yet)
+  // - Selected in STARTING lineup
+  // - Selected on BENCH
   const isAvailable =
-    report && (report.availability === 'STARTING' || report.availability === 'BENCH');
+    report &&
+    (report.availability === 'AVAILABLE' ||
+      report.availability === 'STARTING' ||
+      report.availability === 'BENCH');
+
+  // Player is not available if:
+  // - Team not playing this round
+  // - Not in squad (when rosters ARE published)
   const notAvailable =
     report &&
     (report.availability === 'TEAM_NOT_PLAYING' || report.availability === 'NOT_IN_SQUAD');
@@ -24,13 +34,26 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
     if (report) {
       const { availability, home_team_name, away_team_name, game_id, team_name } = report;
 
-      if (availability === 'STARTING' || (availability === 'BENCH' && game_id)) {
+      if (availability === 'STARTING' || availability === 'BENCH') {
         const isHomeTeam = team_name === home_team_name;
         const opponent = isHomeTeam ? away_team_name : home_team_name;
         return `vs ${opponent}`;
       }
 
-      return 'Not Playing ⚠️';
+      if (availability === 'AVAILABLE' && game_id) {
+        // Team is playing but rosters not published yet
+        const isHomeTeam = team_name === home_team_name;
+        const opponent = isHomeTeam ? away_team_name : home_team_name;
+        return `vs ${opponent}`;
+      }
+
+      if (availability === 'TEAM_NOT_PLAYING') {
+        return 'Team Not Playing';
+      }
+
+      if (availability === 'NOT_IN_SQUAD') {
+        return 'Not Playing ⚠️';
+      }
     }
 
     return undefined;

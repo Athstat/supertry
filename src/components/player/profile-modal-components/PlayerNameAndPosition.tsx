@@ -3,6 +3,12 @@ import { formatPosition } from '../../../utils/athleteUtils';
 import { usePlayerData } from '../provider/PlayerDataProvider';
 import TeamLogo from '../../team/TeamLogo';
 import FormIndicator from '../../shared/FormIndicator';
+import { usePlayerSquadReport } from '../../../hooks/fantasy/usePlayerSquadReport';
+import useSWR from 'swr';
+import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import { useAuth } from '../../../contexts/AuthContext';
+import { swrFetchKeys } from '../../../utils/swrKeys';
+import { leagueService } from '../../../services/leagueService';
 
 type Props = {};
 
@@ -13,6 +19,24 @@ export default function PlayerNameAndPosition({}: Props) {
   // const stats = useAtomValue(playerProfileCurrStatsAtom);
 
   const { player } = usePlayerData();
+  const { currentRound } = useFantasyLeagueGroup();
+  const { authUser } = useAuth();
+
+  const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
+    currentRound?.fantasy_league_group_id ?? '',
+    currentRound?.id ?? '',
+    authUser?.kc_id
+  );
+
+  const { data: userTeam } = useSWR(key, () =>
+    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
+  );
+
+  // Get player availability
+  const { reportText, isAvailable, notAvailable } = usePlayerSquadReport(
+    userTeam?.id ?? '',
+    player?.tracking_id ?? ''
+  );
 
   if (!player) return;
 
@@ -42,6 +66,21 @@ export default function PlayerNameAndPosition({}: Props) {
             )}
             {!player.team && player.position && (
               <SecondaryText>{formatPosition(player.position)}</SecondaryText>
+            )}
+            {/* Availability Status */}
+            {userTeam && reportText && (
+              <div className="mt-1">
+                {isAvailable && (
+                  <span className="text-xs px-2 py-0.5 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                    {reportText}
+                  </span>
+                )}
+                {notAvailable && (
+                  <span className="text-xs px-2 py-0.5 rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">
+                    {reportText}
+                  </span>
+                )}
+              </div>
             )}
           </div>
         </div>

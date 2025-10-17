@@ -121,13 +121,7 @@ export function PlayerGameCard({
   const playerIcons = getRandomIcons(getRandomIconCount());
 
   let imageUrl = useMemo(() => {
-    if (player.athlete) {
-      return player.athlete.team?.athstat_id
-        ? getTeamJerseyImage(player.athlete.team?.athstat_id)
-        : undefined;
-    } else {
-      return player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
-    }
+    return player.team?.athstat_id ? getTeamJerseyImage(player.team.athstat_id) : undefined;
   }, [player]);
 
   const { currentRound } = useFantasyLeagueGroup();
@@ -143,11 +137,12 @@ export function PlayerGameCard({
     leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
   );
 
-  const playerId = player.athlete_id || player.athlete?.tracking_id || player.tracking_id;
+  // Extract player tracking ID - handle both IProAthlete and IFantasyTeamAthlete types
+  const playerId =
+    (player as IFantasyTeamAthlete).athlete_id ?? (player as IProAthlete).tracking_id;
 
-  const { notAvailable } = !isPlayersScreen
-    ? usePlayerSquadReport(userTeam?.id, playerId)
-    : { notAvailable: false };
+  // Check availability for all screens when user has a team
+  const { notAvailable, reportText } = usePlayerSquadReport(userTeam?.id ?? '', playerId);
 
   return (
     <div
@@ -195,16 +190,9 @@ export function PlayerGameCard({
                 'lg:w-10'
               )}
             >
-              {player.athlete
-                ? player.athlete.team?.image_url && (
-                    <TeamLogo
-                      url={player.athlete.team.image_url}
-                      className="w-6 h-6 lg:w-8 lg:h-8"
-                    />
-                  )
-                : player.team?.image_url && (
-                    <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
-                  )}
+              {player.team?.image_url && (
+                <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
+              )}
             </div>
 
             {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
