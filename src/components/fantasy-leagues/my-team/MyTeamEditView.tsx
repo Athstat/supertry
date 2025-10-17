@@ -90,12 +90,12 @@ export default function MyTeamEditView({ leagueConfig, leagueRound }: Props) {
   });
 
   const handleCompleteSwapPlayer = (newAthlete: IProAthlete) => {
-    console.log('About to swap player', swapState);
+    //console.log('About to swap player', swapState);
 
     // Only check if swapState is valid (allow both swap and add scenarios)
     if (!swapState || swapState.slot === null) return;
 
-    console.log('Yey, so we passed the test bro');
+    //console.log('Yey, so we passed the test bro');
     setPlayerAtSlot(swapState.slot, newAthlete);
     setSwapState({ open: false, slot: null, position: null });
 
