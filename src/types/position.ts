@@ -29,3 +29,9 @@ export interface FantasyTeamPosition {
   isSpecial?: boolean;
 }
 
+
+
+export type CreateTeamPositon = {
+  name: string, 
+  position_class: string
+}

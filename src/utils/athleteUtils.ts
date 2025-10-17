@@ -373,7 +373,7 @@ export function getPositionFrameBackground(positionClass: string) {
 }
 
 
-export function getTeamJerseyImage(teamId: string) {
+export function getTeamJerseyImage(teamId: string | number) {
     const teamFallbackUrl = teamId
         ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${teamId}-ph-removebg-preview.png`
         : undefined;

@@ -3,12 +3,10 @@ import { MAX_TEAM_BUDGET } from '../../../types/constants';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { useEffect, useState } from 'react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
-import { seasonService } from '../../../services/seasonsService';
-import { IProAthlete } from '../../../types/athletes';
+import { IProAthlete, PositionClass } from '../../../types/athletes';
 import { Position } from '../../../types/position';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
-import PlayerSelectionModal from '../../team-creation/PlayerSelectionModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import { IFantasyLeagueTeamSlot } from '../../../types/fantasyLeagueTeam';
 import { EditableTeamSlotItem } from './EditableTeamSlotItem';
@@ -16,6 +14,7 @@ import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import WarningCard from '../../shared/WarningCard';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import PlayerPickerV2 from '../../player-picker/PlayerPickerV2';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -24,15 +23,10 @@ type Props = {
   onEditChange?: (isEditing: boolean) => void;
 };
 /** Renders My Team Edit Grid */
-export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
+export default function MyTeamEditView({ leagueConfig, leagueRound }: Props) {
+  const { slots, setPlayerAtSlot, totalSpent } = useFantasyLeagueTeam();
 
-  const {
-    slots,
-    setPlayerAtSlot, totalSpent,
-    
-  } = useFantasyLeagueTeam();
-
-  const {league} = useFantasyLeagueGroup();
+  const { league } = useFantasyLeagueGroup();
 
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IFantasyTeamAthlete>();
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -48,8 +42,6 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
     setPlayerModalPlayer(undefined);
   };
 
-  const [players, setPlayers] = useState<IProAthlete[]>([]);
-
   const [swapState, setSwapState] = useState<{
     open: boolean;
     slot: number | null;
@@ -60,32 +52,29 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
   useEffect(() => {
-    fantasyAnalytics.trackVisitedEditTeamTab(
-      league?.id,
-      leagueRound?.id
-    );
+    fantasyAnalytics.trackVisitedEditTeamTab(league?.id, leagueRound?.id);
   }, []);
 
   // Load season players for swapping
-  useEffect(() => {
-    const loadAthletes = async () => {
-      if (!leagueRound) return;
-      try {
-        const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
-          .filter(a => {
-            return a.power_rank_rating && a.power_rank_rating > 50;
-          })
-          .sort((a, b) => {
-            return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
-          });
+  // useEffect(() => {
+  //   const loadAthletes = async () => {
+  //     if (!leagueRound) return;
+  //     try {
+  //       const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
+  //         .filter(a => {
+  //           return a.power_rank_rating && a.power_rank_rating > 50;
+  //         })
+  //         .sort((a, b) => {
+  //           return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+  //         });
 
-        setPlayers(athletes);
-      } catch (e) {
-        console.error('Failed to load athletes for season', e);
-      }
-    };
-    loadAthletes();
-  }, [leagueRound]);
+  //       setPlayers(athletes);
+  //     } catch (e) {
+  //       console.error('Failed to load athletes for season', e);
+  //     }
+  //   };
+  //   loadAthletes();
+  // }, [leagueRound]);
 
   const toPosition = (
     p: { name: string; position_class: string; isSpecial?: boolean },
@@ -101,17 +90,17 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
   });
 
   const handleCompleteSwapPlayer = (newAthlete: IProAthlete) => {
-    
-    console.log("About to swap player", swapState);
-    
-    if (!swapState || swapState.slot === null || !swapPlayer?.slot === undefined) return;
+    //console.log('About to swap player', swapState);
 
-    console.log("Yey, so we passed the test bro");
+    // Only check if swapState is valid (allow both swap and add scenarios)
+    if (!swapState || swapState.slot === null) return;
+
+    //console.log('Yey, so we passed the test bro');
     setPlayerAtSlot(swapState.slot, newAthlete);
     setSwapState({ open: false, slot: null, position: null });
 
     fantasyAnalytics.trackUsedSwapPlayerFeature();
-  }
+  };
 
   const handleIntiateSwap = (slot: IFantasyLeagueTeamSlot) => {
     const pos = toPosition(slot.position, slot.slotNumber - 1);
@@ -120,7 +109,7 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
     if (slot.athlete) {
       setSwapPlayer(slot.athlete);
     }
-  }
+  };
 
   const handleCancelSwap = () => {
     setSwapPlayer(undefined);
@@ -128,10 +117,9 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
     setSwapState({
       open: false,
       slot: null,
-      position: undefined
+      position: undefined,
     });
-
-  }
+  };
 
   const handleAddPlayerOnEmptySlot = (slot: IFantasyLeagueTeamSlot) => {
     // Set slot state
@@ -139,11 +127,11 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
     setSwapState({
       open: true,
       slot: slot.slotNumber,
-      position: pos
+      position: pos,
     });
 
     setSwapPlayer(undefined);
-  }
+  };
 
   // const handleClearSlot = (slot: IFantasyLeagueTeamSlot) => {
   //   const {playerRemoved} = removePlayerAtSlot(slot.slotNumber);
@@ -156,17 +144,17 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
 
   return (
     <Fragment>
-      
-      {isLocked && leagueRound && <WarningCard className='text-sm' >
-        <p>
-          Team selection for <strong>{leagueRound.title}</strong> has been locked. You can
-          no longer make changes to your lineup after the deadline has passed
-        </p>
-      </WarningCard>}
+      {isLocked && leagueRound && (
+        <WarningCard className="text-sm">
+          <p>
+            Team selection for <strong>{leagueRound.title}</strong> has been locked. You can no
+            longer make changes to your lineup after the deadline has passed
+          </p>
+        </WarningCard>
+      )}
 
       <div className="mt-4 grid gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
-
-        {slots.map((s) => {
+        {slots.map(s => {
           return (
             <EditableTeamSlotItem
               key={s.slotNumber}
@@ -179,21 +167,17 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
         })}
       </div>
 
-
-
       {/* Player profile modal */}
-      {
-        playerModalPlayer && (
-          <PlayerProfileModal
-            player={playerModalPlayer}
-            isOpen={showProfileModal}
-            onClose={handleClosePlayerProfileModal}
-          />
-        )
-      }
+      {playerModalPlayer && (
+        <PlayerProfileModal
+          player={playerModalPlayer}
+          isOpen={showProfileModal}
+          onClose={handleClosePlayerProfileModal}
+        />
+      )}
 
       {/* Swap selection modal */}
-      {
+      {/* {
         swapState.open && swapState.slot != null && swapState.position && (
           <PlayerSelectionModal
             visible={swapState.open}
@@ -216,8 +200,24 @@ export default function MyTeamEditView({ leagueConfig,leagueRound }: Props) {
             leagueId={String(leagueRound?.official_league_id || '')}
           />
         )
-      }
+      } */}
 
-    </Fragment >
+      {
+        <PlayerPickerV2
+          isOpen={swapState.open && swapState.slot != null && Boolean(swapState.position)}
+          positionPool={swapState?.position?.positionClass as PositionClass}
+          remainingBudget={budgetRemaining + (swapPlayer?.purchase_price || 0)}
+          excludePlayers={slots
+            .filter(s => Boolean(s.athlete))
+            .map(s => {
+              return { tracking_id: s.athlete?.tracking_id ?? '' };
+            })}
+          onSelectPlayer={handleCompleteSwapPlayer}
+          onClose={handleCancelSwap}
+          targetLeagueRound={leagueRound}
+          playerToBeReplaced={swapPlayer}
+        />
+      }
+    </Fragment>
   );
 }

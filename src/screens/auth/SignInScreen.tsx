@@ -1,108 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AuthLayout } from '../../components/auth/AuthLayout';
 import EmailPasswordLoginBox from '../../components/auth/login/EmailPasswordLoginBox';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
-import { authService } from '../../services/authService';
-import { useAuth } from '../../contexts/AuthContext';
-import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../utils/firstVisitUtils';
-import { useGoogleLogin } from '@react-oauth/google';
 import Experimental from '../../components/shared/ab_testing/Experimental';
 
-// Check if running in mobile WebView
-const isMobileWebView = () => {
-  return (
-    (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
-    window.ReactNativeWebView !== undefined
-  );
-};
-
 export function SignInScreen() {
-  const navigate = useNavigate();
-  const { } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: async tokenResponse => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        // For the code flow, we need to exchange the code for a token on the backend
-        // But since our backend expects an ID token, we'll use the authorization code
-        const result = await authService.googleOAuth(tokenResponse.code);
-
-        if (result.error) {
-          setError(result.error.message || 'Google sign-in failed');
-          setIsLoading(false);
-          return;
-        }
-
-        // Check if this is the first completed visit
-        const firstVisitCompleted = isFirstVisitCompleted();
-
-        // Navigate to appropriate screen
-        if (firstVisitCompleted) {
-          navigate('/dashboard');
-        } else {
-          markFirstVisitCompleted();
-          navigate('/post-signup-welcome');
-        }
-      } catch (err: any) {
-        console.error('Google OAuth error:', err);
-        setError('Google sign-in failed. Please try again.');
-        setIsLoading(false);
-      }
-    },
-    onError: () => {
-      setError('Google sign-in failed. Please try again.');
-      setIsLoading(false);
-    },
-    flow: 'auth-code',
-  });
-
-  const handleAppleSuccess = async (response: any) => {
-    if (!response.authorization || !response.authorization.id_token) {
-      setError('Apple sign-in failed. Please try again.');
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setError(null);
-      const result = await authService.appleOAuth(response.authorization.id_token);
-
-      if (result.error) {
-        setError(result.error.message || 'Apple sign-in failed');
-        setIsLoading(false);
-        return;
-      }
-
-      // Update auth context
-      // await checkAuth();
-
-      // Check if this is the first completed visit
-      const firstVisitCompleted = isFirstVisitCompleted();
-
-      // Navigate to appropriate screen
-      if (firstVisitCompleted) {
-        navigate('/dashboard');
-      } else {
-        markFirstVisitCompleted();
-        navigate('/post-signup-welcome');
-      }
-    } catch (err: any) {
-      console.error('Apple OAuth error:', err);
-      setError('Apple sign-in failed. Please try again.');
-      setIsLoading(false);
-    }
-  };
-
-  const handleAppleError = (error: any) => {
-    console.error('Apple sign-in failed:', error);
-    setError('Apple sign-in failed. Please try again.');
-  };
+  const [isLoading, ] = useState(false);
 
   return (
     <>
@@ -190,32 +95,21 @@ export function SignInScreen() {
               />
             </motion.div>
 
+          </Experimental> */}
+
+          <EmailPasswordLoginBox />
+
+          <Experimental>
             <div className="relative flex items-center justify-center">
               <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
-              <div className="text-sm px-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-dark-850">
+              <div className="text-sm px-2 text-gray-500 dark:text-gray-400 ">
                 or
               </div>
               <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
             </div>
-
-          </Experimental> */}
-
-          <EmailPasswordLoginBox />
-          
-          <Experimental>
-            <GuestLoginBox />
           </Experimental>
 
-          {/* Error Display */}
-          {error && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-4 text-red-500 text-sm text-center"
-            >
-              {error}
-            </motion.div>
-          )}
+          <GuestLoginBox />
 
           <div className="text-center">
             <p className="text-gray-600 dark:text-gray-400">

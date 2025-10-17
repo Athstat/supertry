@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Lock } from 'lucide-react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
@@ -6,11 +6,11 @@ import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import MyTeamPitchView from './MyTeamPitchView';
 import MyTeamEditView from './MyTeamEditView';
 import { twMerge } from 'tailwind-merge';
-import PushOptInModal from '../../ui/PushOptInModal';
-import { isBridgeAvailable, requestPushPermissions } from '../../../utils/bridgeUtils';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import SaveTeamBar from './SaveTeamBar';
 import { useMyTeamView } from './MyTeamStateProvider';
+import PushOptInModal from '../../ui/PushOptInModal';
+import { requestPushPermissions } from '../../../utils/bridgeUtils';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -26,31 +26,14 @@ export default function ViewMyTeam({
   onTeamUpdated: () => Promise<void>;
   onEditChange?: (isEditing: boolean) => void;
 }) {
+  const { viewMode, navigate: setViewMode } = useMyTeamView();
 
-  const {viewMode, navigate: setViewMode} = useMyTeamView();
-
-  const {totalSpent, selectedCount} = useFantasyLeagueTeam();
+  const { totalSpent, selectedCount } = useFantasyLeagueTeam();
 
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
 
   // Push opt-in prompt state
   const [showPushModal, setShowPushModal] = useState(false);
-
-
-
-  // Show "Enable push" modal on ViewMyTeam if not enabled and supported
-  useEffect(() => {
-    try {
-      const hasPushId = !!localStorage.getItem('onesignal_id');
-      const dismissed = localStorage.getItem('push_optin_dismissed') === 'true';
-
-      if (isBridgeAvailable() && !hasPushId && !dismissed) {
-        setShowPushModal(true);
-      }
-    } catch {
-      // If localStorage not available, do nothing
-    }
-  }, []);
 
   return (
     <div className="w-full py-4">
@@ -88,11 +71,10 @@ export default function ViewMyTeam({
           <button
             type="button"
             onClick={() => setViewMode('pitch')}
-            className={`${
-              viewMode === 'pitch'
+            className={`${viewMode === 'pitch'
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
+              } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
           >
             Pitch
           </button>
@@ -121,10 +103,7 @@ export default function ViewMyTeam({
         </div>
       </div>
 
-      {leagueRound && <SaveTeamBar 
-        leagueRound={leagueRound}
-        onTeamUpdated={onTeamUpdated}
-      />}
+      {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
       {viewMode === 'edit' ? (
         // 2x3 grid of slots with player cards
@@ -139,12 +118,7 @@ export default function ViewMyTeam({
       ) : (
         // Pitch view
         <Fragment>
-          {leagueRound && (
-            <MyTeamPitchView
-              leagueRound={leagueRound}
-              team={team}
-            />
-          )}
+          {leagueRound && <MyTeamPitchView leagueRound={leagueRound} team={team} />}
         </Fragment>
       )}
 
@@ -162,7 +136,9 @@ export default function ViewMyTeam({
         onNotNow={() => {
           try {
             localStorage.setItem('push_optin_dismissed', 'true');
-          } catch {}
+          } catch (err) {
+            console.log("Local Storage error ", err);
+          }
           setShowPushModal(false);
         }}
       />

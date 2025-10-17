@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 
 type Props = {
-    teamId?: string,
+    teamId?: string | number,
     className?: string,
     hideFade?: boolean
 }

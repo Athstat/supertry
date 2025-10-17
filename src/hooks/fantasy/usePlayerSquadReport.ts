@@ -14,14 +14,20 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
     error,
   } = useSWR(key, () => fantasyAthleteService.getRoundSquadReport(teamId, trackingId));
 
-  const isAvailable = report && report.availability === 'AVAILABLE';
-  const notAvailable = report && report.availability === 'TEAM_NOT_PLAYING';
+  //console.log('report: ', report);
+
+  //const isAvailable = report && report.availability === 'AVAILABLE';
+  const isAvailable =
+    report && (report.availability === 'STARTING' || report.availability === 'BENCH');
+  const notAvailable =
+    report &&
+    (report.availability === 'TEAM_NOT_PLAYING' || report.availability === 'NOT_IN_SQUAD');
 
   const reportText = useMemo(() => {
     if (report) {
       const { availability, home_team_name, away_team_name, game_id, team_name } = report;
 
-      if (availability === 'AVAILABLE' && game_id) {
+      if (availability === 'STARTING' || (availability === 'BENCH' && game_id)) {
         const isHomeTeam = team_name === home_team_name;
         const opponent = isHomeTeam ? away_team_name : home_team_name;
         return `vs ${opponent}`;

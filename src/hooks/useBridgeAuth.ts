@@ -2,12 +2,12 @@ import { useCallback, useEffect } from 'react';
 import { AUTH_USER_KEY, authTokenService } from '../services/auth/authTokenService';
 import { authService } from '../services/authService';
 import { DjangoAuthUser } from '../types/auth';
-import { loginWithBridge, requestPushPermissionsAfterLogin } from '../utils/bridgeUtils';
+import { loginWithBridge } from '../utils/bridgeUtils';
 
 type AuthStatusRes = {
-  authToken?: string,
-  authUser?: DjangoAuthUser
-}
+  authToken?: string;
+  authUser?: DjangoAuthUser;
+};
 
 export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => void) {
   const restoreAuthFromMobileApp = useCallback(async () => {
@@ -176,8 +176,6 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
       console.error('AuthContext: Error notifying mobile app bridge:', bridgeError);
     }
 
-    requestPushPermissionsAfterLogin();
-
     // Add a delay to ensure the mobile app has processed the login
     await new Promise(resolve => setTimeout(resolve, 300));
   };
@@ -188,30 +186,27 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
   };
 }
 
-
 export function useBrudgeAuthV2() {
-
   /** Communicates with bridge for the auth token to be
    * saved on the mobile devices async storage
    */
   const saveAccessTokenToMobile = async (accessToken: string): Promise<void> => {
     try {
-
       // If bridge is available, request auth status
       if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
-
-        window.ScrummyBridge.login({ accessToken, refreshToken: accessToken }, {
-          user_id: "",
-          email: "",
-          name: ""
-        });
-
+        window.ScrummyBridge.login(
+          { accessToken, refreshToken: accessToken },
+          {
+            user_id: '',
+            email: '',
+            name: '',
+          }
+        );
       }
-
     } catch (err) {
-      console.log("Error saving user auth token to mobile bridge", err);
+      console.log('Error saving user auth token to mobile bridge', err);
     }
-  }
+  };
 
   /** Returns the auth status object with the saved auth token and user object */
   const getSavedAccessTokenFromMobile = async (): Promise<string | undefined> => {
@@ -228,20 +223,16 @@ export function useBrudgeAuthV2() {
           console.log('AuthContext: Found authentication status from mobile app:', authStatus);
 
           const { tokens } = authStatus;
-          return tokens?.accessToken
-
+          return tokens?.accessToken;
         }
       }
-    }
-    catch (err) {
-
-    }
+    } catch (err) {}
 
     return undefined;
-  }
+  };
 
   return {
     getSavedAccessTokenFromMobile,
-    saveAccessTokenToMobile
+    saveAccessTokenToMobile,
   };
 }

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 import { Position } from '../../types/position';
-import PlayerSelectionModal from '../team-creation/PlayerSelectionModal';
 import { seasonService } from '../../services/seasonsService';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
@@ -58,7 +57,7 @@ export default function CreateMyTeam({
   const [saveError, setSaveError] = useState<string | undefined>(undefined);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showClaimAccountModal, setShowClaimAccountModal] = useState(false);
   // Presets
   const [presets, setPresets] = useState<TeamPreset[]>([]);
@@ -85,44 +84,42 @@ export default function CreateMyTeam({
     setTimeout(() => setToast(prev => ({ ...prev, isVisible: false })), 5000);
   };
 
-  const selectedRoundId = useMemo(() => leagueRound?.id, [leagueRound?.id]);
+  // const selectedRoundId = useMemo(() => leagueRound?.id, [leagueRound?.id]);
 
-  const { leagueId } = useParams();
+  // const { leagueId } = useParams();
 
   const navigate = useNavigate();
   const { navigate: tabNavigate } = useTabView();
 
   const isGuestAccount = useAtomValue(isGuestUserAtom);
 
-  console.log('leagueRound: ', leagueRound);
+  // useEffect(() => {
+  //   const loadAthletes = async () => {
+  //     if (!leagueRound) return;
 
-  useEffect(() => {
-    const loadAthletes = async () => {
-      if (!leagueRound) return;
+  //     analytics.trackTeamCreationStarted(leagueRound);
 
-      analytics.trackTeamCreationStarted(leagueRound);
+  //     try {
+  //       //const athletes = await seasonService.getSeasonAthletes(leagueId);
+  //       const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
+  //         .filter(a => {
+  //           return a.power_rank_rating && a.power_rank_rating > 50;
+  //         })
+  //         .sort((a, b) => {
+  //           return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
+  //         });
 
-      try {
-        //const athletes = await seasonService.getSeasonAthletes(leagueId);
-        const athletes = (await seasonService.getSeasonAthletes(leagueRound.season_id))
-          .filter(a => {
-            return a.power_rank_rating && a.power_rank_rating > 50;
-          })
-          .sort((a, b) => {
-            return (b.power_rank_rating ?? 0) - (a.power_rank_rating ?? 0);
-          });
+  //       setPlayers(athletes);
+  //       console.log('athletes: ', athletes);
+  //     } catch (e) {
+  //       console.error('Failed to load athletes for season ', leagueId, e);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-        setPlayers(athletes);
-        console.log('athletes: ', athletes);
-      } catch (e) {
-        console.error('Failed to load athletes for season ', leagueId, e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadAthletes();
-  }, [leagueRound]);
+  //   loadAthletes();
+  // }, [leagueId, leagueRound]);
 
   // Load saved team presets for the season (scoped to current user)
   useEffect(() => {
@@ -537,7 +534,7 @@ export default function CreateMyTeam({
         })}
       </div>
 
-      {isModalOpen && activePosition && (
+      {/* {isModalOpen && activePosition && (
         <PlayerSelectionModal
           visible={isModalOpen}
           selectedPosition={activePosition}
@@ -559,19 +556,18 @@ export default function CreateMyTeam({
           roundEnd={leagueRound?.end_round ?? undefined}
           leagueId={leagueRound?.official_league_id}
         />
-      )}
-
-      {/* {activePosition && (
-        <PlayerPickerV2
-          isOpen={isModalOpen}
-          positionPool={activePosition.positionClass as (PositionClass | undefined)}
-          remainingBudget={remainingBudget}
-          excludePlayers={Object.values(selectedPlayers)}
-          onSelectPlayer={onSelectPlayer}
-          onClose={onClosePickerModal}
-          targetLeagueRound={leagueRound}
-        />
       )} */}
+
+      <PlayerPickerV2
+        isOpen={isModalOpen && activePosition !== null}
+        positionPool={activePosition?.positionClass as (PositionClass | undefined)}
+        remainingBudget={remainingBudget}
+        excludePlayers={Object.values(selectedPlayers)}
+        onSelectPlayer={onSelectPlayer}
+        onClose={onClosePickerModal}
+        targetLeagueRound={leagueRound}
+      />
+
 
       {/* Player profile modal */}
       {playerModalPlayer && (

@@ -209,11 +209,6 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
     }
 
     if (!isNaN(Number(action_count))) {
-      const isPercentage = action_count && action_count.toString().startsWith('0.');
-      if (isPercentage) {
-        return `${Math.floor(Number(action_count) * 100)}%`;
-      }
-
       return Math.floor(Number(action_count));
     }
 

@@ -38,6 +38,7 @@ import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import OnboardingDataProvider from './components/onboarding/OnboardingDataProvider';
+import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -105,7 +106,9 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <DashboardScreen />
+              <DashboardDataProvider>
+                <DashboardScreen />
+              </DashboardDataProvider>
             </Layout>
           </ProtectedRoute>
         }

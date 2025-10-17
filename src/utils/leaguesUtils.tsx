@@ -85,15 +85,20 @@ export function isLeagueLocked(joinDeadline: Date | null | undefined) {
 }
 
 export function isLeagueRoundLocked(leagueRound: IFantasyLeagueRound) {
-  
-  const {join_deadline} = leagueRound;
-  
+  const { join_deadline } = leagueRound;
+
   if (!join_deadline) return false;
 
   const now = new Date();
   const deadline = new Date(join_deadline);
 
   return now.valueOf() >= deadline.valueOf();
+}
+
+export function hasLeagueRoundEnded(leagueRound: IFantasyLeagueRound) {
+  const { has_ended } = leagueRound;
+
+  return has_ended;
 }
 
 export function isLeagueGroupLocked(joinDeadline: Date | null | undefined) {
@@ -107,7 +112,6 @@ export function isLeagueGroupLocked(joinDeadline: Date | null | undefined) {
 
 /** Returns the last possible date that users can join a league */
 export function calculateJoinDeadline(league: IFantasyLeagueRound) {
-
   if (league.join_deadline) {
     const deadline = new Date(league.join_deadline);
     return deadline;
@@ -190,12 +194,10 @@ export function pastLeaguesFilter(leagues: IFantasyLeagueRound[]) {
 export function leaguesOnClockFilter(leagues: FantasyLeagueGroup[]) {
   const activeLeagues = activeLeaguesFilter(leagues);
 
-  const leagueOnTheClock = activeLeagues.length > 0 ?
-    activeLeagues[0] : undefined;
+  const leagueOnTheClock = activeLeagues.length > 0 ? activeLeagues[0] : undefined;
 
   return {
     leaguesOnTheClock: activeLeagues,
-    firstLeagueOnClock: leagueOnTheClock
+    firstLeagueOnClock: leagueOnTheClock,
   };
-
 }
