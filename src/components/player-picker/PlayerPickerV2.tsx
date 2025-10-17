@@ -102,7 +102,7 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
       open={isOpen}
       title={dialogTitle}
       onClose={onClose}
-      hw="min-h-[95vh] lg:w-[60vh]"
+      hw="min-h-[100vh] w-full lg:w-[60vh]"
       className="flex flex-col gap-2 relative"
       outerCon="no-scrollbar"
       ref={setRefs}
