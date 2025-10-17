@@ -4,9 +4,6 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ScrummyDarkModeLogo } from '../../components/branding/scrummy_logo';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
-import Experimental from '../../components/shared/ab_testing/Experimental';
-import GoogleOAuthBox from '../../components/auth/oauth/GoogleOAuthBox';
-import AppleOAuthBox from '../../components/auth/oauth/AppleOAuthBox';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
@@ -110,14 +107,6 @@ export function WelcomeScreen() {
               <BetaTag className="bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none" />
             </PrimaryButton>
 
-            <Experimental>
-              <GoogleOAuthBox
-                className='dark:bg-slate-200 text-dark-900 dark:text-dark-900 border-none dark:hover:bg-white'
-              />
-              <AppleOAuthBox
-                className='bg-white dark:bg-slate-200 text-dark-900 dark:text-dark-900 border-none dark:hover:bg-white'
-              />
-            </Experimental>
 
 
             <GuestLoginBox
