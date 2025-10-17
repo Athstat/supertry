@@ -37,7 +37,7 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
   }, [onClose, player.tracking_id, startTime]);
 
   return (
-    <PlayerDataProvider player={player}>
+    <PlayerDataProvider onClose={handleCloseModal} player={player}>
       <DialogModal
         open={isOpen}
         className="p-0 flex flex-col gap-2 "
