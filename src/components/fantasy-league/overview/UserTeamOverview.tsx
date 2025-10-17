@@ -160,7 +160,7 @@ function PlayerItem({ athlete, onClick }: PlayerItemProps) {
       <div
         onClick={onClick}
         className={twMerge(
-          'flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col'
+          'flex border dark:border-slate-700 min-w-[120px] max-w-[120px] h-[120px] rounded-xl overflow-clip p-0 flex-col'
         )}
       ></div>
     );

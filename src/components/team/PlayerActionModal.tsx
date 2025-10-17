@@ -4,6 +4,7 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import DialogModal from "../shared/DialogModal";
 import PlayerMugshot from "../shared/PlayerMugshot";
+import { AvailabilityText } from "../players/availability/AvailabilityIcon";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -91,6 +92,13 @@ export function PlayerActionModal({
               </div>
             )}
           </div>
+        </div>
+
+        <div className="mb-4" >
+          <AvailabilityText
+            className="p-2"
+            athlete={player}
+          />
         </div>
 
         {/* Action Buttons */}

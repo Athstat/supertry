@@ -1,31 +1,33 @@
 import { useNavigate } from 'react-router-dom';
 import BlueGradientCard from '../shared/BlueGradientCard';
-
+import { SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY } from '../../state/fantasy/fantasyLeagueScreen.atoms';
 
 export function HeroSection() {
-
   const navigate = useNavigate();
   const onClick = () => {
-    navigate(`/leagues?season_id=9e74bed3-9ea2-5f41-a906-434d0d3e8f4e`)
-  }
+    const key = SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY;
+    const seasonId = '9e74bed3-9ea2-5f41-a906-434d0d3e8f4e';
+    navigate(`/leagues?${key}=${seasonId}`);
+  };
 
   return (
     <BlueGradientCard
       onClick={onClick}
-      className="cursor-pointer from-purple-900 to-blue-800 dark:from-violet-700 dark:to-blue-800 hover:dark:from-primary-700 hover:dark:to-violet-700 overflow-clip transition-all ease-in duration-1000"
+      className="cursor-pointer from-purple-900 to-blue-800 dark:from-violet-700 dark:to-violet-800 hover:dark:from-primary-700 hover:dark:to-violet-700 overflow-clip transition-all ease-in duration-1000"
     >
       <div className="flex flex-col gap-4 p-3">
-
-        <div className='flex flex-col gap-1'>
+        <div className="flex flex-col gap-1">
           <div>
-            <h1 className="text-lg lg:text-xl font-bold">URC is back! Your rivals are preparing 🔥</h1>
+            <h1 className="text-lg lg:text-xl font-bold">
+              URC is back! Your rivals are preparing 🔥
+            </h1>
           </div>
 
           <p className="text-sm opacity-90">
-            Time to scrum down, build your squad, and take on your mates. Pick your team, invite your friend, and let the battles begin.
+            Time to scrum down, build your squad, and take on your mates. Pick your team, invite
+            your friend, and let the battles begin.
           </p>
         </div>
-
       </div>
 
       {/* {leagueOnTheClock && (

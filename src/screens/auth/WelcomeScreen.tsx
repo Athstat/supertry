@@ -4,9 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ScrummyDarkModeLogo } from '../../components/branding/scrummy_logo';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
-import SecondaryText from '../../components/shared/SecondaryText';
-import { useGuestLogin } from '../../hooks/auth/useGuestLogin';
-import { ErrorMessage } from '../../components/ui/ErrorState';
+import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
 import BetaTag from '../../components/branding/BetaTag';
@@ -15,8 +13,6 @@ import { FEATURED_PLAYER_IDS } from '../../types/constants';
 export function WelcomeScreen() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-
-  const { isLoading, error, handleGuestLogin } = useGuestLogin('/post-signup-welcome');
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -62,84 +58,13 @@ export function WelcomeScreen() {
     };
   }, []);
 
-  // const googleLogin = useGoogleLogin({
-  //   onSuccess: async tokenResponse => {
-  //     try {
-  //       setError(null);
-  //       const result = await authService.googleOAuth(tokenResponse.code);
-
-  //       if (result.error) {
-  //         setError(result.error.message || 'Google sign-in failed');
-  //         return;
-  //       }
-
-  //       const authUser = result.data?.user;
-  //       const accessToken = result.data?.token;
-
-  //       if (authUser && accessToken) {
-  //         authTokenService.setAccessToken(accessToken);
-  //         authTokenService.saveUserToLocalStorage(authUser);
-  //         navigate('/post-signup-welcome');
-  //       }
-
-  //       // Mark first visit completed and navigate
-  //       markFirstVisitCompleted();
-  //       setError('Google sign-in failed. Please try again.');
-
-  //     } catch (err: any) {
-  //       console.error('Google OAuth error:', err);
-  //       setError('Google sign-in failed. Please try again.');
-  //     }
-  //   },
-  //   onError: () => setError('Google sign-in failed. Please try again.'),
-  //   flow: 'auth-code',
-  // });
-
-  // const handleAppleSuccess = async (response: any) => {
-  //   if (!response.authorization || !response.authorization.id_token) {
-  //     setError('Apple sign-in failed. Please try again.');
-  //     return;
-  //   }
-
-  //   try {
-  //     setError(null);
-  //     const result = await authService.appleOAuth(response.authorization.id_token);
-
-  //     if (result.error) {
-  //       setError(result.error.message || 'Apple sign-in failed');
-  //       return;
-  //     }
-
-  //     const authUser = result.data?.user;
-  //     const accessToken = result.data?.token;
-
-  //     if (authUser && accessToken) {
-  //       authTokenService.setAccessToken(accessToken);
-  //       authTokenService.saveUserToLocalStorage(authUser);
-  //       navigate('/post-signup-welcome');
-  //     }
-
-  //     // Mark first visit completed and navigate
-  //     markFirstVisitCompleted();
-  //     navigate('/post-signup-welcome');
-  //   } catch (err: any) {
-  //     console.error('Apple OAuth error:', err);
-  //     setError('Apple sign-in failed. Please try again.');
-  //   }
-  // };
-
-  // const handleAppleError = (error: any) => {
-  //   console.error('Apple sign-in failed:', error);
-  //   setError('Apple sign-in failed. Please try again.');
-  // };
-
   const navigateToSignin = () => {
     navigate('/signin');
   };
 
   return (
     <MovingRugbyPitch className="h-[100vh] overflow-hidden flex flex-col items-center justify-center">
-      <div className="flex z-50 bg-green-700/90 flex-col items-center overflow-y-auto justify-center h-[100vh] px-4">
+      <div className="flex z-50 bg-green-900/90 flex-col items-center overflow-y-auto justify-center h-[100vh] px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -176,22 +101,22 @@ export function WelcomeScreen() {
           >
             <PrimaryButton
               className="w-full py-3 animate-glow"
-              onClick={handleGuestLogin}
-              isLoading={isLoading}
+              onClick={navigateToSignin}
             >
-              <p>Get Started</p>
+              <p>Sign In</p>
               <BetaTag className="bg-white dark:bg-white text-blue-500 dark:text-blue-500 border-none dark:border-none" />
             </PrimaryButton>
 
-            {error && <ErrorMessage message={error} />}
 
-            <div onClick={navigateToSignin}>
-              <SecondaryText className="underline cursor-pointer text-white">
-                Already Part of The Scrum? Sign In
-              </SecondaryText>
-            </div>
+
+            <GuestLoginBox
+              className='bg-transparent py-0 text-slate-200 dark:text-slate-200 hover:text-white dark:hover:text-white dark:bg-transparent border-none underline hover:bg-transparent hover:dark:bg-transparent'
+              hideIcon
+            />
+            
           </motion.div>
         </motion.div>
+
       </div>
     </MovingRugbyPitch>
   );

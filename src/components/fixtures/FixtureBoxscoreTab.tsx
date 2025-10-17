@@ -1,7 +1,7 @@
 import { IFixture } from "../../types/games"
 import { fixtureSumary } from "../../utils/fixtureUtils"
-import { BoxscoreListRecordItem, GameSportAction } from "../../types/boxScore"
 import { useEffect, useMemo } from "react"
+import { BoxscoreListRecordItem, GameSportAction } from "../../types/boxScore"
 import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
 import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
 import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics"
@@ -112,6 +112,7 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
         </div>
     )
 }
+
 
 function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
     const athleteIds: string[] = [];
