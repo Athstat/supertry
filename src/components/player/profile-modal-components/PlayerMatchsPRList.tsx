@@ -188,35 +188,33 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="flex flex-row items-center gap-3">
-          {singleMatchPr.minutes_played !== undefined && singleMatchPr.minutes_played !== null && (
-            <div className="flex flex-col items-center justify-center">
-              <p className="dark:text-slate-200 text-slate-900 text-sm font-semibold">
-                {singleMatchPr.minutes_played}'
-              </p>
-              <p className="text-xs dark:text-slate-400 text-slate-600">mins</p>
-            </div>
-          )}
-          {singleMatchPr.fantasy_points !== undefined && singleMatchPr.fantasy_points !== null && (
-            <div className="flex flex-col items-center justify-center">
-              <p className="dark:text-slate-200 text-slate-900 text-sm font-semibold">
-                {singleMatchPr.fantasy_points.toFixed(1)}
-              </p>
-              <p className="text-xs dark:text-slate-400 text-slate-600">pts</p>
-            </div>
-          )}
-          <div className="flex flex-col items-center justify-center px-2 py-1 rounded-lg bg-blue-500/20 ring-1 ring-blue-500/30">
-            <p className="dark:text-blue-400 text-blue-600 text-lg font-bold">
-              {singleMatchPr.updated_power_ranking}
-            </p>
-            <p className="text-xs dark:text-blue-400 text-blue-600">PR</p>
-          </div>
+        {/* Power Ranking Badge */}
+        <div className="flex flex-col items-center justify-center px-2 py-1 rounded-lg bg-blue-500/20 ring-1 ring-blue-500/30">
+          <p className="dark:text-blue-400 text-blue-600 text-lg font-bold">
+            {singleMatchPr.updated_power_ranking}
+          </p>
+          <p className="text-xs dark:text-blue-400 text-blue-600">PR</p>
         </div>
       </div>
 
+      {/* Stats Row - Minutes & Fantasy Points */}
+      <div className="flex flex-row items-center gap-4 text-sm dark:text-slate-300 text-slate-700 pl-9">
+        {singleMatchPr.minutes_played !== undefined && singleMatchPr.minutes_played !== null && (
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold">{singleMatchPr.minutes_played}'</span>
+            <span className="text-xs dark:text-slate-400 text-slate-600">mins</span>
+          </div>
+        )}
+        {singleMatchPr.fantasy_points !== undefined && singleMatchPr.fantasy_points !== null && (
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold">{singleMatchPr.fantasy_points.toFixed(1)}</span>
+            <span className="text-xs dark:text-slate-400 text-slate-600">Fantasy Pts</span>
+          </div>
+        )}
+      </div>
+
       {/* Match Date & Competition */}
-      <div className="dark:text-slate-400 text-xs text-slate-600">
+      <div className="dark:text-slate-400 text-xs text-slate-600 pl-9">
         {kickoff_time ? format(kickoff_time, 'EEE dd MMM yyyy') : ''} • {season_name}
       </div>
 
