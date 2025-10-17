@@ -13,17 +13,14 @@ import {
   isBridgeAvailable,
   requestPushPermissions,
   getPushPermissionStatus,
-  isMobileWebView,
-  openSystemNotificationSettings,
 } from '../utils/bridgeUtils';
 import { authService } from '../services/authService';
-import GameStoriesCarrousel from '../components/dashboard/stories/GameStoriesCarrousel';
-import Experimental from '../components/shared/ab_testing/Experimental';
+import { logger } from '../services/logger';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
   const [showPushModal, setShowPushModal] = useState(false);
-  const [showSettingsNote, setShowSettingsNote] = useState(false);
+  const [, setShowSettingsNote] = useState(false);
   const [pushPermissionStatus, setPushPermissionStatus] = useState<
     'granted' | 'denied' | 'prompt' | 'unknown'
   >('unknown');
@@ -73,7 +70,9 @@ export function DashboardScreen() {
         if (!isBridgeAvailable()) return;
         const status = await getPushPermissionStatus();
         if (!cancelled) setPushPermissionStatus(status);
-      } catch {}
+      } catch (err) {
+        logger.error("Error with push optin ", err)
+      }
     })();
     return () => {
       cancelled = true;
@@ -102,9 +101,7 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      <Experimental>
-        <GameStoriesCarrousel />
-      </Experimental>
+
 
       {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}
 
@@ -181,7 +178,9 @@ export function DashboardScreen() {
                     setShowSettingsNote(true);
                   }
                 }
-              } catch {}
+              } catch (err) {
+                logger.error("Error with push optin ", err)
+              }
             }
           } catch {
             // swallow error and proceed to hide modal
@@ -199,7 +198,9 @@ export function DashboardScreen() {
                 setShowSettingsNote(true);
               }
             }
-          } catch {}
+          } catch (err) {
+            logger.error("Error with push optin ", err)
+          }
           setShowPushModal(false);
         }}
       />

@@ -5,8 +5,6 @@ import { AuthLayout } from '../../components/auth/AuthLayout';
 import EmailPasswordLoginBox from '../../components/auth/login/EmailPasswordLoginBox';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
 import Experimental from '../../components/shared/ab_testing/Experimental';
-import GoogleOAuthBox from '../../components/auth/oauth/GoogleOAuthBox';
-import AppleOAuthBox from '../../components/auth/oauth/AppleOAuthBox';
 
 export function SignInScreen() {
   const [isLoading, ] = useState(false);
@@ -109,11 +107,6 @@ export function SignInScreen() {
               </div>
               <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
             </div>
-          </Experimental>
-
-          <Experimental>
-            <GoogleOAuthBox />
-            <AppleOAuthBox />
           </Experimental>
 
           <GuestLoginBox />

@@ -5,13 +5,10 @@ import { format } from 'date-fns';
 import PlayerInfoCard from '../PlayerInfoCard';
 import { IProAthlete } from '../../../../types/athletes';
 import { usePlayerData } from '../../provider/PlayerDataProvider';
-import PlayerIconsRow from '../../../players/compare/PlayerIconsRow';
 import { Calendar, Ruler, Dumbbell, Globe } from 'lucide-react';
 import { isNumeric } from '../../../../utils/stringUtils';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
-import RelatedPlayersList from '../RelatedPlayersList';
 import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
-import PlayerHeroCard from '../PlayerHeroCard';
 import NoContentCard from '../../../shared/NoContentMessage';
 
 type Props = {
@@ -85,9 +82,6 @@ export default function PlayerOverviewTab({ player }: Props) {
         </div>
       </div>
 
-      {/* Additional Content */}
-      {currentSeason && <PlayerIconsRow player={player} season={currentSeason} size="sm" />}
-
       <CoachScrummyPlayerReport player={player} />
 
       {currentSeason && (
@@ -101,8 +95,6 @@ export default function PlayerOverviewTab({ player }: Props) {
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
           Season Statistics
         </h3>
-
-        {currentSeason && <PlayerIconsRow player={player} season={currentSeason} size="sm" />}
 
         {sortedSeasons.length === 0 && (
           <NoContentCard message={`Career stats for ${player.player_name} are not available`} />
