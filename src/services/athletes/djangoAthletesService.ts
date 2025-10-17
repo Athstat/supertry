@@ -1,4 +1,4 @@
-import { IProAthlete, IAthleteSeasonStarRatings } from "../../types/athletes";
+import { IProAthlete, IAthleteSeasonStarRatings, AthleteRoundAvailabilityReport } from "../../types/athletes";
 import { IProSeason } from "../../types/season";
 import { SportAction } from "../../types/sports_actions";
 import { getUri, getAuthHeader } from "../../utils/backendUtils";
@@ -129,7 +129,7 @@ export const djangoAthleteService = {
             }
 
         } catch (err) {
-            console.log("Error fetching athlete seasons");
+            console.log("Error fetching athlete seasons: ", err);
         }
 
         return [];
@@ -148,7 +148,7 @@ export const djangoAthleteService = {
             }
 
         } catch (err) {
-            console.log(`Error fetching athlete season stats for ${season_id}`);
+            console.log(`Error fetching athlete season stats for ${season_id}: `, err);
         }
 
         return [];
@@ -167,7 +167,7 @@ export const djangoAthleteService = {
             }
 
         } catch (err) {
-            console.log(`Error fetching athlete season stats for ${season_id}`);
+            console.log(`Error fetching athlete season stats for ${season_id}: `, err);
         }
 
         return undefined;
@@ -186,9 +186,29 @@ export const djangoAthleteService = {
             }
 
         } catch (err) {
-            console.log(`Error fetching athlete team mates for ${athleteId}`);
+            logger.error(`Error fetching athlete team mates for ${athleteId}: `, err);
         }
 
         return [];
     },
+
+    /** Gets a list of availability reports for season rounds that a player is eligible for */
+    getAthleteAvailabilityReport: async (athleteId: string) : Promise<AthleteRoundAvailabilityReport[]> => {
+        
+        try {
+            const uri = getUri(`/api/v1/athletes/${athleteId}/availability`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as AthleteRoundAvailabilityReport[];
+            }
+        } catch(err) {
+            logger.error("Error fetching player availability report ", err);
+        }
+
+        return [];
+        
+    }
 }

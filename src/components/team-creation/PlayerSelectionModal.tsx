@@ -14,7 +14,6 @@ import { LoadingState } from '../ui/LoadingState';
 import usePlayersFilter from './player-selection-components/usePlayersFilter';
 import useAvailableTeams from './player-selection-components/useAvailableTeams';
 import useModalEffects from './player-selection-components/useModalEffects';
-import AvailableFilter from './AvailableFilter';
 import { AthleteWithTrackingId } from '../../types/fantasyTeamAthlete';
 import { IProAthlete } from '../../types/athletes';
 import useSWR from 'swr';
@@ -53,7 +52,7 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
     'rating'
   );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [filterAvailable, setFilterAvailable] = useState(false);
+  const [filterAvailable, ] = useState(false);
 
   // Only fetch fixtures if leagueId is provided (TeamCreationScreen)
   const {currentRound} = useFantasyLeagueGroup();
@@ -161,14 +160,14 @@ const PlayerSelectionModal: React.FC<PlayerSelectionModalProps> = ({
         {/* Search bar */}
         <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
-        <AvailableFilter
+        {/* <AvailableFilter
           filterAvailable={filterAvailable}
           toogle={() => setFilterAvailable(!filterAvailable)}
           remainingBudget={remainingBudget}
           totalBudget={240} // Default budget value
           selectedPlayersCount={selectedPlayers.length}
           requiredPlayersCount={6} // Default required players value
-        />
+        /> */}
 
         {/* Filters section */}
         <TeamFilter

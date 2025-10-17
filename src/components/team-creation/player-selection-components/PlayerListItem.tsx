@@ -6,7 +6,7 @@ import FormIndicator from '../../shared/FormIndicator';
 import renderStatDots from './renderStatDots';
 import { useState } from 'react';
 import { WarningPopup } from '../../shared/WarningPopup';
-import { ScrummyLightModeLogo } from '../../branding/scrummy_logo';
+import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
 
 type Props = {
   index?: number;
@@ -55,7 +55,7 @@ export default function PlayerListItem({
         className={twMerge(
           'flex items-center px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-700 cursor-pointer transition',
           cannotAfford &&
-            'opacity-40 bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700'
+          'opacity-40 bg-gray-200 hover:bg-gray-300 dark:bg-slate-600 dark:hover:bg-slate-700'
         )}
       >
         {/* Player image with fallback logo */}
@@ -85,14 +85,22 @@ export default function PlayerListItem({
               {player.form && player.form !== 'NEUTRAL' && <FormIndicator form={player.form} />}
             </div>
           </div>
-          <div className="flex flex-col gap-0 lg:flex-col">
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+
+          <div className="flex flex-row gap-1 items-center text-gray-500 dark:text-gray-400">
+            <p className="text-xs  truncate">
               {player.team?.athstat_name || 'No team'}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p>|</p>
+            <p className="text-xs">
               {formatPosition(player.position || selectedPosition.name)}
             </p>
+            <AvailabilityIcon
+              athlete={player}
+              className='w-4 h-4 rounded-md'
+              iconClassName='w-2 h-2'
+            />
           </div>
+
           <button
             onClick={e => handleViewPlayerProfile(player, e)}
             className="mt-1 text-blue-500 dark:text-blue-400 hover:underline transition-colors text-xs flex items-center"
