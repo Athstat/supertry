@@ -75,6 +75,12 @@ export default function EnableNotificationMessage() {
         setShowSettingsNote(pushPermissionStatus !== 'granted');
     }, [pushPermissionStatus]);
 
+    const isOnMobile = isMobileWebView();
+
+    if (!isOnMobile) {
+        return;
+    }
+
     return (
         <div className="" >
             {showSettingsNote && (
