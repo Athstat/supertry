@@ -7,84 +7,11 @@ import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeC
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
-import { useEffect, useState } from 'react';
-import PushOptInModal from '../components/ui/PushOptInModal';
-import {
-  isBridgeAvailable,
-  requestPushPermissions,
-  getPushPermissionStatus,
-  isMobileWebView,
-  openSystemNotificationSettings,
-} from '../utils/bridgeUtils';
-import { authService } from '../services/authService';
-import { logger } from '../services/logger';
+import { HeroSection } from '../components/dashboard';
+import EnableNotificationMessage from '../components/notifications/EnableNotificationMessage';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
-  const [showPushModal, setShowPushModal] = useState(false);
-  const [, setShowSettingsNote] = useState(false);
-  const [pushPermissionStatus, setPushPermissionStatus] = useState<
-    'granted' | 'denied' | 'prompt' | 'unknown'
-  >('unknown');
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      if (!isBridgeAvailable()) return;
-      try {
-        const userInfo = await authService.getUserInfo();
-        const kcId = userInfo?.kc_id;
-        if (!kcId) return;
-
-        const hasPushId = !!localStorage.getItem('onesignal_id');
-        const dismissed = localStorage.getItem('push_optin_dismissed') === 'true';
-        const firstSeenKey = `dashboard_seen_user_${kcId}`;
-        const settingsNoteSeenKey = `push_settings_note_seen_user_${kcId}`;
-        const hasSeenDash = localStorage.getItem(firstSeenKey) === 'true';
-
-        if (!hasSeenDash) {
-          localStorage.setItem(firstSeenKey, 'true');
-          if (!hasPushId && !dismissed && !cancelled) {
-            setShowPushModal(true);
-          } else if (
-            !hasPushId &&
-            dismissed &&
-            localStorage.getItem(settingsNoteSeenKey) !== 'true' &&
-            !cancelled
-          ) {
-            setShowSettingsNote(true);
-          }
-        }
-      } catch {
-        // no-op
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Query push permission status on mount
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        if (!isBridgeAvailable()) return;
-        const status = await getPushPermissionStatus();
-        if (!cancelled) setPushPermissionStatus(status);
-      } catch (err) {
-        logger.error("Error with push optin ", err)
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Keep settings note visible whenever notifications are not granted
-  useEffect(() => {
-    setShowSettingsNote(pushPermissionStatus !== 'granted');
-  }, [pushPermissionStatus]);
 
   const handleBannerClick = () => {
     navigate('/leagues');
@@ -103,53 +30,18 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      {showSettingsNote && (
-        <div
-          role="alert"
-          className="-mx-4 px-4 py-3 border-y border-yellow-200 bg-yellow-50 text-yellow-900 dark:border-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-100"
-        >
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="text-sm">
-              <span className="font-semibold">Enable push notifications.</span> Notifications are
-              disabled. Turn them on to get match updates and alerts.
-            </div>
-            {isMobileWebView() && (
-              <PrimaryButton
-                className="shrink-0"
-                onClick={async () => {
-                  const opened = await openSystemNotificationSettings();
-                  if (!opened) {
-                    console.warn('Could not open system settings from web environment');
-                  }
-                }}
-              >
-                Go to settings
-              </PrimaryButton>
-            )}
-          </div>
-        </div>
-      )}
-
       <div>
         <HeroSection />
-        {/* <div className="mt-3">
-          <HeroSection2 />
-        </div> */}
       </div>
 
-      {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}
-
-      {/* <FeaturedPlayersCarousel /> */}
 
       <ClaimAccountNoticeCard />
 
+      <EnableNotificationMessage />
+
       <FeaturedFantasyLeagueGroups />
 
-      {/* <ActionList /> */}
       <UpcomingFixturesSection hidePastFixtures />
-      {/* <ComparePlayersPanel /> */}
-      {/* <MyWeekPanel /> */}
-      {/* <MyTeamsSection /> */}
 
       <RoundedCard className="flex flex-col gap-4 p-4">
         <div className="flex flex-col gap-1">
@@ -163,47 +55,6 @@ export function DashboardScreen() {
         <PrimaryButton onClick={handleBannerClick}>Take Me There</PrimaryButton>
       </RoundedCard>
 
-      <PushOptInModal
-        visible={showPushModal}
-        onEnable={async () => {
-          try {
-            const granted = await requestPushPermissions();
-            setPushPermissionStatus(granted ? 'granted' : 'denied');
-            if (!granted) {
-              try {
-                const kcId = authService.getUserInfoSync()?.kc_id;
-                if (kcId) {
-                  const settingsNoteSeenKey = `push_settings_note_seen_user_${kcId}`;
-                  if (localStorage.getItem(settingsNoteSeenKey) !== 'true') {
-                    setShowSettingsNote(true);
-                  }
-                }
-              } catch (err) {
-                logger.error("Error with push optin ", err)
-              }
-            }
-          } catch {
-            // swallow error and proceed to hide modal
-          } finally {
-            setShowPushModal(false);
-          }
-        }}
-        onNotNow={() => {
-          try {
-            localStorage.setItem('push_optin_dismissed', 'true');
-            const kcId = authService.getUserInfoSync()?.kc_id;
-            if (kcId) {
-              const settingsNoteSeenKey = `push_settings_note_seen_user_${kcId}`;
-              if (localStorage.getItem(settingsNoteSeenKey) !== 'true') {
-                setShowSettingsNote(true);
-              }
-            }
-          } catch (err) {
-            logger.error("Error with push optin ", err)
-          }
-          setShowPushModal(false);
-        }}
-      />
     </PageView>
   );
 }
