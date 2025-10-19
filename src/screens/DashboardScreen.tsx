@@ -8,7 +8,6 @@ import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
 import { HeroSection } from '../components/dashboard';
-import EnableNotificationMessage from '../components/notifications/EnableNotificationMessage';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ export function DashboardScreen() {
 
       <ClaimAccountNoticeCard />
 
-      <EnableNotificationMessage />
+      {/* <EnableNotificationMessage /> */}
 
       <FeaturedFantasyLeagueGroups />
 
