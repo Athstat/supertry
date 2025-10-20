@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { X, ChevronLeft, Trophy, Dot, Lock } from "lucide-react";
 import { RankedFantasyTeam } from "../../types/league";
-import { PointsBreakdownItem } from "../../services/athletes/athleteService";
 import { formatAction } from "../../utils/athleteUtils";
 import { RugbyPlayer } from "../../types/rugbyPlayer";
 import TeamAthletesModalPitchView from "./TeamAthletesModalPitchView";
@@ -11,6 +10,7 @@ import { useAtomValue } from "jotai";
 import { authService } from "../../services/authService";
 import PlayerMugshot from "../shared/PlayerMugshot";
 import { fantasyLeagueLockedAtom } from "../../state/fantasy/fantasyLeague.atoms";
+import { PointsBreakdownItem } from "../../types/sports_actions";
 
 interface TeamAthletesModalProps {
   team: RankedFantasyTeam;

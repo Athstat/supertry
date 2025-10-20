@@ -1,9 +1,8 @@
-import useSWR from "swr";
-import { fantasyAthleteService } from "../../services/fantasy/fantasyAthleteService";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { PlayerGameCard } from "../player/PlayerGameCard";
 import { twMerge } from "tailwind-merge";
+import { useAthleteRoundScore } from "../../hooks/useAthletePointsBreakdown";
 
 type TeamPlayerCardProp = {
   player: IFantasyTeamAthlete,
@@ -20,16 +19,8 @@ export function FantasyTeamAthleteCard({ player, onPlayerClick, round, pointsCla
     }
   }
 
-  const key = `/fantasy-team/${player.team_id}/athlete-points-breakdown/${player.id}`
-  const { data: pointItems, isLoading } = useSWR(key, () => fantasyAthleteService.getRoundPointsBreakdown(
-    player.athlete_id,
-    round.start_round ?? 0,
-    round.season_id
-  ));
-
-  const totalPoints = pointItems?.reduce((prev, curr) => {
-    return prev + (curr.score ?? 0);
-  }, 0) ?? 0;
+  const {score, isLoading} = useAthleteRoundScore(player.tracking_id, round.season_id, round.start_round ?? 0);
+  const totalPoints = score ?? 0;
 
   return (
     <div className='flex flex-col items-center justify-start' >
@@ -44,7 +35,7 @@ export function FantasyTeamAthleteCard({ player, onPlayerClick, round, pointsCla
       {!isLoading && <p className={twMerge(
         'text-white h-3 font-bold',
         pointsClassName
-      )} >{Math.floor(totalPoints)}</p>}
+      )} >{(totalPoints).toFixed(1)}</p>}
 
       {isLoading && <p className={twMerge(
         'text-white font-bold w-3 h-3 rounded-full animate-pulse bg-white/50',

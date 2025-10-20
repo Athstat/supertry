@@ -1,5 +1,6 @@
-import { FantasyAthletePointsBreakdownItem, SquadReportItem } from "../../types/fantasyTeamAthlete";
+import { AthleteRoundScore, FantasyAthletePointsBreakdownItem, SquadReportItem } from "../../types/fantasyTeamAthlete";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
+import { logger } from "../logger";
 
 export const fantasyAthleteService = {
 
@@ -38,6 +39,25 @@ export const fantasyAthleteService = {
             }
         } catch (err) {
             console.log("Error fetching athlete squad report ", err);
+        }
+
+        return undefined;
+    },
+
+    getRoundScore: async (athleteId: string, seasonId: string, round: number | string) : Promise<AthleteRoundScore | undefined> => {
+        
+        try {
+            const uri = getUri(`/api/v1/fantasy-athletes/${athleteId}/season/${seasonId}/round/${round}/score`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader(),
+            });
+
+            if (res.ok) {
+                return await res.json() as AthleteRoundScore;
+            }
+
+        } catch (err) {
+            logger.error("Error fetching athlete round score ", err);
         }
 
         return undefined;

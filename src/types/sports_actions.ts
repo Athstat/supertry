@@ -1,4 +1,3 @@
-import { normaliseSportsActionName } from "../utils/sportsActionUtils"
 import { IProSeason } from "./season"
 
 export type SportAction = {
@@ -7,7 +6,7 @@ export type SportAction = {
     action_count: number,
     season_id: string,
     season: IProSeason,
-    definition?: SportActionDefinition 
+    definition?: SportActionDefinition
 }
 
 export type PlayerAggregateStatAction = "Offloads" | "Passes" | "PenaltyConcededLineoutOffence" |
@@ -46,4 +45,13 @@ export type SportActionDefinition = {
     show_on_ui?: boolean,
     group_as?: string,
     finesse_required?: boolean
+}
+
+export type PointsBreakdownItem = {
+    action: string,
+    action_count: number,
+    score: number,
+    round: number,
+    game: string,
+    athlete: string
 }
