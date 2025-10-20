@@ -1,5 +1,3 @@
-import useSWR from "swr";
-import { fantasyAthleteService } from "../../services/fantasy/fantasyAthleteService";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { PlayerGameCard } from "../player/PlayerGameCard";
