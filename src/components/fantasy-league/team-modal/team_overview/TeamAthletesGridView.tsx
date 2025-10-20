@@ -1,5 +1,9 @@
+import { useMemo } from "react"
+import { useLeagueRoundStandingsFilter } from "../../../../hooks/fantasy/useLeagueRoundStandingsFilter"
+import { useFantasyLeagueGroup } from "../../../../hooks/leagues/useFantasyLeagueGroup"
+import { useAthleteRoundScore } from "../../../../hooks/useAthletePointsBreakdown"
 import { IProAthlete } from "../../../../types/athletes"
-import { FantasyLeagueTeamWithAthletes } from "../../../../types/fantasyLeague"
+import { FantasyLeagueTeamWithAthletes, IDetailedFantasyAthlete } from "../../../../types/fantasyLeague"
 import { formatPosition } from "../../../../utils/athleteUtils"
 import { PlayerGameCard } from "../../../player/PlayerGameCard"
 import PlayerMugshot from "../../../shared/PlayerMugshot"
@@ -12,6 +16,7 @@ type TeamAthletesViewProps = {
 }
 
 export function TeamAthletesGridView({ roundTeam, onClickPlayer }: TeamAthletesViewProps) {
+
     return (
         <div className="bg-green-600 overflow-clip min-h-[920px] max-h-[920px] relative rounded-xl" >
             <RugbyPitch count={6} />
@@ -19,28 +24,65 @@ export function TeamAthletesGridView({ roundTeam, onClickPlayer }: TeamAthletesV
             <div className="flex flex-row  min-h-[920px] max-h-[920px] items-center justify-center flex-wrap absolute top-0 left-0" >
 
                 {roundTeam?.athletes?.map((a) => {
-
-                    const handleClick = () => {
-                        if (onClickPlayer) {
-                            onClickPlayer(a.athlete);
-                        }
-                    }
-
                     return (
-                        <div className="flex flex-col gap-2 items-center justify-center" >
-                            <PlayerGameCard
-                                player={a.athlete}
-                                onClick={handleClick}
-                                key={a.athlete.tracking_id}
-                            />
-
-                            <p className="font-bold text-white" >{Math.floor(a.score ?? 0)}</p>
-                        </div>
+                        <GridItem
+                            a={a}
+                            onClickPlayer={onClickPlayer}
+                        />
                     )
                 })}
             </div>
         </div>
     )
+}
+
+type GridItemProps = {
+    onClickPlayer?: (p: IProAthlete) => void,
+    a: IDetailedFantasyAthlete
+}
+
+function GridItem({ onClickPlayer, a }: GridItemProps) {
+
+    const { currentRound, rounds } = useFantasyLeagueGroup();
+    const { roundFilterId } = useLeagueRoundStandingsFilter();
+
+    const filteredRound = useMemo(() => {
+        if (roundFilterId === "overall" || roundFilterId === undefined) {
+            return currentRound;
+        }
+
+        const fRound = rounds.find((r) => {
+            return r.id.toString() === roundFilterId;
+        });
+
+        return fRound || currentRound;
+    }, [roundFilterId, currentRound, rounds]);
+
+    const { score, isLoading } = useAthleteRoundScore(a.athlete.tracking_id ?? "", filteredRound?.season_id ?? "", filteredRound?.start_round ?? "");
+
+    const handleClick = () => {
+        if (onClickPlayer) {
+            onClickPlayer(a.athlete);
+        }
+    }
+
+
+    return (
+        <div className="flex flex-col gap-2 items-center justify-center" >
+            <PlayerGameCard
+                player={a.athlete}
+                onClick={handleClick}
+                key={a.athlete.tracking_id}
+            />
+
+            {!isLoading && <p className="font-bold text-white" >{(score ?? 0).toFixed(1)}</p>}
+            {isLoading && (
+                <div className="font-bold text-white w-4 h-4 rounded-full bg-white/50 animate-pulse " >
+                </div>
+            )}
+        </div>
+    )
+
 }
 
 
