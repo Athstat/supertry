@@ -75,7 +75,7 @@ function GridItem({ onClickPlayer, a }: GridItemProps) {
                 key={a.athlete.tracking_id}
             />
 
-            {!isLoading && <p className="font-bold text-white" >{Math.floor(score ?? 0)}</p>}
+            {!isLoading && <p className="font-bold text-white" >{(score ?? 0).toFixed(1)}</p>}
             {isLoading && (
                 <div className="font-bold text-white w-4 h-4 rounded-full bg-white/50 animate-pulse " >
                 </div>
