@@ -122,6 +122,13 @@ export function PlayerGameCard({
   const playerIcons = getRandomIcons(getRandomIconCount());
 
   let imageUrl = useMemo(() => {
+    // First try to use the player's actual image
+    //console.log('Player image URL: ', player);
+    if (player.image_url && !playerImageErr) {
+      return player.image_url;
+    }
+
+    // Fall back to team jersey image
     if (player.athlete) {
       return player.athlete.team?.athstat_id
         ? getTeamJerseyImage(player.athlete.team?.athstat_id)
@@ -129,7 +136,7 @@ export function PlayerGameCard({
     } else {
       return player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
     }
-  }, [player]);
+  }, [player, playerImageErr]);
 
   const { currentRound } = useFantasyLeagueGroup();
   const { authUser } = useAuth();
@@ -160,11 +167,8 @@ export function PlayerGameCard({
       )}
       onClick={onClick}
     >
-
-      <div className='absolute top-0 text-black right-0' >
-        <AvailabilityIcon 
-          athlete={player}
-        />
+      <div className="absolute top-0 text-black right-0">
+        <AvailabilityIcon athlete={player} />
       </div>
 
       {/* Card Container */}
