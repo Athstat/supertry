@@ -1,6 +1,9 @@
 import { useAtomValue } from "jotai";
 import { useFetch } from "./useFetch";
 import { fantasyLeagueAtom } from "../state/fantasy/fantasyLeague.atoms";
+import useSWR from "swr";
+import { fantasyAthleteService } from "../services/fantasy/fantasyAthleteService";
+import { useMemo } from "react";
 
 export function useAthletePointsBreakdown(trackingId: string) {
 
@@ -24,4 +27,21 @@ export function useAthletePointsBreakdown(trackingId: string) {
         , async ({  }) => {
             return []
         });
+}
+
+/** Hook that returns a players score for a specific season round  */
+export function useAthleteRoundScore(athleteId: string, seasonId: string, round: number | string) {
+    const key = `/fantasy-athletes/${athleteId}/season/${seasonId}/round/${round}`;
+    const {data, isLoading, error} = useSWR(key, () => fantasyAthleteService.getRoundScore(athleteId, seasonId, round));
+
+    const score = useMemo(() => data?.score || 0, [data]);
+
+    return {
+        isLoading,
+        error,
+        score,
+        seasonId,
+        round,
+        athleteId
+    }
 }
