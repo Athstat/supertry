@@ -131,3 +131,11 @@ export type SquadReportItem = {
   away_team_name: string;
   availability: PlayerSquadAvailability;
 };
+
+/** Represents an athletes round score */
+export type AthleteRoundScore = {
+  athlete_id: string,
+  season_id: string,
+  round: number,
+  score: number
+}
