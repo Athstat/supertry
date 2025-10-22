@@ -6,6 +6,7 @@ import { SideDrawer } from "./SideDrawer";
 import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
 import { isInProduction } from "../utils/webUtils";
 import BetaTag from "./branding/BetaTag";
+import NotificationsBell from "./notifications/NotificationsBell";
 
 export function Header() {
   
@@ -18,6 +19,10 @@ export function Header() {
   const handleProfileClick = () => {
     navigate("/profile");
   };
+  
+  const handleInAppMessages = () => {
+    navigate('/in-app-messages');
+  }
 
   const isProfileActive = location.pathname === "/profile";
 
@@ -48,12 +53,11 @@ export function Header() {
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            {/* <button
-              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-              aria-label="Notifications"
-            >
-              <Bell size={20} />
-            </button> */}
+            
+            <NotificationsBell 
+              onClick={handleInAppMessages}
+            />
+
             <button
               onClick={handleProfileClick}
               className={`p-2 transition-colors ${
