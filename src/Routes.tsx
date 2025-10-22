@@ -38,6 +38,7 @@ import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import OnboardingDataProvider from './components/onboarding/OnboardingDataProvider';
+import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -351,6 +352,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      
 
       <Route
         path="/verify-email"
@@ -370,6 +372,17 @@ const AppRoutes = () => {
         path="/invite-steps"
         element={
           <InviteStepsScreen />
+        }
+      />
+
+      <Route
+        path="/in-app-messages"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <InAppMessagesScreen />
+            </Layout>
+          </ProtectedRoute>
         }
       />
 
