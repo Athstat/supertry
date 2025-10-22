@@ -31,9 +31,9 @@ export default function InAppMessagesScreen() {
                 <p className='font-bold text-xl' >Notifications</p>
             </div>
 
-            { isLoading && <LoadingSkeleton />}
+            {isLoading && <LoadingSkeleton />}
 
-            <div className='flex flex-col w-full gap-4' >
+            {!isLoading && <div className='flex flex-col w-full gap-4' >
                 {(sortedMessages).map((m) => {
                     return (
                         <InAppMessageCard 
@@ -41,7 +41,7 @@ export default function InAppMessagesScreen() {
                         />
                     )
                 })}
-            </div>
+            </div>}
         </PageView>
     )
 }
@@ -49,8 +49,13 @@ export default function InAppMessagesScreen() {
 
 function LoadingSkeleton() {
     return (
-        <div>
-            <RoundedCard />
+        <div className='flex flex-col gap-4' >
+            <RoundedCard className='h-[80px] animate-pulse p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl' />
+            <RoundedCard className='h-[80px] animate-pulse p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl' />
+            <RoundedCard className='h-[140px] animate-pulse p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl' />
+            <RoundedCard className='h-[80px] animate-pulse p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl' />
+            <RoundedCard className='h-[80px] animate-pulse p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl' />
+            <RoundedCard className='h-[80px] animate-pulse p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl' />
         </div>
     )
 }
