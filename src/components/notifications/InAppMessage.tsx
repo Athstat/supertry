@@ -28,7 +28,14 @@ export default function InAppMessageCard({ message }: Props) {
             }
         }
 
-        mark_as_read();
+        /** Marks notification as unread after ten seconds */
+        const timeout = setTimeout(() => {
+            mark_as_read();
+        }, 10000);
+
+        return () => {
+            clearTimeout(timeout);
+        }
     }, [inView, message]);
 
     const handleCtaAction = () => {
