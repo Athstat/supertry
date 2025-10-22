@@ -5,13 +5,14 @@ import useSWR from 'swr'
 import { inAppMessagesServices } from '../../services/notifications/inAppMessagesService';
 import InAppMessageCard from '../../components/notifications/InAppMessage';
 import { useMemo } from 'react';
+import TabView, { TabViewHeaderItem, TabViewPage } from '../../components/shared/tabs/TabView';
 
 export default function InAppMessagesScreen() {
 
     const key = `/in-app-notifications/user-messages`;
-    const {data: messages, isLoading} = useSWR(key, () => inAppMessagesServices.getMessages());
+    const { data: messages, isLoading } = useSWR(key, () => inAppMessagesServices.getMessages());
 
-    const sortedMessages = useMemo(( ) => {
+    const sortedMessages = useMemo(() => {
         const copy = [...(messages ?? [])]
         return copy.sort((a, b) => {
             const aEpoch = new Date(a.created_at).valueOf();
@@ -21,9 +22,40 @@ export default function InAppMessagesScreen() {
         })
     }, [messages]);
 
+    const unreadMessages = useMemo(() => {
+        const copy = [...(sortedMessages ?? [])]
+        return copy.filter((m) => {
+            return m.is_read === false
+        })
+    }, [sortedMessages]);
+
+    const readMessages = useMemo(() => {
+        const copy = [...(sortedMessages ?? [])]
+        return copy.filter((m) => {
+            return m.is_read === true
+        })
+    }, [sortedMessages]);
+
+    const unreadCount = unreadMessages.length;
+    const readCount = readMessages.length;
+
+    const tabItems: TabViewHeaderItem[] = [
+        {
+            label: `Unread ${unreadCount > 0 ? `(${unreadCount})` : ""}`,
+            tabKey: 'unread',
+            className: 'flex-1'
+        },
+
+        {
+            label: `Read ${readCount > 0 ? `(${readCount})` : ""}`,
+            tabKey: 'read',
+            className: "flex-1"
+        }
+    ]
+
     return (
         <PageView className='px-4 flex flex-col gap-4' >
-            
+
             <div
                 className='flex flex-row items-center gap-2'
             >
@@ -33,15 +65,41 @@ export default function InAppMessagesScreen() {
 
             {isLoading && <LoadingSkeleton />}
 
-            {!isLoading && <div className='flex flex-col w-full gap-4' >
-                {(sortedMessages).map((m) => {
-                    return (
-                        <InAppMessageCard 
-                            message={m}
-                        />
-                    )
-                })}
-            </div>}
+            <TabView
+                tabHeaderItems={tabItems}
+            >
+
+                <TabViewPage
+                    tabKey='unread'
+                >
+                    {!isLoading && <div className='flex flex-col w-full gap-4' >
+                        {(unreadMessages).map((m) => {
+                            return (
+                                <InAppMessageCard
+                                    message={m}
+                                />
+                            )
+                        })}
+                    </div>}
+                </TabViewPage>
+
+                <TabViewPage
+                    tabKey='read'
+                >
+                    {!isLoading && <div className='flex flex-col w-full gap-4' >
+                        {(readMessages).map((m) => {
+                            return (
+                                <InAppMessageCard
+                                    message={m}
+                                />
+                            )
+                        })}
+                    </div>}
+                </TabViewPage>
+
+            </TabView>
+
+
         </PageView>
     )
 }

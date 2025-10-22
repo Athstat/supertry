@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom"
 import { InAppMessage } from "../../types/notifications/inAppMessage"
 import { formatDistanceToNow } from "date-fns"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useInView } from "react-intersection-observer"
+import { inAppMessagesServices } from "../../services/notifications/inAppMessagesService"
+import { logger } from "../../services/logger"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
     message: InAppMessage
@@ -9,7 +13,23 @@ type Props = {
 
 /** Renders an in app message card with modern card design */
 export default function InAppMessageCard({ message }: Props) {
+    
     const navigate = useNavigate();
+    const {inView, ref} = useInView({triggerOnce: true});
+    const [isRead, setIsRead] = useState(message.is_read);
+
+    useEffect(() => {
+        const mark_as_read = async () => {
+            try {
+                await inAppMessagesServices.markAsRead(message.id);
+                setIsRead(true);   
+            } catch (err) {
+                logger.error("Error marking message as read ", err);
+            }
+        }
+
+        mark_as_read();
+    }, [inView, message]);
 
     const handleCtaAction = () => {
         if (message.cta_in_app_link) {
@@ -29,12 +49,16 @@ export default function InAppMessageCard({ message }: Props) {
         <div 
             className="p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl"
             onClick={handleCtaAction}
+            ref={ref}
         >
             
             <div className="flex gap-2">
                 {/* Icon */}
                 <div className="flex-shrink-0 pt-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-primary-500 flex items-center justify-center">
+                    <div className={twMerge(
+                        "w-2.5 h-2.5 rounded-full bg-primary-500 flex items-center justify-center",
+                        isRead && "bg-transparent"
+                    )}>
                     </div>
                 </div>
 
