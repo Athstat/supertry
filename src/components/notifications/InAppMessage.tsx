@@ -1,16 +1,14 @@
 import { useNavigate } from "react-router-dom"
 import { InAppMessage } from "../../types/notifications/inAppMessage"
-import SecondaryText from "../shared/SecondaryText"
 import { formatDistanceToNow } from "date-fns"
-import { twMerge } from "tailwind-merge"
+import { useMemo } from "react"
 
 type Props = {
     message: InAppMessage
 }
 
-/** Renders an in app message card */
+/** Renders an in app message card with modern card design */
 export default function InAppMessageCard({ message }: Props) {
-
     const navigate = useNavigate();
 
     const handleCtaAction = () => {
@@ -19,55 +17,66 @@ export default function InAppMessageCard({ message }: Props) {
         }
     }
 
-    const createdAt = new Date(message.created_at ?? new Date());
-    const timeSince = formatDistanceToNow(createdAt, { addSuffix: true })
+    ;
+    const timeSince = useMemo(() => {
+        const createdAt = new Date(message.created_at ?? new Date())
+        const copy = formatDistanceToNow(createdAt, { addSuffix: true });
+
+        return copy.replace('about', '');
+    }, [message]);
 
     return (
-        <div
-            className={twMerge(
-                "p-4 flex flex-row overflow-hidden border gap-2  dark:border-slate-800/60 dark:bg-slate-800/40 rounded-xl"
-            )}
+        <div 
+            className="p-4 w-full bg-white border border-slate-200 dark:border-transparent dark:bg-slate-800/40 rounded-2xl"
+            onClick={handleCtaAction}
         >
-            <div className="h-full flex pt-2 flex-col items-center justify-start" >
-                <div>
-                    {/* <BellDot className="w-4 h-4" /> */}
-                    <div className="bg-primary-500 rounded-full w-2.5 h-2.5" ></div>
-                </div>
-            </div>
-
-            <div className="flex flex-col overflow-hidden  gap-2 w-full" >
-
-                <div className="flex flex-row overflow-hidden items-start w-full flex-1 justify-between" >
-                    <div className="flex flex-col truncate" >
-                        <p className="text-sm truncate " >{message.title}</p>
-                        <p className="text-xs text-slate-600 dark:text-slate-300" >{message.sub_title}</p>
+            
+            <div className="flex gap-2">
+                {/* Icon */}
+                <div className="flex-shrink-0 pt-1">
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary-500 flex items-center justify-center">
                     </div>
-
-                    {message.created_at && <div className="text-nowrap" >
-                        <SecondaryText className="text-xs" >{timeSince}</SecondaryText>
-                    </div>}
                 </div>
 
-                {message.message && (
-                    <div>
-                        <p className="text-xs text-slate-600 dark:text-slate-400" >{message.message}</p>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                    {/* Title and Time */}
+                    <div className="flex items-start justify-between gap-3 mb-0">
+                        <h3 className="font-semibold truncate text-sm dark:text-white leading-tight">
+                            {message.title}
+                        </h3>
+                        {message.created_at && (
+                            <span className="text-xs dark:text-slate-400 text-slate-500 flex-shrink-0">
+                                {timeSince}
+                            </span>
+                        )}
                     </div>
-                )}
 
-                {message.cta_text && (
-                    <div>
+                    {/* Subtitle */}
+                    {message.sub_title && (
+                        <p className="text-sm dark:text-slate-300 text-slate-500 leading-relaxed mb-1">
+                            {message.sub_title}
+                        </p>
+                    )}
+
+                    {/* Message */}
+                    {message.message && (
+                        <p className="text-sm dark:text-slate-400 text-slate-600 leading-relaxed">
+                            {message.message}
+                        </p>
+                    )}
+
+                    {/* CTA Button */}
+                    {message.cta_text && (
                         <button
-                            className="text-primary-500 text-sm hover:text-blue-500"
                             onClick={handleCtaAction}
+                            className="mt-3 text-sm text-primary-500 hover:text-blue-600 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
                         >
                             {message.cta_text}
                         </button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-
-
-
         </div>
     )
 }

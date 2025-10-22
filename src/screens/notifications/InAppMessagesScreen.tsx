@@ -23,6 +23,7 @@ export default function InAppMessagesScreen() {
 
     return (
         <PageView className='px-4 flex flex-col gap-4' >
+            
             <div
                 className='flex flex-row items-center gap-2'
             >
@@ -32,7 +33,7 @@ export default function InAppMessagesScreen() {
 
             { isLoading && <LoadingSkeleton />}
 
-            <div className='flex flex-col gap-4' >
+            <div className='flex flex-col w-full gap-4' >
                 {(sortedMessages).map((m) => {
                     return (
                         <InAppMessageCard 
