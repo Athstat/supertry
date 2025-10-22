@@ -20,6 +20,11 @@ export default function InAppMessageCard({ message }: Props) {
 
     useEffect(() => {
         const mark_as_read = async () => {
+
+            if (!inView) {
+                return;
+            }
+
             try {
                 await inAppMessagesServices.markAsRead(message.id);
                 setIsRead(true);   
@@ -30,7 +35,11 @@ export default function InAppMessageCard({ message }: Props) {
 
         /** Marks notification as unread after ten seconds */
         const timeout = setTimeout(() => {
-            mark_as_read();
+            
+            if (inView) {
+                mark_as_read();
+            }
+
         }, 10000);
 
         return () => {

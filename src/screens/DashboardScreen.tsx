@@ -8,9 +8,14 @@ import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
 import { HeroSection } from '../components/dashboard';
+import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
+
+  /** Hook for temporal fix, that prompts user to enable
+   * notification if they havem't already seen a message to do so */
+  useTempEnableNotificationAlert();
 
   const handleBannerClick = () => {
     navigate('/leagues');

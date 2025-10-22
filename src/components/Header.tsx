@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Menu, User } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
 import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
@@ -11,20 +11,20 @@ import NotificationsBell from "./notifications/NotificationsBell";
 export function Header() {
   
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const isInQa = isInProduction() !== true;
 
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
+  // const handleProfileClick = () => {
+  //   navigate("/profile");
+  // };
   
   const handleInAppMessages = () => {
     navigate('/in-app-messages');
   }
 
-  const isProfileActive = location.pathname === "/profile";
+  // const isProfileActive = location.pathname === "/profile";
 
   return (
     <>
@@ -58,7 +58,7 @@ export function Header() {
               onClick={handleInAppMessages}
             />
 
-            <button
+            {/* <button
               onClick={handleProfileClick}
               className={`p-2 transition-colors ${
                 isProfileActive
@@ -68,7 +68,7 @@ export function Header() {
               aria-label="Profile"
             >
               <User size={20} />
-            </button>
+            </button> */}
           </div>
         </div>
       </header>
