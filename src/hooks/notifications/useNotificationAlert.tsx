@@ -8,14 +8,14 @@ import { requestPushPermissions } from "../../utils/bridgeUtils";
  * */
 export function useTempEnableNotificationAlert() {
     const {authUser} = useAuth();
-    const localStorageKey = `temp-enabled-notifications-${authUser?.kc_id}`;
+    const localStorageKey = `user-prompted-to-enabled-notifications-${authUser?.kc_id}`;
 
     useEffect(() => {
         const fetcher = async () => {
             
             const isSet = localStorage.getItem(localStorageKey);
 
-            if (isSet === null) {
+            if (isSet !== null) {
                 return;
             }
         

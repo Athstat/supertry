@@ -21,6 +21,7 @@ export function DashboardScreen() {
     navigate('/leagues');
   };
 
+
   return (
     <PageView className="flex flex-col space-y-4 p-4">
       <div className="flex flex-row items-center justify-between">
