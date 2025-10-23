@@ -260,7 +260,10 @@ export const PlayerScreenContent = () => {
 
         {/* Player Grid */}
         {!activeIsLoading && !activeError && !isFiltering && (
-          <div className="grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 md:gap-y-3">
+          <div
+            data-player-grid
+            className="grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 md:gap-y-3"
+          >
             {filteredAthletes.map(player => (
               <PlayerCardItem
                 player={player}
@@ -324,7 +327,7 @@ function PlayerCardItem({ player, onClick }: ItemProps) {
   const { ref, inView } = useInView({ triggerOnce: true });
 
   return (
-    <div ref={ref}>
+    <div ref={ref} data-player-card>
       {inView && (
         <PlayerGameCard
           key={player.tracking_id}
