@@ -4,13 +4,22 @@ import RoundedCard from '../../components/shared/RoundedCard'
 import useSWR from 'swr'
 import { inAppMessagesServices } from '../../services/notifications/inAppMessagesService';
 import InAppMessageCard from '../../components/notifications/InAppMessage';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../components/shared/tabs/TabView';
+import EmptyUnreadNotificationsMessage, { EmptyReadNotificationsMessage } from '../../components/notifications/EmptyNotificationsMessage';
 
 export default function InAppMessagesScreen() {
 
     const key = `/in-app-notifications/user-messages`;
-    const { data: messages, isLoading } = useSWR(key, () => inAppMessagesServices.getMessages());
+    const { data: messages, isLoading, mutate } = useSWR(key, () => inAppMessagesServices.getMessages());
+
+    useEffect(() => {
+
+        /** Refresh notifications list after closing component */
+        return () => {
+            mutate();
+        }
+    }, [mutate]);
 
     const sortedMessages = useMemo(() => {
         const copy = [...(messages ?? [])]
@@ -81,6 +90,11 @@ export default function InAppMessagesScreen() {
                             )
                         })}
                     </div>}
+
+                    {unreadCount === 0 && (
+                        <EmptyUnreadNotificationsMessage />
+                    )}
+
                 </TabViewPage>
 
                 <TabViewPage
@@ -95,6 +109,10 @@ export default function InAppMessagesScreen() {
                             )
                         })}
                     </div>}
+
+                    {readCount === 0 && (
+                        <EmptyReadNotificationsMessage />
+                    )}
                 </TabViewPage>
 
             </TabView>
