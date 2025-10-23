@@ -48,3 +48,14 @@ export type GameSportAction = {
     data_source: string,
     definition?: SportActionDefinition
 }
+
+export type BoxscoreListRecordItem = {
+    athleteId: string,
+    stats: (number | string)[]
+}
+
+export type BoxscoreHeader = {
+    lable: string,
+    key?: string,
+    tooltip?: string
+}

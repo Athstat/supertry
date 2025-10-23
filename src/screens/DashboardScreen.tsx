@@ -22,9 +22,8 @@ export function DashboardScreen() {
   };
 
   return (
-    <PageView className="flex flex-col space-y-8 p-4">
-
-      <div className='flex flex-row items-center justify-between' >
+    <PageView className="flex flex-col space-y-4 p-4">
+      <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Home />
           <p className="text-xl font-extrabold">Dashboard</p>
@@ -35,32 +34,31 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      <HeroSection />
+      <div>
+        <HeroSection />
+      </div>
 
-      {/* <HeroImageBanner link={'/images/wwc_2025_banner.jpg'} onClick={handleBannerClick} /> */}
-
-      {/* <FeaturedPlayersCarousel /> */}
 
       <ClaimAccountNoticeCard />
+
+      {/* <EnableNotificationMessage /> */}
+
       <FeaturedFantasyLeagueGroups />
 
-      {/* <ActionList /> */}
-      <UpcomingFixturesSection 
-        hidePastFixtures
-      />
-      {/* <ComparePlayersPanel /> */}
-      {/* <MyWeekPanel /> */}
-      {/* <MyTeamsSection /> */}
+      <UpcomingFixturesSection hidePastFixtures />
 
-      <RoundedCard className='flex flex-col gap-4 p-4' >
-
-        <div className='flex flex-col gap-1' >
-          <h1 className='font-bold text-lg' >Dominate the SCRUMM</h1>
-          <p>Leagues are live! 🎉 Create your own, join one, and challenge your friends. Invite your crew and see who really rules the game!</p>
+      <RoundedCard className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="font-bold text-lg">Dominate the SCRUMM</h1>
+          <p>
+            Leagues are live! 🎉 Create your own, join one, and challenge your friends. Invite your
+            crew and see who really rules the game!
+          </p>
         </div>
 
-        <PrimaryButton onClick={handleBannerClick} >Take Me There</PrimaryButton>
+        <PrimaryButton onClick={handleBannerClick}>Take Me There</PrimaryButton>
       </RoundedCard>
+
     </PageView>
   );
 }

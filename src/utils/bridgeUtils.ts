@@ -31,6 +31,10 @@ declare global {
         };
       }>;
       getDeviceId(): Promise<string>;
+      getPushPermissionStatus?(): Promise<{
+        status: 'granted' | 'denied' | 'prompt';
+        onesignal_id?: string;
+      }>;
       initializeAuth(): Promise<{
         isAuthenticated: boolean;
         tokens?: {
@@ -69,6 +73,7 @@ declare global {
         };
         error?: string;
       }>;
+      openNotificationSettings?(): Promise<{ success: boolean }>;
     };
     // Also support lowercase version (as injected by mobile app)
     scrummyBridge?: {
@@ -91,6 +96,10 @@ declare global {
         };
       }>;
       getDeviceId(): Promise<string>;
+      getPushPermissionStatus?(): Promise<{
+        status: 'granted' | 'denied' | 'prompt';
+        onesignal_id?: string;
+      }>;
       initializeAuth(): Promise<{
         isAuthenticated: boolean;
         tokens?: {
@@ -118,6 +127,7 @@ declare global {
         message?: string;
         authUrl?: string;
       }>;
+      openNotificationSettings?(): Promise<{ success: boolean }>;
     };
   }
 }
@@ -429,6 +439,30 @@ export function requestPushPermissionsAfterSignup(userId: string, email: string)
  * Request navigation in the mobile app WebView
  * @param url The URL to navigate to
  */
+export async function getPushPermissionStatus(): Promise<
+  'granted' | 'denied' | 'prompt' | 'unknown'
+> {
+  try {
+    if (!isBridgeAvailable()) {
+      return localStorage.getItem('onesignal_id') ? 'granted' : 'unknown';
+    }
+    const bridge: any = (window as any).ScrummyBridge || (window as any).scrummyBridge;
+    if (bridge && typeof bridge.getPushPermissionStatus === 'function') {
+      const res = await bridge.getPushPermissionStatus();
+      const status = res?.status as 'granted' | 'denied' | 'prompt' | undefined;
+      if (status === 'granted' && res?.onesignal_id) {
+        localStorage.setItem('onesignal_id', res.onesignal_id);
+      }
+      return status ?? (localStorage.getItem('onesignal_id') ? 'granted' : 'unknown');
+    }
+    // Fallback inference if native method not available
+    return localStorage.getItem('onesignal_id') ? 'granted' : 'prompt';
+  } catch (e) {
+    console.error('Error getting push permission status:', e);
+    return localStorage.getItem('onesignal_id') ? 'granted' : 'unknown';
+  }
+}
+
 export function requestNavigation(url: string): void {
   if (typeof window !== 'undefined' && window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
@@ -437,5 +471,33 @@ export function requestNavigation(url: string): void {
         payload: { url },
       })
     );
+  }
+}
+
+/** Returns true if the app is running inside a mobile webview */
+export function isMobileWebView(): boolean {
+  return (
+    (window.ScrummyBridge?.isMobileApp && window.ScrummyBridge.isMobileApp()) ||
+    window.ReactNativeWebView !== undefined
+  );
+}
+
+export async function openSystemNotificationSettings(): Promise<boolean> {
+  try {
+    const bridge: any = (window as any).ScrummyBridge || (window as any).scrummyBridge;
+    if (bridge?.openNotificationSettings) {
+      const res = await bridge.openNotificationSettings();
+      return !!res?.success;
+    }
+    if (isMobileWebView() && (window as any).ReactNativeWebView) {
+      (window as any).ReactNativeWebView.postMessage(
+        JSON.stringify({ type: 'OPEN_NOTIFICATION_SETTINGS' })
+      );
+      return true;
+    }
+    return false;
+  } catch (e) {
+    console.error('Failed to open notification settings', e);
+    return false;
   }
 }

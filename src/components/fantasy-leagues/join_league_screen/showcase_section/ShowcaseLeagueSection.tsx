@@ -8,10 +8,10 @@ import useSWR from 'swr';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { leagueService } from '../../../../services/leagueService';
 import { swrFetchKeys } from '../../../../utils/swrKeys';
-import { LoadingState } from '../../../ui/LoadingState';
 import { LeagueRoundSummary } from '../../../fantasy-league/overview/LeagueOverviewTab';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
+import RoundedCard from '../../../shared/RoundedCard';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -20,7 +20,10 @@ type Props = {
 /** Renders the showcase league section */
 export default function ShowcaseLeagueSection({ leagueGroup }: Props) {
   return (
-    <FantasyLeagueGroupDataProvider leagueId={leagueGroup.id}>
+    <FantasyLeagueGroupDataProvider
+      loadingFallback={<LoadingSkeleton />}
+      leagueId={leagueGroup.id}
+    >
       <Content />
     </FantasyLeagueGroupDataProvider>
   );
@@ -47,7 +50,7 @@ function Content() {
   if (!league) return;
 
   if (isLoading) {
-    return <LoadingState />;
+    return <LoadingSkeleton />
   }
 
   const goToLeague = () => {
@@ -116,4 +119,27 @@ function Content() {
       )}
     </div>
   );
+}
+
+
+function LoadingSkeleton() {
+
+  return (
+    <div className='flex flex-col gap-4' >
+      <div className='flex flex-col gap-2' >
+        <RoundedCard className='w-[140px] h-[30px] border-none rounded-xl animate-pulse' />
+        <RoundedCard className='w-[160px] h-[30px] border-none rounded-xl animate-pulse' />
+      </div>
+      <div className='flex flex-col gap-2' >
+        <RoundedCard className='w-full h-[230px] border-none rounded-xl animate-pulse' />
+        <div className='flex flex-row items-center gap-2' >
+          <RoundedCard className='w-full h-[70px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[70px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[70px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[70px] border-none rounded-xl animate-pulse' />
+        </div>
+      </div>
+    </div>
+  );
+
 }

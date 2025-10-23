@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   FantasyLeagueTeamWithAthletes,
   IDetailedFantasyAthlete,
@@ -7,14 +7,14 @@ import {
 import PlayerPointsBreakdownView from '../team-modal/points_breakdown/PlayerPointsBreakdownView';
 import { IProAthlete } from '../../../types/athletes';
 import DialogModal from '../../shared/DialogModal';
-import TeamJersey from '../../player/TeamJersey';
-import { usePlayerSquadReport } from '../../../hooks/fantasy/usePlayerSquadReport';
+import { useGeneralPlayerAvailability } from '../../../hooks/fantasy/usePlayerSquadReport';
 import { twMerge } from 'tailwind-merge';
 import SecondaryText from '../../shared/SecondaryText';
 import { ArrowRight } from 'lucide-react';
 import { useTabView } from '../../shared/tabs/TabView';
 import { useNavigate } from 'react-router-dom';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
+
 
 type Props = {
   userTeam: FantasyLeagueTeamWithAthletes;
@@ -110,32 +110,69 @@ type PlayerItemProps = {
   team: FantasyLeagueTeamWithAthletes;
 };
 
-function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
-  const { reportText, isLoading, notAvailable } = usePlayerSquadReport(
-    team.id,
-    athlete.athlete.tracking_id
-  );
+function PlayerItem({ athlete, onClick }: PlayerItemProps) {
+
+  const {
+    nextMatch, isLoading,
+    isNotAvailable, isTeamNotPlaying,
+    report
+  } = useGeneralPlayerAvailability(athlete.athlete.tracking_id);
+
+  const { nextOpponent, fieldStatus } = useMemo(() => {
+
+    if (nextMatch) {
+      if (athlete.athlete.team_id === nextMatch.team?.athstat_id) {
+        return { nextOpponent: nextMatch.opposition_team, fieldStatus: "H" };
+      }
+
+      return { nextOpponent: nextMatch.team, fieldStatus: "A" };
+    }
+
+    return { nextOpponent: undefined, fieldStatus: undefined };
+  }, [nextMatch, athlete]);
+
+  const showWarning = isTeamNotPlaying || isNotAvailable;
+
+  const reportText = useMemo<string | undefined>(() => {
+    if (report) {
+      const { status } = report;
+
+      if (status === "PENDING" || status === "AVAILABLE") {
+        if (nextOpponent && fieldStatus) {
+          return `${nextOpponent.athstat_name} (${fieldStatus}) `;
+        }
+      }
+
+      if (status === "TEAM_NOT_PLAYING") {
+        return "Team Not Playing";
+      }
+
+      if (status === "NOT_AVAILABLE") {
+        return "⚠️ Not On Roster";
+      }
+    }
+
+    return "";
+  }, [fieldStatus, nextOpponent, report])
 
   if (isLoading) {
     return (
       <div
         onClick={onClick}
         className={twMerge(
-          'flex border dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col'
+          'flex border dark:border-slate-700 min-w-[120px] max-w-[120px] h-[120px] rounded-xl overflow-clip p-0 flex-col'
         )}
       ></div>
     );
   }
 
-  console.log('Team Id ', team.id);
-
   return (
     <div
       onClick={onClick}
       className={twMerge(
-        'flex border cursor-pointer dark:border-slate-700 min-w-[90px] max-w-[90px] h-[100px] rounded-xl overflow-clip p-0 flex-col',
-        notAvailable &&
-          'border-yellow-600 dark:border-yellow-900 bg-yellow-100 dark:bg-yellow-600/20 opacity-80'
+        'flex border cursor-pointer dark:border-slate-700 min-w-[120px] max-w-[120px] h-[120px] rounded-xl overflow-clip p-0 flex-col',
+        showWarning &&
+        'border-yellow-600 dark:border-yellow-900 bg-yellow-100 dark:bg-yellow-600/20 opacity-80'
       )}
     >
       <div className="h-[60%] w-full flex flex-col items-center justify-center">
@@ -154,12 +191,12 @@ function PlayerItem({ athlete, onClick, team }: PlayerItemProps) {
       <div
         className={twMerge(
           'text-center bg-white p-2 dark:bg-slate-800/60 truncate border-t dark:border-slate-700 h-[40%] pt-1 w-full flex  flex-col items-center justify-center ',
-          notAvailable && 'bg-yellow-200 dark:bg-yellow-900/30'
+          showWarning && 'bg-yellow-200 dark:bg-yellow-900/30'
         )}
       >
-        <p className="text-[10px] text-center truncate">{athlete.athlete.athstat_lastname}</p>
+        <p className="text-[10px] max-w-20 text-center truncate">{athlete.athlete.athstat_firstname}</p>
         <SecondaryText
-          className={twMerge('text-[10px]', notAvailable && 'text-yellow-600 dark:text-yellow-200')}
+          className={twMerge('text-[10px] truncate', showWarning && 'text-yellow-600 dark:text-yellow-200')}
         >
           {athlete.score ? Math.floor(athlete.score) : reportText}
         </SecondaryText>

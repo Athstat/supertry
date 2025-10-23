@@ -1,9 +1,12 @@
 import { RugbyPlayer } from "../../types/rugbyPlayer";
-import { useAthletePointsBreakdown } from "../../hooks/useAthletePointsBreakdown";
-import { PointsBreakdownItem } from "../../services/athletes/athleteService";
+import { useAthleteRoundScore } from "../../hooks/useAthletePointsBreakdown";
 import RugbyPitch from "../shared/RugbyPitch";
 import { PlayerGameCard } from "../player/PlayerGameCard";
 import { ArrowUpDown } from "lucide-react";
+import { PointsBreakdownItem } from "../../types/sports_actions";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import { useLeagueRoundStandingsFilter } from "../../hooks/fantasy/useLeagueRoundStandingsFilter";
+import { useMemo } from "react";
 
 type Props = {
     athletes: RugbyPlayer[],
@@ -65,20 +68,22 @@ type ListItemProps = {
     ) => void;
 };
 
-function TeamAthleteListItem({
-    athlete,
-    handleViewBreakdown,
-}: ListItemProps) {
+function TeamAthleteListItem({ athlete, handleViewBreakdown }: ListItemProps) {
+    
     const athleteId = athlete.id ?? "fall-back-id";
-    const { data: points, isLoading } = useAthletePointsBreakdown(
-        athlete.tracking_id ?? "default-tracking-id"
-    );
+    
+    const {league, currentRound} = useFantasyLeagueGroup();
+    const { roundFilterId } = useLeagueRoundStandingsFilter();
 
-    const totalScore: number = points
-        ? points.reduce((currTotal, action) => {
-            return currTotal + action.score;
-        }, 0)
-        : 0;
+    const round = useMemo(() => {
+        if (roundFilterId === "overall") {
+            return currentRound?.start_round
+        } else {
+            return roundFilterId
+        }
+    }, [roundFilterId, currentRound]);
+
+    const {score, isLoading} = useAthleteRoundScore(athlete.tracking_id ?? "", league?.season_id ?? "", round);
 
     const isSub = !athlete.is_starting;
 
@@ -98,7 +103,7 @@ function TeamAthleteListItem({
                     Sub
                     <ArrowUpDown className="w-2.5 h-2.5" />
                 </p>}
-                {<p className="font-bold text-sm" >{totalScore.toFixed(1)}</p>}
+                {!isLoading && <p className="font-bold text-sm" >{score.toFixed(1)}</p>}
             </div>
         </div>
     );

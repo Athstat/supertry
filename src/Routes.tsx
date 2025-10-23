@@ -5,7 +5,7 @@ import { SignInScreen } from './screens/auth/SignInScreen';
 import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
 import { ForgotPasswordScreen } from './screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
-import PostSignUpWelcomeScreen from './screens/PostSignUpWelcomeScreen';
+import OnBoardingScreen from './screens/OnboardingScreen';
 import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { FantasyLeaguesScreen } from './screens/FantasyLeaguesScreen';
@@ -39,6 +39,7 @@ import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardin
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import OnboardingDataProvider from './components/onboarding/OnboardingDataProvider';
 import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
+import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -106,7 +107,9 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <DashboardScreen />
+              <DashboardDataProvider>
+                <DashboardScreen />
+              </DashboardDataProvider>
             </Layout>
           </ProtectedRoute>
         }
@@ -293,7 +296,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <OnboardingDataProvider>
-              <PostSignUpWelcomeScreen />
+              <OnBoardingScreen />
             </OnboardingDataProvider>
           </ProtectedRoute>
         }

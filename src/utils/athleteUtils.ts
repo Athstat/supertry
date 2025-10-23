@@ -32,6 +32,11 @@ export const formatPosition = (inStr?: string) => {
 function nameMatches(query: string, target: string) {
     // Normalize strings: convert to lowercase, remove diacritics, and remove apostrophes
     const normalizeString = (str: string) => {
+
+        if (!str) {
+            return "";
+        }
+
         return str
             .toLowerCase()
             .normalize('NFD') // Decompose combined characters into base + diacritics
@@ -80,31 +85,6 @@ export function formatAction(actionName: string) {
 
     return res
 }
-
-export const getGroupedActions = (breakdown: any[]) => {
-    if (!breakdown || !breakdown.length) return [];
-
-    const groupedActions = breakdown.reduce((result: any, item) => {
-        const action = item.action || "";
-
-        if (!result[action]) {
-            result[action] = {
-                action: action,
-                action_count: 0,
-                score: 0,
-                instances: [],
-            };
-        }
-
-        result[action].action_count += item.action_count || 1;
-        result[action].score += item.score || 0;
-        result[action].instances.push(item);
-
-        return result;
-    }, {});
-
-    return Object.values(groupedActions);
-};
 
 
 export function calculateAveragePr(players: IFantasyTeamAthlete[]): number {
@@ -250,6 +230,9 @@ export function athleteSearchFilter(athletes: IProAthlete[], query: string | und
     if (!query) return buff;
 
     return buff.filter((a) => {
+        if (!query) {
+            return true;
+        }
         return athleteSearchPredicate(a, query);
     })
 }
@@ -285,7 +268,7 @@ export function getAthletesSummary(athletes: IProAthlete[]) {
  * Determines if a stat action value is the best (highest) among all compared players
  */
 export function isStatActionBest(
-    athlete: IProAthlete,
+    _athlete: IProAthlete,
     value: number | undefined,
     statKey: PlayerAggregateStatAction,
     comparePlayerStats: IComparePlayerStats[]
@@ -335,7 +318,7 @@ export function isSportActionBest(
  * Determines if a star rating value is the best (highest) among all compared players
  */
 export function isStarRatingBest(
-    athlete: IProAthlete,
+    _athlete: IProAthlete,
     value: number | undefined,
     starRatingKey: keyof IAthleteSeasonStarRatings,
     compareStarRatings: ICompareStarRatingsStats[]
@@ -390,7 +373,7 @@ export function getPositionFrameBackground(positionClass: string) {
 }
 
 
-export function getTeamJerseyImage(teamId: string) {
+export function getTeamJerseyImage(teamId: string | number) {
     const teamFallbackUrl = teamId
         ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${teamId}-ph-removebg-preview.png`
         : undefined;

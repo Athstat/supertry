@@ -12,7 +12,7 @@ type Props = {
 };
 
 // Budget Indicator Component
-const BudgetIndicator: React.FC<{ budget: number; maxBudget?: number }> = ({
+export const BudgetIndicator: React.FC<{ budget: number; maxBudget?: number }> = ({
   budget,
   maxBudget = 200,
 }) => {

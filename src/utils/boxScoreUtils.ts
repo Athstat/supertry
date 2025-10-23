@@ -1,6 +1,7 @@
 // Sort Players by Offensive Stats
 
-import { IBoxScoreItem } from "../types/boxScore";
+import { BoxscoreListRecordItem } from "../components/fixtures/boxscore/BoxscoreCategoryList";
+import { GameSportAction, IBoxScoreItem } from "../types/boxScore";
 
 export function rankByAttackingStats(stats: IBoxScoreItem[]) {
     
@@ -151,7 +152,7 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
     let penaltiesScored = 0;
     let penaltiesConceded = 0;
     let dropGoalsScored = 0;
-    let kicksAtGoal = 0;
+    const kicksAtGoal = 0;
     let lineOutsWon = 0;
     let turnoversWon = 0;
     let turnoversConceded = 0;
@@ -159,7 +160,7 @@ export function aggregateTeamStats(teamId: string, boxScore: IBoxScoreItem[]) {
     let yellowCards = 0;
 
     boxScore
-    .filter(bs => bs.athlete_team_id === teamId)
+    .filter(bs => bs.athlete.team_id === teamId)
     .forEach((bs) => {
         points += bs.points;
         tries += bs.tries;
@@ -222,4 +223,147 @@ export function convertionsPercVal(made: number, missed: number) {
     }
 
     return (made/total) * 100;
+}
+
+
+export function attackBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id) && b.team_id === teamId) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const tries = stats.find((b) => b.action === "tries")?.action_count;
+        const points = stats.find((b) => b.action === "points")?.action_count;
+        const passes = stats.find((b) => b.action === "carry_dominant")?.action_count;
+
+        return {
+            stats: [Math.floor(tries ?? 0), Math.floor(points ?? 0), Math.floor(passes ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [, points] = a.stats;
+        const [, bPoints] = b.stats;
+
+        return (bPoints ?? 0) - (points ?? 0)
+    });
+
+
+    return athleteStats;
+
+}
+
+
+export function defenseBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id) && b.team_id === teamId) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const tackles = stats.find((b) => b.action === "tackles")?.action_count;
+        const dominantTackles = stats.find((b) => b.action === "dominant_tackles")?.action_count;
+        const turnoversWon = stats.find((b) => b.action === "turnover_won")?.action_count;
+
+        return {
+            stats: [Math.floor(tackles ?? 0), Math.floor(dominantTackles ?? 0), Math.floor(turnoversWon ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [tackles] = a.stats;
+        const [bTackles] = b.stats;
+
+        return (bTackles ?? 0) - (tackles ?? 0)
+    }).filter((a) => {
+        const [x] = a.stats;
+
+        return x > 0;
+    });
+
+
+    return athleteStats;
+
+}
+
+
+export function kickingBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id) && teamId === b.team_id) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const conversion_goals = stats.find((b) => b.action === "conversion_goals")?.action_count;
+        const drop_goals_scored = stats.find((b) => b.action === "drop_goals_converted")?.action_count;
+        const penalty_goals = stats.find((b) => b.action === "kick_penalty_good")?.action_count;
+
+        return {
+            stats: [Math.floor(conversion_goals ?? 0), Math.floor(drop_goals_scored ?? 0), Math.floor(penalty_goals ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [conversion_goals] = a.stats;
+        const [bConversion_goals] = b.stats;
+
+        return (bConversion_goals ?? 0) - (conversion_goals ?? 0)
+    }).filter((a) => {
+        const [x, b, c] = a.stats;
+
+        return (x > 0) || (b > 0) || (c > 0)
+    });
+
+
+    return athleteStats;
+
+}
+
+export function disciplineBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id) && teamId === b.team_id) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const red_cards = stats.find((b) => b.action === "red_cards")?.action_count;
+        const yellow_cards = stats.find((b) => b.action === "yellow_cards")?.action_count;
+
+        return {
+            stats: [Math.floor(red_cards ?? 0), Math.floor(yellow_cards ?? 0)],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [redCards] = a.stats;
+        const [bRedCards] = b.stats;
+
+        return (bRedCards ?? 0) - (redCards ?? 0)
+
+    }).filter((a) => {
+        const [x, b] = a.stats;
+
+        return (x > 0) || (b > 0);
+    });
+
+
+    return athleteStats;
+
 }

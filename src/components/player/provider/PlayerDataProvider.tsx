@@ -12,11 +12,12 @@ import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete'
 
 type Props = {
     children?: ReactNode,
-    player: IProAthlete | IFantasyTeamAthlete
+    player: IProAthlete | IFantasyTeamAthlete,
+    onClose?: () => void
 }
 
 /** Provides a players data and stats down to child components */
-export default function PlayerDataProvider({ children, player }: Props) {
+export default function PlayerDataProvider({ children, player, onClose }: Props) {
 
     const atoms = [
         playerAtom,
@@ -28,6 +29,7 @@ export default function PlayerDataProvider({ children, player }: Props) {
         <ScopeProvider atoms={atoms} >
             <ProviderInner
                 player={player}
+                onClose={onClose}
             >
                 {children}
             </ProviderInner>
@@ -35,7 +37,7 @@ export default function PlayerDataProvider({ children, player }: Props) {
     )
 }
 
-function ProviderInner({ children, player }: Props) {
+function ProviderInner({ children, player, onClose }: Props) {
 
     const setPlayer = useSetAtom(playerAtom);
     const setSeasons = useSetAtom(playerSeasonsAtom);
@@ -53,14 +55,15 @@ function ProviderInner({ children, player }: Props) {
         if (fetchedPlayer) setPlayer(fetchedPlayer);
         if (seasons) setSeasons(seasons);
 
-    }, [player, seasons, fetchedPlayer]);
+    }, [player, seasons, fetchedPlayer, setPlayer, setSeasons]);
 
     if (isLoading) {
         return <DialogModal
             open={true}
-            hw='min-h-[95%]'
+            hw='min-h-[95%] lg:w-[40%]'
             className='animate-pulse flex flex-col gap-4'
             title={player.player_name}
+            onClose={onClose}
         >
 
             <RoundedCard className='animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[200px]' >

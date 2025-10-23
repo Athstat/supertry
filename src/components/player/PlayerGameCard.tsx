@@ -20,6 +20,7 @@ import { leagueService } from '../../services/leagueService';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { useAuth } from '../../contexts/AuthContext';
 import { swrFetchKeys } from '../../utils/swrKeys';
+import AvailabilityIcon from '../players/availability/AvailabilityIcon';
 // import { swrFetchKeys } from '../../utils/swrKeys';
 // import useSWR from 'swr';
 // import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
@@ -121,6 +122,12 @@ export function PlayerGameCard({
   const playerIcons = getRandomIcons(getRandomIconCount());
 
   let imageUrl = useMemo(() => {
+    // First try to use the player's actual image
+    if (player.image_url && !playerImageErr) {
+      return player.image_url;
+    }
+
+    // Fall back to team jersey image
     if (player.athlete) {
       return player.athlete.team?.athstat_id
         ? getTeamJerseyImage(player.athlete.team?.athstat_id)
@@ -128,7 +135,7 @@ export function PlayerGameCard({
     } else {
       return player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
     }
-  }, [player]);
+  }, [player, playerImageErr]);
 
   const { currentRound } = useFantasyLeagueGroup();
   const { authUser } = useAuth();
@@ -145,18 +152,24 @@ export function PlayerGameCard({
 
   const playerId = player.athlete_id || player.athlete?.tracking_id || player.tracking_id;
 
-  const { notAvailable } = usePlayerSquadReport(userTeam?.id, playerId);
+  const { notAvailable } = !isPlayersScreen
+    ? usePlayerSquadReport(userTeam?.id, playerId)
+    : { notAvailable: false };
 
   return (
     <div
       className={twMerge(
-        'min-w-[160px] max-w-[160px]  cursor-pointer max-h-[250px] ',
+        'min-w-[160px] max-w-[160px] relative cursor-pointer max-h-[250px] ',
         'lg:min-w-[200px] lg:max-w-[200px]',
         'flex items-center justify-center relative text-white dark:text-white',
         className
       )}
       onClick={onClick}
     >
+      <div className="absolute top-0 text-black right-0">
+        <AvailabilityIcon athlete={player} />
+      </div>
+
       {/* Card Container */}
       <div className="relative isolate z-0">
         {/* Card */}
@@ -244,7 +257,7 @@ export function PlayerGameCard({
                 )}
                 onError={() => setPlayerImageErr(true)}
               />
-              {notAvailable && !isPlayersScreen && (
+              {notAvailable && isPlayersScreen && (
                 <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
                   <span className="bg-black/70 text-white text-xs lg:text-sm font-semibold px-2 py-1 rounded">
                     Not Playing ⚠️
