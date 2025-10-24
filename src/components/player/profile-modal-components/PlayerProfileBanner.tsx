@@ -1,37 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { CardTier } from '../../../types/athletes';
 import { ScrummyDarkModeLogo } from '../../branding/scrummy_logo';
 import { CircleDollarSign } from 'lucide-react';
 import { usePlayerData } from '../provider/PlayerDataProvider';
+import { getTeamJerseyImage } from '../../../utils/athleteUtils';
 
 interface Props {}
 
 export default function PlayerProfileBanner({}: Props) {
   const { player } = usePlayerData();
+  const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
-  // Fallback chain like PlayerGameCard
-  const primaryImageUrl = player?.image_url ?? null;
-  const teamFallbackUrl = player?.team_id
-    ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${player.team_id}-ph-removebg-preview.png`
-    : null;
-  const [src, setSrc] = useState<string | null>(primaryImageUrl ?? teamFallbackUrl);
-
-  useEffect(() => {
-    setSrc(primaryImageUrl ?? teamFallbackUrl ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [primaryImageUrl, teamFallbackUrl]);
-
-  const handleImageError = () => {
-    if (src && primaryImageUrl && src === primaryImageUrl) {
-      if (teamFallbackUrl) setSrc(teamFallbackUrl);
-      else setSrc(null);
-    } else if (src && teamFallbackUrl && src === teamFallbackUrl) {
-      setSrc(null);
-    } else {
-      setSrc(null);
+  // Use the same image fallback logic as PlayerGameCard
+  const imageUrl = useMemo(() => {
+    // First try to use the player's actual image
+    if (player?.image_url && !playerImageErr) {
+      return player.image_url;
     }
-  };
+
+    // Fall back to team jersey image
+    return player?.team?.athstat_id ? getTeamJerseyImage(player.team.athstat_id) : undefined;
+  }, [player, playerImageErr]);
 
   const pr = player?.power_rank_rating ?? 0;
   const cardTier: CardTier =
@@ -58,28 +48,17 @@ export default function PlayerProfileBanner({}: Props) {
           <p className="text-sm font-bold">{player?.price}</p>
         </div>
       )}
-      {teamFallbackUrl ? (
+      {imageUrl ? (
         <div className="w-full h-full flex items-center justify-center">
           <img
-            src={teamFallbackUrl}
-            className="h-[200px] translate-y-12"
-            onError={handleImageError}
+            src={imageUrl}
+            className="h-[200px] object-contain"
+            onError={() => setPlayerImageErr(true)}
           />
         </div>
       ) : (
         <ScrummyDarkModeLogo className="h-[200px] w-[200px] grayscale opacity-30" />
       )}
-      {/* {src ? (
-        src === teamFallbackUrl ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <img src={src} className="h-[200px] translate-y-12" onError={handleImageError} />
-          </div>
-        ) : (
-          <img src={src} className="h-[200px]" onError={handleImageError} />
-        )
-      ) : (
-        <ScrummyDarkModeLogo className="h-[200px] w-[200px] grayscale opacity-30" />
-      )} */}
     </div>
   );
 }
