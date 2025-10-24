@@ -63,10 +63,11 @@ export default function FeaturedFantasyLeagueGroups() {
 
             )} */}
 
-            {officialLeagues.map((group) => {
+            {officialLeagues.map((group, index) => {
                 return (
                     <SmallLeagueOverviewCard 
                         league={group}
+                        key={index}
                     />
                 )
             })}

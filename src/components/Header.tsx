@@ -1,25 +1,30 @@
 import { useState } from "react";
-import { Menu, User } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { SideDrawer } from "./SideDrawer";
 import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
 import { isInProduction } from "../utils/webUtils";
 import BetaTag from "./branding/BetaTag";
+import NotificationsBell from "./notifications/NotificationsBell";
 
 export function Header() {
   
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const isInQa = isInProduction() !== true;
 
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
+  // const handleProfileClick = () => {
+  //   navigate("/profile");
+  // };
+  
+  const handleInAppMessages = () => {
+    navigate('/in-app-messages');
+  }
 
-  const isProfileActive = location.pathname === "/profile";
+  // const isProfileActive = location.pathname === "/profile";
 
   return (
     <>
@@ -48,13 +53,12 @@ export function Header() {
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
+            
+            <NotificationsBell 
+              onClick={handleInAppMessages}
+            />
+
             {/* <button
-              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-              aria-label="Notifications"
-            >
-              <Bell size={20} />
-            </button> */}
-            <button
               onClick={handleProfileClick}
               className={`p-2 transition-colors ${
                 isProfileActive
@@ -64,7 +68,7 @@ export function Header() {
               aria-label="Profile"
             >
               <User size={20} />
-            </button>
+            </button> */}
           </div>
         </div>
       </header>
