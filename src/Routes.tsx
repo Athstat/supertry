@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
 import { SignUpScreen } from './screens/auth/SignUpScreen';
 import { SignInScreen } from './screens/auth/SignInScreen';
 import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
@@ -55,341 +56,324 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
   const { state } = useLocation();
 
-
   if (isAuthenticated) {
-    const nextRoute = state?.fromPathname ?? "/dashboard";
+    const nextRoute = state?.fromPathname ?? '/dashboard';
 
-    console.log("Next route: ", nextRoute);
+    console.log('Next route: ', nextRoute);
 
     return <Navigate to={nextRoute} />;
   }
 
-  return <RouteErrorBoundary>
-    {children}
-  </RouteErrorBoundary>;
+  return <RouteErrorBoundary>{children}</RouteErrorBoundary>;
 };
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      {/* Auth routes */}
-      <Route path="/" element={<FirstVisitHandler />} />
-      <Route
-        path="/signup"
-        element={
-          <AuthRoute>
-            <SignUpScreen />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="/signin"
-        element={
-          <AuthRoute>
-            <SignInScreen />
-          </AuthRoute>
-        }
-      />
-      <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
-      <Route path="/reset-password" element={<ResetPasswordScreen />} />
-      <Route
-        path="/auth-choice"
-        element={
-          <AuthRoute>
-            <AuthChoiceScreen />
-          </AuthRoute>
-        }
-      />
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* Auth routes */}
+        <Route path="/" element={<FirstVisitHandler />} />
+        <Route
+          path="/signup"
+          element={
+            <AuthRoute>
+              <SignUpScreen />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <AuthRoute>
+              <SignInScreen />
+            </AuthRoute>
+          }
+        />
+        <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+        <Route path="/reset-password" element={<ResetPasswordScreen />} />
+        <Route
+          path="/auth-choice"
+          element={
+            <AuthRoute>
+              <AuthChoiceScreen />
+            </AuthRoute>
+          }
+        />
 
-      {/* Protected routes */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <DashboardDataProvider>
-                <DashboardScreen />
-              </DashboardDataProvider>
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <DashboardDataProvider>
+                  <DashboardScreen />
+                </DashboardDataProvider>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/leagues"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <FantasyLeaguesScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/leagues"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FantasyLeaguesScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/join-group/:inviteCode"
-        element={
-          <ProtectedRoute>
-            <JoinGroupScreen />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/join-group/:inviteCode"
+          element={
+            <ProtectedRoute>
+              <JoinGroupScreen />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/league/:leagueId"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <FantasyLeagueScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/league/:leagueId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FantasyLeagueScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/my-teams"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <MyTeamsListScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/my-teams"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <MyTeamsListScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/:officialLeagueId/create-team"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <TeamCreationScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/:officialLeagueId/create-team"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <TeamCreationScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/review-team"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <ReviewTeamScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/review-team"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ReviewTeamScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/my-team/:teamId"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <MyTeamScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/my-team/:teamId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <MyTeamScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <UserProfileScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UserProfileScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/players"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <PlayersScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/players"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PlayersScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/players/:playerId"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <PlayerProfileScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/players/:playerId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PlayerProfileScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/sbr"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <SbrScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/sbr"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SbrScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/sbr/fixtures/:fixtureId"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <SbrFixtureScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/sbr/fixtures/:fixtureId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SbrFixtureScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/sbr/chat"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <SBRChatScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/sbr/chat"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SBRChatScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/fixtures/:fixtureId"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <FixtureScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/fixtures/:fixtureId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FixtureScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/fixtures"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <FixturesScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/fixtures"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FixturesScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Test, can be edited */}
-      <Route
-        path="/invite-friends"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <InviteFriendsScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        {/* Test, can be edited */}
+        <Route
+          path="/invite-friends"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <InviteFriendsScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Post-Sign-Up Welcome Screen */}
-      <Route
-        path="/post-signup-welcome"
-        element={
-          <ProtectedRoute>
-            <OnboardingDataProvider>
-              <OnBoardingScreen />
-            </OnboardingDataProvider>
-          </ProtectedRoute>
-        }
-      />
+        {/* Post-Sign-Up Welcome Screen */}
+        <Route
+          path="/post-signup-welcome"
+          element={
+            <ProtectedRoute>
+              <OnboardingDataProvider>
+                <OnBoardingScreen />
+              </OnboardingDataProvider>
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Complete Profile Screen */}
-      <Route
-        path="/complete-profile"
-        element={
-          <ProtectedRoute>
-            <CompleteProfileScreen />
-          </ProtectedRoute>
-        }
-      />
+        {/* Complete Profile Screen */}
+        <Route
+          path="/complete-profile"
+          element={
+            <ProtectedRoute>
+              <CompleteProfileScreen />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/seasons"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <CompetitionsScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/seasons"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CompetitionsScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/seasons/:seasonId"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <SeasonScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/seasons/:seasonId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SeasonScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/predictions"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <PredictionsRankingScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/predictions"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PredictionsRankingScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/fantasy-rankings"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <FantasyRankingsScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      
+        <Route
+          path="/fantasy-rankings"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FantasyRankingsScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/verify-email"
-        element={
-          <VerifyEmailScreen />
-        }
-      />
+        <Route path="/verify-email" element={<VerifyEmailScreen />} />
 
-      <Route
-        path="/onboarding/join-league"
-        element={
-          <JoinLeagueOnboardingScreen />
-        }
-      />
+        <Route path="/onboarding/join-league" element={<JoinLeagueOnboardingScreen />} />
 
-      <Route
-        path="/invite-steps"
-        element={
-          <InviteStepsScreen />
-        }
-      />
+        <Route path="/invite-steps" element={<InviteStepsScreen />} />
 
-      <Route
-        path="/in-app-messages"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <InAppMessagesScreen />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-
-    </Routes>
+        <Route
+          path="/in-app-messages"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <InAppMessagesScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 

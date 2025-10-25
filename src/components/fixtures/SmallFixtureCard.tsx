@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { IFixture } from '../../types/games';
 import SecondaryText from '../shared/SecondaryText';
 import TeamLogo from '../team/TeamLogo';
-import { fixtureSumary } from '../../utils/fixtureUtils';
+import { fixtureSumary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Fragment, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import { FixtureCardModal } from './FixtureCard';
@@ -73,16 +73,26 @@ export default function SmallFixtureCard({ fixture, className, hideVotingBox }: 
             </div>
           </div>
 
-          <div className="flex text-[10px] lg:text-xs text-center flex-col w-1/3 p-2 items-center justify-center">
+          <div className="flex text-[10px] lg:text-xs text-center flex-col w-1/3 p-2 items-center justify-center gap-1">
             {!matchFinal && fixture.kickoff_time && (
               <SecondaryText className="text-[10px] lg:text-xs">
                 {format(fixture.kickoff_time, 'HH:mm')}
               </SecondaryText>
             )}
             {matchFinal && <SecondaryText className="text-[10px] lg:text-xs">Final</SecondaryText>}
+
+            {isGameLive(fixture.game_status) && (
+              <div className="flex flex-row items-center gap-1">
+                <div className="w-1.5 h-1.5 bg-green-500 animate-pulse dark:bg-green-400 rounded-full" />
+                <span className="text-[9px] lg:text-[10px] text-green-600 dark:text-green-400 font-bold">
+                  {formatGameStatus(fixture.game_status)}
+                </span>
+              </div>
+            )}
+
             {fixture.kickoff_time && (
               <SecondaryText className="text-[10px] lg:text-xs">
-                {format(fixture.kickoff_time, 'dd MMM yyy')}
+                {format(fixture.kickoff_time, 'EEE, dd MMM yyyy')}
               </SecondaryText>
             )}
           </div>
