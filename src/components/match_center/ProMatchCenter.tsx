@@ -7,7 +7,7 @@ import { useQueryState } from '../../hooks/useQueryState';
 import NoContentCard from '../shared/NoContentMessage';
 import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
 import MatchCenterSearchBar from './MatchCenterSearchBar';
-import { searchProFixturePredicate } from '../../utils/fixtureUtils';
+import { searchProFixturePredicate, isGameLive } from '../../utils/fixtureUtils';
 import { twMerge } from 'tailwind-merge';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import { IFixture } from '../../types/games';
@@ -60,7 +60,12 @@ export default function ProMatchCenter() {
 
       if (kickoff) {
         const now = new Date().valueOf();
-        return now > new Date(kickoff).valueOf() && f.game_status !== 'in_progress' ;
+        const kickoffPassed = now > new Date(kickoff).valueOf();
+        // Exclude live games from past fixtures
+        const notLive = !isGameLive(f.game_status);
+        return (
+          kickoffPassed && notLive && (f.game_status === 'completed' || f.game_status === 'result')
+        );
       }
 
       return false;
@@ -113,7 +118,7 @@ export default function ProMatchCenter() {
           <p className="font-semibold text-lg">Past Fixtures</p>
         </div>
 
-        <div className="flex flex-col items-center gap-3 w-full">
+        <div className="flex flex-col gap-3 w-full">
           {pastFixtures.map((fixture, index) => {
             return (
               <FixtureItem
@@ -156,17 +161,19 @@ function UpcomingFixturesSection({
 
       <div
         className={twMerge(
-          'flex flex-row items-center gap-3 overflow-x-auto no-scrollbar',
-          focus === 'upcoming' ? 'flex flex-col gap-2 overflow-x-hidden' : ''
+          'flex space-x-4 overflow-x-auto no-scrollbar pb-2',
+          focus === 'upcoming' ? 'flex-col space-x-0 gap-4 overflow-x-hidden' : ''
         )}
       >
         {upcomingFixtures.map((fixture, index) => {
           return (
-            <FixtureItem
+            <FixtureCard
               fixture={fixture}
               key={index}
+              showLogos
+              showCompetition
               className={twMerge(
-                'rounded-xl border min-w-96 max-h-[240px] min-h-[150px] dark:border-slate-700 flex-1',
+                'min-w-96 rounded-xl border dark:border-slate-700',
                 focus === 'upcoming' && 'min-w-full'
               )}
             />
@@ -188,7 +195,7 @@ function FixtureItem({ fixture, className }: FixtureItemProps) {
   const { ref, inView } = useInView({ triggerOnce: true });
 
   return (
-    <div ref={ref} className="w-full">
+    <div ref={ref} className="flex-shrink-0">
       {inView && <FixtureCard fixture={fixture} showLogos showCompetition className={className} />}
     </div>
   );

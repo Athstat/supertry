@@ -7,15 +7,16 @@ import { Calendar } from 'lucide-react';
 import { useRouter } from '../../hooks/useRoter';
 import { Fragment } from 'react';
 import { useQueryState } from '../../hooks/useQueryState';
-import SmallFixtureCard from '../fixtures/SmallFixtureCard';
+import FixtureCard from '../fixtures/FixtureCard';
 import SecondaryText from '../shared/SecondaryText';
 import { Tv } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { isGameLive } from '../../utils/fixtureUtils';
 
 type Props = {
-  hideTitleBar?: boolean,
-  hidePastFixtures?: boolean
-}
+  hideTitleBar?: boolean;
+  hidePastFixtures?: boolean;
+};
 
 export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures }: Props) {
   const {
@@ -33,7 +34,7 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
   //   wantedSeasonsId: seasonIds,
   // });
 
-  const [season,] = useQueryState('pcid', { init: 'all' });
+  const [season] = useQueryState('pcid', { init: 'all' });
 
   if (isLoading) return <LoadingState />;
 
@@ -67,7 +68,10 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
 
       if (kickoff) {
         const now = subHours(new Date(), 2).valueOf();
-        return now < new Date(kickoff).valueOf();
+        const isUpcoming = now < new Date(kickoff).valueOf();
+        // Exclude live games from upcoming
+        const notLive = !isGameLive(f.game_status);
+        return isUpcoming && notLive;
       }
 
       return false;
@@ -100,14 +104,13 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
 
   const liveFixtures = fixtures
     .filter(f => {
-
       const kickoff = f.kickoff_time;
 
       if (kickoff) {
         const now = new Date().valueOf();
         const kickoffPassed = now > new Date(kickoff).valueOf();
         const { game_status } = f;
-        return kickoffPassed && game_status === 'in_progress';
+        return kickoffPassed && isGameLive(game_status);
       }
 
       return false;
@@ -120,23 +123,25 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
     });
 
   const handleViewAllFixtures = () => {
-    push('/fixtures#upcoming-matches')
-  }
+    push('/fixtures#upcoming-matches');
+  };
 
   return (
     <div className="flex flex-col gap-4">
-      {!hideTitleBar && <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold flex items-center gap-2 text-gray-900 dark:text-gray-100">
-          <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
-          Fixtures
-        </h3>
-        <button
-          onClick={handleViewAllFixtures}
-          className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
-        >
-          View All
-        </button>
-      </div>}
+      {!hideTitleBar && (
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-bold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+            <Calendar className="w-4 h-4 text-primary-700 dark:text-primary-400" />
+            Fixtures
+          </h3>
+          <button
+            onClick={handleViewAllFixtures}
+            className="text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
+          >
+            View All
+          </button>
+        </div>
+      )}
 
       {/* <PilledSeasonFilterBar
         seasons={seasons}
@@ -151,7 +156,7 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
 
       {liveFixtures.length > 0 && (
         <Fragment>
-          <div className='flex flex-row bg-red-500 animate-pulse text-white w-fit px-2 py-0.5 rounded-xl items-center gap-2' >
+          <div className="flex flex-row bg-red-500 animate-pulse text-white w-fit px-2 py-0.5 rounded-xl items-center gap-2">
             <Tv className="w-4 h-4" />
             <p>Live Fixtures </p>
           </div>
@@ -159,11 +164,12 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
           <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-2">
             {liveFixtures.map(fixture => {
               return (
-                <SmallFixtureCard
+                <FixtureCard
                   fixture={fixture}
                   key={fixture.game_id}
-                  className='min-w-[85%]'
-                  hideVotingBox
+                  className="min-w-96 rounded-xl border dark:border-slate-700"
+                  showLogos
+                  showCompetition
                 />
               );
             })}
@@ -171,22 +177,27 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
         </Fragment>
       )}
 
-
       <div>
         <SecondaryText>Upcoming Fixtures</SecondaryText>
       </div>
       {upcomingFixtures.length > 0 && (
-        <div className={twMerge(
-          "flex space-x-4 overflow-x-auto no-scrollbar pb-2",
-          hidePastFixtures && 'flex flex-col space-x-0 gap-4'
-        )}>
+        <div
+          className={twMerge(
+            'flex space-x-4 overflow-x-auto no-scrollbar pb-2',
+            hidePastFixtures && 'flex flex-col space-x-0 gap-4'
+          )}
+        >
           {upcomingFixtures.map(fixture => {
             return (
-              <SmallFixtureCard
+              <FixtureCard
                 fixture={fixture}
                 key={fixture.game_id}
-                className='min-w-[85%]'
-                hideVotingBox
+                className={twMerge(
+                  'min-w-96 rounded-xl border dark:border-slate-700',
+                  hidePastFixtures && 'min-w-full'
+                )}
+                showLogos
+                showCompetition
               />
             );
           })}
@@ -202,10 +213,12 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
           <div className="flex flex-col gap-2 pb-2">
             {[...pastFixtures].slice(0, 3).map(fixture => {
               return (
-                <SmallFixtureCard
+                <FixtureCard
                   fixture={fixture}
                   key={fixture.game_id}
-                  hideVotingBox
+                  className="rounded-xl border dark:border-slate-700"
+                  showLogos
+                  showCompetition
                 />
               );
             })}
@@ -213,10 +226,11 @@ export default function UpcomingFixturesSection({ hideTitleBar, hidePastFixtures
         </Fragment>
       )}
 
-      <div className='flex flex-row items-center justify-center' >
-        <button onClick={handleViewAllFixtures} className='text-blue-500' >View All Fixtures</button>
+      <div className="flex flex-row items-center justify-center">
+        <button onClick={handleViewAllFixtures} className="text-blue-500">
+          View All Fixtures
+        </button>
       </div>
     </div>
   );
 }
-
