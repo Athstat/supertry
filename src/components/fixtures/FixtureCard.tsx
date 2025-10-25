@@ -5,7 +5,7 @@ import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
-import { fixtureSumary } from '../../utils/fixtureUtils';
+import { fixtureSumary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
 import GameHighlightsCard from '../video/GameHighlightsCard';
@@ -48,10 +48,10 @@ export default function FixtureCard({
   const [showModal, setShowModal] = useState(false);
   const toogle = () => setShowModal(!showModal);
 
-  const handleClick = () =>{
+  const handleClick = () => {
     toogle();
     analytics.trackFixtureCardClicked(fixture);
-  }
+  };
 
   const { gameKickedOff } = fixtureSumary(fixture);
 
@@ -110,16 +110,18 @@ export default function FixtureCard({
           <div className="flex-1 text-slate-700 dark:text-slate-400 flex flex-col items-center text-center justify-center">
             {/* <p className='text-xs' >{fixture.venue}</p> */}
             {!hideDate && kickoff_time && (
-              <p className="text-xs">{format(kickoff_time, 'dd, MMM yyyy')}</p>
+              <p className="text-xs">{format(kickoff_time, 'EEE, dd MMM yyyy')}</p>
             )}
-            {kickoff_time && game_status !== 'in_progress' && (
+            {kickoff_time && (
               <p className="text-sm font-semibold">{format(kickoff_time, 'h:mm a')}</p>
             )}
 
-            {game_status === 'in_progress' && (
-              <div className='flex flex-row items-center gap-1' >
-                <div className="w-2 h-2 bg-red-500 animate-pulse dark:bg-red-400 rounded-full " />
-                <span className="text-xs text-red-500 dark:text-red-400 font-bold">LIVE</span>
+            {isGameLive(game_status) && (
+              <div className="flex flex-row items-center gap-1">
+                <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full " />
+                <span className="text-sm text-green-600 dark:text-green-400 font-bold">
+                  {formatGameStatus(game_status)}
+                </span>
               </div>
             )}
           </div>
@@ -268,32 +270,43 @@ function MatchResultsInformation({ fixture }: Props) {
   const { kickoff_time, game_status } = fixture;
 
   return (
-    <div className="flex  flex-1 w-full flex-col items-center justify-center">
-      <div>
-        {game_status && (
+    <div className="flex flex-1 w-full flex-col items-center justify-center text-center">
+      <div className="w-full flex justify-center items-center mb-2">
+        {game_status === 'completed' && (
+          <span className="text-sm text-slate-500 font-medium dark:text-slate-400">Final</span>
+        )}
+        {isGameLive(game_status) && (
+          <div className="flex flex-row items-center justify-center gap-1">
+            <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full" />
+            <span className="text-sm text-green-600 dark:text-green-400 font-bold">
+              {formatGameStatus(game_status)}
+            </span>
+          </div>
+        )}
+        {game_status && !isGameLive(game_status) && game_status !== 'completed' && (
           <span className="text-sm text-slate-500 font-medium dark:text-slate-400">
-            {game_status === 'completed' && 'Final'}
+            {formatGameStatus(game_status)}
           </span>
         )}
       </div>
 
-      <div className="flex flex-1 flex-row gap-2 items-center justify-center">
+      <div className="flex flex-row gap-2 items-center justify-center w-full">
         {/* Home Team Score */}
         <div className="dark:text-white flex-1 text-2xl font-medium flex items-center justify-center">
           <p>{fixture.team_score}</p>
         </div>
 
-        <div className="flex flex-1 flex-col dark:text-white text-center items-center justify-center">
+        <div className="flex flex-col dark:text-white text-center items-center justify-center">
           <p>-</p>
         </div>
 
         {/* Away Team Score */}
-        <div className="dark:text-white  text-wrap flex-1 text-2xl font-medium flex items-center justify-center">
+        <div className="dark:text-white text-wrap flex-1 text-2xl font-medium flex items-center justify-center">
           <p>{fixture.opposition_score}</p>
         </div>
       </div>
 
-      <div>
+      <div className="w-full flex justify-center items-center mt-2">
         {kickoff_time && (
           <span className="text-sm text-slate-500 dark:text-slate-400">
             {format(kickoff_time, 'h:mm a')}
