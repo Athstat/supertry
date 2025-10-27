@@ -9,6 +9,7 @@ import { authService } from '../../services/authService';
 import { ErrorState } from '../ui/ErrorState';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useAuth } from '../../contexts/AuthContext';
+import { requestPushPermissions } from '../../utils/bridgeUtils';
 
 type Props = {
   databaseUser: DjangoAuthUser;
@@ -21,6 +22,8 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
   const handleClick = () => {
     toggle();
   };
+
+  requestPushPermissions();
 
   return (
     <div>
