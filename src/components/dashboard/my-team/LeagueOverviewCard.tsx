@@ -1,6 +1,5 @@
 import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
-import BlueGradientCard from '../../shared/BlueGradientCard';
 import { ArrowRight, Globe, Info, Lock, Plus, Trophy } from 'lucide-react';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
@@ -25,16 +24,16 @@ function Content({ league }: Props) {
 
   return (
     <div>
-      <BlueGradientCard className='p-4 dark:border-none flex flex-col gap-4' >
+      <RoundedCard className='p-4 dark:border-none flex flex-col gap-4' >
         
         <div className='flex flex-row items-center justify-between' >
           <div className='flex flex-row items-center gap-2' >
-            <Trophy />
-            <p className='font-bold' >{league.title}</p>
+            <Trophy className='w-4 h-4' />
+            <p className='font-semobold' >{league.title}</p>
           </div>
 
-          <div className='bg-white w-6 h-6 flex flex-col items-center justify-center rounded-md' >
-            <Globe className=' text-blue-500 w-5 h-5' />
+          <div className='' >
+            <Globe className=' w-6 h-6' />
           </div>
         </div>
 
@@ -43,23 +42,23 @@ function Content({ league }: Props) {
             <p className={twMerge(
               'font-bold text-lg'
             )} >Rank #103</p>
-            <p className='text-sm' >1041 points</p>
+            <SecondaryText className='text-sm' >1041 points</SecondaryText>
           </div>
           
           <div className='flex flex-col items-end justify-end' >
             <div className='flex flex-row items-center gap-1' >
               <p className='font-bold text-lg' >Top 1%</p>
-              <Flame className='w-5 text-blue-100 h-5' />
+              <Flame className='w-5 text-yellow-500 h-5' />
             </div>
-            <p className='text-sm' >Out of 894</p>
+            <SecondaryText className='text-sm' >Out of 894</SecondaryText>
           </div>
         </div>
 
         <div className='pt-2 flex-row flex items-center justify-center gap-2' >
-            <p className='text-sm' >Show More</p>
+            <SecondaryText className='text-sm' >Show More</SecondaryText>
             <ArrowRight className='w-4 h-4' />
         </div>
-      </BlueGradientCard>
+      </RoundedCard>
     </div>
   );
 }
