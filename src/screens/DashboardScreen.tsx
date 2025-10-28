@@ -10,9 +10,12 @@ import { Crown } from 'lucide-react';
 import { Flame } from 'lucide-react';
 import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelectedPlayersList';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
+import { useDashboard } from '../hooks/dashboard/useDashboard';
+import { abbreviateSeasonName } from '../components/players/compare/PlayerCompareSeasonPicker';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
+  const {currentSeason} = useDashboard();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */
@@ -47,7 +50,7 @@ export function DashboardScreen() {
       <div className='flex flex-col gap-4 pt-4' >
         <div className='flex flex-row items-center gap-2' >
           <Crown className='text-blue-500' />
-          <h1 className='font-bold' >Stats Leaders</h1>
+          <h1 className='font-bold' >{ currentSeason ? `${abbreviateSeasonName(currentSeason.name)} STATS LEADERS`  : "Stats Leaders"}</h1>
         </div>
 
         <div className='flex flex-col no-scrollbar overflow-y-hidden overflow-x-auto gap-2' >
