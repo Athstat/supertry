@@ -37,10 +37,37 @@ export function DashboardScreen() {
           <h1 className='font-bold' >Stats Leaders</h1>
         </div>
 
-        <SportActionRankingsList
-          actionName='tries'
-          title='Tries Scored'
-        />
+        <div className='flex flex-col no-scrollbar overflow-y-hidden overflow-x-auto gap-2' >
+          <SportActionRankingsList
+            actionName='tries'
+            title='Tries Scored'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='try_assist'
+            title='Try Assits'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='defenders_beaten'
+            title='Defenders Beaten'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='tackles'
+            title='Tackles'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='post_contact_metres'
+            title='Post Contact Meters (m)'
+            className='min-w-[90%]'
+          />
+        </div>
 
       </div>
 

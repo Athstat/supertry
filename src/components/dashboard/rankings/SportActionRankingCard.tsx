@@ -7,15 +7,17 @@ import SecondaryText from "../../shared/SecondaryText";
 import PlayerMugshot from "../../shared/PlayerMugshot";
 import TeamLogo from "../../team/TeamLogo";
 import RoundedCard from "../../shared/RoundedCard";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
     season?: IProSeason,
     actionName: string,
-    title: string
+    title: string,
+    className?: string
 }
 
 /** Renders a sports action ranking card */
-export default function SportActionRankingsList({ season, actionName, title }: Props) {
+export default function SportActionRankingsList({ season, actionName, title, className }: Props) {
 
     const { currentSeason } = useDashboard();
 
@@ -32,13 +34,19 @@ export default function SportActionRankingsList({ season, actionName, title }: P
     if (isLoading) {
         return (
             <>
-                <RoundedCard className=" h-[380px] animate-pulse border-none rounded-xl p-4 flex flex-col gap-2" ></RoundedCard>
+                <RoundedCard className={twMerge(
+                    " h-[380px] animate-pulse border-none rounded-xl p-4 flex flex-col gap-2",
+                    className
+                )} ></RoundedCard>
             </>
         )
     }
 
     return (
-        <RoundedCard className=" h-[380px] rounded-xl p-4 flex flex-col gap-2" >
+        <RoundedCard className={twMerge(
+            " h-[380px] rounded-xl p-4 flex flex-col gap-2",
+            className
+        )}>
             <div>
                 <p className="font-semibold">{title}</p>
             </div>
