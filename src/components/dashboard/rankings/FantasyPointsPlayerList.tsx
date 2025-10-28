@@ -37,7 +37,7 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
     }
 
     return (
-        <RoundedCard className="p-4 h-[160px] flex flex-col gap-2" >
+        <RoundedCard className="p-4 h-[160px] flex flex-col gap-3" >
 
             <div>
                 <p className="font-semibold" >Fantasy Points Scored</p>
@@ -70,7 +70,7 @@ function RankingItem({ item, index }: RankingItemProps) {
     return (
         <div className="flex flex-row gap-2" >
             <div>
-                <SecondaryText className="text-base" >#{rank}</SecondaryText>
+                <SecondaryText className="" >#{rank}</SecondaryText>
             </div>
             <div className="flex flex-col items-center justify-center gap-1" >
                 <PlayerMugshot
@@ -78,11 +78,11 @@ function RankingItem({ item, index }: RankingItemProps) {
                     className="w-14 h-14 bg-blue-500"
                 />
 
-                <div>
+                <div className="flex flex-col items-center justify-center" >
                     <p className="text-xs text-center text-nowrap" >{item.athstat_lastname}</p>
+                    <SecondaryText className="text-xs" >{Math.floor(item.total_points)}</SecondaryText>
                 </div>
 
-                <SecondaryText className="text-xs" >{Math.floor(item.total_points)}</SecondaryText>
             </div>
         </div>
     )
