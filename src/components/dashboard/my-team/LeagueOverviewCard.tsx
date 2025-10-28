@@ -25,7 +25,7 @@ type Props = {
 /** Renders a league overview card */
 export default function SmallLeagueOverviewCard({ league }: Props) {
   return (
-    <FantasyLeagueGroupDataProvider loadingFallback={<LoadingSkeleton />} leagueId={league.id}>
+    <FantasyLeagueGroupDataProvider loadingFallback={<SmallLeagueOverviewLoadingSkeleton />} leagueId={league.id}>
       <Content league={league} />
     </FantasyLeagueGroupDataProvider>
   );
@@ -56,7 +56,7 @@ function Content({ league }: Props) {
   const isLoading = loadingStandings || loadingUserTeam;
 
   if (!isLoading) {
-    <LoadingSkeleton />
+    <SmallLeagueOverviewLoadingSkeleton />
   }
 
   const userStanding = useMemo(() => {
@@ -207,7 +207,7 @@ function NotTeamCreatedLeagueLocked() {
 }
 
 /** Renders Loading Skeleton for League Overview */
-function LoadingSkeleton() {
+export function SmallLeagueOverviewLoadingSkeleton() {
 
   return (
     <div className="flex  flex-col gap-4">
