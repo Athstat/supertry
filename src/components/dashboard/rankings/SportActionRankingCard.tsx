@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useDashboard } from "../../../hooks/dashboard/useDashboard"
 import { IProSeason } from "../../../types/season"
 import { useSportActionRankings } from "../../../hooks/fantasy/useSportActionRanking";
@@ -8,6 +8,8 @@ import PlayerMugshot from "../../shared/PlayerMugshot";
 import TeamLogo from "../../team/TeamLogo";
 import RoundedCard from "../../shared/RoundedCard";
 import { twMerge } from "tailwind-merge";
+import { IProAthlete } from "../../../types/athletes";
+import PlayerProfileModal from "../../player/PlayerProfileModal";
 
 type Props = {
     season?: IProSeason,
@@ -20,6 +22,10 @@ type Props = {
 export default function SportActionRankingsList({ season, actionName, title, className }: Props) {
 
     const { currentSeason } = useDashboard();
+    const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
+    const toggleModal = () => {
+        setSelectedPlayer(undefined);
+    }
 
     const finalSeason = useMemo(() => {
         return season ?? currentSeason
@@ -43,41 +49,59 @@ export default function SportActionRankingsList({ season, actionName, title, cla
     }
 
     return (
-        <RoundedCard className={twMerge(
-            " h-[380px] rounded-xl p-4 flex flex-col gap-2",
-            className
-        )}>
-            <div>
-                <p className="font-semibold">{title}</p>
-            </div>
+        <Fragment>
+            <RoundedCard className={twMerge(
+                " h-[380px] rounded-xl p-4 flex flex-col gap-2",
+                className
+            )}>
+                <div>
+                    <p className="font-semibold">{title}</p>
+                </div>
 
-            <div className="flex flex-col items-center gap-2" >
-                {rankings.map((r, index) => {
-                    return (
-                        <PlayerRankingCard
-                            item={r}
-                            index={index}
-                            key={r.tracking_id}
-                        />
-                    )
-                })}
-            </div>
-        </RoundedCard>
+                <div className="flex flex-col items-center gap-2" >
+                    {rankings.map((r, index) => {
+                        return (
+                            <PlayerRankingCard
+                                item={r}
+                                index={index}
+                                key={r.tracking_id}
+                                onClickPlayer={setSelectedPlayer}
+                            />
+                        )
+                    })}
+                </div>
+            </RoundedCard>
+
+            {selectedPlayer && (
+                <PlayerProfileModal 
+                    player={selectedPlayer}
+                    isOpen={true}
+                    onClose={toggleModal}
+                />
+            )}
+        </Fragment>
     )
 }
 
 type RankingCardProps = {
     item: PlayerSportActionRankingItem,
-    index: number
+    index: number,
+    onClickPlayer: (player: IProAthlete) => void
 }
 
-function PlayerRankingCard({ item, index }: RankingCardProps) {
+function PlayerRankingCard({ item, index, onClickPlayer }: RankingCardProps) {
     const rank = index + 1;
+
+    const handleOnClick = () => {
+        if (onClickPlayer) {
+            onClickPlayer(item);
+        }
+    }
 
     return (
         <div className="flex flex-col w-full" >
-
-            <div className="flex flex-row items-center gap-4" >
+ 
+            <div onClick={handleOnClick} className="flex cursor-pointer flex-row items-center gap-4" >
                 <div>
                     <SecondaryText>#{rank}</SecondaryText>
                 </div>
