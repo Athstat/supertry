@@ -9,6 +9,7 @@ import SportActionRankingsList from '../components/dashboard/rankings/SportActio
 import { Crown } from 'lucide-react';
 import { Flame } from 'lucide-react';
 import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelectedPlayersList';
+import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ export function DashboardScreen() {
         </div>
 
         <MostSelectedPlayersList />
+        <FantasyPointsScoredPlayerList />
       </div>
 
       <div className='flex flex-col gap-4 pt-4' >

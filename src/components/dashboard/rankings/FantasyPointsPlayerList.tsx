@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { useDashboard } from "../../../hooks/dashboard/useDashboard"
 import { IProSeason } from "../../../types/season";
-import { useMostSelectedPlayers } from "../../../hooks/fantasy/useSportActionRanking";
+import { useFantasyPointsRankings  } from "../../../hooks/fantasy/useSportActionRanking";
 import RoundedCard from "../../shared/RoundedCard";
-import { MostSelectedRankingItem } from "../../../types/fantasyLeagueGroups";
+import { FantasyPointsScoredRankingItem } from "../../../types/fantasyLeagueGroups";
 import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
 
@@ -11,7 +11,7 @@ type Props = {
     season?: IProSeason
 }
 
-export default function MostSelectedPlayersList({ season }: Props) {
+export default function FantasyPointsScoredPlayerList({ season }: Props) {
 
     const { currentSeason } = useDashboard();
 
@@ -19,7 +19,7 @@ export default function MostSelectedPlayersList({ season }: Props) {
         return season || currentSeason;
     }, [currentSeason, season]);
 
-    const { rankings, isLoading } = useMostSelectedPlayers(
+    const { rankings, isLoading } = useFantasyPointsRankings(
         finalSeason?.id ?? '',
         15
     );
@@ -40,7 +40,7 @@ export default function MostSelectedPlayersList({ season }: Props) {
         <RoundedCard className="p-4 h-[190px] flex flex-col gap-2" >
 
             <div>
-                <p className="font-semibold" >Most Selected Players</p>
+                <p className="font-semibold" >Fantasy Points Scored</p>
             </div>
 
             <div className="flex flex-row no-scrollbar items-center overflow-x-auto overflow-y-hidden gap-4" >
@@ -58,7 +58,7 @@ export default function MostSelectedPlayersList({ season }: Props) {
 }
 
 type RankingItemProps = {
-    item: MostSelectedRankingItem
+    item: FantasyPointsScoredRankingItem
 }
 
 function RankingItem({ item }: RankingItemProps) {
@@ -76,7 +76,7 @@ function RankingItem({ item }: RankingItemProps) {
                     <p className="text-xs text-center text-nowrap" >{item.athstat_lastname}</p>
                 </div>
 
-                <SecondaryText className="text-xs" >{item.percentage_selected}%</SecondaryText>
+                <SecondaryText className="text-xs" >{item.total_points}</SecondaryText>
             </div>
         </div>
     )
