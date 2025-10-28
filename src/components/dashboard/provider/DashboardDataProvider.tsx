@@ -8,7 +8,6 @@ import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsS
 import { swrFetchKeys } from '../../../utils/swrKeys'
 import { seasonService } from '../../../services/seasonsService'
 import { logger } from '../../../services/logger'
-import { Home } from 'lucide-react'
 import PageView from '../../../screens/PageView'
 import { SmallLeagueOverviewLoadingSkeleton } from '../my-team/LeagueOverviewCard'
 import RoundedCard from '../../shared/RoundedCard'
@@ -115,16 +114,6 @@ function InnerProvider({ children }: Props) {
 function LoadingSkeleton() {
     return (
         <PageView className="flex flex-col space-y-4 p-4">
-            <div className="flex flex-row items-center justify-between">
-                <div className="flex flex-row items-center gap-2">
-                    <Home />
-                    <p className="text-xl font-extrabold">Dashboard</p>
-                </div>
-
-                <div>
-                    {/* <GamePlayHelpButton /> */}
-                </div>
-            </div>
 
             <SmallLeagueOverviewLoadingSkeleton />
 
