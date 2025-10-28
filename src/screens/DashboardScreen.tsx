@@ -62,7 +62,7 @@ export function DashboardScreen() {
 
           <SportActionRankingsList
             actionName='try_assist'
-            title='Try Assits'
+            title='Try Assists'
             className='min-w-[90%]'
           />
 
