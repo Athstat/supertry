@@ -7,6 +7,8 @@ import RoundedCard from '../components/shared/RoundedCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import SportActionRankingsList from '../components/dashboard/rankings/SportActionRankingCard';
 import { Crown } from 'lucide-react';
+import { Flame } from 'lucide-react';
+import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelectedPlayersList';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -33,7 +35,16 @@ export function DashboardScreen() {
 
       <div className='flex flex-col gap-4 pt-4' >
         <div className='flex flex-row items-center gap-2' >
-          <Crown />
+          <Flame className="text-yellow-500" />
+          <h1 className='font-bold' >Top Fantasy Picks</h1>
+        </div>
+
+        <MostSelectedPlayersList />
+      </div>
+
+      <div className='flex flex-col gap-4 pt-4' >
+        <div className='flex flex-row items-center gap-2' >
+          <Crown className='text-blue-500' />
           <h1 className='font-bold' >Stats Leaders</h1>
         </div>
 

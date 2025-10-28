@@ -24,7 +24,7 @@ export function useSportActionRankings(seasonId: string, actionName: string, lim
 
 /** Hook for most selected player rankings based of a sports action */
 export function useMostSelectedPlayers(seasonId: string, limit: number = 5) {
-    const key = `/fantasy-seasons/${seasonId}/most-selected-players?limit=${limit}`;
+    const key = seasonId ? `/fantasy-seasons/${seasonId}/most-selected-players?limit=${limit}` : null;
     const { data, isLoading, mutate } = useSWR(key, () => fantasySeasonsService.getMostSelectedPlayers(
         seasonId,
         limit
