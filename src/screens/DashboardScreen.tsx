@@ -6,7 +6,6 @@ import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
-import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 
 export function DashboardScreen() {
