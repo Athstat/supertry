@@ -43,8 +43,8 @@ export function DashboardScreen() {
           <h1 className='font-bold' >Top Fantasy Picks</h1>
         </div>
 
-        <MostSelectedPlayersList />
         <FantasyPointsScoredPlayerList />
+        <MostSelectedPlayersList />
       </div>
 
       <div className='flex flex-col gap-4 pt-4' >
