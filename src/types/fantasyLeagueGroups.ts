@@ -52,3 +52,12 @@ export type FantasyLeagueGroupStanding = {
     total_score?: number,
     rank: number
 }
+
+export type MemberRankingDetail = {
+    user_id: string,
+    fantasy_league_group_id: string,
+    total_points: number,
+    overall_rank: number,
+    total_users: number,
+    rank_percentile: number
+}

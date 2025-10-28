@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import WarningCard from '../../shared/WarningCard';
 import { Flame } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { useMemberRankDetail } from '../../../hooks/fantasy/useMemberRankingDetail';
+import { useAuth } from '../../../contexts/AuthContext';
 
 type Props = {
   league: FantasyLeagueGroup;
@@ -22,9 +24,32 @@ export default function SmallLeagueOverviewCard({ league }: Props) {
 
 function Content({ league }: Props) {
 
+  const {authUser} = useAuth();
+  const shouldFetchRanking = Boolean(league.id) && Boolean(authUser?.kc_id);
+  const {rankingDetail, isLoading} = useMemberRankDetail(league.id, authUser?.kc_id ?? '', shouldFetchRanking);
+
+  const navigate = useNavigate();
+
+  const handleShowMore = () => {
+      navigate(`/league/${league.id}`);
+  }
+
+  if (isLoading) {
+    return (
+      <RoundedCard className='p-4 h-[170px] animate-pulse bg-slate-200/70 dark:bg-slate-800/70 border-none flex flex-col gap-4' >
+      </RoundedCard>
+    )
+  }
+
+  if (!rankingDetail) {
+    return;
+  }
+
+  const {rank_percentile} = rankingDetail;
+
   return (
     <div>
-      <RoundedCard className='p-4 dark:border-none flex flex-col gap-4' >
+      <RoundedCard className='p-4 h-[170px] cursor-pointer dark:border-none flex flex-col gap-4' >
         
         <div className='flex flex-row items-center justify-between' >
           <div className='flex flex-row items-center gap-2' >
@@ -41,21 +66,21 @@ function Content({ league }: Props) {
           <div>
             <p className={twMerge(
               'font-bold text-lg'
-            )} >Rank #103</p>
-            <SecondaryText className='text-sm' >1041 points</SecondaryText>
+            )} >Rank #{rankingDetail?.overall_rank}</p>
+            <SecondaryText className='text-sm' >{rankingDetail.total_points || "--"} points</SecondaryText>
           </div>
           
           <div className='flex flex-col items-end justify-end' >
             <div className='flex flex-row items-center gap-1' >
-              <p className='font-bold text-lg' >Top 1%</p>
-              <Flame className='w-5 text-yellow-500 h-5' />
+              <p className='font-bold text-lg' >Top { rank_percentile < 1 ? rank_percentile : Math.floor(rank_percentile)}%</p>
+              {rank_percentile <= 5 && (<Flame className='w-5 text-yellow-500 h-5' />)}
             </div>
-            <SecondaryText className='text-sm' >Out of 894</SecondaryText>
+            <SecondaryText className='text-sm' >Out of {rankingDetail.total_users}</SecondaryText>
           </div>
         </div>
 
-        <div className='pt-2 flex-row flex items-center justify-center gap-2' >
-            <SecondaryText className='text-sm' >Show More</SecondaryText>
+        <div onClick={handleShowMore} className='pt-2 flex-row flex items-center hover:text-primary-500 justify-center gap-2' >
+            <p className='text-sm ' >Show More</p>
             <ArrowRight className='w-4 h-4' />
         </div>
       </RoundedCard>
@@ -99,7 +124,7 @@ function NotTeamCreatedLeagueLocked() {
   };
 
   return (
-    <RoundedCard className="p-6 text-center h-[200px] gap-4 border-dotted border-4 flex flex-col items-center justify-center">
+    <RoundedCard className="p-6 text-center h-[170px] gap-4 border-dotted border-4 flex flex-col items-center justify-center">
       <SecondaryText className="text-base">
         You can't pick a team because, round '{currentRound.title}', has been locked{' '}
       </SecondaryText>
