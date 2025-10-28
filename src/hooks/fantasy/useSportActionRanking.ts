@@ -3,8 +3,8 @@ import { fantasySeasonsService } from "../../services/fantasy/fantasySeasonsServ
 import { useMemo } from "react";
 
 /** Hook for returning rankings based of a sports action */
-export function useSportActionRanking(seasonId: string, actionName: string, limit: number = 5) {
-    const key = `/fantasy-seasons/${seasonId}/sports-action-rankings/${actionName}?limit=${limit}`;
+export function useSportActionRankings(seasonId: string, actionName: string, limit: number = 5) {
+    const key = seasonId && actionName ? `/fantasy-seasons/${seasonId}/sports-action-rankings/${actionName}?limit=${limit}` : null;
     const { data, isLoading, mutate } = useSWR(key, () => fantasySeasonsService.getSportActionRankings(
         seasonId,
         actionName,

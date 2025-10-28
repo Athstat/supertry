@@ -1,12 +1,12 @@
 import PageView from './PageView';
-import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
-import { Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
+import SportActionRankingsList from '../components/dashboard/rankings/SportActionRankingCard';
+import { Crown } from 'lucide-react';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -21,16 +21,6 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-4 p-4">
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <Home />
-          <p className="text-xl font-extrabold">Dashboard</p>
-        </div>
-
-        <div>
-          {/* <GamePlayHelpButton /> */}
-        </div>
-      </div>
 
 
       {/* <FixtureCarrousel /> */}
@@ -41,7 +31,18 @@ export function DashboardScreen() {
 
       <FeaturedFantasyLeagueGroups />
 
-      <UpcomingFixturesSection hidePastFixtures />
+      <div className='flex flex-col gap-4 pt-4' >
+        <div className='flex flex-row items-center gap-2' >
+          <Crown />
+          <h1 className='font-bold' >Stats Leaders</h1>
+        </div>
+
+        <SportActionRankingsList
+          actionName='tries'
+          title='Tries Scored'
+        />
+
+      </div>
 
       <RoundedCard className="flex flex-col gap-4 p-4">
         <div className="flex flex-col gap-1">

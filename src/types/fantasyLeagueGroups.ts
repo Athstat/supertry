@@ -65,7 +65,7 @@ export type FantasyPointsScoredRankingItem = IProAthlete & {
 }
 
 /** type definition for a single player sport action ranking item */
-export type PlayerSportActionRankingItem = {
+export type PlayerSportActionRankingItem = IProAthlete & {
     action_count: number,
     action_name: string,
     season_id: string,
