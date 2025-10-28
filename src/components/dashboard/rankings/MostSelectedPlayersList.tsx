@@ -8,6 +8,7 @@ import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
 import { IProAthlete } from "../../../types/athletes";
 import PlayerProfileModal from "../../player/PlayerProfileModal";
+import NoContentCard from "../../shared/NoContentMessage";
 
 type Props = {
     season?: IProSeason
@@ -64,6 +65,12 @@ export default function MostSelectedPlayersList({ season }: Props) {
                         )
                     })}
                 </div>
+
+                {rankings.length === 0 && (
+                    <NoContentCard
+                        message="Whoops!! Nothing to see here yet. Check again soon"
+                    />
+                )}
             </RoundedCard>
 
             {
