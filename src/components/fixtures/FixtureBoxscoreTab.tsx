@@ -1,5 +1,5 @@
 import { IFixture } from "../../types/games"
-import { fixtureSumary } from "../../utils/fixtureUtils"
+import { fixtureSummary } from "../../utils/fixtureUtils"
 import { useEffect, useMemo } from "react"
 import { BoxscoreListRecordItem, GameSportAction } from "../../types/boxScore"
 import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
@@ -15,7 +15,7 @@ type Props = {
 
 export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
-    const { gameKickedOff } = fixtureSumary(fixture);
+    const { gameKickedOff } = fixtureSummary(fixture);
     // const [search, setSearch] = useState<string>("");
 
     const { selectedTeamId, selectedTeam } = useBoxscoreFilter(fixture);

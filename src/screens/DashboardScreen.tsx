@@ -1,17 +1,21 @@
 import PageView from './PageView';
-import UpcomingFixturesSection from '../components/dashboard/UpcomingFixturesSection';
-import { Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
-import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
-import { HeroSection } from '../components/dashboard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
+import SportActionRankingsList from '../components/dashboard/rankings/SportActionRankingCard';
+import { Crown } from 'lucide-react';
+import { Flame } from 'lucide-react';
+import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelectedPlayersList';
+import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
+import { useDashboard } from '../hooks/dashboard/useDashboard';
+import { abbreviateSeasonName } from '../components/players/compare/PlayerCompareSeasonPicker';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
+  const {currentSeason} = useDashboard();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */
@@ -23,21 +27,9 @@ export function DashboardScreen() {
 
   return (
     <PageView className="flex flex-col space-y-4 p-4">
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <Home />
-          <p className="text-xl font-extrabold">Dashboard</p>
-        </div>
 
-        <div>
-          <GamePlayHelpButton />
-        </div>
-      </div>
 
-      <div>
-        <HeroSection />
-      </div>
-
+      {/* <FixtureCarrousel /> */}
 
       <ClaimAccountNoticeCard />
 
@@ -45,7 +37,55 @@ export function DashboardScreen() {
 
       <FeaturedFantasyLeagueGroups />
 
-      <UpcomingFixturesSection hidePastFixtures />
+      <div className='flex flex-col gap-4 pt-4' >
+        <div className='flex flex-row items-center gap-2' >
+          <Flame className="text-yellow-500" />
+          <h1 className='font-bold' >Top Fantasy Picks</h1>
+        </div>
+
+        <FantasyPointsScoredPlayerList />
+        <MostSelectedPlayersList />
+      </div>
+
+      <div className='flex flex-col gap-4 pt-4' >
+        <div className='flex flex-row items-center gap-2' >
+          <Crown className='text-blue-500' />
+          <h1 className='font-bold' >{ currentSeason ? `${abbreviateSeasonName(currentSeason.name)} STATS LEADERS`  : "Stats Leaders"}</h1>
+        </div>
+
+        <div className='flex flex-col no-scrollbar overflow-y-hidden overflow-x-auto gap-2' >
+          <SportActionRankingsList
+            actionName='tries'
+            title='Tries Scored'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='try_assist'
+            title='Try Assits'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='defenders_beaten'
+            title='Defenders Beaten'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='tackles'
+            title='Tackles'
+            className='min-w-[90%]'
+          />
+
+          <SportActionRankingsList
+            actionName='post_contact_metres'
+            title='Post Contact Meters (m)'
+            className='min-w-[90%]'
+          />
+        </div>
+
+      </div>
 
       <RoundedCard className="flex flex-col gap-4 p-4">
         <div className="flex flex-col gap-1">

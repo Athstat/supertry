@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { IFixture } from '../types/games';
-import { fixtureSumary } from '../utils/fixtureUtils';
+import { fixtureSummary } from '../utils/fixtureUtils';
 import FixtureScreenOverview from '../components/fixtures/FixtureScreenOverview';
 import useSWR from 'swr';
 import { gamesService } from '../services/gamesService';
@@ -48,7 +48,7 @@ export default function FixtureScreen() {
   if (!fixtureId) return <ErrorState message="Match was not found" />;
 
   const fixture = fetchedFixture as IFixture;
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
     {

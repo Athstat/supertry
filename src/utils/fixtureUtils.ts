@@ -2,7 +2,7 @@ import { endOfDay, startOfDay } from 'date-fns';
 import { IFixture } from '../types/games';
 import { ISbrFixture } from '../types/sbr';
 
-export function fixtureSumary(fixture: IFixture) {
+export function fixtureSummary(fixture: IFixture) {
   const { team_score, kickoff_time, game_status, opposition_score } = fixture;
 
   const matchFinal =
