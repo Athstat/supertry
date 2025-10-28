@@ -5,7 +5,7 @@ import { useFetch } from "../../../hooks/useFetch";
 import { gamesService } from "../../../services/gamesService";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { IFixture } from "../../../types/games";
-import { fixtureSumary } from "../../../utils/fixtureUtils";
+import { fixtureSummary } from "../../../utils/fixtureUtils";
 import TeamLogo from "../../team/TeamLogo";
 import { LoadingState } from "../../ui/LoadingState";
 
@@ -94,7 +94,7 @@ export default function LeagueCardFixturesSection({
           {/* Fixtures for this day */}
           <div className="grid gap-3 grid-cols-1">
             {fixturesByDay[dayKey].map((fixture, index) => {
-              const { game_status } = fixtureSumary(fixture);
+              const { game_status } = fixtureSummary(fixture);
 
               return (
                 <motion.div

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
-import { fixtureSumary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
+import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
 import GameHighlightsCard from '../video/GameHighlightsCard';
@@ -53,7 +53,7 @@ export default function FixtureCard({
     analytics.trackFixtureCardClicked(fixture);
   };
 
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
 
   return (
     <>
@@ -187,7 +187,7 @@ export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
   const navigate = useNavigate();
 
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
 
   const goToFullMatchDetails = () => {
     navigate(`/fixtures/${fixture.game_id}`, { state: fixture });

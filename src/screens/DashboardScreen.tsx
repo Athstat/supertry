@@ -9,6 +9,7 @@ import RoundedCard from '../components/shared/RoundedCard';
 import { GamePlayHelpButton } from '../components/branding/help/LearnScrummyNoticeCard';
 import { HeroSection } from '../components/dashboard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
+import FixtureCarrousel from '../components/dashboard/fixtures/FixtureCarrousel';
 
 export function DashboardScreen() {
   const navigate = useNavigate();
@@ -34,10 +35,8 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      <div>
-        <HeroSection />
-      </div>
 
+      <FixtureCarrousel />
 
       <ClaimAccountNoticeCard />
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { IProAthlete } from "../../types/athletes";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import NoContentCard from "../shared/NoContentMessage";
-import { fixtureSumary } from "../../utils/fixtureUtils";
+import { fixtureSummary } from "../../utils/fixtureUtils";
 import { useInView } from "react-intersection-observer";
 import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics";
 import { useGameRosters } from "../../hooks/fixtures/useGameRosters";
@@ -25,7 +25,7 @@ export default function FixtureRosters({ fixture }: Props) {
     const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
     const [showModal, setShowModal] = useState<boolean>(false);
 
-    const {game_status} = fixtureSumary(fixture);
+    const {game_status} = fixtureSummary(fixture);
     const gameComplete = game_status === "completed";
     
     const {ref, inView} = useInView();
