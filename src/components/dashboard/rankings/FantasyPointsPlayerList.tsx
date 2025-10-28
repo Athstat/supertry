@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useDashboard } from "../../../hooks/dashboard/useDashboard"
 import { IProSeason } from "../../../types/season";
-import { useFantasyPointsRankings  } from "../../../hooks/fantasy/useSportActionRanking";
+import { useFantasyPointsRankings } from "../../../hooks/fantasy/useSportActionRanking";
 import RoundedCard from "../../shared/RoundedCard";
 import { FantasyPointsScoredRankingItem } from "../../../types/fantasyLeagueGroups";
 import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
+import { IProAthlete } from "../../../types/athletes";
+import PlayerProfileModal from "../../player/PlayerProfileModal";
 
 type Props = {
     season?: IProSeason
@@ -14,6 +16,11 @@ type Props = {
 export default function FantasyPointsScoredPlayerList({ season }: Props) {
 
     const { currentSeason } = useDashboard();
+
+    const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
+    const toggleModal = () => {
+        setSelectedPlayer(undefined);
+    }
 
     const finalSeason = useMemo(() => {
         return season || currentSeason;
@@ -37,38 +44,56 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
     }
 
     return (
-        <RoundedCard className="p-4 h-[160px] flex flex-col gap-3" >
+        <Fragment>
+            <RoundedCard className="p-4 h-[160px] flex flex-col gap-3" >
 
-            <div>
-                <p className="font-semibold" >Fantasy Points Scored</p>
-            </div>
+                <div>
+                    <p className="font-semibold" >Fantasy Points Scored</p>
+                </div>
 
-            <div className="flex flex-row no-scrollbar items-center overflow-x-auto overflow-y-hidden gap-4" >
-                {rankings.map((r, index) => {
-                    return (
-                        <RankingItem
-                            item={r}
-                            key={r.tracking_id}
-                            index={index}
-                        />
-                    )
-                })}
-            </div>
-        </RoundedCard>
+                <div className="flex flex-row no-scrollbar items-center overflow-x-auto overflow-y-hidden gap-4" >
+                    {rankings.map((r, index) => {
+                        return (
+                            <RankingItem
+                                item={r}
+                                key={r.tracking_id}
+                                index={index}
+                                onClickPlayer={setSelectedPlayer}
+                            />
+                        )
+                    })}
+                </div>
+            </RoundedCard>
+
+            {selectedPlayer && (
+                <PlayerProfileModal 
+                    player={selectedPlayer}
+                    onClose={toggleModal}
+                    isOpen={true}
+                />
+            )}
+        </Fragment>
     )
 }
 
 type RankingItemProps = {
     item: FantasyPointsScoredRankingItem,
-    index: number
+    index: number,
+    onClickPlayer: (player: IProAthlete) => void
 }
 
-function RankingItem({ item, index }: RankingItemProps) {
+function RankingItem({ item, index, onClickPlayer }: RankingItemProps) {
 
     const rank = index + 1;
+    
+    const handleOnClick = () => {
+        if (onClickPlayer) {
+            onClickPlayer(item);
+        }
+    }
 
     return (
-        <div className="flex flex-row gap-2" >
+        <div onClick={handleOnClick} className="flex flex-row gap-2" >
             <div>
                 <SecondaryText className="" >#{rank}</SecondaryText>
             </div>
