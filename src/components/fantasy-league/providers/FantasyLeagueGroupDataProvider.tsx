@@ -7,7 +7,6 @@ import useSWR from "swr"
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService"
 import { LoadingState } from "../../ui/LoadingState"
 import { useLocation } from "react-router-dom"
-import RoundedCard from "../../shared/RoundedCard"
 
 type Props = {
     children?: ReactNode,
@@ -84,8 +83,7 @@ function Fetcher({ children, leagueId, loadingFallback }: Props) {
             <Fragment>
                 {loadingFallback ? (
                     <Fragment>
-                        <RoundedCard className="h-[100px] w-full rounded-xl border-none animate-pulse" >
-                        </RoundedCard>
+                        {loadingFallback}
                     </Fragment>
                 ) : <LoadingState />}
             </Fragment>
