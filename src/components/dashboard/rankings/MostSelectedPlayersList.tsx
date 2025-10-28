@@ -31,24 +31,25 @@ export default function MostSelectedPlayersList({ season }: Props) {
     if (isLoading) {
         return (
             <>
-                <RoundedCard className="p-4 h-[190px] animate-pulse border-none flex flex-col gap-2" ></RoundedCard>
+                <RoundedCard className="p-4 h-[160px] animate-pulse border-none flex flex-col gap-2" ></RoundedCard>
             </>
         )
     }
 
     return (
-        <RoundedCard className="p-4 h-[190px] flex flex-col gap-2" >
+        <RoundedCard className="p-4 h-[160px] flex flex-col gap-2" >
 
             <div>
                 <p className="font-semibold" >Most Selected Players</p>
             </div>
 
             <div className="flex flex-row no-scrollbar items-center overflow-x-auto overflow-y-hidden gap-4" >
-                {rankings.map((r) => {
+                {rankings.map((r, index) => {
                     return (
                         <RankingItem
                             item={r}
                             key={r.tracking_id}
+                            index={index}
                         />
                     )
                 })}
@@ -58,18 +59,22 @@ export default function MostSelectedPlayersList({ season }: Props) {
 }
 
 type RankingItemProps = {
-    item: MostSelectedRankingItem
+    item: MostSelectedRankingItem,
+    index: number
 }
 
-function RankingItem({ item }: RankingItemProps) {
+function RankingItem({ item, index }: RankingItemProps) {
+    const rank = index + 1;
+
     return (
-        <div>
+        <div className="flex flex-row gap-2" >
             <div>
+                <SecondaryText className="text-base" >#{rank}</SecondaryText>
             </div>
             <div className="flex flex-col items-center justify-center gap-1" >
                 <PlayerMugshot
                     url={item.image_url}
-                    className="w-20 h-20 bg-blue-500"
+                    className="w-14 h-14 bg-blue-500"
                 />
 
                 <div>
