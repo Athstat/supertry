@@ -6,8 +6,9 @@ import RoundedCard from "../components/shared/RoundedCard";
 import SmallLeagueOverviewCard from "../components/dashboard/my-team/LeagueOverviewCard";
 import { hasLeagueGroupEnded } from "../utils/fantasy/leagueGroupsUtils";
 
+/** List of featured fantasy leagues on the dashboard */
 export default function FeaturedFantasyLeagueGroups() {
-
+    
     const key = swrFetchKeys.getAllPublicFantasyLeagues();
     const { data: fetchedLeagues, isLoading: loadingPublic } = useSWR(key, () => fantasyLeagueGroupsService.getAllPublicLeagues());
 
@@ -56,12 +57,6 @@ export default function FeaturedFantasyLeagueGroups() {
 
     return (
         <div className="flex flex-col gap-4" >
-            {/* {firstOfficialLeague && (
-                <SmallLeagueOverviewCard
-                    league={firstOfficialLeague}
-                />
-
-            )} */}
 
             {officialLeagues.map((group, index) => {
                 return (
