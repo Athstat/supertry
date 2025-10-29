@@ -1,4 +1,4 @@
-import { endOfDay, startOfDay } from 'date-fns';
+import { endOfDay, startOfDay, startOfWeek, endOfWeek, getWeek, getYear, format } from 'date-fns';
 import { IFixture } from '../types/games';
 import { ISbrFixture } from '../types/sbr';
 
@@ -305,4 +305,161 @@ export function isGameLive(gameStatus?: string): boolean {
 export function formatGameStatus(gameStatus?: string): string {
   if (!gameStatus) return '';
   return gameStatus.toUpperCase();
+}
+
+/** Get ISO week number from a date */
+export function getWeekNumber(date: Date): number {
+  return getWeek(date, { weekStartsOn: 1 }); // Week starts on Monday
+}
+
+/** Get the year for a given date (handles year transitions) */
+export function getWeekYear(date: Date): number {
+  return getYear(date);
+}
+
+/** Get current week number and year */
+export function getCurrentWeek(): { weekNumber: number; year: number } {
+  const now = new Date();
+  return {
+    weekNumber: getWeekNumber(now),
+    year: getWeekYear(now),
+  };
+}
+
+/** Get Monday-Sunday date range for a given week number and year */
+export function getWeekDateRange(weekNumber: number, year: number): { start: Date; end: Date } {
+  // Create a date in the middle of the target year
+  const midYear = new Date(year, 6, 1);
+
+  // Get the first day of week 1 in the target year
+  const week1Start = startOfWeek(new Date(year, 0, 4), { weekStartsOn: 1 });
+
+  // Calculate the start date by adding (weekNumber - 1) weeks
+  const weekStart = new Date(week1Start);
+  weekStart.setDate(weekStart.getDate() + (weekNumber - 1) * 7);
+
+  // Get the start and end of the week
+  const start = startOfWeek(weekStart, { weekStartsOn: 1 });
+  const end = endOfWeek(weekStart, { weekStartsOn: 1 });
+
+  return { start, end };
+}
+
+/** Format week header: "Week 45, 27 Oct - 2 Nov" */
+export function formatWeekHeader(
+  weekNumber: number,
+  dateRange: { start: Date; end: Date }
+): string {
+  const startFormatted = format(dateRange.start, 'd MMM');
+  const endFormatted = format(dateRange.end, 'd MMM');
+
+  return `Week ${weekNumber}, ${startFormatted} - ${endFormatted}`;
+}
+
+/** Get fixtures for a specific week */
+export function getFixturesForWeek(
+  fixtures: IFixture[],
+  weekNumber: number,
+  year: number
+): IFixture[] {
+  const { start, end } = getWeekDateRange(weekNumber, year);
+  const startEpoch = startOfDay(start).valueOf();
+  const endEpoch = endOfDay(end).valueOf();
+
+  return fixtures
+    .filter(f => {
+      if (f.kickoff_time) {
+        const kickoffEpoch = new Date(f.kickoff_time).valueOf();
+        return kickoffEpoch >= startEpoch && kickoffEpoch <= endEpoch;
+      }
+      return false;
+    })
+    .sort((a, b) => {
+      const aDate = new Date(a.kickoff_time ?? new Date());
+      const bDate = new Date(b.kickoff_time ?? new Date());
+      return aDate.valueOf() - bDate.valueOf();
+    });
+}
+
+/** Get SBR fixtures for a specific week */
+export function getSbrFixturesForWeek<T extends { kickoff_time?: Date }>(
+  fixtures: T[],
+  weekNumber: number,
+  year: number
+): T[] {
+  const { start, end } = getWeekDateRange(weekNumber, year);
+  const startEpoch = startOfDay(start).valueOf();
+  const endEpoch = endOfDay(end).valueOf();
+
+  return fixtures
+    .filter(f => {
+      if (f.kickoff_time) {
+        const kickoffEpoch = new Date(f.kickoff_time).valueOf();
+        return kickoffEpoch >= startEpoch && kickoffEpoch <= endEpoch;
+      }
+      return false;
+    })
+    .sort((a, b) => {
+      const aDate = new Date(a.kickoff_time ?? new Date());
+      const bDate = new Date(b.kickoff_time ?? new Date());
+      return aDate.valueOf() - bDate.valueOf();
+    });
+}
+
+/** Find the next week with fixtures (searches forward up to maxWeeks) */
+export function findNextWeekWithFixtures(
+  fixtures: IFixture[],
+  startWeek: number,
+  startYear: number,
+  maxWeeks: number = 12
+): { weekNumber: number; year: number } | null {
+  let currentWeek = startWeek;
+  let currentYear = startYear;
+
+  for (let i = 0; i < maxWeeks; i++) {
+    // Move to next week
+    if (currentWeek === 52) {
+      currentWeek = 1;
+      currentYear++;
+    } else {
+      currentWeek++;
+    }
+
+    // Check if this week has fixtures
+    const weekFixtures = getFixturesForWeek(fixtures, currentWeek, currentYear);
+    if (weekFixtures.length > 0) {
+      return { weekNumber: currentWeek, year: currentYear };
+    }
+  }
+
+  return null;
+}
+
+/** Find the next week with SBR fixtures (searches forward up to maxWeeks) */
+export function findNextWeekWithSbrFixtures<T extends { kickoff_time?: Date }>(
+  fixtures: T[],
+  startWeek: number,
+  startYear: number,
+  maxWeeks: number = 12
+): { weekNumber: number; year: number } | null {
+  let currentWeek = startWeek;
+  let currentYear = startYear;
+
+  for (let i = 0; i < maxWeeks; i++) {
+    // Move to next week
+    if (currentWeek === 52) {
+      currentWeek = 1;
+      currentYear++;
+    } else {
+      currentWeek++;
+    }
+
+    // Check if this week has fixtures
+    const weekFixtures = getSbrFixturesForWeek(fixtures, currentWeek, currentYear);
+    if (weekFixtures.length > 0) {
+      return { weekNumber: currentWeek, year: currentYear };
+    }
+  }
+
+  return null;
 }
