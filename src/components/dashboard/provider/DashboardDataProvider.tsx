@@ -115,13 +115,20 @@ function LoadingSkeleton() {
         <PageView className="flex flex-col space-y-4 p-4">
 
             <div className='flex flex-col gap-2' >
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
+
+                <div className='flex flex-row items-center gap-2' >
+                    <RoundedCard className=' bg-slate-200 h-[50px] w-[50px] border-none animate-pulse' />
+                    <RoundedCard className=' bg-slate-200 h-[40px] w-[200px] border-none animate-pulse' />
+                </div>
+
+                <RoundedCard className='w-full bg-slate-200 h-[200px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[50px] border-none animate-pulse' />
+
+                <RoundedCard className=' bg-slate-200 mt-5 h-[30px] w-[200px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
             </div>
         </PageView>
     )
