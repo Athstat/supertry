@@ -10,6 +10,7 @@ type Props = {
   children?: ReactNode;
   tabHeaderItems: TabViewHeaderItem[];
   className?: string;
+  pillTabRowClassName: string;
 };
 
 export default function PilledTabView({
@@ -18,6 +19,7 @@ export default function PilledTabView({
   children,
   tabHeaderItems,
   className,
+  pillTabRowClassName
 }: Props) {
   return (
     <ScopeProvider atoms={[currentTabAtom]}>
@@ -26,6 +28,7 @@ export default function PilledTabView({
         tabKeySearchParam={tabKeySearchParam}
         initialTabKey={initialTabKey}
         tabHeaderItems={tabHeaderItems}
+        pillTabRowClassName={pillTabRowClassName}
       >
         {children}
       </TabViewInner>
@@ -41,6 +44,7 @@ function TabViewInner({
   className,
   tabKeySearchParam = 'tabKey',
   initialTabKey,
+  pillTabRowClassName
 }: TabInnerProps) {
   const { currentTabKey, navigate } = useTabView();
   const location = useLocation();
@@ -69,12 +73,12 @@ function TabViewInner({
         }
       }
     }
-  }, [location.search, initialTabKey]);
+  }, [location.search, initialTabKey, currentTabKey, tabKeySearchParam, enabledTabs, navigate]);
 
   return (
     <div className={twMerge('w-full flex flex-col gap-5', className)}>
       {/* Header */}
-      <div className="flex flex-row no-scrollbar gap-1 w-full h-fit overflow-x-auto">
+      <div className={twMerge("flex flex-row no-scrollbar gap-1 w-full h-fit overflow-x-auto", pillTabRowClassName)}>
         {enabledTabs.map((item, index) => {
           return (
             <PilledTabViewButton

@@ -84,7 +84,7 @@ function Content() {
   ];
 
   return (
-    <PageView className="dark:text-white p-4 flex flex-col gap-4">
+    <PageView className="dark:text-white flex flex-col gap-4">
       
       <LeagueGroupScreenHeader 
         isEditing={isEditing}
@@ -106,28 +106,32 @@ function Content() {
         <StatCard label="Current Round" value={currentRound?.title} className="flex-1" />
       </div> */}
 
-      <PilledTabView initialTabKey={initialTabKey} tabHeaderItems={headerItems}>
+      <PilledTabView 
+        initialTabKey={initialTabKey}
+        tabHeaderItems={headerItems}
+        pillTabRowClassName='px-4'
+      >
         <TabViewPage tabKey="my-team">
           <MyTeams onEditChange={setIsEditing} />
         </TabViewPage>
 
-        <TabViewPage tabKey="standings">
+        <TabViewPage tabKey="standings" className='px-4'>
           <LeagueStandings />
         </TabViewPage>
 
-        <TabViewPage tabKey="info">
+        <TabViewPage tabKey="info" className='px-4' >
           <LeagueInfoTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="fixtures">
+        <TabViewPage tabKey="fixtures" className='px-4' >
           <LeagueFixturesTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="commissioner">
+        <TabViewPage tabKey="commissioner" className='px-4' >
           <LeagueCommissionerTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="overview">
+        <TabViewPage tabKey="overview" className='px-4' >
           <LeagueOverviewTab />
         </TabViewPage>
       </PilledTabView>

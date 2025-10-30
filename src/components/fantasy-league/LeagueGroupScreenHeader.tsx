@@ -25,7 +25,7 @@ export default function LeagueGroupScreenHeader({isEditing} : Props) {
     }
 
     return (
-        <div className="flex flex-col ">
+        <div className="flex flex-col px-4 pt-4">
             <div className="flex flex-row items-start justify-between gap-2">
 
                 <div className="flex flex-col items-start justify-center gap-2">
