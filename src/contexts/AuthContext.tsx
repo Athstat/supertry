@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
-import { useAuthToken } from '../components/auth/providers/AuthTokenProvider';
+import { useAuthToken } from '../providers/AuthTokenProvider';
 import useSWR, { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
