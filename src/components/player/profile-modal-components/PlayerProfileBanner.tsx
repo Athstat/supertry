@@ -3,12 +3,10 @@ import { twMerge } from 'tailwind-merge';
 import { CardTier } from '../../../types/athletes';
 import { ScrummyDarkModeLogo } from '../../branding/scrummy_logo';
 import { CircleDollarSign } from 'lucide-react';
-import { usePlayerData } from '../provider/PlayerDataProvider';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
+import { usePlayerData } from '../../../providers/PlayerDataProvider';
 
-interface Props {}
-
-export default function PlayerProfileBanner({}: Props) {
+export default function PlayerProfileBanner() {
   const { player } = usePlayerData();
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 

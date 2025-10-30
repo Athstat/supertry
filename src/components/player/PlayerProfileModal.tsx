@@ -1,12 +1,12 @@
 import PlayerProfileBanner from './profile-modal-components/PlayerProfileBanner';
 import PlayerNameAndPosition from './profile-modal-components/PlayerNameAndPosition';
 import PlayerProfileModalTabContent from './profile-modal-components/PlayerProfileModalTabContent';
-import PlayerDataProvider from './provider/PlayerDataProvider';
 import DialogModal from '../shared/DialogModal';
 import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { useCallback, useEffect, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
+import PlayerDataProvider from '../../providers/PlayerDataProvider';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;

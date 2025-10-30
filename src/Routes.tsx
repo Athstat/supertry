@@ -38,9 +38,9 @@ import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
 import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
-import OnboardingDataProvider from './components/onboarding/OnboardingDataProvider';
 import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
 import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
+import OnboardingDataProvider from './providers/OnboardingDataProvider';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
