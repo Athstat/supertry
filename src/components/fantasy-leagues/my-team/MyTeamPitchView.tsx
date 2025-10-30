@@ -11,6 +11,7 @@ import WarningCard from '../../shared/WarningCard';
 import { useMyTeamView } from './MyTeamStateProvider';
 import { EmptyPlayerCard } from './EditableTeamSlotItem';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
+import { useHideBottomNavBar } from '../../../hooks/navigation/useNavigationBars';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -19,6 +20,8 @@ type Props = {
 
 /** Renders my team pitch view */
 export default function MyTeamPitchView({ leagueRound, team }: Props) {
+
+  useHideBottomNavBar();
 
   const { slots, isTeamFull, selectedCount } = useFantasyLeagueTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
