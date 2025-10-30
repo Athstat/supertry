@@ -146,6 +146,8 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
           onClose={handleClosePointsModal}
         />
       )}
+
+      {}
     </div>
   );
 }

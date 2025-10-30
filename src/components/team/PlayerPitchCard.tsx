@@ -8,6 +8,8 @@ import PlayerMugshot from "../shared/PlayerMugshot";
 import SecondaryText from "../shared/SecondaryText";
 import { Activity } from "react";
 import { IFixture } from "../../types/games";
+import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
+import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete,
@@ -18,6 +20,8 @@ type PlayerPitchCardProps = {
 export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps) {
 
     const { position_class } = player;
+    const { viewMode } = useMyTeamView();
+    const { setTeamCaptainAtSlot, removePlayerAtSlot } = useFantasyLeagueTeam();
 
     const handleClick = () => {
         if (onClick) {
@@ -26,7 +30,9 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
     }
 
     return (
-        <div className='flex flex-col items-center justify-center gap-1' >
+        <div className='flex flex-col items-center justify-center gap-1 relative' >
+
+
             <div
                 className={twMerge(
                     'overflow-hidden rounded-xl min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
@@ -60,11 +66,22 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
             </div>
 
-            <PlayerScoreIndicator
-                player={player}
-                round={round}
-            />
+            <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
+                <PlayerScoreIndicator
+                    player={player}
+                    round={round}
+                />
+            </Activity>
 
+            {/* <Activity mode={viewMode === "edit" ? "visible" : "hidden"} >
+                <div className="flex flex-col gap-2 w-full" >
+                    <div className="w-full flex-1" >
+                        <PrimaryButton className="w-full" >
+                            Swap
+                        </PrimaryButton>
+                    </div>
+                </div>
+            </Activity> */}
         </div>
     )
 }
