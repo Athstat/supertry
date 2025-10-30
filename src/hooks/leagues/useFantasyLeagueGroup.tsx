@@ -48,7 +48,7 @@ export function useFantasyLeagueGroup() {
     }
 
     return undefined;
-  }, [rounds]);
+  }, [sortedRounds]);
 
   const mutateLeague = (newLeague: FantasyLeagueGroup) => {
     setLeague(newLeague);
