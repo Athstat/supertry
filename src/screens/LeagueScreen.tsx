@@ -19,6 +19,7 @@ import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverv
 import PilledTabView from '../components/shared/tabs/PilledTabView';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
+import { useHideTopNavBar } from '../hooks/navigation/useNavigationBars';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -31,6 +32,8 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
+
+  useHideTopNavBar();
   const { league, userMemberRecord, isMember, isOfficialLeague, currentRound } =
     useFantasyLeagueGroup();
   const { handleShare } = useShareLeague(league);

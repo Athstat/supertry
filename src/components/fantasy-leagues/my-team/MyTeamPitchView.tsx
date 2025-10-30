@@ -29,6 +29,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
 
   const {navigate: navigateViewMode} = useMyTeamView();
 
+
   useEffect(() => {
     fantasyAnalytics.trackVisitedTeamPitchView();
   }, []);
