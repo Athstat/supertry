@@ -28,7 +28,7 @@ export function PlayerRankingCard({ rank, onClick, player, value }: Props) {
                 </div>
 
                 <div className="flex flex-row items-center gap-2" >
-                    <PlayerMugshot className="w-14 bg-blue-600 h-14" url={player.image_url} />
+                    <PlayerMugshot className="w-14 bg-slate-100 dark:bg-blue-600 h-14" url={player.image_url} />
                     <TeamLogo className="w-8 h-8" url={player.team?.image_url} />
                 </div>
 
@@ -41,7 +41,6 @@ export function PlayerRankingCard({ rank, onClick, player, value }: Props) {
                     <p className="font-bold text-sm" >{value}</p>
                 </div>
             </div>
-
 
         </div>
     )
