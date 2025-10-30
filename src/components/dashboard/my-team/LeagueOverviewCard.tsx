@@ -1,15 +1,16 @@
 import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
-import { ArrowRight, Globe, Info, Lock, Plus, Trophy } from 'lucide-react';
+import { ArrowRight, Globe, Trophy } from 'lucide-react';
 import RoundedCard from '../../shared/RoundedCard';
-import SecondaryText from '../../shared/SecondaryText';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
 import { useNavigate } from 'react-router-dom';
-import WarningCard from '../../shared/WarningCard';
 import { Flame } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useMemberRankDetail } from '../../../hooks/fantasy/useMemberRankingDetail';
 import { useAuth } from '../../../contexts/AuthContext';
+import BlueGradientCard from '../../shared/BlueGradientCard';
+import { Fragment } from 'react/jsx-runtime';
+import { LeagueRoundCountdown2 } from '../../fantasy-league/LeagueCountdown';
+import FantasyLeagueGroupDataProvider from '../../fantasy-league/providers/FantasyLeagueGroupDataProvider';
 
 type Props = {
   league: FantasyLeagueGroup;
@@ -24,14 +25,14 @@ export default function SmallLeagueOverviewCard({ league }: Props) {
 
 function Content({ league }: Props) {
 
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
   const shouldFetchRanking = Boolean(league.id) && Boolean(authUser?.kc_id);
-  const {rankingDetail, isLoading} = useMemberRankDetail(league.id, authUser?.kc_id ?? '', shouldFetchRanking);
+  const { rankingDetail, isLoading } = useMemberRankDetail(league.id, authUser?.kc_id ?? '', shouldFetchRanking);
 
   const navigate = useNavigate();
 
   const handleShowMore = () => {
-      navigate(`/league/${league.id}`);
+    navigate(`/league/${league.id}`);
   }
 
   if (isLoading) {
@@ -45,16 +46,16 @@ function Content({ league }: Props) {
     return;
   }
 
-  const {rank_percentile} = rankingDetail;
+  const { rank_percentile, overall_rank, total_points } = rankingDetail;
 
   return (
-    <div>
-      <RoundedCard className='p-4 h-[170px] cursor-pointer dark:border-none flex flex-col gap-4' >
-        
+    <div className='flex flex-col gap-2' >
+      <BlueGradientCard className='p-4 h-[170px] cursor-pointer dark:border-none flex flex-col gap-4' >
+
         <div className='flex flex-row items-center justify-between' >
           <div className='flex flex-row items-center gap-2' >
             <Trophy className='w-4 h-4' />
-            <p className='font-semobold' >{league.title}</p>
+            <p className='font-bold' >{league.title}</p>
           </div>
 
           <div className='' >
@@ -66,73 +67,61 @@ function Content({ league }: Props) {
           <div>
             <p className={twMerge(
               'font-bold text-lg'
-            )} >Rank #{rankingDetail?.overall_rank}</p>
-            <SecondaryText className='text-sm' >{rankingDetail.total_points || "--"} points</SecondaryText>
+            )} >
+              {overall_rank ? `Rank #${overall_rank}` : "-"}
+            </p>
+
+            <p className='text-sm text-white/80' >{total_points ? `${total_points} points` : "0 points"}</p>
           </div>
-          
+
           <div className='flex flex-col items-end justify-end' >
             <div className='flex flex-row items-center gap-1' >
-              <p className='font-bold text-lg' >Top { rank_percentile < 1 ? rank_percentile : Math.floor(rank_percentile)}%</p>
+              <p className='font-bold text-lg' >Top {rank_percentile < 1 ? 1 : Math.floor(rank_percentile)}%</p>
               {rank_percentile <= 5 && (<Flame className='w-5 text-yellow-500 h-5' />)}
             </div>
-            <SecondaryText className='text-sm' >Out of {rankingDetail.total_users}</SecondaryText>
+            <p className='text-sm text-white/80' >Out of {rankingDetail.total_users}</p>
           </div>
         </div>
 
         <div onClick={handleShowMore} className='pt-2 flex-row flex items-center hover:text-primary-500 justify-center gap-2' >
-            <p className='text-sm ' >Show More</p>
-            <ArrowRight className='w-4 h-4' />
+          <p className='text-sm ' >View League</p>
+          <ArrowRight className='w-4 h-4' />
         </div>
-      </RoundedCard>
+      </BlueGradientCard>
+
+      <FantasyLeagueGroupDataProvider
+        leagueId={league.id}
+        loadingFallback={<CountDownLoadingSkeleton />}
+      >
+        <CountDown />
+      </FantasyLeagueGroupDataProvider>
     </div>
   );
 }
 
-function NotTeamCreated() {
-  const navigate = useNavigate();
+function CountDown() {
+
   const { currentRound } = useFantasyLeagueGroup();
 
   if (!currentRound) return;
 
-  const goToCreateTeam = () => {
-    navigate(`/league/${currentRound.fantasy_league_group_id}?journey=team-creation`);
-  };
-
   return (
-    <WarningCard className="px-4 py-2 text-center gap-4  flex flex-row items-center justify-between">
-      <div className="flex flex-row items-center gap-2">
-        <Info className="w-4 h-4" />
-        <p className="text-xs text-left">You haven't picked a team for {currentRound.title} yet</p>
-      </div>
-
-      <PrimaryButton onClick={goToCreateTeam} className="w-fit text-xs px-2">
-        {/* <p className='text-[10px]' >Pick Team</p> */}
-        <Plus className="w-4 h-4" />
-      </PrimaryButton>
-    </WarningCard>
+    <BlueGradientCard>
+      <LeagueRoundCountdown2 leagueRound={currentRound} />
+    </BlueGradientCard>
   );
 }
 
-function NotTeamCreatedLeagueLocked() {
-  const navigate = useNavigate();
+function CountDownLoadingSkeleton() {
+
   const { currentRound } = useFantasyLeagueGroup();
 
   if (!currentRound) return;
 
-  const goToCreateTeam = () => {
-    navigate(`/league/${currentRound.fantasy_league_group_id}?journey=team-creation`);
-  };
-
   return (
-    <RoundedCard className="p-6 text-center h-[170px] gap-4 border-dotted border-4 flex flex-col items-center justify-center">
-      <SecondaryText className="text-base">
-        You can't pick a team because, round '{currentRound.title}', has been locked{' '}
-      </SecondaryText>
-
-      <PrimaryButton disabled={true} onClick={goToCreateTeam} className="w-fit px-6 py-2">
-        <p>Pick Team</p>
-        <Lock className="w-4 h-4" />
-      </PrimaryButton>
-    </RoundedCard>
+    <Fragment>
+      <RoundedCard className='h-[30px] animate-pulse border-none' >
+      </RoundedCard>
+    </Fragment>
   );
 }
