@@ -47,6 +47,8 @@ export function useFantasyLeagueGroup() {
       return endedRounds[endedRounds.length - 1];
     }
 
+    // TODO: Change this Back
+
     return undefined;
   }, [sortedRounds]);
 
