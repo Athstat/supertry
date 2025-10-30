@@ -11,6 +11,9 @@ import { logger } from '../../../services/logger'
 import PageView from '../../../screens/PageView'
 import RoundedCard from '../../shared/RoundedCard'
 
+import { Activity } from "react";
+import { useDebounced } from '../../../hooks/useDebounced'
+
 type Props = {
     children?: ReactNode
 }
@@ -48,6 +51,7 @@ function InnerProvider({ children }: Props) {
     const { data: roundsFetched, isLoading: loadingRounds } = useSWR(roundsKey, () => seasonService.getSeasonRounds(currentSeason?.id ?? ''))
 
     const isLoading = loadingRounds || loadingSeasons;
+    const isLoadingDebounced = useDebounced(isLoading, 500);
 
     useEffect(() => {
 
@@ -96,16 +100,15 @@ function InnerProvider({ children }: Props) {
         }
     }, [seasonRounds, setCurrentRound]);
 
-
-    if (isLoading) {
-        return (
-            <LoadingSkeleton />
-        )
-    }
-
     return (
         <Fragment>
-            {children}
+            <Activity mode={isLoadingDebounced ? "hidden" : "visible"} >
+                {children}
+            </Activity>
+
+            <Activity mode={isLoadingDebounced ? "visible" : "hidden"} >
+                <LoadingSkeleton />
+            </Activity>
         </Fragment>
     )
 }
@@ -115,13 +118,20 @@ function LoadingSkeleton() {
         <PageView className="flex flex-col space-y-4 p-4">
 
             <div className='flex flex-col gap-2' >
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
-                <RoundedCard className='w-full h-[150px] border-none animate-pulse' />
+
+                <div className='flex flex-row items-center gap-2' >
+                    <RoundedCard className=' bg-slate-200 h-[50px] w-[50px] border-none animate-pulse' />
+                    <RoundedCard className=' bg-slate-200 h-[40px] w-[200px] border-none animate-pulse' />
+                </div>
+
+                <RoundedCard className='w-full bg-slate-200 h-[200px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[50px] border-none animate-pulse' />
+
+                <RoundedCard className=' bg-slate-200 mt-5 h-[30px] w-[200px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
+                <RoundedCard className='w-full bg-slate-200 h-[150px] border-none animate-pulse' />
             </div>
         </PageView>
     )
