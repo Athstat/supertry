@@ -1,11 +1,7 @@
-import useSWR from "swr"
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../types/fantasyLeague"
 import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../shared/SecondaryText"
-import { swrFetchKeys } from "../../../utils/swrKeys"
-import { leagueService } from "../../../services/leagueService"
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup"
-import { isLeagueRoundLocked } from "../../../utils/leaguesUtils"
+import { useRoundScoringSummary } from "../../../hooks/fantasy/useRoundScoringSummary"
 
 type Props = {
     userTeam: FantasyLeagueTeamWithAthletes,
@@ -16,9 +12,7 @@ type Props = {
 export default function UserRoundScoringUpdate({ userTeam, leagueRound }: Props) {
 
     // Lets fetch round scoring analysis
-    const key = swrFetchKeys.getLeagueRoundScoringOverview(leagueRound.id);
-    const { data: scoringOverview, isLoading } = useSWR(key, () => leagueService.getRoundScoringOverview(leagueRound.id));
-    const isLocked = isLeagueRoundLocked(leagueRound);
+    const {isLoading, userScore, averagePointsScored, highestPointsScored, isLocked} = useRoundScoringSummary(leagueRound);
 
     if (isLoading) {
         return (
@@ -27,10 +21,6 @@ export default function UserRoundScoringUpdate({ userTeam, leagueRound }: Props)
             </RoundedCard>
         )
     }
-
-    const highestPointsScored = scoringOverview?.highest_points_scored;
-    const averagePointsScored = scoringOverview?.average_points_scored;
-    const userScore = scoringOverview?.user_score;
 
     if (!isLocked) return;
 
