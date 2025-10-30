@@ -1,10 +1,8 @@
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot } from '../../types/fantasyLeagueTeam';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { EmptyPlayerCard } from '../fantasy-leagues/my-team/EditableTeamSlotItem';
 import { useMyTeamView } from '../fantasy-leagues/my-team/MyTeamStateProvider';
-import RugbyPitch from '../shared/RugbyPitch';
-import { FantasyTeamAthleteCard } from './FantasyTeamAthleteCard';
+import { RugbyPitch3D } from '../shared/RugbyPitch';
 
 interface TeamFormationProps {
   players: IFantasyLeagueTeamSlot[];
@@ -12,41 +10,20 @@ interface TeamFormationProps {
   round: IFantasyLeagueRound
 }
 
-export function TeamFormation({ players: slots, onPlayerClick, round }: TeamFormationProps) {
+/** Renders a 3 Dimensional-looking pitch view */
+export function TeamFormation3D({ players: slots, onPlayerClick, round }: TeamFormationProps) {
 
   const {navigate: navigateView} = useMyTeamView();
+
   const handleGoToEdit = () => {
     navigateView("edit");
   }
 
   return (
-    <div className="relative left-0 right-0 w-full h-[900px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
-      <RugbyPitch />
+    <div className="relative w-full flex flex-col justify-center">
+      
+      <RugbyPitch3D />
 
-      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-0 lg:px-[10%]">
-        {/* Front Row - Top */}
-
-        {slots.map((s) => {
-
-          if (!s.athlete) {
-            return <EmptyPlayerCard
-            slot={s}
-            onClickSlot={handleGoToEdit}
-            />
-          };
-          
-          const player = s.athlete; 
-
-          return (
-            <FantasyTeamAthleteCard
-              key={player.id}
-              player={player}
-              onPlayerClick={onPlayerClick}
-              round={round}
-            />
-          )
-        })}
-      </div>
     </div>
   );
 }
