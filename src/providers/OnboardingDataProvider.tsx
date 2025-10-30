@@ -1,14 +1,14 @@
 import { useSetAtom } from 'jotai';
 import useSWR from 'swr';
-import { swrFetchKeys } from '../../utils/swrKeys';
-import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { ReactNode, useEffect } from 'react';
-import ScrummyLoadingState from '../ui/ScrummyLoadingState';
 import { ScopeProvider } from 'jotai-scope';
-import { DEFAULT_FALLBACK_FEATURED_LEAGUE_ID, FEATURED_PLAYER_IDS } from '../../types/constants';
-import { featuredLeagueAtom, featuredPlayersAtom } from '../../hooks/onboarding/useOnboarding';
-import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
-import { IProAthlete } from '../../types/athletes';
+import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
+import { featuredLeagueAtom, featuredPlayersAtom } from '../hooks/onboarding/useOnboarding';
+import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
+import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
+import { IProAthlete } from '../types/athletes';
+import { DEFAULT_FALLBACK_FEATURED_LEAGUE_ID, FEATURED_PLAYER_IDS } from '../types/constants';
+import { swrFetchKeys } from '../utils/swrKeys';
 
 
 // Export so other screens (e.g., WelcomeScreen) can preload assets
