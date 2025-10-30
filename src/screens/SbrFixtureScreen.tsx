@@ -13,7 +13,6 @@ import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
 import SbrMotmVotingBox from "../components/sbr/motm/SbrMotmVotingBox";
 import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../state/sbrFixtureScreen.atoms";
 import { ScopeProvider } from "jotai-scope";
-import SbrFixtureDataProvider from "../components/sbr/fixture/SbrFixtureDataProvider";
 import { useAtomValue } from "jotai";
 import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
 import SbrFixtureChat from "../components/sbr/fixture/SbrFixtureChat";
@@ -21,6 +20,7 @@ import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { sbrService } from "../services/sbr/sbrService";
 import { LoadingState } from "../components/ui/LoadingState";
+import SbrFixtureDataProvider from "../providers/SbrFixtureDataProvider";
 
 export default function SbrFixtureScreen() {
 

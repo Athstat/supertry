@@ -10,10 +10,10 @@ import {
   sbrFixtureTimelineAtom,
 } from '../../state/sbrFixtureScreen.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import SbrFixtureDataProvider from './fixture/SbrFixtureDataProvider';
 import { format } from 'date-fns';
 import SbrFixtureStatsStatusCard from './card/SbrFixtureStatsStatusCard';
 import { isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
+import SbrFixtureDataProvider from '../../providers/SbrFixtureDataProvider';
 
 type Props = {
   fixture: ISbrFixture;
