@@ -9,6 +9,7 @@ import SecondaryText from "../../shared/SecondaryText";
 import { IProAthlete } from "../../../types/athletes";
 import PlayerProfileModal from "../../player/PlayerProfileModal";
 import NoContentCard from "../../shared/NoContentMessage";
+import TeamLogo from "../../team/TeamLogo";
 
 type Props = {
     season?: IProSeason
@@ -29,7 +30,7 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
 
     const { rankings, isLoading } = useFantasyPointsRankings(
         finalSeason?.id ?? '',
-        15
+        3
     );
 
     if (!finalSeason) {
@@ -39,20 +40,20 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
     if (isLoading) {
         return (
             <>
-                <RoundedCard className="p-4 h-[160px] animate-pulse border-none flex flex-col gap-2" ></RoundedCard>
+                <RoundedCard className="p-4 h-[260px] animate-pulse border-none flex flex-col gap-2" ></RoundedCard>
             </>
         )
     }
 
     return (
         <Fragment>
-            <RoundedCard className="p-4 h-[160px] flex flex-col gap-3" >
+            <RoundedCard className="h-[260px] rounded-xl p-4 flex flex-col gap-2" >
 
                 <div>
                     <p className="font-semibold" >Fantasy Points Scored</p>
                 </div>
 
-                <div className="flex flex-row no-scrollbar items-center overflow-x-auto overflow-y-hidden gap-4" >
+                <div className="flex flex-col  items-center overflow-y-hidden gap-2" >
                     {rankings.map((r, index) => {
                         return (
                             <RankingItem
@@ -100,22 +101,29 @@ function RankingItem({ item, index, onClickPlayer }: RankingItemProps) {
     }
 
     return (
-        <div onClick={handleOnClick} className="flex flex-row gap-2" >
-            <div>
-                <SecondaryText className="" >#{rank}</SecondaryText>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-1" >
-                <PlayerMugshot
-                    url={item.image_url}
-                    className="w-14 h-14 bg-blue-500"
-                />
+        <div className="flex flex-col w-full" >
 
-                <div className="flex flex-col items-center justify-center" >
-                    <p className="text-xs text-center text-nowrap" >{item.athstat_lastname}</p>
-                    <SecondaryText className="text-xs" >{Math.floor(item.total_points)}</SecondaryText>
+            <div onClick={handleOnClick} className="flex cursor-pointer flex-row items-center gap-4" >
+                <div>
+                    <SecondaryText>#{rank}</SecondaryText>
                 </div>
 
+                <div className="flex flex-row items-center gap-2" >
+                    <PlayerMugshot className="w-14 bg-blue-600 h-14" url={item.image_url} />
+                    <TeamLogo className="w-8 h-8" url={item.team?.image_url} />
+                </div>
+
+                <div>
+                    <p className="text-sm" >{item.player_name}</p>
+                    <SecondaryText className="text-xs" >{item.team?.athstat_name}</SecondaryText>
+                </div>
+
+                <div className="flex-1 w-full flex mr-4 flex-row items-center justify-end" >
+                    <p className="font-bold text-md" >{item.total_points}</p>
+                </div>
             </div>
+
+
         </div>
     )
 }

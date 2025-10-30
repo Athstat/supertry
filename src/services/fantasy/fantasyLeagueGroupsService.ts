@@ -1,9 +1,10 @@
 import { RestPromise } from "../../types/auth";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
-import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasyLeagueGroupStanding, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
+import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasyLeagueGroupStanding, MemberRankingDetail, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
 import { IFixture } from "../../types/games";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
+import { logger } from "../logger";
 
 export const fantasyLeagueGroupsService = {
 
@@ -309,6 +310,23 @@ export const fantasyLeagueGroupsService = {
         }
 
         return [];
+    },
+
+    getMemberRanking: async (id: string, userId: string) : Promise<MemberRankingDetail | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-league-groups/${id}/members/${userId}/ranking`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as MemberRankingDetail
+            }
+        } catch (err) {
+            logger.error("Error fetching member standing ", err);
+        }
+
+        return undefined;
     }
 
 }
