@@ -11,6 +11,9 @@ import { logger } from '../../../services/logger'
 import PageView from '../../../screens/PageView'
 import RoundedCard from '../../shared/RoundedCard'
 
+import { Activity } from "react";
+import { useDebounced } from '../../../hooks/useDebounced'
+
 type Props = {
     children?: ReactNode
 }
@@ -48,6 +51,7 @@ function InnerProvider({ children }: Props) {
     const { data: roundsFetched, isLoading: loadingRounds } = useSWR(roundsKey, () => seasonService.getSeasonRounds(currentSeason?.id ?? ''))
 
     const isLoading = loadingRounds || loadingSeasons;
+    const isLoadingDebounced = useDebounced(isLoading, 500);
 
     useEffect(() => {
 
@@ -96,16 +100,15 @@ function InnerProvider({ children }: Props) {
         }
     }, [seasonRounds, setCurrentRound]);
 
-
-    if (isLoading) {
-        return (
-            <LoadingSkeleton />
-        )
-    }
-
     return (
         <Fragment>
-            {children}
+            <Activity mode={isLoadingDebounced ? "hidden" : "visible"} >
+                {children}
+            </Activity>
+
+            <Activity mode={isLoadingDebounced ? "visible" : "hidden"} >
+                <LoadingSkeleton />
+            </Activity>
         </Fragment>
     )
 }
