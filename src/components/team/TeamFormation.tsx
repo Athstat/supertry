@@ -112,7 +112,7 @@ function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
         /> */}
       </div>
 
-      <div className='flex-1 p-2 w-full items-center justify-center  min-h-[30%] rounded-xl bg-gradient-to-br from-white to-slate-200' >
+      <div className='flex-1 p-2 w-full items-center justify-center  min-h-[30%] rounded-xl bg-gradient-to-br from-white to-slate-200 dark:from-slate-800 dark:to-dark-900' >
         
         <div className='flex flex-col items-center justify-center' >
           <p className='text-slate-800 dark:text-white text-[11px] font-semibold' >{player.athstat_firstname}</p>
