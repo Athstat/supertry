@@ -82,3 +82,111 @@ export default function LeagueRoundCountdown({ leagueRound }: Props) {
         </div>
     )
 }
+
+
+/** Renders a league count down 2 */
+export function LeagueRoundCountdown2({ leagueRound }: Props) {
+
+    const deadlineMillis = new Date(leagueRound.join_deadline ?? new Date()).valueOf();
+    const dateNow = new Date().valueOf();
+    const startMillis = deadlineMillis - dateNow;
+
+    const [secondsLeft, setSecondsLeft] = useState(Math.floor(startMillis / 1000)); // total seconds
+
+    useEffect(() => {
+
+        // if the seconds left is 0 then don't start time
+        // if new count down value is less than 0 can we
+        // stop the interval and return 0
+
+        const timer = setInterval(() => {
+            setSecondsLeft(prev => {
+                const nextVal = prev - 1;
+
+                if (nextVal <= 0) {
+                    clearInterval(timer);
+                    return 0;
+                }
+
+                return nextVal;
+            });
+        }, 1000);
+
+        if (secondsLeft <= 0) {
+            clearInterval(secondsLeft);
+            return;
+        };
+
+
+        return () => clearInterval(timer);
+
+    }, [secondsLeft]);
+
+    const isCountdownFinished = secondsLeft <= 0;
+
+    const days = !isCountdownFinished ? Math.floor(secondsLeft / (60 * 60 * 24)) : 0;
+    const hours = !isCountdownFinished ? Math.floor((secondsLeft % (60 * 60 * 24)) / (60 * 60)) : 0;
+    const minutes = !isCountdownFinished ? Math.floor((secondsLeft % (60 * 60)) / 60) : 0;
+    const seconds = !isCountdownFinished ? secondsLeft % 60 : 0;
+
+    const timeBlocks = useMemo(() => {
+        return [
+            { value: days, label: 'Days' },
+            { value: hours, label: 'Hours' },
+            { value: minutes, label: 'Minutes' },
+            { value: seconds, label: 'Seconds' },
+        ];
+    }, [days, hours, minutes, seconds]);
+
+    const isTimeLeft = days + hours + minutes + seconds > 0;
+
+    return (
+        <div className='flex flex-row gap-2 h-[30px] items-center justify-between' >
+
+            {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
+            <div>
+                <p className="font-semibold" > ⏰ GW {leagueRound.start_round} Deadline</p>
+            </div>
+
+            {isTimeLeft && <div className="flex flex-row items-center gap-2">
+                {timeBlocks.map((block, index) => {
+
+                    if (days > 0 && (block.label === "Seconds" || block.label === "Minutes")) {
+                        return;
+                    }
+
+                    if (hours > 0 && (block.label === "Seconds")) {
+                        return;
+                    }
+
+                    if (block.label === "Days" && block.value === 0) {
+                        return;
+                    }
+
+                    if (block.label === "Hours" && block.value === 0 && (days === 0)) {
+                        return;
+                    }
+
+                    return (
+                        <div
+                            key={index}
+                            className="flex flex-row gap-1"
+                        >
+                            <p className="font-bold text-sm">
+                                {block.value.toString().padStart(2, '0')}
+                            </p>
+                            <p className="text-sm dark:text-primary-100">{block.label}</p>
+                        </div>
+                    )
+                })}
+            </div>}
+
+            {!isTimeLeft && (
+                <div>
+                    <p>Times Up!</p>
+                </div>
+            )}
+
+        </div>
+    )
+}
