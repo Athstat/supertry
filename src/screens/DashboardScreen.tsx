@@ -6,7 +6,7 @@ import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import SportActionRankingsList from '../components/dashboard/rankings/SportActionRankingCard';
-import { Crown } from 'lucide-react';
+import { Crown, Home } from 'lucide-react';
 import { Flame } from 'lucide-react';
 import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelectedPlayersList';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
@@ -28,6 +28,12 @@ export function DashboardScreen() {
   return (
     <PageView className="flex flex-col space-y-4 p-4">
 
+      <div>
+        <div className='flex flex-row items-center gap-2' >
+          <Home />
+          <p className='font-bold text-lg' >Dashboard</p>
+        </div>
+      </div>
 
       {/* <FixtureCarrousel /> */}
 
