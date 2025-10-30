@@ -14,7 +14,6 @@ import { FantasyLeagueScreen } from './screens/LeagueScreen';
 import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
 import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
-import { MyTeamScreen } from './screens/MyTeamScreen';
 import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
 import { PlayersScreen } from './screens/PlayersScreen';
@@ -174,17 +173,6 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <ReviewTeamScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/my-team/:teamId"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <MyTeamScreen />
               </Layout>
             </ProtectedRoute>
           }
