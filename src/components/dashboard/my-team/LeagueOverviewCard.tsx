@@ -119,7 +119,7 @@ function CountDownLoadingSkeleton() {
 
   return (
     <>
-      <RoundedCard className='h-[30px] animate-pulse border-none' >
+      <RoundedCard className='max-h-[55px] min-h-[55px] animate-pulse border-none' >
       </RoundedCard>
     </>
   );

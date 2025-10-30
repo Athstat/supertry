@@ -9,7 +9,6 @@ import { swrFetchKeys } from '../../../utils/swrKeys'
 import { seasonService } from '../../../services/seasonsService'
 import { logger } from '../../../services/logger'
 import PageView from '../../../screens/PageView'
-import { SmallLeagueOverviewLoadingSkeleton } from '../my-team/LeagueOverviewCard'
 import RoundedCard from '../../shared/RoundedCard'
 
 type Props = {
@@ -114,8 +113,6 @@ function InnerProvider({ children }: Props) {
 function LoadingSkeleton() {
     return (
         <PageView className="flex flex-col space-y-4 p-4">
-
-            <SmallLeagueOverviewLoadingSkeleton />
 
             <div className='flex flex-col gap-2' >
                 <RoundedCard className='w-full h-[150px] border-none animate-pulse' />

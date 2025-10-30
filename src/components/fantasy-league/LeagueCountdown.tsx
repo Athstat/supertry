@@ -141,7 +141,7 @@ export function LeagueRoundCountdown2({ leagueRound }: Props) {
     const isTimeLeft = days + hours + minutes + seconds > 0;
 
     return (
-        <div className='flex flex-row gap-2 h-[30px] items-center justify-between' >
+        <div className='flex flex-row gap-2 min-h-[30px] max-h-[30px] items-center justify-between' >
 
             {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
             <div>

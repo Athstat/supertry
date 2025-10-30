@@ -78,7 +78,7 @@ function Fetcher({ children, leagueId, loadingFallback }: Props) {
 
     }, [leagueId, mutate, state]);
 
-    if (!isLoading) {
+    if (isLoading) {
         return (
             <Fragment>
                 {loadingFallback ? (
