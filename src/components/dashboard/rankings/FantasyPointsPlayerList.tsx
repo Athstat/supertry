@@ -3,13 +3,10 @@ import { useDashboard } from "../../../hooks/dashboard/useDashboard"
 import { IProSeason } from "../../../types/season";
 import { useFantasyPointsRankings } from "../../../hooks/fantasy/useSportActionRanking";
 import RoundedCard from "../../shared/RoundedCard";
-import { FantasyPointsScoredRankingItem } from "../../../types/fantasyLeagueGroups";
-import PlayerMugshot from "../../shared/PlayerMugshot";
-import SecondaryText from "../../shared/SecondaryText";
 import { IProAthlete } from "../../../types/athletes";
 import PlayerProfileModal from "../../player/PlayerProfileModal";
 import NoContentCard from "../../shared/NoContentMessage";
-import TeamLogo from "../../team/TeamLogo";
+import { PlayerRankingCard } from "../../players/ranking/PlayerRankingCard";
 
 type Props = {
     season?: IProSeason
@@ -55,12 +52,16 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
 
                 <div className="flex flex-col  items-center overflow-y-hidden gap-2" >
                     {rankings.map((r, index) => {
+
+                        const val = r.total_points;
+
                         return (
-                            <RankingItem
-                                item={r}
+                            <PlayerRankingCard
+                                player={r}
                                 key={r.tracking_id}
-                                index={index}
-                                onClickPlayer={setSelectedPlayer}
+                                rank={index + 1}
+                                onClick={setSelectedPlayer}
+                                value={val ? `${Math.floor(val)}` : '--'}
                             />
                         )
                     })}
@@ -81,49 +82,5 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
                 />
             )}
         </Fragment>
-    )
-}
-
-type RankingItemProps = {
-    item: FantasyPointsScoredRankingItem,
-    index: number,
-    onClickPlayer: (player: IProAthlete) => void
-}
-
-function RankingItem({ item, index, onClickPlayer }: RankingItemProps) {
-
-    const rank = index + 1;
-
-    const handleOnClick = () => {
-        if (onClickPlayer) {
-            onClickPlayer(item);
-        }
-    }
-
-    return (
-        <div className="flex flex-col w-full" >
-
-            <div onClick={handleOnClick} className="flex cursor-pointer flex-row items-center gap-4" >
-                <div>
-                    <SecondaryText>#{rank}</SecondaryText>
-                </div>
-
-                <div className="flex flex-row items-center gap-2" >
-                    <PlayerMugshot className="w-14 bg-blue-600 h-14" url={item.image_url} />
-                    <TeamLogo className="w-8 h-8" url={item.team?.image_url} />
-                </div>
-
-                <div>
-                    <p className="text-sm" >{item.player_name}</p>
-                    <SecondaryText className="text-xs" >{item.team?.athstat_name}</SecondaryText>
-                </div>
-
-                <div className="flex-1 w-full flex mr-4 flex-row items-center justify-end" >
-                    <p className="font-bold text-md" >{item.total_points}</p>
-                </div>
-            </div>
-
-
-        </div>
     )
 }
