@@ -1,4 +1,3 @@
-import { Fragment } from 'react/jsx-runtime';
 import { MAX_TEAM_BUDGET } from '../../../types/constants';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { useEffect, useState } from 'react';
@@ -143,7 +142,7 @@ export default function MyTeamEditView({ leagueConfig, leagueRound }: Props) {
   // }
 
   return (
-    <Fragment>
+    <div className='p-4'>
       {isLocked && leagueRound && (
         <WarningCard className="text-sm">
           <p>
@@ -218,6 +217,6 @@ export default function MyTeamEditView({ leagueConfig, leagueRound }: Props) {
           playerToBeReplaced={swapPlayer}
         />
       }
-    </Fragment>
+    </div>
   );
 }

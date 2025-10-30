@@ -28,7 +28,7 @@ export default function ViewMyTeam({
   const [showPushModal, setShowPushModal] = useState(false);
 
   return (
-    <div className="w-full py-2">
+    <div className="w-full ">
 
       {leagueConfig && leagueRound && (<MyTeamViewHeader
         onTeamUpdated={onTeamUpdated}

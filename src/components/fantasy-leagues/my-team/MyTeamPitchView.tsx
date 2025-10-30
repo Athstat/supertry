@@ -86,23 +86,23 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
   return (
     <div className="mt-4 ">
       <div className='flex flex-col relative'>
-        <div className='px-4' >
-          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Team Formation</h2>
 
-          <div className='mb-4 flex flex-col gap-0' >
-            <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium">
-              Greyed out players are not playing in this round's games
-            </p>
+        <div className='px-4 mb-4' >
 
-            {!isTeamFull && (
-              <WarningCard className='text-sm' >
-                <p>
-                  You have empty slot{emptySlotCount <= 1 ? '' : 's'} on your team. Click on <span className='underline cursor-pointer text-blue-500 hover:text-blue-600' onClick={handleGoToEdit} >Edit</span> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
-                </p>
-              </WarningCard>
-            )}
-          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium">
+            Greyed out players are not playing in this round's games
+          </p>
+
+          {!isTeamFull && (
+            <WarningCard className='text-sm' >
+              <p>
+                You have empty slot{emptySlotCount <= 1 ? '' : 's'} on your team. Click on <span className='underline cursor-pointer text-blue-500 hover:text-blue-600' onClick={handleGoToEdit} >Edit</span> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
+              </p>
+            </WarningCard>
+          )}
+
         </div>
+
 
         {leagueRound && starters.length > 0 && (
           <TeamFormation3D players={starters} onPlayerClick={handlePlayerClick} round={leagueRound} />

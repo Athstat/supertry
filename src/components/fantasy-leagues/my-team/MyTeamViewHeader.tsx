@@ -6,6 +6,7 @@ import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { Lock } from "lucide-react";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { IGamesLeagueConfig } from "../../../types/leagueConfig";
+import RoundedCard from "../../shared/RoundedCard";
 
 type Props = {
     leagueRound: IFantasyLeagueRound,
@@ -17,62 +18,35 @@ type Props = {
 export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpdated }: Props) {
     const { viewMode, navigate: setViewMode } = useMyTeamView();
     const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
-    const { totalSpent, selectedCount } = useFantasyLeagueTeam();
+    const { totalSpent, selectedCount, team } = useFantasyLeagueTeam();
 
     return (
-        <div className="px-4" >
-            <div className="flex flex-row items-center justify-between mb-5">
-                <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
-                    <div className="flex flex-col">
-                        <p className="font-bold text-xl">My Team</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-                            Your team for {leagueRound?.title}
-                        </p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    <button
-                        type="button"
-                        onClick={() => setViewMode('edit')}
-                        // disabled={isLocked}
-                        className={twMerge(
-                            'px-3 py-1.5 rounded-lg text-sm flex flex-row items-center gap-2 font-medium border border-gray-200 dark:border-gray-700`',
-                            'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 dark:border-slate-700',
-                            viewMode === 'edit' && 'bg-blue-600 dark:bg-blue-600 text-white'
-                        )}
-                    >
-                        <p>Edit</p>
-                        {isLocked && <Lock className="w-4 h-4" />}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setViewMode('pitch')}
-                        className={`${viewMode === 'pitch'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-                            } px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700`}
-                    >
-                        Pitch
-                    </button>
-                </div>
-            </div>
+        <div className="px-4 flex flex-col gap-3.5" >
 
-            {/* Top stats row */}
-            <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800/70 p-3">
-                    <div className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <div className="flex flex-row  items-center justify-between" >
+
+                <div className="flex flex-col w-full  flex-1 items-start justify-start">
+                    <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
                         Selected
                     </div>
-                    <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <div className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">
                         {selectedCount}/6
                     </div>
                 </div>
-                <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-800/70 p-3">
-                    <div className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
+
+                <div className="flex flex-col items-center justify-center">
+                    <p className="font-bold ">{team?.first_name || "My Team"}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+                        Game Week {leagueRound?.start_round}
+                    </p>
+                </div>
+
+                <div className="flex-1 w-full flex flex-col items-end justify-center">
+                    <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
                         Total Spent
                     </div>
                     {leagueConfig && (
-                        <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                        <div className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">
                             {totalSpent}/{leagueConfig?.team_budget}
                         </div>
                     )}
@@ -81,6 +55,34 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
 
             {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
+            <RoundedCard className="flex p-1.5 bg-gray-300 border-none  w-full justify-between flex-row items-center gap-2">
+                <button
+                    type="button"
+                    onClick={() => setViewMode('edit')}
+                    // disabled={isLocked}
+                    className={twMerge(
+                        'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center justify-center gap-2 font-medium text-slate-500`',
+                        viewMode === 'edit' && 'bg-white dark:bg-blue-600'
+                    )}
+                >
+                    <p>Edit</p>
+                    {isLocked && <Lock className="w-4 h-4" />}
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => setViewMode('pitch')}
+                    // disabled={isLocked}
+                    className={twMerge(
+                        'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center  justify-center gap-2 font-medium text-slate-500`',
+                        viewMode === 'pitch' && 'bg-white dark:bg-blue-600 '
+                    )}
+                >
+                    <p>Pitch</p>
+                    {isLocked && <Lock className="w-4 h-4" />}
+                </button>
+
+            </RoundedCard>
         </div>
     )
 }
