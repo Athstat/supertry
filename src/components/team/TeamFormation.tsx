@@ -112,12 +112,13 @@ function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
         /> */}
       </div>
 
-      <div className='flex-1 w-full items-center justify-center  min-h-[30%] rounded-xl bg-white dark:bg-dark-800' >
-        <div className='flex flex-col p-1 items-center justify-center' >
-          <p className='text-slate-700 dark:text-white text-xs font-bold' >{player.athstat_firstname}</p>
+      <div className='flex-1 p-2 w-full items-center justify-center  min-h-[30%] rounded-xl bg-gradient-to-br from-white to-slate-200' >
+        
+        <div className='flex flex-col items-center justify-center' >
+          <p className='text-slate-800 dark:text-white text-[11px] font-semibold' >{player.athstat_firstname}</p>
         </div>
 
-        <div className='flex bg-slate-100 p-1 flex-col items-center justify-center' >
+        <div className='flex flex-col items-center justify-center' >
           <SecondaryText className=' text-[10px]' >{position_class ? formatPosition(position_class) : ""}</SecondaryText>
         </div>
 

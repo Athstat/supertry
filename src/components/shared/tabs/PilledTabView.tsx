@@ -10,7 +10,7 @@ type Props = {
   children?: ReactNode;
   tabHeaderItems: TabViewHeaderItem[];
   className?: string;
-  pillTabRowClassName: string;
+  pillTabRowClassName?: string;
 };
 
 export default function PilledTabView({

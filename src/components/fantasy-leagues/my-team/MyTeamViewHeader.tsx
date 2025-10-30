@@ -55,14 +55,14 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
 
             {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
-            <RoundedCard className="flex p-1.5 bg-gray-300 border-none  w-full justify-between flex-row items-center gap-2">
+            <RoundedCard className="flex p-1.5 bg-gray-50 border-slate-200  w-full justify-between flex-row items-center gap-2">
                 <button
                     type="button"
                     onClick={() => setViewMode('edit')}
                     // disabled={isLocked}
                     className={twMerge(
                         'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center justify-center gap-2 font-medium text-slate-500`',
-                        viewMode === 'edit' && 'bg-white dark:bg-blue-600'
+                        viewMode === 'edit' && 'bg-blue-600 text-white dark:bg-blue-600'
                     )}
                 >
                     <p>Edit</p>
@@ -75,7 +75,7 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
                     // disabled={isLocked}
                     className={twMerge(
                         'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center  justify-center gap-2 font-medium text-slate-500`',
-                        viewMode === 'pitch' && 'bg-white dark:bg-blue-600 '
+                        viewMode === 'pitch' && 'bg-blue-600 text-white dark:bg-blue-600 '
                     )}
                 >
                     <p>Pitch</p>

@@ -84,7 +84,7 @@ function Content() {
   ];
 
   return (
-    <PageView className="dark:text-white flex flex-col gap-4">
+    <PageView className="dark:text-white bg-white flex flex-col gap-4">
       
       <LeagueGroupScreenHeader 
         isEditing={isEditing}

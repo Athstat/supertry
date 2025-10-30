@@ -1,6 +1,6 @@
 import { IProAthlete } from '../../../types/athletes';
 import usePowerRankings from './usePowerRankings';
-import { Activity, Trophy, Hash } from 'lucide-react';
+import { Trophy, Hash } from 'lucide-react';
 
 type Props = {
   player: IProAthlete;
@@ -48,8 +48,8 @@ export default function PlayerPerformanceSnapshot({ player }: Props) {
         <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/20 backdrop-blur-sm ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/10">
           <Trophy className="w-4 h-4 text-amber-400" />
           <div className="flex flex-col">
-            <span className="text-xs text-slate-400">Best Match</span>
-            <span className="text-sm font-bold text-white">PR: {bestMatch}</span>
+            <span className="text-xs text-slate-800 dark:text-slate-400">Best Match</span>
+            <span className="text-sm font-bold text-yellow-700 dark:text-white">PR: {bestMatch}</span>
           </div>
         </div>
       )}
@@ -59,8 +59,8 @@ export default function PlayerPerformanceSnapshot({ player }: Props) {
         <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 backdrop-blur-sm ring-1 ring-green-500/30 shadow-lg shadow-green-500/10">
           <Hash className="w-4 h-4 text-green-400" />
           <div className="flex flex-col">
-            <span className="text-xs text-slate-400">Total Matches</span>
-            <span className="text-sm font-bold text-white">{totalMatches}</span>
+            <span className="text-xs text-slate-800 dark:text-slate-400">Total Matches</span>
+            <span className="text-sm font-bold text-green-800 dark:text-white">{totalMatches}</span>
           </div>
         </div>
       )}
