@@ -1,14 +1,14 @@
 import { ScopeProvider } from 'jotai-scope'
 import { Fragment, ReactNode, useEffect, useMemo } from 'react'
-import { IProAthlete } from '../../../types/athletes'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { playerAtom, playerCurrentSeasonAtom, playerSeasonsAtom } from '../../../state/player.atoms'
-import { swrFetchKeys } from '../../../utils/swrKeys'
 import useSWR from 'swr'
-import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService'
-import DialogModal from '../../shared/DialogModal'
-import RoundedCard from '../../shared/RoundedCard'
-import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete'
+import DialogModal from '../components/shared/DialogModal'
+import RoundedCard from '../components/shared/RoundedCard'
+import { djangoAthleteService } from '../services/athletes/djangoAthletesService'
+import { playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom } from '../state/player.atoms'
+import { IProAthlete } from '../types/athletes'
+import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete'
+import { swrFetchKeys } from '../utils/swrKeys'
 
 type Props = {
     children?: ReactNode,

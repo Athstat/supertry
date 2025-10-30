@@ -1,8 +1,8 @@
 import { useSetAtom } from "jotai"
-import { IProAthlete } from "../../../types/athletes"
-import { compareModeAtom, comparePlayersAtom, comparePlayersMapAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, isCompareModeModal, isCompareModePicking, showComparePlayerInfo, openInfoTrackingIdAtom } from "../../../state/comparePlayers.atoms";
 import { ReactNode, useEffect } from "react";
 import { ScopeProvider } from "jotai-scope";
+import { IProAthlete } from "../types/athletes";
+import { compareModeAtom, comparePlayersAtom, comparePlayersMapAtom, comparePlayersStarRatingsAtom, comparePlayersStatsAtom, isCompareModeModal, isCompareModePicking, openInfoTrackingIdAtom, showComparePlayerInfo } from "../state/comparePlayers.atoms";
 
 type Props = {
     selectedPlayers?: IProAthlete[],
@@ -28,7 +28,7 @@ export default function PlayerCompareProvider({ selectedPlayers = [], children }
 
 
     return (
-        <ScopeProvider  atoms={atoms}>
+        <ScopeProvider atoms={atoms}>
             <PlayerCompareInner
                 selectedPlayers={selectedPlayers}
             >
@@ -41,12 +41,12 @@ export default function PlayerCompareProvider({ selectedPlayers = [], children }
 
 
 export function PlayerCompareInner({ selectedPlayers = [], children }: Props) {
-    
+
     const setComparePlayers = useSetAtom(comparePlayersAtom);
 
     useEffect(() => {
         setComparePlayers(selectedPlayers);
-    }, [selectedPlayers]);
+    }, [selectedPlayers, setComparePlayers]);
 
     return (
         <>{children}</>

@@ -1,12 +1,12 @@
 import useSWR from "swr"
-import { swrFetchKeys } from "../../../utils/swrKeys"
-import { sbrService } from "../../../services/sbr/sbrService";
 import { useSetAtom } from "jotai";
-import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom as sbrFixtureTimelineAtom } from "../../../state/sbrFixtureScreen.atoms";
 import { ReactNode, useEffect } from "react";
-import { ErrorState } from "../../ui/ErrorState";
-import { ISbrFixture } from "../../../types/sbr";
-import { LoadingState } from "../../ui/LoadingState";
+import { ErrorState } from "../components/ui/ErrorState";
+import { LoadingState } from "../components/ui/LoadingState";
+import { sbrService } from "../services/sbr/sbrService";
+import { ISbrFixture } from "../types/sbr";
+import { swrFetchKeys } from "../utils/swrKeys";
+import { sbrFixtureAtom, sbrFixtureTimelineAtom, sbrFixtureBoxscoreAtom } from "../state/sbrFixtureScreen.atoms";
 
 type Props = {
     fixture: ISbrFixture,
@@ -39,7 +39,7 @@ export default function SbrFixtureDataProvider({ fixture, children, fetchBoxscor
         if (events) setSbrFixtureEvents(events);
         if (boxscore) setSbrFixtureBoxscore(boxscore);
 
-    }, [fixture, events, boxscore]);
+    }, [fixture, events, boxscore, setSbrFixture, setSbrFixtureEvents, setSbrFixtureBoxscore]);
 
     if (isLoading) {
 

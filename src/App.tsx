@@ -9,10 +9,11 @@ import AppErrorFallback from './components/AppErrorFallback';
 import { useState } from 'react';
 import ChatProvider from './contexts/ChatContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import AuthTokenProvider from './components/auth/providers/AuthTokenProvider';
+import AuthTokenProvider from './providers/AuthTokenProvider';
 import NetworkStatusProvider from './components/network/NetworkStatusProvider';
 import SportActionsDefinitionsProvider from './components/stats/SportActionsDefinitionsProvider';
 import { useSyncDeviceId } from './hooks/auth/useSyncDeviceId';
+import NavigationBarsProvider from './providers/navigation/NavigationBarsProvider';
 
 function DeviceIdSync() {
   useSyncDeviceId();
@@ -46,7 +47,9 @@ function App() {
                           }}
                           fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                         >
-                          <AppRoutes />
+                          <NavigationBarsProvider>
+                            <AppRoutes />
+                          </NavigationBarsProvider>
                         </ErrorBoundary>
                       </AppStateProvider>
                     </PlayerProfileProvider>

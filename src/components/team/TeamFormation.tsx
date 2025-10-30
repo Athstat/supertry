@@ -1,10 +1,9 @@
+import { useMemo } from 'react';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot } from '../../types/fantasyLeagueTeam';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { EmptyPlayerCard } from '../fantasy-leagues/my-team/EditableTeamSlotItem';
-import { useMyTeamView } from '../fantasy-leagues/my-team/MyTeamStateProvider';
-import RugbyPitch from '../shared/RugbyPitch';
-import { FantasyTeamAthleteCard } from './FantasyTeamAthleteCard';
+import { RugbyPitch3D } from '../shared/RugbyPitch';
+import { PlayerPitchCard } from './PlayerPitchCard';
 
 interface TeamFormationProps {
   players: IFantasyLeagueTeamSlot[];
@@ -12,41 +11,67 @@ interface TeamFormationProps {
   round: IFantasyLeagueRound
 }
 
-export function TeamFormation({ players: slots, onPlayerClick, round }: TeamFormationProps) {
+/** Renders a 3 Dimensional-looking pitch view */
+export function TeamFormation3D({ players: slots, onPlayerClick, round }: TeamFormationProps) {
 
-  const {navigate: navigateView} = useMyTeamView();
-  const handleGoToEdit = () => {
-    navigateView("edit");
-  }
+  const firstRowSlots = useMemo(() => {
+    return slots
+      .filter((a) => {
+        return a.slotNumber <= 2;
+      });
+  }, [slots]);
+
+  const lastRowSlots = useMemo(() => {
+    return slots
+      .filter((a) => {
+        return a.slotNumber >= 3;
+      });
+  }, [slots]);
+
 
   return (
-    <div className="relative h-[900px] lg:h-[650px] bg-green-700 rounded-2xl overflow-hidden">
-      <RugbyPitch />
+    <div className="relative w-full flex flex-col justify-center">
 
-      <div className="absolute inset-0 flex flex-row flex-wrap items-center justify-center gap-2 p-0 lg:px-[10%]">
-        {/* Front Row - Top */}
+      <RugbyPitch3D />
 
-        {slots.map((s) => {
+      <div className='top-0 left-0 absolute w-full p-4 flex flex-col gap-6' >
 
-          if (!s.athlete) {
-            return <EmptyPlayerCard
-            slot={s}
-            onClickSlot={handleGoToEdit}
-            />
-          };
-          
-          const player = s.athlete; 
+        <div className='flex flex-row items-center gap-2 justify-center' >
+          {firstRowSlots.map((s) => {
 
-          return (
-            <FantasyTeamAthleteCard
-              key={player.id}
-              player={player}
-              onPlayerClick={onPlayerClick}
-              round={round}
-            />
-          )
-        })}
+            const { athlete } = s;
+            if (!athlete) return;
+            return (
+              <PlayerPitchCard
+                player={athlete}
+                onClick={onPlayerClick}
+                key={s.slotNumber}
+                round={round}
+              />
+            )
+          })}
+        </div>
+
+        <div className='flex flex-row items-center gap-2 justify-center' >
+          {lastRowSlots.map((s) => {
+
+            const { athlete } = s;
+            if (!athlete) return;
+            return (
+              <PlayerPitchCard
+                player={athlete}
+                onClick={onPlayerClick}
+                key={s.slotNumber}
+                round={round}
+              />
+            )
+          })}
+        </div>
+
+
       </div>
+
     </div>
   );
 }
+

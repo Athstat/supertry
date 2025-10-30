@@ -1,10 +1,10 @@
 import SecondaryText from '../../shared/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
-import { usePlayerData } from '../provider/PlayerDataProvider';
 import TeamLogo from '../../team/TeamLogo';
 import FormIndicator from '../../shared/FormIndicator';
 
 import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
+import { usePlayerData } from '../../../providers/PlayerDataProvider';
 
 export default function PlayerNameAndPosition() {
   // console.log('player: ', player);

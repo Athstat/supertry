@@ -1,6 +1,6 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { authService } from '../authService';
-import { getDeviceInfo, getWeekFromLaunch, isInProduction } from '../../utils/webUtils';
+import { getDeviceInfo, getWeekFromLaunch } from '../../utils/webUtils';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { IProAthlete } from '../../types/athletes';
@@ -8,33 +8,49 @@ import { IFixture } from '../../types/games';
 
 //console.log('Amplitude API Key ', import.meta.env.VITE_AMPLITUDE_API_KEY);
 
-amplitude.init(import.meta.env.VITE_AMPLITUDE_API_KEY, {
-  defaultTracking: true,
-});
+function initAmplitude() {
+  try {
+    const apiKey = import.meta.env.VITE_AMPLITUDE_API_KEY;
+    if (apiKey) {
+      amplitude.init(apiKey, {
+        defaultTracking: true,
+      });
+    }
+  } catch (err) {
+    console.log("error intializing amplitude ", err);
+  }
+}
 
-function track(event: string, eventInfo?: Record<string, any>) {
+initAmplitude();
+
+function track(event: string, eventInfo?: Record<string, unknown>) {
   // if (!isInProduction()) {
   //   console.log(`Skipped recording event ${event} because app is not in production`);
   //   return;
   // }
+  try {
 
-  const { agent } = getDeviceInfo();
-  const user = authService.getUserInfoSync();
+    const { agent } = getDeviceInfo();
+    const user = authService.getUserInfoSync();
 
-  const reqBody = {
-    ...eventInfo,
-    timeStamp: new Date(),
-    device: agent,
-    source: getCurrentPath(),
-    weekNumber: getWeekFromLaunch(),
-    userId: user ? user.kc_id : null,
-  };
+    const reqBody = {
+      ...eventInfo,
+      timeStamp: new Date(),
+      device: agent,
+      source: getCurrentPath(),
+      weekNumber: getWeekFromLaunch(),
+      userId: user ? user.kc_id : null,
+    };
 
-  console.log('Logging Event ', reqBody);
+    console.log('Logging Event ', reqBody);
 
-  const res = amplitude.track(event, reqBody);
+    const res = amplitude.track(event, reqBody);
 
-  console.log('Amplitude Res ', res);
+    console.log('Amplitude Res ', res);
+  } catch {
+    // console.log("Error Logging event ", err);
+  }
+
 }
 
 function trackPageVisit(route: string) {

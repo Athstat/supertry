@@ -1,15 +1,11 @@
 import { ReactNode, useEffect } from "react";
-import { IFixture } from "../../../types/games";
 import { useSetAtom } from "jotai";
-import { 
-    proGameMotmCandidatesAtom, 
-    proGameMotmVotesAtom, 
-    currentProGameAtom 
-} from "../../../state/proMotm.atoms";
 import useSWR from "swr";
-import { proMotmService } from "../../../services/proMotmService";
-import { gamesService } from "../../../services/gamesService";
-import { LoadingState } from "../../ui/LoadingState";
+import { LoadingState } from "../components/ui/LoadingState";
+import { gamesService } from "../services/gamesService";
+import { proMotmService } from "../services/proMotmService";
+import { proGameMotmCandidatesAtom, currentProGameAtom, proGameMotmVotesAtom } from "../state/proMotm.atoms";
+import { IFixture } from "../types/games";
 
 type Props = {
     children?: ReactNode;

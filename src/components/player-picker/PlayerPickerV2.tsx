@@ -7,13 +7,13 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague"
 import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms"
 import PlayerPickerHeader from "./PlayerPickerHeader"
 import PlayerPickerPlayerList from "./PlayerPickerPlayerList"
-import PlayerPickerDataProvider from "./PlayerPickerDataProvider"
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import { formatPosition } from "../../utils/athleteUtils"
 import { useInView } from "react-intersection-observer"
 import PlayerPickerFAB from "./PlayerPickerFAB"
 import { useRef } from "react"
 import DialogModal from "../shared/DialogModal"
+import PlayerPickerDataProvider from "../../providers/PlayerPickerDataProvider"
 
 type Props = {
   playerToBeReplaced?: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
