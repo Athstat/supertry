@@ -298,7 +298,7 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
 
                             <div className="flex flex-col" >
                                 <div className="flex flex-row items-center gap-1" >
-                                    <p className="text-sm truncate" >{player.player_name}</p>
+                                    <p className="text-sm dark:text-white truncate" >{player.player_name}</p>
                                     <AvailabilityIcon 
                                         athlete={player}
                                         iconClassName="w-2 h-2"
