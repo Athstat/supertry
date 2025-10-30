@@ -93,7 +93,7 @@ function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
   return (
     <div
       className={twMerge(
-        'overflow-hidden rounded-xl min-h-[150px] max-h-[150px] bg-green-500/50',
+        'overflow-hidden rounded-xl min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
         'min-w-[120px] max-w-[120px] flex flex-col'
       )}
       onClick={handleClick}

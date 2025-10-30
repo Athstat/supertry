@@ -4,7 +4,6 @@ import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../../utils/athleteUtils";
 import PlayerMugshot from "../../shared/PlayerMugshot";
-import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../shared/SecondaryText";
 import BottomSheetHandle from "../../ui/BottomSheetHandle";
 import { EmptyPlayerCard } from "./EditableTeamSlotItem";
@@ -26,27 +25,29 @@ export default function TeamBenchDrawer({ superSubSlot, onPlayerClick }: Props) 
   }
 
   return (
-    <div className="max-h-[130px] min-h-[130px] fixed bottom-0 left-0 w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
+    <div className="max-h-[130px] fixed bottom-0 left-0 w-full min-h-[130px] flex flex-col items-center justify-center" >
+      <div className="lg:max-w-[40%] md:max-w-[50%]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
 
-      <div className="w-full flex flex-col gap-1 p-3" >
-        <BottomSheetHandle className="bg-slate-800" />
+        <div className="w-full flex flex-col gap-1 p-3" >
+          <BottomSheetHandle className="bg-slate-800" />
 
-        <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Super Substitute
-        </p>
+          <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
+            Super Substitute
+          </p>
 
-        <div className="">
-          {superSubSlot.athlete ? (
-            <SubPlayerCard
-              player={superSubSlot.athlete}
-              onClick={handlePlayerClick}
-            />
-          ) : (
-            <EmptyPlayerCard
-              slot={superSubSlot}
-              className='h-[100px]'
-            />
-          )}
+          <div className="">
+            {superSubSlot.athlete ? (
+              <SubPlayerCard
+                player={superSubSlot.athlete}
+                onClick={handlePlayerClick}
+              />
+            ) : (
+              <EmptyPlayerCard
+                slot={superSubSlot}
+                className='h-[100px]'
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -64,7 +65,7 @@ function SubPlayerCard({ player, onClick }: SubPlayerProps) {
   const { position_class, purchase_price } = player;
 
   return (
-    <RoundedCard
+    <div
       className="w-full border-none p-2 flex flex-row items-center justify-between"
       onClick={onClick}
     >
@@ -86,12 +87,12 @@ function SubPlayerCard({ player, onClick }: SubPlayerProps) {
           <p className="text-sm" >{purchase_price}</p>
         </div>
         <div>
-          <button className="w-7 h-7 bg-blue-100 hover:bg-blue-200 flex items-center justify-center rounded-md" >
-            <ArrowLeftRight className="w-5 h-5 text-blue-600 " />
+          <button className="w-7 h-7 bg-blue-100 hover:bg-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center justify-center rounded-md" >
+            <ArrowLeftRight className="w-5 h-5 text-blue-600 dark:text-blue-100" />
           </button>
         </div>
       </div>
 
-    </RoundedCard>
+    </div>
   )
 }

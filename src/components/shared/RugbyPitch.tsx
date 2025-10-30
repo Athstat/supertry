@@ -28,7 +28,7 @@ export default function RugbyPitch({ count = 5 }: Props) {
 /** Renders a 3 Dimensional Rugby Pitch by perspective like FPL */
 export function RugbyPitch3D() {
     return (
-        <div className="relative" >
+        <div className="relative max-h-[500px] lg:max-h-[700px] overflow-clip" >
 
             {/* <PitchAdvertisingBoard /> */}
 
@@ -49,7 +49,7 @@ export function RugbyPitch3D() {
                 >
                     {/* Striped grass effect - larger stripes like FPL */}
                     <div className="absolute inset-0">
-                        {Array.from({ length: 15 }).map((_, i) => (
+                        {Array.from({ length: 10 }).map((_, i) => (
                             <div
                                 key={i}
                                 className={`absolute w-full ${i % 2 === 0 ? 'bg-green-700/25' : 'bg-green-500/25'}`}
