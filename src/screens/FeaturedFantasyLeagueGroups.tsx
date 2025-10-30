@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
 import RoundedCard from "../components/shared/RoundedCard";
-import SmallLeagueOverviewCard from "../components/dashboard/my-team/LeagueOverviewCard";
+import UserLeagueRankingCard from "../components/dashboard/my-team/UserLeagueRankingCard";
 import { hasLeagueGroupEnded } from "../utils/fantasy/leagueGroupsUtils";
 
 /** List of featured fantasy leagues on the dashboard */
@@ -60,7 +60,7 @@ export default function FeaturedFantasyLeagueGroups() {
 
             {officialLeagues.map((group, index) => {
                 return (
-                    <SmallLeagueOverviewCard 
+                    <UserLeagueRankingCard 
                         league={group}
                         key={index}
                     />

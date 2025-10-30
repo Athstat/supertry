@@ -15,8 +15,10 @@ type Props = {
   league: FantasyLeagueGroup;
 };
 
-/** Renders a league overview card */
-export default function SmallLeagueOverviewCard({ league }: Props) {
+/** Renders a user league ranking card, showing their points, rank and 
+ * percentage ranking in a fantasy league group */
+
+export default function UserLeagueRankingCard({ league }: Props) {
   return (
     <Content league={league} />
   );
