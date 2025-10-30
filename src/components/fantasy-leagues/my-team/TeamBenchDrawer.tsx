@@ -26,7 +26,7 @@ export default function TeamBenchDrawer({ superSubSlot, onPlayerClick }: Props) 
   }
 
   return (
-    <div className="max-h-[150px] min-h-[150px] fixed bottom-0 left-0 w-full bg-white dark:bg-dark-800/80 rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
+    <div className="max-h-[150px] min-h-[150px] fixed bottom-0 left-0 w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
 
       <div className="w-full flex flex-col gap-1 p-3" >
         <BottomSheetHandle className="bg-slate-800" />
