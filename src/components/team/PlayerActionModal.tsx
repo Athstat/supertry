@@ -10,13 +10,16 @@ import QuickActionButton from "../ui/QuickActionButton";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
 import RoundedCard from "../shared/RoundedCard";
 import SuperSubPill from "./SuperSubPill";
+import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
+import { useMemo } from "react";
+import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
   onClose: () => void;
   onViewProfile: (player: IFantasyTeamAthlete) => void;
   league?: IFantasyLeagueRound,
-  onViewPointsBreakdown: (player: IFantasyTeamAthlete) => void
+  onViewPointsBreakdown: (player: IFantasyTeamAthlete) => void,
 }
 
 export function PlayerActionModal({
@@ -29,7 +32,17 @@ export function PlayerActionModal({
   // const key = swrFetchKeys.getAthleteById(player.tracking_id);
   // const { data: info, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteById(player.tracking_id));
 
+  const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain } = useFantasyLeagueTeam();
   const isSub = !player.is_starting;
+
+  const playerSlot = useMemo(() => {
+    return slots.find((s) => {
+      return s.athlete?.tracking_id === player.tracking_id
+    })
+  }, [slots, player]);
+
+  const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
+
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -43,6 +56,28 @@ export function PlayerActionModal({
     }
   }
 
+  const handleInitSwap = () => {
+
+    if (playerSlot) {
+      onClose();
+      initiateSwap(playerSlot);
+    }
+  }
+
+  const handleRemovePlayer = () => {
+    if (playerSlot) {
+      onClose();
+      removePlayerAtSlot(playerSlot.slotNumber);
+    }
+  }
+
+  const handleMakePlayerCaptain = () => {
+    if (playerSlot) {
+      setTeamCaptainAtSlot(playerSlot.slotNumber);
+    }
+  }
+
+
   return (
     <BottomSheetView
       className="min-h-[400px] py-4 px-6"
@@ -52,11 +87,11 @@ export function PlayerActionModal({
 
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2" >
-            
+
             <AvailabilityIcon
               athlete={player}
             />
-            
+
             <p className="text-lg font-bold" >{player.player_name}</p>
 
             {isSub && <SuperSubPill />}
@@ -123,22 +158,36 @@ export function PlayerActionModal({
       <div className="flex flex-row items-center justify-center gap-2" >
         <PrimaryButton
           className="bg-purple-100 text-purple-700 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50"
+          onClick={handleInitSwap}
         >
           Swap
         </PrimaryButton>
         <PrimaryButton
           className="bg-red-100 text-red-700 dark:text-red-300 dark:bg-red-900/30 dark:hover:bg-red-900 dark:border-red-500/40"
+          onClick={handleRemovePlayer}
         >
           Remove
         </PrimaryButton>
       </div>
 
       <div>
-        <RoundedCard className={
-          "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row"
-        } >
+        {!isTeamCaptain && <RoundedCard
+          className={
+            "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row"
+          }
+          onClick={handleMakePlayerCaptain}
+        >
           Make Captain
-        </RoundedCard>
+        </RoundedCard>}
+
+        {isTeamCaptain && <div
+          className={
+            "bg-transparent gap-2 dark:bg-transparent cursor-pointer dark:text-slate-400 border dark:border-slate-700 rounded-xl p-2.5 items-center justify-center flex flex-row"
+          }
+        >
+          Team Captain
+          <CaptainsArmBand />
+        </div>}
       </div>
 
 
