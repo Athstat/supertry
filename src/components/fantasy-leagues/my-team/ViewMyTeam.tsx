@@ -7,6 +7,9 @@ import { useMyTeamView } from './MyTeamStateProvider';
 import PushOptInModal from '../../ui/PushOptInModal';
 import { requestPushPermissions } from '../../../utils/bridgeUtils';
 import MyTeamViewHeader from './MyTeamViewHeader';
+import PlayerPickerV2 from '../../player-picker/PlayerPickerV2';
+import { PositionClass } from '../../../types/athletes';
+import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 
 export default function ViewMyTeam({
   leagueRound,
@@ -23,6 +26,7 @@ export default function ViewMyTeam({
   onEditChange?: (isEditing: boolean) => void;
 }) {
   const { viewMode } = useMyTeamView();
+    const {cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } = useFantasyLeagueTeam();
 
   // Push opt-in prompt state
   const [showPushModal, setShowPushModal] = useState(false);
@@ -47,12 +51,27 @@ export default function ViewMyTeam({
 
       <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
         {leagueRound && (
-          <MyTeamPitchView 
+          <MyTeamPitchView
             leagueRound={leagueRound}
-            team={team} 
+            team={team}
           />
         )}
       </Activity>
+
+      <PlayerPickerV2
+        isOpen={swapState.open && swapState.slot != null && Boolean(swapState.position)}
+        positionPool={swapState?.position?.positionClass as PositionClass}
+        remainingBudget={budgetRemaining + (swapPlayer?.purchase_price || 0)}
+        excludePlayers={slots
+          .filter(s => Boolean(s.athlete))
+          .map(s => {
+            return { tracking_id: s.athlete?.tracking_id ?? '' };
+          })}
+        onSelectPlayer={completeSwap}
+        onClose={cancelSwap}
+        targetLeagueRound={leagueRound}
+        playerToBeReplaced={swapPlayer}
+      />
 
       <PushOptInModal
         visible={showPushModal}

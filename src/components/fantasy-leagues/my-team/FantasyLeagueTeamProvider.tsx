@@ -9,6 +9,7 @@ import { IProAthlete } from "../../../types/athletes"
 import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils/athleteUtils"
 import { Position } from "../../../types/position"
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics"
+import { MAX_TEAM_BUDGET } from "../../../types/constants"
 
 type Props = {
     team: IFantasyLeagueTeam,
@@ -84,11 +85,12 @@ function InnerProvider({ team, children }: Props) {
 
 /** Provides a hook for manipulating a fantasy league team  */
 export function useFantasyLeagueTeam() {
+
     const [team, setTeam] = useAtom(fantasyLeagueTeamAtom);
     const [teamAthletes] = useAtom(fantasyTeamAthletesAtom);
     const [slots, setSlots] = useAtom(fantasyTeamSlotsAtom);
     const [swapState, setSwapState] = useAtom(swapStateAtom);
-    const [, setSwapPlayer] = useAtom(swapPlayerAtom);
+    const [swapPlayer, setSwapPlayer] = useAtom(swapPlayerAtom);
 
     const totalSpent: number = useMemo(() => {
         return slots.reduce((sum, s) => {
@@ -316,7 +318,7 @@ export function useFantasyLeagueTeam() {
 
         if (!swapState || swapState.slot === null) return;
 
-        
+
         setPlayerAtSlot(swapState.slot, newAthlete);
         setSwapState({ open: false, slot: null, position: null });
 
@@ -343,10 +345,10 @@ export function useFantasyLeagueTeam() {
     }, [setSwapPlayer, setSwapState]);
 
     const initateSwapOnEmptySlot = (slot: IFantasyLeagueTeamSlot) => {
-        
+
         // Set slot state
         const pos = toPosition(slot.position, slot.slotNumber - 1);
-        
+
         setSwapState({
             open: true,
             slot: slot.slotNumber,
@@ -356,6 +358,8 @@ export function useFantasyLeagueTeam() {
         setSwapPlayer(undefined);
 
     };
+
+    const budgetRemaining = (MAX_TEAM_BUDGET) - totalSpent;
 
     return {
         slots, setSlots,
@@ -376,6 +380,9 @@ export function useFantasyLeagueTeam() {
         initiateSwap,
         completeSwap,
         initateSwapOnEmptySlot,
-        cancelSwap
+        cancelSwap,
+        swapPlayer,
+        swapState,
+        budgetRemaining
     }
 }
