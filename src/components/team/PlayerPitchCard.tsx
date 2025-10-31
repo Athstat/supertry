@@ -12,6 +12,7 @@ import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 import { CirclePlus } from "lucide-react";
+import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete,
@@ -23,6 +24,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
     const { position_class } = player;
     const { viewMode } = useMyTeamView();
+    const {teamCaptain} = useFantasyLeagueTeam();
 
     const handleClick = () => {
         if (onClick) {
@@ -30,9 +32,16 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
         }
     }
 
+    const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
+
     return (
         <div className='flex flex-col items-center justify-center gap-1 relative' >
 
+            {isTeamCaptain && (
+                <div className="absolute top-0 right-0" >
+                    <CaptainsArmBand className="font-black" />
+                </div>
+            )}
 
             <div
                 className={twMerge(
