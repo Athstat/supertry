@@ -3,7 +3,7 @@ import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot } from '../../types/fantasyLeagueTeam';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3D } from '../shared/RugbyPitch';
-import { PlayerPitchCard } from './PlayerPitchCard';
+import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 
 interface TeamFormationProps {
   players: IFantasyLeagueTeamSlot[];
@@ -40,7 +40,15 @@ export function TeamFormation3D({ players: slots, onPlayerClick, round }: TeamFo
           {firstRowSlots.map((s) => {
 
             const { athlete } = s;
-            if (!athlete) return;
+
+            if (!athlete) {
+              return (
+                <EmptySlotPitchCard
+                  slot={s}
+                />
+              )
+            };
+
             return (
               <PlayerPitchCard
                 player={athlete}
@@ -50,13 +58,22 @@ export function TeamFormation3D({ players: slots, onPlayerClick, round }: TeamFo
               />
             )
           })}
+
         </div>
 
         <div className='flex flex-row items-center gap-2 justify-center' >
           {lastRowSlots.map((s) => {
 
             const { athlete } = s;
-            if (!athlete) return;
+            
+            if (!athlete) {
+              return (
+                <EmptySlotPitchCard
+                  slot={s}
+                />
+              )
+            };
+
             return (
               <PlayerPitchCard
                 player={athlete}

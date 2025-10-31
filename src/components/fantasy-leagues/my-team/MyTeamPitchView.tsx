@@ -113,6 +113,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
           <TeamBenchDrawer
             superSubSlot={superSubSlot}
             leagueRound={leagueRound}
+            onPlayerClick={handlePlayerClick}
           />
         )}
 

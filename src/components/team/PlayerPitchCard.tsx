@@ -9,6 +9,9 @@ import SecondaryText from "../shared/SecondaryText";
 import { Activity } from "react";
 import { IFixture } from "../../types/games";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
+import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
+import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
+import { CirclePlus } from "lucide-react";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete,
@@ -99,5 +102,50 @@ function PlayerScoreIndicator({ round, player, nextMatch }: PlayerPointsScorePro
                 <p>{nextMatch?.game_id}</p>
             </Activity>
         </>
+    )
+}
+
+
+
+type EmptySlotProps = {
+    slot: IFantasyLeagueTeamSlot
+}
+
+/** Renders an empty slot card */
+export function EmptySlotPitchCard({slot}: EmptySlotProps) {
+
+    const {initateSwapOnEmptySlot} = useFantasyLeagueTeam();
+
+    const {position} = slot;
+    const {position_class} = position;
+
+    const handleClick = () => {
+        initateSwapOnEmptySlot(slot);
+    }
+
+    return (
+        <div className='flex flex-col items-center justify-center gap-1 relative' >
+
+
+            <div
+                className={twMerge(
+                    'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
+                    'min-w-[120px] max-w-[120px] flex flex-col'
+                )}
+                onClick={handleClick}
+            >
+
+                <div className='flex-1 h-full flex overflow-clip flex-col items-center justify-center w-full gap-2' >
+                    <div>
+                        <CirclePlus className="w-10 text-white/50 h-10" />
+                    </div>
+
+                    <div>
+                        <p className="text-sm text-white/50" >{position_class ? formatPosition(position_class) : ''}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     )
 }
