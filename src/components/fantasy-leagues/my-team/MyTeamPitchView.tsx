@@ -129,6 +129,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
             onViewPointsBreakdown={handleViewPointsBreakdown}
             onClose={handleCloseActionModal}
             onViewProfile={handleViewProfile}
+            league={leagueRound}
           />
         </AnimatePresence>
       )}
