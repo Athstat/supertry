@@ -74,7 +74,7 @@ function SubPlayerCard({ player, onClick }: SubPlayerProps) {
 
   return (
     <div
-      className="w-full border-none p-2 flex flex-row items-center justify-between"
+      className="w-full cursor-pointer border-none p-2 flex flex-row items-center justify-between"
       onClick={onClick}
     >
       <div className="flex flex-row items-center gap-2">
