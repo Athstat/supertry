@@ -103,12 +103,12 @@ function PlayerScoreIndicator({ round, player, nextMatch }: PlayerPointsScorePro
         <>
             <Activity mode={!isLoading && isLocked ? 'visible' : 'hidden'}  >
                 <div>
-                    <p className='font-bold' >{score.toFixed(1)}</p>
+                    <p className='font-bold text-white' >{score.toFixed(1)}</p>
                 </div>
             </Activity>
 
             <Activity mode={nextMatch ? "visible" : "hidden"} >
-                <p>{nextMatch?.game_id}</p>
+                <p className="text-white" >{}</p>
             </Activity>
         </>
     )

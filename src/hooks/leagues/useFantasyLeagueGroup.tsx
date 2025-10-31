@@ -31,23 +31,22 @@ export function useFantasyLeagueGroup() {
     // if all rounds are have ended, go to the last round
     // if all rounds are not yet open but they have not ended, use first round
 
-    // const openRounds = sortedRounds.filter(r => {
-    //   return r.is_open === true;
-    // });
+    const openRounds = sortedRounds.filter(r => {
+      return r.is_open === true;
+    });
 
-    // if (openRounds.length > 0) {
-    //   return openRounds[0];
-    // }
+    if (openRounds.length > 0) {
+      return openRounds[0];
+    }
 
-    // const endedRounds = sortedRounds.filter(r => {
-    //   return r.has_ended === true;
-    // });
+    const endedRounds = sortedRounds.filter(r => {
+      return r.has_ended === true;
+    });
 
-    // if (endedRounds.length === sortedRounds.length) {
-    //   return endedRounds[endedRounds.length - 1];
-    // }
+    if (endedRounds.length === sortedRounds.length) {
+      return endedRounds[endedRounds.length - 1];
+    }
 
-    return sortedRounds[3]
     // TODO: Change this Back
 
     return undefined;
