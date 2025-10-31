@@ -9,7 +9,10 @@ import SecondaryText from "../shared/SecondaryText";
 import { Activity } from "react";
 import { IFixture } from "../../types/games";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
+import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
+import { CirclePlus } from "lucide-react";
+import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete,
@@ -21,7 +24,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
     const { position_class } = player;
     const { viewMode } = useMyTeamView();
-    const { setTeamCaptainAtSlot, removePlayerAtSlot } = useFantasyLeagueTeam();
+    const {teamCaptain} = useFantasyLeagueTeam();
 
     const handleClick = () => {
         if (onClick) {
@@ -29,9 +32,16 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
         }
     }
 
+    const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
+
     return (
         <div className='flex flex-col items-center justify-center gap-1 relative' >
 
+            {isTeamCaptain && (
+                <div className="absolute top-0 right-0" >
+                    <CaptainsArmBand className="font-black" />
+                </div>
+            )}
 
             <div
                 className={twMerge(
@@ -73,15 +83,6 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 />
             </Activity>
 
-            {/* <Activity mode={viewMode === "edit" ? "visible" : "hidden"} >
-                <div className="flex flex-col gap-2 w-full" >
-                    <div className="w-full flex-1" >
-                        <PrimaryButton className="w-full" >
-                            Swap
-                        </PrimaryButton>
-                    </div>
-                </div>
-            </Activity> */}
         </div>
     )
 }
@@ -102,13 +103,58 @@ function PlayerScoreIndicator({ round, player, nextMatch }: PlayerPointsScorePro
         <>
             <Activity mode={!isLoading && isLocked ? 'visible' : 'hidden'}  >
                 <div>
-                    <p className='font-bold' >{score.toFixed(1)}</p>
+                    <p className='font-bold text-white' >{score.toFixed(1)}</p>
                 </div>
             </Activity>
 
             <Activity mode={nextMatch ? "visible" : "hidden"} >
-                <p>{nextMatch?.game_id}</p>
+                <p className="text-white" >{}</p>
             </Activity>
         </>
+    )
+}
+
+
+
+type EmptySlotProps = {
+    slot: IFantasyLeagueTeamSlot
+}
+
+/** Renders an empty slot card */
+export function EmptySlotPitchCard({slot}: EmptySlotProps) {
+
+    const {initateSwapOnEmptySlot} = useFantasyLeagueTeam();
+
+    const {position} = slot;
+    const {position_class} = position;
+
+    const handleClick = () => {
+        initateSwapOnEmptySlot(slot);
+    }
+
+    return (
+        <div className='flex flex-col items-center justify-center gap-1 relative' >
+
+
+            <div
+                className={twMerge(
+                    'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
+                    'min-w-[120px] max-w-[120px] flex flex-col'
+                )}
+                onClick={handleClick}
+            >
+
+                <div className='flex-1 h-full flex overflow-clip flex-col items-center justify-center w-full gap-2' >
+                    <div>
+                        <CirclePlus className="w-10 text-white/50 h-10" />
+                    </div>
+
+                    <div>
+                        <p className="text-sm text-white/50" >{position_class ? formatPosition(position_class) : ''}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     )
 }

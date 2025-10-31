@@ -134,5 +134,7 @@ declare module "lucide-react" {
   export const Inbox : CIP;
   export const Crown : CIP;
   export const Flame : CIP;
+  export const ArrowUpRight : CIP;
+  export const CirclePlus : CIP;
 }
 

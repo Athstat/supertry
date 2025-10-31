@@ -16,7 +16,7 @@ type Props = {
 export default function FantasyRoundsList({ rounds, handleCreateTeam, handleViewTeam, handlePlayerClick, refreshRounds }: Props) {
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 px-4">
             <div className="flex flex-col items-start justify-start">
                 <div className="flex flex-row items-center gap-2">
                     <Users />

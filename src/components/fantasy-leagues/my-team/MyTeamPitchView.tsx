@@ -11,6 +11,7 @@ import { useMyTeamView } from './MyTeamStateProvider';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useHideBottomNavBar } from '../../../hooks/navigation/useNavigationBars';
 import TeamBenchDrawer from './TeamBenchDrawer';
+import { AnimatePresence } from 'framer-motion';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -113,6 +114,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
           <TeamBenchDrawer
             superSubSlot={superSubSlot}
             leagueRound={leagueRound}
+            onPlayerClick={handlePlayerClick}
           />
         )}
 
@@ -121,12 +123,15 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
 
 
       {selectedPlayer && showActionModal && (
-        <PlayerActionModal
-          player={selectedPlayer}
-          onViewPointsBreakdown={handleViewPointsBreakdown}
-          onClose={handleCloseActionModal}
-          onViewProfile={handleViewProfile}
-        />
+        <AnimatePresence>
+          <PlayerActionModal
+            player={selectedPlayer}
+            onViewPointsBreakdown={handleViewPointsBreakdown}
+            onClose={handleCloseActionModal}
+            onViewProfile={handleViewProfile}
+            league={leagueRound}
+          />
+        </AnimatePresence>
       )}
 
       {selectedPlayer && showProfileModal && (
@@ -147,7 +152,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
         />
       )}
 
-      {}
+      { }
     </div>
   );
 }

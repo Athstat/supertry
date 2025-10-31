@@ -266,7 +266,7 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
         <div ref={ref} className={twMerge(
             "flex hover:bg-slate-50 flex-row items-center",
             !isAffordable && 'opacity-50',
-            "hover:bg-slate-800/50"
+            "dark:hover:bg-slate-800/50 hover:bg-slate-200"
         )} >
 
             {inView && (

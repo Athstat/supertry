@@ -80,36 +80,39 @@ function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
 
     const { viewMode, navigate: setViewMode } = useMyTeamView();
     const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+    const { changesDetected } = useFantasyLeagueTeam();
 
     return (
-        <RoundedCard className="flex p-1.5 bg-gray-50 border-slate-200  w-full justify-between flex-row items-center gap-2">
-            <button
-                type="button"
-                onClick={() => setViewMode('edit')}
-                // disabled={isLocked}
-                className={twMerge(
-                    'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center justify-center gap-2 font-medium text-slate-500`',
-                    viewMode === 'edit' && 'bg-blue-600 text-white dark:bg-blue-600'
-                )}
-            >
-                <p>Edit</p>
-                {isLocked && <Lock className="w-4 h-4" />}
-            </button>
+        <Activity mode={changesDetected ? "hidden" : "visible"} >
+            <RoundedCard className="flex p-1.5 bg-gray-50 border-slate-200  w-full justify-between flex-row items-center gap-2">
+                <button
+                    type="button"
+                    onClick={() => setViewMode('edit')}
+                    // disabled={isLocked}
+                    className={twMerge(
+                        'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center justify-center gap-2 font-medium text-slate-500`',
+                        viewMode === 'edit' && 'bg-blue-600 text-white dark:bg-blue-600'
+                    )}
+                >
+                    <p>Edit</p>
+                    {isLocked && <Lock className="w-4 h-4" />}
+                </button>
 
-            <button
-                type="button"
-                onClick={() => setViewMode('pitch')}
-                // disabled={isLocked}
-                className={twMerge(
-                    'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center  justify-center gap-2 font-medium text-slate-500`',
-                    viewMode === 'pitch' && 'bg-blue-600 text-white dark:bg-blue-600 '
-                )}
-            >
-                <p>Pitch</p>
-                {isLocked && <Lock className="w-4 h-4" />}
-            </button>
+                <button
+                    type="button"
+                    onClick={() => setViewMode('pitch')}
+                    // disabled={isLocked}
+                    className={twMerge(
+                        'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center  justify-center gap-2 font-medium text-slate-500`',
+                        viewMode === 'pitch' && 'bg-blue-600 text-white dark:bg-blue-600 '
+                    )}
+                >
+                    <p>Pitch</p>
+                    {isLocked && <Lock className="w-4 h-4" />}
+                </button>
 
-        </RoundedCard>
+            </RoundedCard>
+        </Activity>
     )
 }
 
