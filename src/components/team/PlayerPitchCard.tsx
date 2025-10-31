@@ -9,7 +9,6 @@ import SecondaryText from "../shared/SecondaryText";
 import { Activity } from "react";
 import { IFixture } from "../../types/games";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
-import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete,
@@ -21,7 +20,6 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
     const { position_class } = player;
     const { viewMode } = useMyTeamView();
-    const { setTeamCaptainAtSlot, removePlayerAtSlot } = useFantasyLeagueTeam();
 
     const handleClick = () => {
         if (onClick) {
@@ -73,15 +71,6 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 />
             </Activity>
 
-            {/* <Activity mode={viewMode === "edit" ? "visible" : "hidden"} >
-                <div className="flex flex-col gap-2 w-full" >
-                    <div className="w-full flex-1" >
-                        <PrimaryButton className="w-full" >
-                            Swap
-                        </PrimaryButton>
-                    </div>
-                </div>
-            </Activity> */}
         </div>
     )
 }

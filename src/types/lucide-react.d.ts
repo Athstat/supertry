@@ -132,5 +132,6 @@ declare module "lucide-react" {
   export const Sun : CIP;
   export const Ruler : CIP;
   export const Inbox : CIP;
+  export const ArrowUpRight : CIP;
 }
 

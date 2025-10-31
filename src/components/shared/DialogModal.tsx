@@ -1,7 +1,7 @@
-import { X } from 'lucide-react';
 import { forwardRef } from 'react';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
+import CloseButton from './buttons/CloseButton';
 
 type Props = {
   children?: React.ReactNode;
@@ -45,12 +45,10 @@ const DialogModal = forwardRef<HTMLDivElement, Props>(
               <h2 className="text-md lg:text-xl font-bold text-gray-900 truncate dark:text-gray-100">
                 {title}
               </h2>
-              <button
+
+              <CloseButton 
                 onClick={handleOnClose}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-full text-gray-600 dark:text-gray-400"
-              >
-                <X size={20} />
-              </button>
+              />
             </div>
 
             <div className={twMerge('', className)}>{children}</div>

@@ -32,7 +32,7 @@ export default function TeamBenchDrawer({ superSubSlot, onPlayerClick }: Props) 
           <BottomSheetHandle className="bg-slate-800" />
 
           <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
-            Super Substitute
+            Super Subsitute
           </p>
 
           <div className="">
