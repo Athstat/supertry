@@ -124,11 +124,12 @@ export function useFantasyLeagueTeam() {
 
         });
 
+        setSwapPlayer(undefined);
         setSlots(newSlots);
 
         return { playerRemoved };
 
-    }, [slots, setSlots]);
+    }, [slots, setSlots, setSwapPlayer]);
 
     const setPlayerAtSlot = useCallback((slotNumber: number, athlete: IProAthlete) => {
         if (!team) return;
@@ -318,12 +319,15 @@ export function useFantasyLeagueTeam() {
 
         if (!swapState || swapState.slot === null) return;
 
+        setSwapPlayer(undefined);
+
+        console.log("Set Swap player to undefined");
 
         setPlayerAtSlot(swapState.slot, newAthlete);
         setSwapState({ open: false, slot: null, position: null });
 
         fantasyAnalytics.trackUsedSwapPlayerFeature();
-    }, [setPlayerAtSlot, setSwapState, swapState])
+    }, [setPlayerAtSlot, setSwapPlayer, setSwapState, swapState])
 
     const initiateSwap = (slot: IFantasyLeagueTeamSlot) => {
         const pos = toPosition(slot.position, slot.slotNumber - 1);
@@ -331,6 +335,8 @@ export function useFantasyLeagueTeam() {
 
         if (slot.athlete) {
             setSwapPlayer(slot.athlete);
+        } else {
+            setSwapPlayer(undefined);
         }
     };
 
@@ -348,6 +354,8 @@ export function useFantasyLeagueTeam() {
 
         // Set slot state
         const pos = toPosition(slot.position, slot.slotNumber - 1);
+        
+        setSwapPlayer(undefined);
 
         setSwapState({
             open: true,
@@ -355,7 +363,6 @@ export function useFantasyLeagueTeam() {
             position: pos,
         });
 
-        setSwapPlayer(undefined);
 
     };
 

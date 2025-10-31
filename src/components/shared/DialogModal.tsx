@@ -1,4 +1,4 @@
-import { Activity, forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 import CloseButton from './buttons/CloseButton';
@@ -23,8 +23,11 @@ const DialogModal = forwardRef<HTMLDivElement, Props>(
       }
     };
 
+    if (!open) {
+      return;
+    }
+
     const modalContent = (
-      <Activity mode={open ? "visible" : "hidden"} >
         <div className="fixed inset-0 bg-black bg-opacity-60 z-[200] flex flex-col items-center justify-center">
           <div
             className={twMerge(
@@ -54,7 +57,6 @@ const DialogModal = forwardRef<HTMLDivElement, Props>(
             </div>
           </div>
         </div>
-      </Activity>
     );
 
     return createPortal(modalContent, document.body);
