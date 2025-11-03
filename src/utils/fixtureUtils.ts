@@ -463,3 +463,115 @@ export function findNextWeekWithSbrFixtures<T extends { kickoff_time?: Date }>(
 
   return null;
 }
+
+/** Find the previous week with fixtures (searches backward up to maxWeeks) */
+export function findPreviousWeekWithFixtures(
+  fixtures: IFixture[],
+  startWeek: number,
+  startYear: number,
+  maxWeeks: number = 26
+): { weekNumber: number; year: number } | null {
+  let currentWeek = startWeek;
+  let currentYear = startYear;
+
+  for (let i = 0; i < maxWeeks; i++) {
+    // Move to previous week
+    if (currentWeek === 1) {
+      currentWeek = 52;
+      currentYear--;
+    } else {
+      currentWeek--;
+    }
+
+    // Check if this week has fixtures
+    const weekFixtures = getFixturesForWeek(fixtures, currentWeek, currentYear);
+    if (weekFixtures.length > 0) {
+      return { weekNumber: currentWeek, year: currentYear };
+    }
+  }
+
+  return null;
+}
+
+/** Find the previous week with SBR fixtures (searches backward up to maxWeeks) */
+export function findPreviousWeekWithSbrFixtures<T extends { kickoff_time?: Date }>(
+  fixtures: T[],
+  startWeek: number,
+  startYear: number,
+  maxWeeks: number = 26
+): { weekNumber: number; year: number } | null {
+  let currentWeek = startWeek;
+  let currentYear = startYear;
+
+  for (let i = 0; i < maxWeeks; i++) {
+    // Move to previous week
+    if (currentWeek === 1) {
+      currentWeek = 52;
+      currentYear--;
+    } else {
+      currentWeek--;
+    }
+
+    // Check if this week has fixtures
+    const weekFixtures = getSbrFixturesForWeek(fixtures, currentWeek, currentYear);
+    if (weekFixtures.length > 0) {
+      return { weekNumber: currentWeek, year: currentYear };
+    }
+  }
+
+  return null;
+}
+
+/** Find the closest week with fixtures (checks current, then forward, then backward) */
+export function findClosestWeekWithFixtures(
+  fixtures: IFixture[],
+  startWeek: number,
+  startYear: number
+): { weekNumber: number; year: number } | null {
+  // First check if current week has fixtures
+  const currentWeekFixtures = getFixturesForWeek(fixtures, startWeek, startYear);
+  if (currentWeekFixtures.length > 0) {
+    return { weekNumber: startWeek, year: startYear };
+  }
+
+  // Try finding next week with fixtures
+  const nextWeek = findNextWeekWithFixtures(fixtures, startWeek, startYear, 26);
+  if (nextWeek) {
+    return nextWeek;
+  }
+
+  // Fallback to previous week with fixtures
+  const previousWeek = findPreviousWeekWithFixtures(fixtures, startWeek, startYear, 26);
+  if (previousWeek) {
+    return previousWeek;
+  }
+
+  return null;
+}
+
+/** Find the closest week with SBR fixtures (checks current, then forward, then backward) */
+export function findClosestWeekWithSbrFixtures<T extends { kickoff_time?: Date }>(
+  fixtures: T[],
+  startWeek: number,
+  startYear: number
+): { weekNumber: number; year: number } | null {
+  // First check if current week has fixtures
+  const currentWeekFixtures = getSbrFixturesForWeek(fixtures, startWeek, startYear);
+  if (currentWeekFixtures.length > 0) {
+    return { weekNumber: startWeek, year: startYear };
+  }
+
+  // Try finding next week with fixtures
+  const nextWeek = findNextWeekWithSbrFixtures(fixtures, startWeek, startYear, 26);
+  if (nextWeek) {
+    return nextWeek;
+  }
+
+  // Fallback to previous week with fixtures
+  const previousWeek = findPreviousWeekWithSbrFixtures(fixtures, startWeek, startYear, 26);
+  if (previousWeek) {
+    return previousWeek;
+  }
+
+  return null;
+}
