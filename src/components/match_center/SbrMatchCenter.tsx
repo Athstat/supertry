@@ -149,7 +149,7 @@ export default function SbrMatchCenter() {
             </h2>
             {!search && (
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Today: {format(new Date(), 'EEE, d MMM yyyy')}
+                Today: Week {currentWeek.weekNumber}, {format(new Date(), 'EEE, d MMM yyyy')}
               </p>
             )}
           </div>
