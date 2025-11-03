@@ -10,12 +10,15 @@ import NoContentCard from '../shared/NoContentMessage';
 import MatchCenterSearchBar from './MatchCenterSearchBar';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
 import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
 import {
   getCurrentWeek,
   getWeekDateRange,
   formatWeekHeader,
   getSbrFixturesForWeek,
+  findClosestWeekWithSbrFixtures,
   findNextWeekWithSbrFixtures,
+  findPreviousWeekWithSbrFixtures,
 } from '../../utils/fixtureUtils';
 
 export default function SbrMatchCenter() {
@@ -29,12 +32,21 @@ export default function SbrMatchCenter() {
   const [selectedWeek, setSelectedWeek] = useState(currentWeek.weekNumber);
   const [selectedYear, setSelectedYear] = useState(currentWeek.year);
 
-  // Update to current week when component mounts
+  // Update to closest week with fixtures when component mounts or fixtures load
   useEffect(() => {
-    const current = getCurrentWeek();
-    setSelectedWeek(current.weekNumber);
-    setSelectedYear(current.year);
-  }, []);
+    if (fixtures && fixtures.length > 0) {
+      const current = getCurrentWeek();
+      const closestWeek = findClosestWeekWithSbrFixtures(
+        fixtures,
+        current.weekNumber,
+        current.year
+      );
+      if (closestWeek) {
+        setSelectedWeek(closestWeek.weekNumber);
+        setSelectedYear(closestWeek.year);
+      }
+    }
+  }, [fixtures?.length]); // Only run when fixtures are loaded
 
   if (isLoading) {
     return <LoadingState />;
@@ -73,28 +85,26 @@ export default function SbrMatchCenter() {
   const isCurrentWeek =
     selectedWeek === currentWeek.weekNumber && selectedYear === currentWeek.year;
 
-  // Find next week with fixtures (for empty week case)
-  const nextWeekWithFixtures = findNextWeekWithSbrFixtures(
-    filteredFixtures,
-    selectedWeek,
-    selectedYear
-  );
+  // Check if there are any fixtures at all (for edge case handling)
+  const hasAnyFixtures = fixtures.length > 0;
 
   const handlePreviousWeek = () => {
-    if (selectedWeek === 1) {
-      setSelectedWeek(52);
-      setSelectedYear(selectedYear - 1);
-    } else {
-      setSelectedWeek(selectedWeek - 1);
+    const previousWeek = findPreviousWeekWithSbrFixtures(
+      filteredFixtures,
+      selectedWeek,
+      selectedYear
+    );
+    if (previousWeek) {
+      setSelectedWeek(previousWeek.weekNumber);
+      setSelectedYear(previousWeek.year);
     }
   };
 
   const handleNextWeek = () => {
-    if (selectedWeek === 52) {
-      setSelectedWeek(1);
-      setSelectedYear(selectedYear + 1);
-    } else {
-      setSelectedWeek(selectedWeek + 1);
+    const nextWeek = findNextWeekWithSbrFixtures(filteredFixtures, selectedWeek, selectedYear);
+    if (nextWeek) {
+      setSelectedWeek(nextWeek.weekNumber);
+      setSelectedYear(nextWeek.year);
     }
   };
 
@@ -105,11 +115,18 @@ export default function SbrMatchCenter() {
   };
 
   const handleJumpToNextFixtures = () => {
-    if (nextWeekWithFixtures) {
-      setSelectedWeek(nextWeekWithFixtures.weekNumber);
-      setSelectedYear(nextWeekWithFixtures.year);
+    const nextWeek = findNextWeekWithSbrFixtures(filteredFixtures, selectedWeek, selectedYear);
+    if (nextWeek) {
+      setSelectedWeek(nextWeek.weekNumber);
+      setSelectedYear(nextWeek.year);
     }
   };
+
+  // Check if navigation buttons should be disabled
+  const hasPreviousWeek =
+    findPreviousWeekWithSbrFixtures(filteredFixtures, selectedWeek, selectedYear) !== null;
+  const hasNextWeek =
+    findNextWeekWithSbrFixtures(filteredFixtures, selectedWeek, selectedYear) !== null;
 
   return (
     <div className="flex flex-col gap-4">
@@ -124,47 +141,59 @@ export default function SbrMatchCenter() {
       <PilledSeasonFilterBar seasons={seasons} onChange={setSeason} value={season} />
 
       {/* Week Navigation */}
-      <div className="flex flex-row items-center justify-between gap-2">
-        <h2 className="font-semibold text-base md:text-lg">
-          {search ? 'Search Results' : weekHeader}
-        </h2>
-        <div className="flex flex-row gap-2">
-          {!search && (
-            <>
-              <button
-                onClick={handleJumpToCurrentWeek}
-                disabled={isCurrentWeek}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Jump to current week"
-              >
-                <Calendar className="w-4 h-4" />
-                <span className="text-sm hidden sm:inline">Today</span>
-              </button>
-              <button
-                onClick={handlePreviousWeek}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span className="text-sm hidden sm:inline">Previous</span>
-              </button>
-              <button
-                onClick={handleNextWeek}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-              >
-                <span className="text-sm hidden sm:inline">Next</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </>
-          )}
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row items-center justify-between gap-2">
+          <div className="flex flex-col gap-1">
+            <h2 className="font-semibold text-base md:text-lg">
+              {search ? 'Search Results' : weekHeader}
+            </h2>
+            {!search && (
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Today: {format(new Date(), 'EEE, d MMM yyyy')}
+              </p>
+            )}
+          </div>
+          <div className="flex flex-row gap-2">
+            {!search && hasAnyFixtures && (
+              <>
+                <button
+                  onClick={handleJumpToCurrentWeek}
+                  disabled={isCurrentWeek}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Jump to current week"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span className="text-sm hidden sm:inline">Today</span>
+                </button>
+                <button
+                  onClick={handlePreviousWeek}
+                  disabled={!hasPreviousWeek}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span className="text-sm hidden sm:inline">Previous</span>
+                </button>
+                <button
+                  onClick={handleNextWeek}
+                  disabled={!hasNextWeek}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="text-sm hidden sm:inline">Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Fixtures List */}
       <div className="flex flex-col gap-3 w-full">
-        {displayFixtures.length === 0 && !search && (
+        {!hasAnyFixtures && !search && <NoContentCard message="No fixtures available" />}
+        {displayFixtures.length === 0 && !search && hasAnyFixtures && (
           <div className="flex flex-col gap-3 items-center">
             <NoContentCard message="No fixtures found for this week" />
-            {nextWeekWithFixtures && (
+            {findNextWeekWithSbrFixtures(filteredFixtures, selectedWeek, selectedYear) && (
               <button
                 onClick={handleJumpToNextFixtures}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors"
