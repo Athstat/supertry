@@ -17,7 +17,7 @@ export default function FantasyRankingsLeaderBoard() {
 
     if (!rankings) return;
 
-    let shortList = rankings ?? [];
+    let shortList = (rankings ?? []);
 
     shortList = shortList.slice(0, 15);
 

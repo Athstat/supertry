@@ -1,9 +1,7 @@
 
 import {
   X,
-  Calendar,
   Trophy,
-  Users,
   Sparkles,
   ArrowDownUp
 } from "lucide-react";
@@ -22,7 +20,7 @@ export function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
     // { icon: Shield, label: "My Teams", path: "/my-teams" },
     // { icon: Calendar, label: "Fixtures", path: "/fixtures" },
     { icon: Trophy, label: "Competitions", path: "/seasons" },
-    // { icon: Sparkles, label: "Prediction Rankings", path: "/predictions" },
+    { icon: Sparkles, label: "Prediction Rankings", path: "/predictions" },
     { icon: ArrowDownUp, label: "Fantasy Rankings", path: "/fantasy-rankings" },
     // { icon: Users, label: "My Teams", path: "/my-teams" },
     // { icon: Settings, label: "Settings", path: "#" },

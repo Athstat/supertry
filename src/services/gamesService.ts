@@ -59,7 +59,11 @@ export const gamesService = {
         headers: getAuthHeader(),
       });
 
-      return (await res.json()) as IFixture;
+      if (res.ok) {
+        return (await res.json()) as IFixture;
+      }
+
+      
     } catch (err) {
       console.log('Error fetching games', err);
       return undefined;
