@@ -8,6 +8,7 @@ import SecondaryText from "../../shared/SecondaryText";
 import BottomSheetHandle from "../../ui/BottomSheetHandle";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { twMerge } from "tailwind-merge";
+import TeamJersey from "../../player/TeamJersey";
 
 
 type Props = {
@@ -79,9 +80,20 @@ function SubPlayerCard({ player, onClick }: SubPlayerProps) {
     >
       <div className="flex flex-row items-center gap-2">
 
-        <PlayerMugshot
+        {player.image_url && <PlayerMugshot
           url={player.image_url}
-        />
+          teamId={player.athlete_team_id}
+        />}
+
+        {!player.image_url && (
+          <div className="w-12 h-12 flex flex-col items-center justify-center rounded-full bg-blue-600/40" >
+            <TeamJersey
+              teamId={player.athlete_team_id}
+              className="w-10 h-10"
+              useBaseClasses={false}
+            />
+          </div>
+        )}
 
         <div className="flex flex-col items-start justify-center" >
           <p className="text font-semibold" >{player.player_name}</p>
