@@ -7,7 +7,7 @@ type Props = {
     teamId?: string | number,
     className?: string,
     hideFade?: boolean,
-    useBaseClasses: boolean
+    useBaseClasses?: boolean
 }
 
 export default function TeamJersey({ teamId, className, hideFade, useBaseClasses = true }: Props) {
