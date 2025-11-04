@@ -36,7 +36,10 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
     const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
 
     return (
-        <div className='flex flex-col items-center justify-center gap-1 relative' >
+        <div 
+            key={player.tracking_id}
+            className='flex flex-col items-center justify-center gap-1 relative' 
+        >
 
             {isTeamCaptain && (
                 <div className="absolute top-0 right-0" >
@@ -46,8 +49,10 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
             <div
                 className={twMerge(
-                    'overflow-hidden rounded-xl min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
-                    'min-w-[120px] max-w-[120px] flex flex-col'
+                    'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px]',
+                    'min-w-[120px] max-w-[120px] flex flex-col',
+                    player.image_url && "bg-gradient-to-br from-green-500/30 to-green-500/60",
+                    !player.image_url && "bg-gradient-to-br from-green-500/20 to-green-500/20"
                 )}
                 onClick={handleClick}
             >
@@ -62,12 +67,14 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     />}
 
                     {!player.image_url && (
-                        <div className="object-bottom relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center justify-end" >
+                        <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
                             <TeamJersey 
                                 teamId={player.athlete_team_id}
                                 useBaseClasses={false}
-                                className="h-[100px] absolute -bottom-6 drop-shadow-md shadow-black"
+                                className="h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
+                                scummyLogoClassName="absolute top-0 left-0 w-[100px] h-full"
                                 hideFade
+                                key={player.tracking_id}
                             />
                         </div>
                     )}
