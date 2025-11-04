@@ -44,6 +44,7 @@ export default function PlayerPickerV2({
     playerPickerAtoms.onSelectPlayerAtom,
     playerPickerAtoms.excludePlayersAtom,
     playerPickerAtoms.maxPlayerPriceAtom,
+    playerPickerAtoms.searchQueryAtom,
     fantasyLeagueAtom
   ]
 
@@ -102,9 +103,9 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
       open={isOpen}
       title={dialogTitle}
       onClose={onClose}
-      hw="min-h-[100vh] w-full lg:w-[60vh]"
+      hw="min-h-[100vh] lg:min-h-[95vh] w-full lg:w-[70vh]"
       className="flex flex-col gap-2 relative"
-      outerCon="no-scrollbar"
+      outerCon="no-scrollbar lg:min-h-[95vh] rounded-none lg:rounded-xl dark:bg-[#0D0D0D] lg:dark:bg-slate-800/60"
       ref={setRefs}
     >
       <PlayerPickerHeader />

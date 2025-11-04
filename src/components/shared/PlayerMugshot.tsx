@@ -12,6 +12,7 @@ type Props = {
   playerPr?: number;
   teamId?: string;
   isCaptain?: boolean;
+  scrummyLogoClassName?: string;
 };
 
 export default function PlayerMugshot({
@@ -22,6 +23,7 @@ export default function PlayerMugshot({
   playerPr,
   teamId,
   isCaptain = false,
+  scrummyLogoClassName
 }: Props) {
 
   const teamFallbackUrl = teamId
@@ -42,7 +44,8 @@ export default function PlayerMugshot({
       <div
         className={twMerge(
           'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2',
-          className
+          className,
+          scrummyLogoClassName
         )}
       >
         <ScrummyLogo className="opacity-30" />

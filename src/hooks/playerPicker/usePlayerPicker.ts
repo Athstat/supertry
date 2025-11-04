@@ -1,7 +1,6 @@
 import { useAtom, useAtomValue } from "jotai";
 import { playerPickerAtoms } from "../../state/playerPicker/playerPicker";
 import { remainingTeamBudgetAtom } from "../../state/myTeam.atoms";
-import { useQueryState } from "../useQueryState";
 import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
 
 /** Provides a hook to interface with the player picker component */
@@ -19,7 +18,7 @@ export function usePlayerPicker() {
     const excludePlayers = useAtomValue(playerPickerAtoms.excludePlayersAtom);
 
 
-    const [searchQuery, setSearchQuery] = useQueryState<string>('player_query');
+    const [searchQuery, setSearchQuery] = useAtom(playerPickerAtoms.searchQueryAtom);
 
     const maxPrice = useAtomValue(playerPickerAtoms.maxPlayerPriceAtom);
     const playerToBeReplaced = useAtomValue(playerPickerAtoms.playerToBeReplacedAtom);

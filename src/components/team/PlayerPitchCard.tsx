@@ -13,6 +13,7 @@ import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 import { CirclePlus } from "lucide-react";
 import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
+import TeamJersey from "../player/TeamJersey";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete,
@@ -24,7 +25,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
     const { position_class } = player;
     const { viewMode } = useMyTeamView();
-    const {teamCaptain} = useFantasyLeagueTeam();
+    const { teamCaptain } = useFantasyLeagueTeam();
 
     const handleClick = () => {
         if (onClick) {
@@ -35,7 +36,10 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
     const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
 
     return (
-        <div className='flex flex-col items-center justify-center gap-1 relative' >
+        <div 
+            key={player.tracking_id}
+            className='flex flex-col items-center justify-center gap-1 relative' 
+        >
 
             {isTeamCaptain && (
                 <div className="absolute top-0 right-0" >
@@ -45,18 +49,35 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
             <div
                 className={twMerge(
-                    'overflow-hidden rounded-xl min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
-                    'min-w-[120px] max-w-[120px] flex flex-col'
+                    'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px]',
+                    'min-w-[120px] max-w-[120px] flex flex-col',
+                    player.image_url && "bg-gradient-to-br from-green-500/30 to-green-500/60",
+                    !player.image_url && "bg-gradient-to-br from-green-500/20 to-green-500/20"
                 )}
                 onClick={handleClick}
             >
 
                 <div className='flex-3 flex overflow-clip flex-col items-center justify-center w-full' >
-                    <PlayerMugshot
+                    {player.image_url && <PlayerMugshot
                         url={player.image_url}
                         className='border-none rounded-none w-[100px] h-[100px] bg-transparent hover:bg-transparent'
+                        scrummyLogoClassName="dark:bg-transparent bg-transparent"
                         showPrBackground={false}
-                    />
+                        key={player.tracking_id}
+                    />}
+
+                    {!player.image_url && (
+                        <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
+                            <TeamJersey 
+                                teamId={player.athlete_team_id}
+                                useBaseClasses={false}
+                                className="h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
+                                scummyLogoClassName="absolute top-0 left-0 w-[100px] h-full"
+                                hideFade
+                                key={player.tracking_id}
+                            />
+                        </div>
+                    )}
 
                     {/* <TeamJersey 
           teamId={player.athlete_team_id}
@@ -108,7 +129,7 @@ function PlayerScoreIndicator({ round, player, nextMatch }: PlayerPointsScorePro
             </Activity>
 
             <Activity mode={nextMatch ? "visible" : "hidden"} >
-                <p className="text-white" >{}</p>
+                <p className="text-white" >{ }</p>
             </Activity>
         </>
     )
@@ -121,12 +142,12 @@ type EmptySlotProps = {
 }
 
 /** Renders an empty slot card */
-export function EmptySlotPitchCard({slot}: EmptySlotProps) {
+export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
 
-    const {initateSwapOnEmptySlot} = useFantasyLeagueTeam();
+    const { initateSwapOnEmptySlot } = useFantasyLeagueTeam();
 
-    const {position} = slot;
-    const {position_class} = position;
+    const { position } = slot;
+    const { position_class } = position;
 
     const handleClick = () => {
         initateSwapOnEmptySlot(slot);

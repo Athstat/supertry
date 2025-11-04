@@ -48,6 +48,8 @@ const excludePlayersAtom = atom<(IProAthlete | IFantasyAthlete | IFantasyTeamAth
 
 const maxPlayerPriceAtom = atom<number>(240);
 
+const searchQueryAtom = atom<string>();
+
 export const playerPickerAtoms = {
     relatedGamesAtom,
     positionPoolAtom,
@@ -56,5 +58,6 @@ export const playerPickerAtoms = {
     playerToBeReplacedAtom,
     onSelectPlayerAtom,
     excludePlayersAtom,
-    maxPlayerPriceAtom
+    maxPlayerPriceAtom,
+    searchQueryAtom
 }
