@@ -28,7 +28,7 @@ export default function RugbyPitch({ count = 5 }: Props) {
 /** Renders a 3 Dimensional Rugby Pitch by perspective like FPL */
 export function RugbyPitch3D() {
     return (
-        <div className="relative max-h-[500px] lg:max-h-[700px] overflow-clip" >
+        <div className="relative max-h-[500px] lg:max-h-[600px] overflow-clip" >
 
             {/* <PitchAdvertisingBoard /> */}
 

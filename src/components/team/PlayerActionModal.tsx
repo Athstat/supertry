@@ -123,6 +123,7 @@ export function PlayerActionModal({
                   className="w-16 h-16 -bottom-2 absolute rounded-full"
                   hideFade
                   teamId={player.athlete_team_id ?? ""}
+                  useBaseClasses={false}
                 />
               </div>
             )}
