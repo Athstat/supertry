@@ -1,21 +1,21 @@
 /** Renders Pro Predcitions Rankings Screen */
 
 import useSWR from "swr";
-import { useAuthUser } from "../../hooks/useAuthUser"
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
 import { LoadingState } from "../../components/ui/LoadingState";
 import { IStatCard, TopicPageView } from "../PageView";
 import ProPredictionsLeaderboard from "../../components/predictions/ProPredictionsLeaderboard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/shared/tabs/TabView";
 import UserProPredictionsHistoryTab from "../../components/predictions/ProPredictionsHistory";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function PredictionsRankingScreen() {
 
-    const user = useAuthUser();
+    const {authUser: user} = useAuth();
 
-    const key = `pro-predictions-rankings/${user.kc_id}`
+    const key = `pro-predictions-rankings/${user?.kc_id}`
     const { data: userRanking, isLoading: loadingUserRanking } = useSWR(
-        key, () => proPredictionsRankingService.getUserRanking(user.kc_id)
+        key, () => proPredictionsRankingService.getUserRanking(user?.kc_id)
     );
 
     if (loadingUserRanking) {
