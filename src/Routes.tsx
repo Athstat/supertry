@@ -41,6 +41,7 @@ import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import OnboardingDataProvider from './components/onboarding/OnboardingDataProvider';
 import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
 import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
+import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -308,6 +309,15 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <CompleteProfileScreen />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/account-info"
+          element={
+            <ProtectedRoute>
+              <EditAccountInfoScreen />
             </ProtectedRoute>
           }
         />

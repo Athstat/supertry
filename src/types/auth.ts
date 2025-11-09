@@ -209,3 +209,10 @@ export type RequestEmailVerificationRes = {
 export type VerifyEmailRes = {
   message: string;
 };
+
+
+export type UpdateUserProfileReq = {
+  username?: string,
+  first_name?: string,
+  last_name?: string
+}
