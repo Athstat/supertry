@@ -317,7 +317,9 @@ const AppRoutes = () => {
           path="/profile/account-info"
           element={
             <ProtectedRoute>
-              <EditAccountInfoScreen />
+              <Layout>
+                <EditAccountInfoScreen />
+              </Layout>
             </ProtectedRoute>
           }
         />
