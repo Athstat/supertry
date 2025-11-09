@@ -1,5 +1,5 @@
 import { DjangoAuthUser, UpdateUserProfileReq } from "../types/auth";
-import { getUri } from "../utils/backendUtils";
+import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger";
 
 export const userService = {
@@ -30,7 +30,8 @@ export const userService = {
             const uri = getUri('/api/v1/users/me');
             const res = await fetch(uri, {
                 method: "PUT",
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                headers: getAuthHeader()
             });
 
             if (res.ok) {
