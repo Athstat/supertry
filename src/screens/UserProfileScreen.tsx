@@ -11,6 +11,8 @@ import DeleteAccountButton from '../components/auth/DeleteAccountButton';
 import Experimental from '../components/shared/ab_testing/Experimental';
 import QaNoticeCard from '../components/settings/QaNoticeCard';
 import { useNavigate } from 'react-router-dom';
+import ProfileSettingCard from '../components/settings/ProfileSettingCard';
+import { UserCircle } from 'lucide-react';
 
 export function UserProfileScreen() {
 
@@ -56,7 +58,14 @@ function Content() {
 
         {/* Complete Profile Card for Guest Users */}
         {isGuestAccount && <ClaimGuestAccountBox />}
-r
+
+        <ProfileSettingCard 
+          title='Account Info'
+          description='Edit Username, First Name and Last Name'
+          icon={<UserCircle />}
+          onClick={handleEditUserProfile}
+        />
+
         {authUser && (
           <UserNotificationsSettings databaseUser={authUser} />
         )}
