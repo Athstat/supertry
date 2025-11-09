@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/shared/buttons/BackButton";
 import PageView from "../PageView";
 import { useAuth } from "../../contexts/AuthContext";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import InputField from "../../components/shared/InputField";
 import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
 import AccountInfoProgressCard from "../../components/profile/AccountInfoProgressCard";
@@ -19,6 +19,20 @@ export default function EditAccountInfoScreen() {
     lastName: authUser?.last_name
   });
 
+  const userNameError = useMemo(() => {
+    const { username } = form;
+
+    if (username === "" || username === undefined) {
+      return "Username is required"
+    }
+
+    if (username.length < 3) {
+      return "Username must be atleast 3 characters long"
+    }
+
+    return undefined;
+  }, [form.username]);
+
   return (
     <PageView className="px-6 flex flex-col gap-6" >
       <div className="flex flex-row items-center gap-2" >
@@ -31,7 +45,7 @@ export default function EditAccountInfoScreen() {
         </div>
       </div>
 
-      <AccountInfoProgressCard 
+      <AccountInfoProgressCard
         username={form.username}
         lastName={form.lastName}
         firstName={form.firstName}
@@ -41,10 +55,11 @@ export default function EditAccountInfoScreen() {
         <InputField
           placeholder="Username"
           value={form.username}
-          label="Username"
+          label="Username*"
           onChange={(s) => {
             setForm({ ...form, username: s ?? "" })
           }}
+          error={userNameError}
         />
 
         <InputField

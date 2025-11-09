@@ -2,6 +2,7 @@ import { twMerge } from "tailwind-merge";
 import RoundedCard from "../shared/RoundedCard";
 import SecondaryText from "../shared/SecondaryText";
 import { useDebounced } from "../../hooks/useDebounced";
+import { AnimatePresence, motion } from "framer-motion";
 
 type Props = {
     username: string,
@@ -31,25 +32,37 @@ export default function AccountInfoProgressCard({ username, firstName, lastName 
             <div
                 className="flex flex-row bg-slate-200 dark:bg-slate-700 w-full h-[6px] rounded-xl overflow-clip"
             >
+                <AnimatePresence>
+                    <motion.div
+                        className={twMerge(
+                            "flex flex-row bg-blue-500 w-full h-[6] rounded-xl overflow-clip",
+                            percentageCompleted === 100 && "bg-gradient-to-r from-blue-500 via-purple-500 to-blue-700"
+                        )}
 
-                <div
-                    className={twMerge(
-                        "flex flex-row bg-blue-500 w-full h-[6] rounded-xl overflow-clip",
-                        percentageCompleted === 100 && "bg-green-500"
-                    )}
+                        initial={{
+                            opacity: 0
+                        }}
+                        
+                        animate={{
+                            opacity: 1
+                        }}
 
-                    style={{
-                        width: `${percentageCompleted}%`
-                    }}
-                ></div>
+                        style={{
+                            width: `${percentageCompleted}%`
+                        }}
+                    ></motion.div>
+                </AnimatePresence>
 
             </div>
 
             <div>
-
-                <div className="flex flex-row items-center gap-1" >
-                    <p className="font-semibold text-xl" >{percentageCompleted}% Complete</p>
-                </div>
+                <AnimatePresence>
+                    <motion.div
+                        className="flex flex-row items-center gap-1"
+                    >
+                        <p className="font-semibold text-xl" >{percentageCompleted}% Complete</p>
+                    </motion.div>
+                </AnimatePresence>
 
                 <SecondaryText>Complete your profile to fully express yourself on the SCRUM!</SecondaryText>
             </div>
