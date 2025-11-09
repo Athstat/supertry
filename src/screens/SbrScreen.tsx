@@ -6,8 +6,8 @@ import SbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
 import { allSbrWeekFixturesAtom, sbrFixturesPivotDateAtom, sbrFixturesWeekEndAtom, sbrFixturesWeekStartAtom, sbrWeekFeatureGamesAtom, sbrWeekFixturesAtom } from "../state/sbrFixtures.atoms";
-import SbrScreenDataProvider from "../components/sbr/SbrScreenDataProvider";
 import { useAtomValue } from "jotai";
+import SbrScreenDataProvider from "../providers/SbrScreenDataProvider";
 
 export default function SbrScreen() {
 

@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
-import { FantasyTeamAthleteCard } from '../../team/FantasyTeamAthleteCard';
-import { TeamFormation } from '../../team/TeamFormation';
+import { TeamFormation3D } from '../../team/TeamFormation';
 import { PlayerActionModal } from '../../team/PlayerActionModal';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import WarningCard from '../../shared/WarningCard';
 import { useMyTeamView } from './MyTeamStateProvider';
-import { EmptyPlayerCard } from './EditableTeamSlotItem';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
+import { useHideBottomNavBar } from '../../../hooks/navigation/useNavigationBars';
+import TeamBenchDrawer from './TeamBenchDrawer';
+import { AnimatePresence } from 'framer-motion';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -20,6 +21,8 @@ type Props = {
 /** Renders my team pitch view */
 export default function MyTeamPitchView({ leagueRound, team }: Props) {
 
+  useHideBottomNavBar();
+
   const { slots, isTeamFull, selectedCount } = useFantasyLeagueTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
@@ -27,7 +30,8 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
 
-  const {navigate: navigateViewMode} = useMyTeamView();
+  const { navigate: navigateViewMode } = useMyTeamView();
+
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedTeamPitchView();
@@ -81,12 +85,12 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
   }
 
   return (
-    <div className="mt-4">
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Team Formation</h2>
+    <div className="mt-4 ">
+      <div className='flex flex-col relative'>
 
-        <div className='mb-4 flex flex-col gap-0' >
-          <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium">
+        <div className='px-4 mb-4' >
+
+          <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium">
             Greyed out players are not playing in this round's games
           </p>
 
@@ -97,47 +101,37 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
               </p>
             </WarningCard>
           )}
+
         </div>
+
 
         {leagueRound && starters.length > 0 && (
-          <TeamFormation players={starters} onPlayerClick={handlePlayerClick} round={leagueRound} />
+          <TeamFormation3D players={starters} onPlayerClick={handlePlayerClick} round={leagueRound} />
         )}
+
+        {/* Super Substitute */}
+        {leagueRound && superSubSlot && (
+          <TeamBenchDrawer
+            superSubSlot={superSubSlot}
+            leagueRound={leagueRound}
+            onPlayerClick={handlePlayerClick}
+          />
+        )}
+
       </div>
 
-      {/* Super Substitute */}
-      {leagueRound && superSubSlot && (
-        <div className="mt-8">
-         
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
-            <span>Super Substitute</span>
-            <span className="ml-2 text-orange-500 text-sm px-2 py-0.5 rounded-full">Special</span>
-          </h2>
-          
-          <div className="rounded-xl p-4 w-40 ">
-            {superSubSlot.athlete ? (
-              <FantasyTeamAthleteCard
-                player={superSubSlot.athlete}
-                onPlayerClick={handlePlayerClick}
-                round={leagueRound}
-                pointsClassName="text-black dark:text-white"
-              />
-            ) : (
-              <EmptyPlayerCard 
-                slot={superSubSlot}
-                className='h-[100px]'
-              />
-            )}
-          </div>
-        </div>
-      )}
+
 
       {selectedPlayer && showActionModal && (
-        <PlayerActionModal
-          player={selectedPlayer}
-          onViewPointsBreakdown={handleViewPointsBreakdown}
-          onClose={handleCloseActionModal}
-          onViewProfile={handleViewProfile}
-        />
+        <AnimatePresence>
+          <PlayerActionModal
+            player={selectedPlayer}
+            onViewPointsBreakdown={handleViewPointsBreakdown}
+            onClose={handleCloseActionModal}
+            onViewProfile={handleViewProfile}
+            league={leagueRound}
+          />
+        </AnimatePresence>
       )}
 
       {selectedPlayer && showProfileModal && (
@@ -157,6 +151,8 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
           onClose={handleClosePointsModal}
         />
       )}
+
+      { }
     </div>
   );
 }

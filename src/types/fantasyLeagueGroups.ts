@@ -1,3 +1,4 @@
+import { IProAthlete } from "./athletes";
 import { DjangoAuthUser } from "./auth";
 import { IProSeason } from "./season";
 
@@ -51,4 +52,29 @@ export type FantasyLeagueGroupStanding = {
     username?: string,
     total_score?: number,
     rank: number
+}
+
+export type MostSelectedRankingItem = IProAthlete & {
+    times_selected: number,
+    percentage_selected: number,
+}
+
+export type FantasyPointsScoredRankingItem = IProAthlete & {
+    total_points: number,
+}
+
+/** type definition for a single player sport action ranking item */
+export type PlayerSportActionRankingItem = IProAthlete & {
+    action_count: number,
+    action_name: string,
+    season_id: string,
+}
+
+export type MemberRankingDetail = {
+    user_id: string,
+    fantasy_league_group_id: string,
+    total_points: number,
+    overall_rank: number,
+    total_users: number,
+    rank_percentile: number
 }

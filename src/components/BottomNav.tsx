@@ -1,8 +1,11 @@
 import { useLocation, Link } from 'react-router-dom';
 import { Home, Trophy, Users, Calendar, User } from 'lucide-react';
-import { useState } from 'react';
+import { Activity, useState } from 'react';
+import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 
 export function BottomNav() {
+
+  const {bottomNavViewMode} = useNavigationBars();
   const { pathname } = useLocation();
   const [rippleMap, setRippleMap] = useState<Record<string, { x: number; y: number }>>({});
 
@@ -35,39 +38,40 @@ export function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-dark-850 backdrop-blur-sm z-50 shadow-sm">
-      <div className="flex justify-around items-center h-16 max-w-md mx-auto">
-        {navItems.map(item => {
-          const isActive = pathname === item.path || pathname.startsWith(`${item.path}/`);
-          const Icon = item.icon;
+    <Activity mode={bottomNavViewMode} >
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-dark-850 backdrop-blur-sm z-50 shadow-sm">
+        <div className="flex justify-around items-center h-16 max-w-md mx-auto">
+          {navItems.map(item => {
+            const isActive = pathname === item.path || pathname.startsWith(`${item.path}/`);
+            const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.id}
-              to={item.path}
-              className={`flex flex-col items-center justify-center w-full h-full relative overflow-hidden ${
-                isActive
-                  ? 'text-primary-600 dark:text-primary-400'
-                  : 'text-gray-500 dark:text-gray-400'
-              }`}
-              onClick={e => handleRipple(item.id, e)}
-            >
-              {rippleMap[item.id] && (
-                <span
-                  className="absolute bg-gray-200 dark:bg-gray-700 rounded-full animate-ripple"
-                  style={{
-                    left: rippleMap[item.id].x,
-                    top: rippleMap[item.id].y,
-                    transform: 'translate(-50%, -50%)',
-                  }}
-                />
-              )}
-              <Icon size={20} />
-              <span className="text-xs mt-1">{item.label}</span>
-            </Link>
-          );
-        })}
+            return (
+              <Link
+                key={item.id}
+                to={item.path}
+                className={`flex flex-col items-center justify-center w-full h-full relative overflow-hidden ${isActive
+                    ? 'text-primary-600 dark:text-primary-400'
+                    : 'text-gray-500 dark:text-gray-400'
+                  }`}
+                onClick={e => handleRipple(item.id, e)}
+              >
+                {rippleMap[item.id] && (
+                  <span
+                    className="absolute bg-gray-200 dark:bg-gray-700 rounded-full animate-ripple"
+                    style={{
+                      left: rippleMap[item.id].x,
+                      top: rippleMap[item.id].y,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  />
+                )}
+                <Icon size={20} />
+                <span className="text-xs mt-1">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </Activity>
   );
 }

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { ReactNode, useEffect } from 'react';
+import BottomSheetHandle from './BottomSheetHandle';
 
 type GlassBottomSheetProps = {
   isOpen: boolean;
@@ -63,7 +64,7 @@ export default function GlassBottomSheet({
               onClick={e => e.stopPropagation()}
             >
               {/* Grabber */}
-              <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-white/40 dark:bg-white/20" />
+              <BottomSheetHandle />
               <div className="max-h-[75vh] overflow-y-auto no-scrollbar">{children}</div>
             </div>
           </motion.div>
