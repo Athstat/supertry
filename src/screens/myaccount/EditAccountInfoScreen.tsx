@@ -19,6 +19,13 @@ export default function EditAccountInfoScreen() {
     lastName: authUser?.last_name
   });
 
+  const changesDetected = useMemo(() => {
+    const originalHash = `${authUser?.username}---${authUser?.first_name}---${authUser?.last_name}`;
+    const newHash = `${form.username}---${form?.firstName}---${form?.lastName}`;
+
+    return newHash !== originalHash
+  }, [authUser, form]);
+
   const userNameError = useMemo(() => {
     const { username } = form;
 
@@ -79,10 +86,10 @@ export default function EditAccountInfoScreen() {
             setForm({ ...form, lastName: s ?? "" })
           }}
         />
-
-        <PrimaryButton>
+      
+        {changesDetected && <PrimaryButton>
           Save Changes
-        </PrimaryButton>
+        </PrimaryButton>}
       </form>
 
     </PageView>
