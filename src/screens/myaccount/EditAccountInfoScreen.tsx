@@ -62,8 +62,8 @@ export default function EditAccountInfoScreen() {
 
       const res = await userService.updateUserProfile({
         username: form.username ?? "",
-        first_name: form.firstName ?? " ",
-        last_name: form.lastName ?? " "
+        first_name: form.firstName ?? "",
+        last_name: form.lastName ?? ""
       });
 
       if (res) {
