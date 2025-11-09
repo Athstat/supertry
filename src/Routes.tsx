@@ -39,6 +39,7 @@ import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardin
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
 import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
+import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 import OnboardingDataProvider from './providers/OnboardingDataProvider';
 
 // Layout component to maintain consistent structure across routes
@@ -296,6 +297,17 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <CompleteProfileScreen />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/account-info"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EditAccountInfoScreen />
+              </Layout>
             </ProtectedRoute>
           }
         />
