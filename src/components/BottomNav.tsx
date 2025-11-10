@@ -1,11 +1,11 @@
 import { useLocation, Link } from 'react-router-dom';
 import { Home, Trophy, Users, Calendar, User } from 'lucide-react';
-import { Activity, useState } from 'react';
+import { useState } from 'react';
 import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
+import { Activity } from './shared/Activity';
 
 export function BottomNav() {
-
-  const {bottomNavViewMode} = useNavigationBars();
+  const { bottomNavViewMode } = useNavigationBars();
   const { pathname } = useLocation();
   const [rippleMap, setRippleMap] = useState<Record<string, { x: number; y: number }>>({});
 
@@ -38,7 +38,7 @@ export function BottomNav() {
   ];
 
   return (
-    <Activity mode={bottomNavViewMode} >
+    <Activity mode={bottomNavViewMode}>
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-dark-850 backdrop-blur-sm z-50 shadow-sm">
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           {navItems.map(item => {
@@ -49,10 +49,11 @@ export function BottomNav() {
               <Link
                 key={item.id}
                 to={item.path}
-                className={`flex flex-col items-center justify-center w-full h-full relative overflow-hidden ${isActive
+                className={`flex flex-col items-center justify-center w-full h-full relative overflow-hidden ${
+                  isActive
                     ? 'text-primary-600 dark:text-primary-400'
                     : 'text-gray-500 dark:text-gray-400'
-                  }`}
+                }`}
                 onClick={e => handleRipple(item.id, e)}
               >
                 {rippleMap[item.id] && (
