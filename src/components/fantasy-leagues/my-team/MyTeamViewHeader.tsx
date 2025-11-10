@@ -57,11 +57,11 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
 
             {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
-            <Activity mode={isLocked ? "hidden" : "visible"} >
+            {/* <Activity mode={isLocked ? "hidden" : "visible"} >
                 <ViewSwitcher
                     leagueRound={leagueRound}
                 />
-            </Activity>
+            </Activity> */}
 
             <Activity mode={isLocked ? "visible" : "hidden"} >
                 <TeamPointsCard
@@ -76,7 +76,7 @@ type ViewSwitcherProps = {
     leagueRound: IFantasyLeagueRound
 }
 
-function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
+export function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
 
     const { viewMode, navigate: setViewMode } = useMyTeamView();
     const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
