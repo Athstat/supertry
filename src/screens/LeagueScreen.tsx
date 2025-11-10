@@ -5,6 +5,7 @@ import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
 import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import { LeagueStandings } from '../components/fantasy-league/LeagueStandings';
+import { LeaguePredictionsTab } from '../components/fantasy-league/LeaguePredictionsTab';
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
 import LeagueCommissionerTab from '../components/fantasy-league/commissioner/LeagueCommissionerTab';
@@ -29,7 +30,6 @@ export function FantasyLeagueScreen() {
 }
 
 function Content() {
-
   /** Auto Hides Top Bar to Maximise screen space */
   useHideTopNavBar();
 
@@ -62,7 +62,11 @@ function Content() {
       tabKey: 'standings',
       className: 'w-fit',
     },
-
+    {
+      label: 'Predictions',
+      tabKey: 'predictions',
+      className: 'w-fit',
+    },
     {
       label: 'My Team',
       tabKey: 'my-team',
@@ -85,10 +89,7 @@ function Content() {
 
   return (
     <PageView className="dark:text-white bg-white dark:bg-[#0D0D0D] flex flex-col gap-4">
-      
-      <LeagueGroupScreenHeader 
-        isEditing={isEditing}
-      />
+      <LeagueGroupScreenHeader isEditing={isEditing} />
 
       <LearnScrummyNoticeCard />
 
@@ -106,32 +107,36 @@ function Content() {
         <StatCard label="Current Round" value={currentRound?.title} className="flex-1" />
       </div> */}
 
-      <PilledTabView 
+      <PilledTabView
         initialTabKey={initialTabKey}
         tabHeaderItems={headerItems}
-        pillTabRowClassName='px-4'
+        pillTabRowClassName="px-4"
       >
         <TabViewPage tabKey="my-team">
           <MyTeams onEditChange={setIsEditing} />
         </TabViewPage>
 
-        <TabViewPage tabKey="standings" className='px-4'>
+        <TabViewPage tabKey="standings" className="px-4">
           <LeagueStandings />
         </TabViewPage>
 
-        <TabViewPage tabKey="info" className='px-4' >
+        <TabViewPage tabKey="predictions" className="px-4">
+          <LeaguePredictionsTab />
+        </TabViewPage>
+
+        <TabViewPage tabKey="info" className="px-4">
           <LeagueInfoTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="fixtures" className='px-4' >
+        <TabViewPage tabKey="fixtures" className="px-4">
           <LeagueFixturesTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="commissioner" className='px-4' >
+        <TabViewPage tabKey="commissioner" className="px-4">
           <LeagueCommissionerTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="overview" className='px-4' >
+        <TabViewPage tabKey="overview" className="px-4">
           <LeagueOverviewTab />
         </TabViewPage>
       </PilledTabView>

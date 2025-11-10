@@ -1,5 +1,6 @@
-import { Activity, useState } from 'react';
+import { useState } from 'react';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
+import { Activity } from '../../shared/Activity';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
 import MyTeamPitchView from './MyTeamPitchView';
 import MyTeamEditView from './MyTeamEditView';
@@ -26,21 +27,23 @@ export default function ViewMyTeam({
   onEditChange?: (isEditing: boolean) => void;
 }) {
   const { viewMode } = useMyTeamView();
-    const {cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } = useFantasyLeagueTeam();
+  const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
+    useFantasyLeagueTeam();
 
   // Push opt-in prompt state
   const [showPushModal, setShowPushModal] = useState(false);
 
   return (
     <div className="w-full ">
+      {leagueConfig && leagueRound && (
+        <MyTeamViewHeader
+          onTeamUpdated={onTeamUpdated}
+          leagueConfig={leagueConfig}
+          leagueRound={leagueRound}
+        />
+      )}
 
-      {leagueConfig && leagueRound && (<MyTeamViewHeader
-        onTeamUpdated={onTeamUpdated}
-        leagueConfig={leagueConfig}
-        leagueRound={leagueRound}
-      />)}
-
-      <Activity mode={viewMode === 'edit' ? "visible" : "hidden"} >
+      <Activity mode={viewMode === 'edit' ? 'visible' : 'hidden'}>
         <MyTeamEditView
           leagueConfig={leagueConfig}
           leagueRound={leagueRound}
@@ -49,13 +52,8 @@ export default function ViewMyTeam({
         />
       </Activity>
 
-      <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
-        {leagueRound && (
-          <MyTeamPitchView
-            leagueRound={leagueRound}
-            team={team}
-          />
-        )}
+      <Activity mode={viewMode === 'pitch' ? 'visible' : 'hidden'}>
+        {leagueRound && <MyTeamPitchView leagueRound={leagueRound} team={team} />}
       </Activity>
 
       <PlayerPickerV2
@@ -88,7 +86,7 @@ export default function ViewMyTeam({
           try {
             localStorage.setItem('push_optin_dismissed', 'true');
           } catch (err) {
-            console.log("Local Storage error ", err);
+            console.log('Local Storage error ', err);
           }
           setShowPushModal(false);
         }}

@@ -1,18 +1,18 @@
-import { Activity, useState } from "react";
-import { Menu } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { ThemeToggle } from "./ThemeToggle";
-import { SideDrawer } from "./SideDrawer";
-import ScrummyLogoHorizontal from "./branding/scrummy_logo_horizontal";
-import { isInProduction } from "../utils/webUtils";
-import BetaTag from "./branding/BetaTag";
-import NotificationsBell from "./notifications/NotificationsBell";
-import { useNavigationBars } from "../hooks/navigation/useNavigationBars";
+import { useState } from 'react';
+import { Menu } from 'lucide-react';
+import { Activity } from './shared/Activity';
+import { useNavigate } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle';
+import { SideDrawer } from './SideDrawer';
+import ScrummyLogoHorizontal from './branding/scrummy_logo_horizontal';
+import { isInProduction } from '../utils/webUtils';
+import BetaTag from './branding/BetaTag';
+import NotificationsBell from './notifications/NotificationsBell';
+import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 
 export function Header() {
-  
   const navigate = useNavigate();
-  const {topNavViewMode} = useNavigationBars();
+  const { topNavViewMode } = useNavigationBars();
   // const location = useLocation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -21,15 +21,15 @@ export function Header() {
   // const handleProfileClick = () => {
   //   navigate("/profile");
   // };
-  
+
   const handleInAppMessages = () => {
     navigate('/in-app-messages');
-  }
+  };
 
   // const isProfileActive = location.pathname === "/profile";
 
   return (
-    <Activity mode={topNavViewMode} >
+    <Activity mode={topNavViewMode}>
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none mb-0 pb-0">
         <div className="container mx-auto px-4 h-16 overflow-hidden flex items-center justify-between">
           <div className="flex items-center">
@@ -43,22 +43,20 @@ export function Header() {
 
             <div
               className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate('/dashboard')}
               tabIndex={0}
               aria-label="Navigate to home"
             >
               <ScrummyLogoHorizontal className="" />
             </div>
 
-            { isInQa && <BetaTag />}
+            {isInQa && <BetaTag />}
           </div>
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            
-            <NotificationsBell 
-              onClick={handleInAppMessages}
-            />
+
+            <NotificationsBell onClick={handleInAppMessages} />
 
             {/* <button
               onClick={handleProfileClick}
@@ -75,10 +73,7 @@ export function Header() {
         </div>
       </header>
 
-      <SideDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-      />
+      <SideDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </Activity>
   );
 }
