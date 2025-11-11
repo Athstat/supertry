@@ -3,11 +3,16 @@ import { LeaguePredictionRanking } from '../../../types/fantasyLeagueGroups';
 import SecondaryText from '../../shared/SecondaryText';
 import { twMerge } from 'tailwind-merge';
 import { useAuthUser } from '../../../hooks/useAuthUser';
-import { User, Target, Info } from 'lucide-react';
+import { User, Target, Info, ArrowLeftRight } from 'lucide-react';
 import { isEmail } from '../../../utils/stringUtils';
 import NoContentCard from '../../shared/NoContentMessage';
 import { LoadingState } from '../../ui/LoadingState';
 import UserPredictionsHistoryModal from './UserPredictionsHistoryModal';
+import { usePredictionsCompareActions } from '../../../hooks/usePredictionsCompare';
+import { useAtomValue } from 'jotai';
+import { comparePredictionsAtomGroup } from '../../../state/comparePredictions.atoms';
+import UserPredictionsCompareModal from './compare/UserPredictionsCompareModal';
+import PrimaryButton from '../../shared/buttons/PrimaryButton';
 
 type LeaguePredictionsLeaderboardProps = {
   rankings: LeaguePredictionRanking[];
@@ -27,6 +32,19 @@ export default function LeaguePredictionsLeaderboard({
     userId: string;
     username: string;
   } | null>(null);
+
+  const isPickingUsers = useAtomValue(comparePredictionsAtomGroup.isCompareModePredictionsPicking);
+  const selectedUsers = useAtomValue(comparePredictionsAtomGroup.compareUsersAtom);
+  const { addOrRemoveUser, startPicking, showCompareModal, stopPicking } =
+    usePredictionsCompareActions();
+
+  const handleUserClick = (ranking: LeaguePredictionRanking) => {
+    if (isPickingUsers) {
+      addOrRemoveUser(ranking);
+    } else {
+      setSelectedUser({ userId: ranking.user_id, username: ranking.username });
+    }
+  };
 
   if (isLoading) {
     return <LoadingState />;
@@ -60,6 +78,30 @@ export default function LeaguePredictionsLeaderboard({
         </div>
       )}
 
+      {/* Compare buttons */}
+      {!isEmpty && (
+        <div className="flex flex-row items-center gap-2">
+          <PrimaryButton
+            className="flex flex-row items-center gap-2 flex-1 md:flex-initial md:w-fit"
+            onClick={() => (isPickingUsers ? showCompareModal() : startPicking())}
+          >
+            <ArrowLeftRight className="w-4 h-4" />
+            {isPickingUsers
+              ? `Compare ${selectedUsers.length} User${selectedUsers.length !== 1 ? 's' : ''}`
+              : 'Compare Users'}
+          </PrimaryButton>
+
+          {isPickingUsers && (
+            <button
+              className="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors flex flex-row items-center gap-2"
+              onClick={stopPicking}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="flex flex-col gap-2">
         {rankedUsers.map((r, index) => {
           if (shouldHide(r)) {
@@ -71,7 +113,9 @@ export default function LeaguePredictionsLeaderboard({
               ranking={r}
               key={index}
               isUser={user?.kc_id === r.user_id}
-              onClick={() => setSelectedUser({ userId: r.user_id, username: r.username })}
+              isPickingMode={isPickingUsers}
+              isSelected={selectedUsers.some(u => u.user_id === r.user_id)}
+              onClick={() => handleUserClick(r)}
             />
           );
         })}
@@ -90,7 +134,9 @@ export default function LeaguePredictionsLeaderboard({
               ranking={r}
               key={index}
               isUser={user?.kc_id === r.user_id}
-              onClick={() => setSelectedUser({ userId: r.user_id, username: r.username })}
+              isPickingMode={isPickingUsers}
+              isSelected={selectedUsers.some(u => u.user_id === r.user_id)}
+              onClick={() => handleUserClick(r)}
             />
           );
         })}
@@ -99,6 +145,8 @@ export default function LeaguePredictionsLeaderboard({
       {isEmpty && (
         <NoContentCard message="No predictions made in this league yet. Start making predictions!" />
       )}
+
+      <UserPredictionsCompareModal leagueId={leagueId} roundId={roundId} />
 
       {selectedUser && (
         <UserPredictionsHistoryModal
@@ -117,10 +165,18 @@ export default function LeaguePredictionsLeaderboard({
 type LeaderboardItemProps = {
   ranking: LeaguePredictionRanking;
   isUser?: boolean;
+  isPickingMode?: boolean;
+  isSelected?: boolean;
   onClick: () => void;
 };
 
-function LeaderboardItem({ ranking, isUser, onClick }: LeaderboardItemProps) {
+function LeaderboardItem({
+  ranking,
+  isUser,
+  isPickingMode,
+  isSelected,
+  onClick,
+}: LeaderboardItemProps) {
   return (
     <section id={isUser ? 'my-rank-section' : undefined}>
       <div
@@ -129,7 +185,8 @@ function LeaderboardItem({ ranking, isUser, onClick }: LeaderboardItemProps) {
           'p-4 rounded-xl flex flex-row items-center gap-4 bg-white border border-slate-300',
           'dark:bg-slate-800/40 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer',
           isUser &&
-            'dark:bg-primary-500 hover:animate-glow dark:hover:animate-glow dark:hover:bg-primary-500 hover:bg-primary-500 bg-primary-500 border border-primary-200dark:border-primary-400'
+            'dark:bg-primary-500 hover:animate-glow dark:hover:animate-glow dark:hover:bg-primary-500 hover:bg-primary-500 bg-primary-500 border border-primary-200dark:border-primary-400',
+          isSelected && 'ring-2 ring-yellow-500 dark:ring-yellow-400'
         )}
       >
         <div>
