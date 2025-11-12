@@ -24,7 +24,7 @@ export function useAthletePointsBreakdown(trackingId: string) {
             round: league?.start_round ?? 1,
             trackingId
         }
-        , async ({  }) => {
+        , async () => {
             return []
         });
 }

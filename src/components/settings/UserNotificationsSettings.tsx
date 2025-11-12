@@ -1,4 +1,4 @@
-import { Bell, ChevronRight, LoaderCircle } from 'lucide-react';
+import { Bell, LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { GameUpdatesPreference, gameUpdatesPreferenceOptions } from '../../types/notifications';
 import { formatPosition } from '../../utils/athleteUtils';
@@ -9,6 +9,7 @@ import { authService } from '../../services/authService';
 import { ErrorState } from '../ui/ErrorState';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useAuth } from '../../contexts/AuthContext';
+import ProfileSettingCard from './ProfileSettingCard';
 
 type Props = {
   databaseUser: DjangoAuthUser;
@@ -24,16 +25,13 @@ export default function UserNotificationsSettings({ databaseUser }: Props) {
 
   return (
     <div>
-      <button
+      <ProfileSettingCard
+        title='Notifications'
+        description='Edit notification preferences'
+        icon={<Bell />}
         onClick={handleClick}
-        className="w-full bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden px-6 py-4 flex items-center space-x-3 transition-colors disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-dark-800/40"
-      >
-        <div className="flex items-center gap-3">
-          <Bell size={20} className="text-gray-500" />
-          <span className="font-medium dark:text-gray-100">Notifications</span>
-        </div>
-        <ChevronRight size={20} className="text-gray-400" />
-      </button>
+      />
+
 
       <DialogModal
         onClose={toggle}
@@ -56,9 +54,9 @@ type GameUpdatesProps = {
   user: DjangoAuthUser;
 };
 
-function GameUpdatesSection({user}: GameUpdatesProps) {
+function GameUpdatesSection({ user }: GameUpdatesProps) {
 
-  const {refreshAuthUser} = useAuth();
+  const { refreshAuthUser } = useAuth();
 
   const [selection, setSelection] = useState<GameUpdatesPreference>(
     user.game_updates_preference ?? 'key-updates'

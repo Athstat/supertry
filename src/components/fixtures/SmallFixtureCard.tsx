@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { IFixture } from '../../types/games';
 import SecondaryText from '../shared/SecondaryText';
 import TeamLogo from '../team/TeamLogo';
-import { fixtureSumary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
+import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Fragment, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import { FixtureCardModal } from './FixtureCard';
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default function SmallFixtureCard({ fixture, className, hideVotingBox }: Props) {
-  const { matchFinal, gameKickedOff } = fixtureSumary(fixture);
+  const { matchFinal, gameKickedOff } = fixtureSummary(fixture);
   const [showModal, setShowModal] = useState(false);
 
   const toggle = () => setShowModal(prev => !prev);

@@ -1,26 +1,37 @@
 import { ScopeProvider } from "jotai-scope"
-import { fantasyLeagueTeamAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
+import { fantasyLeagueTeamAtom, fantasyLeagueTeamLeagueRoundAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
 import { ReactNode, useCallback, useEffect, useMemo } from "react"
-import { useAtom, useSetAtom } from "jotai"
-import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
 import { IProAthlete } from "../../../types/athletes"
 import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils/athleteUtils"
+import { Position } from "../../../types/position"
+import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics"
+import { MAX_TEAM_BUDGET } from "../../../types/constants"
 
 type Props = {
     team: IFantasyLeagueTeam,
-    children?: ReactNode
+    children?: ReactNode,
+    leagueRound?: IFantasyLeagueRound
 }
 
 /** Provides team athlete data and fantasy league team data to be provided  */
-export default function FantasyLeagueTeamProvider({ team, children }: Props) {
+export default function FantasyLeagueTeamProvider({ team, children, leagueRound }: Props) {
 
-    const atoms = [fantasyLeagueTeamAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom];
+    const atoms = [
+        fantasyLeagueTeamAtom,
+        fantasyTeamAthletesAtom,
+        fantasyTeamSlotsAtom,
+        swapPlayerAtom,
+        swapStateAtom,
+        fantasyLeagueTeamLeagueRoundAtom
+    ];
 
     return (
         <ScopeProvider atoms={atoms} >
-            <InnerProvider team={team} >
+            <InnerProvider leagueRound={leagueRound} team={team} >
                 {children}
             </InnerProvider>
         </ScopeProvider>
@@ -28,10 +39,12 @@ export default function FantasyLeagueTeamProvider({ team, children }: Props) {
 }
 
 
-function InnerProvider({ team, children }: Props) {
+function InnerProvider({ team, children, leagueRound }: Props) {
 
     const setTeam = useSetAtom(fantasyLeagueTeamAtom);
     const setSlots = useSetAtom(fantasyTeamSlotsAtom);
+
+    const setLeagueRound = useSetAtom(fantasyLeagueTeamLeagueRoundAtom);
 
     useEffect(() => {
 
@@ -65,7 +78,11 @@ function InnerProvider({ team, children }: Props) {
             setSlots(slots);
 
         }
-    }, [team]);
+
+        if (leagueRound) {
+            setLeagueRound(leagueRound);
+        }
+    }, [setSlots, setTeam, team, leagueRound, setLeagueRound]);
 
     return (
         <>
@@ -76,9 +93,13 @@ function InnerProvider({ team, children }: Props) {
 
 /** Provides a hook for manipulating a fantasy league team  */
 export function useFantasyLeagueTeam() {
+
     const [team, setTeam] = useAtom(fantasyLeagueTeamAtom);
     const [teamAthletes] = useAtom(fantasyTeamAthletesAtom);
     const [slots, setSlots] = useAtom(fantasyTeamSlotsAtom);
+    const [swapState, setSwapState] = useAtom(swapStateAtom);
+    const [swapPlayer, setSwapPlayer] = useAtom(swapPlayerAtom);
+    const leagueRound = useAtomValue(fantasyLeagueTeamLeagueRoundAtom);
 
     const totalSpent: number = useMemo(() => {
         return slots.reduce((sum, s) => {
@@ -112,11 +133,12 @@ export function useFantasyLeagueTeam() {
 
         });
 
+        setSwapPlayer(undefined);
         setSlots(newSlots);
 
         return { playerRemoved };
 
-    }, [slots, setSlots]);
+    }, [slots, setSlots, setSwapPlayer]);
 
     const setPlayerAtSlot = useCallback((slotNumber: number, athlete: IProAthlete) => {
         if (!team) return;
@@ -135,7 +157,8 @@ export function useFantasyLeagueTeam() {
                     slot: s.slotNumber,
                     id: new Date().valueOf(), // temporal id,
                     athlete_id: athlete.tracking_id,
-
+                    is_starting: s.slotNumber < 6,
+                    athlete_team_id: athlete.team?.athstat_id
                 },
                 purchasePrice: athlete.price,
             }
@@ -166,7 +189,7 @@ export function useFantasyLeagueTeam() {
 
         setSlots(newSlots);
 
-    }, [slots, setSlots]);
+    }, [team, slots, setSlots]);
 
 
     const teamCaptain = useMemo(() => {
@@ -215,7 +238,8 @@ export function useFantasyLeagueTeam() {
 
         });
 
-    }, [setSlots, slots]);
+    }, [setSlots]);
+
 
     const resetToOriginalTeam = useCallback(() => {
 
@@ -237,7 +261,7 @@ export function useFantasyLeagueTeam() {
         });
 
         setSlots(slots);
-    }, [slots, setSlots, teamAthletes]);
+    }, [setSlots, teamAthletes]);
 
     const originalSlots = useMemo(() => {
         const slots = defaultFantasyPositions.map((p, index) => {
@@ -260,7 +284,7 @@ export function useFantasyLeagueTeam() {
 
         return slots;
 
-    }, [slots, teamAthletes]);
+    }, [teamAthletes]);
 
     const originalCaptain = useMemo(() => {
         return originalSlots.find((s) => s.isCaptain === true)?.athlete;
@@ -288,6 +312,72 @@ export function useFantasyLeagueTeam() {
 
     const isTeamFull = useMemo(() => selectedCount === 6, [selectedCount]);
 
+    const toPosition = (
+        p: { name: string; position_class: string; isSpecial?: boolean },
+        index: number
+    ): Position => ({
+        id: p.position_class || String(index),
+        name: p.name,
+        shortName: p.name.slice(0, 2).toUpperCase(),
+        x: '0',
+        y: '0',
+        positionClass: p.position_class,
+        isSpecial: Boolean(p.isSpecial),
+    });
+
+    const completeSwap = useCallback((newAthlete: IProAthlete) => {
+
+        if (!swapState || swapState.slot === null) return;
+
+        setSwapPlayer(undefined);
+
+        console.log("Set Swap player to undefined");
+
+        setPlayerAtSlot(swapState.slot, newAthlete);
+        setSwapState({ open: false, slot: null, position: null });
+
+        fantasyAnalytics.trackUsedSwapPlayerFeature();
+    }, [setPlayerAtSlot, setSwapPlayer, setSwapState, swapState])
+
+    const initiateSwap = (slot: IFantasyLeagueTeamSlot) => {
+        const pos = toPosition(slot.position, slot.slotNumber - 1);
+        setSwapState({ open: true, slot: slot.slotNumber, position: pos });
+
+        if (slot.athlete) {
+            setSwapPlayer(slot.athlete);
+        } else {
+            setSwapPlayer(undefined);
+        }
+    };
+
+    const cancelSwap = useCallback(() => {
+        setSwapPlayer(undefined);
+
+        setSwapState({
+            open: false,
+            slot: null,
+            position: undefined,
+        });
+    }, [setSwapPlayer, setSwapState]);
+
+    const initateSwapOnEmptySlot = (slot: IFantasyLeagueTeamSlot) => {
+
+        // Set slot state
+        const pos = toPosition(slot.position, slot.slotNumber - 1);
+        
+        setSwapPlayer(undefined);
+
+        setSwapState({
+            open: true,
+            slot: slot.slotNumber,
+            position: pos,
+        });
+
+
+    };
+
+    const budgetRemaining = (MAX_TEAM_BUDGET) - totalSpent;
+
     return {
         slots, setSlots,
         teamAthletes,
@@ -303,6 +393,14 @@ export function useFantasyLeagueTeam() {
         originalCaptain,
         setOldPlayerAtSlot,
         changesDetected,
-        isTeamFull
+        isTeamFull,
+        initiateSwap,
+        completeSwap,
+        initateSwapOnEmptySlot,
+        cancelSwap,
+        swapPlayer,
+        swapState,
+        budgetRemaining,
+        leagueRound
     }
 }

@@ -128,7 +128,7 @@ export default function SportActionCategoryList({
   return (
     <div className="flex flex-col gap-2">
       <div>
-        <p className="font-semibold">{categoryName}</p>
+        <p className="font-semibold dark:text-white">{categoryName}</p>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -256,7 +256,7 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
           </SecondaryText>
         </div>
 
-        <div className="text-left flex-none">
+        <div className="text-left dark:text-white flex-none">
           <p>{processActionCount() ?? 0}</p>
         </div>
       </div>

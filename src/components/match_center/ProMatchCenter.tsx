@@ -2,33 +2,47 @@ import useSWR from 'swr';
 import { gamesService } from '../../services/gamesService';
 import { LoadingState } from '../ui/LoadingState';
 import FixtureCard from '../fixtures/FixtureCard';
-import { subHours } from 'date-fns';
 import { useQueryState } from '../../hooks/useQueryState';
 import NoContentCard from '../shared/NoContentMessage';
-import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
 import MatchCenterSearchBar from './MatchCenterSearchBar';
-import { searchProFixturePredicate, isGameLive } from '../../utils/fixtureUtils';
-import { twMerge } from 'tailwind-merge';
-import { Maximize2, Minimize2 } from 'lucide-react';
+import { searchProFixturePredicate } from '../../utils/fixtureUtils';
+import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { IFixture } from '../../types/games';
 import { useInView } from 'react-intersection-observer';
+import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
+import {
+  getCurrentWeek,
+  getWeekDateRange,
+  formatWeekHeader,
+  getFixturesForWeek,
+  findClosestWeekWithFixtures,
+  findNextWeekWithFixtures,
+  findPreviousWeekWithFixtures,
+} from '../../utils/fixtureUtils';
 
 export default function ProMatchCenter() {
   const key = 'pro-fixtures';
   let { data: fixtures, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
 
-  const [season, setSeason] = useQueryState<string | undefined>('pcid', { init: 'all' });
   const [search, setSearch] = useQueryState<string | undefined>('proq');
-  const [focus, setFocus] = useQueryState<string | undefined>('focus');
 
-  const toggleFocus = () => {
-    if (focus === 'upcoming') {
-      setFocus('');
-      return;
+  // Get current week on mount
+  const currentWeek = getCurrentWeek();
+  const [selectedWeek, setSelectedWeek] = useState(currentWeek.weekNumber);
+  const [selectedYear, setSelectedYear] = useState(currentWeek.year);
+
+  // Update to closest week with fixtures when component mounts or fixtures load
+  useEffect(() => {
+    if (fixtures && fixtures.length > 0) {
+      const current = getCurrentWeek();
+      const closestWeek = findClosestWeekWithFixtures(fixtures, current.weekNumber, current.year);
+      if (closestWeek) {
+        setSelectedWeek(closestWeek.weekNumber);
+        setSelectedYear(closestWeek.year);
+      }
     }
-
-    setFocus('upcoming');
-  };
+  }, [fixtures?.length]); // Only run when fixtures are loaded
 
   if (isLoading) {
     return <LoadingState />;
@@ -36,64 +50,67 @@ export default function ProMatchCenter() {
 
   fixtures = fixtures ?? [];
 
-  const seasons: { name: string; id: string }[] = [];
+  // Filter by search first
+  const searchedFixtures = fixtures.filter(f => {
+    return search ? searchProFixturePredicate(search, f) : true;
+  });
 
-  fixtures.forEach(f => {
-    if (!seasons.some(c => c.id === f.league_id) && f.competition_name && f.league_id) {
-      seasons.push({ name: f.competition_name, id: f.league_id });
+  // If searching, show all fixtures across all weeks
+  // Otherwise, show only fixtures for the selected week
+  const displayFixtures = search
+    ? searchedFixtures.sort((a, b) => {
+        const aDate = new Date(a.kickoff_time ?? new Date());
+        const bDate = new Date(b.kickoff_time ?? new Date());
+        return aDate.valueOf() - bDate.valueOf();
+      })
+    : getFixturesForWeek(searchedFixtures, selectedWeek, selectedYear);
+
+  // Get date range for header
+  const dateRange = getWeekDateRange(selectedWeek, selectedYear);
+  const weekHeader = formatWeekHeader(selectedWeek, dateRange);
+
+  // Check if we're on current week
+  const isCurrentWeek =
+    selectedWeek === currentWeek.weekNumber && selectedYear === currentWeek.year;
+
+  // Check if there are any fixtures at all (for edge case handling)
+  const hasAnyFixtures = fixtures.length > 0;
+
+  const handlePreviousWeek = () => {
+    const previousWeek = findPreviousWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear);
+    if (previousWeek) {
+      setSelectedWeek(previousWeek.weekNumber);
+      setSelectedYear(previousWeek.year);
     }
-  });
+  };
 
-  const filteredFixtures = fixtures.filter(f => {
-    const seasonMatches = !season || season === 'all' ? true : f.league_id === season;
+  const handleNextWeek = () => {
+    const nextWeek = findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear);
+    if (nextWeek) {
+      setSelectedWeek(nextWeek.weekNumber);
+      setSelectedYear(nextWeek.year);
+    }
+  };
 
-    const searchMatches = search ? searchProFixturePredicate(search, f) : true;
+  const handleJumpToCurrentWeek = () => {
+    const current = getCurrentWeek();
+    setSelectedWeek(current.weekNumber);
+    setSelectedYear(current.year);
+  };
 
-    return searchMatches && seasonMatches;
-  });
+  const handleJumpToNextFixtures = () => {
+    const nextWeek = findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear);
+    if (nextWeek) {
+      setSelectedWeek(nextWeek.weekNumber);
+      setSelectedYear(nextWeek.year);
+    }
+  };
 
-  console.log('filteredFixtures', filteredFixtures);
-
-  const pastFixtures = filteredFixtures
-    .filter(f => {
-      const kickoff = f.kickoff_time;
-
-      if (kickoff) {
-        const now = new Date().valueOf();
-        const kickoffPassed = now > new Date(kickoff).valueOf();
-        // Exclude live games from past fixtures
-        const notLive = !isGameLive(f.game_status);
-        return (
-          kickoffPassed && notLive && (f.game_status === 'completed' || f.game_status === 'result')
-        );
-      }
-
-      return false;
-    })
-    .sort((a, b) => {
-      const aE = new Date(a.kickoff_time ?? new Date());
-      const bE = new Date(b.kickoff_time ?? new Date());
-
-      return bE.valueOf() - aE.valueOf();
-    });
-
-  const upcomingFixtures = filteredFixtures
-    .filter(f => {
-      const kickoff = f.kickoff_time;
-
-      if (kickoff) {
-        const now = subHours(new Date(), 2).valueOf();
-        return now < new Date(kickoff).valueOf();
-      }
-
-      return false;
-    })
-    .sort((a, b) => {
-      const aE = new Date(a.kickoff_time ?? new Date());
-      const bE = new Date(b.kickoff_time ?? new Date());
-
-      return aE.valueOf() - bE.valueOf();
-    });
+  // Check if navigation buttons should be disabled
+  const hasPreviousWeek =
+    findPreviousWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear) !== null;
+  const hasNextWeek =
+    findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear) !== null;
 
   return (
     <div className="flex flex-col gap-4">
@@ -105,83 +122,83 @@ export default function ProMatchCenter() {
         placeholder="Search Pro Games, Seasons ..."
       />
 
-      {/* <PilledSeasonFilterBar seasons={seasons} onChange={setSeason} value={season} /> */}
-
-      <UpcomingFixturesSection
-        upcomingFixtures={upcomingFixtures}
-        onToggleFocus={toggleFocus}
-        focus={focus}
-      />
-
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row items-center justify-between">
-          <p className="font-semibold text-lg">Past Fixtures</p>
-        </div>
-
-        <div className="flex flex-col gap-3 w-full">
-          {pastFixtures.map((fixture, index) => {
-            return (
-              <FixtureItem
-                fixture={fixture}
-                key={index}
-                className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
-              />
-            );
-          })}
+      {/* Week Navigation */}
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row items-center justify-between gap-2">
+          <div className="flex flex-col gap-1">
+            <h2 className="font-semibold text-base md:text-lg">
+              {search ? 'Search Results' : weekHeader}
+            </h2>
+            {!search && (
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Today: Week {currentWeek.weekNumber}, {format(new Date(), 'EEE, d MMM yyyy')}
+              </p>
+            )}
+          </div>
+          <div className="flex flex-row gap-2">
+            {!search && hasAnyFixtures && (
+              <>
+                <button
+                  onClick={handleJumpToCurrentWeek}
+                  disabled={isCurrentWeek}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Jump to current week"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span className="text-sm hidden sm:inline">Today</span>
+                </button>
+                <button
+                  onClick={handlePreviousWeek}
+                  disabled={!hasPreviousWeek}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span className="text-sm hidden sm:inline">Previous</span>
+                </button>
+                <button
+                  onClick={handleNextWeek}
+                  disabled={!hasNextWeek}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="text-sm hidden sm:inline">Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
 
-type UpcomingFixturesProps = {
-  upcomingFixtures: IFixture[];
-  onToggleFocus: () => void;
-  focus?: string;
-};
-
-function UpcomingFixturesSection({
-  upcomingFixtures,
-  focus,
-  onToggleFocus,
-}: UpcomingFixturesProps) {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-row items-center justify-between">
-        <p className="font-semibold text-lg">Upcoming Fixtures</p>
-
-        <button
-          className="cursor-pointer p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800/40 "
-          onClick={onToggleFocus}
-        >
-          {focus !== 'upcoming' && <Maximize2 />}
-          {focus === 'upcoming' && <Minimize2 />}
-        </button>
-      </div>
-
-      <div
-        className={twMerge(
-          'flex space-x-4 overflow-x-auto no-scrollbar pb-2',
-          focus === 'upcoming' ? 'flex-col space-x-0 gap-4 overflow-x-hidden' : ''
+      {/* Fixtures List */}
+      <div className="flex flex-col gap-3 w-full">
+        {!hasAnyFixtures && !search && <NoContentCard message="No fixtures available" />}
+        {displayFixtures.length === 0 && !search && hasAnyFixtures && (
+          <div className="flex flex-col gap-3 items-center">
+            <NoContentCard message="No fixtures found for this week" />
+            {findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear) && (
+              <button
+                onClick={handleJumpToNextFixtures}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+              >
+                <span>View Next Fixtures</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         )}
-      >
-        {upcomingFixtures.map((fixture, index) => {
+        {displayFixtures.length === 0 && search && (
+          <NoContentCard message="No fixtures match your search" />
+        )}
+        {displayFixtures.map((fixture, index) => {
           return (
-            <FixtureCard
+            <FixtureItem
               fixture={fixture}
               key={index}
-              showLogos
-              showCompetition
-              className={twMerge(
-                'min-w-96 rounded-xl border dark:border-slate-700',
-                focus === 'upcoming' && 'min-w-full'
-              )}
+              className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
             />
           );
         })}
       </div>
-
-      {upcomingFixtures.length === 0 && <NoContentCard message="There are no upcoming fixtures" />}
     </div>
   );
 }

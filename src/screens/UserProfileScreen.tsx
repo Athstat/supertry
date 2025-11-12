@@ -10,6 +10,9 @@ import LogoutButton from '../components/auth/LogoutButton';
 import DeleteAccountButton from '../components/auth/DeleteAccountButton';
 import Experimental from '../components/shared/ab_testing/Experimental';
 import QaNoticeCard from '../components/settings/QaNoticeCard';
+import { useNavigate } from 'react-router-dom';
+import ProfileSettingCard from '../components/settings/ProfileSettingCard';
+import { UserCircle } from 'lucide-react';
 
 export function UserProfileScreen() {
 
@@ -29,7 +32,11 @@ function Content() {
 
   const authUser = useAtomValue(authUserAtom);
   const isGuestAccount = useAtomValue(isGuestUserAtom);
+  const navigate = useNavigate();
 
+  const handleEditUserProfile = () => {
+    navigate('/profile/account-info');
+  }
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
@@ -51,6 +58,13 @@ function Content() {
 
         {/* Complete Profile Card for Guest Users */}
         {isGuestAccount && <ClaimGuestAccountBox />}
+
+        <ProfileSettingCard 
+          title='Account Info'
+          description='Edit Username, First Name and Last Name'
+          icon={<UserCircle />}
+          onClick={handleEditUserProfile}
+        />
 
         {authUser && (
           <UserNotificationsSettings databaseUser={authUser} />

@@ -3,8 +3,8 @@ import PlayerMatchsPRList from './PlayerMatchsPRList';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PilledTabView from '../../shared/tabs/PilledTabView';
 import PlayerStatsTab from './tabs/PlayerStatsTab';
-import { usePlayerData } from '../provider/PlayerDataProvider';
 import { AvailabilityText } from '../../players/availability/AvailabilityIcon';
+import { usePlayerData } from '../../../providers/PlayerDataProvider';
 
 /** Renders the tab view for the player profile modal */
 export function PlayerProfileModalTabContent() {

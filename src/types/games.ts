@@ -1,6 +1,8 @@
 import { IProAthlete } from "./athletes";
 import { IProTeam } from "./team";
 
+export type ProGameStatus = "completed" | "not_started" | "abandoned" | "result";
+
 export type IFixture = {
   game_id: string,
   team?: IProTeam,
@@ -16,7 +18,7 @@ export type IFixture = {
   extra_info?: string,
   hidden?: boolean,
   network?: string,
-  game_status?: string,
+  game_status?: ProGameStatus,
   game_clock?: string,
   result?: string,
   source_id?: string,

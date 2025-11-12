@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
-import { DjangoAuthUser } from "../../../types/auth";
-import { authTokenService } from "../../../services/auth/authTokenService";
-import { useBrudgeAuthV2 } from "../../../hooks/useBridgeAuth";
-import ScrummyLoadingState from "../../ui/ScrummyLoadingState";
-import { logoutFromBridge } from "../../../utils/bridgeUtils";
+import { DjangoAuthUser } from "../types/auth";
+import { authTokenService } from "../services/auth/authTokenService";
+import { useBrudgeAuthV2 } from "../hooks/useBridgeAuth";
+import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
+import { logoutFromBridge } from "../utils/bridgeUtils";
 
 type AuthTokenContextProps = {
     /** The auth token for the current login session */
