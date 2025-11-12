@@ -4,7 +4,7 @@ import BlueGradientCard from '../../shared/BlueGradientCard';
 import { TranslucentButton } from '../../shared/buttons/PrimaryButton';
 import { Shield } from 'lucide-react';
 import { Table } from 'lucide-react';
-import LeagueRoundCountdown from '../LeagueCountdown';
+import LeagueRoundCountdown, { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { useTabView } from '../../shared/tabs/TabView';
 import { useNavigate } from 'react-router-dom';
@@ -51,14 +51,15 @@ export default function UserRoundOverviewCard({
   };
 
   return (
-    <div>
-      <BlueGradientCard className="p-4 flex flex-col gap-4 w-full">
+    <div className='flex flex-col gap-2' >
+      <BlueGradientCard className="p-3 flex flex-col gap-2 w-full">
+        
         <div className="flex flex-row w-full items-center justify-between">
           <div>
-            <h3 className="font-bold ">{userTeam.team?.name || 'My Team'}</h3>
+            {/* <h3 className="font-bold ">{authUser?.username || 'My Team'}</h3> */}
             <div className="flex flex-row items-center gap-1">
               {isLocked && <Lock className="w-4 h-4" />}
-              <p className="text-sm">{leagueRound.title}</p>
+              {/* <p className="text-sm">{leagueRound.title}</p> */}
             </div>
           </div>
         </div>
@@ -77,12 +78,14 @@ export default function UserRoundOverviewCard({
           </div>
         )}
 
-        {!isLocked && <LeagueRoundCountdown leagueRound={leagueRound} />}
+        <LeagueRoundCountdown2 
+          leagueRound={leagueRound}
+        />
 
         <div className="flex flex-row items-center justify-center gap-2">
           <TranslucentButton onClick={handleViewTeam}>
             <Shield className="w-4 h-4" />
-            View Team
+            Manage Team
           </TranslucentButton>
 
           <TranslucentButton onClick={handleViewStandings}>
@@ -91,6 +94,7 @@ export default function UserRoundOverviewCard({
           </TranslucentButton>
         </div>
       </BlueGradientCard>
+
     </div>
   );
 }

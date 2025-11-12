@@ -3,7 +3,6 @@ import { useFantasyLeagueGroup } from '../../../../hooks/leagues/useFantasyLeagu
 import { FantasyLeagueGroup } from '../../../../types/fantasyLeagueGroups';
 import FantasyLeagueGroupDataProvider from '../../../fantasy-league/providers/FantasyLeagueGroupDataProvider';
 import LearnScrummyNoticeCard from '../../../branding/help/LearnScrummyNoticeCard';
-import UserTeamOverview from '../../../fantasy-league/overview/UserTeamOverview';
 import useSWR from 'swr';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { leagueService } from '../../../../services/leagueService';
@@ -84,7 +83,6 @@ function Content() {
           <div className="flex flex-row items-center gap-1">
             <Globe className="w-4 h-4" />
             <p className="">{league.title}</p>
-            {/* <NewTag /> */}
           </div>
         </div>
 
@@ -110,13 +108,6 @@ function Content() {
         />
       )}
 
-      {currentRound && userTeam && (
-        <UserTeamOverview
-          userTeam={userTeam}
-          leagueRound={currentRound}
-          onManageTeam={handleViewTeam}
-        />
-      )}
     </div>
   );
 }

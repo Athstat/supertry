@@ -77,17 +77,6 @@ export function FantasySeasonDashboard({fantasySeason} : Props) {
   return (
     <div className="flex flex-col gap-8">
 
-      {/* <div className="flex items-center mb-4 gap-2 sm:mb-6 justify-between">
-
-        <div className='flex flex-row gap-2 items-center justify-center' >
-          <Trophy className='dark:text-white w-4 h-4' />
-          <h1 className="font-bold dark:text-white flex-1">Fantasy Leagues</h1>
-        </div>
-
-        <div>
-        </div>
-      </div> */}
-
       {showcaseLeague && <ShowcaseLeagueSection
         leagueGroup={showcaseLeague}
       />}

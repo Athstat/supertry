@@ -5,6 +5,7 @@ import FantasySeasonSelector from "../components/fantasy-seasons/FantasySeasonSe
 import { useFantasyLeaguesScreen } from "../hooks/fantasy/useFantasyLeaguesScreen";
 import { FantasySeasonDashboard } from "../components/fantasy-seasons/FantasySeasonDashboard";
 import FantasySeasonsOverview from "../components/fantasy-seasons/FantasySeasonsOverview";
+import { Activity } from "react";
 
 
 export function FantasyLeaguesScreen() {
@@ -32,10 +33,11 @@ function InnnerScreen() {
 
       <FantasySeasonSelector />
 
-
-      {selectedSeason && (
-        <FantasySeasonDashboard fantasySeason={selectedSeason} />
-      )}
+      <Activity mode={selectedSeason ? "visible" : "hidden"}>
+        {selectedSeason && (
+          <FantasySeasonDashboard fantasySeason={selectedSeason} />
+        )}
+      </Activity>
 
       {!selectedSeason && (
         <FantasySeasonsOverview />
