@@ -1,19 +1,21 @@
 import { createContext, useContext, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
-import { useAuthToken } from '../components/auth/providers/AuthTokenProvider';
+import { useAuthToken } from '../providers/AuthTokenProvider';
+import { Activity } from '../components/shared/Activity';
 import useSWR, { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
 import { analytics } from '../services/analytics/anayticsService';
+import { useDebounced } from '../hooks/useDebounced';
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  setAuth: (accessToken: string, user: DjangoAuthUser) => void,
-  logout: () => void,
-  authUser: DjangoAuthUser | undefined,
-  isLoading: boolean, 
-  refreshAuthUser: KeyedMutator<DjangoAuthUser | undefined>
+  setAuth: (accessToken: string, user: DjangoAuthUser) => void;
+  logout: () => void;
+  authUser: DjangoAuthUser | undefined;
+  isLoading: boolean;
+  refreshAuthUser: KeyedMutator<DjangoAuthUser | undefined>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,45 +36,40 @@ declare global {
         external_id?: string;
       };
     };
-    onScrummyAuthStatusReady?: (status: any) => void;
+    onScrummyAuthStatusReady?: (status: string) => void;
   }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  
-  const {
-    accessToken,
-    setAcessToken,
-    saveUserInfoToLocalStorage,
-    clearAccessTokenAndUser
-  } = useAuthToken();
+  const { accessToken, setAcessToken, saveUserInfoToLocalStorage, clearAccessTokenAndUser } =
+    useAuthToken();
 
   const fetchKey = accessToken ? `/auth-user/${atob(accessToken)}` : null;
-  const {data: authUser, isLoading, error, mutate} = useSWR(fetchKey, () => authService.whoami(accessToken));
+  const {
+    data: authUser,
+    isLoading,
+    error,
+    mutate,
+  } = useSWR(fetchKey, () => authService.whoami(accessToken));
 
-  const setAuth = useCallback((token: string, user: DjangoAuthUser) => {
-    setAcessToken(token);
-    saveUserInfoToLocalStorage(user);
-  }, [setAcessToken, saveUserInfoToLocalStorage]);
+  const setAuth = useCallback(
+    (token: string, user: DjangoAuthUser) => {
+      setAcessToken(token);
+      saveUserInfoToLocalStorage(user);
+    },
+    [setAcessToken, saveUserInfoToLocalStorage]
+  );
 
   const logout = useCallback(() => {
     clearAccessTokenAndUser();
     analytics.trackUserLogout();
   }, [clearAccessTokenAndUser]);
 
-  if (isLoading) {
-    return (
-      <ScrummyLoadingState />
-    )
-  }
+  const isLoadingDebounced = useDebounced(isLoading, 500);
 
   if (error) {
-    return (
-      <ErrorState error='Authentication Error' message={error} />
-    )
+    return <ErrorState error="Authentication Error" message={error} />;
   }
-
-  console.log("Auth User here is the auth user ", authUser);
 
   return (
     <AuthContext.Provider
@@ -82,12 +79,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         isAuthenticated: authUser !== undefined,
         isLoading,
-        refreshAuthUser: mutate
+        refreshAuthUser: mutate,
       }}
     >
-      {children}
+      <Activity mode={isLoadingDebounced ? 'hidden' : 'visible'}>{children}</Activity>
+
+      <Activity mode={isLoadingDebounced ? 'visible' : 'hidden'}>
+        <ScrummyLoadingState />
+      </Activity>
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {

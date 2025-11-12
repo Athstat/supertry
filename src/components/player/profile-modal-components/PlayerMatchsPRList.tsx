@@ -2,21 +2,18 @@ import useSWR from 'swr';
 import { powerRankingsService } from '../../../services/powerRankingsService';
 import { LoadingState } from '../../ui/LoadingState';
 import { SingleMatchPowerRanking } from '../../../types/powerRankings';
-import RoundedCard from '../../shared/RoundedCard';
 import { Calendar, ChevronRight } from 'lucide-react';
 import TeamLogo from '../../team/TeamLogo';
 import { twMerge } from 'tailwind-merge';
 import { format } from 'date-fns';
-import PillTag from '../../shared/PillTap';
-import SecondaryText from '../../shared/SecondaryText';
 import { IProAthlete } from '../../../types/athletes';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import PlayerSeasonStatsTray from '../../stats/PlayerSeasonStatsTray';
-import { usePlayerData } from '../provider/PlayerDataProvider';
+import { usePlayerData } from '../../../providers/PlayerDataProvider';
+import { IProSeason } from '../../../types/season';
 
 type Props = {
   player: IProAthlete;
@@ -142,11 +139,6 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
     ? singleMatchPr.game.opposition_team?.image_url
     : singleMatchPr.game.team?.image_url;
 
-  const navigate = useNavigate();
-
-  const goToMatchPage = () => {
-    navigate(`/fixtures/${singleMatchPr.game.game_id}`);
-  };
 
   const toggleExpand = () => {
     setExpanded(prev => !prev);
@@ -239,7 +231,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
                 <PlayerSeasonStatsTray
                   player={player}
                   stats={matchStats}
-                  season={{ name: season_name } as any}
+                  season={{ name: season_name } as IProSeason}
                   isLoading={isLoading}
                 />
               </div>

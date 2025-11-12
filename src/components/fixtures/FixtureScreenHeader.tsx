@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { useSticky } from "../../hooks/useSticky";
 import { IFixture } from "../../types/games";
-import { fixtureSumary } from "../../utils/fixtureUtils";
+import { fixtureSummary } from "../../utils/fixtureUtils";
 import { Sticky } from "../shared/Sticky";
 import TeamLogo from "../team/TeamLogo";
 
@@ -12,7 +12,7 @@ type Props = {
 export function FixtureScreenHeader({ fixture }: Props) {
     const { isSticky, sentinelRef } = useSticky<HTMLDivElement>();
 
-    const {gameKickedOff, game_status} = fixtureSumary(fixture);
+    const {gameKickedOff, game_status} = fixtureSummary(fixture);
     const gameIsFinal = (game_status === "completed") && gameKickedOff;
 
     return (

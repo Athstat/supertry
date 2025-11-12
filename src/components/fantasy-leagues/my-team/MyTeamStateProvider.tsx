@@ -43,7 +43,7 @@ export function useMyTeamView() {
 
         setMode(tab);
 
-    }, [mode, setMode]);
+    }, [setMode]);
 
     const viewMode = mode;
 

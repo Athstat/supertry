@@ -15,7 +15,6 @@ import { useTabView } from '../../shared/tabs/TabView';
 import { useNavigate } from 'react-router-dom';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
 
-
 type Props = {
   userTeam: FantasyLeagueTeamWithAthletes;
   leagueRound: IFantasyLeagueRound;
@@ -76,7 +75,7 @@ export default function UserTeamOverview({
       {currentRound && userTeam && (
         <div className="w-full relative max-h-[200px]rounded-xl">
           <div className="flex flex-row items-center gap-2 overflow-y-auto no-scrollbar">
-            {userTeam.athletes.map(a => {
+            {(userTeam.athletes || []).map(a => {
               return (
                 <PlayerItem
                   key={a.athlete.tracking_id}
@@ -111,21 +110,16 @@ type PlayerItemProps = {
 };
 
 function PlayerItem({ athlete, onClick }: PlayerItemProps) {
-
-  const {
-    nextMatch, isLoading,
-    isNotAvailable, isTeamNotPlaying,
-    report
-  } = useGeneralPlayerAvailability(athlete.athlete.tracking_id);
+  const { nextMatch, isLoading, isNotAvailable, isTeamNotPlaying, report } =
+    useGeneralPlayerAvailability(athlete.athlete.tracking_id);
 
   const { nextOpponent, fieldStatus } = useMemo(() => {
-
     if (nextMatch) {
       if (athlete.athlete.team_id === nextMatch.team?.athstat_id) {
-        return { nextOpponent: nextMatch.opposition_team, fieldStatus: "H" };
+        return { nextOpponent: nextMatch.opposition_team, fieldStatus: 'H' };
       }
 
-      return { nextOpponent: nextMatch.team, fieldStatus: "A" };
+      return { nextOpponent: nextMatch.team, fieldStatus: 'A' };
     }
 
     return { nextOpponent: undefined, fieldStatus: undefined };
@@ -137,23 +131,23 @@ function PlayerItem({ athlete, onClick }: PlayerItemProps) {
     if (report) {
       const { status } = report;
 
-      if (status === "PENDING" || status === "AVAILABLE") {
+      if (status === 'PENDING' || status === 'AVAILABLE') {
         if (nextOpponent && fieldStatus) {
           return `${nextOpponent.athstat_name} (${fieldStatus}) `;
         }
       }
 
-      if (status === "TEAM_NOT_PLAYING") {
-        return "Team Not Playing";
+      if (status === 'TEAM_NOT_PLAYING') {
+        return 'Team Not Playing';
       }
 
-      if (status === "NOT_AVAILABLE") {
-        return "⚠️ Not On Roster";
+      if (status === 'NOT_AVAILABLE') {
+        return '⚠️ Not On Roster';
       }
     }
 
-    return "";
-  }, [fieldStatus, nextOpponent, report])
+    return '';
+  }, [fieldStatus, nextOpponent, report]);
 
   if (isLoading) {
     return (
@@ -172,7 +166,7 @@ function PlayerItem({ athlete, onClick }: PlayerItemProps) {
       className={twMerge(
         'flex border cursor-pointer dark:border-slate-700 min-w-[120px] max-w-[120px] h-[120px] rounded-xl overflow-clip p-0 flex-col',
         showWarning &&
-        'border-yellow-600 dark:border-yellow-900 bg-yellow-100 dark:bg-yellow-600/20 opacity-80'
+          'border-yellow-600 dark:border-yellow-900 bg-yellow-100 dark:bg-yellow-600/20 opacity-80'
       )}
     >
       <div className="h-[60%] w-full flex flex-col items-center justify-center">
@@ -194,9 +188,14 @@ function PlayerItem({ athlete, onClick }: PlayerItemProps) {
           showWarning && 'bg-yellow-200 dark:bg-yellow-900/30'
         )}
       >
-        <p className="text-[10px] max-w-20 text-center truncate">{athlete.athlete.athstat_firstname}</p>
+        <p className="text-[10px] max-w-20 text-center truncate">
+          {athlete.athlete.athstat_firstname}
+        </p>
         <SecondaryText
-          className={twMerge('text-[10px] truncate', showWarning && 'text-yellow-600 dark:text-yellow-200')}
+          className={twMerge(
+            'text-[10px] truncate',
+            showWarning && 'text-yellow-600 dark:text-yellow-200'
+          )}
         >
           {athlete.score ? Math.floor(athlete.score) : reportText}
         </SecondaryText>

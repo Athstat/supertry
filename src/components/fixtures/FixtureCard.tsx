@@ -5,7 +5,7 @@ import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
-import { fixtureSumary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
+import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
 import GameHighlightsCard from '../video/GameHighlightsCard';
@@ -53,7 +53,7 @@ export default function FixtureCard({
     analytics.trackFixtureCardClicked(fixture);
   };
 
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
 
   return (
     <>
@@ -117,11 +117,18 @@ export default function FixtureCard({
             )}
 
             {isGameLive(game_status) && (
-              <div className="flex flex-row items-center gap-1">
-                <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full " />
-                <span className="text-sm text-green-600 dark:text-green-400 font-bold">
-                  {formatGameStatus(game_status)}
-                </span>
+              <div className="flex flex-col items-center gap-0.5">
+                <div className="flex flex-row items-center gap-1">
+                  <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full " />
+                  <span className="text-sm text-green-600 dark:text-green-400 font-bold">
+                    {formatGameStatus(game_status)}
+                  </span>
+                </div>
+                {fixture.game_clock && (
+                  <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
+                    {fixture.game_clock}
+                  </span>
+                )}
               </div>
             )}
           </div>
@@ -187,7 +194,7 @@ export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
   const navigate = useNavigate();
 
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
 
   const goToFullMatchDetails = () => {
     navigate(`/fixtures/${fixture.game_id}`, { state: fixture });
@@ -276,11 +283,18 @@ function MatchResultsInformation({ fixture }: Props) {
           <span className="text-sm text-slate-500 font-medium dark:text-slate-400">Final</span>
         )}
         {isGameLive(game_status) && (
-          <div className="flex flex-row items-center justify-center gap-1">
-            <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full" />
-            <span className="text-sm text-green-600 dark:text-green-400 font-bold">
-              {formatGameStatus(game_status)}
-            </span>
+          <div className="flex flex-col items-center gap-0.5">
+            <div className="flex flex-row items-center justify-center gap-1">
+              <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full" />
+              <span className="text-sm text-green-600 dark:text-green-400 font-bold">
+                {formatGameStatus(game_status)}
+              </span>
+            </div>
+            {fixture.game_clock && (
+              <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
+                {fixture.game_clock}
+              </span>
+            )}
           </div>
         )}
         {game_status && !isGameLive(game_status) && game_status !== 'completed' && (

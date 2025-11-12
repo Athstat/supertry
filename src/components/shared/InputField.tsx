@@ -14,10 +14,11 @@ type Props = {
     icon?: ReactNode,
     placeholder?: string,
     required?: boolean,
-    minLength?: number
+    minLength?: number,
+    error?: string
 }
 
-export default function InputField({value, onChange, label, type, id, inputCn, labelCn, className, icon, placeholder, required, minLength} : Props) {
+export default function InputField({value, onChange, label, type, id, inputCn, labelCn, className, icon, placeholder, required, minLength, error} : Props) {
 
     const handleInputChange = (newVal?: string) => {
         if (onChange) {
@@ -46,6 +47,7 @@ export default function InputField({value, onChange, label, type, id, inputCn, l
                     className={twMerge(
                         "w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent dark:text-gray-100",
                         icon && "pr-12",
+                        error && "border-red-500 dark:border-red-500 bg-red-100/60 dark:bg-red-900/20",
                         inputCn
                     )}
                     value={value}
@@ -60,6 +62,8 @@ export default function InputField({value, onChange, label, type, id, inputCn, l
                     </div>
                 )}
             </div>
+
+            <p className='text-red-500' >{error}</p>
         </div>
     )
 }

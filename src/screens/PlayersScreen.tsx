@@ -25,21 +25,17 @@ import RoundedCard from '../components/shared/RoundedCard';
 import SecondaryText from '../components/shared/SecondaryText';
 import { useQueryState } from '../hooks/useQueryState';
 import useAthleteFilter from '../hooks/useAthleteFilter';
-import PlayerCompareProvider from '../components/players/compare/PlayerCompareProvider';
 import { usePlayerCompareActions } from '../hooks/usePlayerCompare';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtomGroup } from '../state/comparePlayers.atoms';
 import { useInView } from 'react-intersection-observer';
-import PlayersCompareButton from '../components/player/PlayerScreenCompareButton';
-import { twMerge } from 'tailwind-merge';
 import useSWR from 'swr';
 import { seasonService } from '../services/seasonsService';
 import { getAthletesSummary } from '../utils/athleteUtils';
 
 // Fantasy seasons: mirror FantasyLeaguesScreen behavior
 import FantasyLeaguesScreenDataProvider from '../components/fantasy-leagues/FantasyLeaguesScreenDataProvider';
-import PlayersSeasonSelector from '../components/fantasy-seasons/PlayersSeasonSelector';
-import { useFantasyLeaguesScreen } from '../hooks/fantasy/useFantasyLeaguesScreen';
+import PlayerCompareProvider from '../providers/PlayerCompareProvider';
 
 export function PlayersScreen() {
   return (
@@ -56,7 +52,6 @@ export const PlayerScreenContent = () => {
   const [params, setParams] = useSearchParams();
 
   // Use the same selected fantasy season as FantasyLeaguesScreen
-  const { selectedSeason, selectedFantasySeasonId } = useFantasyLeaguesScreen();
 
   //console.log('selectedSeason', selectedSeason);
 
@@ -65,7 +60,7 @@ export const PlayerScreenContent = () => {
     // if (selectedFantasySeasonId && selectedFantasySeasonId !== 'all')
     //   return selectedFantasySeasonId;
     return '9e74bed3-9ea2-5f41-a906-434d0d3e8f4e';
-  }, [selectedSeason?.id, selectedFantasySeasonId]);
+  }, []);
 
   console.log('activeSeasonIdForFetch', activeSeasonIdForFetch);
 
@@ -94,7 +89,7 @@ export const PlayerScreenContent = () => {
 
   // Active loading/error helpers and retry
   const activeIsLoading = activeSeasonIdForFetch ? loadingSeason : isLoading;
-  const activeError: any = activeSeasonIdForFetch ? errorSeason : error;
+  const activeError = activeSeasonIdForFetch ? errorSeason : error;
   const activeErrorMessage = activeError
     ? typeof activeError === 'string'
       ? activeError
@@ -120,7 +115,7 @@ export const PlayerScreenContent = () => {
     if (teamIdFilter && !availableTeams.some(t => t.athstat_id === teamIdFilter)) {
       setTeamIdFilter('');
     }
-  }, [availableTeams, teamIdFilter]);
+  }, [availableTeams, setTeamIdFilter, teamIdFilter]);
 
   // Use debounced search for better performance
   const debouncedSearchQuery = useDebounced(searchQuery, 300);
@@ -169,7 +164,7 @@ export const PlayerScreenContent = () => {
         setShowPlayerModal(true);
       }
     },
-    [isPickingPlayers]
+    [addOrRemovePlayer, isPickingPlayers]
   );
 
   // Handle search filtering

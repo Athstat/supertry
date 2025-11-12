@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { mutate } from 'swr';
 import { useGameVotes } from '../../../hooks/useGameVotes';
 import { gamesService } from '../../../services/gamesService';
-import { fixtureSumary, isProGameTBD } from '../../../utils/fixtureUtils';
+import { fixtureSummary, isProGameTBD } from '../../../utils/fixtureUtils';
 import { IFixture } from '../../../types/games';
 import { useInView } from 'react-intersection-observer';
 
@@ -24,7 +24,7 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
   const homeTeamWon = matchFinal ? team_score > opposition_score : false;
   const awayTeamWon = matchFinal ? team_score < opposition_score : false;
 
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
 
   // Voting functionality
   const { ref, inView } = useInView({ triggerOnce: true });

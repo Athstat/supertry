@@ -86,7 +86,7 @@ function TeamFilterItem({ team }: FilterItemProps) {
             )}
         >
             <TeamLogo url={team.image_url} className="w-4 h-4" />
-            <p className="text-xs" >{team.athstat_name}</p>
+            <p className="text-xs dark:text-white" >{team.athstat_name}</p>
 
             {isSelected && <X className="w-3.5 h-3.5" />}
         </button>

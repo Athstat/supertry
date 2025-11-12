@@ -55,7 +55,7 @@ export default function UserRoundOverviewCard({
       <BlueGradientCard className="p-4 flex flex-col gap-4 w-full">
         <div className="flex flex-row w-full items-center justify-between">
           <div>
-            <h3 className="font-bold ">{userTeam.team.name}</h3>
+            <h3 className="font-bold ">{userTeam.team?.name || 'My Team'}</h3>
             <div className="flex flex-row items-center gap-1">
               {isLocked && <Lock className="w-4 h-4" />}
               <p className="text-sm">{leagueRound.title}</p>

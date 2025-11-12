@@ -24,13 +24,20 @@ export const usePowerRankings = (athleteId?: string): UsePowerRankingsResult => 
       setError(null);
 
       try {
-        const rankingsData = await powerRankingsService.getPastMatchsPowerRankings(athleteId, 10);
-        
-        // Sort by kickoff_time
-        const sortedData = [...rankingsData].sort((a, b) => 
-          new Date(a.game.kickoff_time ?? new Date()).getTime() - new Date(b.game.kickoff_time ?? new Date()).getTime()
+        const currentSeasonId = import.meta.env.VITE_CURRENT_URC_SEASON_ID;
+        const rankingsData = await powerRankingsService.getPastMatchsPowerRankings(
+          athleteId,
+          10,
+          currentSeasonId
         );
-        
+
+        // Sort by kickoff_time
+        const sortedData = [...rankingsData].sort(
+          (a, b) =>
+            new Date(a.game.kickoff_time ?? new Date()).getTime() -
+            new Date(b.game.kickoff_time ?? new Date()).getTime()
+        );
+
         setData(sortedData);
       } catch (err) {
         console.error('Error fetching power rankings:', err);

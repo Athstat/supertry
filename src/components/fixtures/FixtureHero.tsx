@@ -3,7 +3,7 @@ import { IFixture } from '../../types/games';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
 import {
-  fixtureSumary,
+  fixtureSummary,
   summerizeGameStatus,
   isGameLive,
   formatGameStatus,
@@ -20,7 +20,7 @@ type Props = {
 export default function FixtureHero({ fixture }: Props) {
   const navigate = useNavigate();
   const { team, opposition_team } = fixture;
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
 
   return (
     <div className="w-full rounded-none h-44 bg-gradient-to-br ">
@@ -103,7 +103,7 @@ function KickOffInformation({ fixture }: Props) {
 
 function MatchResultsInformation({ fixture }: Props) {
   const { game_status } = fixture;
-  const { homeTeamWon, awayTeamWon } = fixtureSumary(fixture);
+  const { homeTeamWon, awayTeamWon } = fixtureSummary(fixture);
 
   return (
     <div className="flex justify-between flex-1 w-full flex-col items-center">

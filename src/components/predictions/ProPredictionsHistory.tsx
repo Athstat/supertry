@@ -10,15 +10,16 @@ import NoContentCard from "../shared/NoContentMessage";
 import { ProGameVote } from "../../types/proPredictions";
 import { gamesService } from "../../services/gamesService";
 import FixtureCard from "../fixtures/FixtureCard";
+import RoundedCard from "../shared/RoundedCard";
 
 export default function UserProPredictionsHistoryTab() {
 
     const user = useAuthUser();
-    const uid = (user as any)?.kc_id ?? (user as any)?.id;
-    const key = swrFetchKeys.getUserProPredictionsHistoryKey(uid);
-    let { data: history, isLoading, error } = useSWR(key, () => proPredictionsRankingService.getUserPredicitionHistory(uid));
+    const userId = user?.kc_id ?? "";
+    const key = swrFetchKeys.getUserProPredictionsHistoryKey(userId);
+    const { data, isLoading, error } = useSWR(key, () => proPredictionsRankingService.getUserPredicitionHistory(userId));
 
-    history = history ?? [];
+    const history = data ?? [];
 
     if (isLoading) return (
         <LoadingState />
@@ -40,10 +41,10 @@ export default function UserProPredictionsHistoryTab() {
         <div className="" >
 
             <div className="flex flex-col gap-4" >
-                {history.map((gameVote, index) => {
+                {history.map((gameVote) => {
                     return <ProPredictionHistoryCard
                         gameVote={gameVote}
-                        key={index}
+                        key={gameVote.id}
                     />
                 })}
             </div>
@@ -58,7 +59,11 @@ type ItemProps = {
 function ProPredictionHistoryCard({ gameVote }: ItemProps) {
 
     const key = swrFetchKeys.getProFixtureKey(gameVote.game_id)
-    const { data: fixture } = useSWR(key, () => gamesService.getGameById(gameVote.game_id));
+    const { data: fixture, isLoading } = useSWR(key, () => gamesService.getGameById(gameVote.game_id));
+
+    if (isLoading) {
+        return <RoundedCard className="w-full bg-slate-200 h-[268px] animate-pulse border-none" />
+    }
 
     if (!fixture) {
         return;

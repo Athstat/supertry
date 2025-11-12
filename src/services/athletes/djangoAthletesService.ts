@@ -120,7 +120,7 @@ export const djangoAthleteService = {
         return (await res.json()) as IProSeason[];
       }
     } catch (err) {
-      console.log('Error fetching athlete seasons');
+      logger.error('Error fetching athlete seasons ', err);
     }
 
     return [];
@@ -137,7 +137,7 @@ export const djangoAthleteService = {
         return (await res.json()) as SportAction[];
       }
     } catch (err) {
-      console.log(`Error fetching athlete season stats for ${season_id}`);
+      console.log(`Error fetching athlete season stats for ${season_id} `, err);
     }
 
     return [];
@@ -157,7 +157,7 @@ export const djangoAthleteService = {
         return (await res.json()) as IAthleteSeasonStarRatings;
       }
     } catch (err) {
-      console.log(`Error fetching athlete season stats for ${season_id}`);
+      console.log(`Error fetching athlete season stats for ${season_id} `, err);
     }
 
     return undefined;
@@ -174,7 +174,7 @@ export const djangoAthleteService = {
         return (await res.json()) as IProAthlete[];
       }
     } catch (err) {
-      console.log(`Error fetching athlete team mates for ${athleteId}`);
+      console.log(`Error fetching athlete team mates for ${athleteId} `, err);
     }
 
     return [];
@@ -191,7 +191,7 @@ export const djangoAthleteService = {
         return (await res.json()) as SportAction[];
       }
     } catch (err) {
-      console.log(`Error fetching athlete match stats for ${athleteId} in game ${gameId}`);
+      console.log(`Error fetching athlete match stats for ${athleteId} in game ${gameId}`, err);
     }
 
     return [];
@@ -214,6 +214,25 @@ export const djangoAthleteService = {
     }
 
     return [];
+
+  },
+
+  getRoundAvailabilityReport: async (athleteId: string, seasonId: string, roundNumber: number): Promise<AthleteRoundAvailabilityReport | undefined> => {
+
+    try {
+      const uri = getUri(`/api/v1/athletes/${athleteId}/availability/by-season/${seasonId}/${roundNumber}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as AthleteRoundAvailabilityReport;
+      }
+    } catch (err) {
+      logger.error("Error fetching player availability report ", err);
+    }
+
+    return undefined;
 
   }
 };

@@ -32,7 +32,7 @@ export function useQueryState<T>(key: string, options?: Options) {
     if (value) {
       setValue(value);
     }
-  }, [init]);
+  }, [init, setValue, value]);
 
   // useEffect(() => {
 

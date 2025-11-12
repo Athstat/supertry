@@ -6,7 +6,7 @@ import { useGameVotes } from "../../hooks/useGameVotes";
 import { useRouter } from "../../hooks/useRoter";
 import { gamesService } from "../../services/gamesService";
 import { IFixture } from "../../types/games";
-import { fixtureSumary } from "../../utils/fixtureUtils";
+import { fixtureSummary } from "../../utils/fixtureUtils";
 import { VotingOptionBar } from "../shared/bars/VotingOptionBar";
 import DialogModal from "../shared/DialogModal";
 import SecondaryText from "../shared/SecondaryText";
@@ -30,7 +30,7 @@ export function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
     }
   };
 
-  const { game_status } = fixtureSumary(fixture);
+  const { game_status } = fixtureSummary(fixture);
   const gameCompleted = game_status === 'completed';
   const gameLive = game_status === 'in_progress';
 
@@ -159,7 +159,7 @@ export function FixturePredictionModal({
   onClose: () => void;
 }) {
   const navigate = useNavigate();
-  const { gameKickedOff } = fixtureSumary(fixture);
+  const { gameKickedOff } = fixtureSummary(fixture);
   const { homeVotes, awayVotes, userVote } = useGameVotes(fixture);
   const [isVoting, setIsVoting] = useState(false);
 

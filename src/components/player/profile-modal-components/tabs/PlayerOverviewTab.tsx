@@ -4,12 +4,12 @@ import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import PlayerInfoCard from '../PlayerInfoCard';
 import { IProAthlete } from '../../../../types/athletes';
-import { usePlayerData } from '../../provider/PlayerDataProvider';
 import { Calendar, Ruler, Dumbbell, Globe } from 'lucide-react';
 import { isNumeric } from '../../../../utils/stringUtils';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 import NoContentCard from '../../../shared/NoContentMessage';
+import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 
 type Props = {
   player: IProAthlete;

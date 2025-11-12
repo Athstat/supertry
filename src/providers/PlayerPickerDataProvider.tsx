@@ -1,15 +1,15 @@
 import useSWR from "swr";
-import { fantasyLeagueGroupsService } from "../../services/fantasy/fantasyLeagueGroupsService";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague"
-import RoundedCard from "../shared/RoundedCard";
 import { Fragment, ReactNode, useEffect } from "react";
 import { useSetAtom } from "jotai";
-import { playerPickerAtoms } from "../../state/playerPicker/playerPicker";
-import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
-import { IProAthlete, PositionClass } from "../../types/athletes";
-import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import { IFantasyAthlete } from "../../types/rugbyPlayer";
-import { swrFetchKeys } from "../../utils/swrKeys";
+import RoundedCard from "../components/shared/RoundedCard";
+import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
+import { fantasyLeagueAtom } from "../state/fantasy/fantasyLeague.atoms";
+import { playerPickerAtoms } from "../state/playerPicker/playerPicker";
+import { IProAthlete, PositionClass } from "../types/athletes";
+import { IFantasyLeagueRound } from "../types/fantasyLeague";
+import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
+import { IFantasyAthlete } from "../types/rugbyPlayer";
+import { swrFetchKeys } from "../utils/swrKeys";
 
 type Props = {
     leagueRound?: IFantasyLeagueRound,
