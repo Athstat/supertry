@@ -159,7 +159,10 @@ export function useFantasyLeagueTeam() {
                     id: new Date().valueOf(), // temporal id,
                     athlete_id: athlete.tracking_id,
                     is_starting: s.slotNumber < 6,
-                    athlete_team_id: athlete.team?.athstat_id
+                    athlete_team_id: athlete.team?.athstat_id,
+                    athlete: athlete,
+                    is_super_sub: s.slotNumber >= 6,
+                    score: 0
                 },
                 purchasePrice: athlete.price,
             }
