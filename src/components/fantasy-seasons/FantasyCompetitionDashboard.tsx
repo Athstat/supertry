@@ -11,7 +11,7 @@ type Props = {
 }
 
 /** Serves a dashboard for a fantasy season */
-export function FantasySeasonDashboard({fantasySeason} : Props) {
+export function FantasyCompetitionDashboard({fantasySeason} : Props) {
   // Tabs state (persist between visits)
   // const [activeTab, setActiveTab] = useQueryState<'my' | 'discover' | 'code'>('active_tab', {
   //   init: 'my'

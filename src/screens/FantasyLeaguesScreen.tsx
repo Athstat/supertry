@@ -3,7 +3,7 @@ import { Trophy } from "lucide-react";
 import FantasyLeaguesScreenDataProvider from "../components/fantasy-leagues/FantasyLeaguesScreenDataProvider";
 import FantasySeasonSelector from "../components/fantasy-seasons/FantasySeasonSelector";
 import { useFantasyLeaguesScreen } from "../hooks/fantasy/useFantasyLeaguesScreen";
-import { FantasySeasonDashboard } from "../components/fantasy-seasons/FantasySeasonDashboard";
+import { FantasyCompetitionDashboard } from "../components/fantasy-seasons/FantasyCompetitionDashboard";
 import FantasySeasonsOverview from "../components/fantasy-seasons/FantasySeasonsOverview";
 import { Activity } from "react";
 
@@ -35,7 +35,7 @@ function InnnerScreen() {
 
       <Activity mode={selectedSeason ? "visible" : "hidden"}>
         {selectedSeason && (
-          <FantasySeasonDashboard fantasySeason={selectedSeason} />
+          <FantasyCompetitionDashboard fantasySeason={selectedSeason} />
         )}
       </Activity>
 
