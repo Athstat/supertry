@@ -1,0 +1,81 @@
+import { useAtom, useAtomValue } from "jotai";
+import { teamHistoryCurrentRoundAtom, teamHistoryCurrentTeamAtom, teamHistoryTeamManagerAtom } from "../../state/fantasy/fantasy-teams/teamHistory.atoms";
+import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
+import { useMemo } from "react";
+
+/** 
+ * Hook that provides functionality to travel through a teams history.
+ * This hook depends on the `FantasyLeagueGroupProvider` and the `TeamHistoryProvider`
+*/
+
+export function useTeamHistory() {
+    const team = useAtomValue(teamHistoryCurrentTeamAtom);
+    const [currentRound, setCurrentRound] = useAtom(teamHistoryCurrentRoundAtom);
+    const manager = useAtomValue(teamHistoryTeamManagerAtom);
+
+    const { sortedRounds, currentRound: groupCurrentRound } = useFantasyLeagueGroup();
+
+    const currentRoundIndex = useMemo(() => {
+        if (currentRound) {
+            return sortedRounds.findIndex((r) => {
+                return r.id === currentRound.id
+            });
+        }
+
+        return undefined;
+    }, [currentRound, sortedRounds]);
+
+    const maxIndex = useMemo<number | undefined>(() => {
+        if (groupCurrentRound) {
+            return sortedRounds.findIndex((r) => {
+                return r.id === groupCurrentRound.id
+            });
+        }
+
+        return undefined;
+
+    }, [groupCurrentRound, sortedRounds]);
+
+    const moveNextRound = useMemo(() => {
+
+        if (maxIndex === undefined || currentRoundIndex === undefined || sortedRounds.length === 0) {
+            return;
+        }
+
+        const nextIndex = currentRoundIndex + 1;
+
+        if (nextIndex > maxIndex) {
+            return;
+        }
+
+        const nextRound = sortedRounds[nextIndex];
+        setCurrentRound(nextRound);
+
+    }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound]);
+
+    const movePreviousRound = useMemo(() => {
+
+        if (maxIndex === undefined || currentRoundIndex === undefined || sortedRounds.length === 0) {
+            return;
+        }
+
+        const nextIndex = currentRoundIndex - 1;
+
+        if (nextIndex < 0) {
+            return;
+        }
+
+        const nextRound = sortedRounds[nextIndex];
+        setCurrentRound(nextRound);
+
+    }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound]);
+
+    return {
+        team,
+        round: currentRound,
+        manager,
+        rounds: sortedRounds,
+        moveNextRound,
+        movePreviousRound
+    }
+}
