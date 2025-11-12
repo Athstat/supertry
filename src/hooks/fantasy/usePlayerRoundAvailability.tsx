@@ -6,7 +6,9 @@ import { IFixture } from "../../types/games";
 /** Gets Player Specific Round Availability outside rosters */
 export function usePlayerRoundAvailability(athleteId: string, seasonId: string, roundNumber: number) {
 
-  const key = `/athlete/${athleteId}/general-availabilityby-season/${seasonId}/${roundNumber}`;
+  const shouldFetch = (Boolean(athleteId) && Boolean(seasonId)) && (roundNumber > 0);
+  const key = shouldFetch ? `/athlete/${athleteId}/general-availabilityby-season/${seasonId}/${roundNumber}` : null;
+  
   const { data, isLoading } = useSWR(key, () => djangoAthleteService.getRoundAvailabilityReport(
     athleteId,
     seasonId,
@@ -33,6 +35,10 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     return firstReport?.status === "TEAM_NOT_PLAYING";
   }, [firstReport]);
 
+  const isAvailable = useMemo(() => {
+    return firstReport?.status === "AVAILABLE";
+  }, [firstReport]);
+
   const isPastGame = useMemo<boolean>(() => {
     if (nextMatch) {
       const dateNow = new Date();
@@ -56,6 +62,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     isPending,
     isNotAvailable,
     isTeamNotPlaying,
-    isPastGame
+    isPastGame,
+    isAvailable
   };
 }

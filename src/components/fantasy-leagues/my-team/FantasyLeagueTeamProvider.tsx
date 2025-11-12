@@ -1,8 +1,8 @@
 import { ScopeProvider } from "jotai-scope"
-import { fantasyLeagueTeamAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
+import { fantasyLeagueTeamAtom, fantasyLeagueTeamLeagueRoundAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
 import { ReactNode, useCallback, useEffect, useMemo } from "react"
-import { useAtom, useSetAtom } from "jotai"
-import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
 import { IProAthlete } from "../../../types/athletes"
@@ -13,23 +13,25 @@ import { MAX_TEAM_BUDGET } from "../../../types/constants"
 
 type Props = {
     team: IFantasyLeagueTeam,
-    children?: ReactNode
+    children?: ReactNode,
+    leagueRound?: IFantasyLeagueRound
 }
 
 /** Provides team athlete data and fantasy league team data to be provided  */
-export default function FantasyLeagueTeamProvider({ team, children }: Props) {
+export default function FantasyLeagueTeamProvider({ team, children, leagueRound }: Props) {
 
     const atoms = [
         fantasyLeagueTeamAtom,
         fantasyTeamAthletesAtom,
         fantasyTeamSlotsAtom,
         swapPlayerAtom,
-        swapStateAtom
+        swapStateAtom,
+        fantasyLeagueTeamLeagueRoundAtom
     ];
 
     return (
         <ScopeProvider atoms={atoms} >
-            <InnerProvider team={team} >
+            <InnerProvider leagueRound={leagueRound} team={team} >
                 {children}
             </InnerProvider>
         </ScopeProvider>
@@ -37,10 +39,12 @@ export default function FantasyLeagueTeamProvider({ team, children }: Props) {
 }
 
 
-function InnerProvider({ team, children }: Props) {
+function InnerProvider({ team, children, leagueRound }: Props) {
 
     const setTeam = useSetAtom(fantasyLeagueTeamAtom);
     const setSlots = useSetAtom(fantasyTeamSlotsAtom);
+
+    const setLeagueRound = useSetAtom(fantasyLeagueTeamLeagueRoundAtom);
 
     useEffect(() => {
 
@@ -74,7 +78,11 @@ function InnerProvider({ team, children }: Props) {
             setSlots(slots);
 
         }
-    }, [setSlots, setTeam, team]);
+
+        if (leagueRound) {
+            setLeagueRound(leagueRound);
+        }
+    }, [setSlots, setTeam, team, leagueRound, setLeagueRound]);
 
     return (
         <>
@@ -91,6 +99,7 @@ export function useFantasyLeagueTeam() {
     const [slots, setSlots] = useAtom(fantasyTeamSlotsAtom);
     const [swapState, setSwapState] = useAtom(swapStateAtom);
     const [swapPlayer, setSwapPlayer] = useAtom(swapPlayerAtom);
+    const leagueRound = useAtomValue(fantasyLeagueTeamLeagueRoundAtom);
 
     const totalSpent: number = useMemo(() => {
         return slots.reduce((sum, s) => {
@@ -391,6 +400,7 @@ export function useFantasyLeagueTeam() {
         cancelSwap,
         swapPlayer,
         swapState,
-        budgetRemaining
+        budgetRemaining,
+        leagueRound
     }
 }

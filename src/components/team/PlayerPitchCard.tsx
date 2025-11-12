@@ -6,14 +6,15 @@ import { formatPosition } from "../../utils/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import PlayerMugshot from "../shared/PlayerMugshot";
 import SecondaryText from "../shared/SecondaryText";
-import { Activity } from "react";
-import { IFixture } from "../../types/games";
+import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, TriangleAlert } from "lucide-react";
 import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 import TeamJersey from "../player/TeamJersey";
+import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete,
@@ -25,7 +26,16 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
     const { position_class } = player;
     const { viewMode } = useMyTeamView();
+    const { league } = useFantasyLeagueGroup();
     const { teamCaptain } = useFantasyLeagueTeam();
+
+    const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
+        player.tracking_id,
+        league?.season_id ?? "",
+        round?.start_round ?? 0,
+    );
+
+    const showAvailabilityWarning = isNotAvailable || isTeamNotPlaying;
 
     const handleClick = () => {
         if (onClick) {
@@ -36,14 +46,26 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
     const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
 
     return (
-        <div 
+        <div
             key={player.tracking_id}
-            className='flex flex-col items-center justify-center gap-1 relative' 
+            className='flex flex-col items-center justify-center gap-1 relative'
         >
 
             {isTeamCaptain && (
-                <div className="absolute top-0 right-0" >
+                <div className="absolute top-0 right-0 p-1" >
                     <CaptainsArmBand className="font-black" />
+                </div>
+            )}
+
+            {showAvailabilityWarning && (
+                <div className="absolute top-0 left-0 p-1" >
+                    <div className={twMerge(
+                        " dark:bg-yellow-300 bg-yellow-400 hover:bg-yellow-400  border-yellow-500 dark:border-yellow-500 w-6 h-6 rounded-md flex flex-col items-center justify-center",
+                    )} >
+                        <TriangleAlert className={twMerge(
+                            "w-3.5  text-yellow-600 dark:text-yellow-700 h-4",
+                        )} />
+                    </div>
                 </div>
             )}
 
@@ -52,7 +74,8 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px]',
                     'min-w-[120px] max-w-[120px] flex flex-col',
                     player.image_url && "bg-gradient-to-br from-green-500/30 to-green-500/60",
-                    !player.image_url && "bg-gradient-to-br from-green-500/20 to-green-500/20"
+                    !player.image_url && "bg-gradient-to-br from-green-500/20 to-green-500/20",
+                    showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}
                 onClick={handleClick}
             >
@@ -68,7 +91,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
                     {!player.image_url && (
                         <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
-                            <TeamJersey 
+                            <TeamJersey
                                 teamId={player.athlete_team_id}
                                 useBaseClasses={false}
                                 className="h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
@@ -79,20 +102,22 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         </div>
                     )}
 
-                    {/* <TeamJersey 
-          teamId={player.athlete_team_id}
-          className='border-none rounded-none w-[100px] h-[100px] bg-transparent hover:bg-transparent'
-        /> */}
                 </div>
 
-                <div className='flex-1 p-2 w-full items-center justify-center  min-h-[30%] rounded-xl bg-gradient-to-br from-white to-slate-200 dark:from-slate-800 dark:to-dark-900' >
+                <div className={twMerge(
+                    'flex-1 p-2 w-full items-center justify-center text-slate-800 dark:text-white  min-h-[30%] rounded-xl bg-gradient-to-br from-white to-slate-200 dark:from-slate-800 dark:to-dark-900',
+                    // showAvailabilityWarning && "dark:from-yellow-400 dark:to-yellow-500 dark:text-black"
+                )} >
 
                     <div className='flex flex-col items-center justify-center' >
-                        <p className='text-slate-800 dark:text-white text-[11px] font-semibold' >{player.athstat_firstname}</p>
+                        <p className=' text-[11px] font-semibold' >{player.athstat_firstname}</p>
                     </div>
 
                     <div className='flex flex-col items-center justify-center' >
-                        <SecondaryText className=' text-[10px]' >{position_class ? formatPosition(position_class) : ""}</SecondaryText>
+                        <SecondaryText className={twMerge(
+                            ' text-[10px]',
+                            // showAvailabilityWarning && "dark:text-black"
+                        )} >{position_class ? formatPosition(position_class) : ""}</SecondaryText>
                     </div>
                 </div>
             </div>
@@ -111,26 +136,62 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 type PlayerPointsScoreProps = {
     round: IFantasyLeagueRound,
     player: IFantasyTeamAthlete,
-    nextMatch?: IFixture
 }
 
-function PlayerScoreIndicator({ round, player, nextMatch }: PlayerPointsScoreProps) {
+function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const isLocked = isLeagueRoundLocked(round);
-    const { isLoading, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round.start_round ?? 0);
+    const { isLoading, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
+    const { league } = useFantasyLeagueGroup();
 
+    const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
+        player.tracking_id,
+        league?.season_id ?? "",
+        round?.start_round ?? 0,
+    );
 
+    const [homeOrAway, opponent] = useMemo(() => {
+        if (!nextMatch) {
+            return [undefined, undefined];
+        }
+
+        const playerTeamId = player.athlete_team_id;
+
+        if (playerTeamId === nextMatch.team?.athstat_id) {
+            return ["(H)", nextMatch.opposition_team];
+        }
+
+        if (playerTeamId === nextMatch.opposition_team?.athstat_id) {
+            return ["(A)", nextMatch.team];
+        }
+
+        return [undefined, undefined];
+
+    }, [nextMatch, player.athlete_team_id]);
+
+    const showScore = !isLoading && isLocked;
+
+    const showAvailabilityWarning = (isNotAvailable || isTeamNotPlaying) && !showScore;
+    const showNextMatchInfo = !showAvailabilityWarning && homeOrAway && opponent && !showScore;
+    
     return (
         <>
-            <Activity mode={!isLoading && isLocked ? 'visible' : 'hidden'}  >
-                <div>
-                    <p className='font-bold text-white' >{score.toFixed(1)}</p>
-                </div>
-            </Activity>
 
-            <Activity mode={nextMatch ? "visible" : "hidden"} >
-                <p className="text-white" >{ }</p>
-            </Activity>
+            <div className="min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row" >
+                <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
+                    <p className="text-white text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway} </p>
+                </Activity>
+
+                <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
+                    <p className="dark:text-yellow-200 text-[10px] font-medium text-yellow-300" >Not Playing ⚠️</p>
+                </Activity>
+
+                <Activity mode={showScore ? 'visible' : 'hidden'}  >
+                    <div>
+                        <p className='text-[10px] font-medium text-white' >{score.toFixed(1)}</p>
+                    </div>
+                </Activity>
+            </div>
         </>
     )
 }
