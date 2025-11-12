@@ -11,7 +11,7 @@ import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import { formatPosition } from "../../utils/athleteUtils"
 import { useInView } from "react-intersection-observer"
 import PlayerPickerFAB from "./PlayerPickerFAB"
-import { useRef } from "react"
+import { useCallback, useRef } from "react"
 import DialogModal from "../shared/DialogModal"
 import PlayerPickerDataProvider from "../../providers/PlayerPickerDataProvider"
 
@@ -87,10 +87,10 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
   const { ref: inViewRef, inView } = useInView();
   // actual DOM ref
 
-  const setRefs = (node: HTMLDivElement | null) => {
+  const setRefs = useCallback((node: HTMLDivElement | null) => {
     topRef.current = node;
     inViewRef(node);
-  };
+  }, [inViewRef]);
 
   const handleClickFAB = () => {
     if (!inView && topRef) {
@@ -110,7 +110,7 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
     >
       <PlayerPickerHeader />
 
-      <PlayerPickerPlayerList 
+      <PlayerPickerPlayerList
         onSelect={onSelect}
       />
       <PlayerPickerFAB

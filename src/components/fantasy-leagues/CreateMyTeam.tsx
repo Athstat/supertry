@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 import { useNavigate } from 'react-router-dom';
@@ -12,18 +12,20 @@ import NoContentCard from '../shared/NoContentMessage';
 import { useTabView } from '../shared/tabs/TabView';
 
 import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
 import { useSubmitTeam } from '../../hooks/fantasy/useSubmitTeam';
 import { useFantasyLeagueTeam } from './my-team/FantasyLeagueTeamProvider';
 import MyTeamViewHeader from './my-team/MyTeamViewHeader';
 import { TeamFormation3D } from '../team/TeamFormation';
+import TeamBenchDrawer from './my-team/TeamBenchDrawer';
+import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 
 
 export default function CreateMyTeam() {
 
-  const { leagueConfig } = useFantasyLeagueGroup();
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
+
+  useHideBottomNavBar();
 
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
@@ -40,24 +42,12 @@ export default function CreateMyTeam() {
 
   const isGuestAccount = useAtomValue(isGuestUserAtom);
 
+  const excludePlayers = useMemo(() => {
+    return swapPlayer ? [swapPlayer] : []
+  }, [swapPlayer])
 
   const onClosePickerModal = () => {
     cancelSwap();
-  }
-
-
-  if (!leagueConfig) {
-    return (
-      <div className="flex flex-col items-center justify-center p-8 text-center">
-        <div className="text-red-500 text-lg mb-4">Failed to load league configuration</div>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-        >
-          Try Again
-        </button>
-      </div>
-    );
   }
 
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
@@ -95,6 +85,7 @@ export default function CreateMyTeam() {
     setShowProfileModal(true);
   }
 
+
   if (!leagueRound) return;
 
   if (isLocked) {
@@ -115,17 +106,21 @@ export default function CreateMyTeam() {
 
       <MyTeamViewHeader />
 
-      <div className='mt-6' >
+      <div className='mt-6 relative' >
         <TeamFormation3D
           onPlayerClick={handlePlayerClick}
         />
+        <TeamBenchDrawer
+        />
       </div>
+
+
 
       {<PlayerPickerV2
         isOpen={swapState.open}
         positionPool={swapState.position?.positionClass ?? undefined}
         remainingBudget={budgetRemaining}
-        excludePlayers={swapPlayer ? [swapPlayer] : []}
+        excludePlayers={excludePlayers}
         onSelectPlayer={completeSwap}
         onClose={onClosePickerModal}
         targetLeagueRound={leagueRound}

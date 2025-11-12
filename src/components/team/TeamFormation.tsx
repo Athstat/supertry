@@ -23,7 +23,7 @@ export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
   const lastRowSlots = useMemo(() => {
     return slots
       .filter((a) => {
-        return a.slotNumber >= 3;
+        return a.slotNumber >= 3 && a.slotNumber < 6;
       });
   }, [slots]);
 
