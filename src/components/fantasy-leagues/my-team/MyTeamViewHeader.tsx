@@ -57,12 +57,6 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
 
             {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
-            {/* <Activity mode={isLocked ? "hidden" : "visible"} >
-                <ViewSwitcher
-                    leagueRound={leagueRound}
-                />
-            </Activity> */}
-
             <Activity mode={isLocked ? "visible" : "hidden"} >
                 <TeamPointsCard
                     leagueRound={leagueRound}
@@ -125,22 +119,23 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
     const { userScore, highestPointsScored, averagePointsScored, isLoading } = useRoundScoringSummary(leagueRound);
 
     return (
-        <div className="flex flex-col py-2" >
+        <div className="flex flex-col" >
             <Activity mode={isLoading ? "hidden" : "visible"} >
                 <div className="flex flex-row items-center justify-center gap-6" >
+
                     <div className="flex flex-col items-center justify-center" >
-                        <p className="font-black text-xl" >{Math.round(averagePointsScored ?? 0)}</p>
-                        <SecondaryText>Average</SecondaryText>
+                        <p className="font-black text-md" >{Math.round(averagePointsScored ?? 0)}</p>
+                        <SecondaryText className="text-[10px]" >Average</SecondaryText>
                     </div>
 
                     <div className="flex flex-col items-center justify-center" >
-                        <p className="font-black text-xl" >{Math.round(userScore ?? 0)}</p>
-                        <SecondaryText>Your Score</SecondaryText>
+                        <p className="font-black text-md" >{Math.round(userScore ?? 0)}</p>
+                        <SecondaryText className="text-[10px]" >Your Score</SecondaryText>
                     </div>
 
                     <div className="flex flex-col items-center justify-center" >
-                        <p className="font-black text-xl" >{Math.round(highestPointsScored ?? 0)}</p>
-                        <SecondaryText>Highest</SecondaryText>
+                        <p className="font-black text-md" >{Math.round(highestPointsScored ?? 0)}</p>
+                        <SecondaryText className="text-[10px]" >Highest</SecondaryText>
                     </div>
                 </div>
             </Activity>
