@@ -1,5 +1,4 @@
 import { ScopeProvider } from "jotai-scope"
-import { fantasyLeagueTeamAtom, fantasyLeagueTeamLeagueRoundAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
 import { ReactNode, useCallback, useEffect, useMemo } from "react"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague"
@@ -10,6 +9,8 @@ import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils
 import { Position } from "../../../types/position"
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics"
 import { MAX_TEAM_BUDGET } from "../../../types/constants"
+import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
+import { fantasyTeamAthletesAtom } from "../../../state/myTeam.atoms"
 
 type Props = {
     team: IFantasyLeagueTeam,
