@@ -1,6 +1,7 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   currGroupMemberAtom,
+  fantasyLeagueConfigAtom,
   fantasyLeagueGroupAtom,
   fantasyLeagueGroupMembersAtom,
   fantasyLeagueGroupRoundsAtom,
@@ -16,6 +17,8 @@ export function useFantasyLeagueGroup() {
   const rounds = useAtomValue(fantasyLeagueGroupRoundsAtom);
   const userMemberRecord = useAtomValue(currGroupMemberAtom);
   const setRounds = useSetAtom(fantasyLeagueGroupRoundsAtom);
+
+  const leagueConfig = useAtomValue(fantasyLeagueConfigAtom);
 
   const sortedRounds = useMemo(() => {
     return [...rounds].sort((a, b) => {
@@ -80,6 +83,7 @@ export function useFantasyLeagueGroup() {
     isAdminMember: userMemberRecord?.is_admin === true,
     mutateLeague,
     refreshRounds,
-    isOfficialLeague
+    isOfficialLeague,
+    leagueConfig
   };
 }
