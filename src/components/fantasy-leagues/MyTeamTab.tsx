@@ -10,6 +10,7 @@ import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup
 import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
 import TeamHistoryBar from './my-team/TeamHistoryBar';
 import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
+import CreateFantasyTeamProvider from '../../providers/fantasy-teams/CreateFantasyTeamProvider';
 
 
 /** Renders the my team tab  */
@@ -69,7 +70,7 @@ function MyTeamModeSelector() {
   return (
     <Fragment>
       <TeamHistoryBar />
-      
+
       <Activity mode={viewMode === "pitch-view" ? "visible" : "hidden"} >
         {roundTeam && (
           <FantasyLeagueTeamProvider
@@ -88,12 +89,11 @@ function MyTeamModeSelector() {
       </Activity>
 
       <Activity mode={viewMode === "create-team" ? "visible" : "hidden"} >
-        <CreateMyTeam
+        {round && <CreateFantasyTeamProvider
           leagueRound={round}
-          onBack={() => { }}
-          leagueConfig={leagueConfig}
-          onTeamCreated={() => { }}
-        />
+        >
+          <CreateMyTeam/>
+        </CreateFantasyTeamProvider>}
       </Activity>
 
       <Activity mode={viewMode === "no-team-locked" ? "visible" : "hidden"} >

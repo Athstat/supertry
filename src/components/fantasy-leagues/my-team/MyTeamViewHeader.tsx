@@ -4,7 +4,6 @@ import SaveTeamBar from './SaveTeamBar';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { Lock } from 'lucide-react';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
-import { IGamesLeagueConfig } from '../../../types/leagueConfig';
 import RoundedCard from '../../shared/RoundedCard';
 import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSummary';
 import { Activity } from '../../shared/Activity';
@@ -13,19 +12,30 @@ import { useMyTeamView } from './MyTeamStateProvider';
 import { useAuth } from '../../../contexts/AuthContext';
 import BlueGradientCard from '../../shared/BlueGradientCard';
 import { LeagueRoundCountdown2 } from '../../fantasy-league/LeagueCountdown';
+import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 
 type Props = {
-  leagueRound: IFantasyLeagueRound;
-  leagueConfig: IGamesLeagueConfig;
-  onTeamUpdated: () => Promise<void>;
+  onTeamUpdated?: () => Promise<void>;
 };
 
 /** Renders My Team View Header */
-export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpdated }: Props) {
-  const { totalSpent, selectedCount, team } = useFantasyLeagueTeam();
+export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
+  const {leagueConfig} = useFantasyLeagueGroup();
+  const { totalSpent, selectedCount, team, leagueRound } = useFantasyLeagueTeam();
 
   const { authUser } = useAuth();
   const displayName = (authUser?.username || authUser?.first_name || team?.team_name);
+
+  const handleTeamUpdated = async () => {
+    if (onTeamUpdated) {
+      await onTeamUpdated();
+    }
+  }
+
+  if (!leagueRound || !leagueConfig) {
+    return;
+  }
+
 
   return (
     <div className="px-4 flex flex-col gap-3.5" >
@@ -61,7 +71,10 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
         </div>
       </div>
 
-      {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
+      {leagueRound && <SaveTeamBar 
+        leagueRound={leagueRound} 
+        onTeamUpdated={handleTeamUpdated} 
+      />}
 
       <TeamPointsCard
         leagueRound={leagueRound}

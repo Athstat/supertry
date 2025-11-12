@@ -1,3 +1,4 @@
+import { PositionClass } from "./athletes";
 import { IFantasyTeamAthlete } from "./fantasyTeamAthlete";
 import { RugbyPlayer } from "./rugbyPlayer";
 
@@ -7,7 +8,7 @@ export type BasePositionType = {
   shortName: string;
   x: string;
   y: string;
-  positionClass?: string;
+  positionClass?: PositionClass;
   isSpecial?: boolean;
 }
 

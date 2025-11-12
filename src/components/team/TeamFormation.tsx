@@ -1,18 +1,17 @@
 import { useMemo } from 'react';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
-import { IFantasyLeagueTeamSlot } from '../../types/fantasyLeagueTeam';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3D } from '../shared/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
+import { useFantasyLeagueTeam } from '../fantasy-leagues/my-team/FantasyLeagueTeamProvider';
 
 interface TeamFormationProps {
-  players: IFantasyLeagueTeamSlot[];
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
-  round: IFantasyLeagueRound
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function TeamFormation3D({ players: slots, onPlayerClick, round }: TeamFormationProps) {
+export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
+
+  const {slots, leagueRound: round} = useFantasyLeagueTeam();
 
   const firstRowSlots = useMemo(() => {
     return slots
@@ -28,6 +27,9 @@ export function TeamFormation3D({ players: slots, onPlayerClick, round }: TeamFo
       });
   }, [slots]);
 
+  if (!round) {
+    return;
+  }
 
   return (
     <div className="relative w-full flex flex-col justify-center">

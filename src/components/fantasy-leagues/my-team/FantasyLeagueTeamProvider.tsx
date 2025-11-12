@@ -4,7 +4,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
-import { IProAthlete } from "../../../types/athletes"
+import { IProAthlete, PositionClass } from "../../../types/athletes"
 import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils/athleteUtils"
 import { Position } from "../../../types/position"
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics"
@@ -317,7 +317,7 @@ export function useFantasyLeagueTeam() {
     const isTeamFull = useMemo(() => selectedCount === 6, [selectedCount]);
 
     const toPosition = (
-        p: { name: string; position_class: string; isSpecial?: boolean },
+        p: { name: string; position_class: PositionClass; isSpecial?: boolean },
         index: number
     ): Position => ({
         id: p.position_class || String(index),

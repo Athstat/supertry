@@ -3,11 +3,15 @@ import { leagueService } from "../services/leagueService";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
 import { useDebounced } from "./useDebounced";
 
+
+
 /** Fetches the league config */
 export function useLeagueConfig(seasonId?: string) {
 
     const [isLoading, setLoading] = useState<boolean>(false);
-    const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(null);
+    const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig>(
+        getFallbackConfig(seasonId ?? "")
+    );
 
     const debouncedLoading = useDebounced(isLoading, 500);
 
@@ -20,7 +24,7 @@ export function useLeagueConfig(seasonId?: string) {
             setLoading(true);
 
             try {
-                
+
                 const config = await leagueService.getLeagueConfig(
                     seasonId ?? ""
                 );
@@ -45,4 +49,21 @@ export function useLeagueConfig(seasonId?: string) {
         leagueConfig,
         isLoading: debouncedLoading
     };
+}
+
+function getFallbackConfig(leagueId: string) : IGamesLeagueConfig {
+    return {
+        "league_id": leagueId,
+        "league": leagueId,
+        "team_budget": 240.0,
+        "lineup_size": 5,
+        "bench_size": 0,
+        "min_slot_index": 1,
+        "max_slot_index": 5,
+        "transfers_allowed": 0,
+        "current_round": 18,
+        "transfers_activated": true,
+        "allowed_positions": [],
+        "starting_positions": []
+    }
 }
