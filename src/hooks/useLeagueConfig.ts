@@ -1,23 +1,30 @@
 import { useEffect, useState } from "react";
 import { leagueService } from "../services/leagueService";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
-import { IFantasyLeagueRound } from "../types/fantasyLeague";
+import { useDebounced } from "./useDebounced";
 
 /** Fetches the league config */
-export function useLeagueConfig(league: IFantasyLeagueRound | undefined) {
+export function useLeagueConfig(seasonId?: string) {
 
+    const [isLoading, setLoading] = useState<boolean>(false);
     const [leagueConfig, setLeagueConfig] = useState<IGamesLeagueConfig | null>(null);
+
+    const debouncedLoading = useDebounced(isLoading, 500);
 
     useEffect(() => {
         const fetchLeagueConfig = async () => {
-            if (!league?.id) {
+            if (!seasonId) {
                 return;
             }
 
+            setLoading(true);
+
             try {
+                
                 const config = await leagueService.getLeagueConfig(
-                    league?.official_league_id
+                    seasonId ?? ""
                 );
+
                 if (config) {
                     setLeagueConfig(config);
                     console.log("League config: ", config);
@@ -26,12 +33,16 @@ export function useLeagueConfig(league: IFantasyLeagueRound | undefined) {
                 }
             } catch (err) {
                 console.error("Error fetching league config:", err);
-                console.log("An error occurred while loading league configuration");
             }
+
+            setLoading(false);
         };
 
         fetchLeagueConfig();
-    }, [league?.id]);
+    }, [seasonId]);
 
-    return leagueConfig;
+    return {
+        leagueConfig,
+        isLoading: debouncedLoading
+    };
 }

@@ -71,11 +71,11 @@ export function useTeamHistory() {
     }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound]);
 
     return {
-        team,
+        roundTeam: team,
         round: currentRound,
         manager,
         rounds: sortedRounds,
         moveNextRound,
-        movePreviousRound
+        movePreviousRound,
     }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { TeamFormation3D } from '../../team/TeamFormation';
 import { PlayerActionModal } from '../../team/PlayerActionModal';
@@ -15,15 +15,14 @@ import { AnimatePresence } from 'framer-motion';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
-  team: IFantasyLeagueTeam;
 };
 
 /** Renders my team pitch view */
-export default function MyTeamPitchView({ leagueRound, team }: Props) {
+export default function MyTeamPitchView({ leagueRound }: Props) {
 
   useHideBottomNavBar();
 
-  const { slots, isTeamFull, selectedCount } = useFantasyLeagueTeam();
+  const { slots, isTeamFull, selectedCount, team } = useFantasyLeagueTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
   const [showActionModal, setShowActionModal] = useState(false);
@@ -138,7 +137,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
         />
       )}
 
-      {selectedPlayer && showPointsModal && (
+      {selectedPlayer && showPointsModal && team && (
         <PointsBreakdownModal
           isOpen={showPointsModal}
           athlete={selectedPlayer}

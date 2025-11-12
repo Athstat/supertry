@@ -3,14 +3,14 @@
  */
 
 import { atom } from "jotai";
-import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../types/fantasyLeague";
+import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { DjangoUserMinimal } from "../../../types/auth";
 
 /** Holds the current league round atom to fetch team from */
 export const teamHistoryCurrentRoundAtom = atom<IFantasyLeagueRound>();
 
 /** Holds the current league round team to display */
-export const teamHistoryCurrentTeamAtom = atom<FantasyLeagueTeamWithAthletes>();
+export const teamHistoryCurrentTeamAtom = atom<IFantasyLeagueTeam>();
 
 /** Export holds the user id of the manager of a team */
 export const teamHistoryTeamManagerAtom = atom<DjangoUserMinimal>();

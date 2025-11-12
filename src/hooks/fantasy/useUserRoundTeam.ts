@@ -7,7 +7,7 @@ export function useUserRoundTeam(leagueRound?: IFantasyLeagueRound, userId?: str
     
     const finalShouldFetch = shouldFetch && Boolean(userId) && Boolean(leagueRound);
     const fetchKey = finalShouldFetch ? `/fantasy-league-rounds/${leagueRound?.id}/user-teams/${userId}` : null;
-    const { data: roundTeam, isLoading, error } = useSWR(fetchKey, () => leagueService.getUserRoundTeam(leagueRound?.id ?? 0, userId ?? ""));
+    const { data: roundTeam, isLoading, error } = useSWR(fetchKey, () => leagueService.getUserParticipatingTeam(leagueRound?.id ?? 0, userId ?? ""));
 
     return {
         roundTeam,

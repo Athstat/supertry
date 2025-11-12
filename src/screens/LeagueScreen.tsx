@@ -9,7 +9,7 @@ import { LeaguePredictionsTab } from '../components/fantasy-league/LeaguePredict
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
 import LeagueCommissionerTab from '../components/fantasy-league/commissioner/LeagueCommissionerTab';
-import MyTeams from '../components/fantasy-leagues/MyTeams';
+import MyTeamsTab from '../components/fantasy-leagues/MyTeamTab';
 import { useQueryState } from '../hooks/useQueryState';
 import { useEffect, useState } from 'react';
 import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverviewTab';
@@ -114,7 +114,7 @@ function Content() {
         pillTabRowClassName="px-4"
       >
         <TabViewPage tabKey="my-team">
-          <MyTeams onEditChange={setIsEditing} />
+          <MyTeamsTab onEditChange={setIsEditing} />
         </TabViewPage>
 
         <TabViewPage tabKey="standings" className="px-4">
