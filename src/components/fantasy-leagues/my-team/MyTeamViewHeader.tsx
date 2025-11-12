@@ -23,7 +23,7 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
   const { totalSpent, selectedCount, team } = useFantasyLeagueTeam();
 
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
   const displayName = (authUser?.username || authUser?.first_name || team?.team_name);
 
   return (
@@ -40,11 +40,12 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <p className="font-bold ">{displayName || "My Team"}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-            Game Week {leagueRound?.start_round}
-          </p>
+
+        <div className="flex flex-row items-center justify-center text-center gap-1">
+
+          <div>
+            <p className="font-bold ">{displayName || "My Team"}</p>
+          </div>
         </div>
 
         <div className="flex-1 w-full flex flex-col items-end justify-center">

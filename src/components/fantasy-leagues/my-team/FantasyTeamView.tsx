@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import { Activity } from '../../shared/Activity';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
 import MyTeamPitchView from './MyTeamPitchView';
-import MyTeamEditView from './MyTeamEditView';
-import { useMyTeamView } from './MyTeamStateProvider';
 import PushOptInModal from '../../ui/PushOptInModal';
 import { requestPushPermissions } from '../../../utils/bridgeUtils';
 import MyTeamViewHeader from './MyTeamViewHeader';
@@ -21,9 +18,8 @@ type Props = {
 }
 
 /** Renders a fantasy team view, with editor capabilities */
-export default function FantasyTeamView({ leagueRound, leagueConfig, onTeamUpdated, onEditChange }: Props) {
-  
-  const { viewMode } = useMyTeamView();
+export default function FantasyTeamView({ leagueRound, leagueConfig, onTeamUpdated}: Props) {
+
   const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
     useFantasyLeagueTeam();
 
@@ -40,17 +36,7 @@ export default function FantasyTeamView({ leagueRound, leagueConfig, onTeamUpdat
         />
       )}
 
-      <Activity mode={viewMode === 'edit' ? 'visible' : 'hidden'}>
-        <MyTeamEditView
-          leagueConfig={leagueConfig}
-          leagueRound={leagueRound}
-          onEditChange={onEditChange}
-        />
-      </Activity>
-
-      <Activity mode={viewMode === 'pitch' ? 'visible' : 'hidden'}>
-        {leagueRound && <MyTeamPitchView leagueRound={leagueRound} />}
-      </Activity>
+      {leagueRound && <MyTeamPitchView leagueRound={leagueRound} />}
 
       <PlayerPickerV2
         isOpen={swapState.open && swapState.slot != null && Boolean(swapState.position)}
