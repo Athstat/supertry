@@ -9,11 +9,15 @@ import { useCallback, useMemo } from "react";
 */
 
 export function useTeamHistory() {
-    const team = useAtomValue(teamHistoryCurrentTeamAtom);
+    const [team, setTeam] = useAtom(teamHistoryCurrentTeamAtom);
     const [currentRound, setCurrentRound] = useAtom(teamHistoryCurrentRoundAtom);
     const manager = useAtomValue(teamHistoryTeamManagerAtom);
 
     const { sortedRounds, currentRound: groupCurrentRound } = useFantasyLeagueGroup();
+
+    const resetTeamForNewRound = useCallback(() => {
+        setTeam(undefined);
+    }, [setTeam]);
 
     const currentRoundIndex = useMemo(() => {
         if (currentRound) {
@@ -50,8 +54,9 @@ export function useTeamHistory() {
 
         const nextRound = sortedRounds[nextIndex];
         setCurrentRound(nextRound);
+        resetTeamForNewRound();
 
-    }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound]);
+    }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound, resetTeamForNewRound]);
 
     const movePreviousRound = useCallback(() => {
 
@@ -67,8 +72,9 @@ export function useTeamHistory() {
 
         const nextRound = sortedRounds[nextIndex];
         setCurrentRound(nextRound);
+        resetTeamForNewRound();
 
-    }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound]);
+    }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound, resetTeamForNewRound]);
 
     return {
         roundTeam: team,
