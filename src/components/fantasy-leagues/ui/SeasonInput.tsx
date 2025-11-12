@@ -11,7 +11,7 @@ type Props = {
 
 export default function SeasonInput({ options, value, onChange }: Props) {
     return (
-        <div>
+        <div className='dark:text-white' >
             <label>Season</label>
 
             <div className="flex flex-row no-scrollbar items-center flex-nowrap gap-2 overflow-x-auto" >
