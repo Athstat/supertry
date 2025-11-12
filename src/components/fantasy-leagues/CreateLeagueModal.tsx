@@ -49,7 +49,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
           <CreateLeagueForm />
         </TabViewPage>
 
-        <TabViewPage tabKey='join' className='flex flex-col gap-4' >
+        <TabViewPage tabKey='join' className='flex dark:text-white flex-col gap-4' >
           <div className='flex flex-col' >
             <p className='font-bold text-xl' >Join League</p>
             <SecondaryText>

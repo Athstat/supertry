@@ -10,6 +10,7 @@ import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSu
 import { Activity } from '../../shared/Activity';
 import SecondaryText from '../../shared/SecondaryText';
 import { useMyTeamView } from './MyTeamStateProvider';
+import { useAuth } from '../../../contexts/AuthContext';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -21,6 +22,9 @@ type Props = {
 export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpdated }: Props) {
   const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
   const { totalSpent, selectedCount, team } = useFantasyLeagueTeam();
+
+  const {authUser} = useAuth();
+  const displayName = (authUser?.username || authUser?.first_name || team?.team_name);
 
   return (
     <div className="px-4 flex flex-col gap-3.5" >
@@ -37,7 +41,7 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
         </div>
 
         <div className="flex flex-col items-center justify-center">
-          <p className="font-bold ">{team?.first_name || "My Team"}</p>
+          <p className="font-bold ">{displayName || "My Team"}</p>
           <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
             Game Week {leagueRound?.start_round}
           </p>
@@ -55,7 +59,7 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
         </div>
       </div>
 
-            {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
+      {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
       <Activity mode={isLocked ? "visible" : "hidden"} >
         <TeamPointsCard
@@ -73,8 +77,8 @@ type ViewSwitcherProps = {
 export function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
 
   const isLocked = isLeagueRoundLocked(leagueRound);
-  const {navigate: setViewMode, viewMode} = useMyTeamView();
-  const {changesDetected} = useFantasyLeagueTeam();
+  const { navigate: setViewMode, viewMode } = useMyTeamView();
+  const { changesDetected } = useFantasyLeagueTeam();
 
   return (
     <Activity mode={changesDetected ? 'hidden' : 'visible'}>
@@ -117,27 +121,27 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
   const { userScore, highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummary(leagueRound);
 
-    return (
-        <div className="flex flex-col" >
-            <Activity mode={isLoading ? "hidden" : "visible"} >
-                <div className="flex flex-row items-center justify-center gap-6" >
+  return (
+    <div className="flex flex-col" >
+      <Activity mode={isLoading ? "hidden" : "visible"} >
+        <div className="flex flex-row items-center justify-center gap-6" >
 
-                    <div className="flex flex-col items-center justify-center" >
-                        <p className="font-black text-md" >{Math.round(averagePointsScored ?? 0)}</p>
-                        <SecondaryText className="text-[10px]" >Average</SecondaryText>
-                    </div>
+          <div className="flex flex-col items-center justify-center" >
+            <p className="font-black text-md" >{Math.round(averagePointsScored ?? 0)}</p>
+            <SecondaryText className="text-[10px]" >Average</SecondaryText>
+          </div>
 
-                    <div className="flex flex-col items-center justify-center" >
-                        <p className="font-black text-md" >{Math.round(userScore ?? 0)}</p>
-                        <SecondaryText className="text-[10px]" >Your Score</SecondaryText>
-                    </div>
+          <div className="flex flex-col items-center justify-center" >
+            <p className="font-black text-md" >{Math.round(userScore ?? 0)}</p>
+            <SecondaryText className="text-[10px]" >Your Score</SecondaryText>
+          </div>
 
-                    <div className="flex flex-col items-center justify-center" >
-                        <p className="font-black text-md" >{Math.round(highestPointsScored ?? 0)}</p>
-                        <SecondaryText className="text-[10px]" >Highest</SecondaryText>
-                    </div>
-                </div>
-            </Activity>
+          <div className="flex flex-col items-center justify-center" >
+            <p className="font-black text-md" >{Math.round(highestPointsScored ?? 0)}</p>
+            <SecondaryText className="text-[10px]" >Highest</SecondaryText>
+          </div>
         </div>
-    )
+      </Activity>
+    </div>
+  )
 }

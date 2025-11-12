@@ -44,7 +44,7 @@ export default function LeagueVisibilityInput({ value, onChange }: Props) {
     ]
 
     return (
-        <div className="flex flex-col gap-1" >
+        <div className="flex flex-col gap-1  dark:text-white" >
             <label>Visibility</label>
 
             <div className="flex flex-row items-start justify-start gap-2" >
