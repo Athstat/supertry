@@ -88,7 +88,7 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
     <div className="mt-4 ">
       <div className='flex flex-col relative'>
 
-        <div className='px-4 mb-2' >
+        <div className='px-4 mb-4' >
 
           {!isTeamFull && (
             <WarningCard className='text-sm' >
