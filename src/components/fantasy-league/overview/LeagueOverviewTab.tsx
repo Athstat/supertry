@@ -8,7 +8,6 @@ import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from './UserRoundOverv
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import UserRoundScoringUpdate from './UserRoundScoringUpdate';
 import UserTeamOverview from './UserTeamOverview';
-import LeagueRoundFixturesOverview from './LeagueRoundFixturesOverview';
 import { GamePlayHelpButton } from '../../branding/help/LearnScrummyNoticeCard';
 import LeagueRoundCountdown from '../LeagueCountdown';
 import BlueGradientCard from '../../shared/BlueGradientCard';
@@ -65,10 +64,6 @@ export default function LeagueOverviewTab() {
       {currentRound && userTeam && (
         <UserTeamOverview userTeam={userTeam} leagueRound={currentRound} />
       )}
-
-      {/* <Experimental> */}
-      {currentRound && <LeagueRoundFixturesOverview leagueRound={currentRound} />}
-      {/* </Experimental> */}
     </div>
   );
 }

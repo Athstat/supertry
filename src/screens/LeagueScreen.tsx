@@ -52,9 +52,15 @@ function Content() {
   }
 
   const headerItems: TabViewHeaderItem[] = [
+    // {
+    //   label: 'Overview',
+    //   tabKey: 'overview',
+    //   className: 'w-fit',
+    // },
+    
     {
-      label: 'Overview',
-      tabKey: 'overview',
+      label: 'My Team',
+      tabKey: 'my-team',
       className: 'w-fit',
     },
     {
@@ -65,11 +71,6 @@ function Content() {
     {
       label: 'Predictions',
       tabKey: 'predictions',
-      className: 'w-fit',
-    },
-    {
-      label: 'My Team',
-      tabKey: 'my-team',
       className: 'w-fit',
     },
 

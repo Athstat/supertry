@@ -78,12 +78,14 @@ function Content() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-row items-center gap-2 justify-between">
         <div>
-          <p className="font-bold text-2xl">{currentRound?.title}</p>
+
 
           <div className="flex flex-row items-center gap-1">
             <Globe className="w-4 h-4" />
             <p className="">{league.title}</p>
           </div>
+          
+          <p className="font-bold text-md">{currentRound?.title}</p>
         </div>
 
         <div>
