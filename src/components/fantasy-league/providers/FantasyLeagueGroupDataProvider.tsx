@@ -1,12 +1,13 @@
 import { Fragment, ReactNode, useEffect, useState } from "react"
-import { currGroupMemberAtom, fantasyLeagueGroupAtom, fantasyLeagueGroupMembersAtom, fantasyLeagueGroupRoundsAtom } from "../../../state/fantasy/fantasyLeagueGroup.atoms"
+import { currGroupMemberAtom, fantasyLeagueConfigAtom, fantasyLeagueGroupAtom, fantasyLeagueGroupMembersAtom, fantasyLeagueGroupRoundsAtom } from "../../../state/fantasy/fantasyLeagueGroup.atoms"
 import { ScopeProvider } from "jotai-scope"
-import { useSetAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import useSWR from "swr"
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService"
 import { LoadingState } from "../../ui/LoadingState"
 import { useLocation } from "react-router-dom"
+import { useLeagueConfig } from "../../../hooks/useLeagueConfig"
 
 type Props = {
     children?: ReactNode,
@@ -20,7 +21,8 @@ export default function FantasyLeagueGroupDataProvider({ children, leagueId, loa
         fantasyLeagueGroupAtom,
         fantasyLeagueGroupMembersAtom,
         fantasyLeagueGroupRoundsAtom,
-        currGroupMemberAtom
+        currGroupMemberAtom,
+        fantasyLeagueConfigAtom
     ]
 
     return (
@@ -38,11 +40,14 @@ export default function FantasyLeagueGroupDataProvider({ children, leagueId, loa
 
 function Fetcher({ children, leagueId, loadingFallback }: Props) {
 
-    const setFantasyLeagueGroup = useSetAtom(fantasyLeagueGroupAtom);
+    const [leagueGroup, setFantasyLeagueGroup] = useAtom(fantasyLeagueGroupAtom);
     const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
     const setFantasyLeagueGroupRounds = useSetAtom(fantasyLeagueGroupRoundsAtom);
+    const setLeagueConfig = useSetAtom(fantasyLeagueConfigAtom);
 
     const { state } = useLocation();
+
+    const {leagueConfig, isLoading: loadingConfig} = useLeagueConfig(leagueGroup?.season_id);
 
     const key = leagueId ? swrFetchKeys.getFantasyLeagueGroupById(leagueId) : null;
     const { data: league, isLoading: loadingLeague } = useSWR(key, () => fantasyLeagueGroupsService.getGroupById(leagueId ?? ""));
@@ -54,7 +59,7 @@ function Fetcher({ children, leagueId, loadingFallback }: Props) {
     const { data: rounds, isLoading: loadingRounds } = useSWR(roundsKey, () => fantasyLeagueGroupsService.getGroupRounds(leagueId ?? ""))
 
     const [isMutating, setMutate] = useState<boolean>(false);
-    const isLoading = loadingLeague || loadingMembers || loadingRounds || isMutating;
+    const isLoading = loadingLeague || loadingMembers || loadingRounds || isMutating || loadingConfig; 
 
     useEffect(() => {
 
@@ -77,6 +82,12 @@ function Fetcher({ children, leagueId, loadingFallback }: Props) {
         reloadMembers();
 
     }, [leagueId, mutate, state]);
+
+    useEffect(() => {
+        if (leagueConfig) {
+            setLeagueConfig(leagueConfig);
+        }
+    }, [leagueConfig, setLeagueConfig]);
 
     if (isLoading) {
         return (
