@@ -6,6 +6,7 @@ import { Fragment, ReactNode, useEffect } from "react";
 import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { DjangoUserMinimal } from "../../types/auth";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import { useDebounced } from "../../hooks/useDebounced";
 
 type Props = {
     children?: ReactNode,
@@ -78,7 +79,7 @@ function RoundTeamProvider({ loadingFallback, children }: Props) {
 
     const { roundTeam, isLoading: loadingTeam } = useUserRoundTeam(round?.id, manager?.kc_id, shouldFetch);
 
-    const isLoading = loadingTeam;
+    const isLoading = useDebounced(loadingTeam, 1000);
 
     useEffect(() => {
         if (roundTeam) {

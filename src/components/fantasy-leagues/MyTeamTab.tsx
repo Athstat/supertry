@@ -84,6 +84,7 @@ function MyTeamModeSelector() {
             />
           </FantasyLeagueTeamProvider>
         )}
+
       </Activity>
 
       <Activity mode={viewMode === "create-team" ? "visible" : "hidden"} >

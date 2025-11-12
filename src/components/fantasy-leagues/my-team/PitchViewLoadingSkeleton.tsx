@@ -24,6 +24,13 @@ export default function PitchViewLoadingSkeleton() {
                     <RoundedCard className="w-[50px] border-none h-[15px]" />
                 </div>
             </div>
+
+            <div className="h-[30px] my-4 flex flex-col items-center justify-center" >
+                <RoundedCard className="w-1/2 border-none h-[30px] animate-pulse" >
+
+                </RoundedCard>
+            </div>
+
             <div className="mt-4 ">
                 <div className='flex flex-col relative'>
 
