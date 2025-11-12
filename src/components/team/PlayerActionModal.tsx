@@ -2,7 +2,7 @@ import { Coins, Lock } from "lucide-react";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import PlayerMugshot from "../shared/PlayerMugshot";
-import AvailabilityIcon from "../players/availability/AvailabilityIcon";
+import AvailabilityIcon, { RoundAvailabilityText } from "../players/availability/AvailabilityIcon";
 import BottomSheetView from "../ui/BottomSheetView";
 import CloseButton from "../shared/buttons/CloseButton";
 import SecondaryText from "../shared/SecondaryText";
@@ -85,7 +85,7 @@ export function PlayerActionModal({
 
   return (
     <BottomSheetView
-      className="min-h-[400px] py-4 px-6"
+      className="max-h-[440px] min-h-[400px] py-4 px-6"
       key={player.tracking_id}
     >
       <div className="flex flex-col gap-4" >
@@ -162,6 +162,13 @@ export function PlayerActionModal({
         </div>
 
       </div>
+
+      {league && (
+        <RoundAvailabilityText
+          round={league}
+          athlete={player}
+        />
+      )}
 
       {/* <div>
         <PowerRankingChartTab 

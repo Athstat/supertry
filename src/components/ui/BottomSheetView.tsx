@@ -24,7 +24,7 @@ export default function BottomSheetView({ className, children }: Props) {
                 }}
             >
                 <div className={twMerge(
-                    "lg:max-w-[40%] flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
+                    "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className
                 )}>
 

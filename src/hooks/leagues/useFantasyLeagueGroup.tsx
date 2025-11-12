@@ -31,6 +31,7 @@ export function useFantasyLeagueGroup() {
     // if all rounds are have ended, go to the last round
     // if all rounds are not yet open but they have not ended, use first round
 
+
     const openRounds = sortedRounds.filter(r => {
       return r.is_open === true;
     });

@@ -1,6 +1,5 @@
 import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import { useMyTeamView } from './MyTeamStateProvider';
 import SaveTeamBar from './SaveTeamBar';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { Lock } from 'lucide-react';
@@ -10,6 +9,7 @@ import RoundedCard from '../../shared/RoundedCard';
 import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSummary';
 import { Activity } from '../../shared/Activity';
 import SecondaryText from '../../shared/SecondaryText';
+import { useMyTeamView } from './MyTeamStateProvider';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;
@@ -23,8 +23,10 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
   const { totalSpent, selectedCount, team } = useFantasyLeagueTeam();
 
   return (
-    <div className="px-4 flex flex-col gap-3.5">
-      <div className="flex flex-row  items-center justify-between">
+    <div className="px-4 flex flex-col gap-3.5" >
+
+      <div className="flex flex-row  items-center justify-between" >
+
         <div className="flex flex-col w-full  flex-1 items-start justify-start">
           <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
             Selected
@@ -35,7 +37,7 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
         </div>
 
         <div className="flex flex-col items-center justify-center">
-          <p className="font-bold ">{team?.first_name || 'My Team'}</p>
+          <p className="font-bold ">{team?.first_name || "My Team"}</p>
           <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
             Game Week {leagueRound?.start_round}
           </p>
@@ -55,12 +57,10 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
 
       {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
-      <Activity mode={isLocked ? 'hidden' : 'visible'}>
-        <ViewSwitcher leagueRound={leagueRound} />
-      </Activity>
-
-      <Activity mode={isLocked ? 'visible' : 'hidden'}>
-        <TeamPointsCard leagueRound={leagueRound} />
+      <Activity mode={isLocked ? "visible" : "hidden"} >
+        <TeamPointsCard
+          leagueRound={leagueRound}
+        />
       </Activity>
     </div>
   );
@@ -70,10 +70,11 @@ type ViewSwitcherProps = {
   leagueRound: IFantasyLeagueRound;
 };
 
-function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
-  const { viewMode, navigate: setViewMode } = useMyTeamView();
-  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
-  const { changesDetected } = useFantasyLeagueTeam();
+export function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
+
+  const isLocked = isLeagueRoundLocked(leagueRound);
+  const {navigate: setViewMode, viewMode} = useMyTeamView();
+  const {changesDetected} = useFantasyLeagueTeam();
 
   return (
     <Activity mode={changesDetected ? 'hidden' : 'visible'}>

@@ -83,12 +83,29 @@ export function useGeneralPlayerAvailability(athleteId: string) {
     return firstReport?.status === "TEAM_NOT_PLAYING";
   }, [firstReport]);
 
+  const isPastGame = useMemo<boolean>(() => {
+    if (nextMatch) {
+      const dateNow = new Date();
+      const { kickoff_time } = nextMatch;
+
+      if (kickoff_time) {
+        const gameHours = 1000 * 60 * 60 * 3;
+        const gameAvgEnd = dateNow.valueOf() - gameHours;
+
+        return gameAvgEnd > new Date(kickoff_time).valueOf();
+      }
+    }
+
+    return false;
+  }, [nextMatch])
+
   return {
     report: firstReport,
     isLoading,
     nextMatch,
     isPending,
     isNotAvailable,
-    isTeamNotPlaying
+    isTeamNotPlaying,
+    isPastGame
   };
 }
