@@ -9,6 +9,7 @@ import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
 import TeamHistoryBar from './my-team/TeamHistoryBar';
+import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
 
 
 /** Renders the my team tab  */
@@ -18,6 +19,7 @@ export default function MyTeamsTab() {
   return (
     <TeamHistoryProvider
       user={authUser}
+      loadingFallback={<PitchViewLoadingSkeleton />}
     >
       <MyTeamModeSelector />
     </TeamHistoryProvider>

@@ -1,4 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
     count?: number
@@ -25,10 +26,17 @@ export default function RugbyPitch({ count = 5 }: Props) {
     )
 }
 
+type PitchProps = {
+    className?: string
+}
+
 /** Renders a 3 Dimensional Rugby Pitch by perspective like FPL */
-export function RugbyPitch3D() {
+export function RugbyPitch3D({className} : PitchProps) {
     return (
-        <div className="relative max-h-[500px] lg:max-h-[600px] overflow-clip" >
+        <div className={twMerge(
+            "relative max-h-[500px] lg:max-h-[600px] overflow-clip",
+            className
+        )} >
 
             {/* <PitchAdvertisingBoard /> */}
 
