@@ -5,6 +5,7 @@ import { ScopeProvider } from "jotai-scope";
 import { Fragment, ReactNode, useEffect } from "react";
 import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { DjangoUserMinimal } from "../../types/auth";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 
 type Props = {
     children?: ReactNode,
@@ -15,7 +16,7 @@ type Props = {
 /** Component that provides team history to its child components. 
  * Provder depends on the FantasyLeagueGroupProvider
  */
-export default function TeamHistoryProvider({children, user, loadingFallback} : Props) {
+export default function TeamHistoryProvider({ children, user, loadingFallback }: Props) {
 
     const atoms = [
         teamHistoryCurrentRoundAtom,
@@ -24,7 +25,7 @@ export default function TeamHistoryProvider({children, user, loadingFallback} : 
     ]
 
     return (
-        <ScopeProvider 
+        <ScopeProvider
             atoms={atoms}
         >
             <InnerProvider
@@ -37,35 +38,53 @@ export default function TeamHistoryProvider({children, user, loadingFallback} : 
     )
 }
 
-function InnerProvider({children, user, loadingFallback}: Props) {
+function InnerProvider({ children, user, loadingFallback }: Props) {
 
     const { currentRound } = useFantasyLeagueGroup();
 
-    const [round, setRound] = useAtom(teamHistoryCurrentRoundAtom);
-    const setTeam = useSetAtom(teamHistoryCurrentTeamAtom);
-    const [manager, setManager] = useAtom(teamHistoryTeamManagerAtom);
-
-    const shouldFetch = Boolean(round) && Boolean(manager);
-    const {roundTeam, isLoading: loadingTeam} = useUserRoundTeam(round, manager?.kc_id, shouldFetch);
-
-    const isLoading = loadingTeam;
+    const setRound = useSetAtom(teamHistoryCurrentRoundAtom);
+    const [, setManager] = useAtom(teamHistoryTeamManagerAtom);
 
     useEffect(() => {
         if (currentRound) {
             setRound(currentRound);
         }
+    }, [ currentRound, setRound ]);
 
+    useEffect(() => {
         if (user) {
             setManager(user);
         }
+    }, [user, setManager])
 
-    }, [currentRound, setRound, setManager, manager, user]);
+    return (
+        <Fragment>
+            <RoundTeamProvider
+                loadingFallback={loadingFallback}
+                user={user}
+            >
+                {children}
+            </RoundTeamProvider>
+        </Fragment>
+    )
+}
+
+
+function RoundTeamProvider({ loadingFallback, children }: Props) {
+    const setRoundTeam = useSetAtom(teamHistoryCurrentTeamAtom);
+
+    const { round, manager } = useTeamHistory();
+    const shouldFetch = Boolean(round) && Boolean(manager);
+
+    const { roundTeam, isLoading: loadingTeam } = useUserRoundTeam(round?.id, manager?.kc_id, shouldFetch);
+
+    const isLoading = loadingTeam;
 
     useEffect(() => {
         if (roundTeam) {
-            setTeam(roundTeam);
+            setRoundTeam(roundTeam);
         }
-    }, [roundTeam, setTeam]);
+    }, [roundTeam, setRoundTeam]);
 
     if (isLoading) {
         return (
@@ -73,11 +92,12 @@ function InnerProvider({children, user, loadingFallback}: Props) {
                 {loadingFallback}
             </Fragment>
         )
-    } 
+    }
 
     return (
         <Fragment>
             {children}
         </Fragment>
     )
+
 }

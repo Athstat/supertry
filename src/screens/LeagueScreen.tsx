@@ -12,7 +12,6 @@ import LeagueCommissionerTab from '../components/fantasy-league/commissioner/Lea
 import MyTeamsTab from '../components/fantasy-leagues/MyTeamTab';
 import { useQueryState } from '../hooks/useQueryState';
 import { useEffect, useState } from 'react';
-import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverviewTab';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
@@ -41,7 +40,7 @@ function Content() {
   initialTabKey = journey === 'my-team' ? 'my-team' : initialTabKey;
 
   // Hooks must be declared before any early returns
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEditing, ] = useState<boolean>(false);
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
@@ -114,7 +113,7 @@ function Content() {
         pillTabRowClassName="px-4"
       >
         <TabViewPage tabKey="my-team">
-          <MyTeamsTab onEditChange={setIsEditing} />
+          <MyTeamsTab />
         </TabViewPage>
 
         <TabViewPage tabKey="standings" className="px-4">
@@ -137,9 +136,6 @@ function Content() {
           <LeagueCommissionerTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="overview" className="px-4">
-          <LeagueOverviewTab />
-        </TabViewPage>
       </PilledTabView>
     </PageView>
   );

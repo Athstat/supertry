@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { teamHistoryCurrentRoundAtom, teamHistoryCurrentTeamAtom, teamHistoryTeamManagerAtom } from "../../state/fantasy/fantasy-teams/teamHistory.atoms";
 import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 /** 
  * Hook that provides functionality to travel through a teams history.
@@ -36,7 +36,7 @@ export function useTeamHistory() {
 
     }, [groupCurrentRound, sortedRounds]);
 
-    const moveNextRound = useMemo(() => {
+    const moveNextRound = useCallback(() => {
 
         if (maxIndex === undefined || currentRoundIndex === undefined || sortedRounds.length === 0) {
             return;
@@ -53,7 +53,7 @@ export function useTeamHistory() {
 
     }, [maxIndex, currentRoundIndex, sortedRounds, setCurrentRound]);
 
-    const movePreviousRound = useMemo(() => {
+    const movePreviousRound = useCallback(() => {
 
         if (maxIndex === undefined || currentRoundIndex === undefined || sortedRounds.length === 0) {
             return;

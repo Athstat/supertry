@@ -31,7 +31,9 @@ function MyTeamModeSelector() {
   const { round, roundTeam } = useTeamHistory();
   const { leagueConfig } = useFantasyLeagueGroup();
 
-  const isLocked = round && isLeagueRoundLocked(round);
+  const isLocked = useMemo(() => {
+    return round && isLeagueRoundLocked(round)
+  }, [round]);
 
   const viewMode: ViewMode = useMemo<ViewMode>(() => {
 
