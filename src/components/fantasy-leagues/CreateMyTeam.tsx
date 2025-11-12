@@ -2,8 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 
 import { Position } from '../../types/position';
-import { seasonService } from '../../services/seasonsService';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PlayerGameCard } from '../player/PlayerGameCard';
 import { IProAthlete, PositionClass } from '../../types/athletes';
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -28,9 +27,7 @@ import {
 } from '../../services/fantasy/teamPresetsService';
 
 import { analytics } from '../../services/analytics/anayticsService';
-import Experimental from '../shared/ab_testing/Experimental';
 import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
-import { rugbyPlayers } from '../../data/rugbyPlayers';
 
 export default function CreateMyTeam({
   leagueRound,
@@ -377,12 +374,12 @@ export default function CreateMyTeam({
   }
 
   return (
-    <div className="w-full py-4">
+    <div className="w-full px-4">
       {leagueRound && (
         <div className="flex flex-row items-center justify-between mb-5">
           <div className="flex flex-row items-center gap-2" style={{ marginTop: -20 }}>
             <div className="flex flex-col">
-              <p className="font-bold text-xl">{leagueRound?.title}</p>
+              <p className="font-semibold text-xl">Pick Your Team</p>
             </div>
           </div>
         </div>
