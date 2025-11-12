@@ -55,7 +55,7 @@ export default function MyTeamViewHeader({ leagueRound, leagueConfig, onTeamUpda
         </div>
       </div>
 
-      {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
+            {leagueRound && <SaveTeamBar leagueRound={leagueRound} onTeamUpdated={onTeamUpdated} />}
 
       <Activity mode={isLocked ? "visible" : "hidden"} >
         <TeamPointsCard
@@ -117,26 +117,27 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
   const { userScore, highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummary(leagueRound);
 
-  return (
-    <div className="flex flex-col py-2">
-      <Activity mode={isLoading ? 'hidden' : 'visible'}>
-        <div className="flex flex-row items-center justify-center gap-6">
-          <div className="flex flex-col items-center justify-center">
-            <p className="font-black text-xl">{Math.round(averagePointsScored ?? 0)}</p>
-            <SecondaryText>Average</SecondaryText>
-          </div>
+    return (
+        <div className="flex flex-col" >
+            <Activity mode={isLoading ? "hidden" : "visible"} >
+                <div className="flex flex-row items-center justify-center gap-6" >
 
-          <div className="flex flex-col items-center justify-center">
-            <p className="font-black text-xl">{Math.round(userScore ?? 0)}</p>
-            <SecondaryText>Your Score</SecondaryText>
-          </div>
+                    <div className="flex flex-col items-center justify-center" >
+                        <p className="font-black text-md" >{Math.round(averagePointsScored ?? 0)}</p>
+                        <SecondaryText className="text-[10px]" >Average</SecondaryText>
+                    </div>
 
-          <div className="flex flex-col items-center justify-center">
-            <p className="font-black text-xl">{Math.round(highestPointsScored ?? 0)}</p>
-            <SecondaryText>Highest</SecondaryText>
-          </div>
+                    <div className="flex flex-col items-center justify-center" >
+                        <p className="font-black text-md" >{Math.round(userScore ?? 0)}</p>
+                        <SecondaryText className="text-[10px]" >Your Score</SecondaryText>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center" >
+                        <p className="font-black text-md" >{Math.round(highestPointsScored ?? 0)}</p>
+                        <SecondaryText className="text-[10px]" >Highest</SecondaryText>
+                    </div>
+                </div>
+            </Activity>
         </div>
-      </Activity>
-    </div>
-  );
+    )
 }

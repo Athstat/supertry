@@ -90,10 +90,6 @@ export default function MyTeamPitchView({ leagueRound, team }: Props) {
 
         <div className='px-4 mb-4' >
 
-          <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide font-medium">
-            Greyed out players are not playing in this round's games
-          </p>
-
           {!isTeamFull && (
             <WarningCard className='text-sm' >
               <p>

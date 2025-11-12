@@ -1,4 +1,4 @@
-import { CirclePlus, Coins } from "lucide-react";
+import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
@@ -9,6 +9,9 @@ import BottomSheetHandle from "../../ui/BottomSheetHandle";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { twMerge } from "tailwind-merge";
 import TeamJersey from "../../player/TeamJersey";
+import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
+import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
+import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 
 
 type Props = {
@@ -18,7 +21,7 @@ type Props = {
 }
 
 /** Renders a bottom drawer for team subs */
-export default function TeamBenchDrawer({ superSubSlot, onPlayerClick }: Props) {
+export default function TeamBenchDrawer({ superSubSlot, onPlayerClick, leagueRound }: Props) {
 
   const handlePlayerClick = () => {
     if (onPlayerClick && superSubSlot.athlete) {
@@ -36,7 +39,7 @@ export default function TeamBenchDrawer({ superSubSlot, onPlayerClick }: Props) 
     )} >
       <div className="lg:max-w-[40%] md:max-w-[50%]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
 
-        <div className="w-full flex flex-col gap-2 p-3" >
+        <div className="w-full flex flex-col gap-1 p-2" >
           <BottomSheetHandle className="bg-slate-800" />
 
           <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
@@ -47,6 +50,7 @@ export default function TeamBenchDrawer({ superSubSlot, onPlayerClick }: Props) 
             <SubPlayerCard
               player={athlete}
               onClick={handlePlayerClick}
+              round={leagueRound}
             />
           )}
 
@@ -65,39 +69,77 @@ export default function TeamBenchDrawer({ superSubSlot, onPlayerClick }: Props) 
 
 type SubPlayerProps = {
   player: IFantasyTeamAthlete,
+  round: IFantasyLeagueRound
   onClick: () => void
 }
 
-function SubPlayerCard({ player, onClick }: SubPlayerProps) {
+function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
   const { position_class, purchase_price } = player;
+  const { league } = useFantasyLeagueGroup();
+  const isLocked = isLeagueRoundLocked(round);
+  
+  const { isNotAvailable, isTeamNotPlaying} = usePlayerRoundAvailability(
+    player.tracking_id,
+    league?.season_id ?? "",
+    round?.start_round ?? 0,
+  );
+
+  const showAvailabilityWarning = (isNotAvailable || isTeamNotPlaying);
 
 
   return (
     <div
-      className="w-full cursor-pointer border-none p-2 flex flex-row items-center justify-between"
+      className={twMerge(
+        "w-full cursor-pointer rounded-2xl p-2 flex flex-row items-center justify-between",
+        showAvailabilityWarning && "bg-yellow-200/10 dark:bg-yellow-700/10 border border-yellow-500/30 dark:border-yellow-700/30"
+      )}
       onClick={onClick}
     >
       <div className="flex flex-row items-center gap-2">
 
-        {player.image_url && <PlayerMugshot
-          url={player.image_url}
-          teamId={player.athlete_team_id}
-        />}
+        <div className="flex fle-row items-center gap-2" >
 
-        {!player.image_url && (
-          <div className="w-12 h-12 flex flex-col items-center justify-center rounded-full bg-blue-600/40" >
-            <TeamJersey
-              teamId={player.athlete_team_id}
-              className="w-10 h-10"
-              useBaseClasses={false}
-            />
-          </div>
-        )}
+          {showAvailabilityWarning && (
+            <div className="" >
+              <div className={twMerge(
+                " dark:bg-yellow-400 bg-yellow-400 hover:bg-yellow-400  border-yellow-500 dark:border-yellow-500 w-6 h-6 rounded-md flex flex-col items-center justify-center",
+              )} >
+                <TriangleAlert className={twMerge(
+                  "w-3.5  text-yellow-700 dark:text-yellow-700 h-4",
+                )} />
+              </div>
+            </div>
+          )}
+
+          {player.image_url && <PlayerMugshot
+            url={player.image_url}
+            teamId={player.athlete_team_id}
+          />}
+
+          {!player.image_url && (
+            <div className="w-12 h-12 flex flex-col items-center justify-center rounded-full bg-blue-600/40" >
+              <TeamJersey
+                teamId={player.athlete_team_id}
+                className="w-10 h-10"
+                useBaseClasses={false}
+              />
+            </div>
+          )}
+
+
+        </div>
 
         <div className="flex flex-col items-start justify-center" >
           <p className="text font-semibold" >{player.player_name}</p>
-          <SecondaryText className="text-xs" >{position_class ? formatPosition(position_class) : 'Substitute'}</SecondaryText>
+          
+          <div className="flex flex-row items-center gap-1" >
+            <SecondaryText className="text-xs" >{position_class ? formatPosition(position_class) : 'Substitute'}</SecondaryText>
+            {showAvailabilityWarning && !isLocked && (
+              <p className="text-[10px] text-yellow-500" >- Not Playing ⚠️</p>
+            )}
+          </div>
+
         </div>
       </div>
 
