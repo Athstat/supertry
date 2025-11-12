@@ -8,6 +8,7 @@ import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
+import TeamHistoryBar from '../my-team/TeamHistoryBar';
 
 
 /** Renders the my team tab  */
@@ -65,7 +66,8 @@ function MyTeamModeSelector() {
 
   return (
     <Fragment>
-
+      <TeamHistoryBar />
+      
       <Activity mode={viewMode === "pitch-view" ? "visible" : "hidden"} >
         {roundTeam && (
           <FantasyLeagueTeamProvider
