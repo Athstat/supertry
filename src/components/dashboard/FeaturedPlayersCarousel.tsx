@@ -15,9 +15,7 @@ import { useDeterministicShuffle } from '../../hooks/useShuffle';
 export default function FeaturedPlayersCarousel() {
   const navigate = useNavigate();
 
-  const wantedSeasons = [
-    '695fa717-1448-5080-8f6f-64345a714b10'
-  ];
+  const wantedSeasons = ['695fa717-1448-5080-8f6f-64345a714b10'];
 
   const {
     seasons,
@@ -34,7 +32,7 @@ export default function FeaturedPlayersCarousel() {
   );
 
   const players = (fetchedPlayers ?? []).filter(p => {
-    return (p.power_rank_rating ?? 0) > 60;
+    return (p.power_rank_rating ?? 0) > 40;
   });
 
   const { shuffledArr: shuffledPlayers } = useDeterministicShuffle(players, {

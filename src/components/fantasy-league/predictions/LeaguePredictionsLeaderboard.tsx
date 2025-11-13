@@ -8,6 +8,10 @@ import { isEmail } from '../../../utils/stringUtils';
 import NoContentCard from '../../shared/NoContentMessage';
 import { LoadingState } from '../../ui/LoadingState';
 import UserPredictionsHistoryModal from './UserPredictionsHistoryModal';
+import { usePredictionsCompareActions } from '../../../hooks/usePredictionsCompare';
+import { useAtomValue } from 'jotai';
+import { comparePredictionsAtomGroup } from '../../../state/comparePredictions.atoms';
+import UserPredictionsCompareModal from './compare/UserPredictionsCompareModal';
 
 type LeaguePredictionsLeaderboardProps = {
   rankings: LeaguePredictionRanking[];
@@ -27,6 +31,18 @@ export default function LeaguePredictionsLeaderboard({
     userId: string;
     username: string;
   } | null>(null);
+
+  const isPickingUsers = useAtomValue(comparePredictionsAtomGroup.isCompareModePredictionsPicking);
+  const selectedUsers = useAtomValue(comparePredictionsAtomGroup.compareUsersAtom);
+  const { addOrRemoveUser } = usePredictionsCompareActions();
+
+  const handleUserClick = (ranking: LeaguePredictionRanking) => {
+    if (isPickingUsers) {
+      addOrRemoveUser(ranking);
+    } else {
+      setSelectedUser({ userId: ranking.user_id, username: ranking.username });
+    }
+  };
 
   if (isLoading) {
     return <LoadingState />;
@@ -50,7 +66,7 @@ export default function LeaguePredictionsLeaderboard({
   const hasAnyResults = rankingsList.some(r => r.has_results);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-44">
       {!hasAnyResults && rankingsList.length > 0 && (
         <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -71,7 +87,9 @@ export default function LeaguePredictionsLeaderboard({
               ranking={r}
               key={index}
               isUser={user?.kc_id === r.user_id}
-              onClick={() => setSelectedUser({ userId: r.user_id, username: r.username })}
+              isPickingMode={isPickingUsers}
+              isSelected={selectedUsers.some(u => u.user_id === r.user_id)}
+              onClick={() => handleUserClick(r)}
             />
           );
         })}
@@ -90,7 +108,9 @@ export default function LeaguePredictionsLeaderboard({
               ranking={r}
               key={index}
               isUser={user?.kc_id === r.user_id}
-              onClick={() => setSelectedUser({ userId: r.user_id, username: r.username })}
+              isPickingMode={isPickingUsers}
+              isSelected={selectedUsers.some(u => u.user_id === r.user_id)}
+              onClick={() => handleUserClick(r)}
             />
           );
         })}
@@ -99,6 +119,8 @@ export default function LeaguePredictionsLeaderboard({
       {isEmpty && (
         <NoContentCard message="No predictions made in this league yet. Start making predictions!" />
       )}
+
+      <UserPredictionsCompareModal leagueId={leagueId} roundId={roundId} />
 
       {selectedUser && (
         <UserPredictionsHistoryModal
@@ -117,10 +139,18 @@ export default function LeaguePredictionsLeaderboard({
 type LeaderboardItemProps = {
   ranking: LeaguePredictionRanking;
   isUser?: boolean;
+  isPickingMode?: boolean;
+  isSelected?: boolean;
   onClick: () => void;
 };
 
-function LeaderboardItem({ ranking, isUser, onClick }: LeaderboardItemProps) {
+function LeaderboardItem({
+  ranking,
+  isUser,
+  isPickingMode,
+  isSelected,
+  onClick,
+}: LeaderboardItemProps) {
   return (
     <section id={isUser ? 'my-rank-section' : undefined}>
       <div
@@ -129,32 +159,42 @@ function LeaderboardItem({ ranking, isUser, onClick }: LeaderboardItemProps) {
           'p-4 rounded-xl flex flex-row items-center gap-4 bg-white border border-slate-300',
           'dark:bg-slate-800/40 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer',
           isUser &&
-            'dark:bg-primary-500 hover:animate-glow dark:hover:animate-glow dark:hover:bg-primary-500 hover:bg-primary-500 bg-primary-500 border border-primary-200dark:border-primary-400'
+            'dark:bg-primary-500 hover:animate-glow dark:hover:animate-glow dark:hover:bg-primary-500 hover:bg-primary-500 bg-primary-500 border border-primary-200dark:border-primary-400',
+          isSelected && 'ring-2 ring-yellow-500 dark:ring-yellow-400'
         )}
       >
         <div>
-          <p className={twMerge('text-lg font-bold text-blue-500', isUser && 'text-primary-100')}>
+          <p
+            className={twMerge(
+              'text-lg font-bold text-blue-500 dark:text-blue-400',
+              isUser && 'text-primary-100 dark:text-primary-100'
+            )}
+          >
             {ranking.rank ?? '-'}
           </p>
         </div>
 
         <div className="flex flex-col items-start">
-          <p className={twMerge('font-bold', isUser && 'text-white')}>{ranking.username}</p>
+          <p
+            className={twMerge('font-bold text-slate-800 dark:text-white', isUser && 'text-white')}
+          >
+            {ranking.username}
+          </p>
           <div className="flex flex-row items-center gap-2 flex-wrap">
-            <SecondaryText className={twMerge(isUser && 'dark:text-white text-white')}>
+            <SecondaryText className={twMerge(isUser && 'text-white dark:text-white')}>
               Predictions <strong>{ranking.predictions_made ?? '-'}</strong>
             </SecondaryText>
-            <SecondaryText className={twMerge(isUser && 'dark:text-white text-white')}>
+            <SecondaryText className={twMerge(isUser && 'text-white dark:text-white')}>
               Correct <strong>{ranking.has_results ? ranking.correct_predictions : '-'}</strong>
             </SecondaryText>
             {ranking.has_results && ranking.accuracy > 0 && (
               <SecondaryText
                 className={twMerge(
                   'flex items-center gap-1',
-                  isUser && 'dark:text-white text-white'
+                  isUser && 'text-white dark:text-white'
                 )}
               >
-                <Target className="w-3 h-3" />
+                <Target className="w-3 h-3 text-slate-600 dark:text-slate-300" />
                 <strong>{ranking.accuracy}%</strong>
               </SecondaryText>
             )}
