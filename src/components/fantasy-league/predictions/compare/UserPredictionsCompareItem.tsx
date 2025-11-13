@@ -80,7 +80,7 @@ export default function UserPredictionsCompareItem({ user, leagueId, roundId }: 
               label="Accuracy"
               value={`${stats.accuracy}%`}
               isLeader={stats.isAccuracyLeader}
-              icon={<Target className="w-3 h-3" />}
+              icon={<Target className="w-3 h-3 text-slate-600 dark:text-slate-300" />}
             />
           )}
         </div>
@@ -116,10 +116,15 @@ function StatRow({ label, value, isLeader, icon }: StatRowProps) {
     >
       <div className="flex items-center gap-1">
         {icon}
-        <SecondaryText className="text-xs">{label}</SecondaryText>
+        <SecondaryText className="text-xs text-slate-600 dark:text-slate-300">
+          {label}
+        </SecondaryText>
       </div>
       <p
-        className={twMerge('font-bold text-sm', isLeader && 'text-yellow-700 dark:text-yellow-400')}
+        className={twMerge(
+          'font-bold text-sm text-slate-900 dark:text-slate-100',
+          isLeader && 'text-yellow-700 dark:text-yellow-400'
+        )}
       >
         {value}
       </p>

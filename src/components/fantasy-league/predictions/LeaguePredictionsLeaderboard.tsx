@@ -3,7 +3,7 @@ import { LeaguePredictionRanking } from '../../../types/fantasyLeagueGroups';
 import SecondaryText from '../../shared/SecondaryText';
 import { twMerge } from 'tailwind-merge';
 import { useAuthUser } from '../../../hooks/useAuthUser';
-import { User, Target, Info, ArrowLeftRight } from 'lucide-react';
+import { User, Target, Info } from 'lucide-react';
 import { isEmail } from '../../../utils/stringUtils';
 import NoContentCard from '../../shared/NoContentMessage';
 import { LoadingState } from '../../ui/LoadingState';
@@ -12,7 +12,6 @@ import { usePredictionsCompareActions } from '../../../hooks/usePredictionsCompa
 import { useAtomValue } from 'jotai';
 import { comparePredictionsAtomGroup } from '../../../state/comparePredictions.atoms';
 import UserPredictionsCompareModal from './compare/UserPredictionsCompareModal';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
 
 type LeaguePredictionsLeaderboardProps = {
   rankings: LeaguePredictionRanking[];
@@ -35,8 +34,7 @@ export default function LeaguePredictionsLeaderboard({
 
   const isPickingUsers = useAtomValue(comparePredictionsAtomGroup.isCompareModePredictionsPicking);
   const selectedUsers = useAtomValue(comparePredictionsAtomGroup.compareUsersAtom);
-  const { addOrRemoveUser, startPicking, showCompareModal, stopPicking } =
-    usePredictionsCompareActions();
+  const { addOrRemoveUser } = usePredictionsCompareActions();
 
   const handleUserClick = (ranking: LeaguePredictionRanking) => {
     if (isPickingUsers) {
@@ -68,37 +66,13 @@ export default function LeaguePredictionsLeaderboard({
   const hasAnyResults = rankingsList.some(r => r.has_results);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-44">
       {!hasAnyResults && rankingsList.length > 0 && (
         <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           <p className="text-sm text-blue-700 dark:text-blue-300">
             Awaiting game results - Rankings shown by participation
           </p>
-        </div>
-      )}
-
-      {/* Compare buttons */}
-      {!isEmpty && (
-        <div className="flex flex-row items-center gap-2">
-          <PrimaryButton
-            className="flex flex-row items-center gap-2 flex-1 md:flex-initial md:w-fit"
-            onClick={() => (isPickingUsers ? showCompareModal() : startPicking())}
-          >
-            <ArrowLeftRight className="w-4 h-4" />
-            {isPickingUsers
-              ? `Compare ${selectedUsers.length} User${selectedUsers.length !== 1 ? 's' : ''}`
-              : 'Compare Users'}
-          </PrimaryButton>
-
-          {isPickingUsers && (
-            <button
-              className="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors flex flex-row items-center gap-2"
-              onClick={stopPicking}
-            >
-              Cancel
-            </button>
-          )}
         </div>
       )}
 
@@ -190,28 +164,37 @@ function LeaderboardItem({
         )}
       >
         <div>
-          <p className={twMerge('text-lg font-bold text-blue-500', isUser && 'text-primary-100')}>
+          <p
+            className={twMerge(
+              'text-lg font-bold text-blue-500 dark:text-blue-400',
+              isUser && 'text-primary-100 dark:text-primary-100'
+            )}
+          >
             {ranking.rank ?? '-'}
           </p>
         </div>
 
         <div className="flex flex-col items-start">
-          <p className={twMerge('font-bold', isUser && 'text-white')}>{ranking.username}</p>
+          <p
+            className={twMerge('font-bold text-slate-800 dark:text-white', isUser && 'text-white')}
+          >
+            {ranking.username}
+          </p>
           <div className="flex flex-row items-center gap-2 flex-wrap">
-            <SecondaryText className={twMerge(isUser && 'dark:text-white text-white')}>
+            <SecondaryText className={twMerge(isUser && 'text-white dark:text-white')}>
               Predictions <strong>{ranking.predictions_made ?? '-'}</strong>
             </SecondaryText>
-            <SecondaryText className={twMerge(isUser && 'dark:text-white text-white')}>
+            <SecondaryText className={twMerge(isUser && 'text-white dark:text-white')}>
               Correct <strong>{ranking.has_results ? ranking.correct_predictions : '-'}</strong>
             </SecondaryText>
             {ranking.has_results && ranking.accuracy > 0 && (
               <SecondaryText
                 className={twMerge(
                   'flex items-center gap-1',
-                  isUser && 'dark:text-white text-white'
+                  isUser && 'text-white dark:text-white'
                 )}
               >
-                <Target className="w-3 h-3" />
+                <Target className="w-3 h-3 text-slate-600 dark:text-slate-300" />
                 <strong>{ranking.accuracy}%</strong>
               </SecondaryText>
             )}

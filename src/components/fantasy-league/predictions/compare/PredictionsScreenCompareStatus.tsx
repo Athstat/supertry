@@ -13,35 +13,28 @@ export default function PredictionsScreenCompareStatus() {
 
   return (
     <Sticky className="">
-      <div className="z-[1000] bottom-32 fixed py-2 flex flex-col gap-1 w-full items-center justify-center left-0">
-        <div className="flex flex-col bg-slate-200 gap-2 flex-wrap px-4 py-4 dark:bg-slate-800/95 rounded-xl w-[90%] lg:w-[50%]">
-          <div className="flex flex-row items-center justify-between">
-            <p className="truncate">Click to Select User</p>
-
-            <button
-              className="p-2 rounded-md hover:bg-slate-200 hover:dark:bg-slate-700"
-              onClick={stopPicking}
-            >
-              <X className="w-4 h-4" />
-            </button>
+      <div className="z-[70] fixed bottom-20 right-20 sm:right-24 md:right-24">
+        <div className="flex flex-col bg-slate-200 dark:bg-slate-800/95 rounded-xl px-3 py-2 gap-2 max-w-[220px] shadow-lg shadow-black/30 ring-1 ring-black/30">
+          <div className="flex flex-row items-center">
+            <p className="text-xs font-medium truncate">Select to compare users</p>
           </div>
 
-          <div className="flex flex-col">
-            <div className="flex flex-row items-center max-h-24 overflow-x-auto flex-wrap gap-1">
+          {selectedUsers.length > 0 && (
+            <div className="flex flex-row items-center max-h-20 overflow-x-auto overflow-y-hidden flex-wrap gap-1">
               {selectedUsers.map(u => {
                 return (
                   <div
                     key={u.user_id}
                     onClick={() => removeUser(u)}
-                    className="px-3 py-1 text-xs bg-yellow-700 hover:bg-yellow-600 cursor-pointer text-yellow-400 rounded-xl flex flex-row items-center gap-0.5"
+                    className="px-2 py-0.5 text-[10px] bg-yellow-700 hover:bg-yellow-600 cursor-pointer text-yellow-400 rounded-lg flex flex-row items-center gap-0.5 flex-shrink-0"
                   >
-                    {u.username}
-                    <X className="w-3 h-3" />
+                    <span className="truncate max-w-[80px]">{u.username}</span>
+                    <X className="w-2.5 h-2.5 flex-shrink-0" />
                   </div>
                 );
               })}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </Sticky>

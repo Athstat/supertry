@@ -1,7 +1,7 @@
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { Target } from 'lucide-react';
 import useSWR from 'swr';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, Fragment } from 'react';
 import { useLeagueRoundStandingsFilter } from '../../hooks/fantasy/useLeagueRoundStandingsFilter';
 import LeagueStandingsFilterSelector, {
   SelectedWeekIndicator,
@@ -9,6 +9,8 @@ import LeagueStandingsFilterSelector, {
 import LeaguePredictionsLeaderboard from './predictions/LeaguePredictionsLeaderboard';
 import { leaguePredictionsService } from '../../services/fantasy/leaguePredictionsService';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
+import FloatingPredictionsCompareButton from './predictions/FloatingPredictionsCompareButton';
+import PredictionsScreenCompareStatus from './predictions/compare/PredictionsScreenCompareStatus';
 
 export function LeaguePredictionsTab() {
   const { league } = useFantasyLeagueGroup();
@@ -41,26 +43,32 @@ export function LeaguePredictionsTab() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <Target />
-          <p className="font-bold text-xl">Predictions</p>
+    <Fragment>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-2">
+            <Target />
+            <p className="font-bold text-xl dark:text-white">Predictions</p>
+          </div>
+
+          <div>
+            <LeagueStandingsFilterSelector />
+          </div>
         </div>
 
-        <div>
-          <LeagueStandingsFilterSelector />
-        </div>
+        <SelectedWeekIndicator />
+
+        <PredictionsScreenCompareStatus />
+
+        <LeaguePredictionsLeaderboard
+          rankings={rankings || []}
+          isLoading={isLoading}
+          leagueId={groupId as string}
+          roundId={roundFilterId}
+        />
       </div>
 
-      <SelectedWeekIndicator />
-
-      <LeaguePredictionsLeaderboard
-        rankings={rankings || []}
-        isLoading={isLoading}
-        leagueId={groupId as string}
-        roundId={roundFilterId}
-      />
-    </div>
+      <FloatingPredictionsCompareButton />
+    </Fragment>
   );
 }
