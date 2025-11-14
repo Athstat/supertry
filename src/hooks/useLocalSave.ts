@@ -4,13 +4,17 @@ import { logger } from "../services/logger";
 /** Hook that can take data, serialize it, and save it in local storage
  * useful for when you are making local auto saves before uploading data
  */
-export function useLocalSave<T>(key: string) {
+export function useLocalSave<T>(key: string, fallbackValue: T) {
 
-    const [data, setData] = useState<T>();
+    const [data, setData] = useState<T | undefined>(fallbackValue);
 
     useEffect(() => {
         const loader = () => {
-            setData(loadFromStorage<T>(key));
+            const fromLocal = loadFromStorage<T>(key);
+
+            if (fromLocal) {
+                setData(fromLocal);
+            }
         }
 
         loader();
