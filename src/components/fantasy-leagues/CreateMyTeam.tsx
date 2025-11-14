@@ -21,16 +21,12 @@ export default function CreateMyTeam() {
 
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
 
-  useHideBottomNavBar();
-
-
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [profileModalPlayer, setProfileModalPlayer] = useState<IFantasyTeamAthlete>();
   const [actionModalPlayer, setActionModalPlayer] = useState<IFantasyTeamAthlete>();
 
-
-
   const { navigate: tabNavigate } = useTabView();
+   useHideBottomNavBar();
 
   const excludePlayers = useMemo(() => {
     return swapPlayer ? [swapPlayer] : []
@@ -110,7 +106,7 @@ export default function CreateMyTeam() {
         targetLeagueRound={leagueRound}
       />}
 
-      { actionModalPlayer && <PlayerActionModal 
+      {actionModalPlayer && <PlayerActionModal
         player={actionModalPlayer}
         onClose={handleCloseActionModal}
         onViewProfile={handleViewPlayerProfile}
@@ -126,7 +122,7 @@ export default function CreateMyTeam() {
         />
       )}
 
-      
+
     </div>
   );
 }
