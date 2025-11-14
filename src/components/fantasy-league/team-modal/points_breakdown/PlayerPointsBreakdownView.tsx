@@ -52,7 +52,7 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
     }, [athlete]);
 
     return (
-        <div className="flex flex-col gap-4" ref={ref} >
+        <div className="flex flex-col gap-4 dark:text-white" ref={ref} >
             <div className="flex flex-row truncate items-center gap-2" >
 
                 {onClose && <div>
@@ -69,13 +69,13 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
                 />
 
                 <div>
-                    <p className="font-semibold" >{athlete.player_name}</p>
+                    <p className="font-semibold dark:text-white" >{athlete.player_name}</p>
                     {athlete.position && athlete.position_class && (
                         <SecondaryText className="" >{formatPosition(athlete.position_class)} | {formatPosition(athlete.position)}</SecondaryText>
                     )}
                 </div>
 
-                <div className="flex flex-row font-bold flex-1 items-center justify-end" >
+                <div className="flex flex-row  font-bold flex-1 items-center justify-end" >
                     {!isLoading && totalPoints && <p className="text-lg" >{totalPoints?.toFixed(1)}</p>}
                     {isLoading && (
                         <RoundedCard
@@ -91,7 +91,7 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
             />
 
             <div>
-                <p className="font-semibold text-lg" >Points Breakdown</p>
+                <p className="font-semibold text-lg dark:text-white" >Points Breakdown</p>
             </div>
 
             {isLoading && (

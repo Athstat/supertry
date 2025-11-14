@@ -21,6 +21,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { isGuestUser } from '../../utils/deviceId/deviceIdUtils';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
+
 export function LeagueStandings() {
   const { userMemberRecord, league } = useFantasyLeagueGroup();
   const { authUser } = useAuth();
@@ -30,11 +31,14 @@ export function LeagueStandings() {
   const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
   const { roundFilterId } = useLeagueRoundStandingsFilter();
+  // const navigate = useNavigate();
+
+  // const {navigate: changeTab} = useTabView();
 
   const groupId = league?.id;
   const fetchKey = useMemo(() => {
     return league && `/fantasy-league-groups/${league.id}/standings/${roundFilterId}`;
-  }, [roundFilterId]);
+  }, [league, roundFilterId]);
 
   // Fetch group standings (backend aggregated totals)
   const {
@@ -68,6 +72,15 @@ export function LeagueStandings() {
     setSelectedMember(member);
     fantasyAnalytics.trackClickedRowOnLeagueStandings();
     setShowModal(true);
+
+    // if (member.user_id === authUser?.kc_id) {
+    //   changeTab("my-team");
+    //   return;
+    // }
+
+    // const roundId = roundFilterId === "all" ? currentRound?.id : roundFilterId;
+
+    // navigate(`/league/${league?.id}/member/${member.user_id}?round_id=${roundId}`);
   };
 
   const handleCloseMemberModal = () => {
@@ -77,9 +90,12 @@ export function LeagueStandings() {
 
   return (
     <div className="flex flex-col gap-4">
-      {userMemberRecord && <ClaimAccountNoticeCard reasonNum={2} />}
 
-      <div className="flex flex-row items-center justify-between">
+      <div className='px-4' >
+        {userMemberRecord && <ClaimAccountNoticeCard reasonNum={2} />}
+      </div>
+
+      <div className="flex flex-row items-center px-4 justify-between">
         <div className="flex flex-row items-center gap-2">
           <Table2 />
           <p className="font-bold text-xl">Standings</p>
@@ -94,10 +110,12 @@ export function LeagueStandings() {
           <LeagueStandingsFilterSelector />
         </div>
       </div>
+      
+      <div className='px-4' >
+        <SelectedWeekIndicator />
+      </div>
 
-      <SelectedWeekIndicator />
-
-      <div className="relative">
+      <div className="relative px-2">
         <div className={`${isGuest ? 'blur-[3px] pointer-events-none select-none' : ''}`}>
           <LeagueStandingsTable
             standings={standings}

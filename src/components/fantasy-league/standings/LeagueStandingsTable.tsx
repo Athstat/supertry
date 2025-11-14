@@ -26,7 +26,7 @@ export default function LeagueStandingsTable({
   const { members, userMemberRecord } = useFantasyLeagueGroup();
 
   return (
-    <div className=" rounded-xl ">
+    <div className="overflow-y-auto rounded-xl bg-slate-100 dark:bg-slate-800/40">
       <div className="flex  flex-row items-center p-3 justify-between">
         <div className="flex flex-row items-center gap-2">
           <SecondaryText className="text-md w-10">Rank</SecondaryText>
@@ -94,12 +94,14 @@ type StandingsProps = {
   hideUserScore?: boolean;
 };
 
-function LeagueStandingsRow({ member, isUser, hideUserScore }: StandingsProps) {
+function LeagueStandingsRow({ member, isUser, hideUserScore, index }: StandingsProps) {
   const { members } = useFantasyLeagueGroup();
   const memberRecord = members.find(m => m.user_id === member.user_id);
 
+  const rank = member.rank ?? index + 1;
+
   const badge = useMemo(() => {
-    switch (member.rank) {
+    switch (rank) {
       case 1:
         return '🏅';
         break;
@@ -115,7 +117,7 @@ function LeagueStandingsRow({ member, isUser, hideUserScore }: StandingsProps) {
     }
 
     return undefined;
-  }, [member]);
+  }, [rank]);
 
   const pointsDisplay =
     isUser && hideUserScore ? '-' : member.total_score ? Math.floor(member.total_score) : 0;
@@ -130,9 +132,13 @@ function LeagueStandingsRow({ member, isUser, hideUserScore }: StandingsProps) {
       <div className="flex flex-row items-center gap-2">
         <div className="flex flex-row">
           {/* {badge && <div className='text-sm' >{badge}</div>} */}
-          <p className="w-10">
-            {member.rank} {badge}{' '}
-          </p>
+          <SecondaryText className={twMerge(
+            "w-10",
+            isUser && "text-white dark:text-white"
+          )}>
+            {/* {rank} {badge}{' '} */}
+            {rank}
+          </SecondaryText>
         </div>
 
         {isUser && (

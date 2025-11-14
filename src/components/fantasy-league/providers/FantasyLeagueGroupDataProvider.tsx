@@ -8,6 +8,7 @@ import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLea
 import { LoadingState } from "../../ui/LoadingState"
 import { useLocation } from "react-router-dom"
 import { useLeagueConfig } from "../../../hooks/useLeagueConfig"
+import { useDebounced } from "../../../hooks/useDebounced"
 
 type Props = {
     children?: ReactNode,
@@ -61,6 +62,8 @@ function Fetcher({ children, leagueId, loadingFallback }: Props) {
     const [isMutating, setMutate] = useState<boolean>(false);
     const isLoading = loadingLeague || loadingMembers || loadingRounds || isMutating || loadingConfig; 
 
+    const debouncedLoading = useDebounced(isLoading, 500);
+
     useEffect(() => {
 
         if (league) setFantasyLeagueGroup(league);
@@ -89,7 +92,7 @@ function Fetcher({ children, leagueId, loadingFallback }: Props) {
         }
     }, [leagueConfig, setLeagueConfig]);
 
-    if (isLoading) {
+    if (debouncedLoading) {
         return (
             <Fragment>
                 {loadingFallback ? (
