@@ -9,10 +9,10 @@ import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSu
 import { Activity } from '../../shared/Activity';
 import SecondaryText from '../../shared/SecondaryText';
 import { useMyTeamView } from './MyTeamStateProvider';
-import { useAuth } from '../../../contexts/AuthContext';
 import BlueGradientCard from '../../shared/BlueGradientCard';
 import { LeagueRoundCountdown2 } from '../../fantasy-league/LeagueCountdown';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import { useTeamHistory } from '../../../hooks/fantasy/useTeamHistory';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;
@@ -20,11 +20,11 @@ type Props = {
 
 /** Renders My Team View Header */
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
-  const {leagueConfig} = useFantasyLeagueGroup();
+  const { leagueConfig } = useFantasyLeagueGroup();
   const { totalSpent, selectedCount, team, leagueRound } = useFantasyLeagueTeam();
 
-  const { authUser } = useAuth();
-  const displayName = (authUser?.username || authUser?.first_name || team?.team_name);
+  const { manager } = useTeamHistory();
+  const displayName = (manager?.username || manager?.first_name || team?.team_name);
 
   const handleTeamUpdated = async () => {
     if (onTeamUpdated) {
@@ -55,7 +55,7 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         <div className="flex flex-row items-center justify-center text-center gap-1">
 
           <div>
-            <p className="font-bold ">{displayName || "My Team"}</p>
+            <p className="font-semibold max-w-[130px] truncate ">{displayName || "My Team"}</p>
           </div>
         </div>
 
@@ -71,9 +71,9 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         </div>
       </div>
 
-      {leagueRound && <SaveTeamBar 
-        leagueRound={leagueRound} 
-        onTeamUpdated={handleTeamUpdated} 
+      {leagueRound && <SaveTeamBar
+        leagueRound={leagueRound}
+        onTeamUpdated={handleTeamUpdated}
       />}
 
       <TeamPointsCard
@@ -93,6 +93,7 @@ export function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
   const isLocked = isLeagueRoundLocked(leagueRound);
   const { navigate: setViewMode, viewMode } = useMyTeamView();
   const { changesDetected } = useFantasyLeagueTeam();
+
 
   return (
     <Activity mode={changesDetected ? 'hidden' : 'visible'}>
@@ -165,10 +166,10 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
       <Activity mode={!isLocked ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
           <BlueGradientCard className='w-fit py-2 px-4 items-center ' >
-            <LeagueRoundCountdown2 
-              leagueRound={leagueRound} 
+            <LeagueRoundCountdown2
+              leagueRound={leagueRound}
               className='gap-4'
-              leagueTitleClassName='font-normal'
+              leagueTitleClassName='font-normal text-sm'
             />
           </BlueGradientCard>
         </div>
