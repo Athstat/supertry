@@ -15,11 +15,11 @@ import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
 import { useSubmitTeam } from '../../hooks/fantasy/useSubmitTeam';
 import { useFantasyLeagueTeam } from './my-team/FantasyLeagueTeamProvider';
-import MyTeamViewHeader from './my-team/MyTeamViewHeader';
 import { TeamFormation3D } from '../team/TeamFormation';
 import TeamBenchDrawer from './my-team/TeamBenchDrawer';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
+import CreateTeamViewHeader from './my-team/CreateTeamViewHeader';
 
 
 export default function CreateMyTeam() {
@@ -110,7 +110,7 @@ export default function CreateMyTeam() {
     <div className="w-full flex flex-col gap-2">
 
 
-      <MyTeamViewHeader />
+      <CreateTeamViewHeader />
 
       <div className='mt-6 relative' >
         <TeamFormation3D
