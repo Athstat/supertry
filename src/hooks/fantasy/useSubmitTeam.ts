@@ -17,6 +17,10 @@ export function useSubmitTeam(onSuccess?: () => void) {
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [saveError, setSaveError] = useState<string>();
 
+    const clearSaveError = () => {
+        setSaveError(undefined);
+    }
+
     const handleSave = useCallback(async () => {
 
         const shouldCancelSave = !authUser || !leagueRound ||
@@ -30,6 +34,14 @@ export function useSubmitTeam(onSuccess?: () => void) {
             setIsSaving(false);
             setSaveError("You haven't picked a team captain");
             return;
+        }
+
+        // TODO: Fix save logic
+        if (teamCaptain) {
+            if (onSuccess) {
+                onSuccess();
+                return;
+            }
         }
 
         try {
@@ -103,6 +115,7 @@ export function useSubmitTeam(onSuccess?: () => void) {
     return {
         handleSave,
         isSaving,
-        saveError
+        saveError,
+        clearSaveError
     }
 }
