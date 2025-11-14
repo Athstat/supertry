@@ -4,7 +4,6 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
-import PlayerMugshot from "../shared/PlayerMugshot";
 import SecondaryText from "../shared/SecondaryText";
 import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
@@ -80,15 +79,15 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
             >
 
                 <div className='flex-3 flex overflow-clip flex-col items-center justify-center w-full' >
-                    {player.image_url && <PlayerMugshot
+                    {/* {player.image_url && <PlayerMugshot
                         url={player.image_url}
                         className='border-none rounded-none w-[100px] h-[100px] bg-transparent hover:bg-transparent'
                         scrummyLogoClassName="dark:bg-transparent bg-transparent"
                         showPrBackground={false}
                         key={player.tracking_id}
-                    />}
+                    />} */}
 
-                    {!player.image_url && (
+                    {/* {!player.image_url && ( */}
                         <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
                             <TeamJersey
                                 teamId={player.athlete_team_id}
@@ -99,7 +98,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                                 key={player.tracking_id}
                             />
                         </div>
-                    )}
+                    {/* )} */}
 
                 </div>
 
