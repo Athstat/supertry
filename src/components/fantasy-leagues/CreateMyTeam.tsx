@@ -18,8 +18,9 @@ import { PlayerActionModal } from '../team/PlayerActionModal';
 
 
 export default function CreateMyTeam() {
-
+  
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
+  
 
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [profileModalPlayer, setProfileModalPlayer] = useState<IFantasyTeamAthlete>();
@@ -65,6 +66,8 @@ export default function CreateMyTeam() {
     console.log("Ran complete Swap Function! ", player);
   }
 
+  // Add Delay to make sure team is fully loaded
+
 
   if (!leagueRound) return;
 
@@ -79,6 +82,7 @@ export default function CreateMyTeam() {
       </div>
     );
   }
+
 
   return (
     <div className="w-full flex flex-col gap-2">

@@ -79,7 +79,7 @@ function RoundTeamProvider({ loadingFallback, children }: Props) {
 
     const { roundTeam, isLoading: loadingTeam } = useUserRoundTeam(round?.id, manager?.kc_id, shouldFetch);
 
-    const isLoading = useDebounced(loadingTeam, 1000);
+    const isLoading = useDebounced(loadingTeam, 2000);
 
     useEffect(() => {
         if (roundTeam) {

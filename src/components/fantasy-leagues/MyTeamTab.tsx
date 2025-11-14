@@ -1,4 +1,4 @@
-import { Activity, Fragment, useMemo } from 'react';
+import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
 import CreateMyTeam from './CreateMyTeam';
 import FantasyTeamView from './my-team/FantasyTeamView';
 import NoTeamCreatedFallback from './FantasyRoundsList';
@@ -34,6 +34,21 @@ function MyTeamModeSelector() {
 
   const { round, roundTeam } = useTeamHistory();
   const { leagueConfig } = useFantasyLeagueGroup();
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+
+    setLoading(true);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      setLoading(false);
+    }
+  }, []);
 
   const isLocked = useMemo(() => {
     return round && isLeagueRoundLocked(round)
@@ -57,19 +72,18 @@ function MyTeamModeSelector() {
 
   }, [isLocked, round, roundTeam]);
 
-  // get the current team and round
 
-  // if user created team, show the pitch view
+  if (isLoading) {
+    return (
+      <PitchViewLoadingSkeleton />
+    )
+  }
 
-  // if the round is locked, and didn't create team show the player pitch with empty cards and message that can't create team
-  // but should be able to move back in time to see their teams
-
-  // if the user has no team and round is not locked, show the the create team page with the ability to create a team
-  // its not just a placeholder card
 
   return (
     <Fragment>
-      <TeamHistoryBar 
+
+      <TeamHistoryBar
         lock={viewMode === "create-team"}
       />
 
@@ -87,14 +101,13 @@ function MyTeamModeSelector() {
             />
           </FantasyLeagueTeamProvider>
         )}
-
       </Activity>
 
       <Activity mode={viewMode === "create-team" ? "visible" : "hidden"} >
         {round && <CreateFantasyTeamProvider
           leagueRound={round}
         >
-          <CreateMyTeam/>
+          <CreateMyTeam />
         </CreateFantasyTeamProvider>}
       </Activity>
 
@@ -102,6 +115,7 @@ function MyTeamModeSelector() {
         <NoTeamCreatedFallback
         />
       </Activity>
+
     </Fragment>
   )
 }
