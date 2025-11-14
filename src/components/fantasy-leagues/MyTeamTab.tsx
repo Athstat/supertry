@@ -11,6 +11,7 @@ import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
 import TeamHistoryBar from './my-team/TeamHistoryBar';
 import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
 import CreateFantasyTeamProvider from '../../providers/fantasy-teams/CreateFantasyTeamProvider';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
 
 /** Renders the my team tab  */
@@ -36,19 +37,30 @@ function MyTeamModeSelector() {
   const { leagueConfig } = useFantasyLeagueGroup();
   const [isLoading, setLoading] = useState<boolean>(false);
 
+  const [visitedRounds, setVistedRounds] = useState<IFantasyLeagueRound[]>([]);
+
   useEffect(() => {
+
+    const hasVistedRound = visitedRounds.find((r) => {
+      return r.id === round?.id
+    });
+
+    if (hasVistedRound || !round) {
+      return;
+    }
 
     setLoading(true);
 
     const timer = setTimeout(() => {
       setLoading(false);
+      setVistedRounds(prev => [...prev, round])
     }, 1000);
 
     return () => {
       clearTimeout(timer);
       setLoading(false);
     }
-  }, []);
+  }, [round, visitedRounds]);
 
   const isLocked = useMemo(() => {
     return round && isLeagueRoundLocked(round)
