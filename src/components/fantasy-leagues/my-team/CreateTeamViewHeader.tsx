@@ -94,7 +94,7 @@ export default function CreateTeamViewHeader() {
             <div className="flex flex-row items-center justify-center gap-2" >
                 <PrimaryButton
                     onClick={resetToOriginalTeam}
-                    className="text-xs w-[150px] dark:bg-slate-700/40 dark:border-slate-700 dark:hover:bg-slate-700"
+                    className="text-xs w-[150px] dark:bg-slate-700/40 dark:border-slate-700 dark:hover:bg-slate-700 dark:text-white bg-slate-200 text-slate-700 border-slate-300 hover:bg-slate-300"
                 >
                     Reset
                 </PrimaryButton>

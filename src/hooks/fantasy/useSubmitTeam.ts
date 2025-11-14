@@ -39,6 +39,7 @@ export function useSubmitTeam(onSuccess?: () => void) {
         // TODO: Fix save logic
         if (teamCaptain) {
             if (onSuccess) {
+                clearSaveError();
                 onSuccess();
                 return;
             }
@@ -97,6 +98,7 @@ export function useSubmitTeam(onSuccess?: () => void) {
 
             // Show success modal
             if (onSuccess) {
+                clearSaveError();
                 onSuccess();
             }
 
