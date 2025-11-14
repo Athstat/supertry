@@ -57,8 +57,6 @@ function InnerProvider({ team, children, leagueRound }: Props) {
 
             const teamAthletes: IFantasyTeamAthlete[] = team.athletes;
 
-            console.log("Team Athletes Size: ", teamAthletes);
-
             const slots = defaultFantasyPositions.map((p, index) => {
 
                 const slotAthlete = teamAthletes.find((a) => a.slot === index + 1);

@@ -48,7 +48,7 @@ export default function CreateFantasyTeamProvider({leagueRound, children}: Props
 
         faker();
 
-    }, [authUser, fakeTeam, leagueRound.id]);
+    }, [authUser, leagueRound.id]);
 
     if (!fakeTeam) {
         return;

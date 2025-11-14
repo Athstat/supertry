@@ -19,6 +19,7 @@ import MyTeamViewHeader from './my-team/MyTeamViewHeader';
 import { TeamFormation3D } from '../team/TeamFormation';
 import TeamBenchDrawer from './my-team/TeamBenchDrawer';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
+import { IProAthlete } from '../../types/athletes';
 
 
 export default function CreateMyTeam() {
@@ -85,6 +86,11 @@ export default function CreateMyTeam() {
     setShowProfileModal(true);
   }
 
+  const handleCompleteSwap = (player: IProAthlete) => {
+    completeSwap(player);
+    console.log("Ran complete Swap Function! ", player);
+  }
+
 
   if (!leagueRound) return;
 
@@ -121,7 +127,7 @@ export default function CreateMyTeam() {
         positionPool={swapState.position?.positionClass ?? undefined}
         remainingBudget={budgetRemaining}
         excludePlayers={excludePlayers}
-        onSelectPlayer={completeSwap}
+        onSelectPlayer={handleCompleteSwap}
         onClose={onClosePickerModal}
         targetLeagueRound={leagueRound}
       />}
