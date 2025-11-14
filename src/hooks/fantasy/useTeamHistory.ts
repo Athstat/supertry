@@ -83,6 +83,7 @@ export function useTeamHistory() {
         rounds: sortedRounds,
         moveNextRound,
         movePreviousRound,
-        setRoundTeam: setTeam
+        setRoundTeam: setTeam,
+        jumpToRound: setCurrentRound
     }
 }

@@ -1,7 +1,7 @@
 import { Activity, Fragment, useMemo } from 'react';
 import CreateMyTeam from './CreateMyTeam';
 import FantasyTeamView from './my-team/FantasyTeamView';
-import FantasyRoundsList from './FantasyRoundsList';
+import NoTeamCreatedFallback from './FantasyRoundsList';
 import TeamHistoryProvider from '../../providers/fantasy-teams/TeamHistoryProvider';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
@@ -99,12 +99,7 @@ function MyTeamModeSelector() {
       </Activity>
 
       <Activity mode={viewMode === "no-team-locked" ? "visible" : "hidden"} >
-        <FantasyRoundsList
-          rounds={round ? [round] : []}
-          handleCreateTeam={() => { }}
-          handlePlayerClick={() => { }}
-          handleViewTeam={() => { }}
-          refreshRounds={() => { }}
+        <NoTeamCreatedFallback
         />
       </Activity>
     </Fragment>

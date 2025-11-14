@@ -1,56 +1,60 @@
-import { Users } from "lucide-react";
-import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../types/fantasyLeague";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
-import FantasyRoundCard from "./fantasy_rounds/FantasyRoundCard";
-import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { useTabView } from "../shared/tabs/TabView";
+import PitchViewLoadingSkeleton from "./my-team/PitchViewLoadingSkeleton";
 
-type Props = {
-    rounds: IFantasyLeagueRound[],
-    handleCreateTeam: (round: IFantasyLeagueRound) => void,
-    handleViewTeam: (team: IFantasyLeagueTeam, round: IFantasyLeagueRound) => void,
-    handlePlayerClick: (player: IFantasyTeamAthlete) => void,
-    refreshRounds: () => void
-}
 
 /** Renders a list of rounds */
-export default function FantasyRoundsList({ rounds, handleCreateTeam, handleViewTeam, handlePlayerClick, refreshRounds }: Props) {
+export default function NoTeamCreatedFallback() {
+
+    const { round, jumpToRound } = useTeamHistory();
+    const { currentRound } = useFantasyLeagueGroup();
+
+    const {navigate} = useTabView();
+
+    const isOldLeague = round && currentRound && ((round?.start_round ?? 0) < (currentRound?.start_round ?? 0));
+    const missedDeadline = round && currentRound && (round?.id === currentRound?.id);
+
+    const jumpToCurrentRound = () => {
+        if (isOldLeague) {
+            jumpToRound(currentRound);
+        }
+    }
+
+    const handleViewStandings = () => {
+        navigate("standings")
+    }
 
     return (
-        <div className="flex flex-col gap-4 px-4">
-            <div className="flex flex-col items-start justify-start">
-                <div className="flex flex-row items-center gap-2">
-                    <Users />
-                    <p className="font-bold text-xl">My Teams</p>
-                </div>
-                <p className="mt-1 text-gray-600 dark:text-gray-400 text-sm">
-                    Choose a round to create or view your team
-                </p>
+        <div className="relative flex overflow-hidden max-h-[400px] flex-col items-center justify-center w-full h-full" >
+            <div className="opacity-20 w-full mt-40" >
+                <PitchViewLoadingSkeleton />
             </div>
 
-            <div className="">
+            <div className="absolute top-0 gap-2 w-full h-[400px] left-0 flex flex-col items-center justify-center" >
+                {isOldLeague && <div className="font flex flex-col gap-2" >
+                    <p>You didn't create a team for {round?.title}</p>
 
-                {rounds.map(round => (
-                    <div key={round.id} className="py-3">
-                        <FantasyRoundCard
-                            round={round}
-                            onCreateTeam={() => handleCreateTeam(round)}
-                            onViewTeam={handleViewTeam}
-                            onPlayerClick={handlePlayerClick}
-                        />
-                    </div>
-                ))}
-
-                {(rounds.length ?? 0) === 0 && (
-                    <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                        No rounds available
-                        <div className="mt-4 flex justify-center">
-                            <PrimaryButton className="w-auto px-6" onClick={() => refreshRounds()}>
-                                Refresh
-                            </PrimaryButton>
+                    {isOldLeague && (
+                        <div>
+                            <PrimaryButton onClick={jumpToCurrentRound} >Jump to {currentRound.title}</PrimaryButton>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>}
 
+                {missedDeadline && <div className="font w-2/3 flex flex-col gap-2 items-center justify-center text-center" >
+                    <p>
+                        You missed the deadline for {round.title}. You can pick your team on the next round
+                    </p>
+                    <p className="text-sm" ></p>
+
+                    {isOldLeague && (
+                        <div>
+                            <PrimaryButton onClick={handleViewStandings} >View Standings</PrimaryButton>
+                        </div>
+                    )}
+                </div>}
             </div>
         </div>
     );
