@@ -18,6 +18,7 @@ export function useLocalSave<T>(key: string) {
 
     const saveChanges = useCallback((newData: T) => {
         saveToStorage(key, newData);
+        setData(newData);
     }, [key]);
 
     const purge = useCallback(() => {
