@@ -1,15 +1,16 @@
 import { ScopeProvider } from "jotai-scope"
-import { fantasyLeagueTeamAtom, fantasyLeagueTeamLeagueRoundAtom, fantasyTeamAthletesAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
 import { ReactNode, useCallback, useEffect, useMemo } from "react"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
-import { IProAthlete } from "../../../types/athletes"
+import { IProAthlete, PositionClass } from "../../../types/athletes"
 import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils/athleteUtils"
 import { Position } from "../../../types/position"
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics"
 import { MAX_TEAM_BUDGET } from "../../../types/constants"
+import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
+import { fantasyTeamAthletesAtom } from "../../../state/myTeam.atoms"
 
 type Props = {
     team: IFantasyLeagueTeam,
@@ -55,8 +56,6 @@ function InnerProvider({ team, children, leagueRound }: Props) {
         if (team.athletes) {
 
             const teamAthletes: IFantasyTeamAthlete[] = team.athletes;
-
-            console.log("Team Athletes Size: ", teamAthletes);
 
             const slots = defaultFantasyPositions.map((p, index) => {
 
@@ -158,7 +157,10 @@ export function useFantasyLeagueTeam() {
                     id: new Date().valueOf(), // temporal id,
                     athlete_id: athlete.tracking_id,
                     is_starting: s.slotNumber < 6,
-                    athlete_team_id: athlete.team?.athstat_id
+                    athlete_team_id: athlete.team?.athstat_id,
+                    athlete: athlete,
+                    is_super_sub: s.slotNumber >= 6,
+                    score: 0
                 },
                 purchasePrice: athlete.price,
             }
@@ -313,7 +315,7 @@ export function useFantasyLeagueTeam() {
     const isTeamFull = useMemo(() => selectedCount === 6, [selectedCount]);
 
     const toPosition = (
-        p: { name: string; position_class: string; isSpecial?: boolean },
+        p: { name: string; position_class: PositionClass; isSpecial?: boolean },
         index: number
     ): Position => ({
         id: p.position_class || String(index),

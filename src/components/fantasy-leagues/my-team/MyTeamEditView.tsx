@@ -1,6 +1,6 @@
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { useEffect, useState } from 'react';
-import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../../types/fantasyLeague';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
@@ -13,7 +13,6 @@ import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGr
 type Props = {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
-  team: IFantasyLeagueTeam;
   onEditChange?: (isEditing: boolean) => void;
 };
 /** Renders My Team Edit Grid */

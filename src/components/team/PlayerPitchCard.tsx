@@ -232,6 +232,10 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
                     </div>
                 </div>
             </div>
+
+            <div className="min-h-[14px] max-h-[14px] w-full" >
+                
+            </div>
         </div>
     );
 }

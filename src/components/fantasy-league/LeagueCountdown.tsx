@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague"
 import { TranslucentButton } from "../shared/buttons/PrimaryButton";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
-    leagueRound: IFantasyLeagueRound
+    leagueRound: IFantasyLeagueRound,
+    className?: string,
+    leagueTitleClassName?: string
 }
 
 export default function LeagueRoundCountdown({ leagueRound }: Props) {
@@ -85,7 +88,7 @@ export default function LeagueRoundCountdown({ leagueRound }: Props) {
 
 
 /** Renders a league count down 2 */
-export function LeagueRoundCountdown2({ leagueRound }: Props) {
+export function LeagueRoundCountdown2({ leagueRound, className,leagueTitleClassName }: Props) {
 
     const deadlineMillis = new Date(leagueRound.join_deadline ?? new Date()).valueOf();
     const dateNow = new Date().valueOf();
@@ -141,11 +144,17 @@ export function LeagueRoundCountdown2({ leagueRound }: Props) {
     const isTimeLeft = days + hours + minutes + seconds > 0;
 
     return (
-        <div className='flex flex-row gap-2 min-h-[30px] max-h-[30px] items-center justify-between' >
+        <div className={twMerge(
+            'flex flex-row gap-2 min-h-[30px] max-h-[30px] items-center justify-between',
+            className
+        )} >
 
             {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
             <div>
-                <p className="font-semibold" > ⏰ GW {leagueRound.start_round} Deadline</p>
+                <p className={twMerge(
+                    "font-semibold",
+                    leagueTitleClassName
+                )} > ⏰ GW {leagueRound.start_round} Deadline</p>
             </div>
 
             {isTimeLeft && <div className="flex flex-row items-center gap-2">

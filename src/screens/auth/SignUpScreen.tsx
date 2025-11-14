@@ -12,8 +12,6 @@ import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
 import FormErrorText from '../../components/shared/FormError';
 import { authService } from '../../services/authService';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
-import AppleOAuthBox from '../../components/auth/oauth/AppleOAuthBox';
-import GoogleOAuthBox from '../../components/auth/oauth/GoogleOAuthBox';
 import Experimental from '../../components/shared/ab_testing/Experimental';
 
 export function SignUpScreen() {
@@ -210,10 +208,6 @@ export function SignUpScreen() {
           </div>
         </Experimental>
 
-        <Experimental>
-          <GoogleOAuthBox />
-          <AppleOAuthBox />
-        </Experimental>
 
         <Experimental>
           <GuestLoginBox />

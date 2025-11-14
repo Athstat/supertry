@@ -12,25 +12,35 @@ import TeamJersey from "../../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
+import { useMemo } from "react";
 
 
 type Props = {
-  superSubSlot: IFantasyLeagueTeamSlot,
-  leagueRound: IFantasyLeagueRound,
   onPlayerClick?: (player: IFantasyTeamAthlete) => void
 }
 
 /** Renders a bottom drawer for team subs */
-export default function TeamBenchDrawer({ superSubSlot, onPlayerClick, leagueRound }: Props) {
+export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
-  const handlePlayerClick = () => {
-    if (onPlayerClick && superSubSlot.athlete) {
-      onPlayerClick(superSubSlot.athlete);
-    }
+  const { leagueRound, slots } = useFantasyLeagueTeam();
+
+  const superSubSlot = useMemo(() => {
+    return slots.find((s) => s.slotNumber === 6);
+  }, [slots]);
+
+  if (!superSubSlot || !leagueRound) {
+    return;
   }
 
   const { athlete } = superSubSlot;
   const isSlotEmpty = athlete === undefined || athlete === null;
+
+  const handlePlayerClick = () => {
+
+    if (superSubSlot && onPlayerClick && superSubSlot.athlete) {
+      onPlayerClick(superSubSlot.athlete);
+    }
+  }
 
   return (
     <div className={twMerge(
@@ -78,8 +88,8 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
   const { position_class, purchase_price } = player;
   const { league } = useFantasyLeagueGroup();
   const isLocked = isLeagueRoundLocked(round);
-  
-  const { isNotAvailable, isTeamNotPlaying} = usePlayerRoundAvailability(
+
+  const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
     player.tracking_id,
     league?.season_id ?? "",
     round?.start_round ?? 0,
@@ -132,7 +142,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
         <div className="flex flex-col items-start justify-center" >
           <p className="text font-semibold" >{player.player_name}</p>
-          
+
           <div className="flex flex-row items-center gap-1" >
             <SecondaryText className="text-xs" >{position_class ? formatPosition(position_class) : 'Substitute'}</SecondaryText>
             {showAvailabilityWarning && !isLocked && (

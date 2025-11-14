@@ -22,7 +22,7 @@ type PlayerActionModalProps = {
   onClose: () => void;
   onViewProfile: (player: IFantasyTeamAthlete) => void;
   league?: IFantasyLeagueRound,
-  onViewPointsBreakdown: (player: IFantasyTeamAthlete) => void,
+  onViewPointsBreakdown?: (player: IFantasyTeamAthlete) => void,
 }
 
 export function PlayerActionModal({
@@ -153,12 +153,12 @@ export function PlayerActionModal({
             Full Profile
           </QuickActionButton>
 
-          <QuickActionButton
+          {onViewPointsBreakdown && <QuickActionButton
             onClick={handleViewPointsBreak}
             className="items-center justify-center"
           >
             Points Breakdown
-          </QuickActionButton>
+          </QuickActionButton>}
         </div>
 
       </div>
