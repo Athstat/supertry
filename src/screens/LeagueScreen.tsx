@@ -120,7 +120,7 @@ function Content() {
           <MyTeamsTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="standings" className="px-4">
+        <TabViewPage tabKey="standings" className="">
           <LeagueStandings />
         </TabViewPage>
 
