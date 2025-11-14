@@ -20,6 +20,7 @@ import TeamBenchDrawer from './my-team/TeamBenchDrawer';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
 import CreateTeamViewHeader from './my-team/CreateTeamViewHeader';
+import { PlayerActionModal } from '../team/PlayerActionModal';
 
 
 export default function CreateMyTeam() {
@@ -32,6 +33,7 @@ export default function CreateMyTeam() {
   const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [profileModalPlayer, setProfileModalPlayer] = useState<IFantasyTeamAthlete>();
+  const [actionModalPlayer, setActionModalPlayer] = useState<IFantasyTeamAthlete>();
 
   const handleSuccess = useCallback(() => {
     setShowSuccessModal(true);
@@ -81,9 +83,17 @@ export default function CreateMyTeam() {
     setShowClaimAccountModal(false);
   }
 
-  const handlePlayerClick = (player: IFantasyTeamAthlete) => {
+  const handleViewPlayerProfile = (player: IFantasyTeamAthlete) => {
     setProfileModalPlayer(player);
     setShowProfileModal(true);
+  }
+
+  const handleOpenActionModal = (player: IFantasyTeamAthlete) => {
+    setActionModalPlayer(player);
+  }
+
+  const handleCloseActionModal = () => {
+    setActionModalPlayer(undefined);
   }
 
   const handleCompleteSwap = (player: IProAthlete) => {
@@ -114,7 +124,7 @@ export default function CreateMyTeam() {
 
       <div className='mt-6 relative' >
         <TeamFormation3D
-          onPlayerClick={handlePlayerClick}
+          onPlayerClick={handleOpenActionModal}
         />
         <TeamBenchDrawer
         />
@@ -130,6 +140,12 @@ export default function CreateMyTeam() {
         onSelectPlayer={handleCompleteSwap}
         onClose={onClosePickerModal}
         targetLeagueRound={leagueRound}
+      />}
+
+      { actionModalPlayer && <PlayerActionModal 
+        player={actionModalPlayer}
+        onClose={handleCloseActionModal}
+        onViewProfile={handleViewPlayerProfile}
       />}
 
 
