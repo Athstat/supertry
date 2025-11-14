@@ -1,14 +1,14 @@
+import { IFantasyLeagueTeam } from './../../types/fantasyLeague';
 import { useCallback, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics/anayticsService";
 import { leagueService } from "../../services/leagueService";
-import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { ICreateFantasyTeamAthleteItem } from "../../types/fantasyTeamAthlete";
 import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
 import { useCreateFantasyTeam } from "./useCreateFantasyTeam";
 
 /** Hook for submitting a fantasy league team */
-export function useSubmitTeam(onSuccess?: () => void) {
+export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => void) {
 
     const { leagueConfig } = useFantasyLeagueGroup();
     const { leagueRound, teamCaptain, slots } = useCreateFantasyTeam();
@@ -34,15 +34,6 @@ export function useSubmitTeam(onSuccess?: () => void) {
             setIsSaving(false);
             setSaveError("You haven't picked a team captain");
             return;
-        }
-
-        // TODO: Fix save logic
-        if (teamCaptain) {
-            if (onSuccess) {
-                clearSaveError();
-                onSuccess();
-                return;
-            }
         }
 
         try {
@@ -74,32 +65,18 @@ export function useSubmitTeam(onSuccess?: () => void) {
                 setIsSaving(false);
             }
 
-            const response = await leagueService.joinLeague(
+            const createdTeam = await leagueService.joinLeague(
                 leagueRound.id,
                 authUser.kc_id,
                 teamName,
                 athletes
             );
 
-            console.log('Join league response:', response);
-            // Best-effort mapping to IFantasyLeagueTeam
-            const createdTeam: IFantasyLeagueTeam = {
-                id: response?.id || response?.team?.id || '',
-                team_id: String(response?.team?.id ?? response?.id ?? ''),
-                league_id: Number(leagueRound.id),
-                rank: response?.team?.rank ?? 0,
-                overall_score: response?.team?.overall_score ?? 0,
-                team_name: response?.team?.team_name ?? teamName,
-                user_id: authUser.kc_id,
-                first_name: authUser.first_name ?? '',
-                last_name: authUser.last_name ?? '',
-                athletes: Array.isArray(response?.team?.athletes) ? response.team.athletes : [],
-            };
-
             // Show success modal
-            if (onSuccess) {
+            if (onSuccess && createdTeam) {
                 clearSaveError();
-                onSuccess();
+                // Perform Optimistic Update
+                onSuccess(createdTeam);
             }
 
             analytics.trackTeamCreationCompleted(leagueRound, createdTeam);

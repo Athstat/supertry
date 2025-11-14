@@ -190,7 +190,7 @@ export const leagueService = {
     userId: string,
     teamName: string,
     athletes: ICreateFantasyTeamAthleteItem[]
-  ): Promise<any> => {
+  ): Promise<IFantasyLeagueTeam | undefined> => {
     try {
       const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/join`);
       const headers = getAuthHeader();
@@ -236,6 +236,7 @@ export const leagueService = {
       console.error('Error in leagueService.joinLeague:', error);
       throw error;
     }
+
   },
 
   joinLeagueWithExistingTeam: async (league: any, teamId?: string): Promise<any> => {

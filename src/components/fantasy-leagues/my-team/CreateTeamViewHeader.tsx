@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { isGuestUserAtom } from "../../../state/authUser.atoms";
 import { Toast } from "../../ui/Toast";
+import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
+import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 
 
 /** Renders Create Team View Header */
@@ -15,12 +17,14 @@ export default function CreateTeamViewHeader() {
     const { leagueConfig } = useFantasyLeagueGroup();
     const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam } = useFantasyLeagueTeam();
 
-
+    const {setRoundTeam} = useTeamHistory(); 
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
+    const [createdTeam, setCreatedTeam] = useState<IFantasyLeagueTeam>();
 
-    const handleSuccess = useCallback(() => {
+    const handleSuccess = useCallback((team: IFantasyLeagueTeam) => {
         setShowSuccessModal(true);
+        setCreatedTeam(team);
     }, [setShowSuccessModal])
 
     const isGuestAccount = useAtomValue(isGuestUserAtom);
@@ -41,9 +45,10 @@ export default function CreateTeamViewHeader() {
             setShowClaimAccountModal(true);
         }
 
-        // else if (onViewTeam) {
-        //   onViewTeam();
-        // }
+        // Perform Optimistic Update
+        if (createdTeam) {
+            setRoundTeam(createdTeam)
+        }
     }
 
     const handleCancelClaimAccount = () => {
