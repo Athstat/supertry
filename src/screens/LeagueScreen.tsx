@@ -38,6 +38,7 @@ function Content() {
 
   let initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
   initialTabKey = journey === 'my-team' ? 'my-team' : initialTabKey;
+  initialTabKey = journey === 'standings' ? 'standings' : initialTabKey;
 
   // Hooks must be declared before any early returns
   const [isEditing, ] = useState<boolean>(false);
