@@ -95,9 +95,9 @@ export default function CreateMyTeam() {
           onPlayerClick={handleOpenActionModal}
         />
         <TeamBenchDrawer
+          onPlayerClick={handleOpenActionModal}
         />
       </div>
-
 
 
       {<PlayerPickerV2
