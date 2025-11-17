@@ -43,7 +43,6 @@ export default function PlayerPickerV2({
     playerPickerAtoms.playerToBeReplacedAtom,
     playerPickerAtoms.onSelectPlayerAtom,
     playerPickerAtoms.excludePlayersAtom,
-    playerPickerAtoms.maxPlayerPriceAtom,
     playerPickerAtoms.searchQueryAtom,
     fantasyLeagueAtom
   ]
