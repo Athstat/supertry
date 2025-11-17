@@ -19,6 +19,10 @@ export default function FixtureHero({ fixture }: Props) {
   const { team, opposition_team } = fixture;
   const { gameKickedOff } = fixtureSummary(fixture);
 
+  const handleBack = () => {
+    navigate('/fixtures');
+  }
+
   return (
     <div className="w-full rounded-none h-44 bg-gradient-to-br ">
       <div
@@ -27,7 +31,7 @@ export default function FixtureHero({ fixture }: Props) {
           'flex flex-row items-center justify-center relative'
           // " dark:bg-dark-800/30 relative"
         )}
-        onClick={() => navigate(-1)}
+        onClick={handleBack}
       >
         <div className="absolute text-slate-700 dark:text-slate-400 left-0 flex hover:text-blue-500 px-2 flex-row items-center gap-1">
           <ArrowLeft className="w-4 h-4 " />
