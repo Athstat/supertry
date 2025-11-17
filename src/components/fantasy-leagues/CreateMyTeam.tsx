@@ -90,11 +90,6 @@ export default function CreateMyTeam() {
 
       <CreateTeamViewHeader />
 
-      <div className='flex flex-col items-center gap-2 w-full' >
-        <p>Player Budget Remaining: {budgetRemaining}</p>
-        <p>Swap Player Purchase Price: {swapPlayer?.purchase_price || 0}</p>
-      </div>
-
       <div className='mt-6 relative' >
         <TeamFormation3D
           onPlayerClick={handleOpenActionModal}
