@@ -378,7 +378,10 @@ export function useFantasyLeagueTeam() {
 
     };
 
-    const budgetRemaining = (MAX_TEAM_BUDGET) - totalSpent;
+    const budgetRemaining = useMemo(() => {
+        const swapPlayerFee = swapPlayer?.purchase_price || 0;
+        return (MAX_TEAM_BUDGET + swapPlayerFee) - totalSpent;
+    }, [swapPlayer?.purchase_price, totalSpent]);
 
     return {
         slots, setSlots,
