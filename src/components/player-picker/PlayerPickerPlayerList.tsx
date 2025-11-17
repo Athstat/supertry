@@ -29,7 +29,7 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
     const {
         searchQuery, positionPool, availbleTeams,
         leagueRound, filterTeams, excludePlayers,
-        maxPrice
+        remainingBudget
     } = usePlayerPicker();
 
     const key = leagueRound ? `/all-players` : null;
@@ -121,8 +121,8 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
 
         result
             .sort((a, b) => {
-                const isA_Affordable = (a?.price ?? 0) <= maxPrice;
-                const isB_Affordable = (b?.price ?? 0) <= maxPrice;
+                const isA_Affordable = (a?.price ?? 0) <= remainingBudget;
+                const isB_Affordable = (b?.price ?? 0) <= remainingBudget;
 
                 const aBias = isA_Affordable ? 0 : 1;
                 const bBias = isB_Affordable ? 0 : 1;
@@ -132,7 +132,7 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
 
         return result;
 
-    }, [filterTeams, availbleTeams, athletes, sortField, sortDirection, positionPool, searchQuery, excludePlayers, maxPrice]);
+    }, [filterTeams, availbleTeams, athletes, sortField, sortDirection, positionPool, searchQuery, excludePlayers, remainingBudget]);
 
     const isLoading = loadingAthletes;
 
@@ -239,10 +239,10 @@ type PlayerListItemProps = {
 function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerListItemProps) {
 
     // const infoButtonRef = useRef<HTMLDivElement | null>(null);
-    const { maxPrice } = usePlayerPicker();
+    const { remainingBudget } = usePlayerPicker();
     const { inView, ref } = useInView({ triggerOnce: true });
 
-    const isAffordable = (player?.price ?? 0) <= maxPrice;
+    const isAffordable = (player?.price ?? 0) <= remainingBudget;
 
     const handleViewPlayerProfile = () => {
         if (onViewPlayerProfile) {

@@ -9,7 +9,7 @@ import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import { CirclePlus, TriangleAlert } from "lucide-react";
+import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
@@ -111,11 +111,15 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <p className=' text-[11px] font-semibold' >{player.athstat_firstname}</p>
                     </div>
 
-                    <div className='flex flex-col items-center justify-center' >
+                    <div className='flex flex-row items-center justify-center gap-2 divide-x-1 divide-red-500' >
                         <SecondaryText className={twMerge(
                             ' text-[10px]',
                             // showAvailabilityWarning && "dark:text-black"
                         )} >{position_class ? formatPosition(position_class) : ""}</SecondaryText>
+                        <div className="flex flex-row items-center gap-0.5" >
+                            <p className="text-[10px]" >{player.purchase_price}</p>
+                            <Coins className="w-2.5 h-2.5 text-yellow-500" />
+                        </div>
                     </div>
                 </div>
             </div>

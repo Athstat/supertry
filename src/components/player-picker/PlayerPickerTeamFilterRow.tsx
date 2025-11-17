@@ -5,12 +5,12 @@ import SecondaryText from "../shared/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import { twMerge } from "tailwind-merge";
 import { X } from "lucide-react";
-import { BudgetIndicator } from "../team-creation/AvailableFilter";
+import { BudgetIndicator } from "../team-creation/BudgetIndicator";
 
 
 export default function PlayerPickerTeamFilterRow() {
 
-    const { availbleTeams, filterTeams, setFilterTeams, maxPrice } = usePlayerPicker();
+    const { availbleTeams, filterTeams, setFilterTeams, remainingBudget } = usePlayerPicker();
     const len = filterTeams.length;
 
     if (availbleTeams.length <= 0) {
@@ -38,8 +38,7 @@ export default function PlayerPickerTeamFilterRow() {
                         </button>
                     )}
                 </div>
-
-                <BudgetIndicator budget={maxPrice} maxBudget={240} />
+                <BudgetIndicator remainingBudget={remainingBudget} />
 
             </div>
             <div className="flex flex-row items-center text-nowrap flex-nowrap gap-2 overflow-x-auto no-scrollbar" >

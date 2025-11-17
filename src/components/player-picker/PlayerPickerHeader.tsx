@@ -8,13 +8,14 @@ import Experimental from "../shared/ab_testing/Experimental";
 
 export default function PlayerPickerHeader() {
 
-    const { searchQuery, setSearchQuery, maxPrice } = usePlayerPicker();
+    const { searchQuery, setSearchQuery, remainingBudget } = usePlayerPicker();
 
     useEffect(() => {
         return () => {
             setSearchQuery(undefined);
         }
     }, [setSearchQuery]);
+
 
     return (
         <div className="flex flex-col gap-2" >
@@ -26,7 +27,7 @@ export default function PlayerPickerHeader() {
                         "from-blue-600 to-purple-700"
                     )}
                 >
-                    <p className="text-sm font-medium" >Budget ${maxPrice}</p>
+                    <p className="text-sm font-medium" >Budget Remaining ${remainingBudget}</p>
                 </BlueGradientCard>
             </Experimental>
 

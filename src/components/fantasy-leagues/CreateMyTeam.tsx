@@ -18,16 +18,16 @@ import { PlayerActionModal } from '../team/PlayerActionModal';
 
 
 export default function CreateMyTeam() {
-  
+
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
-  
+
 
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [profileModalPlayer, setProfileModalPlayer] = useState<IFantasyTeamAthlete>();
   const [actionModalPlayer, setActionModalPlayer] = useState<IFantasyTeamAthlete>();
 
   const { navigate: tabNavigate } = useTabView();
-   useHideBottomNavBar();
+  useHideBottomNavBar();
 
   const excludePlayers = useMemo(() => {
     return swapPlayer ? [swapPlayer] : []
