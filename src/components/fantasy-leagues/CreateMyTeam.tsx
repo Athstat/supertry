@@ -18,16 +18,16 @@ import { PlayerActionModal } from '../team/PlayerActionModal';
 
 
 export default function CreateMyTeam() {
-  
+
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
-  
+
 
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [profileModalPlayer, setProfileModalPlayer] = useState<IFantasyTeamAthlete>();
   const [actionModalPlayer, setActionModalPlayer] = useState<IFantasyTeamAthlete>();
 
   const { navigate: tabNavigate } = useTabView();
-   useHideBottomNavBar();
+  useHideBottomNavBar();
 
   const excludePlayers = useMemo(() => {
     return swapPlayer ? [swapPlayer] : []
@@ -89,6 +89,11 @@ export default function CreateMyTeam() {
 
 
       <CreateTeamViewHeader />
+
+      <div className='flex flex-col items-center gap-2 w-full' >
+        <p>Player Budget Remaining: {budgetRemaining}</p>
+        <p>Swap Player Purchase Price: {swapPlayer?.purchase_price || 0}</p>
+      </div>
 
       <div className='mt-6 relative' >
         <TeamFormation3D
