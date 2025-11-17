@@ -2,16 +2,13 @@ import { ArrowLeft } from 'lucide-react';
 import { IFixture } from '../../types/games';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
-import {
-  fixtureSummary,
-  summerizeGameStatus,
-  isGameLive,
-  formatGameStatus,
-} from '../../utils/fixtureUtils';
+import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { GoTriangleLeft } from 'react-icons/go';
 import SecondaryText from '../shared/SecondaryText';
+import TeamSeasonRecordText from '../teams/TeamSeasonRecordText';
+import { IProTeam } from '../../types/team';
 
 type Props = {
   fixture: IFixture;
@@ -51,38 +48,20 @@ export default function FixtureHero({ fixture }: Props) {
           // "bg-gradient-to-r from-slate-100 via-white to-slate-100"
         )}
       >
-        <div className="flex flex-1 flex-col items-center justify-start gap-3">
-          <TeamLogo
-            className="lg:hidden w-12 h-12 dark:text-slate-200 "
-            url={team?.image_url}
-            teamName={team?.athstat_name}
-          />
-          <TeamLogo
-            className="lg:block hidden w-12 h-12 dark:text-slate-200 "
-            url={team?.image_url}
-            teamName={team?.athstat_name}
-          />
-          <p className="text-xs text-wrap text-center">{team?.athstat_name}</p>
-        </div>
+        <FixtureScreenTeamLogoAndRecord
+          team={team}
+          fixture={fixture}
+        />
 
         <div className="flex flex-col mx-4 flex-[3]">
           {gameKickedOff && <MatchResultsInformation fixture={fixture} />}
           {!gameKickedOff && <KickOffInformation fixture={fixture} />}
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-3 justify-end">
-          <TeamLogo
-            className="lg:hidden w-12 h-12 dark:text-slate-200 "
-            url={opposition_team?.image_url}
-            teamName={opposition_team?.athstat_name}
-          />
-          <TeamLogo
-            className="lg:block hidden w-12 h-12 dark:text-slate-200 "
-            url={opposition_team?.image_url}
-            teamName={opposition_team?.athstat_name}
-          />
-          <p className="text-xs text-wrap text-center">{opposition_team?.athstat_name}</p>
-        </div>
+        <FixtureScreenTeamLogoAndRecord
+          team={opposition_team}
+          fixture={fixture}
+        />
       </div>
     </div>
   );
@@ -149,4 +128,40 @@ function MatchResultsInformation({ fixture }: Props) {
       </div>
     </div>
   );
+}
+
+type TeamAndRecordProps = {
+  team?: IProTeam,
+  fixture: IFixture
+}
+
+function FixtureScreenTeamLogoAndRecord({ team, fixture }: TeamAndRecordProps) {
+
+  return (
+    <div className="flex flex-1 flex-col items-center gap-1 justify-end">
+      <TeamLogo
+        className="lg:hidden w-12 h-12 dark:text-slate-200 "
+        url={team?.image_url}
+        teamName={team?.athstat_name}
+      />
+      <TeamLogo
+        className="lg:block hidden w-12 h-12 dark:text-slate-200 "
+        url={team?.image_url}
+        teamName={team?.athstat_name}
+      />
+
+      <div className=' flex text-nowrap flex-col items-center justify-center ' >
+        <p className="text-[10.5px] max-w-[100px] truncate text-nowrap md:text-xs text-center">{team?.athstat_name}</p>
+      </div>
+
+      <div className='min-h-[20px] flex flex-col items-center justify-start h-full' >
+        {team?.athstat_id && fixture.league_id && (
+          <TeamSeasonRecordText
+            teamId={team?.athstat_id}
+            seasonId={fixture.league_id}
+          />
+        )}
+      </div>
+    </div>
+  )
 }

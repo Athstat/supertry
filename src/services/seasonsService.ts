@@ -3,7 +3,7 @@
 import { IProAthlete } from '../types/athletes';
 import { ISeasonRound } from '../types/fantasy/fantasySeason';
 import { IFixture, ITeam } from '../types/games';
-import { IProSeason } from '../types/season';
+import { IProSeason, TeamSeasonRecord } from '../types/season';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 
@@ -114,5 +114,25 @@ export const seasonService = {
 
     return [];
 
+  },
+
+  /** Gets a team's season record */
+  getTeamSeasonRecord: async (seasonId: string, teamId: string) : Promise<TeamSeasonRecord | undefined> => {
+    try {
+      
+      const uri = getUri(`/api/v1/seasons/${seasonId}/teams/${teamId}/record`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as TeamSeasonRecord;
+      }
+
+    } catch (err) {
+      logger.error("Error fetching team season record ", err);
+    }
+
+    return undefined;
   }
 };
