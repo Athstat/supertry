@@ -11,3 +11,11 @@ export type IProSeason = {
     competition_id: number,
     fantasy_supported?: boolean
 }
+
+/** Represents the response from the team season record api */
+export type TeamSeasonRecord = {
+    total_games_played: number,
+    wins: number,
+    losses: number,
+    draws: number
+}
