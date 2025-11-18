@@ -4,13 +4,12 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
-import PlayerMugshot from "../shared/PlayerMugshot";
 import SecondaryText from "../shared/SecondaryText";
 import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import { CirclePlus, TriangleAlert } from "lucide-react";
+import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
@@ -80,15 +79,15 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
             >
 
                 <div className='flex-3 flex overflow-clip flex-col items-center justify-center w-full' >
-                    {player.image_url && <PlayerMugshot
+                    {/* {player.image_url && <PlayerMugshot
                         url={player.image_url}
                         className='border-none rounded-none w-[100px] h-[100px] bg-transparent hover:bg-transparent'
                         scrummyLogoClassName="dark:bg-transparent bg-transparent"
                         showPrBackground={false}
                         key={player.tracking_id}
-                    />}
+                    />} */}
 
-                    {!player.image_url && (
+                    {/* {!player.image_url && ( */}
                         <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
                             <TeamJersey
                                 teamId={player.athlete_team_id}
@@ -99,7 +98,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                                 key={player.tracking_id}
                             />
                         </div>
-                    )}
+                    {/* )} */}
 
                 </div>
 
@@ -112,11 +111,15 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <p className=' text-[11px] font-semibold' >{player.athstat_firstname}</p>
                     </div>
 
-                    <div className='flex flex-col items-center justify-center' >
+                    <div className='flex flex-row items-center justify-center gap-2 divide-x-1 divide-red-500' >
                         <SecondaryText className={twMerge(
                             ' text-[10px]',
                             // showAvailabilityWarning && "dark:text-black"
                         )} >{position_class ? formatPosition(position_class) : ""}</SecondaryText>
+                        <div className="flex flex-row items-center gap-0.5" >
+                            <p className="text-[10px]" >{player.purchase_price}</p>
+                            <Coins className="w-2.5 h-2.5 text-yellow-500" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -231,6 +234,10 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
                         </p>
                     </div>
                 </div>
+            </div>
+
+            <div className="min-h-[14px] max-h-[14px] w-full" >
+                
             </div>
         </div>
     );

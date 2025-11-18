@@ -9,21 +9,23 @@ import { LeaguePredictionsTab } from '../components/fantasy-league/LeaguePredict
 import LeagueInfoTab from '../components/fantasy-league/LeagueInfoTab';
 import LeagueFixturesTab from '../components/fantasy-league/LeagueFixturesTab';
 import LeagueCommissionerTab from '../components/fantasy-league/commissioner/LeagueCommissionerTab';
-import MyTeams from '../components/fantasy-leagues/MyTeams';
+import MyTeamsTab from '../components/fantasy-leagues/MyTeamTab';
 import { useQueryState } from '../hooks/useQueryState';
 import { useEffect, useState } from 'react';
-import LeagueOverviewTab from '../components/fantasy-league/overview/LeagueOverviewTab';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
 import { useHideTopNavBar } from '../hooks/navigation/useNavigationBars';
 import LeagueGroupScreenHeader from '../components/fantasy-league/LeagueGroupScreenHeader';
+import RoundedCard from '../components/shared/RoundedCard';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
 
   return (
-    <FantasyLeagueGroupDataProvider leagueId={leagueId}>
+    <FantasyLeagueGroupDataProvider
+      loadingFallback={<LoadingSkeleton />}
+      leagueId={leagueId}>
       <Content />
     </FantasyLeagueGroupDataProvider>
   );
@@ -39,9 +41,10 @@ function Content() {
 
   let initialTabKey = journey === 'team-creation' ? 'my-team' : undefined;
   initialTabKey = journey === 'my-team' ? 'my-team' : initialTabKey;
+  initialTabKey = journey === 'standings' ? 'standings' : initialTabKey;
 
   // Hooks must be declared before any early returns
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEditing,] = useState<boolean>(false);
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
@@ -52,9 +55,15 @@ function Content() {
   }
 
   const headerItems: TabViewHeaderItem[] = [
+    // {
+    //   label: 'Overview',
+    //   tabKey: 'overview',
+    //   className: 'w-fit',
+    // },
+
     {
-      label: 'Overview',
-      tabKey: 'overview',
+      label: 'My Team',
+      tabKey: 'my-team',
       className: 'w-fit',
     },
     {
@@ -65,11 +74,6 @@ function Content() {
     {
       label: 'Predictions',
       tabKey: 'predictions',
-      className: 'w-fit',
-    },
-    {
-      label: 'My Team',
-      tabKey: 'my-team',
       className: 'w-fit',
     },
 
@@ -113,10 +117,10 @@ function Content() {
         pillTabRowClassName="px-4"
       >
         <TabViewPage tabKey="my-team">
-          <MyTeams onEditChange={setIsEditing} />
+          <MyTeamsTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="standings" className="px-4">
+        <TabViewPage tabKey="standings" className="">
           <LeagueStandings />
         </TabViewPage>
 
@@ -136,10 +140,42 @@ function Content() {
           <LeagueCommissionerTab />
         </TabViewPage>
 
-        <TabViewPage tabKey="overview" className="px-4">
-          <LeagueOverviewTab />
-        </TabViewPage>
       </PilledTabView>
     </PageView>
   );
+}
+
+
+function LoadingSkeleton() {
+
+  useHideTopNavBar();
+
+  return (
+    <PageView className='p-4 animate-pulse overflow-hidden flex flex-col gap-4' >
+      <div className='flex flex-row items-center justify-between' >
+
+        <div className='flex flex-row items-center gap-2' >
+          <RoundedCard className='border-none w-[30px] h-[25px] ' />
+          <RoundedCard className='border-none w-[100px] h-[25px] ' />
+        </div>
+
+        <RoundedCard className='border-none w-[100px] h-[40px] ' />
+
+      </div>
+
+      <div className='flex flex-row items-center gap-2' >
+        <RoundedCard className='border-none w-[100px] h-[25px] ' />
+        <RoundedCard className='border-none w-[100px] h-[25px] ' />
+        <RoundedCard className='border-none w-[90px] h-[25px] ' />
+        <RoundedCard className='border-none w-[70px] h-[25px] ' />
+      </div>
+
+      <div className='flex flex-col items-center gap-2' >
+        <RoundedCard className='border-none w-full h-[100px] ' />
+        <RoundedCard className='border-none w-full h-[500px] ' />
+        <RoundedCard className='border-none w-full h-[40px] ' />
+      </div>
+
+    </PageView>
+  )
 }

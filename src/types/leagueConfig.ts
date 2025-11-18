@@ -1,5 +1,6 @@
 export interface IGamesLeagueConfig {
   league_id: string;
+  league?: string;
   team_budget: number;
   lineup_size: number;
   bench_size: number;

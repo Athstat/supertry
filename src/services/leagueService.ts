@@ -139,6 +139,26 @@ export const leagueService = {
     }
   },
 
+  getUserParticipatingTeam: async (leagueId: string | number, userId: string): Promise<IFantasyLeagueTeam | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/teams/by-user/${userId}`);
+
+      const response = await fetch(uri, {
+        method: 'GET',
+        headers: getAuthHeader(),
+      });
+
+      if (response.ok) {
+        return await response.json() as IFantasyLeagueTeam;
+      }
+
+    } catch (error) {
+      console.error('Error fetching participating teams:', error);
+    }
+
+    return undefined;
+  },
+
   getLeagueConfig: async (officialLeagueId: string): Promise<IGamesLeagueConfig | null> => {
     try {
       const uri = getUri(`/api/v1/fantasy-leagues-config/${officialLeagueId}`);
@@ -170,7 +190,7 @@ export const leagueService = {
     userId: string,
     teamName: string,
     athletes: ICreateFantasyTeamAthleteItem[]
-  ): Promise<any> => {
+  ): Promise<IFantasyLeagueTeam | undefined> => {
     try {
       const uri = getUri(`/api/v1/fantasy-leagues/${leagueId}/join`);
       const headers = getAuthHeader();
@@ -216,6 +236,7 @@ export const leagueService = {
       console.error('Error in leagueService.joinLeague:', error);
       throw error;
     }
+
   },
 
   joinLeagueWithExistingTeam: async (league: any, teamId?: string): Promise<any> => {

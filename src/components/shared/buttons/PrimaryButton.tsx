@@ -52,7 +52,8 @@ export function TranslucentButton(props : Props) {
             isLoading={props.isLoading}
             type={props.type}
             className={twMerge(
-                'bg-blue-100/10 dark:bg-blue-100/10  border-white/20',
+                'bg-blue-100/10 dark:bg-blue-100/10  border-white/20 ',
+                'hover:bg-blue-100/20 hover:dark:bg-blue-100/20',
                 props.className
             )}
         >

@@ -46,8 +46,6 @@ const onSelectPlayerAtom = atom<(player: IProAthlete) => void>();
 
 const excludePlayersAtom = atom<(IProAthlete | IFantasyAthlete | IFantasyTeamAthlete | {tracking_id: string})[]>([]);
 
-const maxPlayerPriceAtom = atom<number>(240);
-
 const searchQueryAtom = atom<string>();
 
 export const playerPickerAtoms = {
@@ -58,6 +56,5 @@ export const playerPickerAtoms = {
     playerToBeReplacedAtom,
     onSelectPlayerAtom,
     excludePlayersAtom,
-    maxPlayerPriceAtom,
     searchQueryAtom
 }

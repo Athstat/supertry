@@ -216,3 +216,12 @@ export type UpdateUserProfileReq = {
   first_name?: string,
   last_name?: string
 }
+
+export type DjangoUserMinimal = {
+  kc_id: string,
+  email: string ,
+  first_name?: string,
+  last_name?: string,
+  username?: string,
+  game_updates_preference?: string
+}
