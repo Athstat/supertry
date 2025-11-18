@@ -28,7 +28,7 @@ const DialogModal = forwardRef<HTMLDivElement, Props>(
     }
 
     const modalContent = (
-        <div className="fixed inset-0 bg-black bg-opacity-60 z-[200] flex flex-col items-center justify-center">
+        <div className="fixed inset-0 dark:text-white bg-black bg-opacity-60 z-[200] flex flex-col items-center justify-center">
           <div
             className={twMerge(
               'bg-black w-[95%] md:w-[80%] lg:w-2/3 max-h-[90vh] my-4 mx-auto rounded-lg',
