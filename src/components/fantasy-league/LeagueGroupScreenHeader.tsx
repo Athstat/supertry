@@ -13,7 +13,7 @@ type Props = {
 export default function LeagueGroupScreenHeader({isEditing} : Props) {
 
     const navigate = useNavigate();
-    const { league, isMember, currentRound } = useFantasyLeagueGroup();
+    const { league, isMember } = useFantasyLeagueGroup();
     const { handleShare } = useShareLeague(league);
 
     const handleBackToLeagues = () => {
@@ -38,9 +38,9 @@ export default function LeagueGroupScreenHeader({isEditing} : Props) {
                         {/* {isOfficialLeague ? <Globe /> : <Trophy />} */}
                         <p className="font-bold text-xl">{league?.title}</p>
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
+                    {/* <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
                         {currentRound?.title}
-                    </p>
+                    </p> */}
                 </div>
 
                 {!isEditing && (

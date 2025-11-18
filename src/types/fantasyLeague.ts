@@ -41,7 +41,7 @@ export type IFantasyLeagueTeam = {
   rank: number;
   overall_score: number;
   team_id: string;
-  league_id: number;
+  league_id: number | string;
   position?: number;
   position_change?: number;
   score?: number;

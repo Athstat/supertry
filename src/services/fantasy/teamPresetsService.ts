@@ -47,7 +47,7 @@ async function http<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
 }
 
 export const teamPresetsService = {
-  async list(params: { userId: string; seasonId?: number; fantasyLeagueGroupId?: string }) {
+  async list(params: { userId: string; seasonId?: number | string; fantasyLeagueGroupId?: string }) {
     const query = buildQuery({
       user_id: params.userId,
       season_id: params.seasonId,

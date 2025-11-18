@@ -41,6 +41,7 @@ import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
 import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
 import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 import OnboardingDataProvider from './providers/OnboardingDataProvider';
+import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -329,6 +330,18 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <SeasonScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+
+        <Route
+          path="/league/:leagueId/member/:userId"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <LeagueMemberTeamScreen />
               </Layout>
             </ProtectedRoute>
           }

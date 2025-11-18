@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 import { FantasyLeagueGroup, FantasyLeagueGroupMember } from '../../types/fantasyLeagueGroups';
 import { authService } from '../../services/authService';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { IGamesLeagueConfig } from '../../types/leagueConfig';
 
 /** Holds a fantasy league group */
 export const fantasyLeagueGroupAtom = atom<FantasyLeagueGroup>();
@@ -20,3 +21,6 @@ export const currGroupMemberAtom = atom<FantasyLeagueGroupMember | undefined>(ge
 
 /** Holds the rounds of a fantasy league group */
 export const fantasyLeagueGroupRoundsAtom = atom<IFantasyLeagueRound[]>([]);
+
+/** Holds the fantasy league config atom */
+export const fantasyLeagueConfigAtom = atom<IGamesLeagueConfig>();

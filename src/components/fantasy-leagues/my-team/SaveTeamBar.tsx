@@ -7,6 +7,7 @@ import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { Check, Loader } from "lucide-react";
 import { Toast } from "../../ui/Toast";
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
+import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -20,6 +21,8 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
     const isLocked = isLeagueRoundLocked(leagueRound);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+    const { setRoundTeam } = useTeamHistory();
 
     const {
         changesDetected,
@@ -78,9 +81,15 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
 
             console.log('athletesPayload: ', athletesPayload);
 
-            const newTeam = await fantasyTeamService.updateFantasyTeam(team.id, { athletes: athletesPayload });
-            console.log("New Team ", newTeam);
+            const updatedTeam = await fantasyTeamService.updateFantasyTeam(team.id, { athletes: athletesPayload });
+
+            // Apply optimistic update
+            if (updatedTeam) {
+                setRoundTeam(updatedTeam);
+            }
+
             await onTeamUpdated();
+
             setIsSaving(false);
             setShowSuccessModal(true);
 
@@ -117,7 +126,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             </div>}
 
             {saveError && (
-                <Toast 
+                <Toast
                     message={saveError}
                     isVisible={Boolean(saveError)}
                     type="error"

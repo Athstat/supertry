@@ -8,7 +8,6 @@ import FantasyLeagueGroupDataProvider from "../fantasy-league/providers/FantasyL
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { ChevronRight, Trophy } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import UpcomingFixturesSection from "../dashboard/UpcomingFixturesSection";
 import LearnScrummyNoticeCard from "../branding/help/LearnScrummyNoticeCard";
 
 /** Component rendered when there are not selected fantasy season pages */
@@ -17,14 +16,14 @@ export default function FantasySeasonsOverview() {
     const { fantasySeasons } = useFantasyLeaguesScreen();
 
     return (
-        <div className="flex flex-col gap-4" >
+        <div className="flex flex-col gap-2" >
             <div>
-                <h1 className="font-bold text-lg" >Overview</h1>
+                <h1 className="font-bold text-lg" >Competitons</h1>
             </div>
 
             <LearnScrummyNoticeCard />
 
-            <div className="flex flex-col mt-3 gap-2" >
+            <div className="flex flex-col gap-2" >
                 {fantasySeasons.map((s, index) => {
                     return (
                         <FantasySeasonCard
@@ -34,14 +33,6 @@ export default function FantasySeasonsOverview() {
                     )
                 })}
             </div>
-
-
-
-            <div className="mt-10" >
-                <h1 className="font-bold text-lg" >Fixtures</h1>
-            </div>
-
-            <UpcomingFixturesSection hideTitleBar />
 
         </div>
     )
