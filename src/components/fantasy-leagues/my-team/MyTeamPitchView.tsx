@@ -101,14 +101,12 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
 
 
         {leagueRound && starters.length > 0 && (
-          <TeamFormation3D players={starters} onPlayerClick={handlePlayerClick} round={leagueRound} />
+          <TeamFormation3D onPlayerClick={handlePlayerClick} />
         )}
 
         {/* Super Substitute */}
         {leagueRound && superSubSlot && (
           <TeamBenchDrawer
-            superSubSlot={superSubSlot}
-            leagueRound={leagueRound}
             onPlayerClick={handlePlayerClick}
           />
         )}

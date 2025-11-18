@@ -88,7 +88,7 @@ export function PlayerActionModal({
     <BottomSheetView
       className={twMerge(
         "max-h-[440px] min-h-[400px] py-4 px-6",
-        isReadOnly && "max-h-[260px] min-h-[260px]"
+        isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
       key={player.tracking_id}
     >
