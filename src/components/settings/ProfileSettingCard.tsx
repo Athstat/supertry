@@ -1,16 +1,26 @@
 import { ChevronRight } from 'lucide-react';
 import { ReactNode } from 'react'
 import SecondaryText from '../shared/SecondaryText';
+import { useAuth } from '../../contexts/AuthContext';
+import { isGuestUser } from '../../utils/deviceId/deviceIdUtils';
 
 type Props = {
     icon?: ReactNode,
     onClick?: () => void,
     title?: string,
-    description?: string
+    description?: string,
+    hideForGuestUsers?: boolean
 }
 
 /** Renders profile settings card */
-export default function ProfileSettingCard({ icon, onClick, title, description }: Props) {
+export default function ProfileSettingCard({ icon, onClick, title, description, hideForGuestUsers }: Props) {
+
+    const {authUser} = useAuth();
+    const isGuest = isGuestUser(authUser);
+
+    if (isGuest && hideForGuestUsers) {
+        return;
+    } 
 
     return (
         <button

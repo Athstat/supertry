@@ -1,7 +1,7 @@
 import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
 import CreateMyTeam from './CreateMyTeam';
 import FantasyTeamView from './my-team/FantasyTeamView';
-import NoTeamCreatedFallback from './FantasyRoundsList';
+import NoTeamCreatedFallback from './NoTeamCreatedFallback';
 import TeamHistoryProvider from '../../providers/fantasy-teams/TeamHistoryProvider';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';

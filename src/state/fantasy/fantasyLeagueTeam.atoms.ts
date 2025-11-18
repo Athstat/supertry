@@ -31,3 +31,6 @@ export type SwapState = {
 
 /** Holds the swap state */
 export const swapStateAtom = atom<SwapState>({ open: false, slot: null, position: null });
+
+/** Holds a boolean value whether a pitch view is readonly or not */
+export const readOnlyAtom = atom<boolean>(false);

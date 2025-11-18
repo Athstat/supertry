@@ -1,3 +1,4 @@
+
 export const CACHE_DURATION = 5 * 60 * 1000;
 export const URC_COMPETIION_ID = "b5cae2ff-d123-5f12-a771-5faa6d40e967";
 export const ERPC_COMPETITION_ID = "d313fbf5-c721-569b-975d-d9ec242a6f19";
@@ -28,3 +29,8 @@ export const FANTASY_TEAM_POSITIONS = [
     { name: 'Back', position_class: 'back' },
     { name: 'Super Sub', position_class: 'super-sub', isSpecial: true },
   ];
+
+
+export const queryParamKeys = {
+  ROUND_ID_QUERY_KEY: 'round_id'
+}

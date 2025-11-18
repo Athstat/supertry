@@ -64,6 +64,7 @@ function Content() {
           description='Edit Username, First Name and Last Name'
           icon={<UserCircle />}
           onClick={handleEditUserProfile}
+          hideForGuestUsers
         />
 
         {authUser && (

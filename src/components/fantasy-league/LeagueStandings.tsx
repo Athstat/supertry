@@ -20,10 +20,12 @@ import LeagueStandingsTable from './standings/LeagueStandingsTable';
 import { useAuth } from '../../contexts/AuthContext';
 import { isGuestUser } from '../../utils/deviceId/deviceIdUtils';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
+import { useNavigate } from 'react-router-dom';
+import { useTabView } from '../shared/tabs/TabView';
 
 
 export function LeagueStandings() {
-  const { userMemberRecord, league } = useFantasyLeagueGroup();
+  const { userMemberRecord, league, currentRound } = useFantasyLeagueGroup();
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
 
@@ -31,9 +33,9 @@ export function LeagueStandings() {
   const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
   const { roundFilterId } = useLeagueRoundStandingsFilter();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const {navigate: changeTab} = useTabView();
+  const {navigate: changeTab} = useTabView();
 
   const groupId = league?.id;
   const fetchKey = useMemo(() => {
@@ -73,14 +75,14 @@ export function LeagueStandings() {
     fantasyAnalytics.trackClickedRowOnLeagueStandings();
     setShowModal(true);
 
-    // if (member.user_id === authUser?.kc_id) {
-    //   changeTab("my-team");
-    //   return;
-    // }
+    if (member.user_id === authUser?.kc_id) {
+      changeTab("my-team");
+      return;
+    }
 
-    // const roundId = roundFilterId === "all" ? currentRound?.id : roundFilterId;
+    const roundId = roundFilterId === "all" ? currentRound?.id : roundFilterId;
 
-    // navigate(`/league/${league?.id}/member/${member.user_id}?round_id=${roundId}`);
+    navigate(`/league/${league?.id}/member/${member.user_id}?round_id=${roundId}`);
   };
 
   const handleCloseMemberModal = () => {

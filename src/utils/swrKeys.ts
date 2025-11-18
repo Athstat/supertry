@@ -153,4 +153,8 @@ export const swrFetchKeys = {
   getSeasonRounds: (seasonId?: string) => {
     return `/fantasy-seaons/${seasonId}/rounds`;
   },
+
+  getUserById: (userId: string) => {
+    return `/users/${userId}`;
+  } 
 };

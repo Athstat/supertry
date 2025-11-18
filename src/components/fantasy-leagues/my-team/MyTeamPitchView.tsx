@@ -6,8 +6,6 @@ import { PlayerActionModal } from '../../team/PlayerActionModal';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
-import WarningCard from '../../shared/WarningCard';
-import { useMyTeamView } from './MyTeamStateProvider';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useHideBottomNavBar } from '../../../hooks/navigation/useNavigationBars';
 import TeamBenchDrawer from './TeamBenchDrawer';
@@ -22,14 +20,12 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
 
   useHideBottomNavBar();
 
-  const { slots, isTeamFull, selectedCount, team } = useFantasyLeagueTeam();
+  const { slots, team } = useFantasyLeagueTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
   const [showActionModal, setShowActionModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
-
-  const { navigate: navigateViewMode } = useMyTeamView();
 
 
   useEffect(() => {
@@ -77,38 +73,23 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
   const superSubSlot = slots
     .find(player => player.slotNumber === 6);
 
-  const emptySlotCount = 6 - selectedCount;
-
-  const handleGoToEdit = () => {
-    navigateViewMode("edit");
-  }
 
   return (
-    <div className="mt-4 ">
+    <div className="mt-4 h-full ">
       <div className='flex flex-col relative'>
 
         <div className='px-4 mb-4' >
-
-          {!isTeamFull && (
-            <WarningCard className='text-sm' >
-              <p>
-                You have empty slot{emptySlotCount <= 1 ? '' : 's'} on your team. Click on <span className='underline cursor-pointer text-blue-500 hover:text-blue-600' onClick={handleGoToEdit} >Edit</span> to add {selectedCount <= 1 ? "a player to that slot" : "players to those empty slots"}
-              </p>
-            </WarningCard>
-          )}
 
         </div>
 
 
         {leagueRound && starters.length > 0 && (
-          <TeamFormation3D players={starters} onPlayerClick={handlePlayerClick} round={leagueRound} />
+          <TeamFormation3D onPlayerClick={handlePlayerClick} />
         )}
 
         {/* Super Substitute */}
         {leagueRound && superSubSlot && (
           <TeamBenchDrawer
-            superSubSlot={superSubSlot}
-            leagueRound={leagueRound}
             onPlayerClick={handlePlayerClick}
           />
         )}
