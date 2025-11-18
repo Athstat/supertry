@@ -18,7 +18,7 @@ type Props = {
 }
 
 /** Renders a fantasy team view, with editor capabilities */
-export default function FantasyTeamView({ leagueRound, leagueConfig, onTeamUpdated}: Props) {
+export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
 
   const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
     useFantasyLeagueTeam();
@@ -27,14 +27,10 @@ export default function FantasyTeamView({ leagueRound, leagueConfig, onTeamUpdat
   const [showPushModal, setShowPushModal] = useState(false);
 
   return (
-    <div className="w-full ">
-      {leagueConfig && leagueRound && (
-        <MyTeamViewHeader
-          onTeamUpdated={onTeamUpdated}
-          leagueConfig={leagueConfig}
-          leagueRound={leagueRound}
-        />
-      )}
+    <div className="w-full h-full">
+      <MyTeamViewHeader
+        onTeamUpdated={onTeamUpdated}
+      />
 
       {leagueRound && <MyTeamPitchView leagueRound={leagueRound} />}
 

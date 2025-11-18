@@ -21,7 +21,7 @@ type Props = {
 /** Renders My Team View Header */
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
   const { leagueConfig } = useFantasyLeagueGroup();
-  const { totalSpent, selectedCount, team, leagueRound } = useFantasyLeagueTeam();
+  const { totalSpent, selectedCount, team, leagueRound, isReadOnly } = useFantasyLeagueTeam();
 
   const { manager } = useTeamHistory();
   const displayName = (manager?.username || manager?.first_name || team?.team_name);
@@ -54,9 +54,15 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
         <div className="flex flex-row items-center justify-center text-center gap-1">
 
-          <div>
+          {!isReadOnly && <div>
             <p className="font-semibold max-w-[130px] truncate ">{displayName || "My Team"}</p>
-          </div>
+          </div>}
+
+          {isReadOnly && (
+            <TeamPointsCard 
+              leagueRound={leagueRound}
+            />
+          )}
         </div>
 
         <div className="flex-1 w-full flex flex-col items-end justify-center">
@@ -76,9 +82,9 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         onTeamUpdated={handleTeamUpdated}
       />}
 
-      <TeamPointsCard
+      {!isReadOnly && <TeamPointsCard
         leagueRound={leagueRound}
-      />
+      />}
 
     </div>
   );
@@ -134,6 +140,7 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
+  const {isReadOnly} = useFantasyLeagueTeam();
   const isLocked = isLeagueRoundLocked(leagueRound);
   const { userScore, highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummary(leagueRound);
@@ -144,7 +151,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
     <div className="flex flex-col max-h-[30px]" >
 
       <Activity mode={showScore ? "visible" : "hidden"} >
-        <div className="flex flex-row items-center justify-center gap-6" >
+        <div className="flex flex-row items-center justify-center gap-3" >
 
           <div className="flex flex-col items-center justify-center" >
             <p className="font-black text-md" >{Math.round(averagePointsScored ?? 0)}</p>
@@ -163,7 +170,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
         </div>
       </Activity>
 
-      <Activity mode={!isLocked ? "visible" : "hidden"} >
+      <Activity mode={!isLocked && !isReadOnly ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
           <BlueGradientCard className='w-fit py-2 px-4 items-center ' >
             <LeagueRoundCountdown2
@@ -174,6 +181,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
           </BlueGradientCard>
         </div>
       </Activity>
+
     </div>
   )
 }

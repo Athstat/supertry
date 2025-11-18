@@ -9,17 +9,18 @@ import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils
 import { Position } from "../../../types/position"
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics"
 import { MAX_TEAM_BUDGET } from "../../../types/constants"
-import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
+import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom, readOnlyAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
 import { fantasyTeamAthletesAtom } from "../../../state/myTeam.atoms"
 
 type Props = {
     team: IFantasyLeagueTeam,
     children?: ReactNode,
-    leagueRound?: IFantasyLeagueRound
+    leagueRound?: IFantasyLeagueRound,
+    readOnly?: boolean
 }
 
 /** Provides team athlete data and fantasy league team data to be provided  */
-export default function FantasyLeagueTeamProvider({ team, children, leagueRound }: Props) {
+export default function FantasyLeagueTeamProvider({ team, children, leagueRound, readOnly }: Props) {
 
     const atoms = [
         fantasyLeagueTeamAtom,
@@ -27,12 +28,13 @@ export default function FantasyLeagueTeamProvider({ team, children, leagueRound 
         fantasyTeamSlotsAtom,
         swapPlayerAtom,
         swapStateAtom,
-        fantasyLeagueTeamLeagueRoundAtom
+        fantasyLeagueTeamLeagueRoundAtom,
+        readOnlyAtom
     ];
 
     return (
         <ScopeProvider atoms={atoms} >
-            <InnerProvider leagueRound={leagueRound} team={team} >
+            <InnerProvider leagueRound={leagueRound} team={team} readOnly={readOnly} >
                 {children}
             </InnerProvider>
         </ScopeProvider>
@@ -40,12 +42,13 @@ export default function FantasyLeagueTeamProvider({ team, children, leagueRound 
 }
 
 
-function InnerProvider({ team, children, leagueRound }: Props) {
+function InnerProvider({ team, children, leagueRound, readOnly }: Props) {
 
     const setTeam = useSetAtom(fantasyLeagueTeamAtom);
     const setSlots = useSetAtom(fantasyTeamSlotsAtom);
 
     const setLeagueRound = useSetAtom(fantasyLeagueTeamLeagueRoundAtom);
+    const setReadOnly = useSetAtom(readOnlyAtom);
 
     useEffect(() => {
 
@@ -81,7 +84,12 @@ function InnerProvider({ team, children, leagueRound }: Props) {
         if (leagueRound) {
             setLeagueRound(leagueRound);
         }
-    }, [setSlots, setTeam, team, leagueRound, setLeagueRound]);
+
+        if (readOnly !== undefined) {
+            setReadOnly(readOnly);
+        }
+        
+    }, [setSlots, setTeam, team, leagueRound, setLeagueRound, readOnly, setReadOnly]);
 
     return (
         <>
@@ -99,6 +107,8 @@ export function useFantasyLeagueTeam() {
     const [swapState, setSwapState] = useAtom(swapStateAtom);
     const [swapPlayer, setSwapPlayer] = useAtom(swapPlayerAtom);
     const leagueRound = useAtomValue(fantasyLeagueTeamLeagueRoundAtom);
+
+    const isReadOnly = useAtomValue(readOnlyAtom);
 
     const totalSpent: number = useMemo(() => {
         return slots.reduce((sum, s) => {
@@ -406,6 +416,7 @@ export function useFantasyLeagueTeam() {
         swapPlayer,
         swapState,
         budgetRemaining,
-        leagueRound
+        leagueRound,
+        isReadOnly
     }
 }
