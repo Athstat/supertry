@@ -7,7 +7,6 @@ import {
 } from '../../../types/fantasyLeagueGroups';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
-import { useMemo } from 'react';
 
 type Props = {
   isLoading?: boolean;
@@ -100,24 +99,24 @@ function LeagueStandingsRow({ member, isUser, hideUserScore, index }: StandingsP
 
   const rank = member.rank ?? index + 1;
 
-  const badge = useMemo(() => {
-    switch (rank) {
-      case 1:
-        return '🏅';
-        break;
+  // const badge = useMemo(() => {
+  //   switch (rank) {
+  //     case 1:
+  //       return '🏅';
+  //       break;
 
-      case 2:
-        return '🥈';
-      case 3:
-        return '🥉';
+  //     case 2:
+  //       return '🥈';
+  //     case 3:
+  //       return '🥉';
 
-      default:
-        return undefined;
-        break;
-    }
+  //     default:
+  //       return undefined;
+  //       break;
+  //   }
 
-    return undefined;
-  }, [rank]);
+  //   return undefined;
+  // }, [rank]);
 
   const pointsDisplay =
     isUser && hideUserScore ? '-' : member.total_score ? Math.floor(member.total_score) : 0;

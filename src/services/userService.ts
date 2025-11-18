@@ -1,4 +1,4 @@
-import { DjangoAuthUser, UpdateUserProfileReq } from "../types/auth";
+import { DjangoAuthUser, DjangoUserMinimal, UpdateUserProfileReq } from "../types/auth";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger";
 
@@ -39,6 +39,23 @@ export const userService = {
             }
         } catch (err) {
             logger.error("Error updating user profile ", err);
+        }
+
+        return undefined;
+    },
+
+    getUserById: async (userId: string) : Promise<DjangoUserMinimal | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/users/${userId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as DjangoUserMinimal
+            }
+        } catch (err) {
+            logger.error("Error fetching user by id ", err);
         }
 
         return undefined;
