@@ -75,7 +75,7 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
 
 
   return (
-    <div className="mt-4 ">
+    <div className="mt-4 h-full ">
       <div className='flex flex-col relative'>
 
         <div className='px-4 mb-4' >

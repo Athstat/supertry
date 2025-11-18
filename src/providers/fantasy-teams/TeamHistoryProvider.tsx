@@ -9,6 +9,7 @@ import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useDebounced } from "../../hooks/useDebounced";
 import { useQueryState } from "../../hooks/useQueryState";
 import { queryParamKeys } from "../../types/constants";
+import { AnimatePresence } from "framer-motion";
 
 type Props = {
     children?: ReactNode,
@@ -53,7 +54,7 @@ function InnerProvider({ children, user, loadingFallback }: Props) {
         if (currentRound) {
             setRound(currentRound);
         }
-    }, [ currentRound, setRound ]);
+    }, [currentRound, setRound]);
 
     useEffect(() => {
         if (user) {
@@ -104,9 +105,12 @@ function RoundTeamProvider({ loadingFallback, children }: Props) {
         )
     }
 
+
     return (
         <Fragment>
-            {children}
+            <AnimatePresence >
+                {children}
+            </AnimatePresence>
         </Fragment>
     )
 

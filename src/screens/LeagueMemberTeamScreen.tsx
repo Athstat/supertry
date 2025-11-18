@@ -60,7 +60,7 @@ function Content() {
     const navigate = useNavigate();
 
     const [visitedRounds, setVistedRounds] = useState<IFantasyLeagueRound[]>([]);
-    
+
     const handleBack = () => {
         if (league) {
             navigate(`/league/${league?.id}?journey=standings`);
@@ -95,7 +95,7 @@ function Content() {
     }, [round]);
 
     return (
-        <PageView className="flex flex-col pt-2 gap-4" >
+        <PageView className="flex flex-col gap-4 " >
 
             <div className="flex flex-col px-4" >
                 <div className="h-[50px] relative w-full items-center justify-center flex flex-col rounded-xl border-none">
@@ -114,27 +114,24 @@ function Content() {
             />
 
             {roundTeam && !isDelaying && (
-                <Fragment>
-                    <FantasyLeagueTeamProvider
+                <FantasyLeagueTeamProvider
+                    leagueRound={round}
+                    team={roundTeam}
+                    readOnly
+                >
+                    <FantasyTeamView
+                        leagueConfig={leagueConfig}
                         leagueRound={round}
-                        team={roundTeam}
-                        readOnly
-                    >
-                        <FantasyTeamView
-                            leagueConfig={leagueConfig}
-                            leagueRound={round}
-                            onTeamUpdated={async () => { }}
-                            onBack={() => { }}
-                        />
-                    </FantasyLeagueTeamProvider>
-
-                </Fragment>
+                        onTeamUpdated={async () => { }}
+                        onBack={() => { }}
+                    />
+                </FantasyLeagueTeamProvider>
             )}
 
 
 
             {!roundTeam && !isDelaying && (
-                <NoTeamCreatedFallback 
+                <NoTeamCreatedFallback
                     hideViewStandingsOption
                     perspective="third-person"
                 />

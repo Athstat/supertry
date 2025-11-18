@@ -27,7 +27,7 @@ export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
   const [showPushModal, setShowPushModal] = useState(false);
 
   return (
-    <div className="w-full ">
+    <div className="w-full h-full">
       <MyTeamViewHeader
         onTeamUpdated={onTeamUpdated}
       />
