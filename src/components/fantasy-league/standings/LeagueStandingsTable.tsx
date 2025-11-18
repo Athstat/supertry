@@ -7,7 +7,6 @@ import {
 } from '../../../types/fantasyLeagueGroups';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
-import { useMemo } from 'react';
 
 type Props = {
   isLoading?: boolean;
@@ -39,7 +38,7 @@ export default function LeagueStandingsTable({
       </div>
 
       {isLoading && (
-        <div className="flex flex-col gap-4 animate-pulse">
+        <div className="flex flex-col gap-4 animate-pulse p-4">
           <RoundedCard className="border-none h-8 w-1/3 lg:w-1/4" />
 
           <div className="flex flex-row items-center justify-between">
@@ -100,24 +99,24 @@ function LeagueStandingsRow({ member, isUser, hideUserScore, index }: StandingsP
 
   const rank = member.rank ?? index + 1;
 
-  const badge = useMemo(() => {
-    switch (rank) {
-      case 1:
-        return '🏅';
-        break;
+  // const badge = useMemo(() => {
+  //   switch (rank) {
+  //     case 1:
+  //       return '🏅';
+  //       break;
 
-      case 2:
-        return '🥈';
-      case 3:
-        return '🥉';
+  //     case 2:
+  //       return '🥈';
+  //     case 3:
+  //       return '🥉';
 
-      default:
-        return undefined;
-        break;
-    }
+  //     default:
+  //       return undefined;
+  //       break;
+  //   }
 
-    return undefined;
-  }, [rank]);
+  //   return undefined;
+  // }, [rank]);
 
   const pointsDisplay =
     isUser && hideUserScore ? '-' : member.total_score ? Math.floor(member.total_score) : 0;
