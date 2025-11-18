@@ -38,7 +38,7 @@ export default function LeagueStandingsTable({
       </div>
 
       {isLoading && (
-        <div className="flex flex-col gap-4 animate-pulse">
+        <div className="flex flex-col gap-4 animate-pulse p-4">
           <RoundedCard className="border-none h-8 w-1/3 lg:w-1/4" />
 
           <div className="flex flex-row items-center justify-between">

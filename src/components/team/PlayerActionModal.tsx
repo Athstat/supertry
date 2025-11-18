@@ -16,6 +16,7 @@ import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
 import TeamJersey from "../player/TeamJersey";
+import { Activity } from "../shared/Activity";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -36,7 +37,7 @@ export function PlayerActionModal({
   // const key = swrFetchKeys.getAthleteById(player.tracking_id);
   // const { data: info, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteById(player.tracking_id));
 
-  const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain } = useFantasyLeagueTeam();
+  const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyLeagueTeam();
   const isSub = !player.is_starting;
 
   const playerSlot = useMemo(() => {
@@ -85,7 +86,10 @@ export function PlayerActionModal({
 
   return (
     <BottomSheetView
-      className="max-h-[440px] min-h-[400px] py-4 px-6"
+      className={twMerge(
+        "max-h-[440px] min-h-[400px] py-4 px-6",
+        isReadOnly && "max-h-[260px] min-h-[260px]"
+      )}
       key={player.tracking_id}
     >
       <div className="flex flex-col gap-4" >
@@ -175,53 +179,62 @@ export function PlayerActionModal({
           player={player}
         />
       </div> */}
-      <div className="mt-3" >
-        <p>Quick Actions</p>
-      </div>
 
-      <div className={twMerge(
-        "flex flex-row items-center justify-center gap-2",
-        isLocked && "opacity-60"
-      )} >
-        <PrimaryButton
-          className="bg-purple-100 text-purple-700 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50 border-purple-500 hover:bg-purple-200"
-          onClick={handleInitSwap}
-        >
-          Swap
-          {isLocked && <Lock className="w-4 h-4" />}
-        </PrimaryButton>
-        <PrimaryButton
-          className="bg-red-100 text-red-700 dark:text-red-300 dark:bg-red-900/30 dark:hover:bg-red-900 dark:border-red-500/40 border-red-500 hover:bg-red-200"
-          onClick={handleRemovePlayer}
-        >
-          Remove
-          {isLocked && <Lock className="w-4 h-4" />}
-        </PrimaryButton>
-      </div>
 
-      <div className={twMerge(
-        isLocked && "opacity-60"
-      )} >
-        {!isTeamCaptain && <RoundedCard
-          className={
-            "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
-          }
-          onClick={handleMakePlayerCaptain}
-        >
-          Make Captain
-          {isLocked && <Lock className="w-4 h-4" />}
-        </RoundedCard>}
+      <Activity mode={isReadOnly ? "hidden" : "visible"} >
 
-        {isTeamCaptain && <div
-          className={
-            "bg-transparent  dark:bg-transparent cursor-pointer dark:text-slate-400 border dark:border-slate-700 rounded-xl p-2.5 items-center justify-center gap-1 flex flex-row"
-          }
-        >
-          Team Captain
-          {isLocked && <Lock className="w-4 h-4" />}
-          <CaptainsArmBand />
-        </div>}
-      </div>
+        <div className="mt-3" >
+          <p>Quick Actions</p>
+        </div>
+
+        <div className={twMerge(
+          "flex flex-row items-center justify-center gap-2",
+          isLocked && "opacity-60"
+        )} >
+          <PrimaryButton
+            className="bg-purple-100 text-purple-700 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50 border-purple-500 hover:bg-purple-200"
+            onClick={handleInitSwap}
+          >
+            Swap
+            {isLocked && <Lock className="w-4 h-4" />}
+          </PrimaryButton>
+          <PrimaryButton
+            className="bg-red-100 text-red-700 dark:text-red-300 dark:bg-red-900/30 dark:hover:bg-red-900 dark:border-red-500/40 border-red-500 hover:bg-red-200"
+            onClick={handleRemovePlayer}
+          >
+            Remove
+            {isLocked && <Lock className="w-4 h-4" />}
+          </PrimaryButton>
+        </div>
+
+      </Activity>
+
+
+      <Activity mode={isReadOnly ? "hidden" : "visible"} >
+        <div className={twMerge(
+          isLocked && "opacity-60"
+        )} >
+          {!isTeamCaptain && <RoundedCard
+            className={
+              "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
+            }
+            onClick={handleMakePlayerCaptain}
+          >
+            Make Captain
+            {isLocked && <Lock className="w-4 h-4" />}
+          </RoundedCard>}
+
+          {isTeamCaptain && <div
+            className={
+              "bg-transparent  dark:bg-transparent cursor-pointer dark:text-slate-400 border dark:border-slate-700 rounded-xl p-2.5 items-center justify-center gap-1 flex flex-row"
+            }
+          >
+            Team Captain
+            {isLocked && <Lock className="w-4 h-4" />}
+            <CaptainsArmBand />
+          </div>}
+        </div>
+      </Activity>
 
 
     </BottomSheetView>
