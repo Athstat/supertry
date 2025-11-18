@@ -34,17 +34,19 @@ export default function LeagueMemberTeamScreen() {
     }
 
     return (
-        <PageView>
+        <Fragment>
             <FantasyLeagueGroupDataProvider
                 leagueId={leagueId}
+                loadingFallback={<LoadingFallback />}
             >
                 <TeamHistoryProvider
+                    loadingFallback={<LoadingFallback />}
                     user={manager}
                 >
                     <Content />
                 </TeamHistoryProvider>
             </FantasyLeagueGroupDataProvider>
-        </PageView>
+        </Fragment>
     )
 }
 
@@ -93,7 +95,7 @@ function Content() {
     }, [round]);
 
     return (
-        <div className="flex flex-col pt-2 gap-4" >
+        <PageView className="flex flex-col pt-2 gap-4" >
 
             <div className="flex flex-col px-4" >
                 <div className="h-[50px] relative w-full items-center justify-center flex flex-col rounded-xl border-none">
@@ -141,14 +143,14 @@ function Content() {
             {isDelaying && (
                 <PitchViewLoadingSkeleton />
             )}
-        </div>
+        </PageView>
     )
 }
 
 
 function LoadingFallback() {
     return (
-        <div className="flex flex-col animate-pulse gap-2" >
+        <PageView className="flex flex-col animate-pulse gap-2" >
             <div className="flex flex-col p-4 " >
                 <RoundedCard
                     className="h-[50px] w-full rounded-xl border-none"
@@ -156,6 +158,6 @@ function LoadingFallback() {
             </div>
 
             <PitchViewLoadingSkeleton />
-        </div>
+        </PageView>
     )
 }

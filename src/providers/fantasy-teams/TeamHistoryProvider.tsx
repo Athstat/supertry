@@ -7,6 +7,8 @@ import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { DjangoUserMinimal } from "../../types/auth";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useDebounced } from "../../hooks/useDebounced";
+import { useQueryState } from "../../hooks/useQueryState";
+import { queryParamKeys } from "../../types/constants";
 
 type Props = {
     children?: ReactNode,
@@ -41,6 +43,7 @@ export default function TeamHistoryProvider({ children, user, loadingFallback }:
 
 function InnerProvider({ children, user, loadingFallback }: Props) {
 
+    const [roundId, setRoundId] = useQueryState(queryParamKeys.ROUND_ID_QUERY_KEY);
     const { currentRound } = useFantasyLeagueGroup();
 
     const setRound = useSetAtom(teamHistoryCurrentRoundAtom);
@@ -57,6 +60,12 @@ function InnerProvider({ children, user, loadingFallback }: Props) {
             setManager(user);
         }
     }, [user, setManager])
+
+    useEffect(() => {
+        if (!roundId && currentRound) {
+            setRoundId(currentRound.id);
+        }
+    }, [currentRound, roundId, setRoundId]);
 
     return (
         <Fragment>
