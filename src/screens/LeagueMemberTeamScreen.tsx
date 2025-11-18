@@ -16,6 +16,7 @@ import { Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import { IFantasyLeagueRound } from "../types/fantasyLeague";
 import BlueGradientCard from "../components/shared/BlueGradientCard";
+import NoTeamCreatedFallback from "../components/fantasy-leagues/NoTeamCreatedFallback";
 
 
 export default function LeagueMemberTeamScreen() {
@@ -70,7 +71,7 @@ function Content() {
         const timer = setTimeout(() => {
             setDelaying(false);
             setVistedRounds(prev => [...prev, round])
-        }, 1000);
+        }, 2000);
 
         return () => {
             clearTimeout(timer);
@@ -114,9 +115,10 @@ function Content() {
 
 
             {!roundTeam && !isDelaying && (
-                <div>
-                    No Round Team
-                </div>
+                <NoTeamCreatedFallback 
+                    hideViewStandingsOption
+                    perspective="third-person"
+                />
             )}
 
             {isDelaying && (
