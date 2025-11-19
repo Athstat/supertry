@@ -67,8 +67,8 @@ function Content() {
           hideForGuestUsers
         />
 
-        {authUser && (
-          <UserNotificationsSettings databaseUser={authUser} />
+        {authUser && !isGuestAccount && (
+          <UserNotificationsSettings />
         )}
 
         <LicensingModal />
