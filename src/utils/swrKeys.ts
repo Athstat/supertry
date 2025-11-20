@@ -156,5 +156,9 @@ export const swrFetchKeys = {
 
   getUserById: (userId: string) => {
     return `/users/${userId}`;
-  } 
+  },
+
+  getNotificationProfileByUserId: (userId: string) => {
+    return `/notifications/profiles/${userId}`;
+  }
 };
