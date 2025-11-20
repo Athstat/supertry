@@ -42,6 +42,7 @@ import DashboardDataProvider from './components/dashboard/provider/DashboardData
 import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 import OnboardingDataProvider from './providers/OnboardingDataProvider';
 import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
+import NotificationPreferencesScreen from './screens/myaccount/NotificationPreferencesScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -308,6 +309,17 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <EditAccountInfoScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/notification-preferences"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <NotificationPreferencesScreen />
               </Layout>
             </ProtectedRoute>
           }
