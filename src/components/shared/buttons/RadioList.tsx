@@ -60,11 +60,11 @@ function Option({ option, value, onChange }: OptionProp) {
     >
 
       <div className={twMerge(
-        "w-4 h-4 rounded-full flex flex-col p-[1.5px] items-center justify-center border dark:border-slate-400",
+        "w-4 h-4 rounded-full flex flex-col p-[1.5px] items-center justify-center border dark:border-slate-400 border-slate-500",
         isCurrent && ""
       )} >
         {isCurrent && <div className={twMerge(
-          "w-full h-full bg-white rounded-full"
+          "w-full h-full dark:bg-white bg-slate-500 rounded-full"
         )} >
 
         </div>}

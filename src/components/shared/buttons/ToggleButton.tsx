@@ -28,7 +28,7 @@ export default function ToggleButton({ value, onChange, isDisable }: Props) {
             {/* Handle */}
             <div
                 className={twMerge(
-                    'w-[30px] h-[25px] bg-white  rounded-full transition-transform duration-300',
+                    'w-[30px] h-[23px] bg-white  rounded-full transition-transform duration-300',
                     finalValue ? "translate-x-[25px]" : "translate-x-[3px]"
                 )}
             />

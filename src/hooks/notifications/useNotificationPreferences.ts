@@ -51,7 +51,7 @@ export function useNotificationPreferences() {
         fetcher();
     }, [authUser]);
 
-    const debouncedLoading = useDebounced(isLoading, 1000);
+    const debouncedLoading = useDebounced(isLoading, 500);
 
     const handleAutoSave = useCallback(async () => {
         try {
