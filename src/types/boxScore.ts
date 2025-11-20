@@ -57,5 +57,6 @@ export type BoxscoreListRecordItem = {
 export type BoxscoreHeader = {
     lable: string,
     key?: string,
-    tooltip?: string
+    tooltip?: string,
+    title?: string
 }
