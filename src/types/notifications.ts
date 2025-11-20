@@ -1,3 +1,5 @@
+import { RadioListOption } from "./ui";
+
 export type GameUpdatesPreference = "key-updates" | "all-updates" | "results-only";
 
 /** An Array with game updates preference options */
@@ -5,6 +7,21 @@ export const gameUpdatesPreferenceOptions: GameUpdatesPreference[] = [
     "key-updates",
     "all-updates",
     "results-only"
+];
+
+export const gameUpdatesPreferenceRadioListOptions: RadioListOption[] = [
+    {
+        value: "key-updates",
+        label: "Key Updates"
+    },
+    {
+        value: "results-only",
+        label: "Results Only"
+    }, 
+    {
+        value: "all-updates",
+        label: "All Updates"
+    }
 ];
 
 export type NotificationProfile = {

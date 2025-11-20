@@ -10,6 +10,8 @@ import { Toast } from "../../components/ui/Toast";
 import { ErrorState } from "../../components/ui/ErrorState";
 import { useNotificationPreferences } from "../../hooks/notifications/useNotificationPreferences";
 import { twMerge } from "tailwind-merge";
+import RadioList from "../../components/shared/buttons/RadioList";
+import { GameUpdatesPreference, gameUpdatesPreferenceRadioListOptions } from "../../types/notifications";
 
 
 /** Renders the Notification Preferences Screen */
@@ -75,6 +77,18 @@ export default function NotificationPreferencesScreen() {
                         }}
 
                         isDisabled={!profile.receive_notifications_enabled}
+                    />
+
+                    <RadioList 
+                        options={gameUpdatesPreferenceRadioListOptions}
+                        value={profile.game_updates_preference}
+                        disabled={!profile.receive_notifications_enabled}
+                        onChange={(val) => {
+                            setProfile({...profile, game_updates_preference: val as GameUpdatesPreference})
+                        }}
+
+                        title="Game Update Level"
+                        description="Customise game updates level"
                     />
 
                     <TogglableSettingCard
