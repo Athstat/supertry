@@ -26,7 +26,7 @@ export default function ToggleButton({ value, onChange }: Props) {
             <div
                 className={twMerge(
                     'w-[30px] h-[25px] bg-white  rounded-full transition-transform duration-300',
-                    value ? "translate-x-[25px]" : "translate-x-[2px]"
+                    value ? "translate-x-[25px]" : "translate-x-[3px]"
                 )}
             />
         </button>
