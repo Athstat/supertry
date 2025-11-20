@@ -18,7 +18,7 @@ function getScrollParent(node: HTMLElement | null): HTMLElement | null {
 
   return isScrollable ? node : getScrollParent(node.parentElement);
 }
-
+  
 /**
  * Hook: Tracks the page-based x/y coordinates of an element,
  * accounting for both window scrolling and scrollable containers.
