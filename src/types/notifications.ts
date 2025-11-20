@@ -9,12 +9,12 @@ export const gameUpdatesPreferenceOptions: GameUpdatesPreference[] = [
 
 export type NotificationProfile = {
     user_id: string,
-    receive_notifications_enabled?: boolean,
-    game_updates_enabled?: boolean,
-    game_roster_updates_enabled?: boolean,
-    news_updates_enabled?: boolean,
-    my_team_updates_enabled?: boolean,
-    email_updates_enabled?: boolean,
+    receive_notifications_enabled: boolean,
+    game_updates_enabled: boolean,
+    game_roster_updates_enabled: boolean,
+    news_updates_enabled: boolean,
+    my_team_updates_enabled: boolean,
+    email_updates_enabled: boolean,
     created_at: Date,
     updated_at: Date,
     game_updates_preference: GameUpdatesPreference

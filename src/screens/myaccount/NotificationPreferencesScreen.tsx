@@ -4,52 +4,21 @@ import PageView from "../PageView";
 import { useNavigate } from "react-router-dom";
 import SecondaryText from "../../components/shared/SecondaryText";
 import ToggleButton from "../../components/shared/buttons/ToggleButton";
-import { useAuth } from "../../contexts/AuthContext";
-import { notificationService } from "../../services/notificationsService";
-import { useEffect, useRef, useState } from "react";
 import RoundedCard from "../../components/shared/RoundedCard";
-import { useDebounced } from "../../hooks/useDebounced";
-import { NotificationProfile } from "../../types/notifications";
-import { logger } from "../../services/logger";
+import { GoSync } from "react-icons/go";
+import { Toast } from "../../components/ui/Toast";
+import { ErrorState } from "../../components/ui/ErrorState";
+import { useNotificationPreferences } from "../../hooks/notifications/useNotificationPreferences";
 
 
 /** Renders the Notification Preferences Screen */
 export default function NotificationPreferencesScreen() {
 
-    const { authUser } = useAuth();
-
-    const [isLoading, setLoading] = useState<boolean>(false);
-    const [profile, setProfile] = useState<NotificationProfile>();
-    const originalProfileRef = useRef<NotificationProfile>(null);
-
-    useEffect(() => {
-        const fetcher = async () => {
-
-            setLoading(true);
-
-            try {
-                if (!authUser) {
-                    return;
-                }
-
-                const data = await notificationService.getNotificationProfile(authUser?.kc_id);
-
-                if (data) {
-                    originalProfileRef.current = data;
-                    setProfile(data);
-                }
-
-            } catch (err) {
-                logger.error("Error fetching profile in efffect", err);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetcher();
-    }, [authUser]);
-
-    const debouncedLoading = useDebounced(isLoading, 700);
+    const {
+        error, clearError, isSaving,
+        isProfileFetchFailed, isLoading, 
+        profile, setProfile
+    } = useNotificationPreferences();
 
     const navigate = useNavigate();
 
@@ -57,13 +26,13 @@ export default function NotificationPreferencesScreen() {
         navigate(`/profile`);
     }
 
-    if (debouncedLoading) {
+    if (isLoading) {
         return <LoadingSkeleton />
     }
 
     return (
         <PageView className="px-6 flex flex-col gap-4" >
-            <div className="flex flex-row items-center gap-4" >
+            <div className="flex flex-row relative items-center gap-4" >
                 <CircleButton
                     onClick={handleBack}
                 >
@@ -73,6 +42,10 @@ export default function NotificationPreferencesScreen() {
                 <div>
                     <h1 className="font-bold text-lg" >Notification Preferences</h1>
                 </div>
+
+                {isSaving && <div className="absolute right-0" >
+                    <GoSync className="dark:text-slate-400 animate-spin" />
+                </div>}
             </div>
 
             {profile && (
@@ -143,6 +116,24 @@ export default function NotificationPreferencesScreen() {
                         }}
                     />
                 </div>
+            )}
+
+            {!isProfileFetchFailed && (
+                <div>
+                    <ErrorState
+                        error="Whoops! Something wen't wrong"
+                        message="We failed to retreive your notification preferences."
+                    />
+                </div>
+            )}
+
+            {error && (
+                <Toast
+                    message={error}
+                    isVisible={Boolean(error)}
+                    onClose={clearError}
+                    type="error"
+                />
             )}
         </PageView>
     )
