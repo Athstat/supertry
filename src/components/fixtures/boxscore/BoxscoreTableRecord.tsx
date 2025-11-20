@@ -72,6 +72,7 @@ export function BoxscoreTableRecord({ record, index, className }: TableRecordPro
                         key={statIndex}
                         className={twMerge(
                             "flex-1 min-w-[80px] flex flex-row items-center justify-center px-3 py-3",
+                            statIndex === record.stats.length - 1 && "min-w-[140px]"
                         )}
                     >
                         <SecondaryText className="font-medium text-sm">{stat}</SecondaryText>

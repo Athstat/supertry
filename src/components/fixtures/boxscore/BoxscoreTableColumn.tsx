@@ -8,6 +8,7 @@ import { BoxscoreHeader } from "../../../types/boxScore";
 import SecondaryText from "../../shared/SecondaryText";
 import TooltipCard from "../../shared/Tooltip";
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
+import { useBoxscoreTable } from "./BoxscoreTableProvider";
 
 type TableColumnProps = {
     column: BoxscoreHeader,
@@ -18,6 +19,9 @@ export function BoxscoreTableColumn({ column, className, sortIndex }: TableColum
 
     const { sortDirection, sortIndex: currentIndex, toggleDirection, setSortDirection, setSortIndex } = useTableSort();
     const isCurrentIndex = sortIndex === currentIndex;
+
+    const {secondaryColumns} = useBoxscoreTable();
+    const isLastColumn = sortIndex === secondaryColumns.length - 1;
 
     const ref = useRef<HTMLDivElement>(null);
     const [show, setShow] = useState<boolean>(false);
@@ -56,7 +60,8 @@ export function BoxscoreTableColumn({ column, className, sortIndex }: TableColum
             <div
                 ref={ref}
                 className={twMerge(
-                    'px-3 py-2 cursor-pointer relative h-full flex flex-row gap-1 items-center justify-start',
+                    'px-3 py-2 cursor-pointer relative h-full min-w-[80px] flex flex-row gap-1 items-center justify-start',
+                    isLastColumn && "min-w-[135px] flex-1",
                     className,
                 )}
 

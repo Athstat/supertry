@@ -4,6 +4,7 @@ import { useMemo } from "react"
 import { useTableSort } from "../../../hooks/tables/useTableSort"
 import { BoxscoreTableColumn } from "./BoxscoreTableColumn"
 import { BoxscoreTableRecord } from "./BoxscoreTableRecord"
+import { logger } from "../../../services/logger"
 
 type Props = {
     title?: string,
@@ -29,18 +30,25 @@ export default function BoxscoreTable2({ title, columns, records, noContentMessa
 function InnerTable() {
 
     const { title, firstColumn, secondaryColumns, records } = useBoxscoreTable();
-    const {sortIndex, sortDirection} = useTableSort();
-    
+    const { sortIndex, sortDirection } = useTableSort();
+
     const sortedRows = useMemo(() => {
         return records.sort((a, b) => {
-            const aIndexStat = a.stats[sortIndex].toString();
-            const bIndexStat = b.stats[sortIndex].toString();
 
-            if (sortDirection === "desc") {
-                return bIndexStat.localeCompare(aIndexStat);
-            }
+            try {
+                const aIndexStat = Number(a.stats[sortIndex].toString().replace("%", ""));
+                const bIndexStat = Number(b.stats[sortIndex].toString().replace("%", ""));
 
-            return aIndexStat.localeCompare(bIndexStat);
+                if (sortDirection === "desc") {
+                    return bIndexStat - aIndexStat;
+                }
+
+                return aIndexStat - bIndexStat;
+            } catch (err) {
+                logger.error("Error sorting rows ", err);
+            }  
+
+            return 0;
         });
     }, [records, sortDirection, sortIndex]);
 
@@ -72,7 +80,7 @@ function InnerTable() {
                             <BoxscoreTableColumn
                                 key={column.key || index}
                                 column={column}
-                                className="flex-1 min-w-[80px] justify-center"
+                                className="flex-1  justify-center"
                                 sortIndex={index}
                             />
                         )
