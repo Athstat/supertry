@@ -2,10 +2,13 @@ import { twMerge } from "tailwind-merge"
 import { BoxscoreHeader, BoxscoreListRecordItem } from "../../../types/boxScore"
 import BoxscoreTableProvider, { useBoxscoreTable } from "./BoxscoreTableProvider"
 import SecondaryText from "../../shared/SecondaryText"
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import useSWR from "swr"
 import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService"
 import RoundedCard from "../../shared/RoundedCard"
+import TooltipCard from "../../shared/Tooltip"
+import { useNodeCoordinates } from "../../../hooks/useNodeCoordinates"
+import { useClickOutside } from "../../../hooks/useClickOutside"
 
 type Props = {
     title?: string,
@@ -89,15 +92,40 @@ type TableColumnProps = {
     className?: string
 }
 function TableColumn({ column, className }: TableColumnProps) {
+
+    const ref = useRef<HTMLDivElement>(null);
+    const [show, setShow] = useState<boolean>(false);
+    const hasToolTip = Boolean(column.title);
+
+    const { coordinates } = useNodeCoordinates(ref);
+    
+    const toggle = () => {
+        setShow(prev => !prev);
+    }
+
+    useClickOutside(ref, () => setShow(false));
+
     return (
-        <div
-            className={twMerge(
-                'px-3 py-2 h-full flex flex-row items-center justify-start',
-                className
-            )}
-        >
-            <SecondaryText className="font-bold text-xs uppercase tracking-wide">{column.lable}</SecondaryText>
-        </div>
+        <Fragment>
+
+            <div
+                ref={ref}
+                className={twMerge(
+                    'px-3 py-2 cursor-pointer relative h-full flex flex-row items-center justify-start',
+                    className
+                )}
+                onClick={toggle}
+            >
+                <SecondaryText className="font-bold text-xs uppercase tracking-wide">{column.lable}</SecondaryText>
+            </div>
+
+            {hasToolTip && <TooltipCard
+                title={column.title}
+                text={column.tooltip}
+                showTooltip={show}
+                coordinates={coordinates}
+            />}
+        </Fragment>
     )
 }
 
