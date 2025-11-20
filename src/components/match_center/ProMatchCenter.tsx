@@ -2,9 +2,7 @@ import useSWR from 'swr';
 import { gamesService } from '../../services/gamesService';
 import { LoadingState } from '../ui/LoadingState';
 import FixtureCard from '../fixtures/FixtureCard';
-import { useQueryState } from '../../hooks/useQueryState';
 import NoContentCard from '../shared/NoContentMessage';
-import MatchCenterSearchBar from './MatchCenterSearchBar';
 import { searchProFixturePredicate } from '../../utils/fixtureUtils';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { IFixture } from '../../types/games';
@@ -21,11 +19,14 @@ import {
   findPreviousWeekWithFixtures,
 } from '../../utils/fixtureUtils';
 
-export default function ProMatchCenter() {
+type Props = {
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+};
+
+export default function ProMatchCenter({ searchQuery }: Props) {
   const key = 'pro-fixtures';
   let { data: fixtures, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
-
-  const [search, setSearch] = useQueryState<string | undefined>('proq');
 
   // Get current week on mount
   const currentWeek = getCurrentWeek();
@@ -52,16 +53,16 @@ export default function ProMatchCenter() {
 
   // Filter by search first
   const searchedFixtures = fixtures.filter(f => {
-    return search ? searchProFixturePredicate(search, f) : true;
+    return searchQuery ? searchProFixturePredicate(searchQuery, f) : true;
   });
 
-  // If searching, show all fixtures across all weeks
+  // If searching, show all fixtures across all weeks (latest first)
   // Otherwise, show only fixtures for the selected week
-  const displayFixtures = search
+  const displayFixtures = searchQuery
     ? searchedFixtures.sort((a, b) => {
         const aDate = new Date(a.kickoff_time ?? new Date());
         const bDate = new Date(b.kickoff_time ?? new Date());
-        return aDate.valueOf() - bDate.valueOf();
+        return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
       })
     : getFixturesForWeek(searchedFixtures, selectedWeek, selectedYear);
 
@@ -116,27 +117,21 @@ export default function ProMatchCenter() {
     <div className="flex flex-col gap-4">
       <h1 className="font-bold text-lg">Professional Rugby</h1>
 
-      <MatchCenterSearchBar
-        value={search}
-        onChange={setSearch}
-        placeholder="Search Pro Games, Seasons ..."
-      />
-
       {/* Week Navigation */}
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-col gap-1">
             <h2 className="font-semibold text-base md:text-lg">
-              {search ? 'Search Results' : weekHeader}
+              {searchQuery ? 'Search Results' : weekHeader}
             </h2>
-            {!search && (
+            {!searchQuery && (
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Today: Week {currentWeek.weekNumber}, {format(new Date(), 'EEE, d MMM yyyy')}
+                Today: {format(new Date(), 'EEE, d MMM yyyy')}
               </p>
             )}
           </div>
           <div className="flex flex-row gap-2">
-            {!search && hasAnyFixtures && (
+            {!searchQuery && hasAnyFixtures && (
               <>
                 <button
                   onClick={handleJumpToCurrentWeek}
@@ -171,8 +166,8 @@ export default function ProMatchCenter() {
 
       {/* Fixtures List */}
       <div className="flex flex-col gap-3 w-full">
-        {!hasAnyFixtures && !search && <NoContentCard message="No fixtures available" />}
-        {displayFixtures.length === 0 && !search && hasAnyFixtures && (
+        {!hasAnyFixtures && !searchQuery && <NoContentCard message="No fixtures available" />}
+        {displayFixtures.length === 0 && !searchQuery && hasAnyFixtures && (
           <div className="flex flex-col gap-3 items-center">
             <NoContentCard message="No fixtures found for this week" />
             {findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear) && (
@@ -186,7 +181,7 @@ export default function ProMatchCenter() {
             )}
           </div>
         )}
-        {displayFixtures.length === 0 && search && (
+        {displayFixtures.length === 0 && searchQuery && (
           <NoContentCard message="No fixtures match your search" />
         )}
         {displayFixtures.map((fixture, index) => {

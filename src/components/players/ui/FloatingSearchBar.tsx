@@ -5,11 +5,13 @@ import { Search, Filter, ArrowRight, User } from 'lucide-react';
 type Props = {
   value: string;
   onChange: (v: string) => void;
-  onOpenControls: () => void;
+  onOpenControls?: () => void;
   onOpenCompare?: () => void;
   isComparePicking?: boolean;
   placeholder?: string;
   className?: string;
+  showFilterButton?: boolean;
+  showCompareButton?: boolean;
 };
 
 export default function FloatingSearchBar({
@@ -20,6 +22,8 @@ export default function FloatingSearchBar({
   isComparePicking,
   placeholder = 'Search players...',
   className,
+  showFilterButton = true,
+  showCompareButton = true,
 }: Props) {
   const [isScrollingDown, setIsScrollingDown] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
@@ -41,31 +45,36 @@ export default function FloatingSearchBar({
         // Responsive width (viewport-based so it never overflows the screen)
         'w-[92vw] max-w-md md:max-w-lg',
         className ?? '',
-        'flex flex-row items-center justify-between',
+        'flex flex-row items-center gap-2',
+        showFilterButton || showCompareButton ? 'justify-between' : 'justify-center',
       ].join(' ')}
       initial={{ y: 16, opacity: 0 }}
       animate={{ y: 0, opacity: isScrollingDown ? 0.85 : 1 }}
       transition={{ type: 'spring', damping: 22, stiffness: 240 }}
     >
-      <button
-        aria-label="Open filters and sorting"
-        onClick={onOpenControls}
-        className={[
-          'w-10 h-10 md:w-10 md:h-10',
-          'rounded-full',
-          'flex items-center justify-center',
-          'bg-white/95 dark:bg-dark-850/95',
-          'border border-slate-200 dark:border-slate-700',
-          'hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98]',
-          'transition',
-          'shadow-lg shadow-black/20',
-        ].join(' ')}
-      >
-        <Filter className={`w-5 h-5 ${iconColorClass}`} />
-      </button>
+      {showFilterButton && (
+        <button
+          aria-label="Open filters and sorting"
+          onClick={onOpenControls}
+          className={[
+            'w-10 h-10 md:w-10 md:h-10',
+            'rounded-full',
+            'flex items-center justify-center',
+            'bg-white/95 dark:bg-dark-850/95',
+            'border border-slate-200 dark:border-slate-700',
+            'hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98]',
+            'transition',
+            'shadow-lg shadow-black/20',
+          ].join(' ')}
+        >
+          <Filter className={`w-5 h-5 ${iconColorClass}`} />
+        </button>
+      )}
       <div
         className={[
-          'w-[70%] h-12 md:h-[52px]',
+          'w-[90%]',
+          'items-center justify-center',
+          'h-12 md:h-[52px]',
           'px-4 md:px-5',
           'flex items-center gap-3',
           'rounded-full',
@@ -80,36 +89,38 @@ export default function FloatingSearchBar({
           value={value}
           onChange={e => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`flex-1 bg-transparent outline-none text-sm md:text-base ${textColorClass} ${placeholderColorClass}`}
+          className={`flex-1 bg-transparent outline-none text-base ${textColorClass} ${placeholderColorClass}`}
         />
       </div>
-      <button
-        aria-label="Enter compare mode"
-        onClick={onOpenCompare ?? onOpenControls}
-        className={[
-          // Size differs when showing two icons vs. single arrow
-          isComparePicking ? 'w-10 h-10 md:w-10 md:h-10' : 'w-14 h-10 md:w-10 md:h-10',
-          'rounded-full',
-          'flex items-center justify-center',
-          // Style changes with compare mode
-          isComparePicking
-            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-            : 'bg-white/95 dark:bg-dark-850/95 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700',
-          'active:scale-[0.98]',
-          'transition',
-          'shadow-lg shadow-black/20',
-        ].join(' ')}
-      >
-        {isComparePicking ? (
-          <ArrowRight className="w-5 h-5 text-white" />
-        ) : (
-          <>
-            <User className={`w-5 h-5 ${iconColorClass}`} />
-            <span className="text-slate-400 dark:text-slate-500">|</span>
-            <User className={`w-5 h-5 ${iconColorClass}`} />
-          </>
-        )}
-      </button>
+      {showCompareButton && (
+        <button
+          aria-label="Enter compare mode"
+          onClick={onOpenCompare ?? onOpenControls}
+          className={[
+            // Size differs when showing two icons vs. single arrow
+            isComparePicking ? 'w-10 h-10 md:w-10 md:h-10' : 'w-14 h-10 md:w-10 md:h-10',
+            'rounded-full',
+            'flex items-center justify-center',
+            // Style changes with compare mode
+            isComparePicking
+              ? 'bg-blue-600 hover:bg-blue-700 text-white'
+              : 'bg-white/95 dark:bg-dark-850/95 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700',
+            'active:scale-[0.98]',
+            'transition',
+            'shadow-lg shadow-black/20',
+          ].join(' ')}
+        >
+          {isComparePicking ? (
+            <ArrowRight className="w-5 h-5 text-white" />
+          ) : (
+            <>
+              <User className={`w-5 h-5 ${iconColorClass}`} />
+              <span className="text-slate-400 dark:text-slate-500">|</span>
+              <User className={`w-5 h-5 ${iconColorClass}`} />
+            </>
+          )}
+        </button>
+      )}
     </motion.div>
   );
 }
