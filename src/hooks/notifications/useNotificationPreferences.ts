@@ -51,7 +51,7 @@ export function useNotificationPreferences() {
         fetcher();
     }, [authUser]);
 
-    const debouncedLoading = useDebounced(isLoading, 700);
+    const debouncedLoading = useDebounced(isLoading, 1000);
 
     const handleAutoSave = useCallback(async () => {
         try {
@@ -114,7 +114,7 @@ export function useNotificationPreferences() {
         setError(undefined);
     }
 
-    const isProfileFetchFailed = !profile && !debouncedLoading;
+    const isProfileFetchFailed = !profile && !isLoading;
 
     return { profile, isProfileFetchFailed, isSaving, isLoading: debouncedLoading, error, clearError, setProfile }
 }
