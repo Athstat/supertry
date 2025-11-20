@@ -9,6 +9,7 @@ import { GoSync } from "react-icons/go";
 import { Toast } from "../../components/ui/Toast";
 import { ErrorState } from "../../components/ui/ErrorState";
 import { useNotificationPreferences } from "../../hooks/notifications/useNotificationPreferences";
+import { twMerge } from "tailwind-merge";
 
 
 /** Renders the Notification Preferences Screen */
@@ -72,6 +73,8 @@ export default function NotificationPreferencesScreen() {
                                 game_updates_enabled: newVal
                             })
                         }}
+
+                        isDisabled={!profile.receive_notifications_enabled}
                     />
 
                     <TogglableSettingCard
@@ -86,6 +89,8 @@ export default function NotificationPreferencesScreen() {
                                 game_roster_updates_enabled: newVal
                             })
                         }}
+
+                        isDisabled={!profile.receive_notifications_enabled}
                     />
 
                     <TogglableSettingCard
@@ -100,6 +105,8 @@ export default function NotificationPreferencesScreen() {
                                 my_team_updates_enabled: newVal
                             })
                         }}
+
+                        isDisabled={!profile.receive_notifications_enabled}
                     />
 
                     <TogglableSettingCard
@@ -114,6 +121,8 @@ export default function NotificationPreferencesScreen() {
                                 news_updates_enabled: newVal
                             })
                         }}
+
+                        isDisabled={!profile.receive_notifications_enabled}
                     />
                 </div>
             )}
@@ -143,12 +152,16 @@ type SettingProp = {
     title?: string,
     description?: string,
     value?: boolean,
-    onChange?: (newVal: boolean) => void
+    onChange?: (newVal: boolean) => void,
+    isDisabled?: boolean
 }
 
-function TogglableSettingCard({ title, description, value, onChange }: SettingProp) {
+function TogglableSettingCard({ title, description, value, onChange, isDisabled = false }: SettingProp) {
     return (
-        <div className="flex flex-row items-center gap-2 justify-between" >
+        <div className={twMerge(
+            "flex flex-row items-center gap-2 justify-between",
+            isDisabled && "opacity-30"
+        )} >
             <div>
                 <p>{title}</p>
                 <SecondaryText className="text-xs text-wrap max-w-[95%]" >{description}</SecondaryText>
@@ -158,6 +171,7 @@ function TogglableSettingCard({ title, description, value, onChange }: SettingPr
                 <ToggleButton
                     value={value}
                     onChange={onChange}
+                    isDisable={isDisabled}
                 />
             </div>
         </div>
