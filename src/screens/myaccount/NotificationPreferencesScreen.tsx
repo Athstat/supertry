@@ -80,7 +80,7 @@ export default function NotificationPreferencesScreen() {
                             isDisabled={!profile.receive_notifications_enabled}
                         />
 
-                        {profile.game_updates_enabled && <RadioList
+                        {profile.game_updates_enabled && profile.receive_notifications_enabled && <RadioList
                             options={gameUpdatesPreferenceRadioListOptions}
                             value={profile.game_updates_preference}
                             disabled={!profile.receive_notifications_enabled}
