@@ -141,6 +141,22 @@ export default function NotificationPreferencesScreen() {
 
                         isDisabled={!profile.receive_notifications_enabled}
                     />
+
+                    <TogglableSettingCard
+                        title="Email"
+                        description={
+                            "Receive updates from SCRUMMY through your email"
+                        }
+                        value={profile.email_updates_enabled}
+                        onChange={(newVal) => {
+                            setProfile({
+                                ...profile,
+                                email_updates_enabled: newVal
+                            })
+                        }}
+
+                        isDisabled={!profile.receive_notifications_enabled}
+                    />
                 </div>
             )}
 
