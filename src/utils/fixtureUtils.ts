@@ -353,7 +353,7 @@ export function formatWeekHeader(
   const startFormatted = format(dateRange.start, 'd MMM');
   const endFormatted = format(dateRange.end, 'd MMM');
 
-  return `Week ${weekNumber}, ${startFormatted} - ${endFormatted}`;
+  return `${startFormatted} - ${endFormatted}`;
 }
 
 /** Get fixtures for a specific week */

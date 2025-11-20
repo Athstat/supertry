@@ -7,7 +7,6 @@ import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import NoContentCard from '../shared/NoContentMessage';
-import MatchCenterSearchBar from './MatchCenterSearchBar';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
@@ -21,11 +20,15 @@ import {
   findPreviousWeekWithSbrFixtures,
 } from '../../utils/fixtureUtils';
 
-export default function SbrMatchCenter() {
+type Props = {
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+};
+
+export default function SbrMatchCenter({ searchQuery }: Props) {
   const key = 'sbr-fixtures';
   let { data: fixtures, isLoading } = useSWR(key, () => sbrService.getAllFixtures());
   const [season, setSeason] = useQueryState<string | undefined>('sbrcs', { init: 'all' });
-  const [search, setSearch] = useQueryState<string | undefined>('proq');
 
   // Get current week on mount
   const currentWeek = getCurrentWeek();
@@ -63,17 +66,17 @@ export default function SbrMatchCenter() {
 
   const filteredFixtures = fixtures.filter(f => {
     const seasonMatches = !season || season === 'all' ? true : f.season === season;
-    const searchMatches = search ? searchSbrFixturePredicate(search ?? '', f) : true;
+    const searchMatches = searchQuery ? searchSbrFixturePredicate(searchQuery ?? '', f) : true;
     return seasonMatches && searchMatches;
   });
 
-  // If searching, show all fixtures across all weeks
+  // If searching, show all fixtures across all weeks (latest first)
   // Otherwise, show only fixtures for the selected week
-  const displayFixtures = search
+  const displayFixtures = searchQuery
     ? filteredFixtures.sort((a, b) => {
         const aDate = new Date(a.kickoff_time ?? new Date());
         const bDate = new Date(b.kickoff_time ?? new Date());
-        return aDate.valueOf() - bDate.valueOf();
+        return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
       })
     : getSbrFixturesForWeek(filteredFixtures, selectedWeek, selectedYear);
 
@@ -132,12 +135,6 @@ export default function SbrMatchCenter() {
     <div className="flex flex-col gap-4">
       <h1 className="font-bold text-lg">School Boy Rugby</h1>
 
-      <MatchCenterSearchBar
-        value={search}
-        onChange={setSearch}
-        placeholder="Search SBR games, seasons ..."
-      />
-
       <PilledSeasonFilterBar seasons={seasons} onChange={setSeason} value={season} />
 
       {/* Week Navigation */}
@@ -145,16 +142,16 @@ export default function SbrMatchCenter() {
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-col gap-1">
             <h2 className="font-semibold text-base md:text-lg">
-              {search ? 'Search Results' : weekHeader}
+              {searchQuery ? 'Search Results' : weekHeader}
             </h2>
-            {!search && (
+            {!searchQuery && (
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 Today: Week {currentWeek.weekNumber}, {format(new Date(), 'EEE, d MMM yyyy')}
               </p>
             )}
           </div>
           <div className="flex flex-row gap-2">
-            {!search && hasAnyFixtures && (
+            {!searchQuery && hasAnyFixtures && (
               <>
                 <button
                   onClick={handleJumpToCurrentWeek}
@@ -189,8 +186,8 @@ export default function SbrMatchCenter() {
 
       {/* Fixtures List */}
       <div className="flex flex-col gap-3 w-full">
-        {!hasAnyFixtures && !search && <NoContentCard message="No fixtures available" />}
-        {displayFixtures.length === 0 && !search && hasAnyFixtures && (
+        {!hasAnyFixtures && !searchQuery && <NoContentCard message="No fixtures available" />}
+        {displayFixtures.length === 0 && !searchQuery && hasAnyFixtures && (
           <div className="flex flex-col gap-3 items-center">
             <NoContentCard message="No fixtures found for this week" />
             {findNextWeekWithSbrFixtures(filteredFixtures, selectedWeek, selectedYear) && (
@@ -204,7 +201,7 @@ export default function SbrMatchCenter() {
             )}
           </div>
         )}
-        {displayFixtures.length === 0 && search && (
+        {displayFixtures.length === 0 && searchQuery && (
           <NoContentCard message="No fixtures match your search" />
         )}
         {displayFixtures.map((fixture, index) => {
