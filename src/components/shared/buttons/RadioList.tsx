@@ -8,13 +8,17 @@ type Props = {
   description?: string,
   disabled?: boolean,
   value?: string,
-  onChange?: (newVal: string) => void
+  onChange?: (newVal: string) => void,
+  className?: string
 }
 
 /** Renders a Radio List Component */
-export default function RadioList({ title, description, options, value, onChange }: Props) {
+export default function RadioList({ title, description, options, value, onChange, className }: Props) {
   return (
-    <div className="flex flex-col gap-2" >
+    <div className={twMerge(
+      "flex flex-col gap-2",
+      className
+    )} >
       <div>
         <p>{title}</p>
         <SecondaryText className="text-xs" >{description}</SecondaryText>

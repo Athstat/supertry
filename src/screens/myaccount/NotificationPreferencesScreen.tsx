@@ -19,7 +19,7 @@ export default function NotificationPreferencesScreen() {
 
     const {
         error, clearError, isSaving,
-        isProfileFetchFailed, isLoading, 
+        isProfileFetchFailed, isLoading,
         profile, setProfile
     } = useNotificationPreferences();
 
@@ -52,7 +52,7 @@ export default function NotificationPreferencesScreen() {
             </div>
 
             {profile && (
-                <div className="flex flex-col w-full gap-4" >
+                <div className="flex flex-col w-full gap-6" >
                     <TogglableSettingCard
                         title="Receive Notifications"
                         description="Allow SCRUMMY to send notifications"
@@ -65,31 +65,34 @@ export default function NotificationPreferencesScreen() {
                         }}
                     />
 
-                    <TogglableSettingCard
-                        title="Game Updates"
-                        description="Receive updates e.g scores, tries when a game is live"
-                        value={profile.game_updates_enabled}
-                        onChange={(newVal) => {
-                            setProfile({
-                                ...profile,
-                                game_updates_enabled: newVal
-                            })
-                        }}
+                    <div className="flex flex-col gap-2" >
+                        <TogglableSettingCard
+                            title="Game Updates"
+                            description="Receive updates e.g scores, tries when a game is live"
+                            value={profile.game_updates_enabled}
+                            onChange={(newVal) => {
+                                setProfile({
+                                    ...profile,
+                                    game_updates_enabled: newVal
+                                })
+                            }}
 
-                        isDisabled={!profile.receive_notifications_enabled}
-                    />
+                            isDisabled={!profile.receive_notifications_enabled}
+                        />
 
-                    <RadioList 
-                        options={gameUpdatesPreferenceRadioListOptions}
-                        value={profile.game_updates_preference}
-                        disabled={!profile.receive_notifications_enabled}
-                        onChange={(val) => {
-                            setProfile({...profile, game_updates_preference: val as GameUpdatesPreference})
-                        }}
+                        {profile.game_updates_enabled && <RadioList
+                            options={gameUpdatesPreferenceRadioListOptions}
+                            value={profile.game_updates_preference}
+                            disabled={!profile.receive_notifications_enabled}
+                            onChange={(val) => {
+                                setProfile({ ...profile, game_updates_preference: val as GameUpdatesPreference })
+                            }}
 
-                        title="Game Update Level"
-                        description="Customise game updates level"
-                    />
+                            description="Customise game update frequency"
+                            className="pl-5"
+
+                        />}
+                    </div>
 
                     <TogglableSettingCard
                         title="Roster Updates"
