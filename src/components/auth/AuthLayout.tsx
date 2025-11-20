@@ -22,22 +22,22 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
             </div>
 
             {subtitle && <p className="mt-2 text-gray-600 dark:text-gray-400">{subtitle}</p>}
+
+            <p className="mt-2 text-center text-xs text-gray-500 dark:text-gray-400">
+              By continuing, you acknowledge that you have read and understand our{' '}
+              <a
+                href="https://scrummy-app.com/#/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+              >
+                Privacy Policy
+              </a>
+              .
+            </p>
           </div>
 
           {children}
-
-          <p className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">
-            By continuing, you acknowledge that you have read and understand our{' '}
-            <a
-              href="https://scrummy-app.com/#/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-            >
-              Privacy Policy
-            </a>
-            .
-          </p>
         </div>
       </main>
     </ScrummyMatrixBackground>
