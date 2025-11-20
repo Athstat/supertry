@@ -18,6 +18,7 @@ import { ProMotmVotingBox } from '../components/pro/motm';
 import ProFixtureVotingBox from '../components/fixtures/voting/ProFixtureVotingBox';
 import { ErrorState } from '../components/ui/ErrorState';
 import FixtureHero from '../components/fixtures/FixtureHero';
+import { Activity } from '../components/shared/Activity';
 
 export default function FixtureScreen() {
 
@@ -51,12 +52,12 @@ export default function FixtureScreen() {
   const { gameKickedOff } = fixtureSummary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
-    {
-      label: 'Kick Off',
-      tabKey: 'kick-off',
-      disabled: false,
-      className: "flex-1"
-    },
+    // {
+    //   label: 'Kick Off',
+    //   tabKey: 'kick-off',
+    //   disabled: false,
+    //   className: "flex-1"
+    // },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
@@ -103,7 +104,11 @@ export default function FixtureScreen() {
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
-              {sportActions && (sportActions?.length ?? 0) > 0 && <FixtureBoxscoreTab sportActions={sportActions} fixture={fixture} />}
+
+              <Activity mode={sportActions && (sportActions?.length ?? 0) > 0 ? "visible" : "hidden"} >
+                <FixtureBoxscoreTab sportActions={sportActions || []} fixture={fixture} />
+              </Activity>
+
             </TabViewPage>
 
             <TabViewPage className="flex flex-col gap-4 p-2" tabKey="kick-off">

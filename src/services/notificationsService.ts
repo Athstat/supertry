@@ -1,7 +1,9 @@
 /** Notification Service */
 
+import { NotificationProfile, UpdateNotificationProfileReq } from "../types/notifications";
 import { getAuthHeader, getUri } from "../utils/backendUtils"
 import { authService } from "./authService";
+import { logger } from "./logger";
 
 export const notificationService = {
 
@@ -28,5 +30,41 @@ export const notificationService = {
             console.log("Error updating game updates ", error);
             return undefined;
         }
-    } 
+    },
+
+    getNotificationProfile: async (userId: string) : Promise<NotificationProfile | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/notifications/profiles/${userId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as NotificationProfile
+            }
+        } catch (err) {
+            logger.error("Error fetching user notification profile ", err);
+        }
+
+        return undefined;
+    },
+
+    updateNotificationProfile: async (userId: string, data: UpdateNotificationProfileReq) : Promise<NotificationProfile | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/notifications/profiles/${userId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader(),
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                return (await res.json()) as NotificationProfile
+            }
+        } catch (err) {
+            logger.error("Error updating notification profile ", err);
+        }
+
+        return undefined;
+    }
 }
