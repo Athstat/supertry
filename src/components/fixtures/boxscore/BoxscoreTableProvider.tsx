@@ -3,6 +3,7 @@ import { boxscoreTableAtoms } from "../../../state/fixtures/boxscore.atoms"
 import { BoxscoreHeader, BoxscoreListRecordItem } from "../../../types/boxScore"
 import { Fragment, ReactNode, useEffect, useMemo } from "react"
 import { useAtomValue, useSetAtom } from "jotai"
+import SortableTableProvider from "../../../providers/tables/SortableTableProvider"
 
 type Props = {
     tableTitle?: string,
@@ -24,14 +25,16 @@ export default function BoxscoreTableProvider({ children, columns, tableTitle, r
 
     return (
         <ScopeProvider atoms={atoms} >
-            <InnerProvider
-                columns={columns}
-                records={records}
-                tableTitle={tableTitle}
-                noContentMessage={noContentMessage}
-            >
-                {children}
-            </InnerProvider>
+            <SortableTableProvider>
+                <InnerProvider
+                    columns={columns}
+                    records={records}
+                    tableTitle={tableTitle}
+                    noContentMessage={noContentMessage}
+                >
+                    {children}
+                </InnerProvider>
+            </SortableTableProvider>
         </ScopeProvider>
     )
 }
@@ -41,7 +44,7 @@ function InnerProvider({ children, columns, tableTitle, records, noContentMessag
     const setColumns = useSetAtom(boxscoreTableAtoms.columnsAtom);
     const setTitle = useSetAtom(boxscoreTableAtoms.titleAtom);
     const setRecords = useSetAtom(boxscoreTableAtoms.recordsAtom);
-    const setNoContentMessage = useSetAtom(boxscoreTableAtoms.noContentMessage)
+    const setNoContentMessage = useSetAtom(boxscoreTableAtoms.noContentMessage);
 
     useEffect(() => {
 
@@ -86,7 +89,7 @@ export function useBoxscoreTable() {
     const firstColumn = useMemo(() => {
         if (columns.length >= 1) {
             return columns[0];
-        } 
+        }
     }, [columns]);
 
     const secondaryColumns = useMemo(() => {
@@ -103,7 +106,7 @@ export function useBoxscoreTable() {
         records,
         title,
         noContentMessage,
-        firstColumn, 
+        firstColumn,
         secondaryColumns
     }
 }

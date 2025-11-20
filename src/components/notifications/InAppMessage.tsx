@@ -40,7 +40,7 @@ export default function InAppMessageCard({ message }: Props) {
                 mark_as_read();
             }
 
-        }, 10000);
+        }, 2000);
 
         return () => {
             clearTimeout(timeout);

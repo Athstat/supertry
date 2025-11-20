@@ -70,41 +70,61 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
             <BoxscoreTable2
                 title={selectedTeam?.athstat_name}
                 columns={[
-                    { lable: "Player" },
-                    { lable: "Tries" },
-                    { lable: "Pts" },
-                    { lable: "Asst" },
-                    { lable: "Carr" },
-                    { lable: "Tckls" },
-                    { lable: "Tckl%" },
-                    { lable: "PCM" },
-                    { lable: "Ruck Arr" },
-                    {lable: "D.Beaten"}
+                    { lable: "Player", title: "Player", tooltip: "Player Name" },
+                    { lable: "Tries", title: "Tries", tooltip: "The total number of tries scored by the player." },
+                    { lable: "Pts", title: "Points Scored", tooltip: "The total points scored by the player in the match" },
+                    { lable: "Asst", title: "Assits", tooltip: "Total passes provided by the player leading to a try." },
+                    { lable: "Carr", title: "Carries", tooltip: "Total number of carries made by a player" },
+                    { lable: "Tckls", title: "Title", tooltip: "The total number of tackles made by the player" },
+                    { lable: "Tckl%", title: "Tackle Success", tooltip: "Successful tackles made as a percentage of total tackles made" },
+                    { lable: "PCM", title: "Post Contact Metres", tooltip: "Metres gained after making contact with an opponent"},
+                    { lable: "Ruck Arr", title: "Ruck Arrivals", tooltip: "The number of times a player arrived at a ruck to contest for the ball." },
+                    {lable: "D.Beaten", title: "Defenders Beaten", tooltip: "Total number of defenders successfully evaded by the player."}
                 ]}
                 records={allStatsList}
             />
 
             <BoxscoreTable2
                 title="Attacking"
-                columns={[{ lable: "Player" }, { lable: "Tries" }, { lable: "Pts" }, { lable: "Carr" }]}
+                columns={[
+                    { lable: "Player", title: "Player", tooltip: "Player Name" },
+                    { lable: "Tries", title: "Tries", tooltip: "The total number of tries scored by the player." },
+                    { lable: "Pts", title: "Points Scored", tooltip: "The total points scored by the player in the match" },
+                    { lable: "Carr", title: "Carries", tooltip: "Total number of carries made by a player" },
+                ]}
                 records={attackList}
             />
 
             <BoxscoreTable2
                 title="Defense"
-                columns={[{ lable: "Player" }, { lable: "Tkls" }, { lable: "Tkl%" }, { lable: "DT" }, { lable: "T/0s Won" }]}
+                columns={[
+                    { lable: "Player", title: "Player", tooltip: "Player Name" },
+                    { lable: "Tckls", title: "Title", tooltip: "The total number of tackles made by the player" },
+                    { lable: "Tckl%", title: "Tackle Success", tooltip: "Successful tackles made as a percentage of total tackles made" },
+                    { lable: "DT", title: "Dominant Tackles", tooltip: "The number of tackles made that were deemed dominant by the referee." },
+                    { lable: "T/0s Won", title: "Turnovers Won",tooltip: "The number of times the team wins possession from the opposition." }
+                ]}
                 records={defenseList}
             />
 
             <BoxscoreTable2
                 title="Kicking"
-                columns={[{ lable: "Player" }, { lable: "Convs" }, { lable: "DG" }, { lable: "PK" }]}
+                columns={[
+                    { lable: "Player", title: "Player", tooltip: "Player Name" },
+                    { lable: "Convs", title: "Conversions", tooltip: "The total number of successful conversion kicks after tries." },
+                    { lable: "DG", title: "Drop Goals Scored", tooltip: "The number of drop goal attempts that were successfully converted." },
+                    { lable: "PK", title: "Successful Penalty Kicks", tooltip: "The number of penalty kicks successfully converted by the player." }
+                ]}
                 records={kickingList}
             />
 
             <BoxscoreTable2
                 title="Discipline"
-                columns={[{ lable: "Player" }, { lable: "Red" }, { lable: "Yellow" }]}
+                columns={[
+                    { lable: "Player", title: "Player", tooltip: "Player Name" },
+                    { lable: "Red", title: "Red Cards", tooltip: "The number of red cards received by the player or team." },
+                    { lable: "Yellow", title: "Yellow Cards", tooltip: "The total number of yellow cards shown to the player." }
+                ]}
                 records={disciplineList}
                 noContentMessage="Whoops, clean game detected"
             />
@@ -129,7 +149,7 @@ function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLi
         const tries = stats.find((b) => b.action === "tries")?.action_count;
         const points = stats.find((b) => b.action === "points")?.action_count;
         const tryAssits = stats.find((b) => b.action === "try_assits")?.action_count;
-        const passes = stats.find((b) => b.action === "carry_dominant")?.action_count;
+        const carries = stats.find((b) => b.action === "carry_dominant")?.action_count;
         const tackles = stats.find((b) => b.action === "tackles")?.action_count;
         const tackleSuccess = stats.find((b) => b.action === "tackle_success")?.action_count;
         const postContactMetres = stats.find((b) => b.action === "post_contact_metres")?.action_count;
@@ -143,7 +163,7 @@ function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreLi
                 Math.floor(tries ?? 0),
                 Math.floor(points ?? 0),
                 Math.floor(tryAssits ?? 0),
-                Math.floor(passes ?? 0),
+                Math.floor(carries ?? 0),
                 `${Math.floor(tackles ?? 0)}`,
                 tacklingPerc + "%",
                 Math.floor(postContactMetres ?? 0),

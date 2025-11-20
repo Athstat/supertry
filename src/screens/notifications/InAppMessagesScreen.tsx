@@ -74,7 +74,7 @@ export default function InAppMessagesScreen() {
 
             {isLoading && <LoadingSkeleton />}
 
-            <TabView
+            {!isLoading && <TabView
                 tabHeaderItems={tabItems}
             >
 
@@ -115,7 +115,7 @@ export default function InAppMessagesScreen() {
                     )}
                 </TabViewPage>
 
-            </TabView>
+            </TabView>}
 
 
         </PageView>

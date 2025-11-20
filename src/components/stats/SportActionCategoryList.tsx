@@ -184,8 +184,8 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
   }, []);
 
   const { coordinates, handleMouseEnter } = useHoverCoordinates(
-    () => {},
-    () => {}
+    () => { },
+    () => { }
   );
 
   const toggleTooltip = (e: React.MouseEvent) => {
@@ -196,24 +196,6 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
   useClickOutside(ref, () => {
     setShowTooltip(false);
   });
-
-  // In canonical mode we pass placeholders (athlete_id === '') which should still render
-  const isPlaceholder = !sportAction.athlete_id;
-  if (!shouldShow && !isPlaceholder) {
-    return;
-  }
-
-  const processActionCount = () => {
-    if (isPlaceholder || action_count === undefined || action_count === null) {
-      return 0;
-    }
-
-    if (!isNaN(Number(action_count))) {
-      return Math.floor(Number(action_count));
-    }
-
-    return 0;
-  };
 
   // Determine if this row is a leader among compared players (ties included)
   const isLeader = useMemo(() => {
@@ -233,6 +215,26 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
     const myVal = typeof action_count === 'number' ? Number(action_count) : 0;
     return anyPositive && maxCount === 1 && myVal === maxVal;
   }, [highlightLeaders, compareStats, sportAction.definition?.action_name, action_count]);
+
+  // In canonical mode we pass placeholders (athlete_id === '') which should still render
+  const isPlaceholder = !sportAction.athlete_id;
+  if (!shouldShow && !isPlaceholder) {
+    return;
+  }
+
+  const processActionCount = () => {
+    if (isPlaceholder || action_count === undefined || action_count === null) {
+      return 0;
+    }
+
+    if (!isNaN(Number(action_count))) {
+      return Math.floor(Number(action_count));
+    }
+
+    return 0;
+  };
+
+
 
   return (
     <div>
