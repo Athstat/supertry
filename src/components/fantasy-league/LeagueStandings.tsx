@@ -80,7 +80,7 @@ export function LeagueStandings() {
       return;
     }
 
-    const roundId = roundFilterId === "all" ? currentRound?.id : roundFilterId;
+    const roundId = roundFilterId === "overall" ? currentRound?.id : roundFilterId;
 
     navigate(`/league/${league?.id}/member/${member.user_id}?round_id=${roundId}`);
   };
