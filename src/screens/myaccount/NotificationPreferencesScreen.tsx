@@ -118,7 +118,7 @@ export default function NotificationPreferencesScreen() {
                 </div>
             )}
 
-            {!isProfileFetchFailed && (
+            {isProfileFetchFailed && (
                 <div>
                     <ErrorState
                         error="Whoops! Something wen't wrong"

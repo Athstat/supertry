@@ -1,36 +1,43 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { logger } from "../../services/logger";
 import { notificationService } from "../../services/notificationsService";
 import { NotificationProfile, UpdateNotificationProfileReq } from "../../types/notifications";
-import { hashNotificationProfile } from "../../utils/notificationUtils";
+import { compareProfiles } from "../../utils/notificationUtils";
 import { useDebounced } from "../useDebounced";
 
 export function useNotificationPreferences() {
     const { authUser } = useAuth();
 
+    // Whether data is being fetched or not
     const [isLoading, setLoading] = useState<boolean>(false);
+
+    // Whether preferences are being saved or not
     const [isSaving, setSaving] = useState<boolean>(false);
+
     const [error, setError] = useState<string>();
+
+
+    // Original Profile for comparison on auto save
+    const [originalProfile, setOriginalProfile] = useState<NotificationProfile>();
+
+    // Profile Object for making edits to
     const [profile, setProfile] = useState<NotificationProfile>();
 
-    const debouncedProfile = useDebounced(profile, 1000);
-    const originalProfileRef = useRef<NotificationProfile>(null);
 
     useEffect(() => {
         const fetcher = async () => {
-
-            setLoading(true);
 
             try {
                 if (!authUser) {
                     return;
                 }
 
+                setLoading(true);
                 const data = await notificationService.getNotificationProfile(authUser?.kc_id);
 
                 if (data) {
-                    originalProfileRef.current = data;
+                    setOriginalProfile(data);
                     setProfile(data);
                 }
 
@@ -48,65 +55,66 @@ export function useNotificationPreferences() {
 
     const handleAutoSave = useCallback(async () => {
         try {
-            setSaving(true);
-            setError(undefined);
 
-            if (!debouncedProfile || !originalProfileRef.current || !authUser) {
+            if (!profile || !originalProfile || !authUser) {
                 return;
             }
 
-            const originalHash = hashNotificationProfile(debouncedProfile);
-            const newHash = hashNotificationProfile(originalProfileRef.current);
+            setSaving(true);
+            setError(undefined);
 
-            if (originalHash === newHash) {
+            
+
+            if (compareProfiles(profile, originalProfile)) {
                 return;
             }
 
             const updateData: UpdateNotificationProfileReq = {
-                receive_notifications_enabled: debouncedProfile.receive_notifications_enabled,
-                game_updates_enabled: debouncedProfile.game_updates_enabled,
-                game_roster_updates_enabled: debouncedProfile.game_roster_updates_enabled,
-                news_updates_enabled: debouncedProfile.news_updates_enabled,
-                my_team_updates_enabled: debouncedProfile.my_team_updates_enabled,
-                email_updates_enabled: debouncedProfile.email_updates_enabled,
-                game_updates_preference: debouncedProfile.game_updates_preference
+                receive_notifications_enabled: profile.receive_notifications_enabled,
+                game_updates_enabled: profile.game_updates_enabled,
+                game_roster_updates_enabled: profile.game_roster_updates_enabled,
+                news_updates_enabled: profile.news_updates_enabled,
+                my_team_updates_enabled: profile.my_team_updates_enabled,
+                email_updates_enabled: profile.email_updates_enabled,
+                game_updates_preference: profile.game_updates_preference
             };
 
-            const res = await notificationService.updateNotificationProfile(
+            const updatedProfile = await notificationService.updateNotificationProfile(
                 authUser.kc_id,
                 updateData
             );
 
-            if (res) {
-                originalProfileRef.current = res;
+            // Set original hash to the last set profile
+            // in order to track original profile as this is the one
+            // currently in the database right now
+            if (updatedProfile) {
+                setOriginalProfile(updatedProfile);
             }
 
         } catch (err) {
 
             logger.error("Error updating notification profile ", err);
-
-            // Revert back to old settings
-            if (originalProfileRef.current) {
-                setProfile(originalProfileRef.current);
-            }
-
             setError("Something wen't wrong updating your preferences");
 
         } finally {
             setSaving(false);
         }
 
-    }, [debouncedProfile, authUser]);
+    }, [profile, originalProfile, authUser]);
 
     useEffect(() => {
-        handleAutoSave();
-    }, [debouncedProfile, handleAutoSave]);
+        const timer = setTimeout(() => {
+            handleAutoSave();
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [handleAutoSave]);
 
     const clearError = () => {
         setError(undefined);
     }
 
-    const isProfileFetchFailed = debouncedProfile && !debouncedLoading
+    const isProfileFetchFailed = !profile && !debouncedLoading;
 
-    return {profile, isProfileFetchFailed, isSaving, isLoading: debouncedLoading, error, clearError, setProfile}
+    return { profile, isProfileFetchFailed, isSaving, isLoading: debouncedLoading, error, clearError, setProfile }
 }
