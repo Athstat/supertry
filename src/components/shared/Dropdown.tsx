@@ -113,12 +113,12 @@ function OptionsTray({ options, value, onClickOption, className }: OptionsTrayPr
                 twMerge(
                     "w-[130px] mt-2 absolute z-[40] rounded-md max-h-[300px] border dark:border-slate-600 overflow-y-auto",
                     className,
-                    "dark:bg-black"
+                    "dark:bg-black bg-white"
                 )
             }
         >
             <div className={twMerge(
-                "w-full flex flex-col rounded-md dark:bg-slate-700/70 px-0.5 py-1",
+                "w-full flex flex-col rounded-md dark:bg-slate-700/70 bg-white px-0.5 py-1",
             )} >
                 {options.map((o) => {
 
@@ -176,8 +176,8 @@ function OptionItem({ option, onClick, currentValue }: OptionItemProps) {
             key={option.value}
             onClick={handleOnClick}
             className={twMerge(
-                "cursor-pointer hover:bg-slate-600 dark:text-slate-200 px-2 py-1 rounded-md",
-                isCurrent && "dark:bg-blue-500/30 dark:text-blue-200"
+                "cursor-pointer transition-all ease-linear delay-100 hover:dark:bg-slate-600 hover:bg-blue-500/20 dark:text-slate-200 px-2 py-1 rounded-md",
+                isCurrent && "dark:bg-blue-500/30 bg-blue-500/20 text-blue-600 dark:text-blue-200"
             )}
         >
             <p className=" cursor-pointer" >{label}</p>
