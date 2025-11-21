@@ -23,6 +23,7 @@ import { KeyRound } from 'lucide-react';
 import { BadgeCheck } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { authAnalytics } from '../services/analytics/authAnalytics';
+import PageView from './PageView';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -75,10 +76,9 @@ function ScreenContent() {
 
   return (
     <ScrummyMatrixBackground>
-      <div
+      <PageView
         className={twMerge(
           'flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto',
-          'lg:px-[25%]'
         )}
       >
         {/* Header */}
@@ -123,44 +123,46 @@ function ScreenContent() {
           />
         </div>
 
-        {/* Content */}
-        {step === 1 && (
-          <EmailUsernameStep
-            onNextStep={handleGoNextStep}
-            onPreviousStep={handleGoPreviousStep}
-            form={formData}
-            setForm={setFormData}
-            startTime={startTime}
-          />
-        )}
+        <div className='w-full md:max-w-[70%] lg:max-w-[70%] xl:max-w-[60%] flex flex-col items-center justify-center gap-2' >
+          {/* Content */}
+          {step === 1 && (
+            <EmailUsernameStep
+              onNextStep={handleGoNextStep}
+              onPreviousStep={handleGoPreviousStep}
+              form={formData}
+              setForm={setFormData}
+              startTime={startTime}
+            />
+          )}
 
-        {step === 2 && (
-          <CreatePasswordStep
-            onNextStep={handleGoNextStep}
-            onPreviousStep={handleGoPreviousStep}
-            form={formData}
-            setForm={setFormData}
-            startTime={startTime}
-          />
-        )}
+          {step === 2 && (
+            <CreatePasswordStep
+              onNextStep={handleGoNextStep}
+              onPreviousStep={handleGoPreviousStep}
+              form={formData}
+              setForm={setFormData}
+              startTime={startTime}
+            />
+          )}
 
-        {step === 3 && (
-          <ConfirmationStep
-            onNextStep={handleGoNextStep}
-            onPreviousStep={handleGoPreviousStep}
-            form={formData}
-            setForm={setFormData}
-            startTime={startTime}
-          />
-        )}
+          {step === 3 && (
+            <ConfirmationStep
+              onNextStep={handleGoNextStep}
+              onPreviousStep={handleGoPreviousStep}
+              form={formData}
+              setForm={setFormData}
+              startTime={startTime}
+            />
+          )}
 
-        {step > 1 && (
-          <button onClick={handleGoPreviousStep}>
-            <SecondaryText>Go Back</SecondaryText>
-          </button>
-        )}
-        {}
-      </div>
+          {step > 1 && (
+            <button onClick={handleGoPreviousStep}>
+              <SecondaryText>Go Back</SecondaryText>
+            </button>
+          )}
+          { }
+        </div>
+      </PageView>
     </ScrummyMatrixBackground>
   );
 }
@@ -184,7 +186,7 @@ function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
   const [error, setError] = useState<string>();
   const { isLoading: loadingEmailCheck, emailTaken } = useEmailUniqueValidator(form.email);
   const isFormComplete =
-    !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username);
+    !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username) && emailValidator(form.email);
 
   const handleNextStep = () => {
     if (form.username && form.email && onNextStep) {
@@ -302,7 +304,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
 
-  const [errors, setErrors] = useState<any>();
+  const [errors, setErrors] = useState<object>();
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -359,7 +361,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
       if (res) {
         authAnalytics.trackClaimGuestAccountCompleted(startTime, new Date());
         await refreshAuthUser();
-        navigate('/dashboard');
+        navigate('/profile');
         return;
       }
 
@@ -400,10 +402,10 @@ function ConfirmationStep({ form, startTime }: StepProps) {
       <PrimaryButton
         disabled={isSubmitting}
         isLoading={isSubmitting}
-        className="animate-glow py-4"
+        className="py-3"
         type="submit"
       >
-        Claim Account 🔥
+        Claim Account
       </PrimaryButton>
 
       {submitError && <ErrorMessage message={submitError} />}

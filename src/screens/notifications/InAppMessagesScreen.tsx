@@ -86,6 +86,7 @@ export default function InAppMessagesScreen() {
                             return (
                                 <InAppMessageCard
                                     message={m}
+                                    key={m.id}
                                 />
                             )
                         })}
@@ -105,6 +106,7 @@ export default function InAppMessagesScreen() {
                             return (
                                 <InAppMessageCard
                                     message={m}
+                                    key={m.id}
                                 />
                             )
                         })}

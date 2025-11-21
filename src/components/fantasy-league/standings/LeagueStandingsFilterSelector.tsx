@@ -1,45 +1,45 @@
-import { twMerge } from "tailwind-merge";
 import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter";
 import { Fragment } from "react/jsx-runtime";
 import SecondaryText from "../../shared/SecondaryText";
+import { DropdownOption } from "../../../types/ui";
+import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
+import Dropdown from "../../shared/Dropdown";
 
-type Props = {
-}
 
-export default function LeagueStandingsFilterSelector({ }: Props) {
+/** Renders a drop down to select a week for a fantasy league group */
+export default function LeagueStandingsFilterSelector() {
 
   const {
-    roundFilterId: value,
     setRoundFilterId: onChange,
-    otherOptions,
     currentOption
   } = useLeagueRoundStandingsFilter();
+
+  const {sortedRounds} = useFantasyLeagueGroup();
+
+  let dropdownOptions: DropdownOption[] = (sortedRounds ?? []).map((r) => {
+    return {
+      value: r.id,
+      label: r.title
+    }
+  });
+
+  dropdownOptions = [{value: "overall", label: "Overall"}, ...dropdownOptions];
 
   return (
     <div>
 
-      <select
-        className={twMerge(
-          'dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 bg-slate-100 px-6 py-2 rounded-xl'
-        )}
-        value={value}
-        onChange={(v) => onChange(v.target.value)}
-      >
-        {currentOption && <option value={currentOption.id} key={currentOption.id} >{currentOption.lable}</option>}
-
-        {otherOptions.map((o) => {
-          return <option value={o.id} key={o.id} >{o.lable}</option>
-        })}
-      </select>
+      <Dropdown 
+        options={dropdownOptions}
+        onChange={onChange}
+        value={currentOption?.id}
+        showSearch
+      />
 
     </div>
   )
 }
 
-type SelectedWeekIndicatorProps = {
-}
-
-export function SelectedWeekIndicator({ }: SelectedWeekIndicatorProps) {
+export function SelectedWeekIndicator() {
 
   const { currentOption } = useLeagueRoundStandingsFilter();
 
