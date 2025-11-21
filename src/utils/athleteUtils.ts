@@ -335,7 +335,7 @@ export function isPowerRatingBest(athlete: IProAthlete, comparePlayers: IProAthl
 /** Get Frame Src by the given position class */
 export function getPositionFrameBackground(positionClass: string) {
   positionClass = positionClass.toLowerCase();
-  const CDN_BASE_URL = "https://dp7xhssw324ru.cloudfront.net";
+  const CDN_BASE_URL = 'https://dp7xhssw324ru.cloudfront.net';
 
   const frameByPosition: Record<string, string> = {
     'front-row': `${CDN_BASE_URL}/front-row-bg.png`,
@@ -344,7 +344,7 @@ export function getPositionFrameBackground(positionClass: string) {
     'half-back': `${CDN_BASE_URL}/half-back-bg.png`,
     back: `${CDN_BASE_URL}/back-bg.png`,
   };
-  
+
   const frameSrc = frameByPosition[positionClass] || `${CDN_BASE_URL}/back-bg.png`;
 
   return frameSrc ?? `${CDN_BASE_URL}/front-row-bg.png`;
