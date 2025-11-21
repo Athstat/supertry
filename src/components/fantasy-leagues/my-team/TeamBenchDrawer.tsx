@@ -1,6 +1,5 @@
 import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
-import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../../utils/athleteUtils";
 import PlayerMugshot from "../../shared/PlayerMugshot";
@@ -22,7 +21,7 @@ type Props = {
 /** Renders a bottom drawer for team subs */
 export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
-  const { leagueRound, slots } = useFantasyLeagueTeam();
+  const { leagueRound, slots, initateSwapOnEmptySlot } = useFantasyLeagueTeam();
 
   const superSubSlot = useMemo(() => {
     return slots.find((s) => s.slotNumber === 6);
@@ -39,18 +38,34 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
     if (superSubSlot && onPlayerClick && superSubSlot.athlete) {
       onPlayerClick(superSubSlot.athlete);
+      return;
     }
+
+    initateSwapOnEmptySlot(superSubSlot);
+  }
+
+  const handleOnDrag = () => {
+    handlePlayerClick();
   }
 
   return (
-    <div className={twMerge(
+    <div 
+    
+    className={twMerge(
       "max-h-[130px] fixed bottom-0 left-0 w-full min-h-[130px] flex flex-col items-center justify-center",
       isSlotEmpty && "max-h-[150px]"
-    )} >
+    )}
+
+    onClick={handlePlayerClick}
+
+    >
       <div className="lg:max-w-[40%] md:max-w-[50%]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
 
         <div className="w-full flex flex-col gap-1 p-2" >
-          <BottomSheetHandle className="bg-slate-800" />
+          <BottomSheetHandle
+            className="bg-slate-800"
+            onDragStart={handleOnDrag}
+          />
 
           <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
             Super Subsitute
@@ -59,14 +74,13 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
           {athlete && (
             <SubPlayerCard
               player={athlete}
-              onClick={handlePlayerClick}
               round={leagueRound}
+              onClick={() => {}}
             />
           )}
 
           {isSlotEmpty && (
             <EmptySuperSubSlot
-              slot={superSubSlot}
             />
           )}
 
@@ -164,22 +178,11 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
   )
 }
 
-type EmptySlotProps = {
-  slot: IFantasyLeagueTeamSlot
-}
-
-function EmptySuperSubSlot({ slot }: EmptySlotProps) {
-
-  const { initateSwapOnEmptySlot } = useFantasyLeagueTeam();
-
-  const handleClick = () => {
-    initateSwapOnEmptySlot(slot);
-  }
+function EmptySuperSubSlot() {
 
   return (
     <div
       className="w-full cursor-pointer border-4 rounded-xl dark:text-slate-600 border-dotted border-slate-100 dark:border-slate-700/80 p-2.5 flex flex-col items-center justify-center"
-      onClick={handleClick}
     >
       <div>
         <CirclePlus />
