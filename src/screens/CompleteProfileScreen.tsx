@@ -23,6 +23,7 @@ import { KeyRound } from 'lucide-react';
 import { BadgeCheck } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { authAnalytics } from '../services/analytics/authAnalytics';
+import PageView from './PageView';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -75,10 +76,9 @@ function ScreenContent() {
 
   return (
     <ScrummyMatrixBackground>
-      <div
+      <PageView
         className={twMerge(
           'flex dark:text-white flex-col gap-2 items-center min-h-screen p-6 overflow-y-auto',
-          'lg:px-[25%]'
         )}
       >
         {/* Header */}
@@ -123,44 +123,46 @@ function ScreenContent() {
           />
         </div>
 
-        {/* Content */}
-        {step === 1 && (
-          <EmailUsernameStep
-            onNextStep={handleGoNextStep}
-            onPreviousStep={handleGoPreviousStep}
-            form={formData}
-            setForm={setFormData}
-            startTime={startTime}
-          />
-        )}
+        <div className='w-full md:max-w-[70%] lg:max-w-[60%]' >
+          {/* Content */}
+          {step === 1 && (
+            <EmailUsernameStep
+              onNextStep={handleGoNextStep}
+              onPreviousStep={handleGoPreviousStep}
+              form={formData}
+              setForm={setFormData}
+              startTime={startTime}
+            />
+          )}
 
-        {step === 2 && (
-          <CreatePasswordStep
-            onNextStep={handleGoNextStep}
-            onPreviousStep={handleGoPreviousStep}
-            form={formData}
-            setForm={setFormData}
-            startTime={startTime}
-          />
-        )}
+          {step === 2 && (
+            <CreatePasswordStep
+              onNextStep={handleGoNextStep}
+              onPreviousStep={handleGoPreviousStep}
+              form={formData}
+              setForm={setFormData}
+              startTime={startTime}
+            />
+          )}
 
-        {step === 3 && (
-          <ConfirmationStep
-            onNextStep={handleGoNextStep}
-            onPreviousStep={handleGoPreviousStep}
-            form={formData}
-            setForm={setFormData}
-            startTime={startTime}
-          />
-        )}
+          {step === 3 && (
+            <ConfirmationStep
+              onNextStep={handleGoNextStep}
+              onPreviousStep={handleGoPreviousStep}
+              form={formData}
+              setForm={setFormData}
+              startTime={startTime}
+            />
+          )}
 
-        {step > 1 && (
-          <button onClick={handleGoPreviousStep}>
-            <SecondaryText>Go Back</SecondaryText>
-          </button>
-        )}
-        {}
-      </div>
+          {step > 1 && (
+            <button onClick={handleGoPreviousStep}>
+              <SecondaryText>Go Back</SecondaryText>
+            </button>
+          )}
+          { }
+        </div>
+      </PageView>
     </ScrummyMatrixBackground>
   );
 }
@@ -302,7 +304,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
 
-  const [errors, setErrors] = useState<any>();
+  const [errors, setErrors] = useState<object>();
   const navigate = useNavigate();
 
   const validateForm = () => {
