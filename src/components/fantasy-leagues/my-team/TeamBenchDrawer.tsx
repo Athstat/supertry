@@ -63,7 +63,7 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
         <div className="w-full flex flex-col gap-1 p-2" >
           <BottomSheetHandle
-            className="bg-slate-800"
+            className="bg-slate-800 opacity-0"
             onDragStart={handleOnDrag}
           />
 
