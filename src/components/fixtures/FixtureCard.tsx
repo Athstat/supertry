@@ -11,6 +11,8 @@ import WarningCard from '../shared/WarningCard';
 import GameHighlightsCard from '../video/GameHighlightsCard';
 import ProFixtureVotingBox from './voting/ProFixtureVotingBox';
 import { analytics } from '../../services/analytics/anayticsService';
+import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
+import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';
 type Props = {
   fixture: IFixture;
   className?: string;
@@ -19,6 +21,7 @@ type Props = {
   showVenue?: boolean;
   message?: string;
   hideDate?: boolean;
+  liveGameClock?: string | null;
 };
 
 export default function FixtureCard({
@@ -30,6 +33,18 @@ export default function FixtureCard({
   message,
   hideDate,
 }: Props) {
+  // Use live fixture polling hook
+  const { liveFixture } = useLiveFixture({ fixture });
+
+  // Use the live fixture data if available, otherwise use prop fixture
+  const displayFixture = liveFixture || fixture;
+
+  // Use live game clock hook
+  const liveGameClock = useLiveGameClock({
+    gameStatus: displayFixture.game_status,
+    serverGameClock: displayFixture.game_clock,
+  });
+
   const {
     team_score,
     competition_name,
@@ -38,7 +53,7 @@ export default function FixtureCard({
     game_status,
     opposition_score,
     venue,
-  } = fixture;
+  } = displayFixture;
 
   const matchFinal = game_status === 'completed' && team_score && opposition_score;
 
@@ -53,7 +68,7 @@ export default function FixtureCard({
     analytics.trackFixtureCardClicked(fixture);
   };
 
-  const { gameKickedOff } = fixtureSummary(fixture);
+  const { gameKickedOff } = fixtureSummary(displayFixture);
 
   return (
     <>
@@ -125,9 +140,9 @@ export default function FixtureCard({
                     {formatGameStatus(game_status)}
                   </span>
                 </div>
-                {fixture.game_clock && (
+                {liveGameClock && (
                   <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
-                    {fixture.game_clock}
+                    {liveGameClock}
                   </span>
                 )}
               </div>
@@ -195,7 +210,17 @@ export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
 
   const navigate = useNavigate();
 
-  const { gameKickedOff } = fixtureSummary(fixture);
+  // Use live fixture polling for modal as well
+  const { liveFixture } = useLiveFixture({ fixture, enabled: showModal });
+  const displayFixture = liveFixture || fixture;
+
+  // Use live game clock for modal
+  const liveGameClock = useLiveGameClock({
+    gameStatus: displayFixture.game_status,
+    serverGameClock: displayFixture.game_clock,
+  });
+
+  const { gameKickedOff } = fixtureSummary(displayFixture);
 
   const goToFullMatchDetails = () => {
     navigate(`/fixtures/${fixture.game_id}`, { state: fixture });
@@ -228,8 +253,10 @@ export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
         </div>
 
         <div className="flex flex-1 flex-row">
-          {!gameKickedOff && <KickOffInformation fixture={fixture} />}
-          {gameKickedOff && <MatchResultsInformation fixture={fixture} />}
+          {!gameKickedOff && <KickOffInformation fixture={displayFixture} />}
+          {gameKickedOff && (
+            <MatchResultsInformation fixture={displayFixture} liveGameClock={liveGameClock} />
+          )}
         </div>
 
         <div className="flex flex-1 gap-5 flex-col items-center justify-center">
@@ -274,7 +301,7 @@ function KickOffInformation({ fixture }: Props) {
   );
 }
 
-function MatchResultsInformation({ fixture }: Props) {
+function MatchResultsInformation({ fixture, liveGameClock }: Props) {
   const { kickoff_time, game_status } = fixture;
 
   return (
@@ -291,9 +318,9 @@ function MatchResultsInformation({ fixture }: Props) {
                 {formatGameStatus(game_status)}
               </span>
             </div>
-            {fixture.game_clock && (
+            {liveGameClock && (
               <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
-                {fixture.game_clock}
+                {liveGameClock}
               </span>
             )}
           </div>
