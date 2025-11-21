@@ -13,36 +13,35 @@ import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
 import CreateFantasyTeamProvider from '../../providers/fantasy-teams/CreateFantasyTeamProvider';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
-
 /** Renders the my team tab  */
 export default function MyTeamsTab() {
   const { authUser } = useAuth();
 
   return (
-    <TeamHistoryProvider
-      user={authUser}
-      loadingFallback={<PitchViewLoadingSkeleton />}
-    >
+    <TeamHistoryProvider user={authUser} loadingFallback={<PitchViewLoadingSkeleton />}>
       <MyTeamModeSelector />
     </TeamHistoryProvider>
-  )
+  );
 }
 
-type ViewMode = "create-team" | "pitch-view" | "no-team-locked" | "error";
+type ViewMode = 'create-team' | 'pitch-view' | 'no-team-locked' | 'error';
 
 /** Component that selects between showing the pitch view or showing the create team view  */
 function MyTeamModeSelector() {
-
   const { round, roundTeam } = useTeamHistory();
   const { leagueConfig } = useFantasyLeagueGroup();
   const [isLoading, setLoading] = useState<boolean>(false);
 
+  // Wait for leagueConfig to load to prevent error flash
+  if (!leagueConfig) {
+    return <PitchViewLoadingSkeleton />;
+  }
+
   const [visitedRounds, setVistedRounds] = useState<IFantasyLeagueRound[]>([]);
 
   useEffect(() => {
-
-    const hasVistedRound = visitedRounds.find((r) => {
-      return r.id === round?.id
+    const hasVistedRound = visitedRounds.find(r => {
+      return r.id === round?.id;
     });
 
     if (hasVistedRound || !round) {
@@ -53,81 +52,67 @@ function MyTeamModeSelector() {
 
     const timer = setTimeout(() => {
       setLoading(false);
-      setVistedRounds(prev => [...prev, round])
+      setVistedRounds(prev => [...prev, round]);
     }, 1000);
 
     return () => {
       clearTimeout(timer);
       setLoading(false);
-    }
+    };
   }, [round, visitedRounds]);
 
   const isLocked = useMemo(() => {
-    return round && isLeagueRoundLocked(round)
+    return round && isLeagueRoundLocked(round);
   }, [round]);
 
   const viewMode: ViewMode = useMemo<ViewMode>(() => {
-
     if (round && roundTeam) {
-      return "pitch-view"
+      return 'pitch-view';
     }
 
     if (isLocked && roundTeam === undefined) {
-      return "no-team-locked"
+      return 'no-team-locked';
     }
 
     if (!isLocked && roundTeam === undefined) {
-      return "create-team";
+      return 'create-team';
     }
 
-    return "error";
-
+    return 'error';
   }, [isLocked, round, roundTeam]);
 
-
   if (isLoading) {
-    return (
-      <PitchViewLoadingSkeleton />
-    )
+    return <PitchViewLoadingSkeleton />;
   }
-
 
   return (
     <Fragment>
+      <TeamHistoryBar lock={viewMode === 'create-team'} />
 
-      <TeamHistoryBar
-        lock={viewMode === "create-team"}
-      />
-
-      <Activity mode={viewMode === "pitch-view" ? "visible" : "hidden"} >
+      <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
         {roundTeam && (
-          <FantasyLeagueTeamProvider
-            leagueRound={round}
-            team={roundTeam}
-          >
+          <FantasyLeagueTeamProvider leagueRound={round} team={roundTeam}>
             <FantasyTeamView
               leagueConfig={leagueConfig}
               leagueRound={round}
-              onTeamUpdated={async () => { }}
-              onBack={() => { }}
+              onTeamUpdated={async () => {}}
+              onBack={() => {}}
             />
           </FantasyLeagueTeamProvider>
         )}
       </Activity>
 
-      <Activity mode={viewMode === "create-team" ? "visible" : "hidden"} >
-        {round && <CreateFantasyTeamProvider
-          leagueRound={round}
-        >
-          <CreateMyTeam />
-        </CreateFantasyTeamProvider>}
+      <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
+        {round && (
+          <CreateFantasyTeamProvider leagueRound={round}>
+            <CreateMyTeam />
+          </CreateFantasyTeamProvider>
+        )}
       </Activity>
 
-      <Activity mode={viewMode === "no-team-locked" ? "visible" : "hidden"} >
-        <NoTeamCreatedFallback
-        />
+      <Activity mode={viewMode === 'no-team-locked' ? 'visible' : 'hidden'}>
+        <NoTeamCreatedFallback />
       </Activity>
-
     </Fragment>
-  )
+  );
 }
