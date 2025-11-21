@@ -9,10 +9,7 @@ import { useImagePreloader } from "../../../hooks/useImagePreloader";
 import { useEffect } from "react";
 import { analytics } from "../../../services/analytics/anayticsService";
 
-type Props = {
-}
-
-export default function PlayerCompareModal({}: Props) {
+export default function PlayerCompareModal() {
 
   const selectedPlayers = useAtomValue(comparePlayersAtom);
   const open = useAtomValue(comparePlayersAtomGroup.isCompareModeModal);
@@ -29,7 +26,7 @@ export default function PlayerCompareModal({}: Props) {
   useImagePreloader({ players: selectedPlayers, enabled: open });
 
   const playerLen = selectedPlayers.length;
-  let title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;
+  const title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;
   
   if (open === false) return;
 

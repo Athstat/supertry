@@ -9,6 +9,8 @@ export function usePlayerCompareActions() {
         comparePlayersAtomGroup.compareModeAtom
     );
 
+    const COMPARE_LIMIT = 5;
+
     const [selectedPlayers, setSelectedPlayers] = useAtom(
         comparePlayersAtomGroup.comparePlayersAtom
     )
@@ -38,6 +40,10 @@ export function usePlayerCompareActions() {
 
         setSelectedPlayers(prev => {
 
+            if (prev.length === COMPARE_LIMIT) {
+                return prev;
+            }
+
             const doNotAdded = isPlayerSelectedAlready(player, prev);
 
             if (doNotAdded) {
@@ -52,6 +58,10 @@ export function usePlayerCompareActions() {
 
         setSelectedPlayers(prev => {
 
+            if (prev.length === COMPARE_LIMIT) {
+                return prev;
+            }
+ 
             const isAlreadyThere = isPlayerSelectedAlready(player, prev);
 
             if (isAlreadyThere) {
@@ -114,6 +124,8 @@ export function usePlayerCompareActions() {
         setSelectedPlayers([])
     }
 
+    const isCompareLimitReached = COMPARE_LIMIT === selectedPlayers.length;
+
     return {
         showCompareModal,
         closeCompareModal,
@@ -128,7 +140,8 @@ export function usePlayerCompareActions() {
         startPicking,
         clearSelections,
         isPlayerSelectedAlready,
-        addOrRemovePlayer
+        addOrRemovePlayer,
+        isCompareLimitReached
     }
 
 }
