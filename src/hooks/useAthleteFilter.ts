@@ -15,13 +15,14 @@ type Props = {
   sortField?: SortField;
   sortDirection?: SortDirection;
   searchQuery?: string;
+  selectedSeasonIds?: string[]
 };
 
 /** Is a comprehensive filter and sorter that handles
  * position filtering, team filtering and so on */
 
 export default function useAthleteFilter(data: Props) {
-  const { athletes, selectedPositions, selectedTeamIds, sortField, sortDirection, searchQuery } =
+  const { athletes, selectedPositions, selectedTeamIds, sortField, sortDirection, searchQuery} =
     data;
 
   const [filteredAthletes, setFilteredAthletes] = useState(athletes);

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useTransition } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { djangoAthleteService } from "../services/athletes/djangoAthletesService";
@@ -26,7 +26,10 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   const key = swrFetchKeys.getAllProAthletesKey();
   const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = useSWR(key, () => djangoAthleteService.getAllAthletes());
 
-  const athletes = fetchedAthletes ?? [];
+  const athletes = useMemo(() => {
+    return fetchedAthletes ?? []
+  }, [fetchedAthletes]);
+  
   const isLoading = loadingAthletes;
 
   const [teams, setTeams] = useState<IProTeam[]>([]);

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAthletes } from "../../contexts/AthleteContext"
 import useAthleteFilter from "../../hooks/useAthleteFilter";
 import { IProAthlete } from "../../types/athletes"
 import DialogModal from "../shared/DialogModal";
@@ -12,6 +11,7 @@ import { X } from "lucide-react";
 import RoundedCard from "../shared/RoundedCard";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";
+import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 
 type Props = {
     onSelectPlayers?: (players: IProAthlete[]) => void,
@@ -22,13 +22,13 @@ type Props = {
 
 export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose, exclude = [] }: Props) {
 
-    const { athletes } = useAthletes();
-    const [search, setSearch] = useState<string>("");
-
     const [selected, setSelected] = useState<IProAthlete[]>([]);
 
+    const [search, setSearch] = useState<string>("");
     const debouncedSearchQuery = useDebounced(search, 300);
-
+    
+    
+    const {athletes } = useSupportedAthletes();
     const { filteredAthletes } = useAthleteFilter({
         athletes,
         searchQuery: debouncedSearchQuery
@@ -78,9 +78,10 @@ export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose,
             open={open}
             onClose={handleCloseModal}
             title="Add Players"
-            className="flex flex-col gap-3 overflow-hidden"
+            className="flex flex-col gap-3 overflow-hidden h-max"
+            hw="max-h-[90vh] min-h-[90vh]"
         >
-            <div className="overflow-y-auto flex flex-col gap-3" >
+            <div className="overflow-y-auto flex h-max flex-col gap-3" >
 
                 <PlayerSearch
                     searchQuery={search}
@@ -125,7 +126,7 @@ export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose,
                 </div>
             </div>
 
-            <div>
+            <div className="" >
                 <PrimaryButton onClick={onLockSelection} >Done</PrimaryButton>
             </div>
         </DialogModal>
@@ -181,7 +182,7 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
                         <SecondaryText className={twMerge(
                             "text-sm",
                             isSelected && "text-slate-100 dark:text-slate-100"
-                        )} >{player.team.athstat_name}</SecondaryText>
+                        )} >{player?.team?.athstat_name}</SecondaryText>
                     </div>
 
                     <div className="flex flex-row items-center gap-2" >
