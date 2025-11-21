@@ -123,7 +123,7 @@ function ScreenContent() {
           />
         </div>
 
-        <div className='w-full md:max-w-[70%] lg:max-w-[60%]' >
+        <div className='w-full md:max-w-[70%] lg:max-w-[70%] xl:max-w-[60%] flex flex-col items-center justify-center gap-2' >
           {/* Content */}
           {step === 1 && (
             <EmailUsernameStep
@@ -186,7 +186,7 @@ function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
   const [error, setError] = useState<string>();
   const { isLoading: loadingEmailCheck, emailTaken } = useEmailUniqueValidator(form.email);
   const isFormComplete =
-    !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username);
+    !loadingEmailCheck && !emailTaken && Boolean(form.email) && Boolean(form.username) && emailValidator(form.email);
 
   const handleNextStep = () => {
     if (form.username && form.email && onNextStep) {
@@ -361,7 +361,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
       if (res) {
         authAnalytics.trackClaimGuestAccountCompleted(startTime, new Date());
         await refreshAuthUser();
-        navigate('/dashboard');
+        navigate('/profile');
         return;
       }
 
@@ -402,10 +402,10 @@ function ConfirmationStep({ form, startTime }: StepProps) {
       <PrimaryButton
         disabled={isSubmitting}
         isLoading={isSubmitting}
-        className="animate-glow py-4"
+        className="py-3"
         type="submit"
       >
-        Claim Account 🔥
+        Claim Account
       </PrimaryButton>
 
       {submitError && <ErrorMessage message={submitError} />}
