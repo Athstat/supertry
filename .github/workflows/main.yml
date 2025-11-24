@@ -12,17 +12,23 @@ jobs:
       pull-requests: write
     outputs:
       final_message: ${{ steps.run_codex.outputs.final-message }}
+
     steps:
       - uses: actions/checkout@v5
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          fetch-depth: 0
 
-      - name: Pre-fetch base and head refs
+      # Get list of changed files
+      - name: Get changed files
+        id: changed_files
         run: |
-          git fetch --no-tags origin \
-            ${{ github.event.pull_request.base.ref }} \
-            +refs/pull/${{ github.event.pull_request.number }}/head
+          FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD)
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+          echo "Changed files:"
+          echo "$FILES"
 
+      # Run Codex only on changed files
       - name: Run Codex
         id: run_codex
         uses: openai/codex-action@v1
@@ -32,6 +38,8 @@ jobs:
           output-file: codex-output.md
           safety-strategy: drop-sudo
           sandbox: workspace-write
+        env:
+          CHANGED_FILES: ${{ steps.changed_files.outputs.files }}
 
   post_feedback:
     runs-on: ubuntu-latest
@@ -48,6 +56,6 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
               body: process.env.CODEX_FINAL_MESSAGE,
-            });
+            })
         env:
           CODEX_FINAL_MESSAGE: ${{ needs.codex.outputs.final_message }}
