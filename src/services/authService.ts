@@ -19,7 +19,6 @@ import {
 } from '../types/auth';
 
 import { applicationJsonHeader, getAuthHeader, getUri } from '../utils/backendUtils';
-import { validateUsername } from '../utils/authUtils';
 import { isGuestEmail } from '../utils/deviceId/deviceIdUtils';
 import { emailValidator } from '../utils/stringUtils';
 import { analytics } from './analytics/anayticsService';
@@ -28,14 +27,6 @@ import { authTokenService, IS_GUEST_ACCOUNT_KEY } from './auth/authTokenService'
 import { mutate } from 'swr';
 import { swrFetchKeys } from '../utils/swrKeys';
 import { DeviceIdPair } from '../types/device';
-
-// OAuth types
-interface SocialAuthData {
-  provider: 'google' | 'apple';
-  token: string;
-  email?: string;
-  name?: string;
-}
 
 type DeviceIdData = {
   realDeviceId: string;
@@ -89,8 +80,9 @@ export const authService = {
     try {
       console.log('Starting to claim guest account ');
       const userInfo = await authService.whoami();
+      const isGuest = await authService.isGuestAccount();
 
-      if (!userInfo || !authService.isGuestAccount()) {
+      if (!userInfo || !isGuest) {
         return { error: { message: 'Not a guest account or not logged in' } };
       }
 
