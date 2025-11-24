@@ -3,6 +3,8 @@ name: Codex pull request review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
 
 jobs:
   codex:
@@ -12,7 +14,6 @@ jobs:
       pull-requests: write
     outputs:
       final_message: ${{ steps.run_codex.outputs.final-message }}
-
     steps:
       - uses: actions/checkout@v5
         with:
@@ -24,9 +25,15 @@ jobs:
         id: changed_files
         run: |
           FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD)
-          echo "files=$FILES" >> $GITHUB_OUTPUT
+
           echo "Changed files:"
           echo "$FILES"
+
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       # Run Codex only on changed files
       - name: Run Codex
@@ -40,6 +47,7 @@ jobs:
           sandbox: workspace-write
         env:
           CHANGED_FILES: ${{ steps.changed_files.outputs.files }}
+          COMMENT_BODY: ${{ github.event.comment.body || '' }}
 
   post_feedback:
     runs-on: ubuntu-latest
@@ -51,11 +59,24 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: process.env.CODEX_FINAL_MESSAGE,
-            })
+            const message = `**🏈 Coach Scrummy's Code Review:**\n\n${process.env.CODEX_FINAL_MESSAGE}`;
+            
+            // Determine if this is a reply to a comment or a new PR comment
+            if (context.eventName === 'issue_comment' && context.payload.comment) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.issue.number,
+                body: message,
+                in_reply_to: context.payload.comment.id
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: message
+              });
+            }
         env:
           CODEX_FINAL_MESSAGE: ${{ needs.codex.outputs.final_message }}
