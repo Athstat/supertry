@@ -12,7 +12,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      issues: write  # ← ADDED THIS
+      issues: write
     # Combined if conditions - only run on PRs AND when summoned for comments
     if: ${{ (github.event_name == 'pull_request') || (github.event_name == 'issue_comment' && github.event.issue.pull_request && (contains(github.event.comment.body, '@CoachScrummy') || contains(github.event.comment.body, '@coachscrummy') || contains(github.event.comment.body, '@COACHSCRUMMY'))) }}
     outputs:
@@ -31,7 +31,8 @@ jobs:
             echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
 
-      - uses: actions/checkout@v5
+      # Changed to v4 (Standard stable version)
+      - uses: actions/checkout@v4
         with:
           ref: refs/pull/${{ steps.pr_number.outputs.pr_number }}/merge
           fetch-depth: 0
@@ -93,7 +94,9 @@ jobs:
   post_feedback:
     runs-on: ubuntu-latest
     permissions:
-      issues: write  # ← ADDED THIS TOO
+      contents: read       # Recommended
+      issues: write        # Required for commenting
+      pull-requests: write # ← THE FIX: Required to comment on PRs
     needs: codex
     if: needs.codex.outputs.final_message != '' && (
           github.event_name != 'issue_comment' || 
@@ -110,7 +113,7 @@ jobs:
             const message = `**🏈🔥 Coach Scrummy's Code Review:**\n\n${process.env.CODEX_FINAL_MESSAGE}`;
 
             if (context.eventName === 'issue_comment' && context.payload.comment) {
-              // For issue comments, create a regular comment (no in_reply_to)
+              // For issue comments, create a regular comment
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
