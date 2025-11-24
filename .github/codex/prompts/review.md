@@ -14,4 +14,9 @@ Focus on:
 - Code maintainability and readability
 - Documentation completeness
 
+For suggestions also include:
+- sugeest where code can be broken down into components
+- refactoring changes
+- react Best Practices
+
 Provide constructive feedback in a clear, professional manner.
