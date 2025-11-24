@@ -60,7 +60,7 @@ export const authService = {
         const errJson = (await res.json()) as RestError;
         return { error: errJson };
       }
-    } catch (error: any) {
+    } catch (error) {
       logger.error('Error on device auth ', error);
     }
 
