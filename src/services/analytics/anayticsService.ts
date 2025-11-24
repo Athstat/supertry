@@ -6,7 +6,6 @@ import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { IProAthlete } from '../../types/athletes';
 import { IFixture } from '../../types/games';
 
-//console.log('Amplitude API Key ', import.meta.env.VITE_AMPLITUDE_API_KEY);
 
 function initAmplitude() {
   try {
@@ -16,12 +15,18 @@ function initAmplitude() {
         defaultTracking: true,
       });
     }
+
+    console.log("Amplitude is Initialized");
+    
   } catch (err) {
     console.log("error intializing amplitude ", err);
   }
 }
 
-initAmplitude();
+if (typeof window !== 'undefined') {
+  initAmplitude();
+}
+
 
 function track(event: string, eventInfo?: Record<string, unknown>) {
   // if (!isInProduction()) {
