@@ -148,7 +148,7 @@ function OptionItem({ option, onClick, currentValue }: OptionItemProps) {
     const isCurrent = currentValue === value;
 
     const divRef = useRef<HTMLDivElement>(null);
-    const { ref: inViewRef, inView } = useInView({ triggerOnce: false });
+    const { ref: inViewRef, inView } = useInView({ triggerOnce: true });
 
     const setRefs = (el: HTMLDivElement | null) => {
         divRef.current = el;
@@ -176,7 +176,7 @@ function OptionItem({ option, onClick, currentValue }: OptionItemProps) {
             key={option.value}
             onClick={handleOnClick}
             className={twMerge(
-                "cursor-pointer transition-all ease-linear delay-100 hover:dark:bg-slate-600 hover:bg-blue-500/20 dark:text-slate-200 px-2 py-1 rounded-md",
+                "cursor-pointer  hover:dark:bg-slate-600 hover:bg-blue-500/20 dark:text-slate-200 px-2 py-1 rounded-md",
                 isCurrent && "dark:bg-blue-500/30 bg-blue-500/20 text-blue-600 dark:text-blue-200"
             )}
         >

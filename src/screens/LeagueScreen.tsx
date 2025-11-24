@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
-import { useHideTopNavBar } from '../hooks/navigation/useNavigationBars';
+import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
 import LeagueGroupScreenHeader from '../components/fantasy-league/LeagueGroupScreenHeader';
 import RoundedCard from '../components/shared/RoundedCard';
 
@@ -31,7 +31,8 @@ export function FantasyLeagueScreen() {
 
 function Content() {
   /** Auto Hides Top Bar to Maximise screen space */
-  useHideTopNavBar();
+  // useHideTopNavBar();
+  useHideBottomNavBar();
 
   const { league, userMemberRecord, isLoading } = useFantasyLeagueGroup();
 
@@ -90,7 +91,7 @@ function Content() {
   ];
 
   return (
-    <PageView className="dark:text-white bg-white dark:bg-[#0D0D0D] flex flex-col gap-4">
+    <PageView className="dark:text-white dark:bg-[#0D0D0D] flex flex-col gap-4">
       <LeagueGroupScreenHeader isEditing={isEditing} />
 
       <LearnScrummyNoticeCard />
@@ -143,7 +144,8 @@ function Content() {
 }
 
 function LoadingSkeleton() {
-  useHideTopNavBar();
+  // useHideTopNavBar();
+  useHideBottomNavBar();
 
   return (
     <PageView className="p-4 animate-pulse overflow-hidden flex flex-col gap-4">
