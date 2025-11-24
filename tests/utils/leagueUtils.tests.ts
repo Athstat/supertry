@@ -1,4 +1,4 @@
-import { add, addDays, addMinutes } from "date-fns";
+import { addDays, addMinutes } from "date-fns";
 import { isLeagueLocked } from "../../src/utils/leaguesUtils";
 
 test('test is league locked when join deadline has passed', () => {
