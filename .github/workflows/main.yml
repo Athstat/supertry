@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      issues: write  # ← ADDED THIS
     # Combined if conditions - only run on PRs AND when summoned for comments
     if: ${{ (github.event_name == 'pull_request') || (github.event_name == 'issue_comment' && github.event.issue.pull_request && (contains(github.event.comment.body, '@CoachScrummy') || contains(github.event.comment.body, '@coachscrummy') || contains(github.event.comment.body, '@COACHSCRUMMY'))) }}
     outputs:
@@ -35,25 +36,23 @@ jobs:
           ref: refs/pull/${{ steps.pr_number.outputs.pr_number }}/merge
           fetch-depth: 0
 
-      # Resolve base ref for both PR and comment events
-      - name: Resolve base ref
+      # Get PR author and base ref for both PR and comment events
+      - name: Get PR metadata
         id: pr_meta
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if [ "${{ github.event_name }}" = "issue_comment" ]; then
-            # Install GitHub CLI and get base ref for comment events
-            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-            sudo apt update
-            sudo apt install gh -y
-            
-            # Authenticate GitHub CLI with the token
+            # Use pre-installed GitHub CLI for comment events
             echo "$GH_TOKEN" | gh auth login --with-token
             
-            echo "base_ref=$(gh pr view ${{ steps.pr_number.outputs.pr_number }} --json baseRefName -q .baseRefName)" >> "$GITHUB_OUTPUT"
+            PR_DATA=$(gh pr view ${{ steps.pr_number.outputs.pr_number }} --json baseRefName,author --jq '{base_ref: .baseRefName, author: .author.login}')
+            echo "base_ref=$(echo "$PR_DATA" | jq -r '.base_ref')" >> "$GITHUB_OUTPUT"
+            echo "pr_author=$(echo "$PR_DATA" | jq -r '.author')" >> "$GITHUB_OUTPUT"
           else
+            # For PR events, use direct payload data
             echo "base_ref=${{ github.event.pull_request.base.ref }}" >> "$GITHUB_OUTPUT"
+            echo "pr_author=${{ github.event.pull_request.user.login }}" >> "$GITHUB_OUTPUT"
           fi
 
       # Fetch base branch for comparison
@@ -89,9 +88,12 @@ jobs:
         env:
           CHANGED_FILES: ${{ steps.changed_files.outputs.files }}
           COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          PR_AUTHOR: ${{ steps.pr_meta.outputs.pr_author }}
 
   post_feedback:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write  # ← ADDED THIS TOO
     needs: codex
     if: needs.codex.outputs.final_message != '' && (
           github.event_name != 'issue_comment' || 
