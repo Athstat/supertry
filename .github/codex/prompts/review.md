@@ -29,7 +29,7 @@ Review Format:
         but improvements
         - also show code snippets as well
 
-    * PLEASE NOTE: if there are no suggestions or issues found, just print out "No actionable issues for this PR. Welldone ${reviewer-name}"
+    * PLEASE NOTE: if there are no suggestions or issues found, just print out "No actionable issues for this PR", and congradulate the author of the commit
 
 Focus feedback on:
 
