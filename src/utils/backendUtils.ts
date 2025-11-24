@@ -3,7 +3,8 @@ import { authTokenService } from '../services/auth/authTokenService';
 const DEV = import.meta.env.DEV;
 //const BACKEND_SERVER_URL = DEV ? '' : import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'; // Django default port
 
-const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL;
+const FALLBACK_BACKEND_SERVER_URL = "https://scrummy-django-server-0wal.onrender.com";
+const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL || FALLBACK_BACKEND_SERVER_URL;
 
 /** Completes an api url */
 export function getUri(endPoint: string) {
