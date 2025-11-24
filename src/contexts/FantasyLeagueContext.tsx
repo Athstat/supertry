@@ -25,7 +25,7 @@ export default function FantasyLeagueProvider({league, children, userTeam}: Prop
 
   const setFantasyLeague = useSetAtom(fantasyLeagueAtom);
   const setUserFantasyTeam = useSetAtom(userFantasyTeamAtom);
-  const user = authService.getUserInfo();
+  const user = authService.getUserInfoSync();
 
   const {data: participatingTeams, isLoading} = useSWR(`user-teams/${league?.id}`, () => leagueService.fetchParticipatingTeams(league?.id ?? "0"));
 
@@ -41,7 +41,7 @@ export default function FantasyLeagueProvider({league, children, userTeam}: Prop
       if (userRoundTeam) setUserFantasyTeam(userRoundTeam);
     }
 
-  }, [league, user, participatingTeams]);
+  }, [league, user, participatingTeams, setFantasyLeague, setUserFantasyTeam]);
 
   if (isLoading) {
     return <LoadingState />
