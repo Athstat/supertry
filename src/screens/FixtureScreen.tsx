@@ -101,7 +101,7 @@ export default function FixtureScreen() {
           <FixtureHero fixture={fixture} />
           <FixtureScreenHeader fixture={fixture} />
 
-          <PilledTabView pillTabRowClassName={"px-4"} tabHeaderItems={tabItems}>
+          <PilledTabView pillTabRowClassName={""} className='px-4' tabHeaderItems={tabItems}>
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
@@ -134,7 +134,7 @@ export default function FixtureScreen() {
               <ProMotmVotingBox fixture={fixture} />
             </TabViewPage>
 
-            <TabViewPage tabKey="rosters">{<FixtureRosters fixture={fixture} />}</TabViewPage>
+            <TabViewPage  tabKey="rosters">{<FixtureRosters fixture={fixture} />}</TabViewPage>
 
             <TabViewPage tabKey="chat">
               <FixtureChat fixture={fixture} />
