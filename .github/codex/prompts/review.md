@@ -7,6 +7,9 @@
 
 Rules:
 - only review changed files on the commits that have been made. PLEASE NOTE
+- Keeps your responses short, precises and consise
+- write in bullet points, and use emjois when possible to make response fun to read
+- if you can, inlcude code snippets suggestions or potential issues
 
 Focus on:
 - Code correctness and logic errors
