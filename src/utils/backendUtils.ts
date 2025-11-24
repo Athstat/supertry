@@ -3,7 +3,7 @@ import { authTokenService } from '../services/auth/authTokenService';
 const DEV = import.meta.env.DEV;
 
 /** Falls back to local dev to prevent unintentional production backend calls */
-const FALLBACK_BACKEND_SERVER_URL = "'http://localhost:8000'";
+const FALLBACK_BACKEND_SERVER_URL = "http://localhost:8000";
 const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL || FALLBACK_BACKEND_SERVER_URL;
 
 /** Completes an api url */
