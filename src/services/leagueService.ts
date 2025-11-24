@@ -324,43 +324,6 @@ export const leagueService = {
   },
 
   /**
-   * Check if the current user has joined a specific league
-   * Used both methods and consolidated them into one
-   */
-  checkUserLeagueStatus: async (leagueId: string): Promise<boolean> => {
-    try {
-      // Try the first approach - look for user teams in the league
-      try {
-        const userTeams = await fantasyTeamService
-          .fetchUserTeams
-          // leagueId
-          ();
-        // If the user has any teams in this league, they've joined it
-        if (userTeams.length > 0) {
-          return true;
-        }
-      } catch (error) {
-        console.log('First approach failed, trying second approach', error);
-      }
-
-      // Get user ID from auth service (Django uses simple tokens, not JWTs)
-      const userInfo = await authService.getUserInfo();
-      if (!userInfo || !userInfo.kc_id) return false;
-
-      const userId = userInfo.kc_id;
-
-      // Fetch participating teams for this league
-      const participatingTeams = await leagueService.fetchParticipatingTeams(leagueId);
-
-      // Check if any team belongs to the current user
-      return participatingTeams.some(team => team.user_id === userId);
-    } catch (error) {
-      console.error(`Error checking user status for league ${leagueId}:`, error);
-      return false;
-    }
-  },
-
-  /**
    * Fetch all available competitions/seasons
    */
   getAllSeasons: async (): Promise<ISeason[]> => {
