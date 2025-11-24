@@ -12,6 +12,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    # Combined if conditions - only run on PRs AND when summoned for comments
+    if: ${{ (github.event_name == 'pull_request') || (github.event_name == 'issue_comment' && github.event.issue.pull_request && (contains(github.event.comment.body, '@CoachScrummy') || contains(github.event.comment.body, '@coachscrummy') || contains(github.event.comment.body, '@COACHSCRUMMY'))) }}
     outputs:
       final_message: ${{ steps.run_codex.outputs.final-message }}
 
@@ -33,16 +35,32 @@ jobs:
           ref: refs/pull/${{ steps.pr_number.outputs.pr_number }}/merge
           fetch-depth: 0
 
+      # Resolve base ref for both PR and comment events
+      - name: Resolve base ref
+        id: pr_meta
+        run: |
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            # Install GitHub CLI and get base ref for comment events
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh -y
+            
+            echo "base_ref=$(gh pr view ${{ steps.pr_number.outputs.pr_number }} --json baseRefName -q .baseRefName)" >> "$GITHUB_OUTPUT"
+          else
+            echo "base_ref=${{ github.event.pull_request.base.ref }}" >> "$GITHUB_OUTPUT"
+          fi
+
       # Fetch base branch for comparison
       - name: Fetch base branch
         run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git fetch origin ${{ steps.pr_meta.outputs.base_ref }}
 
       # Get list of changed files
       - name: Get changed files
         id: changed_files
         run: |
-          FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD)
+          FILES=$(git diff --name-only origin/${{ steps.pr_meta.outputs.base_ref }}...HEAD)
 
           echo "Changed files:"
           echo "$FILES"
