@@ -50,7 +50,7 @@ export default function ResetPasswordScreen() {
   const [searchParams] = useSearchParams();
   const resetToken = searchParams.get('token');
 
-  const key = `/introspect/password-reset-token/${resetToken}`;
+  const key = resetToken ? `/introspect/password-reset-token/${resetToken}` : null;
   const { data: passwordReset, isLoading } = useSWR(key, () => authService.introspectPasswdResetToken(resetToken ?? "fallback-token"));
 
   const navigate = useNavigate();

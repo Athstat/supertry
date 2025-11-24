@@ -111,8 +111,6 @@ export const authService = {
           },
         };
 
-      console.log('[claimGuestAccount] Request payload:', JSON.stringify(data));
-
       const uri = getUri(`/api/v1/auth/device/link`);
 
       const response = await fetch(uri, {
