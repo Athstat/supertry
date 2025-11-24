@@ -16,10 +16,27 @@ jobs:
       final_message: ${{ steps.run_codex.outputs.final-message }}
 
     steps:
+      # Get PR number from different event types
+      - name: Get PR number
+        id: pr_number
+        run: |
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            # For comment events, use issue.number (PRs are also issues)
+            echo "pr_number=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+          else
+            # For PR events, use the direct PR number
+            echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          fi
+
       - uses: actions/checkout@v5
         with:
-          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          ref: refs/pull/${{ steps.pr_number.outputs.pr_number }}/merge
           fetch-depth: 0
+
+      # Fetch base branch for comparison
+      - name: Fetch base branch
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }}
 
       # Get list of changed files
       - name: Get changed files
@@ -53,7 +70,12 @@ jobs:
   post_feedback:
     runs-on: ubuntu-latest
     needs: codex
-    if: needs.codex.outputs.final_message != '' && (github.event_name != 'issue_comment' || contains(github.event.comment.body, '@CoachScrummy'))
+    if: needs.codex.outputs.final_message != '' && (
+          github.event_name != 'issue_comment' || 
+          contains(github.event.comment.body, '@CoachScrummy') ||
+          contains(github.event.comment.body, '@coachscrummy') ||
+          contains(github.event.comment.body, '@COACHSCRUMMY')
+        )
     steps:
       - name: Post Codex feedback
         uses: actions/github-script@v7
@@ -63,13 +85,12 @@ jobs:
             const message = `**🏈🔥 Coach Scrummy's Code Review:**\n\n${process.env.CODEX_FINAL_MESSAGE}`;
 
             if (context.eventName === 'issue_comment' && context.payload.comment) {
-              // Reply only to the comment that triggered this
+              // For issue comments, create a regular comment (no in_reply_to)
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.payload.issue.number,
-                body: message,
-                in_reply_to: context.payload.comment.id
+                body: message
               });
             } else {
               // New PR or PR update
