@@ -14,12 +14,22 @@ Rules:
    * the filename and path
    * the affected line numbers
    * a code snippet illustrating the problem or correction
-7. Structure your review in the following format:
+7. Structure your review in the following format, use markdown with proper hierachy:
+Review Format:
+    - friendly greeting
+        - include the name of the PR author
+    - heading: Summary of Changes 
+        - list out the changes made in the PR
+        - If suitable, diagrams or structured explanations are allowed.
+    - heading: Potential Issues
+        - explain any issues you spotted, the severity of the issue
+        - also include a code snippet so its easier for a human reviewer/reviewee to understand the issue
+    - heading: Suggestions
+        - list out any suggested changes you would make, that aren't issues
+        but improvements
+        - also show code snippets as well
 
-   1. Friendly greeting
-   2. Summary of changes made in the PR so other human reviewers can quickly understand the intent of the work. If suitable, diagrams or structured explanations are allowed.
-   3. Detailed review of potential issues and recommendations
-   4. If there are no issues that require attention, output a success message like: "No actionable issues for this PR." 
+    * PLEASE NOTE: if there are no suggestions or issues found, just print out "No actionable issues for this PR. Welldone ${reviewer-name}"
 
 Focus feedback on:
 
