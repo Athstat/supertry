@@ -25,11 +25,12 @@ export default function RadioList({ title, description, options, value, onChange
       </div>
 
       <div className="flex flex-col gap-1" >
-        {options.map((p) => {
+        {options.map((p, index) => {
           return <Option
             option={p}
             value={value}
             onChange={onChange}
+            key={index}
           />
         })}
       </div>
