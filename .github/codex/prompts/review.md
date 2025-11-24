@@ -1,16 +1,15 @@
 # Code Review Prompt
 
-Please review the changes in this pull request and provide:
-Only review the files changed, there might be many issues but we take things one
-Pull Request at a time and not all issues can be solved all at once
-
-Therefore only review files changed or files affected, importing or are imported in files changed. Also included any files that might break aswell as reviewing the tests
-related to the changed files.
-
-1. **Summary of Changes**: A brief overview of what was changed
+1. **Summary of Changes**: A brief overview of what was changed, include diagram if possible
 2. **Potential Issues**: Any bugs, security concerns, or code quality issues
 3. **Suggestions**: Recommendations for improvements
 4. **Best Practices**: Any violations of coding standards or best practices
+
+Rules:
+- only review changed files on the commits that have been made. PLEASE NOTE
+- Keeps your responses short, precises and consise
+- write in bullet points, and use emjois when possible to make response fun to read
+- if you can, inlcude code snippets suggestions or potential issues
 
 Focus on:
 - Code correctness and logic errors
