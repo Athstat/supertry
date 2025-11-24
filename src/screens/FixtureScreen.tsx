@@ -52,12 +52,12 @@ export default function FixtureScreen() {
   const { gameKickedOff } = fixtureSummary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
-    // {
-    //   label: 'Kick Off',
-    //   tabKey: 'kick-off',
-    //   disabled: false,
-    //   className: "flex-1"
-    // },
+    {
+      label: 'Kick Off',
+      tabKey: 'kick-off',
+      disabled: false,
+      className: "flex-1"
+    },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
@@ -73,7 +73,7 @@ export default function FixtureScreen() {
     {
       label: 'Top Player',
       tabKey: 'motm',
-      disabled: false,
+      disabled: true,
       className: "flex-1"
     },
     {
