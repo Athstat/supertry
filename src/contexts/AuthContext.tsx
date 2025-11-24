@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { accessToken, setAcessToken, saveUserInfoToLocalStorage, clearAccessTokenAndUser } =
     useAuthToken();
 
-  const fetchKey = accessToken ? `/auth-user/${atob(accessToken)}` : null;
+  const fetchKey = accessToken ? `/auth-user/${accessToken}` : null;
   const {
     data: authUser,
     isLoading,
