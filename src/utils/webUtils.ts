@@ -24,7 +24,7 @@ export function getWeekFromLaunch() {
     const dateNow = new Date();
     dateNow.setHours(0, 0, 0, 0);
 
-    const weekEpoch = 1000 * 60 * 60 * 24 * 24;
+    const weekEpoch = 1000 * 60 * 60 * 24 * 7;
     const diff = dateNow.valueOf() - launchDate.valueOf();
 
     const weeks = diff / weekEpoch;
