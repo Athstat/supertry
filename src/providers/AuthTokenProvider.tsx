@@ -59,7 +59,6 @@ export default function AuthTokenProvider({ children }: Props) {
             const tokenFromLocalStorage = authTokenService.getAccessToken();
 
             if (tokenFromLocalStorage) {
-                console.log("Access Token from storage ", tokenFromLocalStorage);
                 setAccessToken(tokenFromLocalStorage);
                 saveAccessTokenToMobile(tokenFromLocalStorage);
                 setIsLoading(false);

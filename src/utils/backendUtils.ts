@@ -1,9 +1,10 @@
 import { authTokenService } from '../services/auth/authTokenService';
 
 const DEV = import.meta.env.DEV;
-//const BACKEND_SERVER_URL = DEV ? '' : import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'; // Django default port
 
-const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL;
+/** Falls back to local dev to prevent unintentional production backend calls */
+const FALLBACK_BACKEND_SERVER_URL = "'http://localhost:8000'";
+const BACKEND_SERVER_URL = import.meta.env.VITE_API_BASE_URL || FALLBACK_BACKEND_SERVER_URL;
 
 /** Completes an api url */
 export function getUri(endPoint: string) {
