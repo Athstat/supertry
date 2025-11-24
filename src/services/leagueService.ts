@@ -291,14 +291,6 @@ export const leagueService = {
         user_id: userId,
       };
 
-      console.log('Join league request:', {
-        uri,
-        headers,
-        payload,
-        hasToken: !!token,
-        tokenPrefix: token ? token.substring(0, 10) + '...' : 'none',
-      });
-
       const response = await fetch(uri, {
         method: 'PUT',
         headers,

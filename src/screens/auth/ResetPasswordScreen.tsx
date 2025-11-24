@@ -6,7 +6,7 @@ import { AuthLayout } from '../../components/auth/AuthLayout';
 import useSWR from 'swr';
 import { usePasswordValidation } from '../../hooks/usePasswordValidation';
 import { ErrorState } from '../../components/ui/ErrorState';
-import { PasswordResetTokenIntrospect } from '../../types/auth';
+import { PasswordResetTokenIntrospect, RestError } from '../../types/auth';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { PasswordInputField } from '../../components/shared/InputField';
 import FormErrorText from '../../components/shared/FormError';
@@ -121,6 +121,7 @@ export function ResetPasswordForm({ resetToken, onSuccess }: FormProps) {
     
     if (!isPasswordValid) {
       setError(passwordMessage ?? "Invalid Password");
+      return;
     }
 
     if (newPassword !== confirmPassword) {
@@ -139,8 +140,8 @@ export function ResetPasswordForm({ resetToken, onSuccess }: FormProps) {
         setError(resetError?.message ?? "Failed to reset password");
       }
 
-    } catch (error: any) {
-      setError(error.message || 'Failed to reset password');
+    } catch (error) {
+      setError((error as RestError).message || 'Failed to reset password');
     } finally {
       setIsLoading(false);
     }
