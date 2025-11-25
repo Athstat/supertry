@@ -1,4 +1,5 @@
 import { DjangoAuthUser } from '../../types/auth';
+import { logger } from '../logger';
 
 export const ACCESS_TOKEN_KEY = 'access_token';
 export const REFRESH_TOKEN_KEY = 'refresh_token';
@@ -25,6 +26,7 @@ function isKeycloakToken(token: string): boolean {
     return header.typ === 'JWT' && header.alg;
   } catch (error) {
     // If we can't decode it as JWT, it's likely a Django token
+    logger.error("Error checking if token is keycloak token ", error);
     return false;
   }
 }
@@ -56,6 +58,7 @@ export const authTokenService = {
       const obj = JSON.parse(jsonStr);
       return obj as DjangoAuthUser;
     } catch (err) {
+      logger.error("Error getting user from local storage ", err);
       return undefined;
     }
   },
@@ -70,7 +73,6 @@ export const authTokenService = {
   },
 
   setAccessToken: (token: string) => {
-    console.log('Saving access token ', token);
     localStorage.setItem(ACCESS_TOKEN_KEY, token);
   },
 

@@ -1,7 +1,7 @@
 import { IProAthlete } from "./athletes";
 import { IProTeam } from "./team";
 
-export type ProGameStatus = "completed" | "not_started" | "abandoned" | "result";
+export type ProGameStatus = "completed" | "not_started" | "abandoned" | "result" | 'in_progress' | 'fixture';
 
 export type IFixture = {
   game_id: string,

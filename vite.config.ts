@@ -1,11 +1,20 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import {validateEnvironmentVariables} from "./src/utils/envUtils";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   const env = loadEnv(mode, process.cwd(), '');
+
+    validateEnvironmentVariables({
+      apiBaseUrl: env.VITE_API_BASE_URL,
+      amplitudeApiKey: env.VITE_AMPLITUDE_API_KEY,
+      appEnvironment: env.VITE_APP_ENV,
+      appsFlyerOneLinkBaseUrl: env.VITE_AF_ONELINK_BASE_URL,
+      featureLeagueGroupId: env.VITE_FEATURE_LEAGUE_GROUP_ID,
+    });
 
   return {
     plugins: [react()],

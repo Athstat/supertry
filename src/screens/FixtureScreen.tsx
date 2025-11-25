@@ -8,7 +8,7 @@ import { LoadingState } from '../components/ui/LoadingState';
 import FixtureBoxscoreTab from '../components/fixtures/FixtureBoxscoreTab';
 import { boxScoreService } from '../services/boxScoreService';
 import { FixtureScreenHeader } from '../components/fixtures/FixtureScreenHeader';
-import TabView, { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
+import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import FixtureHeadToHeadStats from '../components/fixtures/FixtureHeadToHeadStats';
 import PageView from './PageView';
 import FixtureRosters from '../components/fixtures/FixtureRosters';
@@ -19,6 +19,7 @@ import ProFixtureVotingBox from '../components/fixtures/voting/ProFixtureVotingB
 import { ErrorState } from '../components/ui/ErrorState';
 import FixtureHero from '../components/fixtures/FixtureHero';
 import { Activity } from '../components/shared/Activity';
+import PilledTabView from '../components/shared/tabs/PilledTabView';
 
 export default function FixtureScreen() {
 
@@ -52,41 +53,41 @@ export default function FixtureScreen() {
   const { gameKickedOff } = fixtureSummary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
-    // {
-    //   label: 'Kick Off',
-    //   tabKey: 'kick-off',
-    //   disabled: false,
-    //   className: "flex-1"
-    // },
+    {
+      label: 'Kick Off',
+      tabKey: 'kick-off',
+      disabled: false,
+      className: ""
+    },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
       disabled: !sportActions || sportActions.length === 0,
-      className: "flex-1"
+      className: ""
     },
     {
       label: 'Team Stats',
       tabKey: 'team-stats',
       disabled: !teamActions || teamActions.length === 0 || !gameKickedOff,
-      className: "flex-1"
+      className: ""
     },
     {
       label: 'Top Player',
       tabKey: 'motm',
-      disabled: false,
-      className: "flex-1"
+      disabled: true,
+      className: ""
     },
     {
       label: 'Chat',
       tabKey: 'chat',
       disabled: true,
-      className: "flex-1"
+      className: ""
     },
     {
       label: 'Team Rosters',
       tabKey: 'rosters',
       disabled: false,
-      className: "flex-1"
+      className: ""
     },
   ];
 
@@ -96,11 +97,11 @@ export default function FixtureScreen() {
 
 
       {!loadingSportsActions && (
-        <PageView className="w-full">
+        <PageView className="w-full"  >
           <FixtureHero fixture={fixture} />
           <FixtureScreenHeader fixture={fixture} />
 
-          <TabView tabHeaderItems={tabItems}>
+          <PilledTabView pillTabRowClassName={""} className='px-4' tabHeaderItems={tabItems}>
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
@@ -133,12 +134,12 @@ export default function FixtureScreen() {
               <ProMotmVotingBox fixture={fixture} />
             </TabViewPage>
 
-            <TabViewPage tabKey="rosters">{<FixtureRosters fixture={fixture} />}</TabViewPage>
+            <TabViewPage  tabKey="rosters">{<FixtureRosters fixture={fixture} />}</TabViewPage>
 
             <TabViewPage tabKey="chat">
               <FixtureChat fixture={fixture} />
             </TabViewPage>
-          </TabView>
+          </PilledTabView>
         </PageView>
       )}
 

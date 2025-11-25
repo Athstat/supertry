@@ -33,6 +33,7 @@ export default function LeagueStandingsFilterSelector() {
         onChange={onChange}
         value={currentOption?.id}
         showSearch
+        className="w-[140px]"
       />
 
     </div>
