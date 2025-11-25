@@ -23,9 +23,7 @@ export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
 
   return (
-    <FantasyLeagueGroupDataProvider
-      loadingFallback={<LoadingSkeleton />}
-      leagueId={leagueId}>
+    <FantasyLeagueGroupDataProvider loadingFallback={<LoadingSkeleton />} leagueId={leagueId}>
       <Content />
     </FantasyLeagueGroupDataProvider>
   );
@@ -36,7 +34,7 @@ function Content() {
   // useHideTopNavBar();
     useHideBottomNavBar();
 
-  const { league, userMemberRecord } = useFantasyLeagueGroup();
+  const { league, userMemberRecord, isLoading } = useFantasyLeagueGroup();
 
   const [journey] = useQueryState('journey');
 
@@ -45,13 +43,13 @@ function Content() {
   initialTabKey = journey === 'standings' ? 'standings' : initialTabKey;
 
   // Hooks must be declared before any early returns
-  const [isEditing,] = useState<boolean>(false);
+  const [isEditing] = useState<boolean>(false);
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
   }, [league?.id]);
 
-  if (!league && !league) {
+  if (!isLoading && !league) {
     return <ErrorState error="Whoops" message="Fantasy League was not found" />;
   }
 
@@ -140,12 +138,10 @@ function Content() {
         <TabViewPage tabKey="commissioner" className="px-4">
           <LeagueCommissionerTab />
         </TabViewPage>
-
       </PilledTabView>
     </PageView>
   );
 }
-
 
 function LoadingSkeleton() {
 
@@ -153,31 +149,28 @@ function LoadingSkeleton() {
   useHideBottomNavBar();
 
   return (
-    <PageView className='p-4 animate-pulse overflow-hidden flex flex-col gap-4' >
-      <div className='flex flex-row items-center justify-between' >
-
-        <div className='flex flex-row items-center gap-2' >
-          <RoundedCard className='border-none w-[30px] h-[25px] ' />
-          <RoundedCard className='border-none w-[100px] h-[25px] ' />
+    <PageView className="p-4 animate-pulse overflow-hidden flex flex-col gap-4">
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center gap-2">
+          <RoundedCard className="border-none w-[30px] h-[25px] " />
+          <RoundedCard className="border-none w-[100px] h-[25px] " />
         </div>
 
-        <RoundedCard className='border-none w-[100px] h-[40px] ' />
-
+        <RoundedCard className="border-none w-[100px] h-[40px] " />
       </div>
 
-      <div className='flex flex-row items-center gap-2' >
-        <RoundedCard className='border-none w-[100px] h-[25px] ' />
-        <RoundedCard className='border-none w-[100px] h-[25px] ' />
-        <RoundedCard className='border-none w-[90px] h-[25px] ' />
-        <RoundedCard className='border-none w-[70px] h-[25px] ' />
+      <div className="flex flex-row items-center gap-2">
+        <RoundedCard className="border-none w-[100px] h-[25px] " />
+        <RoundedCard className="border-none w-[100px] h-[25px] " />
+        <RoundedCard className="border-none w-[90px] h-[25px] " />
+        <RoundedCard className="border-none w-[70px] h-[25px] " />
       </div>
 
-      <div className='flex flex-col items-center gap-2' >
-        <RoundedCard className='border-none w-full h-[100px] ' />
-        <RoundedCard className='border-none w-full h-[500px] ' />
-        <RoundedCard className='border-none w-full h-[40px] ' />
+      <div className="flex flex-col items-center gap-2">
+        <RoundedCard className="border-none w-full h-[100px] " />
+        <RoundedCard className="border-none w-full h-[500px] " />
+        <RoundedCard className="border-none w-full h-[40px] " />
       </div>
-
     </PageView>
-  )
+  );
 }
