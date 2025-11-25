@@ -10,7 +10,7 @@ type Props = {
 export default function BlueGradientCard({ className, children, onClick } : Props) {
   return (
     <div onClick={onClick} className={twMerge(
-        "bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 dark:from-primary-600 dark:via-primary-700 dark:to-primary-800 rounded-2xl p-4 text-white",
+        "bg-gradient-to-br from-[#1196F5] to-[#011E5C] rounded-2xl p-4 text-white",
         className
     )} >
         {children}

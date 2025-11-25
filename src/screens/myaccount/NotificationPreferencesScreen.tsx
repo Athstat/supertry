@@ -12,6 +12,7 @@ import { useNotificationPreferences } from "../../hooks/notifications/useNotific
 import { twMerge } from "tailwind-merge";
 import RadioList from "../../components/shared/buttons/RadioList";
 import { GameUpdatesPreference, gameUpdatesPreferenceRadioListOptions } from "../../types/notifications";
+import { useEffect } from "react";
 
 
 /** Renders the Notification Preferences Screen */
@@ -20,7 +21,7 @@ export default function NotificationPreferencesScreen() {
     const {
         error, clearError, isSaving,
         isProfileFetchFailed, isLoading,
-        profile, setProfile
+        profile, setProfile, handleAutoSave
     } = useNotificationPreferences();
 
     const navigate = useNavigate();
@@ -28,6 +29,12 @@ export default function NotificationPreferencesScreen() {
     const handleBack = () => {
         navigate(`/profile`);
     }
+
+    useEffect(() => {
+        return () => {
+            handleAutoSave();
+        }
+    }, [handleAutoSave]);
 
     if (isLoading) {
         return <LoadingSkeleton />

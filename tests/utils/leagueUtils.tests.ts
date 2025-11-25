@@ -1,49 +1,41 @@
-import { add, addDays, addHours, addMinutes } from "date-fns";
+import { addDays, addHours, addMinutes, subDays, subHours, subMinutes } from "date-fns";
 import { isLeagueLocked } from "../../src/utils/leaguesUtils";
 
 test('test is league locked when join deadline has passed', () => {
     const now = new Date();
-    const joinDeadline = addDays(now, 1);
+    const joinDeadline1 = subHours(now, 1);
+    const joinDeadline2 = subMinutes(now, 30);
+    const joinDeadline3 = subDays(now, 1);
+    const joinDeadline4 = subDays(now, 2);
 
-    expect(isLeagueLocked(joinDeadline)).toEqual(true);
+    expect(isLeagueLocked(joinDeadline1)).toEqual(true);
+    expect(isLeagueLocked(joinDeadline2)).toEqual(true);
+    expect(isLeagueLocked(joinDeadline3)).toEqual(true);
+    expect(isLeagueLocked(joinDeadline4)).toEqual(true);
 });
 
-test('test is league locked when join deadline in equal to time now', () => {
-    // This problem is something we eventually want to fix, but this test
-    // serves to make sure the work around isn't broken
-    // sincerely Tadiwa
-
-    /** 
-        The Problem here is that the join deadline is actually set two hours
-        before the game on the backend but on the front-end we lock the leagues
-        30 minutes before the first match
-    */
+test('test is league locked when join deadline has not yet been reached', () => {
 
     const now = new Date();
-    const joinDeadline = addMinutes(now, 1);
+    const joinDeadline1 = addMinutes(now, 1);
+    const joinDeadline2 = addMinutes(now, 30);
+    const joinDeadline3 = addHours(now, 1);
+    const joinDeadline4 = addDays(now, 2);
 
-    expect(isLeagueLocked(joinDeadline)).toEqual(false);
+    expect(isLeagueLocked(joinDeadline1)).toEqual(false);
+    expect(isLeagueLocked(joinDeadline2)).toEqual(false);
+    expect(isLeagueLocked(joinDeadline3)).toEqual(false);
+    expect(isLeagueLocked(joinDeadline4)).toEqual(false);
 
 });
 
-test('test is league locked when its 30 minutes before the first match', () => {
-    // This problem is something we eventually want to fix, but this test
-    // serves to make sure the work around isn't broken
-    // sincerely Tadiwa
-
-    /** 
-        The Problem here is that the join deadline is actually set two hours
-        before the game on the backend but on the front-end we lock the leagues
-        30 minutes before the first match
-    */
+test('test is league locked when join deadline is equal to now', () => {
 
     const now = new Date();
-    const joinDeadline = add(now, {
-        minutes: 30,
-        hours: 1
-    });
+    const joinDeadline = now;
 
     expect(isLeagueLocked(joinDeadline)).toEqual(true);
 
 });
+
 

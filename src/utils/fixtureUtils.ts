@@ -10,7 +10,7 @@ export function fixtureSummary(fixture: IFixture) {
     team_score !== undefined &&
     opposition_score !== undefined;
 
-  const hasNotStarted = game_status === 'fixture';
+  const hasNotStarted = game_status === "not_started";
 
   const homeTeamWon = matchFinal ? team_score > opposition_score : false;
   const awayTeamWon = matchFinal ? team_score < opposition_score : false;
@@ -119,7 +119,7 @@ export function filterPastFixtures(fixtures: IFixture[], limit?: number) {
   return fixtures
     .filter(f => {
       if (f.kickoff_time) {
-        return f.game_status === 'complete';
+        return f.game_status === "completed";
       }
 
       return false;
@@ -328,8 +328,6 @@ export function getCurrentWeek(): { weekNumber: number; year: number } {
 
 /** Get Monday-Sunday date range for a given week number and year */
 export function getWeekDateRange(weekNumber: number, year: number): { start: Date; end: Date } {
-  // Create a date in the middle of the target year
-  const midYear = new Date(year, 6, 1);
 
   // Get the first day of week 1 in the target year
   const week1Start = startOfWeek(new Date(year, 0, 4), { weekStartsOn: 1 });

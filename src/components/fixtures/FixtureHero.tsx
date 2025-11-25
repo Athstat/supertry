@@ -31,9 +31,13 @@ export default function FixtureHero({ fixture }: Props) {
           'flex flex-row items-center justify-center relative'
           // " dark:bg-dark-800/30 relative"
         )}
-        onClick={handleBack}
+        
       >
-        <div className="absolute text-slate-700 dark:text-slate-400 left-0 flex hover:text-blue-500 px-2 flex-row items-center gap-1">
+        <div 
+        
+          className="absolute text-slate-700 dark:text-slate-400 left-0 flex hover:text-blue-500 px-2 flex-row items-center gap-1"
+          onClick={handleBack}
+        >
           <ArrowLeft className="w-4 h-4 " />
           <p className="text-sm">Back</p>
         </div>
