@@ -5,7 +5,6 @@ import { Activity } from '../components/shared/Activity';
 import useSWR, { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
-import { ErrorState } from '../components/ui/ErrorState';
 import { analytics } from '../services/analytics/anayticsService';
 import { useDebounced } from '../hooks/useDebounced';
 
@@ -44,11 +43,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { accessToken, setAcessToken, saveUserInfoToLocalStorage, clearAccessTokenAndUser } =
     useAuthToken();
 
-  const fetchKey = accessToken ? `/auth-user/${atob(accessToken)}` : null;
+  const fetchKey = accessToken ? `/auth-user/${accessToken}` : null;
   const {
     data: authUser,
     isLoading,
-    error,
     mutate,
   } = useSWR(fetchKey, () => authService.whoami(accessToken));
 
@@ -66,10 +64,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [clearAccessTokenAndUser]);
 
   const isLoadingDebounced = useDebounced(isLoading, 500);
-
-  if (error) {
-    return <ErrorState error="Authentication Error" message={error} />;
-  }
 
   return (
     <AuthContext.Provider
