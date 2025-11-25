@@ -107,7 +107,9 @@ export function useNotificationPreferences() {
             handleAutoSave();
         }, 1000);
 
-        return () => clearTimeout(timer);
+        return () => {
+            clearTimeout(timer);
+        }
     }, [handleAutoSave]);
 
     const clearError = () => {
@@ -116,5 +118,5 @@ export function useNotificationPreferences() {
 
     const isProfileFetchFailed = !profile && !isLoading;
 
-    return { profile, isProfileFetchFailed, isSaving, isLoading: debouncedLoading, error, clearError, setProfile }
+    return { profile, isProfileFetchFailed, isSaving, isLoading: debouncedLoading, error, clearError, setProfile, handleAutoSave }
 }
