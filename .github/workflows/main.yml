@@ -34,7 +34,7 @@ jobs:
       # Changed to v4 (Standard stable version)
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/merge', steps.pr_number.outputs.pr_number) }}
           fetch-depth: 0
 
       # Get PR author and base ref for both PR and comment events
