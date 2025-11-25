@@ -32,10 +32,9 @@ export default function NotificationPreferencesScreen() {
 
     useEffect(() => {
         return () => {
-            console.log("saving changes post component unmount")
             handleAutoSave();
         }
-    })
+    }, [handleAutoSave]);
 
     if (isLoading) {
         return <LoadingSkeleton />
