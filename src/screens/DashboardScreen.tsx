@@ -12,8 +12,17 @@ import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelect
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useDashboard } from '../hooks/dashboard/useDashboard';
 import { abbreviateSeasonName } from '../components/players/compare/PlayerCompareSeasonPicker';
+import TeamPlayersPrefetchProvider from '../providers/TeamPlayersPrefetchProvider';
 
 export function DashboardScreen() {
+  return (
+    <TeamPlayersPrefetchProvider>
+      <DashboardContent />
+    </TeamPlayersPrefetchProvider>
+  );
+}
+
+function DashboardContent() {
   const navigate = useNavigate();
   const { currentSeason } = useDashboard();
 
