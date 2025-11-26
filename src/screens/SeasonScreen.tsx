@@ -14,7 +14,6 @@ import { ScopeProvider } from 'jotai-scope';
 import { TopicPageView } from './PageView';
 import { seasonService } from '../services/seasonsService';
 import SeasonScreenTeamList from '../components/seasons/SeasonScreenTeamList';
-import SeasonScreenAthleteList from '../components/seasons/SeasonScreenAthleteList';
 import SeasonScreenFixturesList from '../components/seasons/SeasonScreenFixturesList';
 
 export default function SeasonScreen() {
@@ -42,7 +41,6 @@ export default function SeasonScreen() {
 function SeasonScreenContent() {
   const season = useAtomValue(seasonAtom);
   let teams = useAtomValue(seasonTeamsAtoms);
-  const athletes = useAtomValue(seasonAthletesAtoms);
   const fixtures = useAtomValue(seasonFixtutesAtoms);
 
   teams = teams.filter(t => t.athstat_name !== 'TBD');
