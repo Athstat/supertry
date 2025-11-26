@@ -18,7 +18,7 @@ export default function LeagueGroupScreenHeader({isEditing} : Props) {
     const { handleShare } = useShareLeague(league);
 
     const handleBackToLeagues = () => {
-        hardPop();
+        hardPop("/leagues");
     }
 
     if (!league) {
