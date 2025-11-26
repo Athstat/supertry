@@ -43,6 +43,7 @@ import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 import OnboardingDataProvider from './providers/OnboardingDataProvider';
 import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
 import NotificationPreferencesScreen from './screens/myaccount/NotificationPreferencesScreen';
+import NotFoundScreen from './screens/NotFoundScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -388,6 +389,8 @@ const AppRoutes = () => {
 
         <Route path="/invite-steps" element={<InviteStepsScreen />} />
 
+
+
         <Route
           path="/in-app-messages"
           element={
@@ -398,6 +401,12 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route path='*' element={(
+          <Layout>
+            <NotFoundScreen />
+          </Layout>
+        )} />
       </Routes>
     </>
   );
