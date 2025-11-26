@@ -1,13 +1,13 @@
-import {RouterStack} from "../../../src/utils/web/browserUtils";
+import {RouterHistoryStack} from "../../../src/utils/web/browserUtils";
 
 describe("Test Router Stack", () => {
     test("test intializing empty router stack", () => {
-        const stack = new RouterStack();
+        const stack = new RouterHistoryStack();
         expect(stack.peek()).toBeUndefined();
     });
 
     test("test pushing to router stack", () => {
-        const stack = new RouterStack();
+        const stack = new RouterHistoryStack();
         stack.push("/fixtures?focus=sbr");
 
         expect(stack.peek()).toEqual("/fixtures?focus=sbr");
@@ -22,7 +22,7 @@ describe("Test Router Stack", () => {
     });
 
     test("test soft popping to router stack ", () => {
-        const stack = new RouterStack();
+        const stack = new RouterHistoryStack();
         stack.push("/fixtures?focus=sbr");
         stack.push("/fixtures?focus=pro");
 
@@ -37,7 +37,7 @@ describe("Test Router Stack", () => {
     });
 
     test("test hard popping on router stack", () => {
-        const stack = new RouterStack();
+        const stack = new RouterHistoryStack();
         stack.push("/dashboard");
         stack.push("/dashboard?league=urc");
 

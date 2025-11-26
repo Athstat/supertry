@@ -89,7 +89,7 @@ class RouterStackItem {
  
 }
 
-export class RouterStack {
+export class RouterHistoryStack {
     private pathStack: IdempotentPushStack<RouterStackItem>;
 
     constructor() {
