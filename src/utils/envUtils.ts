@@ -26,6 +26,9 @@ export type EnvsDict = {
  * The function will throw an exception if there is any issue
   */
 export function validateEnvironmentVariables(dict: EnvsDict) {
+
+    // AppsFlyer VITE_AF_ONELINK_BASE_URL is optional, not in this check
+
     if (!dict.apiBaseUrl) {
         throw Error("'VITE_API_BASE_URL', env variable is missing");
     }
@@ -40,10 +43,6 @@ export function validateEnvironmentVariables(dict: EnvsDict) {
 
     if (!dict.featureLeagueGroupId) {
         throw Error("'VITE_FEATURE_LEAGUE_GROUP_ID', env variable is missing. Refer to README.md for more information");
-    }
-
-    if (!dict.appsFlyerOneLinkBaseUrl) {
-        throw Error("'VITE_AF_ONELINK_BASE_URL', env variable is missing. Refer to README.md for more information")
     }
 
     if (!dict.appEnvironment) {
