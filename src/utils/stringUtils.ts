@@ -53,3 +53,18 @@ export function isNumeric(str: string) {
   if (typeof str != "string") return false; // only process strings
   return !isNaN(Number(str)) && !isNaN(parseFloat(str));
 }
+
+
+/** Gets the Pathname and Search Params from a URI, the Search Params will include the '?' symbol */
+export function getPathNameAndSearchParams(uri: string): [(string|undefined), (string|undefined)] {
+    if (!uri) {
+        return [undefined, undefined];
+    }
+
+    if (uri.includes("?")) {
+        const [pathName, queryWithoutQuestionMark] = uri.split("?");
+        return [pathName, "?" + queryWithoutQuestionMark];
+    }
+
+    return [uri, undefined];
+}

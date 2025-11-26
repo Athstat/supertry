@@ -14,6 +14,7 @@ import NetworkStatusProvider from './components/network/NetworkStatusProvider';
 import SportActionsDefinitionsProvider from './components/stats/SportActionsDefinitionsProvider';
 import { useSyncDeviceId } from './hooks/auth/useSyncDeviceId';
 import NavigationBarsProvider from './providers/navigation/NavigationBarsProvider';
+import BrowserHistoryProvider from './providers/web/BrowserHistoryProvider';
 
 function DeviceIdSync() {
   useSyncDeviceId();
@@ -47,9 +48,11 @@ function App() {
                           }}
                           fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                         >
-                          <NavigationBarsProvider>
-                            <AppRoutes />
-                          </NavigationBarsProvider>
+                          <BrowserHistoryProvider>
+                            <NavigationBarsProvider>
+                              <AppRoutes />
+                            </NavigationBarsProvider>
+                          </BrowserHistoryProvider>
                         </ErrorBoundary>
                       </AppStateProvider>
                     </PlayerProfileProvider>
