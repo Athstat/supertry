@@ -7,7 +7,7 @@ export function useNavigateBack() {
     const navigate = useNavigate();
     const [stack, setStack] = useAtom(browserHistoryAtoms.historyStackAtom);
 
-    const hardPop = useCallback(() => {
+    const hardPop = useCallback((fallback?: string) => {
 
         stack.hardPop();
         const nextPath = stack.peek();
@@ -19,9 +19,14 @@ export function useNavigateBack() {
             return;
         }
 
+        if (fallback) {
+            navigate(fallback);
+            return;
+        }
+
     }, [navigate, setStack, stack]);
 
-    const softPop = useCallback(() => {
+    const softPop = useCallback((fallback?: string) => {
         stack.softPop();
         const nextPath = stack.peek();
 
@@ -31,7 +36,12 @@ export function useNavigateBack() {
             navigate(nextPath);
             return;
         }
+
+        if (fallback) {
+            navigate(fallback);
+            return;
+        }
     }, [navigate, setStack, stack]);
 
-    return {softPop, hardPop}
+    return { softPop, hardPop }
 }

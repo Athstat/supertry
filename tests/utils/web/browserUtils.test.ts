@@ -1,4 +1,4 @@
-import {RouterHistoryStack} from "../../../src/utils/web/browserUtils";
+import { RouterHistoryStack } from "../../../src/utils/web/browserUtils";
 
 describe("Test Router Stack", () => {
     test("test intializing empty router stack", () => {
@@ -53,5 +53,17 @@ describe("Test Router Stack", () => {
 
         stack.hardPop();
         expect(stack.peek()).toBeUndefined();
-    })
+    });
+
+    test("test soft popping when one query param is there", () => {
+        const stack = new RouterHistoryStack();
+        stack.push("/leagues");
+        stack.push("/leagues?id=urc");
+
+        stack.softPop();
+        expect(stack.peek()).toEqual("/leagues");
+
+        stack.softPop();
+        expect(stack.peek()).toBeUndefined();
+    });
 })
