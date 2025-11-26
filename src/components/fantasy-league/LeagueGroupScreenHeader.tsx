@@ -1,9 +1,9 @@
 import { ArrowLeft, Share2 } from 'lucide-react'
 import PrimaryButton from '../shared/buttons/PrimaryButton'
 import JoinLeagueButton from './buttons/JoinLeagueButton'
-import { useNavigate } from 'react-router-dom';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { useShareLeague } from '../../hooks/leagues/useShareLeague';
+import { useNavigateBack } from '../../hooks/web/useNavigateBack';
 
 type Props = {
     isEditing?: boolean
@@ -12,12 +12,13 @@ type Props = {
 /** Renders a header component on the fantasy league group header */
 export default function LeagueGroupScreenHeader({isEditing} : Props) {
 
-    const navigate = useNavigate();
+    const {hardPop} = useNavigateBack();
+
     const { league, isMember } = useFantasyLeagueGroup();
     const { handleShare } = useShareLeague(league);
 
     const handleBackToLeagues = () => {
-        navigate(`/leagues`);
+        hardPop();
     }
 
     if (!league) {
