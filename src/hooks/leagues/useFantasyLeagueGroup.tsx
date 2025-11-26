@@ -3,7 +3,6 @@ import {
   currGroupMemberAtom,
   fantasyLeagueConfigAtom,
   fantasyLeagueGroupAtom,
-  fantasyLeagueGroupLoadingAtom,
   fantasyLeagueGroupMembersAtom,
   fantasyLeagueGroupRoundsAtom,
 } from '../../state/fantasy/fantasyLeagueGroup.atoms';
@@ -20,7 +19,6 @@ export function useFantasyLeagueGroup() {
   const setRounds = useSetAtom(fantasyLeagueGroupRoundsAtom);
 
   const leagueConfig = useAtomValue(fantasyLeagueConfigAtom);
-  const isLoading = useAtomValue(fantasyLeagueGroupLoadingAtom);
 
   const sortedRounds = useMemo(() => {
     return [...rounds].sort((a, b) => {
@@ -35,6 +33,7 @@ export function useFantasyLeagueGroup() {
     // The first open round we encounter
     // if all rounds are have ended, go to the last round
     // if all rounds are not yet open but they have not ended, use first round
+
 
     const openRounds = sortedRounds.filter(r => {
       return r.is_open === true;
@@ -85,7 +84,6 @@ export function useFantasyLeagueGroup() {
     mutateLeague,
     refreshRounds,
     isOfficialLeague,
-    leagueConfig,
-    isLoading,
+    leagueConfig
   };
 }

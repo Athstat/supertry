@@ -12,19 +12,10 @@ import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelect
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useDashboard } from '../hooks/dashboard/useDashboard';
 import { abbreviateSeasonName } from '../components/players/compare/PlayerCompareSeasonPicker';
-import TeamPlayersPrefetchProvider from '../providers/TeamPlayersPrefetchProvider';
 
 export function DashboardScreen() {
-  return (
-    <TeamPlayersPrefetchProvider>
-      <DashboardContent />
-    </TeamPlayersPrefetchProvider>
-  );
-}
-
-function DashboardContent() {
   const navigate = useNavigate();
-  const { currentSeason } = useDashboard();
+  const {currentSeason} = useDashboard();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */
@@ -36,10 +27,11 @@ function DashboardContent() {
 
   return (
     <PageView className="flex flex-col space-y-4 p-4">
+
       <div>
-        <div className="flex flex-row items-center gap-2">
+        <div className='flex flex-row items-center gap-2' >
           <Home />
-          <p className="font-bold text-lg">Dashboard</p>
+          <p className='font-bold text-lg' >Dashboard</p>
         </div>
       </div>
 
@@ -51,57 +43,54 @@ function DashboardContent() {
 
       <FeaturedFantasyLeagueGroups />
 
-      <div className="flex flex-col gap-4 pt-4">
-        <div className="flex flex-row items-center gap-2">
+      <div className='flex flex-col gap-4 pt-4' >
+        <div className='flex flex-row items-center gap-2' >
           <Flame className="text-yellow-500" />
-          <h1 className="font-bold">Top Fantasy Picks</h1>
+          <h1 className='font-bold' >Top Fantasy Picks</h1>
         </div>
 
         <FantasyPointsScoredPlayerList />
         <MostSelectedPlayersList />
       </div>
 
-      <div className="flex flex-col gap-4 pt-4">
-        <div className="flex flex-row items-center gap-2">
-          <Crown className="text-blue-500" />
-          <h1 className="font-bold">
-            {currentSeason
-              ? `${abbreviateSeasonName(currentSeason.name)} STATS LEADERS`
-              : 'Stats Leaders'}
-          </h1>
+      <div className='flex flex-col gap-4 pt-4' >
+        <div className='flex flex-row items-center gap-2' >
+          <Crown className='text-blue-500' />
+          <h1 className='font-bold' >{ currentSeason ? `${abbreviateSeasonName(currentSeason.name)} STATS LEADERS`  : "Stats Leaders"}</h1>
         </div>
 
-        <div className="flex flex-col no-scrollbar overflow-y-hidden overflow-x-auto gap-2 max-w-full">
+        <div className='flex flex-col no-scrollbar overflow-y-hidden overflow-x-auto gap-2' >
           <SportActionRankingsList
-            actionName="tries"
-            title="Tries Scored"
-            className="min-w-[320px] w-full"
+            actionName='tries'
+            title='Tries Scored'
+            className='min-w-[90%]'
           />
 
           <SportActionRankingsList
-            actionName="try_assist"
-            title="Try Assists"
-            className="min-w-[320px] w-full"
+            actionName='try_assist'
+            title='Try Assists'
+            className='min-w-[90%]'
           />
 
           <SportActionRankingsList
-            actionName="defenders_beaten"
-            title="Defenders Beaten"
-            className="min-w-[320px] w-full"
+            actionName='defenders_beaten'
+            title='Defenders Beaten'
+            className='min-w-[90%]'
           />
 
           <SportActionRankingsList
-            actionName="tackles"
-            title="Tackles"
-            className="min-w-[320px] w-full"
+            actionName='tackles'
+            title='Tackles'
+            className='min-w-[90%]'
           />
 
           <SportActionRankingsList
-            actionName="post_contact_metres"
-            title="Post Contact Meters (m)"
-            className="min-w-[320px] w-full"
+            actionName='post_contact_metres'
+            title='Post Contact Meters (m)'
+            className='min-w-[90%]'
           />
         </div>
+
       </div>
 
       <RoundedCard className="flex flex-col gap-4 p-4">
@@ -115,6 +104,7 @@ function DashboardContent() {
 
         <PrimaryButton onClick={handleBannerClick}>Take Me There</PrimaryButton>
       </RoundedCard>
+
     </PageView>
   );
 }

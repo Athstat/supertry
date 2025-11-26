@@ -31,6 +31,12 @@ function MyTeamModeSelector() {
   const { round, roundTeam } = useTeamHistory();
   const { leagueConfig } = useFantasyLeagueGroup();
   const [isLoading, setLoading] = useState<boolean>(false);
+
+  // Wait for leagueConfig to load to prevent error flash
+  if (!leagueConfig) {
+    return <PitchViewLoadingSkeleton />;
+  }
+
   const [visitedRounds, setVistedRounds] = useState<IFantasyLeagueRound[]>([]);
 
   useEffect(() => {
@@ -75,8 +81,7 @@ function MyTeamModeSelector() {
     return 'error';
   }, [isLocked, round, roundTeam]);
 
-  // Wait for leagueConfig to load to prevent error flash
-  if (!leagueConfig || isLoading) {
+  if (isLoading) {
     return <PitchViewLoadingSkeleton />;
   }
 

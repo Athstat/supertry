@@ -24,6 +24,3 @@ export const fantasyLeagueGroupRoundsAtom = atom<IFantasyLeagueRound[]>([]);
 
 /** Holds the fantasy league config atom */
 export const fantasyLeagueConfigAtom = atom<IGamesLeagueConfig>();
-
-/** Holds the loading state for the fantasy league group */
-export const fantasyLeagueGroupLoadingAtom = atom<boolean>(true);
