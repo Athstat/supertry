@@ -5,15 +5,8 @@ import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
 import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import TeamJersey from './TeamJersey';
 import darkModeLogo from '../branding/assets/logo_dark_mode.svg';
 
-//import { CircleDollarSign } from 'lucide-react';
-import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
-// import PlayerIconsRow from '../players/compare/PlayerIconsRow';
-//import { getPlayerIcons, PlayerIcon } from '../../utils/playerIcons';
-import PlayerIconComponent from '../players/compare/PlayerIconComponent';
-import Experimental from '../shared/ab_testing/Experimental';
 import { usePlayerSquadReport } from '../../hooks/fantasy/usePlayerSquadReport';
 import useSWR from 'swr';
 import { leagueService } from '../../services/leagueService';
@@ -21,10 +14,6 @@ import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup
 import { useAuth } from '../../contexts/AuthContext';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import AvailabilityIcon from '../players/availability/AvailabilityIcon';
-// import { swrFetchKeys } from '../../utils/swrKeys';
-// import useSWR from 'swr';
-// import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
-// import { usePlayerData } from './provider/PlayerDataProvider';
 
 type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -65,16 +54,16 @@ export function PlayerGameCard({
   //console.log('Player: ', player);
 
   const getBorderColor = () => {
-    switch (frameSrc) {
-      case '/player_card_backgrounds/front-row-bg.png':
+    switch (player.position_class) {
+      case 'front-row':
         return 'hsl(0, 100%, 27%)';
-      case '/player_card_backgrounds/half-back-bg.png':
+      case 'half-back':
         return 'hsl(39, 100%, 35%)';
-      case '/player_card_backgrounds/back-bg.png':
+      case 'back':
         return 'hsl(148, 100%, 27%)';
-      case '/player_card_backgrounds/second-row-bg.png':
+      case 'second-row':
         return 'hsl(210, 100%, 30%)';
-      case '/player_card_backgrounds/back-row-bg.png':
+      case 'back-row':
         return 'hsl(181, 94%, 19%)';
       default:
         return '';

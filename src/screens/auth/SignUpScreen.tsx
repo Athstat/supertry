@@ -1,91 +1,107 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, ArrowRight, User } from 'lucide-react';
 import { AuthLayout } from '../../components/auth/AuthLayout';
-import { RegisterUserReq, SignUpForm } from '../../types/auth';
+import { RegisterUserReq } from '../../types/auth';
 import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/analytics/anayticsService';
-import { emailValidator } from '../../utils/stringUtils';
-import InputField, { PasswordInputField } from '../../components/shared/InputField';
-import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
-import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
-import FormErrorText from '../../components/shared/FormError';
 import { authService } from '../../services/authService';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
 import Experimental from '../../components/shared/ab_testing/Experimental';
+import { ProgressIndicator } from '../../components/auth/signup/ProgressIndicator';
+import { OnboardingStep1Username } from '../../components/auth/signup/OnboardingStep1Username';
+import { OnboardingStep2Email } from '../../components/auth/signup/OnboardingStep2Email';
+import { OnboardingStep3Password } from '../../components/auth/signup/OnboardingStep3Password';
+import { OnboardingStep4Review } from '../../components/auth/signup/OnboardingStep4Review';
+
+interface OnboardingState {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export function SignUpScreen() {
   const navigate = useNavigate();
   const { setAuth } = useAuth();
-  const [currentStep] = useState(1); // Keeping this for compatibility
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [form, setForm] = useState<SignUpForm>({
+  const [onboardingData, setOnboardingData] = useState<OnboardingState>({
+    username: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    username: '',
-    nationality: undefined,
-    favoriteTeam: undefined,
   });
 
-  const { emailTaken, isLoading: isEmailUniqueValidatorLoading } = useEmailUniqueValidator(
-    form.email
-  );
-  const isEmailTaken = !isLoading && emailTaken;
-
-  const isAllFieldsComplete = form.email && form.username && form.password && form.confirmPassword;
-  const isPasswordsMatch = form.password === form.confirmPassword;
-
-  // Validate all fields and submit the form directly instead of going to next step
-  const validateForm = () => {
-    // Validate email and password
-    if (!form.email || !form.password || !form.confirmPassword) {
-      setError('Please fill in all fields');
-      return;
-    }
-
-    if (!emailValidator(form.email)) {
-      setError('Please enter a valid email');
-      return;
-    }
-
-    if (form.password !== form.confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-    if (!form.username) {
-      setError('Please provide a username');
-      return;
-    }
-
-    if (form.password.length < 8) {
-      setError('Password should be atleast 8 characters long');
-      return;
-    }
+  // Navigation handlers
+  const goToStep = (step: 1 | 2 | 3 | 4) => {
+    setCurrentStep(step);
+    setError(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Step 1: Username handlers
+  const handleUsernameChange = (username: string) => {
+    setOnboardingData(prev => ({ ...prev, username }));
+  };
+
+  const handleStep1Next = () => {
+    goToStep(2);
+  };
+
+  // Step 2: Email handlers
+  const handleEmailChange = (email: string) => {
+    setOnboardingData(prev => ({ ...prev, email }));
+  };
+
+  const handleStep2Next = () => {
+    goToStep(3);
+  };
+
+  const handleStep2Back = () => {
+    goToStep(1);
+  };
+
+  // Step 3: Password handlers
+  const handlePasswordChange = (password: string) => {
+    setOnboardingData(prev => ({ ...prev, password }));
+  };
+
+  const handleStep3Next = () => {
+    goToStep(4);
+  };
+
+  const handleStep3Back = () => {
+    goToStep(2);
+  };
+
+  // Step 4: Review handlers
+  const handleEditUsername = () => {
+    goToStep(1);
+  };
+
+  const handleEditEmail = () => {
+    goToStep(2);
+  };
+
+  const handleEditPassword = () => {
+    goToStep(3);
+  };
+
+  const handleStep4Back = () => {
+    goToStep(3);
+  };
+
+  const handleSubmit = async () => {
     setIsLoading(true);
     setError(null);
 
-    validateForm();
-
     try {
-      if (!form.username) {
-        setError('Username is required');
-        return;
-      }
-
       const registerData: RegisterUserReq = {
-        email: form.email,
-        password: form.password,
-        username: form.username,
+        email: onboardingData.email,
+        password: onboardingData.password,
+        username: onboardingData.username,
       };
 
-      const { data: res, error } = await authService.registerUser(registerData);
+      const { data: res, error: apiError } = await authService.registerUser(registerData);
 
       if (res) {
         analytics.trackUserSignUp('Email');
@@ -99,10 +115,21 @@ export function SignUpScreen() {
 
         return;
       }
-      setError(error?.message ?? '');
+
+      // Handle API errors and return to relevant step
+      const errorMessage = apiError?.message ?? 'Registration failed. Please try again.';
+      setError(errorMessage);
+
+      // Map errors to relevant steps
+      if (errorMessage.toLowerCase().includes('email')) {
+        goToStep(2);
+      } else if (errorMessage.toLowerCase().includes('username')) {
+        goToStep(1);
+      } else if (errorMessage.toLowerCase().includes('password')) {
+        goToStep(3);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
-      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -110,110 +137,71 @@ export function SignUpScreen() {
 
   return (
     <AuthLayout title="Create your account" subtitle="Join thousands of fantasy rugby players">
-      {error && (
-        <div className="mt-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-lg">
-          {error}
-        </div>
-      )}
+      <div>
+        <div style={{ marginTop: -30 }}>
+          <ProgressIndicator currentStep={currentStep} totalSteps={4} />
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-        {currentStep === 1 && (
-          <div className="space-y-4">
-            <div>
-              <InputField
-                id="username"
-                label="Username"
-                placeholder="Username"
-                type="text"
-                required
-                value={form.username}
-                onChange={val =>
-                  setForm(prev => ({
-                    ...prev,
-                    username: val,
-                  }))
-                }
-                icon={<User className="h-5 w-5" />}
-              />
-            </div>
+          {currentStep === 1 && (
+            <OnboardingStep1Username
+              username={onboardingData.username}
+              onUsernameChange={handleUsernameChange}
+              onNext={handleStep1Next}
+            />
+          )}
 
-            <div className="flex flex-col gap-1">
-              <InputField
-                id="email"
-                type="email"
-                label="Email"
-                placeholder="Email"
-                required
-                value={form.email}
-                onChange={val => setForm(prev => ({ ...prev, email: val?.toLowerCase() ?? '' }))}
-                icon={<Mail className="h-5 w-5" />}
-              />
+          {currentStep === 2 && (
+            <OnboardingStep2Email
+              email={onboardingData.email}
+              onEmailChange={handleEmailChange}
+              onNext={handleStep2Next}
+              onBack={handleStep2Back}
+            />
+          )}
 
-              {isEmailTaken && <FormErrorText error="Email is already taken" />}
-            </div>
+          {currentStep === 3 && (
+            <OnboardingStep3Password
+              password={onboardingData.password}
+              onPasswordChange={handlePasswordChange}
+              onNext={handleStep3Next}
+              onBack={handleStep3Back}
+            />
+          )}
 
-            <div>
-              <PasswordInputField
-                id="password"
-                label="Password"
-                placeholder="Password"
-                value={form.password}
-                onChange={val => setForm(prev => ({ ...prev, password: val ?? '' }))}
-                minLength={8}
-              />
-            </div>
-
-            <div>
-              <PasswordInputField
-                id="confirmPassword"
-                label="Confirm Password"
-                placeholder="Confirm Password"
-                value={form.confirmPassword}
-                minLength={8}
-                onChange={val =>
-                  setForm(prev => ({
-                    ...prev,
-                    confirmPassword: val ?? '',
-                  }))
-                }
-              />
-            </div>
-
-            <PrimaryButton
-              type="submit"
-              disabled={
-                !(
-                  !isLoading &&
-                  !isEmailTaken &&
-                  !isEmailUniqueValidatorLoading &&
-                  isAllFieldsComplete &&
-                  isPasswordsMatch
-                )
-              }
+          {currentStep === 4 && (
+            <OnboardingStep4Review
+              username={onboardingData.username}
+              email={onboardingData.email}
+              password={onboardingData.password}
+              onEditUsername={handleEditUsername}
+              onEditEmail={handleEditEmail}
+              onEditPassword={handleEditPassword}
+              onSubmit={handleSubmit}
+              onBack={handleStep4Back}
               isLoading={isLoading}
-              className="py-3"
-            >
-              {isLoading ? 'Creating Account...' : 'Complete Sign Up'}
-              {!isLoading && <ArrowRight size={20} />}
-            </PrimaryButton>
-          </div>
-        )}
-        {/* Steps 2 and 3 removed - country and team selection no longer needed */}
+              error={error}
+            />
+          )}
+        </div>
 
-        <Experimental>
-          <div className="relative flex items-center justify-center">
-            <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
-            <div className="text-sm px-2 text-gray-500 dark:text-gray-400 ">or</div>
-            <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
-          </div>
-        </Experimental>
+        {/* {currentStep === 4 && (
+          <>
+            <Experimental>
+              <div className="relative flex items-center justify-center mt-6">
+                <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
+                <div className="text-sm px-2 text-gray-500 dark:text-gray-400 ">or</div>
+                <div className="border-t border-gray-300 dark:border-gray-700 w-full"></div>
+              </div>
+            </Experimental>
 
+            <Experimental>
+              <div className="mt-4">
+                <GuestLoginBox />
+              </div>
+            </Experimental>
+          </>
+        )} */}
 
-        <Experimental>
-          <GuestLoginBox />
-        </Experimental>
-
-        <div className="text-center">
+        <div className="text-center mt-6">
           <p className="text-gray-600 dark:text-gray-400">
             Already have an account?{' '}
             <Link
@@ -224,7 +212,7 @@ export function SignUpScreen() {
             </Link>
           </p>
         </div>
-      </form>
+      </div>
     </AuthLayout>
   );
 }

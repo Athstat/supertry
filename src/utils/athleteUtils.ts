@@ -335,17 +335,19 @@ export function isPowerRatingBest(athlete: IProAthlete, comparePlayers: IProAthl
 /** Get Frame Src by the given position class */
 export function getPositionFrameBackground(positionClass: string) {
   positionClass = positionClass.toLowerCase();
+  const CDN_BASE_URL = "https://dp7xhssw324ru.cloudfront.net";
 
   const frameByPosition: Record<string, string> = {
-    'front-row': '/player_card_backgrounds/front-row-bg.png',
-    'second-row': '/player_card_backgrounds/second-row-bg.png',
-    'back-row': '/player_card_backgrounds/back-row-bg.png',
-    'half-back': '/player_card_backgrounds/half-back-bg.png',
-    back: '/player_card_backgrounds/back-bg.png',
+    'front-row': `${CDN_BASE_URL}/front-row-bg.png`,
+    'second-row': `${CDN_BASE_URL}/second-row-bg.png`,
+    'back-row': `${CDN_BASE_URL}/back-row-bg.png`,
+    'half-back': `${CDN_BASE_URL}/half-back-bg.png`,
+    back: `${CDN_BASE_URL}/back-bg.png`,
   };
-  const frameSrc = frameByPosition[positionClass] || '/player_card_backgrounds/back-bg.png';
+  
+  const frameSrc = frameByPosition[positionClass] || `${CDN_BASE_URL}/back-bg.png`;
 
-  return frameSrc ?? '/player_card_backgrounds/front-row-bg.png';
+  return frameSrc ?? `${CDN_BASE_URL}/front-row-bg.png`;
 }
 
 export function getTeamJerseyImage(teamId: string | number) {
