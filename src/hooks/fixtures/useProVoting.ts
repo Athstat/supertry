@@ -6,14 +6,8 @@ import { fixtureSummary, isProGameTBD } from "../../utils/fixtureUtils";
 import { useGameVotes } from "../useGameVotes";
 
 export function useProVoting(fixture: IFixture) {
-    const { team_score, game_status, opposition_score } = fixture;
 
-    const matchFinal = game_status === 'completed' && team_score !== undefined && opposition_score !== undefined;
-
-    const homeTeamWon = matchFinal ? team_score > opposition_score : false;
-    const awayTeamWon = matchFinal ? team_score < opposition_score : false;
-
-    const { gameKickedOff } = fixtureSummary(fixture);
+    const { gameKickedOff, homeTeamWon, awayTeamWon } = fixtureSummary(fixture);
 
     const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture, true);
     const [isVoting, setIsVoting] = useState(false);
@@ -26,6 +20,8 @@ export function useProVoting(fixture: IFixture) {
     const votedHomeTeam = userVote?.vote_for === 'home_team';
     const votedAwayTeam = userVote?.vote_for === 'away_team';
     const hasUserVoted = votedHomeTeam || votedAwayTeam;
+
+    const wasVoteCorrect = hasUserVoted && ((votedHomeTeam && homeTeamWon) || (votedAwayTeam && awayTeamWon))
 
     const handleVote = async (voteFor: 'home_team' | 'away_team') => {
         if (gameKickedOff) return;
@@ -62,6 +58,7 @@ export function useProVoting(fixture: IFixture) {
         hasUserVoted,
         isLoading,
         awayVotes,
-        userVote
+        userVote,
+        wasVoteCorrect
     }
 }

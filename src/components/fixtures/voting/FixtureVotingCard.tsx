@@ -7,6 +7,7 @@ import TeamLogo from "../../team/TeamLogo";
 import { useProVoting } from "../../../hooks/fixtures/useProVoting";
 import { Activity } from "react";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
+import { CircleCheck, XCircle } from "lucide-react";
 
 type Props = {
     fixture: IFixture;
@@ -21,7 +22,8 @@ export function FixtureVotingCard({ fixture }: Props) {
     const {
         isLoading, homeVotes, awayVotes,
         isVoting, handleVote,
-        homePerc, awayPerc, userVote
+        homePerc, awayPerc, userVote, 
+        isTbdGame, wasVoteCorrect
     } = useProVoting(fixture);
 
     const { gameKickedOff } = fixtureSummary(fixture);
@@ -31,7 +33,7 @@ export function FixtureVotingCard({ fixture }: Props) {
 
     const totalVotes = homeVotesCount + awayVotesCount;
 
-    if (!team || !opposition_team) {
+    if (!team || !opposition_team || isTbdGame) {
         return;
     }
 
@@ -100,6 +102,7 @@ export function FixtureVotingCard({ fixture }: Props) {
                     homePerc={homePerc}
                     awayPerc={awayPerc}
                     userVote={userVote}
+                    wasVoteCorrect={wasVoteCorrect}
                 />
             </Activity>
 
@@ -153,10 +156,11 @@ function VotingOption({ team, className, onClick, isVoting, userVote, awayPerc, 
 type VotingResultsProp = {
     homePerc?: number,
     awayPerc?: number,
-    userVote?: IGameVote
+    userVote?: IGameVote,
+    wasVoteCorrect?: boolean
 }
 
-function VotingResults({ homePerc, awayPerc, userVote }: VotingResultsProp) {
+function VotingResults({ homePerc, awayPerc, userVote, wasVoteCorrect }: VotingResultsProp) {
 
     return (
         <div className="flex flex-col gap-2" >
@@ -177,13 +181,22 @@ function VotingResults({ homePerc, awayPerc, userVote }: VotingResultsProp) {
             </div>
 
             {userVote &&
-                <div>
+                <div className="flex flex-row items-center justify-between" >
                     <div className="flex flex-row items-center gap-1" >
                         <div className={twMerge(
                             "w-4 h-4 rounded-md",
                             userVote.vote_for === "home_team" ? "bg-blue-500" : "bg-red-500"
                         )} ></div>
                         <p>Your Vote</p>
+                    </div>
+
+                    <div className={twMerge(
+                        "flex flex-row items-center gap-1",
+                        "text-slate-700 dark:text-slate-400",
+                        wasVoteCorrect && "text-green-500 dark:text-green-400 font-bold"
+                    )} >
+                        <p className="text-sm" >{wasVoteCorrect ? "Correct" : "Wrong"}</p>
+                        {wasVoteCorrect ?  <CircleCheck className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                     </div>
                 </div>
             }
