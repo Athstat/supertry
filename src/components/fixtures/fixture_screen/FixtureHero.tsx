@@ -1,14 +1,14 @@
 import { ArrowLeft } from 'lucide-react';
-import { IFixture } from '../../types/games';
-import TeamLogo from '../team/TeamLogo';
-import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { GoTriangleLeft } from 'react-icons/go';
-import SecondaryText from '../shared/SecondaryText';
-import TeamSeasonRecordText from '../teams/TeamSeasonRecordText';
-import { IProTeam } from '../../types/team';
-import { useNavigateBack } from '../../hooks/web/useNavigateBack';
+import { useNavigateBack } from '../../../hooks/web/useNavigateBack';
+import { IFixture } from '../../../types/games';
+import { IProTeam } from '../../../types/team';
+import { fixtureSummary, isGameLive, formatGameStatus } from '../../../utils/fixtureUtils';
+import SecondaryText from '../../shared/SecondaryText';
+import TeamLogo from '../../team/TeamLogo';
+import TeamSeasonRecordText from '../../teams/TeamSeasonRecordText';
 
 type Props = {
   fixture: IFixture;

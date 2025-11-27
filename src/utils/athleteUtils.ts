@@ -68,6 +68,11 @@ export function athleteSearchPredicate(athlete: IProAthlete, query: string) {
   return nameMatches(query, athlete.player_name);
 }
 
+export function athleteNameSearchPredicate(athleteName: string, query: string) {
+  return nameMatches(query, athleteName);
+}
+
+
 /** Predicate for searching by human names */
 export function nameSearchPredicate(fullName: string, query: string) {
   return nameMatches(fullName, query);
@@ -344,7 +349,7 @@ export function getPositionFrameBackground(positionClass: string) {
     'half-back': `${CDN_BASE_URL}/half-back-bg.png`,
     back: `${CDN_BASE_URL}/back-bg.png`,
   };
-  
+
   const frameSrc = frameByPosition[positionClass] || `${CDN_BASE_URL}/back-bg.png`;
 
   return frameSrc ?? `${CDN_BASE_URL}/front-row-bg.png`;

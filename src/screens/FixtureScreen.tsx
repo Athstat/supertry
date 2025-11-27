@@ -18,7 +18,7 @@ import FixtureBoxscoreTab from '../components/fixtures/fixture_screen/FixtureBox
 import FixtureHeadToHeadStats from '../components/fixtures/fixture_screen/FixtureHeadToHeadStats';
 import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
 import FixtureRosters from '../components/fixtures/fixture_screen/FixtureRosters';
-import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureScreenHeader';
+import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureStickyHeader';
 
 export default function FixtureScreen() {
 

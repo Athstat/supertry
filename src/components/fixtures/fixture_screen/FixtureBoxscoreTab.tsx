@@ -1,12 +1,13 @@
-import { IFixture } from "../../types/games"
-import { fixtureSummary } from "../../utils/fixtureUtils"
-import { useEffect, useMemo } from "react"
-import { BoxscoreListRecordItem, GameSportAction } from "../../types/boxScore"
-import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
-import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
-import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics"
-import { useInView } from "react-intersection-observer"
-import BoxscoreTable2 from "./boxscore/BoxscoreTable2"
+import { useEffect, useMemo } from "react";
+import { useBoxscoreFilter } from "../../../hooks/fixtures/useBoxscoreFilter";
+import { fixtureAnalytics } from "../../../services/analytics/fixtureAnalytics";
+import { BoxscoreListRecordItem, GameSportAction } from "../../../types/boxScore";
+import { IFixture } from "../../../types/games";
+import { fixtureSummary } from "../../../utils/fixtureUtils";
+import BoxscoreTable2 from "../boxscore/BoxscoreTable2";
+import FixtureTeamSelector from "../boxscore/FixtureTeamSelector";
+import { useInView } from "react-intersection-observer";
+
 
 type Props = {
     fixture: IFixture,

@@ -1,9 +1,9 @@
-import { IFixture } from "../../types/games"
-import TitledCard from "../shared/TitledCard"
-import { IBoxScoreItem } from "../../types/boxScore"
-import { rankByDisciplineStats } from "../../utils/boxScoreUtils"
-import PlayerBoxScoreSmallCard from "../player/PlayerSmallCard"
 import { useState } from "react"
+import { IBoxScoreItem } from "../../../types/boxScore";
+import { IFixture } from "../../../types/games";
+import { rankByDisciplineStats } from "../../../utils/boxScoreUtils";
+import PlayerBoxScoreSmallCard from "../../player/PlayerSmallCard";
+import TitledCard from "../../shared/TitledCard";
 
 type Props = {
   fixture: IFixture,

@@ -1,10 +1,10 @@
 import { Shield } from "lucide-react"
-import { IFixture, ITeamAction, ITeamActionName } from "../../types/games"
-import TitledCard from "../shared/TitledCard"
-import TeamLogo from "../team/TeamLogo"
 import { twMerge } from "tailwind-merge"
-import { TeamActionsParser, TeamHeadtoHeadItem } from "../../utils/teamActionsUtils"
-import { mapSportsActionToAthstatName } from "../../utils/sportsActionUtils"
+import { IFixture, ITeamAction, ITeamActionName } from "../../../types/games"
+import { mapSportsActionToAthstatName } from "../../../utils/sportsActionUtils"
+import { TeamActionsParser, TeamHeadtoHeadItem } from "../../../utils/teamActionsUtils"
+import TitledCard from "../../shared/TitledCard"
+import TeamLogo from "../../team/TeamLogo"
 
 type Props = {
     fixture: IFixture,

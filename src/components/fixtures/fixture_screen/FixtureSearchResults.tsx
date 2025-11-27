@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { GameSportAction, IBoxScoreItem } from "../../types/boxScore"
-import { IFixture } from "../../types/games";
-import { athleteSearchPredicate, formatPosition } from "../../utils/athleteUtils";
-import PlayerMugshot from "../shared/PlayerMugshot";
 import useSWR from "swr";
-import { djangoAthleteService } from "../../services/athletes/djangoAthletesService";
+import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
+import { IFixture } from "../../../types/games";
+import { athleteNameSearchPredicate, formatPosition } from "../../../utils/athleteUtils";
+import PlayerMugshot from "../../shared/PlayerMugshot";
+import { GameSportAction } from "../../../types/boxScore";
 
 type Props = {
     search: string,
-    boxScore: IBoxScoreItem[],
+    boxScore: GameSportAction[],
     fixture: IFixture
 }
 
 export default function FixtureSearchResults({ search, boxScore, fixture }: Props) {
 
-    const searchResults = boxScore.filter(bs => athleteSearchPredicate(bs.athlete, search));
+    const searchResults = boxScore.filter(bs => athleteNameSearchPredicate(bs.team_id , search));
 
     return (
         <div className="grid grid-cols-1 gap-3" >
@@ -38,8 +38,8 @@ type ResultItemProps = {
 
 function ResultItem({ bs, fixture }: ResultItemProps) {
 
-    const teamName = bs.team_id === fixture.team.athstat_id ?
-        fixture.team.athstat_name : fixture.opposition_team.athstat_name;
+    const teamName = bs.team_id === fixture?.team?.athstat_id ?
+        fixture.team.athstat_name : fixture?.opposition_team?.athstat_name;
 
     const [show, setShow] = useState(false);
     const toggle = () => setShow(!show);

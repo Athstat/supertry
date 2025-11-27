@@ -1,8 +1,8 @@
 import { twMerge } from "tailwind-merge";
-import { IProAthlete } from "../../types/athletes";
-import { IRosterItem } from "../../types/games";
-import { formatPosition } from "../../utils/athleteUtils";
-import PlayerMugshot from "../shared/PlayerMugshot";
+import { IProAthlete } from "../../../types/athletes";
+import { IRosterItem } from "../../../types/games";
+import { formatPosition } from "../../../utils/athleteUtils";
+import PlayerMugshot from "../../shared/PlayerMugshot";
 
 type RosterListProps = {
     roster: IRosterItem[],
