@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { IFixture } from '../types/games';
 import { fixtureSummary } from '../utils/fixtureUtils';
-import FixtureScreenOverview from '../components/fixtures/fixture_screen/FixtureScreenOverview';
+import FixtureOverviewTab from '../components/fixtures/fixture_screen/FixtureOverviewTab';
 import useSWR from 'swr';
 import { gamesService } from '../services/gamesService';
 import { LoadingState } from '../components/ui/LoadingState';
@@ -111,11 +111,11 @@ export default function FixtureScreen() {
 
             </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-4 p-2" tabKey="kick-off">
-              <FixtureScreenOverview fixture={fixture} />
+            <TabViewPage className="flex flex-col gap-4" tabKey="kick-off">
+              <FixtureOverviewTab fixture={fixture} />
             </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-5 p-2" tabKey="team-stats">
+            <TabViewPage className="flex flex-col gap-5" tabKey="team-stats">
               {teamActions && gameKickedOff && (
                 <FixtureHeadToHeadStats teamActions={teamActions} fixture={fixture} />
               )}
