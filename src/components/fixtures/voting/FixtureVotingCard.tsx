@@ -37,8 +37,10 @@ export function FixtureVotingCard({ fixture }: Props) {
 
     if (isLoading) {
         return (
-            <RoundedCard className="w-full h-[100px] border-none animate-pulse" >
-                
+            <RoundedCard className={twMerge(
+                "w-full h-[100px] border-none animate-pulse"
+            )} >
+
             </RoundedCard>
         )
     }
@@ -49,7 +51,7 @@ export function FixtureVotingCard({ fixture }: Props) {
 
     return (
         <RoundedCard className={twMerge(
-            'p-3 flex flex-col justify-center h-[100px] border-none gap-2',
+            'p-3 flex flex-col justify-center max-h-[100px] border-none gap-2',
             isVoting && "opacity-30"
         )} >
 
@@ -161,16 +163,16 @@ function VotingResults({ homePerc, awayPerc, userVote }: VotingResultsProp) {
             <div className="flex flex-row items-center gap-1" >
                 <div
                     style={{ width: `${homePerc}%` }}
-                    className="bg-blue-500 rounded-md flex-row flex px-2 items-center justify-center"
+                    className="bg-blue-500 rounded-md flex-row flex px-2 h-[26px] items-center justify-center"
                 >
-                    <p>{homePerc}%</p>
+                    <p className="text-sm" >{homePerc}%</p>
                 </div>
 
                 <div
                     style={{ width: `${awayPerc}%` }}
-                    className="bg-red-500 rounded-md flex-row flex px-2 items-center justify-center"
+                    className="bg-red-500 rounded-md flex-row flex px-2 h-[26px] items-center justify-center"
                 >
-                    <p>{awayPerc}%</p>
+                    <p className="text-sm" >{awayPerc}%</p>
                 </div>
             </div>
 
