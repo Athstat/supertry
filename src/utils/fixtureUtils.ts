@@ -14,11 +14,12 @@ export function fixtureSummary(fixture: IFixture) {
 
   const homeTeamWon = matchFinal ? team_score > opposition_score : false;
   const awayTeamWon = matchFinal ? team_score < opposition_score : false;
+  const isDraw = matchFinal ? (team_score ?? 0) === (opposition_score ?? 0) : false;
 
   const gameKickedOff =
     kickoff_time !== undefined && new Date(kickoff_time) < new Date() && game_status !== 'fixture';
 
-  return { gameKickedOff, homeTeamWon, awayTeamWon, game_status, hasNotStarted, matchFinal };
+  return { gameKickedOff, homeTeamWon, awayTeamWon, game_status, hasNotStarted, matchFinal, isDraw };
 }
 
 export function summerizeGameStatus(fixture: IFixture) {
