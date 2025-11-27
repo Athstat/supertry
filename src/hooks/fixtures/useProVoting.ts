@@ -1,0 +1,67 @@
+import { useState } from "react";
+import { mutate } from "swr";
+import { gamesService } from "../../services/gamesService";
+import { IFixture } from "../../types/games";
+import { fixtureSummary, isProGameTBD } from "../../utils/fixtureUtils";
+import { useGameVotes } from "../useGameVotes";
+
+export function useProVoting(fixture: IFixture) {
+    const { team_score, game_status, opposition_score } = fixture;
+
+    const matchFinal = game_status === 'completed' && team_score !== undefined && opposition_score !== undefined;
+
+    const homeTeamWon = matchFinal ? team_score > opposition_score : false;
+    const awayTeamWon = matchFinal ? team_score < opposition_score : false;
+
+    const { gameKickedOff } = fixtureSummary(fixture);
+
+    const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture, true);
+    const [isVoting, setIsVoting] = useState(false);
+
+    // Calculate voting percentages
+    const totalVotes = homeVotes.length + awayVotes.length;
+    const homePerc = totalVotes === 0 ? 0 : Math.round((homeVotes.length / totalVotes) * 100);
+    const awayPerc = totalVotes === 0 ? 0 : Math.round((awayVotes.length / totalVotes) * 100);
+
+    const votedHomeTeam = userVote?.vote_for === 'home_team';
+    const votedAwayTeam = userVote?.vote_for === 'away_team';
+    const hasUserVoted = votedHomeTeam || votedAwayTeam;
+
+    const handleVote = async (voteFor: 'home_team' | 'away_team') => {
+        if (gameKickedOff) return;
+
+        setIsVoting(true);
+
+        try {
+            if (!userVote) {
+                await gamesService.postGameVote(fixture.game_id, voteFor);
+            } else {
+                await gamesService.putGameVote(fixture.game_id, voteFor);
+            }
+
+            // Refresh the votes data
+            await mutate(`game-votes-${fixture.game_id}`);
+        } catch (error) {
+            console.error('Error voting:', error);
+        } finally {
+            setIsVoting(false);
+        }
+    };
+
+    const isTbdGame = isProGameTBD(fixture);
+
+    return {
+        isTbdGame,
+        handleVote,
+        homeVotes,
+        awayPerc,
+        awayTeamWon,
+        homeTeamWon,
+        homePerc,
+        isVoting,
+        hasUserVoted,
+        isLoading,
+        awayVotes,
+        userVote
+    }
+}
