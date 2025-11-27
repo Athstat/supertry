@@ -53,7 +53,7 @@ export function FixtureVotingCard({ fixture }: Props) {
 
     return (
         <RoundedCard className={twMerge(
-            'p-3 flex flex-col justify-center max-h-[100px] border-none gap-2',
+            'p-4 flex flex-col justify-center max-h-[100px] border-none gap-4',
             isVoting && "opacity-30"
         )} >
 
