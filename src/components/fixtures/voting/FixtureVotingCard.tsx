@@ -6,6 +6,7 @@ import SecondaryText from "../../shared/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { useProVoting } from "../../../hooks/fixtures/useProVoting";
 import { Activity } from "react";
+import { fixtureSummary } from "../../../utils/fixtureUtils";
 
 type Props = {
     fixture: IFixture;
@@ -16,11 +17,14 @@ type Props = {
 export function FixtureVotingCard({ fixture }: Props) {
 
     const { team, opposition_team } = fixture;
+
     const {
         isLoading, homeVotes, awayVotes,
-        isVoting, handleVote, hasUserVoted,
+        isVoting, handleVote,
         homePerc, awayPerc, userVote
     } = useProVoting(fixture);
+
+    const { gameKickedOff } = fixtureSummary(fixture);
 
     const homeVotesCount = homeVotes.length;
     const awayVotesCount = awayVotes.length;
@@ -34,9 +38,13 @@ export function FixtureVotingCard({ fixture }: Props) {
     if (isLoading) {
         return (
             <RoundedCard className="w-full h-[100px] border-none animate-pulse" >
-
+                
             </RoundedCard>
         )
+    }
+
+    if (totalVotes === 0 && gameKickedOff) {
+        return null;
     }
 
     return (
@@ -47,7 +55,8 @@ export function FixtureVotingCard({ fixture }: Props) {
 
             <div className='flex flex-row text-sm items-center justify-between' >
                 <div>
-                    <p className="font-semibold" >Who you got winning?</p>
+                    {!gameKickedOff && <p className="font-semibold" >Who you got winning?</p>}
+                    {gameKickedOff && <p className="font-semibold" >Fan Predictions</p>}
                 </div>
 
                 <div>
@@ -55,7 +64,7 @@ export function FixtureVotingCard({ fixture }: Props) {
                 </div>
             </div>
 
-            <Activity mode={hasUserVoted ? "hidden" : "visible"} >
+            <Activity mode={gameKickedOff ? "hidden" : "visible"} >
 
                 <div className='flex flex-row items-center gap-2' >
                     <VotingOption
@@ -63,6 +72,11 @@ export function FixtureVotingCard({ fixture }: Props) {
                         team={team}
                         className=""
                         onClick={() => handleVote("home_team")}
+                        isHome
+
+                        userVote={userVote}
+                        homePerc={homePerc}
+                        awayPerc={awayPerc}
                     />
 
                     <VotingOption
@@ -70,12 +84,16 @@ export function FixtureVotingCard({ fixture }: Props) {
                         team={opposition_team}
                         className=""
                         onClick={() => handleVote("away_team")}
+
+                        userVote={userVote}
+                        homePerc={homePerc}
+                        awayPerc={awayPerc}
                     />
                 </div>
 
             </Activity>
 
-            <Activity mode={hasUserVoted ? "visible" : "hidden"} >
+            <Activity mode={gameKickedOff ? "visible" : "hidden"} >
                 <VotingResults
                     homePerc={homePerc}
                     awayPerc={awayPerc}
@@ -92,10 +110,14 @@ type VotingOptionProps = {
     team: IProTeam,
     className?: string,
     onClick?: () => void,
-    isVoting?: boolean
+    isVoting?: boolean,
+    homePerc?: number
+    awayPerc?: number,
+    userVote?: IGameVote,
+    isHome?: boolean
 }
 
-function VotingOption({ team, className, onClick, isVoting }: VotingOptionProps) {
+function VotingOption({ team, className, onClick, isVoting, userVote, awayPerc, homePerc, isHome }: VotingOptionProps) {
 
     const handleOnClick = () => {
         if (onClick && !isVoting) {
@@ -103,18 +125,25 @@ function VotingOption({ team, className, onClick, isVoting }: VotingOptionProps)
         }
     }
 
+    const hasUserVoted = Boolean(userVote);
+    const isVoteCurrent = hasUserVoted && ( (userVote?.vote_for === "home_team" && isHome) || (userVote?.vote_for === "away_team" && !isHome))
+
+    const votePer = isHome ? homePerc : awayPerc;
+
     return (
         <button
+
             className={twMerge(
                 "flex flex-row items-center border hover:dark:bg-slate-800 dark:border-slate-600 rounded-xl gap-2 flex-1 justify-center p-2",
                 className,
-                isVoting && "animate-pulse opacity-35"
+                isVoting && "animate-pulse opacity-35",
+                isVoteCurrent && "bg-blue-500 dark:bg-blue-500 hover:dark:bg-blue-500 dark:border-blue-400"
             )}
 
             onClick={handleOnClick}
         >
             <TeamLogo url={team.image_url} className="w-5 h-5" />
-            <p className="text-sm" >{team.athstat_name}</p>
+            <p className="text-sm" >{hasUserVoted ? `${votePer}%` : team.athstat_name}</p>
         </button>
     )
 }
