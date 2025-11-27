@@ -10,10 +10,10 @@ import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
-import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import { CaptainsArmBand } from "../player/CaptainsArmBand";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;
