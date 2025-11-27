@@ -1,15 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PageView from "./PageView";
 import { CloudRain } from "lucide-react";
 
 /** Renders Not Found Screen */
 export default function NotFoundScreen() {
-
-    const navigate = useNavigate();
-
-    const goToDashboard = () => {
-        navigate("/dashboard");
-    }
 
     return (
         <PageView className="w-full h-[85vh] flex flex-col gap-6 items-center justify-center" >
@@ -24,7 +18,7 @@ export default function NotFoundScreen() {
             </div>
 
             <div>
-                <button onClick={goToDashboard} className="dark:text-blue-400 underline text-blue-500" >Go to Dashboard</button>
+                <Link  className="dark:text-blue-400 underline text-blue-500" to={"/dashboard"} >Go to Dashboard</Link>
             </div>
         </PageView>
     )

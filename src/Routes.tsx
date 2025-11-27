@@ -403,9 +403,11 @@ const AppRoutes = () => {
         />
 
         <Route path='*' element={(
-          <Layout>
-            <NotFoundScreen />
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <NotFoundScreen />
+            </Layout>
+          </ProtectedRoute>
         )} />
       </Routes>
     </>
