@@ -160,5 +160,9 @@ export const swrFetchKeys = {
 
   getNotificationProfileByUserId: (userId: string) => {
     return `/notifications/profiles/${userId}`;
+  },
+
+  getPastMatchups: (gameId: string) => {
+    return `/games/${gameId}/past-matchups`;
   }
 };

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import GameHighlightsCard from "../../video/GameHighlightsCard"
 import RoundedCard from "../../shared/RoundedCard"
 import { FixtureVotingCard } from "../voting/FixtureVotingCard"
+import PastMatchupsCard from "./PastMatchupsCard"
 
 type Props = {
     fixture: IFixture
@@ -61,6 +62,10 @@ export default function FixtureOverviewTab({ fixture }: Props) {
             <GameHighlightsCard link={fixture.highlights_link} />
 
             <FixtureVotingCard fixture={fixture} />
+            
+            <PastMatchupsCard 
+                fixture={fixture}
+            />
 
         </div>
     )

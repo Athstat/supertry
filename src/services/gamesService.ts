@@ -23,6 +23,7 @@ export const gamesService = {
   getGamesByCompetitionId: async (competitionId: string): Promise<IFixture[]> => {
     //const uri = getUri(`/api/v1/games/leagues/${competitionId}`); //no such endpoint
     const uri = getUri(`/api/v1/games/`);
+    logger.error(competitionId);
 
     try {
       const res = await fetch(uri, {
@@ -63,7 +64,7 @@ export const gamesService = {
         return (await res.json()) as IFixture;
       }
 
-      
+
     } catch (err) {
       console.log('Error fetching games', err);
       return undefined;
@@ -186,4 +187,22 @@ export const gamesService = {
       return [];
     }
   },
+
+  getFixturePastMatchUps: async (gameId: string) : Promise<IFixture[] | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/games/${gameId}/past-matchups`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as IFixture[];
+      }
+
+    } catch (err) {
+      logger.error("Error fetching past matchups ", err);
+    }
+
+    return [];
+  }
 };
