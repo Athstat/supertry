@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
 
             <div className="flex flex-col items-center justify-center" >
                 <h1 className="font-bold text-5xl" >404</h1>
-                <h1>Opps! Page was not found</h1>
+                <h1>Oops! Page was not found</h1>
             </div>
 
             <div>
