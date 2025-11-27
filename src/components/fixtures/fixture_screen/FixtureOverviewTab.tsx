@@ -23,9 +23,9 @@ export default function FixtureOverviewTab({ fixture }: Props) {
 
     return (
 
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-6" >
             <RoundedCard
-                className="flex flex-col gap-2 p-3 text-sm"
+                className="flex border-none flex-col gap-2 p-3 text-sm"
             >
 
                 {/* <div>
@@ -53,9 +53,6 @@ export default function FixtureOverviewTab({ fixture }: Props) {
                     <Info className="w-5 h-5" />
                     <p>{fixture.extra_info}</p>
                 </div>}
-
-
-
 
             </RoundedCard>
 
