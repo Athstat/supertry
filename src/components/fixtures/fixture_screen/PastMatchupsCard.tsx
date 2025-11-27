@@ -114,7 +114,7 @@ function MatchupItem({ fixture, className }: MatchupItemProps) {
       <div
         className={twMerge(
           'cursor-pointer rounded-xl flex flex-col',
-          'hover:underline',
+          'hover:bg-slate-100 hover:dark:bg-slate-800 p-2',
           className
         )}
       >
