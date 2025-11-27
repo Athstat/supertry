@@ -1,15 +1,16 @@
 import { format } from "date-fns";
-import { useSticky } from "../../hooks/useSticky";
-import { IFixture } from "../../types/games";
-import { fixtureSummary } from "../../utils/fixtureUtils";
-import { Sticky } from "../shared/Sticky";
-import TeamLogo from "../team/TeamLogo";
+import { useSticky } from "../../../hooks/useSticky";
+import { IFixture } from "../../../types/games";
+import { fixtureSummary } from "../../../utils/fixtureUtils";
+import { Sticky } from "../../shared/Sticky";
+import TeamLogo from "../../team/TeamLogo";
 
 type Props = {
     fixture: IFixture
 }
 
-export function FixtureScreenHeader({ fixture }: Props) {
+/** Renders a sticky header for the fixture screen */
+export function FixtureStickyHeader({ fixture }: Props) {
     const { isSticky, sentinelRef } = useSticky<HTMLDivElement>();
 
     const {gameKickedOff, game_status} = fixtureSummary(fixture);

@@ -1,25 +1,24 @@
 import { useParams } from 'react-router-dom';
 import { IFixture } from '../types/games';
 import { fixtureSummary } from '../utils/fixtureUtils';
-import FixtureScreenOverview from '../components/fixtures/FixtureScreenOverview';
+import FixtureScreenOverview from '../components/fixtures/fixture_screen/FixtureScreenOverview';
 import useSWR from 'swr';
 import { gamesService } from '../services/gamesService';
 import { LoadingState } from '../components/ui/LoadingState';
-import FixtureBoxscoreTab from '../components/fixtures/FixtureBoxscoreTab';
 import { boxScoreService } from '../services/boxScoreService';
-import { FixtureScreenHeader } from '../components/fixtures/FixtureScreenHeader';
 import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
-import FixtureHeadToHeadStats from '../components/fixtures/FixtureHeadToHeadStats';
 import PageView from './PageView';
-import FixtureRosters from '../components/fixtures/FixtureRosters';
 import FixtureChat from '../components/fixtures/FixtureChat';
 import GameHighlightsCard from '../components/video/GameHighlightsCard';
 import { ProMotmVotingBox } from '../components/pro/motm';
-import ProFixtureVotingBox from '../components/fixtures/voting/ProFixtureVotingBox';
 import { ErrorState } from '../components/ui/ErrorState';
-import FixtureHero from '../components/fixtures/FixtureHero';
 import { Activity } from '../components/shared/Activity';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
+import FixtureBoxscoreTab from '../components/fixtures/fixture_screen/FixtureBoxscoreTab';
+import FixtureHeadToHeadStats from '../components/fixtures/fixture_screen/FixtureHeadToHeadStats';
+import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
+import FixtureRosters from '../components/fixtures/fixture_screen/FixtureRosters';
+import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureScreenHeader';
 
 export default function FixtureScreen() {
 
@@ -99,7 +98,7 @@ export default function FixtureScreen() {
       {!loadingSportsActions && (
         <PageView className="w-full"  >
           <FixtureHero fixture={fixture} />
-          <FixtureScreenHeader fixture={fixture} />
+          <FixtureStickyHeader fixture={fixture} />
 
           <PilledTabView pillTabRowClassName={""} className='px-4' tabHeaderItems={tabItems}>
 
@@ -114,14 +113,6 @@ export default function FixtureScreen() {
 
             <TabViewPage className="flex flex-col gap-4 p-2" tabKey="kick-off">
               <FixtureScreenOverview fixture={fixture} />
-              <GameHighlightsCard link={fixture.highlights_link} />
-              <div className="flex flex-col">
-                <p className="font-bold">Predictions</p>
-                <ProFixtureVotingBox
-                  className="border border-slate-300 px-4 py-6 rounded-xl bg-white dark:border-slate-700 dark:bg-slate-800/40"
-                  fixture={fixture}
-                />
-              </div>
             </TabViewPage>
 
             <TabViewPage className="flex flex-col gap-5 p-2" tabKey="team-stats">
