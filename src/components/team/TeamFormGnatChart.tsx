@@ -5,6 +5,7 @@ import { fixtureSummary } from "../../utils/fixtureUtils"
 import SecondaryText from "../shared/SecondaryText"
 import { Activity, useState } from "react"
 import { FixtureCardModal } from "../fixtures/FixtureCard"
+import TeamLogo from "./TeamLogo"
 
 type Props = {
     team: IProTeam,
@@ -26,7 +27,11 @@ export default function TeamFormGnatChart({ team, fixtures }: Props) {
     return (
         <div className="flex h-[40px] flex-row items-center gap-2" >
 
-            <div className="h-[40x] flex items-center flex-row" >
+            <div className="h-[40x] flex items-center flex-row gap-2" >
+                <TeamLogo 
+                    url={team.image_url}
+                    className="w-5 h-5"
+                />
                 <SecondaryText className="truncate w-[130px]" >{team.athstat_name}</SecondaryText>
             </div>
 

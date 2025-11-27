@@ -50,7 +50,7 @@ export default function PastMatchupsCard({ fixture }: Props) {
 
   return (
     <RoundedCard className={twMerge(
-      "p-3 px-4 flex border-none flex-col gap-4",
+      "p-3 px-4 flex dark:border-none flex-col gap-4",
       
     )} >
 

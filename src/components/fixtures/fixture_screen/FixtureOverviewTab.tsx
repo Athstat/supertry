@@ -26,7 +26,7 @@ export default function FixtureOverviewTab({ fixture }: Props) {
 
         <div className="flex flex-col gap-6" >
             <RoundedCard
-                className="flex border-none flex-col gap-2 p-3 text-sm"
+                className="flex dark:border-none flex-col gap-2 p-4 text-sm"
             >
 
                 {/* <div>

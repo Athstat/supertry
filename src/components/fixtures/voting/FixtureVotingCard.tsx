@@ -40,7 +40,7 @@ export function FixtureVotingCard({ fixture }: Props) {
     if (isLoading) {
         return (
             <RoundedCard className={twMerge(
-                "w-full h-[100px] border-none animate-pulse"
+                "w-full h-[140px] border-none animate-pulse"
             )} >
 
             </RoundedCard>
@@ -53,7 +53,7 @@ export function FixtureVotingCard({ fixture }: Props) {
 
     return (
         <RoundedCard className={twMerge(
-            'p-4 flex flex-col justify-center max-h-[100px] border-none gap-4',
+            'p-4 flex flex-col justify-center max-h-[140px] dark:border-none gap-4',
             isVoting && "opacity-30"
         )} >
 
@@ -142,7 +142,7 @@ function VotingOption({ team, className, onClick, isVoting, userVote, awayPerc, 
                 "flex flex-row items-center border hover:dark:bg-slate-800 dark:border-slate-600 rounded-xl gap-2 flex-1 justify-center p-2",
                 className,
                 isVoting && "animate-pulse opacity-35",
-                isVoteCurrent && "bg-blue-500 dark:bg-blue-500 hover:dark:bg-blue-500 dark:border-blue-400"
+                isVoteCurrent && "bg-blue-500 text-white dark:bg-blue-500 hover:dark:bg-blue-500 dark:border-blue-400 border-blue-500"
             )}
 
             onClick={handleOnClick}
