@@ -109,11 +109,11 @@ const AppRoutes = () => {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Layout>
-                <DashboardDataProvider>
+              <DashboardDataProvider>
+                <Layout>
                   <DashboardScreen />
-                </DashboardDataProvider>
-              </Layout>
+                </Layout>
+              </DashboardDataProvider>
             </ProtectedRoute>
           }
         />
@@ -142,9 +142,11 @@ const AppRoutes = () => {
           path="/league/:leagueId"
           element={
             <ProtectedRoute>
-              <Layout>
-                <FantasyLeagueScreen />
-              </Layout>
+              <DashboardDataProvider>
+                <Layout>
+                  <FantasyLeagueScreen />
+                </Layout>
+              </DashboardDataProvider>
             </ProtectedRoute>
           }
         />
@@ -348,7 +350,6 @@ const AppRoutes = () => {
           }
         />
 
-
         <Route
           path="/league/:leagueId/member/:userId"
           element={
@@ -402,9 +403,11 @@ const AppRoutes = () => {
         />
 
         <Route path='*' element={(
-          <Layout>
-            <NotFoundScreen />
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <NotFoundScreen />
+            </Layout>
+          </ProtectedRoute>
         )} />
       </Routes>
     </>

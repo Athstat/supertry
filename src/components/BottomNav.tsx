@@ -3,6 +3,8 @@ import { Home, Trophy, Users, Calendar, Sparkles, ArrowDownUp } from 'lucide-rea
 import { useState, useRef, useEffect } from 'react';
 import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 import { Activity } from './shared/Activity';
+import { House } from 'lucide-react';
+import { School } from 'lucide-react';
 
 export function BottomNav() {
   const { bottomNavViewMode } = useNavigationBars();
@@ -66,10 +68,11 @@ export function BottomNav() {
   ];
 
   const navItems = [
-    { id: 'dashboard', path: '/dashboard', icon: Home, label: 'Dashboard' },
-    { id: 'leagues', path: '/leagues', icon: Trophy, label: 'Leagues' },
-    { id: 'fixtures', path: '/fixtures', icon: Calendar, label: 'Fixtures' },
+    { id: 'dashboard', path: '/dashboard', icon: Home, label: 'Home' },
     { id: 'players', path: '/players', icon: Users, label: 'Players' },
+    { id: 'leagues', path: '/leagues', icon: Trophy, label: 'Fantasy' },
+    { id: 'fixtures', path: '/fixtures', icon: Calendar, label: 'Fixtures' },
+    { id: 'schools', path: '/fixtures?sc=SBR', icon: School, label: 'Schools' },
   ];
 
   return (
@@ -107,7 +110,7 @@ export function BottomNav() {
             );
           })}
 
-          {/* More Menu */}
+          {/* More Menu
           <div ref={menuRef} className="relative w-full h-full">
             <button
               onClick={handleMoreClick}
@@ -141,7 +144,7 @@ export function BottomNav() {
             </button>
 
             {/* Popup Menu */}
-            {showMoreMenu && (
+          {/* {showMoreMenu && (
               <div className="absolute bottom-full right-0 mb-2 w-56 bg-white dark:bg-dark-850 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden z-[9999]">
                 {moreMenuItems.map((item, index) => {
                   const Icon = item.icon;
@@ -158,7 +161,7 @@ export function BottomNav() {
                 })}
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </Activity>
