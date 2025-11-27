@@ -1,13 +1,13 @@
 import { useSetAtom } from 'jotai'
-import { ISeason } from '../../types/games'
 import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms } from '../../state/season.atoms'
 import { ReactNode, useEffect } from 'react'
 import useSWR from 'swr'
 import { seasonService } from '../../services/seasonsService'
 import { LoadingState } from '../ui/LoadingState'
+import { IProSeason } from '../../types/season'
 
 type Props = {
-  season: ISeason,
+  season: IProSeason,
   children?: ReactNode
 }
 
@@ -33,7 +33,7 @@ export default function SeasonDataProvider({ season, children }: Props) {
     if (teams) setSeasonTeams(teams);
     if (fixtures) setSeasonFixtures(fixtures);
     if (athletes) setSeasonAthletes(athletes);
-  }, [season, teams, athletes, fixtures]);
+  }, [season, teams, athletes, fixtures, setSeason, setSeasonTeams, setSeasonFixtures, setSeasonAthletes]);
 
   if (isLoading) return <LoadingState />
 

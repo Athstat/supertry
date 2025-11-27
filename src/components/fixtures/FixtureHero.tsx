@@ -1,7 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { IFixture } from '../../types/games';
 import TeamLogo from '../team/TeamLogo';
-import { useNavigate } from 'react-router-dom';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
@@ -9,18 +8,19 @@ import { GoTriangleLeft } from 'react-icons/go';
 import SecondaryText from '../shared/SecondaryText';
 import TeamSeasonRecordText from '../teams/TeamSeasonRecordText';
 import { IProTeam } from '../../types/team';
+import { useNavigateBack } from '../../hooks/web/useNavigateBack';
 
 type Props = {
   fixture: IFixture;
 };
 
 export default function FixtureHero({ fixture }: Props) {
-  const navigate = useNavigate();
+  const {hardPop} = useNavigateBack();
   const { team, opposition_team } = fixture;
   const { gameKickedOff } = fixtureSummary(fixture);
 
   const handleBack = () => {
-    navigate('/fixtures');
+    hardPop('/fixtures');
   }
 
   return (

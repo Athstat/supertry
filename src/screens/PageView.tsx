@@ -1,9 +1,9 @@
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
 import BlueGradientCard from "../components/shared/BlueGradientCard"
-import { useNavigate } from "react-router-dom"
 import { ChevronLeft } from "lucide-react"
 import TransparentStatCard from "../components/shared/TransparentStatCard"
+import { useNavigateBack } from "../hooks/web/useNavigateBack"
 
 type Props = {
     children?: ReactNode,
@@ -34,10 +34,10 @@ type TopicPageViewProps = Props & {
 
 export function TopicPageView({ children, title, statsCards, className }: TopicPageViewProps) {
 
-    const navigate = useNavigate();
+    const {hardPop} = useNavigateBack();
 
     const handleGoBack = () => {
-        navigate(-1)
+        hardPop("/dashboard");
     }
 
     return (
