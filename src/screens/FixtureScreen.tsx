@@ -19,6 +19,7 @@ import FixtureHeadToHeadStats from '../components/fixtures/fixture_screen/Fixtur
 import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
 import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureStickyHeader';
 import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRostersTab';
+import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
 
 export default function FixtureScreen() {
 
@@ -33,6 +34,8 @@ export default function FixtureScreen() {
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
     boxScoreService.getSportActionsByGameId(fixtureId ?? '')
   );
+
+  useHideBottomNavBar();
 
   const teamActionsKey = fixtureId ? `fixtures/${fixtureId}/team-actions` : null;
   const { data: teamActions, isLoading: loadingTeamActions } = useSWR(teamActionsKey, () =>
@@ -100,7 +103,7 @@ export default function FixtureScreen() {
           <FixtureHero fixture={fixture} />
           <FixtureStickyHeader fixture={fixture} />
 
-          <PilledTabView pillTabRowClassName={""} className='px-4' tabHeaderItems={tabItems}>
+          <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
               <GameHighlightsCard link={fixture.highlights_link} />
@@ -111,7 +114,7 @@ export default function FixtureScreen() {
 
             </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-4" tabKey="kick-off">
+            <TabViewPage className="flex flex-col gap-4 px-4" tabKey="kick-off">
               <FixtureOverviewTab fixture={fixture} />
             </TabViewPage>
 
