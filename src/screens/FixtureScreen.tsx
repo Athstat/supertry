@@ -17,8 +17,8 @@ import PilledTabView from '../components/shared/tabs/PilledTabView';
 import FixtureBoxscoreTab from '../components/fixtures/fixture_screen/FixtureBoxscoreTab';
 import FixtureHeadToHeadStats from '../components/fixtures/fixture_screen/FixtureHeadToHeadStats';
 import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
-import FixtureRosters from '../components/fixtures/fixture_screen/FixtureRosters';
 import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureStickyHeader';
+import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRostersTab';
 
 export default function FixtureScreen() {
 
@@ -125,7 +125,9 @@ export default function FixtureScreen() {
               <ProMotmVotingBox fixture={fixture} />
             </TabViewPage>
 
-            <TabViewPage  tabKey="rosters">{<FixtureRosters fixture={fixture} />}</TabViewPage>
+            <TabViewPage className='p-0 px-0'  tabKey="rosters">
+              <FixtureRostersTab fixture={fixture} />
+            </TabViewPage>
 
             <TabViewPage tabKey="chat">
               <FixtureChat fixture={fixture} />

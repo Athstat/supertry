@@ -6,10 +6,11 @@ import TeamLogo from "../../team/TeamLogo"
 import { useBoxscoreFilter } from "../../../hooks/fixtures/useBoxscoreFilter"
 
 type Props = {
-  fixture: IFixture
+  fixture: IFixture,
+  className?: string
 }
 
-export default function FixtureTeamSelector({ fixture }: Props) {
+export default function FixtureTeamSelector({ fixture, className }: Props) {
 
   const { selectedTeam: value, setSelectedTeamId } = useBoxscoreFilter(fixture);
 
@@ -22,7 +23,10 @@ export default function FixtureTeamSelector({ fixture }: Props) {
   }
 
   return (
-    <div className="bg-white flex border border-slate-300 dark:border-slate-700 flex-row items-center gap-2 dark:bg-slate-800/40 shadow-lg rounded-xl overflow-clip" >
+    <div className={twMerge(
+      "bg-white flex border border-slate-300 dark:border-slate-700 flex-row items-center gap-2 dark:bg-slate-800/40 shadow-lg rounded-xl overflow-clip",
+      className
+    )} >
 
       { fixture.team && value && <SingleTeamButton
         team={fixture.team}
