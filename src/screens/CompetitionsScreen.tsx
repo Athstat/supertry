@@ -6,15 +6,19 @@ import { LoadingState } from '../components/ui/LoadingState';
 import SeasonCard from '../components/seasons/SeasonCard';
 import NoContentCard from '../components/shared/NoContentMessage';
 import { swrFetchKeys } from '../utils/swrKeys';
+import { useMemo } from 'react';
 
 /** Renders Competition Screen */
 export default function CompetitionsScreen() {
   const key = swrFetchKeys.getAllSuppportedSeasons();
-  let { data: seasons, isLoading } = useSWR(key, () => seasonService.getAllSupportedSeasons());
+  const { data, isLoading } = useSWR(key, () => seasonService.getAllSupportedSeasons());
+
+  const seasons = useMemo(() => {
+    return data ?? [];
+  }, [data]);
 
   if (isLoading) return <LoadingState />;
 
-  seasons = seasons ?? [];
 
   // Order competitions to show upcoming first, then past
   const now = new Date();
