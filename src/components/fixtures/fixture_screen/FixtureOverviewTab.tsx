@@ -57,12 +57,9 @@ export default function FixtureOverviewTab({ fixture }: Props) {
 
             </RoundedCard>
 
-
-
             <GameHighlightsCard link={fixture.highlights_link} />
 
             <FixtureVotingCard fixture={fixture} />
-
 
             <PreFixtureForm
                 fixture={fixture}

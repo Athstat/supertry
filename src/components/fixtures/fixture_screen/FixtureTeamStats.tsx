@@ -20,7 +20,7 @@ export default function FixtureTeamStats({ fixture }: Props) {
         gamesService.getGameTeamActions(fixtureId ?? '')
     );
 
-    const {gameKickedOff} = fixtureSummary(fixture);
+    const { gameKickedOff } = fixtureSummary(fixture);
 
     const formatedTeamActions = (teamActions ?? []).map((t) => {
 
@@ -44,13 +44,13 @@ export default function FixtureTeamStats({ fixture }: Props) {
     return (
         <RoundedCard className="p-4 dark:border-none" >
 
-            <div className="flex flex-col gap-2" >
+            <div className="flex flex-col gap-4" >
 
                 <div className="flex flex-row gap-1" >
                     <div className="flex flex-1 items-center justify-start" >
                         <TeamLogo className="w-6 h-6" teamName={fixture?.team?.athstat_name} url={fixture?.team?.image_url} />
                     </div>
-                    <div className="flex flex-[3] items-center justify-center text-center " >
+                    <div className="flex flex-[3] font-semibold items-center justify-center text-center " >
                         <p>Team Stats</p>
                     </div>
                     <div className="flex flex-1 items-center justify-end" >
@@ -90,30 +90,51 @@ type HeadToHeadProps = {
 }
 
 function HeadToHeadItem({ stat }: HeadToHeadProps) {
-    const { homeValue, awayValue, winner, action, hide } = stat;
+    const { homeValue, awayValue, winner, action, hide, homeStrValue, awayStrValue } = stat;
     const homeTeamWonCategory = winner === 'home';
     const awayTeamWonCategory = winner === 'away';
+
+    const total = (homeValue ?? 0) + (awayValue ?? 0);
+    const homePerc = (total > 0 ? ((homeValue ?? 0) / (total)) : 0) * 100;
+    const awayPerc = (total > 0 ? ((awayValue ?? 0) / (total)) : 0) * 100;
 
     if (hide) return;
 
     return (
-        <div className="flex flex-row " >
+        <div className="flex flex-col w-full gap-1" >
 
-            <div className="flex flex-1 items-center justify-start" >
-                <p className={twMerge("h-full rounded-xl w-10 flex flex-col items-center justify-center",
-                    homeTeamWonCategory && "bg-blue-700 text-white"
-                )} >{homeValue ?? '-'}</p>
+            <div className="w-full flex flex-row items-center justify-between" >
+                <div>
+                    <p className="text-sm" >{homeStrValue || homeValue}</p>
+                </div>
+
+                <p className="text-sm font-medium" >{action}</p>
+                <div>
+                    <p className="text-sm" >{awayStrValue || awayValue}</p>
+                </div>
             </div>
 
-            <div className="flex flex-[3] items-center justify-center text-center " >
-                <p className="text-slate-700 font-medium dark:text-slate-400" >{action}</p>
+            <div className="flex flex-row items-center gap-4 justify-between" >
+
+                <div
+                    className="flex-1 flex flex-row items-center justify-end rounded-full bg-slate-700 h-[10px]"
+                >
+                    <div style={{ width: `${homePerc}%` }} className={twMerge(
+                        "h-[10px] rounded-full bg-slate-400/60",
+                        homeTeamWonCategory && "bg-blue-500"
+                    )} />
+                </div>
+
+                <div
+                    className="flex-1 flex flex-row items-center justify-start rounded-full bg-slate-700 h-[10px]"
+                >
+                    <div style={{ width: `${awayPerc}%` }} className={twMerge(
+                        "h-[10px] rounded-full bg-slate-400/60",
+                        awayTeamWonCategory && "bg-blue-500"
+                    )} />
+                </div>
             </div>
 
-            <div className="flex flex-1  items-center justify-end" >
-                <p className={twMerge("h-full rounded-xl w-10 flex flex-col items-center justify-center",
-                    awayTeamWonCategory && "bg-blue-700 text-white"
-                )} >{awayValue ?? '-'}</p>
-            </div>
         </div>
     )
 }

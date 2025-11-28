@@ -50,12 +50,12 @@ export default function FixtureScreen() {
   const fixture = fetchedFixture as IFixture;
 
   const tabItems: TabViewHeaderItem[] = [
-    // {
-    //   label: 'Kick Off',
-    //   tabKey: 'kick-off',
-    //   disabled: false,
-    //   className: ""
-    // },
+    {
+      label: 'Kick Off',
+      tabKey: 'kick-off',
+      disabled: false,
+      className: ""
+    },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
