@@ -19,7 +19,7 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
     const { gameKickedOff } = fixtureSummary(fixture);
     // const [search, setSearch] = useState<string>("");
 
-    const { selectedTeamId, selectedTeam } = useBoxscoreFilter(fixture);
+    const { selectedTeamId, selectedTeam, setSelectedTeamId } = useBoxscoreFilter(fixture);
     const { ref, inView } = useInView({ triggerOnce: true });
 
     useEffect(() => {
@@ -55,9 +55,9 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
     return (
 
-        <div ref={ref} className="flex flex-col w-full gap-4" >
+        <div ref={ref} className="flex flex-col w-full gap-4 px-2" >
 
-            <div className="flex flex-col w-full gap-4" >
+            <div className="flex flex-col w-full items-center justify-center gap-4" >
                 {/* <div className="flex flex-row items-center justify-start gap-2" >
                     <Table2 />
                     <h1 className="font-bold text-lg" >Boxscore</h1>
@@ -65,6 +65,9 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
                 <FixtureTeamSelector
                     fixture={fixture}
+                    value={selectedTeam}
+                    onChange={(t) => setSelectedTeamId(t?.athstat_id)}
+                    className="w-2/3"
                 />
             </div>
 

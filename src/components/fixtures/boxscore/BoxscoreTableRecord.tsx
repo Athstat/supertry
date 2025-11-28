@@ -5,6 +5,7 @@ import { djangoAthleteService } from "../../../services/athletes/djangoAthletesS
 import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../shared/SecondaryText";
 import { BoxscoreListRecordItem } from "../../../types/boxScore";
+import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
 
 type TableRecordProps = {
     record: BoxscoreListRecordItem,
@@ -19,6 +20,8 @@ export function BoxscoreTableRecord({ record, index, className }: TableRecordPro
     const { data: info, isLoading: loadingInfo, } = useSWR(key, () => djangoAthleteService.getAthleteById(athleteId), {
         revalidateOnFocus: false
     });
+
+    const { openPlayerMatchModal } = useFixtureScreen();
 
     const [show, setShow] = useState(true);
 
@@ -47,20 +50,30 @@ export function BoxscoreTableRecord({ record, index, className }: TableRecordPro
 
     const isEvenRow = ((index) % 2) === 0;
 
+    const handleClick = () => {
+        openPlayerMatchModal(info);
+    }
+
     return (
-        <div className={twMerge(
-            'w-full min-w-fit flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 transition-colors',
-            !isEvenRow && "bg-white dark:bg-[#181e26]",
-            isEvenRow && "bg-slate-100 dark:bg-[#1c2534]",
-            className
-        )}>
+        <div
+
+            className={twMerge(
+                'w-full cursor-pointer min-w-fit flex flex-row flex-nowrap items-center justify-start border-b border-slate-100 dark:border-slate-700/30 hover:bg-slate-50 transition-colors',
+                !isEvenRow && "bg-white dark:bg-[#181e26]",
+                isEvenRow && "bg-slate-100 dark:bg-[#1c2534]",
+                className
+            )}
+
+            onClick={handleClick}
+
+        >
             {/* Player Name Column - Sticky */}
             <div className={twMerge(
                 "flex sticky left-0 z-10 w-[180px] min-w-[180px] px-3 py-3 flex-row border-r-2 border-slate-200 dark:border-slate-700/40 items-center gap-2",
                 !isEvenRow && "bg-white dark:bg-[#181e26]",
                 isEvenRow && "bg-slate-100 dark:bg-[#1c2534]",
             )}>
-                <p className="text-sm font-medium truncate">
+                <p className="text-sm hover:underline font-medium truncate">
                     {playerInitial} {info?.athstat_lastname}
                 </p>
             </div>

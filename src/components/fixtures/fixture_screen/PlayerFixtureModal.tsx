@@ -63,7 +63,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
     return (
         <Activity mode={isOpen ? "visible" : "hidden"} >
             <BottomSheetView
-                className="min-h-[80vh] max-h-[80vh] py-2 px-4 flex flex-col gap-2"
+                className="min-h-[80vh] dark:bg-[#161c27] z-20 max-h-[80vh] py-2 px-4 flex flex-col gap-2"
                 hideHandle
             >
 
