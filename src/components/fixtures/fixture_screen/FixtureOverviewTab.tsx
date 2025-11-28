@@ -8,6 +8,7 @@ import RoundedCard from "../../shared/RoundedCard"
 import { FixtureVotingCard } from "../voting/FixtureVotingCard"
 import PastMatchupsCard from "./PastMatchupsCard"
 import PreFixtureForm from "./PreFixtureForm"
+import FixturePotmCard from "./FixturePotmCard"
 
 type Props = {
     fixture: IFixture
@@ -60,6 +61,10 @@ export default function FixtureOverviewTab({ fixture }: Props) {
             <GameHighlightsCard link={fixture.highlights_link} />
 
             <FixtureVotingCard fixture={fixture} />
+            
+            <FixturePotmCard 
+                fixture={fixture}
+            />
 
             <PreFixtureForm
                 fixture={fixture}

@@ -2,6 +2,7 @@ import { IFixture, IFullFixture, IGameVote, IRosterItem, ITeamAction } from '../
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 import { authService } from './authService';
+import { SingleMatchPowerRanking } from '../types/powerRankings';
 
 /** Games Service */
 export const gamesService = {
@@ -204,5 +205,23 @@ export const gamesService = {
     }
 
     return [];
+  },
+
+  /** Fetches fixture player of the match */
+  getFixturePotm: async (fixtureId: string) : Promise<SingleMatchPowerRanking | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/games/${fixtureId}/power-rankings/potm`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as SingleMatchPowerRanking
+      }
+    } catch (err) {
+      logger.error("Error fetching fixture motm ", err);
+    }
+
+    return undefined;
   }
 };

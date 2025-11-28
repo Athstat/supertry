@@ -168,5 +168,9 @@ export const swrFetchKeys = {
 
   getSeasonStandings: (seasonId: string) => {
     return `/seasons/$${seasonId}/standings`;
+  },
+
+  getFixturePotm: (fixtureId: string) => {
+    return `/fixture/${fixtureId}/potm`;
   }
 };
