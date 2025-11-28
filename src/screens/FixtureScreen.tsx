@@ -21,7 +21,7 @@ import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureSt
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
 import { useAtomValue } from 'jotai';
 import { fixtureAtom } from '../state/fixtures/fixture.atoms';
-import { FixtureScreenProvider } from '../providers/fixtures/FixtureProvider';
+import { FixtureScreenProvider } from '../providers/fixtures/FixtureScreenProvider';
 
 export default function FixtureScreen() {
 

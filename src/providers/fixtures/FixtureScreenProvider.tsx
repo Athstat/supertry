@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useEffect } from "react";
 import useSWR from "swr";
 import { gamesService } from "../../services/gamesService";
-import { fixtureAtom } from "../../state/fixtures/fixture.atoms";
+import { fixtureAtom, fixtureSelectedPlayerAtom } from "../../state/fixtures/fixture.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { useSetAtom } from "jotai";
 import { LoadingState } from "../../components/ui/LoadingState";
@@ -14,7 +14,7 @@ type Props = {
 
 /** Provides a fixture to its children */
 export function FixtureScreenProvider({ fixtureId, children, loadingFallback }: Props) {
-    const atoms = [fixtureAtom];
+    const atoms = [fixtureAtom, fixtureSelectedPlayerAtom];
 
     return (
         <ScopeProvider
