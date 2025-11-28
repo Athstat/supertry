@@ -30,7 +30,7 @@ export default function DashboardHero({ season }: Props) {
 
   if (isLoading) {
     return (
-      <RoundedCard className="p-6 animate-pulse">
+      <RoundedCard className="p-6 animate-pulse bg-gray-200 dark:bg-gray-800">
         <div className="h-48"></div>
       </RoundedCard>
     );
