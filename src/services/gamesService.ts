@@ -3,6 +3,7 @@ import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 import { authService } from './authService';
 import { SingleMatchPowerRanking } from '../types/powerRankings';
+import { GameSportAction } from '../types/boxScore';
 
 /** Games Service */
 export const gamesService = {
@@ -243,5 +244,23 @@ export const gamesService = {
     }
 
     return undefined;
+  },
+
+  /** Gets the sports actions for a player for a single game */
+  getAthleteFixtureSportsActions: async (fixtureId: string, athleteId: string) : Promise<GameSportAction[]> => {
+    try {
+      const uri = getUri(`/api/v1/games/${fixtureId}/sport-actions/athletes/${athleteId}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as GameSportAction[]
+      }
+    } catch (err) {
+      logger.error("Error fetching athlete sports actions ", err);
+    }
+
+    return [];
   }
 };

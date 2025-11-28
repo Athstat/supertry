@@ -11,6 +11,7 @@ import { useAthleteMatchPr } from "../../../hooks/athletes/useAthleteMatchPr"
 import { useAtomValue } from "jotai"
 import { fixtureAtom } from "../../../state/fixtures/fixture.atoms"
 import { SmallMatchPrCard } from "../../rankings/MatchPrCard"
+import { useFixtureScreen } from "../../../hooks/fixtures/useFixture"
 
 type Props = {
     fixture: IFixture
@@ -181,13 +182,21 @@ type RosterItemProps = {
 
 function RosterItem({ item }: RosterItemProps) {
 
+    const {openPlayerMatchModal} = useFixtureScreen();
     const fixture = useAtomValue(fixtureAtom);
-    const {pr} = useAthleteMatchPr(item?.athlete.tracking_id, fixture?.game_id)
+    const {pr} = useAthleteMatchPr(item?.athlete.tracking_id, fixture?.game_id);
+
+    const onClick = () => {
+        if (item?.athlete) {
+            openPlayerMatchModal(item?.athlete);
+        }
+    }
 
     return (
         <div
             key={item?.athlete.tracking_id}
             className=""
+            onClick={onClick}
         >
             {item && <div className="flex flex-col items-center justify-center relative" >
 

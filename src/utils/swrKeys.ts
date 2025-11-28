@@ -172,5 +172,9 @@ export const swrFetchKeys = {
 
   getFixturePotm: (fixtureId: string) => {
     return `/fixture/${fixtureId}/potm`;
+  },
+
+  getAthleteFixtureSportsActions: (fixtureId: string, athleteId: string) => {
+    return `/fixtures/${fixtureId}/sports-actions/athletes/${athleteId}`;
   }
 };

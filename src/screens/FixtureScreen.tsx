@@ -19,9 +19,10 @@ import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRost
 import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
 import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureStandingsTab';
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
-import { useAtomValue } from 'jotai';
-import { fixtureAtom } from '../state/fixtures/fixture.atoms';
 import { FixtureScreenProvider } from '../providers/fixtures/FixtureScreenProvider';
+import { useFixtureScreen } from '../hooks/fixtures/useFixture';
+import PlayerFixtureModal from '../components/fixtures/fixture_screen/PlayerFixtureModal';
+import PlayerProfileModal from '../components/player/PlayerProfileModal';
 
 export default function FixtureScreen() {
 
@@ -40,7 +41,7 @@ export default function FixtureScreen() {
 
 function Content() {
 
-  const fixture = useAtomValue(fixtureAtom);
+  const { fixture, showProfileModal, selectedPlayer, showPlayerMatchModal, closePlayerMatchModal, closePlayerProfileModal } = useFixtureScreen();
   const fixtureId = fixture?.game_id;
 
   const sportsActionsKey = fixtureId ? `fixtures/${fixtureId}/sports-actions` : null;
@@ -149,6 +150,23 @@ function Content() {
             </TabViewPage>
           </PilledTabView>
         </PageView>
+      )}
+
+      {showPlayerMatchModal && selectedPlayer && (
+        <PlayerFixtureModal
+          fixture={fixture}
+          player={selectedPlayer}
+          isOpen={showPlayerMatchModal}
+          onClose={closePlayerMatchModal}
+        />
+      )}
+
+      {showProfileModal && selectedPlayer && (
+        <PlayerProfileModal
+          player={selectedPlayer}
+          isOpen={showProfileModal}
+          onClose={closePlayerProfileModal}
+        />
       )}
 
       <div className="flex flex-col p-4 gap-5">
