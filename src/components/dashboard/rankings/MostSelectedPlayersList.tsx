@@ -33,7 +33,7 @@ export default function MostSelectedPlayersList({ season }: Props) {
   if (isLoading) {
     return (
       <>
-        <RoundedCard className="p-4 h-[250px] animate-pulse border-none flex flex-col gap-2"></RoundedCard>
+        <RoundedCard className="p-4 h-[250px] animate-pulse border-none flex flex-col gap-2 bg-gray-200 dark:bg-gray-800"></RoundedCard>
       </>
     );
   }

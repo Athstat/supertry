@@ -25,6 +25,7 @@ import { BottomNav } from './components/BottomNav';
 import SbrScreen from './screens/SbrScreen';
 import FixtureScreen from './screens/FixtureScreen';
 import FixturesScreen from './screens/FixturesScreen';
+import SchoolsScreen from './screens/SchoolsScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
@@ -109,11 +110,11 @@ const AppRoutes = () => {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Layout>
-                <DashboardDataProvider>
+              <DashboardDataProvider>
+                <Layout>
                   <DashboardScreen />
-                </DashboardDataProvider>
-              </Layout>
+                </Layout>
+              </DashboardDataProvider>
             </ProtectedRoute>
           }
         />
@@ -142,9 +143,11 @@ const AppRoutes = () => {
           path="/league/:leagueId"
           element={
             <ProtectedRoute>
-              <Layout>
-                <FantasyLeagueScreen />
-              </Layout>
+              <DashboardDataProvider>
+                <Layout>
+                  <FantasyLeagueScreen />
+                </Layout>
+              </DashboardDataProvider>
             </ProtectedRoute>
           }
         />
@@ -270,6 +273,17 @@ const AppRoutes = () => {
           }
         />
 
+        <Route
+          path="/schools"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SchoolsScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
         {/* Test, can be edited */}
         <Route
           path="/invite-friends"
@@ -348,7 +362,6 @@ const AppRoutes = () => {
           }
         />
 
-
         <Route
           path="/league/:leagueId/member/:userId"
           element={
@@ -388,8 +401,6 @@ const AppRoutes = () => {
 
         <Route path="/invite-steps" element={<InviteStepsScreen />} />
 
-
-
         <Route
           path="/in-app-messages"
           element={
@@ -401,13 +412,16 @@ const AppRoutes = () => {
           }
         />
 
-        <Route path='*' element={(
-          <ProtectedRoute>
-            <Layout>
-              <NotFoundScreen />
-            </Layout>
-          </ProtectedRoute>
-        )} />
+        <Route
+          path="*"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <NotFoundScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
