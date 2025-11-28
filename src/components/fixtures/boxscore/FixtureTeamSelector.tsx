@@ -65,7 +65,7 @@ function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
       className={twMerge(
         "flex flex-1 flex-row truncate justify-center cursor-pointer rounded-full h-[35px] border-b-2 border-transparent  items-center gap-2",
         "hover:bg-slate-100 hover:dark:bg-slate-800/50",
-        value?.athstat_id === team.athstat_id && 'bg-blue-500 text-white hover:dark:bg-blue-500',
+        value?.athstat_id === team.athstat_id && 'bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-500 dark:hover:bg-blue-600',
       )}
 
     >
@@ -77,7 +77,7 @@ function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
       />
 
       <SecondaryText className={twMerge(
-        "font-medium truncate text-nowrap text-xs lg:text-base",
+        "font-medium w-[80px] truncate text-nowrap text-xs lg:text-base",
         value?.athstat_id === team.athstat_id && ' text-white dark:text-white'
       )} >
         {team.athstat_name}

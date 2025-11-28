@@ -24,10 +24,10 @@ export default function FixtureRostersTab({ fixture }: Props) {
                 </div>
             </div>
 
-            <div className="flex px-4 flex-col items-center justify-center" >
+            <div className="flex px-4   flex-col items-center justify-center" >
                 <FixtureTeamSelector
                     fixture={fixture}
-                    className="w-full"
+                    className="w-[70%]"
                     value={team}
                     onChange={setTeam}
                 />
@@ -200,7 +200,7 @@ function RosterItem({ item }: RosterItemProps) {
                     </div>
                 </Activity>
 
-                <p className="text-[10px] font-medium" >{item.player_number}. {item.athlete.athstat_firstname}</p>
+                <p className="text-[10px] text-white font-medium" >{item.player_number}. {item.athlete.athstat_firstname}</p>
             </div>}
         </div>
     )
