@@ -182,7 +182,7 @@ type RosterItemProps = {
 function RosterItem({ item }: RosterItemProps) {
 
     const fixture = useAtomValue(fixtureAtom);
-    const {pr, isLoading} = useAthleteMatchPr(item?.athlete.tracking_id, fixture?.game_id)
+    const {pr} = useAthleteMatchPr(item?.athlete.tracking_id, fixture?.game_id)
 
     return (
         <div
