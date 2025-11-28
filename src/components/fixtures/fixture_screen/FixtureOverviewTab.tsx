@@ -8,6 +8,7 @@ import RoundedCard from "../../shared/RoundedCard"
 import { FixtureVotingCard } from "../voting/FixtureVotingCard"
 import PastMatchupsCard from "./PastMatchupsCard"
 import PreFixtureForm from "./PreFixtureForm"
+import SeasonStandingsTable from "../../seasons/SeasonStandingsTable"
 
 type Props = {
     fixture: IFixture
@@ -56,6 +57,11 @@ export default function FixtureOverviewTab({ fixture }: Props) {
                 </div>}
 
             </RoundedCard>
+
+            <SeasonStandingsTable 
+                seasonId={fixture.league_id} 
+                filterTeamIds={[fixture.team?.athstat_id ?? "", fixture.opposition_team?.athstat_id ?? ""]}       
+            />
 
             <GameHighlightsCard link={fixture.highlights_link} />
 

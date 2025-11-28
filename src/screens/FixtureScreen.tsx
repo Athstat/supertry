@@ -20,6 +20,7 @@ import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
 import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureStickyHeader';
 import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRostersTab';
 import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
+import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureStandingsTab';
 
 export default function FixtureScreen() {
 
@@ -55,12 +56,12 @@ export default function FixtureScreen() {
   const { gameKickedOff } = fixtureSummary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
-    // {
-    //   label: 'Kick Off',
-    //   tabKey: 'kick-off',
-    //   disabled: false,
-    //   className: ""
-    // },
+    {
+      label: 'Kick Off',
+      tabKey: 'kick-off',
+      disabled: false,
+      className: ""
+    },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
@@ -91,12 +92,17 @@ export default function FixtureScreen() {
       disabled: false,
       className: ""
     },
+
+    {
+      label: 'Standings',
+      tabKey: 'standings',
+      disabled: false,
+      className: ""
+    },
   ];
 
   return (
     <div className="dark:text-white w-full flex flex-col">
-
-
 
       {!loadingSportsActions && (
         <PageView className="w-full"  >
@@ -128,12 +134,16 @@ export default function FixtureScreen() {
               <ProMotmVotingBox fixture={fixture} />
             </TabViewPage>
 
-            <TabViewPage className='p-0 px-0'  tabKey="rosters">
+            <TabViewPage className='p-0 px-0' tabKey="rosters">
               <FixtureRostersTab fixture={fixture} />
             </TabViewPage>
 
             <TabViewPage tabKey="chat">
               <FixtureChat fixture={fixture} />
+            </TabViewPage>
+
+            <TabViewPage tabKey="standings" className='px-4'>
+              <FixtureStandingsTab fixture={fixture} />
             </TabViewPage>
           </PilledTabView>
         </PageView>

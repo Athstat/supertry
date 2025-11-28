@@ -164,5 +164,9 @@ export const swrFetchKeys = {
 
   getPastMatchups: (gameId: string) => {
     return `/games/${gameId}/past-matchups`;
+  },
+
+  getSeasonStandings: (seasonId: string) => {
+    return `/seasons/$${seasonId}/standings`;
   }
 };
