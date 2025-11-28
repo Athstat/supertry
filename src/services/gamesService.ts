@@ -223,5 +223,25 @@ export const gamesService = {
     }
 
     return undefined;
+  },
+
+  getAthleteMatchPr: async (fixtureId: string, athleteId: string) : Promise<SingleMatchPowerRanking | undefined> => {
+    try {
+
+      const uri = getUri(`/api/v1/games/${fixtureId}/power-rankings/${athleteId}`);
+      
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as SingleMatchPowerRanking;
+      }
+
+    } catch (err) {
+      logger.error("Error fetching athlete match power ranking ", err);
+    }
+
+    return undefined;
   }
 };

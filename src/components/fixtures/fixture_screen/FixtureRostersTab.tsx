@@ -7,6 +7,10 @@ import { useGameRosters } from "../../../hooks/fixtures/useGameRosters"
 import PlayerMugshot from "../../shared/PlayerMugshot"
 import TeamJersey from "../../player/TeamJersey"
 import { twMerge } from "tailwind-merge"
+import { useAthleteMatchPr } from "../../../hooks/athletes/useAthleteMatchPr"
+import { useAtomValue } from "jotai"
+import { fixtureAtom } from "../../../state/fixtures/fixture.atoms"
+import { SmallMatchPrCard } from "../../rankings/MatchPrCard"
 
 type Props = {
     fixture: IFixture
@@ -75,7 +79,7 @@ function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
         <div className="mt-4 relative" >
 
             <RugbyPitch3D className={twMerge(
-                "max-h-[500px]",
+                "max-h-[500px] opacity-70",
                 !hasRosterItems && "opacity-20"
             )} />
 
@@ -176,11 +180,16 @@ type RosterItemProps = {
 }
 
 function RosterItem({ item }: RosterItemProps) {
+
+    const fixture = useAtomValue(fixtureAtom);
+    const {pr, isLoading} = useAthleteMatchPr(item?.athlete.tracking_id, fixture?.game_id)
+
     return (
         <div
             key={item?.athlete.tracking_id}
+            className=""
         >
-            {item && <div className="flex flex-col items-center justify-center" >
+            {item && <div className="flex flex-col items-center justify-center relative" >
 
                 <Activity mode={item.athlete.image_url ? "visible" : "hidden"} >
                     <PlayerMugshot
@@ -201,6 +210,14 @@ function RosterItem({ item }: RosterItemProps) {
                 </Activity>
 
                 <p className="text-[10px] text-white font-medium" >{item.player_number}. {item.athlete.athstat_firstname}</p>
+
+                {pr && (
+                    <div className="absolute top-0 right-0" >
+                        <SmallMatchPrCard 
+                            pr={pr.updated_power_ranking}
+                        />
+                    </div>
+                )}
             </div>}
         </div>
     )

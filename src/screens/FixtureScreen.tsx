@@ -1,8 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { IFixture } from '../types/games';
 import FixtureOverviewTab from '../components/fixtures/fixture_screen/FixtureOverviewTab';
 import useSWR from 'swr';
-import { gamesService } from '../services/gamesService';
 import { LoadingState } from '../components/ui/LoadingState';
 import { boxScoreService } from '../services/boxScoreService';
 import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
@@ -21,15 +19,29 @@ import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRost
 import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
 import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureStandingsTab';
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
+import { useAtomValue } from 'jotai';
+import { fixtureAtom } from '../state/fixtures/fixture.atoms';
+import { FixtureScreenProvider } from '../providers/fixtures/FixtureProvider';
 
 export default function FixtureScreen() {
 
   const { fixtureId } = useParams();
 
-  const fixtureKey = fixtureId ? `fixture/${fixtureId}` : null;
-  const { data: fetchedFixture, isLoading: loadingFixture } = useSWR(fixtureKey, () =>
-    gamesService.getGameById(fixtureId ?? '')
-  );
+  return (
+    <FixtureScreenProvider
+      fixtureId={fixtureId}
+    >
+      <SportActionsDefinitionsProvider>
+        <Content />
+      </SportActionsDefinitionsProvider>
+    </FixtureScreenProvider>
+  )
+}
+
+function Content() {
+
+  const fixture = useAtomValue(fixtureAtom);
+  const fixtureId = fixture?.game_id;
 
   const sportsActionsKey = fixtureId ? `fixtures/${fixtureId}/sports-actions` : null;
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
@@ -38,16 +50,14 @@ export default function FixtureScreen() {
 
   useHideBottomNavBar();
 
-  const isLoading = loadingFixture || loadingSportsActions;
+  const isLoading = loadingSportsActions;
 
   if (isLoading) return <LoadingState />;
 
-  if (!fetchedFixture)
+  if (!fixture)
     return <ErrorState error='Whoops!' message="Failed to load match information" />;
 
   if (!fixtureId) return <ErrorState message="Match was not found" />;
-
-  const fixture = fetchedFixture as IFixture;
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -96,57 +106,55 @@ export default function FixtureScreen() {
   ];
 
   return (
-    <SportActionsDefinitionsProvider>
-      <div className="dark:text-white w-full flex flex-col">
+    <div className="dark:text-white w-full flex flex-col">
 
-        {!loadingSportsActions && (
-          <PageView className="w-full"  >
-            <FixtureHero fixture={fixture} />
-            <FixtureStickyHeader fixture={fixture} />
+      {!loadingSportsActions && (
+        <PageView className="w-full"  >
+          <FixtureHero fixture={fixture} />
+          <FixtureStickyHeader fixture={fixture} />
 
-            <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
+          <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
 
-              <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
-                <GameHighlightsCard link={fixture.highlights_link} />
+            <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
+              <GameHighlightsCard link={fixture.highlights_link} />
 
-                <Activity mode={sportActions && (sportActions?.length ?? 0) > 0 ? "visible" : "hidden"} >
-                  <FixtureBoxscoreTab sportActions={sportActions || []} fixture={fixture} />
-                </Activity>
+              <Activity mode={sportActions && (sportActions?.length ?? 0) > 0 ? "visible" : "hidden"} >
+                <FixtureBoxscoreTab sportActions={sportActions || []} fixture={fixture} />
+              </Activity>
 
-              </TabViewPage>
+            </TabViewPage>
 
-              <TabViewPage className="flex flex-col gap-4 px-4" tabKey="kick-off">
-                <FixtureOverviewTab fixture={fixture} />
-              </TabViewPage>
+            <TabViewPage className="flex flex-col gap-4 px-4" tabKey="kick-off">
+              <FixtureOverviewTab fixture={fixture} />
+            </TabViewPage>
 
-              <TabViewPage className="flex flex-col gap-5" tabKey="h2h">
-                <FixtureH2HTab fixture={fixture} />
-              </TabViewPage>
+            <TabViewPage className="flex flex-col gap-5" tabKey="h2h">
+              <FixtureH2HTab fixture={fixture} />
+            </TabViewPage>
 
-              <TabViewPage tabKey="motm">
-                <ProMotmVotingBox fixture={fixture} />
-              </TabViewPage>
+            <TabViewPage tabKey="motm">
+              <ProMotmVotingBox fixture={fixture} />
+            </TabViewPage>
 
-              <TabViewPage className='p-0 px-0' tabKey="rosters">
-                <FixtureRostersTab fixture={fixture} />
-              </TabViewPage>
+            <TabViewPage className='p-0 px-0' tabKey="rosters">
+              <FixtureRostersTab fixture={fixture} />
+            </TabViewPage>
 
-              <TabViewPage tabKey="chat">
-                <FixtureChat fixture={fixture} />
-              </TabViewPage>
+            <TabViewPage tabKey="chat">
+              <FixtureChat fixture={fixture} />
+            </TabViewPage>
 
-              <TabViewPage tabKey="standings" className='px-4'>
-                <FixtureStandingsTab fixture={fixture} />
-              </TabViewPage>
-            </PilledTabView>
-          </PageView>
-        )}
+            <TabViewPage tabKey="standings" className='px-4'>
+              <FixtureStandingsTab fixture={fixture} />
+            </TabViewPage>
+          </PilledTabView>
+        </PageView>
+      )}
 
-        <div className="flex flex-col p-4 gap-5">
-          {/* Overview Component */}
-          {loadingSportsActions && <LoadingState />}
-        </div>
+      <div className="flex flex-col p-4 gap-5">
+        {/* Overview Component */}
+        {loadingSportsActions && <LoadingState />}
       </div>
-    </SportActionsDefinitionsProvider>
+    </div>
   );
 }
