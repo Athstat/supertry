@@ -7,6 +7,7 @@ import { useSportActions } from "../../stats/SportActionsDefinitionsProvider";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
+import { fixtureSummary } from "../../../utils/fixtureUtils";
 
 type Props = {
     fixture: IFixture
@@ -15,6 +16,7 @@ type Props = {
 export default function FixtureSeasonLeaders({ fixture }: Props) {
 
     const { team, opposition_team } = fixture;
+    const {matchFinal} = fixtureSummary(fixture);
     const { leaders: leaders1, isLoading: loadingHome } = useTeamSeasonLeaders(team?.athstat_id, fixture.league_id);
     const { leaders: leaders2, isLoading: loadingAway } = useTeamSeasonLeaders(opposition_team?.athstat_id, fixture.league_id);
 
@@ -29,6 +31,9 @@ export default function FixtureSeasonLeaders({ fixture }: Props) {
         )
     }
 
+    if (matchFinal) {
+        return null;
+    }
 
     return (
         <RoundedCard className={"p-4 dark:border-none flex flex-col gap-4"}>

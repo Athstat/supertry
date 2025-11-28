@@ -104,14 +104,23 @@ function HeadToHeadItem({ stat }: HeadToHeadProps) {
         <div className="flex flex-col w-full gap-1" >
 
             <div className="w-full flex flex-row items-center justify-between" >
+                
                 <div>
-                    <p className="text-sm" >{homeStrValue || homeValue}</p>
+                    <p className={twMerge(
+                        "text-sm px-2 ",
+                        homeTeamWonCategory && "bg-blue-500 rounded-xl"
+                    )} >{homeStrValue || homeValue}</p>
                 </div>
 
                 <p className="text-sm font-medium" >{action}</p>
+                
                 <div>
-                    <p className="text-sm" >{awayStrValue || awayValue}</p>
+                    <p className={twMerge(
+                        "text-sm px-2 ",
+                        awayTeamWonCategory && "bg-blue-500 rounded-xl"
+                    )} >{awayStrValue || awayValue}</p>
                 </div>
+
             </div>
 
             <div className="flex flex-row items-center gap-4 justify-between" >
@@ -120,7 +129,7 @@ function HeadToHeadItem({ stat }: HeadToHeadProps) {
                     className="flex-1 flex flex-row items-center justify-end rounded-full bg-slate-700 h-[10px]"
                 >
                     <div style={{ width: `${homePerc}%` }} className={twMerge(
-                        "h-[10px] rounded-full bg-slate-400/60",
+                        "h-[10px] rounded-full bg-slate-400/40",
                         homeTeamWonCategory && "bg-blue-500"
                     )} />
                 </div>
@@ -129,7 +138,7 @@ function HeadToHeadItem({ stat }: HeadToHeadProps) {
                     className="flex-1 flex flex-row items-center justify-start rounded-full bg-slate-700 h-[10px]"
                 >
                     <div style={{ width: `${awayPerc}%` }} className={twMerge(
-                        "h-[10px] rounded-full bg-slate-400/60",
+                        "h-[10px] rounded-full bg-slate-400/40",
                         awayTeamWonCategory && "bg-blue-500"
                     )} />
                 </div>
