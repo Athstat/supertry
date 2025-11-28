@@ -146,7 +146,7 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
         const hasDecimal = actionCount.toString().includes(".");
 
         if (hasDecimal) {
-            return actionCount.toFixed(1);
+            return Number(actionCount.toString()).toFixed(1);
         }
 
         return Math.floor(actionCount);

@@ -14,6 +14,7 @@ import useSWR from "swr"
 import { gamesService } from "../../../services/gamesService"
 import { LoadingState } from "../../ui/LoadingState"
 import { GameSportAction } from "../../../types/boxScore"
+import { getStatUnit, sanitizeStat } from "../../../utils/stringUtils"
 
 type Props = {
     fixture: IFixture,
@@ -55,6 +56,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
         return (
             <BottomSheetView
                 className="min-h-[80vh] max-h-[900px] py-2 px-4 flex flex-col items-center justify-center gap-2"
+                hideHandle
             >
                 <LoadingState />
             </BottomSheetView>
@@ -122,7 +124,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
                         <div className="flex flex-row items-center gap-2" >
                             <StatCard
                                 label="Minutes Played"
-                                value={minutesPlayed?.action_count}
+                                value={sanitizeStat(minutesPlayed?.action_count) + `${getStatUnit("Minutes Played") || ''}`}
                                 className="flex-1"
                             />
 
@@ -229,6 +231,37 @@ type StatGroupProps = {
 }
 
 function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
+
+    const sanitizeStat = (actionCount?: number) => {
+        if (!actionCount || actionCount === undefined || actionCount === null) {
+            return '-';
+        }
+
+
+        const [, decimal] = actionCount.toString().split(".");
+
+        if (Number(decimal) > 0) {
+            return Number(actionCount.toString()).toFixed(1);
+        }
+
+        return Math.floor(actionCount);
+    }
+
+    const getStatUnit = (actionDisplayName?: string) => {
+        if (!actionDisplayName) {
+            return undefined;
+        }
+
+        if (actionDisplayName.includes("Minute")) {
+            return "'"
+        }
+
+        if (actionDisplayName.includes("Metres")) {
+            return "m"
+        }
+        return undefined;
+    }
+
     return (
         <div className="border-t dark:border-slate-700 p-2 flex flex-col gap-2" >
             <div>
@@ -247,8 +280,6 @@ function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
                         return null;
                     }
 
-                    const isPerc = false;
-
                     return (
                         <div className="flex flex-row items-center gap-2 justify-between" >
                             <div>
@@ -256,7 +287,7 @@ function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
                             </div>
 
                             <div>
-                                <p className="text-sm font-semibold" >{isPerc ? `${(sportAction.action_count * 100)}%` : sportAction.action_count}</p>
+                                <p className="text-sm font-semibold" >{sanitizeStat(sportAction.action_count)}{getStatUnit(sportAction.definition?.display_name)}</p>
                             </div>
                         </div>
                     )
