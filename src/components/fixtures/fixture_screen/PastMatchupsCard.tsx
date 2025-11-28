@@ -26,17 +26,20 @@ export default function PastMatchupsCard({ fixture }: Props) {
 
   const matchups = useMemo(() => (data ?? []), [data]);
 
-  const getWinTotal = useCallback((team: IProTeam) => {
+  const getWinTotal = useCallback((inTeam: IProTeam) => {
+    
     return matchups.reduce((sum, curr) => {
       const { homeTeamWon, awayTeamWon } = fixtureSummary(curr);
-      const wonAsHome = homeTeamWon && fixture.team?.athstat_id === team.athstat_id;
-      const wonAsAway = awayTeamWon && fixture.opposition_team?.athstat_id === team.athstat_id;
+
+      const wonAsHome = homeTeamWon && curr.team?.athstat_id === inTeam.athstat_id;
+      const wonAsAway = awayTeamWon && curr.opposition_team?.athstat_id === inTeam.athstat_id;
 
       const wonMatch = wonAsAway || wonAsHome;
 
       return sum + (wonMatch ? 1 : 0);
     }, 0);
-  }, [fixture.opposition_team?.athstat_id, fixture.team?.athstat_id, matchups]);
+
+  }, [matchups]);
 
   if (!team || !opposition_team) {
     return;
