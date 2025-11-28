@@ -6,6 +6,7 @@ import RoundedCard from "../../shared/RoundedCard";
 import { useSportActions } from "../../stats/SportActionsDefinitionsProvider";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
+import TeamLogo from "../../team/TeamLogo";
 
 type Props = {
     fixture: IFixture
@@ -30,9 +31,25 @@ export default function FixtureSeasonLeaders({ fixture }: Props) {
 
 
     return (
-        <RoundedCard className={"p-4 dark:border-none"}>
-            <div className="flex flex-row items-center justify-center" >
-                <p className="text-sm font-semibold" >Season Leaders</p>
+        <RoundedCard className={"p-4 dark:border-none flex flex-col gap-4"}>
+            <div className="flex flex-row px-8 items-center justify-between" >
+                <div className="flex flex-row flex-1 items-center justify-start" >
+                    <TeamLogo
+                        url={fixture.team?.image_url}
+                        className="w-6 h-6"
+                    />
+                </div>
+
+                <div className="flex-1" >
+                    <p className="text-sm font-semibold" >Season Leaders</p>
+                </div>
+
+                <div className="flex flex-row flex-1 items-center justify-end" >
+                    <TeamLogo
+                        url={fixture.opposition_team?.image_url}
+                        className="w-6 h-6"
+                    />
+                </div>
             </div>
 
             <div className="flex flex-col gap-2" >
@@ -116,6 +133,20 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
         return `${firstName} ${lastName}`
     }
 
+    const sanitizeStat = (actionCount?: number) => {
+        if (!actionCount) {
+            return '-';
+        }
+
+        const hasDecimal = actionCount.toString().includes(".");
+
+        if (hasDecimal) {
+            return actionCount.toFixed(1);
+        }
+
+        return Math.floor(actionCount);
+    }
+
     if (!leader1 || !leader2) {
         return null;
     }
@@ -124,7 +155,7 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
         <div className="flex flex-row items-center justify-between" >
 
             <div className="flex flex-row items-center gap-1" >
-                
+
                 <div className="flex flex-col items-center gap-1" >
                     <SmartPlayerMugshot
                         url={leader1?.image_url}
@@ -137,7 +168,7 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
                 </div>
 
                 <div>
-                    <p className="font-semibold text-sm" >{leader1?.action_count ? leader1.action_count.toFixed(1) : leader1?.action_count}</p>
+                    <p className="font-semibold text-sm" >{sanitizeStat(leader1?.action_count)}</p>
                 </div>
             </div>
 
@@ -148,7 +179,7 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
             <div key={leader2?.athlete_id} className="flex flex-row items-center gap-1" >
 
                 <div>
-                    <p className="font-semibold text-sm" >{leader2?.action_count ? leader2.action_count.toFixed(1) : leader2?.action_count}</p>
+                    <p className="font-semibold text-sm" >{sanitizeStat(leader2?.action_count)}</p>
                 </div>
 
                 <div className="flex flex-col items-center gap-1" >
