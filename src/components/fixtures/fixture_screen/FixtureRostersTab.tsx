@@ -80,7 +80,7 @@ function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
         <div className="mt-4 relative" >
 
             <RugbyPitch3D className={twMerge(
-                "max-h-[500px] opacity-70",
+                "max-h-[500px] dark:opacity-70",
                 !hasRosterItems && "opacity-20"
             )} />
 

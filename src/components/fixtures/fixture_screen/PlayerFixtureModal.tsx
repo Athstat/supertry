@@ -17,6 +17,7 @@ import { GameSportAction } from "../../../types/boxScore"
 import { getStatUnit, sanitizeStat } from "../../../utils/stringUtils"
 import QuickActionButton from "../../ui/QuickActionButton"
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture"
+import { fixtureSummary } from "../../../utils/fixtureUtils"
 
 type Props = {
     fixture: IFixture,
@@ -27,10 +28,11 @@ type Props = {
 
 export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }: Props) {
 
+    const {gameKickedOff, matchFinal} = fixtureSummary(fixture);
     const { openPlayerProfileModal } = useFixtureScreen();
     const { pr, isLoading: loadingPr } = useAthleteMatchPr(player.tracking_id, fixture.game_id);
 
-    const key = swrFetchKeys.getAthleteFixtureSportsActions(fixture.game_id, player.tracking_id)
+    const key = gameKickedOff ? swrFetchKeys.getAthleteFixtureSportsActions(fixture.game_id, player.tracking_id) : null;
     const { data, isLoading: loadingSportsActions } = useSWR(key, () => gamesService.getAthleteFixtureSportsActions(fixture.game_id, player.tracking_id));
 
     const sportActions = useMemo(() => {
@@ -38,6 +40,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
     }, [data]);
 
     const isLoading = loadingPr || loadingSportsActions;
+    
 
     const hasActions = sportActions.length > 0;
 
@@ -221,7 +224,9 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
 
                     <Activity mode={!hasActions ? "visible" : "hidden"} >
                         <div className="flex flex-col items-center justify-center px-[15%] h-[200px] text-center" >
-                            <SecondaryText>Match Statisitics for <strong>{player.player_name}</strong> are not available</SecondaryText>
+                            {!gameKickedOff && <SecondaryText>Match Statisitics for <strong>{player.player_name}</strong> will become available when game kicks off</SecondaryText>}
+                            {gameKickedOff && <SecondaryText>Match Statisitics for <strong>{player.player_name}</strong> are not yet available</SecondaryText>}
+                            {matchFinal && <SecondaryText>Match Statisitics for <strong>{player.player_name}</strong> are not yet available</SecondaryText>}
                         </div>
                     </Activity>
 
