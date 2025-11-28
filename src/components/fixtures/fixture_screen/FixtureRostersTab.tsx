@@ -209,7 +209,7 @@ function RosterItem({ item }: RosterItemProps) {
                 </Activity>
 
                 <Activity mode={item.athlete.image_url ? "hidden" : "visible"} >
-                    <div className="max-w-16 bg-green-600 max-h-16 min-w-16 min-h-16 flex flex-col items-center rounded-full overflow-hidden border-2 dark:border-green-500/20 " >
+                    <div className="max-w-16 bg-green-600 max-h-16 min-w-16 min-h-16 flex flex-col items-center rounded-full overflow-hidden border-2 border-green-200/40 dark:border-green-500/20 " >
                         <TeamJersey
                             teamId={item.athlete.team_id}
                             className="w-full max-h-[60px] max-w-[60px] min-h-[60px] min-w-[60px] object-center mt-3 h-full"

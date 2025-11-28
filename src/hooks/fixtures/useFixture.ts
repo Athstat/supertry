@@ -27,7 +27,7 @@ export function useFixtureScreen() {
 
 
     const closePlayerProfileModal = () => {
-        setShowProfileModal(true);
+        setShowProfileModal(false);
     }
 
     return {

@@ -8,6 +8,7 @@ import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
+import { sanitizeStat } from "../../../utils/stringUtils";
 
 type Props = {
     fixture: IFixture
@@ -136,20 +137,6 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
         }
 
         return `${firstName} ${lastName}`
-    }
-
-    const sanitizeStat = (actionCount?: number) => {
-        if (!actionCount) {
-            return '-';
-        }
-
-        const hasDecimal = actionCount.toString().includes(".");
-
-        if (hasDecimal) {
-            return Number(actionCount.toString()).toFixed(1);
-        }
-
-        return Math.floor(actionCount);
     }
 
     if (!leader1 || !leader2) {

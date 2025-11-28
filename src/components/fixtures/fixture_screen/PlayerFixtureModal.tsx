@@ -15,6 +15,8 @@ import { gamesService } from "../../../services/gamesService"
 import { LoadingState } from "../../ui/LoadingState"
 import { GameSportAction } from "../../../types/boxScore"
 import { getStatUnit, sanitizeStat } from "../../../utils/stringUtils"
+import QuickActionButton from "../../ui/QuickActionButton"
+import { useFixtureScreen } from "../../../hooks/fixtures/useFixture"
 
 type Props = {
     fixture: IFixture,
@@ -25,6 +27,7 @@ type Props = {
 
 export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }: Props) {
 
+    const { openPlayerProfileModal } = useFixtureScreen();
     const { pr, isLoading: loadingPr } = useAthleteMatchPr(player.tracking_id, fixture.game_id);
 
     const key = swrFetchKeys.getAthleteFixtureSportsActions(fixture.game_id, player.tracking_id)
@@ -50,17 +53,8 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
         })
     }, [sportActions]);
 
-    console.log("Actions ", sportActions);
-
-    if (isLoading) {
-        return (
-            <BottomSheetView
-                className="min-h-[80vh] max-h-[900px] py-2 px-4 flex flex-col items-center justify-center gap-2"
-                hideHandle
-            >
-                <LoadingState />
-            </BottomSheetView>
-        )
+    const handleViewPlayerProfile = () => {
+        openPlayerProfileModal(player);
     }
 
     const minutesPlayed = getAction("minutes_played_total", "MinutesPlayedTotal");
@@ -69,156 +63,178 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
     return (
         <Activity mode={isOpen ? "visible" : "hidden"} >
             <BottomSheetView
-                className="min-h-[80vh] max-h-[900px] py-2 px-4 flex flex-col gap-2"
+                className="min-h-[80vh] max-h-[80vh] py-2 px-4 flex flex-col gap-2"
+                hideHandle
             >
-                <div className="flex flex-row items-center justify-between " >
 
-                    <div className="flex flex-row items-center gap-2" >
-                        <Binoculars />
-                        <p>Match Performance Overview</p>
-                    </div>
+                <Activity mode={isLoading ? "hidden" : "visible"} >
 
-                    <div>
-                        <CircleButton
-                            onClick={handleClose}
-                        >
-                            <X className="w-4 h-4" />
-                        </CircleButton>
-                    </div>
-                </div>
-
-
-                <div className="flex mt-2 flex-row items-center justify-between" >
-
-                    <div className="flex flex-row items-center gap-2" >
-
-                        <div>
-                            <SmartPlayerMugshot
-                                url={player.image_url}
-                                teamId={player.team_id}
-                                playerImageClassName="w-16 h-16"
-                                jerseyClassName="min-w-16 min-h-16"
-                                jerseyConClassName="min-w-16 min-h-16"
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-0.5" >
-                            <p>{player.player_name}</p>
-                            <SecondaryText>{player.team?.athstat_name}</SecondaryText>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col items-end justify-center gap-2" >
-
-                        {pr && <MatchPrCard
-                            pr={pr.updated_power_ranking}
-                        />}
-
-                        <SecondaryText className="text-wrap text-center text-xs" >Match Rating</SecondaryText>
-                    </div>
-                </div>
-
-                <Activity mode={hasActions ? "visible" : "hidden"} >
-                    <div className="flex flex-col gap-4 mt-4" >
+                    <div className="flex flex-row items-center justify-between " >
 
                         <div className="flex flex-row items-center gap-2" >
-                            <StatCard
-                                label="Minutes Played"
-                                value={sanitizeStat(minutesPlayed?.action_count) + `${getStatUnit("Minutes Played") || ''}`}
-                                className="flex-1"
-                            />
+                            <Binoculars />
+                            <p>Match Performance Overview</p>
+                        </div>
 
-                            <StatCard
-                                label="Total Points"
-                                value={pointsScored?.action_count}
-                                className="flex-1"
-                            />
+                        <div>
+                            <CircleButton
+                                onClick={handleClose}
+                            >
+                                <X className="w-4 h-4" />
+                            </CircleButton>
                         </div>
                     </div>
 
-                    <StatsGroup
-                        groupTitle="General"
-                        sportActions={sportActions}
-                        actionNames={[
-                            ["minutes_played_total", "MinutesPlayedTotal"],
-                            ["minutes_played_first_half", "	MinutesPlayedFirstHalf"],
-                            ["minutes_played_second_half", "MinutesPlayedSecondHalf"],
-                        ]}
-                    />
 
-                    <StatsGroup
-                        groupTitle="Attacking"
-                        sportActions={sportActions}
-                        actionNames={[
-                            ["tries", "Tries"],
-                            ["points", "Points"],
-                            ["passes", "Passes"],
-                            ["defenders_beaten", "DefendersBeaten"],
-                            ["try_assit", "TryAssit"],
-                            ["offload", "Offload"],
-                            ["turnovers_conceded", "TurnoversConceded"],
-                            ["ruck_arrival_attack", "RuckArrivalAttack"],
-                        ]}
-                    />
+                    <div className="flex mt-2 flex-row items-center justify-between" >
 
-                    <StatsGroup
-                        groupTitle="Ball Carrying"
-                        sportActions={sportActions}
-                        actionNames={[
-                            ["carries_metres", "CarriesMetres"],
-                            ["post_contact_metres", "PostContactMetres"],
-                            ["carry_dominant", "CarryDominant"],
-                            ["carries_opp_half", "CarriesOppHalf"],
-                            ["carries_own_half", "CarriesOwnHalf"],
-                            ["clean_breaks", "CleanBreaks"],
-                        ]}
-                    />
+                        <div className="flex flex-row items-center gap-2" >
 
-                    <StatsGroup
-                        groupTitle="Defense"
-                        sportActions={sportActions}
-                        actionNames={[
-                            ["tackles", "Tackles"],
-                            ["missed_tackles", "MissedTackles"],
-                            ["rucks_lost", "RucksLost"],
-                            ["collection_loose_ball", "CollectionLooseBall"],
-                            ["dominant_tackles", "DominantTackles"],
-                            ["turnover_won", "TurnoverWon"],
-                            ["tackle_try_saver", "TacklesTrySaver"],
-                        ]}
-                    />
+                            <div>
+                                <SmartPlayerMugshot
+                                    url={player.image_url}
+                                    teamId={player.team_id}
+                                    playerImageClassName="w-16 h-16"
+                                    jerseyClassName="min-w-16 min-h-16"
+                                    jerseyConClassName="min-w-16 min-h-16"
+                                />
+                            </div>
 
-                    <StatsGroup
-                        groupTitle="Kicking"
-                        sportActions={sportActions}
-                        actionNames={[
-                            ["conversion_goals", "ConversionGoals"],
-                            ["missed_conversion_goals", "MissedConversionGoals"],
-                            ["kick_penalty_good", "KickPenaltyGood"],
-                            ["kick_penalty_bad", "KickPenaltyBad"],
-                            ["drop_goals_converted", "DropGoalsConverted"],
-                            ["try_kicks", "TryKicks"],
-                        ]}
-                    />
+                            <div className="flex flex-col gap-0.5" >
+                                <p>{player.player_name}</p>
+                                <SecondaryText>{player.team?.athstat_name}</SecondaryText>
+                            </div>
+                        </div>
 
-                    <StatsGroup
-                        groupTitle="Discipline"
-                        sportActions={sportActions}
-                        actionNames={[
-                            ["red_cards", "RedCards"],
-                            ["yellow_cards", "YellowCards"],
-                            ["penalties_conceded", "PenaltiesConceded"],
-                        ]}
-                    />
+                        <div className="flex flex-col items-end justify-center gap-2" >
 
-                </Activity>
+                            {pr && <MatchPrCard
+                                pr={pr.updated_power_ranking}
+                            />}
 
-                <Activity mode={!hasActions ? "visible" : "hidden"} >
-                    <div className="flex flex-col items-center justify-center px-[15%] h-[200px] text-center" >
-                        <SecondaryText>Match Statisitics for <strong>{player.player_name}</strong> are not available</SecondaryText>
+                            <SecondaryText className="text-wrap text-center text-xs" >Match Rating</SecondaryText>
+                        </div>
                     </div>
+
+                    <div className="" >
+                        <QuickActionButton
+                            onClick={handleViewPlayerProfile}
+                        >
+                            View Player Profile
+                        </QuickActionButton>
+                    </div>
+
+                    <Activity mode={hasActions ? "visible" : "hidden"} >
+                        <div className="flex flex-col gap-4 mt-4" >
+
+                            <div className="flex flex-row items-center gap-2" >
+                                <StatCard
+                                    label="Minutes Played"
+                                    value={sanitizeStat(minutesPlayed?.action_count) + `${getStatUnit("Minutes Played") || ''}`}
+                                    className="flex-1"
+                                />
+
+                                <StatCard
+                                    label="Total Points"
+                                    value={sanitizeStat(pointsScored?.action_count)}
+                                    className="flex-1"
+                                />
+                            </div>
+                        </div>
+
+                        <StatsGroup
+                            groupTitle="General"
+                            sportActions={sportActions}
+                            actionNames={[
+                                ["minutes_played_total", "MinutesPlayedTotal"],
+                                ["minutes_played_first_half", "	MinutesPlayedFirstHalf"],
+                                ["minutes_played_second_half", "MinutesPlayedSecondHalf"],
+                            ]}
+                        />
+
+                        <StatsGroup
+                            groupTitle="Attacking"
+                            sportActions={sportActions}
+                            actionNames={[
+                                ["tries", "Tries"],
+                                ["points", "Points"],
+                                ["passes", "Passes"],
+                                ["defenders_beaten", "DefendersBeaten"],
+                                ["try_assit", "TryAssit"],
+                                ["offload", "Offload"],
+                                ["turnovers_conceded", "TurnoversConceded"],
+                                ["ruck_arrival_attack", "RuckArrivalAttack"],
+                            ]}
+                        />
+
+                        <StatsGroup
+                            groupTitle="Ball Carrying"
+                            sportActions={sportActions}
+                            actionNames={[
+                                ["carries_metres", "CarriesMetres"],
+                                ["post_contact_metres", "PostContactMetres"],
+                                ["carry_dominant", "CarryDominant"],
+                                ["carries_opp_half", "CarriesOppHalf"],
+                                ["carries_own_half", "CarriesOwnHalf"],
+                                ["clean_breaks", "CleanBreaks"],
+                            ]}
+                        />
+
+                        <StatsGroup
+                            groupTitle="Defense"
+                            sportActions={sportActions}
+                            actionNames={[
+                                ["tackles", "Tackles"],
+                                ["missed_tackles", "MissedTackles"],
+                                ["rucks_lost", "RucksLost"],
+                                ["collection_loose_ball", "CollectionLooseBall"],
+                                ["dominant_tackles", "DominantTackles"],
+                                ["turnover_won", "TurnoverWon"],
+                                ["tackle_try_saver", "TacklesTrySaver"],
+                            ]}
+                        />
+
+                        <StatsGroup
+                            groupTitle="Kicking"
+                            sportActions={sportActions}
+                            actionNames={[
+                                ["conversion_goals", "ConversionGoals"],
+                                ["missed_conversion_goals", "MissedConversionGoals"],
+                                ["kick_penalty_good", "KickPenaltyGood"],
+                                ["kick_penalty_bad", "KickPenaltyBad"],
+                                ["drop_goals_converted", "DropGoalsConverted"],
+                                ["try_kicks", "TryKicks"],
+                            ]}
+                        />
+
+                        <StatsGroup
+                            groupTitle="Discipline"
+                            sportActions={sportActions}
+                            actionNames={[
+                                ["red_cards", "RedCards"],
+                                ["yellow_cards", "YellowCards"],
+                                ["penalties_conceded", "PenaltiesConceded"],
+                            ]}
+                        />
+
+                    </Activity>
+
+                    <Activity mode={!hasActions ? "visible" : "hidden"} >
+                        <div className="flex flex-col items-center justify-center px-[15%] h-[200px] text-center" >
+                            <SecondaryText>Match Statisitics for <strong>{player.player_name}</strong> are not available</SecondaryText>
+                        </div>
+                    </Activity>
+
                 </Activity>
 
+                <Activity mode={isLoading ? "visible" : "hidden"} >
+                    <BottomSheetView
+                        className="min-h-[80vh] max-h-[900px] py-2 px-4 flex flex-col items-center justify-center gap-2"
+                        hideHandle
+                    >
+                        <LoadingState />
+                    </BottomSheetView>
+                </Activity>
             </BottomSheetView>
         </Activity>
     )
