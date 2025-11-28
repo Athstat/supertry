@@ -1,20 +1,29 @@
-import { Shield } from "lucide-react"
 import { twMerge } from "tailwind-merge"
-import { IFixture, ITeamAction, ITeamActionName } from "../../../types/games"
-import { mapSportsActionToAthstatName } from "../../../utils/sportsActionUtils"
+import { IFixture, ITeamActionName } from "../../../types/games"
 import { TeamActionsParser, TeamHeadtoHeadItem } from "../../../utils/teamActionsUtils"
-import TitledCard from "../../shared/TitledCard"
+import RoundedCard from "../../shared/RoundedCard"
 import TeamLogo from "../../team/TeamLogo"
+import useSWR from "swr"
+import { gamesService } from "../../../services/gamesService"
+import { mapSportsActionToAthstatName } from "../../../utils/sportsActionUtils"
+import { fixtureSummary } from "../../../utils/fixtureUtils"
 
 type Props = {
-    fixture: IFixture,
-    teamActions: ITeamAction[]
+    fixture: IFixture
 }
 
-export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) {
+export default function FixtureTeamStats({ fixture }: Props) {
 
-    const formatedTeamActions = teamActions.map((t) => {
-        
+    const fixtureId = fixture.game_id;
+    const teamActionsKey = fixtureId ? `fixtures/${fixtureId}/team-actions` : null;
+    const { data: teamActions, isLoading } = useSWR(teamActionsKey, () =>
+        gamesService.getGameTeamActions(fixtureId ?? '')
+    );
+
+    const {gameKickedOff} = fixtureSummary(fixture);
+
+    const formatedTeamActions = (teamActions ?? []).map((t) => {
+
         return {
             ...t,
             action: mapSportsActionToAthstatName(t.action) as ITeamActionName
@@ -22,8 +31,18 @@ export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) 
     })
     const taParser = new TeamActionsParser(formatedTeamActions, fixture?.team?.athstat_id ?? '', fixture?.opposition_team?.athstat_id ?? '');
 
+    if (isLoading) {
+        return (
+            <RoundedCard className="p-4" />
+        )
+    }
+
+    if (!gameKickedOff) {
+        return null;
+    }
+
     return (
-        <TitledCard title="Head to Head" icon={Shield} >
+        <RoundedCard className="p-4 dark:border-none" >
 
             <div className="flex flex-col gap-2" >
 
@@ -61,7 +80,7 @@ export default function FixtureHeadToHeadStats({ fixture, teamActions }: Props) 
                 <HeadToHeadItem stat={taParser.getRedCards()} />
 
             </div>
-        </TitledCard>
+        </RoundedCard>
     )
 }
 
@@ -70,8 +89,8 @@ type HeadToHeadProps = {
     stat: TeamHeadtoHeadItem
 }
 
-function HeadToHeadItem ({stat} : HeadToHeadProps) {
-    const {homeValue, awayValue, winner, action, hide} = stat;
+function HeadToHeadItem({ stat }: HeadToHeadProps) {
+    const { homeValue, awayValue, winner, action, hide } = stat;
     const homeTeamWonCategory = winner === 'home';
     const awayTeamWonCategory = winner === 'away';
 

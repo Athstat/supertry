@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { IFixture } from '../types/games';
-import { fixtureSummary } from '../utils/fixtureUtils';
 import FixtureOverviewTab from '../components/fixtures/fixture_screen/FixtureOverviewTab';
 import useSWR from 'swr';
 import { gamesService } from '../services/gamesService';
@@ -15,7 +14,7 @@ import { ErrorState } from '../components/ui/ErrorState';
 import { Activity } from '../components/shared/Activity';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
 import FixtureBoxscoreTab from '../components/fixtures/fixture_screen/FixtureBoxscoreTab';
-import FixtureHeadToHeadStats from '../components/fixtures/fixture_screen/FixtureHeadToHeadStats';
+import FixtureH2HTab from '../components/fixtures/fixture_screen/FixtureH2HTab';
 import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
 import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureStickyHeader';
 import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRostersTab';
@@ -38,12 +37,7 @@ export default function FixtureScreen() {
 
   useHideBottomNavBar();
 
-  const teamActionsKey = fixtureId ? `fixtures/${fixtureId}/team-actions` : null;
-  const { data: teamActions, isLoading: loadingTeamActions } = useSWR(teamActionsKey, () =>
-    gamesService.getGameTeamActions(fixtureId ?? '')
-  );
-
-  const isLoading = loadingFixture || loadingSportsActions || loadingTeamActions;
+  const isLoading = loadingFixture || loadingSportsActions;
 
   if (isLoading) return <LoadingState />;
 
@@ -53,7 +47,6 @@ export default function FixtureScreen() {
   if (!fixtureId) return <ErrorState message="Match was not found" />;
 
   const fixture = fetchedFixture as IFixture;
-  const { gameKickedOff } = fixtureSummary(fixture);
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -69,9 +62,9 @@ export default function FixtureScreen() {
       className: ""
     },
     {
-      label: 'Team Stats',
-      tabKey: 'team-stats',
-      disabled: !teamActions || teamActions.length === 0 || !gameKickedOff,
+      label: 'Head to Head',
+      tabKey: 'h2h',
+      disabled: false,
       className: ""
     },
     {
@@ -124,10 +117,8 @@ export default function FixtureScreen() {
               <FixtureOverviewTab fixture={fixture} />
             </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-5" tabKey="team-stats">
-              {teamActions && gameKickedOff && (
-                <FixtureHeadToHeadStats teamActions={teamActions} fixture={fixture} />
-              )}
+            <TabViewPage className="flex flex-col gap-5" tabKey="h2h">
+              <FixtureH2HTab fixture={fixture} />
             </TabViewPage>
 
             <TabViewPage tabKey="motm">
