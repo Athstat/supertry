@@ -25,6 +25,7 @@ import { BottomNav } from './components/BottomNav';
 import SbrScreen from './screens/SbrScreen';
 import FixtureScreen from './screens/FixtureScreen';
 import FixturesScreen from './screens/FixturesScreen';
+import SchoolsScreen from './screens/SchoolsScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
@@ -272,6 +273,17 @@ const AppRoutes = () => {
           }
         />
 
+        <Route
+          path="/schools"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SchoolsScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
         {/* Test, can be edited */}
         <Route
           path="/invite-friends"
@@ -389,8 +401,6 @@ const AppRoutes = () => {
 
         <Route path="/invite-steps" element={<InviteStepsScreen />} />
 
-
-
         <Route
           path="/in-app-messages"
           element={
@@ -402,13 +412,16 @@ const AppRoutes = () => {
           }
         />
 
-        <Route path='*' element={(
-          <ProtectedRoute>
-            <Layout>
-              <NotFoundScreen />
-            </Layout>
-          </ProtectedRoute>
-        )} />
+        <Route
+          path="*"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <NotFoundScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

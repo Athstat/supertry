@@ -72,7 +72,7 @@ export function BottomNav() {
     { id: 'players', path: '/players', icon: Users, label: 'Players' },
     { id: 'leagues', path: '/leagues', icon: Trophy, label: 'Fantasy' },
     { id: 'fixtures', path: '/fixtures', icon: Calendar, label: 'Fixtures' },
-    { id: 'schools', path: '/fixtures?sc=SBR', icon: School, label: 'Schools' },
+    { id: 'schools', path: '/schools', icon: School, label: 'Schools' },
   ];
 
   return (
