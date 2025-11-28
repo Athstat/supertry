@@ -8,8 +8,9 @@ import { useGameVotes } from '../../hooks/useGameVotes';
 import { gamesService } from '../../services/gamesService';
 import { mutate } from 'swr';
 import ConsensusBar from './ConsensusBar';
-import { Check } from 'lucide-react';
+import { Check, Loader } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
+import PickEmCardSkeleton from './PickEmCardSkeleton';
 
 type Props = {
   fixture: IFixture;
@@ -23,6 +24,9 @@ export default function PickEmCard({ fixture, className }: Props) {
     inView
   );
   const [isVoting, setIsVoting] = useState(false);
+  const [clickedButton, setClickedButton] = useState<'home_team' | 'away_team' | 'draw' | null>(
+    null
+  );
 
   const { gameKickedOff } = fixtureSummary(fixture);
   const isLocked = gameKickedOff;
@@ -35,6 +39,7 @@ export default function PickEmCard({ fixture, className }: Props) {
     if (isLocked || isVoting) return;
 
     setIsVoting(true);
+    setClickedButton(voteFor);
 
     try {
       if (!userVote) {
@@ -49,19 +54,12 @@ export default function PickEmCard({ fixture, className }: Props) {
       console.error('Error voting:', error);
     } finally {
       setIsVoting(false);
+      setClickedButton(null);
     }
   };
 
   if (isLoading) {
-    return (
-      <div
-        ref={ref}
-        className={twMerge(
-          'w-full min-h-[200px] rounded-xl bg-slate-100 dark:bg-slate-800/60 animate-pulse',
-          className
-        )}
-      />
-    );
+    return <PickEmCardSkeleton ref={ref} className={className} />;
   }
 
   return (
@@ -111,18 +109,24 @@ export default function PickEmCard({ fixture, className }: Props) {
             votedHomeTeam &&
               !isLocked &&
               'bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-500 shadow-lg',
-            isLocked && 'cursor-not-allowed'
+            (isLocked || isVoting) && 'cursor-not-allowed opacity-60'
           )}
         >
           <div className="relative">
-            <TeamLogo
-              url={fixture?.team?.image_url}
-              teamName={fixture?.team?.athstat_name}
-              className={twMerge(
-                'w-14 h-14 transition-transform duration-200',
-                votedHomeTeam && !isLocked && 'scale-110'
-              )}
-            />
+            {clickedButton === 'home_team' && isVoting ? (
+              <div className="w-14 h-14 flex items-center justify-center">
+                <Loader className="w-8 h-8 animate-spin text-blue-500" />
+              </div>
+            ) : (
+              <TeamLogo
+                url={fixture?.team?.image_url}
+                teamName={fixture?.team?.athstat_name}
+                className={twMerge(
+                  'w-14 h-14 transition-transform duration-200',
+                  votedHomeTeam && !isLocked && 'scale-110'
+                )}
+              />
+            )}
           </div>
           <p className="text-xs text-center font-medium text-slate-700 dark:text-slate-200 line-clamp-2">
             {fixture?.team?.athstat_name}
@@ -140,16 +144,15 @@ export default function PickEmCard({ fixture, className }: Props) {
             votedDraw &&
               !isLocked &&
               'bg-slate-200 dark:bg-slate-600 ring-2 ring-slate-500 shadow-lg',
-            isLocked && 'cursor-not-allowed',
+            (isLocked || isVoting) && 'cursor-not-allowed opacity-60',
             'border-2 border-slate-300 dark:border-slate-600'
           )}
         >
           <div className="relative">
-            <span className="text-sm font-bold text-slate-600 dark:text-slate-300">DRAW</span>
-            {votedDraw && (
-              <div className="absolute -top-2 -right-2 w-5 h-5 bg-slate-500 rounded-full flex items-center justify-center shadow-md">
-                <Check className="w-3 h-3 text-white" strokeWidth={3} />
-              </div>
+            {clickedButton === 'draw' && isVoting ? (
+              <Loader className="w-5 h-5 animate-spin text-slate-600 dark:text-slate-300" />
+            ) : (
+              <span className="text-sm font-bold text-slate-600 dark:text-slate-300">DRAW</span>
             )}
           </div>
         </button>
@@ -165,18 +168,24 @@ export default function PickEmCard({ fixture, className }: Props) {
             votedAwayTeam &&
               !isLocked &&
               'bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500 shadow-lg',
-            isLocked && 'cursor-not-allowed'
+            (isLocked || isVoting) && 'cursor-not-allowed opacity-60'
           )}
         >
           <div className="relative">
-            <TeamLogo
-              url={fixture?.opposition_team?.image_url}
-              teamName={fixture?.opposition_team?.athstat_name}
-              className={twMerge(
-                'w-14 h-14 transition-transform duration-200',
-                votedAwayTeam && !isLocked && 'scale-110'
-              )}
-            />
+            {clickedButton === 'away_team' && isVoting ? (
+              <div className="w-14 h-14 flex items-center justify-center">
+                <Loader className="w-8 h-8 animate-spin text-indigo-500" />
+              </div>
+            ) : (
+              <TeamLogo
+                url={fixture?.opposition_team?.image_url}
+                teamName={fixture?.opposition_team?.athstat_name}
+                className={twMerge(
+                  'w-14 h-14 transition-transform duration-200',
+                  votedAwayTeam && !isLocked && 'scale-110'
+                )}
+              />
+            )}
           </div>
           <p className="text-xs text-center font-medium text-slate-700 dark:text-slate-200 line-clamp-2">
             {fixture?.opposition_team?.athstat_name}

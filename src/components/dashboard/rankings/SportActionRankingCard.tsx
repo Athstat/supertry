@@ -39,7 +39,7 @@ export default function SportActionRankingsList({ season, actionName, title, cla
       <>
         <RoundedCard
           className={twMerge(
-            ' h-[380px] animate-pulse border-none rounded-xl p-4 flex flex-col gap-2',
+            ' h-[380px] animate-pulse border-none rounded-xl p-4 flex flex-col gap-2 bg-gray-200 dark:bg-gray-800',
             className
           )}
         ></RoundedCard>

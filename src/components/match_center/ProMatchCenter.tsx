@@ -3,11 +3,11 @@ import { gamesService } from '../../services/gamesService';
 import { LoadingState } from '../ui/LoadingState';
 import FixtureCard from '../fixtures/FixtureCard';
 import PickEmCard from '../fixtures/PickEmCard';
+import PickEmCardSkeleton from '../fixtures/PickEmCardSkeleton';
 import NoContentCard from '../shared/NoContentMessage';
 import { searchProFixturePredicate } from '../../utils/fixtureUtils';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { IFixture } from '../../types/games';
-import { useInView } from 'react-intersection-observer';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import {
@@ -50,6 +50,19 @@ export default function ProMatchCenter({ searchQuery, viewMode, onViewModeChange
   }, [fixtures?.length]); // Only run when fixtures are loaded
 
   if (isLoading) {
+    // Show different loading states based on view mode
+    if (viewMode === 'pickem') {
+      return (
+        <div className="flex flex-col gap-3 w-full">
+          {[...Array(5)].map((_, index) => (
+            <PickEmCardSkeleton
+              key={index}
+              className="rounded-xl border w-full dark:border-slate-700"
+            />
+          ))}
+        </div>
+      );
+    }
     return <LoadingState />;
   }
 
@@ -190,7 +203,7 @@ export default function ProMatchCenter({ searchQuery, viewMode, onViewModeChange
           return (
             <FixtureItem
               fixture={fixture}
-              key={index}
+              key={`${viewMode}-${index}`}
               viewMode={viewMode}
               className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
             />
@@ -208,14 +221,12 @@ type FixtureItemProps = {
 };
 
 function FixtureItem({ fixture, viewMode, className }: FixtureItemProps) {
-  const { ref, inView } = useInView({ triggerOnce: true });
-
   return (
-    <div ref={ref} className="flex-shrink-0">
-      {inView && viewMode === 'fixtures' && (
+    <>
+      {viewMode === 'fixtures' && (
         <FixtureCard fixture={fixture} showLogos showCompetition className={className} />
       )}
-      {inView && viewMode === 'pickem' && <PickEmCard fixture={fixture} className={className} />}
-    </div>
+      {viewMode === 'pickem' && <PickEmCard fixture={fixture} className={className} />}
+    </>
   );
 }
