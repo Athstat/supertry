@@ -167,14 +167,14 @@ function VotingResults({ homePerc, awayPerc, userVote, wasVoteCorrect }: VotingR
             <div className="flex flex-row items-center gap-1" >
                 <div
                     style={{ width: `${homePerc}%` }}
-                    className="bg-blue-500 rounded-md flex-row flex px-2 h-[26px] items-center justify-center"
+                    className="bg-blue-500 text-white min-w-[35px] rounded-md flex-row flex px-2 h-[26px] items-center justify-center"
                 >
                     <p className="text-sm" >{homePerc}%</p>
                 </div>
 
                 <div
                     style={{ width: `${awayPerc}%` }}
-                    className="bg-red-500 rounded-md flex-row flex px-2 h-[26px] items-center justify-center"
+                    className="bg-red-500 text-white min-w-[35px] rounded-md flex-row flex px-2 h-[26px] items-center justify-center"
                 >
                     <p className="text-sm" >{awayPerc}%</p>
                 </div>

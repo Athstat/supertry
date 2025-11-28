@@ -107,8 +107,8 @@ function HeadToHeadItem({ stat }: HeadToHeadProps) {
                 
                 <div>
                     <p className={twMerge(
-                        "text-sm px-2 ",
-                        homeTeamWonCategory && "bg-blue-500 rounded-xl"
+                        "text-sm px-2 rounded-xl",
+                        homeTeamWonCategory && "bg-blue-500  text-white"
                     )} >{homeStrValue || homeValue}</p>
                 </div>
 
@@ -116,8 +116,8 @@ function HeadToHeadItem({ stat }: HeadToHeadProps) {
                 
                 <div>
                     <p className={twMerge(
-                        "text-sm px-2 ",
-                        awayTeamWonCategory && "bg-blue-500 rounded-xl"
+                        "text-sm px-2 rounded-xl",
+                        awayTeamWonCategory && "bg-blue-500  text-white"
                     )} >{awayStrValue || awayValue}</p>
                 </div>
 
@@ -126,19 +126,19 @@ function HeadToHeadItem({ stat }: HeadToHeadProps) {
             <div className="flex flex-row items-center gap-4 justify-between" >
 
                 <div
-                    className="flex-1 flex flex-row items-center justify-end rounded-full bg-slate-700 h-[10px]"
+                    className="flex-1 flex flex-row items-center justify-end rounded-full bg-slate-200 dark:bg-slate-700 h-[10px]"
                 >
                     <div style={{ width: `${homePerc}%` }} className={twMerge(
-                        "h-[10px] rounded-full bg-slate-400/40",
+                        "h-[10px] rounded-full bg-slate-400/50",
                         homeTeamWonCategory && "bg-blue-500"
                     )} />
                 </div>
 
                 <div
-                    className="flex-1 flex flex-row items-center justify-start rounded-full bg-slate-700 h-[10px]"
+                    className="flex-1 flex flex-row items-center justify-start rounded-full  bg-slate-200 dark:bg-slate-700 h-[10px]"
                 >
                     <div style={{ width: `${awayPerc}%` }} className={twMerge(
-                        "h-[10px] rounded-full bg-slate-400/40",
+                        "h-[10px] rounded-full bg-slate-400/50",
                         awayTeamWonCategory && "bg-blue-500"
                     )} />
                 </div>
