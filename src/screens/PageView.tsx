@@ -6,31 +6,24 @@ import TransparentStatCard from "../components/shared/TransparentStatCard"
 import { useNavigateBack } from "../hooks/web/useNavigateBack"
 
 type Props = {
-    children?: ReactNode,
-    className?: string
-}
+  children?: ReactNode;
+  className?: string;
+};
 
 export default function PageView({ children, className }: Props) {
-
-
-    return (
-        <div className="w-full py-0 dark:text-white h-full flex flex-col items-center justify-start lg:py-8" >
-            <div className={twMerge(
-                "w-full lg:w-[50%]",
-                className
-            )} >
-                {children}
-            </div>
-        </div>
-    )
+  return (
+    <div className="w-full py-0 dark:text-white bg-gray-50 dark:bg-dark-850 h-full flex flex-col items-center justify-start lg:py-8">
+      <div className={twMerge('w-full lg:w-[50%]', className)}>{children}</div>
+    </div>
+  );
 }
-export type IStatCard = { title: string, value: string | number };
+export type IStatCard = { title: string; value: string | number };
 
 type TopicPageViewProps = Props & {
-    title?: string,
-    description?: string,
-    statsCards?: IStatCard[]
-}
+  title?: string;
+  description?: string;
+  statsCards?: IStatCard[];
+};
 
 export function TopicPageView({ children, title, statsCards, className }: TopicPageViewProps) {
 
@@ -75,5 +68,9 @@ export function TopicPageView({ children, title, statsCards, className }: TopicP
                 {children}
             </PageView>
         </div>
-    )
+      </BlueGradientCard>
+
+      <PageView className={className}>{children}</PageView>
+    </div>
+  );
 }

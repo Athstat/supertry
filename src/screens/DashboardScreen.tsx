@@ -7,12 +7,14 @@ import RoundedCard from '../components/shared/RoundedCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import SportActionRankingsList from '../components/dashboard/rankings/SportActionRankingCard';
 import { Crown, Home } from 'lucide-react';
-import { Flame } from 'lucide-react';
-import MostSelectedPlayersList from '../components/dashboard/rankings/MostSelectedPlayersList';
-import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useDashboard } from '../hooks/dashboard/useDashboard';
 import { abbreviateSeasonName } from '../components/players/compare/PlayerCompareSeasonPicker';
 import TeamPlayersPrefetchProvider from '../providers/TeamPlayersPrefetchProvider';
+import DashboardHero from '../components/dashboard/DashboardHero';
+import WeeklyLeaderboards from '../components/dashboard/WeeklyLeaderboards';
+import { useAtomValue } from 'jotai';
+import { dashboardAtoms } from '../state/dashboard/dashboard.atoms';
+import { useMemo } from 'react';
 
 export function DashboardScreen() {
   return (
@@ -25,6 +27,7 @@ export function DashboardScreen() {
 function DashboardContent() {
   const navigate = useNavigate();
   const { currentSeason } = useDashboard();
+  const selectedSeason = useAtomValue(dashboardAtoms.selectedDashboardSeasonAtom);
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */
@@ -34,87 +37,71 @@ function DashboardContent() {
     navigate('/leagues');
   };
 
+  // Use selected season or fall back to current season
+  const displaySeason = useMemo(() => {
+    return selectedSeason || currentSeason;
+  }, [selectedSeason, currentSeason]);
+
   return (
     <PageView className="flex flex-col space-y-4 p-4">
-      <div>
-        <div className="flex flex-row items-center gap-2">
-          <Home />
-          <p className="font-bold text-lg">Dashboard</p>
-        </div>
-      </div>
-
-      {/* <FixtureCarrousel /> */}
-
       <ClaimAccountNoticeCard />
 
-      {/* <EnableNotificationMessage /> */}
+      {/* Dashboard Hero - Shows team stats or first-time user view */}
+      <DashboardHero season={displaySeason} />
 
-      <FeaturedFantasyLeagueGroups />
+      {/* <FeaturedFantasyLeagueGroups /> */}
 
-      <div className="flex flex-col gap-4 pt-4">
-        <div className="flex flex-row items-center gap-2">
-          <Flame className="text-yellow-500" />
-          <h1 className="font-bold">Top Fantasy Picks</h1>
-        </div>
-
-        <FantasyPointsScoredPlayerList />
-        <MostSelectedPlayersList />
-      </div>
-
-      <div className="flex flex-col gap-4 pt-4">
-        <div className="flex flex-row items-center gap-2">
-          <Crown className="text-blue-500" />
-          <h1 className="font-bold">
-            {currentSeason
-              ? `${abbreviateSeasonName(currentSeason.name)} STATS LEADERS`
-              : 'Stats Leaders'}
-          </h1>
-        </div>
-
-        <div className="flex flex-col no-scrollbar overflow-y-hidden overflow-x-auto gap-2 max-w-full">
-          <SportActionRankingsList
-            actionName="tries"
-            title="Tries Scored"
-            className="min-w-[320px] w-full"
-          />
-
-          <SportActionRankingsList
-            actionName="try_assist"
-            title="Try Assists"
-            className="min-w-[320px] w-full"
-          />
-
-          <SportActionRankingsList
-            actionName="defenders_beaten"
-            title="Defenders Beaten"
-            className="min-w-[320px] w-full"
-          />
-
-          <SportActionRankingsList
-            actionName="tackles"
-            title="Tackles"
-            className="min-w-[320px] w-full"
-          />
-
-          <SportActionRankingsList
-            actionName="post_contact_metres"
-            title="Post Contact Meters (m)"
-            className="min-w-[320px] w-full"
-          />
-        </div>
-      </div>
-
+      {/* Dominate the SCRUM */}
       <RoundedCard className="flex flex-col gap-4 p-4">
         <div className="flex flex-col gap-1">
-          <h1 className="font-bold text-lg">Dominate the SCRUMM</h1>
-          <p>
-            Leagues are live! 🎉 Create your own, join one, and challenge your friends. Invite your
-            crew and see who really rules the game!
-          </p>
+          <h1 className="font-bold text-lg">Dominate the SCRUM</h1>
+          <div className="flex flex-row items-center gap-2">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Create your own league, or join one. Challenge your friends, invite your crew and see
+              who really rules the game!
+            </p>
+            <PrimaryButton
+              className="h-10 whitespace-nowrap w-fit flex-shrink-0"
+              onClick={handleBannerClick}
+            >
+              Start a League
+            </PrimaryButton>
+          </div>
         </div>
-
-        <PrimaryButton onClick={handleBannerClick}>Take Me There</PrimaryButton>
       </RoundedCard>
+
+      {/* Make your match predictions */}
+      <RoundedCard className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="font-bold text-lg">Make your match predictions</h1>
+          <div className="flex flex-row items-center gap-2">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Predict the results of all the upcoming matches to maximize your fantasy points this
+              week.
+            </p>
+            <PrimaryButton
+              className="h-10 whitespace-nowrap w-fit flex-shrink-0"
+              onClick={() => navigate('/#')}
+            >
+              Predict now
+            </PrimaryButton>
+          </div>
+        </div>
+      </RoundedCard>
+
+      {/* What's Going On in Schools Rugby? */}
+      <div className="text-center py-4">
+        <h2 className="font-bold text-lg mb-2">What's Going On in Schools Rugby?</h2>
+        <button
+          onClick={() => navigate('/fixtures?sc=SBR')}
+          className="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 underline font-medium"
+        >
+          View fixtures
+        </button>
+      </div>
+
+      {/* Weekly Leaderboards with tabs */}
+      <WeeklyLeaderboards season={displaySeason} />
     </PageView>
   );
 }

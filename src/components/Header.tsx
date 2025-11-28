@@ -7,6 +7,7 @@ import { isInProduction } from '../utils/webUtils';
 import BetaTag from './branding/BetaTag';
 import NotificationsBell from './notifications/NotificationsBell';
 import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
+import CompetitionSelector from './dashboard/CompetitionSelector';
 
 export function Header() {
   const navigate = useNavigate();
@@ -24,12 +25,14 @@ export function Header() {
   };
 
   const isProfileActive = location.pathname === '/profile';
+  const showCompetitionSelector =
+    location.pathname === '/dashboard' || location.pathname.startsWith('/league');
 
   return (
     <Activity mode={topNavViewMode}>
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none mb-0 pb-0">
         <div className="container mx-auto px-4 h-16 overflow-hidden flex items-center justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center gap-3">
             <div
               className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
               onClick={() => navigate('/dashboard')}
@@ -40,6 +43,12 @@ export function Header() {
             </div>
 
             {isInQa && <BetaTag />}
+
+            {showCompetitionSelector && (
+              <div className="ml-2">
+                <CompetitionSelector />
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-4">
