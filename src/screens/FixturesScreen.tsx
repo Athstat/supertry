@@ -8,7 +8,10 @@ import SegmentedControl from '../components/ui/SegmentedControl';
 
 export default function FixturesScreen() {
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
-  const [viewMode, setViewMode] = useState<'fixtures' | 'pickem'>('fixtures');
+  const [viewParam] = useQueryState<string>('view', { init: '' });
+  const [viewMode, setViewMode] = useState<'fixtures' | 'pickem'>(
+    viewParam === 'pickem' ? 'pickem' : 'fixtures'
+  );
 
   return (
     <Fragment>
