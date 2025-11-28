@@ -69,7 +69,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
 
                 <Activity mode={isLoading ? "hidden" : "visible"} >
 
-                    <div className="flex flex-row items-center justify-between " >
+                    <div className="flex py-2 flex-row items-center justify-between " >
 
                         <div className="flex flex-row items-center gap-2" >
                             <Binoculars />
