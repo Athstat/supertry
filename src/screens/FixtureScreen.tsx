@@ -20,6 +20,7 @@ import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/Fixtu
 import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRostersTab';
 import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
 import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureStandingsTab';
+import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
 
 export default function FixtureScreen() {
 
@@ -49,12 +50,12 @@ export default function FixtureScreen() {
   const fixture = fetchedFixture as IFixture;
 
   const tabItems: TabViewHeaderItem[] = [
-    {
-      label: 'Kick Off',
-      tabKey: 'kick-off',
-      disabled: false,
-      className: ""
-    },
+    // {
+    //   label: 'Kick Off',
+    //   tabKey: 'kick-off',
+    //   disabled: false,
+    //   className: ""
+    // },
     {
       label: 'Boxscore',
       tabKey: 'athletes-stats',
@@ -95,55 +96,57 @@ export default function FixtureScreen() {
   ];
 
   return (
-    <div className="dark:text-white w-full flex flex-col">
+    <SportActionsDefinitionsProvider>
+      <div className="dark:text-white w-full flex flex-col">
 
-      {!loadingSportsActions && (
-        <PageView className="w-full"  >
-          <FixtureHero fixture={fixture} />
-          <FixtureStickyHeader fixture={fixture} />
+        {!loadingSportsActions && (
+          <PageView className="w-full"  >
+            <FixtureHero fixture={fixture} />
+            <FixtureStickyHeader fixture={fixture} />
 
-          <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
+            <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
 
-            <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
-              <GameHighlightsCard link={fixture.highlights_link} />
+              <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
+                <GameHighlightsCard link={fixture.highlights_link} />
 
-              <Activity mode={sportActions && (sportActions?.length ?? 0) > 0 ? "visible" : "hidden"} >
-                <FixtureBoxscoreTab sportActions={sportActions || []} fixture={fixture} />
-              </Activity>
+                <Activity mode={sportActions && (sportActions?.length ?? 0) > 0 ? "visible" : "hidden"} >
+                  <FixtureBoxscoreTab sportActions={sportActions || []} fixture={fixture} />
+                </Activity>
 
-            </TabViewPage>
+              </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-4 px-4" tabKey="kick-off">
-              <FixtureOverviewTab fixture={fixture} />
-            </TabViewPage>
+              <TabViewPage className="flex flex-col gap-4 px-4" tabKey="kick-off">
+                <FixtureOverviewTab fixture={fixture} />
+              </TabViewPage>
 
-            <TabViewPage className="flex flex-col gap-5" tabKey="h2h">
-              <FixtureH2HTab fixture={fixture} />
-            </TabViewPage>
+              <TabViewPage className="flex flex-col gap-5" tabKey="h2h">
+                <FixtureH2HTab fixture={fixture} />
+              </TabViewPage>
 
-            <TabViewPage tabKey="motm">
-              <ProMotmVotingBox fixture={fixture} />
-            </TabViewPage>
+              <TabViewPage tabKey="motm">
+                <ProMotmVotingBox fixture={fixture} />
+              </TabViewPage>
 
-            <TabViewPage className='p-0 px-0' tabKey="rosters">
-              <FixtureRostersTab fixture={fixture} />
-            </TabViewPage>
+              <TabViewPage className='p-0 px-0' tabKey="rosters">
+                <FixtureRostersTab fixture={fixture} />
+              </TabViewPage>
 
-            <TabViewPage tabKey="chat">
-              <FixtureChat fixture={fixture} />
-            </TabViewPage>
+              <TabViewPage tabKey="chat">
+                <FixtureChat fixture={fixture} />
+              </TabViewPage>
 
-            <TabViewPage tabKey="standings" className='px-4'>
-              <FixtureStandingsTab fixture={fixture} />
-            </TabViewPage>
-          </PilledTabView>
-        </PageView>
-      )}
+              <TabViewPage tabKey="standings" className='px-4'>
+                <FixtureStandingsTab fixture={fixture} />
+              </TabViewPage>
+            </PilledTabView>
+          </PageView>
+        )}
 
-      <div className="flex flex-col p-4 gap-5">
-        {/* Overview Component */}
-        {loadingSportsActions && <LoadingState />}
+        <div className="flex flex-col p-4 gap-5">
+          {/* Overview Component */}
+          {loadingSportsActions && <LoadingState />}
+        </div>
       </div>
-    </div>
+    </SportActionsDefinitionsProvider>
   );
 }
