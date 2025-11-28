@@ -3,44 +3,47 @@ import { IFixture } from "../../../types/games"
 import { IProTeam } from "../../../types/team"
 import SecondaryText from "../../shared/SecondaryText"
 import TeamLogo from "../../team/TeamLogo"
-import { useBoxscoreFilter } from "../../../hooks/fixtures/useBoxscoreFilter"
 
 type Props = {
   fixture: IFixture,
-  className?: string
+  className?: string,
+  value?: IProTeam,
+  onChange?: (newTeam?: IProTeam) => void
 }
 
-export default function FixtureTeamSelector({ fixture, className }: Props) {
+export default function FixtureTeamSelector({ fixture, className, onChange, value }: Props) {
 
-  const { selectedTeam: value, setSelectedTeamId } = useBoxscoreFilter(fixture);
+  const {team, opposition_team} = fixture;
 
   const onSelectTeam = (t?: IProTeam) => {
+    if (t && onChange) {
+      onChange(t);
+    }
+  }
 
-    if (!t) return;
-
-    console.log("Selecting team ", t.athstat_name);
-    setSelectedTeamId(t.athstat_id);
+  if (!team || !opposition_team) {
+    return;
   }
 
   return (
     <div className={twMerge(
-      "bg-white flex border border-slate-300 dark:border-slate-700 flex-row items-center gap-2 dark:bg-slate-800/40 shadow-lg rounded-xl overflow-clip",
+      "bg-white flex border border-slate-300 dark:border-slate-700 flex-row items-center gap-2 dark:bg-slate-800/40 p-1 shadow-lg rounded-full overflow-clip",
       className
     )} >
 
-      { fixture.team && value && <SingleTeamButton
-        team={fixture.team}
+      <SingleTeamButton
+        team={team}
         onClick={() => onSelectTeam(fixture.team)}
         value={value}
         fixture={fixture}
-      />}
+      />
 
-      { fixture.opposition_team && value && <SingleTeamButton
-        team={fixture.opposition_team}
+      <SingleTeamButton
+        team={opposition_team}
         onClick={() => onSelectTeam(fixture.opposition_team)}
         value={value}
         fixture={fixture}
-      />}
+      />
 
     </div>
   )
@@ -49,18 +52,20 @@ export default function FixtureTeamSelector({ fixture, className }: Props) {
 type SingleTeamButtonProps = {
   fixture: IFixture,
   team: IProTeam,
-  value: IProTeam,
+  value?: IProTeam,
   onClick?: () => void
 }
 
 function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
+  
   return (
     <div
 
       onClick={onClick}
       className={twMerge(
-        "flex flex-1 flex-row truncate justify-center cursor-pointer px-4 py-2.5 border-b-2 border-transparent  items-center gap-2",
-        value.athstat_id === team.athstat_id && 'border-blue-500 text-blue-500'
+        "flex flex-1 flex-row truncate justify-center cursor-pointer rounded-full h-[35px] border-b-2 border-transparent  items-center gap-2",
+        "hover:bg-slate-100 hover:dark:bg-slate-800/50",
+        value?.athstat_id === team.athstat_id && 'bg-blue-500 text-white hover:dark:bg-blue-500',
       )}
 
     >
@@ -68,15 +73,16 @@ function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
       <TeamLogo
         url={team.image_url}
         teamName={team.athstat_name}
-        className="w-8 h-8"
+        className="w-5 h-5"
       />
 
       <SecondaryText className={twMerge(
-        "font-medium truncate text-nowrap lg:text-base",
-        value.athstat_id === team.athstat_id && 'border-blue-500 text-blue-500'
+        "font-medium truncate text-nowrap text-xs lg:text-base",
+        value?.athstat_id === team.athstat_id && ' text-white dark:text-white'
       )} >
         {team.athstat_name}
       </SecondaryText>
+
     </div>
   )
 }

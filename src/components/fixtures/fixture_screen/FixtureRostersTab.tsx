@@ -13,7 +13,7 @@ type Props = {
 
 export default function FixtureRostersTab({ fixture }: Props) {
 
-    const [team,] = useState<IProTeam | undefined>(fixture?.team);
+    const [team, setTeam] = useState<IProTeam | undefined>(fixture?.team);
 
     return (
         <div className="flex flex-col gap-4" >
@@ -27,6 +27,8 @@ export default function FixtureRostersTab({ fixture }: Props) {
                 <FixtureTeamSelector
                     fixture={fixture}
                     className="w-full"
+                    value={team}
+                    onChange={setTeam}
                 />
             </div>
 
@@ -173,7 +175,7 @@ function RosterItem({ item }: RosterItemProps) {
                     <div className="max-w-16 bg-green-600 max-h-16 min-w-16 min-h-16 flex flex-col items-center rounded-full overflow-hidden border-2 dark:border-green-500/20 " >
                         <TeamJersey
                             teamId={item.athlete.team_id}
-                            className="w-full max-h-16 max-w-16 min-h-16 min-w-16 object-center mt-3 h-full"
+                            className="w-full max-h-15 max-w-15 min-h-15 min-w-15 object-center mt-3 h-full"
                             hideFade
                         />
                     </div>
