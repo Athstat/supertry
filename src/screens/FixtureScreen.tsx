@@ -15,7 +15,7 @@ import FixtureBoxscoreTab from '../components/fixtures/fixture_screen/FixtureBox
 import FixtureH2HTab from '../components/fixtures/fixture_screen/FixtureH2HTab';
 import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
 import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureStickyHeader';
-import FixtureRostersTab from '../components/fixtures/fixture_screen/FixtureRostersTab';
+import FixtureRostersTab from '../components/fixtures/fixture_screen/rosters/FixtureRostersTab';
 import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
 import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureStandingsTab';
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
