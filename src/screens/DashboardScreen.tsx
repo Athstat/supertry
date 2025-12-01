@@ -81,7 +81,7 @@ function DashboardContent() {
             </p>
             <PrimaryButton
               className="h-10 whitespace-nowrap w-fit flex-shrink-0"
-              onClick={() => navigate('/#')}
+              onClick={() => navigate('/fixtures?view=pickem')}
             >
               Predict now
             </PrimaryButton>
