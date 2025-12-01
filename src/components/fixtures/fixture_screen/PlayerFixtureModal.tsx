@@ -366,23 +366,23 @@ function LoadingSkeleton({player, onClose} : SkeletonProps) {
 
                 <div className="flex flex-col items-end justify-center gap-2" >
 
-                    <RoundedCard className="h-[30px] w-[30px] animate-pulse rounded-xl border-none" />
+                    <RoundedCard className="h-[30px] w-[30px] animate-pulse rounded-xl border-none bg-slate-200" />
 
                     <SecondaryText className="text-wrap text-center text-xs" >Match Rating</SecondaryText>
                 </div>
             </div>
 
             <div className="mt-2 flex flex-row animate-pulse items-center gap-2 " >
-                <RoundedCard className="border-none h-[50px] w-full flex-1" />
-                <RoundedCard className="border-none h-[50px] w-full flex-1" />
+                <RoundedCard className="border-none h-[50px] w-full flex-1 bg-slate-200" />
+                <RoundedCard className="border-none h-[50px] w-full flex-1 bg-slate-200" />
             </div>
 
             <div className="flex flex-col gap-4" >
-                <RoundedCard className="h-[100px] w-full border-none" />
-                <RoundedCard className="h-[300px] w-full border-none" />
-                <RoundedCard className="h-[100px] w-full border-none" />
-                <RoundedCard className="h-[100px] w-full border-none" />
-                <RoundedCard className="h-[100px] w-full border-none" />
+                <RoundedCard className="h-[100px] w-full border-none bg-slate-200" />
+                <RoundedCard className="h-[300px] w-full border-none bg-slate-200" />
+                <RoundedCard className="h-[100px] w-full border-none bg-slate-200" />
+                <RoundedCard className="h-[100px] w-full border-none bg-slate-200" />
+                <RoundedCard className="h-[100px] w-full border-none bg-slate-200" />
             </div>
         </div>
     )
