@@ -32,7 +32,7 @@ export function FantasyLeagueScreen() {
 function Content() {
   /** Auto Hides Top Bar to Maximise screen space */
   // useHideTopNavBar();
-    useHideBottomNavBar();
+  useHideBottomNavBar();
 
   const { league, userMemberRecord, isLoading } = useFantasyLeagueGroup();
 
@@ -144,7 +144,6 @@ function Content() {
 }
 
 function LoadingSkeleton() {
-
   // useHideTopNavBar();
   useHideBottomNavBar();
 

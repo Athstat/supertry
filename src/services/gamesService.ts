@@ -119,7 +119,7 @@ export const gamesService = {
     }
   },
 
-  postGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team') => {
+  postGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team' | 'draw') => {
     try {
       const user = await authService.getUserInfo();
       if (!user) return;
@@ -139,7 +139,7 @@ export const gamesService = {
     }
   },
 
-  putGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team') => {
+  putGameVote: async (gameId: string, voteFor: 'home_team' | 'away_team' | 'draw') => {
     try {
       const user = await authService.getUserInfo();
       if (!user) return;

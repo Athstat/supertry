@@ -51,6 +51,9 @@ export default function FloatingSearchBar({
       initial={{ y: 16, opacity: 0 }}
       animate={{ y: 0, opacity: isScrollingDown ? 0.85 : 1 }}
       transition={{ type: 'spring', damping: 22, stiffness: 240 }}
+      style={{
+        marginBottom: -8,
+      }}
     >
       {showFilterButton && (
         <button

@@ -2,11 +2,12 @@ import useSWR from 'swr';
 import { gamesService } from '../../services/gamesService';
 import { LoadingState } from '../ui/LoadingState';
 import FixtureCard from '../fixtures/FixtureCard';
+import PickEmCard from '../fixtures/PickEmCard';
+import PickEmCardSkeleton from '../fixtures/PickEmCardSkeleton';
 import NoContentCard from '../shared/NoContentMessage';
 import { searchProFixturePredicate } from '../../utils/fixtureUtils';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { IFixture } from '../../types/games';
-import { useInView } from 'react-intersection-observer';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import {
@@ -18,13 +19,16 @@ import {
   findNextWeekWithFixtures,
   findPreviousWeekWithFixtures,
 } from '../../utils/fixtureUtils';
+import SegmentedControl from '../ui/SegmentedControl';
 
 type Props = {
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  viewMode: 'fixtures' | 'pickem';
+  onViewModeChange: (mode: 'fixtures' | 'pickem') => void;
 };
 
-export default function ProMatchCenter({ searchQuery }: Props) {
+export default function ProMatchCenter({ searchQuery, viewMode, onViewModeChange }: Props) {
   const key = 'pro-fixtures';
   let { data: fixtures, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
 
@@ -46,6 +50,19 @@ export default function ProMatchCenter({ searchQuery }: Props) {
   }, [fixtures?.length]); // Only run when fixtures are loaded
 
   if (isLoading) {
+    // Show different loading states based on view mode
+    if (viewMode === 'pickem') {
+      return (
+        <div className="flex flex-col gap-3 w-full">
+          {[...Array(5)].map((_, index) => (
+            <PickEmCardSkeleton
+              key={index}
+              className="rounded-xl border w-full dark:border-slate-700"
+            />
+          ))}
+        </div>
+      );
+    }
     return <LoadingState />;
   }
 
@@ -115,9 +132,7 @@ export default function ProMatchCenter({ searchQuery }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="font-bold text-lg">Professional Rugby</h1>
-
-      {/* Week Navigation */}
+      {/* Header with Week Navigation and Mode Toggle */}
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-col gap-1">
@@ -130,7 +145,7 @@ export default function ProMatchCenter({ searchQuery }: Props) {
               </p>
             )}
           </div>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2 items-center">
             {!searchQuery && hasAnyFixtures && (
               <>
                 <button
@@ -188,7 +203,8 @@ export default function ProMatchCenter({ searchQuery }: Props) {
           return (
             <FixtureItem
               fixture={fixture}
-              key={index}
+              key={`${viewMode}-${index}`}
+              viewMode={viewMode}
               className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
             />
           );
@@ -200,15 +216,17 @@ export default function ProMatchCenter({ searchQuery }: Props) {
 
 type FixtureItemProps = {
   fixture: IFixture;
+  viewMode: 'fixtures' | 'pickem';
   className?: string;
 };
 
-function FixtureItem({ fixture, className }: FixtureItemProps) {
-  const { ref, inView } = useInView({ triggerOnce: true });
-
+function FixtureItem({ fixture, viewMode, className }: FixtureItemProps) {
   return (
-    <div ref={ref} className="flex-shrink-0">
-      {inView && <FixtureCard fixture={fixture} showLogos showCompetition className={className} />}
-    </div>
+    <>
+      {viewMode === 'fixtures' && (
+        <FixtureCard fixture={fixture} showLogos showCompetition className={className} />
+      )}
+      {viewMode === 'pickem' && <PickEmCard fixture={fixture} className={className} />}
+    </>
   );
 }

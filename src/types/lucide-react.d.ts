@@ -138,5 +138,6 @@ declare module "lucide-react" {
   export const CirclePlus : CIP;
   export const Minimize : CIP;
   export const Maximize : CIP;
+  export const CloudRain : CIP;
 }
 
