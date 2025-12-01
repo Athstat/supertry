@@ -5,6 +5,7 @@ import { IFixture } from "../../../../types/games";
 import { IProTeam } from "../../../../types/team";
 import { RugbyPitch3D } from "../../../shared/RugbyPitch";
 import { RosterStarterItem } from "./RosterStarterItem";
+import FixtureRosterBench from "./FixtureRosterBench";
 
 type TeamRosterProps = {
     team: IProTeam,
@@ -26,6 +27,12 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
     }, [teamRoster]);
 
     const hasRosterItems = teamRoster.length >= 15;
+
+    const rosterBench = useMemo(() => {
+        return teamRoster.filter((r) => {
+            return r.is_substitute === true;
+        })
+    }, [teamRoster]);
 
     if (isLoading) {
         return (
@@ -131,6 +138,10 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
                     </div>
                 </div>
             </Activity>
+
+            <FixtureRosterBench 
+                bench={rosterBench}
+            />
         </div>
     )
 }

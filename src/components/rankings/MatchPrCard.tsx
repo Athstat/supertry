@@ -2,13 +2,14 @@ import { useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
-    pr?: number
+    pr?: number,
+    className?: string
 }
 
 type TierColour = "purple" | "green" | "yellow" | "red" | "none";
 
 /** Renders a match PR card */
-export default function MatchPrCard({ pr }: Props) {
+export default function MatchPrCard({ pr}: Props) {
 
     const tier = useMemo<TierColour>(() => {
         
@@ -55,7 +56,7 @@ export default function MatchPrCard({ pr }: Props) {
 }
 
 /** Renders a match PR card */
-export function SmallMatchPrCard({ pr }: Props) {
+export function SmallMatchPrCard({ pr, className }: Props) {
 
     const tier = useMemo<TierColour>(() => {
         
@@ -95,6 +96,7 @@ export function SmallMatchPrCard({ pr }: Props) {
             tier === "green" && "bg-green-500 dark:bg-green-600  ",
             tier === "yellow" && "bg-yellow-500 dark:bg-yellow-600 ",
             tier === "red" && "bg-red-500 dark:bg-red-600",
+            className
         )} >
             <p className="text-xs font-semibold" >{pr}</p>
         </div>
