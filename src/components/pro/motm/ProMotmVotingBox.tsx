@@ -12,9 +12,9 @@ import { ScopeProvider } from "jotai-scope";
 import NoContentCard from "../../shared/NoContentMessage";
 import { hasProMotmVotingEnded, proFixtureSummary } from "../../../utils/proMotmUtils";
 import ProMotmWinnerCard from "./ProMotmWinnerCard";
-import FixtureRosters from "../../fixtures/FixtureRosters";
 import { Trophy } from "lucide-react";
 import ProMotmVotingDataProvider from "../../../providers/ProMotmVotingDataProvider";
+import FixtureRosters from "../../fixtures/fixture_screen/FixtureRosters";
 
 type Props = {
     fixture: IFixture;

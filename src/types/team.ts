@@ -48,3 +48,18 @@ export type IProTeam = {
   sport: string,
   organization: string
 }
+
+export type TeamSeasonLeader = {
+  action: string,
+  action_count: number,
+  athlete_id: string,
+  player_name: string,
+  image_url?: string,
+  athstat_firstname: string,
+  athstat_lastname: string,
+  power_rank_rating: number,
+  position: string,
+  nationality?: string | null,
+  price: number,
+  team_id: string
+}

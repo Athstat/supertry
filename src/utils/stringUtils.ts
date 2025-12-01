@@ -26,11 +26,11 @@ export function isEmail(inStr: string) {
 
 /**  Hides part of an email */
 export function maskEmail(email: string): string {
-  const [local, domain] = email.split('@');
-  const maskedLocal = local[0] + '*'.repeat(Math.max(1, local.length - 2)) + local.slice(-1);
-  const [domainName, tld] = domain.split('.');
-  const maskedDomain = domainName[0] + '*'.repeat(Math.max(1, domainName.length - 2)) + domainName.slice(-1);
-  return `${maskedLocal}@${maskedDomain}.${tld}`;
+    const [local, domain] = email.split('@');
+    const maskedLocal = local[0] + '*'.repeat(Math.max(1, local.length - 2)) + local.slice(-1);
+    const [domainName, tld] = domain.split('.');
+    const maskedDomain = domainName[0] + '*'.repeat(Math.max(1, domainName.length - 2)) + domainName.slice(-1);
+    return `${maskedLocal}@${maskedDomain}.${tld}`;
 }
 
 
@@ -50,13 +50,13 @@ export function replaceDashesWithUnderscrolls(inStr: string) {
 
 
 export function isNumeric(str: string) {
-  if (typeof str != "string") return false; // only process strings
-  return !isNaN(Number(str)) && !isNaN(parseFloat(str));
+    if (typeof str != "string") return false; // only process strings
+    return !isNaN(Number(str)) && !isNaN(parseFloat(str));
 }
 
 
 /** Gets the Pathname and Search Params from a URI, the Search Params will include the '?' symbol */
-export function getPathNameAndSearchParams(uri: string): [(string|undefined), (string|undefined)] {
+export function getPathNameAndSearchParams(uri: string): [(string | undefined), (string | undefined)] {
     if (!uri) {
         return [undefined, undefined];
     }
@@ -67,4 +67,36 @@ export function getPathNameAndSearchParams(uri: string): [(string|undefined), (s
     }
 
     return [uri, undefined];
+}
+
+
+export const sanitizeStat = (actionCount?: number) => {
+    if (!actionCount || actionCount === undefined || actionCount === null) {
+        return undefined;
+    }
+
+
+    const [, decimal] = actionCount.toString().split(".");
+
+    if (Number(decimal) > 0) {
+        return Number(actionCount.toString()).toFixed(1);
+    }
+
+    return Math.floor(actionCount);
+}
+
+
+export const getStatUnit = (actionDisplayName?: string) => {
+    if (!actionDisplayName) {
+        return undefined;
+    }
+
+    if (actionDisplayName.includes("Minute")) {
+        return "'"
+    }
+
+    if (actionDisplayName.includes("Metres")) {
+        return "m"
+    }
+    return undefined;
 }

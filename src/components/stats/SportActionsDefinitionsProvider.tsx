@@ -6,7 +6,6 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import { sportActionsService } from '../../services/sportActionsService';
 import { ReactNode, useEffect, useMemo } from 'react';
 import ScrummyLoadingState from '../ui/ScrummyLoadingState';
-import { SportActionDefinition } from '../../types/sports_actions';
 
 type Props = {
     children?: ReactNode

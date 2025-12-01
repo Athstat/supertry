@@ -1,8 +1,8 @@
-import { twMerge } from "tailwind-merge";
-import { IProAthlete } from "../../types/athletes";
-import { IRosterItem } from "../../types/games";
-import { formatPosition } from "../../utils/athleteUtils";
-import PlayerMugshot from "../shared/PlayerMugshot";
+import { IProAthlete } from "../../../types/athletes";
+import { IRosterItem } from "../../../types/games";
+import { formatPosition } from "../../../utils/athleteUtils";
+import PlayerMugshot from "../../shared/PlayerMugshot";
+import { CaptainsArmBand } from "../../player/CaptainsArmBand";
 
 type RosterListProps = {
     roster: IRosterItem[],
@@ -82,21 +82,6 @@ function FixtureRosterListItem({player, onClick} : RosterListItemProps) {
 
                 <p className="text-slate-700 dark:text-slate-400" >{player.athlete.position_class !== 'NULL' ? formatPosition(player.athlete.position_class ?? "") : ''}</p>
             </div>
-        </div>
-    )
-}
-
-type CaptainProps = {
-    className?: string
-}
-
-export function CaptainsArmBand({className} : CaptainProps) {
-    return (
-        <div className={twMerge(
-            "w-8 h-5 bg-black rounded-md flex items-center justify-center text-white dark:bg-white dark:text-black text-sm",
-            className
-        )} >
-            <p >C</p>
         </div>
     )
 }

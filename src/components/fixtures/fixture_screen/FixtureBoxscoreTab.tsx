@@ -1,12 +1,13 @@
-import { IFixture } from "../../types/games"
-import { fixtureSummary } from "../../utils/fixtureUtils"
-import { useEffect, useMemo } from "react"
-import { BoxscoreListRecordItem, GameSportAction } from "../../types/boxScore"
-import FixtureTeamSelector from "./boxscore/FixtureTeamSelector"
-import { useBoxscoreFilter } from "../../hooks/fixtures/useBoxscoreFilter"
-import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics"
-import { useInView } from "react-intersection-observer"
-import BoxscoreTable2 from "./boxscore/BoxscoreTable2"
+import { useEffect, useMemo } from "react";
+import { useBoxscoreFilter } from "../../../hooks/fixtures/useBoxscoreFilter";
+import { fixtureAnalytics } from "../../../services/analytics/fixtureAnalytics";
+import { BoxscoreListRecordItem, GameSportAction } from "../../../types/boxScore";
+import { IFixture } from "../../../types/games";
+import { fixtureSummary } from "../../../utils/fixtureUtils";
+import BoxscoreTable2 from "../boxscore/BoxscoreTable2";
+import FixtureTeamSelector from "../boxscore/FixtureTeamSelector";
+import { useInView } from "react-intersection-observer";
+
 
 type Props = {
     fixture: IFixture,
@@ -18,7 +19,7 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
     const { gameKickedOff } = fixtureSummary(fixture);
     // const [search, setSearch] = useState<string>("");
 
-    const { selectedTeamId, selectedTeam } = useBoxscoreFilter(fixture);
+    const { selectedTeamId, selectedTeam, setSelectedTeamId } = useBoxscoreFilter(fixture);
     const { ref, inView } = useInView({ triggerOnce: true });
 
     useEffect(() => {
@@ -54,9 +55,9 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
     return (
 
-        <div ref={ref} className="flex flex-col w-full gap-4" >
+        <div ref={ref} className="flex flex-col w-full gap-4 px-2" >
 
-            <div className="flex flex-col w-full gap-4" >
+            <div className="flex flex-col w-full items-center justify-center gap-4" >
                 {/* <div className="flex flex-row items-center justify-start gap-2" >
                     <Table2 />
                     <h1 className="font-bold text-lg" >Boxscore</h1>
@@ -64,6 +65,9 @@ export default function FixtureBoxscoreTab({ fixture, sportActions }: Props) {
 
                 <FixtureTeamSelector
                     fixture={fixture}
+                    value={selectedTeam}
+                    onChange={(t) => setSelectedTeamId(t?.athstat_id)}
+                    className="w-2/3"
                 />
             </div>
 

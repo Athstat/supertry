@@ -68,6 +68,11 @@ export function athleteSearchPredicate(athlete: IProAthlete, query: string) {
   return nameMatches(query, athlete.player_name);
 }
 
+export function athleteNameSearchPredicate(athleteName: string, query: string) {
+  return nameMatches(query, athleteName);
+}
+
+
 /** Predicate for searching by human names */
 export function nameSearchPredicate(fullName: string, query: string) {
   return nameMatches(fullName, query);
@@ -350,7 +355,7 @@ export function getPositionFrameBackground(positionClass: string) {
   return frameSrc ?? `${CDN_BASE_URL}/front-row-bg.png`;
 }
 
-export function getTeamJerseyImage(teamId: string | number) {
+export function getTeamJerseyImage(teamId: string | number | null | undefined) {
   const teamFallbackUrl = teamId
     ? `https://dp7xhssw324ru.cloudfront.net/${teamId}-ph-removebg-preview.png`
     : undefined;
@@ -381,3 +386,4 @@ export function sortFantasyTeamAthletes(athletes: IFantasyTeamAthlete[]) {
     return a.slot - b.slot;
   });
 }
+

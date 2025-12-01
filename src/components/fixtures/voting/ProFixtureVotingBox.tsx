@@ -147,3 +147,5 @@ export default function ProFixtureVotingBox({ fixture, className }: Props) {
     </div>
   );
 }
+
+

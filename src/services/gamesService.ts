@@ -2,6 +2,8 @@ import { IFixture, IFullFixture, IGameVote, IRosterItem, ITeamAction } from '../
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 import { authService } from './authService';
+import { SingleMatchPowerRanking } from '../types/powerRankings';
+import { GameSportAction } from '../types/boxScore';
 
 /** Games Service */
 export const gamesService = {
@@ -23,6 +25,7 @@ export const gamesService = {
   getGamesByCompetitionId: async (competitionId: string): Promise<IFixture[]> => {
     //const uri = getUri(`/api/v1/games/leagues/${competitionId}`); //no such endpoint
     const uri = getUri(`/api/v1/games/`);
+    logger.error(competitionId);
 
     try {
       const res = await fetch(uri, {
@@ -62,6 +65,8 @@ export const gamesService = {
       if (res.ok) {
         return (await res.json()) as IFixture;
       }
+
+
     } catch (err) {
       console.log('Error fetching games', err);
       return undefined;
@@ -184,4 +189,78 @@ export const gamesService = {
       return [];
     }
   },
+
+  getFixturePastMatchUps: async (gameId: string) : Promise<IFixture[] | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/games/${gameId}/past-matchups`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as IFixture[];
+      }
+
+    } catch (err) {
+      logger.error("Error fetching past matchups ", err);
+    }
+
+    return [];
+  },
+
+  /** Fetches fixture player of the match */
+  getFixturePotm: async (fixtureId: string) : Promise<SingleMatchPowerRanking | undefined> => {
+    try {
+      const uri = getUri(`/api/v1/games/${fixtureId}/power-rankings/potm`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as SingleMatchPowerRanking
+      }
+    } catch (err) {
+      logger.error("Error fetching fixture motm ", err);
+    }
+
+    return undefined;
+  },
+
+  getAthleteMatchPr: async (fixtureId: string, athleteId: string) : Promise<SingleMatchPowerRanking | undefined> => {
+    try {
+
+      const uri = getUri(`/api/v1/games/${fixtureId}/power-rankings/${athleteId}`);
+      
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as SingleMatchPowerRanking;
+      }
+
+    } catch (err) {
+      logger.error("Error fetching athlete match power ranking ", err);
+    }
+
+    return undefined;
+  },
+
+  /** Gets the sports actions for a player for a single game */
+  getAthleteFixtureSportsActions: async (fixtureId: string, athleteId: string) : Promise<GameSportAction[]> => {
+    try {
+      const uri = getUri(`/api/v1/games/${fixtureId}/sport-actions/athletes/${athleteId}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as GameSportAction[]
+      }
+    } catch (err) {
+      logger.error("Error fetching athlete sports actions ", err);
+    }
+
+    return [];
+  }
 };
