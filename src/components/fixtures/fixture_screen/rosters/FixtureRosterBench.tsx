@@ -97,6 +97,7 @@ function RosterBenchItem({ item }: RosterItemProps) {
                 teamId={athlete.team_id}
                 className="hover:bg-transparent"
                 playerImageClassName="hover:bg-white dark:hover:bg-slate-700 dark:bg-slate-600"
+                
             />
 
             <p className="text-sm" >{player_number}. {athlete.athstat_firstname}</p>
@@ -106,6 +107,7 @@ function RosterBenchItem({ item }: RosterItemProps) {
                     <SmallMatchPrCard
                         pr={pr.updated_power_ranking}
                         className="border-white dark:border-slate-900"
+                        
                     />
                 </div>
             )}

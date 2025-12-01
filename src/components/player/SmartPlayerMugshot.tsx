@@ -24,6 +24,8 @@ export default function SmartPlayerMugshot({ url, teamId, className, playerImage
                         " bg-slate-100 w-10 h-10 lg:w-10 lg:h-10 hover:bg-slate-800",
                         playerImageClassName
                     )}
+
+                    useBaseClassNameForJersey={false}
                 />
             </Activity>
 
