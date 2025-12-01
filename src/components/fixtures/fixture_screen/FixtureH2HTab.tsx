@@ -35,5 +35,3 @@ export default function FixtureH2HTab({ fixture }: Props) {
         </div>
     )
 }
-
-

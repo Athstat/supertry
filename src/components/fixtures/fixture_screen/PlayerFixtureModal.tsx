@@ -12,12 +12,12 @@ import { StatCard } from "../../shared/StatCard"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import useSWR from "swr"
 import { gamesService } from "../../../services/gamesService"
-import { LoadingState } from "../../ui/LoadingState"
 import { GameSportAction } from "../../../types/boxScore"
 import { getStatUnit, sanitizeStat } from "../../../utils/stringUtils"
 import QuickActionButton from "../../ui/QuickActionButton"
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture"
 import { fixtureSummary } from "../../../utils/fixtureUtils"
+import RoundedCard from "../../shared/RoundedCard"
 
 type Props = {
     fixture: IFixture,
@@ -28,7 +28,7 @@ type Props = {
 
 export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }: Props) {
 
-    const {gameKickedOff, matchFinal} = fixtureSummary(fixture);
+    const { gameKickedOff, matchFinal } = fixtureSummary(fixture);
     const { openPlayerProfileModal } = useFixtureScreen();
     const { pr, isLoading: loadingPr } = useAthleteMatchPr(player.tracking_id, fixture.game_id);
 
@@ -40,7 +40,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
     }, [data]);
 
     const isLoading = loadingPr || loadingSportsActions;
-    
+
 
     const hasActions = sportActions.length > 0;
 
@@ -233,12 +233,12 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
                 </Activity>
 
                 <Activity mode={isLoading ? "visible" : "hidden"} >
-                    <BottomSheetView
-                        className="min-h-[80vh] max-h-[900px] py-2 px-4 flex flex-col items-center justify-center gap-2"
-                        hideHandle
-                    >
-                        <LoadingState />
-                    </BottomSheetView>
+
+                    <LoadingSkeleton 
+                        player={player}
+                        onClose={handleClose}
+                    />
+
                 </Activity>
             </BottomSheetView>
         </Activity>
@@ -313,6 +313,76 @@ function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
                         </div>
                     )
                 })}
+            </div>
+        </div>
+    )
+}
+
+type SkeletonProps = {
+    player:IProAthlete,
+    onClose?: () => void
+}
+
+function LoadingSkeleton({player, onClose} : SkeletonProps) {
+    return (
+
+        <div className="flex flex-col gap-2" >
+
+            <div className="flex py-2 flex-row items-center justify-between " >
+
+                <div className="flex flex-row items-center gap-2" >
+                    <Binoculars />
+                    <p>Match Performance Overview</p>
+                </div>
+
+                <div>
+                    <CircleButton
+                        onClick={onClose}
+                    >
+                        <X className="w-4 h-4" />
+                    </CircleButton>
+                </div>
+            </div>
+
+            <div className="flex mt-2 flex-row items-center justify-between" >
+
+                <div className="flex flex-row items-center gap-2" >
+
+                    <div>
+                        <SmartPlayerMugshot
+                            url={player.image_url}
+                            teamId={player.team_id}
+                            playerImageClassName="w-16 h-16"
+                            jerseyClassName="min-w-16 min-h-16"
+                            jerseyConClassName="min-w-16 min-h-16"
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-0.5" >
+                        <p>{player.player_name}</p>
+                        <SecondaryText>{player.team?.athstat_name}</SecondaryText>
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-end justify-center gap-2" >
+
+                    <RoundedCard className="h-[30px] w-[30px] animate-pulse rounded-xl border-none" />
+
+                    <SecondaryText className="text-wrap text-center text-xs" >Match Rating</SecondaryText>
+                </div>
+            </div>
+
+            <div className="mt-2 flex flex-row animate-pulse items-center gap-2 " >
+                <RoundedCard className="border-none h-[50px] w-full flex-1" />
+                <RoundedCard className="border-none h-[50px] w-full flex-1" />
+            </div>
+
+            <div className="flex flex-col gap-4" >
+                <RoundedCard className="h-[100px] w-full border-none" />
+                <RoundedCard className="h-[300px] w-full border-none" />
+                <RoundedCard className="h-[100px] w-full border-none" />
+                <RoundedCard className="h-[100px] w-full border-none" />
+                <RoundedCard className="h-[100px] w-full border-none" />
             </div>
         </div>
     )
