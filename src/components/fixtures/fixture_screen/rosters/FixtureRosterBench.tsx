@@ -20,7 +20,7 @@ type Props = {
 /** Renders game roster bench */
 export default function FixtureRosterBench({ bench }: Props) {
 
-    const [expanded, setExpanded] = useState<boolean>(true);
+    const [expanded, setExpanded] = useState<boolean>(false);
 
     const toggle = () => {
         setExpanded(prev => !prev);
@@ -89,6 +89,7 @@ function RosterBenchItem({ item }: RosterItemProps) {
         <RoundedCard
             onClick={handleOnClick}
             className="p-2 bg-slate-200 cursor-pointer relative border-none flex flex-col items-center h-[100px] justify-center gap-2 flex-1"
+            key={athlete.tracking_id}
         >
 
             <SmartPlayerMugshot
