@@ -45,6 +45,7 @@ import OnboardingDataProvider from './providers/OnboardingDataProvider';
 import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
 import NotificationPreferencesScreen from './screens/myaccount/NotificationPreferencesScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
+import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -201,7 +202,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <PlayersScreen />
+                <PlayersOverviewScreen />
               </Layout>
             </ProtectedRoute>
           }
