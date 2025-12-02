@@ -5,15 +5,16 @@ import { AnimatePresence, motion } from "framer-motion"
 
 type Props = {
     children?: ReactNode,
-    className?: string
+    className?: string,
+    hideHandle?: boolean
 }
 
 /** Renders a bottom sheet view that starts from the bottom of the screen */
-export default function BottomSheetView({ className, children }: Props) {
+export default function BottomSheetView({ className, children, hideHandle }: Props) {
     return (
         <AnimatePresence>
             <motion.div
-                className="fixed bottom-0 left-0 w-full  flex flex-col items-center justify-center"
+                className="fixed z-[100] bottom-0 left-0 w-full  flex flex-col items-center justify-center"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: ["100%", "50%", "0%"] }}
@@ -28,9 +29,10 @@ export default function BottomSheetView({ className, children }: Props) {
                     className
                 )}>
 
-                    <div className="flex flex-row items-center justify-center w-full" >
+                    {!hideHandle && <div className="flex flex-row items-center justify-center w-full" >
                         <BottomSheetHandle />
-                    </div>
+                    </div>}
+                    
                     {children}
                 </div>
             </motion.div>

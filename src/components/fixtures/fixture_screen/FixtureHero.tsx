@@ -1,14 +1,15 @@
 import { ArrowLeft } from 'lucide-react';
-import { IFixture } from '../../types/games';
-import TeamLogo from '../team/TeamLogo';
-import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
-import { format } from 'date-fns';
+import { format, isToday, isTomorrow } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { GoTriangleLeft } from 'react-icons/go';
-import SecondaryText from '../shared/SecondaryText';
-import TeamSeasonRecordText from '../teams/TeamSeasonRecordText';
-import { IProTeam } from '../../types/team';
-import { useNavigateBack } from '../../hooks/web/useNavigateBack';
+import { useNavigateBack } from '../../../hooks/web/useNavigateBack';
+import { IFixture } from '../../../types/games';
+import { IProTeam } from '../../../types/team';
+import { fixtureSummary, isGameLive, formatGameStatus } from '../../../utils/fixtureUtils';
+import SecondaryText from '../../shared/SecondaryText';
+import TeamLogo from '../../team/TeamLogo';
+import TeamSeasonRecordText from '../../teams/TeamSeasonRecordText';
+import { useMemo } from 'react';
 
 type Props = {
   fixture: IFixture;
@@ -78,11 +79,26 @@ export default function FixtureHero({ fixture }: Props) {
 function KickOffInformation({ fixture }: Props) {
   const { kickoff_time } = fixture;
 
+  const timeStr = useMemo(() => {
+    if (kickoff_time) {
+      const ko = new Date(kickoff_time);
+      if (isToday(ko)) {
+        return "Today"
+      }
+
+      if (isTomorrow(ko)) {
+        return "Tommorrow";
+      }
+
+      return format(ko, 'dd MMM yyyy');
+    }
+  }, [kickoff_time]);
+
   return (
     <div className="flex flex-1 text-nowrap flex-col dark:text-white text-center items-center justify-center">
       {kickoff_time && <p className="font-bold">{format(kickoff_time, 'h:mm a')}</p>}
       {kickoff_time && (
-        <p className="dark:text-slate-300 text-slate-500">{format(kickoff_time, 'dd MMM yyyy')}</p>
+        <p className="dark:text-slate-300 text-slate-500">{timeStr}</p>
       )}
     </div>
   );

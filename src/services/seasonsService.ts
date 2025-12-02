@@ -3,7 +3,7 @@
 import { IProAthlete } from '../types/athletes';
 import { ISeasonRound } from '../types/fantasy/fantasySeason';
 import { IFixture, ITeam } from '../types/games';
-import { IProSeason, TeamSeasonRecord } from '../types/season';
+import { IProSeason, SeasonStandingsItem, TeamSeasonRecord } from '../types/season';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 
@@ -134,5 +134,25 @@ export const seasonService = {
     }
 
     return undefined;
+  },
+
+
+  getSeasonStandings: async (seasonId: string) : Promise<SeasonStandingsItem[]> => {
+    try {
+      const uri = getUri(`/api/v1/seasons/${seasonId}/standings`);
+      
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as SeasonStandingsItem[];
+      }
+
+    } catch (err) {
+      logger.error("Error fetching season standings ", err);
+    }
+
+    return [];
   }
 };

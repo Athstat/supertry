@@ -12,11 +12,11 @@ import RoundedCard from "../shared/RoundedCard";
 import SuperSubPill from "./SuperSubPill";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 import { useMemo } from "react";
-import { CaptainsArmBand } from "../fixtures/FixtureRosterList";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
 import TeamJersey from "../player/TeamJersey";
 import { Activity } from "../shared/Activity";
+import { CaptainsArmBand } from "../player/CaptainsArmBand";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;

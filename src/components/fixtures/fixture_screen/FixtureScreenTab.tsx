@@ -1,5 +1,6 @@
-import { useSectionNavigation } from '../../hooks/useSectionNavigation';
-import { TabButton } from '../shared/TabButton'
+import { useSectionNavigation } from "../../../hooks/useSectionNavigation";
+import { TabButton } from "../../shared/TabButton";
+
 
 export default function FixtureScreenTab() {
 
