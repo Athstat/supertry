@@ -139,14 +139,14 @@ function TeamExistsView({
       </div>
 
       {/* Gameweek Countdown */}
-      {currentGameweek && nextDeadline && (
+      {/* {currentGameweek && nextDeadline && (
         <div className="text-center">
           <p className="text-sm">
             <span className="font-semibold">Gameweek {currentGameweek + 1}</span> opens in{' '}
             <span className="font-semibold">{formatCountdown(nextDeadline)}</span>
           </p>
         </div>
-      )}
+      )} */}
 
       <div className="flex justify-center">
         {/* Manage Team Button */}
@@ -175,8 +175,13 @@ function FirstTimeUserView({
 }: FirstTimeUserViewProps) {
   const navigate = useNavigate();
 
-  // Check if the gameweek has opened (nextDeadline has passed)
-  const isGameweekOpen = nextDeadline ? new Date() >= nextDeadline : false;
+  // Check if the gameweek is still open (before deadline)
+  // Convert nextDeadline to Date object if it's a string
+  const isGameweekOpen = nextDeadline ? new Date() < new Date(nextDeadline) : true;
+
+  // Debug logging
+  console.log('FirstTimeUserView - nextDeadline:', nextDeadline);
+  console.log('FirstTimeUserView - isGameweekOpen:', isGameweekOpen);
 
   return (
     <RoundedCard className="p-6 flex flex-col gap-4">
@@ -199,7 +204,7 @@ function FirstTimeUserView({
       {currentGameweek && nextDeadline && (
         <div className="text-center py-4">
           <p className="text-lg">
-            <span className="font-semibold">Gameweek {currentGameweek + 1}</span> opens in
+            <span className="font-semibold">Gameweek {currentGameweek}</span> ends in
           </p>
           <p className="text-2xl font-bold mt-2">{formatCountdown(nextDeadline)}</p>
         </div>
@@ -213,13 +218,8 @@ function FirstTimeUserView({
       {/* Action Buttons */}
       <div className="flex gap-3">
         <button
-          onClick={() => isGameweekOpen && navigate('/how-to-play')}
-          disabled={!isGameweekOpen}
-          className={`flex-1 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium transition-colors ${
-            isGameweekOpen
-              ? 'hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer'
-              : 'opacity-50 cursor-not-allowed'
-          }`}
+          onClick={() => navigate('/#')}
+          className="flex-1 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium transition-colors hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
         >
           How to play?
         </button>

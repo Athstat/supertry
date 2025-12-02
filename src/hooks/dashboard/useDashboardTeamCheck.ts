@@ -247,7 +247,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     leagueGroupId: officialLeague?.id,
     currentRoundId: currentRound?.id,
     currentGameweek: currentRound?.start_round ?? currentRound?.current_gameweek,
-    nextDeadline: calculatedDeadline ?? nextRound?.join_deadline ?? undefined,
+    nextDeadline: currentRound?.join_deadline ?? undefined,
     userStats,
   };
 }
