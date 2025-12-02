@@ -4,9 +4,10 @@ import { useDashboardTeamCheck } from '../../hooks/dashboard/useDashboardTeamChe
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import RoundedCard from '../shared/RoundedCard';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { formatCountdown } from '../../utils/countdown';
+import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
 
 type Props = {
   season?: IFantasySeason;
@@ -174,6 +175,7 @@ function FirstTimeUserView({
   teamUrl,
 }: FirstTimeUserViewProps) {
   const navigate = useNavigate();
+  const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
 
   // Check if the gameweek is still open (before deadline)
   // Convert nextDeadline to Date object if it's a string
@@ -184,53 +186,60 @@ function FirstTimeUserView({
   console.log('FirstTimeUserView - isGameweekOpen:', isGameweekOpen);
 
   return (
-    <RoundedCard className="p-6 flex flex-col gap-4">
-      {/* Welcome Message */}
-      <div className="text-center">
-        <div className="flex justify-center mb-2">
-          <div className="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600"></div>
-        </div>
-        <p className="text-lg">
-          Welcome, <span className="font-medium">{username || 'User'}</span>
-        </p>
-      </div>
-
-      {/* Title */}
-      <h1 className="text-xl font-bold text-center">
-        Play SCRUMMY fantasy: {season.name} Challenge
-      </h1>
-
-      {/* Gameweek Countdown */}
-      {currentGameweek && nextDeadline && (
-        <div className="text-center py-4">
+    <>
+      <RoundedCard className="p-6 flex flex-col gap-4">
+        {/* Welcome Message */}
+        <div className="text-center">
+          <div className="flex justify-center mb-2">
+            <div className="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          </div>
           <p className="text-lg">
-            <span className="font-semibold">Gameweek {currentGameweek}</span> ends in
+            Welcome, <span className="font-medium">{username || 'User'}</span>
           </p>
-          <p className="text-2xl font-bold mt-2">{formatCountdown(nextDeadline)}</p>
         </div>
-      )}
 
-      {/* Call to Action */}
-      <p className="text-center text-gray-700 dark:text-gray-300">
-        Pick your elite team now and start competing!
-      </p>
+        {/* Title */}
+        <h1 className="text-xl font-bold text-center">
+          Play SCRUMMY fantasy: {season.name} Challenge
+        </h1>
 
-      {/* Action Buttons */}
-      <div className="flex gap-3">
-        <button
-          onClick={() => navigate('/#')}
-          className="flex-1 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium transition-colors hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
-        >
-          How to play?
-        </button>
-        <PrimaryButton
-          className={`flex-1 w-fit flex-shrink-0 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
-          onClick={() => isGameweekOpen && navigate(teamUrl)}
-          disabled={!isGameweekOpen}
-        >
-          Pick a team
-        </PrimaryButton>
-      </div>
-    </RoundedCard>
+        {/* Gameweek Countdown */}
+        {currentGameweek && nextDeadline && (
+          <div className="text-center py-4">
+            <p className="text-lg">
+              <span className="font-semibold">Gameweek {currentGameweek}</span> ends in
+            </p>
+            <p className="text-2xl font-bold mt-2">{formatCountdown(nextDeadline)}</p>
+          </div>
+        )}
+
+        {/* Call to Action */}
+        <p className="text-center text-gray-700 dark:text-gray-300">
+          Pick your elite team now and start competing!
+        </p>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <button
+            onClick={() => setIsHowToPlayModalOpen(true)}
+            className="flex-1 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium transition-colors hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
+          >
+            How to play?
+          </button>
+          <PrimaryButton
+            className={`flex-1 w-fit flex-shrink-0 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+            onClick={() => isGameweekOpen && navigate(teamUrl)}
+            disabled={!isGameweekOpen}
+          >
+            Pick a team
+          </PrimaryButton>
+        </div>
+      </RoundedCard>
+
+      <ScrummyGamePlayModal
+        isOpen={isHowToPlayModalOpen}
+        onClose={() => setIsHowToPlayModalOpen(false)}
+      />
+    </>
   );
 }
