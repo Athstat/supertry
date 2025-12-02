@@ -26,18 +26,20 @@ export default function FixtureRosterBench({ bench }: Props) {
         setExpanded(prev => !prev);
     }
 
+    const benchSize = bench.length;
+
     return (
         <BottomSheetView
             hideHandle
             className={twMerge(
-                "p-4 overflow-hidden max-h-[180px]",
+                "p-4 overflow-hidden max-h-[80px] min-h-[80px]",
                 expanded && "max-h-[400px]",
                 "transition-all delay-100 ease-linear"
             )}
         >
             <div className="flex flex-row items-center justify-between" >
                 <div>
-                    <p className="font-semibold" >Bench</p>
+                    <p className="font-semibold" >Bench ({benchSize})</p>
                 </div>
 
                 <div>
