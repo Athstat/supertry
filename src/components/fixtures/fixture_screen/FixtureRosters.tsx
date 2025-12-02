@@ -1,15 +1,16 @@
-import { IFixture } from "../../types/games"
-import TabView, { TabViewHeaderItem, TabViewPage } from "../shared/tabs/TabView"
-import { LoadingState } from "../ui/LoadingState";
-import { FixtureRosterList } from "./FixtureRosterList"
-import { useEffect, useState } from "react";
-import { IProAthlete } from "../../types/athletes";
-import PlayerProfileModal from "../player/PlayerProfileModal";
-import NoContentCard from "../shared/NoContentMessage";
-import { fixtureSummary } from "../../utils/fixtureUtils";
+import { useState, useEffect } from "react";
+import { useGameRosters } from "../../../hooks/fixtures/useGameRosters";
+import { fixtureAnalytics } from "../../../services/analytics/fixtureAnalytics";
+import { IProAthlete } from "../../../types/athletes";
+import { IFixture } from "../../../types/games";
+import { fixtureSummary } from "../../../utils/fixtureUtils";
+import PlayerProfileModal from "../../player/PlayerProfileModal";
+import NoContentCard from "../../shared/NoContentMessage";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../../shared/tabs/TabView";
+import { LoadingState } from "../../ui/LoadingState";
+import { FixtureRosterList } from "./FixtureRosterList";
 import { useInView } from "react-intersection-observer";
-import { fixtureAnalytics } from "../../services/analytics/fixtureAnalytics";
-import { useGameRosters } from "../../hooks/fixtures/useGameRosters";
+
 
 type Props = {
     fixture: IFixture,

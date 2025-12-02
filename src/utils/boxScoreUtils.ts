@@ -1,7 +1,7 @@
 // Sort Players by Offensive Stats
 
-import { BoxscoreListRecordItem } from "../components/fixtures/boxscore/BoxscoreCategoryList";
-import { GameSportAction, IBoxScoreItem } from "../types/boxScore";
+
+import { BoxscoreListRecordItem, GameSportAction, IBoxScoreItem } from "../types/boxScore";
 
 export function rankByAttackingStats(stats: IBoxScoreItem[]) {
     
@@ -226,6 +226,56 @@ export function convertionsPercVal(made: number, missed: number) {
 }
 
 
+export function allStatsBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
+    const athleteIds: string[] = [];
+
+    bs.forEach((b) => {
+        if (!athleteIds.includes(b.athlete_id) && b.team_id === teamId) {
+            athleteIds.push(b.athlete_id);
+        }
+    });
+
+    const athleteStats: BoxscoreListRecordItem[] = athleteIds.map((a) => {
+        const stats = bs.filter((b) => b.athlete_id === a);
+
+        const tries = stats.find((b) => b.action === "tries")?.action_count;
+        const points = stats.find((b) => b.action === "points")?.action_count;
+        const tryAssits = stats.find((b) => b.action === "try_assits")?.action_count;
+        const carries = stats.find((b) => b.action === "carry_dominant")?.action_count;
+        const tackles = stats.find((b) => b.action === "tackles")?.action_count;
+        const tackleSuccess = stats.find((b) => b.action === "tackle_success")?.action_count;
+        const postContactMetres = stats.find((b) => b.action === "post_contact_metres")?.action_count;
+        const ruckArrivals = stats.find((b) => b.action === "ruck_arrival")?.action_count;
+        const defendersBeaten = stats.find((b) => b.action === "defenders_beaten")?.action_count;
+
+        const tacklingPerc = Math.floor((tackleSuccess ?? 0) * 100)
+
+        return {
+            stats: [
+                Math.floor(tries ?? 0),
+                Math.floor(points ?? 0),
+                Math.floor(tryAssits ?? 0),
+                Math.floor(carries ?? 0),
+                `${Math.floor(tackles ?? 0)}`,
+                tacklingPerc + "%",
+                Math.floor(postContactMetres ?? 0),
+                Math.floor(ruckArrivals ?? 0),
+                Math.floor(defendersBeaten ?? 0)
+            ],
+            athleteId: a
+        }
+    }).sort((a, b) => {
+        const [, points] = a.stats;
+        const [, bPoints] = b.stats;
+
+        return ((bPoints as number) ?? 0) - ((points as number) ?? 0)
+    });
+
+
+    return athleteStats;
+
+}
+
 export function attackBoxscoreList(bs: GameSportAction[], teamId: string): BoxscoreListRecordItem[] {
     const athleteIds: string[] = [];
 
@@ -272,22 +322,30 @@ export function defenseBoxscoreList(bs: GameSportAction[], teamId: string): Boxs
         const stats = bs.filter((b) => b.athlete_id === a);
 
         const tackles = stats.find((b) => b.action === "tackles")?.action_count;
+        const tackleSuccess = stats.find((b) => b.action === "tackle_success")?.action_count;
         const dominantTackles = stats.find((b) => b.action === "dominant_tackles")?.action_count;
         const turnoversWon = stats.find((b) => b.action === "turnover_won")?.action_count;
 
+        const tacklingPerc = Math.floor((tackleSuccess ?? 0) * 100)
+
         return {
-            stats: [Math.floor(tackles ?? 0), Math.floor(dominantTackles ?? 0), Math.floor(turnoversWon ?? 0)],
+            stats: [
+                Math.floor(tackles ?? 0),
+                `${tacklingPerc}%`,
+                Math.floor(dominantTackles ?? 0),
+                Math.floor(turnoversWon ?? 0)
+            ],
             athleteId: a
         }
     }).sort((a, b) => {
         const [tackles] = a.stats;
         const [bTackles] = b.stats;
 
-        return (bTackles ?? 0) - (tackles ?? 0)
+        return ((bTackles as number) ?? 0) - ((tackles as number) ?? 0)
     }).filter((a) => {
         const [x] = a.stats;
 
-        return x > 0;
+        return (x as number) > 0;
     });
 
 

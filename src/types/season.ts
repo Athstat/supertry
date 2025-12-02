@@ -1,3 +1,5 @@
+import { IProTeam } from "./team"
+
 export type IProSeason = {
     id: string,
     name: string,
@@ -18,4 +20,16 @@ export type TeamSeasonRecord = {
     wins: number,
     losses: number,
     draws: number
+}
+
+
+export type SeasonStandingsItem = {
+    total_games_played: number,
+    wins: number,
+    losses: number,
+    draws: number,
+    traditional_points: number,
+    team: IProTeam
+    team_id: string,
+    rank: number
 }

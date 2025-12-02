@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { CardTier } from '../../types/cardTiers';
 import ScrummyLogo from '../branding/scrummy_logo';
 import TeamJersey from '../player/TeamJersey';
+import { getTeamJerseyImage } from '../../utils/athleteUtils';
 
 type Props = {
   url?: string;
@@ -13,8 +14,10 @@ type Props = {
   teamId?: string;
   isCaptain?: boolean;
   scrummyLogoClassName?: string;
+  useBaseClassNameForJersey?: boolean
 };
 
+/** Component that renders a player's mugshot */
 export default function PlayerMugshot({
   url,
   className,
@@ -23,22 +26,20 @@ export default function PlayerMugshot({
   playerPr,
   teamId,
   isCaptain = false,
-  scrummyLogoClassName
+  scrummyLogoClassName, 
+  useBaseClassNameForJersey = true
 }: Props) {
 
-  const teamFallbackUrl = teamId
-    ? `https://athstat-landing-assets-migrated.s3.us-east-1.amazonaws.com/logos/${teamId}-ph-removebg-preview.png`
-    : null;
+  const teamFallbackUrl = getTeamJerseyImage(teamId);
   // Start with main URL; if absent, try team fallback; if that fails, show ScrummyLogo
   const [error, setError] = useState(false);
   const src = url;
 
 
   const pr = playerPr ?? 0;
-  const cardTier: CardTier =
-    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+  const cardTier: CardTier = getAthleteCardTier(pr);
 
-  // If both sources failed, show ScrummyLogo inside a neutral circle
+
   if (!src) {
     return (
       <div
@@ -108,8 +109,20 @@ export default function PlayerMugshot({
           className={twMerge(
             'w-full h-full object-contain',
           )}
+          useBaseClasses={useBaseClassNameForJersey}
         />
       )}
     </div>
   );
+}
+
+
+function getAthleteCardTier(pr: number | undefined) {
+
+  pr = pr || 0;
+
+  const cardTier: CardTier =
+    pr <= 69 ? 'bronze' : pr > 70 && pr < 80 ? 'silver' : pr >= 90 ? 'blue' : 'gold';
+
+  return cardTier;
 }

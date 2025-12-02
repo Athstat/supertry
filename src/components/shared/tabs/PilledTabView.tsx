@@ -46,6 +46,7 @@ function TabViewInner({
   initialTabKey,
   pillTabRowClassName
 }: TabInnerProps) {
+  
   const { currentTabKey, navigate } = useTabView();
   const location = useLocation();
 

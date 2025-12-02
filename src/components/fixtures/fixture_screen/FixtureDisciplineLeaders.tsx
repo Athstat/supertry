@@ -1,32 +1,29 @@
-import { IFixture } from "../../types/games"
-import TitledCard from "../shared/TitledCard"
-import { IBoxScoreItem } from "../../types/boxScore"
-import { rankByDefensiveStats } from "../../utils/boxScoreUtils"
-import PlayerBoxScoreSmallCard from "../player/PlayerSmallCard"
-import { Shield } from "lucide-react"
 import { useState } from "react"
+import { IBoxScoreItem } from "../../../types/boxScore";
+import { IFixture } from "../../../types/games";
+import { rankByDisciplineStats } from "../../../utils/boxScoreUtils";
+import PlayerBoxScoreSmallCard from "../../player/PlayerSmallCard";
+import TitledCard from "../../shared/TitledCard";
 
 type Props = {
   fixture: IFixture,
   boxScores: IBoxScoreItem[]
 }
 
-export default function FixtureDefensiveLeaders({ boxScores, fixture }: Props) {
-
+export default function FixtureDisciplineLeaders({ boxScores, fixture }: Props) {
 
   const [showMore, setShowMore] = useState(false);
   const toogle = () => setShowMore(!showMore);
 
-  const sortedList = rankByDefensiveStats(boxScores);
-
+  const sortedList = rankByDisciplineStats(boxScores)
+  .filter((a) => a.redcards !== 0 || a.yellowcards !== 0);
+  
   let shortList = sortedList;
   const length = showMore ? sortedList.length : 4
   shortList = shortList.slice(0, length);
 
-
-
   return (
-    <TitledCard icon={Shield} title={'Defensive Leaders'} >
+    <TitledCard title={'Discipline'} >
 
       <div className="grid grid-cols-1 gap-2 w-full" >
 
@@ -40,11 +37,11 @@ export default function FixtureDefensiveLeaders({ boxScores, fixture }: Props) {
               boxScore={bs}
               fixture={fixture}
             >
-              <div className="flex flex-row w-full text-wrap text-slate-600 dark:text-slate-400 text-xs lg:text-sm gap-2 items-center justify-start" >
-                
-                {bs.tacklesuccess !== 0 && <p className="text-nowrap">Tackles {bs.tacklesmade}/{bs.tacklesmade + bs.tacklesmissed}</p>}
-                {bs.turnoverswon !== 0 && <p className="text-nowrap">T/Os Won {bs.turnoverswon}</p>}
+              <div className="flex flex-row w-full text-wrap text-slate-600 dark:text-slate-400 text-sm gap-2 items-center justify-start" >
+                {bs.redcards !== 0 && <p className="text-nowrap">Red Cards {bs.redcards}</p>}
+                {bs.yellowcards !== 0 && <p className="text-nowrap">Yellow Cards {bs.yellowcards}</p>}
               </div>
+
             </PlayerBoxScoreSmallCard>
 
           </div>
