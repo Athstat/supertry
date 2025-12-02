@@ -1,19 +1,43 @@
-import { Users } from 'lucide-react'
+import { ArrowRight, Users } from 'lucide-react'
 import PageView from '../PageView'
+import SearchInput from '../../components/shared/forms/SearchInput'
+import RoundedCard from '../../components/shared/RoundedCard'
+// import { useNavigate } from 'react-router-dom'
 
 export default function PlayersOverviewScreen() {
+
+  // const navigate = useNavigate();
+
+  const handleViewAll = () => {
+    // navigate user to view all players
+  }
+
   return (
     <PageView className='px-6 flex flex-col gap-4' >
-        <div>
-            <div className='flex flex-row items-center gap-2' >
-                <Users />
-                <p className='text-lg font-bold' >Players</p>
-            </div>
+      <div>
+        <div className='flex flex-row items-center gap-2' >
+          <Users />
+          <p className='text-lg font-bold' >Players</p>
         </div>
+      </div>
 
-        <div className='flex flex-row items-center gap-2 bg-red-500 w-full h-[40px] p-2' >
-            <p>Search Bar</p>
-        </div>
+      <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
+        <SearchInput />
+      </div>
+
+      <div>
+        <RoundedCard 
+          className='flex cursor-pointer py-2 px-4 dark:border-none flex-row items-center gap-2 justify-between' 
+          onClick={handleViewAll}
+        >
+          <p className='text-sm' >View All Players</p>
+          <div>
+            <ArrowRight />
+          </div>
+        </RoundedCard>
+      </div>
+
+
     </PageView>
   )
 }
