@@ -7,13 +7,15 @@ import TeamJersey from "../../../player/TeamJersey";
 import { SmallMatchPrCard } from "../../../rankings/MatchPrCard";
 import PlayerMugshot from "../../../shared/PlayerMugshot";
 import { Activity } from "react";
+import { twMerge } from "tailwind-merge";
 
 type RosterItemProps = {
-    item?: IRosterItem
+    item?: IRosterItem,
+    className?: string
 }
 
 /** Renders pitch view, roster starter item */
-export function RosterStarterItem({ item }: RosterItemProps) {
+export function RosterStarterItem({ item, className }: RosterItemProps) {
 
     const {openPlayerMatchModal} = useFixtureScreen();
     const fixture = useAtomValue(fixtureAtom);
@@ -31,7 +33,10 @@ export function RosterStarterItem({ item }: RosterItemProps) {
             className=""
             onClick={onClick}
         >
-            {item && <div className="flex flex-col items-center justify-center relative" >
+            {item && <div className={twMerge(
+                "flex flex-col items-center justify-center relative",
+                className
+            )} >
 
                 <Activity mode={item.athlete.image_url ? "visible" : "hidden"} >
                     <PlayerMugshot

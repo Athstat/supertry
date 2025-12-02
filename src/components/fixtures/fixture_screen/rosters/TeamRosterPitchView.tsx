@@ -46,13 +46,13 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
         <div className="mt-4 relative" >
 
             <RugbyPitch3D className={twMerge(
-                "max-h-[500px] dark:opacity-70",
+                "max-h-[550px] dark:opacity-70",
                 !hasRosterItems && "opacity-20"
             )} />
 
             <Activity mode={hasRosterItems ? "visible" : "hidden"} >
                 <div className="absolute mt-2 w-full  top-0 left-0 flex flex-col gap-2" >
-                    <div className="flex w-full flex-row items-center justify-center gap-3" >
+                    <div className="flex w-full flex-row items-center justify-center gap-6" >
                         <RosterStarterItem
                             item={getByJersey(1)}
                         />
@@ -66,68 +66,88 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
                         />
                     </div>
 
-                    <div className="flex w-full flex-row items-center justify-center gap-4" >
-                        <RosterStarterItem
-                            item={getByJersey(6)}
-                        />
-
+                    <div className="flex w-full flex-row items-center justify-center gap-6" >
                         <RosterStarterItem
                             item={getByJersey(4)}
                         />
 
-                        <div className="mt-4" >
-                            <RosterStarterItem
-                                item={getByJersey(8)}
-                            />
-                        </div>
-
                         <RosterStarterItem
                             item={getByJersey(5)}
                         />
+                    </div>
 
+                    <div className="flex relative w-full flex-row items-center justify-center gap-6" >
+
+                        <RosterStarterItem
+                            item={getByJersey(6)}
+                            className=""
+                        />
+
+                        <RosterStarterItem
+                            item={getByJersey(8)}
+                            className="top-5"
+                        />
 
                         <RosterStarterItem
                             item={getByJersey(7)}
+                            className=""
                         />
                     </div>
 
-                    <div className="flex w-full flex-row items-center justify-center gap-4" >
+                    <div className="flex mt-4 relative w-full flex-row items-center justify-center gap-6" >
 
+                        <RosterStarterItem
+                            item={getByJersey(9)}
+                            className=""
+                        />
 
                         <RosterStarterItem
                             item={getByJersey(10)}
+                            className="top-4"
                         />
-
-                        <div className="mb-6" >
-                            <RosterStarterItem
-                                item={getByJersey(9)}
-                            />
-                        </div>
 
                         <RosterStarterItem
                             item={getByJersey(12)}
-                        />
-                    </div>
-
-                    <div className="flex w-full flex-row items-center justify-center gap-4" >
-                        <RosterStarterItem
-                            item={getByJersey(11)}
+                            className="top-8"
                         />
 
                         <RosterStarterItem
                             item={getByJersey(13)}
+                            className="top-12"
                         />
-
-                        <div className="mt-6" >
-                            <RosterStarterItem
-                                item={getByJersey(15)}
-                            />
-                        </div>
 
                         <RosterStarterItem
                             item={getByJersey(14)}
+                            className="top-16"
                         />
+
                     </div>
+
+                    <div className="flex mt-6 relative w-full flex-row items-center justify-between" >
+
+                        <div className="flex flex-1 item justify-center" >
+                            <RosterStarterItem
+                                item={getByJersey(11)}
+                                className=""
+                            />
+                        </div>
+
+                        <div className="flex flex-1 item justify-center" >
+                            <RosterStarterItem
+                                item={getByJersey(15)}
+                                className="top-8"
+                            />
+                        </div>
+
+                        <div className="flex flex-1 item justify-center" >
+                            <RosterStarterItem
+                                item={getByJersey(14)}
+                                className="-top-8 hidden left-4"
+                            />
+                        </div>
+
+                    </div>
+
                 </div>
             </Activity>
 
@@ -139,7 +159,7 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
                 </div>
             </Activity>
 
-            <FixtureRosterBench 
+            <FixtureRosterBench
                 bench={rosterBench}
             />
         </div>
