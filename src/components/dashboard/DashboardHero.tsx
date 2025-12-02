@@ -4,8 +4,10 @@ import { useDashboardTeamCheck } from '../../hooks/dashboard/useDashboardTeamChe
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import RoundedCard from '../shared/RoundedCard';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
+import { formatCountdown } from '../../utils/countdown';
+import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
 
 type Props = {
   season?: IFantasySeason;
@@ -13,8 +15,15 @@ type Props = {
 
 export default function DashboardHero({ season }: Props) {
   const { authUser } = useAuth();
-  const { hasTeam, isLoading, leagueGroupId, currentRoundId, currentGameweek, userStats } =
-    useDashboardTeamCheck(season);
+  const {
+    hasTeam,
+    isLoading,
+    leagueGroupId,
+    currentRoundId,
+    currentGameweek,
+    nextDeadline,
+    userStats,
+  } = useDashboardTeamCheck(season);
   const navigate = useNavigate();
 
   const teamUrl = useMemo(() => {
@@ -41,13 +50,22 @@ export default function DashboardHero({ season }: Props) {
   }
 
   if (hasTeam && userStats) {
-    return <TeamExistsView season={season} userStats={userStats} teamUrl={teamUrl} />;
+    return (
+      <TeamExistsView
+        season={season}
+        userStats={userStats}
+        teamUrl={teamUrl}
+        currentGameweek={currentGameweek}
+        nextDeadline={nextDeadline}
+      />
+    );
   }
 
   return (
     <FirstTimeUserView
       season={season}
       currentGameweek={currentGameweek}
+      nextDeadline={nextDeadline}
       username={authUser?.username}
       teamUrl={teamUrl}
     />
@@ -62,9 +80,17 @@ type TeamExistsViewProps = {
     localRankPercentile: number;
   };
   teamUrl: string;
+  currentGameweek?: number;
+  nextDeadline?: Date;
 };
 
-function TeamExistsView({ season, userStats, teamUrl }: TeamExistsViewProps) {
+function TeamExistsView({
+  season,
+  userStats,
+  teamUrl,
+  currentGameweek,
+  nextDeadline,
+}: TeamExistsViewProps) {
   const { authUser } = useAuth();
   const navigate = useNavigate();
 
@@ -99,7 +125,9 @@ function TeamExistsView({ season, userStats, teamUrl }: TeamExistsViewProps) {
             </div>
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">points</p>
-          <p className="text-md font-bold text-gray-600 dark:text-gray-500">Gameweek 5</p>
+          <p className="text-md font-bold text-gray-600 dark:text-gray-500">
+            Gameweek {currentGameweek || '—'}
+          </p>
         </div>
 
         {/* Global Rank */}
@@ -111,13 +139,15 @@ function TeamExistsView({ season, userStats, teamUrl }: TeamExistsViewProps) {
         </div>
       </div>
 
-      {/* Gameweek Countdown - Placeholder */}
-      <div className="text-center">
-        <p className="text-sm">
-          <span className="font-semibold">Gameweek 6</span> closes in{' '}
-          <span className="font-semibold">04 days 12hrs 15mins</span>
-        </p>
-      </div>
+      {/* Gameweek Countdown */}
+      {/* {currentGameweek && nextDeadline && (
+        <div className="text-center">
+          <p className="text-sm">
+            <span className="font-semibold">Gameweek {currentGameweek + 1}</span> opens in{' '}
+            <span className="font-semibold">{formatCountdown(nextDeadline)}</span>
+          </p>
+        </div>
+      )} */}
 
       <div className="flex justify-center">
         {/* Manage Team Button */}
@@ -132,55 +162,84 @@ function TeamExistsView({ season, userStats, teamUrl }: TeamExistsViewProps) {
 type FirstTimeUserViewProps = {
   season: IFantasySeason;
   currentGameweek?: number;
+  nextDeadline?: Date;
   username?: string;
   teamUrl: string;
 };
 
-function FirstTimeUserView({ season, currentGameweek, username, teamUrl }: FirstTimeUserViewProps) {
+function FirstTimeUserView({
+  season,
+  currentGameweek,
+  nextDeadline,
+  username,
+  teamUrl,
+}: FirstTimeUserViewProps) {
   const navigate = useNavigate();
+  const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
+
+  // Check if the gameweek is still open (before deadline)
+  // Convert nextDeadline to Date object if it's a string
+  const isGameweekOpen = nextDeadline ? new Date() < new Date(nextDeadline) : true;
+
+  // Debug logging
+  console.log('FirstTimeUserView - nextDeadline:', nextDeadline);
+  console.log('FirstTimeUserView - isGameweekOpen:', isGameweekOpen);
 
   return (
-    <RoundedCard className="p-6 flex flex-col gap-4">
-      {/* Welcome Message */}
-      <div className="text-center">
-        <div className="flex justify-center mb-2">
-          <div className="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+    <>
+      <RoundedCard className="p-6 flex flex-col gap-4">
+        {/* Welcome Message */}
+        <div className="text-center">
+          <div className="flex justify-center mb-2">
+            <div className="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          </div>
+          <p className="text-lg">
+            Welcome, <span className="font-medium">{username || 'User'}</span>
+          </p>
         </div>
-        <p className="text-lg">
-          Welcome, <span className="font-medium">{username || 'User'}</span>
+
+        {/* Title */}
+        <h1 className="text-xl font-bold text-center">
+          Play SCRUMMY fantasy: {season.name} Challenge
+        </h1>
+
+        {/* Gameweek Countdown */}
+        {currentGameweek && nextDeadline && (
+          <div className="text-center py-4">
+            <p className="text-lg">
+              <span className="font-semibold">Gameweek {currentGameweek}</span> ends in
+            </p>
+            <p className="text-2xl font-bold mt-2">{formatCountdown(nextDeadline)}</p>
+          </div>
+        )}
+
+        {/* Call to Action */}
+        <p className="text-center text-gray-700 dark:text-gray-300">
+          Pick your elite team now and start competing!
         </p>
-      </div>
 
-      {/* Title */}
-      <h1 className="text-xl font-bold text-center">
-        Play SCRUMMY fantasy: {season.name} Challenge
-      </h1>
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <button
+            onClick={() => setIsHowToPlayModalOpen(true)}
+            className="flex-1 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium transition-colors hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
+          >
+            How to play?
+          </button>
+          <PrimaryButton
+            className={`flex-1 w-fit flex-shrink-0 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+            onClick={() => isGameweekOpen && navigate(teamUrl)}
+            disabled={!isGameweekOpen}
+          >
+            Pick a team
+          </PrimaryButton>
+        </div>
+      </RoundedCard>
 
-      {/* Gameweek Countdown - Placeholder */}
-      <div className="text-center py-4">
-        <p className="text-lg">
-          <span className="font-semibold">Gameweek {currentGameweek || 6}</span> closes in
-        </p>
-        <p className="text-2xl font-bold mt-2">04 days 12hrs 15mins</p>
-      </div>
-
-      {/* Call to Action */}
-      <p className="text-center text-gray-700 dark:text-gray-300">
-        Pick your elite team now and start competing!
-      </p>
-
-      {/* Action Buttons */}
-      <div className="flex gap-3">
-        <button
-          onClick={() => navigate('/how-to-play')}
-          className="flex-1 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-        >
-          How to play?
-        </button>
-        <PrimaryButton className="flex-1 w-fit flex-shrink-0" onClick={() => navigate(teamUrl)}>
-          Pick a team
-        </PrimaryButton>
-      </div>
-    </RoundedCard>
+      <ScrummyGamePlayModal
+        isOpen={isHowToPlayModalOpen}
+        onClose={() => setIsHowToPlayModalOpen(false)}
+      />
+    </>
   );
 }
