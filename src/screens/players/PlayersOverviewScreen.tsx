@@ -9,7 +9,7 @@ export default function PlayersOverviewScreen() {
   // const navigate = useNavigate();
 
   const handleViewAll = () => {
-    // navigate user to view all players
+    // navigate user to view
   }
 
   return (
