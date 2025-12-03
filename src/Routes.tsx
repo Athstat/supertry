@@ -46,6 +46,7 @@ import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
 import NotificationPreferencesScreen from './screens/myaccount/NotificationPreferencesScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
 import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
+import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -203,6 +204,17 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <PlayersOverviewScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/country/:countryName"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PlayersByCountryScreen />
               </Layout>
             </ProtectedRoute>
           }

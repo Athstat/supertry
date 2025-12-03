@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthletes"
 import CountryCard from "../../teams/countries/CountryCard";
+import { useNavigate } from "react-router-dom";
 
 /** Renders a list of countries for available players through use athletes */
 export default function PlayersCountryGridList() {
 
     const {athletes} = useSupportedAthletes();
+    const navigate = useNavigate();
 
     const stripCountryName = (name: string) => {
         if (name.endsWith(" A")) {
@@ -36,8 +38,10 @@ export default function PlayersCountryGridList() {
         return unique_set.sort();
     }, [athletes]);
 
-    
 
+    const onClick = (countryName?: string) => {
+        navigate(`/players/country/${countryName}`);
+    }
     
 
     return (
@@ -46,6 +50,7 @@ export default function PlayersCountryGridList() {
                 return (
                     <CountryCard 
                         countryName={c}
+                        onClick={onClick}
                     />
                 )
             })}
