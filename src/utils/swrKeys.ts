@@ -160,5 +160,21 @@ export const swrFetchKeys = {
 
   getNotificationProfileByUserId: (userId: string) => {
     return `/notifications/profiles/${userId}`;
+  },
+
+  getPastMatchups: (gameId: string) => {
+    return `/games/${gameId}/past-matchups`;
+  },
+
+  getSeasonStandings: (seasonId: string) => {
+    return `/seasons/$${seasonId}/standings`;
+  },
+
+  getFixturePotm: (fixtureId: string) => {
+    return `/fixture/${fixtureId}/potm`;
+  },
+
+  getAthleteFixtureSportsActions: (fixtureId: string, athleteId: string) => {
+    return `/fixtures/${fixtureId}/sports-actions/athletes/${athleteId}`;
   }
 };

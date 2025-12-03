@@ -14,11 +14,11 @@ export default function RugbyPitch({ count = 5 }: Props) {
     }
 
     return (
-        <div className="grid grid-cols-1 overflow-clip items-center">
+        <div className="grid grid-cols-1 overflow-clip items-center bg-green-600">
             {arr.map((_, index) => {
                 return <Fragment key={index}>
                     <div className="flex flex-1 border-b-4 border-white/0 h-20"></div>
-                    <div className="flex flex-1 border-b-4 border-white/10 bg-green-800 h-20"></div>
+                    <div className="flex flex-1 border-b-4 border-green-500/10 bg-green-700 h-20"></div>
                 </Fragment>
             })}
 

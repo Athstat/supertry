@@ -3,8 +3,10 @@ import { ITeamAction, ITeamActionName } from "../types/games";
 
 export type TeamHeadtoHeadItem = {
     action: string
-    homeValue?: number | string,
-    awayValue?: number | string,
+    homeValue?: number,
+    awayValue?: number,
+    homeStrValue?: string
+    awayStrValue?: string
     winner?: 'home' | 'away',
     hide?: boolean
 }
@@ -48,16 +50,24 @@ export class TeamActionsParser {
         const [homeMissed, awayMissed] = this.getForHomeAndAway('ConversionsMissed');
         const [homeMade, awayMade] = this.getForHomeAndAway('ConversionsScored');
 
+        const homeTotal = (homeMade ?? 0) + (homeMissed ?? 0);
+        const homePerc = (homeTotal > 0 ? (homeMade ?? 0) / homeTotal : 0) * 100;
+
+        const awayTotal = (awayMade ?? 0) + (awayMissed ?? 0);
+        const awayPerc = (awayTotal > 0 ? (awayMade ?? 0) / awayTotal : 0) * 100;
+
         const homeRate = `${homeMade ?? '-'}/${(homeMade || homeMissed) ? (homeMade ?? 0) + (homeMissed ?? 0) : '-'}`
         const awayRate = `${awayMade ?? '-'}/${(awayMade || awayMissed) ? (awayMade ?? 0) + (awayMissed ?? 0) : '-'}`
 
         return {
             action: "Conversion",
-            homeValue: homeRate,
-            awayValue: awayRate,
+            homeStrValue: homeRate,
+            awayStrValue: awayRate,
+            homeValue: homePerc,
+            awayValue: awayPerc,
             winner: this.calculateWinner(
-                homeMade && homeMissed ? (homeMade)/(homeMade + homeMissed) : undefined,
-                awayMade && awayMissed ? (awayMade)/(awayMade + awayMissed) : undefined,
+                homeMade && homeMissed ? (homeMade) / (homeMade + homeMissed) : undefined,
+                awayMade && awayMissed ? (awayMade) / (awayMade + awayMissed) : undefined,
             )
         }
     }
@@ -195,8 +205,8 @@ export class TeamActionsParser {
             winner: this.calculateWinner(home, away),
             hide: home === undefined && away === undefined
         }
-    } 
-    
+    }
+
     getMaulsFormed(): TeamHeadtoHeadItem {
         const [home, away] = this.getForHomeAndAway('Mauls');
         return {

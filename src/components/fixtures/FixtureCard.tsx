@@ -9,7 +9,6 @@ import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtur
 import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
 import GameHighlightsCard from '../video/GameHighlightsCard';
-import ProFixtureVotingBox from './voting/ProFixtureVotingBox';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';
