@@ -7,16 +7,38 @@ export default function PlayersCountryGridList() {
 
     const {athletes} = useSupportedAthletes();
 
+    const stripCountryName = (name: string) => {
+        if (name.endsWith(" A")) {
+            name = name.replace(" A", "");
+        }
+        
+        name = name.replace(" B", "");
+        name = name.replace(" XV", "");
+        name = name.replace(" 7s", "");
+        name = name.replace(" U18", "");
+        name = name.replace(" U20", "");
+        name = name.replace(" U19", "");
+
+        return name;
+    }
+
     const countries = useMemo(() => {
+
         const unique_set: string[] = [];
+
         athletes.forEach((a) => {
-            if (a.nationality && !unique_set.includes(a.nationality)) {
-                unique_set.push(a.nationality)
+            const playerCountry = a.nationality ? stripCountryName(a.nationality) : undefined;
+            if (playerCountry && !unique_set.includes(playerCountry)) {
+                unique_set.push(playerCountry)
             }
         })
 
-        return unique_set;
+        return unique_set.sort();
     }, [athletes]);
+
+    
+
+    
 
     return (
         <div  className="grid grid-cols-4 gap-2" >
