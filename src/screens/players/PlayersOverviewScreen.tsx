@@ -3,6 +3,7 @@ import PageView from '../PageView'
 import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
 import PositionCard from '../../components/players/positioning/PositionCard'
+import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 // import { useNavigate } from 'react-router-dom'
 
 export default function PlayersOverviewScreen() {
@@ -72,9 +73,13 @@ export default function PlayersOverviewScreen() {
           title='Backs'
           showViewMoreButton
         />
-
-
       </div>
+
+      <div>
+        <p className='font-bold text-md' >By Country</p>
+      </div>
+
+      <PlayersCountryGridList />
 
     </PageView>
   )
