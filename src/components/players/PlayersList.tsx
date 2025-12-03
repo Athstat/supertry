@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { Users, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
@@ -7,7 +7,6 @@ import useAthleteFilter from "../../hooks/useAthleteFilter";
 import { useDebounced } from "../../hooks/useDebounced";
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare";
 import { useQueryState } from "../../hooks/useQueryState";
-import PageView from "../../screens/PageView";
 import { comparePlayersAtomGroup } from "../../state/comparePlayers.atoms";
 import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting";
@@ -33,7 +32,7 @@ type Props = {
 }
 
 /** Renders a list of player cards, with functionality to filter sort etc */
-export default function PlayerCardsList({ players }: Props) {
+export default function PlayersList({ players }: Props) {
     const displayedAthletes = players;
     const [params, setParams] = useSearchParams();
 
@@ -140,21 +139,7 @@ export default function PlayerCardsList({ players }: Props) {
 
     return (
         <Fragment>
-            <PageView className="px-5 flex flex-col items-center justify-center gap-3 md:w-[80%] lg:w-[60%] pb-28 md:pb-32">
-                {/* Search and Filter Header */}
-                <div className="flex flex-row gap-2 items-center w-full">
-                    <Users />
-                    <h1 className="text-2xl font-bold">Players</h1>
-                </div>
-
-                {/* Fantasy Season Tabs - identical to Fantasy Leagues */}
-                {/* <div className="sticky top-16 z-40 w-full -mx-5 py-2 bg-transparent border-b-0 overflow-visible">
-          <PlayersSeasonSelector />
-        </div> */}
-
-                {/* <PlayersCompareButton
-          className={twMerge(isPickingPlayers && 'bg-gradient-to-r from-primary-600 to-blue-700')}
-        /> */}
+            <div className="flex flex-col items-center justify-center flex-wrap">
 
                 {<PlayersScreenCompareStatus />}
 
@@ -187,7 +172,7 @@ export default function PlayerCardsList({ players }: Props) {
                 {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
 
                 {/* Player Grid */}
-                { !isFiltering && (
+                {!isFiltering && (
                     <div
                         data-player-grid
                         className="grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 md:gap-y-3"
@@ -211,7 +196,7 @@ export default function PlayerCardsList({ players }: Props) {
                         isOpen={playerModalPlayer !== undefined && showPlayerModal}
                     />
                 )}
-            </PageView>
+            </div>
 
             <FloatingSearchBar
                 value={searchQuery ?? ''}

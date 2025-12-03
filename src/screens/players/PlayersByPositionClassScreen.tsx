@@ -5,7 +5,11 @@ import RoundedCard from '../../components/shared/RoundedCard';
 import { formatPosition } from '../../utils/athleteUtils';
 import CircleButton from '../../components/shared/buttons/BackButton';
 import PlayersPositionsSheet from '../../components/players/positioning/PlayersPositionsSheet';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import PlayersList from '../../components/players/PlayersList';
+import { useSupportedAthletes } from '../../hooks/athletes/useSupportedAthletes';
+import { twMerge } from 'tailwind-merge';
+import { backgroundTranslucentCN } from '../../types/constants';
 
 export default function PlayersByPositionClassScreen() {
 
@@ -15,14 +19,25 @@ export default function PlayersByPositionClassScreen() {
     const [showSheet, setShowSheet] = useState<boolean>(false);
     const toggle = () => setShowSheet(prev => !prev);
 
+    const {athletes} = useSupportedAthletes();
+
+    const positionPlayers = useMemo(() => {
+        return athletes.filter((a) => {
+            return a.position_class === positionClass;
+        })
+    }, [athletes, positionClass]);
+
     const handleBack = () => {
         navigate("/players")
     }
 
     return (
-        <PageView className='px-4' >
+        <PageView className='px-4 relative' >
 
-            <div className='flex flex-row items-center justify-between' >
+            <div className={twMerge(
+                'flex sticky w-full p-2 top-16 z-[100] left-0 flex-row items-center justify-between',
+                backgroundTranslucentCN
+            )} >
                 <div className='flex flex-row items-center gap-2' >
                     <CircleButton
                         onClick={handleBack}
@@ -43,6 +58,9 @@ export default function PlayersByPositionClassScreen() {
                 </div>
             </div>
 
+            <PlayersList 
+                players={positionPlayers}
+            />
 
             <PlayersPositionsSheet
                 isOpen={showSheet}
