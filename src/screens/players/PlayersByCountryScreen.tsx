@@ -9,6 +9,7 @@ import PlayerSearchResults from "./PlayerSearchResults";
 import { PlayerGameCard } from "../../components/player/PlayerGameCard";
 import { Users } from "lucide-react";
 import RoundedCard from "../../components/shared/RoundedCard";
+import SecondaryText from "../../components/shared/SecondaryText";
 
 
 export default function PlayersByCountryScreen() {
@@ -32,19 +33,24 @@ export default function PlayersByCountryScreen() {
 
 
     return (
-        <PageView className="px-4 flex flex-col gap-4" >
+        <PageView className="px-4 flex flex-col gap-2" >
 
-            <div className="flex flex-row items-center gap-2" >
+            <div className="flex flex-col gap-1" >
 
                 <div className="flex flex-row items-center gap-2" >
                     <Users />
                     <p>Players</p>
                 </div>
 
-                <RoundedCard className="flex dark:border-none cursor-pointer dark:bg-slate-800 px-2 rounded-xl flex-row items-center gap-2" >
-                    <p className="text-xl" >{flag}</p>
-                    <p className="text-sm" >{countryName}</p>
-                </RoundedCard>
+
+                <div className="flex flex-row items-center gap-2" >
+                    <SecondaryText>Viewing Players for</SecondaryText>
+                    <RoundedCard className="flex w-fit dark:border-none cursor-pointer dark:bg-slate-800 px-2 rounded-xl flex-row items-center gap-2" >
+                        <p className="text-xl" >{flag}</p>
+                        <p className="text-sm" >{countryName}</p>
+                    </RoundedCard>
+                </div>
+
             </div>
 
             <div>
