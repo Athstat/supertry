@@ -1,4 +1,4 @@
-import { ArrowRight, Users } from 'lucide-react'
+import { ArrowRight, BicepsFlexed, Shield, Users, WandSparkles } from 'lucide-react'
 import PageView from '../PageView'
 import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
@@ -9,6 +9,8 @@ import PlayerSearchResults from './PlayerSearchResults'
 import { useQueryState } from '../../hooks/useQueryState'
 import { PositionClass } from '../../types/athletes'
 import { useNavigate } from 'react-router-dom'
+import { FastForward } from 'lucide-react'
+import { TrendingUpDown } from 'lucide-react'
 // import { useNavigate } from 'react-router-dom'
 
 export default function PlayersOverviewScreen() {
@@ -86,6 +88,7 @@ function Content() {
           title='Front Row'
           showViewMoreButton
           onClick={handlePositionCardClick}
+          icon={<BicepsFlexed className='w-20 h-20 text-yellow-500' />}
         />
 
         <PositionCard
@@ -93,6 +96,7 @@ function Content() {
           title='Second Row'
           showViewMoreButton
           onClick={handlePositionCardClick}
+          icon={<TrendingUpDown className='w-20 h-20 text-yellow-500' />}
         />
 
         <PositionCard
@@ -100,6 +104,7 @@ function Content() {
           title='Back Row'
           showViewMoreButton
           onClick={handlePositionCardClick}
+          icon={<Shield className='w-20 h-20 text-red-500' />}
         />
 
         <PositionCard
@@ -107,6 +112,7 @@ function Content() {
           title='Half Backs'
           showViewMoreButton
           onClick={handlePositionCardClick}
+          icon={<WandSparkles className='w-20 h-20 text-green-500' />}
         />
 
         <PositionCard
@@ -114,6 +120,7 @@ function Content() {
           title='Backs'
           showViewMoreButton
           onClick={handlePositionCardClick}
+          icon={<FastForward className='w-20 h-20 text-blue-500' />}
         />
       </div>
 
