@@ -1,15 +1,19 @@
-import { ArrowLeft, ChevronDown, Users } from 'lucide-react';
+import { ArrowLeft, ChevronDown } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom'
 import PageView from '../PageView';
 import RoundedCard from '../../components/shared/RoundedCard';
 import { formatPosition } from '../../utils/athleteUtils';
 import CircleButton from '../../components/shared/buttons/BackButton';
 import PlayersPositionsSheet from '../../components/players/positioning/PlayersPositionsSheet';
+import { useState } from 'react';
 
 export default function PlayersByPositionClassScreen() {
 
     const { positionClass } = useParams();
     const navigate = useNavigate();
+
+    const [showSheet, setShowSheet] = useState<boolean>(false);
+    const toggle = () => setShowSheet(prev => !prev);
 
     const handleBack = () => {
         navigate("/players")
@@ -29,7 +33,10 @@ export default function PlayersByPositionClassScreen() {
                 </div>
 
                 <div>
-                    <RoundedCard className='w-fit py-2 cursor-pointer px-3 rounded-md flex flex-row items-center gap-2' >
+                    <RoundedCard
+                        onClick={toggle}
+                        className='w-fit py-2 cursor-pointer px-3 rounded-md flex flex-row items-center gap-2'
+                    >
                         <p className='text-sm' >{formatPosition(positionClass)}</p>
                         <ChevronDown className='w-4 h-4' />
                     </RoundedCard>
@@ -37,8 +44,9 @@ export default function PlayersByPositionClassScreen() {
             </div>
 
 
-            <PlayersPositionsSheet 
-
+            <PlayersPositionsSheet
+                isOpen={showSheet}
+                onClose={toggle}
             />
 
 
