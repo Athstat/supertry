@@ -82,7 +82,7 @@ function MyTeamModeSelector() {
 
   return (
     <Fragment>
-      <TeamHistoryBar lock={viewMode === 'create-team'} />
+      <TeamHistoryBar lock={false} />
 
       <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
         {roundTeam && (
