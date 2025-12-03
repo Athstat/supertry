@@ -1,4 +1,4 @@
-import { twMerge } from "tailwind-merge";
+ import { twMerge } from "tailwind-merge";
 import { useAthleteRoundScore } from "../../hooks/useAthletePointsBreakdown";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
@@ -71,7 +71,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 className={twMerge(
                     'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px]',
                     'min-w-[120px] max-w-[120px] flex flex-col',
-                    player.image_url && "bg-gradient-to-br from-green-500/30 to-green-500/60",
+                    player.image_url && "bg-gradient-to-br from-white/20 to-white/40 ",
                     !player.image_url && "bg-gradient-to-br from-green-500/20 to-green-500/20",
                     showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}

@@ -4,7 +4,6 @@ import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../../utils/athleteUtils";
 import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
-import BottomSheetHandle from "../../ui/BottomSheetHandle";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { twMerge } from "tailwind-merge";
 import TeamJersey from "../../player/TeamJersey";
@@ -44,10 +43,6 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
     initateSwapOnEmptySlot(superSubSlot);
   }
 
-  const handleOnDrag = () => {
-    handlePlayerClick();
-  }
-
   return (
     <div 
     
@@ -61,11 +56,7 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
     >
       <div className="lg:max-w-[40%] md:max-w-[50%]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
 
-        <div className="w-full flex flex-col gap-1 p-2" >
-          <BottomSheetHandle
-            className="bg-slate-800 opacity-0"
-            onDragStart={handleOnDrag}
-          />
+        <div className="w-full flex flex-col gap-1 p-4" >
 
           <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
             Super Subsitute
