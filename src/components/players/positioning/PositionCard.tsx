@@ -1,3 +1,4 @@
+import { twMerge } from "tailwind-merge";
 import { PositionClass } from "../../../types/athletes";
 import RoundedCard from "../../shared/RoundedCard";
 
@@ -7,11 +8,12 @@ type Props = {
     title?: string,
     description?: string,
     showViewMoreButton?: boolean,
-    onClick?: (positionClass: PositionClass) => void
+    onClick?: (positionClass: PositionClass) => void,
+    className?: string
 }
 
 /** Renders a card that shows the top players in that position, using the athlete provider */
-export default function PositionCard({ title, onClick, positionClass }: Props) {
+export default function PositionCard({ title, onClick, positionClass, className }: Props) {
 
     const handleClick = () => {
         if (onClick && positionClass) {
@@ -21,7 +23,10 @@ export default function PositionCard({ title, onClick, positionClass }: Props) {
 
     return (
         <RoundedCard
-            className="flex cursor-pointer p-4 dark:border-none  relative w-full h-[60px] rounded-xl flex-col gap-2"
+            className={twMerge(
+                "flex cursor-pointer p-4 dark:border-none  relative w-full h-[60px] rounded-xl flex-col gap-2",
+                className
+            )}
             onClick={handleClick}
         >
             <p className="font-semibold text-sm" >{title}</p>

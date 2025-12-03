@@ -1,20 +1,31 @@
-import { ChevronDown, Users } from 'lucide-react';
-import { useParams } from 'react-router-dom'
+import { ArrowLeft, ChevronDown, Users } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom'
 import PageView from '../PageView';
 import RoundedCard from '../../components/shared/RoundedCard';
 import { formatPosition } from '../../utils/athleteUtils';
+import CircleButton from '../../components/shared/buttons/BackButton';
+import PlayersPositionsSheet from '../../components/players/positioning/PlayersPositionsSheet';
 
 export default function PlayersByPositionClassScreen() {
 
     const { positionClass } = useParams();
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate("/players")
+    }
 
     return (
         <PageView className='px-4' >
 
             <div className='flex flex-row items-center justify-between' >
                 <div className='flex flex-row items-center gap-2' >
-                    <Users />
-                    <p className='font-bold' >Players</p>
+                    <CircleButton
+                        onClick={handleBack}
+                    >
+                        <ArrowLeft />
+                    </CircleButton>
+                    <p className='font-bold' >Players By Position</p>
                 </div>
 
                 <div>
@@ -24,6 +35,11 @@ export default function PlayersByPositionClassScreen() {
                     </RoundedCard>
                 </div>
             </div>
+
+
+            <PlayersPositionsSheet 
+
+            />
 
 
         </PageView>

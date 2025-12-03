@@ -36,4 +36,4 @@ export const queryParamKeys = {
 }
 
 /** Classname for app lighter dark blue */
-export const lighterDarkBlueCN = "dark:bg-[#161c27]";
+export const lighterDarkBlueCN = "dark:bg-[#161d29]";
