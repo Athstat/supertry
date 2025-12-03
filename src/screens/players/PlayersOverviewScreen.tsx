@@ -2,7 +2,7 @@ import { ArrowRight, Users } from 'lucide-react'
 import PageView from '../PageView'
 import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
-import TopPositionPlayers from '../../components/players/positioning/TopPositionPlayers'
+import PositionCard from '../../components/players/positioning/PositionCard'
 // import { useNavigate } from 'react-router-dom'
 
 export default function PlayersOverviewScreen() {
@@ -38,24 +38,42 @@ export default function PlayersOverviewScreen() {
         </RoundedCard>
       </div>
 
-      <div className='flex flex-col gap-4' >
-        <TopPositionPlayers
+      <div>
+        <p className='font-bold text-md' >By Position</p>
+      </div>
+
+      <div className='grid grid-cols-2 gap-4' >
+        <PositionCard
           positionClass='front-row'
           title='Front Row'
           showViewMoreButton
         />
 
-        <TopPositionPlayers
+        <PositionCard
+          positionClass='second-row'
+          title='Second Row'
+          showViewMoreButton
+        />
+
+        <PositionCard
           positionClass='back-row'
           title='Back Row'
           showViewMoreButton
         />
 
-        <TopPositionPlayers
+        <PositionCard
           positionClass='half-back'
-          title='Half Back'
+          title='Half Backs'
           showViewMoreButton
         />
+
+        <PositionCard
+          positionClass='back'
+          title='Backs'
+          showViewMoreButton
+        />
+
+
       </div>
 
     </PageView>
