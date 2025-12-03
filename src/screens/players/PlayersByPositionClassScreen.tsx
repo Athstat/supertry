@@ -35,7 +35,7 @@ export default function PlayersByPositionClassScreen() {
         <PageView className='px-4 relative' >
 
             <div className={twMerge(
-                'flex sticky w-full p-2 top-16 z-[100] left-0 flex-row items-center justify-between',
+                'flex sticky w-full p-2 top-16 z-[10] left-0 flex-row items-center justify-between',
                 backgroundTranslucentCN
             )} >
                 <div className='flex flex-row items-center gap-2' >
