@@ -38,7 +38,7 @@ export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
 
       <div className='top-0 left-0 absolute w-full p-4 flex flex-col gap-6' >
 
-        <div className='flex flex-row items-center gap-2 justify-center' >
+        <div className='flex flex-row items-center gap-4 justify-center' >
           {firstRowSlots.map((s) => {
 
             const { athlete } = s;
@@ -63,7 +63,7 @@ export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
 
         </div>
 
-        <div className='flex flex-row items-center gap-2 justify-center' >
+        <div className='flex flex-row items-center gap-4 justify-center' >
           {lastRowSlots.map((s) => {
 
             const { athlete } = s;
