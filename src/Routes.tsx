@@ -47,6 +47,7 @@ import NotFoundScreen from './screens/NotFoundScreen';
 import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
 import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
 import PlayersByPositionClassScreen from './screens/players/PlayersByPositionClassScreen';
+import AllPlayersScreen from './screens/players/AllPlayersScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -204,6 +205,17 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <PlayersOverviewScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/all"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <AllPlayersScreen />
               </Layout>
             </ProtectedRoute>
           }

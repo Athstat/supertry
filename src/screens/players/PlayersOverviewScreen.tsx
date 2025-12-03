@@ -27,7 +27,7 @@ export default function PlayersOverviewScreen() {
       </div>
 
       <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
-        <SearchInput 
+        <SearchInput
           value={searchQuery}
           onChange={setSearchQuery}
         />
@@ -53,7 +53,7 @@ function Content() {
   const navigate = useNavigate();
 
   const handleViewAll = () => {
-    // navigate user to view
+    navigate(`/players/all`);
   }
 
   const handlePositionCardClick = (positionClass: PositionClass) => {
@@ -63,6 +63,7 @@ function Content() {
   return (
     <Fragment>
       <div>
+
         <RoundedCard
           className='flex cursor-pointer py-2 px-4 dark:border-none flex-row items-center gap-2 justify-between'
           onClick={handleViewAll}
@@ -72,6 +73,7 @@ function Content() {
             <ArrowRight />
           </div>
         </RoundedCard>
+
       </div>
 
       <div>
