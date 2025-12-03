@@ -8,6 +8,8 @@ import RoundedCard from "../../components/shared/RoundedCard";
 import PlayersCountrySheet from "../../components/players/nationality/PlayersCountrySheet";
 import CircleButton from "../../components/shared/buttons/BackButton";
 import PlayersList from "../../components/players/PlayersList";
+import { twMerge } from "tailwind-merge";
+import { backgroundTranslucentCN } from "../../types/constants";
 
 
 export default function PlayersByCountryScreen() {
@@ -38,7 +40,11 @@ export default function PlayersByCountryScreen() {
     return (
         <PageView className="px-4 flex flex-col gap-2" >
 
-            <div className="flex flex-row items-center justify-between gap-1" >
+            <div className={twMerge(
+                "flex flex-row items-center py-2 justify-between gap-1",
+                "sticky z-[10] top-16 left-0",
+                backgroundTranslucentCN
+            )} >
 
                 <div className="flex flex-row items-center gap-2" >
                     <CircleButton
@@ -47,7 +53,7 @@ export default function PlayersByCountryScreen() {
                         <ArrowLeft />
                     </CircleButton>
 
-                    <p className="font-bold" >Players by Country</p>
+                    <p className="font-bold" >Players by Country ({countryAthletes.length})</p>
                 </div>
 
 
