@@ -139,5 +139,7 @@ declare module "lucide-react" {
   export const Minimize : CIP;
   export const Maximize : CIP;
   export const CloudRain : CIP;
+  export const TrendingUpDown : CIP;
+  export const FastForward : CIP;
 }
 

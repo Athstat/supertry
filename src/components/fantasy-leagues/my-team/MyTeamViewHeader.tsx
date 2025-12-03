@@ -67,7 +67,7 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
         <div className="flex-1 w-full flex flex-col items-end justify-center">
           <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            Total Spent
+            SCRUM Coins Spent
           </div>
           {leagueConfig && (
             <div className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">

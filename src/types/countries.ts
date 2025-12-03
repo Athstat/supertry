@@ -975,6 +975,12 @@ export const countryFlags: Country[] = [
         "name": "Saudi Arabia",
         "flag": "🇸🇦"
     },
+
+    {
+        "code": "SC",
+        "name": "Scotland",
+        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
+    },
     {
         "code": "SB",
         "name": "Solomon Islands",
@@ -1171,7 +1177,7 @@ export const countryFlags: Country[] = [
         "flag": "🇺🇲"
     },
     {
-        "code": "US",
+        "code": "USA",
         "name": "United States",
         "flag": "🇺🇸"
     },
@@ -1219,6 +1225,11 @@ export const countryFlags: Country[] = [
         "code": "VU",
         "name": "Vanuatu",
         "flag": "🇻🇺"
+    },
+    {
+        "code": "WL",
+        "name": "Wales",
+        "flag": "🏴󠁧󠁢󠁷󠁬󠁳󠁿"
     },
     {
         "code": "WF",

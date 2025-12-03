@@ -16,7 +16,6 @@ import { TeamCreationScreen } from './screens/TeamCreationScreen';
 import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
 import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
-import { PlayersScreen } from './screens/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
 import JoinGroupScreen from './screens/JoinGroupScreen';
 import { useAuth } from './contexts/AuthContext';
@@ -45,6 +44,10 @@ import OnboardingDataProvider from './providers/OnboardingDataProvider';
 import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
 import NotificationPreferencesScreen from './screens/myaccount/NotificationPreferencesScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
+import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
+import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
+import PlayersByPositionClassScreen from './screens/players/PlayersByPositionClassScreen';
+import AllPlayersScreen from './screens/players/AllPlayersScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -201,7 +204,40 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <PlayersScreen />
+                <PlayersOverviewScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/all"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <AllPlayersScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/country/:countryName"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PlayersByCountryScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/position-class/:positionClass"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PlayersByPositionClassScreen />
               </Layout>
             </ProtectedRoute>
           }
