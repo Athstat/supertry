@@ -16,7 +16,6 @@ import { TeamCreationScreen } from './screens/TeamCreationScreen';
 import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
 import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
-import { PlayersScreen } from './screens/players/PlayersScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
 import JoinGroupScreen from './screens/JoinGroupScreen';
 import { useAuth } from './contexts/AuthContext';
