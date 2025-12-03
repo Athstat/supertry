@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import PageView from "../PageView";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { getCountryEmojiFlag } from "../../utils/svrUtils";
-import { Activity, useMemo } from "react";
+import { Activity, useMemo, useState } from "react";
 import SearchInput from "../../components/shared/forms/SearchInput";
 import { useQueryState } from "../../hooks/useQueryState";
 import PlayerSearchResults from "./PlayerSearchResults";
@@ -18,6 +18,8 @@ export default function PlayersByCountryScreen() {
     const { countryName } = useParams<{ countryName: string }>();
     const { athletes } = useSupportedAthletes();
 
+    const [showSheet, setShowSheet] = useState<boolean>(false);
+    const toggle = () => setShowSheet(prev => !prev);
 
     const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
 
@@ -44,7 +46,7 @@ export default function PlayersByCountryScreen() {
                 </div>
 
 
-                <div className="flex flex-row items-center gap-2" >
+                <div onClick={toggle} className="flex cursor-pointer flex-row items-center gap-2" >
                     <SecondaryText>Viewing Players for</SecondaryText>
                     <RoundedCard className="flex w-fit dark:border-none cursor-pointer dark:bg-slate-800 px-2 rounded-xl flex-row items-center gap-2" >
                         <p className="text-xl" >{flag}</p>
@@ -80,7 +82,10 @@ export default function PlayersByCountryScreen() {
                 </div>
             </Activity>
 
-            <PlayersCountrySheet />
+            <PlayersCountrySheet 
+                isOpen={showSheet}
+                onClose={toggle}
+            />
         </PageView>
     )
 }

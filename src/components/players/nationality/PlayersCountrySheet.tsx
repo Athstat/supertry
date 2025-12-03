@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthletes"
 import CountryCard from "../../teams/countries/CountryCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BottomSheetView from "../../ui/BottomSheetView";
 import CircleButton from "../../shared/buttons/BackButton";
 import { X } from "lucide-react";
@@ -17,6 +17,7 @@ type Props = {
 export default function PlayersCountrySheet({onClose, isOpen} : Props) {
 
     const { athletes } = useSupportedAthletes();
+    const {countryName} = useParams();
     const navigate = useNavigate();
 
     const stripCountryName = (name: string) => {
@@ -51,6 +52,10 @@ export default function PlayersCountrySheet({onClose, isOpen} : Props) {
 
     const onClick = (countryName?: string) => {
         navigate(`/players/country/${countryName}`);
+
+        if (onClose) {
+            onClose();
+        }
     }
 
     if (!isOpen) {
@@ -80,6 +85,7 @@ export default function PlayersCountrySheet({onClose, isOpen} : Props) {
                         <CountryCard
                             countryName={c}
                             onClick={onClick}
+                            isSelected={c === countryName}
                         />
                     )
                 })}
