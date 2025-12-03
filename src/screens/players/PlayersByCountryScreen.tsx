@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageView from "../PageView";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { getCountryEmojiFlag } from "../../utils/svrUtils";
@@ -7,16 +7,18 @@ import SearchInput from "../../components/shared/forms/SearchInput";
 import { useQueryState } from "../../hooks/useQueryState";
 import PlayerSearchResults from "./PlayerSearchResults";
 import { PlayerGameCard } from "../../components/player/PlayerGameCard";
-import { Users } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
 import RoundedCard from "../../components/shared/RoundedCard";
 import SecondaryText from "../../components/shared/SecondaryText";
 import PlayersCountrySheet from "../../components/players/nationality/PlayersCountrySheet";
+import CircleButton from "../../components/shared/buttons/BackButton";
 
 
 export default function PlayersByCountryScreen() {
 
     const { countryName } = useParams<{ countryName: string }>();
     const { athletes } = useSupportedAthletes();
+    const navigate = useNavigate();
 
     const [showSheet, setShowSheet] = useState<boolean>(false);
     const toggle = () => setShowSheet(prev => !prev);
@@ -33,6 +35,11 @@ export default function PlayersByCountryScreen() {
     }, [countryName, athletes]);
 
 
+    const handleBack = () => {
+        navigate("/players");
+    }
+
+
 
 
     return (
@@ -41,8 +48,13 @@ export default function PlayersByCountryScreen() {
             <div className="flex flex-col gap-1" >
 
                 <div className="flex flex-row items-center gap-2" >
+                    <CircleButton
+                        onClick={handleBack}
+                    >
+                        <ArrowLeft />
+                    </CircleButton>
                     <Users />
-                    <p>Players</p>
+                    <p className="font-bold" >Players</p>
                 </div>
 
 

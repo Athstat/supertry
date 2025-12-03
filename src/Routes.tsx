@@ -47,6 +47,7 @@ import NotificationPreferencesScreen from './screens/myaccount/NotificationPrefe
 import NotFoundScreen from './screens/NotFoundScreen';
 import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
 import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
+import PlayersByPositionClassScreen from './screens/players/PlayersByPositionClassScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -215,6 +216,17 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <PlayersByCountryScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/position_class/:positionClass"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PlayersByPositionClassScreen />
               </Layout>
             </ProtectedRoute>
           }
