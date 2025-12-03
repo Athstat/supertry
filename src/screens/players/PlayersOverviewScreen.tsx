@@ -4,15 +4,16 @@ import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
 import PositionCard from '../../components/players/positioning/PositionCard'
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
+import { Activity, Fragment } from 'react'
+import PlayerSearchResults from './PlayerSearchResults'
+import { useQueryState } from '../../hooks/useQueryState'
 // import { useNavigate } from 'react-router-dom'
 
 export default function PlayersOverviewScreen() {
 
   // const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
 
-  const handleViewAll = () => {
-    // navigate user to view
-  }
 
   return (
     <PageView className='px-6 flex flex-col gap-4' >
@@ -24,9 +25,36 @@ export default function PlayersOverviewScreen() {
       </div>
 
       <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
-        <SearchInput />
+        <SearchInput 
+          value={searchQuery}
+          onChange={setSearchQuery}
+        />
       </div>
 
+      <Activity mode={searchQuery ? "hidden" : "visible"} >
+        <Content />
+      </Activity>
+
+      <Activity mode={searchQuery ? "visible" : "hidden"} >
+        <PlayerSearchResults
+          searchQuery={searchQuery}
+        />
+      </Activity>
+
+    </PageView>
+  )
+}
+
+
+function Content() {
+
+
+  const handleViewAll = () => {
+    // navigate user to view
+  }
+
+  return (
+    <Fragment>
       <div>
         <RoundedCard
           className='flex cursor-pointer py-2 px-4 dark:border-none flex-row items-center gap-2 justify-between'
@@ -80,7 +108,6 @@ export default function PlayersOverviewScreen() {
       </div>
 
       <PlayersCountryGridList />
-
-    </PageView>
+    </Fragment>
   )
 }
