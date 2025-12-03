@@ -1,19 +1,22 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthletes"
 import CountryCard from "../../teams/countries/CountryCard";
 import { useNavigate } from "react-router-dom";
+import RoundedCard from "../../shared/RoundedCard";
 
 /** Renders a list of countries for available players through use athletes */
 export default function PlayersCountryGridList() {
 
-    const {athletes} = useSupportedAthletes();
     const navigate = useNavigate();
+    const { athletes, isLoading: loadingSupported } = useSupportedAthletes();
+    const [isLoading, setLoading] = useState<boolean>(false);
+    const [countries, setCountries] = useState<string[]>([]);
 
     const stripCountryName = (name: string) => {
         if (name.endsWith(" A")) {
             name = name.replace(" A", "");
         }
-        
+
         name = name.replace(" B", "");
         name = name.replace(" XV", "");
         name = name.replace(" 7s", "");
@@ -24,31 +27,65 @@ export default function PlayersCountryGridList() {
         return name;
     }
 
-    const countries = useMemo(() => {
-
-        const unique_set: string[] = [];
-
-        athletes.forEach((a) => {
-            const playerCountry = a.nationality ? stripCountryName(a.nationality) : undefined;
-            if (playerCountry && !unique_set.includes(playerCountry)) {
-                unique_set.push(playerCountry)
-            }
-        })
-
-        return unique_set.sort();
-    }, [athletes]);
-
 
     const onClick = (countryName?: string) => {
         navigate(`/players/country/${countryName}`);
     }
-    
+
+    useEffect(() => {
+
+        setLoading(true);
+
+        const timer = setTimeout(() => {
+
+            let unique_set: string[] = [];
+
+            athletes.forEach((a) => {
+                const playerCountry = a.nationality ? stripCountryName(a.nationality) : undefined;
+                if (playerCountry && !unique_set.includes(playerCountry)) {
+                    unique_set.push(playerCountry)
+                }
+            })
+
+            unique_set = unique_set.sort();
+            setCountries(unique_set)
+
+            setLoading(false);
+        }, 0);
+
+        return () => {
+            clearTimeout(timer);
+        }
+
+    }, [athletes]);
+
+    const finalLoading = isLoading || loadingSupported;
+
+
+    if (finalLoading) {
+        return (
+            <div className="grid grid-cols-4 gap-2 animate-pulse" >
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+                <RoundedCard className="border-none h-[80px]" />
+            </div>
+        )
+    }
 
     return (
-        <div  className="grid grid-cols-4 gap-2" >
+        <div className="grid grid-cols-4 gap-2" >
             {countries.map((c) => {
                 return (
-                    <CountryCard 
+                    <CountryCard
                         countryName={c}
                         onClick={onClick}
                     />
