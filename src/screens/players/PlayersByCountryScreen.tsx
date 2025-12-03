@@ -2,16 +2,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import PageView from "../PageView";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { getCountryEmojiFlag } from "../../utils/svrUtils";
-import { Activity, useMemo, useState } from "react";
-import SearchInput from "../../components/shared/forms/SearchInput";
-import { useQueryState } from "../../hooks/useQueryState";
-import PlayerSearchResults from "./PlayerSearchResults";
-import { PlayerGameCard } from "../../components/player/PlayerGameCard";
-import { ArrowLeft, Users } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowLeft, ChevronDown } from "lucide-react";
 import RoundedCard from "../../components/shared/RoundedCard";
-import SecondaryText from "../../components/shared/SecondaryText";
 import PlayersCountrySheet from "../../components/players/nationality/PlayersCountrySheet";
 import CircleButton from "../../components/shared/buttons/BackButton";
+import PlayersList from "../../components/players/PlayersList";
 
 
 export default function PlayersByCountryScreen() {
@@ -22,9 +18,6 @@ export default function PlayersByCountryScreen() {
 
     const [showSheet, setShowSheet] = useState<boolean>(false);
     const toggle = () => setShowSheet(prev => !prev);
-
-    const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
-
 
     const flag = getCountryEmojiFlag(countryName);
 
@@ -45,7 +38,7 @@ export default function PlayersByCountryScreen() {
     return (
         <PageView className="px-4 flex flex-col gap-2" >
 
-            <div className="flex flex-col gap-1" >
+            <div className="flex flex-row items-center justify-between gap-1" >
 
                 <div className="flex flex-row items-center gap-2" >
                     <CircleButton
@@ -53,48 +46,26 @@ export default function PlayersByCountryScreen() {
                     >
                         <ArrowLeft />
                     </CircleButton>
-                    <Users />
-                    <p className="font-bold" >Players</p>
+
+                    <p className="font-bold" >Players by Country</p>
                 </div>
 
 
                 <div onClick={toggle} className="flex cursor-pointer flex-row items-center gap-2" >
-                    <SecondaryText>Viewing Players for</SecondaryText>
-                    <RoundedCard className="flex w-fit dark:border-none cursor-pointer dark:bg-slate-800 px-2 rounded-xl flex-row items-center gap-2" >
+                    <RoundedCard className="flex rounded-md w-fit dark:border-none cursor-pointer px-4 py-1  flex-row items-center gap-2" >
                         <p className="text-xl" >{flag}</p>
                         <p className="text-sm" >{countryName}</p>
+                        <ChevronDown className="w-4 h-4" />
                     </RoundedCard>
                 </div>
 
             </div>
 
-            <div>
-                <SearchInput
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                />
-            </div>
+            <PlayersList 
+                players={countryAthletes}
+            />
 
-            <Activity mode={searchQuery ? "visible" : "hidden"} >
-                <PlayerSearchResults
-                    searchQuery={searchQuery}
-                    playerPool={countryAthletes}
-                />
-            </Activity>
-
-            <Activity mode={searchQuery ? "hidden" : "visible"} >
-                <div className="flex w-full justify-center flex-row items-center gap-2 flex-wrap" >
-                    {countryAthletes.map((a) => {
-                        return (
-                            <PlayerGameCard
-                                player={a}
-                            />
-                        )
-                    })}
-                </div>
-            </Activity>
-
-            <PlayersCountrySheet 
+            <PlayersCountrySheet
                 isOpen={showSheet}
                 onClose={toggle}
             />
