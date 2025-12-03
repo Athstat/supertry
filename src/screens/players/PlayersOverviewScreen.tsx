@@ -7,6 +7,8 @@ import PlayersCountryGridList from '../../components/players/nationality/Players
 import { Activity, Fragment } from 'react'
 import PlayerSearchResults from './PlayerSearchResults'
 import { useQueryState } from '../../hooks/useQueryState'
+import { PositionClass } from '../../types/athletes'
+import { useNavigate } from 'react-router-dom'
 // import { useNavigate } from 'react-router-dom'
 
 export default function PlayersOverviewScreen() {
@@ -48,9 +50,14 @@ export default function PlayersOverviewScreen() {
 
 function Content() {
 
+  const navigate = useNavigate();
 
   const handleViewAll = () => {
     // navigate user to view
+  }
+
+  const handlePositionCardClick = (positionClass: PositionClass) => {
+    navigate(`/players/position-class/${positionClass}`);
   }
 
   return (
@@ -76,30 +83,35 @@ function Content() {
           positionClass='front-row'
           title='Front Row'
           showViewMoreButton
+          onClick={handlePositionCardClick}
         />
 
         <PositionCard
           positionClass='second-row'
           title='Second Row'
           showViewMoreButton
+          onClick={handlePositionCardClick}
         />
 
         <PositionCard
           positionClass='back-row'
           title='Back Row'
           showViewMoreButton
+          onClick={handlePositionCardClick}
         />
 
         <PositionCard
           positionClass='half-back'
           title='Half Backs'
           showViewMoreButton
+          onClick={handlePositionCardClick}
         />
 
         <PositionCard
           positionClass='back'
           title='Backs'
           showViewMoreButton
+          onClick={handlePositionCardClick}
         />
       </div>
 

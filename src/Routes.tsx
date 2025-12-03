@@ -222,7 +222,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/players/position_class/:positionClass"
+          path="/players/position-class/:positionClass"
           element={
             <ProtectedRoute>
               <Layout>
