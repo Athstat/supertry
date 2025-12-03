@@ -11,11 +11,9 @@ import { PositionClass } from '../../types/athletes'
 import { useNavigate } from 'react-router-dom'
 import { FastForward } from 'lucide-react'
 import { TrendingUpDown } from 'lucide-react'
-// import { useNavigate } from 'react-router-dom'
 
 export default function PlayersOverviewScreen() {
 
-  // const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
 
 
