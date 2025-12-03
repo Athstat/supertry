@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import { IProAthlete } from "../../types/athletes";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
-import { PlayerGameCard } from "../../components/player/PlayerGameCard";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import { LoadingState } from "../../components/ui/LoadingState";
+import PlayerRowCard from "../../components/player/PlayerRowCard";
 
 type Props = {
     searchQuery?: string
@@ -33,6 +33,8 @@ export default function PlayerSearchResults({ searchQuery }: Props) {
 
             const filtered = athletes.filter((a) => {
                 return athleteNameSearchPredicate(a.player_name, searchQuery ?? "");
+            }).sort((a, b) => {
+                return (b.power_rank_rating || 0) - (a.power_rank_rating || 0)
             });
 
             setResults(filtered);
@@ -45,7 +47,7 @@ export default function PlayerSearchResults({ searchQuery }: Props) {
     const resultsLen = results.length;
 
     return (
-        <div>
+        <div className="flex flex-col gap-4" >
             {!isLoading && <div>
                 <p className="font-semibold text-md" >Results for '{searchQuery}' ({resultsLen})</p>
             </div>}
@@ -56,12 +58,13 @@ export default function PlayerSearchResults({ searchQuery }: Props) {
                 </div>
             )}
 
-            {!isLoading && <div className="flex flex-row items-center gap-2" >
+            {!isLoading && <div className="flex flex-col items-center gap-2" >
                 {results.map((r) => {
                     return (
-                        <PlayerGameCard
+                        <PlayerRowCard
                             player={r}
                             onClick={() => handlePlayerClick(r)}
+                            key={r.tracking_id}
                         />
                     )
                 })}

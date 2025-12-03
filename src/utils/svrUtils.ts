@@ -3,7 +3,7 @@ import { countryFlags } from "../types/countries";
 /** Return a countries flag */
 export function getCountryEmojiFlag(country: string | undefined, matchStartsWith: boolean = false) {
 
-    if (country === undefined) return;
+    if (country === undefined || country === null) return;
 
     const flag = countryFlags.find((c) => {
         const notNull = c.name && country;
