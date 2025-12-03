@@ -8,7 +8,7 @@ type Props = {
 
 export default function CountryCard({ countryName }: Props) {
 
-    const flag = getCountryEmojiFlag(countryName);
+    const flag = getCountryEmojiFlag(countryName, true);
 
     if (!flag) {
         return null;
