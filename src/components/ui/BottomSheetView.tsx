@@ -14,7 +14,7 @@ export default function BottomSheetView({ className, children, hideHandle }: Pro
     return (
         <AnimatePresence>
             <motion.div
-                className="fixed z-[100] bottom-0 left-0 w-full  flex flex-col items-center justify-center"
+                className="fixed z-[150] bottom-0 left-0 w-full  flex flex-col items-center justify-center"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: ["100%", "50%", "0%"] }}

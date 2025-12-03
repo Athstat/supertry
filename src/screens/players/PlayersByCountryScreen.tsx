@@ -10,6 +10,7 @@ import { PlayerGameCard } from "../../components/player/PlayerGameCard";
 import { Users } from "lucide-react";
 import RoundedCard from "../../components/shared/RoundedCard";
 import SecondaryText from "../../components/shared/SecondaryText";
+import PlayersCountrySheet from "../../components/players/nationality/PlayersCountrySheet";
 
 
 export default function PlayersByCountryScreen() {
@@ -78,6 +79,8 @@ export default function PlayersByCountryScreen() {
                     })}
                 </div>
             </Activity>
+
+            <PlayersCountrySheet />
         </PageView>
     )
 }
