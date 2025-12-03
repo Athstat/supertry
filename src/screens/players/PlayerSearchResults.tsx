@@ -5,6 +5,7 @@ import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import { LoadingState } from "../../components/ui/LoadingState";
 import PlayerRowCard from "../../components/player/PlayerRowCard";
+import SecondaryText from "../../components/shared/SecondaryText";
 
 type Props = {
     searchQuery?: string
@@ -49,7 +50,7 @@ export default function PlayerSearchResults({ searchQuery }: Props) {
     return (
         <div className="flex flex-col gap-4" >
             {!isLoading && <div>
-                <p className="font-semibold text-md" >Results for '{searchQuery}' ({resultsLen})</p>
+                <p className="font-semibold text-md" >Results for '{searchQuery}' {resultsLen ? `(${resultsLen})` : ''}</p>
             </div>}
 
             {isLoading && (
@@ -70,6 +71,12 @@ export default function PlayerSearchResults({ searchQuery }: Props) {
                 })}
             </div>}
 
+            {resultsLen === 0 && (
+                <NoResultsFallback 
+                    searchQuery={searchQuery}
+                />
+            )}
+
 
             {selectedPlayer && (
                 <PlayerProfileModal 
@@ -78,6 +85,19 @@ export default function PlayerSearchResults({ searchQuery }: Props) {
                     player={selectedPlayer}
                 />
             )}
+        </div>
+    )
+}
+
+type NoResultsProps = {
+    searchQuery?: string
+}
+
+function NoResultsFallback({searchQuery} : NoResultsProps) {
+    return (
+        <div className="flex flex-col items-center justify-center gap-4 flex-1" >
+            {/* <SearchX className="w-14 h-14 dark:text-slate-400" /> */}
+            <SecondaryText>No matches for '{searchQuery}'</SecondaryText>
         </div>
     )
 }
