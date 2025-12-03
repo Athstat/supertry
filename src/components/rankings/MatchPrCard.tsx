@@ -36,11 +36,6 @@ export default function MatchPrCard({ pr}: Props) {
         return "none";
     }, [pr]);
 
-    if (!pr) {
-        return;
-    }
-
-
 
     return (
         <div className={twMerge(
@@ -50,7 +45,7 @@ export default function MatchPrCard({ pr}: Props) {
             tier === "yellow" && "bg-yellow-500 dark:bg-yellow-600",
             tier === "red" && "bg-red-500 dark:bg-red-600",
         )} >
-            <p className="text-sm" >{pr}</p>
+            <p className="text-sm" >{ pr ? Math.floor(pr) : "-"}</p>
         </div>
     )
 }

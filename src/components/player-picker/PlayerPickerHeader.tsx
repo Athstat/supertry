@@ -5,6 +5,7 @@ import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
 import BlueGradientCard from "../shared/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
 import Experimental from "../shared/ab_testing/Experimental";
+import { Coins } from "lucide-react";
 
 export default function PlayerPickerHeader() {
 
@@ -23,11 +24,13 @@ export default function PlayerPickerHeader() {
             <Experimental>
                 <BlueGradientCard
                     className={twMerge(
-                        "flex flex-row items-center justify-center  py-2",
+                        "flex flex-row items-center justify-center gap-1  py-2",
                         "from-blue-600 to-purple-700"
                     )}
                 >
-                    <p className="text-sm font-medium" >Budget Remaining ${remainingBudget}</p>
+                    <p className="text-sm font-medium" >Remaining SCRUM Coins: </p>
+                    <Coins className="w-4 h-4 text-yellow-500" />
+                    <p>{remainingBudget}</p>
                 </BlueGradientCard>
             </Experimental>
 
