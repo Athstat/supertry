@@ -126,7 +126,7 @@ function TeamExistsView({
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">points</p>
           <p className="text-md font-bold text-gray-600 dark:text-gray-500">
-            Gameweek {currentGameweek || '—'}
+            Round {currentGameweek || '—'}
           </p>
         </div>
 
@@ -207,7 +207,7 @@ function FirstTimeUserView({
         {currentGameweek && nextDeadline && (
           <div className="text-center py-4">
             <p className="text-lg">
-              <span className="font-semibold">Gameweek {currentGameweek}</span> ends in
+              <span className="font-semibold">Round {currentGameweek}</span> ends in
             </p>
             <p className="text-2xl font-bold mt-2">{formatCountdown(nextDeadline)}</p>
           </div>
