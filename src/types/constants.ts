@@ -34,3 +34,8 @@ export const FANTASY_TEAM_POSITIONS = [
 export const queryParamKeys = {
   ROUND_ID_QUERY_KEY: 'round_id'
 }
+
+/** Classname for app lighter dark blue */
+export const lighterDarkBlueCN = "dark:bg-[#161d29]";
+export const backgroundCN = "bg-gray-50 dark:bg-dark-850";
+export const backgroundTranslucentCN = "bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none";

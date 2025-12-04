@@ -1,41 +1,41 @@
 import { useState, useCallback, useMemo, Fragment, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAthletes } from '../contexts/AthleteContext';
-import { useDebounced } from '../hooks/useDebounced';
+import { useAthletes } from '../../contexts/AthleteContext';
+import { useDebounced } from '../../hooks/useDebounced';
 
 // Components
-import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
-import GlassBottomSheet from '../components/ui/GlassBottomSheet';
-import { PlayerFilters } from '../components/players/PlayerFilters';
-import { PlayerSort } from '../components/players/PlayerSort';
-import { LoadingState } from '../components/ui/LoadingState';
-import { ErrorState } from '../components/ui/ErrorState';
-import { EmptyState } from '../components/players/EmptyState';
-import { PlayerGameCard } from '../components/player/PlayerGameCard';
-import PageView from './PageView';
+import FloatingSearchBar from '../../components/players/ui/FloatingSearchBar';
+import GlassBottomSheet from '../../components/ui/GlassBottomSheet';
+import { PlayerFilters } from '../../components/players/PlayerFilters';
+import { PlayerSort } from '../../components/players/PlayerSort';
+import { LoadingState } from '../../components/ui/LoadingState';
+import { ErrorState } from '../../components/ui/ErrorState';
+import { EmptyState } from '../../components/players/EmptyState';
+import { PlayerGameCard } from '../../components/player/PlayerGameCard';
+import PageView from '../PageView';
 import { Users, X } from 'lucide-react';
-import PlayersScreenCompareStatus from '../components/players/compare/PlayersScreenCompareStatus';
-import PlayerCompareModal from '../components/players/compare/PlayerCompareModal';
-import PlayerProfileModal from '../components/player/PlayerProfileModal';
-import { SortDirection, SortField } from '../types/playerSorting';
-import { IProAthlete } from '../types/athletes';
-import { IProTeam } from '../types/team';
-import TeamLogo from '../components/team/TeamLogo';
-import RoundedCard from '../components/shared/RoundedCard';
-import SecondaryText from '../components/shared/SecondaryText';
-import { useQueryState } from '../hooks/useQueryState';
-import useAthleteFilter from '../hooks/useAthleteFilter';
-import { usePlayerCompareActions } from '../hooks/usePlayerCompare';
+import PlayersScreenCompareStatus from '../../components/players/compare/PlayersScreenCompareStatus';
+import PlayerCompareModal from '../../components/players/compare/PlayerCompareModal';
+import PlayerProfileModal from '../../components/player/PlayerProfileModal';
+import { SortDirection, SortField } from '../../types/playerSorting';
+import { IProAthlete } from '../../types/athletes';
+import { IProTeam } from '../../types/team';
+import TeamLogo from '../../components/team/TeamLogo';
+import RoundedCard from '../../components/shared/RoundedCard';
+import SecondaryText from '../../components/shared/SecondaryText';
+import { useQueryState } from '../../hooks/useQueryState';
+import useAthleteFilter from '../../hooks/useAthleteFilter';
+import { usePlayerCompareActions } from '../../hooks/usePlayerCompare';
 import { useAtomValue } from 'jotai';
-import { comparePlayersAtomGroup } from '../state/comparePlayers.atoms';
+import { comparePlayersAtomGroup } from '../../state/comparePlayers.atoms';
 import { useInView } from 'react-intersection-observer';
 import useSWR from 'swr';
-import { seasonService } from '../services/seasonsService';
-import { getAthletesSummary } from '../utils/athleteUtils';
+import { seasonService } from '../../services/seasonsService';
+import { getAthletesSummary } from '../../utils/athleteUtils';
 
 // Fantasy seasons: mirror FantasyLeaguesScreen behavior
-import FantasyLeaguesScreenDataProvider from '../components/fantasy-leagues/FantasyLeaguesScreenDataProvider';
-import PlayerCompareProvider from '../providers/PlayerCompareProvider';
+import FantasyLeaguesScreenDataProvider from '../../components/fantasy-leagues/FantasyLeaguesScreenDataProvider';
+import PlayerCompareProvider from '../../providers/PlayerCompareProvider';
 
 export function PlayersScreen() {
   return (
