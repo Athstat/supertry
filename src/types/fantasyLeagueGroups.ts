@@ -91,3 +91,9 @@ export type LeaguePredictionRanking = {
   accuracy: number;
   has_results: boolean;
 };
+
+
+export type IPlayerPercentageSelected = {
+  times_selected: number,
+  percentage_selected: number
+}

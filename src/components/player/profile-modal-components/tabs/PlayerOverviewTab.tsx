@@ -11,6 +11,7 @@ import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 import NoContentCard from '../../../shared/NoContentMessage';
 import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 import PlayerTeamFormCard from '../PlayerTeamForm';
+import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
 
 type Props = {
   player: IProAthlete;
@@ -99,6 +100,11 @@ export default function PlayerOverviewTab({ player }: Props) {
       <PlayerTeamFormCard
         player={player}
       />
+
+      { currentSeason && <PlayerPercentageSelectedCard 
+        player={player}
+        season={currentSeason}
+      />}
 
       {/* Season Statistics */}
       <div className="flex flex-col gap-4">

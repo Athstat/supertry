@@ -1,5 +1,5 @@
 import { IFantasySeason } from "../../types/fantasy/fantasySeason";
-import { FantasyLeagueGroup, FantasyPointsScoredRankingItem, MostSelectedRankingItem, PlayerSportActionRankingItem } from "../../types/fantasyLeagueGroups";
+import { FantasyLeagueGroup, FantasyPointsScoredRankingItem, IPlayerPercentageSelected, MostSelectedRankingItem, PlayerSportActionRankingItem } from "../../types/fantasyLeagueGroups";
 import { getAuthHeader, getUri } from "../../utils/backendUtils";
 import { logger } from "../logger";
 
@@ -112,5 +112,24 @@ export const fantasySeasonsService = {
         }
 
         return [];
+    },
+
+    getPlayerPercentageSelected: async (seasonId: string, athleteId: string) : Promise<IPlayerPercentageSelected | undefined> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-seasons/${seasonId}/player-rankings/by-most-selected/${athleteId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader(),
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IPlayerPercentageSelected
+            }
+
+        } catch (err) {
+            logger.error("Error Player Percentage Selected ", err);
+        }
+
+        return undefined;
     }
 }

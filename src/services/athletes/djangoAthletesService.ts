@@ -234,5 +234,5 @@ export const djangoAthleteService = {
 
     return undefined;
 
-  }
+  },
 };
