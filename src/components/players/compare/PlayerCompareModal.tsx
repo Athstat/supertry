@@ -1,7 +1,7 @@
 import DialogModal from "../../shared/DialogModal";
 import PlayersCompareItem from "./PlayerCompareItem";
-import { useAtomValue } from "jotai";
-import { comparePlayersAtom, comparePlayersAtomGroup } from "../../../state/comparePlayers.atoms";
+import { useAtomValue, useSetAtom } from "jotai";
+import { comparePlayersAtom, comparePlayersAtomGroup, comparePlayersStatsAtom, comparePlayersStarRatingsAtom } from "../../../state/comparePlayers.atoms";
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
@@ -13,8 +13,18 @@ export default function PlayerCompareModal() {
 
   const selectedPlayers = useAtomValue(comparePlayersAtom);
   const open = useAtomValue(comparePlayersAtomGroup.isCompareModeModal);
+  const setComparePlayersStats = useSetAtom(comparePlayersStatsAtom);
+  const setComparePlayersStarRatings = useSetAtom(comparePlayersStarRatingsAtom);
 
-  const  {closeCompareModal} = usePlayerCompareActions();
+  const { closeCompareModal } = usePlayerCompareActions();
+
+  // Clear stats atoms when modal opens to ensure fresh comparison
+  useEffect(() => {
+    if (open) {
+      setComparePlayersStats([]);
+      setComparePlayersStarRatings([]);
+    }
+  }, [open, setComparePlayersStats, setComparePlayersStarRatings]);
 
   useEffect(() => {
     if (selectedPlayers.length > 0) {
@@ -27,7 +37,7 @@ export default function PlayerCompareModal() {
 
   const playerLen = selectedPlayers.length;
   const title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;
-  
+
   if (open === false) return;
 
   return (
