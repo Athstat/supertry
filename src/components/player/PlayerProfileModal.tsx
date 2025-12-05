@@ -1,12 +1,14 @@
 import PlayerProfileBanner from './profile-modal-components/PlayerProfileBanner';
 import PlayerNameAndPosition from './profile-modal-components/PlayerNameAndPosition';
 import PlayerProfileModalTabContent from './profile-modal-components/PlayerProfileModalTabContent';
-import DialogModal from '../shared/DialogModal';
 import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { useCallback, useEffect, useState } from 'react';
+import { Activity, useCallback, useEffect, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import PlayerDataProvider from '../../providers/PlayerDataProvider';
+import BottomSheetView from '../ui/BottomSheetView';
+import { twMerge } from 'tailwind-merge';
+import { lighterDarkBlueCN } from '../../types/constants';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -38,24 +40,30 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
 
   return (
     <PlayerDataProvider onClose={handleCloseModal} player={player}>
-      <DialogModal
-        open={isOpen}
-        className="p-0 flex flex-col gap-2 "
-        title={player?.player_name}
-        outerCon="p-4 no-scrollbar"
-        onClose={handleCloseModal}
-        hw="w-[96%] max-h-[96vh] min-h-[96vh] md:w-[60%] lg:w-[40%]"
-      >
-        {/* Modal header with player image and close button */}
-        <PlayerProfileBanner />
+      <Activity mode={isOpen ? "visible" : "hidden"} >
+        <BottomSheetView
+          className={twMerge(
+            "p-0 flex flex-col gap-2 min-h-[95vh]",
+            lighterDarkBlueCN
+          )}
 
-        {/* Stats Summary */}
-        <PlayerNameAndPosition />
+          hideHandle
+        >
+          {/* Modal header with player image and close button */}
+          <PlayerProfileBanner
+            onClose={onClose}
+          />
 
-        <div className="flex-1 ">
-          <PlayerProfileModalTabContent />
-        </div>
-      </DialogModal>
+          <div className='px-4' >
+            {/* Stats Summary */}
+            <PlayerNameAndPosition />
+
+            <div className="flex-1 ">
+              <PlayerProfileModalTabContent />
+            </div>
+          </div>
+        </BottomSheetView>
+      </Activity>
     </PlayerDataProvider>
   );
 }

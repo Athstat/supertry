@@ -1,10 +1,10 @@
 import SecondaryText from '../../shared/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
-import TeamLogo from '../../team/TeamLogo';
 import FormIndicator from '../../shared/FormIndicator';
 
 import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
+import MatchPrCard from '../../rankings/MatchPrCard';
 
 export default function PlayerNameAndPosition() {
   // console.log('player: ', player);
@@ -18,41 +18,50 @@ export default function PlayerNameAndPosition() {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between my-4">
+      <div className="flex flex-row items-start mt-2 justify-between ">
         <div className="flex flex-row items-center gap-3">
-          {player.team && (
+          {/* {player.team && (
             <TeamLogo
               url={player.team?.image_url}
               teamName={player.team?.athstat_name}
               className="w-10 h-10"
             />
-          )}
+          )} */}
           <div>
-            <p className="font-semibold text-lg dark:text-white">{player.player_name}</p>
+            <div className='flex flex-row items-center gap-2' >
+              <p className="font-semibold text-lg dark:text-white">{player.player_name}</p>
+              {player.form && <FormIndicator form={player.form} />}
+            </div>
             {player.team && (
               <SecondaryText className="text-xs">
-                {player.team.athstat_name}
+                {/* {player.team.athstat_name} */}
                 {player.position && player.position_class && (
                   <span>
                     {' '}
-                    | {formatPosition(player.position)} | {formatPosition(player.position_class)}
+                    {formatPosition(player.position)} - {formatPosition(player.position_class)}
                   </span>
                 )}
               </SecondaryText>
+
             )}
+
+
             {!player.team && player.position && (
               <SecondaryText>{formatPosition(player.position)}</SecondaryText>
             )}
           </div>
+
         </div>
 
         <div className="flex flex-row items-center gap-3">
-          {player.form && <FormIndicator form={player.form} />}
+          
           {player.power_rank_rating && (
-            <div className="flex flex-col items-center gap-0">
-              <p className="font-bold text-xl dark:text-white">
-                PR: {Math.floor(player.power_rank_rating)}
-              </p>
+            <div className="flex flex-col items-center gap-1">
+              <MatchPrCard 
+                pr={player.power_rank_rating}
+                className='w-10 h-10 text-base font-medium'
+              />
+              <SecondaryText>Rating</SecondaryText>
             </div>
           )}
             <AvailabilityIcon athlete={player} />
