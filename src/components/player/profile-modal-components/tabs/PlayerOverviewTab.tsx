@@ -10,7 +10,7 @@ import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
 import NoContentCard from '../../../shared/NoContentMessage';
 import { usePlayerData } from '../../../../providers/PlayerDataProvider';
-import PlayerTeamCard from '../PlayerTeamCard';
+import PlayerTeamFormCard from '../PlayerTeamForm';
 
 type Props = {
   player: IProAthlete;
@@ -38,9 +38,9 @@ export default function PlayerOverviewTab({ player }: Props) {
   return (
     <div className="flex flex-col gap-6 pb-6">
 
-      <PlayerTeamCard 
+      {/* <PlayerTeamCard 
         player={player}
-      />
+      /> */}
 
       {/* TIER 1: Info Cluster */}
       <div className="flex flex-col gap-4">
@@ -95,6 +95,10 @@ export default function PlayerOverviewTab({ player }: Props) {
           <PlayerIconsCard player={player} season={currentSeason} />
         </Experimental>
       )}
+
+      <PlayerTeamFormCard
+        player={player}
+      />
 
       {/* Season Statistics */}
       <div className="flex flex-col gap-4">
