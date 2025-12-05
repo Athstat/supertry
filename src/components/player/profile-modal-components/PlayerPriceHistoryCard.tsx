@@ -25,8 +25,8 @@ export default function PlayerPriceHistoryCard({ player }: Props) {
     const records: BarChartRecord[] = useMemo(() => {
         return history.map((h) => {
             return {
-                value: `${h.new_price}`,
-                displayVal: h.new_price,
+                value: h.new_price,
+                displayVal: `${h.new_price}`,
                 className: "",
                 date: h.change_time
             }
@@ -42,6 +42,7 @@ export default function PlayerPriceHistoryCard({ player }: Props) {
                 maxValue={60}
                 scaleFactor={2.5}
                 pivotValue={player.price}
+                xLabel="Price in SCRUM Coins"
             />
         </RoundedCard>
     )

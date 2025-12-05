@@ -13,14 +13,15 @@ type BarChartProps = {
     records: BarChartRecord[],
     maxValue: number,
     scaleFactor: number,
-    pivotValue?: number
+    pivotValue?: number,
+    xLabel?: string
 }
 
-export function PlainBarChart({ records, maxValue, scaleFactor = 1 }: BarChartProps) {
+export function PlainBarChart({ records, maxValue, scaleFactor = 1, xLabel }: BarChartProps) {
     return (
         <div
             className={twMerge(
-                "dark:bg-dark-850/50 p-4 rounded-xl"
+                "dark:bg-dark-850/50 pt-4 px-4 rounded-xl"
             )}
         >
 
@@ -53,6 +54,10 @@ export function PlainBarChart({ records, maxValue, scaleFactor = 1 }: BarChartPr
                     className="abolute" 
                 >
                 </div>
+            </div>
+
+            <div className="py-2 w-full items-center justify-center flex flex-row" >
+                <SecondaryText className="text-xs" >{xLabel}</SecondaryText>
             </div>
 
         </div>
