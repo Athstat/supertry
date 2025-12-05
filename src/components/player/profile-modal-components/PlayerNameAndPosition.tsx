@@ -59,9 +59,9 @@ export default function PlayerNameAndPosition() {
             <div className="flex flex-col items-center gap-1">
               <MatchPrCard 
                 pr={player.power_rank_rating}
-                className='w-10 h-10 text-base font-medium'
+                className='w-9 h-9 text-base font-medium'
               />
-              <SecondaryText>Rating</SecondaryText>
+              <SecondaryText className='text-xs' >PR</SecondaryText>
             </div>
           )}
             <AvailabilityIcon athlete={player} />
