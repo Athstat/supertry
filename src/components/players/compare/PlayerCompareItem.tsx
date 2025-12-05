@@ -9,7 +9,7 @@ import {
   comparePlayersStatsAtom,
 } from '../../../state/comparePlayers.atoms';
 import PlayerIconsRow from './PlayerIconsRow';
- 
+
 import PlayerSeasonStatsTray from '../../stats/PlayerSeasonStatsTray';
 
 type Props = {
@@ -34,10 +34,10 @@ export default function PlayersCompareItem({ player }: Props) {
     loadingStarRatings,
   } = usePlayerStats(player);
 
-  console.log('player: ', player);
-
   useEffect(() => {
     if (loadingActions || loadingStarRatings) return;
+
+    if (!actions || actions.length === 0) return;
 
     startTransition(() => {
       const newStats = comparePlayersStats.filter(f => {
@@ -64,14 +64,12 @@ export default function PlayersCompareItem({ player }: Props) {
 
       setComparePlayerRatings(newStarRatings);
     });
-
-    return () => {};
-  }, [actions, starRatings]);
+  }, [actions, starRatings, loadingActions, loadingStarRatings, player, comparePlayersStats, comparePlayersStarRatings, setComparePlayersStats, setComparePlayerRatings]);
 
   const isLoading = loadingActions || loadingStarRatings || !currSeason;
 
   // Top stats are shown within the 'General' category rows; no bespoke summary needed
-  
+
 
   return (
     <div className="flex flex-col gap-2 w-[calc(50%-0.25rem)] md:flex-1 md:min-w-[200px] md:max-w-[300px] flex-shrink-0">

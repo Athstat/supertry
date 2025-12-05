@@ -91,7 +91,7 @@ function DashboardContent() {
 
       {/* What's Going On in Schools Rugby? */}
       <div className="text-center py-4">
-        <h2 className="font-bold text-lg mb-2">What's Going On in Schools Rugby?</h2>
+        <h2 className="font-bold text-lg mb-2">What's Going On in School Rugby?</h2>
         <button
           onClick={() => navigate('/fixtures?sc=SBR')}
           className="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 underline font-medium"

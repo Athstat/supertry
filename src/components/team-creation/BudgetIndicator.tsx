@@ -52,7 +52,8 @@ export function BudgetIndicator({ remainingBudget = 0 }: Props) {
                     duration: 0.3,
                 },
             }}
-        >
+        >   
+            <p className="text-xs" >SCRUM Coins</p>
             <Coins size={14} className="text-yellow-500 dark:text-yellow-400" />
             <span className="text-xs font-medium whitespace-nowrap">
                 {amountUsed} / {MAX_TEAM_BUDGET}
