@@ -6,11 +6,15 @@ type Props = {
   player: IProAthlete;
 };
 
-export default function PlayerStatsTab({ player }: Props) {
+export default function PlayerMatchesTab({ player }: Props) {
   return (
     <div className="flex flex-col gap-6 pb-6">
       {/* TIER 1: Performance Snapshot */}
       <PlayerPerformanceSnapshot player={player} />
+
+      {/* <PlayerPrTrendCard 
+        player={player}
+      /> */}
 
       {/* TIER 2: Power Ranking Chart */}
       <PowerRankingChartTab player={player} />

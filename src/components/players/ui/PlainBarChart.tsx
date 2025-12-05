@@ -6,7 +6,8 @@ export type BarChartRecord = {
     value: number,
     secondaryVal?: string,
     className?: string,
-    date?: Date
+    date?: Date,
+    imageUrl?: string
 }
 
 type BarChartProps = {
@@ -45,6 +46,13 @@ export function PlainBarChart({ records, maxValue, scaleFactor = 1, xLabel }: Ba
                             >
 
                             </div>
+
+                            {r.imageUrl && <div>
+                                <img 
+                                    src={r.imageUrl}
+                                    className="w-6 h-6"
+                                />
+                            </div>}
 
                         </div>
                     )

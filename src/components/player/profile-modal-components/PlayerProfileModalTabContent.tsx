@@ -2,7 +2,7 @@ import { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
 import PlayerMatchsPRList from './PlayerMatchsPRList';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PilledTabView from '../../shared/tabs/PilledTabView';
-import PlayerStatsTab from './tabs/PlayerStatsTab';
+import PlayerMatchesTab from './tabs/PlayerStatsTab';
 import { AvailabilityText } from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 
@@ -18,8 +18,8 @@ export function PlayerProfileModalTabContent() {
     },
 
     {
-      label: 'Stats',
-      tabKey: 'stats',
+      label: 'Matches',
+      tabKey: 'matches',
     },
   ];
 
@@ -37,8 +37,8 @@ export function PlayerProfileModalTabContent() {
           <PlayerOverviewTab player={player} />
         </TabViewPage>
 
-        <TabViewPage tabKey="stats">
-          <PlayerStatsTab player={player} />
+        <TabViewPage tabKey="matches">
+          <PlayerMatchesTab player={player} />
           <PlayerMatchsPRList player={player} />
         </TabViewPage>
       </PilledTabView>
