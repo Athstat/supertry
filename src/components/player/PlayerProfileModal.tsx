@@ -47,6 +47,7 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
             lighterDarkBlueCN
           )}
 
+          noAnimation
           hideHandle
         >
           {/* Modal header with player image and close button */}
