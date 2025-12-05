@@ -5,6 +5,7 @@ import PilledTabView from '../../shared/tabs/PilledTabView';
 import PlayerMatchesTab from './tabs/PlayerStatsTab';
 import { AvailabilityText } from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
+import PlayerSeasonStatsTab from './tabs/PlayerSeasonStatsTab';
 
 /** Renders the tab view for the player profile modal */
 export function PlayerProfileModalTabContent() {
@@ -15,6 +16,11 @@ export function PlayerProfileModalTabContent() {
     {
       label: 'Overview',
       tabKey: 'overview',
+    },
+
+    {
+      label: 'Season Stats',
+      tabKey: 'season-stats',
     },
 
     {
@@ -35,6 +41,10 @@ export function PlayerProfileModalTabContent() {
       <PilledTabView tabHeaderItems={tabItems}>
         <TabViewPage tabKey="overview">
           <PlayerOverviewTab player={player} />
+        </TabViewPage>
+
+        <TabViewPage tabKey="season-stats">
+          <PlayerSeasonStatsTab player={player} />
         </TabViewPage>
 
         <TabViewPage tabKey="matches">

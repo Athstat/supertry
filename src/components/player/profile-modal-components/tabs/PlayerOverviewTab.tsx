@@ -7,8 +7,6 @@ import { IProAthlete } from '../../../../types/athletes';
 import { Calendar, Ruler, Dumbbell, Globe } from 'lucide-react';
 import { isNumeric } from '../../../../utils/stringUtils';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
-import PlayerSeasonStatsCard from '../../PlayerSeasonStatsCard';
-import NoContentCard from '../../../shared/NoContentMessage';
 import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 import PlayerTeamFormCard from '../PlayerTeamForm';
 import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
@@ -34,7 +32,7 @@ function kgToLbs(kg: number): string {
 
 /** Renders a player profile overview tab */
 export default function PlayerOverviewTab({ player }: Props) {
-  const { currentSeason, sortedSeasons } = usePlayerData();
+  const { currentSeason } = usePlayerData();
   const nationalityIsValid = player.nationality && !isNumeric(player.nationality ?? '');
 
   return (
@@ -114,7 +112,7 @@ export default function PlayerOverviewTab({ player }: Props) {
       />
 
       {/* Season Statistics */}
-      <div className="flex flex-col gap-4">
+      {/* <div className="flex flex-col gap-4">
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
           Season Statistics
         </h3>
@@ -130,7 +128,9 @@ export default function PlayerOverviewTab({ player }: Props) {
             })}
           </div>
         )}
-      </div>
+      </div> */}
+
+
     </div>
   );
 }
