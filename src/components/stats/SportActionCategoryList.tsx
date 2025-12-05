@@ -14,6 +14,7 @@ type Props = {
   stats: SportAction[];
   forceCanonicalOrder?: boolean;
   highlightLeaders?: boolean;
+  athleteId?: string;
 };
 
 /** Renders List of Sports Actions under a specific category */
@@ -22,6 +23,7 @@ export default function SportActionCategoryList({
   stats,
   forceCanonicalOrder,
   highlightLeaders,
+  athleteId,
 }: Props) {
   const { uiDefintions } = useSportActions();
 
@@ -133,7 +135,7 @@ export default function SportActionCategoryList({
 
       <div className="flex flex-col gap-2">
         {categoryActions.map((s, index) => {
-          return <ActionItem sportAction={s} key={index} highlightLeaders={highlightLeaders} />;
+          return <ActionItem sportAction={s} key={index} highlightLeaders={highlightLeaders} athleteId={athleteId} />;
         })}
       </div>
     </div>
@@ -143,9 +145,10 @@ export default function SportActionCategoryList({
 type ItemProps = {
   sportAction: SportAction;
   highlightLeaders?: boolean;
+  athleteId?: string;
 };
 
-function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
+function ActionItem({ sportAction, highlightLeaders, athleteId }: ItemProps) {
   const shouldShow = shouldShowSportAction(sportAction);
   const { definition, action_count } = sportAction;
   const ref = useRef<HTMLDivElement>(null);
@@ -199,22 +202,40 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
 
   // Determine if this row is a leader among compared players (ties included)
   const isLeader = useMemo(() => {
-    if (!highlightLeaders) return false;
+    if (!highlightLeaders || !athleteId) return false;
+
     const key = sportAction.definition?.action_name;
     if (!key) return false;
+
+    // Ensure we have at least 2 players to compare
+    if (compareStats.length < 2) return false;
+
+    // Get all values for this stat across all players
     const values: number[] = compareStats.map(cs => {
       const found = cs.stats?.find(s => s.definition?.action_name === key);
       const v = found?.action_count;
       return typeof v === 'number' ? Number(v) : 0;
     });
+
     if (values.length === 0) return false;
+
     const maxVal = Math.max(...values);
     const anyPositive = values.some(v => v > 0);
-    // Require a unique max (no ties)
+
+    // Only highlight if there's a positive value
+    if (!anyPositive || maxVal === 0) return false;
+
+    // Find this player's stat value
+    const myPlayerStats = compareStats.find(cs => cs.athlete.tracking_id === athleteId);
+    if (!myPlayerStats) return false;
+
+    const myStatAction = myPlayerStats.stats?.find(s => s.definition?.action_name === key);
+    const myVal = typeof myStatAction?.action_count === 'number' ? Number(myStatAction.action_count) : 0;
+
+    // Highlight only if this player has the max value and it's unique (no ties)
     const maxCount = values.filter(v => v === maxVal).length;
-    const myVal = typeof action_count === 'number' ? Number(action_count) : 0;
-    return anyPositive && maxCount === 1 && myVal === maxVal;
-  }, [highlightLeaders, compareStats, sportAction.definition?.action_name, action_count]);
+    return maxCount === 1 && myVal === maxVal;
+  }, [highlightLeaders, athleteId, compareStats, sportAction.definition?.action_name]);
 
   // In canonical mode we pass placeholders (athlete_id === '') which should still render
   const isPlaceholder = !sportAction.athlete_id;
@@ -253,7 +274,7 @@ function ActionItem({ sportAction, highlightLeaders }: ItemProps) {
         className={`${isHoverable ? 'hover:bg-slate-300/40 dark:hover:bg-slate-600' : ''} ${isLeader ? 'font-semibold bg-primary-200 dark:bg-primary-700 px-1 rounded' : ''} cursor-pointer px-0 py-1 rounded-xl flex flex-row items-center justify-between h-12 sm:h-12 leading-tight`}
       >
         <div className="text-left flex-1 pr-2">
-          <SecondaryText className="whitespace-normal break-words overflow-hidden">
+          <SecondaryText className="whitespace-normal break-words overflow-hidden dark:text-white">
             {definition?.display_name}
           </SecondaryText>
         </div>

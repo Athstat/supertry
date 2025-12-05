@@ -75,6 +75,7 @@ export default function PlayerSeasonStatsTray({ player, season, stats, forceCano
             stats={stats}
             forceCanonicalOrder={forceCanonicalOrder}
             highlightLeaders={highlightRowLeaders}
+            athleteId={player.tracking_id}
           />
         ))}
       </div>
