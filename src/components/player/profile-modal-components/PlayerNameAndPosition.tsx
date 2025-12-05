@@ -5,13 +5,15 @@ import FormIndicator from '../../shared/FormIndicator';
 import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import MatchPrCard from '../../rankings/MatchPrCard';
+import PlayerIconsRow from '../../players/compare/PlayerIconsRow';
+import TeamLogo from '../../team/TeamLogo';
+import { useAtomValue } from 'jotai';
+import { playerProfileCurrStarRatings, playerProfileCurrStatsAtom } from '../../../state/playerProfile.atoms';
 
 export default function PlayerNameAndPosition() {
   // console.log('player: ', player);
 
-  // const starRatings = useAtomValue(playerProfileCurrStarRatings);
-  // const stats = useAtomValue(playerProfileCurrStatsAtom);
-
+  const {currentSeason} = usePlayerData();
   const { player } = usePlayerData();
 
   if (!player) return;
@@ -20,13 +22,13 @@ export default function PlayerNameAndPosition() {
     <>
       <div className="flex flex-row items-start mt-2 justify-between ">
         <div className="flex flex-row items-center gap-3">
-          {/* {player.team && (
+          {player.team && (
             <TeamLogo
               url={player.team?.image_url}
               teamName={player.team?.athstat_name}
               className="w-10 h-10"
             />
-          )} */}
+          )}
           <div>
             <div className='flex flex-row items-center gap-2' >
               <p className="font-semibold text-lg dark:text-white">{player.player_name}</p>
@@ -69,15 +71,14 @@ export default function PlayerNameAndPosition() {
 
       </div>
 
-      {/* Player Icons
-      <div className="px-4 mt-2 w-full flex flex-row items-center justify-center">
+      
+      {currentSeason && <div className="px-4 mt-2 w-full flex flex-row items-center justify-center">
         <PlayerIconsRow
           player={player}
-          starRatings={starRatings ?? null}
-          seasonStats={stats}
+          season={currentSeason}
           size="sm"
         />
-      </div> */}
+      </div>}
     </>
   );
 }

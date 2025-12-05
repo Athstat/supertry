@@ -2,7 +2,6 @@ import { ScopeProvider } from 'jotai-scope';
 import { Fragment, ReactNode, useEffect, useMemo } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import useSWR from 'swr';
-import DialogModal from '../components/shared/DialogModal';
 import RoundedCard from '../components/shared/RoundedCard';
 import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
 import { playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom } from '../state/player.atoms';
@@ -13,6 +12,9 @@ import {
   teamPlayersProfileCacheAtom,
   teamPlayersSeasonsCacheAtom,
 } from '../state/playerProfileCache.atoms';
+import { twMerge } from 'tailwind-merge';
+import BottomSheetView from '../components/ui/BottomSheetView';
+import { lighterDarkBlueCN } from '../types/constants';
 
 type Props = {
   children?: ReactNode;
@@ -76,33 +78,36 @@ function ProviderInner({ children, player, onClose }: Props) {
 
   if (isLoading) {
     return (
-      <DialogModal
-        open={true}
-        hw="min-h-[95%] lg:w-[40%]"
-        className="animate-pulse flex flex-col gap-4"
-        title={player.player_name}
-        onClose={onClose}
+      <BottomSheetView
+        className={twMerge(
+          "p-0 flex flex-col gap-6 min-h-[95vh] overflow-y-auto",
+          lighterDarkBlueCN
+        )}
+
+        hideHandle
       >
         <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[200px]"></RoundedCard>
 
-        <div className="flex flex-row  justify-between">
+        <div className="flex flex-row px-4 justify-between">
           <div className="flex flex-col gap-2">
-            <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[20px] w-[120px]" />
-            <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[20px] w-[60px]" />
+            <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[30px] w-[120px]" />
+            <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[30px] w-[60px]" />
           </div>
 
-          <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[20px] w-[60px]" />
+          <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[30px] w-[60px]" />
         </div>
 
-        <div className="flex flex-row gap-2 items-center">
+        <div className="flex px-4 flex-row gap-2 items-center">
           <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1 " />
           <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[60px] flex-1" />
         </div>
 
-        <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full" />
-        <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[50px] w-full" />
-        <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full" />
-      </DialogModal>
+        <div className='flex flex-col gap-4 px-4' >
+          <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full" />
+          <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[50px] w-full" />
+          <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full" />
+        </div>
+      </BottomSheetView>
     );
   }
 
