@@ -5,13 +5,9 @@ import FormIndicator from '../../shared/FormIndicator';
 import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import MatchPrCard from '../../rankings/MatchPrCard';
-import PlayerIconsRow from '../../players/compare/PlayerIconsRow';
 import ScoutPlayerButton from './ScoutPlayerButton';
 
 export default function PlayerNameAndPosition() {
-  // console.log('player: ', player);
-
-  const { currentSeason } = usePlayerData();
   const { player } = usePlayerData();
 
   if (!player) return;
@@ -76,13 +72,13 @@ export default function PlayerNameAndPosition() {
       </div>
 
 
-      {currentSeason && <div className="px-4 mt-2 w-full flex flex-row items-center justify-center">
+      {/* {currentSeason && <div className="px-4 mt-2 w-full flex flex-row items-center justify-center">
         <PlayerIconsRow
           player={player}
           season={currentSeason}
           size="sm"
         />
-      </div>}
+      </div>} */}
     </>
   );
 }
