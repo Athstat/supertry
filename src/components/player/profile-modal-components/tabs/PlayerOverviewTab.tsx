@@ -51,61 +51,59 @@ export default function PlayerOverviewTab({ player }: Props) {
       /> */}
 
       {/* TIER 1: Info Cluster */}
-      <RoundedCard className='p-4' >
-        <div className='grid grid-cols-3 gap-4' >
+      <RoundedCard className='p-4 dark:border-none grid grid-cols-3 gap-4' >
 
-          {nationalityIsValid && <div className='flex flex-col items-center gap-1' >
-            <SecondaryText className='text-xs text-center' >Nationality</SecondaryText>
-            <div className='flex flex-row items-center gap-1' >
-              <p>{countryFlag}</p>
-              <p className='text-sm font-semibold' >{player.nationality}</p>
-            </div>
-          </div>}
+        {nationalityIsValid && <div className='flex flex-col items-center gap-1' >
+          <SecondaryText className='text-[11px] text-center' >Nationality</SecondaryText>
+          <div className='flex flex-row items-center gap-1' >
+            <p>{countryFlag}</p>
+            <p className='text-sm font-medium' >{player.nationality}</p>
+          </div>
+        </div>}
 
-          {dob && <div className='flex flex-col items-center gap-1' >
-            <SecondaryText className='text-xs text-center' >{format(dob, "d MMM yyyy")}</SecondaryText>
-            <div className='flex flex-row items-center gap-1' >
-              <p className='text-sm font-semibold' >{calculateAge(dob)} yrs</p>
-            </div>
-          </div>}
+        {dob && <div className='flex flex-col items-center gap-1' >
+          <SecondaryText className='text-[11px] text-center' >{format(dob, "d MMM yyyy")}</SecondaryText>
+          <div className='flex flex-row items-center gap-1' >
+            <p className='text-sm font-medium' >{calculateAge(dob)} yrs</p>
+          </div>
+        </div>}
 
-          {player.height && <div className='flex flex-col items-center gap-1' >
-            <SecondaryText className='text-xs text-center' >Height</SecondaryText>
-            <div className='flex flex-row items-center gap-1' >
-              <p className='text-sm font-semibold' >{player.height} cm ({cmToFeetInches(player.height)})</p>
-            </div>
-          </div>}
+        {player.height && <div className='flex flex-col items-center gap-1' >
+          <SecondaryText className='text-[11px] text-center' >Height</SecondaryText>
+          <div className='flex flex-row items-center gap-1' >
+            <p className='text-sm font-medium' >{player.height} cm ({cmToFeetInches(player.height)})</p>
+          </div>
+        </div>}
 
-          {player.weight && <div className='flex flex-col items-center gap-1' >
-            <SecondaryText className='text-xs text-center' >Weight</SecondaryText>
-            <div className='flex flex-row items-center gap-1' >
-              <p className='text-sm font-semibold' >{player.weight} kg ({kgToLbs(player.weight)})</p>
-            </div>
-          </div>}
+        {player.weight && <div className='flex flex-col items-center gap-1' >
+          <SecondaryText className='text-[11px] text-center' >Weight</SecondaryText>
+          <div className='flex flex-row items-center gap-1' >
+            <p className='text-sm font-medium' >{player.weight} kg ({kgToLbs(player.weight)})</p>
+          </div>
+        </div>}
 
-          {(player.gender === "F") && <div className='flex flex-col items-center gap-1' >
-            <SecondaryText className='text-xs text-center' >Gender</SecondaryText>
-            <div className='flex flex-row items-center gap-1' >
-              <p className='text-sm font-semibold' >{player.gender}</p>
-            </div>
-          </div>}
+        {(player.gender === "F") && <div className='flex flex-col items-center gap-1' >
+          <SecondaryText className='text-[11px] text-center' >Gender</SecondaryText>
+          <div className='flex flex-row items-center gap-1' >
+            <p className='text-sm font-medium' >{player.gender}</p>
+          </div>
+        </div>}
 
-          {player.price && <div className='flex flex-col items-center gap-1' >
-            <SecondaryText className='text-xs text-center' >Price</SecondaryText>
-            <div className='flex flex-row items-center gap-1' >
-              <p className='text-sm font-semibold' >{player.price}</p>
-              <Coins className='w-4 h-4 text-yellow-500' />
-            </div>
-          </div>}
+        {player.price && <div className='flex flex-col items-center gap-1' >
+          <SecondaryText className='text-[11px] text-center' >Price</SecondaryText>
+          <div className='flex flex-row items-center gap-1' >
+            <p className='text-sm font-medium' >{player.price}</p>
+            <Coins className='w-4 h-4 text-yellow-500' />
+          </div>
+        </div>}
 
-          {player.form && <div className='flex flex-col items-center gap-1' >
-            <SecondaryText className='text-xs text-center' >Form</SecondaryText>
-            <div className='flex flex-row items-center gap-1' >
-              <FormIndicator form={player.form} />
-            </div>
-          </div>}
+        {player.form && <div className='flex flex-col items-center gap-1' >
+          <SecondaryText className='text-[11px] text-center' >Form</SecondaryText>
+          <div className='flex flex-row items-center gap-1' >
+            <FormIndicator form={player.form} />
+          </div>
+        </div>}
 
-        </div>
       </RoundedCard>
 
       <CoachScrummyPlayerReport player={player} />
