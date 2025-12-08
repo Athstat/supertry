@@ -4,7 +4,7 @@ import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import { IProAthlete } from '../../../../types/athletes';
 import { Coins } from 'lucide-react';
-import { isNumeric } from '../../../../utils/stringUtils';
+import { isNumeric, stripCountryName } from '../../../../utils/stringUtils';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 import PlayerTeamFormCard from '../PlayerTeamForm';
@@ -38,9 +38,10 @@ function kgToLbs(kg: number): string {
 export default function PlayerOverviewTab({ player }: Props) {
 
   const { currentSeason } = usePlayerData();
-  const nationalityIsValid = player.nationality && !isNumeric(player.nationality ?? '');
+  const {nationality} = player;
+  const nationalityIsValid = nationality && !isNumeric(nationality ?? '');
 
-  const countryFlag = getCountryEmojiFlag(player.nationality);
+  const countryFlag = nationalityIsValid ? getCountryEmojiFlag(stripCountryName(nationality)) : undefined;
   const dob = player.date_of_birth ? new Date(player.date_of_birth) : undefined;
 
   return (
@@ -57,7 +58,7 @@ export default function PlayerOverviewTab({ player }: Props) {
           <SecondaryText className='text-[11px] text-center' >Nationality</SecondaryText>
           <div className='flex flex-row items-center gap-1' >
             <p>{countryFlag}</p>
-            <p className='text-sm font-medium' >{player.nationality}</p>
+            <p className='text-sm font-medium' >{stripCountryName(nationality)}</p>
           </div>
         </div>}
 
