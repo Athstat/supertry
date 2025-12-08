@@ -4,7 +4,7 @@ import RoundedCard from "../../shared/RoundedCard"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import { IProSeason } from "../../../types/season"
 import { fantasySeasonsService } from "../../../services/fantasy/fantasySeasonsService"
-import { Activity, useMemo, useState } from "react"
+import { Activity, Fragment, useMemo, useState } from "react"
 import { PlayerPointsHistoryItem } from "../../../types/fantasyLeagueGroups"
 import SecondaryText from "../../shared/SecondaryText"
 import { format } from "date-fns"
@@ -26,7 +26,7 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
     const { data, isLoading } = useSWR(key, () => fantasySeasonsService.getPlayerPointsHistory(season.id, player.tracking_id));
 
     const [selectedFixture, setSelectedFixture] = useState<IFixture>();
-    
+
     const handleClickFixture = (fixture: IFixture) => {
         setSelectedFixture(fixture);
     }
@@ -50,32 +50,33 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
     }
 
     return (
-        <RoundedCard className="p-4 max-h-[170px] min-h-[170px] dark:border-none flex flex-col gap-5" >
-            <div>
-                <p className="font-bold text-sm" >Points History</p>
-            </div>
-
-            <Activity mode={hasHistory ? "hidden" : "visible"} >
-                <div className="flex flex-col items-center justify-center h-[100px] text-center px-[10%]" >
-                    <SecondaryText>{player.player_name}{(player.player_name || "").endsWith("s") ? "'" : "'s"} points history data is not yet available</SecondaryText>
-                </div>
-            </Activity>
-
-            <Activity mode={hasHistory ? "visible" : "hidden"} >
-                <div className="flex flex-row items-center  justify-between gap-3" >
-                    {history.map((h) => {
-                        return (
-                            <PointsHistoryItem
-                                item={h}
-                                key={h.game_id}
-                                player={player}
-                                onClick={handleClickFixture}
-                            />
-                        )
-                    })}
+        <Fragment>
+            <RoundedCard className="p-4 max-h-[170px] min-h-[170px] dark:border-none flex flex-col gap-5" >
+                <div>
+                    <p className="font-bold text-sm" >Points History</p>
                 </div>
 
-                {/* <div className="flex flex-row gap-1 text-[10px]" >
+                <Activity mode={hasHistory ? "hidden" : "visible"} >
+                    <div className="flex flex-col items-center justify-center h-[100px] text-center px-[10%]" >
+                        <SecondaryText>{player.player_name}{(player.player_name || "").endsWith("s") ? "'" : "'s"} points history data is not yet available</SecondaryText>
+                    </div>
+                </Activity>
+
+                <Activity mode={hasHistory ? "visible" : "hidden"} >
+                    <div className="flex flex-row items-center  justify-between gap-3" >
+                        {history.map((h) => {
+                            return (
+                                <PointsHistoryItem
+                                    item={h}
+                                    key={h.game_id}
+                                    player={player}
+                                    onClick={handleClickFixture}
+                                />
+                            )
+                        })}
+                    </div>
+
+                    {/* <div className="flex flex-row gap-1 text-[10px]" >
                     <SecondaryText className="text-[10px]" >Legend</SecondaryText>
 
                     <div className="flex flex-row items-center gap-2" >
@@ -94,15 +95,21 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
                 </div> */}
 
 
-                {selectedFixture && <PlayerFixtureModal 
+
+
+                </Activity>
+            </RoundedCard>
+
+            {
+                selectedFixture && <PlayerFixtureModal
                     player={player}
                     fixture={selectedFixture}
                     isOpen={Boolean(selectedFixture)}
                     onClose={handleCloseFixtureModal}
-                />}
+                />
+            }
 
-            </Activity>
-        </RoundedCard>
+        </Fragment>
     )
 }
 
@@ -143,9 +150,9 @@ function PointsHistoryItem({ item, player, onClick }: HistoryItemProps) {
 
             <div className={twMerge(
                 "w-fit px-4 bg-blue-500 py-0.5 rounded-md items-center justify-center text-center flex",
-                isW && "bg-green-500 text-black font-semibold",
-                isL && "bg-red-500 dark:bg-red-600 ",
-                isDraw && "bg-slate-400 dark:bg-slate-700"
+                isW && "bg-green-500 text-white dark:text-black font-semibold",
+                isL && "bg-red-600 text-white dark:bg-red-600 ",
+                isDraw && "bg-slate-400 white-white dark:bg-slate-700"
             )} >
                 <p className="text-xs" >{Math.floor(item.total_score)}pts</p>
             </div>
