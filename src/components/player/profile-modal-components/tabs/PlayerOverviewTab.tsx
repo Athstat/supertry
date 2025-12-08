@@ -135,26 +135,6 @@ export default function PlayerOverviewTab({ player }: Props) {
         player={player}
       />
 
-      {/* Season Statistics */}
-      {/* <div className="flex flex-col gap-4">
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-          Season Statistics
-        </h3>
-
-        {sortedSeasons.length === 0 && (
-          <NoContentCard message={`Career stats for ${player.player_name} are not available`} />
-        )}
-
-        {sortedSeasons.length > 0 && (
-          <div className="flex flex-col gap-4">
-            {sortedSeasons.map(s => {
-              return <PlayerSeasonStatsCard player={player} season={s} key={s.id} hideTitle />;
-            })}
-          </div>
-        )}
-      </div> */}
-
-
     </div>
   );
 }
