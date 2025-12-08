@@ -1,4 +1,5 @@
 import { IProAthlete } from '../../../../types/athletes';
+import PlayerMatchsPRList from '../PlayerMatchsPRList';
 import PlayerPerformanceSnapshot from '../PlayerPerformanceSnapshot';
 import PowerRankingChartTab from './PRChartTab';
 
@@ -12,12 +13,10 @@ export default function PlayerMatchesTab({ player }: Props) {
       {/* TIER 1: Performance Snapshot */}
       <PlayerPerformanceSnapshot player={player} />
 
-      {/* <PlayerPrTrendCard 
-        player={player}
-      /> */}
-
       {/* TIER 2: Power Ranking Chart */}
       <PowerRankingChartTab player={player} />
+
+      <PlayerMatchsPRList player={player} />
     </div>
   );
 }

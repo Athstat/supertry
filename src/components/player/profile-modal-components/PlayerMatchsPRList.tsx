@@ -16,6 +16,7 @@ type Props = {
 };
 
 export default function PlayerMatchsPRList({ player }: Props) {
+
   const { data, isLoading } = useSWR(`player-matches-pr/${player.tracking_id}`, () =>
     powerRankingsService.getPastMatchsPowerRankings(player.tracking_id ?? '', 10)
   );
@@ -58,18 +59,18 @@ export default function PlayerMatchsPRList({ player }: Props) {
 
         {/* Filter Pills */}
         <div className="flex flex-row items-center gap-2">
-          <div className="px-3 py-1 rounded-full bg-green-500/20 backdrop-blur-sm ring-1 ring-green-500/30">
+          <div className="px-3 flex items-center justify-center py-0.5 rounded-full bg-green-500/20 backdrop-blur-sm ring-1 ring-green-500/30">
             <span className="text-xs font-semibold text-green-600 dark:text-green-400">
               Won {matchesWon}
             </span>
           </div>
-          <div className="px-3 py-1 rounded-full bg-red-500/20 backdrop-blur-sm ring-1 ring-red-500/30">
+          <div className="px-2  flex items-center justify-center py-0.5 rounded-full bg-red-500/20 backdrop-blur-sm ring-1 ring-red-500/30">
             <span className="text-xs font-semibold text-red-600 dark:text-red-400">
               Lost {matchesLost}
             </span>
           </div>
           {matchesDrawn > 0 && (
-            <div className="px-3 py-1 rounded-full bg-slate-500/20 backdrop-blur-sm ring-1 ring-slate-500/30">
+            <div className="px-3 flex items-center justify-center py-0.5  rounded-full bg-slate-500/20 backdrop-blur-sm ring-1 ring-slate-500/30">
               <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
                 Draw {matchesDrawn}
               </span>

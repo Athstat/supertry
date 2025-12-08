@@ -1,5 +1,4 @@
 import { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
-import PlayerMatchsPRList from './PlayerMatchsPRList';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PilledTabView from '../../shared/tabs/PilledTabView';
 import PlayerMatchesTab from './tabs/PlayerStatsTab';
@@ -49,7 +48,6 @@ export function PlayerProfileModalTabContent() {
 
         <TabViewPage tabKey="matches">
           <PlayerMatchesTab player={player} />
-          <PlayerMatchsPRList player={player} />
         </TabViewPage>
       </PilledTabView>
     </div>
