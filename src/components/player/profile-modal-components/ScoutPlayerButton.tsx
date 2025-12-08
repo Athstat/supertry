@@ -17,12 +17,12 @@ type Props = {
 export default function ScoutPlayerButton({ player }: Props) {
 
     // We need to know if player is currently being scouted!
-    const key = `/fantasy/scouting/my-list/${player.tracking_id}`;
+    const key = `/fantasy/scouting/my-list/check/${player.tracking_id}`;
     const { data: scoutingListPlayer, isLoading, mutate } = useSWR(key, () => scoutingService.getScoutingListPlayer(player.tracking_id));
 
     const isOnScoutingList = useMemo(() => {
-        return scoutingListPlayer !== undefined && !isLoading;
-    }, [isLoading, scoutingListPlayer]);
+        return scoutingListPlayer !== undefined;
+    }, [scoutingListPlayer]);
 
     const { addPlayer, isAdding, error, message, clearError, clearMessage } = useScoutingList();
 
@@ -66,7 +66,7 @@ export default function ScoutPlayerButton({ player }: Props) {
 
             <Activity mode={isOnScoutingList ? "visible" : "hidden"} >
                 <RoundedCard
-                    className="flex w-[130px] h-[33px] flex-row items-center justify-center py-1.5 px-2"
+                    className="flex w-fit h-[33px] cursor-pointer dark:bg-slate-700/70 flex-row items-center justify-center py-1.5 px-2"
                     onClick={handleClick}
                 >
                     <div className="flex flex-row items-center gap-2" >

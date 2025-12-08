@@ -22,6 +22,7 @@ export const scoutingService = {
 
     getScoutingListPlayer: async (athleteId: string): Promise<ScoutingListPlayer | undefined> => {
         try {
+            
             const uri = getUri(`/api/v1/fantasy/scouting/my-list/${athleteId}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
@@ -30,6 +31,7 @@ export const scoutingService = {
             if (res.ok) {
                 return (await res.json()) as ScoutingListPlayer
             }
+
         } catch (err) {
             logger.error("Error getting scouting list player ", err);
         };
