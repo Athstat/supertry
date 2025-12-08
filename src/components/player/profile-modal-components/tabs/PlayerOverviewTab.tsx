@@ -11,6 +11,7 @@ import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 import PlayerTeamFormCard from '../PlayerTeamForm';
 import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
 import PlayerPriceHistoryCard from '../PlayerPriceHistoryCard';
+import PlayerPointsHistoryCard from '../PlayerPointsHistoryCard';
 
 type Props = {
   player: IProAthlete;
@@ -100,6 +101,11 @@ export default function PlayerOverviewTab({ player }: Props) {
         player={player}
       />
 
+
+      {currentSeason && <PlayerPointsHistoryCard 
+        player={player}
+        season={currentSeason}
+      />}
 
 
       {currentSeason && <PlayerPercentageSelectedCard

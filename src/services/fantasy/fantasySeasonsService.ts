@@ -1,5 +1,5 @@
 import { IFantasySeason } from "../../types/fantasy/fantasySeason";
-import { FantasyLeagueGroup, FantasyPointsScoredRankingItem, IPlayerPercentageSelected, MostSelectedRankingItem, PlayerSportActionRankingItem } from "../../types/fantasyLeagueGroups";
+import { FantasyLeagueGroup, FantasyPointsScoredRankingItem, IPlayerPercentageSelected, MostSelectedRankingItem, PlayerPointsHistoryItem, PlayerSportActionRankingItem } from "../../types/fantasyLeagueGroups";
 import { getAuthHeader, getUri } from "../../utils/backendUtils";
 import { logger } from "../logger";
 
@@ -131,5 +131,23 @@ export const fantasySeasonsService = {
         }
 
         return undefined;
+    },
+
+    getPlayerPointsHistory: async (seasonId: string, athleteId: string, limit: number = 5) : Promise<PlayerPointsHistoryItem[]> => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-seasons/${seasonId}/players/${athleteId}/points-history?limit=${limit}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as PlayerPointsHistoryItem[];
+            }
+
+        } catch (err) {
+            logger.error(`Error getting player points history `, err);
+        }
+
+        return [];
     }
 }

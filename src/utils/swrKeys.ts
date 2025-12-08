@@ -176,5 +176,9 @@ export const swrFetchKeys = {
 
   getAthleteFixtureSportsActions: (fixtureId: string, athleteId: string) => {
     return `/fixtures/${fixtureId}/sports-actions/athletes/${athleteId}`;
+  },
+
+  getPlayerPointsHistory: (seasonId: string, athleteId: string) => {
+    return `seasons/${seasonId}/athletes/${athleteId}/points-history`;
   }
 };
