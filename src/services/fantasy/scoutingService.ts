@@ -29,7 +29,8 @@ export const scoutingService = {
             });
 
             if (res.ok) {
-                return (await res.json()) as ScoutingListPlayer
+                const json = await res.json();
+                return (json) as ScoutingListPlayer;
             }
 
         } catch (err) {

@@ -21,14 +21,16 @@ export default function ScoutPlayerButton({ player }: Props) {
     const { data: scoutingListPlayer, isLoading, mutate } = useSWR(key, () => scoutingService.getScoutingListPlayer(player.tracking_id));
 
     const isOnScoutingList = useMemo(() => {
-        console.log("Scouting list player ", scoutingListPlayer);
         
-        if (scoutingListPlayer) {
+        if (scoutingListPlayer?.athlete.tracking_id) {
+            console.log("Athlete Value ", scoutingListPlayer.athlete);
             return true;
         }
 
         return false;
     }, [scoutingListPlayer]);
+
+    console.log("Value of ", isOnScoutingList)
 
     const { addPlayer, isAdding, error, message, clearError, clearMessage } = useScoutingList();
 
