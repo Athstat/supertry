@@ -91,6 +91,7 @@ function PlayerFixtureModalWrapper() {
           isOpen={Boolean(selectedFixture)}
           onClose={handleCloseFixtureModal}
           className="z-30"
+          showMatchInfo
         />
       </div>}
     </>

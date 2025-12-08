@@ -19,18 +19,23 @@ import { useFixtureScreen } from "../../../hooks/fixtures/useFixture"
 import { fixtureSummary } from "../../../utils/fixtureUtils"
 import RoundedCard from "../../shared/RoundedCard"
 import { twMerge } from "tailwind-merge"
+import TeamLogo from "../../team/TeamLogo"
+import PrimaryButton from "../../shared/buttons/PrimaryButton"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
     fixture: IFixture,
     player: IProAthlete,
     onClose?: () => void,
     isOpen?: boolean,
-    className?: string
+    className?: string,
+    showMatchInfo?: boolean
 }
 
-export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, className }: Props) {
+export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, className, showMatchInfo }: Props) {
 
     const { gameKickedOff, matchFinal } = fixtureSummary(fixture);
+    const navigate = useNavigate();
     const { openPlayerProfileModal } = useFixtureScreen();
     const { pr, isLoading: loadingPr } = useAthleteMatchPr(player.tracking_id, fixture.game_id);
 
@@ -64,6 +69,10 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
 
     const minutesPlayed = getAction("minutes_played_total", "MinutesPlayedTotal");
     const pointsScored = getAction("points", "Points");
+
+    const handleViewFullMatch = () => {
+        navigate(`/fixtures/${fixture.game_id}`);
+    }
 
     return (
         <Activity mode={isOpen ? "visible" : "hidden"} >
@@ -132,6 +141,33 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                         </QuickActionButton>
                     </div>
 
+                    {showMatchInfo && <RoundedCard className="flex flex-col p-4 mt-2 gap-2" >
+
+                        <div className="flex flex-row w-full items-start" >
+                            <SecondaryText className="text-sm" >{fixture.team?.athstat_name} vs {fixture.opposition_team?.athstat_name}</SecondaryText>
+                        </div>
+
+                        <div className="flex flex-row items-center justify-between" >
+                            <div className="flex flex-row items-center gap-2" >
+                                <TeamLogo
+                                    url={fixture.team?.image_url}
+                                    className="w-8 h-8"
+                                />
+
+                                <p>vs</p>
+
+                                <TeamLogo
+                                    url={fixture.opposition_team?.image_url}
+                                    className="w-8 h-8"
+                                />
+                            </div>
+
+                            <div>
+                                <PrimaryButton onClick={handleViewFullMatch} className="text-xs" >View Match Details</PrimaryButton>
+                            </div>
+                        </div>
+                    </RoundedCard>}
+
                     <Activity mode={hasActions ? "visible" : "hidden"} >
                         <div className="flex flex-col gap-4 mt-4" >
 
@@ -143,7 +179,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                                 />
 
                                 <StatCard
-                                    label="Total Points"
+                                    label="Points Scored"
                                     value={sanitizeStat(pointsScored?.action_count)}
                                     className="flex-1"
                                 />
@@ -239,7 +275,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
 
                 <Activity mode={isLoading ? "visible" : "hidden"} >
 
-                    <LoadingSkeleton 
+                    <LoadingSkeleton
                         player={player}
                         onClose={handleClose}
                     />
@@ -324,11 +360,11 @@ function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
 }
 
 type SkeletonProps = {
-    player:IProAthlete,
+    player: IProAthlete,
     onClose?: () => void
 }
 
-function LoadingSkeleton({player, onClose} : SkeletonProps) {
+function LoadingSkeleton({ player, onClose }: SkeletonProps) {
     return (
 
         <div className="flex flex-col gap-2" >
