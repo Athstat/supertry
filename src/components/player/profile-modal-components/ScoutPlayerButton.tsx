@@ -21,7 +21,7 @@ export default function ScoutPlayerButton({ player }: Props) {
     const { data: scoutingListPlayer, isLoading, mutate } = useSWR(key, () => scoutingService.getScoutingListPlayer(player.tracking_id));
 
     const isOnScoutingList = useMemo(() => {
-        return scoutingListPlayer === undefined && !isLoading;
+        return scoutingListPlayer !== undefined && !isLoading;
     }, [isLoading, scoutingListPlayer]);
 
     const { addPlayer, isAdding, error, message, clearError, clearMessage } = useScoutingList();
