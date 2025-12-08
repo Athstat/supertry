@@ -43,11 +43,13 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
                 <p className="font-bold text-sm" >Points History</p>
             </div>
 
-            <div className="flex flex-col items-center justify-center h-[100px] text-center px-[10%]" >
-                <SecondaryText>{player.player_name}{(player.player_name || "").endsWith("s") ? "'" : "'s"} points history data is not yet available</SecondaryText>
-            </div>
+            <Activity mode={hasHistory ? "hidden" : "visible"} >
+                <div className="flex flex-col items-center justify-center h-[100px] text-center px-[10%]" >
+                    <SecondaryText>{player.player_name}{(player.player_name || "").endsWith("s") ? "'" : "'s"} points history data is not yet available</SecondaryText>
+                </div>
+            </Activity>
 
-            <Activity mode={!hasHistory ? "visible" : "hidden"} >
+            <Activity mode={hasHistory ? "visible" : "hidden"} >
                 <div className="flex flex-row items-center  justify-between gap-3" >
                     {history.map((h) => {
                         return (
