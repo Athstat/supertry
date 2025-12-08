@@ -5,10 +5,11 @@ import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { Activity, useCallback, useEffect, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
-import PlayerDataProvider from '../../providers/PlayerDataProvider';
+import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataProvider';
 import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
+import PlayerFixtureModal from '../fixtures/fixture_screen/PlayerFixtureModal';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -64,7 +65,34 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
             </div>
           </div>
         </BottomSheetView>
+
+        <PlayerFixtureModalWrapper />
+
+
       </Activity>
     </PlayerDataProvider>
   );
+}
+
+function PlayerFixtureModalWrapper() {
+  
+  const {selectedFixture, setSelectedFixture, player} = usePlayerData();
+  
+  const handleCloseFixtureModal = () => {
+    setSelectedFixture(undefined);
+  }
+  
+  return (
+    <>
+      {selectedFixture && player && <div className="absolute top-0 left-0 right-0 h-screen" >
+        <PlayerFixtureModal
+          player={player}
+          fixture={selectedFixture}
+          isOpen={Boolean(selectedFixture)}
+          onClose={handleCloseFixtureModal}
+          className="z-30"
+        />
+      </div>}
+    </>
+  )
 }

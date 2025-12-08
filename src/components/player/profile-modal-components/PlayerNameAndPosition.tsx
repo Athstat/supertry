@@ -7,8 +7,6 @@ import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import MatchPrCard from '../../rankings/MatchPrCard';
 import PlayerIconsRow from '../../players/compare/PlayerIconsRow';
 import TeamLogo from '../../team/TeamLogo';
-import { useAtomValue } from 'jotai';
-import { playerProfileCurrStarRatings, playerProfileCurrStatsAtom } from '../../../state/playerProfile.atoms';
 
 export default function PlayerNameAndPosition() {
   // console.log('player: ', player);

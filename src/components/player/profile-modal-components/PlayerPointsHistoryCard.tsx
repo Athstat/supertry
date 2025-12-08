@@ -4,15 +4,15 @@ import RoundedCard from "../../shared/RoundedCard"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import { IProSeason } from "../../../types/season"
 import { fantasySeasonsService } from "../../../services/fantasy/fantasySeasonsService"
-import { Activity, Fragment, useMemo, useState } from "react"
+import { Activity, Fragment, useMemo } from "react"
 import { PlayerPointsHistoryItem } from "../../../types/fantasyLeagueGroups"
 import SecondaryText from "../../shared/SecondaryText"
 import { format } from "date-fns"
 import TeamLogo from "../../team/TeamLogo"
 import { fixtureSummary, getOpponent } from "../../../utils/fixtureUtils"
 import { twMerge } from "tailwind-merge"
-import PlayerFixtureModal from "../../fixtures/fixture_screen/PlayerFixtureModal"
 import { IFixture } from "../../../types/games"
+import { usePlayerData } from "../../../providers/PlayerDataProvider"
 
 type Props = {
     player: IProAthlete,
@@ -25,14 +25,10 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
     const key = swrFetchKeys.getPlayerPointsHistory(season.id, player.tracking_id)
     const { data, isLoading } = useSWR(key, () => fantasySeasonsService.getPlayerPointsHistory(season.id, player.tracking_id));
 
-    const [selectedFixture, setSelectedFixture] = useState<IFixture>();
+    const {setSelectedFixture} = usePlayerData();
 
     const handleClickFixture = (fixture: IFixture) => {
         setSelectedFixture(fixture);
-    }
-
-    const handleCloseFixtureModal = () => {
-        setSelectedFixture(undefined);
     }
 
     const history = useMemo(() => {
@@ -99,16 +95,6 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
 
                 </Activity>
             </RoundedCard>
-
-            {selectedFixture && <div className="absolute top-0 left-0 right-0 h-screen" >
-                <PlayerFixtureModal
-                    player={player}
-                    fixture={selectedFixture}
-                    isOpen={Boolean(selectedFixture)}
-                    onClose={handleCloseFixtureModal}
-                    className="z-30"
-                />
-            </div>}
 
         </Fragment>
     )
