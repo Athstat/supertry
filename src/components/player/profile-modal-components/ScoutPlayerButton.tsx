@@ -66,7 +66,7 @@ export default function ScoutPlayerButton({ player }: Props) {
 
             <Activity mode={isOnScoutingList ? "visible" : "hidden"} >
                 <RoundedCard
-                    className="flex w-fit h-[33px] cursor-pointer dark:bg-slate-700/70 flex-row items-center justify-center py-1.5 px-2"
+                    className="flex w-fit h-[33px] cursor-pointer dark:border-none dark:bg-slate-700/70 dark:hover:bg-slate-700 flex-row items-center justify-center py-1.5 px-2"
                     onClick={handleClick}
                 >
                     <div className="flex flex-row items-center gap-2" >
