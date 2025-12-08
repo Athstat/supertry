@@ -16,7 +16,7 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
     if (noAnimation) {
         return (
             <div
-                className="fixed z-[150] bottom-0 left-0 w-full  flex flex-col items-center justify-center"
+                className="fixed z-[150] bottom-0 left-0 right-0 w-full  flex flex-col items-center justify-center"
             >
                 <div className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
@@ -36,7 +36,7 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
     return (
         <AnimatePresence>
             <motion.div
-                className="fixed z-[150] bottom-0 left-0 w-full  flex flex-col items-center justify-center"
+                className="fixed z-[150] bottom-0 right-0 left-0 w-full  flex flex-col items-center justify-center"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: ["100%", "50%", "0%"] }}

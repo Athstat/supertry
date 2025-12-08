@@ -100,14 +100,15 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
                 </Activity>
             </RoundedCard>
 
-            {
-                selectedFixture && <PlayerFixtureModal
+            {selectedFixture && <div className="absolute top-0 left-0 right-0 h-screen" >
+                <PlayerFixtureModal
                     player={player}
                     fixture={selectedFixture}
                     isOpen={Boolean(selectedFixture)}
                     onClose={handleCloseFixtureModal}
+                    className="z-30"
                 />
-            }
+            </div>}
 
         </Fragment>
     )
@@ -152,7 +153,7 @@ function PointsHistoryItem({ item, player, onClick }: HistoryItemProps) {
                 "w-fit px-4 bg-blue-500 py-0.5 rounded-md items-center justify-center text-center flex",
                 isW && "bg-green-500 text-white dark:text-black font-semibold",
                 isL && "bg-red-600 text-white dark:bg-red-600 ",
-                isDraw && "bg-slate-400 white-white dark:bg-slate-700"
+                isDraw && "bg-slate-400 text-slate-50 dark:bg-slate-700"
             )} >
                 <p className="text-xs" >{Math.floor(item.total_score)}pts</p>
             </div>

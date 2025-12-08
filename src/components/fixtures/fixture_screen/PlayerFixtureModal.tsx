@@ -18,15 +18,17 @@ import QuickActionButton from "../../ui/QuickActionButton"
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture"
 import { fixtureSummary } from "../../../utils/fixtureUtils"
 import RoundedCard from "../../shared/RoundedCard"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
     fixture: IFixture,
     player: IProAthlete,
     onClose?: () => void,
-    isOpen?: boolean
+    isOpen?: boolean,
+    className?: string
 }
 
-export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }: Props) {
+export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, className }: Props) {
 
     const { gameKickedOff, matchFinal } = fixtureSummary(fixture);
     const { openPlayerProfileModal } = useFixtureScreen();
@@ -66,7 +68,10 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen }:
     return (
         <Activity mode={isOpen ? "visible" : "hidden"} >
             <BottomSheetView
-                className="min-h-[80vh] dark:bg-[#161c27] z-20 max-h-[80vh] py-2 px-4 flex flex-col gap-2"
+                className={twMerge(
+                    "min-h-[80vh] dark:bg-[#161c27] z-20 max-h-[80vh] py-2 px-4 flex flex-col gap-2",
+                    className
+                )}
                 hideHandle
             >
 
