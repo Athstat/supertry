@@ -77,13 +77,13 @@ export default function ScoutPlayerButton({ player }: Props) {
                 >
                     <div className="flex flex-row items-center gap-2" >
                         <Binoculars className="w-4 h-4" />
-                        <p className="text-sm" >Currently Scouting</p>
+                        <p className="text-xs" >Currently Scouting</p>
                     </div>
 
                 </RoundedCard>
             </Activity>
 
-            <p>Scouting Player Active: {isOnScoutingList.valueOf() ? "Yes" : "False"}</p>
+            
 
             {error && <Toast
                 isVisible={Boolean(error)}
