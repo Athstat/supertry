@@ -15,6 +15,7 @@ import RoundedCard from '../../../shared/RoundedCard';
 import SecondaryText from '../../../shared/SecondaryText';
 import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import FormIndicator from '../../../shared/FormIndicator';
+import PlayerTeamCard from '../PlayerTeamCard';
 
 type Props = {
   player: IProAthlete;
@@ -106,6 +107,10 @@ export default function PlayerOverviewTab({ player }: Props) {
         </div>}
 
       </RoundedCard>
+
+      <PlayerTeamCard 
+        player={player}
+      />
 
       <CoachScrummyPlayerReport player={player} />
 

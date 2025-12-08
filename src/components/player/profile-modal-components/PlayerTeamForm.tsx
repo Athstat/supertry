@@ -25,7 +25,7 @@ export default function PlayerTeamFormCard({ player }: Props) {
     }
 
     return (
-        <RoundedCard className="p-4 border-none " >
+        <RoundedCard className="p-4 dark:border-none " >
             <div>
                 <p className="font-bold text-sm" >Team Form</p>
             </div>

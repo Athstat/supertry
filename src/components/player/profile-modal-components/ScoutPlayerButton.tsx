@@ -21,7 +21,13 @@ export default function ScoutPlayerButton({ player }: Props) {
     const { data: scoutingListPlayer, isLoading, mutate } = useSWR(key, () => scoutingService.getScoutingListPlayer(player.tracking_id));
 
     const isOnScoutingList = useMemo(() => {
-        return scoutingListPlayer !== undefined;
+        console.log("Scouting list player ", scoutingListPlayer);
+        
+        if (scoutingListPlayer) {
+            return true;
+        }
+
+        return false;
     }, [scoutingListPlayer]);
 
     const { addPlayer, isAdding, error, message, clearError, clearMessage } = useScoutingList();
@@ -76,6 +82,8 @@ export default function ScoutPlayerButton({ player }: Props) {
 
                 </RoundedCard>
             </Activity>
+
+            <p>Scouting Player Active: {isOnScoutingList.valueOf() ? "Yes" : "False"}</p>
 
             {error && <Toast
                 isVisible={Boolean(error)}
