@@ -10,6 +10,7 @@ import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
 import PlayerFixtureModal from '../fixtures/fixture_screen/PlayerFixtureModal';
+import ScoutPlayerButton from './profile-modal-components/ScoutPlayerButton';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -60,6 +61,8 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
             {/* Stats Summary */}
             <PlayerNameAndPosition />
 
+            <ScoutPlayerButtonWrapper />
+
             <div className="flex-1 ">
               <PlayerProfileModalTabContent />
             </div>
@@ -95,5 +98,19 @@ function PlayerFixtureModalWrapper() {
         />
       </div>}
     </>
+  )
+}
+
+
+function ScoutPlayerButtonWrapper() {
+  
+  const {player} = usePlayerData();
+  
+  if (!player) return null;
+
+  return (
+    <ScoutPlayerButton 
+      player={player}
+    />
   )
 }

@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { logger } from "../../../services/logger";
 import { scoutingService } from "../../../services/fantasy/scoutingService";
 import useSWR from "swr";
+import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
 
 /** API for getting a users scouting list and manipulating it */
 export function useScoutingList() {
@@ -19,7 +20,7 @@ export function useScoutingList() {
         return data ?? [];
     }, [data]);
 
-    const addPlayer = useCallback(async (athleteId: string, callback?: () => void) => {
+    const addPlayer = useCallback(async (athleteId: string, callback?: (player: ScoutingListPlayer) => Promise<void>) => {
 
         setIsAdding(true);
         setMessage(undefined);
@@ -30,7 +31,7 @@ export function useScoutingList() {
 
             if (res) {
                 setMessage("Player Added to Scouting List");
-                if (callback) callback();
+                if (callback) await callback(res);
             }
 
         } catch (err) {
