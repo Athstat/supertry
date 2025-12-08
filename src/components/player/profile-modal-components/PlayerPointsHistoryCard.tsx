@@ -4,13 +4,15 @@ import RoundedCard from "../../shared/RoundedCard"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import { IProSeason } from "../../../types/season"
 import { fantasySeasonsService } from "../../../services/fantasy/fantasySeasonsService"
-import { Activity, useMemo } from "react"
+import { Activity, useMemo, useState } from "react"
 import { PlayerPointsHistoryItem } from "../../../types/fantasyLeagueGroups"
 import SecondaryText from "../../shared/SecondaryText"
 import { format } from "date-fns"
 import TeamLogo from "../../team/TeamLogo"
 import { fixtureSummary, getOpponent } from "../../../utils/fixtureUtils"
 import { twMerge } from "tailwind-merge"
+import PlayerFixtureModal from "../../fixtures/fixture_screen/PlayerFixtureModal"
+import { IFixture } from "../../../types/games"
 
 type Props = {
     player: IProAthlete,
@@ -23,6 +25,16 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
     const key = swrFetchKeys.getPlayerPointsHistory(season.id, player.tracking_id)
     const { data, isLoading } = useSWR(key, () => fantasySeasonsService.getPlayerPointsHistory(season.id, player.tracking_id));
 
+    const [selectedFixture, setSelectedFixture] = useState<IFixture>();
+    
+    const handleClickFixture = (fixture: IFixture) => {
+        setSelectedFixture(fixture);
+    }
+
+    const handleCloseFixtureModal = () => {
+        setSelectedFixture(undefined);
+    }
+
     const history = useMemo(() => {
         return data ?? [];
     }, [data]);
@@ -32,13 +44,13 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
     if (isLoading) {
         return (
             <RoundedCard
-                className="max-h-[200px] min-h-[200px] dark:border-none animate-pulse"
+                className="max-h-[170px] min-h-[170px] dark:border-none animate-pulse"
             />
         )
     }
 
     return (
-        <RoundedCard className="p-4 max-h-[200px] min-h-[200px] dark:border-none flex flex-col gap-5" >
+        <RoundedCard className="p-4 max-h-[170px] min-h-[170px] dark:border-none flex flex-col gap-5" >
             <div>
                 <p className="font-bold text-sm" >Points History</p>
             </div>
@@ -57,12 +69,13 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
                                 item={h}
                                 key={h.game_id}
                                 player={player}
+                                onClick={handleClickFixture}
                             />
                         )
                     })}
                 </div>
 
-                <div className="flex flex-row gap-1 text-[10px]" >
+                {/* <div className="flex flex-row gap-1 text-[10px]" >
                     <SecondaryText className="text-[10px]" >Legend</SecondaryText>
 
                     <div className="flex flex-row items-center gap-2" >
@@ -78,7 +91,16 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
                             <p>Draw</p>
                         </div>
                     </div>
-                </div>
+                </div> */}
+
+
+                {selectedFixture && <PlayerFixtureModal 
+                    player={player}
+                    fixture={selectedFixture}
+                    isOpen={Boolean(selectedFixture)}
+                    onClose={handleCloseFixtureModal}
+                />}
+
             </Activity>
         </RoundedCard>
     )
@@ -86,10 +108,11 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
 
 type HistoryItemProps = {
     item: PlayerPointsHistoryItem,
-    player: IProAthlete
+    player: IProAthlete,
+    onClick?: (fixture: IFixture) => void
 }
 
-function PointsHistoryItem({ item, player }: HistoryItemProps) {
+function PointsHistoryItem({ item, player, onClick }: HistoryItemProps) {
 
     const { game } = item;
     const kickoff = game.kickoff_time ? new Date(game.kickoff_time) : undefined;
@@ -102,8 +125,14 @@ function PointsHistoryItem({ item, player }: HistoryItemProps) {
     const isW = (opp?.athstat_id === team?.athstat_id && awayTeamWon) || (opp?.athstat_id === opposition_team?.athstat_id && homeTeamWon);
     const isL = !isW && !isDraw;
 
+    const handleOnClick = () => {
+        if (onClick) {
+            onClick(game);
+        }
+    }
+
     return (
-        <div className="flex rounded-xl cursor-pointer flex-col gap-2 items-center justify-center flex-1" >
+        <div onClick={handleOnClick} className="flex rounded-xl cursor-pointer flex-col gap-2 items-center justify-center flex-1" >
             {kickoff && <SecondaryText className="text-xs" >{format(kickoff, "d MMM")}</SecondaryText>}
             <div>
                 <TeamLogo
