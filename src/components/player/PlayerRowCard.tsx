@@ -28,7 +28,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
     return (
         <tr
             onClick={handelClick}
-            className="cursor-pointer hover:bg-slate-800"
+            className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
         >
             <td className="py-3" >
                 <div className="flex flex-row items-center gap-2" >
