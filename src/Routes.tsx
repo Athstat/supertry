@@ -55,7 +55,7 @@ import { AppColours } from './types/constants';
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
   <div className={twMerge(
-    "min-h-scree pb-20",
+    "min-h-screen pb-20",
     AppColours.BACKGROUND
   )}>
     <Header />

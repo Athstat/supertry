@@ -43,5 +43,5 @@ export const backgroundTranslucentCN = "bg-white/80 dark:bg-dark-850/80 backdrop
 export const AppColours = {
   BLUE_BACKGROUND: 'bg-[#1196F5] dark:bg-[#1196F5]',
   BACKGROUND: 'dark:bg-[#15202b] bg-gray-50',
-  CARD_BACKGROUND: 'dark:bg-[#22303b]'
+  CARD_BACKGROUND: 'dark:bg-[#22303c]'
 }
