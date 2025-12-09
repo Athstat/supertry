@@ -8,7 +8,7 @@ import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
 export function useScoutingList() {
 
     const key = `/fantasy/scouting/my-list`;
-    const {data, isLoading: loadingList} = useSWR(key, () => scoutingService.getUserList());
+    const {data, isLoading: loadingList, mutate: mutateList} = useSWR(key, () => scoutingService.getUserList());
 
     const [isAdding, setIsAdding] = useState(false);
     const [isRemoving, setIsRemoving] = useState(false);
@@ -32,6 +32,7 @@ export function useScoutingList() {
             if (res) {
                 setMessage("Player Added to Scouting List");
                 if (callback) await callback(res);
+                mutateList()
             }
 
         } catch (err) {
@@ -41,7 +42,7 @@ export function useScoutingList() {
             setIsAdding(false);
         }
 
-    }, [setIsAdding, setMessage, setError]);
+    }, [mutateList]);
 
     const removePlayer = useCallback(async (athleteId: string, callback?: () => void) => {
 
@@ -54,6 +55,8 @@ export function useScoutingList() {
             setMessage("Removed Player from scouting list");
 
             if (callback) callback();
+
+            mutateList();
         } catch (err) {
             logger.error("Error adding player ", err);
             setError("Something wen't wrong");
@@ -61,7 +64,7 @@ export function useScoutingList() {
             setIsAdding(false);
         }
 
-    }, [setIsAdding, setMessage, setError]);
+    }, [mutateList]);
 
     const clearError = () => {
         setError(undefined);

@@ -48,6 +48,7 @@ import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
 import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
 import PlayersByPositionClassScreen from './screens/players/PlayersByPositionClassScreen';
 import AllPlayersScreen from './screens/players/AllPlayersScreen';
+import ScoutingListScreen from './screens/scouting/ScoutingListScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -249,6 +250,17 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <PlayerProfileScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/scouting/my-list"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ScoutingListScreen />
               </Layout>
             </ProtectedRoute>
           }

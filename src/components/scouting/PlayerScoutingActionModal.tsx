@@ -11,6 +11,7 @@ import CircleButton from "../shared/buttons/BackButton";
 import { X } from "lucide-react";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
 import RoundedCard from "../shared/RoundedCard";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     player: IProAthlete,
@@ -22,10 +23,12 @@ type Props = {
 export default function PlayerScoutingActionModal({ isOpen, player, onClose }: Props) {
 
     // We need to know if player is currently being scouted!
+    const navigate = useNavigate();
+
     const key = swrFetchKeys.getScoutingListPlayer(player.tracking_id);
     const { mutate } = useSWR(key, () => scoutingService.getScoutingListPlayer(player.tracking_id));
 
-    const {removePlayer, isRemoving } = useScoutingList();
+    const { removePlayer, isRemoving } = useScoutingList();
 
     const handleRemoveSuccess = useCallback(async () => {
         await mutate();
@@ -36,6 +39,10 @@ export default function PlayerScoutingActionModal({ isOpen, player, onClose }: P
         await removePlayer(player.tracking_id, handleRemoveSuccess);
 
     }, [handleRemoveSuccess, player.tracking_id, removePlayer]);
+
+    const handleViewFullList = () => {
+        navigate(`/scouting/my-list`);
+    }
 
     return (
         <Activity mode={isOpen ? "visible" : "hidden"} >
@@ -57,7 +64,10 @@ export default function PlayerScoutingActionModal({ isOpen, player, onClose }: P
 
                 <div className="flex flex-col items-center justify-center gap-2" >
 
-                    <RoundedCard className="dark:bg-slate-700/70 cursor-pointer text-sm font-medium dark:hover:bg-slate-700 p-2 rounded-xl w-full flex flex-col items-center justify-center" >
+                    <RoundedCard
+                        className="dark:bg-slate-700/70 cursor-pointer text-sm font-medium dark:hover:bg-slate-700 p-2 rounded-xl w-full flex flex-col items-center justify-center"
+                        onClick={handleViewFullList}
+                    >
                         View Full Scouting List
                     </RoundedCard>
 
