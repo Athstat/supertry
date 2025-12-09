@@ -38,7 +38,7 @@ function kgToLbs(kg: number): string {
 export default function PlayerOverviewTab({ player }: Props) {
 
   const { currentSeason } = usePlayerData();
-  const {nationality} = player;
+  const { nationality } = player;
   const nationalityIsValid = nationality && !isNumeric(nationality ?? '');
 
   const countryFlag = nationalityIsValid ? getCountryEmojiFlag(stripCountryName(nationality)) : undefined;
@@ -46,10 +46,10 @@ export default function PlayerOverviewTab({ player }: Props) {
 
   return (
     <div className="flex flex-col gap-6 pb-6">
-
-      {/* <PlayerTeamCard 
+      
+      <PlayerTeamCard
         player={player}
-      /> */}
+      />
 
       {/* TIER 1: Info Cluster */}
       <RoundedCard className='p-4 dark:border-none grid grid-cols-3 gap-4' >
@@ -107,9 +107,7 @@ export default function PlayerOverviewTab({ player }: Props) {
 
       </RoundedCard>
 
-      <PlayerTeamCard 
-        player={player}
-      />
+
 
       <CoachScrummyPlayerReport player={player} />
 
@@ -134,7 +132,7 @@ export default function PlayerOverviewTab({ player }: Props) {
         player={player}
         season={currentSeason}
       />}
-{/* 
+      {/* 
       <PlayerPriceHistoryCard
         player={player}
       /> */}
