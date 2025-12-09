@@ -1,4 +1,4 @@
-import { ArrowRight, BicepsFlexed, Shield, Users, WandSparkles } from 'lucide-react'
+import { ArrowRight, BicepsFlexed, Binoculars, Shield, Users, WandSparkles } from 'lucide-react'
 import PageView from '../PageView'
 import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
@@ -11,6 +11,7 @@ import { PositionClass } from '../../types/athletes'
 import { useNavigate } from 'react-router-dom'
 import { FastForward } from 'lucide-react'
 import { TrendingUpDown } from 'lucide-react'
+import NewTag from '../../components/branding/NewTag'
 
 export default function PlayersOverviewScreen() {
 
@@ -62,10 +63,10 @@ function Content() {
 
   return (
     <Fragment>
-      <div>
+      <div className='flex flex-col gap-2' >
 
         <RoundedCard
-          className='flex cursor-pointer py-2 px-4 dark:border-none flex-row items-center gap-2 justify-between'
+          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
           onClick={handleViewAll}
         >
           <p className='text-sm' >View All Players</p>
@@ -73,6 +74,22 @@ function Content() {
             <ArrowRight />
           </div>
         </RoundedCard>
+
+
+        <RoundedCard
+          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
+          onClick={handleViewAll}
+        >
+          <div className='flex flex-row items-center gap-2' >
+            <Binoculars />
+            <p className='text-sm' >View Scouting List</p>
+            <NewTag />
+          </div>
+
+          <ArrowRight />
+
+        </RoundedCard>
+
 
       </div>
 
