@@ -270,7 +270,7 @@ type TableProps = {
 }
 
 /** Renders Players List Table */
-function PlayerListTable({ players, onClick }: TableProps) {
+export function PlayerListTable({ players, onClick }: TableProps) {
 
     const handleClick = (player: IProAthlete) => {
         if (onClick) {

@@ -12,10 +12,12 @@ import { useNavigate } from 'react-router-dom'
 import { FastForward } from 'lucide-react'
 import { TrendingUpDown } from 'lucide-react'
 import NewTag from '../../components/branding/NewTag'
+import { useDebounced } from '../../hooks/useDebounced'
 
 export default function PlayersOverviewScreen() {
 
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
+  const debouncedQuery = useDebounced(searchQuery, 500);
 
 
   return (
@@ -34,13 +36,13 @@ export default function PlayersOverviewScreen() {
         />
       </div>
 
-      <Activity mode={searchQuery ? "hidden" : "visible"} >
+      <Activity mode={debouncedQuery ? "hidden" : "visible"} >
         <Content />
       </Activity>
 
-      <Activity mode={searchQuery ? "visible" : "hidden"} >
+      <Activity mode={debouncedQuery ? "visible" : "hidden"} >
         <PlayerSearchResults
-          searchQuery={searchQuery}
+          searchQuery={debouncedQuery}
         />
       </Activity>
 
