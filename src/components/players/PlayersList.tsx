@@ -12,7 +12,6 @@ import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting";
 import { IProTeam } from "../../types/team";
 import { getAthletesSummary } from "../../utils/athleteUtils";
-import { PlayerGameCard } from "../player/PlayerGameCard";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import RoundedCard from "../shared/RoundedCard";
 import SecondaryText from "../shared/SecondaryText";
@@ -25,7 +24,7 @@ import { EmptyState } from "./EmptyState";
 import { PlayerFilters } from "./PlayerFilters";
 import { PlayerSort } from "./PlayerSort";
 import FloatingSearchBar from "./ui/FloatingSearchBar";
-import { useInView } from "react-intersection-observer";
+import PlayerRowCard from "../player/PlayerRowCard";
 
 type Props = {
     players: IProAthlete[]
@@ -172,7 +171,7 @@ export default function PlayersList({ players }: Props) {
                 {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
 
                 {/* Player Grid */}
-                {!isFiltering && (
+                {/* {!isFiltering && (
                     <div
                         data-player-grid
                         className="grid items-center justify-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 md:gap-y-3"
@@ -185,6 +184,14 @@ export default function PlayersList({ players }: Props) {
                             />
                         ))}
                     </div>
+                )} */}
+
+                {/* Player List */}
+                {!isFiltering && (
+                    <PlayerListTable
+                        players={filteredAthletes}
+                        onClick={handlePlayerClick}
+                    />
                 )}
 
                 <PlayerCompareModal />
@@ -231,28 +238,71 @@ export default function PlayersList({ players }: Props) {
     );
 };
 
-type ItemProps = {
-    player: IProAthlete;
-    onClick: () => void;
-};
+// type ItemProps = {
+//     player: IProAthlete;
+//     onClick: () => void;
+// };
 
-function PlayerCardItem({ player, onClick }: ItemProps) {
-    const { ref, inView } = useInView({ triggerOnce: true });
+// function PlayerCardItem({ player, onClick }: ItemProps) {
+//     const { ref, inView } = useInView({ triggerOnce: true });
+
+//     return (
+//         <div ref={ref} data-player-card>
+//             {inView && (
+//                 <PlayerGameCard
+//                     key={player.tracking_id}
+//                     player={player}
+//                     onClick={onClick}
+//                     className=""
+//                     // Players screen specific spacing tweaks
+//                     priceClassName="top-14 left-5"
+//                     teamLogoClassName="top-7 right-2"
+//                     detailsClassName="px-6 pb-10"
+//                 />
+//             )}
+//         </div>
+//     );
+// }
+
+type TableProps = {
+    players: IProAthlete[],
+    onClick?: (player: IProAthlete) => void
+}
+
+/** Renders Players List Table */
+function PlayerListTable({ players, onClick }: TableProps) {
+
+    const handleClick = (player: IProAthlete) => {
+        if (onClick) {
+            onClick(player)
+        }
+    }
 
     return (
-        <div ref={ref} data-player-card>
-            {inView && (
-                <PlayerGameCard
-                    key={player.tracking_id}
-                    player={player}
-                    onClick={onClick}
-                    className=""
-                    // Players screen specific spacing tweaks
-                    priceClassName="top-14 left-5"
-                    teamLogoClassName="top-7 right-2"
-                    detailsClassName="px-6 pb-10"
-                />
-            )}
+        <div className="w-full" >
+            <table className="w-full"  >
+
+                <thead>
+                    <tr>
+                        <th className="pb-4" ><SecondaryText >Player</SecondaryText></th>
+                        <th className="pb-4" ><SecondaryText >Price</SecondaryText></th>
+                        <th className="pb-4" ><SecondaryText >Form</SecondaryText></th>
+                        <th className="pb-4" ><SecondaryText >PR</SecondaryText></th>
+                    </tr>
+                </thead>
+
+                <tbody
+                    className="divide-y dark:divide-slate-700"
+                >
+                    {players.map(player => (
+                        <PlayerRowCard
+                            player={player}
+                            onClick={handleClick}
+                            key={player.tracking_id}
+                        />
+                    ))}
+                </tbody>
+            </table>
         </div>
-    );
+    )
 }
