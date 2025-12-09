@@ -10,6 +10,7 @@ import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
 import PlayerFixtureModal from '../fixtures/fixture_screen/PlayerFixtureModal';
+import PlayerScoutingActionModal from '../scouting/PlayerScoutingActionModal';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -67,7 +68,8 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
         </BottomSheetView>
 
         <PlayerFixtureModalWrapper />
-
+        
+        <PlayerScoutingActionModalWrapper />
 
       </Activity>
     </PlayerDataProvider>
@@ -95,5 +97,23 @@ function PlayerFixtureModalWrapper() {
         />
       </div>}
     </>
+  )
+}
+
+function PlayerScoutingActionModalWrapper() {
+  
+  const {player, setShowScoutingActionModal, showScoutingActionModal} = usePlayerData();
+  const onCloseModal = () => setShowScoutingActionModal(false);
+  
+  if (!player) {
+    return null;
+  }
+
+  return (
+    <PlayerScoutingActionModal 
+      isOpen={showScoutingActionModal}
+      player={player}
+      onClose={onCloseModal}
+    />
   )
 }

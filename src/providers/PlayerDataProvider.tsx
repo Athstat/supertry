@@ -4,7 +4,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import RoundedCard from '../components/shared/RoundedCard';
 import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
-import { playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom, playerSelectedFixtureAtom } from '../state/player.atoms';
+import { playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom, playerSelectedFixtureAtom, showPlayerScoutingActionsModalAtom } from '../state/player.atoms';
 import { IProAthlete } from '../types/athletes';
 import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete';
 import { swrFetchKeys } from '../utils/swrKeys';
@@ -25,7 +25,10 @@ type Props = {
 
 /** Provides a players data and stats down to child components */
 export default function PlayerDataProvider({ children, player, onClose }: Props) {
-  const atoms = [playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom, playerSelectedFixtureAtom];
+  const atoms = [
+    playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom,
+    playerSelectedFixtureAtom, showPlayerScoutingActionsModalAtom
+  ];
 
   return (
     <ScopeProvider atoms={atoms}>
@@ -127,6 +130,7 @@ export function usePlayerData() {
   const [seasons] = useAtom(playerSeasonsAtom);
   const currentSeason = useAtomValue(playerCurrentSeasonAtom);
   const [selectedFixture, setSelectedFixture] = useAtom(playerSelectedFixtureAtom);
+  const [showScoutingActionModal, setShowScoutingActionModal] = useAtom(showPlayerScoutingActionsModalAtom);
 
   const sortedSeasons = useMemo(() => {
     return [...seasons].sort((a, b) => {
@@ -137,5 +141,9 @@ export function usePlayerData() {
     });
   }, [seasons]);
 
-  return { player, seasons, currentSeason, sortedSeasons, selectedFixture, setSelectedFixture };
+  return {
+    player, seasons, currentSeason,
+    sortedSeasons, selectedFixture, setSelectedFixture,
+    showScoutingActionModal, setShowScoutingActionModal
+  };
 }

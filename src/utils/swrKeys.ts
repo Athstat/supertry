@@ -180,5 +180,9 @@ export const swrFetchKeys = {
 
   getPlayerPointsHistory: (seasonId: string, athleteId: string) => {
     return `seasons/${seasonId}/athletes/${athleteId}/points-history`;
+  },
+
+  getScoutingListPlayer: (athleteId: string) => {
+    return `/fantasy/scouting/my-list/check/${athleteId}`;
   }
 };

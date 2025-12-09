@@ -31,3 +31,6 @@ export const playerCurrentSeasonAtom = atom<IProSeason | undefined>((get) => {
 
 /** Holds the selected fixture for a player */
 export const playerSelectedFixtureAtom = atom<IFixture>();
+
+/** Holds a true or false value for whether the player scouting action modal should be shown */
+export const showPlayerScoutingActionsModalAtom = atom<boolean>(false);

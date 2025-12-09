@@ -7,11 +7,13 @@ type Props = {
     children?: ReactNode,
     className?: string,
     hideHandle?: boolean,
-    noAnimation?: boolean
+    noAnimation?: boolean,
+    showTopBorder?: boolean,
+    overlayBg?: boolean
 }
 
 /** Renders a bottom sheet view that starts from the bottom of the screen */
-export default function BottomSheetView({ className, children, hideHandle, noAnimation }: Props) {
+export default function BottomSheetView({ className, children, hideHandle, noAnimation, showTopBorder, overlayBg }: Props) {
 
     if (noAnimation) {
         return (
@@ -20,7 +22,8 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
             >
                 <div className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
-                    className
+                    className,
+                    showTopBorder && "border-t dark:border-slate-600"
                 )}>
 
                     {!hideHandle && <div className="flex flex-row items-center justify-center w-full" >
@@ -48,7 +51,8 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
             >
                 <div className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
-                    className
+                    className,
+                    showTopBorder && "border-t dark:border-slate-600"
                 )}>
 
                     {!hideHandle && <div className="flex flex-row items-center justify-center w-full" >

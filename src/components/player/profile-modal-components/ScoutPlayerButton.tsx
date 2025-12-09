@@ -8,6 +8,8 @@ import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { Activity, Fragment, useMemo } from "react";
 import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
 import { Toast } from "../../ui/Toast";
+import { swrFetchKeys } from "../../../utils/swrKeys";
+import { usePlayerData } from "../../../providers/PlayerDataProvider";
 
 type Props = {
     player: IProAthlete
@@ -17,8 +19,10 @@ type Props = {
 export default function ScoutPlayerButton({ player }: Props) {
 
     // We need to know if player is currently being scouted!
-    const key = `/fantasy/scouting/my-list/check/${player.tracking_id}`;
+    const key = swrFetchKeys.getScoutingListPlayer(player.tracking_id);
     const { data: scoutingListPlayer, isLoading, mutate } = useSWR(key, () => scoutingService.getScoutingListPlayer(player.tracking_id));
+
+    const {setShowScoutingActionModal} = usePlayerData();
 
     const isOnScoutingList = useMemo(() => {
         
@@ -30,9 +34,7 @@ export default function ScoutPlayerButton({ player }: Props) {
         return false;
     }, [scoutingListPlayer]);
 
-    console.log("Value of ", isOnScoutingList)
-
-    const { addPlayer, isAdding, error, message, clearError, clearMessage } = useScoutingList();
+    const { addPlayer, isAdding, error, clearError } = useScoutingList();
 
     const handleSuccess = async (res: ScoutingListPlayer) => {
         await mutate(res);
@@ -40,6 +42,7 @@ export default function ScoutPlayerButton({ player }: Props) {
 
     const handleClick = () => {
         if (isOnScoutingList) {
+            setShowScoutingActionModal(true);
             return;
         }
 
@@ -92,13 +95,6 @@ export default function ScoutPlayerButton({ player }: Props) {
                 message={error}
                 type="error"
                 onClose={clearError}
-            />}
-
-            {message && <Toast
-                isVisible={Boolean(message)}
-                message={message}
-                type="success"
-                onClose={clearMessage}
             />}
 
         </Fragment>
