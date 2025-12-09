@@ -49,12 +49,17 @@ import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
 import PlayersByPositionClassScreen from './screens/players/PlayersByPositionClassScreen';
 import AllPlayersScreen from './screens/players/AllPlayersScreen';
 import ScoutingListScreen from './screens/scouting/ScoutingListScreen';
+import { twMerge } from 'tailwind-merge';
+import { AppColours } from './types/constants';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen bg-gray-50 dark:bg-dark-850 pb-20">
+  <div className={twMerge(
+    "min-h-scree pb-20",
+    AppColours.BACKGROUND
+  )}>
     <Header />
-    <div className="pt-1">{children}</div>
+    <div className={twMerge(AppColours.BACKGROUND)}>{children}</div>
     <BottomNav />
   </div>
 );

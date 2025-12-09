@@ -4,6 +4,7 @@ import BlueGradientCard from "../components/shared/BlueGradientCard"
 import { ChevronLeft } from "lucide-react"
 import TransparentStatCard from "../components/shared/TransparentStatCard"
 import { useNavigateBack } from "../hooks/web/useNavigateBack"
+import { AppColours } from "../types/constants"
 
 type Props = {
   children?: ReactNode;
@@ -12,7 +13,10 @@ type Props = {
 
 export default function PageView({ children, className }: Props) {
   return (
-    <div className="w-full py-0 dark:text-white bg-gray-50 dark:bg-dark-850 h-full flex flex-col items-center justify-start lg:py-8">
+    <div className={twMerge(
+      "w-full py-0 dark:text-white h-full flex flex-col items-center justify-start lg:py-8",
+      AppColours.BACKGROUND
+    )}>
       <div className={twMerge('w-full lg:w-[50%]', className)}>{children}</div>
     </div>
   );

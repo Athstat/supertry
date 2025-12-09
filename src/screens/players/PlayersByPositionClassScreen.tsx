@@ -9,7 +9,7 @@ import { useMemo, useState } from 'react';
 import PlayersList from '../../components/players/PlayersList';
 import { useSupportedAthletes } from '../../hooks/athletes/useSupportedAthletes';
 import { twMerge } from 'tailwind-merge';
-import { backgroundTranslucentCN } from '../../types/constants';
+import { AppColours } from '../../types/constants';
 
 export default function PlayersByPositionClassScreen() {
 
@@ -35,8 +35,8 @@ export default function PlayersByPositionClassScreen() {
         <PageView className='px-4 relative' >
 
             <div className={twMerge(
-                'flex sticky w-full p-2 top-16 z-[10] left-0 flex-row items-center justify-between',
-                backgroundTranslucentCN
+                'flex sticky w-full p-2 border-b top-16 z-[10] left-0 flex-row items-center justify-between',
+                AppColours.BACKGROUND
             )} >
                 <div className='flex flex-row items-center gap-2' >
                     <CircleButton

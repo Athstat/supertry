@@ -25,6 +25,8 @@ import { PlayerFilters } from "./PlayerFilters";
 import { PlayerSort } from "./PlayerSort";
 import FloatingSearchBar from "./ui/FloatingSearchBar";
 import PlayerRowCard from "../player/PlayerRowCard";
+import { twMerge } from "tailwind-merge";
+import { AppColours } from "../../types/constants";
 
 type Props = {
     players: IProAthlete[]
@@ -138,7 +140,10 @@ export default function PlayersList({ players }: Props) {
 
     return (
         <Fragment>
-            <div className="flex flex-col items-center justify-center flex-wrap">
+            <div className={twMerge(
+                "flex flex-col items-center justify-center flex-wrap",
+                AppColours.BACKGROUND
+            )}>
 
                 {<PlayersScreenCompareStatus />}
 
@@ -279,7 +284,7 @@ export function PlayerListTable({ players, onClick }: TableProps) {
     }
 
     return (
-        <div className="w-full" >
+        <div className="w-full min-h-screen" >
             <table className="w-full"  >
 
                 <thead>

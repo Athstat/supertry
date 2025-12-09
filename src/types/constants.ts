@@ -40,6 +40,8 @@ export const lighterDarkBlueCN = "dark:bg-[#161d29]";
 export const backgroundCN = "bg-gray-50 dark:bg-dark-850";
 export const backgroundTranslucentCN = "bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none";
 
-export const AppBackgrounds = {
-  BLUE_BACKGROUND: 'bg-[#1196F5] dark:bg-[#1196F5]'
+export const AppColours = {
+  BLUE_BACKGROUND: 'bg-[#1196F5] dark:bg-[#1196F5]',
+  BACKGROUND: 'dark:bg-[#15202b] bg-gray-50',
+  CARD_BACKGROUND: 'dark:bg-[#22303b]'
 }
