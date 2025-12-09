@@ -129,6 +129,9 @@ declare global {
       }>;
       openNotificationSettings?(): Promise<{ success: boolean }>;
     };
+
+    DARK_BACKGROUND_CLASSNAME?: string,
+    DARK_CARD_BACKGROUND_CLASSNAME?: string
   }
 }
 
