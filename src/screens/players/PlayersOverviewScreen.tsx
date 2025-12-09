@@ -61,6 +61,10 @@ function Content() {
     navigate(`/players/position-class/${positionClass}`);
   }
 
+  const handleViewScoutingList = () => {
+    navigate(`/scouting/my-list`);
+  }
+
   return (
     <Fragment>
       <div className='flex flex-col gap-2' >
@@ -78,7 +82,7 @@ function Content() {
 
         <RoundedCard
           className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
-          onClick={handleViewAll}
+          onClick={handleViewScoutingList}
         >
           
           <div className='flex flex-row items-center gap-2' >

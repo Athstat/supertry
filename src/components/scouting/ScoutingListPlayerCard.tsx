@@ -1,4 +1,3 @@
-import { IProAthlete } from "../../types/athletes";
 import { ScoutingListPlayer } from "../../types/fantasy/scouting";
 import { formatPosition } from "../../utils/athleteUtils";
 import SmartPlayerMugshot from "../player/SmartPlayerMugshot";
@@ -8,7 +7,7 @@ import SecondaryText from "../shared/SecondaryText";
 
 type Props = {
     item: ScoutingListPlayer,
-    onClick?: (player: IProAthlete) => void
+    onClick?: (player: ScoutingListPlayer) => void
 }
 
 export function ScoutingListPlayerCard({ item, onClick }: Props) {
@@ -25,7 +24,7 @@ function Content({ item, onClick }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
-            onClick(athlete);
+            onClick(item);
         }
     }
 
