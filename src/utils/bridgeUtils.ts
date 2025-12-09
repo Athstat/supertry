@@ -131,7 +131,8 @@ declare global {
     };
 
     DARK_BACKGROUND_CLASSNAME?: string,
-    DARK_CARD_BACKGROUND_CLASSNAME?: string
+    DARK_CARD_BACKGROUND_CLASSNAME?: string,
+    MOBILE_THEME_NUMBER?: string
   }
 }
 
