@@ -29,10 +29,10 @@ export function useQueryState<T>(key: string, options?: Options) {
   );
 
   useEffect(() => {
-    if (value) {
-      setValue(value);
+    if (init && !params.has(key)) {
+      setValue(init);
     }
-  }, [init, setValue, value]);
+  }, [init, key, params, setValue]);
 
   // useEffect(() => {
 

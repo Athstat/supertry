@@ -1,3 +1,5 @@
+import { athleteNameSearchPredicate } from "../athleteUtils";
+
 export type SearchMatch = {
     score: number;        // 0 - 100
     category: "exact" | "close";
@@ -131,6 +133,10 @@ export class AthleteSearch {
         }
 
         return false;
+    }
+
+    public static standardPredicate(query: string | undefined, atheleteName: string) {
+        return athleteNameSearchPredicate(atheleteName, query ?? "");
     }
 
 
