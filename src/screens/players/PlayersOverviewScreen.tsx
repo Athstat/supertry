@@ -80,10 +80,11 @@ function Content() {
           className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
           onClick={handleViewAll}
         >
+          
           <div className='flex flex-row items-center gap-2' >
             <Binoculars />
             <p className='text-sm' >View Scouting List</p>
-            <NewTag />
+            <NewTag showUntil={new Date('15-12-2025')} />
           </div>
 
           <ArrowRight />
