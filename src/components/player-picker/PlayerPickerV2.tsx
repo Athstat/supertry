@@ -14,6 +14,8 @@ import PlayerPickerFAB from "./PlayerPickerFAB"
 import { useCallback, useRef } from "react"
 import DialogModal from "../shared/DialogModal"
 import PlayerPickerDataProvider from "../../providers/PlayerPickerDataProvider"
+import { twMerge } from "tailwind-merge"
+import { AppColours } from "../../types/constants"
 
 type Props = {
   playerToBeReplaced?: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
@@ -104,7 +106,10 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
       onClose={onClose}
       hw="min-h-[100vh] lg:min-h-[95vh] w-full lg:w-[70vh]"
       className="flex flex-col gap-2 relative"
-      outerCon="no-scrollbar lg:min-h-[95vh] rounded-none lg:rounded-xl dark:bg-[#0D0D0D] lg:dark:bg-slate-800/60"
+      outerCon={twMerge(
+        "no-scrollbar lg:min-h-[95vh] rounded-none lg:rounded-xl lg:dark:bg-slate-800/60",
+        AppColours.BACKGROUND
+      )}
       ref={setRefs}
     >
       <PlayerPickerHeader />

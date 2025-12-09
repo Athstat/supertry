@@ -18,6 +18,8 @@ import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
 import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
 import LeagueGroupScreenHeader from '../components/fantasy-league/LeagueGroupScreenHeader';
 import RoundedCard from '../components/shared/RoundedCard';
+import { twMerge } from 'tailwind-merge';
+import { AppColours } from '../types/constants';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
@@ -91,7 +93,10 @@ function Content() {
   ];
 
   return (
-    <PageView className="dark:text-white dark:bg-[#0D0D0D] flex flex-col gap-4">
+    <PageView className={twMerge(
+      "dark:text-white flex flex-col gap-4",
+      AppColours.BACKGROUND
+    )}>
       <LeagueGroupScreenHeader isEditing={isEditing} />
 
       <LearnScrummyNoticeCard />

@@ -28,42 +28,42 @@ function App() {
   // Auth redirects are now handled by AuthContext and route guards
 
   return (
-    <GoogleOAuthProvider
-      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id'}
-    >
-      <ThemeProvider>
-        <NetworkStatusProvider>
-          <AuthTokenProvider>
-            <AuthProvider>
-              <DeviceIdSync />
-              <ChatProvider>
-                <AthleteProvider>
-                  <SportActionsDefinitionsProvider>
-                    <PlayerProfileProvider>
-                      <AppStateProvider>
-                        <ErrorBoundary
-                          onError={(err, errorInfo) => {
-                            console.error('Root level error caught:', err, errorInfo);
-                            setError(err);
-                          }}
-                          fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
-                        >
-                          <BrowserHistoryProvider>
-                            <NavigationBarsProvider>
-                              <AppRoutes />
-                            </NavigationBarsProvider>
-                          </BrowserHistoryProvider>
-                        </ErrorBoundary>
-                      </AppStateProvider>
-                    </PlayerProfileProvider>
-                  </SportActionsDefinitionsProvider>
-                </AthleteProvider>
-              </ChatProvider>
-            </AuthProvider>
-          </AuthTokenProvider>
-        </NetworkStatusProvider>
-      </ThemeProvider>
-    </GoogleOAuthProvider>
+      <GoogleOAuthProvider
+        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id'}
+      >
+        <ThemeProvider>
+          <NetworkStatusProvider>
+            <AuthTokenProvider>
+              <AuthProvider>
+                <DeviceIdSync />
+                <ChatProvider>
+                  <AthleteProvider>
+                    <SportActionsDefinitionsProvider>
+                      <PlayerProfileProvider>
+                        <AppStateProvider>
+                          <ErrorBoundary
+                            onError={(err, errorInfo) => {
+                              console.error('Root level error caught:', err, errorInfo);
+                              setError(err);
+                            }}
+                            fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
+                          >
+                            <BrowserHistoryProvider>
+                              <NavigationBarsProvider>
+                                <AppRoutes />
+                              </NavigationBarsProvider>
+                            </BrowserHistoryProvider>
+                          </ErrorBoundary>
+                        </AppStateProvider>
+                      </PlayerProfileProvider>
+                    </SportActionsDefinitionsProvider>
+                  </AthleteProvider>
+                </ChatProvider>
+              </AuthProvider>
+            </AuthTokenProvider>
+          </NetworkStatusProvider>
+        </ThemeProvider>
+      </GoogleOAuthProvider>
   );
 }
 

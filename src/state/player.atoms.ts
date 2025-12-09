@@ -3,6 +3,7 @@
 import { atom } from "jotai";
 import { IProAthlete } from "../types/athletes";
 import { IProSeason } from "../types/season";
+import { IFixture } from "../types/games";
 
 /** Holds a player */
 export const playerAtom = atom<IProAthlete>();
@@ -27,3 +28,9 @@ export const playerCurrentSeasonAtom = atom<IProSeason | undefined>((get) => {
 
     return lastSeason;
 });
+
+/** Holds the selected fixture for a player */
+export const playerSelectedFixtureAtom = atom<IFixture>();
+
+/** Holds a true or false value for whether the player scouting action modal should be shown */
+export const showPlayerScoutingActionsModalAtom = atom<boolean>(false);

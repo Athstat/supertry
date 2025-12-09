@@ -9,9 +9,10 @@ type Props = {
     disbabled?: boolean,
     disabled?: boolean,
     isLoading?: boolean,
-    type?: "submit" | "reset" | "button" | undefined
+    type?: "submit" | "reset" | "button" | undefined,
+    destroy?: boolean
 }
-export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled }: Props) {
+export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
@@ -26,6 +27,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
                 "bg-blue-600 dark:bg-blue-600 text-white font-medium px-4 py-2 w-full items-center justify-center flex rounded-xl",
                 "hover:bg-blue-700 dark:hover:bg-blue-700",
                 "border border-primary-500 text-sm lg:text-base",
+                destroy && "bg-red-600 dark:bg-red-600 hover:bg-red-700 dark:hover:bg-red-700 border-red-500",
                 className,
                 (disbabled || disabled) && "opacity-40 cursor-not-allowed",
                 isLoading && 'animate-pulse'

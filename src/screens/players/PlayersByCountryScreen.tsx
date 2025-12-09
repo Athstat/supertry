@@ -9,7 +9,7 @@ import PlayersCountrySheet from "../../components/players/nationality/PlayersCou
 import CircleButton from "../../components/shared/buttons/BackButton";
 import PlayersList from "../../components/players/PlayersList";
 import { twMerge } from "tailwind-merge";
-import { backgroundTranslucentCN } from "../../types/constants";
+import { AppColours } from "../../types/constants";
 
 
 export default function PlayersByCountryScreen() {
@@ -34,16 +34,13 @@ export default function PlayersByCountryScreen() {
         navigate("/players");
     }
 
-
-
-
     return (
         <PageView className="px-4 flex flex-col gap-2" >
 
             <div className={twMerge(
                 "flex flex-row items-center py-2 justify-between gap-1",
                 "sticky z-[10] top-16 left-0",
-                backgroundTranslucentCN
+                AppColours.BACKGROUND
             )} >
 
                 <div className="flex flex-row items-center gap-2" >
