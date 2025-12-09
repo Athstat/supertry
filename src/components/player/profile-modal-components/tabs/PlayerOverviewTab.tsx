@@ -9,7 +9,6 @@ import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 import PlayerTeamFormCard from '../PlayerTeamForm';
 import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
-import PlayerPriceHistoryCard from '../PlayerPriceHistoryCard';
 import PlayerPointsHistoryCard from '../PlayerPointsHistoryCard';
 import RoundedCard from '../../../shared/RoundedCard';
 import SecondaryText from '../../../shared/SecondaryText';
@@ -135,10 +134,10 @@ export default function PlayerOverviewTab({ player }: Props) {
         player={player}
         season={currentSeason}
       />}
-
+{/* 
       <PlayerPriceHistoryCard
         player={player}
-      />
+      /> */}
 
     </div>
   );
