@@ -13,6 +13,7 @@ import PrimaryButton from "../shared/buttons/PrimaryButton"
 import QuickActionButton from "../ui/QuickActionButton"
 import PlayerDataProvider, { usePlayerData } from "../../providers/PlayerDataProvider"
 import PlayerPointsHistoryCard from "../player/profile-modal-components/PlayerPointsHistoryCard"
+import RoundedCard from "../shared/RoundedCard"
 
 type Props = {
     item: ScoutingListPlayer,
@@ -26,8 +27,9 @@ export default function ScoutingListPlayerModal({ item, isOpen, onClose, onRemov
     return (
         <PlayerDataProvider
             player={item.athlete}
+            loadingFallback={<LoadingSkeleton onClose={onClose} item={item} />}
         >
-            <Content 
+            <Content
                 item={item}
                 isOpen={isOpen}
                 onClose={onClose}
@@ -42,7 +44,7 @@ export default function ScoutingListPlayerModal({ item, isOpen, onClose, onRemov
 function Content({ item, isOpen, onClose, onRemove, onViewProfile }: Props) {
     const { athlete } = item;
     const { removePlayer, isRemoving } = useScoutingList();
-    const {currentSeason} = usePlayerData();
+    const { currentSeason } = usePlayerData();
 
     const handleRemove = async () => {
 
@@ -70,6 +72,7 @@ function Content({ item, isOpen, onClose, onRemove, onViewProfile }: Props) {
                 lighterDarkBlueCN
             )}
             hideHandle
+            noAnimation
         >
             <div className="flex flex-row items-center justify-between" >
                 <div className="flex flex-row items-center gap-2" >
@@ -121,7 +124,7 @@ function Content({ item, isOpen, onClose, onRemove, onViewProfile }: Props) {
                 player={athlete}
             />
 
-            {currentSeason && <PlayerPointsHistoryCard 
+            {currentSeason && <PlayerPointsHistoryCard
                 player={item.athlete}
                 season={currentSeason}
             />}
@@ -136,6 +139,45 @@ function Content({ item, isOpen, onClose, onRemove, onViewProfile }: Props) {
                 </PrimaryButton>
             </div>
 
+
+        </BottomSheetView>
+    )
+}
+
+type LoadingSkeletonProps = {
+    item: ScoutingListPlayer,
+    onClose?: () => void
+}
+
+function LoadingSkeleton({ item, onClose }: LoadingSkeletonProps) {
+    return (
+        <BottomSheetView
+            className={twMerge(
+                "min-h-[70vh] p-4 flex flex-col gap-4",
+                lighterDarkBlueCN
+            )}
+            hideHandle
+        >
+            <div className="flex flex-row items-center justify-between" >
+                <div className="flex flex-row items-center gap-2" >
+                    <Binoculars />
+                    <p className="text-md font-semibold" >{item.athlete.player_name}</p>
+                </div>
+
+                <div>
+                    <CircleButton
+                        onClick={onClose}
+                    >
+                        <X />
+                    </CircleButton>
+                </div>
+            </div>
+
+            <RoundedCard className="w-full bg-slate-200 border-none h-[100px] animate-pulse" />
+            <RoundedCard className="w-full bg-slate-200 border-none h-[100px] mt-5 animate-pulse" />
+            <RoundedCard className="w-full bg-slate-200 border-none h-[100px] animate-pulse" />
+            <RoundedCard className="w-full bg-slate-200 border-none h-[100px] animate-pulse" />
+            <RoundedCard className="w-full bg-slate-200 border-none h-[50px] mt-5 animate-pulse" />
 
         </BottomSheetView>
     )

@@ -83,6 +83,6 @@ export function useScoutingList() {
         message,
         clearError,
         clearMessage,
-        list,loadingList
+        list,loadingList, mutateList
     }
 }

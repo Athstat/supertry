@@ -1,19 +1,25 @@
-import { ArrowLeft, Binoculars } from "lucide-react";
+import { ArrowLeft, Binoculars, Plus } from "lucide-react";
 import PageView from "../PageView";
 import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
 import RoundedCard from "../../components/shared/RoundedCard";
 import { ScoutingListPlayerCard } from "../../components/scouting/ScoutingListPlayerCard";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import ScoutingListPlayerModal from "../../components/scouting/ScoutingListPlayerModal";
 import { ScoutingListPlayer } from "../../types/fantasy/scouting";
 import CircleButton from "../../components/shared/buttons/BackButton";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
+import SecondaryText from "../../components/shared/SecondaryText";
+import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
+import { IProAthlete } from "../../types/athletes";
+import SmartPlayerMugshot from "../../components/player/SmartPlayerMugshot";
+import { formatPosition } from "../../utils/athleteUtils";
+import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
 
-    const { list, loadingList } = useScoutingList();
+    const { list, loadingList, mutateList } = useScoutingList();
     const { hardPop } = useNavigateBack()
 
     const [selectedPlayer, setSelectedPlayer] = useState<ScoutingListPlayer>();
@@ -45,11 +51,18 @@ export default function ScoutingListScreen() {
         hardPop('/players');
     }
 
+    const handlePostRemove = async () => {
+        await mutateList();
+        setSelectedPlayer(undefined);
+        setShowScoutingModal(false);
+        setShowProfileModal(false);
+    }
+
     if (loadingList) {
         return (
             <PageView className="px-6 flex flex-col gap-4" >
                 <div className="flex flex-row items-center gap-2" >
-                    
+
                     <CircleButton
                         onClick={handleNavigateBack}
                     >
@@ -94,18 +107,21 @@ export default function ScoutingListScreen() {
                 })}
             </div>
 
-            {selectedPlayer && <ScoutingListPlayerModal
+            {selectedPlayer && showScoutingModal && <ScoutingListPlayerModal
                 item={selectedPlayer}
                 isOpen={showScoutingModal}
                 onClose={handleCloseScoutingModal}
                 onViewProfile={handelViewProfile}
+                onRemove={handlePostRemove}
             />}
 
-            {selectedPlayer && <PlayerProfileModal
+            {selectedPlayer && showProfileModal && <PlayerProfileModal
                 player={selectedPlayer.athlete}
                 isOpen={showProfileModal}
                 onClose={handleCloseProfileModal}
             />}
+
+            <SuggestedPlayers />
         </PageView>
     )
 }
@@ -114,5 +130,104 @@ export default function ScoutingListScreen() {
 function NoContentScreen() {
     return (
         <div></div>
+    )
+}
+
+function SuggestedPlayers() {
+
+    const { addPlayer, isAdding, list } = useScoutingList();
+    const { athletes } = useSupportedAthletes();
+
+    const excludeIds = useMemo(() => {
+        return list.map((i) => i.athlete.tracking_id)
+    }, [list]);
+
+    const top10 = useMemo(() => {
+        const newList = ([...athletes]).sort((a, b) => {
+            return (b.power_rank_rating || 0) - (a.power_rank_rating || 0);
+        }).filter((p) => {
+            return !excludeIds.includes(p.tracking_id)
+        });
+
+        return newList.splice(0, 10);
+    }, [athletes, excludeIds]);
+
+    const handleAddPlayer = (player: IProAthlete) => {
+        addPlayer(player.tracking_id);
+    }
+
+    return (
+        <div className="flex flex-col gap-2" >
+            <div>
+                <SecondaryText>Suggested Players</SecondaryText>
+            </div>
+
+            <div className="flex flex-col gap-2" >
+                {top10.map((p) => {
+                    return (
+                        <SuggestedPlayerCard
+                            player={p}
+                            key={p.tracking_id}
+                            isAdding={isAdding}
+                            onAdd={handleAddPlayer}
+                        />
+                    )
+                })}
+            </div>
+
+        </div>
+    )
+}
+
+type SuggestedPlayerCardProps = {
+    player: IProAthlete,
+    onViewProfile?: (player: IProAthlete) => void,
+    onAdd?: (player: IProAthlete) => void,
+    isAdding?: boolean
+}
+
+function SuggestedPlayerCard({ player, onAdd, onViewProfile, isAdding }: SuggestedPlayerCardProps) {
+
+    const handleAddPlayer = () => {
+        if (onAdd) {
+            onAdd(player);
+        }
+    }
+
+    const handleViewProfile = () => {
+        if (onViewProfile) {
+            onViewProfile(player);
+        }
+    }
+
+    return (
+        <RoundedCard className="dark:border-none p-2 flex flex-row items-center justify-between" >
+
+            <div
+                className="flex flex-row items-center gap-2"
+                onClick={handleViewProfile}
+            >
+                <SmartPlayerMugshot
+                    url={player.image_url}
+                    teamId={player.team_id}
+                />
+
+                <div>
+                    <p className="text-sm font-semibold" >{player.player_name}</p>
+                    <SecondaryText className="text-xs" >{formatPosition(player.position_class)} - {formatPosition(player.position)}</SecondaryText>
+                </div>
+            </div>
+
+            <div className="flex flex-row items-center gap-2" >
+                {/* <MatchPrCard 
+                    pr={player.power_rank_rating}
+                /> */}
+
+                <PrimaryButton className="w-fit px-2" onClick={handleAddPlayer} disabled={isAdding} >
+                    <Plus className="w-4 h-4" />
+                </PrimaryButton>
+            </div>
+
+        </RoundedCard>
     )
 }
