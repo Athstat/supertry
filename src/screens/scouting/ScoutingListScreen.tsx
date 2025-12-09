@@ -2,12 +2,24 @@ import { Binoculars } from "lucide-react";
 import PageView from "../PageView";
 import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
 import RoundedCard from "../../components/shared/RoundedCard";
-import { ScoutingListPlayer } from "../../types/fantasy/scouting";
+import { ScoutingListPlayerCard } from "../../components/scouting/ScoutingListPlayerCard";
+import { useState } from "react";
+import { IProAthlete } from "../../types/athletes";
+import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
 
     const { list, loadingList } = useScoutingList();
+    const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
+
+    const handleClickPlayer = (player: IProAthlete) => {
+        setSelectedPlayer(player);
+    }
+
+    const handleCloseProfileModal = () => {
+        setSelectedPlayer(undefined);
+    }
 
     if (loadingList) {
         return (
@@ -35,27 +47,20 @@ export default function ScoutingListScreen() {
 
             <div className="flex flex-col gap-2" >
                 {list.map((si) => {
-                    return <ScoutingListPlayerCard 
+                    return <ScoutingListPlayerCard
                         item={si}
                         key={si.athlete.tracking_id}
+                        onClick={handleClickPlayer}
                     />
                 })}
             </div>
+
+            {selectedPlayer && <PlayerProfileModal 
+                player={selectedPlayer}
+                isOpen={Boolean(selectedPlayer)}
+                onClose={handleCloseProfileModal}
+            />}
         </PageView>
     )
 }
 
-type ItemProps = {
-    item: ScoutingListPlayer
-}
-
-function ScoutingListPlayerCard({item} : ItemProps) {
-    return (
-        <RoundedCard>
-            <div>
-                
-            </div>
-            <p>{item.athlete.player_name}</p>
-        </RoundedCard>
-    )
-}

@@ -1,0 +1,60 @@
+import { IProAthlete } from "../../types/athletes";
+import { ScoutingListPlayer } from "../../types/fantasy/scouting";
+import { formatPosition } from "../../utils/athleteUtils";
+import SmartPlayerMugshot from "../player/SmartPlayerMugshot";
+import MatchPrCard from "../rankings/MatchPrCard";
+import RoundedCard from "../shared/RoundedCard";
+import SecondaryText from "../shared/SecondaryText";
+
+type Props = {
+    item: ScoutingListPlayer,
+    onClick?: (player: IProAthlete) => void
+}
+
+export function ScoutingListPlayerCard({ item, onClick }: Props) {
+
+    return (
+        <Content item={item} onClick={onClick} />
+    )
+
+}
+
+
+function Content({ item, onClick }: Props) {
+    const { athlete } = item;
+
+    const handleOnClick = () => {
+        if (onClick) {
+            onClick(athlete);
+        }
+    }
+
+    return (
+        <RoundedCard onClick={handleOnClick} className="p-6 flex flex-col gap-2 cursor-pointer rounded-xl" >
+            
+            <div className="flex flex-row items-center justify-between" >
+                <div className="flex flex-row items-center gap-2" >
+                    <div>
+                        <SmartPlayerMugshot
+                            url={athlete.image_url}
+                            teamId={athlete.team_id}
+                        />
+                    </div>
+                    <div>
+                        <p>{athlete.player_name}</p>
+                        <SecondaryText>{formatPosition(athlete.position_class)} - {formatPosition(athlete.position)}</SecondaryText>
+                    </div>
+
+                </div>
+
+                <div className="flex flex-col items-center justify-center gap-1" >
+                    <MatchPrCard
+                        pr={athlete.power_rank_rating}
+                    />
+                    <SecondaryText className="text-xs" >Rating</SecondaryText>
+                </div>
+            </div>
+
+        </RoundedCard>
+    )
+}

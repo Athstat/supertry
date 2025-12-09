@@ -16,11 +16,13 @@ import { usePlayerData } from "../../../providers/PlayerDataProvider"
 
 type Props = {
     player: IProAthlete,
-    season: IProSeason
+    season: IProSeason,
+    className?: string,
+    loadingClassName?: string
 }
 
 /** Renders a players point history graph */
-export default function PlayerPointsHistoryCard({ player, season }: Props) {
+export default function PlayerPointsHistoryCard({ player, season, className, loadingClassName }: Props) {
 
     const key = swrFetchKeys.getPlayerPointsHistory(season.id, player.tracking_id)
     const { data, isLoading } = useSWR(key, () => fantasySeasonsService.getPlayerPointsHistory(season.id, player.tracking_id));
@@ -40,14 +42,20 @@ export default function PlayerPointsHistoryCard({ player, season }: Props) {
     if (isLoading) {
         return (
             <RoundedCard
-                className="max-h-[170px] min-h-[170px] dark:border-none animate-pulse"
+                className={twMerge(
+                    "max-h-[170px] min-h-[170px] dark:border-none animate-pulse",
+                    loadingClassName
+                )}
             />
         )
     }
 
     return (
         <Fragment>
-            <RoundedCard className="p-4 max-h-[170px] min-h-[170px] dark:border-none flex flex-col gap-5" >
+            <RoundedCard className={twMerge(
+                "p-4 max-h-[170px] min-h-[170px] dark:border-none flex flex-col gap-5",
+                className
+            )} >
                 <div>
                     <p className="font-bold text-sm" >Points History</p>
                 </div>
