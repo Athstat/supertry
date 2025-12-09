@@ -15,7 +15,6 @@ import SportActionsDefinitionsProvider from './components/stats/SportActionsDefi
 import { useSyncDeviceId } from './hooks/auth/useSyncDeviceId';
 import NavigationBarsProvider from './providers/navigation/NavigationBarsProvider';
 import BrowserHistoryProvider from './providers/web/BrowserHistoryProvider';
-import { AppColours } from './types/constants';
 
 function DeviceIdSync() {
   useSyncDeviceId();
@@ -29,7 +28,6 @@ function App() {
   // Auth redirects are now handled by AuthContext and route guards
 
   return (
-    <body className={AppColours.BACKGROUND} >
       <GoogleOAuthProvider
         clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id'}
       >
@@ -66,7 +64,6 @@ function App() {
           </NetworkStatusProvider>
         </ThemeProvider>
       </GoogleOAuthProvider>
-    </body>
   );
 }
 
