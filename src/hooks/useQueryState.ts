@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 type Options = {
@@ -6,48 +6,60 @@ type Options = {
   cleanUp?: boolean;
 };
 
-export function useQueryState<T>(key: string, options?: Options) {
-  const init = options?.init;
-  // const cleanUp = options?.cleanUp;
-
+export function useQueryState<T extends string = string>(
+  key: string, 
+  options?: Options
+) {
+  const { init, cleanUp } = options || {};
   const [params, setParams] = useSearchParams();
-  const value = params.get(key) ?? init;
+  
+  // Memoize the value to prevent unnecessary recalculations
+  const value = useMemo(() => 
+    params.get(key) ?? init ?? null
+  , [params, key, init]);
 
   const setValue = useCallback(
-    (newValue?: string) => {
-      const newParams = new URLSearchParams(params);
-
-      if (newValue === '' || newValue === undefined) {
-        newParams.delete(key);
-      } else {
-        newParams.set(key, newValue);
-      }
-
-      setParams(newParams);
+    (newValue?: string | null) => {
+      setParams(prev => {
+        const newParams = new URLSearchParams(prev);
+        
+        if (newValue == null || newValue === '') {
+          newParams.delete(key);
+        } else {
+          newParams.set(key, newValue);
+        }
+        
+        return newParams;
+      });
     },
-    [params, key, setParams]
+    [key, setParams] // Remove params from dependencies
   );
 
+  // Set initial value only once on mount
   useEffect(() => {
     if (init && !params.has(key)) {
-      setValue(init);
+      setParams(prev => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set(key, init);
+        return newParams;
+      });
     }
-  }, [init, key, params, setValue]);
+  }, []); // Empty dependency array - run only once on mount
 
-  // useEffect(() => {
+  // Cleanup effect
+  useEffect(() => {
+    if (!cleanUp) return;
+    
+    return () => {
+      setParams(prev => {
+        const newParams = new URLSearchParams(prev);
+        newParams.delete(key);
+        return newParams;
+      });
+    };
+  }, [cleanUp, key, setParams]);
 
-  //     return () => {
-  //         if (cleanUp === true) {
-
-  //             const newParams = new URLSearchParams(params);
-  //             newParams.delete(key);
-  //             setParams(newParams);
-
-  //         }
-  //     }
-  // }, []);
-
-  return [value as T, setValue] as const;
+  return [value as T | null, setValue] as const;
 }
 
 export function useQueryValue(key: string) {
