@@ -29,7 +29,7 @@ function Content({ item, onClick }: Props) {
     }
 
     return (
-        <RoundedCard onClick={handleOnClick} className="p-6 flex flex-col gap-2 cursor-pointer rounded-xl" >
+        <RoundedCard onClick={handleOnClick} className="px-4 py-3 flex flex-col gap-2 cursor-pointer rounded-xl" >
             
             <div className="flex flex-row items-center justify-between" >
                 <div className="flex flex-row items-center gap-2" >

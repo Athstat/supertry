@@ -58,6 +58,8 @@ export default function ScoutingListScreen() {
         setShowProfileModal(false);
     }
 
+    const listHasPlayers = list.length > 0;
+
     if (loadingList) {
         return (
             <PageView className="px-6 flex flex-col gap-4" >
@@ -97,7 +99,7 @@ export default function ScoutingListScreen() {
                 <p className="text-lg font-bold" >My Scouting List</p>
             </div>
 
-            <div className="flex flex-col gap-2" >
+            {listHasPlayers && <div className="flex flex-col gap-2" >
                 {list.map((si) => {
                     return <ScoutingListPlayerCard
                         item={si}
@@ -105,7 +107,9 @@ export default function ScoutingListScreen() {
                         onClick={handleClickPlayer}
                     />
                 })}
-            </div>
+            </div>}
+
+            {!listHasPlayers && <NoContent />}
 
             {selectedPlayer && showScoutingModal && <ScoutingListPlayerModal
                 item={selectedPlayer}
@@ -127,9 +131,11 @@ export default function ScoutingListScreen() {
 }
 
 
-function NoContentScreen() {
+function NoContent() {
     return (
-        <div></div>
+        <div className="flex flex-col items-center justify-center h-[200px]" >
+            <SecondaryText className="text-center" >Your scouting list is empty.<br/>Add players to your scouting list to get started!</SecondaryText>
+        </div>
     )
 }
 
