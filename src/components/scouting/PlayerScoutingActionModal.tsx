@@ -57,6 +57,7 @@ export default function PlayerScoutingActionModal({ isOpen, player, onClose }: P
 
                     <CircleButton
                         className="w-9 h-9 dark:bg-slate-700"
+                        onClick={onClose}
                     >
                         <X />
                     </CircleButton>

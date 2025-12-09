@@ -17,7 +17,12 @@ export function useScoutingList() {
     const [message, setMessage] = useState<string>();
 
     const list = useMemo(() => {
-        return data ?? [];
+        return (data ?? []).sort((a, b) => {
+            const aDate = new Date(a.created_at);
+            const bDate = new Date(b.created_at);
+
+            return bDate.valueOf() - aDate.valueOf();
+        });
     }, [data]);
 
     const addPlayer = useCallback(async (athleteId: string, callback?: (player: ScoutingListPlayer) => Promise<void>) => {

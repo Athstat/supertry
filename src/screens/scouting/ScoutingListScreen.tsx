@@ -121,7 +121,7 @@ export default function ScoutingListScreen() {
                 onClose={handleCloseProfileModal}
             />}
 
-            <SuggestedPlayers />
+            {list.length < 5 && <SuggestedPlayers />}
         </PageView>
     )
 }

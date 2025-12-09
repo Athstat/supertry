@@ -34,7 +34,12 @@ export default function PlayerPointsHistoryCard({ player, season, className, loa
     }
 
     const history = useMemo(() => {
-        return data ?? [];
+        return (data ?? []).sort((a, b) => {
+            const aDate = a.game.kickoff_time ? new Date(a.game.kickoff_time) : new Date();
+            const bDate = b.game.kickoff_time ? new Date(b.game.kickoff_time) : new Date();
+
+            return aDate.valueOf() - bDate.valueOf();
+        });
     }, [data]);
 
     const hasHistory = history.length > 0;
