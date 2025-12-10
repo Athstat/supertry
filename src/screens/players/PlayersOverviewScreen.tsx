@@ -13,9 +13,11 @@ import { FastForward } from 'lucide-react'
 import { TrendingUpDown } from 'lucide-react'
 import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/useDebounced'
+import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars'
 
 export default function PlayersOverviewScreen() {
 
+  useHideTopNavBar();
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
   const debouncedQuery = useDebounced(searchQuery, 500);
 
