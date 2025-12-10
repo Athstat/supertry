@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import SaveTeamBar from './SaveTeamBar';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
-import { Lock } from 'lucide-react';
+import { Coins, Lock } from 'lucide-react';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import RoundedCard from '../../shared/RoundedCard';
 import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSummary';
@@ -60,8 +60,9 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
             Total Spent
           </div>
           {leagueConfig && (
-            <div className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">
-              {totalSpent}/{leagueConfig?.team_budget}
+            <div className="text-[10px] flex flex-row items-center  justify-end  gap-1 font-semibold text-gray-900 dark:text-gray-100">
+              <p>{totalSpent}/{leagueConfig?.team_budget}</p>
+              <Coins className='text-yellow-500 w-3 h-3' />
             </div>
           )}
         </div>
