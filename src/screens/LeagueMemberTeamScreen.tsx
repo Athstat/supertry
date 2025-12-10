@@ -65,7 +65,7 @@ function Content() {
 
     const handleBack = () => {
         if (league) {
-            navigate(`/league/${league?.id}?journey=standings`);
+            navigate(`/league/${league?.id}/standings`);
         }
     }
 

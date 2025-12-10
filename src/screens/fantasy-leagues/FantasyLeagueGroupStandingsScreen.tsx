@@ -1,7 +1,7 @@
 import { ArrowLeft, Share2 } from "lucide-react";
 import CircleButton from "../../components/shared/buttons/BackButton";
 import PageView from "../PageView";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FantasyLeagueGroupDataProvider from "../../components/fantasy-league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import JoinLeagueButton from "../../components/fantasy-league/buttons/JoinLeagueButton";
@@ -9,7 +9,6 @@ import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
 import { useShareLeague } from "../../hooks/leagues/useShareLeague";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { LeagueStandings } from "../../components/fantasy-league/LeagueStandings";
-import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import RoundedCard from "../../components/shared/RoundedCard";
 
 
@@ -29,14 +28,14 @@ export default function FantasyLeagueGroupStandingsScreen() {
 
 function Content() {
 
+    const navigate = useNavigate();
+
     const { league, userMemberRecord } = useFantasyLeagueGroup();
     const isMember = userMemberRecord !== undefined;
     const { handleShare } = useShareLeague(league);
 
-    const { hardPop } = useNavigateBack();
-
     const handleBack = () => {
-        hardPop(`/leagues`);
+        navigate(`/leagues`);
     }
 
     useHideTopNavBar();
@@ -78,10 +77,10 @@ function Content() {
 
 function LoadingSkeleton() {
 
-    const { hardPop } = useNavigateBack();
+    const navigate = useNavigate();
 
     const handleBack = () => {
-        hardPop(`/leagues`);
+        navigate(`/leagues`);
     }
 
     useHideTopNavBar();
