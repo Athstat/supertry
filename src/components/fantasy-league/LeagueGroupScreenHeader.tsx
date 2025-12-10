@@ -4,18 +4,15 @@ import JoinLeagueButton from './buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { useShareLeague } from '../../hooks/leagues/useShareLeague';
 import { useNavigateBack } from '../../hooks/web/useNavigateBack';
+import CircleButton from '../shared/buttons/BackButton';
 
-type Props = {
-    isEditing?: boolean
-}
 
 /** Renders a header component on the fantasy league group header */
-export default function LeagueGroupScreenHeader({isEditing} : Props) {
+export default function LeagueGroupScreenHeader() {
 
-    const {hardPop} = useNavigateBack();
+    const { hardPop } = useNavigateBack();
 
-    const { league, isMember } = useFantasyLeagueGroup();
-    const { handleShare } = useShareLeague(league);
+    const { league } = useFantasyLeagueGroup();
 
     const handleBackToLeagues = () => {
         hardPop("/leagues");
@@ -27,37 +24,49 @@ export default function LeagueGroupScreenHeader({isEditing} : Props) {
 
     return (
         <div className="flex flex-col px-4 pt-4">
-            <div className="flex flex-row items-start justify-between gap-2">
 
-                <div className="flex flex-col items-start justify-center gap-2">
-                    <div className="flex flex-row items-center gap-2">
-                        
-                        <button onClick={handleBackToLeagues} >
-                            <ArrowLeft />
-                        </button>
+            <div className="flex relative flex-row items-center justify-center gap-2">
 
-                        {/* {isOfficialLeague ? <Globe /> : <Trophy />} */}
-                        <p className="font-bold text-xl">{league?.title}</p>
-                    </div>
-                    {/* <p className="text-sm text-gray-500 dark:text-gray-400 tracking-wide font-medium truncate">
-                        {currentRound?.title}
-                    </p> */}
+                <div className="flex absolute left-0 flex-col items-start justify-center gap-2">
+
+                    <CircleButton onClick={handleBackToLeagues} >
+                        <ArrowLeft className='w-4 h-4' />
+                    </CircleButton>
+
                 </div>
 
-                {!isEditing && (
-                    <div>
-                        {!isMember && <JoinLeagueButton league={league} />}
+                <div>
+                    <p className="font-semibold text-md">My Team</p>
+                </div>
 
-                        {isMember && (
-                            <PrimaryButton onClick={handleShare}>
-                                {/* <Plus className="w-4 h-4" /> */}
-                                <Share2 className="w-4 h-4" />
-                                Invite
-                            </PrimaryButton>
-                        )}
-                    </div>
-                )}
+                <div className='absolute right-0' >
+                    <JoinOrInviteButton />
+                </div>
             </div>
+
+        </div>
+    )
+}
+
+function JoinOrInviteButton() {
+    const { league, isMember } = useFantasyLeagueGroup();
+    const { handleShare } = useShareLeague(league);
+
+    if (!league) {
+        return;
+    }
+
+    return (
+        <div>
+            {!isMember && <JoinLeagueButton league={league} />}
+
+            {isMember && (
+                <PrimaryButton onClick={handleShare} className='text-xs' > 
+                    {/* <Plus className="w-4 h-4" /> */}
+                    <Share2 className="w-4 h-4" />
+                    Invite
+                </PrimaryButton>
+            )}
         </div>
     )
 }
