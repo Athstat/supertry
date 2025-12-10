@@ -1,0 +1,112 @@
+# Sign Up Flow Test
+# Tests the complete user registration process through all 4 steps
+# Flow: Username → Email → Password → Review → Dashboard
+
+appId: ${BASE_URL}
+tags:
+  - auth
+  - critical
+  - signup
+---
+# Launch the web app
+- launchApp:
+    appId: chrome
+    arguments:
+      - "--new-window"
+      - "${BASE_URL}/signup"
+
+# Wait for page to load
+- assertVisible: "Create your account"
+
+# ============================================
+# STEP 1: Username Entry
+# ============================================
+- assertVisible: 
+    text: ".*[Uu]sername.*"
+    
+# Tap on username input field
+- tapOn:
+    text: ".*[Uu]sername.*"
+    index: 0
+
+# Generate unique username with timestamp
+- evalScript: ${output.uniqueUsername = 'test_' + Date.now()}
+
+# Input username
+- inputText: "${output.uniqueUsername}"
+
+# Tap Next button
+- tapOn: "Next"
+
+# ============================================
+# STEP 2: Email Entry  
+# ============================================
+- assertVisible:
+    text: ".*[Ee]mail.*"
+
+# Tap on email input field
+- tapOn:
+    text: ".*[Ee]mail.*"
+    index: 0
+
+# Generate unique email
+- evalScript: ${output.uniqueEmail = 'test_' + Date.now() + '@maestro.test'}
+
+# Input email
+- inputText: "${output.uniqueEmail}"
+
+# Tap Next button
+- tapOn: "Next"
+
+# ============================================
+# STEP 3: Password Entry
+# ============================================
+- assertVisible:
+    text: ".*[Pp]assword.*"
+
+# Tap on password input field  
+- tapOn:
+    text: ".*[Pp]assword.*"
+    index: 0
+
+# Input password
+- inputText: "TestPassword123!"
+
+# Tap Next button
+- tapOn: "Next"
+
+# ============================================
+# STEP 4: Review & Submit
+# ============================================
+- assertVisible:
+    text: ".*[Rr]eview.*"
+
+# Verify username is displayed
+- assertVisible: "${output.uniqueUsername}"
+
+# Verify email is displayed
+- assertVisible: "${output.uniqueEmail}"
+
+# Tap Create Account button (may be Submit, Create, or similar)
+- tapOn:
+    text: ".*([Cc]reate|[Ss]ubmit).*"
+
+# Wait for navigation to complete
+- waitForAnimationToEnd
+
+# ============================================
+# Verification: Check Landing Page
+# ============================================
+# After signup, user should be redirected to onboarding or dashboard
+- assertVisible:
+    text: ".*([Ww]elcome|[Dd]ashboard).*"
+    timeout: 10000
+
+# Take screenshot for test evidence
+- takeScreenshot: signup-success
+
+# Output test results
+- evalScript: |
+    console.log('✅ Sign Up Test Passed');
+    console.log('Created user:', '${output.uniqueUsername}');
+    console.log('Email:', '${output.uniqueEmail}');
