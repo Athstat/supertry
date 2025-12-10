@@ -10,15 +10,16 @@ import { useShareLeague } from "../../hooks/leagues/useShareLeague";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { LeagueStandings } from "../../components/fantasy-league/LeagueStandings";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
+import RoundedCard from "../../components/shared/RoundedCard";
 
 
 export default function FantasyLeagueGroupStandingsScreen() {
 
     const { leagueId } = useParams();
-
     return (
         <FantasyLeagueGroupDataProvider
             leagueId={leagueId}
+            loadingFallback={<LoadingSkeleton />}
         >
             <Content />
         </FantasyLeagueGroupDataProvider>
@@ -32,16 +33,17 @@ function Content() {
     const isMember = userMemberRecord !== undefined;
     const { handleShare } = useShareLeague(league);
 
-    const {hardPop} = useNavigateBack();
-    
+    const { hardPop } = useNavigateBack();
+
     const handleBack = () => {
         hardPop(`/leagues`);
     }
 
     useHideTopNavBar();
 
+
     return (
-        <PageView className="pt-4" >
+        <PageView className="pt-6" >
             <div className="flex px-4 flex-row items-center justify-between" >
                 <div>
                     <CircleButton
@@ -69,6 +71,45 @@ function Content() {
             </div>
 
             <LeagueStandings />
+        </PageView>
+    )
+}
+
+
+function LoadingSkeleton() {
+
+    const { hardPop } = useNavigateBack();
+
+    const handleBack = () => {
+        hardPop(`/leagues`);
+    }
+
+    useHideTopNavBar();
+
+    return (
+        <PageView className="pt-4 flex flex-col gap-4" >
+            <div className="flex px-4 flex-row items-center justify-between" >
+                <div>
+                    <CircleButton
+                        onClick={handleBack}
+                    >
+                        <ArrowLeft />
+                    </CircleButton>
+                </div>
+
+                <div>
+                    <RoundedCard className="w-[160px] h-[40px] animate-pulse border-none" ></RoundedCard>
+                </div>
+
+
+                <RoundedCard className="w-[50px] h-[40px] animate-pulse border-none" ></RoundedCard>
+            </div>
+
+            <div className="flex flex-col gap-4 px-4 " >
+                <RoundedCard className="w-full h-[60px] animate-pulse border-none" />
+                <RoundedCard className="w-full h-[500px] animate-pulse border-none" />
+            </div>
+
         </PageView>
     )
 }
