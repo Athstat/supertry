@@ -10,7 +10,7 @@ type Props = {
 }
 
 /** Renders a fantasy league group card */
-export function FantasyLeagueGroupHorizontalCard({ leagueGroup, onClick }: Props) {
+export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
@@ -20,14 +20,6 @@ export function FantasyLeagueGroupHorizontalCard({ leagueGroup, onClick }: Props
         }
 
         return <Badge variant="success">Public</Badge>;
-
-        // if (league.has_ended) {
-        //   return <Badge variant="secondary">Ended</Badge>;
-        // } else if (league.is_open) {
-        //   return 
-        // } else {
-        //   return <Badge variant="destructive">Locked</Badge>;
-        // }
     };
 
     const handleOnClick = () => {
@@ -37,39 +29,19 @@ export function FantasyLeagueGroupHorizontalCard({ leagueGroup, onClick }: Props
     }
 
     return (
-        <RoundedCard 
+        <RoundedCard
             onClick={handleOnClick}
-            className="py-2 cursor-pointer px-4 border none flex flex-row items-center justify-between" 
+            className="py-2 cursor-pointer px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
         >
 
 
-            {/* Header Row */}
-            <div className="flex justify-between items-start">
-                
-                <div className="flex-1 flex min-w-0 flex-col">
-
-                    <div className="flex flex-row items-center gap-2" >
-
-                        {/* <Trophy /> */}
-
-                        <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
-                            {leagueGroup.title}
-                        </h3>
-                    </div>
-
-                    <div className="flex flex-row items-center gap-1" >
-                        {leagueGroup.season.name && (
-                            <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide truncate">
-                                {leagueGroup.season.name}
-                            </p>
-                        )}
-
-                        {getStatusBadge()}
-                    </div>
-
-                </div>
-
+            <div className="flex flex-row items-center gap-2" >
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    {leagueGroup.title}
+                </h3>
+                {getStatusBadge()}
             </div>
+
 
             <div className="" >
                 <button onClick={handleOnClick} >

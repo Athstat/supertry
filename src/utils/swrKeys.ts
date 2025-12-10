@@ -184,5 +184,9 @@ export const swrFetchKeys = {
 
   getScoutingListPlayer: (athleteId: string) => {
     return `/fantasy/scouting/my-list/check/${athleteId}`;
+  },
+
+  getFantasySeasonFeaturedGroup: (fantasySeasonId: string) => {
+    return `/api/v1/fantasy-seasons/${fantasySeasonId}/fantasy-league-groups/featured`;
   }
 };
