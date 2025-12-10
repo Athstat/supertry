@@ -71,7 +71,7 @@ export function getPathNameAndSearchParams(uri: string): [(string | undefined), 
 
 
 export const sanitizeStat = (actionCount?: number) => {
-    if (!actionCount || actionCount === undefined || actionCount === null) {
+    if (actionCount === undefined || actionCount === null) {
         return undefined;
     }
 

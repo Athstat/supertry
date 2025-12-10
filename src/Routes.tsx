@@ -9,7 +9,7 @@ import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
 import OnBoardingScreen from './screens/OnboardingScreen';
 import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
-import { FantasyLeaguesScreen } from './screens/FantasyLeaguesScreen';
+import { FantasyScreen } from './screens/FantasyScreen';
 import { FantasyLeagueScreen } from './screens/LeagueScreen';
 import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
@@ -51,6 +51,7 @@ import AllPlayersScreen from './screens/players/AllPlayersScreen';
 import ScoutingListScreen from './screens/scouting/ScoutingListScreen';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from './types/constants';
+import FantasyLeagueGroupStandingsScreen from './screens/fantasy-leagues/FantasyLeagueGroupStandingsScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -133,7 +134,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <FantasyLeaguesScreen />
+                <FantasyScreen />
               </Layout>
             </ProtectedRoute>
           }
@@ -152,11 +153,20 @@ const AppRoutes = () => {
           path="/league/:leagueId"
           element={
             <ProtectedRoute>
-              <DashboardDataProvider>
                 <Layout>
                   <FantasyLeagueScreen />
                 </Layout>
-              </DashboardDataProvider>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/league/:leagueId/standings"
+          element={
+            <ProtectedRoute>
+                <Layout>
+                  <FantasyLeagueGroupStandingsScreen />
+                </Layout>
             </ProtectedRoute>
           }
         />

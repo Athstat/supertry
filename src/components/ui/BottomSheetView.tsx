@@ -2,6 +2,7 @@ import { ReactNode } from "react"
 import BottomSheetHandle from "./BottomSheetHandle"
 import { twMerge } from "tailwind-merge"
 import { AnimatePresence, motion } from "framer-motion"
+import { AppColours } from "../../types/constants"
 
 type Props = {
     children?: ReactNode,
@@ -21,9 +22,10 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
                 className="fixed z-[150] bottom-0 left-0 right-0 w-full  flex flex-col items-center justify-center"
             >
                 <div className={twMerge(
-                    "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
+                    "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white  rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className,
-                    showTopBorder && "border-t dark:border-slate-600"
+                    showTopBorder && "border-t dark:border-slate-600",
+                    AppColours.BACKGROUND,
                 )}>
 
                     {!hideHandle && <div className="flex flex-row items-center justify-center w-full" >
@@ -52,7 +54,8 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
                 <div className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className,
-                    showTopBorder && "border-t dark:border-slate-600"
+                    showTopBorder && "border-t dark:border-slate-600",
+                    AppColours.BACKGROUND
                 )}>
 
                     {!hideHandle && <div className="flex flex-row items-center justify-center w-full" >

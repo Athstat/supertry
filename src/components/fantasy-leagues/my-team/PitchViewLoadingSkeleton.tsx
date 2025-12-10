@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import RoundedCard from "../../shared/RoundedCard";
-import { RugbyPitch3D } from "../../shared/RugbyPitch";
+import { RugbyPitch3DRaster } from "../../shared/RugbyPitch";
 import BottomSheetView from "../../ui/BottomSheetView";
 
 
@@ -8,7 +8,7 @@ import BottomSheetView from "../../ui/BottomSheetView";
 export default function PitchViewLoadingSkeleton() {
     return (
         <div>
-            <div className="flex px-4 animate-pulse flex-row items-center justify-between"  >
+            <div className="flex px-4 animate-pulse flex-row mt-32 items-center justify-between"  >
                 <div className="flex flex-col gap-1" >
                     <RoundedCard className="w-[70px] border-none h-[15px]" />
                     <RoundedCard className="w-[50px] border-none h-[15px]" />
@@ -31,14 +31,15 @@ export default function PitchViewLoadingSkeleton() {
                 </RoundedCard>
             </div>
 
-            <div className="mt-4 ">
+            <div className="mt-4">
                 <div className='flex flex-col relative'>
 
 
                     <div className="relative w-full flex flex-col justify-center">
-                        <RugbyPitch3D className="opacity-80" />
+                        
+                        <RugbyPitch3DRaster pitchClassName="opacity-50 mt-12" />
 
-                        <div className='top-0 left-0 absolute w-full p-4 flex flex-col gap-6' >
+                        <div className='top-0 left-0 absolute mt-20 w-full p-4 flex flex-col gap-6' >
 
                             <div className='flex flex-row items-center gap-2 justify-center' >
                                 <PitchCardSkeleton />

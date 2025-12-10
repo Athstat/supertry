@@ -11,6 +11,7 @@ import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoun
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { useMemo } from "react";
+import { AppColours } from "../../../types/constants";
 
 
 type Props = {
@@ -54,7 +55,10 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
     onClick={handlePlayerClick}
 
     >
-      <div className="lg:max-w-[40%] md:max-w-[50%]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
+      <div className={twMerge(
+        "lg:max-w-[40%] md:max-w-[50%]  w-full bg-white  rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
+        AppColours.BACKGROUND
+      )}>
 
         <div className="w-full flex flex-col gap-1 p-4" >
 

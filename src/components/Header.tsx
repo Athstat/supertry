@@ -28,7 +28,8 @@ export function Header() {
 
   const isProfileActive = location.pathname === '/profile';
   const showCompetitionSelector =
-    location.pathname === '/dashboard' || location.pathname.startsWith('/league');
+    // location.pathname === '/dashboard' || location.pathname.startsWith('/league');
+    location.pathname === '/dashboard';
 
   return (
     <Activity mode={topNavViewMode}>

@@ -45,7 +45,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
 }
 
 /** Renders a trnaslucent button */
-export function TranslucentButton(props : Props) {
+export function TranslucentButton(props: Props) {
     return (
         <PrimaryButton
             onClick={props.onClick}
@@ -56,6 +56,25 @@ export function TranslucentButton(props : Props) {
             className={twMerge(
                 'bg-blue-100/10 dark:bg-blue-100/10  border-white/20 ',
                 'hover:bg-blue-100/20 hover:dark:bg-blue-100/20',
+                props.className
+            )}
+        >
+            {props.children}
+        </PrimaryButton>
+    )
+}
+
+/** Renders outlines button */
+export function OutlinedButton(props: Props) {
+    return (
+        <PrimaryButton
+            onClick={props.onClick}
+            disabled={props.disabled}
+            disbabled={props.disbabled}
+            isLoading={props.isLoading}
+            type={props.type}
+            className={twMerge(
+                "bg-transparent dark:bg-transparent hover:bg-transparent dark:border-white/60 border-slate-400 text-slate-600 dark:text-white",
                 props.className
             )}
         >

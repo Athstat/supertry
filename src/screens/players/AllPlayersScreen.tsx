@@ -4,9 +4,11 @@ import CircleButton from '../../components/shared/buttons/BackButton'
 import { useSupportedAthletes } from '../../hooks/athletes/useSupportedAthletes'
 import PlayersList from '../../components/players/PlayersList';
 import { useNavigate } from 'react-router-dom';
+import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars';
 
 export default function AllPlayersScreen() {
 
+    useHideTopNavBar();
     const {athletes} = useSupportedAthletes();
     const navigate = useNavigate();
 

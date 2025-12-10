@@ -15,10 +15,12 @@ import { IProAthlete } from "../../types/athletes";
 import SmartPlayerMugshot from "../../components/player/SmartPlayerMugshot";
 import { formatPosition } from "../../utils/athleteUtils";
 import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
+import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
 
+    useHideTopNavBar();
     const { list, loadingList, mutateList } = useScoutingList();
     const { hardPop } = useNavigateBack()
 

@@ -9,10 +9,8 @@ import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSu
 import { Activity } from '../../shared/Activity';
 import SecondaryText from '../../shared/SecondaryText';
 import { useMyTeamView } from './MyTeamStateProvider';
-import BlueGradientCard from '../../shared/BlueGradientCard';
 import { LeagueRoundCountdown2 } from '../../fantasy-league/LeagueCountdown';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
-import { useTeamHistory } from '../../../hooks/fantasy/useTeamHistory';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;
@@ -21,10 +19,7 @@ type Props = {
 /** Renders My Team View Header */
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
   const { leagueConfig } = useFantasyLeagueGroup();
-  const { totalSpent, selectedCount, team, leagueRound, isReadOnly } = useFantasyLeagueTeam();
-
-  const { manager } = useTeamHistory();
-  const displayName = (manager?.username || manager?.first_name || team?.team_name);
+  const { totalSpent, selectedCount, leagueRound } = useFantasyLeagueTeam();
 
   const handleTeamUpdated = async () => {
     if (onTeamUpdated) {
@@ -54,20 +49,15 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
         <div className="flex flex-row items-center justify-center text-center gap-1">
 
-          {!isReadOnly && <div>
-            <p className="font-semibold max-w-[130px] truncate ">{displayName || "My Team"}</p>
-          </div>}
+          <TeamPointsCard
+            leagueRound={leagueRound}
+          />
 
-          {isReadOnly && (
-            <TeamPointsCard 
-              leagueRound={leagueRound}
-            />
-          )}
         </div>
 
-        <div className="flex-1 w-full flex flex-col items-end justify-center">
+        <div className="flex-1 w-full flex flex-col text-right justify-center">
           <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            SCRUM Coins Spent
+            Total Spent
           </div>
           {leagueConfig && (
             <div className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">
@@ -82,9 +72,7 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         onTeamUpdated={handleTeamUpdated}
       />}
 
-      {!isReadOnly && <TeamPointsCard
-        leagueRound={leagueRound}
-      />}
+
 
     </div>
   );
@@ -140,7 +128,7 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
-  const {isReadOnly} = useFantasyLeagueTeam();
+  const { isReadOnly } = useFantasyLeagueTeam();
   const isLocked = isLeagueRoundLocked(leagueRound);
   const { userScore, highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummary(leagueRound);
@@ -148,7 +136,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
   const showScore = !isLoading && isLocked
 
   return (
-    <div className="flex flex-col max-h-[30px]" >
+    <div className="flex flex-col min-h-[30px] max-h-[30px]" >
 
       <Activity mode={showScore ? "visible" : "hidden"} >
         <div className="flex flex-row items-center justify-center gap-3" >
@@ -172,13 +160,11 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
       <Activity mode={!isLocked && !isReadOnly ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
-          <BlueGradientCard className='w-fit py-2 px-4 items-center ' >
             <LeagueRoundCountdown2
               leagueRound={leagueRound}
-              className='gap-4'
-              leagueTitleClassName='font-normal text-sm'
+              className='flex-col'
+              leagueTitleClassName='font-normal text-xs'
             />
-          </BlueGradientCard>
         </div>
       </Activity>
 

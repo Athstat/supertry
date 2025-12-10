@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { RugbyPitch3D } from '../shared/RugbyPitch';
+import { RugbyPitch3DRaster } from '../shared/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 import { useFantasyLeagueTeam } from '../fantasy-leagues/my-team/FantasyLeagueTeamProvider';
 
@@ -32,13 +32,13 @@ export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
   }
 
   return (
-    <div className="relative w-full flex flex-col justify-center">
+    <div className="relative  w-full mt-10  flex flex-col justify-center">
 
-      <RugbyPitch3D />
+      <RugbyPitch3DRaster className='mt-12' />
 
       <div className='top-0 left-0 absolute w-full p-3 flex flex-col gap-6' >
 
-        <div className='flex flex-row items-center gap-4 justify-center' >
+        <div className='flex mt-20 flex-row items-center gap-4 justify-center' >
           {firstRowSlots.map((s) => {
 
             const { athlete } = s;
