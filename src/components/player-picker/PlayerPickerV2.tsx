@@ -104,10 +104,10 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
       open={isOpen}
       title={dialogTitle}
       onClose={onClose}
-      hw="min-h-[100vh] lg:min-h-[95vh] w-full lg:w-[70vh]"
+      hw="min-h-[100vh] lg:min-h-[95vh] w-full border-none lg:w-[70vh]"
       className="flex flex-col gap-2 relative"
       outerCon={twMerge(
-        "no-scrollbar lg:min-h-[95vh] rounded-none lg:rounded-xl lg:dark:bg-slate-800/60",
+        "no-scrollbar lg:min-h-[95vh] border-none rounded-none lg:rounded-xl lg:dark:bg-slate-800/60",
         AppColours.BACKGROUND
       )}
       ref={setRefs}
