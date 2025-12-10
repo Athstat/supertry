@@ -10,6 +10,7 @@ import { IFantasySeason } from "../../../../types/fantasy/fantasySeason"
 import useSWR from "swr"
 import { fantasyLeagueGroupsService } from "../../../../services/fantasy/fantasyLeagueGroupsService"
 import RoundedCard from "../../../shared/RoundedCard"
+import SecondaryText from "../../../shared/SecondaryText"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -37,12 +38,12 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     }
 
     const handleClickLeagueCard = (league: FantasyLeagueGroup) => {
-        navigate(`/league/${league.id}`);
+        navigate(`/league/${league.id}/standings`);
     }
 
     if (isLoading) {
         return (
-            <RoundedCard 
+            <RoundedCard
                 className="w-full border-none h-[280px] animate-pulse"
             />
         )
@@ -69,7 +70,14 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 </OutlinedButton>
             </div>
 
+
+
             <div className="flex flex-col gap-2" >
+                <div className="flex font-medium flex-row items-center justify-between" >
+                    <SecondaryText className="text-xs" >League</SecondaryText>
+                    <SecondaryText className="text-xs" >Ranking</SecondaryText>
+                </div>
+
                 {leagues.map((l) => {
                     return (
                         <LeagueGroupCardSmall

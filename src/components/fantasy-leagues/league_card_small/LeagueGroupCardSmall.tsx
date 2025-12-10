@@ -1,7 +1,9 @@
+import useSWR from "swr";
+import { useAuth } from "../../../contexts/AuthContext";
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups";
 
 import RoundedCard from "../../shared/RoundedCard";
-import { ChevronRight } from "lucide-react";
+import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
 
 type Props = {
     leagueGroup: FantasyLeagueGroup,
@@ -11,6 +13,11 @@ type Props = {
 
 /** Renders a fantasy league group card */
 export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
+
+    const { authUser } = useAuth();
+    const key = `/fantasy-league-groups/${leagueGroup.id}/members/${authUser?.kc_id}`;
+    const { data: userRanking, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getMemberRanking(leagueGroup.id, authUser?.kc_id || ""));
+
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
@@ -44,9 +51,18 @@ export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
 
 
             <div className="" >
-                <button onClick={handleOnClick} >
+
+                {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
+                    <p>{userRanking?.overall_rank}</p>
+                </div>}
+
+                {isLoading && <div className="text-slate-600 animate-pulse dark:text-slate-200 font-semibold text-sm" >
+                    <div className="w-4 h-4 rounded-xl bg-slate-200 dark:bg-slate-600" ></div>
+                </div>}
+
+                {/* <button onClick={handleOnClick} >
                     <ChevronRight className="w-4 h-4" />
-                </button>
+                </button> */}
             </div>
 
         </RoundedCard>
