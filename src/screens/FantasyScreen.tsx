@@ -6,6 +6,7 @@ import { useFantasyLeaguesScreen } from '../hooks/fantasy/useFantasyLeaguesScree
 import { FantasyCompetitionDashboard } from '../components/fantasy-seasons/FantasyCompetitionDashboard';
 import FantasySeasonsOverview from '../components/fantasy-seasons/FantasySeasonsOverview';
 import { Activity } from '../components/shared/Activity';
+import { useHideTopNavBar } from '../hooks/navigation/useNavigationBars';
 
 export function FantasyScreen() {
   return (
@@ -16,6 +17,7 @@ export function FantasyScreen() {
 }
 
 function InnnerScreen() {
+  useHideTopNavBar();
   const { selectedSeason } = useFantasyLeaguesScreen();
 
   return (
