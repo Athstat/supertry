@@ -83,3 +83,18 @@ export function RugbyPitch3D({className} : PitchProps) {
         </div>
     );
 }
+
+
+/** Renders a 3 Dimensional Rugby Pitch by perspective like FPL */
+export function RugbyPitch3DRaster({className} : PitchProps) {
+    return (
+        <div className={twMerge(
+            "min-h-[500px] lg:max-h-[600px] w-full flex flex-col items-center justify-center",
+            className
+        )} >
+
+            <img src="/public/pitch/pitch_final_8.png" className="min-w-[670px] h-full" />
+
+        </div>
+    );
+}
