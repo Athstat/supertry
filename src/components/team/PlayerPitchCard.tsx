@@ -13,6 +13,7 @@ import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
+import { sanitizeStat } from "../../utils/stringUtils";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;
@@ -196,7 +197,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
                 <Activity mode={showScore ? 'visible' : 'hidden'}  >
                     <div>
-                        <p className='text-[7px] md:text-[10px] font-medium' >{score.toFixed(1)}</p>
+                        <p className='text-[9px] md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
                     </div>
                 </Activity>
             </div>

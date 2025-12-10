@@ -65,9 +65,9 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
           )}
         </div>
 
-        <div className="flex-1 w-full flex flex-col items-end justify-center">
+        <div className="flex-1 w-full flex flex-col text-right justify-center">
           <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            SCRUM Coins Spent
+            Total Spent
           </div>
           {leagueConfig && (
             <div className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">
@@ -148,7 +148,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
   const showScore = !isLoading && isLocked
 
   return (
-    <div className="flex flex-col max-h-[30px]" >
+    <div className="flex flex-col min-h-[30px] max-h-[30px]" >
 
       <Activity mode={showScore ? "visible" : "hidden"} >
         <div className="flex flex-row items-center justify-center gap-3" >
