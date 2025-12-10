@@ -94,7 +94,7 @@ export function RugbyPitch3DRaster({className, pitchClassName} : PitchProps) {
             className
         )} >
 
-            <img src="/public/pitch/pitch_final_8.png" className={twMerge(
+            <img src="/pitch/pitch_final_8.png" className={twMerge(
                 "min-w-[140%] max-w-[100px]",
                 "md:min-w-[670px] lg:min-w-[650px] lg:max-w-[200px] h-fit",
                 pitchClassName
