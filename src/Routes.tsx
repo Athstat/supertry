@@ -9,7 +9,7 @@ import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
 import OnBoardingScreen from './screens/OnboardingScreen';
 import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
-import { FantasyLeaguesScreen } from './screens/FantasyLeaguesScreen';
+import { FantasyScreen } from './screens/FantasyScreen';
 import { FantasyLeagueScreen } from './screens/LeagueScreen';
 import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
@@ -134,7 +134,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <FantasyLeaguesScreen />
+                <FantasyScreen />
               </Layout>
             </ProtectedRoute>
           }

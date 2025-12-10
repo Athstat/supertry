@@ -1,4 +1,3 @@
-import { ArrowRight, Globe } from 'lucide-react';
 import { useFantasyLeagueGroup } from '../../../../hooks/leagues/useFantasyLeagueGroup';
 import { FantasyLeagueGroup } from '../../../../types/fantasyLeagueGroups';
 import FantasyLeagueGroupDataProvider from '../../../fantasy-league/providers/FantasyLeagueGroupDataProvider';
@@ -52,10 +51,6 @@ function Content() {
     return <LoadingSkeleton />
   }
 
-  const goToLeague = () => {
-    navigate(`/league/${league.id}`);
-  };
-
   const handlePickTeam = () => {
     navigate(`/league/${league.id}?journey=team-creation`);
   };
@@ -79,23 +74,23 @@ function Content() {
       <div className="flex flex-row items-center gap-2 justify-between">
         <div>
 
-
+{/* 
           <div className="flex flex-row items-center gap-1">
             <Globe className="w-4 h-4" />
             <p className="">{league.title}</p>
-          </div>
+          </div> */}
 
-          <p className="font-bold text-md">{currentRound?.title}</p>
+          {/* <p className="font-bold text-md">{currentRound?.title}</p> */}
         </div>
 
-        <div>
+        {/* <div>
           <button
             onClick={goToLeague}
             className="hover:bg-slate-200 hover:dark:bg-slate-800 w-10 h-10 flex flex-col items-center justify-center rounded-xl"
           >
             <ArrowRight className="" />
           </button>
-        </div>
+        </div> */}
       </div>
 
       <LearnScrummyNoticeCard />
