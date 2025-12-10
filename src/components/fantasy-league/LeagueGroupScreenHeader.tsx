@@ -23,7 +23,7 @@ export default function LeagueGroupScreenHeader() {
     }
 
     return (
-        <div className="flex flex-col px-4 pt-4">
+        <div className="flex flex-col px-4 pt-6">
 
             <div className="flex relative flex-row items-center justify-center gap-2">
 
