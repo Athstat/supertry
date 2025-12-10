@@ -1,7 +1,7 @@
 import { Trophy } from "lucide-react"
 import { FantasyLeagueGroup } from "../../../../types/fantasyLeagueGroups"
 import { LeagueGroupCardSmall } from "../../league_card_small/LeagueGroupCardSmall"
-import { OutlinedButton } from "../../../shared/buttons/PrimaryButton"
+import PrimaryButton from "../../../shared/buttons/PrimaryButton"
 import { useMemo, useState } from "react"
 import CreateLeagueModal from "../../CreateLeagueModal"
 import { useNavigate } from "react-router-dom"
@@ -31,7 +31,18 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     const isLoading = loadingUserLeagues;
 
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [initTab, setInitTab] = useState<"join" | "create">("create");
     const toggle = () => setShowCreateModal(prev => !prev);
+
+    const openCreateModal = () => {
+        setInitTab("create");
+        toggle();
+    }
+
+    const openJoinModal = () => {
+        setInitTab("join");
+        toggle();
+    }
 
     const handleCreateLeague = (league: FantasyLeagueGroup) => {
         navigate(`/league/${league.id}`);
@@ -50,7 +61,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     }
 
     return (
-        <RoundedCard className="flex flex-col gap-4 dark:border-none p-4" >
+        <div className="flex flex-col gap-4 dark:border-none" >
             <div className="flex flex-row items-center justify-between" >
 
                 <div className="flex flex-row items-center gap-2" >
@@ -61,13 +72,13 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
             </div>
 
             <div className="flex flex-row items-center justify-between gap-2" >
-                <OutlinedButton onClick={toggle} className="flex-1" >
+                <PrimaryButton onClick={openCreateModal} className="flex-1" >
                     <p>Create League</p>
-                </OutlinedButton>
+                </PrimaryButton>
 
-                <OutlinedButton onClick={toggle} className="flex-1" >
+                <PrimaryButton onClick={openJoinModal} className="flex-1" >
                     <p>Join League</p>
-                </OutlinedButton>
+                </PrimaryButton>
             </div>
 
 
@@ -100,9 +111,10 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                     isOpen={showCreateModal}
                     onLeagueCreated={handleCreateLeague}
                     onClose={toggle}
+                    initMode={initTab}
                 />
             )}
-        </RoundedCard>
+        </div>
     )
 }
 

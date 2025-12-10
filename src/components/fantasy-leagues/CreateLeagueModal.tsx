@@ -18,9 +18,10 @@ interface CreateLeagueModalProps {
   isOpen: boolean;
   onClose: () => void;
   onLeagueCreated: (league: FantasyLeagueGroup) => void;
+  initMode?: "join" | "create"
 }
 
-export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModalProps) {
+export default function CreateLeagueModal({ isOpen, onClose, initMode }: CreateLeagueModalProps) {
 
   const tabs: TabViewHeaderItem[] = [
     {
@@ -44,7 +45,7 @@ export default function CreateLeagueModal({ isOpen, onClose }: CreateLeagueModal
       onClose={onClose}
       open={isOpen}
     >
-      <TabView tabHeaderItems={tabs} >
+      <TabView tabHeaderItems={tabs} initialTabKey={initMode} >
         <TabViewPage tabKey='create' >
           <CreateLeagueForm />
         </TabViewPage>

@@ -25,7 +25,7 @@ function InnnerScreen() {
       <div>
         <div className="flex flex-row items-center gap-2">
           <Trophy className="w-5 h-5" />
-          <h1 className="font-bold text-md">Fantasy</h1>
+          <h1 className="font-bold text-xl">Fantasy</h1>
         </div>
       </div>
 
