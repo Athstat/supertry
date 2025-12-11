@@ -15,6 +15,7 @@ import PlayerProfileModal from "../player/PlayerProfileModal";
 import AvailabilityIcon from "../players/availability/AvailabilityIcon";
 import MatchPrCard from "../rankings/MatchPrCard";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
+import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;
@@ -25,14 +26,17 @@ type Props = {
 }
 
 export default function PlayerPickerPlayerList({ onSelect }: Props) {
+
     const [sortField, setSortField] = useState<SortField>('power_rank_rating');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
     const {
         searchQuery, positionPool, availbleTeams,
         leagueRound, filterTeams, excludePlayers,
-        remainingBudget
+        remainingBudget, viewType
     } = usePlayerPicker();
+
+    const {list, loadingList} = useScoutingList();
 
     const key = leagueRound ? `/all-players` : null;
     const { data: fetchedAthletes, isLoading: loadingAthletes } = useSWR(key, () => seasonService.getSeasonAthletes(leagueRound?.season_id ?? ''));
@@ -132,11 +136,17 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
                 return (aBias - bBias);
             })
 
+        if (viewType === "scouting-list") {
+            result = [...result].filter((r) => {
+                return list.find((a) => a.athlete.tracking_id === r.tracking_id);
+            })
+        }
+
         return result;
 
-    }, [filterTeams, availbleTeams, athletes, sortField, sortDirection, positionPool, searchQuery, excludePlayers, remainingBudget]);
+    }, [filterTeams, availbleTeams, athletes, sortField, sortDirection, viewType, positionPool, searchQuery, excludePlayers, remainingBudget, list]);
 
-    const isLoading = loadingAthletes;
+    const isLoading = loadingAthletes || (viewType === "scouting-list" && loadingList);
 
     if (isLoading) {
         return (
@@ -221,6 +231,14 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
                 </tbody>
 
             </table>
+
+            {filteredAthletes.length === 0 && (
+                <div className="flex flex-1 w-full h-[100px] flex-col items-center justify-center" >
+                    <SecondaryText>
+                        {`Whoops! No eligable player(s) found`}
+                    </SecondaryText>
+                </div>
+            )}
 
             {showModal && profileModalPlayer && (
                 <PlayerProfileModal
