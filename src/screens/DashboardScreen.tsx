@@ -51,43 +51,53 @@ function DashboardContent() {
       <DashboardHero season={displaySeason} />
 
       {/* <FeaturedFantasyLeagueGroups /> */}
+      <div className="pl-1 pr-1" style={{ marginTop: 8, marginBottom: -8 }}>
+        {/* Dominate the SCRUM */}
+        <RoundedCard className="flex flex-col sm:flex-row gap-4 pt-5 pb-5 pl-2 pr-2 items-start sm:items-end">
+          <div className="flex flex-col gap-2 flex-1">
+            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white">Dominate the scrum</h1>
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Create your own league, or join one. Challenge your friends, invite your crew and see
+                who really rules the game!
+              </p>
 
-      {/* Dominate the SCRUM */}
-      <RoundedCard className="flex flex-col sm:flex-row gap-4 p-5 items-start sm:items-end">
-        <div className="flex flex-col gap-2 flex-1">
-          <h1 className="font-bold text-lg text-[#011E5C] dark:text-white">Dominate the scrum</h1>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            Create your own league, or join one. Challenge your friends, invite your crew and see
-            who really rules the game!
-          </p>
-        </div>
-        <button
-          onClick={handleBannerClick}
-          className="px-6 py-2.5 rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-sm text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
-        >
-          Start A League
-        </button>
-      </RoundedCard>
+              <button
+                onClick={handleBannerClick}
+                className="px-2 py-2.5 rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-xs text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
+              >
+                Start Your League
+              </button>
+            </div>
+          </div>
+
+        </RoundedCard>
+      </div>
 
       {/* School Rugby Banner */}
       <SchoolRugbyBanner />
 
-      {/* Make your match predictions */}
-      <RoundedCard className="flex flex-col sm:flex-row gap-4 p-5 items-start sm:items-end">
-        <div className="flex flex-col gap-2 flex-1">
-          <h1 className="font-bold text-lg text-[#011E5C] dark:text-white">Make your match predictions</h1>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            Predict the results of all the upcoming matches to maximize your fantasy points this
-            week.
-          </p>
-        </div>
-        <button
-          onClick={() => navigate('/fixtures?view=pickem')}
-          className="px-6 py-2.5 rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-sm text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
-        >
-          Pick'em
-        </button>
-      </RoundedCard>
+      <div className="pl-1 pr-1" style={{ marginTop: 8 }}>
+
+        {/* Make your match predictions */}
+        <RoundedCard className="flex flex-col sm:flex-row gap-4 pt-5 pb-5 pl-2 pr-2 items-start sm:items-end">
+          <div className="flex flex-col gap-2 flex-1">
+            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white">Make your match predictions</h1>
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Predict the results of all the upcoming matches to maximize your fantasy points this
+                week.
+              </p>
+              <button
+                onClick={() => navigate('/fixtures?view=pickem')}
+                className="px-2 py-2.5 rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-xs text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
+              >
+                Pick'em
+              </button>
+            </div>
+          </div>
+        </RoundedCard>
+      </div>
 
       {/* Weekly Leaderboards with tabs */}
       <WeeklyLeaderboards season={displaySeason} />
