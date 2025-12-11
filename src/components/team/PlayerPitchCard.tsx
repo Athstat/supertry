@@ -224,8 +224,8 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
         <div className="flex flex-col items-center justify-center gap-1 relative">
             <div
                 className={twMerge(
-                    'overflow-hidden cursor-pointer rounded-lg min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
-                    'min-w-[120px] max-w-[120px] flex flex-col'
+                    'overflow-hidden cursor-pointer rounded-lg min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px] bg-gradient-to-br from-green-900 to-green-900/60',
+                    'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col'
                 )}
                 onClick={handleClick}
             >
@@ -242,9 +242,9 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
                 </div>
             </div>
 
-            <div className="min-h-[14px] max-h-[14px] w-full" >
+            {/* <div className="min-h-[14px] max-h-[14px] w-full" >
 
-            </div>
+            </div> */}
         </div>
     );
 }
