@@ -66,7 +66,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     return {
                         athlete_id: a.athlete_id,
                         slot,
-                        purchase_price: s.purchasePrice || (a as any).price || a.purchase_price || 0,
+                        purchase_price: s.purchasePrice || (a).price || a.purchase_price || 0,
                         is_starting: slot !== 6,
                         is_captain: s.isCaptain,
                     };
