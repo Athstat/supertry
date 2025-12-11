@@ -4,21 +4,23 @@ import { RugbyPitch3DRaster } from "../../shared/RugbyPitch";
 import BottomSheetView from "../../ui/BottomSheetView";
 
 type Props = {
-    className?: string
+    className?: string,
+    hideHistoryBar?: boolean
 }
 
 /** Renders a pitch view loading skeleton */
-export default function PitchViewLoadingSkeleton({ className }: Props) {
+export default function PitchViewLoadingSkeleton({ className, hideHistoryBar = false }: Props) {
     return (
         <div className="flex flex-col gap-4" >
-            <div className={twMerge(
+
+            {!hideHistoryBar && <div className={twMerge(
                 "flex px-4 animate-pulse w-full flex-row items-center justify-center gap-2",
                 className
             )}  >
                 <RoundedCard className="border-none rounded-full w-[30px] h-[30px] " />
                 <RoundedCard className="border-none w-[100px] h-[30px] " />
                 <RoundedCard className="border-none rounded-full w-[30px] h-[30px] " />
-            </div>
+            </div>}
 
             <div className="flex flex-col items-center gap-2">
 
@@ -27,7 +29,7 @@ export default function PitchViewLoadingSkeleton({ className }: Props) {
                 </div>
 
                 <RugbyPitch3DRaster className='bg-blend-color-burn mt-[20] opacity-20' />
-                <BottomSheetView className='' hideHandle />
+                <BottomSheetView noAnimation className='' hideHandle />
             </div>
 
         </div>
