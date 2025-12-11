@@ -15,6 +15,9 @@ import PlayerProfileModal from "../player/PlayerProfileModal";
 import AvailabilityIcon from "../players/availability/AvailabilityIcon";
 import MatchPrCard from "../rankings/MatchPrCard";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
+import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
+import QuickActionButton from "../ui/QuickActionButton";
+import { useNavigate } from "react-router-dom";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;
@@ -25,14 +28,18 @@ type Props = {
 }
 
 export default function PlayerPickerPlayerList({ onSelect }: Props) {
+
+    const navigate = useNavigate();
     const [sortField, setSortField] = useState<SortField>('power_rank_rating');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
     const {
         searchQuery, positionPool, availbleTeams,
         leagueRound, filterTeams, excludePlayers,
-        remainingBudget
+        remainingBudget, viewType
     } = usePlayerPicker();
+
+    const { list, loadingList } = useScoutingList();
 
     const key = leagueRound ? `/all-players` : null;
     const { data: fetchedAthletes, isLoading: loadingAthletes } = useSWR(key, () => seasonService.getSeasonAthletes(leagueRound?.season_id ?? ''));
@@ -132,11 +139,21 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
                 return (aBias - bBias);
             })
 
+        if (viewType === "scouting-list") {
+            result = [...result].filter((r) => {
+                return list.find((a) => a.athlete.tracking_id === r.tracking_id);
+            })
+        }
+
         return result;
 
-    }, [filterTeams, availbleTeams, athletes, sortField, sortDirection, positionPool, searchQuery, excludePlayers, remainingBudget]);
+    }, [filterTeams, availbleTeams, athletes, sortField, sortDirection, viewType, positionPool, searchQuery, excludePlayers, remainingBudget, list]);
 
-    const isLoading = loadingAthletes;
+    const isLoading = loadingAthletes || (viewType === "scouting-list" && loadingList);
+
+    const handleViewScoutingList = () => {
+        navigate(`/scouting/my-list`);
+    }
 
     if (isLoading) {
         return (
@@ -221,6 +238,26 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
                 </tbody>
 
             </table>
+
+            {filteredAthletes.length === 0 && list.length > 0 && (
+                <div className="flex flex-1 text-center w-full h-[150px] flex-col items-center justify-center gap-2" >
+                    <SecondaryText>
+                        {`Whoops! No eligable player(s) ${viewType === "scouting-list" ? "from your scouting list were" : ""} found`}
+                    </SecondaryText>
+
+                    <QuickActionButton onClick={handleViewScoutingList} showBorder className="border" >View Scouting List</QuickActionButton>
+                </div>
+            )}
+
+            {list.length === 0 && (
+                <div className="flex flex-1 w-full h-[150px] flex-col items-center justify-center gap-4" >
+                    <SecondaryText className="text-center" >
+                        {`Your scouting list is empty. When you add players to your scouting list, you will be able to see them here`}
+                    </SecondaryText>
+
+                    <QuickActionButton onClick={handleViewScoutingList} showBorder className="border" >Get Started with Scouting</QuickActionButton>
+                </div>
+            )}
 
             {showModal && profileModalPlayer && (
                 <PlayerProfileModal

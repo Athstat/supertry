@@ -1,14 +1,10 @@
 import PageView from './PageView';
 import { useNavigate } from 'react-router-dom';
-import FeaturedFantasyLeagueGroups from './FeaturedFantasyLeagueGroups';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import PrimaryButton from '../components/shared/buttons/PrimaryButton';
 import RoundedCard from '../components/shared/RoundedCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
-import SportActionRankingsList from '../components/dashboard/rankings/SportActionRankingCard';
-import { Crown, Home } from 'lucide-react';
 import { useDashboard } from '../hooks/dashboard/useDashboard';
-import { abbreviateSeasonName } from '../components/players/compare/PlayerCompareSeasonPicker';
 import TeamPlayersPrefetchProvider from '../providers/TeamPlayersPrefetchProvider';
 import DashboardHero from '../components/dashboard/DashboardHero';
 import WeeklyLeaderboards from '../components/dashboard/WeeklyLeaderboards';

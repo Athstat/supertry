@@ -1,4 +1,4 @@
-import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
+import { ArrowUpDown, CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../../utils/athleteUtils";
@@ -45,14 +45,14 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
   }
 
   return (
-    <div 
-    
-    className={twMerge(
-      "max-h-[130px] fixed bottom-0 left-0 w-full min-h-[130px] flex flex-col items-center justify-center",
-      isSlotEmpty && "max-h-[150px]"
-    )}
+    <div
 
-    onClick={handlePlayerClick}
+      className={twMerge(
+        "max-h-[130px] fixed bottom-0 left-0 w-full min-h-[130px] flex flex-col items-center justify-center",
+        isSlotEmpty && "max-h-[150px]"
+      )}
+
+      onClick={handlePlayerClick}
 
     >
       <div className={twMerge(
@@ -62,15 +62,18 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
         <div className="w-full flex flex-col gap-1 p-4" >
 
-          <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
-            Super Subsitute
-          </p>
+          <div className="flex flex-row items-center gap-2" >
+            <ArrowUpDown className="text-yellow-500" />
+            <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
+              Super Subsitute
+            </p>
+          </div>
 
           {athlete && (
             <SubPlayerCard
               player={athlete}
               round={leagueRound}
-              onClick={() => {}}
+              onClick={() => { }}
             />
           )}
 

@@ -10,6 +10,8 @@ import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import RoundedCard from '../../shared/RoundedCard';
 import MatchPrCard from '../../rankings/MatchPrCard';
 import SecondaryText from '../../shared/SecondaryText';
+import { abbreviateSeasonName } from '../../players/compare/PlayerCompareSeasonPicker';
+import formatDate from 'date-fns/format';
 
 type Props = {
   player: IProAthlete;
@@ -101,7 +103,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
   } = singleMatchPr.game;
 
   const { player, setSelectedFixture } = usePlayerData();
-  
+
 
   if (
     !player ||
@@ -119,6 +121,7 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
   const wasHomePlayer = singleMatchPr.team_id === singleMatchPr.game.team?.athstat_id;
 
   const { wasDraw, athleteTeamWon } = didAthleteTeamWin(singleMatchPr);
+  const kickoff_time = singleMatchPr.game.kickoff_time ? new Date(singleMatchPr.game.kickoff_time) : undefined;
 
   const oppositionTeamName = wasHomePlayer
     ? singleMatchPr.game.opposition_team?.athstat_name
@@ -132,12 +135,12 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
   return (
     <RoundedCard onClick={handleClick} className="flex flex-col gap-2 cursor-pointer p-4 transition-all duration-200">
       {/* Match Info */}
-      
+
       <div className="flex flex-row items-center justify-between">
 
         <div className="flex flex-row items-center gap-3 flex-1">
           <TeamLogo className="w-10 h-10 rounded-lg" url={oppositionImageUrl} />
-          
+
           <div>
             <p className="dark:text-white">vs {oppositionTeamName}</p>
 
@@ -158,6 +161,8 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
               </p>
             )}
 
+
+
           </div>
 
         </div>
@@ -169,6 +174,11 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
           />
           <SecondaryText className='text-xs' >Rating</SecondaryText>
         </div>
+      </div>
+
+      <div className='flex flex-row items-center gap-1' >
+        {kickoff_time && <SecondaryText className='text-xs' >{abbreviateSeasonName(singleMatchPr.game.competition_name || "")},</SecondaryText>}
+        {kickoff_time && <SecondaryText className='text-xs' >{formatDate(kickoff_time, "EEEE dd MMMM yyyy")}</SecondaryText>}
       </div>
 
     </RoundedCard>

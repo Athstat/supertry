@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import LeagueAndStandingsSection from '../fantasy-leagues/join_league_screen/other_leagues_section/LeagueAndStandingsSection';
-import ShowcaseLeagueSection from '../fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
+import ManageTeamCTA from '../fantasy-leagues/join_league_screen/showcase_section/ManageTeamCTA';
 import RoundedCard from '../shared/RoundedCard';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
@@ -40,7 +40,7 @@ export function FantasyCompetitionDashboard({ fantasySeason }: Props) {
   return (
     <div className="flex flex-col gap-8">
 
-      {featuredGroup && <ShowcaseLeagueSection
+      {featuredGroup && <ManageTeamCTA
         leagueGroup={featuredGroup}
       />}
 

@@ -42,7 +42,7 @@ function Content() {
 
 
     return (
-        <PageView className="pt-6" >
+        <PageView className="pt-6 flex flex-col gap-4" >
             <div className="flex px-4 flex-row items-center justify-between" >
                 <div>
                     <CircleButton

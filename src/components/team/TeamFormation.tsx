@@ -3,13 +3,16 @@ import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3DRaster } from '../shared/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 import { useFantasyLeagueTeam } from '../fantasy-leagues/my-team/FantasyLeagueTeamProvider';
+import { twMerge } from 'tailwind-merge';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
+  marginCN?: string,
+  firstRowMargin?: string
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
+export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
 
   const {slots, leagueRound: round} = useFantasyLeagueTeam();
 
@@ -34,11 +37,17 @@ export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
   return (
     <div className="relative  w-full mt-10  flex flex-col justify-center">
 
-      <RugbyPitch3DRaster className='mt-12' />
+      <RugbyPitch3DRaster className={twMerge(
+        'mt-12',
+        marginCN
+      )} />
 
       <div className='top-0 left-0 absolute w-full p-3 flex flex-col gap-6' >
 
-        <div className='flex mt-20 flex-row items-center gap-4 justify-center' >
+        <div className={twMerge(
+          'flex mt-20 flex-row items-center gap-4 justify-center',
+          firstRowMargin
+        )} >
           {firstRowSlots.map((s) => {
 
             const { athlete } = s;

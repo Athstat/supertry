@@ -46,6 +46,7 @@ export default function PlayerPickerV2({
     playerPickerAtoms.onSelectPlayerAtom,
     playerPickerAtoms.excludePlayersAtom,
     playerPickerAtoms.searchQueryAtom,
+    playerPickerAtoms.viewType,
     fantasyLeagueAtom
   ]
 

@@ -7,15 +7,17 @@ type Props = {
   children?: ReactNode,
   className?: string,
   onClick?: () => void,
-  hideArrow?: boolean
+  hideArrow?: boolean,
+  showBorder?: boolean
 }
 
 /** Renders quick link component */
-export default function QuickActionButton({ children, className, onClick, hideArrow }: Props) {
+export default function QuickActionButton({ children, className, onClick, hideArrow, showBorder }: Props) {
   return (
     <RoundedCard
       className={twMerge(
-        "w-fit p-1.5 text-sm px-3 border-none flex flex-row bg-slate-100 hover:dark:bg-slate-700 items-center gap-2 cursor-pointer",
+        "w-fit p-1.5 text-sm px-3 flex flex-row bg-slate-100 hover:dark:bg-slate-700 items-center gap-2 cursor-pointer",
+        !showBorder && "border-none",
         className
       )}
       onClick={onClick}

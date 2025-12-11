@@ -4,18 +4,19 @@ import JoinLeagueButton from './buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { useShareLeague } from '../../hooks/leagues/useShareLeague';
 import CircleButton from '../shared/buttons/BackButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigateBack } from '../../hooks/web/useNavigateBack';
 
 
 /** Renders a header component on the fantasy league group header */
 export default function LeagueGroupScreenHeader() {
 
-    const navigate = useNavigate();
+    const {hardPop} = useNavigateBack();
 
     const { league } = useFantasyLeagueGroup();
 
     const handleBackToLeagues = () => {
-        navigate("/leagues");
+        // navigate("/leagues");
+        hardPop("/leagues");
     }
 
     if (!league) {
