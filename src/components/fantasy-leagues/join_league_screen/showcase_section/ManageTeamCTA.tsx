@@ -102,19 +102,9 @@ function LoadingSkeleton() {
 
   return (
     <div className='flex flex-col gap-6' >
-      <div className='flex flex-row items-center justify-between' >
-        <div className='flex flex-col gap-1' >
-          <RoundedCard className='w-[100px] h-[25px] rounded-xl border-none' />
-          <RoundedCard className='w-[60px] h-[20px] rounded-xl border-none' />
-        </div>
-
-        <div>
-          <RoundedCard className='w-[40px] h-[30px] border-none rounded-xl animate-pulse' />
-        </div>
-      </div>
 
       <div className='flex flex-col gap-2' >
-        <RoundedCard className='w-full h-[100px] border-none rounded-xl animate-pulse' />
+        <RoundedCard className='w-full h-[150px] border-none rounded-xl animate-pulse' />
       </div>
     </div>
   );
@@ -173,7 +163,7 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
 
   const navigate = useNavigate();
 
-  const isCurrentLocked = isLeagueRoundLocked(leagueRound) || true;
+  const isCurrentLocked = isLeagueRoundLocked(leagueRound);
   const isUserHasTeam = Boolean(userRoundTeam);
 
   const showManageTeam = !isCurrentLocked && isUserHasTeam;
