@@ -28,7 +28,7 @@ export default function PitchViewLoadingSkeleton({ className, hideHistoryBar = f
                     <RoundedCard className="border-none w-full h-[100px] mb-10 " />
                 </div>
 
-                <RugbyPitch3DRaster className='bg-blend-color-burn mt-[20] opacity-20' />
+                <RugbyPitch3DRaster className='bg-blend-color-burn mt-[20] opacity-55 dark:opacity-20' />
                 <BottomSheetView noAnimation className='' hideHandle />
             </div>
 
