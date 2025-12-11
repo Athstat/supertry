@@ -64,7 +64,7 @@ export default function ScoutingListScreen() {
 
     if (loadingList) {
         return (
-            <PageView className="px-6 flex flex-col gap-4" >
+            <PageView className="px-4 flex flex-col gap-4 py-4" >
                 <div className="flex flex-row items-center gap-2" >
 
                     <CircleButton

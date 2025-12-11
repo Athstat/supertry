@@ -38,7 +38,7 @@ export default function PlayersByCountryScreen() {
     }
 
     return (
-        <PageView className="px-4 flex flex-col gap-2" >
+        <PageView className="px-4 py-4 flex flex-col gap-2" >
 
             <div className={twMerge(
                 "flex flex-row items-center py-2 justify-between gap-1",

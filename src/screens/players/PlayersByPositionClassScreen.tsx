@@ -34,7 +34,7 @@ export default function PlayersByPositionClassScreen() {
     }
 
     return (
-        <PageView className='px-4 relative' >
+        <PageView className='px-4 py-4 relative' >
 
             <div className={twMerge(
                 'flex sticky w-full p-2 top-0 z-[10] left-0 flex-row items-center justify-between',

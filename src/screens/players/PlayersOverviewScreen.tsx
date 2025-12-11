@@ -23,7 +23,7 @@ export default function PlayersOverviewScreen() {
 
 
   return (
-    <PageView className='px-6 flex flex-col gap-4' >
+    <PageView className='px-6 flex flex-col gap-4 py-4' >
       <div>
         <div className='flex flex-row items-center gap-2' >
           <Users />
