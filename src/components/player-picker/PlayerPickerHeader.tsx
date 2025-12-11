@@ -6,6 +6,7 @@ import BlueGradientCard from "../shared/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
 import Experimental from "../shared/ab_testing/Experimental";
 import { Coins } from "lucide-react";
+import { AppColours } from "../../types/constants";
 
 export default function PlayerPickerHeader() {
 
@@ -79,6 +80,67 @@ export default function PlayerPickerHeader() {
                 </div>
             )} */}
 
+
+            <ScoutingListSwitcher />
+
+        </div>
+    )
+}
+
+function ScoutingListSwitcher() {
+
+    const { viewType, setViewType } = usePlayerPicker();
+
+    const handleChange = (val: string) => {
+        if (val) {
+            setViewType(val as "all" | "scouting-list");
+        }
+    }
+
+    return (
+        <div className="bg-slate-700 overflow-clip p-1 w-full h-[40px] rounded-xl flex flex-row items-center justify-between" >
+            <Option
+                label="All Players"
+                current={viewType}
+                value="all"
+                onSelect={handleChange}
+            />
+            <Option
+                label="Scouting List"
+                current={viewType}
+                value="scouting-list"
+                onSelect={handleChange}
+            />
+        </div>
+    )
+}
+
+type OptionProps = {
+    label?: string,
+    value?: string,
+    current?: string,
+    onSelect?: (val: string) => void
+}
+
+function Option({ label, current, value, onSelect }: OptionProps) {
+
+    const isCurrent = current === value;
+
+    const handleOnClick = () => {
+        if (onSelect && value) {
+            onSelect(value);
+        }
+    }
+
+    return (
+        <div
+            className={twMerge(
+                "flex-1 text-sm cursor-pointer h-full flex rounded-xl items-center justify-center",
+                isCurrent && AppColours.BACKGROUND,
+            )}
+            onClick={handleOnClick}
+        >
+            <p className="">{label}</p>
         </div>
     )
 }
