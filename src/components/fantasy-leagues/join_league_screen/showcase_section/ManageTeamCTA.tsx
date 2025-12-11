@@ -71,7 +71,7 @@ function Content() {
     <div className="flex flex-col gap-4">
       <LearnScrummyNoticeCard />
 
-      <BlueGradientCard className='flex flex-col gap-3 p-4' >
+      <BlueGradientCard className='flex flex-col gap-4 p-4' >
         <div>
           <p className='font-semibold ' >{league.title}</p>
         </div>
@@ -82,7 +82,7 @@ function Content() {
           <LeagueRoundCountdown2
             leagueRound={currentRound}
             title={`${currentRound.title} Starts in`}
-            leagueTitleClassName='font-normal'
+            leagueTitleClassName='font-normal text-sm'
           />
         )}
 
@@ -139,23 +139,23 @@ function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
   return (
     <div className='flex flex-col gap-2' >
       <div className='flex flex-col items-center justify-center w-full' >
-        <p>{leagueRound.title} Score</p>
+        <p className='text-sm' >{leagueRound.title} Score</p>
       </div>
 
       <div className='grid grid-cols-3 px-[10%]' >
 
         <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-2xl' >{Math.floor(averagePointsScored || 0)}</p>
+          <p className='font-bold text-xl' >{Math.floor(averagePointsScored || 0)}</p>
           <p className='text-xs' >Average</p>
         </div>
 
         <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-4xl' >{Math.floor(userScore || 0)}</p>
-          <p className='text-xs' >My Score</p>
+          <p className='font-bold text-2xl' >{Math.floor(userScore || 0)}</p>
+          <p className='text-xs' >Your Score</p>
         </div>
 
         <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-2xl' >{Math.floor(highestPointsScored || 0)}</p>
+          <p className='font-bold text-xl' >{Math.floor(highestPointsScored || 0)}</p>
           <p className='text-xs' >Highest</p>
         </div>
       </div>
