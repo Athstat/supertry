@@ -71,7 +71,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     'cursor-pointer rounded-lg ',
                     "min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px]",
                     'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col',
-                    player.image_url && "bg-gradient-to-br from-green-800 to-green-800 border border-green-600",
+                    player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
                     !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
                     showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}
@@ -82,13 +82,6 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     'flex-3 flex md:min-h-[100px] md:max-h-[100px] overflow-clip flex-col items-center justify-center w-full',
                     "min-h-[100px] max-h-[100px]"
                 )} >
-                    {/* {player.image_url && <PlayerMugshot
-                        url={player.image_url}
-                        className='border-none rounded-none w-[100px] h-[100px] bg-transparent hover:bg-transparent'
-                        scrummyLogoClassName="dark:bg-transparent bg-transparent"
-                        showPrBackground={false}
-                        key={player.tracking_id}
-                    />} */}
 
                     {/* {!player.image_url && ( */}
                     <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
@@ -107,23 +100,19 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
                 <div className={twMerge(
                     'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] rounded-lg bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
+                    "dark:from-slate-700 dark:to-slate-800 dark:text-white",
                     'min-h-[50px] max-h-[50px]'
-                    // showAvailabilityWarning && "dark:from-yellow-400 dark:to-yellow-500 dark:text-black"
                 )} >
 
                     <div className='flex px-2 h-[25px] md:h-[25px] flex-col items-center justify-center' >
                         <p className=' text-[10px] md:text-[11px] font-semibold' >{player.athstat_firstname}</p>
                     </div>
 
-                    <div className='flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-slate-200 justify-center gap-2 divide-x-1 divide-red-500' >
-                        {/* <p className={twMerge(
-                            ' text-[10px]',
-                            // showAvailabilityWarning && "dark:text-black"
-                        )} >{position_class ? formatPosition(position_class) : ""}</p>
-                        <div className="flex flex-row items-center gap-0.5" >
-                            <p className="text-[10px]" >{player.purchase_price}</p>
-                            <Coins className="w-2.5 h-2.5 text-yellow-500" />
-                        </div> */}
+                    <div className={twMerge(
+                        'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
+                        "from-slate-200 to-slate-300",
+                        "dark:from-slate-600 dark:to-slate-700 dark:text-white",
+                    )} >
 
                         <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
                             <PlayerScoreIndicator
@@ -231,11 +220,11 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
             >
                 <div className="flex-1 h-full flex overflow-clip flex-col items-center justify-center w-full gap-2">
                     <div>
-                        <CirclePlus className="w-10 text-white/50 h-10" />
+                        <CirclePlus className="w-10 text-white/90 h-10" />
                     </div>
 
                     <div>
-                        <p className="text-sm text-white/50">
+                        <p className="text-sm text-white/90">
                             {position_class ? formatPosition(position_class) : ''}
                         </p>
                     </div>
