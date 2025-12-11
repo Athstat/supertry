@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { fantasyTeamService } from "../../../services/fantasyTeamService";
@@ -103,20 +103,20 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
     };
 
     return (
-        <Fragment>
+        <div className="max-h-[50px] min-h-[50px]" >
 
-            {isEditing && <div className="mt-3 flex-col gap-2  relative z-[50]">
-                <div className="flex gap-2">
+            {isEditing && <div className="mt-4 flex-col gap-2 relative z-[50]">
+                <div className="flex gap-2 flex-row items-center justify-center">
                     <button
                         type="button"
                         onClick={handleCancelEdits}
                         disabled={isSaving}
-                        className="w-1/2 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40"
+                        className="w-[150px] text-xs rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40"
                     >
                         Cancel
                     </button>
                     <PrimaryButton
-                        className="w-1/2"
+                        className="w-[150px] text-xs"
                         disabled={isSaving || !leagueRound?.is_open || !isTeamFull}
                         onClick={buildPayloadAndSave}
                     >
@@ -183,6 +183,6 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                 )
             }
 
-        </Fragment>
+        </div>
     )
 }
