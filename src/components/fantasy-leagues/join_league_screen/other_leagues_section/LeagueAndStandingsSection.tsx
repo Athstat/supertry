@@ -82,6 +82,9 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
             </div>
 
 
+            <div>
+                <SecondaryText>Click on a league to view it's standings</SecondaryText>
+            </div>
 
             <div className="flex flex-col gap-2" >
                 <div className="flex font-medium flex-row items-center justify-between" >
