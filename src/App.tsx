@@ -6,7 +6,7 @@ import { PlayerProfileProvider } from './hooks/usePlayerProfile';
 import { AppStateProvider } from './contexts/AppStateContext';
 import ErrorBoundary, { FallbackProps } from './components/ErrorBoundary';
 import AppErrorFallback from './components/AppErrorFallback';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatProvider from './contexts/ChatContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AuthTokenProvider from './providers/AuthTokenProvider';
@@ -15,6 +15,8 @@ import SportActionsDefinitionsProvider from './components/stats/SportActionsDefi
 import { useSyncDeviceId } from './hooks/auth/useSyncDeviceId';
 import NavigationBarsProvider from './providers/navigation/NavigationBarsProvider';
 import BrowserHistoryProvider from './providers/web/BrowserHistoryProvider';
+import { twMerge } from 'tailwind-merge';
+import { AppColours } from './types/constants';
 
 function DeviceIdSync() {
   useSyncDeviceId();
@@ -24,46 +26,51 @@ function DeviceIdSync() {
 function App() {
   const [, setError] = useState<Error | null>(null);
 
-  // Removed visibility change handler that was causing double reloads
-  // Auth redirects are now handled by AuthContext and route guards
+  // Fixes white overflow when pulling the screen up from the top
+  useEffect(() => {
+    document.body.className = twMerge(
+      AppColours.BACKGROUND,
+      "w-screen h-screen"
+    );
+  }, []);
 
   return (
-      <GoogleOAuthProvider
-        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id'}
-      >
-        <ThemeProvider>
-          <NetworkStatusProvider>
-            <AuthTokenProvider>
-              <AuthProvider>
-                <DeviceIdSync />
-                <ChatProvider>
-                  <AthleteProvider>
-                    <SportActionsDefinitionsProvider>
-                      <PlayerProfileProvider>
-                        <AppStateProvider>
-                          <ErrorBoundary
-                            onError={(err, errorInfo) => {
-                              console.error('Root level error caught:', err, errorInfo);
-                              setError(err);
-                            }}
-                            fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
-                          >
-                            <BrowserHistoryProvider>
-                              <NavigationBarsProvider>
-                                <AppRoutes />
-                              </NavigationBarsProvider>
-                            </BrowserHistoryProvider>
-                          </ErrorBoundary>
-                        </AppStateProvider>
-                      </PlayerProfileProvider>
-                    </SportActionsDefinitionsProvider>
-                  </AthleteProvider>
-                </ChatProvider>
-              </AuthProvider>
-            </AuthTokenProvider>
-          </NetworkStatusProvider>
-        </ThemeProvider>
-      </GoogleOAuthProvider>
+    <GoogleOAuthProvider
+      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id'}
+    >
+      <ThemeProvider>
+        <NetworkStatusProvider>
+          <AuthTokenProvider>
+            <AuthProvider>
+              <DeviceIdSync />
+              <ChatProvider>
+                <AthleteProvider>
+                  <SportActionsDefinitionsProvider>
+                    <PlayerProfileProvider>
+                      <AppStateProvider>
+                        <ErrorBoundary
+                          onError={(err, errorInfo) => {
+                            console.error('Root level error caught:', err, errorInfo);
+                            setError(err);
+                          }}
+                          fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
+                        >
+                          <BrowserHistoryProvider>
+                            <NavigationBarsProvider>
+                              <AppRoutes />
+                            </NavigationBarsProvider>
+                          </BrowserHistoryProvider>
+                        </ErrorBoundary>
+                      </AppStateProvider>
+                    </PlayerProfileProvider>
+                  </SportActionsDefinitionsProvider>
+                </AthleteProvider>
+              </ChatProvider>
+            </AuthProvider>
+          </AuthTokenProvider>
+        </NetworkStatusProvider>
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 }
 
