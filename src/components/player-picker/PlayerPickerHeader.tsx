@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import SearchBar from "../team-creation/player-selection-components/SearchBar";
 import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
@@ -6,7 +6,6 @@ import BlueGradientCard from "../shared/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
 import Experimental from "../shared/ab_testing/Experimental";
 import { Coins } from "lucide-react";
-import { AppColours } from "../../types/constants";
 
 export default function PlayerPickerHeader() {
 
@@ -98,18 +97,20 @@ function ScoutingListSwitcher() {
     }
 
     return (
-        <div className="bg-slate-700 overflow-clip p-1 w-full h-[40px] rounded-xl flex flex-row items-center justify-between" >
+        <div className="bg-slate-200 dark:bg-slate-700/50 overflow-clip p-1 w-full h-[40px] rounded-xl flex flex-row items-center justify-between" >
             <Option
                 label="All Players"
                 current={viewType}
                 value="all"
                 onSelect={handleChange}
+                // icon={<Users className="w-4 h-4" />}
             />
             <Option
                 label="Scouting List"
                 current={viewType}
                 value="scouting-list"
                 onSelect={handleChange}
+                // icon={<Binoculars className="w-4 h-4" />}
             />
         </div>
     )
@@ -119,10 +120,11 @@ type OptionProps = {
     label?: string,
     value?: string,
     current?: string,
-    onSelect?: (val: string) => void
+    onSelect?: (val: string) => void,
+    icon?: ReactNode
 }
 
-function Option({ label, current, value, onSelect }: OptionProps) {
+function Option({ label, current, value, onSelect, icon }: OptionProps) {
 
     const isCurrent = current === value;
 
@@ -135,12 +137,14 @@ function Option({ label, current, value, onSelect }: OptionProps) {
     return (
         <div
             className={twMerge(
-                "flex-1 text-sm cursor-pointer h-full flex rounded-xl items-center justify-center",
-                isCurrent && AppColours.BACKGROUND,
+                "flex-1 text-xs cursor-pointer h-full flex flex-row gap-1 text-slate-700 dark:text-slate-300 rounded-xl items-center justify-center",
+                // isCurrent && AppColours.BACKGROUND,
+                isCurrent && "bg-blue-500 dark:bg-blue-600 text-white dark:text-white",
             )}
             onClick={handleOnClick}
         >
             <p className="">{label}</p>
+            {icon}
         </div>
     )
 }
