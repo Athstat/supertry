@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react';
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { formatCountdown } from '../../utils/countdown';
 import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
+import { Globe, Trophy, Users, ArrowUp } from 'lucide-react';
 
 type Props = {
   season?: IFantasySeason;
@@ -15,15 +16,8 @@ type Props = {
 
 export default function DashboardHero({ season }: Props) {
   const { authUser } = useAuth();
-  const {
-    hasTeam,
-    isLoading,
-    leagueGroupId,
-    currentRoundId,
-    currentGameweek,
-    nextDeadline,
-    userStats,
-  } = useDashboardTeamCheck(season);
+  const { hasTeam, isLoading, leagueGroupId, currentRoundId, currentGameweek, nextDeadline, userStats } =
+    useDashboardTeamCheck(season);
   const navigate = useNavigate();
 
   const teamUrl = useMemo(() => {
@@ -84,78 +78,115 @@ type TeamExistsViewProps = {
   nextDeadline?: Date;
 };
 
-function TeamExistsView({
-  season,
-  userStats,
-  teamUrl,
-  currentGameweek,
-  nextDeadline,
-}: TeamExistsViewProps) {
-  const { authUser } = useAuth();
+function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadline }: TeamExistsViewProps) {
   const navigate = useNavigate();
+  const { authUser } = useAuth();
 
   return (
-    <RoundedCard className="p-6 flex flex-col gap-4">
-      {/* Username */}
-      <div className="flex items-center justify-center gap-2">
-        <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600"></div>
-        <p className="font-medium">{authUser?.username || 'User'}</p>
-      </div>
+    <div className="relative w-full overflow-hidden shadow-md">
+      {/* Blue Gradient Background */}
+      <div
+        className="absolute inset-0 opacity-90"
+        style={{
+          background: 'linear-gradient(47deg, #1196F5 0%, #011E5C 100%)',
+        }}
+      />
 
-      {/* Title */}
-      <h1 className="text-xl font-bold text-center">
-        {abbreviateSeasonName(season.name)} Challenge
-      </h1>
-
-      {/* Stats Circles */}
-      <div className="flex justify-around items-center py-4">
-        {/* Local Rank */}
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-            <span className="font-bold text-lg">{userStats.localRankPercentile}%</span>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">local rank</p>
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center gap-4 py-6 px-2">
+        {/* Username Header */}
+        <div className="flex items-center gap-2">
+          <div className="text-2xl">👤</div>
+          <p className="text-white font-normal text-base">{authUser?.username || 'User'}</p>
         </div>
 
-        {/* Points */}
-        <div className="flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-            <div className="text-center">
-              <p className="font-bold text-xl">{userStats.totalPoints}</p>
+        {/* Title */}
+        <h1
+          className="text-center font-normal text-base leading-6 text-white"
+          style={{ fontFamily: 'Oswald, sans-serif' }}
+        >
+          PLAY URC FANTASY
+          <br />
+          {abbreviateSeasonName(season.name).toUpperCase()} CHALLENGE
+        </h1>
+
+        {/* Stats Card with Internal Border and Round */}
+        <div
+          className="w-full max-w-sm bg-[#011E5C]/80 rounded-lg pt-4 pb-2 flex flex-col gap-3"
+          style={{ backdropFilter: 'blur(4px)' }}
+        >
+          {/* Top: Stats Row */}
+          <div className="flex items-end gap-4">
+            {/* Global Rank */}
+            <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
+              <Globe className="w-6 h-6 text-white" />
+              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
+                #{userStats.rank}<span className="text-xs text-white">/1653</span>
+              </p>
+            </div>
+
+            {/* Points (Center - Larger & Elevated) */}
+            <div className="flex-1 flex flex-col items-center gap-1.5">
+              <Trophy className="w-6 h-6 text-white" />
+              <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Oswald, sans-serif', marginBottom: -5 }}>
+                {userStats.totalPoints}
+              </p>
+              <p className="text-xs text-white" style={{ marginBottom: -5 }}>points</p>
+            </div>
+
+            {/* League Rank */}
+            <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
+              <Users className="w-6 h-6 text-white" />
+              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
+                #{userStats.localRankPercentile}<span className="text-xs text-white">/16</span>
+              </p>
             </div>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">points</p>
-          <p className="text-md font-bold text-gray-600 dark:text-gray-500">
+
+          {/* Labels Row with Inline Border */}
+          <div className="flex items-center">
+            {/* Left Label - matches left stat column width */}
+            <div className="flex-1 flex justify-center">
+              <p className="text-xs text-[#E2E8F0]">global rank</p>
+            </div>
+
+            {/* Center: Border Line - matches center stat column width */}
+            <div className="flex-1 flex flex-col items-center gap-0.5">
+              <div className="w-[130%] border-t border-[#1196F5]"></div>
+            </div>
+
+            {/* Right Label - matches right stat column width */}
+            <div className="flex-1 flex justify-center">
+              <p className="text-xs text-white">league rank</p>
+            </div>
+          </div>
+
+          {/* Round Indicator (inside card) */}
+          <p className="text-sm font-semibold text-[#1196F5] text-center -mt-4">
             Round {currentGameweek || '—'}
           </p>
         </div>
 
-        {/* Global Rank */}
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-            <span className="font-bold text-lg">#{userStats.rank}</span>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">global rank</p>
-        </div>
-      </div>
+        {/* Deadline */}
+        {nextDeadline && (
+          <>
+            <div className="w-full max-w-sm border-t border-white/50"></div>
+            <p className="text-sm text-white text-center">
+              Round {(currentGameweek || 0) + 1} Deadline:{' '}
+              <span className="font-bold">{formatCountdown(nextDeadline)}</span>
+            </p>
+          </>
+        )}
 
-      {/* Gameweek Countdown */}
-      {/* {currentGameweek && nextDeadline && (
-        <div className="text-center">
-          <p className="text-sm">
-            <span className="font-semibold">Gameweek {currentGameweek + 1}</span> opens in{' '}
-            <span className="font-semibold">{formatCountdown(nextDeadline)}</span>
-          </p>
-        </div>
-      )} */}
-
-      <div className="flex justify-center">
         {/* Manage Team Button */}
-        <PrimaryButton className="w-fit flex-shrink-0" onClick={() => navigate(teamUrl)}>
-          Manage my team
-        </PrimaryButton>
+        <button
+          onClick={() => navigate(teamUrl)}
+          className="px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
+        >
+          PLAY
+        </button>
       </div>
-    </RoundedCard>
+    </div>
   );
 }
 
@@ -167,23 +198,12 @@ type FirstTimeUserViewProps = {
   teamUrl: string;
 };
 
-function FirstTimeUserView({
-  season,
-  currentGameweek,
-  nextDeadline,
-  username,
-  teamUrl,
-}: FirstTimeUserViewProps) {
+function FirstTimeUserView({ season, currentGameweek, nextDeadline, username, teamUrl }: FirstTimeUserViewProps) {
   const navigate = useNavigate();
   const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
 
   // Check if the gameweek is still open (before deadline)
-  // Convert nextDeadline to Date object if it's a string
   const isGameweekOpen = nextDeadline ? new Date() < new Date(nextDeadline) : true;
-
-  // Debug logging
-  console.log('FirstTimeUserView - nextDeadline:', nextDeadline);
-  console.log('FirstTimeUserView - isGameweekOpen:', isGameweekOpen);
 
   return (
     <>
@@ -236,10 +256,7 @@ function FirstTimeUserView({
         </div>
       </RoundedCard>
 
-      <ScrummyGamePlayModal
-        isOpen={isHowToPlayModalOpen}
-        onClose={() => setIsHowToPlayModalOpen(false)}
-      />
+      <ScrummyGamePlayModal isOpen={isHowToPlayModalOpen} onClose={() => setIsHowToPlayModalOpen(false)} />
     </>
   );
 }
