@@ -124,7 +124,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
             </div>
 
-            <div className="bg-green-900 h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+            <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
                 <p className="text-[10px] font-medium" >{formatPosition(player.position_class)}</p>
             </div>
 
