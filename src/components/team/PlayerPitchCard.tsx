@@ -124,7 +124,9 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
             </div>
 
-
+            <div className="bg-green-900 h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+                <p className="text-[10px] font-medium" >{formatPosition(player.position_class)}</p>
+            </div>
 
         </div>
 
@@ -234,6 +236,10 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
             {/* <div className="min-h-[14px] max-h-[14px] w-full" >
 
             </div> */}
+
+            <div className="min-h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+                
+            </div>
         </div>
     );
 }
