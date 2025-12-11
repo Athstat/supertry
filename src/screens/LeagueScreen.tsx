@@ -12,19 +12,20 @@ import LeagueGroupScreenHeader from '../components/fantasy-league/LeagueGroupScr
 import RoundedCard from '../components/shared/RoundedCard';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
+import PitchViewLoadingSkeleton from '../components/fantasy-leagues/my-team/PitchViewLoadingSkeleton';
 
 export function FantasyLeagueScreen() {
   const { leagueId } = useParams();
 
   return (
-    <FantasyLeagueGroupDataProvider loadingFallback={<LoadingSkeleton />} leagueId={leagueId}>
+    <FantasyLeagueGroupDataProvider loadingFallback={<LeagueScreenLoadingSkeleton />} leagueId={leagueId}>
       <Content />
     </FantasyLeagueGroupDataProvider>
   );
 }
 
 function Content() {
-  
+
   /** Auto Hides Top Bar to Maximise screen space */
   useHideTopNavBar();
   useHideBottomNavBar();
@@ -53,33 +54,23 @@ function Content() {
   );
 }
 
-function LoadingSkeleton() {
+function LeagueScreenLoadingSkeleton() {
   useHideTopNavBar();
   useHideBottomNavBar();
 
   return (
-    <PageView className="p-4 animate-pulse overflow-hidden flex flex-col gap-4">
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <RoundedCard className="border-none w-[30px] h-[25px] " />
-          <RoundedCard className="border-none w-[100px] h-[25px] " />
+    <PageView className="animate-pulse overflow-hidden flex flex-col gap-4">
+
+      <div className='px-4' >
+        <div className="flex flex-row pt-4 relative items-center justify-center">
+
+          <RoundedCard className="border-none absolute left-0 rounded-full w-[30px] h-[30px] " />
+          <RoundedCard className="border-none w-[100px] h-[30px] " />
+          <RoundedCard className="border-none absolute w-[100px] right-0 h-[30px] " />
         </div>
-
-        <RoundedCard className="border-none w-[100px] h-[40px] " />
       </div>
 
-      <div className="flex flex-row items-center gap-2">
-        <RoundedCard className="border-none w-[100px] h-[25px] " />
-        <RoundedCard className="border-none w-[100px] h-[25px] " />
-        <RoundedCard className="border-none w-[90px] h-[25px] " />
-        <RoundedCard className="border-none w-[70px] h-[25px] " />
-      </div>
-
-      <div className="flex flex-col items-center gap-2">
-        <RoundedCard className="border-none w-full h-[100px] " />
-        <RoundedCard className="border-none w-full h-[500px] " />
-        <RoundedCard className="border-none w-full h-[40px] " />
-      </div>
+      <PitchViewLoadingSkeleton />
     </PageView>
   );
 }

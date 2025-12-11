@@ -76,7 +76,7 @@ function MyTeamModeSelector() {
   }, [isLocked, round, roundTeam]);
 
   // Wait for leagueConfig to load to prevent error flash
-  if (!leagueConfig || isLoading) {
+  if (!(isLoading)) {
     return <PitchViewLoadingSkeleton />;
   }
 
