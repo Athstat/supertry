@@ -95,9 +95,9 @@ function InnerProvider({ children }: Props) {
 
   return (
     <Fragment>
-      <Activity mode={isLoadingDebounced ? 'hidden' : 'visible'}>{children}</Activity>
+      <Activity mode={!isLoadingDebounced ? 'hidden' : 'visible'}>{children}</Activity>
 
-      <Activity mode={isLoadingDebounced ? 'visible' : 'hidden'}>
+      <Activity mode={!isLoadingDebounced ? 'visible' : 'hidden'}>
         <LoadingSkeleton />
       </Activity>
     </Fragment>
