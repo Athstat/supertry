@@ -8,6 +8,8 @@ import { Check, Loader } from "lucide-react";
 import { Toast } from "../../ui/Toast";
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
 import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
+import { twMerge } from "tailwind-merge";
+import { AppColours } from "../../../types/constants";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -138,7 +140,10 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             {
                 showSuccessModal && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-                        <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+                        <div className={twMerge(
+                            "bg-white rounded-xl w-full max-w-md p-6",
+                            AppColours.BACKGROUND
+                        )}>
                             <div className="text-center">
                                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
                                     <Check size={32} />
@@ -168,7 +173,10 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             {
                 isSaving && !showSuccessModal && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-                        <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
+                        <div className={twMerge(
+                            "bg-white rounded-xl w-full max-w-md p-6",
+                            AppColours.BACKGROUND
+                        )}>
                             <div className="text-center">
                                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full text-primary-500 dark:text-primary-400">
                                     <Loader className="w-10 h-10 animate-spin" />
