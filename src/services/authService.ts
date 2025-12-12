@@ -318,7 +318,7 @@ export const authService = {
 
       if (res.ok) {
         const updatedUser = (await res.json()) as DjangoAuthUser;
-
+        console.log('Updated user (device sync): ', updatedUser);
         authTokenService.saveUserToLocalStorage(updatedUser);
         await mutate(swrFetchKeys.getAuthUserProfileKey());
         return updatedUser;

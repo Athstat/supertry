@@ -73,15 +73,6 @@ export function useFantasyLeagueGroup() {
     return league?.type === 'official_league';
   }, [league]);
 
-  const previousRound = useMemo(() => {
-    if (currentRound) {
-      const prevRoundNum = (currentRound.start_round || 0) - 1;
-      return rounds.find((r) => r.start_round === prevRoundNum);
-    }
-
-    return undefined;
-  }, [currentRound, rounds]);
-
   return {
     league,
     members,
@@ -96,6 +87,5 @@ export function useFantasyLeagueGroup() {
     isOfficialLeague,
     leagueConfig,
     isLoading,
-    previousRound
   };
 }

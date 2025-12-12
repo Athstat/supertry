@@ -25,11 +25,12 @@ export default function FixtureHero({ fixture }: Props) {
   }
 
   return (
-    <div className="w-full rounded-none h-44 ">
+    <div className="w-full rounded-none h-44 bg-gradient-to-br ">
       <div
         className={twMerge(
           'flex p-2 cursor-pointer w-full  flex-row items-center justify-start',
           'flex flex-row items-center justify-center relative'
+          // " dark:bg-dark-800/30 relative"
         )}
         
       >
@@ -51,7 +52,9 @@ export default function FixtureHero({ fixture }: Props) {
 
       <div
         className={twMerge(
-          'flex p-4   dark:border-slate-700/40 flex-row h-max items-center justify-center w-full'
+          'flex p-4  dark:bg-[#0D0D0D]  dark:border-slate-700/40 flex-row h-max items-center justify-center w-full '
+          // "dark:bg-gradient-to-r dark:from-gray-800/40 dark:via-[#0D0D0D] dark:to-gray-800/40",
+          // "bg-gradient-to-r from-slate-100 via-white to-slate-100"
         )}
       >
         <FixtureScreenTeamLogoAndRecord

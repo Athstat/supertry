@@ -17,7 +17,6 @@ import { twMerge } from "tailwind-merge";
 import TeamJersey from "../player/TeamJersey";
 import { Activity } from "../shared/Activity";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
-import MatchPrCard from "../rankings/MatchPrCard";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -136,20 +135,17 @@ export function PlayerActionModal({
 
           <div className="flex flex-col items-center justify-center" >
             <div className="flex flex-row items-center gap-1" >
-              <p className="text-lg" >{player.purchase_price}</p>
               <Coins className="text-yellow-500 w-6 h-6" />
+              <p className="text-lg" >{player.purchase_price}</p>
             </div>
-
             <SecondaryText>
               Purchase Price
             </SecondaryText>
-            <SecondaryText>(Scrum Coins)</SecondaryText>
-
           </div>
 
-          <div className="flex flex-col items-center justify-end gap-1" >
-            <MatchPrCard className="text-xl w-10 h-10" pr={player.power_rank_rating} />
-            <SecondaryText className="text-xs" >Power Ranking</SecondaryText>
+          <div className="flex flex-col items-center justify-end" >
+            <p className="text-xl font-bold" >{player.power_rank_rating}</p>
+            <SecondaryText>Power Ranking</SecondaryText>
           </div>
         </div>
 

@@ -1,11 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
-import LeagueAndStandingsSection from '../fantasy-leagues/join_league_screen/other_leagues_section/LeagueAndStandingsSection';
-import ManageTeamCTA from '../fantasy-leagues/join_league_screen/showcase_section/ManageTeamCTA';
+import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
+import OtherLeaguesSection from '../fantasy-leagues/join_league_screen/other_leagues_section/OtherLeaguesSection';
+import ShowcaseLeagueSection from '../fantasy-leagues/join_league_screen/showcase_section/ShowcaseLeagueSection';
 import RoundedCard from '../shared/RoundedCard';
-import { swrFetchKeys } from '../../utils/swrKeys';
-import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
 
 type Props = {
   fantasySeason: IFantasySeason
@@ -13,39 +12,80 @@ type Props = {
 
 /** Serves a dashboard for a fantasy season */
 export function FantasyCompetitionDashboard({ fantasySeason }: Props) {
+  // Tabs state (persist between visits)
+  // const [activeTab, setActiveTab] = useQueryState<'my' | 'discover' | 'code'>('active_tab', {
+  //   init: 'my'
+  // });
 
-  const key = swrFetchKeys.getFantasySeasonFeaturedGroup(fantasySeason.id);
-  const {data: fetchedFeatured, isLoading} = useSWR(key, () => fantasySeasonsService.getFeaturedLeagueGroups(fantasySeason.id));
+  const key = `/user-joined-leagues/${fantasySeason.id}`;
 
-  const featuredGroup = useMemo(() => {
-    const res = (fetchedFeatured || []);
-
-    if (res.length > 0) {
-      return res[0];
-    }
-
-    return undefined;
-  }, [fetchedFeatured]);
+  const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
+    key, () => fantasyLeagueGroupsFetcher(fantasySeason.id), {
+    revalidateOnFocus: false
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const leagues = useMemo(() => (fetchedLeagues ?? []), [fetchedLeagues]);
+  const isLoading = loadingUserLeagues;
+
+  const showcaseLeague = useMemo(() => {
+    return leagues.find((l) => {
+      return l.type === 'official_league';
+    });
+  }, [leagues]);
+
+  console.log("Showcase Leagues ", showcaseLeague);
+
+  const otherLeagues = useMemo(() => {
+    return leagues.filter(() => {
+      return true;
+    })
+  }, [leagues]);
+
   if (isLoading) {
     return (
-      <LoadingSkeleton />
+      <div className='flex flex-col gap-6' >
+        <div className='flex flex-row items-center justify-between' >
+          <div className='flex flex-col gap-1' >
+            <RoundedCard className='w-[100px] h-[25px] rounded-xl border-none' />
+            <RoundedCard className='w-[60px] h-[20px] rounded-xl border-none' />
+          </div>
+
+          <div>
+            <RoundedCard className='w-[40px] h-[30px] border-none rounded-xl animate-pulse' />
+          </div>
+        </div>
+
+        <div className='flex flex-col gap-2' >
+          <RoundedCard className='w-full h-[100px] border-none rounded-xl animate-pulse' />
+        </div>
+
+        <div className='flex flex-col gap-3' >
+          <div className='flex flex-row items-center justify-between' >
+            <RoundedCard className='w-[100px] h-[30px] border-none rounded-xl animate-pulse' />
+            <RoundedCard className='w-[100px] h-[30px] border-none rounded-xl animate-pulse' />
+          </div>
+          <RoundedCard className='w-full h-[60px] mt-5 border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
+          <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
+        </div>
+      </div>
     )
   }
 
   return (
     <div className="flex flex-col gap-8">
 
-      {featuredGroup && <ManageTeamCTA
-        leagueGroup={featuredGroup}
+      {showcaseLeague && <ShowcaseLeagueSection
+        leagueGroup={showcaseLeague}
       />}
 
-      <LeagueAndStandingsSection
-        fantasySeason={fantasySeason}
+      <OtherLeaguesSection
+        joinedLeagues={otherLeagues}
       />
 
 
@@ -53,36 +93,11 @@ export function FantasyCompetitionDashboard({ fantasySeason }: Props) {
   );
 }
 
+async function fantasyLeagueGroupsFetcher(seasonId: string) {
+  const joinedLeagues = await fantasyLeagueGroupsService.getJoinedLeagues(seasonId);
+  const mineLeagues = await fantasyLeagueGroupsService.getMyCreatedLeagues(seasonId);
 
+  const aggregate = [...mineLeagues, ...joinedLeagues];
 
-function LoadingSkeleton() {
-  return (
-    <div className='flex flex-col gap-6' >
-      <div className='flex flex-row items-center justify-between' >
-        <div className='flex flex-col gap-1' >
-          <RoundedCard className='w-[100px] h-[25px] rounded-xl border-none' />
-          <RoundedCard className='w-[60px] h-[20px] rounded-xl border-none' />
-        </div>
-
-        <div>
-          <RoundedCard className='w-[40px] h-[30px] border-none rounded-xl animate-pulse' />
-        </div>
-      </div>
-
-      <div className='flex flex-col gap-2' >
-        <RoundedCard className='w-full h-[100px] border-none rounded-xl animate-pulse' />
-      </div>
-
-      <div className='flex flex-col gap-3' >
-        <div className='flex flex-row items-center justify-between' >
-          <RoundedCard className='w-[100px] h-[30px] border-none rounded-xl animate-pulse' />
-          <RoundedCard className='w-[100px] h-[30px] border-none rounded-xl animate-pulse' />
-        </div>
-        <RoundedCard className='w-full h-[60px] mt-5 border-none rounded-xl animate-pulse' />
-        <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
-        <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
-        <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
-      </div>
-    </div>
-  )
+  return aggregate;
 }

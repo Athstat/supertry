@@ -255,10 +255,9 @@ export function useFantasyLeagueTeam() {
 
     const resetToOriginalTeam = useCallback(() => {
 
-        const ogTeamAthletes = team?.athletes || [];
         const slots = defaultFantasyPositions.map((p, index) => {
 
-            const slotAthlete = ogTeamAthletes.find((a) => a.slot === index + 1);
+            const slotAthlete = teamAthletes.find((a) => a.slot === index + 1);
             const slotNumber = slotAthlete?.slot ?? (index + 1);
 
             const slot: IFantasyLeagueTeamSlot = {

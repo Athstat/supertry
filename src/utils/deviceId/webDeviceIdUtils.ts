@@ -17,7 +17,10 @@ export function getWebDeviceId() : DeviceIdPair {
         }
 
         localStorage.setItem('device_id', webDeviceId);
+        console.log('New device ID for web: ', webDeviceId);
     }
+
+    console.log('deviceId exists in local storage: ', webDeviceId);
 
     return {storedDeviceId: webDeviceId, realDeviceId: webDeviceId}
 }

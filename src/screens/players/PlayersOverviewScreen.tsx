@@ -1,4 +1,4 @@
-import { ArrowRight, BicepsFlexed, Binoculars, Shield, Users, WandSparkles } from 'lucide-react'
+import { ArrowRight, BicepsFlexed, Shield, Users, WandSparkles } from 'lucide-react'
 import PageView from '../PageView'
 import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
@@ -11,20 +11,14 @@ import { PositionClass } from '../../types/athletes'
 import { useNavigate } from 'react-router-dom'
 import { FastForward } from 'lucide-react'
 import { TrendingUpDown } from 'lucide-react'
-import NewTag from '../../components/branding/NewTag'
-import { useDebounced } from '../../hooks/useDebounced'
-import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars'
-import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 
 export default function PlayersOverviewScreen() {
 
-  useHideTopNavBar();
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
-  const debouncedQuery = useDebounced(searchQuery, 500);
 
 
   return (
-    <PageView className='px-6 flex flex-col gap-4 py-4' >
+    <PageView className='px-6 flex flex-col gap-4' >
       <div>
         <div className='flex flex-row items-center gap-2' >
           <Users />
@@ -39,13 +33,13 @@ export default function PlayersOverviewScreen() {
         />
       </div>
 
-      <Activity mode={debouncedQuery ? "hidden" : "visible"} >
+      <Activity mode={searchQuery ? "hidden" : "visible"} >
         <Content />
       </Activity>
 
-      <Activity mode={debouncedQuery ? "visible" : "hidden"} >
+      <Activity mode={searchQuery ? "visible" : "hidden"} >
         <PlayerSearchResults
-          searchQuery={debouncedQuery}
+          searchQuery={searchQuery}
         />
       </Activity>
 
@@ -66,16 +60,12 @@ function Content() {
     navigate(`/players/position-class/${positionClass}`);
   }
 
-  const handleViewScoutingList = () => {
-    navigate(`/scouting/my-list`);
-  }
-
   return (
     <Fragment>
-      <div className='flex flex-col gap-2' >
+      <div>
 
         <RoundedCard
-          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
+          className='flex cursor-pointer py-2 px-4 dark:border-none flex-row items-center gap-2 justify-between'
           onClick={handleViewAll}
         >
           <p className='text-sm' >View All Players</p>
@@ -83,23 +73,6 @@ function Content() {
             <ArrowRight />
           </div>
         </RoundedCard>
-
-
-        <RoundedCard
-          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
-          onClick={handleViewScoutingList}
-        >
-
-          <div className='flex flex-row items-center gap-2' >
-            <Binoculars />
-            <p className='text-sm' >View Scouting List</p>
-            <NewTag showUntil={new Date('15-12-2025')} />
-          </div>
-
-          <ArrowRight />
-
-        </RoundedCard>
-
 
       </div>
 
@@ -148,11 +121,6 @@ function Content() {
           icon={<FastForward className='w-20 h-20 text-blue-500' />}
         />
       </div>
-
-      <div>
-        <p className='font-bold text-md' >By Team</p>
-      </div>
-      <PlayersTeamsGridList />
 
       <div>
         <p className='font-bold text-md' >By Country</p>

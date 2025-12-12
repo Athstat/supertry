@@ -1,18 +1,15 @@
 import { useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { RugbyPitch3DRaster } from '../shared/RugbyPitch';
+import { RugbyPitch3D } from '../shared/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 import { useFantasyLeagueTeam } from '../fantasy-leagues/my-team/FantasyLeagueTeamProvider';
-import { twMerge } from 'tailwind-merge';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
-  marginCN?: string,
-  firstRowMargin?: string
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
+export function TeamFormation3D({ onPlayerClick}: TeamFormationProps) {
 
   const {slots, leagueRound: round} = useFantasyLeagueTeam();
 
@@ -35,19 +32,13 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
   }
 
   return (
-    <div className="relative  w-full mt-10  flex flex-col justify-center">
+    <div className="relative w-full flex flex-col justify-center">
 
-      <RugbyPitch3DRaster className={twMerge(
-        'mt-12',
-        marginCN
-      )} />
+      <RugbyPitch3D />
 
-      <div className='top-0 left-0 absolute w-full p-3 flex flex-col gap-6' >
+      <div className='top-0 left-0 absolute w-full p-4 flex flex-col gap-6' >
 
-        <div className={twMerge(
-          'flex mt-20 flex-row items-center gap-4 justify-center',
-          firstRowMargin
-        )} >
+        <div className='flex flex-row items-center gap-2 justify-center' >
           {firstRowSlots.map((s) => {
 
             const { athlete } = s;
@@ -72,7 +63,7 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
 
         </div>
 
-        <div className='flex flex-row items-center gap-3 justify-center' >
+        <div className='flex flex-row items-center gap-2 justify-center' >
           {lastRowSlots.map((s) => {
 
             const { athlete } = s;

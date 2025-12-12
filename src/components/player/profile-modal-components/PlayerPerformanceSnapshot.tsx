@@ -1,9 +1,6 @@
-import { useMemo } from 'react';
 import { IProAthlete } from '../../../types/athletes';
 import usePowerRankings from './usePowerRankings';
-import RoundedCard from '../../shared/RoundedCard';
-import SecondaryText from '../../shared/SecondaryText';
-import MatchPrCard from '../../rankings/MatchPrCard';
+import { Trophy, Hash } from 'lucide-react';
 
 type Props = {
   player: IProAthlete;
@@ -17,74 +14,56 @@ export default function PlayerPerformanceSnapshot({ player }: Props) {
   const avgPR =
     powerRankings && powerRankings.length > 0
       ? (
-        powerRankings.reduce((sum, item) => sum + item.updated_power_ranking, 0) /
-        powerRankings.length
-      ).toFixed(1)
+          powerRankings.reduce((sum, item) => sum + item.updated_power_ranking, 0) /
+          powerRankings.length
+        ).toFixed(1)
       : null;
 
-  const bestMatch = useMemo(() => {
-    return powerRankings && powerRankings.length > 0
+  const bestMatch =
+    powerRankings && powerRankings.length > 0
       ? Math.max(...powerRankings.map(item => item.updated_power_ranking))
       : null;
-  }, [powerRankings]);
 
   const totalMatches = powerRankings?.length || 0;
-
-  const average = useMemo(() => {
-
-    if (totalMatches === 0) {
-      return undefined;
-    }
-
-    const totalPr = powerRankings.reduce((sum, curr) => {
-      return sum + curr.updated_power_ranking;
-    }, 0);
-
-    return (totalPr) / (totalMatches)
-  }, [totalMatches, powerRankings]);
-
-  const worstMatch = useMemo(() => {
-    return powerRankings && powerRankings.length > 0
-      ? Math.min(...powerRankings.map(item => item.updated_power_ranking))
-      : null;
-  }, [powerRankings]);
 
   if (!avgPR && !bestMatch && totalMatches === 0) {
     return null;
   }
 
   return (
-    <RoundedCard className="flex flex-col gap-4  flex-wrap p-4">
-
-      <div>
-        <p className='font-semibold text-sm' >Summary (Last {totalMatches} Games)</p>
-      </div>
-
-      <div className='flex flex-row items-center justify-between' >
-
-        <div className='flex flex-col gap-1 items-center justify-center flex-1' >
-          <SecondaryText>Best PR</SecondaryText>
-          {bestMatch && <MatchPrCard
-            pr={bestMatch}
-          />}
+    <div className="flex flex-row gap-3 flex-wrap">
+      {/* Average PR */}
+      {/* {avgPR && (
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 backdrop-blur-sm ring-1 ring-blue-500/30 shadow-lg shadow-blue-500/10">
+          <Activity className="w-4 h-4 text-blue-400" />
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-400">Avg PR</span>
+            <span className="text-sm font-bold text-white">{avgPR}</span>
+          </div>
         </div>
+      )} */}
 
-        <div className='flex flex-col gap-1 items-center justify-center flex-1' >
-          <SecondaryText>Average PR</SecondaryText>
-          {average && <MatchPrCard
-            pr={average}
-          />}
+      {/* Best Match */}
+      {bestMatch && (
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/20 backdrop-blur-sm ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/10">
+          <Trophy className="w-4 h-4 text-amber-400" />
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-800 dark:text-slate-400">Best Match</span>
+            <span className="text-sm font-bold text-yellow-700 dark:text-white">PR: {bestMatch}</span>
+          </div>
         </div>
+      )}
 
-        <div className='flex flex-col gap-1 items-center justify-center flex-1' >
-          <SecondaryText>Worst PR</SecondaryText>
-          {worstMatch && <MatchPrCard
-            pr={worstMatch}
-          />}
+      {/* Total Matches */}
+      {totalMatches > 0 && (
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 backdrop-blur-sm ring-1 ring-green-500/30 shadow-lg shadow-green-500/10">
+          <Hash className="w-4 h-4 text-green-400" />
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-800 dark:text-slate-400">Total Matches</span>
+            <span className="text-sm font-bold text-green-800 dark:text-white">{totalMatches}</span>
+          </div>
         </div>
-
-      </div>
-
-    </RoundedCard>
+      )}
+    </div>
   );
 }

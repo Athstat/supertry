@@ -176,17 +176,5 @@ export const swrFetchKeys = {
 
   getAthleteFixtureSportsActions: (fixtureId: string, athleteId: string) => {
     return `/fixtures/${fixtureId}/sports-actions/athletes/${athleteId}`;
-  },
-
-  getPlayerPointsHistory: (seasonId: string, athleteId: string) => {
-    return `seasons/${seasonId}/athletes/${athleteId}/points-history`;
-  },
-
-  getScoutingListPlayer: (athleteId: string) => {
-    return `/fantasy/scouting/my-list/check/${athleteId}`;
-  },
-
-  getFantasySeasonFeaturedGroup: (fantasySeasonId: string) => {
-    return `/api/v1/fantasy-seasons/${fantasySeasonId}/fantasy-league-groups/featured`;
   }
 };

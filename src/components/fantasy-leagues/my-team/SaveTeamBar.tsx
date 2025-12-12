@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { fantasyTeamService } from "../../../services/fantasyTeamService";
@@ -8,8 +8,6 @@ import { Check, Loader } from "lucide-react";
 import { Toast } from "../../ui/Toast";
 import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
 import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
-import { twMerge } from "tailwind-merge";
-import { AppColours } from "../../../types/constants";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -68,7 +66,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     return {
                         athlete_id: a.athlete_id,
                         slot,
-                        purchase_price: s.purchasePrice || (a).price || a.purchase_price || 0,
+                        purchase_price: s.purchasePrice || (a as any).price || a.purchase_price || 0,
                         is_starting: slot !== 6,
                         is_captain: s.isCaptain,
                     };
@@ -105,20 +103,20 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
     };
 
     return (
-        <div className="max-h-[50px] min-h-[50px]" >
+        <Fragment>
 
-            {isEditing && <div className="mt-4 flex-col gap-2 relative z-[50]">
-                <div className="flex gap-2 flex-row items-center justify-center">
+            {isEditing && <div className="mt-3 flex-col gap-2  relative z-[50]">
+                <div className="flex gap-2">
                     <button
                         type="button"
                         onClick={handleCancelEdits}
                         disabled={isSaving}
-                        className="w-[150px] text-xs rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40"
+                        className="w-1/2 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-200 px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40"
                     >
                         Cancel
                     </button>
                     <PrimaryButton
-                        className="w-[150px] text-xs"
+                        className="w-1/2"
                         disabled={isSaving || !leagueRound?.is_open || !isTeamFull}
                         onClick={buildPayloadAndSave}
                     >
@@ -140,10 +138,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             {
                 showSuccessModal && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-                        <div className={twMerge(
-                            "bg-white rounded-xl w-full max-w-md p-6",
-                            AppColours.BACKGROUND
-                        )}>
+                        <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
                             <div className="text-center">
                                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
                                     <Check size={32} />
@@ -173,10 +168,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             {
                 isSaving && !showSuccessModal && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-                        <div className={twMerge(
-                            "bg-white rounded-xl w-full max-w-md p-6",
-                            AppColours.BACKGROUND
-                        )}>
+                        <div className="bg-white dark:bg-dark-850 rounded-xl w-full max-w-md p-6">
                             <div className="text-center">
                                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full text-primary-500 dark:text-primary-400">
                                     <Loader className="w-10 h-10 animate-spin" />
@@ -191,6 +183,6 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                 )
             }
 
-        </div>
+        </Fragment>
     )
 }

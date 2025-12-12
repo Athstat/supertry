@@ -88,7 +88,6 @@ export default function PlayersCountryGridList() {
                     <CountryCard
                         countryName={c}
                         onClick={onClick}
-                        key={c}
                     />
                 )
             })}

@@ -4,7 +4,7 @@ import { IProSeason } from "../../../types/season";
 
 export const abbreviateSeasonName = (seasonName: string): string => {
     if (seasonName.startsWith("United Rugby Championship")) {
-        return seasonName.replace("United Rugby Championship", "");
+        return seasonName.replace("United Rugby Championship", "URC");
     }
     if (seasonName.startsWith("EPCR Challenge Cup")) {
         return seasonName.replace("EPCR Challenge Cup", "EPRC");
@@ -61,8 +61,9 @@ export default function PlayerCompareSeasonPicker({ seasons, currSeason, setCurr
                     {currSeason ? abbreviateSeasonName(currSeason.name) : "Select Season"}
                 </span>
                 <ChevronDown
-                    className={`h-4 w-4 transition-transform flex-shrink-0 ml-2 ${isOpen ? "rotate-180" : ""
-                        }`}
+                    className={`h-4 w-4 transition-transform flex-shrink-0 ml-2 ${
+                        isOpen ? "rotate-180" : ""
+                    }`}
                 />
             </button>
 

@@ -1,5 +1,5 @@
 import { IFantasySeason } from "../../types/fantasy/fantasySeason";
-import { FantasyLeagueGroup, FantasyPointsScoredRankingItem, IPlayerPercentageSelected, MostSelectedRankingItem, PlayerPointsHistoryItem, PlayerSportActionRankingItem } from "../../types/fantasyLeagueGroups";
+import { FantasyLeagueGroup, FantasyPointsScoredRankingItem, MostSelectedRankingItem, PlayerSportActionRankingItem } from "../../types/fantasyLeagueGroups";
 import { getAuthHeader, getUri } from "../../utils/backendUtils";
 import { logger } from "../logger";
 
@@ -41,7 +41,7 @@ export const fantasySeasonsService = {
         return undefined;
     },
 
-    getFeaturedLeagueGroups: async (id: string) : Promise<FantasyLeagueGroup[]> => {
+    getFantasySeasonFeaturedLeagues: async (id: string) : Promise<FantasyLeagueGroup[]> => {
         try {
             const uri = getUri(`/api/v1/fantasy-seasons/${id}/fantasy-league-groups/featured`);
             const res = await fetch(uri, {
@@ -109,43 +109,6 @@ export const fantasySeasonsService = {
             }
         } catch (err) {
             logger.error("Error fetching sport action ranking for ", actionName, err);
-        }
-
-        return [];
-    },
-
-    getPlayerPercentageSelected: async (seasonId: string, athleteId: string) : Promise<IPlayerPercentageSelected | undefined> => {
-        try {
-
-            const uri = getUri(`/api/v1/fantasy-seasons/${seasonId}/player-rankings/by-most-selected/${athleteId}`);
-            const res = await fetch(uri, {
-                headers: getAuthHeader(),
-            });
-
-            if (res.ok) {
-                return (await res.json()) as IPlayerPercentageSelected
-            }
-
-        } catch (err) {
-            logger.error("Error Player Percentage Selected ", err);
-        }
-
-        return undefined;
-    },
-
-    getPlayerPointsHistory: async (seasonId: string, athleteId: string, limit: number = 5) : Promise<PlayerPointsHistoryItem[]> => {
-        try {
-            const uri = getUri(`/api/v1/fantasy-seasons/${seasonId}/players/${athleteId}/points-history?limit=${limit}`);
-            const res = await fetch(uri, {
-                headers: getAuthHeader()
-            });
-
-            if (res.ok) {
-                return (await res.json()) as PlayerPointsHistoryItem[];
-            }
-
-        } catch (err) {
-            logger.error(`Error getting player points history `, err);
         }
 
         return [];

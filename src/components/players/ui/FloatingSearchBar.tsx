@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, ArrowRight, User } from 'lucide-react';
 
@@ -81,7 +81,7 @@ export default function FloatingSearchBar({
           'px-4 md:px-5',
           'flex items-center gap-3',
           'rounded-full',
-          'bg-white/95 dark:bg-dark-850/70',
+          'bg-white/95 dark:bg-dark-850/95',
           'border border-slate-200 dark:border-slate-700',
           'shadow-lg shadow-black/20',
         ].join(' ')}

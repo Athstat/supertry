@@ -5,8 +5,6 @@ import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 import { Activity } from './shared/Activity';
 import { House } from 'lucide-react';
 import { School } from 'lucide-react';
-import { twMerge } from 'tailwind-merge';
-import { AppColours } from '../types/constants';
 
 export function BottomNav() {
   const { bottomNavViewMode } = useNavigationBars();
@@ -79,10 +77,7 @@ export function BottomNav() {
 
   return (
     <Activity mode={bottomNavViewMode}>
-      <div className={twMerge(
-        "fixed bottom-0 left-0 right-0 bg-white backdrop-blur-sm z-[100] shadow-sm",
-        AppColours.BACKGROUND
-      )}>
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-dark-850 backdrop-blur-sm z-[100] shadow-sm">
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           {navItems.map(item => {
             const isActive = pathname === item.path || pathname.startsWith(`${item.path}/`);

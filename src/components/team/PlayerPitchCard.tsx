@@ -4,16 +4,16 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import SecondaryText from "../shared/SecondaryText";
 import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import { CirclePlus, TriangleAlert } from "lucide-react";
+import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
-import { sanitizeStat } from "../../utils/stringUtils";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;
@@ -22,6 +22,7 @@ type PlayerPitchCardProps = {
 };
 
 export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps) {
+    const { position_class } = player;
     const { viewMode } = useMyTeamView();
     const { league } = useFantasyLeagueGroup();
     const { teamCaptain } = useFantasyLeagueTeam();
@@ -68,65 +69,67 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
             <div
                 className={twMerge(
-                    'cursor-pointer rounded-lg ',
-                    "min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px]",
-                    'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col',
-                    player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
-                    !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
+                    'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px]',
+                    'min-w-[120px] max-w-[120px] flex flex-col',
+                    player.image_url && "bg-gradient-to-br from-green-500/30 to-green-500/60",
+                    !player.image_url && "bg-gradient-to-br from-green-500/20 to-green-500/20",
                     showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}
                 onClick={handleClick}
             >
 
-                <div className={twMerge(
-                    'flex-3 flex md:min-h-[100px] md:max-h-[100px] overflow-clip flex-col items-center justify-center w-full',
-                    "min-h-[100px] max-h-[100px]"
-                )} >
+                <div className='flex-3 flex overflow-clip flex-col items-center justify-center w-full' >
+                    {/* {player.image_url && <PlayerMugshot
+                        url={player.image_url}
+                        className='border-none rounded-none w-[100px] h-[100px] bg-transparent hover:bg-transparent'
+                        scrummyLogoClassName="dark:bg-transparent bg-transparent"
+                        showPrBackground={false}
+                        key={player.tracking_id}
+                    />} */}
 
                     {/* {!player.image_url && ( */}
-                    <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
-                        <TeamJersey
-                            teamId={player.athlete_team_id}
-                            useBaseClasses={false}
-                            className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
-                            scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
-                            hideFade
-                            key={player.tracking_id}
-                        />
-                    </div>
+                        <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
+                            <TeamJersey
+                                teamId={player.athlete_team_id}
+                                useBaseClasses={false}
+                                className="h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
+                                scummyLogoClassName="absolute top-0 left-0 w-[100px] h-full"
+                                hideFade
+                                key={player.tracking_id}
+                            />
+                        </div>
                     {/* )} */}
 
                 </div>
 
                 <div className={twMerge(
-                    'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] rounded-lg bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
-                    "dark:from-slate-700 dark:to-slate-800 dark:text-white",
-                    'min-h-[50px] max-h-[50px]'
+                    'flex-1 p-2 w-full items-center justify-center text-slate-800 dark:text-white  min-h-[30%] rounded-xl bg-gradient-to-br from-white to-slate-200 dark:from-slate-800 dark:to-dark-900',
+                    // showAvailabilityWarning && "dark:from-yellow-400 dark:to-yellow-500 dark:text-black"
                 )} >
 
-                    <div className='flex px-2 h-[25px] md:h-[25px] flex-col items-center justify-center' >
-                        <p className=' text-[10px] md:text-[11px] font-semibold' >{player.athstat_firstname}</p>
+                    <div className='flex flex-col items-center justify-center' >
+                        <p className=' text-[11px] font-semibold' >{player.athstat_firstname}</p>
                     </div>
 
-                    <div className={twMerge(
-                        'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
-                        "from-slate-200 to-slate-300",
-                        "dark:from-slate-600 dark:to-slate-700 dark:text-white",
-                    )} >
-
-                        <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
-                            <PlayerScoreIndicator
-                                player={player}
-                                round={round}
-                            />
-                        </Activity>
+                    <div className='flex flex-row items-center justify-center gap-2 divide-x-1 divide-red-500' >
+                        <SecondaryText className={twMerge(
+                            ' text-[10px]',
+                            // showAvailabilityWarning && "dark:text-black"
+                        )} >{position_class ? formatPosition(position_class) : ""}</SecondaryText>
+                        <div className="flex flex-row items-center gap-0.5" >
+                            <p className="text-[10px]" >{player.purchase_price}</p>
+                            <Coins className="w-2.5 h-2.5 text-yellow-500" />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
-                <p className="text-[10px] font-medium" >{formatPosition(player.position_class)}</p>
-            </div>
+            <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
+                <PlayerScoreIndicator
+                    player={player}
+                    round={round}
+                />
+            </Activity>
 
         </div>
 
@@ -179,16 +182,16 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
             <div className="min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row" >
                 <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
-                    <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+                    <p className="text-white text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway} </p>
                 </Activity>
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
-                    <p className="dark:text-yellow-200 text-[8px] md:text-[10px] font-medium text-yellow-300" >Not Playing ⚠️</p>
+                    <p className="dark:text-yellow-200 text-[10px] font-medium text-yellow-300" >Not Playing ⚠️</p>
                 </Activity>
 
                 <Activity mode={showScore ? 'visible' : 'hidden'}  >
                     <div>
-                        <p className='text-[10px] md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
+                        <p className='text-[10px] font-medium text-white' >{score.toFixed(1)}</p>
                     </div>
                 </Activity>
             </div>
@@ -215,29 +218,25 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
         <div className="flex flex-col items-center justify-center gap-1 relative">
             <div
                 className={twMerge(
-                    'overflow-hidden cursor-pointer rounded-lg min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px] bg-gradient-to-br from-green-900 to-green-900/60',
-                    'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col'
+                    'overflow-hidden cursor-pointer rounded-xl min-h-[150px] max-h-[150px] bg-gradient-to-br from-green-500/30 to-green-500/60',
+                    'min-w-[120px] max-w-[120px] flex flex-col'
                 )}
                 onClick={handleClick}
             >
                 <div className="flex-1 h-full flex overflow-clip flex-col items-center justify-center w-full gap-2">
                     <div>
-                        <CirclePlus className="w-10 text-white/90 h-10" />
+                        <CirclePlus className="w-10 text-white/50 h-10" />
                     </div>
 
                     <div>
-                        <p className="text-sm text-white/90">
+                        <p className="text-sm text-white/50">
                             {position_class ? formatPosition(position_class) : ''}
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* <div className="min-h-[14px] max-h-[14px] w-full" >
-
-            </div> */}
-
-            <div className="min-h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+            <div className="min-h-[14px] max-h-[14px] w-full" >
                 
             </div>
         </div>

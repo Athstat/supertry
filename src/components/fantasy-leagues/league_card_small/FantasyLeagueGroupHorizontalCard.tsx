@@ -1,9 +1,7 @@
-import useSWR from "swr";
-import { useAuth } from "../../../contexts/AuthContext";
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups";
 
 import RoundedCard from "../../shared/RoundedCard";
-import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
+import { ChevronRight } from "lucide-react";
 
 type Props = {
     leagueGroup: FantasyLeagueGroup,
@@ -12,12 +10,7 @@ type Props = {
 }
 
 /** Renders a fantasy league group card */
-export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
-
-    const { authUser } = useAuth();
-    const key = `/fantasy-league-groups/${leagueGroup.id}/members/${authUser?.kc_id}`;
-    const { data: userRanking, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getMemberRanking(leagueGroup.id, authUser?.kc_id || ""));
-
+export function FantasyLeagueGroupHorizontalCard({ leagueGroup, onClick }: Props) {
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
@@ -27,6 +20,14 @@ export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
         }
 
         return <Badge variant="success">Public</Badge>;
+
+        // if (league.has_ended) {
+        //   return <Badge variant="secondary">Ended</Badge>;
+        // } else if (league.is_open) {
+        //   return 
+        // } else {
+        //   return <Badge variant="destructive">Locked</Badge>;
+        // }
     };
 
     const handleOnClick = () => {
@@ -36,33 +37,44 @@ export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
     }
 
     return (
-        <RoundedCard
+        <RoundedCard 
             onClick={handleOnClick}
-            className="py-2 cursor-pointer px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
+            className="py-2 cursor-pointer px-4 border none flex flex-row items-center justify-between" 
         >
 
 
-            <div className="flex flex-row items-center gap-2" >
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                    {leagueGroup.title}
-                </h3>
-                {getStatusBadge()}
+            {/* Header Row */}
+            <div className="flex justify-between items-start">
+                
+                <div className="flex-1 flex min-w-0 flex-col">
+
+                    <div className="flex flex-row items-center gap-2" >
+
+                        {/* <Trophy /> */}
+
+                        <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+                            {leagueGroup.title}
+                        </h3>
+                    </div>
+
+                    <div className="flex flex-row items-center gap-1" >
+                        {leagueGroup.season.name && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400 tracking-wide truncate">
+                                {leagueGroup.season.name}
+                            </p>
+                        )}
+
+                        {getStatusBadge()}
+                    </div>
+
+                </div>
+
             </div>
 
-
             <div className="" >
-
-                {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
-                    <p>{userRanking?.overall_rank}</p>
-                </div>}
-
-                {isLoading && <div className="text-slate-600 animate-pulse dark:text-slate-200 font-semibold text-sm" >
-                    <div className="w-4 h-4 rounded-xl bg-slate-200 dark:bg-slate-600" ></div>
-                </div>}
-
-                {/* <button onClick={handleOnClick} >
+                <button onClick={handleOnClick} >
                     <ChevronRight className="w-4 h-4" />
-                </button> */}
+                </button>
             </div>
 
         </RoundedCard>

@@ -35,7 +35,7 @@ export default function TeamFormGnatChart({ team, fixtures }: Props) {
                 <SecondaryText className="truncate w-[130px]" >{team.athstat_name}</SecondaryText>
             </div>
 
-            <div className="flex overflow-clip overflow-x-hidden gap-1 h-[40px] w-full flex-row items-center justify-end" >
+            <div className="flex overflow-clip gap-1 h-[40px] w-full flex-row items-center justify-end" >
                 {fixtures.map((f, index) => {
                     return <FixtureWinLossCard
                         key={f.game_id}

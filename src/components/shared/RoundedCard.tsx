@@ -1,6 +1,5 @@
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
-import { AppColours } from "../../types/constants"
 
 type Props = {
     children?: ReactNode,
@@ -22,8 +21,7 @@ export default function RoundedCard({children, className, onClick} : Props) {
         <div
             onClick={handleClick}
             className={twMerge(
-                "bg-white dark:text-white dark:hover:text-slate-50  dark:hover:bg-slate-800/50 border border-slate-300 dark:border-slate-800 rounded-2xl transition-all",
-                AppColours.CARD_BACKGROUND,
+                "bg-white dark:text-white dark:hover:text-slate-50 dark:bg-slate-800/60 dark:hover:bg-slate-800/50 border border-slate-300 dark:border-slate-800 rounded-2xl transition-all",
                 className
             )}
         >

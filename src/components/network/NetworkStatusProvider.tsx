@@ -6,7 +6,6 @@ import { twMerge } from 'tailwind-merge';
 import { WifiOff } from 'lucide-react';
 import ScrummyLogoHorizontal from '../branding/scrummy_logo_horizontal';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
-import { AppColours } from '../../types/constants';
 
 type Props = {
     children?: ReactNode
@@ -34,7 +33,7 @@ export default function NetworkStatusProvider({children} : Props) {
         return (
             <div className={twMerge(
                 'flex lg:max-w-1/4 flex-1 items-center text-center gap-6 p-6 justify-start w-full flex-col h-screen overflow-hidden',
-                AppColours.BACKGROUND
+                'bg-red-50 dark:bg-black'
             )} >
 
                 <div>

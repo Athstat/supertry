@@ -327,8 +327,6 @@ export const fantasyLeagueGroupsService = {
         }
 
         return undefined;
-    },
-
-    
+    }
 
 }

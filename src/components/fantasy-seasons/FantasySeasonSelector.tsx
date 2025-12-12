@@ -13,7 +13,7 @@ export default function FantasySeasonSelector() {
 
                 <ListItem
                     isSelected={selectedSeason === undefined}
-                    title={'Select Competition'}
+                    title={'Overview'}
                     onSelect={() => {
                         setSelectedFantasySeasonId('all')
                     }}
