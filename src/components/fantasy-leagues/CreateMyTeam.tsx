@@ -17,7 +17,7 @@ import CreateTeamViewHeader from './my-team/CreateTeamViewHeader';
 import { PlayerActionModal } from '../team/PlayerActionModal';
 
 
-export default function CreateTeamView() {
+export default function CreateMyTeam() {
 
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
 
@@ -85,18 +85,15 @@ export default function CreateTeamView() {
 
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col gap-2">
 
 
       <CreateTeamViewHeader />
 
-      <div className='relative' >
+      <div className='mt-6 relative' >
         <TeamFormation3D
           onPlayerClick={handleOpenActionModal}
-          marginCN='mt-0'
-          firstRowMargin='mt-8'
         />
-
         <TeamBenchDrawer
           onPlayerClick={handleOpenActionModal}
         />

@@ -27,10 +27,11 @@ export default function LeagueOverviewTab() {
   const { data: userTeam, isLoading } = useSWR(key, () =>
     leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
   );
+  console.log('userTeam: ', userTeam);
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedLeagueOverviewScreen(league?.id);
-  }, [league?.id]);
+  }, []);
 
   if (isLoading) {
     return (

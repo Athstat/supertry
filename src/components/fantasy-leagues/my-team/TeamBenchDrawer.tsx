@@ -1,9 +1,10 @@
-import { ArrowUpDown, CirclePlus, Coins, TriangleAlert } from "lucide-react";
+import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../../utils/athleteUtils";
 import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
+import BottomSheetHandle from "../../ui/BottomSheetHandle";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { twMerge } from "tailwind-merge";
 import TeamJersey from "../../player/TeamJersey";
@@ -11,7 +12,6 @@ import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoun
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { useMemo } from "react";
-import { AppColours } from "../../../types/constants";
 
 
 type Props = {
@@ -44,36 +44,38 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
     initateSwapOnEmptySlot(superSubSlot);
   }
 
+  const handleOnDrag = () => {
+    handlePlayerClick();
+  }
+
   return (
-    <div
+    <div 
+    
+    className={twMerge(
+      "max-h-[130px] fixed bottom-0 left-0 w-full min-h-[130px] flex flex-col items-center justify-center",
+      isSlotEmpty && "max-h-[150px]"
+    )}
 
-      className={twMerge(
-        "max-h-[130px] fixed bottom-0 left-0 w-full min-h-[130px] flex flex-col items-center justify-center",
-        isSlotEmpty && "max-h-[150px]"
-      )}
-
-      onClick={handlePlayerClick}
+    onClick={handlePlayerClick}
 
     >
-      <div className={twMerge(
-        "lg:max-w-[40%] md:max-w-[50%]  w-full bg-white  rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
-        AppColours.BACKGROUND
-      )}>
+      <div className="lg:max-w-[40%] md:max-w-[50%]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-2xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]">
 
-        <div className="w-full flex flex-col gap-1 p-4" >
+        <div className="w-full flex flex-col gap-1 p-2" >
+          <BottomSheetHandle
+            className="bg-slate-800 opacity-0"
+            onDragStart={handleOnDrag}
+          />
 
-          <div className="flex flex-row items-center gap-2" >
-            <ArrowUpDown className="text-yellow-500" />
-            <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
-              Super Subsitute
-            </p>
-          </div>
+          <p className="text-base font-semibold text-gray-800 dark:text-gray-100">
+            Super Subsitute
+          </p>
 
           {athlete && (
             <SubPlayerCard
               player={athlete}
               round={leagueRound}
-              onClick={() => { }}
+              onClick={() => {}}
             />
           )}
 

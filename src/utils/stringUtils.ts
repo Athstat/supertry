@@ -71,7 +71,7 @@ export function getPathNameAndSearchParams(uri: string): [(string | undefined), 
 
 
 export const sanitizeStat = (actionCount?: number) => {
-    if (actionCount === undefined || actionCount === null) {
+    if (!actionCount || actionCount === undefined || actionCount === null) {
         return undefined;
     }
 
@@ -99,19 +99,4 @@ export const getStatUnit = (actionDisplayName?: string) => {
         return "m"
     }
     return undefined;
-}
-
-export const stripCountryName = (name: string) => {
-    if (name.endsWith(" A")) {
-        name = name.replace(" A", "");
-    }
-
-    name = name.replace(" B", "");
-    name = name.replace(" XV", "");
-    name = name.replace(" 7s", "");
-    name = name.replace(" U18", "");
-    name = name.replace(" U20", "");
-    name = name.replace(" U19", "");
-
-    return name;
 }

@@ -2,15 +2,17 @@ import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import SaveTeamBar from './SaveTeamBar';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
-import { Coins, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import RoundedCard from '../../shared/RoundedCard';
 import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSummary';
 import { Activity } from '../../shared/Activity';
 import SecondaryText from '../../shared/SecondaryText';
 import { useMyTeamView } from './MyTeamStateProvider';
+import BlueGradientCard from '../../shared/BlueGradientCard';
 import { LeagueRoundCountdown2 } from '../../fantasy-league/LeagueCountdown';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import { useTeamHistory } from '../../../hooks/fantasy/useTeamHistory';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;
@@ -19,7 +21,10 @@ type Props = {
 /** Renders My Team View Header */
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
   const { leagueConfig } = useFantasyLeagueGroup();
-  const { totalSpent, selectedCount, leagueRound } = useFantasyLeagueTeam();
+  const { totalSpent, selectedCount, team, leagueRound, isReadOnly } = useFantasyLeagueTeam();
+
+  const { manager } = useTeamHistory();
+  const displayName = (manager?.username || manager?.first_name || team?.team_name);
 
   const handleTeamUpdated = async () => {
     if (onTeamUpdated) {
@@ -49,20 +54,24 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
         <div className="flex flex-row items-center justify-center text-center gap-1">
 
-          <TeamPointsCard
-            leagueRound={leagueRound}
-          />
+          {!isReadOnly && <div>
+            <p className="font-semibold max-w-[130px] truncate ">{displayName || "My Team"}</p>
+          </div>}
 
+          {isReadOnly && (
+            <TeamPointsCard 
+              leagueRound={leagueRound}
+            />
+          )}
         </div>
 
-        <div className="flex-1 w-full flex flex-col text-right justify-center">
+        <div className="flex-1 w-full flex flex-col items-end justify-center">
           <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            Total Spent
+            SCRUM Coins Spent
           </div>
           {leagueConfig && (
-            <div className="text-[10px] flex flex-row items-center  justify-end  gap-1 font-semibold text-gray-900 dark:text-gray-100">
-              <p>{totalSpent}/{leagueConfig?.team_budget}</p>
-              <Coins className='text-yellow-500 w-3 h-3' />
+            <div className="text-[10px] font-semibold text-gray-900 dark:text-gray-100">
+              {totalSpent}/{leagueConfig?.team_budget}
             </div>
           )}
         </div>
@@ -73,7 +82,9 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         onTeamUpdated={handleTeamUpdated}
       />}
 
-
+      {!isReadOnly && <TeamPointsCard
+        leagueRound={leagueRound}
+      />}
 
     </div>
   );
@@ -129,7 +140,7 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
-  const { isReadOnly } = useFantasyLeagueTeam();
+  const {isReadOnly} = useFantasyLeagueTeam();
   const isLocked = isLeagueRoundLocked(leagueRound);
   const { userScore, highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummary(leagueRound);
@@ -137,7 +148,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
   const showScore = !isLoading && isLocked
 
   return (
-    <div className="flex flex-col min-h-[30px] max-h-[30px]" >
+    <div className="flex flex-col max-h-[30px]" >
 
       <Activity mode={showScore ? "visible" : "hidden"} >
         <div className="flex flex-row items-center justify-center gap-3" >
@@ -161,11 +172,13 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
       <Activity mode={!isLocked && !isReadOnly ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
+          <BlueGradientCard className='w-fit py-2 px-4 items-center ' >
             <LeagueRoundCountdown2
               leagueRound={leagueRound}
-              className='flex-col'
-              leagueTitleClassName='font-normal text-xs'
+              className='gap-4'
+              leagueTitleClassName='font-normal text-sm'
             />
+          </BlueGradientCard>
         </div>
       </Activity>
 

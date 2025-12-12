@@ -1,6 +1,5 @@
 import { IProAthlete } from './athletes';
 import { DjangoAuthUser } from './auth';
-import { IFixture } from './games';
 import { IProSeason } from './season';
 
 export type FantasyLeagueGroupType = 'user_created' | 'system_created' | 'official_league';
@@ -92,17 +91,3 @@ export type LeaguePredictionRanking = {
   accuracy: number;
   has_results: boolean;
 };
-
-
-export type IPlayerPercentageSelected = {
-  times_selected: number,
-  percentage_selected: number
-}
-
-
-export type PlayerPointsHistoryItem = {
-  athlete_id: string,
-  game_id: string,
-  game: IFixture
-  total_score: number
-}

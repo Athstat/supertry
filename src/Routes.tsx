@@ -9,7 +9,7 @@ import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
 import OnBoardingScreen from './screens/OnboardingScreen';
 import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
-import { FantasyScreen } from './screens/FantasyScreen';
+import { FantasyLeaguesScreen } from './screens/FantasyLeaguesScreen';
 import { FantasyLeagueScreen } from './screens/LeagueScreen';
 import { MyTeamsListScreen } from './screens/MyTeamsScreen';
 import { TeamCreationScreen } from './screens/TeamCreationScreen';
@@ -48,20 +48,12 @@ import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
 import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
 import PlayersByPositionClassScreen from './screens/players/PlayersByPositionClassScreen';
 import AllPlayersScreen from './screens/players/AllPlayersScreen';
-import ScoutingListScreen from './screens/scouting/ScoutingListScreen';
-import { twMerge } from 'tailwind-merge';
-import { AppColours } from './types/constants';
-import FantasyLeagueGroupStandingsScreen from './screens/fantasy-leagues/FantasyLeagueGroupStandingsScreen';
-import PlayersByTeamScreens from './screens/players/PlayersByTeamScreens';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
-  <div className={twMerge(
-    "min-h-screen pb-20",
-    AppColours.BACKGROUND
-  )}>
+  <div className="min-h-screen bg-gray-50 dark:bg-dark-850 pb-20">
     <Header />
-    <div className={twMerge(AppColours.BACKGROUND)}>{children}</div>
+    <div className="pt-1">{children}</div>
     <BottomNav />
   </div>
 );
@@ -121,11 +113,11 @@ const AppRoutes = () => {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Layout>
-                <DashboardDataProvider>
+              <DashboardDataProvider>
+                <Layout>
                   <DashboardScreen />
-                </DashboardDataProvider>
-              </Layout>
+                </Layout>
+              </DashboardDataProvider>
             </ProtectedRoute>
           }
         />
@@ -135,7 +127,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <FantasyScreen />
+                <FantasyLeaguesScreen />
               </Layout>
             </ProtectedRoute>
           }
@@ -154,20 +146,11 @@ const AppRoutes = () => {
           path="/league/:leagueId"
           element={
             <ProtectedRoute>
-              <Layout>
-                <FantasyLeagueScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/league/:leagueId/standings"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <FantasyLeagueGroupStandingsScreen />
-              </Layout>
+              <DashboardDataProvider>
+                <Layout>
+                  <FantasyLeagueScreen />
+                </Layout>
+              </DashboardDataProvider>
             </ProtectedRoute>
           }
         />
@@ -261,33 +244,11 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/players/teams/:teamId"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <PlayersByTeamScreens />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
           path="/players/:playerId"
           element={
             <ProtectedRoute>
               <Layout>
                 <PlayerProfileScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/scouting/my-list"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <ScoutingListScreen />
               </Layout>
             </ProtectedRoute>
           }

@@ -48,8 +48,6 @@ const excludePlayersAtom = atom<(IProAthlete | IFantasyAthlete | IFantasyTeamAth
 
 const searchQueryAtom = atom<string>();
 
-const viewType = atom<"all" | "scouting-list">("all");
-
 export const playerPickerAtoms = {
     relatedGamesAtom,
     positionPoolAtom,
@@ -58,6 +56,5 @@ export const playerPickerAtoms = {
     playerToBeReplacedAtom,
     onSelectPlayerAtom,
     excludePlayersAtom,
-    searchQueryAtom,
-    viewType
+    searchQueryAtom
 }

@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { useGameRosters } from "../../../../hooks/fixtures/useGameRosters";
 import { IFixture } from "../../../../types/games";
 import { IProTeam } from "../../../../types/team";
-import { RugbyPitch3DRaster } from "../../../shared/RugbyPitch";
+import { RugbyPitch3D } from "../../../shared/RugbyPitch";
 import { RosterStarterItem } from "./RosterStarterItem";
 import FixtureRosterBench from "./FixtureRosterBench";
 
@@ -37,7 +37,7 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
     if (isLoading) {
         return (
             <div className="mt-4 relative animate-pulse" >
-                <RugbyPitch3DRaster className="max-h-[500px]" />
+                <RugbyPitch3D className="max-h-[500px]" />
             </div>
         )
     }
@@ -45,13 +45,13 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
     return (
         <div className="mt-4 relative" >
 
-            <RugbyPitch3DRaster className={twMerge(
-                "max-h-[550px] opacity-60",
+            <RugbyPitch3D className={twMerge(
+                "max-h-[550px] dark:opacity-70",
                 !hasRosterItems && "opacity-20"
             )} />
 
             <Activity mode={hasRosterItems ? "visible" : "hidden"} >
-                <div className="absolute mt-6 w-full  top-0 left-0 flex flex-col gap-2" >
+                <div className="absolute mt-2 w-full  top-0 left-0 flex flex-col gap-2" >
                     <div className="flex w-full flex-row items-center justify-center gap-6" >
                         <RosterStarterItem
                             item={getByJersey(1)}

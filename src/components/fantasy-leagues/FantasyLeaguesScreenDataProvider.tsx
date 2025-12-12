@@ -84,7 +84,7 @@ function InnerProvider({ children }: Props) {
 
     if (isLoading) {
         return (
-            <PageView className="p-4 mt-0 pt-6 flex flex-col gap-4 animate-pulse" >
+            <PageView className="p-4 mt-0 pt-0 flex flex-col gap-4 animate-pulse" >
                 <div className="flex flex-col gap-2" >
                     <RoundedCard className="w-[150px] h-[30px] bg-slate-200 border-none rounded-xl " />
                     <div className="flex flex-row items-center gap-2" >
@@ -94,22 +94,29 @@ function InnerProvider({ children }: Props) {
                     </div>
                 </div>
 
+                <div>
+                    <RoundedCard className="w-[150px] h-[30px] bg-slate-200 border-none rounded-xl " />
+                </div>
 
                 <div className="flex flex-col gap-2" >
-                    <RoundedCard className="w-full h-[150px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
                 </div>
 
                 <div>
-                    <RoundedCard className="w-[160px] h-[30px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-[150px] h-[30px] bg-slate-200 border-none rounded-xl " />
                 </div>
 
-                <div className="flex flex-row items-center gap-2 overflow-y-auto no- justify-between" >
-                    <RoundedCard className="w-full h-[40px] bg-slate-200 border-none rounded-xl " />
-                    <RoundedCard className="w-full h-[40px] bg-slate-200 border-none rounded-xl " />
+                <div className="flex flex-row items-center gap-2 overflow-y-auto no-scrollbar" >
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
                 </div>
 
                 <div className="flex flex-col gap-2" >
-                    <RoundedCard className="w-full h-[160px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
+                    <RoundedCard className="w-full h-[100px] bg-slate-200 border-none rounded-xl " />
                 </div>
 
             </PageView>

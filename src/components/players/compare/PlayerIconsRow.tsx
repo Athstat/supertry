@@ -6,6 +6,7 @@ import useSWR from 'swr';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { IProSeason } from '../../../types/season';
+import RoundedCard from '../../shared/RoundedCard';
 
 type Props = {
   player: IProAthlete;
@@ -29,7 +30,10 @@ export default function PlayerIconsRow({ player, size = 'md', season }: Props) {
   const playerIcons =  getPlayerIcons(player, starRatings ?? null, actions ?? []);
 
   if (isLoading) {
-    return null;
+    return (
+      <RoundedCard className='w-full rounded-xl h-[40px] animate-pulse border-none bg-slate-200' >
+      </RoundedCard>
+    )
   }
 
   if (playerIcons.length === 0) {

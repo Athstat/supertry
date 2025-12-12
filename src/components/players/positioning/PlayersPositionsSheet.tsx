@@ -30,10 +30,6 @@ export default function PlayersPositionsSheet({ isOpen, onClose }: Props) {
 
     const onClickPosition = (positionClass: PositionClass) => {
         navigate(`/players/position-class/${positionClass}`);
-        
-        if (onClose) {
-            onClose();
-        }
     }
 
     if (!isOpen) {

@@ -1,24 +1,28 @@
 
 import { twMerge } from 'tailwind-merge';
+import { useTheme } from '../../contexts/ThemeContext'
 import ScrummyLogo from '../branding/scrummy_logo';
-import { AppColours } from '../../types/constants';
+import ScrummyMatrixBackground from '../shared/ScrummyMatrixBackground';
 
 export default function ScrummyLoadingState() {
 
+    const { } = useTheme();
+
     return (
-        <div
-            className={twMerge(
-                'bg-gradient-to-br ',
-                '',
-                'w-screen h-screen overflow-hidden flex flex-col items-center justify-center',
-                AppColours.BACKGROUND
-            )}
-        >
+        <ScrummyMatrixBackground>
+            <div
+                className={twMerge(
+                    'bg-gradient-to-br ',
+                    '',
+                    'w-screen h-screen overflow-hidden flex flex-col items-center justify-center'
+                )}
+            >
 
-            <ScrummyLogo
-                className='animate-pulse w-52 h-52'
-            />
+                <ScrummyLogo
+                    className='animate-pulse w-52 h-52'
+                />
 
-        </div>
+            </div>
+        </ScrummyMatrixBackground>
     )
 }

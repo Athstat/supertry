@@ -47,7 +47,7 @@ function FantasySeasonCard({ fantasySeason, index }: FantasySeasonCardProps) {
 
     const { setSelectedSeason } = useFantasyLeaguesScreen();
     const featuredLeagueKey = `/featured-league/${fantasySeason.id}`;
-    const { data: featuredLeagues, isLoading } = useSWR(featuredLeagueKey, () => fantasySeasonsService.getFeaturedLeagueGroups(fantasySeason.id));
+    const { data: featuredLeagues, isLoading } = useSWR(featuredLeagueKey, () => fantasySeasonsService.getFantasySeasonFeaturedLeagues(fantasySeason.id));
 
     if (isLoading) {
         return (

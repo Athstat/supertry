@@ -9,12 +9,10 @@ import { useMemo, useState } from 'react';
 import PlayersList from '../../components/players/PlayersList';
 import { useSupportedAthletes } from '../../hooks/athletes/useSupportedAthletes';
 import { twMerge } from 'tailwind-merge';
-import { AppColours } from '../../types/constants';
-import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars';
+import { backgroundTranslucentCN } from '../../types/constants';
 
 export default function PlayersByPositionClassScreen() {
 
-    useHideTopNavBar();
     const { positionClass } = useParams();
     const navigate = useNavigate();
 
@@ -34,11 +32,11 @@ export default function PlayersByPositionClassScreen() {
     }
 
     return (
-        <PageView className='px-4 py-4 relative' >
+        <PageView className='px-4 relative' >
 
             <div className={twMerge(
-                'flex sticky w-full p-2 top-0 z-[10] left-0 flex-row items-center justify-between',
-                AppColours.BACKGROUND
+                'flex sticky w-full p-2 top-16 z-[10] left-0 flex-row items-center justify-between',
+                backgroundTranslucentCN
             )} >
                 <div className='flex flex-row items-center gap-2' >
                     <CircleButton
