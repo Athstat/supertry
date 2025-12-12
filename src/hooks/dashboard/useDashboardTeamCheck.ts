@@ -4,7 +4,7 @@ import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeague
 import { leagueService } from '../../services/leagueService';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import { FantasyLeagueGroup, FantasyLeagueGroupStanding } from '../../types/fantasyLeagueGroups';
-import { IFantasyLeagueRound, FantasyLeagueTeamWithAthletes } from '../../types/fantasyLeague';
+import { IFantasyLeagueRound, IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes } from '../../types/fantasyLeague';
 import { IFixture } from '../../types/games';
 
 type TeamCheckResult = {
@@ -15,9 +15,12 @@ type TeamCheckResult = {
   currentGameweek?: number;
   nextDeadline?: Date;
   userStats?: {
-    rank: number;
+    globalRank: number;
+    leagueRank: number;
     totalPoints: number;
     localRankPercentile: number;
+    totalUsers: number;
+    roundTotalUsers: number;
   };
 };
 
@@ -30,6 +33,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
   const [officialLeague, setOfficialLeague] = useState<FantasyLeagueGroup | undefined>();
   const [rounds, setRounds] = useState<IFantasyLeagueRound[]>([]);
   const [standings, setStandings] = useState<FantasyLeagueGroupStanding[]>([]);
+  const [currentRoundStandings, setCurrentRoundStandings] = useState<IFantasyLeagueTeam[]>([]);
   const [currentRoundTeam, setCurrentRoundTeam] = useState<
     FantasyLeagueTeamWithAthletes | undefined
   >();
@@ -144,6 +148,29 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     fetchStandings();
   }, [officialLeague?.id]);
 
+  // Fetch current round standings for round-specific rank
+  useEffect(() => {
+    const fetchCurrentRoundStandings = async () => {
+      if (!currentRound?.id) {
+        setCurrentRoundStandings([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const teams = await leagueService.fetchParticipatingTeams(currentRound.id);
+        setCurrentRoundStandings(teams);
+      } catch (error) {
+        console.error('Error fetching current round standings:', error);
+        setCurrentRoundStandings([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCurrentRoundStandings();
+  }, [currentRound?.id]);
+
   // Fetch user's team for the current round to determine if they have a team picked
   useEffect(() => {
     const fetchCurrentRoundTeam = async () => {
@@ -222,21 +249,37 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
   }, [standings, authUser]);
 
   const userStats = useMemo(() => {
-    if (!userStanding || !standings) return undefined;
+    if (!authUser?.kc_id) return undefined;
 
+    // Get global rank from overall league standings
+    const userStandingGlobal = standings.find(standing => standing.user_id === authUser.kc_id);
+
+    // Get league (round) rank from current round standings
+    // Use index + 1 for rank calculation (same as LeagueStandingsTable does)
+    const userTeamIndex = currentRoundStandings.findIndex(team => team.user_id === authUser.kc_id);
+    const userTeamRound = userTeamIndex !== -1 ? currentRoundStandings[userTeamIndex] : undefined;
+
+    // Need at least one of them to show
+    if (!userStandingGlobal && !userTeamRound) return undefined;
+
+    const globalRank = userStandingGlobal?.rank ?? 0;
+    const leagueRank = userTeamIndex !== -1 ? userTeamIndex + 1 : 0; // Calculate rank from position
     const totalUsers = standings.length;
-    const rank = userStanding.rank;
-    const localRankPercentile = totalUsers > 0 ? (rank / totalUsers) * 100 : 0;
+    const roundTotalUsers = currentRoundStandings.length;
+    const localRankPercentile = totalUsers > 0 ? (globalRank / totalUsers) * 100 : 0;
 
     // Use current round team points if available, otherwise use total score
-    const roundPoints = currentRoundTeam?.overall_score ?? userStanding.total_score ?? 0;
+    const roundPoints = userTeamRound?.overall_score ?? userStandingGlobal?.total_score ?? 0;
 
     return {
-      rank: rank,
+      globalRank: globalRank, // Overall league rank
+      leagueRank: leagueRank, // Current round rank (calculated from position)
       totalPoints: roundPoints,
       localRankPercentile: Math.round(localRankPercentile),
+      totalUsers: totalUsers,
+      roundTotalUsers: roundTotalUsers,
     };
-  }, [userStanding, standings, currentRoundTeam]);
+  }, [standings, currentRoundStandings, authUser]);
 
   // Check if user has a team for the CURRENT round (not just overall league participation)
   const hasTeam = !!currentRoundTeam;

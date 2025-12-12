@@ -7,13 +7,16 @@ import { IProAthlete } from '../../../types/athletes';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import NoContentCard from '../../shared/NoContentMessage';
 import { PlayerRankingCard } from '../../players/ranking/PlayerRankingCard';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   season?: IProSeason;
+  currentRound?: number;
 };
 
-export default function FantasyPointsScoredPlayerList({ season }: Props) {
+export default function FantasyPointsScoredPlayerList({ season, currentRound }: Props) {
   const { currentSeason } = useDashboard();
+  const navigate = useNavigate();
 
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
   const toggleModal = () => {
@@ -24,7 +27,7 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
     return season || currentSeason;
   }, [currentSeason, season]);
 
-  const { rankings, isLoading } = useFantasyPointsRankings(finalSeason?.id ?? '', 3);
+  const { rankings, isLoading } = useFantasyPointsRankings(finalSeason?.id ?? '', 5);
 
   if (!finalSeason) {
     return;
@@ -40,30 +43,64 @@ export default function FantasyPointsScoredPlayerList({ season }: Props) {
 
   return (
     <Fragment>
-      <RoundedCard className="h-[260px] rounded-xl p-4 flex flex-col gap-2 overflow-hidden">
-        <div>
-          <p className="font-semibold">Fantasy Points Scored</p>
+      <RoundedCard className="rounded-xl overflow-hidden">
+        {/* Title */}
+        <div className="pt-4 pl-2 pb-2">
+          <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
+            Fantasy Top Performers {currentRound ? `(Round ${currentRound})` : ''}
+          </p>
         </div>
 
-        <div className="flex flex-col items-center overflow-y-auto gap-2">
+        {/* Table Header */}
+        <div className="bg-[#011E5C] text-white pl-4 py-2 flex items-center gap-4 w-[97%] mx-auto">
+          <div className="w-8 text-xs font-semibold">Position</div>
+          <div className="flex-1 text-xs font-semibold ml-14">Player</div>
+          <div className="text-xs font-semibold mr-4">Points</div>
+        </div>
+
+        <div className="flex flex-col items-center overflow-y-auto gap-1 pt-4 pl-2 pr-2">
           {rankings.map((r, index) => {
             const val = r.total_points;
+            const rank = index + 1;
+
+            // Define border colors based on rank
+            const getBorderColor = (rank: number) => {
+              switch (rank) {
+                case 1: return '#FFD700'; // Gold
+                case 2: return '#C0C0C0'; // Silver
+                case 3: return '#CD7F32'; // Bronze
+                case 4: return '#9333EA'; // Purple
+                case 5: return '#10B981'; // Green
+                default: return '#1196F5'; // Blue
+              }
+            };
 
             return (
               <PlayerRankingCard
                 player={r}
                 key={r.tracking_id}
-                rank={index + 1}
+                rank={rank}
                 onClick={setSelectedPlayer}
                 value={val ? `${Math.floor(val)}` : '--'}
+                borderColor={getBorderColor(rank)}
               />
             );
           })}
         </div>
 
         {rankings.length === 0 && (
-          <NoContentCard message="Whoops!! Nothing to see here yet. Check again soon" />
+          <div className="p-4">
+            <NoContentCard message="Whoops!! Nothing to see here yet. Check again soon" />
+          </div>
         )}
+
+        {/* View All Players Link */}
+        <p
+          onClick={() => navigate('/players')}
+          className="font-semibold text-sm text-[#011E5C] dark:text-white underline pb-4 text-center cursor-pointer"
+        >
+          View All Players
+        </p>
       </RoundedCard>
 
       {selectedPlayer && (

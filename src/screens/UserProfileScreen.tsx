@@ -12,7 +12,8 @@ import Experimental from '../components/shared/ab_testing/Experimental';
 import QaNoticeCard from '../components/settings/QaNoticeCard';
 import { useNavigate } from 'react-router-dom';
 import ProfileSettingCard from '../components/settings/ProfileSettingCard';
-import { UserCircle } from 'lucide-react';
+import { UserCircle, Moon, Sun } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 export function UserProfileScreen() {
 
@@ -33,6 +34,7 @@ function Content() {
   const authUser = useAtomValue(authUserAtom);
   const isGuestAccount = useAtomValue(isGuestUserAtom);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const handleEditUserProfile = () => {
     navigate('/profile/account-info');
@@ -59,7 +61,7 @@ function Content() {
         {/* Complete Profile Card for Guest Users */}
         {isGuestAccount && <ClaimGuestAccountBox />}
 
-        <ProfileSettingCard 
+        <ProfileSettingCard
           title='Account Info'
           description='Edit Username, First Name and Last Name'
           icon={<UserCircle />}
@@ -70,6 +72,13 @@ function Content() {
         {authUser && !isGuestAccount && (
           <UserNotificationsSettings />
         )}
+
+        <ProfileSettingCard
+          title='Appearance'
+          description={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          icon={theme === 'dark' ? <Sun /> : <Moon />}
+          onClick={toggleTheme}
+        />
 
         <LicensingModal />
 
