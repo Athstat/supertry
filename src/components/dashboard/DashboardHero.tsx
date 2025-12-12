@@ -161,7 +161,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
           <div className="flex items-center">
             {/* Left Label - matches left stat column width */}
             <div className="flex-1 flex justify-center">
-              <p className="text-xs text-[#E2E8F0]">global rank</p>
+              <p className="text-xs text-[#E2E8F0]">league rank</p>
             </div>
 
             {/* Center: Border Line - matches center stat column width */}
@@ -171,7 +171,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
 
             {/* Right Label - matches right stat column width */}
             <div className="flex-1 flex justify-center">
-              <p className="text-xs text-white">local rank</p>
+              <p className="text-xs text-white">round rank</p>
             </div>
           </div>
 
