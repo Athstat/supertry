@@ -14,6 +14,7 @@ import { TrendingUpDown } from 'lucide-react'
 import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/useDebounced'
 import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars'
+import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 
 export default function PlayersOverviewScreen() {
 
@@ -88,7 +89,7 @@ function Content() {
           className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
           onClick={handleViewScoutingList}
         >
-          
+
           <div className='flex flex-row items-center gap-2' >
             <Binoculars />
             <p className='text-sm' >View Scouting List</p>
@@ -147,6 +148,11 @@ function Content() {
           icon={<FastForward className='w-20 h-20 text-blue-500' />}
         />
       </div>
+
+      <div>
+        <p className='font-bold text-md' >By Team</p>
+      </div>
+      <PlayersTeamsGridList />
 
       <div>
         <p className='font-bold text-md' >By Country</p>
