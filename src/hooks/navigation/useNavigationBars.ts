@@ -46,7 +46,7 @@ export function useHideTopNavBar() {
         return () => {
             revealTopNav();
         }
-    })
+    }, [hideTopNav, revealTopNav]);
 }
 
 /** Hook that when mounted will auto hide the bottom navigation bar,
@@ -61,5 +61,5 @@ export function useHideBottomNavBar() {
         return () => {
             revealBottomNav();
         }
-    })
+    }, [hideBottomNav, revealBottomNav])
 }
