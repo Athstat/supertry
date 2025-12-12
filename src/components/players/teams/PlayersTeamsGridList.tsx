@@ -57,7 +57,7 @@ function SeasonTeamGridList({ season }: SeasonTeamListProps) {
   const teams = fetchedTeams || [];
 
   const handleOnClick = (team: ITeam) => {
-    navigate(`/players/by-teams/${team.athstat_id}`);
+    navigate(`/players/teams/${team.athstat_id}`);
   }
 
   if (isLoading) {
