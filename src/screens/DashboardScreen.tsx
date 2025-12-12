@@ -8,9 +8,12 @@ import { useDashboard } from '../hooks/dashboard/useDashboard';
 import TeamPlayersPrefetchProvider from '../providers/TeamPlayersPrefetchProvider';
 import DashboardHero from '../components/dashboard/DashboardHero';
 import WeeklyLeaderboards from '../components/dashboard/WeeklyLeaderboards';
+import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
+import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useAtomValue } from 'jotai';
 import { dashboardAtoms } from '../state/dashboard/dashboard.atoms';
 import { useMemo } from 'react';
+import { useDashboardTeamCheck } from '../hooks/dashboard/useDashboardTeamCheck';
 
 export function DashboardScreen() {
   return (
@@ -38,66 +41,71 @@ function DashboardContent() {
     return selectedSeason || currentSeason;
   }, [selectedSeason, currentSeason]);
 
+  // Get current gameweek for Fantasy Top Performers
+  const { currentGameweek } = useDashboardTeamCheck(displaySeason);
+
   return (
-    <PageView className="flex flex-col space-y-4 p-4">
+    <PageView className="flex flex-col space-y-4">
       <ClaimAccountNoticeCard />
 
       {/* Dashboard Hero - Shows team stats or first-time user view */}
       <DashboardHero season={displaySeason} />
 
       {/* <FeaturedFantasyLeagueGroups /> */}
+      <div className="pl-1 pr-1" style={{ marginTop: 8, marginBottom: -8 }}>
+        {/* Dominate the SCRUM */}
+        <RoundedCard className="flex flex-col sm:flex-row gap-4 pt-5 pb-5 pl-2 pr-2 items-start sm:items-end">
+          <div className="flex flex-col gap-2 flex-1">
+            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Dominate the Scrum!</h1>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-gray-600 dark:text-gray-300">
+                Create your own league, or join one. Challenge your friends, invite your crew!
+              </p>
 
-      {/* Dominate the SCRUM */}
-      <RoundedCard className="flex flex-col gap-4 p-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="font-bold text-lg">Dominate the SCRUM</h1>
-          <div className="flex flex-row items-center gap-2">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              Create your own league, or join one. Challenge your friends, invite your crew and see
-              who really rules the game!
-            </p>
-            <PrimaryButton
-              className="h-10 whitespace-nowrap w-fit flex-shrink-0"
-              onClick={handleBannerClick}
-            >
-              Start a League
-            </PrimaryButton>
+              <button
+                onClick={handleBannerClick}
+                className="px-2 py-2.5 rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-xs text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
+              >
+                Start Your League
+              </button>
+            </div>
           </div>
-        </div>
-      </RoundedCard>
 
-      {/* Make your match predictions */}
-      <RoundedCard className="flex flex-col gap-4 p-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="font-bold text-lg">Make your match predictions</h1>
-          <div className="flex flex-row items-center gap-2">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              Predict the results of all the upcoming matches to maximize your fantasy points this
-              week.
-            </p>
-            <PrimaryButton
-              className="h-10 whitespace-nowrap w-fit flex-shrink-0"
-              onClick={() => navigate('/fixtures?view=pickem')}
-            >
-              Predict now
-            </PrimaryButton>
+        </RoundedCard>
+      </div>
+
+      {/* School Rugby Banner */}
+      <SchoolRugbyBanner />
+
+      {/* Fantasy Top Performers */}
+      <div className="pl-1 pr-1" style={{ marginTop: 8 }}>
+        <FantasyPointsScoredPlayerList season={displaySeason} currentRound={currentGameweek} />
+      </div>
+
+      <div className="pl-1 pr-1" style={{ marginTop: 8 }}>
+
+        {/* Make your match predictions */}
+        <RoundedCard className="flex flex-col sm:flex-row gap-4 pt-5 pb-5 pl-2 pr-2 items-start sm:items-end">
+          <div className="flex flex-col gap-2 flex-1">
+            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Make your match predictions</h1>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-gray-600 dark:text-gray-300">
+                Predict the results of all the upcoming matches to maximize your fantasy points this
+                week.
+              </p>
+              <button
+                onClick={() => navigate('/fixtures?view=pickem')}
+                className="px-2 py-2.5 rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-xs text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
+              >
+                Pick'em
+              </button>
+            </div>
           </div>
-        </div>
-      </RoundedCard>
-
-      {/* What's Going On in Schools Rugby? */}
-      <div className="text-center py-4">
-        <h2 className="font-bold text-lg mb-2">What's Going On in Schools Rugby?</h2>
-        <button
-          onClick={() => navigate('/fixtures?sc=SBR')}
-          className="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 underline font-medium"
-        >
-          View fixtures
-        </button>
+        </RoundedCard>
       </div>
 
       {/* Weekly Leaderboards with tabs */}
-      <WeeklyLeaderboards season={displaySeason} />
+      {/* <WeeklyLeaderboards season={displaySeason} /> */}
     </PageView>
   );
 }
