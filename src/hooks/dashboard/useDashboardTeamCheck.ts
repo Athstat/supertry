@@ -29,7 +29,12 @@ type TeamCheckResult = {
  */
 export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult {
   const { authUser } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  // Track individual loading states
+  const [isLoadingLeague, setIsLoadingLeague] = useState(true);
+  const [isLoadingRounds, setIsLoadingRounds] = useState(false);
+  const [isLoadingStandings, setIsLoadingStandings] = useState(false);
+  const [isLoadingCurrentRoundTeam, setIsLoadingCurrentRoundTeam] = useState(false);
+
   const [officialLeague, setOfficialLeague] = useState<FantasyLeagueGroup | undefined>();
   const [rounds, setRounds] = useState<IFantasyLeagueRound[]>([]);
   const [standings, setStandings] = useState<FantasyLeagueGroupStanding[]>([]);
@@ -44,10 +49,11 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     const fetchOfficialLeague = async () => {
       if (!season?.id) {
         setOfficialLeague(undefined);
+        setIsLoadingLeague(false);
         return;
       }
 
-      setIsLoading(true);
+      setIsLoadingLeague(true);
       try {
         // Get all public leagues and filter for official league of this season
         const allLeagues = await fantasyLeagueGroupsService.getAllPublicLeagues();
@@ -59,7 +65,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
         console.error('Error fetching official league:', error);
         setOfficialLeague(undefined);
       } finally {
-        setIsLoading(false);
+        setIsLoadingLeague(false);
       }
     };
 
@@ -71,10 +77,11 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     const fetchRounds = async () => {
       if (!officialLeague?.id) {
         setRounds([]);
+        setIsLoadingRounds(false);
         return;
       }
 
-      setIsLoading(true);
+      setIsLoadingRounds(true);
       try {
         const fetchedRounds = await fantasyLeagueGroupsService.getGroupRounds(officialLeague.id);
         setRounds(fetchedRounds);
@@ -82,7 +89,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
         console.error('Error fetching rounds:', error);
         setRounds([]);
       } finally {
-        setIsLoading(false);
+        setIsLoadingRounds(false);
       }
     };
 
@@ -128,10 +135,11 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     const fetchStandings = async () => {
       if (!officialLeague?.id) {
         setStandings([]);
+        setIsLoadingStandings(false);
         return;
       }
 
-      setIsLoading(true);
+      setIsLoadingStandings(true);
       try {
         const fetchedStandings = await fantasyLeagueGroupsService.getGroupStandings(
           officialLeague.id
@@ -141,7 +149,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
         console.error('Error fetching standings:', error);
         setStandings([]);
       } finally {
-        setIsLoading(false);
+        setIsLoadingStandings(false);
       }
     };
 
@@ -156,15 +164,12 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
         return;
       }
 
-      setIsLoading(true);
       try {
         const teams = await leagueService.fetchParticipatingTeams(currentRound.id);
         setCurrentRoundStandings(teams);
       } catch (error) {
         console.error('Error fetching current round standings:', error);
         setCurrentRoundStandings([]);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -176,10 +181,11 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     const fetchCurrentRoundTeam = async () => {
       if (!currentRound?.id || !authUser?.kc_id) {
         setCurrentRoundTeam(undefined);
+        setIsLoadingCurrentRoundTeam(false);
         return;
       }
 
-      setIsLoading(true);
+      setIsLoadingCurrentRoundTeam(true);
       try {
         const team = await leagueService.getUserRoundTeam(currentRound.id, authUser.kc_id);
         setCurrentRoundTeam(team);
@@ -187,7 +193,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
         console.error('Error fetching current round team:', error);
         setCurrentRoundTeam(undefined);
       } finally {
-        setIsLoading(false);
+        setIsLoadingCurrentRoundTeam(false);
       }
     };
 
@@ -283,6 +289,10 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
 
   // Check if user has a team for the CURRENT round (not just overall league participation)
   const hasTeam = !!currentRoundTeam;
+
+  // Compute overall loading state - only false when critical data fetching is complete
+  // We need to wait for currentRoundTeam to be loaded to determine hasTeam
+  const isLoading = isLoadingLeague || isLoadingRounds || isLoadingStandings || isLoadingCurrentRoundTeam;
 
   return {
     hasTeam,
