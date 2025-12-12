@@ -83,11 +83,11 @@ export default function PlayersByTeamScreens() {
                 players={teamAthletes}
             />
 
-            {showModal && <PlayersTeamsSheet 
+            <PlayersTeamsSheet 
                 isOpen={showModal}
                 onClose={toggle}
                 onSuccess={() => setShowModal(false)}
-            />}
+            />
         </PageView>
     )
 }
@@ -95,7 +95,7 @@ export default function PlayersByTeamScreens() {
 
 function LoadingSkeleton() {
     return (
-        <PageView>
+        <PageView className="py-4" >
             <div className={twMerge(
                 'flex sticky w-full p-2 top-0 z-[10] left-0 flex-row items-center justify-between',
                 AppColours.BACKGROUND
