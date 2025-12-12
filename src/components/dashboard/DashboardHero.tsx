@@ -8,7 +8,8 @@ import { useMemo, useState } from 'react';
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { formatCountdown } from '../../utils/countdown';
 import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
-import { Globe, Trophy, Users, ArrowUp } from 'lucide-react';
+import { Globe, Users, ArrowUp } from 'lucide-react';
+import TrophyIcon from '../shared/icons/TrophyIcon';
 
 type Props = {
   season?: IFantasySeason;
@@ -107,13 +108,13 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
       <div className="relative z-10 flex flex-col items-center gap-4 py-6 px-2">
         {/* Username Header */}
         <div className="flex items-center gap-2">
-          <div className="text-2xl">👤</div>
-          <p className="text-white font-normal text-base">{authUser?.username || 'User'}</p>
+          <img src="/images/profile-icon.svg" alt="Profile" className="w-6 h-6" />
+          <p className="text-white font-normal text-xs">{authUser?.username || 'User'}</p>
         </div>
 
         {/* Title */}
         <h1
-          className="text-center font-normal text-lg leading-6 text-white"
+          className="text-center font-normal text-md leading-6 text-white"
           style={{ fontFamily: "'Race Sport', sans-serif" }}
         >
           PLAY URC FANTASY
@@ -130,25 +131,25 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
           <div className="flex items-end gap-4">
             {/* Global Rank */}
             <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
-              <Globe className="w-6 h-6 text-white" />
-              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Roboto, sans-serif' }}>
+              {/* <Globe className="w-6 h-6 text-white" /> */}
+              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
                 #{userStats.rank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
               </p>
             </div>
 
             {/* Points (Center - Larger & Elevated) */}
             <div className="flex-1 flex flex-col items-center gap-1.5">
-              <Trophy className="w-6 h-6 text-white" />
-              <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Roboto, sans-serif', marginBottom: -5 }}>
+              <TrophyIcon className="w-6 h-6 text-[#1196F5]" />
+              <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Oswald, sans-serif', marginBottom: -5 }}>
                 {userStats.totalPoints}
               </p>
-              <p className="text-xs text-white" style={{ marginBottom: -5 }}>points</p>
+              <p className="text-xs text-white" style={{ marginBottom: -10 }}>points</p>
             </div>
 
             {/* League Rank */}
             <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
-              <Users className="w-6 h-6 text-white" />
-              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Roboto, sans-serif' }}>
+              {/* <Users className="w-6 h-6 text-white" /> */}
+              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
                 #{userStats.rank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
               </p>
             </div>
@@ -181,7 +182,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
         {/* Deadline */}
         {nextDeadline && (
           <>
-            <div className="w-full max-w-sm border-t border-white/50"></div>
+            <div className="w-[80%] max-w-sm border-t border-white/50"></div>
             <p className="text-sm text-white text-center">
               Round {(currentGameweek || 0) + 1} Deadline:<br />
               <span className="font-bold">{formatCountdown(nextDeadline)}</span>

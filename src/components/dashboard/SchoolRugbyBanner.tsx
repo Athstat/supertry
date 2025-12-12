@@ -17,36 +17,37 @@ export default function SchoolRugbyBanner() {
             <div className="relative z-10 flex flex-col items-center justify-center py-8 px-8">
                 {/* Title */}
                 <h2
-                    className="text-center font-bold text-base leading-6 text-[#011E5C] w-[80%]"
-                    style={{ fontFamily: 'Oswald, sans-serif' }}
+                    className="text-center font-bold text-md leading-6 text-[#011E5C] w-[80%]"
+                    style={{ fontFamily: 'Race Sport, sans-serif' }}
                 >
-                    WHAT'S GOING ON IN SCHOOL RUGBY?
+                    SCHOOL RUGBY '26
                 </h2>
+                <p className="text-center -mt-2 text-sm text-gray-600 dark:text-gray-300">Games - Data - Players</p>
 
                 {/* Button */}
                 <p
                     onClick={() => navigate('/fixtures?sc=SBR')}
                     className="font-semibold text-sm text-[#011E5C] underline mt-3"
                 >
-                    View Fixtures
+                    See What's Happening
                 </p>
             </div>
 
             {/* Rugby player images */}
-            {/* Left player image */}
-            <div className="absolute -left-2 bottom-0 w-32 h-36 pointer-events-none">
+            {/* Left player image - Two players */}
+            <div className="absolute left-0 bottom-0 w-40 h-44 pointer-events-none">
                 <img
-                    src="/images/dashboard/school-rugby-player-left.jpg"
+                    src="/images/dashboard/school-rugby-player-left.png"
                     alt="Rugby players"
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-contain translate-y-[75px]"
                 />
             </div>
-            {/* Right player image */}
-            <div className="absolute right-0 bottom-0 w-28 h-36 pointer-events-none">
+            {/* Right player image - Single player in purple/white */}
+            <div className="absolute right-0 bottom-0 w-28 h-40 pointer-events-none">
                 <img
-                    src="/images/dashboard/school-rugby-player-right.jpg"
+                    src="/images/dashboard/school-rugby-player-right.png"
                     alt="Rugby player"
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-contain object-bottom scale-[70%] translate-y-[40px]"
                 />
             </div>
         </div>
