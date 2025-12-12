@@ -70,10 +70,12 @@ export default function DashboardHero({ season }: Props) {
 type TeamExistsViewProps = {
   season: IFantasySeason;
   userStats: {
-    rank: number;
+    globalRank: number;
+    leagueRank: number;
     totalPoints: number;
     localRankPercentile: number;
     totalUsers: number;
+    roundTotalUsers: number;
   };
   teamUrl: string;
   currentGameweek?: number;
@@ -133,7 +135,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
             <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
               {/* <Globe className="w-6 h-6 text-white" /> */}
               <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                #{userStats.rank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
+                #{userStats.globalRank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
               </p>
             </div>
 
@@ -150,7 +152,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
             <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
               {/* <Users className="w-6 h-6 text-white" /> */}
               <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                #{userStats.rank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
+                #{userStats.leagueRank}<span className="text-xs text-white">/{userStats.roundTotalUsers}</span>
               </p>
             </div>
           </div>
@@ -169,7 +171,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
 
             {/* Right Label - matches right stat column width */}
             <div className="flex-1 flex justify-center">
-              <p className="text-xs text-white">league rank</p>
+              <p className="text-xs text-white">local rank</p>
             </div>
           </div>
 
@@ -219,54 +221,72 @@ function FirstTimeUserView({ season, currentGameweek, nextDeadline, username, te
 
   return (
     <>
-      <RoundedCard className="p-6 flex flex-col gap-4">
-        {/* Welcome Message */}
-        <div className="text-center">
-          <div className="flex justify-center mb-2">
-            <div className="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+      <div className="relative w-full overflow-hidden shadow-md">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'url(/images/dashboard/hero-background.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+
+        {/* Blue Gradient Overlay */}
+        <div
+          className="absolute inset-0 opacity-90"
+          style={{
+            background: 'linear-gradient(47deg, #1196F5 0%, #011E5C 100%)',
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center gap-4 py-6 px-2">
+          {/* Username Header */}
+          <div className="flex items-center gap-2">
+            <img src="/images/profile-icon.svg" alt="Profile" className="w-6 h-6" />
+            <p className="text-white font-normal text-xs">{username || 'User'}</p>
           </div>
-          <p className="text-lg">
-            Welcome, <span className="font-medium">{username || 'User'}</span>
-          </p>
-        </div>
 
-        {/* Title */}
-        <h1 className="text-xl font-bold text-center">
-          Play SCRUMMY fantasy: {season.name} Challenge
-        </h1>
+          {/* Title */}
+          <h1
+            className="text-center font-normal text-md leading-6 text-white"
+            style={{ fontFamily: "'Race Sport', sans-serif" }}
+          >
+            PLAY URC FANTASY
+            <br />
+            {/* {abbreviateSeasonName(season.name).toUpperCase()} CHALLENGE */}
+          </h1>
 
-        {/* Gameweek Countdown */}
-        {currentGameweek && nextDeadline && (
-          <div className="text-center py-4">
-            <p className="text-lg">
-              <span className="font-semibold">Round {currentGameweek}</span> ends in
-            </p>
-            <p className="text-2xl font-bold mt-2">{formatCountdown(nextDeadline)}</p>
+          {/* Deadline */}
+          {nextDeadline && (
+            <>
+              <div className="w-[80%] max-w-sm border-t border-white/50"></div>
+              <p className="text-sm text-white text-center">
+                Round {(currentGameweek || 0) + 1} Deadline:<br />
+                <span className="font-bold">{formatCountdown(nextDeadline)}</span>
+              </p>
+            </>
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 w-full max-w-sm px-2">
+            <button
+              onClick={() => setIsHowToPlayModalOpen(true)}
+              className="flex-1 px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
+            >
+              HOW TO PLAY
+            </button>
+            <button
+              onClick={() => isGameweekOpen && navigate(teamUrl)}
+              disabled={!isGameweekOpen}
+              className={`flex-1 px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              PLAY NOW
+            </button>
           </div>
-        )}
-
-        {/* Call to Action */}
-        <p className="text-center text-gray-700 dark:text-gray-300">
-          Pick your elite team now and start competing!
-        </p>
-
-        {/* Action Buttons */}
-        <div className="flex gap-3">
-          <button
-            onClick={() => setIsHowToPlayModalOpen(true)}
-            className="flex-1 px-4 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 font-medium transition-colors hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
-          >
-            How to play?
-          </button>
-          <PrimaryButton
-            className={`flex-1 w-fit flex-shrink-0 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={() => isGameweekOpen && navigate(teamUrl)}
-            disabled={!isGameweekOpen}
-          >
-            Pick a team
-          </PrimaryButton>
         </div>
-      </RoundedCard>
+      </div>
 
       <ScrummyGamePlayModal isOpen={isHowToPlayModalOpen} onClose={() => setIsHowToPlayModalOpen(false)} />
     </>
