@@ -10,6 +10,7 @@ import { useProTeam } from "../../hooks/teams/useProTeam";
 import TeamLogo from "../../components/team/TeamLogo";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import PlayersList from "../../components/players/PlayersList";
+import PlayersTeamsSheet from "../../components/players/teams/PlayersTeamsSheet";
 
 
 /** Renders a page for players by team screen */
@@ -78,6 +79,12 @@ export default function PlayersByTeamScreens() {
             <PlayersList
                 players={teamAthletes}
             />
+
+            {showModal && <PlayersTeamsSheet 
+                isOpen={showModal}
+                onClose={toggle}
+                onSuccess={() => setShowModal(false)}
+            />}
         </PageView>
     )
 }

@@ -9,9 +9,12 @@ import SecondaryText from "../../shared/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { useNavigate } from "react-router-dom";
 
+type Props = {
+  onSuccess?: () => void
+}
 
 /** Renders a Grid list of teams to discover players by */
-export default function PlayersTeamsGridList() {
+export default function PlayersTeamsGridList({onSuccess} : Props) {
 
   const { seasons: fantasySeasons, isLoading } = useActiveFantasySeasons();
 
@@ -41,16 +44,18 @@ export default function PlayersTeamsGridList() {
     <div>
       {firstSeason && <SeasonTeamGridList
         season={firstSeason}
+        onSuccess={onSuccess}
       />}
     </div>
   )
 }
 
 type SeasonTeamListProps = {
-  season: IProSeason
+  season: IProSeason,
+  onSuccess?: () => void
 }
 
-function SeasonTeamGridList({ season }: SeasonTeamListProps) {
+function SeasonTeamGridList({ season, onSuccess }: SeasonTeamListProps) {
 
   const navigate = useNavigate();
   const { teams: fetchedTeams, isLoading } = useSeasonTeams(season.id);
@@ -58,6 +63,10 @@ function SeasonTeamGridList({ season }: SeasonTeamListProps) {
 
   const handleOnClick = (team: ITeam) => {
     navigate(`/players/teams/${team.athstat_id}`);
+
+    if (onSuccess) {
+      onSuccess();
+    }
   }
 
   if (isLoading) {
@@ -102,7 +111,7 @@ function TeamItem({ team, onClick }: TeamItemProps) {
 
 
   return (
-    <RoundedCard onClick={handleOnClick} className="border-none cursor-pointer p-2 h-[90px] flex flex-col items-center justify-center gap-2" >
+    <RoundedCard onClick={handleOnClick} className="cursor-pointer p-2 h-[90px] flex flex-col items-center justify-center gap-2" >
       <TeamLogo
         url={team.image_url}
         className="w-8 h-8"
