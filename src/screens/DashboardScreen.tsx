@@ -13,9 +13,11 @@ import TeamPlayersPrefetchProvider from '../providers/TeamPlayersPrefetchProvide
 import DashboardHero from '../components/dashboard/DashboardHero';
 import WeeklyLeaderboards from '../components/dashboard/WeeklyLeaderboards';
 import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
+import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useAtomValue } from 'jotai';
 import { dashboardAtoms } from '../state/dashboard/dashboard.atoms';
 import { useMemo } from 'react';
+import { useDashboardTeamCheck } from '../hooks/dashboard/useDashboardTeamCheck';
 
 export function DashboardScreen() {
   return (
@@ -42,6 +44,9 @@ function DashboardContent() {
   const displaySeason = useMemo(() => {
     return selectedSeason || currentSeason;
   }, [selectedSeason, currentSeason]);
+
+  // Get current gameweek for Fantasy Top Performers
+  const { currentGameweek } = useDashboardTeamCheck(displaySeason);
 
   return (
     <PageView className="flex flex-col space-y-4">
@@ -75,6 +80,11 @@ function DashboardContent() {
 
       {/* School Rugby Banner */}
       <SchoolRugbyBanner />
+
+      {/* Fantasy Top Performers */}
+      <div className="pl-1 pr-1" style={{ marginTop: 8 }}>
+        <FantasyPointsScoredPlayerList season={displaySeason} currentRound={currentGameweek} />
+      </div>
 
       <div className="pl-1 pr-1" style={{ marginTop: 8 }}>
 

@@ -270,17 +270,17 @@ function FirstTimeUserView({ season, currentGameweek, nextDeadline, username, te
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 w-full max-w-sm px-2">
+          <div className="flex gap-3 w-full max-w-sm justify-center px-2">
             <button
               onClick={() => setIsHowToPlayModalOpen(true)}
-              className="flex-1 px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
+              className="px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
             >
               HOW TO PLAY
             </button>
             <button
               onClick={() => isGameweekOpen && navigate(teamUrl)}
               disabled={!isGameweekOpen}
-              className={`flex-1 px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               PLAY NOW
             </button>
