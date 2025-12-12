@@ -1,0 +1,95 @@
+# Sign In Flow Test
+# Tests user authentication with email and password
+# Prerequisites: User must already exist in the system
+
+appId: ${BASE_URL}
+tags:
+  - auth
+  - critical
+  - signin
+---
+# Launch the web app
+- launchApp:
+    appId: chrome
+    arguments:
+      - "--new-window"
+      - "${BASE_URL}/signin"
+
+# Wait for page to load
+- assertVisible: "Welcome back"
+
+# ============================================
+# Enter Email
+# ============================================
+- assertVisible:
+    text: ".*[Ee]mail.*"
+
+# Tap on email input field
+- tapOn:
+    text: ".*[Ee]mail.*"
+    index: 0
+
+# Input test email from config
+- inputText: "${TEST_EMAIL}"
+
+# ============================================
+# Enter Password
+# ============================================
+- assertVisible:
+    text: ".*[Pp]assword.*"
+
+# Tap on password input field
+- tapOn:
+    text: ".*[Pp]assword.*"
+    index: 0
+
+# Input test password from config
+- inputText: "${TEST_PASSWORD}"
+
+# ============================================
+# Submit Sign In
+# ============================================
+# Tap Sign In button
+- tapOn:
+    text: ".*[Ss]ign [Ii]n.*"
+
+# Wait for authentication to complete
+- waitForAnimationToEnd
+
+# ============================================
+# Verification: Dashboard Loaded
+# ============================================
+# Verify user is redirected to dashboard
+- assertVisible:
+    text: ".*[Dd]ashboard.*"
+    timeout: 10000
+
+# Verify key dashboard elements are present
+- assertVisible:
+    text: ".*([Mm]y [Tt]eams|[Ll]eagues).*"
+
+# Take screenshot for test evidence
+- takeScreenshot: signin-success
+
+# ============================================
+# Verify Session Persistence
+# ============================================
+# Refresh the page to check if session persists
+- pressKey: F5
+
+# Wait for page reload
+- waitForAnimationToEnd
+
+# User should still be logged in (not redirected to login)
+- assertVisible:
+    text: ".*[Dd]ashboard.*"
+    timeout: 5000
+
+# Take screenshot
+- takeScreenshot: session-persisted
+
+# Output test results
+- evalScript: |
+    console.log('✅ Sign In Test Passed');
+    console.log('User authenticated successfully');
+    console.log('Session persisted after refresh');

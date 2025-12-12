@@ -1,15 +1,15 @@
-import { Coins } from "lucide-react"
 import { IProAthlete } from "../../types/athletes"
 import { formatPosition } from "../../utils/athleteUtils"
 import { getCountryEmojiFlag } from "../../utils/svrUtils"
 import MatchPrCard from "../rankings/MatchPrCard"
-import RoundedCard from "../shared/RoundedCard"
 import SecondaryText from "../shared/SecondaryText"
 import SmartPlayerMugshot from "./SmartPlayerMugshot"
+import FormIndicator from "../shared/FormIndicator"
+import { stripCountryName } from "../../utils/stringUtils"
 
 type Props = {
     player: IProAthlete,
-    onClick?: () => void
+    onClick?: (player: IProAthlete) => void
 }
 
 /** Renders a player role card */
@@ -17,54 +17,69 @@ export default function PlayerRowCard({ player, onClick }: Props) {
 
     const countryFlag = getCountryEmojiFlag(player.nationality, true);
 
+    
+
+    const handelClick = () => {
+        if (onClick) {
+            onClick(player);
+        }
+    }
+
     return (
-        <RoundedCard
-            onClick={onClick}
-            className="flex cursor-pointer dark:border-none flex-row w-full items-center justify-between gap-2 p-3"
+        <tr
+            onClick={handelClick}
+            className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
         >
-            <div className="flex flex-row items-center gap-2" >
-                <div>
-                    <SmartPlayerMugshot
-                        url={player.image_url}
-                        teamId={player.team_id}
-                    />
-                </div>
-
-                <div>
+            <td className="py-3" >
+                <div className="flex flex-row items-center gap-2" >
                     <div>
-                        <p className="text-sm" >{player.player_name}</p>
+                        <SmartPlayerMugshot
+                            url={player.image_url}
+                            teamId={player.team_id}
+                            playerImageClassName="bg-transparent"
+                        />
                     </div>
-                    <div className="flex flex-row items-center gap-2" >
 
-                        <SecondaryText className="text-xs" >{formatPosition(player.position)} </SecondaryText>
+                    <div>
+                        <div>
+                            <p className="text-sm" >{player.player_name}</p>
+                        </div>
+                        <div className="flex flex-row items-center gap-2" >
 
-                        {player.nationality && (
-                            <>
-                                <div className="w-1 h-1 rounded-full bg-slate-700 dark:bg-slate-400" ></div>
+                            <SecondaryText className="text-xs" >{formatPosition(player.position)} </SecondaryText>
 
-                                <SecondaryText className="text-xs" >
-                                    {countryFlag} {player.nationality}
-                                </SecondaryText>
-                            </>
-                        )}
+                            {player.nationality && (
+                                <>
+                                    <div className="w-1 h-1 rounded-full bg-slate-700 dark:bg-slate-400" ></div>
+
+                                    <SecondaryText className="text-xs" >
+                                        {countryFlag} {stripCountryName(player.nationality)}
+                                    </SecondaryText>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </td>
 
-            <div className="flex flex-row items-center gap-4" >
-                
-                <div className="flex flex-row items-center gap-1" >
-                    <p className="text-xs" >{player.price}</p>
-                    <Coins className="text-yellow-500 w-3 h-3" />
-                </div>
 
-                <div className="flex flex-col gap-1 items-center justify-center" >
-                    <MatchPrCard
-                        pr={player.power_rank_rating}
-                    />
-                    <SecondaryText className="text-[10px]" >Rating</SecondaryText>
+            <td className="flex py-3 flex-row items-center justify-center gap-1" >
+                <p className="text-xs" >{player.price}</p>
+                {/* <Coins className="text-yellow-500 w-3 h-3" /> */}
+            </td>
+
+            <td className="py-3" >
+                <div className="flex flex-row items-center justify-center w-full flex-1" >
+                    {player.form ? <FormIndicator form={player.form} /> : "-"}
                 </div>
-            </div>
-        </RoundedCard >
+            </td>
+            
+            <td className="flex py-3 flex-col gap-1 items-center justify-center" >
+                <MatchPrCard
+                    pr={player.power_rank_rating}
+                />
+            </td>
+
+        </tr>
     )
 }

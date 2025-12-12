@@ -1,4 +1,4 @@
-import { IProAthlete, IAthleteSeasonStarRatings, AthleteRoundAvailabilityReport } from '../../types/athletes';
+import { IProAthlete, IAthleteSeasonStarRatings, AthleteRoundAvailabilityReport, PlayerPriceHistoryItem } from '../../types/athletes';
 import { IProSeason } from '../../types/season';
 import { SportAction } from '../../types/sports_actions';
 import { getUri, getAuthHeader } from '../../utils/backendUtils';
@@ -234,5 +234,22 @@ export const djangoAthleteService = {
 
     return undefined;
 
+  },
+
+  getPriceHistory: async (athleteId: string, limit: number = 10) : Promise<PlayerPriceHistoryItem[]> => {
+    try {
+      const uri = getUri(`/api/v1/athletes/${athleteId}/price-history?limit=${limit}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as PlayerPriceHistoryItem[]
+      }
+    } catch (err) {
+      logger.error("Error fetching price history ", err);
+    }
+
+    return [];
   }
 };

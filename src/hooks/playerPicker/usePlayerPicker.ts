@@ -22,6 +22,8 @@ export function usePlayerPicker() {
 
     const playerToBeReplaced = useAtomValue(playerPickerAtoms.playerToBeReplacedAtom);
 
+    const [viewType, setViewType] = useAtom(playerPickerAtoms.viewType);
+
     return {
         onSelectPlayer,
         filterTeams,
@@ -35,5 +37,7 @@ export function usePlayerPicker() {
         leagueRound,
         excludePlayers,
         playerToBeReplaced,
+        viewType,
+        setViewType
     }
 }

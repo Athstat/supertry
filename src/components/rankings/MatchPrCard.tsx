@@ -9,7 +9,7 @@ type Props = {
 type TierColour = "purple" | "green" | "yellow" | "red" | "none";
 
 /** Renders a match PR card */
-export default function MatchPrCard({ pr}: Props) {
+export default function MatchPrCard({ pr, className}: Props) {
 
     const tier = useMemo<TierColour>(() => {
         
@@ -39,13 +39,14 @@ export default function MatchPrCard({ pr}: Props) {
 
     return (
         <div className={twMerge(
-            "w-8 h-8 rounded-md dark:bg-slate-600 flex flex-col items-center justify-center",
+            "w-8 h-8 text-sm font-semibold  dark:bg-slate-600 flex flex-col items-center justify-center",
             tier === "purple" && "bg-purple-500 dark:bg-purple-500",
             tier === "green" && "bg-green-500 dark:bg-green-600",
             tier === "yellow" && "bg-yellow-500 dark:bg-yellow-600",
             tier === "red" && "bg-red-500 dark:bg-red-600",
+            className
         )} >
-            <p className="text-sm" >{ pr ? Math.floor(pr) : "-"}</p>
+            <p className="" >{ pr ? Math.floor(pr) : "-"}</p>
         </div>
     )
 }

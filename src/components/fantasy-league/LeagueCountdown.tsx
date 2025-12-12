@@ -6,7 +6,8 @@ import { twMerge } from "tailwind-merge";
 type Props = {
     leagueRound: IFantasyLeagueRound,
     className?: string,
-    leagueTitleClassName?: string
+    leagueTitleClassName?: string,
+    title?: string
 }
 
 export default function LeagueRoundCountdown({ leagueRound }: Props) {
@@ -88,7 +89,7 @@ export default function LeagueRoundCountdown({ leagueRound }: Props) {
 
 
 /** Renders a league count down 2 */
-export function LeagueRoundCountdown2({ leagueRound, className,leagueTitleClassName }: Props) {
+export function LeagueRoundCountdown2({ leagueRound, className,leagueTitleClassName, title }: Props) {
 
     const deadlineMillis = new Date(leagueRound.join_deadline ?? new Date()).valueOf();
     const dateNow = new Date().valueOf();
@@ -154,7 +155,7 @@ export function LeagueRoundCountdown2({ leagueRound, className,leagueTitleClassN
                 <p className={twMerge(
                     "font-semibold",
                     leagueTitleClassName
-                )} > ⏰ GW {leagueRound.start_round} Deadline</p>
+                )} > { title ? title : `⏰ GW ${leagueRound.start_round} Deadline`}</p>
             </div>
 
             {isTimeLeft && <div className="flex flex-row items-center gap-2">

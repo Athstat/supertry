@@ -18,10 +18,12 @@ import { IFantasyLeagueRound } from "../types/fantasyLeague";
 import NoTeamCreatedFallback from "../components/fantasy-leagues/NoTeamCreatedFallback";
 import CircleButton from "../components/shared/buttons/BackButton";
 import { ArrowLeft } from "lucide-react";
+import { useHideTopNavBar } from "../hooks/navigation/useNavigationBars";
 
 
 export default function LeagueMemberTeamScreen() {
 
+    useHideTopNavBar();
     const { leagueId, userId } = useParams<{ leagueId?: string, userId?: string }>();
 
     const key = userId ? swrFetchKeys.getUserById(userId) : null;
@@ -63,7 +65,7 @@ function Content() {
 
     const handleBack = () => {
         if (league) {
-            navigate(`/league/${league?.id}?journey=standings`);
+            navigate(`/league/${league?.id}/standings`);
         }
     }
 

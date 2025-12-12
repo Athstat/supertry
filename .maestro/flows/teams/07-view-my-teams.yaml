@@ -1,0 +1,125 @@
+# View My Teams Flow Test
+# Tests the ability to view all user teams and navigate to team details
+# Prerequisites: User must be logged in and have at least one team
+# Flow: Navigate to My Teams → View teams list → Select team → View details
+
+appId: ${BASE_URL}
+tags:
+  - teams
+  - view-teams
+---
+# Use helper flow to login first
+- runFlow: ../helpers/login-helper.yaml
+
+# ============================================
+# Navigate to My Teams
+# ============================================
+# Look for My Teams navigation link
+- assertVisible:
+    text: ".*([Mm]y [Tt]eams).*"
+    timeout: 5000
+
+# Tap on My Teams
+- tapOn:
+    text: ".*([Mm]y [Tt]eams).*"
+
+# Wait for navigation
+- waitForAnimationToEnd
+
+# ============================================
+# Verify Teams List Screen
+# ============================================
+- assertVisible:
+    text: ".*([Yy]our [Tt]eams|[Mm]y [Tt]eams).*"
+    timeout: 10000
+
+# Take screenshot of teams list
+- takeScreenshot: my-teams-list
+
+# ============================================
+# Verify Team Cards Are Present
+# ============================================
+# Check for at least one team card
+# Team cards should display team name or other identifying info
+- assertVisible:
+    text: ".*[Tt]eam.*"
+    timeout: 5000
+
+# ============================================
+# Navigate to Individual Team
+# ============================================
+# Tap on first team card to view details
+- tapOn:
+    text: ".*[Tt]eam.*"
+    index: 0
+
+# Wait for team details to load
+- waitForAnimationToEnd
+
+# ============================================
+# Verify Team Details Display
+# ============================================
+# Check for team details elements
+- assertVisible:
+    text: ".*([Tt]eam|[Pp]layers).*"
+    timeout: 10000
+
+# Verify score/points display
+- assertVisible:
+    text: ".*([Ss]core|[Pp]oints).*"
+    optional: true
+
+# Take screenshot of team details
+- takeScreenshot: team-details-view
+
+# ============================================
+# Verify Players Display
+# ============================================
+# Scroll down to see all players
+- scroll:
+    direction: down
+
+# Verify player information is visible
+- assertVisible:
+    text: ".*([Pp]layer|[Pp]osition).*"
+    timeout: 5000
+
+# Take screenshot of players section
+- takeScreenshot: team-players
+
+# ============================================
+# Verify Team Stats/Info
+# ============================================
+# Check for overall score
+- assertVisible:
+    text: ".*([Oo]verall|[Tt]otal).*"
+    optional: true
+
+# Check for rank or league position
+- assertVisible:
+    text: ".*([Rr]ank|[Pp]osition).*"
+    optional: true
+
+# Take final screenshot
+- takeScreenshot: team-complete-view
+
+# ============================================
+# Navigate Back to Teams List
+# ============================================
+# Tap back button or navigate back
+- back
+    
+# Wait for navigation
+- waitForAnimationToEnd
+
+# Verify we're back at teams list
+- assertVisible:
+    text: ".*([Yy]our [Tt]eams|[Mm]y [Tt]eams).*"
+    timeout: 5000
+
+# Output test results
+- evalScript: |
+    console.log('✅ View My Teams Flow Test Passed');
+    console.log('Teams list displayed correctly');
+    console.log('Team details loaded successfully');
+    console.log('All team information visible');
