@@ -1,7 +1,6 @@
 import { User } from 'lucide-react';
 import { Activity } from './shared/Activity';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ThemeToggle } from './ThemeToggle';
 import ScrummyLogoHorizontal from './branding/scrummy_logo_horizontal';
 import { isInProduction } from '../utils/webUtils';
 import BetaTag from './branding/BetaTag';
@@ -52,17 +51,14 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-4">
-            <ThemeToggle />
-
             <NotificationsBell onClick={handleInAppMessages} />
 
             <button
               onClick={handleProfileClick}
-              className={`p-2 transition-colors ${
-                isProfileActive
-                  ? 'text-primary-500'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
-              }`}
+              className={`p-2 transition-colors ${isProfileActive
+                ? 'text-primary-500'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+                }`}
               aria-label="Profile"
             >
               <User size={20} />
