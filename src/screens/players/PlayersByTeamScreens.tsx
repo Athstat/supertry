@@ -11,6 +11,7 @@ import TeamLogo from "../../components/team/TeamLogo";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import PlayersList from "../../components/players/PlayersList";
 import PlayersTeamsSheet from "../../components/players/teams/PlayersTeamsSheet";
+import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 
 
 /** Renders a page for players by team screen */
@@ -18,6 +19,8 @@ export default function PlayersByTeamScreens() {
 
     const { teamId } = useParams<{ teamId: string }>();
     const navigate = useNavigate();
+
+    useHideTopNavBar();
 
     const { team, isLoading: loadingTeam } = useProTeam(teamId);
     const { athletes, isLoading: loadingAthletes } = useSupportedAthletes();
@@ -45,7 +48,7 @@ export default function PlayersByTeamScreens() {
     }
 
     return (
-        <PageView>
+        <PageView className="py-4" >
             <div className={twMerge(
                 'flex sticky w-full p-2 top-0 z-[10] left-0 flex-row items-center justify-between',
                 AppColours.BACKGROUND

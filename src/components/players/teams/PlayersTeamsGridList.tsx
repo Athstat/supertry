@@ -111,7 +111,7 @@ function TeamItem({ team, onClick }: TeamItemProps) {
 
 
   return (
-    <RoundedCard onClick={handleOnClick} className="cursor-pointer p-2 h-[90px] flex flex-col items-center justify-center gap-2" >
+    <RoundedCard onClick={handleOnClick} className="dark:border-none cursor-pointer p-2 h-[90px] flex flex-col items-center justify-center gap-2" >
       <TeamLogo
         url={team.image_url}
         className="w-8 h-8"
