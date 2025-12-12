@@ -34,19 +34,19 @@ export default function SchoolRugbyBanner() {
 
             {/* Rugby player images */}
             {/* Left player image */}
-            <div className="absolute -left-2 bottom-0 w-24 h-28 pointer-events-none">
+            <div className="absolute -left-2 bottom-0 w-32 h-36 pointer-events-none">
                 <img
-                    src="/images/dashboard/rugby-player-right.png"
-                    alt="Rugby player"
-                    className="w-full h-full object-cover"
+                    src="/images/dashboard/school-rugby-player-left.jpg"
+                    alt="Rugby players"
+                    className="w-full h-full object-cover object-center"
                 />
             </div>
             {/* Right player image */}
-            <div className="absolute right-0 bottom-0 w-32 h-32 pointer-events-none">
+            <div className="absolute right-0 bottom-0 w-28 h-36 pointer-events-none">
                 <img
-                    src="/images/dashboard/rugby-player-left.png"
+                    src="/images/dashboard/school-rugby-player-right.jpg"
                     alt="Rugby player"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                 />
             </div>
         </div>

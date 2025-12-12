@@ -72,6 +72,7 @@ type TeamExistsViewProps = {
     rank: number;
     totalPoints: number;
     localRankPercentile: number;
+    totalUsers: number;
   };
   teamUrl: string;
   currentGameweek?: number;
@@ -84,7 +85,17 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
 
   return (
     <div className="relative w-full overflow-hidden shadow-md">
-      {/* Blue Gradient Background */}
+      {/* Background Image */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url(/images/dashboard/hero-background.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+
+      {/* Blue Gradient Overlay */}
       <div
         className="absolute inset-0 opacity-90"
         style={{
@@ -102,12 +113,12 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
 
         {/* Title */}
         <h1
-          className="text-center font-normal text-base leading-6 text-white"
-          style={{ fontFamily: 'Oswald, sans-serif' }}
+          className="text-center font-normal text-lg leading-6 text-white"
+          style={{ fontFamily: "'Race Sport', sans-serif" }}
         >
           PLAY URC FANTASY
           <br />
-          {abbreviateSeasonName(season.name).toUpperCase()} CHALLENGE
+          {/* {abbreviateSeasonName(season.name).toUpperCase()} CHALLENGE */}
         </h1>
 
         {/* Stats Card with Internal Border and Round */}
@@ -120,15 +131,15 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
             {/* Global Rank */}
             <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
               <Globe className="w-6 h-6 text-white" />
-              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                #{userStats.rank}<span className="text-xs text-white">/1653</span>
+              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Roboto, sans-serif' }}>
+                #{userStats.rank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
               </p>
             </div>
 
             {/* Points (Center - Larger & Elevated) */}
             <div className="flex-1 flex flex-col items-center gap-1.5">
               <Trophy className="w-6 h-6 text-white" />
-              <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Oswald, sans-serif', marginBottom: -5 }}>
+              <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Roboto, sans-serif', marginBottom: -5 }}>
                 {userStats.totalPoints}
               </p>
               <p className="text-xs text-white" style={{ marginBottom: -5 }}>points</p>
@@ -137,8 +148,8 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
             {/* League Rank */}
             <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
               <Users className="w-6 h-6 text-white" />
-              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                #{userStats.localRankPercentile}<span className="text-xs text-white">/16</span>
+              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Roboto, sans-serif' }}>
+                #{userStats.rank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
               </p>
             </div>
           </div>
@@ -172,7 +183,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
           <>
             <div className="w-full max-w-sm border-t border-white/50"></div>
             <p className="text-sm text-white text-center">
-              Round {(currentGameweek || 0) + 1} Deadline:{' '}
+              Round {(currentGameweek || 0) + 1} Deadline:<br />
               <span className="font-bold">{formatCountdown(nextDeadline)}</span>
             </p>
           </>
@@ -183,7 +194,7 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
           onClick={() => navigate(teamUrl)}
           className="px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
         >
-          PLAY
+          PLAY NOW
         </button>
       </div>
     </div>

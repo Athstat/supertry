@@ -18,6 +18,7 @@ type TeamCheckResult = {
     rank: number;
     totalPoints: number;
     localRankPercentile: number;
+    totalUsers: number;
   };
 };
 
@@ -235,6 +236,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
       rank: rank,
       totalPoints: roundPoints,
       localRankPercentile: Math.round(localRankPercentile),
+      totalUsers: totalUsers,
     };
   }, [userStanding, standings, currentRoundTeam]);
 

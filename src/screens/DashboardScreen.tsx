@@ -55,11 +55,10 @@ function DashboardContent() {
         {/* Dominate the SCRUM */}
         <RoundedCard className="flex flex-col sm:flex-row gap-4 pt-5 pb-5 pl-2 pr-2 items-start sm:items-end">
           <div className="flex flex-col gap-2 flex-1">
-            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white">Dominate the scrum</h1>
+            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Dominate the Scrum!</h1>
             <div className="flex items-center gap-2">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Create your own league, or join one. Challenge your friends, invite your crew and see
-                who really rules the game!
+              <p className="text-xs text-gray-600 dark:text-gray-300">
+                Create your own league, or join one. Challenge your friends, invite your crew!
               </p>
 
               <button
@@ -82,9 +81,9 @@ function DashboardContent() {
         {/* Make your match predictions */}
         <RoundedCard className="flex flex-col sm:flex-row gap-4 pt-5 pb-5 pl-2 pr-2 items-start sm:items-end">
           <div className="flex flex-col gap-2 flex-1">
-            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white">Make your match predictions</h1>
+            <h1 className="font-bold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Make your match predictions</h1>
             <div className="flex items-center gap-2">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-xs text-gray-600 dark:text-gray-300">
                 Predict the results of all the upcoming matches to maximize your fantasy points this
                 week.
               </p>
@@ -100,7 +99,7 @@ function DashboardContent() {
       </div>
 
       {/* Weekly Leaderboards with tabs */}
-      <WeeklyLeaderboards season={displaySeason} />
+      {/* <WeeklyLeaderboards season={displaySeason} /> */}
     </PageView>
   );
 }
