@@ -1,0 +1,63 @@
+# Login Helper Flow
+# Reusable flow for authenticating a user
+# This flow can be included in other tests that require authentication
+# Uses credentials from config.yaml
+
+appId: ${BASE_URL}
+---
+# Launch the web app at signin page
+- launchApp:
+    appId: chrome
+    arguments:
+      - "--new-window"
+      - "${BASE_URL}/signin"
+
+# Wait for page to load
+- assertVisible: 
+    text: "Welcome back"
+    timeout: 10000
+
+# ============================================
+# Enter Email
+# ============================================
+# Tap on email input field
+- tapOn:
+    text: ".*[Ee]mail.*"
+    index: 0
+
+# Input test email from config
+- inputText: "${TEST_EMAIL}"
+
+# ============================================
+# Enter Password
+# ============================================
+# Tap on password input field
+- tapOn:
+    text: ".*[Pp]assword.*"
+    index: 0
+
+# Input test password from config
+- inputText: "${TEST_PASSWORD}"
+
+# ============================================
+# Submit Sign In
+# ============================================
+# Tap Sign In button
+- tapOn:
+    text: ".*[Ss]ign [Ii]n.*"
+
+# Wait for authentication to complete
+- waitForAnimationToEnd
+
+# ============================================
+# Verify Login Success
+# ============================================
+# Verify user is redirected to dashboard
+- assertVisible:
+    text: ".*[Dd]ashboard.*"
+    timeout: 15000
+
+# Output helper completion
+- evalScript: |
+    console.log('✅ Login Helper Completed');
+    console.log('User authenticated: ${TEST_EMAIL}');

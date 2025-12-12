@@ -39,9 +39,10 @@ export default function NoTeamCreatedFallback({perspective = "first-person", hid
         `${managerAlias} didn't create a team for ${round?.title}`;
 
     return (
-        <div className="relative flex overflow-hidden max-h-[400px] flex-col items-center justify-center w-full h-full" >
-            <div className="opacity-20 w-full mt-40" >
-                <PitchViewLoadingSkeleton />
+        <div className="relative flex overflow-hidden flex-col items-center justify-center w-full h-full" >
+            
+            <div className="opacity-20 w-full" >
+                <PitchViewLoadingSkeleton hideHistoryBar />
             </div>
 
             <div className="absolute top-0 gap-2 w-full h-[400px] left-0 flex flex-col items-center justify-center" >

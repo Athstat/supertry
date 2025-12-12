@@ -1,5 +1,5 @@
 import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
-import CreateMyTeam from './CreateMyTeam';
+import CreateTeamView from './CreateTeamView';
 import FantasyTeamView from './my-team/FantasyTeamView';
 import NoTeamCreatedFallback from './NoTeamCreatedFallback';
 import TeamHistoryProvider from '../../providers/fantasy-teams/TeamHistoryProvider';
@@ -76,13 +76,13 @@ function MyTeamModeSelector() {
   }, [isLocked, round, roundTeam]);
 
   // Wait for leagueConfig to load to prevent error flash
-  if (!leagueConfig || isLoading) {
+  if (isLoading) {
     return <PitchViewLoadingSkeleton />;
   }
 
   return (
     <Fragment>
-      <TeamHistoryBar lock={viewMode === 'create-team'} />
+      <TeamHistoryBar lock={false} />
 
       <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
         {roundTeam && (
@@ -100,7 +100,7 @@ function MyTeamModeSelector() {
       <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
         {round && (
           <CreateFantasyTeamProvider leagueRound={round}>
-            <CreateMyTeam />
+            <CreateTeamView />
           </CreateFantasyTeamProvider>
         )}
       </Activity>

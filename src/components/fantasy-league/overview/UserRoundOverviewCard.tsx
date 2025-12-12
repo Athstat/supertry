@@ -3,7 +3,6 @@ import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../typ
 import BlueGradientCard from '../../shared/BlueGradientCard';
 import { TranslucentButton } from '../../shared/buttons/PrimaryButton';
 import { Shield } from 'lucide-react';
-import { Table } from 'lucide-react';
 import LeagueRoundCountdown, { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { useTabView } from '../../shared/tabs/TabView';
@@ -20,7 +19,6 @@ export default function UserRoundOverviewCard({
   leagueRound,
   userTeam,
   onViewTeam,
-  onViewStandings,
 }: Props) {
   const { navigate } = useTabView();
   const routerNavigate = useNavigate();
@@ -43,23 +41,16 @@ export default function UserRoundOverviewCard({
     }
   };
 
-  const handleViewStandings = () => {
-    if (onViewStandings) {
-      onViewStandings();
-      navigate('standings');
-    }
-  };
-
   return (
     <div className='flex flex-col gap-2' >
-      <BlueGradientCard className="p-3 flex flex-col gap-2 w-full">
+      <BlueGradientCard className="px-6 flex flex-col gap-6 w-full">
         
         <div className="flex flex-row w-full items-center justify-between">
           <div>
             {/* <h3 className="font-bold ">{authUser?.username || 'My Team'}</h3> */}
             <div className="flex flex-row items-center gap-1">
               {isLocked && <Lock className="w-4 h-4" />}
-              {/* <p className="text-sm">{leagueRound.title}</p> */}
+              <p className="">{}</p>
             </div>
           </div>
         </div>
@@ -82,16 +73,16 @@ export default function UserRoundOverviewCard({
           leagueRound={leagueRound}
         />
 
-        <div className="flex flex-row items-center justify-center gap-2">
+        <div className="flex flex-col items-center justify-center gap-2">
           <TranslucentButton onClick={handleViewTeam}>
             <Shield className="w-4 h-4" />
             Manage Team
           </TranslucentButton>
 
-          <TranslucentButton onClick={handleViewStandings}>
+          {/* <TranslucentButton onClick={handleViewStandings}>
             <Table className="w-4 h-4" />
             Standings
-          </TranslucentButton>
+          </TranslucentButton> */}
         </div>
       </BlueGradientCard>
 

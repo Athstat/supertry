@@ -83,3 +83,10 @@ export type AthleteRoundAvailabilityReport = {
   status: PlayerAvailabilityStatus,
   game?: IFixture
 }
+
+export type PlayerPriceHistoryItem = {
+  athlete_id: string,
+  new_price: number,
+  old_price: number,
+  change_time: Date
+}

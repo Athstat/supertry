@@ -75,22 +75,19 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
 
 
   return (
-    <div className="mt-4 h-full ">
+    <div className=" h-ful ">
       <div className='flex flex-col relative'>
-
-        <div className='px-4 mb-4' >
-
-        </div>
 
 
         {leagueRound && starters.length > 0 && (
-          <TeamFormation3D onPlayerClick={handlePlayerClick} />
+          <TeamFormation3D marginCN='mt-0' firstRowMargin='mt-8' onPlayerClick={handlePlayerClick} />
         )}
 
         {/* Super Substitute */}
         {leagueRound && superSubSlot && (
           <TeamBenchDrawer
             onPlayerClick={handlePlayerClick}
+            
           />
         )}
 

@@ -1,3 +1,5 @@
+import { getAppTheme } from "./themes/theme.constants";
+import { AppTheme } from "./themes/themes";
 
 export const CACHE_DURATION = 5 * 60 * 1000;
 export const URC_COMPETIION_ID = "b5cae2ff-d123-5f12-a771-5faa6d40e967";
@@ -39,3 +41,14 @@ export const queryParamKeys = {
 export const lighterDarkBlueCN = "dark:bg-[#161d29]";
 export const backgroundCN = "bg-gray-50 dark:bg-dark-850";
 export const backgroundTranslucentCN = "bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none";
+
+const currentTheme: AppTheme = getAppTheme();
+
+export const AppColours = {
+  BLUE_BACKGROUND: 'bg-[#1196F5] dark:bg-[#1196F5]',
+  BACKGROUND: currentTheme.backgroundCN,
+  CARD_BACKGROUND: currentTheme.cardBackgroundCN
+}
+
+console.log("Background", window.DARK_BACKGROUND_CLASSNAME)
+console.log("Card Background", window.DARK_CARD_BACKGROUND_CLASSNAME);

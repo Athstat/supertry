@@ -25,3 +25,12 @@ dist-ssr
 .env
 
 *.rdb
+
+# Maestro test artifacts
+test-results.xml
+.maestro/test-results/
+.maestro/.maestro/
+*.maestro-logs
+
+# Test data with sensitive credentials
+.maestro/test-data/users.yaml
