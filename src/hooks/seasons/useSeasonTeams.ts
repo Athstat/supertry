@@ -7,7 +7,7 @@ export function useSeasonTeams(seasonId?: string) {
     const { data, isLoading, mutate, error} = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(seasonId ?? ""));
 
     const sortedTeams = useMemo(() => {
-        return (data || []).sort((a, b) => {
+        return [...(data || [])].sort((a, b) => {
             return a.athstat_name.localeCompare(b.athstat_name)
         })
     },[data]);
