@@ -5,7 +5,7 @@ import { swrFetchKeys } from "../../../utils/swrKeys";
 import { gamesService } from "../../../services/gamesService";
 import { useAthlete } from "../../../hooks/athletes/useAthlete";
 import RoundedCard from "../../shared/RoundedCard";
-import { Star } from "lucide-react";
+import { Crown, Star } from "lucide-react";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
 import MatchPrCard from "../../rankings/MatchPrCard";
@@ -71,8 +71,8 @@ export default function FixturePotmCard({ fixture }: Props) {
 
             <div className="absolute top-0 left-0 p-4 w-full flex flex-col gap-2" >
                 <div className="flex flex-row items-center gap-1" >
-                    <Star className="text-yellow-500 w-4 h-4" />
-                    <p className="font-semibold text-sm" >SCRUMMY Player of The Match</p>
+                    <Crown className="text-yellow-500 w-4 h-4" />
+                    <p className="font-semibold text-sm" >Power Ranking King</p>
                 </div>
 
                 <div className="flex flex-row items-center justify-between" >
