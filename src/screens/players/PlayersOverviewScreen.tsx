@@ -3,7 +3,6 @@ import PageView from '../PageView'
 import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
 import PositionCard from '../../components/players/positioning/PositionCard'
-import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 import { Activity, Fragment } from 'react'
 import PlayerSearchResults from './PlayerSearchResults'
 import { useQueryState } from '../../hooks/useQueryState'
@@ -154,11 +153,11 @@ function Content() {
       </div>
       <PlayersTeamsGridList />
 
-      <div>
+      {/* <div>
         <p className='font-bold text-md' >By Country</p>
-      </div>
+      </div> */}
 
-      <PlayersCountryGridList />
+      {/* <PlayersCountryGridList /> */}
     </Fragment>
   )
 }

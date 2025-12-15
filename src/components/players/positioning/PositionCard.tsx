@@ -33,7 +33,7 @@ export default function PositionCard({ title, onClick, positionClass, className,
         >
             <p className="font-semibold text-sm" >{title}</p>
 
-            {<div className="absolute top-0 right-0 opacity-40 blur-xl" >
+            {<div className="absolute top-0 right-0 opacity-0" >
                 {icon}
             </div>}
         </RoundedCard>
