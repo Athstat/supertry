@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { X } from "lucide-react";
+import { ChevronsUpDown, X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
@@ -17,7 +17,6 @@ import RoundedCard from "../shared/RoundedCard";
 import SecondaryText from "../shared/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import GlassBottomSheet from "../ui/GlassBottomSheet";
-import { LoadingState } from "../ui/LoadingState";
 import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
 import { EmptyState } from "./EmptyState";
@@ -170,7 +169,7 @@ export default function PlayersList({ players }: Props) {
                 </div>
 
                 {/* Filtering Loading State */}
-                {isFiltering && <LoadingState message="Searching..." />}
+                {/* {isFiltering && <LoadingState message="Searching..." />} */}
 
                 {/* Empty State */}
                 {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
@@ -196,6 +195,9 @@ export default function PlayersList({ players }: Props) {
                     <PlayerListTable
                         players={filteredAthletes}
                         onClick={handlePlayerClick}
+                        onSort={handleSortByField}
+                        currentSortDirection={sortDirection}
+                        currentSortField={sortField}
                     />
                 )}
 
@@ -243,39 +245,16 @@ export default function PlayersList({ players }: Props) {
     );
 };
 
-// type ItemProps = {
-//     player: IProAthlete;
-//     onClick: () => void;
-// };
-
-// function PlayerCardItem({ player, onClick }: ItemProps) {
-//     const { ref, inView } = useInView({ triggerOnce: true });
-
-//     return (
-//         <div ref={ref} data-player-card>
-//             {inView && (
-//                 <PlayerGameCard
-//                     key={player.tracking_id}
-//                     player={player}
-//                     onClick={onClick}
-//                     className=""
-//                     // Players screen specific spacing tweaks
-//                     priceClassName="top-14 left-5"
-//                     teamLogoClassName="top-7 right-2"
-//                     detailsClassName="px-6 pb-10"
-//                 />
-//             )}
-//         </div>
-//     );
-// }
-
 type TableProps = {
     players: IProAthlete[],
-    onClick?: (player: IProAthlete) => void
+    onClick?: (player: IProAthlete) => void,
+    onSort?: (field: SortField, direction: SortDirection) => void,
+    currentSortField?: SortField,
+    currentSortDirection?: SortDirection
 }
 
 /** Renders Players List Table */
-export function PlayerListTable({ players, onClick }: TableProps) {
+export function PlayerListTable({ players, onClick, onSort, currentSortDirection, currentSortField }: TableProps) {
 
     const handleClick = (player: IProAthlete) => {
         if (onClick) {
@@ -283,16 +262,51 @@ export function PlayerListTable({ players, onClick }: TableProps) {
         }
     }
 
+
+
     return (
         <div className="w-full min-h-screen" >
             <table className="w-full"  >
 
                 <thead>
                     <tr>
-                        <th className="pb-4" ><SecondaryText >Player</SecondaryText></th>
-                        <th className="pb-4" ><SecondaryText >Price</SecondaryText></th>
-                        <th className="pb-4" ><SecondaryText >Form</SecondaryText></th>
-                        <th className="pb-4" ><SecondaryText >PR</SecondaryText></th>
+
+                        <PlayerListTableColumn
+                            className="pb-4"
+                            label="Player"
+                            fieldName={'player_name'}
+                            currentSortDirection={currentSortDirection}
+                            currentSortField={currentSortField}
+                            onSort={onSort}
+                        />
+
+                        <PlayerListTableColumn
+                            className="pb-4"
+                            label="Price"
+                            fieldName={'price'}
+                            currentSortDirection={currentSortDirection}
+                            currentSortField={currentSortField}
+                            onSort={onSort}
+                        />
+
+                        <PlayerListTableColumn
+                            className="pb-4"
+                            label="Form"
+                            fieldName={'form'}
+                            currentSortDirection={currentSortDirection}
+                            currentSortField={currentSortField}
+                            onSort={onSort}
+                        />
+
+                        <PlayerListTableColumn
+                            className="pb-4"
+                            label="PR"
+                            fieldName={'power_rank_rating'}
+                            currentSortDirection={currentSortDirection}
+                            currentSortField={currentSortField}
+                            onSort={onSort}
+                        />
+
                     </tr>
                 </thead>
 
@@ -309,5 +323,51 @@ export function PlayerListTable({ players, onClick }: TableProps) {
                 </tbody>
             </table>
         </div>
+    )
+}
+
+type ColumnProps = {
+    label?: string,
+    fieldName: SortField,
+    currentSortDirection?: SortDirection,
+    currentSortField?: SortField,
+    className?: string,
+    onSort?: (field: SortField, direction: SortDirection) => void
+}
+
+function PlayerListTableColumn({ label, className, onSort, currentSortDirection, currentSortField, fieldName }: ColumnProps) {
+
+    const isCurrent = fieldName === currentSortField;
+
+    const handleSort = () => {
+        if (!onSort) {
+            return;
+        }
+
+        if (fieldName === currentSortField) {
+            const inverseDirection = currentSortDirection === "asc" ? "desc" : "asc";
+            onSort(fieldName, inverseDirection);
+            return;
+        }
+
+        onSort(fieldName, "desc");
+    }
+
+    return (
+        <>
+            <th className={twMerge(
+                className,
+            )} >
+                <button onClick={handleSort} className="flex flex-row items-center gap-1" >
+                    <SecondaryText>
+                        {label}
+                    </SecondaryText>
+
+                    {isCurrent && (
+                        <ChevronsUpDown className="text-slate-600 dark:text-slate-400 text-sm w-4 h-4" />
+                    )}
+                </button>
+            </th>
+        </>
     )
 }
