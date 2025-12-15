@@ -31,6 +31,12 @@ export function useScoutingList() {
         setMessage(undefined);
         setError(undefined);
 
+        if (list.length >= 5) {
+            setIsAdding(false);
+            setError("Whoops, limit reached! You can only scout up to 5 players at a time");
+            return;
+        } 
+
         try {
             const res = await scoutingService.addPlayer(athleteId);
 
@@ -47,7 +53,7 @@ export function useScoutingList() {
             setIsAdding(false);
         }
 
-    }, [mutateList]);
+    }, [list.length, mutateList]);
 
     const removePlayer = useCallback(async (athleteId: string, callback?: () => void) => {
 

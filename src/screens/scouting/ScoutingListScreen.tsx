@@ -101,6 +101,12 @@ export default function ScoutingListScreen() {
                 <p className="text-lg font-bold" >My Scouting List</p>
             </div>
 
+            <div>
+                <SecondaryText>
+                    You can only scout up to 5 players at time
+                </SecondaryText>
+            </div>
+
             {listHasPlayers && <div className="flex flex-col gap-2" >
                 {list.map((si) => {
                     return <ScoutingListPlayerCard
