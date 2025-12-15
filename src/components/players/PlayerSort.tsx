@@ -1,9 +1,8 @@
 import { ChevronDown } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { athleteAnalytics } from '../../services/analytics/athleteAnalytics';
+import { SortField, SortDirection } from '../../types/playerSorting';
 
-type SortField = 'power_rank_rating' | 'player_name' | 'form';
-type SortDirection = 'asc' | 'desc';
 
 interface PlayerSortProps {
   sortField: SortField;
