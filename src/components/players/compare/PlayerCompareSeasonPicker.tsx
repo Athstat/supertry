@@ -4,7 +4,7 @@ import { IProSeason } from "../../../types/season";
 
 export const abbreviateSeasonName = (seasonName: string): string => {
     if (seasonName.startsWith("United Rugby Championship")) {
-        return seasonName.replace("United Rugby Championship", "");
+        return seasonName.replace("United Rugby Championship", "URC");
     }
     if (seasonName.startsWith("EPCR Challenge Cup")) {
         return seasonName.replace("EPCR Challenge Cup", "EPRC");
