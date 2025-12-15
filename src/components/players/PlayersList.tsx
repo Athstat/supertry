@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { X } from "lucide-react";
+import { ChevronsUpDown, X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
@@ -17,7 +17,6 @@ import RoundedCard from "../shared/RoundedCard";
 import SecondaryText from "../shared/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import GlassBottomSheet from "../ui/GlassBottomSheet";
-import { LoadingState } from "../ui/LoadingState";
 import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
 import { EmptyState } from "./EmptyState";
@@ -170,7 +169,7 @@ export default function PlayersList({ players }: Props) {
                 </div>
 
                 {/* Filtering Loading State */}
-                {isFiltering && <LoadingState message="Searching..." />}
+                {/* {isFiltering && <LoadingState message="Searching..." />} */}
 
                 {/* Empty State */}
                 {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
@@ -338,6 +337,8 @@ type ColumnProps = {
 
 function PlayerListTableColumn({ label, className, onSort, currentSortDirection, currentSortField, fieldName }: ColumnProps) {
 
+    const isCurrent = fieldName === currentSortField;
+
     const handleSort = () => {
         if (!onSort) {
             return;
@@ -355,12 +356,16 @@ function PlayerListTableColumn({ label, className, onSort, currentSortDirection,
     return (
         <>
             <th className={twMerge(
-                className
+                className,
             )} >
-                <button onClick={handleSort} >
+                <button onClick={handleSort} className="flex flex-row items-center gap-1" >
                     <SecondaryText>
                         {label}
                     </SecondaryText>
+
+                    {isCurrent && (
+                        <ChevronsUpDown className="text-slate-600 dark:text-slate-400 text-sm w-4 h-4" />
+                    )}
                 </button>
             </th>
         </>
