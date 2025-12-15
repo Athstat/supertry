@@ -181,7 +181,7 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
       {showManageTeam && <TranslucentButton
         onClick={handleManageTeam}
       >
-        Manage Your Team
+        Manage My Team
       </TranslucentButton>}
 
       {showViewTeam && <TranslucentButton
