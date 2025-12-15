@@ -96,6 +96,7 @@ function PlayerFixtureModalWrapper() {
           onClose={handleCloseFixtureModal}
           className="z-30"
           showMatchInfo
+          hideViewPlayerProfile
         />
       </div>}
     </>
