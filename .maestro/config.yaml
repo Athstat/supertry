@@ -1,7 +1,5 @@
-# Maestro Configuration for Scrummy App
-# This file contains environment variables and app configuration
-
-appId: com.scrummy.mobile
+# Maestro Configuration for Scrummy Web App
+# This file contains environment variables and configuration for web testing
 
 env:
   # Base URL for the web app (adjust for your environment)

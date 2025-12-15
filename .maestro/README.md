@@ -1,6 +1,6 @@
-# Maestro E2E Tests for Scrummy App
+# Maestro E2E Tests for Scrummy Web App
 
-This directory contains automated end-to-end (E2E) tests for the Scrummy fantasy rugby application using [Maestro](https://maestro.mobile.dev).
+This directory contains automated end-to-end (E2E) tests for the Scrummy fantasy rugby web application using [Maestro](https://maestro.mobile.dev).
 
 ## 📁 Directory Structure
 
@@ -28,9 +28,9 @@ This directory contains automated end-to-end (E2E) tests for the Scrummy fantasy
 
 ### Prerequisites
 
-1. **Node.js and npm/pnpm** installed
+1. **Node.js and pnpm** installed
 2. **Maestro CLI** installed (see installation below)
-3. **Chrome browser** installed (for web testing)
+3. **Chrome browser** installed and accessible from command line
 4. **Running dev server** on `http://localhost:5173`
 
 ### Installing Maestro
@@ -46,11 +46,21 @@ brew install maestro
 maestro --version
 ```
 
-#### Windows/Linux
+#### Linux
 
 ```bash
 # Install via curl
 curl -Ls "https://get.maestro.mobile.dev" | bash
+
+# Verify installation
+maestro --version
+```
+
+#### Windows
+
+```powershell
+# Install via PowerShell
+iwr -useb 'https://get.maestro.mobile.dev' | iex
 
 # Verify installation
 maestro --version
@@ -66,12 +76,13 @@ Edit `.maestro/config.yaml` to match your environment:
 
 ```yaml
 env:
-  BASE_URL: "http://localhost:5173"  # Your app URL
-  API_URL: "your-api-url"
+  BASE_URL: "http://localhost:5173"  # Your web app URL
   TEST_EMAIL: "maestro_test@example.com"
   TEST_PASSWORD: "TestPassword123!"
   TEST_USERNAME: "maestro_test_user"
 ```
+
+**Note:** The BASE_URL should point to your local development server. If you deploy to a staging/production environment, update this accordingly.
 
 ### 2. Create Test User
 
@@ -89,11 +100,10 @@ You can do this manually or create a setup script.
 # Start your development server
 pnpm dev
 
-# Or for Windows
-pnpm dev-win
+# The app will be running on http://localhost:5173
 ```
 
-The app should be running on `http://localhost:5173` (or update BASE_URL in config.yaml).
+**Note:** On Windows, use `pnpm dev-win` if you encounter issues with the default `dev` command.
 
 ## 🧪 Running Tests
 
@@ -170,28 +180,33 @@ pnpm test:e2e:report
 Tests are organized with tags for selective execution:
 
 - `auth` - Authentication related tests
-- `teams` - Team management tests
+- `teams` - Team management tests  
 - `critical` - Critical path tests (P0 priority)
 - `signup` - Sign up specific
 - `signin` - Sign in specific
 - `guest` - Guest user tests
+- `web` - Web-specific tests
 
 Run tests by tag:
 
 ```bash
 maestro test --include-tags=critical .maestro/flows/
 maestro test --include-tags=auth .maestro/flows/
+maestro test --include-tags=web .maestro/flows/
 ```
 
 ## 🐛 Debugging Tests
 
 ### Use Maestro Studio
 
-Maestro Studio is a visual tool for debugging and creating tests:
+Maestro Studio is a visual tool for debugging and creating tests interactively:
 
 ```bash
 # Launch Maestro Studio
 maestro studio
+
+# Then open a test file or create a new one
+# The studio will guide you through the test visually
 ```
 
 ### View Test Output
@@ -314,7 +329,12 @@ maestro test .maestro/flows/your-feature/new-test.yaml
 
 ### Issue: "Chrome not found"
 
-**Solution:** Ensure Chrome is installed and in your PATH.
+**Solution:** 
+- Ensure Google Chrome is installed on your system
+- On macOS: Chrome is typically at `/Applications/Google Chrome.app`
+- On Linux: Install via `sudo apt install google-chrome-stable` or similar
+- On Windows: Install from [chrome.google.com](https://www.google.com/chrome/)
+- Verify Chrome is accessible from command line by running `chrome --version` (or `google-chrome --version` on Linux)
 
 ### Issue: "Element not found"
 
@@ -332,12 +352,14 @@ maestro test .maestro/flows/your-feature/new-test.yaml
 - Increase timeout values
 - Check for race conditions
 
-### Issue: "App not launching"
+### Issue: "App not launching" or "Cannot access BASE_URL"
 
 **Solution:**
-- Ensure dev server is running
-- Check BASE_URL in config.yaml
-- Verify Chrome can access localhost
+- Ensure dev server is running (`pnpm dev`)
+- Verify app loads at http://localhost:5173 in your browser
+- Check BASE_URL in config.yaml matches your dev server
+- If using a different port, update BASE_URL accordingly
+- Check firewall settings aren't blocking localhost access
 
 ## 🔄 CI/CD Integration
 
@@ -379,6 +401,7 @@ jobs:
 ## 📚 Resources
 
 - [Maestro Documentation](https://maestro.mobile.dev)
+- [Maestro Web Testing Guide](https://maestro.mobile.dev/platform-support/web)
 - [Maestro Commands Reference](https://maestro.mobile.dev/api-reference/commands)
 - [Maestro GitHub](https://github.com/mobile-dev-inc/maestro)
 - [Scrummy App Repository](https://github.com/Athstat/supertry)
@@ -397,6 +420,7 @@ When adding new tests:
 
 For issues with:
 - **Maestro**: [Maestro GitHub Issues](https://github.com/mobile-dev-inc/maestro/issues)
+- **Maestro Web Testing**: [Web Testing Docs](https://maestro.mobile.dev/platform-support/web)
 - **Scrummy App**: Contact the development team
 
 ---

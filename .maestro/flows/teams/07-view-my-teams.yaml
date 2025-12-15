@@ -3,7 +3,7 @@
 # Prerequisites: User must be logged in and have at least one team
 # Flow: Navigate to My Teams → View teams list → Select team → View details
 
-appId: ${BASE_URL}
+url: ${BASE_URL}
 tags:
   - teams
   - view-teams
@@ -17,7 +17,6 @@ tags:
 # Look for My Teams navigation link
 - assertVisible:
     text: ".*([Mm]y [Tt]eams).*"
-    timeout: 5000
 
 # Tap on My Teams
 - tapOn:
@@ -31,7 +30,6 @@ tags:
 # ============================================
 - assertVisible:
     text: ".*([Yy]our [Tt]eams|[Mm]y [Tt]eams).*"
-    timeout: 10000
 
 # Take screenshot of teams list
 - takeScreenshot: my-teams-list
@@ -43,7 +41,6 @@ tags:
 # Team cards should display team name or other identifying info
 - assertVisible:
     text: ".*[Tt]eam.*"
-    timeout: 5000
 
 # ============================================
 # Navigate to Individual Team
@@ -62,7 +59,6 @@ tags:
 # Check for team details elements
 - assertVisible:
     text: ".*([Tt]eam|[Pp]layers).*"
-    timeout: 10000
 
 # Verify score/points display
 - assertVisible:
@@ -82,7 +78,6 @@ tags:
 # Verify player information is visible
 - assertVisible:
     text: ".*([Pp]layer|[Pp]osition).*"
-    timeout: 5000
 
 # Take screenshot of players section
 - takeScreenshot: team-players
@@ -115,7 +110,6 @@ tags:
 # Verify we're back at teams list
 - assertVisible:
     text: ".*([Yy]our [Tt]eams|[Mm]y [Tt]eams).*"
-    timeout: 5000
 
 # Output test results
 - evalScript: |
