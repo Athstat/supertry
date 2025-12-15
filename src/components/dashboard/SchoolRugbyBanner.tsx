@@ -27,7 +27,7 @@ export default function SchoolRugbyBanner() {
                 {/* Button */}
                 <p
                     onClick={() => navigate('/schools')}
-                    className="font-semibold text-sm text-[#011E5C] underline mt-3"
+                    className="font-semibold text-sm text-[#011E5C] underline mt-3 cursor-pointer"
                 >
                     See What's Happening
                 </p>
