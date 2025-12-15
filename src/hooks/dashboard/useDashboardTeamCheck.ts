@@ -13,6 +13,7 @@ type TeamCheckResult = {
   leagueGroupId?: string;
   currentRoundId?: string;
   currentGameweek?: number;
+  previousGameweek?: number;
   nextDeadline?: Date;
   userStats?: {
     globalRank: number;
@@ -39,6 +40,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
   const [rounds, setRounds] = useState<IFantasyLeagueRound[]>([]);
   const [standings, setStandings] = useState<FantasyLeagueGroupStanding[]>([]);
   const [currentRoundStandings, setCurrentRoundStandings] = useState<IFantasyLeagueTeam[]>([]);
+  const [previousRoundStandings, setPreviousRoundStandings] = useState<IFantasyLeagueTeam[]>([]);
   const [currentRoundTeam, setCurrentRoundTeam] = useState<
     FantasyLeagueTeamWithAthletes | undefined
   >();
@@ -96,8 +98,8 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     fetchRounds();
   }, [officialLeague?.id]);
 
-  const { currentRound, nextRound } = useMemo(() => {
-    if (!rounds || rounds.length === 0) return { currentRound: undefined, nextRound: undefined };
+  const { currentRound, nextRound, previousRound } = useMemo(() => {
+    if (!rounds || rounds.length === 0) return { currentRound: undefined, nextRound: undefined, previousRound: undefined };
 
     const sortedRounds = [...rounds].sort((a, b) => {
       return (a.start_round ?? 0) - (b.start_round ?? 0);
@@ -120,14 +122,20 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
 
     // Find the next round after current
     let next: IFantasyLeagueRound | undefined;
+    // Find the previous round before current
+    let previous: IFantasyLeagueRound | undefined;
+
     if (current) {
       const currentIndex = sortedRounds.findIndex(r => r.id === current!.id);
       if (currentIndex >= 0 && currentIndex < sortedRounds.length - 1) {
         next = sortedRounds[currentIndex + 1];
       }
+      if (currentIndex > 0) {
+        previous = sortedRounds[currentIndex - 1];
+      }
     }
 
-    return { currentRound: current, nextRound: next };
+    return { currentRound: current, nextRound: next, previousRound: previous };
   }, [rounds]);
 
   // Fetch standings to check if user has a team
@@ -175,6 +183,26 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
 
     fetchCurrentRoundStandings();
   }, [currentRound?.id]);
+
+  // Fetch previous round standings for stats display
+  useEffect(() => {
+    const fetchPreviousRoundStandings = async () => {
+      if (!previousRound?.id) {
+        setPreviousRoundStandings([]);
+        return;
+      }
+
+      try {
+        const teams = await leagueService.fetchParticipatingTeams(previousRound.id);
+        setPreviousRoundStandings(teams);
+      } catch (error) {
+        console.error('Error fetching previous round standings:', error);
+        setPreviousRoundStandings([]);
+      }
+    };
+
+    fetchPreviousRoundStandings();
+  }, [previousRound?.id]);
 
   // Fetch user's team for the current round to determine if they have a team picked
   useEffect(() => {
@@ -260,10 +288,10 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     // Get global rank from overall league standings
     const userStandingGlobal = standings.find(standing => standing.user_id === authUser.kc_id);
 
-    // Get league (round) rank from current round standings
+    // Get league (round) rank from PREVIOUS round standings for stats display
     // Use index + 1 for rank calculation (same as LeagueStandingsTable does)
-    const userTeamIndex = currentRoundStandings.findIndex(team => team.user_id === authUser.kc_id);
-    const userTeamRound = userTeamIndex !== -1 ? currentRoundStandings[userTeamIndex] : undefined;
+    const userTeamIndex = previousRoundStandings.findIndex(team => team.user_id === authUser.kc_id);
+    const userTeamRound = userTeamIndex !== -1 ? previousRoundStandings[userTeamIndex] : undefined;
 
     // Need at least one of them to show
     if (!userStandingGlobal && !userTeamRound) return undefined;
@@ -271,21 +299,21 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     const globalRank = userStandingGlobal?.rank ?? 0;
     const leagueRank = userTeamIndex !== -1 ? userTeamIndex + 1 : 0; // Calculate rank from position
     const totalUsers = standings.length;
-    const roundTotalUsers = currentRoundStandings.length;
+    const roundTotalUsers = previousRoundStandings.length;
     const localRankPercentile = totalUsers > 0 ? (globalRank / totalUsers) * 100 : 0;
 
-    // Use current round team points if available, otherwise use total score
+    // Use previous round team points if available, otherwise use total score
     const roundPoints = userTeamRound?.overall_score ?? userStandingGlobal?.total_score ?? 0;
 
     return {
       globalRank: globalRank, // Overall league rank
-      leagueRank: leagueRank, // Current round rank (calculated from position)
+      leagueRank: leagueRank, // Previous round rank (calculated from position)
       totalPoints: roundPoints,
       localRankPercentile: Math.round(localRankPercentile),
       totalUsers: totalUsers,
       roundTotalUsers: roundTotalUsers,
     };
-  }, [standings, currentRoundStandings, authUser]);
+  }, [standings, previousRoundStandings, authUser]);
 
   // Check if user has a team for the CURRENT round (not just overall league participation)
   const hasTeam = !!currentRoundTeam;
@@ -300,6 +328,7 @@ export function useDashboardTeamCheck(season?: IFantasySeason): TeamCheckResult 
     leagueGroupId: officialLeague?.id,
     currentRoundId: currentRound?.id,
     currentGameweek: currentRound?.start_round ?? currentRound?.current_gameweek,
+    previousGameweek: previousRound?.start_round ?? previousRound?.current_gameweek,
     nextDeadline: currentRound?.join_deadline ?? undefined,
     userStats,
   };

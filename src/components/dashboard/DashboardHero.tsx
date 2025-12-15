@@ -17,7 +17,7 @@ type Props = {
 
 export default function DashboardHero({ season }: Props) {
   const { authUser } = useAuth();
-  const { hasTeam, isLoading, leagueGroupId, currentRoundId, currentGameweek, nextDeadline, userStats } =
+  const { hasTeam, isLoading, leagueGroupId, currentRoundId, currentGameweek, previousGameweek, nextDeadline, userStats } =
     useDashboardTeamCheck(season);
   const navigate = useNavigate();
 
@@ -51,6 +51,7 @@ export default function DashboardHero({ season }: Props) {
         userStats={userStats}
         teamUrl={teamUrl}
         currentGameweek={currentGameweek}
+        previousGameweek={previousGameweek}
         nextDeadline={nextDeadline}
       />
     );
@@ -79,10 +80,11 @@ type TeamExistsViewProps = {
   };
   teamUrl: string;
   currentGameweek?: number;
+  previousGameweek?: number;
   nextDeadline?: Date;
 };
 
-function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadline }: TeamExistsViewProps) {
+function TeamExistsView({ season, userStats, teamUrl, currentGameweek, previousGameweek, nextDeadline }: TeamExistsViewProps) {
   const navigate = useNavigate();
   const { authUser } = useAuth();
 
@@ -175,18 +177,18 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, nextDeadl
             </div>
           </div>
 
-          {/* Round Indicator (inside card) */}
+          {/* Round Indicator (inside card) - Shows PREVIOUS round stats */}
           <p className="text-sm font-semibold text-[#1196F5] text-center -mt-4">
-            Round {currentGameweek || '—'}
+            Round {previousGameweek || '—'}
           </p>
         </div>
 
-        {/* Deadline */}
+        {/* Deadline - Shows NEXT round deadline */}
         {nextDeadline && (
           <>
             <div className="w-[80%] max-w-sm border-t border-white/50"></div>
             <p className="text-sm text-white text-center">
-              Round {(currentGameweek || 0) + 1} Deadline:<br />
+              Round {(currentGameweek || 0)} Deadline:<br />
               <span className="font-bold">{formatCountdown(nextDeadline)}</span>
             </p>
           </>
