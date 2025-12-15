@@ -3,7 +3,7 @@
 # Prerequisites: User must be logged in
 # Flow: Navigate to create team → Select players → Select captain → Submit
 
-appId: ${BASE_URL}
+url: ${BASE_URL}
 tags:
   - teams
   - critical
@@ -18,7 +18,6 @@ tags:
 # Look for Create Team button/link
 - assertVisible:
     text: ".*([Cc]reate [Tt]eam|[Nn]ew [Tt]eam).*"
-    timeout: 5000
 
 # Tap on Create Team
 - tapOn:
@@ -46,7 +45,6 @@ tags:
 # ============================================
 - assertVisible:
     text: ".*([Bb]udget|[Rr]emaining).*"
-    timeout: 10000
 
 # Take screenshot of empty team
 - takeScreenshot: team-creation-start

@@ -3,19 +3,14 @@
 # This flow can be included in other tests that require authentication
 # Uses credentials from config.yaml
 
-appId: ${BASE_URL}
+url: ${BASE_URL}
 ---
 # Launch the web app at signin page
-- launchApp:
-    appId: chrome
-    arguments:
-      - "--new-window"
-      - "${BASE_URL}/signin"
+- launchApp: "${BASE_URL}/signin"
 
 # Wait for page to load
 - assertVisible: 
     text: "Welcome back"
-    timeout: 10000
 
 # ============================================
 # Enter Email
@@ -55,7 +50,6 @@ appId: ${BASE_URL}
 # Verify user is redirected to dashboard
 - assertVisible:
     text: ".*[Dd]ashboard.*"
-    timeout: 15000
 
 # Output helper completion
 - evalScript: |
