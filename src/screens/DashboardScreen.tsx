@@ -50,9 +50,9 @@ function DashboardContent() {
       <DashboardHero season={displaySeason} />
 
       {/* <FeaturedFantasyLeagueGroups /> */}
-      <div className="pl-1 pr-1" style={{ marginTop: 8, marginBottom: -8 }}>
+      <div className="p-4 lg:p-6" style={{ marginTop: 8, marginBottom: -8 }}>
         {/* Dominate the SCRUM */}
-        <RoundedCard className="flex flex-col gap-2 pt-5 pb-5 pl-2 pr-2">
+        <RoundedCard className="flex flex-col gap-2 pt-5 pb-5 pl-3 pr-3">
           <h1 className="font-bold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Dominate the Scrum!</h1>
           <div className="flex flex-row gap-2 sm:gap-4 items-center">
             <p className="text-xs text-gray-600 dark:text-gray-300 flex-1">
