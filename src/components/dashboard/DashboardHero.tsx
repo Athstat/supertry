@@ -285,14 +285,14 @@ function TeamExistsView({ teamUrl, currentGameweek, previousGameweek, nextDeadli
 
       <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
         <img
-          src='/public/images/dashboard/all_blacks_player_haka.png'
+          src='/images/dashboard/all_blacks_player_haka.png'
           className='h-32 object-contain'
         />
       </div>
 
       <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
         <img
-          src='/public/images/dashboard/beast_screeming.png'
+          src='/images/dashboard/beast_screeming.png'
           className='h-32 object-contain'
         />
       </div>
@@ -409,14 +409,14 @@ function FirstTimeUserView({ nextDeadline, username, nextDeadlineRound }: FirstT
 
         <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
           <img
-            src='/public/images/dashboard/all_blacks_player_haka.png'
+            src='/images/dashboard/all_blacks_player_haka.png'
             className='h-32 object-contain'
           />
         </div>
 
         <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
           <img
-            src='/public/images/dashboard/beast_screeming.png'
+            src='/images/dashboard/beast_screeming.png'
             className='h-32 object-contain'
           />
         </div>
