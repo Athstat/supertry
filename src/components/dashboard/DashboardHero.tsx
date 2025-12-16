@@ -1,42 +1,128 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useDashboardTeamCheck } from '../../hooks/dashboard/useDashboardTeamCheck';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import RoundedCard from '../shared/RoundedCard';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
-import { useMemo, useState } from 'react';
-import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
+import { useEffect, useMemo, useState } from 'react';
 import { formatCountdown } from '../../utils/countdown';
 import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
-import { Globe, Users, ArrowUp } from 'lucide-react';
 import TrophyIcon from '../shared/icons/TrophyIcon';
+import useSWR from 'swr';
+import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
+import FantasyLeagueGroupDataProvider from '../fantasy-league/providers/FantasyLeagueGroupDataProvider';
+import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
+import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
 type Props = {
   season?: IFantasySeason;
 };
 
 export default function DashboardHero({ season }: Props) {
+
+  const key = season ? `fantasy-season/${season.id}/` : null;
+  const { data: featuredLeagues } = useSWR(key, () => fantasySeasonsService.getFantasySeasonFeaturedLeagues(season?.id || ''));
+
+  const featuredLeague = useMemo(() => {
+    if (featuredLeagues && featuredLeagues.length > 0) {
+      return featuredLeagues[0];
+    }
+
+    return undefined;
+  }, [featuredLeagues]);
+
+  return (
+    <FantasyLeagueGroupDataProvider
+      leagueId={featuredLeague?.id}
+      loadingFallback={<DashboardHeroLoadingSkeleton />}
+    >
+      <Content season={season} />
+    </FantasyLeagueGroupDataProvider>
+  )
+}
+
+function Content({ season }: Props) {
   const { authUser } = useAuth();
-  const { hasTeam, isLoading, leagueGroupId, currentRoundId, currentGameweek, previousGameweek, nextDeadline, userStats } =
-    useDashboardTeamCheck(season);
-  const navigate = useNavigate();
+
+  const [isDelaying, setIsDelaying] = useState(false); 
+  const { currentRound: currentGameweek, isLoading: loadingGroup, rounds, league } = useFantasyLeagueGroup();
+
+  const previousGameweek = useMemo(() => {
+    if (currentGameweek && rounds) {
+      const prevRoundStart = (currentGameweek.start_round || 0) - 1;
+      return rounds.find((r) => {
+        return r.start_round === prevRoundStart
+      })
+
+    }
+
+    return undefined;
+  }, [currentGameweek, rounds]);
+
+  const nextGameweek = useMemo(() => {
+    if (currentGameweek && rounds) {
+      const nextRoundStart = (currentGameweek.start_round || 0) + 1;
+      return rounds.find((r) => {
+        return r.start_round === nextRoundStart
+      })
+
+    }
+
+    return undefined;
+  }, [currentGameweek, rounds]);
+
+  const scoringGameweek = useMemo(() => {
+    if (currentGameweek && isLeagueRoundLocked(currentGameweek)) {
+      return currentGameweek;
+    }
+
+    return previousGameweek
+  }, [currentGameweek, previousGameweek]);
+
+
+  const leagueGroupId = league?.id;
+  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(scoringGameweek?.id, authUser?.kc_id);
 
   const teamUrl = useMemo(() => {
     if (!leagueGroupId) return '/leagues';
     const url = `/league/${leagueGroupId}`;
     const params = new URLSearchParams();
-    if (currentRoundId) {
-      params.append('round_filter', currentRoundId);
+    if (currentGameweek) {
+      params.append('round_filter', currentGameweek.id);
     }
     params.append('tab', 'my-team');
     return `${url}?${params.toString()}`;
-  }, [leagueGroupId, currentRoundId]);
+  }, [leagueGroupId, currentGameweek]);
 
-  if (isLoading) {
+  const nextDeadline = useMemo(() => {
+    if (currentGameweek && isLeagueRoundLocked(currentGameweek)) {
+      const deadline = nextGameweek?.join_deadline ? new Date(nextGameweek?.join_deadline) : undefined;
+      return deadline;
+    }
+
+    const deadline = currentGameweek?.join_deadline ? new Date(currentGameweek?.join_deadline) : undefined;
+    return deadline;
+  }, [currentGameweek, nextGameweek?.join_deadline]);
+
+  const isLoading = loadingGroup || loadingRoundTeam;
+
+  useEffect(() => {
+    setIsDelaying(true);
+
+    const timeout = setTimeout(() => {
+      setIsDelaying(false)
+    }, 500);
+
+    return () => {
+      setIsDelaying(false);
+      clearTimeout(timeout);
+    }
+  }, []);
+
+  if (isLoading || isDelaying) {
     return (
-      <RoundedCard className="p-6 animate-pulse bg-gray-200 dark:bg-gray-800">
-        <div className="h-48"></div>
-      </RoundedCard>
+      <DashboardHeroLoadingSkeleton />
     );
   }
 
@@ -44,15 +130,15 @@ export default function DashboardHero({ season }: Props) {
     return null;
   }
 
-  if (hasTeam && userStats) {
+  if (roundTeam && scoringGameweek) {
     return (
       <TeamExistsView
         season={season}
-        userStats={userStats}
         teamUrl={teamUrl}
-        currentGameweek={currentGameweek}
-        previousGameweek={previousGameweek}
+        currentGameweek={currentGameweek?.start_round || undefined}
+        previousGameweek={previousGameweek?.start_round || undefined}
         nextDeadline={nextDeadline}
+        scoringGameweek={scoringGameweek}
       />
     );
   }
@@ -60,7 +146,7 @@ export default function DashboardHero({ season }: Props) {
   return (
     <FirstTimeUserView
       season={season}
-      currentGameweek={currentGameweek}
+      currentGameweek={currentGameweek?.start_round || undefined}
       nextDeadline={nextDeadline}
       username={authUser?.username}
       teamUrl={teamUrl}
@@ -70,23 +156,17 @@ export default function DashboardHero({ season }: Props) {
 
 type TeamExistsViewProps = {
   season: IFantasySeason;
-  userStats: {
-    globalRank: number;
-    leagueRank: number;
-    totalPoints: number;
-    localRankPercentile: number;
-    totalUsers: number;
-    roundTotalUsers: number;
-  };
   teamUrl: string;
   currentGameweek?: number;
   previousGameweek?: number;
+  scoringGameweek: IFantasyLeagueRound;
   nextDeadline?: Date;
 };
 
-function TeamExistsView({ season, userStats, teamUrl, currentGameweek, previousGameweek, nextDeadline }: TeamExistsViewProps) {
+function TeamExistsView({ teamUrl, currentGameweek, previousGameweek, nextDeadline, scoringGameweek }: TeamExistsViewProps) {
   const navigate = useNavigate();
   const { authUser } = useAuth();
+  const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummary(scoringGameweek);
 
   return (
     <div className="relative w-full overflow-hidden shadow-md">
@@ -128,59 +208,50 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, previousG
 
         {/* Stats Card with Internal Border and Round */}
         <div
-          className="w-full max-w-sm bg-[#011E5C]/80 rounded-lg pt-4 pb-2 flex flex-col gap-3"
+          className="w-full bg-[#011E5C]/80 rounded-lg pt-4 pb-2 flex flex-row items-center gap-4 justify-center"
           style={{ backdropFilter: 'blur(4px)' }}
         >
-          {/* Top: Stats Row */}
-          <div className="flex items-end gap-4">
-            {/* Global Rank */}
-            <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
-              {/* <Globe className="w-6 h-6 text-white" /> */}
-              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                #{userStats.globalRank}<span className="text-xs text-white">/{userStats.totalUsers}</span>
-              </p>
-            </div>
 
-            {/* Points (Center - Larger & Elevated) */}
-            <div className="flex-1 flex flex-col items-center gap-1.5">
-              <TrophyIcon className="w-6 h-6 text-[#1196F5]" />
-              <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Oswald, sans-serif', marginBottom: -5 }}>
-                {userStats.totalPoints}
-              </p>
-              <p className="text-xs text-white" style={{ marginBottom: -10 }}>points</p>
-            </div>
+          {/* Global Average */}
+          <div className='flex flex-col items-center justify-center gap-1' >
+            <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
+              {Math.floor(averagePointsScored || 0)}
+            </p>
 
-            {/* League Rank */}
-            <div className="flex-1 flex flex-col items-center gap-1.5" style={{ marginBottom: -10 }}>
-              {/* <Users className="w-6 h-6 text-white" /> */}
-              <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                #{userStats.leagueRank}<span className="text-xs text-white">/{userStats.roundTotalUsers}</span>
+            <div className="flex-1 flex justify-center">
+              <p className="text-xs text-[#E2E8F0]">global average</p>
+            </div>
+          </div>
+
+          {/* User Score */}
+          <div className='flex flex-col items-center justify-center gap-1' >
+            <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Oswald, sans-serif', marginBottom: -5 }}>
+              {Math.floor(userScore || 0)}
+            </p>
+            <p className="text-xs text-white" style={{ marginBottom: -10 }}>points</p>
+
+            <div className='flex flex-col items-center justify-center gap-1' >
+              <TrophyIcon className="w-8 h-8 mt-3 text-[#1196F5]" />
+              <div className="w-[130px] border-t border-[#1196F5]"></div>
+
+              {/* Round Indicator (inside card) - Shows PREVIOUS round stats */}
+              <p className="text-sm font-semibold text-[#1196F5] text-center ">
+                Round {previousGameweek || '—'}
               </p>
             </div>
           </div>
 
-          {/* Labels Row with Inline Border */}
-          <div className="flex items-center">
-            {/* Left Label - matches left stat column width */}
-            <div className="flex-1 flex justify-center">
-              <p className="text-xs text-[#E2E8F0]">league rank</p>
-            </div>
+          {/* Highest Points Scored */}
+          <div className='flex flex-col items-center justify-center gap-1' >
+            <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
+              {Math.floor(highestPointsScored || 0)}
+            </p>
 
-            {/* Center: Border Line - matches center stat column width */}
-            <div className="flex-1 flex flex-col items-center gap-0.5">
-              <div className="w-[130%] border-t border-[#1196F5]"></div>
-            </div>
-
-            {/* Right Label - matches right stat column width */}
             <div className="flex-1 flex justify-center">
-              <p className="text-xs text-white">round rank</p>
+              <p className="text-xs text-white">highest points</p>
             </div>
           </div>
 
-          {/* Round Indicator (inside card) - Shows PREVIOUS round stats */}
-          <p className="text-sm font-semibold text-[#1196F5] text-center -mt-4">
-            Round {previousGameweek || '—'}
-          </p>
         </div>
 
         {/* Deadline - Shows NEXT round deadline */}
@@ -202,6 +273,20 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, previousG
           PLAY NOW
         </button>
       </div>
+
+      <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
+        <img
+          src='/public/images/dashboard/all_blacks_player_haka.png'
+          className='h-32 object-contain'
+        />
+      </div>
+
+      <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
+        <img
+          src='/public/images/dashboard/beast_screeming.png'
+          className='h-32 object-contain'
+        />
+      </div>
     </div>
   );
 }
@@ -214,7 +299,7 @@ type FirstTimeUserViewProps = {
   teamUrl: string;
 };
 
-function FirstTimeUserView({ season, currentGameweek, nextDeadline, username, teamUrl }: FirstTimeUserViewProps) {
+function FirstTimeUserView({ currentGameweek, nextDeadline, username, teamUrl }: FirstTimeUserViewProps) {
   const navigate = useNavigate();
   const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
 
@@ -272,25 +357,49 @@ function FirstTimeUserView({ season, currentGameweek, nextDeadline, username, te
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 w-full max-w-sm justify-center px-2">
-            <button
-              onClick={() => setIsHowToPlayModalOpen(true)}
-              className="px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
-            >
-              HOW TO PLAY
-            </button>
+          <div className="flex flex-col items-center gap-3 w-full max-w-sm justify-center px-2">
             <button
               onClick={() => isGameweekOpen && navigate(teamUrl)}
               disabled={!isGameweekOpen}
-              className={`px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               PLAY NOW
             </button>
+
+            <button
+              onClick={() => setIsHowToPlayModalOpen(true)}
+              className="w-fit font-semibold text-sm underline text-white uppercase shadow-md transition-colors "
+            >
+              HOW TO PLAY
+            </button>
           </div>
+        </div>
+
+        <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
+          <img
+            src='/public/images/dashboard/all_blacks_player_haka.png'
+            className='h-32 object-contain'
+          />
+        </div>
+
+        <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
+          <img
+            src='/public/images/dashboard/beast_screeming.png'
+            className='h-32 object-contain'
+          />
         </div>
       </div>
 
       <ScrummyGamePlayModal isOpen={isHowToPlayModalOpen} onClose={() => setIsHowToPlayModalOpen(false)} />
     </>
   );
+}
+
+
+function DashboardHeroLoadingSkeleton() {
+  return <div>
+    <RoundedCard className="p-6 animate-pulse bg-gray-200 dark:bg-slate-800 border-none">
+      <div className="h-64"></div>
+    </RoundedCard>
+  </div>
 }
