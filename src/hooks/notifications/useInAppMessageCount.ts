@@ -5,13 +5,7 @@ import { useMemo } from "react";
 /** Get in app message counts */
 export function useInAppMessageCount() {
     const key = `/in-app-messages-count`;
-    const { data, isLoading } = useSWR(
-        key,
-        () => inAppMessagesServices.getCount(),
-        {
-            refreshInterval: 10
-        }
-    );
+    const { data, isLoading } = useSWR(key, () => inAppMessagesServices.getCount());
 
     const unread_count = useMemo(() => {
         if (data) {
@@ -30,7 +24,7 @@ export function useInAppMessageCount() {
     }, [data]);
 
     const total_count = useMemo(() => {
-        
+
         if (data) {
             return data.total_count
         }
@@ -38,5 +32,5 @@ export function useInAppMessageCount() {
         return 0;
     }, [data]);
 
-    return {total_count, read_count, unread_count, isLoading}
+    return { total_count, read_count, unread_count, isLoading }
 }
