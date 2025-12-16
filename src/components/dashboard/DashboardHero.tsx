@@ -45,7 +45,7 @@ export default function DashboardHero({ season }: Props) {
 function Content({ season }: Props) {
   const { authUser } = useAuth();
 
-  const [isDelaying, setIsDelaying] = useState(false); 
+  const [isDelaying, setIsDelaying] = useState(false);
   const { currentRound: currentGameweek, isLoading: loadingGroup, rounds, league } = useFantasyLeagueGroup();
 
   const previousGameweek = useMemo(() => {
@@ -94,6 +94,14 @@ function Content({ season }: Props) {
     params.append('tab', 'my-team');
     return `${url}?${params.toString()}`;
   }, [leagueGroupId, currentGameweek]);
+
+  const nextDeadlineRound = useMemo(() => {
+    if (currentGameweek && isLeagueRoundLocked(currentGameweek)) {
+      return nextGameweek;
+    }
+
+    return currentGameweek;
+  }, [currentGameweek, nextGameweek]);
 
   const nextDeadline = useMemo(() => {
     if (currentGameweek && isLeagueRoundLocked(currentGameweek)) {
@@ -150,6 +158,7 @@ function Content({ season }: Props) {
       nextDeadline={nextDeadline}
       username={authUser?.username}
       teamUrl={teamUrl}
+      nextDeadlineRound={nextDeadlineRound?.start_round || 1}
     />
   );
 }
@@ -297,9 +306,10 @@ type FirstTimeUserViewProps = {
   nextDeadline?: Date;
   username?: string;
   teamUrl: string;
+  nextDeadlineRound?: number
 };
 
-function FirstTimeUserView({ currentGameweek, nextDeadline, username, teamUrl }: FirstTimeUserViewProps) {
+function FirstTimeUserView({nextDeadline, username, teamUrl, nextDeadlineRound }: FirstTimeUserViewProps) {
   const navigate = useNavigate();
   const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
 
@@ -346,11 +356,11 @@ function FirstTimeUserView({ currentGameweek, nextDeadline, username, teamUrl }:
           </h1>
 
           {/* Deadline */}
-          {nextDeadline && (
+          {nextDeadline && nextDeadlineRound && (
             <>
               <div className="w-[80%] max-w-sm border-t border-white/50"></div>
               <p className="text-sm text-white text-center">
-                Round {(currentGameweek || 0) + 1} Deadline:<br />
+                Round {(nextDeadlineRound || 0)} Deadline:<br />
                 <span className="font-bold">{formatCountdown(nextDeadline)}</span>
               </p>
             </>
@@ -358,17 +368,20 @@ function FirstTimeUserView({ currentGameweek, nextDeadline, username, teamUrl }:
 
           {/* Action Buttons */}
           <div className="flex flex-col items-center gap-3 w-full max-w-sm justify-center px-2">
+
+            <p className='text-white max-w-48 text-xs text-center' >Pick your elite team now and start competing!</p>
+
             <button
               onClick={() => isGameweekOpen && navigate(teamUrl)}
               disabled={!isGameweekOpen}
               className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              PLAY NOW
+              PICK A TEAM
             </button>
 
             <button
               onClick={() => setIsHowToPlayModalOpen(true)}
-              className="w-fit font-semibold text-sm underline text-white uppercase shadow-md transition-colors "
+              className="w-fit font-semibold text-xs underline text-white uppercase shadow-md transition-colors "
             >
               HOW TO PLAY
             </button>
