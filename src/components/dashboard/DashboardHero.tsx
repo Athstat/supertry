@@ -123,7 +123,6 @@ function Content({ season }: Props) {
     }, 500);
 
     return () => {
-      setIsDelaying(false);
       clearTimeout(timeout);
     }
   }, []);
