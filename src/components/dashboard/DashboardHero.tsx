@@ -3,12 +3,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useDashboardTeamCheck } from '../../hooks/dashboard/useDashboardTeamCheck';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import RoundedCard from '../shared/RoundedCard';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { useMemo, useState } from 'react';
-import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { formatCountdown } from '../../utils/countdown';
 import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
-import { Globe, Users, ArrowUp } from 'lucide-react';
 import TrophyIcon from '../shared/icons/TrophyIcon';
 
 type Props = {
@@ -19,7 +16,6 @@ export default function DashboardHero({ season }: Props) {
   const { authUser } = useAuth();
   const { hasTeam, isLoading, leagueGroupId, currentRoundId, currentGameweek, previousGameweek, nextDeadline, userStats } =
     useDashboardTeamCheck(season);
-  const navigate = useNavigate();
 
   const teamUrl = useMemo(() => {
     if (!leagueGroupId) return '/leagues';
@@ -84,7 +80,7 @@ type TeamExistsViewProps = {
   nextDeadline?: Date;
 };
 
-function TeamExistsView({ season, userStats, teamUrl, currentGameweek, previousGameweek, nextDeadline }: TeamExistsViewProps) {
+function TeamExistsView({ userStats, teamUrl, currentGameweek, previousGameweek, nextDeadline }: TeamExistsViewProps) {
   const navigate = useNavigate();
   const { authUser } = useAuth();
 
@@ -202,6 +198,20 @@ function TeamExistsView({ season, userStats, teamUrl, currentGameweek, previousG
           PLAY NOW
         </button>
       </div>
+
+      <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
+        <img
+          src='/public/images/dashboard/all_blacks_player_haka.png'
+          className='h-32 object-contain'
+        />
+      </div>
+
+      <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
+        <img
+          src='/public/images/dashboard/beast_screeming.png'
+          className='h-32 object-contain'
+        />
+      </div>
     </div>
   );
 }
@@ -214,7 +224,7 @@ type FirstTimeUserViewProps = {
   teamUrl: string;
 };
 
-function FirstTimeUserView({ season, currentGameweek, nextDeadline, username, teamUrl }: FirstTimeUserViewProps) {
+function FirstTimeUserView({ currentGameweek, nextDeadline, username, teamUrl }: FirstTimeUserViewProps) {
   const navigate = useNavigate();
   const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
 
@@ -272,21 +282,36 @@ function FirstTimeUserView({ season, currentGameweek, nextDeadline, username, te
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 w-full max-w-sm justify-center px-2">
-            <button
-              onClick={() => setIsHowToPlayModalOpen(true)}
-              className="px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
-            >
-              HOW TO PLAY
-            </button>
+          <div className="flex flex-col items-center gap-3 w-full max-w-sm justify-center px-2">
             <button
               onClick={() => isGameweekOpen && navigate(teamUrl)}
               disabled={!isGameweekOpen}
-              className={`px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               PLAY NOW
             </button>
+
+            <button
+              onClick={() => setIsHowToPlayModalOpen(true)}
+              className="w-fit font-semibold text-sm underline text-white uppercase shadow-md transition-colors "
+            >
+              HOW TO PLAY
+            </button>
           </div>
+        </div>
+
+        <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
+          <img
+            src='/public/images/dashboard/all_blacks_player_haka.png'
+            className='h-32 object-contain'
+          />
+        </div>
+
+        <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
+          <img
+            src='/public/images/dashboard/beast_screeming.png'
+            className='h-32 object-contain'
+          />
         </div>
       </div>
 
