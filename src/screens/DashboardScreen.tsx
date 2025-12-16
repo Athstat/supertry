@@ -4,27 +4,21 @@ import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeC
 import RoundedCard from '../components/shared/RoundedCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import { useDashboard } from '../hooks/dashboard/useDashboard';
-import TeamPlayersPrefetchProvider from '../providers/TeamPlayersPrefetchProvider';
 import DashboardHero from '../components/dashboard/DashboardHero';
 import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
-import { useAtomValue } from 'jotai';
-import { dashboardAtoms } from '../state/dashboard/dashboard.atoms';
 import { useMemo } from 'react';
 import { useDashboardTeamCheck } from '../hooks/dashboard/useDashboardTeamCheck';
 
 export function DashboardScreen() {
   return (
-    <TeamPlayersPrefetchProvider>
-      <DashboardContent />
-    </TeamPlayersPrefetchProvider>
+    <DashboardContent />
   );
 }
 
 function DashboardContent() {
   const navigate = useNavigate();
-  const { currentSeason } = useDashboard();
-  const selectedSeason = useAtomValue(dashboardAtoms.selectedDashboardSeasonAtom);
+  const { currentSeason, selectedSeason } = useDashboard();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */

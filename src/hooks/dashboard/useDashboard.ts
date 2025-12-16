@@ -8,12 +8,14 @@ export function useDashboard() {
     const [currentSeason,] = useAtom(dashboardAtoms.currentSeasonAtom);
     const [seasonRounds,] = useAtom(dashboardAtoms.seasonRoundsAtom);
     const [currentRound,] = useAtom(dashboardAtoms.currentSeasonRoundAtom);
+    const [selectedSeason] = useAtom(dashboardAtoms.selectedDashboardSeasonAtom);
 
     return {
         fantasySeasons,
         currentSeason,
         seasonRounds,
-        currentRound
+        currentRound,
+        selectedSeason
     }
 
 }
