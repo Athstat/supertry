@@ -3,7 +3,7 @@
 # Prerequisites: User must be logged in and have at least one team
 # Flow: Navigate to team → Edit team → Make changes → Save
 
-appId: ${BASE_URL}
+url: ${BASE_URL}
 tags:
   - teams
   - edit-team
@@ -17,7 +17,6 @@ tags:
 # Look for My Teams link
 - assertVisible:
     text: ".*([Mm]y [Tt]eams).*"
-    timeout: 5000
 
 # Tap on My Teams
 - tapOn:
@@ -31,7 +30,6 @@ tags:
 # ============================================
 - assertVisible:
     text: ".*([Yy]our [Tt]eams|[Mm]y [Tt]eams).*"
-    timeout: 10000
 
 # Take screenshot of teams list
 - takeScreenshot: my-teams-list
@@ -52,7 +50,6 @@ tags:
 # ============================================
 - assertVisible:
     text: ".*([Tt]eam [Dd]etails|[Pp]layers).*"
-    timeout: 5000
 
 # Take screenshot of team details
 - takeScreenshot: team-details
@@ -63,7 +60,6 @@ tags:
 # Look for Edit Team button
 - assertVisible:
     text: ".*([Ee]dit [Tt]eam|[Ee]dit).*"
-    timeout: 5000
 
 # Tap on Edit Team
 - tapOn:
@@ -135,7 +131,6 @@ tags:
 # Look for Save button
 - assertVisible:
     text: ".*([Ss]ave|[Ss]ave [Cc]hanges).*"
-    timeout: 5000
 
 # Tap Save button
 - tapOn:
@@ -151,7 +146,6 @@ tags:
 - assertVisible:
     text: ".*([Ss]aved|[Ss]uccess|[Uu]pdated).*"
     optional: true
-    timeout: 5000
 
 # Take screenshot of updated team
 - takeScreenshot: team-updated

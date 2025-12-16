@@ -2,17 +2,13 @@
 # Tests guest authentication with limited permissions
 # Guest users should have restricted access to certain features
 
-appId: ${BASE_URL}
+url: ${BASE_URL}
 tags:
   - auth
   - guest
 ---
 # Launch the web app
-- launchApp:
-    appId: chrome
-    arguments:
-      - "--new-window"
-      - "${BASE_URL}/signin"
+- launchApp: "${BASE_URL}/signin"
 
 # Wait for page to load
 - assertVisible: "Welcome back"
@@ -37,7 +33,6 @@ tags:
 # Verify guest is redirected to dashboard
 - assertVisible:
     text: ".*[Dd]ashboard.*"
-    timeout: 10000
 
 # Take screenshot for test evidence
 - takeScreenshot: guest-login-success

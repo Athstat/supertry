@@ -2,18 +2,14 @@
 # Tests the complete user registration process through all 4 steps
 # Flow: Username → Email → Password → Review → Dashboard
 
-appId: ${BASE_URL}
+url: ${BASE_URL}
 tags:
   - auth
   - critical
   - signup
 ---
 # Launch the web app
-- launchApp:
-    appId: chrome
-    arguments:
-      - "--new-window"
-      - "${BASE_URL}/signup"
+- launchApp: "${BASE_URL}/signup"
 
 # Wait for page to load
 - assertVisible: "Create your account"
@@ -100,7 +96,6 @@ tags:
 # After signup, user should be redirected to onboarding or dashboard
 - assertVisible:
     text: ".*([Ww]elcome|[Dd]ashboard).*"
-    timeout: 10000
 
 # Take screenshot for test evidence
 - takeScreenshot: signup-success

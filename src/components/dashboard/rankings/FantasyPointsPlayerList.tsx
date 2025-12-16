@@ -1,6 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
 import { useDashboard } from '../../../hooks/dashboard/useDashboard';
-import { IProSeason } from '../../../types/season';
 import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import RoundedCard from '../../shared/RoundedCard';
 import { IProAthlete } from '../../../types/athletes';
@@ -9,13 +8,9 @@ import NoContentCard from '../../shared/NoContentMessage';
 import { PlayerRankingCard } from '../../players/ranking/PlayerRankingCard';
 import { useNavigate } from 'react-router-dom';
 
-type Props = {
-  season?: IProSeason;
-  currentRound?: number;
-};
 
-export default function FantasyPointsScoredPlayerList({ season, currentRound }: Props) {
-  const { currentSeason } = useDashboard();
+export default function FantasyPointsScoredPlayerList() {
+  const { currentSeason, currentRound, selectedSeason } = useDashboard();
   const navigate = useNavigate();
 
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
@@ -24,8 +19,8 @@ export default function FantasyPointsScoredPlayerList({ season, currentRound }: 
   };
 
   const finalSeason = useMemo(() => {
-    return season || currentSeason;
-  }, [currentSeason, season]);
+    return selectedSeason || currentSeason;
+  }, [currentSeason, selectedSeason]);
 
   const { rankings, isLoading } = useFantasyPointsRankings(finalSeason?.id ?? '', 5);
 
@@ -45,9 +40,9 @@ export default function FantasyPointsScoredPlayerList({ season, currentRound }: 
     <Fragment>
       <RoundedCard className="rounded-xl overflow-hidden">
         {/* Title */}
-        <div className="pt-4 pl-2 pb-2">
+        <div className="p-4">
           <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
-            Fantasy Top Performers {currentRound ? `(Round ${currentRound})` : ''}
+            Fantasy Top Performers {currentRound?.round_number ? `(Round ${currentRound.round_number})` : ''}
           </p>
         </div>
 
