@@ -77,7 +77,7 @@ function Content({ season }: Props) {
       return currentGameweek;
     }
 
-    return previousGameweek
+    return previousGameweek || currentGameweek;
   }, [currentGameweek, previousGameweek]);
 
 
@@ -174,7 +174,7 @@ type TeamExistsViewProps = {
   nextDeadlineRound?: number
 };
 
-function TeamExistsView({ teamUrl, previousGameweek, nextDeadline, scoringGameweek, nextDeadlineRound }: TeamExistsViewProps) {
+function TeamExistsView({ teamUrl, nextDeadline, scoringGameweek, nextDeadlineRound }: TeamExistsViewProps) {
   const navigate = useNavigate();
   const { authUser } = useAuth();
   const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummary(scoringGameweek);
@@ -245,9 +245,9 @@ function TeamExistsView({ teamUrl, previousGameweek, nextDeadline, scoringGamewe
               <TrophyIcon className="w-8 h-8 mt-3 text-[#1196F5]" />
               <div className="w-[130px] border-t border-[#1196F5]"></div>
 
-              {/* Round Indicator (inside card) - Shows PREVIOUS round stats */}
+              {/* Round Indicator (inside card) - Shows Scoring Round Card */}
               <p className="text-sm font-semibold text-[#1196F5] text-center ">
-                Round {previousGameweek || '—'}
+                Round {scoringGameweek.start_round || '—'}
               </p>
             </div>
           </div>
