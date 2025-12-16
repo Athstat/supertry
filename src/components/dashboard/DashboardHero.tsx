@@ -82,7 +82,7 @@ function Content({ season }: Props) {
 
 
   const leagueGroupId = league?.id;
-  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(scoringGameweek?.id, authUser?.kc_id);
+  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
 
   const teamUrl = useMemo(() => {
     if (!leagueGroupId) return '/leagues';
