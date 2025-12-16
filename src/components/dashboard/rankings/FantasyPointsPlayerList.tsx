@@ -42,7 +42,7 @@ export default function FantasyPointsScoredPlayerList() {
         {/* Title */}
         <div className="p-4">
           <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
-            Fantasy Top Performers {currentRound ? `(Round ${currentRound})` : ''}
+            Fantasy Top Performers {currentRound ? `(Round ${currentRound.round_number})` : ''}
           </p>
         </div>
 
