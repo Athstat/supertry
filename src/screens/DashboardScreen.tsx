@@ -59,7 +59,7 @@ function DashboardContent() {
               onClick={handleBannerClick}
               className="px-2 py-2.5 rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-xs text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
             >
-              Start Your League
+              Get Started
             </button>
           </div>
         </RoundedCard>
