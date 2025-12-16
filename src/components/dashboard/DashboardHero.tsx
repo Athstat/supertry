@@ -139,11 +139,11 @@ function TeamExistsView({ userStats, teamUrl, currentGameweek, previousGameweek,
 
             {/* Points (Center - Larger & Elevated) */}
             <div className="flex-1 flex flex-col items-center gap-1.5">
-              <TrophyIcon className="w-6 h-6 text-[#1196F5]" />
               <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Oswald, sans-serif', marginBottom: -5 }}>
-                {userStats.totalPoints}
+                {Math.floor(userStats.totalPoints)}
               </p>
               <p className="text-xs text-white" style={{ marginBottom: -10 }}>points</p>
+
             </div>
 
             {/* League Rank */}
@@ -159,17 +159,18 @@ function TeamExistsView({ userStats, teamUrl, currentGameweek, previousGameweek,
           <div className="flex items-center">
             {/* Left Label - matches left stat column width */}
             <div className="flex-1 flex justify-center">
-              <p className="text-xs text-[#E2E8F0]">league rank</p>
+              <p className="text-xs text-[#E2E8F0]">global average</p>
             </div>
 
             {/* Center: Border Line - matches center stat column width */}
             <div className="flex-1 flex flex-col items-center gap-0.5">
+              <TrophyIcon className="w-8 h-8 mt-3 text-[#1196F5]" />
               <div className="w-[130%] border-t border-[#1196F5]"></div>
             </div>
 
             {/* Right Label - matches right stat column width */}
             <div className="flex-1 flex justify-center">
-              <p className="text-xs text-white">round rank</p>
+              <p className="text-xs text-white">highest points</p>
             </div>
           </div>
 
