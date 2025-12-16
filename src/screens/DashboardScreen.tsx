@@ -9,6 +9,7 @@ import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useMemo } from 'react';
 import { useDashboardTeamCheck } from '../hooks/dashboard/useDashboardTeamCheck';
+import { twMerge } from 'tailwind-merge';
 
 export function DashboardScreen() {
   return (
@@ -37,16 +38,18 @@ function DashboardContent() {
   const { currentGameweek } = useDashboardTeamCheck(displaySeason);
 
   return (
-    <PageView className="flex flex-col space-y-4">
+    <PageView className={twMerge(
+      "flex flex-col bg-[#F0F3F7] dark:bg-transparent space-y-4",
+    )}>
       <ClaimAccountNoticeCard />
 
       {/* Dashboard Hero - Shows team stats or first-time user view */}
       <DashboardHero season={displaySeason} />
 
       {/* <FeaturedFantasyLeagueGroups /> */}
-      <div className="p-4 lg:p-6" style={{ marginTop: 8, marginBottom: -8 }}>
+      <div className="p-4 lg:p-6 " style={{ marginTop: 8, marginBottom: -8 }}>
         {/* Dominate the SCRUM */}
-        <RoundedCard className="flex flex-col gap-2 pt-5 pb-5 pl-3 pr-3">
+        <RoundedCard className="flex bg-[#F0F3F7] flex-col gap-2 pt-5 pb-5 pl-3 pr-3">
           <h1 className="font-bold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Dominate the Scrum!</h1>
           <div className="flex flex-row gap-2 sm:gap-4 items-center">
             <p className="text-xs text-gray-600 dark:text-gray-300 flex-1">
@@ -70,9 +73,9 @@ function DashboardContent() {
         <FantasyPointsScoredPlayerList season={displaySeason} currentRound={currentGameweek} />
       </div>
 
-      <div className="pl-1 pr-1" style={{ marginTop: 8 }}>
+      <div className="p-4" style={{ marginTop: 8 }}>
         {/* Make your match predictions */}
-        <RoundedCard className="flex flex-col gap-2 pt-5 pb-5 pl-2 pr-2">
+        <RoundedCard className="flex bg-[#F0F3F7] flex-col gap-2 pt-5 pb-5 pl-2 pr-2">
           <h1 className="font-bold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Make your match predictions</h1>
           <div className="flex flex-row gap-2 sm:gap-4 items-center">
             <p className="text-xs text-gray-600 dark:text-gray-300 flex-1">
