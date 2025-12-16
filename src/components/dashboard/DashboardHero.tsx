@@ -147,6 +147,7 @@ function Content({ season }: Props) {
         previousGameweek={previousGameweek?.start_round || undefined}
         nextDeadline={nextDeadline}
         scoringGameweek={scoringGameweek}
+        nextDeadlineRound={nextDeadlineRound?.start_round || 1}
       />
     );
   }
@@ -170,9 +171,10 @@ type TeamExistsViewProps = {
   previousGameweek?: number;
   scoringGameweek: IFantasyLeagueRound;
   nextDeadline?: Date;
+  nextDeadlineRound?: number
 };
 
-function TeamExistsView({ teamUrl, currentGameweek, previousGameweek, nextDeadline, scoringGameweek }: TeamExistsViewProps) {
+function TeamExistsView({ teamUrl, previousGameweek, nextDeadline, scoringGameweek, nextDeadlineRound }: TeamExistsViewProps) {
   const navigate = useNavigate();
   const { authUser } = useAuth();
   const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummary(scoringGameweek);
@@ -264,11 +266,11 @@ function TeamExistsView({ teamUrl, currentGameweek, previousGameweek, nextDeadli
         </div>
 
         {/* Deadline - Shows NEXT round deadline */}
-        {nextDeadline && (
+        {nextDeadline && nextDeadlineRound && (
           <>
             <div className="w-[80%] max-w-sm border-t border-white/50"></div>
             <p className="text-sm text-white text-center">
-              Round {(currentGameweek || 0)} Deadline:<br />
+              Next Deadline: Round {(nextDeadlineRound || 0)}<br />
               <span className="font-bold">{formatCountdown(nextDeadline)}</span>
             </p>
           </>
@@ -372,7 +374,7 @@ function FirstTimeUserView({ nextDeadline, username, nextDeadlineRound }: FirstT
             <>
               <div className="w-[80%] max-w-sm border-t border-white/50"></div>
               <p className="text-sm text-white text-center">
-                Round {(nextDeadlineRound || 0)} Deadline:<br />
+                Next Deadline: Round {(nextDeadlineRound || 0)}<br />
                 <span className="font-bold">{formatCountdown(nextDeadline)}</span>
               </p>
             </>
