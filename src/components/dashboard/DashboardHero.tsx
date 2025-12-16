@@ -82,7 +82,7 @@ function Content({ season }: Props) {
 
 
   const leagueGroupId = league?.id;
-  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(scoringGameweek?.id, authUser?.kc_id);
+  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
 
   const teamUrl = useMemo(() => {
     if (!leagueGroupId) return '/leagues';
@@ -285,14 +285,14 @@ function TeamExistsView({ teamUrl, currentGameweek, previousGameweek, nextDeadli
 
       <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
         <img
-          src='/public/images/dashboard/all_blacks_player_haka.png'
+          src='/images/dashboard/all_blacks_player_haka.png'
           className='h-32 object-contain'
         />
       </div>
 
       <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
         <img
-          src='/public/images/dashboard/beast_screeming.png'
+          src='/images/dashboard/beast_screeming.png'
           className='h-32 object-contain'
         />
       </div>
@@ -309,12 +309,24 @@ type FirstTimeUserViewProps = {
   nextDeadlineRound?: number
 };
 
-function FirstTimeUserView({nextDeadline, username, teamUrl, nextDeadlineRound }: FirstTimeUserViewProps) {
+function FirstTimeUserView({ nextDeadline, username, nextDeadlineRound }: FirstTimeUserViewProps) {
+
   const navigate = useNavigate();
+  const { league, currentRound } = useFantasyLeagueGroup();
   const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
 
   // Check if the gameweek is still open (before deadline)
-  const isGameweekOpen = nextDeadline ? new Date() < new Date(nextDeadline) : true;
+  const isGameweekOpen =  currentRound && !isLeagueRoundLocked(currentRound);
+
+  const handlePickTeam = () => {
+
+    if (!league || !isGameweekOpen) {
+      navigate('/leagues');
+      return
+    }
+
+    navigate(`/league/${league?.id}`);
+  }
 
   return (
     <>
@@ -371,13 +383,20 @@ function FirstTimeUserView({nextDeadline, username, teamUrl, nextDeadlineRound }
 
             <p className='text-white max-w-48 text-xs text-center' >Pick your elite team now and start competing!</p>
 
-            <button
-              onClick={() => isGameweekOpen && navigate(teamUrl)}
+            {isGameweekOpen && <button
+              onClick={handlePickTeam}
               disabled={!isGameweekOpen}
               className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               PICK A TEAM
-            </button>
+            </button>}
+
+            {!isGameweekOpen && <button
+              onClick={handlePickTeam}
+              className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30`}
+            >
+              Play Now
+            </button>}
 
             <button
               onClick={() => setIsHowToPlayModalOpen(true)}
@@ -390,14 +409,14 @@ function FirstTimeUserView({nextDeadline, username, teamUrl, nextDeadlineRound }
 
         <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
           <img
-            src='/public/images/dashboard/all_blacks_player_haka.png'
+            src='/images/dashboard/all_blacks_player_haka.png'
             className='h-32 object-contain'
           />
         </div>
 
         <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
           <img
-            src='/public/images/dashboard/beast_screeming.png'
+            src='/images/dashboard/beast_screeming.png'
             className='h-32 object-contain'
           />
         </div>

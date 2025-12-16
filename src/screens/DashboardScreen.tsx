@@ -10,7 +10,6 @@ import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/Fant
 import { useMemo } from 'react';
 import { useDashboardTeamCheck } from '../hooks/dashboard/useDashboardTeamCheck';
 import { twMerge } from 'tailwind-merge';
-import { AppColours } from '../types/constants';
 
 export function DashboardScreen() {
   return (
@@ -40,8 +39,7 @@ function DashboardContent() {
 
   return (
     <PageView className={twMerge(
-      "flex flex-col bg-[#F0F3F7] space-y-4",
-      AppColours.BACKGROUND
+      "flex flex-col bg-[#F0F3F7] dark:bg-transparent space-y-4",
     )}>
       <ClaimAccountNoticeCard />
 
