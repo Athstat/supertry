@@ -1,6 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
 import { useDashboard } from '../../../hooks/dashboard/useDashboard';
-import { IProSeason } from '../../../types/season';
 import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import RoundedCard from '../../shared/RoundedCard';
 import { IProAthlete } from '../../../types/athletes';
@@ -9,13 +8,9 @@ import NoContentCard from '../../shared/NoContentMessage';
 import { PlayerRankingCard } from '../../players/ranking/PlayerRankingCard';
 import { useNavigate } from 'react-router-dom';
 
-type Props = {
-  season?: IProSeason;
-  currentRound?: number;
-};
 
-export default function FantasyPointsScoredPlayerList({ season, currentRound }: Props) {
-  const { currentSeason } = useDashboard();
+export default function FantasyPointsScoredPlayerList() {
+  const { currentSeason, currentRound, selectedSeason } = useDashboard();
   const navigate = useNavigate();
 
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
@@ -24,8 +19,8 @@ export default function FantasyPointsScoredPlayerList({ season, currentRound }: 
   };
 
   const finalSeason = useMemo(() => {
-    return season || currentSeason;
-  }, [currentSeason, season]);
+    return selectedSeason || currentSeason;
+  }, [currentSeason, selectedSeason]);
 
   const { rankings, isLoading } = useFantasyPointsRankings(finalSeason?.id ?? '', 5);
 

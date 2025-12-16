@@ -18,7 +18,7 @@ export function DashboardScreen() {
 
 function DashboardContent() {
   const navigate = useNavigate();
-  const { currentSeason, selectedSeason, currentRound: currentGameweek } = useDashboard();
+  const { currentSeason, selectedSeason} = useDashboard();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */
@@ -67,7 +67,7 @@ function DashboardContent() {
 
       {/* Fantasy Top Performers */}
       <div className="p-4" style={{ marginTop: 8 }}>
-        <FantasyPointsScoredPlayerList season={displaySeason} currentRound={currentGameweek?.round_number} />
+        <FantasyPointsScoredPlayerList />
       </div>
 
       <div className="p-4" style={{ marginTop: 8 }}>
