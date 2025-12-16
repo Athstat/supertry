@@ -10,6 +10,7 @@ type Props = {
   season?: IProSeason;
 };
 
+/** Requires DashboardProvider */
 export default function WeeklyLeaderboards({ season }: Props) {
   const [activeTab, setActiveTab] = useState<TabType>('most-selected');
 
@@ -42,7 +43,7 @@ export default function WeeklyLeaderboards({ season }: Props) {
 
       {/* Tab Content */}
       <div className="mt-2">
-        {activeTab === 'fantasy-points' && <FantasyPointsScoredPlayerList season={season} />}
+        {activeTab === 'fantasy-points' && <FantasyPointsScoredPlayerList />}
         {activeTab === 'most-selected' && <MostSelectedPlayersList season={season} />}
         {activeTab === 'tries-scored' && (
           <SportActionRankingsList
