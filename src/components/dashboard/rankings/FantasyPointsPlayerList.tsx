@@ -45,7 +45,7 @@ export default function FantasyPointsScoredPlayerList({ season, currentRound }: 
     <Fragment>
       <RoundedCard className="rounded-xl overflow-hidden">
         {/* Title */}
-        <div className="pt-4 pl-2 pb-2">
+        <div className="p-4">
           <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
             Fantasy Top Performers {currentRound ? `(Round ${currentRound})` : ''}
           </p>

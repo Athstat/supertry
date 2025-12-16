@@ -23,7 +23,7 @@ export default function SchoolRugbyBanner() {
                 >
                     SCHOOL RUGBY '26
                 </h2>
-                <p className="text-end -mt-2 text-sm text-gray-600 dark:text-gray-300">Games - Data - Players</p>
+                <p className="text-end -mt-2 font-semibold text-sm text-gray-800">Games - Data - Players</p>
 
                 {/* Button */}
                 <p

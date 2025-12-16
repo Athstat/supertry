@@ -66,7 +66,7 @@ function DashboardContent() {
       <SchoolRugbyBanner />
 
       {/* Fantasy Top Performers */}
-      <div className="pl-1 pr-1" style={{ marginTop: 8 }}>
+      <div className="p-4" style={{ marginTop: 8 }}>
         <FantasyPointsScoredPlayerList season={displaySeason} currentRound={currentGameweek} />
       </div>
 
