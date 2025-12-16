@@ -22,7 +22,7 @@ type Props = {
 export default function DashboardHero({ season }: Props) {
 
   const key = season ? `fantasy-season/${season.id}/` : null;
-  const { data: featuredLeagues } = useSWR(key, () => fantasySeasonsService.getFantasySeasonFeaturedLeagues(season?.id || ''));
+  const { data: featuredLeagues } = useSWR(key, () => fantasySeasonsService.getFeaturedLeagueGroups(season?.id || ''));
 
   const featuredLeague = useMemo(() => {
     if (featuredLeagues && featuredLeagues.length > 0) {
