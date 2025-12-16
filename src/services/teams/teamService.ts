@@ -1,9 +1,26 @@
 import { IFixture } from "../../types/games";
-import { TeamSeasonLeader } from "../../types/team";
+import { IProTeam, TeamSeasonLeader } from "../../types/team";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
 import { logger } from "../logger";
 
 export const teamService = {
+    getTeamById: async (teamId: string) : Promise<IProTeam | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/teams/${teamId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IProTeam;
+            }
+        } catch (err) {
+            logger.error("Error fetching team by id ", err);
+        }
+
+        return undefined;
+    },
+
     getLastNFixtures: async (teamId: string, limit: number = 5) => {
         try {
             

@@ -4,7 +4,7 @@ import {
   FantasyLeagueGroupStanding,
 } from '../../types/fantasyLeagueGroups';
 import { Table2, EyeOff } from 'lucide-react';
-import {} from 'lucide-react';
+import { } from 'lucide-react';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { ErrorState } from '../ui/ErrorState';
@@ -35,7 +35,7 @@ export function LeagueStandings() {
   const { roundFilterId } = useLeagueRoundStandingsFilter();
   const navigate = useNavigate();
 
-  const {navigate: changeTab} = useTabView();
+  const { navigate: changeTab } = useTabView();
 
   const groupId = league?.id;
   const fetchKey = useMemo(() => {
@@ -73,14 +73,15 @@ export function LeagueStandings() {
   const handleSelectMember = (member: FantasyLeagueGroupMember) => {
     setSelectedMember(member);
     fantasyAnalytics.trackClickedRowOnLeagueStandings();
-    setShowModal(true);
+
+    const roundId = roundFilterId === "overall" ? currentRound?.id : roundFilterId;
 
     if (member.user_id === authUser?.kc_id) {
-      changeTab("my-team");
+      navigate(`/league/${league?.id}?round_id=${roundId}`);
       return;
     }
 
-    const roundId = roundFilterId === "overall" ? currentRound?.id : roundFilterId;
+
 
     navigate(`/league/${league?.id}/member/${member.user_id}?round_id=${roundId}`);
   };
@@ -112,7 +113,7 @@ export function LeagueStandings() {
           <LeagueStandingsFilterSelector />
         </div>
       </div>
-      
+
       <div className='px-4' >
         <SelectedWeekIndicator />
       </div>

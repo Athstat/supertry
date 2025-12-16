@@ -7,7 +7,7 @@ import { FantasyCompetitionDashboard } from '../components/fantasy-seasons/Fanta
 import FantasySeasonsOverview from '../components/fantasy-seasons/FantasySeasonsOverview';
 import { Activity } from '../components/shared/Activity';
 
-export function FantasyLeaguesScreen() {
+export function FantasyScreen() {
   return (
     <FantasyLeaguesScreenDataProvider>
       <InnnerScreen />
@@ -19,11 +19,11 @@ function InnnerScreen() {
   const { selectedSeason } = useFantasyLeaguesScreen();
 
   return (
-    <PageView className="px-4 flex flex-col gap-3">
+    <PageView className="px-4 pt-4 flex flex-col gap-3">
       <div>
         <div className="flex flex-row items-center gap-2">
           <Trophy className="w-5 h-5" />
-          <h1 className="font-bold text-md">Fantasy Leagues</h1>
+          <h1 className="font-bold text-xl">Fantasy</h1>
         </div>
       </div>
 

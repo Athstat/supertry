@@ -1,10 +1,10 @@
 import { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
-import PlayerMatchsPRList from './PlayerMatchsPRList';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PilledTabView from '../../shared/tabs/PilledTabView';
-import PlayerStatsTab from './tabs/PlayerStatsTab';
+import PlayerMatchesTab from './tabs/PlayerStatsTab';
 import { AvailabilityText } from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
+import PlayerSeasonStatsTab from './tabs/PlayerSeasonStatsTab';
 
 /** Renders the tab view for the player profile modal */
 export function PlayerProfileModalTabContent() {
@@ -18,8 +18,13 @@ export function PlayerProfileModalTabContent() {
     },
 
     {
-      label: 'Stats',
-      tabKey: 'stats',
+      label: 'Season Stats',
+      tabKey: 'season-stats',
+    },
+
+    {
+      label: 'Matches',
+      tabKey: 'matches',
     },
   ];
 
@@ -37,9 +42,12 @@ export function PlayerProfileModalTabContent() {
           <PlayerOverviewTab player={player} />
         </TabViewPage>
 
-        <TabViewPage tabKey="stats">
-          <PlayerStatsTab player={player} />
-          <PlayerMatchsPRList player={player} />
+        <TabViewPage tabKey="season-stats">
+          <PlayerSeasonStatsTab player={player} />
+        </TabViewPage>
+
+        <TabViewPage tabKey="matches">
+          <PlayerMatchesTab player={player} />
         </TabViewPage>
       </PilledTabView>
     </div>

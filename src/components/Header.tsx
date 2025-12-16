@@ -7,6 +7,8 @@ import BetaTag from './branding/BetaTag';
 import NotificationsBell from './notifications/NotificationsBell';
 import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 import CompetitionSelector from './dashboard/CompetitionSelector';
+import { twMerge } from 'tailwind-merge';
+import { AppColours } from '../types/constants';
 
 export function Header() {
   const navigate = useNavigate();
@@ -25,11 +27,15 @@ export function Header() {
 
   const isProfileActive = location.pathname === '/profile';
   const showCompetitionSelector =
-    location.pathname === '/dashboard' || location.pathname.startsWith('/league');
+    // location.pathname === '/dashboard' || location.pathname.startsWith('/league');
+    location.pathname === '/dashboard';
 
   return (
     <Activity mode={topNavViewMode}>
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-dark-850/80 backdrop-blur-sm shadow-none mb-0 pb-0">
+      <header className={twMerge(
+        "sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 pb-0",
+        AppColours.BACKGROUND
+      )}>
         <div className="container mx-auto px-4 h-16 overflow-hidden flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div

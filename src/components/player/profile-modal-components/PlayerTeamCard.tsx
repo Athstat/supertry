@@ -1,6 +1,7 @@
 import { IProAthlete } from '../../../types/athletes';
 import { formatPosition } from '../../../utils/athleteUtils';
 import FormIndicator from '../../shared/FormIndicator';
+import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
 
@@ -10,7 +11,7 @@ type Props = {
 
 export default function PlayerTeamCard({ player }: Props) {
   return (
-    <div className="flex flex-row bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md border-none p-4 rounded-2xl items-center justify-between shadow-lg ring-1 ring-white/10 transition-all duration-200">
+    <RoundedCard className="flex dark:border-none flex-row p-4 rounded-2xl items-center justify-between transition-all duration-200">
       <div className="flex flex-row items-center gap-4">
         <TeamLogo
           url={player.team?.image_url}
@@ -29,6 +30,6 @@ export default function PlayerTeamCard({ player }: Props) {
       </div>
 
       <div>{player.form && <FormIndicator form={player.form} />}</div>
-    </div>
+    </RoundedCard>
   );
 }

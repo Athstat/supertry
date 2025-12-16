@@ -5,7 +5,7 @@ import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import { LoadingState } from "../../components/ui/LoadingState";
 import SecondaryText from "../../components/shared/SecondaryText";
-import { PlayerGameCard } from "../../components/player/PlayerGameCard";
+import { PlayerListTable } from "../../components/players/PlayersList";
 
 type Props = {
     searchQuery?: string,
@@ -62,17 +62,12 @@ export default function PlayerSearchResults({ searchQuery, playerPool }: Props) 
                 </div>
             )}
 
-            {!isLoading && <div className="flex flex-row items-center justify-center flex-wrap gap-2" >
-                {results.map((r) => {
-                    return (
-                        <PlayerGameCard
-                            player={r}
-                            onClick={() => handlePlayerClick(r)}
-                            key={r.tracking_id}
-                        />
-                    )
-                })}
-            </div>}
+            {!isLoading && (
+                <PlayerListTable 
+                    players={results}
+                    onClick={handlePlayerClick}
+                />
+            )}
 
             {resultsLen === 0 && (
                 <NoResultsFallback 
