@@ -8,7 +8,6 @@ import DashboardHero from '../components/dashboard/DashboardHero';
 import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useMemo } from 'react';
-import { useDashboardTeamCheck } from '../hooks/dashboard/useDashboardTeamCheck';
 import { twMerge } from 'tailwind-merge';
 
 export function DashboardScreen() {
@@ -19,7 +18,7 @@ export function DashboardScreen() {
 
 function DashboardContent() {
   const navigate = useNavigate();
-  const { currentSeason, selectedSeason } = useDashboard();
+  const { currentSeason, selectedSeason, currentRound: currentGameweek } = useDashboard();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */
@@ -34,8 +33,6 @@ function DashboardContent() {
     return selectedSeason || currentSeason;
   }, [selectedSeason, currentSeason]);
 
-  // Get current gameweek for Fantasy Top Performers
-  const { currentGameweek } = useDashboardTeamCheck(displaySeason);
 
   return (
     <PageView className={twMerge(
@@ -70,7 +67,7 @@ function DashboardContent() {
 
       {/* Fantasy Top Performers */}
       <div className="p-4" style={{ marginTop: 8 }}>
-        <FantasyPointsScoredPlayerList season={displaySeason} currentRound={currentGameweek} />
+        <FantasyPointsScoredPlayerList season={displaySeason} currentRound={currentGameweek?.round_number} />
       </div>
 
       <div className="p-4" style={{ marginTop: 8 }}>
