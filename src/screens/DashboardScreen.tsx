@@ -9,6 +9,8 @@ import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useMemo } from 'react';
 import { useDashboardTeamCheck } from '../hooks/dashboard/useDashboardTeamCheck';
+import { twMerge } from 'tailwind-merge';
+import { AppColours } from '../types/constants';
 
 export function DashboardScreen() {
   return (
@@ -37,7 +39,10 @@ function DashboardContent() {
   const { currentGameweek } = useDashboardTeamCheck(displaySeason);
 
   return (
-    <PageView className="flex flex-col bg-[#F0F3F7] space-y-4">
+    <PageView className={twMerge(
+      "flex flex-col bg-[#F0F3F7] space-y-4",
+      AppColours.BACKGROUND
+    )}>
       <ClaimAccountNoticeCard />
 
       {/* Dashboard Hero - Shows team stats or first-time user view */}
