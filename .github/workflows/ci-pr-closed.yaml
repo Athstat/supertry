@@ -83,7 +83,7 @@ jobs:
         name: Notify QA Deployment
         needs: deploy-to-qa
         runs-on: ubuntu-latest
-        if: always()
+        if: github.event.pull_request.merged == true
         timeout-minutes: 5
 
         steps:

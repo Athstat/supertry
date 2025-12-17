@@ -79,7 +79,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": ":bell: *PR Assigned*\n\n*Repo:* ${{ github.repository }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Assignee:* ${{ (github.event.assignee && github.event.assignee.login) || (github.event.pull_request && github.event.pull_request.assignee && github.event.pull_request.assignee.login) || (github.event.pull_request && github.event.pull_request.requested_reviewer && github.event.pull_request.requested_reviewer.login) || 'unknown' }}"
+                      "text": ":bell: *PR Assigned*\n\n*Repo:* ${{ github.repository }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Assignee:* ${{ (github.event.assignee && github.event.assignee.login) || (github.event.pull_request && github.event.pull_request.assignee && github.event.pull_request.assignee.login) || (github.event.pull_request && github.event.pull_request.requested_reviewers && github.event.pull_request.requested_reviewers[0] && github.event.pull_request.requested_reviewers[0].login) || 'unknown' }}"
                     }
                   },
                   {
