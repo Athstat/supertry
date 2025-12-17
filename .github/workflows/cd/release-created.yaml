@@ -72,7 +72,7 @@ jobs:
         - name: Determine Status
           id: status
           run: |
-            if [ "${{ needs.cd-checks.result }}" == "failure" ] || [ "${{ needs.deploy-production.result }}" == "failure" ]; then
+            if [ "${{ needs.cd-checks.result }}" != "success" ] || [ "${{ needs.deploy-production.result }}" != "success" ]; then
               echo "status=failed" >> $GITHUB_OUTPUT
               echo "color=danger" >> $GITHUB_OUTPUT
               echo "emoji=❌" >> $GITHUB_OUTPUT
