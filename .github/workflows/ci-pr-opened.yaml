@@ -9,7 +9,7 @@ name: Pull Request Opened Workflow
 run-name: CI Checks for PR ${{ github.event.pull_request.number }}
 on: 
     pull_request:
-        types: [opened, reopened, assigned, synchronize]
+        types: [opened, reopened, assigned, synchronize, review_requested]
         branches: [main]
 
 
@@ -63,40 +63,40 @@ jobs:
     
     # Job to Notify assigned reviewer on slack
     notify-reviewer:
-        name: Notify Assigned Reviewer on Slack
-        if: github.event.action == 'assigned'
-        runs-on: ubuntu-latest
+      name: Notify Assigned Reviewer on Slack
+      if: github.event.action == 'assigned' || github.event.action == 'review_requested'
+      runs-on: ubuntu-latest
 
-        steps:
-            - name: Send Slack Notification
-              uses: slackapi/slack-github-action@v1.24.0
-              with:
-                payload: |
+      steps:
+        - name: Send Slack Notification
+          uses: slackapi/slack-github-action@v1.24.0
+          with:
+            payload: |
+              {
+                "text": ":bell: *PR Assigned*",
+                "blocks": [
                   {
-                    "text": ":bell: *PR Assigned*",
-                    "blocks": [
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ":bell: *PR Assigned*\n\n*Repo:* ${{ github.repository }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Assignee:* ${{ (github.event.assignee && github.event.assignee.login) || (github.event.pull_request && github.event.pull_request.assignee && github.event.pull_request.assignee.login) || (github.event.pull_request && github.event.pull_request.requested_reviewer && github.event.pull_request.requested_reviewer.login) || 'unknown' }}"
+                    }
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
                       {
-                        "type": "section",
+                        "type": "button",
                         "text": {
-                          "type": "mrkdwn",
-                          "text": ":bell: *PR Assigned*\n\n*Repo:* ${{ github.repository }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Assignee:* ${{ github.event.assignee.login }}"
-                        }
-                      },
-                      {
-                        "type": "actions",
-                        "elements": [
-                          {
-                            "type": "button",
-                            "text": {
-                              "type": "plain_text",
-                              "text": "View PR"
-                            },
-                            "url": "${{ github.event.pull_request.html_url }}"
-                          }
-                        ]
+                          "type": "plain_text",
+                          "text": "View PR"
+                        },
+                        "url": "${{ github.event.pull_request.html_url }}"
                       }
                     ]
                   }
-              env:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }}
-                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+                ]
+              }
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }}
+            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
