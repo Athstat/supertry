@@ -18,7 +18,8 @@
     "test:e2e:critical": "maestro test --config .maestro/config.yaml --include-tags=critical .maestro/flows/",
     "test:e2e:signup": "maestro test --config .maestro/config.yaml .maestro/flows/auth/01-signup.yaml",
     "test:e2e:signin": "maestro test --config .maestro/config.yaml .maestro/flows/auth/02-signin.yaml",
-    "test:e2e:report": "maestro test --config .maestro/config.yaml --format junit --output test-results.xml .maestro/flows/"
+    "test:e2e:report": "maestro test --config .maestro/config.yaml --format junit --output test-results.xml .maestro/flows/",
+    "ci": "lint && test && build"
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.17.3",

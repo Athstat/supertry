@@ -5,16 +5,17 @@
 # It also sends a notification to the assigned 
 # reviewer to make sure they don't miss it
 
-name: Pull Request CI
+name: Pull Request Opened Workflow
 run-name: CI Checks for PR {{github.pr.number}}
 on: 
     pull_request:
         types: [opened, reopened, assigned, synchronize]
+        branches: [main]
 
 
 # Runs Pull Request checks, lint, test and build checks
 jobs:
-    ci:
+    ci-checks:
         name: Lint, Test & Build
         if: |
         github.event.action == 'opened' ||
@@ -56,7 +57,7 @@ jobs:
         steps:
             - name: Send Slack Notification
               env:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }}
 
               run: |
                 PR_TITLE="${{ github.event.pull_request.title }}"

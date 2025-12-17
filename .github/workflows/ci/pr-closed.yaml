@@ -1,0 +1,51 @@
+# This is a github actions workflow that runs when a pull
+# request to the main branch is closed, and builds, tests
+# and deploys to QA/UAT environment
+
+name: Pull Request Closed Workflow
+on:
+    pull_request:
+        types: [closed]
+        branches: [main]
+
+
+# Continuosly Integrate the PR to QA Environment
+jobs:
+    ci-checks:
+        name: Lint, Test & Build
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+            uses: actions/checkout@v4
+
+        - name: Setup Node JS Environment
+            uses: actions/setup-node@v4
+            with:
+            node-version: 18
+            cache: 'pnpm'
+
+        - name: Install pnpm
+            run: npm install -g pnpm
+
+        - name: Install dependencies
+            run: pnpm install
+
+        - name: Lint
+            run: pnpm lint
+
+        - name: Run tests
+            run: pnpm test
+
+        - name: Build
+            run: pnpm build
+    
+    deploy-to-qa:
+        name: Deploy to QA
+        if: github.event.pull_request.merged == true
+        env: 
+            RENDER_QA_DEPLOY_HOOK: ${{ secrets.RENDER_QA_DEPLOY_HOOK }}
+        run: |
+          echo "PR merged — triggering QA deploy on Render"
+          curl -X POST "$RENDER_QA_DEPLOY_HOOK"
