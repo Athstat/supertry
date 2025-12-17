@@ -20,6 +20,15 @@ jobs:
           matrix:
             node-version: [20]
 
+        # Dummy Environment Variables for building app
+        env:
+          VITE_API_BASE_URL: http:localhost:8080
+          VITE_AMPLITUDE_API_KEY: dummy-amplitude-key
+          VITE_APP_ENV: qa
+          VITE_AF_ONELINK_BASE_URL: dummy-one-link-api-key
+          VITE_FEATURE_LEAGUE_GROUP_ID: dummy-featured-league-id
+
+
 
         steps:
           - uses: actions/checkout@v4
