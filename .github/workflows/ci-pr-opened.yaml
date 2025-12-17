@@ -22,31 +22,38 @@ jobs:
           github.event.action == 'reopened' ||
           github.event.action == 'synchronize'
         runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            node-version: [20]
 
         steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+          - uses: actions/checkout@v4
+          
+          - name: Install pnpm
+            uses: pnpm/action-setup@v4
+            with:
+              version: 10
 
-        - name: Setup Node JS Environment
-          uses: actions/setup-node@v4
-          with:
-            node-version: 20
-            cache: 'pnpm'
+          - name: Use Node.js ${{ matrix.node-version }}
+            uses: actions/setup-node@v4
+            with:
+              node-version: ${{ matrix.node-version }}
+              cache: "pnpm"
 
-        - name: Install pnpm
-          run: npm install -g pnpm
+          - name: Install pnpm
+            run: npm install -g pnpm
 
-        - name: Install dependencies
-          run: pnpm install
+          - name: Install dependencies
+            run: pnpm install
 
-        - name: Lint
-          run: pnpm lint
+          - name: Lint
+            run: pnpm lint
 
-        - name: Run tests
-          run: pnpm test
+          - name: Run tests
+            run: pnpm test
 
-        - name: Build
-          run: pnpm build
+          - name: Build
+            run: pnpm build
     
     # Job to Notify assigned reviewer on slack
     notify-reviewer:
