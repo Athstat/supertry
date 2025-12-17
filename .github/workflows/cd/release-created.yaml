@@ -65,7 +65,6 @@ jobs:
         name: Slack Release Notification
         needs: [cd-checks, deploy-production]
         runs-on: ubuntu-latest
-        if: always()
         timeout-minutes: 5
 
         steps:
