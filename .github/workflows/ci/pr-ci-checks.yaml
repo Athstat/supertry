@@ -1,0 +1,78 @@
+# This is a github actions workflow that runs when
+# a new pull request is created, or when updates to 
+# a pull request have been made
+
+# It also sends a notification to the assigned 
+# reviewer to make sure they don't miss it
+
+name: Pull Request CI
+run-name: CI Checks for PR {{github.pr.number}}
+on: 
+    pull_request:
+        types: [opened, reopened, assigned, synchronize]
+
+
+# Runs Pull Request checks, lint, test and build checks
+jobs:
+    ci:
+        name: Lint, Test & Build
+        if: |
+        github.event.action == 'opened' ||
+        github.event.action == 'reopened' ||
+        github.event.action == 'synchronize'
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+            uses: actions/checkout@v4
+
+        - name: Setup Node JS Environment
+            uses: actions/setup-node@v4
+            with:
+            node-version: 18
+            cache: 'pnpm'
+
+        - name: Install pnpm
+            run: npm install -g pnpm
+
+        - name: Install dependencies
+            run: pnpm install
+
+        - name: Lint
+            run: pnpm lint
+
+        - name: Run tests
+            run: pnpm test
+
+        - name: Build
+            run: pnpm build
+    
+    # Job to Notify assigned reviewer on slack
+    notify-reviewer:
+        name: Notify Assigned Reviewer on Slack
+        if: github.event.action == 'assigned'
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Send Slack Notification
+              env:
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+              run: |
+                PR_TITLE="${{ github.event.pull_request.title }}"
+                PR_URL="${{ github.event.pull_request.html_url }}"
+                ASSIGNEE="${{ github.event.assignee.login }}"
+                REPO="${{ github.repository }}"
+                PR_AUTHOR="${{ github.event.pull_request.author }}"
+
+                payload=$(cat <<EOF
+                {
+                "text": ":bell: *PR Assigned*\n\n*Repo:* ${REPO}\n*Title:* ${PR_TITLE}\n*Author:* ${PR_AUTHOR}\*Assignee:* ${ASSIGNEE}\n<${PR_URL}|View Pull Request>"
+                }
+                EOF
+                )
+
+                curl -X POST -H 'Content-type: application/json' \
+                --data "$payload" \
+                $SLACK_WEBHOOK_URL
+  
