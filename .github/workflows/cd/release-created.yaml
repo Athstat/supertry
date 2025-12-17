@@ -8,76 +8,116 @@ name: Release Created Workflow
 on:
     release:
         types: [created]
-        branches: [main]
 
 jobs:
     cd-checks:
         name: Lint, Test & Build
-        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
+        timeout-minutes: 30
 
         steps:
         - name: Checkout code
-            uses: actions/checkout@v4
+          uses: actions/checkout@v4
 
         - name: Setup Node JS Environment
-            uses: actions/setup-node@v4
-            with:
-            node-version: 18
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20
             cache: 'pnpm'
 
         - name: Install pnpm
-            run: npm install -g pnpm
+          run: npm install -g pnpm
 
         - name: Install dependencies
-            run: pnpm install
+          run: pnpm install
 
         - name: Lint
-            run: pnpm lint
+          run: pnpm lint
 
         - name: Run tests
-            run: pnpm test
+          run: pnpm test
 
         - name: Build
-            run: pnpm build
+          run: pnpm build
     
     deploy-production:
         name: Deploy to Production
         needs: cd-checks
         runs-on: ubuntu-latest
+        timeout-minutes: 15
 
         steps:
             - name: Trigger Render production deploy
-            env:
+              env:
                 RENDER_PROD_DEPLOY_HOOK: ${{ secrets.RENDER_PROD_DEPLOY_HOOK }}
-            run: |
+              run: |
+                if [ -z "$RENDER_PROD_DEPLOY_HOOK" ]; then
+                  echo "Error: RENDER_PROD_DEPLOY_HOOK secret not configured"
+                  exit 1
+                fi
                 echo "Triggering Render production deploy"
-                curl -X POST "$RENDER_PROD_DEPLOY_HOOK"
+                curl -X POST "$RENDER_PROD_DEPLOY_HOOK" \
+                  --fail \
+                  --retry 3 \
+                  --retry-delay 5
 
-
-    slack-notify:
+    slack-notify-release:
         name: Slack Release Notification
-        needs: deploy-production
+        needs: [cd-checks, deploy-production]
         runs-on: ubuntu-latest
+        if: always()
+        timeout-minutes: 5
 
         steps:
+        - name: Determine Status
+          id: status
+          run: |
+            if [ "${{ needs.cd-checks.result }}" == "failure" ] || [ "${{ needs.deploy-production.result }}" == "failure" ]; then
+              echo "status=failed" >> $GITHUB_OUTPUT
+              echo "color=danger" >> $GITHUB_OUTPUT
+              echo "emoji=❌" >> $GITHUB_OUTPUT
+            else
+              echo "status=succeeded" >> $GITHUB_OUTPUT
+              echo "color=good" >> $GITHUB_OUTPUT
+              echo "emoji=🚀" >> $GITHUB_OUTPUT
+            fi
+
         - name: Send Slack notification
-            env:
+          uses: slackapi/slack-github-action@v1.24.0
+          with:
+            payload: |
+              {
+                "text": "${{ steps.status.outputs.emoji }} Production Release Deployed",
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "${{ steps.status.outputs.emoji }} *Production Release Deployed*\n\n*Repo:* ${{ github.repository }}\n*Release:* ${{ github.event.release.name }}\n*Version:* ${{ github.event.release.tag_name }}\n*Status:* ${{ steps.status.outputs.status }}"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*Release Notes:*\n${{ github.event.release.body }}"
+                    }
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "View Release"
+                        },
+                        "url": "${{ github.event.release.html_url }}"
+                      }
+                    ]
+                  }
+                ]
+              }
+          env:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }}
-            run: |
-            RELEASE_NAME="${{ github.event.release.name }}"
-            TAG="${{ github.event.release.tag_name }}"
-            RELEASE_NOTES="${{ github.event.release.body }}"
-            REPO="${{ github.repository }}"
-            RELEASE_URL="${{ github.event.release.html_url }}"
-
-            payload=$(cat <<EOF
-            {
-                "text": ":rocket: *Production Release Deployed*\n\n*Repo:* ${REPO}\n*Release:* ${RELEASE_NAME}\n*Version:* ${TAG}\n\n*Release Notes:*\n${RELEASE_NOTES}\n\n<${RELEASE_URL}|View Release>"
-            }
-            EOF
-            )
-
-            curl -X POST -H "Content-type: application/json" \
-                --data "$payload" \
-                $SLACK_WEBHOOK_URL
+            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

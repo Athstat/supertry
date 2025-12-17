@@ -6,7 +6,7 @@
 # reviewer to make sure they don't miss it
 
 name: Pull Request Opened Workflow
-run-name: CI Checks for PR {{github.pr.number}}
+run-name: CI Checks for PR ${{ github.event.pull_request.number }}
 on: 
     pull_request:
         types: [opened, reopened, assigned, synchronize]
@@ -18,63 +18,72 @@ jobs:
     ci-checks:
         name: Lint, Test & Build
         if: |
-        github.event.action == 'opened' ||
-        github.event.action == 'reopened' ||
-        github.event.action == 'synchronize'
+          github.event.action == 'opened' ||
+          github.event.action == 'reopened' ||
+          github.event.action == 'synchronize'
         runs-on: ubuntu-latest
 
         steps:
         - name: Checkout code
-            uses: actions/checkout@v4
+          uses: actions/checkout@v4
 
         - name: Setup Node JS Environment
-            uses: actions/setup-node@v4
-            with:
-            node-version: 18
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20
             cache: 'pnpm'
 
         - name: Install pnpm
-            run: npm install -g pnpm
+          run: npm install -g pnpm
 
         - name: Install dependencies
-            run: pnpm install
+          run: pnpm install
 
         - name: Lint
-            run: pnpm lint
+          run: pnpm lint
 
         - name: Run tests
-            run: pnpm test
+          run: pnpm test
 
         - name: Build
-            run: pnpm build
+          run: pnpm build
     
     # Job to Notify assigned reviewer on slack
     notify-reviewer:
         name: Notify Assigned Reviewer on Slack
-        needs: ci-checks
         if: github.event.action == 'assigned'
         runs-on: ubuntu-latest
 
         steps:
             - name: Send Slack Notification
+              uses: slackapi/slack-github-action@v1.24.0
+              with:
+                payload: |
+                  {
+                    "text": ":bell: *PR Assigned*",
+                    "blocks": [
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": ":bell: *PR Assigned*\n\n*Repo:* ${{ github.repository }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Assignee:* ${{ github.event.assignee.login }}"
+                        }
+                      },
+                      {
+                        "type": "actions",
+                        "elements": [
+                          {
+                            "type": "button",
+                            "text": {
+                              "type": "plain_text",
+                              "text": "View PR"
+                            },
+                            "url": "${{ github.event.pull_request.html_url }}"
+                          }
+                        ]
+                      }
+                    ]
+                  }
               env:
                 SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }}
-
-              run: |
-                PR_TITLE="${{ github.event.pull_request.title }}"
-                PR_URL="${{ github.event.pull_request.html_url }}"
-                ASSIGNEE="${{ github.event.assignee.login }}"
-                REPO="${{ github.repository }}"
-                PR_AUTHOR="${{ github.event.pull_request.author }}"
-
-                payload=$(cat <<EOF
-                {
-                "text": ":bell: *PR Assigned*\n\n*Repo:* ${REPO}\n*Title:* ${PR_TITLE}\n*Author:* ${PR_AUTHOR}\*Assignee:* ${ASSIGNEE}\n<${PR_URL}|View Pull Request>"
-                }
-                EOF
-                )
-
-                curl -X POST -H 'Content-type: application/json' \
-                --data "$payload" \
-                $SLACK_WEBHOOK_URL
-  
+                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

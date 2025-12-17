@@ -15,38 +15,92 @@ jobs:
         name: Lint, Test & Build
         if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
+        timeout-minutes: 30
 
         steps:
         - name: Checkout code
-            uses: actions/checkout@v4
+          uses: actions/checkout@v4
 
         - name: Setup Node JS Environment
-            uses: actions/setup-node@v4
-            with:
-            node-version: 18
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20
             cache: 'pnpm'
 
         - name: Install pnpm
-            run: npm install -g pnpm
+          run: npm install -g pnpm
 
         - name: Install dependencies
-            run: pnpm install
+          run: pnpm install
 
         - name: Lint
-            run: pnpm lint
+          run: pnpm lint
 
         - name: Run tests
-            run: pnpm test
+          run: pnpm test
 
         - name: Build
-            run: pnpm build
+          run: pnpm build
     
     deploy-to-qa:
         name: Deploy to QA
         needs: ci-checks
         if: github.event.pull_request.merged == true
-        env: 
-            RENDER_QA_DEPLOY_HOOK: ${{ secrets.RENDER_QA_DEPLOY_HOOK }}
-        run: |
-          echo "PR merged — triggering QA deploy on Render"
-          curl -X POST "$RENDER_QA_DEPLOY_HOOK"
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        steps:
+            - name: Trigger Render Deploy Hook
+              env: 
+                RENDER_QA_DEPLOY_HOOK: ${{ secrets.RENDER_QA_DEPLOY_HOOK }}
+              run: |
+                if [ -z "$RENDER_QA_DEPLOY_HOOK" ]; then
+                  echo "Error: RENDER_QA_DEPLOY_HOOK secret not configured"
+                  exit 1
+                fi
+                echo "PR merged — triggering QA deploy on Render"
+                curl -X POST "$RENDER_QA_DEPLOY_HOOK" \
+                  --fail \
+                  --retry 3 \
+                  --retry-delay 5
+
+    notify-qa-deployment:
+        name: Notify QA Deployment
+        needs: deploy-to-qa
+        runs-on: ubuntu-latest
+        if: always()
+        timeout-minutes: 5
+
+        steps:
+        - name: Send Slack notification
+          uses: slackapi/slack-github-action@v1.24.0
+          with:
+            payload: |
+              {
+                "text": "QA Deployment Triggered",
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ":rocket: *QA Deployment Triggered*\n\n*Repo:* ${{ github.repository }}\n*PR:* #${{ github.event.pull_request.number }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Status:* ${{ needs.deploy-to-qa.result }}"
+                    }
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "View PR"
+                        },
+                        "url": "${{ github.event.pull_request.html_url }}"
+                      }
+                    ]
+                  }
+                ]
+              }
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_WEBHOOK_URL }}
+            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
