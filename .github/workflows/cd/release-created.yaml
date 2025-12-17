@@ -66,6 +66,7 @@ jobs:
         needs: [cd-checks, deploy-production]
         runs-on: ubuntu-latest
         timeout-minutes: 5
+        if: always()
 
         steps:
         - name: Determine Status
