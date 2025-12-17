@@ -83,7 +83,7 @@ jobs:
         name: Notify QA Deployment
         needs: deploy-to-qa
         runs-on: ubuntu-latest
-        if: github.event.pull_request.merged == true
+        if: always() && github.event.pull_request.merged == true
         timeout-minutes: 5
 
         steps:
@@ -98,7 +98,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": ":rocket: *QA Deployment Triggered*\n\n*Repo:* ${{ github.repository }}\n*PR:* #${{ github.event.pull_request.number }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Status:* ${{ needs.deploy-to-qa.result }}"
+                      "text": ":rocket: *QA Deployment Triggered Please Check Render for build status*\n\n*Repo:* ${{ github.repository }}\n*PR:* #${{ github.event.pull_request.number }}\n*Title:* ${{ github.event.pull_request.title }}\n*Author:* ${{ github.event.pull_request.user.login }}\n*Status:* ${{ needs.deploy-to-qa.result }}"
                     }
                   },
                   {
