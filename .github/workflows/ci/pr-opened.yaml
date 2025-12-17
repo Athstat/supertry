@@ -51,6 +51,7 @@ jobs:
     # Job to Notify assigned reviewer on slack
     notify-reviewer:
         name: Notify Assigned Reviewer on Slack
+        needs: ci-checks
         if: github.event.action == 'assigned'
         runs-on: ubuntu-latest
 

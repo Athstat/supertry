@@ -43,6 +43,7 @@ jobs:
     
     deploy-to-qa:
         name: Deploy to QA
+        needs: ci-checks
         if: github.event.pull_request.merged == true
         env: 
             RENDER_QA_DEPLOY_HOOK: ${{ secrets.RENDER_QA_DEPLOY_HOOK }}
