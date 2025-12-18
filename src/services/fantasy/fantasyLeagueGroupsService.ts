@@ -1,6 +1,6 @@
 import { RestPromise } from "../../types/auth";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
-import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasyLeagueGroupStanding, MemberRankingDetail, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
+import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasyLeagueGroupStanding, FantasySeasonOverallRanking, MemberRankingDetail, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
 import { IFixture } from "../../types/games";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
@@ -10,7 +10,7 @@ export const fantasyLeagueGroupsService = {
 
     getAllPublicLeagues: async (): Promise<FantasyLeagueGroup[]> => {
         try {
-            
+
             const uri = getUri(`/api/v1/fantasy-league-groups/public`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
@@ -312,7 +312,7 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
-    getMemberRanking: async (id: string, userId: string) : Promise<MemberRankingDetail | undefined> => {
+    getMemberRanking: async (id: string, userId: string): Promise<MemberRankingDetail | undefined> => {
         try {
             const uri = getUri(`/api/v1/fantasy-league-groups/${id}/members/${userId}/ranking`);
             const res = await fetch(uri, {
@@ -329,6 +329,23 @@ export const fantasyLeagueGroupsService = {
         return undefined;
     },
 
-    
+    /** Fetches a user's overall ranking in a fantasy league group */
+    getUserOverallRanking: async (leagueGroupId: string, userId: string): Promise<FantasySeasonOverallRanking | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueGroupId}/standings/${userId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasySeasonOverallRanking
+            }
+        } catch (err) {
+            logger.error("Error fetching member standing ", err);
+        }
+
+        return undefined;
+    },
+
 
 }
