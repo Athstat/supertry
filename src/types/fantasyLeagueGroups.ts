@@ -114,8 +114,8 @@ export type FantasySeasonOverallRanking = {
   last_name?: string,
   username?: string,
   total_score: number,
-  rank: number,
-  league_rank: number,
+  rank?: number,
+  league_rank?: number,
   created_at: Date,
   updated_at?: Date
 }
