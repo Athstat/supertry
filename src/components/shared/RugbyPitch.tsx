@@ -90,7 +90,7 @@ export function RugbyPitch3D({className} : PitchProps) {
 export function RugbyPitch3DRaster({className, pitchClassName} : PitchProps) {
     return (
         <div className={twMerge(
-            "min-h-[500px] lg:max-h-[600px] overflow-clip w-full flex flex-col items-center justify-center",
+            "min-h-[500px] md:max-h-[600px] lg:max-h-[800px] overflow-clip w-full flex flex-col items-center justify-center",
             className
         )} >
 

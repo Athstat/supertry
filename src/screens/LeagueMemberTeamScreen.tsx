@@ -114,7 +114,7 @@ function Content() {
 
             <TeamHistoryBar
             />
-
+            
             {roundTeam && !isDelaying && (
                 <FantasyLeagueTeamProvider
                     leagueRound={round}

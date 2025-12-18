@@ -1,5 +1,5 @@
 import { } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Table2, EyeOff } from 'lucide-react';
 import { ErrorState } from '../ui/ErrorState';
 import { useNavigate } from 'react-router-dom';
@@ -14,28 +14,61 @@ import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup
 import { useLeagueRoundStandingsFilter } from '../../hooks/fantasy/useLeagueRoundStandingsFilter';
 import { useLeagueGroupStandings } from '../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
 import LeagueStandingsFilterSelector, { SelectedWeekIndicator } from './standings/LeagueStandingsFilterSelector';
+import { useOfficialLeagueGroup } from '../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
 
 
 export function LeagueStandings() {
   const { userMemberRecord, league, currentRound } = useFantasyLeagueGroup();
+
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
 
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
-  const { roundFilterId, selectedRound} = useLeagueRoundStandingsFilter();
+  const { roundFilterId, selectedRound } = useLeagueRoundStandingsFilter();
   const navigate = useNavigate();
 
-  const {standings, isLoading, error} = useLeagueGroupStandings(league?.id, {
+  const { standings, isLoading: loadingStandings, error } = useLeagueGroupStandings(league?.id, {
     round_number: selectedRound?.start_round || undefined
   });
+
+  const { featuredLeague, isLoading: loadingOfficialLeague } = useOfficialLeagueGroup(league?.season_id)
 
   useEffect(() => {
     fantasyAnalytics.trackViewedStandingsTab();
   }, []);
 
   // Handle team row clicks
+
+  const handleSelectMember = useCallback((member: FantasyLeagueGroupMember) => {
+
+    setSelectedMember(member);
+    fantasyAnalytics.trackClickedRowOnLeagueStandings();
+
+    const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
+
+    if (featuredLeague) {
+      if (member.user_id === authUser?.kc_id) {
+        navigate(`/league/${featuredLeague.id}`, {
+          state: { roundNumber }
+        });
+        return;
+      }
+
+      navigate(`/league/${featuredLeague.id}/member/${member.user_id}`, {
+        state: { roundNumber }
+      });
+    }
+  }, [authUser, currentRound, featuredLeague, navigate, roundFilterId, selectedRound])
+
+  const handleCloseMemberModal = () => {
+    setSelectedMember(undefined);
+    setShowModal(false);
+  };
+
+
+  const isLoading = loadingOfficialLeague || loadingStandings;
 
   if (error) {
     return (
@@ -47,25 +80,6 @@ export function LeagueStandings() {
       </div>
     );
   }
-
-  const handleSelectMember = (member: FantasyLeagueGroupMember) => {
-    setSelectedMember(member);
-    fantasyAnalytics.trackClickedRowOnLeagueStandings();
-
-    const roundId = roundFilterId === "overall" ? currentRound?.id : roundFilterId;
-
-    if (member.user_id === authUser?.kc_id) {
-      navigate(`/league/${league?.id}?round_id=${roundId}`);
-      return;
-    }
-
-    navigate(`/league/${league?.id}/member/${member.user_id}?round_id=${roundId}`);
-  };
-
-  const handleCloseMemberModal = () => {
-    setSelectedMember(undefined);
-    setShowModal(false);
-  };
 
   return (
     <div className="flex flex-col gap-4">
