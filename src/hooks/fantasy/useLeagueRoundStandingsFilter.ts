@@ -33,12 +33,9 @@ export function useLeagueRoundStandingsFilter() {
     }, [setRoundFilterId]);
 
     const selectedRound = useMemo<IFantasyLeagueRound | undefined>(() => {
-        if (roundFilterId === "all") {
-            return undefined;
-        }
 
         return sortedRounds.find((r) => {
-            return r.id === roundFilterId;
+            return r.id.toString() === roundFilterId;
         })
 
     }, [roundFilterId, sortedRounds]);

@@ -3,14 +3,14 @@ import { twMerge } from 'tailwind-merge';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import {
   FantasyLeagueGroupMember,
-  FantasyLeagueGroupStanding,
+  FantasySeasonOverallRanking,
 } from '../../../types/fantasyLeagueGroups';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
 
 type Props = {
   isLoading?: boolean;
-  standings: FantasyLeagueGroupStanding[];
+  standings: FantasySeasonOverallRanking[];
   handleSelectMember: (m: FantasyLeagueGroupMember) => void;
   hideUserScore?: boolean;
 };
@@ -87,7 +87,7 @@ export default function LeagueStandingsTable({
 }
 
 type StandingsProps = {
-  member: FantasyLeagueGroupStanding;
+  member: FantasySeasonOverallRanking;
   index: number;
   isUser?: boolean;
   hideUserScore?: boolean;
@@ -97,7 +97,7 @@ function LeagueStandingsRow({ member, isUser, hideUserScore, index }: StandingsP
   const { members } = useFantasyLeagueGroup();
   const memberRecord = members.find(m => m.user_id === member.user_id);
 
-  const rank = member.rank ?? index + 1;
+  const rank = member.league_rank ?? index + 1;
 
   // const badge = useMemo(() => {
   //   switch (rank) {

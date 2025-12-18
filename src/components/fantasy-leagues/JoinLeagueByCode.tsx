@@ -16,10 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 
-type JoinLeagueByCodeProps = {
-}
 
-export default function JoinLeagueByCode({ }: JoinLeagueByCodeProps) {
+export default function JoinLeagueByCode() {
 
 
   const [code, setCode] = useQueryState<string>('code');
@@ -139,7 +137,7 @@ function JoinFantasyLeagueGroupCard({ leagueGroup, custom = 0}: Props) {
   const handleOnClick = () => {
 
     if (isJoined) {
-      navigate(`/league/${leagueGroup.id}`);
+      navigate(`/league/${leagueGroup.id}/standings`);
     }
 
   }
@@ -150,7 +148,7 @@ function JoinFantasyLeagueGroupCard({ leagueGroup, custom = 0}: Props) {
       return;
     }
 
-    joinLeague(leagueGroup, `/league/${leagueGroup.id}`);
+    joinLeague(leagueGroup, `/league/${leagueGroup.id}/standings`);
   }
 
 
