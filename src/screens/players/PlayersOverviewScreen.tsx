@@ -14,6 +14,7 @@ import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/useDebounced'
 import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
+import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 
 export default function PlayersOverviewScreen() {
 
@@ -157,7 +158,7 @@ function Content() {
         <p className='font-bold text-md' >By Country</p>
       </div> */}
 
-      {/* <PlayersCountryGridList /> */}
+      <PlayersCountryGridList />
     </Fragment>
   )
 }
