@@ -46,7 +46,7 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
         <div className="mt-4 relative" >
 
             <RugbyPitch3DRaster className={twMerge(
-                "max-h-[720px] lg:max-h-[800px] opacity-60",
+                "max-h-[720px] lg:max-h-[800px] dark:opacity-60",
                 !hasRosterItems && "opacity-20"
             )} />
 
