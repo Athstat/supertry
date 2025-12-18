@@ -1,6 +1,6 @@
 import { ArrowLeft, Share2 } from 'lucide-react'
 import PrimaryButton from '../shared/buttons/PrimaryButton'
-import JoinLeagueButton from './buttons/JoinLeagueButton'
+import JoinLeagueButton, { JoinOrInviteButton } from './buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { useShareLeague } from '../../hooks/leagues/useShareLeague';
 import CircleButton from '../shared/buttons/BackButton';
@@ -45,29 +45,6 @@ export default function LeagueGroupScreenHeader() {
                 </div>
             </div>
 
-        </div>
-    )
-}
-
-function JoinOrInviteButton() {
-    const { league, isMember } = useFantasyLeagueGroup();
-    const { handleShare } = useShareLeague(league);
-
-    if (!league) {
-        return;
-    }
-
-    return (
-        <div>
-            {!isMember && <JoinLeagueButton league={league} />}
-
-            {isMember && (
-                <PrimaryButton onClick={handleShare} className='text-xs' > 
-                    {/* <Plus className="w-4 h-4" /> */}
-                    <Share2 className="w-4 h-4" />
-                    Invite
-                </PrimaryButton>
-            )}
         </div>
     )
 }

@@ -1,12 +1,10 @@
-import { ArrowLeft, Share2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/shared/buttons/BackButton";
 import PageView from "../PageView";
 import { useNavigate, useParams } from "react-router-dom";
 import FantasyLeagueGroupDataProvider from "../../components/fantasy-league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import JoinLeagueButton from "../../components/fantasy-league/buttons/JoinLeagueButton";
-import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
-import { useShareLeague } from "../../hooks/leagues/useShareLeague";
+import { JoinOrInviteButton } from "../../components/fantasy-league/buttons/JoinLeagueButton";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { LeagueStandings } from "../../components/fantasy-league/LeagueStandings";
 import RoundedCard from "../../components/shared/RoundedCard";
@@ -30,9 +28,7 @@ function Content() {
 
     const navigate = useNavigate();
 
-    const { league, userMemberRecord } = useFantasyLeagueGroup();
-    const isMember = userMemberRecord !== undefined;
-    const { handleShare } = useShareLeague(league);
+    const { league } = useFantasyLeagueGroup();
 
     const handleBack = () => {
         navigate(`/leagues`);
@@ -56,17 +52,7 @@ function Content() {
                     <p>{league?.title}</p>
                 </div>
 
-                {league && <div>
-                    {!isMember && <JoinLeagueButton league={league} />}
-
-                    {isMember && (
-                        <PrimaryButton onClick={handleShare}>
-                            {/* <Plus className="w-4 h-4" /> */}
-                            <Share2 className="w-4 h-4" />
-                            Invite
-                        </PrimaryButton>
-                    )}
-                </div>}
+                <JoinOrInviteButton />
             </div>
 
             <LeagueStandings />

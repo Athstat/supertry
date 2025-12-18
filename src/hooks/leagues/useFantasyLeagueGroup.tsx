@@ -10,9 +10,12 @@ import {
 import { useMemo } from 'react';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
+import { useAuth } from '../../contexts/AuthContext';
 
 /** Hook that provides fantasy league group info. Should be used with in the fantasy league group provider */
 export function useFantasyLeagueGroup() {
+  const {authUser} = useAuth();
+
   const [league, setLeague] = useAtom(fantasyLeagueGroupAtom);
   const members = useAtomValue(fantasyLeagueGroupMembersAtom);
   const rounds = useAtomValue(fantasyLeagueGroupRoundsAtom);
@@ -82,6 +85,12 @@ export function useFantasyLeagueGroup() {
     return undefined;
   }, [currentRound, rounds]);
 
+  const isMember = useMemo(() => {
+    return members.find((r) => {
+      return r.user_id === authUser?.kc_id
+    })
+  }, [members, authUser]);
+
   return {
     league,
     members,
@@ -89,7 +98,7 @@ export function useFantasyLeagueGroup() {
     userMemberRecord,
     currentRound,
     sortedRounds,
-    isMember: userMemberRecord !== undefined,
+    isMember,
     isAdminMember: userMemberRecord?.is_admin === true,
     mutateLeague,
     refreshRounds,
