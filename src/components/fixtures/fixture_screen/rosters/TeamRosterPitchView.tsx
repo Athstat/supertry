@@ -46,12 +46,12 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
         <div className="mt-4 relative" >
 
             <RugbyPitch3DRaster className={twMerge(
-                "max-h-[550px] opacity-60",
+                "max-h-[720px] lg:max-h-[800px] dark:opacity-60",
                 !hasRosterItems && "opacity-20"
             )} />
 
             <Activity mode={hasRosterItems ? "visible" : "hidden"} >
-                <div className="absolute mt-6 w-full  top-0 left-0 flex flex-col gap-2" >
+                <div className="absolute mt-8 w-full  top-0 left-0 flex flex-col gap-2" >
                     <div className="flex w-full flex-row items-center justify-center gap-6" >
                         <RosterStarterItem
                             item={getByJersey(1)}
@@ -128,7 +128,7 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
                         <div className="flex flex-1 item justify-center" >
                             <RosterStarterItem
                                 item={getByJersey(11)}
-                                className=""
+                                className="lg:left-28"
                             />
                         </div>
 

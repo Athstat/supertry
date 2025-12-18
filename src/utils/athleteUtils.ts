@@ -213,6 +213,14 @@ export function athleteSorter(
     });
   }
 
+  if (sortType === 'price') {
+    return sorted.sort((a, b) => {
+      return direction === 'asc'
+        ? (a.price || 0) - (b.price || 0)
+        : (b.price || 0) - (a.price || 0);
+    });
+  }
+
   return sorted;
 }
 

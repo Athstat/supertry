@@ -175,8 +175,8 @@ type TeamExistsViewProps = {
 
 function TeamExistsView({ teamUrl, nextDeadline, scoringGameweek, nextDeadlineRound }: TeamExistsViewProps) {
   const navigate = useNavigate();
-  const { authUser } = useAuth();
   const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummary(scoringGameweek);
+
 
   return (
     <div className="relative w-full overflow-hidden shadow-md">
@@ -201,10 +201,7 @@ function TeamExistsView({ teamUrl, nextDeadline, scoringGameweek, nextDeadlineRo
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center gap-4 py-6 px-2">
         {/* Username Header */}
-        <div className="flex items-center gap-2">
-          <img src="/images/profile-icon.svg" alt="Profile" className="w-6 h-6" />
-          <p className="text-white font-normal text-xs">{authUser?.username || 'User'}</p>
-        </div>
+        <UsernameHeader />
 
         {/* Title */}
         <h1
@@ -310,14 +307,14 @@ type FirstTimeUserViewProps = {
   nextDeadlineRound?: number
 };
 
-function FirstTimeUserView({ nextDeadline, username, nextDeadlineRound }: FirstTimeUserViewProps) {
+function FirstTimeUserView({ nextDeadline, nextDeadlineRound }: FirstTimeUserViewProps) {
 
   const navigate = useNavigate();
   const { league, currentRound } = useFantasyLeagueGroup();
   const [isHowToPlayModalOpen, setIsHowToPlayModalOpen] = useState(false);
 
   // Check if the gameweek is still open (before deadline)
-  const isGameweekOpen =  currentRound && !isLeagueRoundLocked(currentRound);
+  const isGameweekOpen = currentRound && !isLeagueRoundLocked(currentRound);
 
   const handlePickTeam = () => {
 
@@ -353,10 +350,7 @@ function FirstTimeUserView({ nextDeadline, username, nextDeadlineRound }: FirstT
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-4 py-6 px-2">
           {/* Username Header */}
-          <div className="flex items-center gap-2">
-            <img src="/images/profile-icon.svg" alt="Profile" className="w-6 h-6" />
-            <p className="text-white font-normal text-xs">{username || 'User'}</p>
-          </div>
+          <UsernameHeader />
 
           {/* Title */}
           <h1
@@ -435,4 +429,21 @@ function DashboardHeroLoadingSkeleton() {
       <div className="h-64"></div>
     </RoundedCard>
   </div>
+}
+
+/**Renders a username header */
+function UsernameHeader() {
+  const navigate = useNavigate();
+  const {authUser} = useAuth();
+
+  const handleClick = () => {
+    navigate('/profile');
+  }
+
+  return (
+    <div onClick={handleClick} className="flex cursor-pointer items-center gap-2">
+      <img src="/images/profile-icon.svg" alt="Profile" className="w-6 h-6" />
+      <p className="text-white font-normal text-xs">{authUser?.username || 'User'}</p>
+    </div>
+  )
 }

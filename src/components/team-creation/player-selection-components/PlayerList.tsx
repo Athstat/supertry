@@ -30,7 +30,7 @@ export const PlayerList: React.FC<PlayerListProps> = ({
   const { showPlayerProfile } = usePlayerProfile();
 
   // Function to handle viewing player profile
-  const handleViewPlayerProfile = (player: any, e: React.MouseEvent) => {
+  const handleViewPlayerProfile = (player: IProAthlete, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent row selection
     showPlayerProfile(player, { roundId: roundId?.toString() });
   };

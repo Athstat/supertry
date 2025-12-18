@@ -3,7 +3,6 @@ import PageView from '../PageView'
 import SearchInput from '../../components/shared/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
 import PositionCard from '../../components/players/positioning/PositionCard'
-import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 import { Activity, Fragment } from 'react'
 import PlayerSearchResults from './PlayerSearchResults'
 import { useQueryState } from '../../hooks/useQueryState'
@@ -15,6 +14,7 @@ import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/useDebounced'
 import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
+import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 
 export default function PlayersOverviewScreen() {
 

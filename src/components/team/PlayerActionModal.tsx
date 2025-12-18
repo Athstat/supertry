@@ -91,6 +91,7 @@ export function PlayerActionModal({
         "max-h-[440px] min-h-[400px] py-4 px-6",
         isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
+      hideHandle
       key={player.tracking_id}
     >
       <div className="flex flex-col gap-4" >

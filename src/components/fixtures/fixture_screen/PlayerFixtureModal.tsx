@@ -29,10 +29,11 @@ type Props = {
     onClose?: () => void,
     isOpen?: boolean,
     className?: string,
-    showMatchInfo?: boolean
+    showMatchInfo?: boolean,
+    hideViewPlayerProfile?: boolean
 }
 
-export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, className, showMatchInfo }: Props) {
+export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, className, showMatchInfo, hideViewPlayerProfile = false }: Props) {
 
     const { gameKickedOff, matchFinal } = fixtureSummary(fixture);
     const navigate = useNavigate();
@@ -134,11 +135,11 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                     </div>
 
                     <div className="" >
-                        <QuickActionButton
+                        {!hideViewPlayerProfile && <QuickActionButton
                             onClick={handleViewPlayerProfile}
                         >
                             View Player Profile
-                        </QuickActionButton>
+                        </QuickActionButton>}
                     </div>
 
                     {showMatchInfo && <RoundedCard className="flex flex-col p-4 mt-2 gap-2" >
