@@ -48,7 +48,11 @@ export default function FantasyPointsScoredPlayerList() {
   }, [currentRound, previousRound]);
 
 
-  const { rankings, isLoading } = useFantasyPointsRankings(finalSeason?.id ?? '', 5);
+  const { rankings, isLoading } = useFantasyPointsRankings((finalSeason?.id ?? ''), 5, {
+    round_number: scoringRound?.round_number
+  });
+
+  console.log("Scoring Round ", scoringRound)
 
   if (!finalSeason) {
     return;

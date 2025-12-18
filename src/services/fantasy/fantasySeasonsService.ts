@@ -78,9 +78,13 @@ export const fantasySeasonsService = {
     },
 
     /** returns a ranking of players based on fantasy points scored */
-    getFantasyPointsScoredRankings: async (id: string, limit: number = 5) : Promise<FantasyPointsScoredRankingItem[]> => {
+    getFantasyPointsScoredRankings: async (id: string, limit: number = 5, round_number: number | undefined = undefined) : Promise<FantasyPointsScoredRankingItem[]> => {
         try {
-            const uri = getUri(`/api/v1/fantasy-seasons/${id}/player-rankings/by-points-scored?limit=${limit}`);
+
+            const query_params = `?limit=${limit}${round_number ? `&round_number=${round_number}` : ''}`;
+            const uri = getUri(`/api/v1/fantasy-seasons/${id}/player-rankings/by-points-scored${query_params}`);
+            console.log("FInal URI ", uri);
+
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             })
