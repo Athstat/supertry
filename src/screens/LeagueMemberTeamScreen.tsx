@@ -92,10 +92,6 @@ function Content() {
         }
     }, [round, visitedRounds]);
 
-    useEffect(() => {
-
-    }, [round]);
-
     return (
         <PageView className="flex flex-col gap-4 " >
 

@@ -47,19 +47,17 @@ export function LeagueStandings() {
     fantasyAnalytics.trackClickedRowOnLeagueStandings();
 
     const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
+    const queryParams = roundNumber ? `?round_number=${roundNumber}` : "";
 
     if (featuredLeague) {
       if (member.user_id === authUser?.kc_id) {
-        navigate(`/league/${featuredLeague.id}`, {
-          state: { roundNumber }
-        });
+        navigate(`/league/${featuredLeague.id}${queryParams}`);
         return;
       }
 
-      navigate(`/league/${featuredLeague.id}/member/${member.user_id}`, {
-        state: { roundNumber }
-      });
+      navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
     }
+    
   }, [authUser, currentRound, featuredLeague, navigate, roundFilterId, selectedRound])
 
   const handleCloseMemberModal = () => {

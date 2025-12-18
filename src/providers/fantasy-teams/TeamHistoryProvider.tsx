@@ -44,8 +44,9 @@ export default function TeamHistoryProvider({ children, user, loadingFallback }:
 
 function InnerProvider({ children, user, loadingFallback }: Props) {
 
+    const [roundNumber, setRoundNumber] = useQueryState(queryParamKeys.ROUND_NUMBER_QUERY_KEY);
     const [roundId, setRoundId] = useQueryState(queryParamKeys.ROUND_ID_QUERY_KEY);
-    const { currentRound } = useFantasyLeagueGroup();
+    const { currentRound, sortedRounds } = useFantasyLeagueGroup();
 
     const setRound = useSetAtom(teamHistoryCurrentRoundAtom);
     const [, setManager] = useAtom(teamHistoryTeamManagerAtom);
@@ -63,10 +64,25 @@ function InnerProvider({ children, user, loadingFallback }: Props) {
     }, [user, setManager])
 
     useEffect(() => {
+
+        if (!roundId && roundNumber) {
+
+            const matchingRound = sortedRounds.find((r) => {
+                return r.start_round?.toString() === (roundNumber || "")
+            });
+
+            if (matchingRound) {
+                setRoundId(matchingRound.id);
+                return;
+            }
+        }
+
         if (!roundId && currentRound) {
             setRoundId(currentRound.id);
+            return;
         }
-    }, [currentRound, roundId, setRoundId]);
+
+    }, [currentRound, roundId, roundNumber, setRoundId, setRoundNumber, sortedRounds]);
 
     return (
         <Fragment>

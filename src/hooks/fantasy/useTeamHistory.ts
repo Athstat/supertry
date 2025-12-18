@@ -13,12 +13,13 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 
 export function useTeamHistory() {
 
+    
+    const { sortedRounds, currentRound: groupCurrentRound } = useFantasyLeagueGroup();
+
     const [roundId, setRoundId] = useQueryState(queryParamKeys.ROUND_ID_QUERY_KEY);
 
     const [team, setTeam] = useAtom(teamHistoryCurrentTeamAtom);
     const manager = useAtomValue(teamHistoryTeamManagerAtom);
-
-    const { sortedRounds, currentRound: groupCurrentRound } = useFantasyLeagueGroup();
 
     const setCurrentRound = useCallback((round: IFantasyLeagueRound) => {
         setRoundId(round.id);
@@ -28,7 +29,7 @@ export function useTeamHistory() {
         if (!roundId) {
             return groupCurrentRound;
         }
-
+    
         return sortedRounds.find((r) => r.id.toString() === roundId)
     }, [groupCurrentRound, roundId, sortedRounds]);
 
