@@ -344,6 +344,8 @@ function PlayerListTableColumn({ label, className, onSort, currentSortDirection,
             return;
         }
 
+        console.log(`Sorting by ${currentSortField}, and the direction ${currentSortDirection}`);
+
         if (fieldName === currentSortField) {
             const inverseDirection = currentSortDirection === "asc" ? "desc" : "asc";
             onSort(fieldName, inverseDirection);
