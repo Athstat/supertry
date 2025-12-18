@@ -57,7 +57,7 @@ export function LeagueStandings() {
 
       navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
     }
-    
+
   }, [authUser, currentRound, featuredLeague, navigate, roundFilterId, selectedRound])
 
   const handleCloseMemberModal = () => {
@@ -89,7 +89,7 @@ export function LeagueStandings() {
       <div className="flex flex-row items-center px-4 justify-between">
         <div className="flex flex-row items-center gap-2">
           <Table2 />
-          <p className="font-bold text-xl">Standings {selectedRound?.title}</p>
+          <p className="font-bold text-xl">Standings</p>
         </div>
 
         <div>
