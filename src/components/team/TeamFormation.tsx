@@ -14,7 +14,7 @@ interface TeamFormationProps {
 /** Renders a 3 Dimensional-looking pitch view */
 export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
 
-  const {slots, leagueRound: round} = useFantasyLeagueTeam();
+  const { slots, leagueRound: round } = useFantasyLeagueTeam();
 
   const firstRowSlots = useMemo(() => {
     return slots
@@ -29,6 +29,15 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
         return a.slotNumber >= 3 && a.slotNumber < 6;
       });
   }, [slots]);
+
+  // const getSlot = (slotNum: number, callback: (slot: IFantasyLeagueTeamSlot) => ReactNode) => {
+  //   const slot = slots.find((s) => s.slotNumber === slotNum);
+  //   if (slot) {
+  //     return callback(slot);
+  //   }
+
+  //   return null;
+  // }
 
   if (!round) {
     return;
@@ -103,3 +112,34 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
   );
 }
 
+// type SlotCardProps = {
+//   slot: IFantasyLeagueTeamSlot,
+//   onPlayerClick?: (player: IFantasyTeamAthlete) => void,
+//   round?: IFantasyLeagueRound,
+//   className?: string
+// }
+
+// function SlotCard({ slot, onPlayerClick, round }: SlotCardProps) {
+//   const { athlete } = slot;
+
+//   if (!athlete) {
+//     return (
+//       <EmptySlotPitchCard
+//         slot={slot}
+//       />
+//     )
+//   };
+
+//   if (!round) {
+//     return null;
+//   }
+
+//   return (
+//     <PlayerPitchCard
+//       player={athlete}
+//       onClick={onPlayerClick}
+//       key={s.slotNumber}
+//       round={round}
+//     />
+//   )
+// }
