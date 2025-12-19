@@ -21,7 +21,7 @@ type TableProps = {
 /** Renders Players List Table */
 export function PlayerListTable({ players, onClick, onSort, currentSortDirection, currentSortField, searchQuery, onClearSearchQuery }: TableProps) {
 
-    const [isDelaying, setIsDeplaying] = useState<boolean>(false);
+    const [isDelaying, setIsDelaying] = useState<boolean>(true);
 
     const handleClick = (player: IProAthlete) => {
         if (onClick) {
@@ -34,16 +34,11 @@ export function PlayerListTable({ players, onClick, onSort, currentSortDirection
     }, [players]);
 
     useEffect(() => {
-        setIsDeplaying(true);
-
-        const timeout = setTimeout(() => {
-            setIsDeplaying(false)
-        }, 800);
-
-        return () => {
-            clearTimeout(timeout);
-        }
-    }, [])
+        if (!isEmpty) return setIsDelaying(false);
+        setIsDelaying(true);
+        const timeout = setTimeout(() => setIsDelaying(false), 800);
+        return () => clearTimeout(timeout);
+    }, [isEmpty]);
 
     return (
         <div className="w-full min-h-screen" >
