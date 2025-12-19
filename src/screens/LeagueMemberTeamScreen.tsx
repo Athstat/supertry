@@ -93,7 +93,7 @@ function Content() {
     }, [round, visitedRounds]);
 
     return (
-        <PageView className="flex flex-col gap-4 " >
+        <PageView className="flex flex-col gap-4 py-4 " >
 
             <div className="flex flex-col px-4" >
                 <div className="h-[50px] relative w-full items-center justify-center flex flex-col rounded-xl border-none">
