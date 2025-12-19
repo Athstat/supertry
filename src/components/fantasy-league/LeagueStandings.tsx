@@ -15,6 +15,8 @@ import { useLeagueRoundStandingsFilter } from '../../hooks/fantasy/useLeagueRoun
 import { useLeagueGroupStandings } from '../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
 import LeagueStandingsFilterSelector, { SelectedWeekIndicator } from './standings/LeagueStandingsFilterSelector';
 import { useOfficialLeagueGroup } from '../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
+import { LeagueRoundCountdown2 } from './LeagueCountdown';
+import BlueGradientCard from '../shared/BlueGradientCard';
 
 
 export function LeagueStandings() {
@@ -86,6 +88,8 @@ export function LeagueStandings() {
         {userMemberRecord && <ClaimAccountNoticeCard reasonNum={2} />}
       </div>
 
+
+
       <div className="flex flex-row items-center px-4 justify-between">
         <div className="flex flex-row items-center gap-2">
           <Table2 />
@@ -101,6 +105,8 @@ export function LeagueStandings() {
           <LeagueStandingsFilterSelector />
         </div>
       </div>
+
+
 
       <div className='px-4' >
         <SelectedWeekIndicator />
@@ -124,6 +130,14 @@ export function LeagueStandings() {
           </div>
         )}
       </div>
+
+      {currentRound && (
+        <BlueGradientCard className='px-4 mx-4' >
+          <LeagueRoundCountdown2
+            leagueRound={currentRound}
+          />
+        </BlueGradientCard>
+      )}
 
       <div>
         {/* {isMember && <PrimaryButton onClick={handleShare} className="" >
