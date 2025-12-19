@@ -11,6 +11,7 @@ import { useSupportedAthletes } from '../../hooks/athletes/useSupportedAthletes'
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../../types/constants';
 import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars';
+import { PlayerListTableLoadingSkeleton } from '../../components/players/PlayerListTable';
 
 export default function PlayersByPositionClassScreen() {
 
@@ -21,7 +22,7 @@ export default function PlayersByPositionClassScreen() {
     const [showSheet, setShowSheet] = useState<boolean>(false);
     const toggle = () => setShowSheet(prev => !prev);
 
-    const {athletes} = useSupportedAthletes();
+    const { athletes, isLoading } = useSupportedAthletes();
 
     const positionPlayers = useMemo(() => {
         return athletes.filter((a) => {
@@ -31,6 +32,12 @@ export default function PlayersByPositionClassScreen() {
 
     const handleBack = () => {
         navigate("/players")
+    }
+
+    if (!isLoading) {
+        return (
+            <LoadingSkeleton />
+        )
     }
 
     return (
@@ -60,7 +67,7 @@ export default function PlayersByPositionClassScreen() {
                 </div>
             </div>
 
-            <PlayersList 
+            <PlayersList
                 players={positionPlayers}
             />
 
@@ -69,6 +76,47 @@ export default function PlayersByPositionClassScreen() {
                 onClose={toggle}
             />
 
+
+        </PageView>
+    )
+}
+
+function LoadingSkeleton() {
+
+    const { positionClass } = useParams();
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate("/players")
+    }
+
+    return (
+        <PageView className='px-4 py-4 relative' >
+
+            <div className={twMerge(
+                'flex sticky w-full p-2 top-0 z-[10] left-0 flex-row items-center justify-between',
+                AppColours.BACKGROUND
+            )} >
+                <div className='flex flex-row items-center gap-2' >
+                    <CircleButton
+                        onClick={handleBack}
+                    >
+                        <ArrowLeft />
+                    </CircleButton>
+                    <p className='font-bold' >Players By Position</p>
+                </div>
+
+                <div>
+                    <RoundedCard
+                        className='w-fit py-2 cursor-pointer px-3 rounded-md flex flex-row items-center gap-2'
+                    >
+                        <p className='text-sm' >{formatPosition(positionClass)}</p>
+                        <ChevronDown className='w-4 h-4' />
+                    </RoundedCard>
+                </div>
+            </div>
+
+            <PlayerListTableLoadingSkeleton />
 
         </PageView>
     )

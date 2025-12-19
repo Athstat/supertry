@@ -5,7 +5,7 @@ import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import { LoadingState } from "../../components/ui/LoadingState";
 import SecondaryText from "../../components/shared/SecondaryText";
-import { PlayerListTable } from "../../components/players/PlayersList";
+import { PlayerListTable } from "../../components/players/PlayerListTable";
 
 type Props = {
     searchQuery?: string,
