@@ -68,7 +68,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
             <div
                 className={twMerge(
-                    'cursor-pointer rounded-lg ',
+                    'cursor-pointer',
                     "min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px]",
                     'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col',
                     // player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
@@ -88,7 +88,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <TeamJersey
                             teamId={player.athlete_team_id}
                             useBaseClasses={false}
-                            className="h-[100px] md:h-[110px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
+                            className="h-[100px] rounded-b-2xl md:h-[110px] object-cover  absolute -bottom-4 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
                             key={player.tracking_id}
@@ -99,17 +99,17 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
 
                 <div className={twMerge(
-                    'flex-1 w-full items-center justify-between text-[#011E5C] dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] rounded-lg bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
+                    'flex-1 w-full items-center justify-between text-[#011E5C] dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
                     // "dark:from-slate-700 dark:to-slate-800 dark:text-white",
                     'min-h-[50px] max-h-[50px]'
                 )} >
 
                     <div className='flex px-2 h-[25px] md:h-[25px] flex-col items-center justify-center' >
-                        <p className='text-[10px] md:text-[11px] max-w-[80%] font-bold text-center text-nowrap truncate' >{player.athstat_lastname}</p>
+                        <p className='text-[10px] md:text-[11px] max-w-[80%] font-semibold text-center text-nowrap truncate' >{player.athstat_lastname}</p>
                     </div>
 
                     <div className={twMerge(
-                        'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
+                        'flex flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
                         "from-[#011E5C] to-[#011E5C] text-white",
                         showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-yellow-900",
                     )} >
