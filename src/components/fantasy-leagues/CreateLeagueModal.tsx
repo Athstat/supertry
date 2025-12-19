@@ -65,13 +65,15 @@ export default function CreateLeagueModal({ isOpen, onClose, initMode }: CreateL
 }
 
 function CreateLeagueForm() {
-  const { isLoading, fantasySupportedSeasons: seasons } = useSupportedSeasons();
+  const { isLoading: loadingSupportedSeasons, fantasySupportedSeasons: seasons } = useSupportedSeasons();
 
   const navigate = useNavigate();
   const [isSubmiting, setSubmiting] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
 
   const {selectedSeason} = useFantasyLeaguesScreen();
+
+  const isLoading = loadingSupportedSeasons;
 
   const [form, setForm] = useState<CreateLeagueForm>({
     title: '',
@@ -89,11 +91,7 @@ function CreateLeagueForm() {
         season_id: selectedSeason?.id ?? form.season_id
       });
       if (res.data) {
-        navigate(`/league/${res.data.id}`, {
-          state: {
-            is_new: true,
-          },
-        });
+          navigate(`/league/${res.data.id}/standings`);
       } else {
         setError(res.error?.message);
       }
