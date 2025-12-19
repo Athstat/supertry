@@ -162,6 +162,26 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
+    getMemberById: async (leagueId: string, userId: string): Promise<FantasyLeagueGroupMember | undefined> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/members/${userId}`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasyLeagueGroupMember;
+            }
+
+        } catch (err) {
+            console.log("Error fetching public fantasy league groups ", err);
+        }
+
+        return undefined;
+    },
+
     /** API to create a league group */
     createGroup: async (data: NewFantasyLeagueGroupReq): RestPromise<FantasyLeagueGroup> => {
 
