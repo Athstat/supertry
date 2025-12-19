@@ -149,7 +149,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
           <div className="flex flex-col items-center justify-center" >
             <p className="font-black text-md" >{Math.round(userScore ?? 0)}</p>
-            <SecondaryText className="text-[10px]" >Your Score</SecondaryText>
+            <SecondaryText className="text-[10px]" >Score</SecondaryText>
           </div>
 
           <div className="flex flex-col items-center justify-center" >
