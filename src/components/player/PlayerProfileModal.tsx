@@ -25,6 +25,18 @@ interface Props {
 export default function PlayerProfileModal({ player, isOpen, onClose, source }: Props) {
   /** Holds the time stamp where the modal as opened, for analytics purposes */
   const [startTime, setStartTime] = useState(new Date());
+  const { selectedFixture } = usePlayerData();
+
+  const handleClickOutSide = () => {
+    if (selectedFixture && player) {
+      return;
+    }
+
+    handleCloseModal();
+  }
+
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, handleClickOutSide);
 
   useEffect(() => {
     if (player && isOpen) {
@@ -42,39 +54,43 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
 
   }, [onClose, player.tracking_id, startTime]);
 
+
+
   return (
     <PlayerDataProvider onClose={handleCloseModal} player={player} loadingFallback={<DefaultLoadingSkeleton onClose={handleCloseModal} />} >
       <Activity mode={isOpen ? "visible" : "hidden"} >
-        <BottomSheetView
-          className={twMerge(
-            "p-0 flex flex-col gap-2 min-h-[95vh]",
-            lighterDarkBlueCN
-          )}
+        <div ref={ref} className='w-fit' >
+          <BottomSheetView
 
-          noAnimation
-          hideHandle
+            className={twMerge(
+              "p-0 flex flex-col gap-2 min-h-[95vh]",
+              lighterDarkBlueCN
+            )}
 
-          onClickOutside={onClose}
-        >
-          {/* Modal header with player image and close button */}
-          <PlayerProfileBanner
-            onClose={onClose}
-          />
+            noAnimation
+            hideHandle
 
-          <div className='px-4' >
-            {/* Stats Summary */}
-            <PlayerNameAndPosition />
+          >
+            {/* Modal header with player image and close button */}
+            <PlayerProfileBanner
+              onClose={onClose}
+            />
 
-            <div className="flex-1 ">
-              <PlayerProfileModalTabContent />
+            <div className='px-4' >
+              {/* Stats Summary */}
+              <PlayerNameAndPosition />
+
+              <div className="flex-1 ">
+                <PlayerProfileModalTabContent />
+              </div>
             </div>
-          </div>
-        </BottomSheetView>
+          </BottomSheetView>
 
-        <PlayerFixtureModalWrapper />
+          <PlayerFixtureModalWrapper />
 
-        <PlayerScoutingActionModalWrapper />
+          <PlayerScoutingActionModalWrapper />
 
+        </div>
       </Activity>
     </PlayerDataProvider>
   );
