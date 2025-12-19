@@ -4,6 +4,7 @@ import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting"
 import PlayerRowCard from "../player/PlayerRowCard"
 import SecondaryText from "../shared/SecondaryText"
+import RoundedCard from "../shared/RoundedCard"
 
 type TableProps = {
     players: IProAthlete[],
@@ -165,13 +166,30 @@ export function PlayerListTableLoadingSkeleton() {
 
                     </tr>
                 </thead>
-
-                <tbody
-                    className="divide-y dark:divide-slate-700"
-                >
-                    <p>Loading</p>
-                </tbody>
             </table>
-        </div>
+
+            <div className="divide-y flex flex-col dark:divide-slate-700 w-full p-2 gap-4">
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+                <RoundedCard className="w-full h-[50px] border-none" />
+            </div>
+
+        </div >
     )
 }
