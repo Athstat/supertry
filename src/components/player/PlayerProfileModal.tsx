@@ -53,6 +53,8 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
 
           noAnimation
           hideHandle
+
+          onClickOutside={onClose}
         >
           {/* Modal header with player image and close button */}
           <PlayerProfileBanner

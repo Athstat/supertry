@@ -34,9 +34,13 @@ export function PlayerIconsCard({ player, season }: Props) {
   if (isLoading) {
     return (
       <div className='flex flex-col gap-2' >
-        <RoundedCard className='bg-slate-200 animate-pulse rounded-xl w-full h-[20px]' />
-        <RoundedCard className='bg-slate-200 animate-pulse rounded-xl w-full h-[20px]' />
-        <RoundedCard className='bg-slate-200 animate-pulse rounded-xl w-full h-[20px]' />
+        <SecondaryText className='flex flex-row items-center gap-2' >
+          <Sparkles className='w-4 h-4' />
+          <p>Player Icons</p>
+
+        </SecondaryText>
+        
+        <RoundedCard className='bg-slate-200 animate-pulse rounded-xl w-full border-none h-[100px]' />
       </div>
     )
   }
@@ -50,7 +54,7 @@ export function PlayerIconsCard({ player, season }: Props) {
       <SecondaryText className='flex flex-row items-center gap-2' >
         <Sparkles className='w-4 h-4' />
         <p>Player Icons</p>
-        
+
       </SecondaryText>
 
       <div className="space-y-3">
@@ -58,9 +62,9 @@ export function PlayerIconsCard({ player, season }: Props) {
           const iconData = PLAYER_ICONS[iconName];
 
           return (
-            <div
+            <RoundedCard
               key={iconName}
-              className="bg-gray-50 flex flex-row items-center dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+              className="flex flex-row items-center p-4 px-6 dark:border-none"
             >
               <div className="flex items-center flex-row gap-4">
                 {/* Icon */}
@@ -78,7 +82,7 @@ export function PlayerIconsCard({ player, season }: Props) {
                   </p>
                 </div>
               </div>
-            </div>
+            </RoundedCard>
           );
         })}
       </div>

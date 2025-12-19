@@ -1,6 +1,5 @@
 import { calculateAge } from '../../../../utils/playerUtils';
 import PlayerIconsCard from '../PlayerIconsCard';
-import Experimental from '../../../shared/ab_testing/Experimental';
 import { format } from 'date-fns';
 import { IProAthlete } from '../../../../types/athletes';
 import { Coins } from 'lucide-react';
@@ -46,7 +45,7 @@ export default function PlayerOverviewTab({ player }: Props) {
 
   return (
     <div className="flex flex-col gap-6 pb-6">
-      
+
       <PlayerTeamCard
         player={player}
       />
@@ -112,9 +111,7 @@ export default function PlayerOverviewTab({ player }: Props) {
       <CoachScrummyPlayerReport player={player} />
 
       {currentSeason && (
-        <Experimental>
-          <PlayerIconsCard player={player} season={currentSeason} />
-        </Experimental>
+        <PlayerIconsCard player={player} season={currentSeason} />
       )}
 
       <PlayerTeamFormCard
