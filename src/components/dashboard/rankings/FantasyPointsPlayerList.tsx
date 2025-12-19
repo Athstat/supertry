@@ -52,7 +52,9 @@ export default function FantasyPointsScoredPlayerList() {
     round_number: scoringRound?.round_number
   });
 
-  console.log("Scoring Round ", scoringRound)
+  const handleViewMore = () => {
+    navigate('/players/fantasy-points-rankings')
+  }
 
   if (!finalSeason) {
     return;
@@ -121,7 +123,7 @@ export default function FantasyPointsScoredPlayerList() {
 
         {/* View All Players Link */}
         <p
-          onClick={() => navigate('/players')}
+          onClick={handleViewMore}
           className="font-semibold text-sm text-[#011E5C] dark:text-white underline pb-4 text-center cursor-pointer"
         >
           View All Players
