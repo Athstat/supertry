@@ -8,10 +8,9 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 /** Hook that provides data and logic for league standings filtering */
 export function useLeagueRoundStandingsFilter() {
 
-    const { sortedRounds} = useFantasyLeagueGroup();
-    const defaultFilterVal = "overall";
+    const { sortedRounds, scoringRound } = useFantasyLeagueGroup();
+    const defaultFilterVal = scoringRound?.id || "overall";
     const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: defaultFilterVal });
-
 
     const options = useMemo(() => {
         return getLeagueStandingsFilterItems(sortedRounds);

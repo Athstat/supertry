@@ -8,6 +8,7 @@ import {
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
 import { useMemo } from 'react';
+import { useLeagueRoundStandingsFilter } from '../../../hooks/fantasy/useLeagueRoundStandingsFilter';
 
 type Props = {
   isLoading?: boolean;
@@ -23,11 +24,14 @@ export default function LeagueStandingsTable({
   handleSelectMember,
   hideUserScore,
 }: Props) {
+
+  const { selectedRound } = useLeagueRoundStandingsFilter();
+
   const { members, userMemberRecord } = useFantasyLeagueGroup();
   const exclude_ids = standings.map((s) => {
     return s.user_id;
   })
-  
+
   const leftOutMembers = members.filter((m) => {
     return !exclude_ids.includes(m.user_id);
   })
@@ -60,7 +64,7 @@ export default function LeagueStandingsTable({
         </div>
 
         <div>
-          <SecondaryText className="text-md">Points</SecondaryText>
+          <SecondaryText className="text-md">{selectedRound ? `${selectedRound.title} Points` : "Points"}</SecondaryText>
         </div>
       </div>
 

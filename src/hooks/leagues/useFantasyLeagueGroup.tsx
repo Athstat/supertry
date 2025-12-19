@@ -11,6 +11,7 @@ import { useMemo } from 'react';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { useAuth } from '../../contexts/AuthContext';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 
 /** Hook that provides fantasy league group info. Should be used with in the fantasy league group provider */
 export function useFantasyLeagueGroup() {
@@ -55,8 +56,6 @@ export function useFantasyLeagueGroup() {
       return endedRounds[endedRounds.length - 1];
     }
 
-    // TODO: Change this Back
-
     return undefined;
   }, [sortedRounds]);
 
@@ -91,6 +90,14 @@ export function useFantasyLeagueGroup() {
     })
   }, [members, authUser]);
 
+  const scoringRound = useMemo(() => {
+    if (currentRound && isLeagueRoundLocked(currentRound)) {
+      return currentRound;
+    }
+
+    return previousRound || currentRound;
+  }, [currentRound, previousRound]);
+
   return {
     league,
     members,
@@ -105,6 +112,7 @@ export function useFantasyLeagueGroup() {
     isOfficialLeague,
     leagueConfig,
     isLoading,
-    previousRound
+    previousRound,
+    scoringRound
   };
 }
