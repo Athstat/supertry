@@ -34,7 +34,7 @@ export default function PlayersByPositionClassScreen() {
         navigate("/players")
     }
 
-    if (!isLoading) {
+    if (isLoading) {
         return (
             <LoadingSkeleton />
         )

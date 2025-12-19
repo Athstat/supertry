@@ -19,7 +19,6 @@ import TeamLogo from "../team/TeamLogo";
 import GlassBottomSheet from "../ui/GlassBottomSheet";
 import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
-import { EmptyState } from "./EmptyState";
 import { PlayerFilters } from "./PlayerFilters";
 import { PlayerSort } from "./PlayerSort";
 import FloatingSearchBar from "./ui/FloatingSearchBar";
@@ -79,8 +78,6 @@ export default function PlayersList({ players }: Props) {
     });
 
     const [controlsOpen, setControlsOpen] = useState(false);
-
-    const isEmpty = !isFiltering && filteredAthletes.length === 0;
 
     const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
     const [showPlayerModal, setShowPlayerModal] = useState(false);
@@ -171,8 +168,6 @@ export default function PlayersList({ players }: Props) {
                 {/* Filtering Loading State */}
                 {/* {isFiltering && <LoadingState message="Searching..." />} */}
 
-                {/* Empty State */}
-                {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
 
                 {/* Player Grid */}
                 {/* {!isFiltering && (
@@ -198,6 +193,8 @@ export default function PlayersList({ players }: Props) {
                         onSort={handleSortByField}
                         currentSortDirection={sortDirection}
                         currentSortField={sortField}
+                        searchQuery={searchQuery}
+                        onClearSearchQuery={() => setSearchQuery("")}
                     />
                 )}
 

@@ -5,23 +5,45 @@ import { SortField, SortDirection } from "../../types/playerSorting"
 import PlayerRowCard from "../player/PlayerRowCard"
 import SecondaryText from "../shared/SecondaryText"
 import RoundedCard from "../shared/RoundedCard"
+import { EmptyState } from "./EmptyState"
+import { useEffect, useMemo, useState } from "react"
 
 type TableProps = {
     players: IProAthlete[],
     onClick?: (player: IProAthlete) => void,
     onSort?: (field: SortField, direction: SortDirection) => void,
     currentSortField?: SortField,
-    currentSortDirection?: SortDirection
+    currentSortDirection?: SortDirection,
+    searchQuery?: string,
+    onClearSearchQuery?: () => void
 }
 
 /** Renders Players List Table */
-export function PlayerListTable({ players, onClick, onSort, currentSortDirection, currentSortField }: TableProps) {
+export function PlayerListTable({ players, onClick, onSort, currentSortDirection, currentSortField, searchQuery, onClearSearchQuery }: TableProps) {
+
+    const [isDelaying, setIsDeplaying] = useState<boolean>(false);
 
     const handleClick = (player: IProAthlete) => {
         if (onClick) {
             onClick(player)
         }
     }
+
+    const isEmpty = useMemo(() => {
+        return players.length === 0;
+    }, [players]);
+
+    useEffect(() => {
+        setIsDeplaying(true);
+
+        const timeout = setTimeout(() => {
+            setIsDeplaying(false)
+        }, 800);
+
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [])
 
     return (
         <div className="w-full min-h-screen" >
@@ -81,6 +103,10 @@ export function PlayerListTable({ players, onClick, onSort, currentSortDirection
                     ))}
                 </tbody>
             </table>
+
+            {/* Empty State */}
+            {isEmpty && !isDelaying && <EmptyState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
+
         </div>
     )
 }
