@@ -29,7 +29,7 @@ export default function MatchPrCard({ pr, className}: Props) {
             return "yellow"
         }
 
-        if (pr <= 59) {
+        if (pr < 60) {
             return "red";
         }
 

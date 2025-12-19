@@ -113,7 +113,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
   return (
     <div
       className={twMerge(
-        "w-full cursor-pointer rounded-2xl p-2 flex flex-row items-center justify-between",
+        "w-full cursor-pointer h-full min-h-[80px] rounded-2xl p-2 flex flex-row items-center justify-between",
         showAvailabilityWarning && "bg-yellow-200/10 dark:bg-yellow-700/10 border border-yellow-500/30 dark:border-yellow-700/30"
       )}
       onClick={onClick}

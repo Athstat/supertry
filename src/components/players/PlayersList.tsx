@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { ChevronsUpDown, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
@@ -19,13 +19,12 @@ import TeamLogo from "../team/TeamLogo";
 import GlassBottomSheet from "../ui/GlassBottomSheet";
 import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
-import { EmptyState } from "./EmptyState";
 import { PlayerFilters } from "./PlayerFilters";
 import { PlayerSort } from "./PlayerSort";
 import FloatingSearchBar from "./ui/FloatingSearchBar";
-import PlayerRowCard from "../player/PlayerRowCard";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
+import { PlayerListTable } from "./PlayerListTable";
 
 type Props = {
     players: IProAthlete[]
@@ -79,8 +78,6 @@ export default function PlayersList({ players }: Props) {
     });
 
     const [controlsOpen, setControlsOpen] = useState(false);
-
-    const isEmpty = !isFiltering && filteredAthletes.length === 0;
 
     const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
     const [showPlayerModal, setShowPlayerModal] = useState(false);
@@ -171,8 +168,6 @@ export default function PlayersList({ players }: Props) {
                 {/* Filtering Loading State */}
                 {/* {isFiltering && <LoadingState message="Searching..." />} */}
 
-                {/* Empty State */}
-                {isEmpty && <EmptyState searchQuery={searchQuery} onClearSearch={() => handleSearch('')} />}
 
                 {/* Player Grid */}
                 {/* {!isFiltering && (
@@ -198,6 +193,8 @@ export default function PlayersList({ players }: Props) {
                         onSort={handleSortByField}
                         currentSortDirection={sortDirection}
                         currentSortField={sortField}
+                        searchQuery={searchQuery}
+                        onClearSearchQuery={() => setSearchQuery("")}
                     />
                 )}
 
@@ -244,132 +241,3 @@ export default function PlayersList({ players }: Props) {
         </Fragment>
     );
 };
-
-type TableProps = {
-    players: IProAthlete[],
-    onClick?: (player: IProAthlete) => void,
-    onSort?: (field: SortField, direction: SortDirection) => void,
-    currentSortField?: SortField,
-    currentSortDirection?: SortDirection
-}
-
-/** Renders Players List Table */
-export function PlayerListTable({ players, onClick, onSort, currentSortDirection, currentSortField }: TableProps) {
-
-    const handleClick = (player: IProAthlete) => {
-        if (onClick) {
-            onClick(player)
-        }
-    }
-
-
-
-    return (
-        <div className="w-full min-h-screen" >
-            <table className="w-full"  >
-
-                <thead>
-                    <tr>
-
-                        <PlayerListTableColumn
-                            className="pb-4"
-                            label="Player"
-                            fieldName={'player_name'}
-                            currentSortDirection={currentSortDirection}
-                            currentSortField={currentSortField}
-                            onSort={onSort}
-                        />
-
-                        <PlayerListTableColumn
-                            className="pb-4"
-                            label="Price"
-                            fieldName={'price'}
-                            currentSortDirection={currentSortDirection}
-                            currentSortField={currentSortField}
-                            onSort={onSort}
-                        />
-
-                        <PlayerListTableColumn
-                            className="pb-4"
-                            label="Form"
-                            fieldName={'form'}
-                            currentSortDirection={currentSortDirection}
-                            currentSortField={currentSortField}
-                            onSort={onSort}
-                        />
-
-                        <PlayerListTableColumn
-                            className="pb-4"
-                            label="PR"
-                            fieldName={'power_rank_rating'}
-                            currentSortDirection={currentSortDirection}
-                            currentSortField={currentSortField}
-                            onSort={onSort}
-                        />
-
-                    </tr>
-                </thead>
-
-                <tbody
-                    className="divide-y dark:divide-slate-700"
-                >
-                    {players.map(player => (
-                        <PlayerRowCard
-                            player={player}
-                            onClick={handleClick}
-                            key={player.tracking_id}
-                        />
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    )
-}
-
-type ColumnProps = {
-    label?: string,
-    fieldName: SortField,
-    currentSortDirection?: SortDirection,
-    currentSortField?: SortField,
-    className?: string,
-    onSort?: (field: SortField, direction: SortDirection) => void
-}
-
-function PlayerListTableColumn({ label, className, onSort, currentSortDirection, currentSortField, fieldName }: ColumnProps) {
-
-    const isCurrent = fieldName === currentSortField;
-
-    const handleSort = () => {
-        if (!onSort) {
-            return;
-        }
-
-        console.log(`Sorting by ${currentSortField}, and the direction ${currentSortDirection}`);
-
-        if (fieldName === currentSortField) {
-            const inverseDirection = currentSortDirection === "asc" ? "desc" : "asc";
-            onSort(fieldName, inverseDirection);
-            return;
-        }
-
-        onSort(fieldName, "desc");
-    }
-
-    return (
-        <>
-            <th className={twMerge(
-                className,
-            )} >
-                <button onClick={handleSort} className="flex flex-row items-center gap-1" >
-                    <SecondaryText>
-                        {label}
-                    </SecondaryText>
-
-                    {isCurrent && (
-                        <ChevronsUpDown className="text-slate-600 dark:text-slate-400 text-sm w-4 h-4" />
-                    )}
-                </button>
-            </th>
-        </>
-    )
-}

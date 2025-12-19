@@ -3,7 +3,7 @@ import PlayerNameAndPosition from './profile-modal-components/PlayerNameAndPosit
 import PlayerProfileModalTabContent from './profile-modal-components/PlayerProfileModalTabContent';
 import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { Activity, useCallback, useEffect, useRef, useState } from 'react';
+import { Activity, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataProvider';
 import BottomSheetView from '../ui/BottomSheetView';
@@ -13,6 +13,9 @@ import PlayerFixtureModal from '../fixtures/fixture_screen/PlayerFixtureModal';
 import PlayerScoutingActionModal from '../scouting/PlayerScoutingActionModal';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import RoundedCard from '../shared/RoundedCard';
+import CircleButton from '../shared/buttons/BackButton';
+import { X } from 'lucide-react';
+import SecondaryText from '../shared/SecondaryText';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -25,6 +28,18 @@ interface Props {
 export default function PlayerProfileModal({ player, isOpen, onClose, source }: Props) {
   /** Holds the time stamp where the modal as opened, for analytics purposes */
   const [startTime, setStartTime] = useState(new Date());
+  const { selectedFixture } = usePlayerData();
+
+  const handleClickOutSide = () => {
+    if (selectedFixture && player) {
+      return;
+    }
+
+    handleCloseModal();
+  }
+
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, handleClickOutSide);
 
   useEffect(() => {
     if (player && isOpen) {
@@ -42,39 +57,49 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
 
   }, [onClose, player.tracking_id, startTime]);
 
+
+
   return (
-    <PlayerDataProvider onClose={handleCloseModal} player={player} loadingFallback={<DefaultLoadingSkeleton onClose={handleCloseModal} />} >
+    <PlayerDataProvider 
+      onClose={handleCloseModal} 
+      player={player}
+      loadingFallback={<DefaultLoadingSkeleton onClose={handleCloseModal} />}
+      errorFallback={<PlayerNotFound player={player} onClose={onClose} />}
+       
+    >
       <Activity mode={isOpen ? "visible" : "hidden"} >
-        <BottomSheetView
-          className={twMerge(
-            "p-0 flex flex-col gap-2 min-h-[95vh]",
-            lighterDarkBlueCN
-          )}
+        <div ref={ref} className='w-fit' >
+          <BottomSheetView
 
-          noAnimation
-          hideHandle
+            className={twMerge(
+              "p-0 flex flex-col gap-2 min-h-[95vh]",
+              lighterDarkBlueCN
+            )}
 
-          onClickOutside={onClose}
-        >
-          {/* Modal header with player image and close button */}
-          <PlayerProfileBanner
-            onClose={onClose}
-          />
+            noAnimation
+            hideHandle
 
-          <div className='px-4' >
-            {/* Stats Summary */}
-            <PlayerNameAndPosition />
+          >
+            {/* Modal header with player image and close button */}
+            <PlayerProfileBanner
+              onClose={onClose}
+            />
 
-            <div className="flex-1 ">
-              <PlayerProfileModalTabContent />
+            <div className='px-4' >
+              {/* Stats Summary */}
+              <PlayerNameAndPosition />
+
+              <div className="flex-1 ">
+                <PlayerProfileModalTabContent />
+              </div>
             </div>
-          </div>
-        </BottomSheetView>
+          </BottomSheetView>
 
-        <PlayerFixtureModalWrapper />
+          <PlayerFixtureModalWrapper />
 
-        <PlayerScoutingActionModalWrapper />
+          <PlayerScoutingActionModalWrapper />
 
+        </div>
       </Activity>
     </PlayerDataProvider>
   );
@@ -163,6 +188,59 @@ function DefaultLoadingSkeleton({ onClose }: LoadingProps) {
           <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full" />
           <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[50px] w-full" />
           <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none rounded-2xl h-[100px] w-full" />
+        </div>
+      </BottomSheetView>
+    </div>
+  )
+}
+
+type PlayerNotFoundProps = {
+  onClose?: () => void,
+  player?: IProAthlete | IFantasyTeamAthlete
+}
+
+function PlayerNotFound({onClose, player} : PlayerNotFoundProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+  useClickOutside(divRef, onClose);
+
+  const nameSuffix = useMemo(() => {
+    const playerName = player?.player_name;
+
+    if (playerName && playerName.endsWith('s')) {
+      return "'"
+    }
+
+    if (playerName && !playerName.endsWith("s")) {
+      return "'s"
+    }
+  }, [player?.player_name]);
+
+  return (
+    <div ref={divRef} >
+      <BottomSheetView
+        className={twMerge(
+          "p-4 flex flex-col gap-6 min-h-[95vh] overflow-y-auto",
+          lighterDarkBlueCN
+        )}
+
+        noAnimation
+
+        hideHandle
+      >
+        <div className='flex fex-row items-center justify-between' >
+          
+          <p>{player?.player_name}</p>
+
+          <div>
+            <CircleButton onClick={onClose} >
+              <X />
+            </CircleButton>
+          </div>
+
+        </div>
+
+        <div className='flex flex-col items-center justify-center h-[100px]' >
+          <SecondaryText>Whoops! Failed to fetch {player?.player_name}{nameSuffix} player profile</SecondaryText>
         </div>
       </BottomSheetView>
     </div>
