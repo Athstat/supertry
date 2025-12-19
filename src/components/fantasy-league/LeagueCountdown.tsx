@@ -89,7 +89,7 @@ export default function LeagueRoundCountdown({ leagueRound }: Props) {
 
 
 /** Renders a league count down 2 */
-export function LeagueRoundCountdown2({ leagueRound, className,leagueTitleClassName, title }: Props) {
+export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClassName, title }: Props) {
 
     const deadlineMillis = new Date(leagueRound.join_deadline ?? new Date()).valueOf();
     const dateNow = new Date().valueOf();
@@ -99,28 +99,18 @@ export function LeagueRoundCountdown2({ leagueRound, className,leagueTitleClassN
 
     useEffect(() => {
 
-        // if the seconds left is 0 then don't start time
-        // if new count down value is less than 0 can we
-        // stop the interval and return 0
+        if (secondsLeft <= 0) {
+            return () => { }; // nothing to clean up
+        }
 
         const timer = setInterval(() => {
-            setSecondsLeft(prev => {
-                const nextVal = prev - 1;
-
-                if (nextVal <= 0) {
-                    clearInterval(timer);
-                    return 0;
-                }
-
-                return nextVal;
-            });
+            setSecondsLeft(prev => Math.max(prev - 1, 0));
         }, 1000);
 
         if (secondsLeft <= 0) {
             clearInterval(secondsLeft);
             return;
         };
-
 
         return () => clearInterval(timer);
 
@@ -155,7 +145,7 @@ export function LeagueRoundCountdown2({ leagueRound, className,leagueTitleClassN
                 <p className={twMerge(
                     "font-semibold",
                     leagueTitleClassName
-                )} > { title ? title : `⏰ GW ${leagueRound.start_round} Deadline`}</p>
+                )} > {title ? title : `⏰ GW ${leagueRound.start_round} Deadline`}</p>
             </div>
 
             {isTimeLeft && <div className="flex flex-row items-center gap-2">

@@ -1,9 +1,8 @@
-import useSWR from "swr";
 import { useAuth } from "../../../contexts/AuthContext";
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups";
 
 import RoundedCard from "../../shared/RoundedCard";
-import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
+import { useUserOverallStandings } from "../../../hooks/fantasy/standings/useUserOverallStandings";
 
 type Props = {
     leagueGroup: FantasyLeagueGroup,
@@ -15,9 +14,7 @@ type Props = {
 export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
 
     const { authUser } = useAuth();
-    const key = `/fantasy-league-groups/${leagueGroup.id}/members/${authUser?.kc_id}`;
-    const { data: userRanking, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getMemberRanking(leagueGroup.id, authUser?.kc_id || ""));
-
+    const {userRanking, isLoading} = useUserOverallStandings(authUser?.kc_id, leagueGroup.id)
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
@@ -53,7 +50,7 @@ export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
             <div className="" >
 
                 {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
-                    <p>{userRanking?.overall_rank}</p>
+                    <p>{userRanking?.league_rank}</p>
                 </div>}
 
                 {isLoading && <div className="text-slate-600 animate-pulse dark:text-slate-200 font-semibold text-sm" >

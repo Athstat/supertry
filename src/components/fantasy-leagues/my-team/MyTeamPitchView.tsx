@@ -80,7 +80,7 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
 
 
         {leagueRound && starters.length > 0 && (
-          <TeamFormation3D marginCN='mt-0' firstRowMargin='mt-8' onPlayerClick={handlePlayerClick} />
+          <TeamFormation3D marginCN='mt-0' firstRowMargin='mt-8 md:mt-10' onPlayerClick={handlePlayerClick} />
         )}
 
         {/* Super Substitute */}

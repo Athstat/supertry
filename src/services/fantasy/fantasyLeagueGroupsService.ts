@@ -1,6 +1,6 @@
 import { RestPromise } from "../../types/auth";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
-import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasyLeagueGroupStanding, MemberRankingDetail, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
+import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasySeasonOverallRanking, MemberRankingDetail, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
 import { IFixture } from "../../types/games";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
@@ -10,7 +10,7 @@ export const fantasyLeagueGroupsService = {
 
     getAllPublicLeagues: async (): Promise<FantasyLeagueGroup[]> => {
         try {
-            
+
             const uri = getUri(`/api/v1/fantasy-league-groups/public`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
@@ -162,6 +162,26 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
+    getMemberById: async (leagueId: string, userId: string): Promise<FantasyLeagueGroupMember | undefined> => {
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/members/${userId}`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasyLeagueGroupMember;
+            }
+
+        } catch (err) {
+            console.log("Error fetching public fantasy league groups ", err);
+        }
+
+        return undefined;
+    },
+
     /** API to create a league group */
     createGroup: async (data: NewFantasyLeagueGroupReq): RestPromise<FantasyLeagueGroup> => {
 
@@ -180,7 +200,7 @@ export const fantasyLeagueGroupsService = {
             }
 
         } catch (err) {
-            console.log("Error creating fantasy league group");
+            console.log("Error creating fantasy league group ", err);
         }
 
         return {
@@ -207,7 +227,7 @@ export const fantasyLeagueGroupsService = {
             }
 
         } catch (err) {
-            console.log("Error creating fantasy league group");
+            console.log("Error creating fantasy league group ", err);
         }
 
         return {
@@ -261,7 +281,7 @@ export const fantasyLeagueGroupsService = {
             }
 
         } catch (err) {
-            console.log("Error joining league");
+            console.log("Error joining league ", err);
         }
 
         return {
@@ -291,8 +311,9 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
-    /** Fetches the standings for a league */
-    getGroupStandings: async (leagueId: string): Promise<FantasyLeagueGroupStanding[]> => {
+    /** Fetches the overall standings for a league */
+    getOverallStandings: async (leagueId: string): Promise<FantasySeasonOverallRanking[]> => {
+
         try {
 
             const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/standings`);
@@ -302,17 +323,38 @@ export const fantasyLeagueGroupsService = {
             });
 
             if (res.ok) {
-                return (await res.json()) as FantasyLeagueGroupStanding[];
+                return (await res.json()) as FantasySeasonOverallRanking[];
             }
 
         } catch (err) {
-            console.log("Error getting league standings");
+            console.log("Error getting league standings ", err);
         }
 
         return [];
     },
 
-    getMemberRanking: async (id: string, userId: string) : Promise<MemberRankingDetail | undefined> => {
+    getWeeklyStandings: async (leagueId: string, round_number: number | string): Promise<FantasySeasonOverallRanking[]> => {
+
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/standings/weekly/${round_number}`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasySeasonOverallRanking[];
+            }
+
+        } catch (err) {
+            console.log("Error getting league standings ", err);
+        }
+
+        return [];
+    },
+
+    getMemberRanking: async (id: string, userId: string): Promise<MemberRankingDetail | undefined> => {
         try {
             const uri = getUri(`/api/v1/fantasy-league-groups/${id}/members/${userId}/ranking`);
             const res = await fetch(uri, {
@@ -329,6 +371,23 @@ export const fantasyLeagueGroupsService = {
         return undefined;
     },
 
-    
+    /** Fetches a user's overall ranking in a fantasy league group */
+    getUserOverallRanking: async (leagueGroupId: string, userId: string): Promise<FantasySeasonOverallRanking | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueGroupId}/standings/${userId}`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasySeasonOverallRanking
+            }
+        } catch (err) {
+            logger.error("Error fetching member standing ", err);
+        }
+
+        return undefined;
+    },
+
 
 }

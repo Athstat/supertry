@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function FantasyPointsScoredPlayerList() {
-  const { currentSeason, currentRound, selectedSeason } = useDashboard();
+  const { currentSeason, currentRound, selectedSeason, seasonRounds } = useDashboard();
   const navigate = useNavigate();
 
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
@@ -22,7 +22,39 @@ export default function FantasyPointsScoredPlayerList() {
     return selectedSeason || currentSeason;
   }, [currentSeason, selectedSeason]);
 
-  const { rankings, isLoading } = useFantasyPointsRankings(finalSeason?.id ?? '', 5);
+  const previousRound = useMemo(() => {
+    if (currentRound && seasonRounds) {
+      return seasonRounds.find((r) => {
+        return r.round_number = currentRound.round_number - 1
+      });
+    }
+
+    return undefined;
+
+  }, [seasonRounds, currentRound]);
+
+  
+  const scoringRound = useMemo(() => {
+    const now = new Date();
+
+    const curr_kickoff = currentRound?.games_start ? new Date(currentRound?.games_start) : undefined
+
+    if (curr_kickoff && curr_kickoff.valueOf() <= now.valueOf()) {
+      return currentRound
+    }
+
+    return previousRound || currentRound;
+
+  }, [currentRound, previousRound]);
+
+
+  const { rankings, isLoading } = useFantasyPointsRankings((finalSeason?.id ?? ''), 5, {
+    round_number: scoringRound?.round_number
+  });
+
+  const handleViewMore = () => {
+    navigate('/players')
+  }
 
   if (!finalSeason) {
     return;
@@ -42,7 +74,7 @@ export default function FantasyPointsScoredPlayerList() {
         {/* Title */}
         <div className="p-4">
           <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
-            Fantasy Top Performers {currentRound?.round_number ? `(Round ${currentRound.round_number})` : ''}
+            Fantasy Top Performers {scoringRound?.round_number ? `(Round ${scoringRound?.round_number})` : ''}
           </p>
         </div>
 
@@ -91,7 +123,7 @@ export default function FantasyPointsScoredPlayerList() {
 
         {/* View All Players Link */}
         <p
-          onClick={() => navigate('/players')}
+          onClick={handleViewMore}
           className="font-semibold text-sm text-[#011E5C] dark:text-white underline pb-4 text-center cursor-pointer"
         >
           View All Players

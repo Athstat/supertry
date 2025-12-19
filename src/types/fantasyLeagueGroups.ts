@@ -106,3 +106,20 @@ export type PlayerPointsHistoryItem = {
   game: IFixture
   total_score: number
 }
+
+/** Type that represents a fantasy season overall ranking */
+export type FantasySeasonOverallRanking = {
+  user_id: string,
+  first_name?: string,
+  last_name?: string,
+  username?: string,
+  total_score: number,
+  rank?: number,
+  league_rank?: number,
+  created_at: Date,
+  updated_at?: Date
+}
+
+export type FantasySeasonWeeklyRanking = FantasySeasonOverallRanking & {
+  round_number: number
+}

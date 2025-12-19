@@ -41,12 +41,21 @@ export function useMostSelectedPlayers(seasonId: string, limit: number = 5) {
     }
 }
 
+type FantasyPointsRankingsOptions = {
+    round_number?: number 
+}
+
 /** Hook for most selected player rankings based of a sports action */
-export function useFantasyPointsRankings(seasonId: string, limit: number = 5) {
-    const key = `/fantasy-seasons/${seasonId}/fantasy-points-scored-rankings?limit=${limit}`;
+export function useFantasyPointsRankings(seasonId: string, limit: number = 5, options?: FantasyPointsRankingsOptions) {
+    
+    const round_num = options?.round_number;
+    const query_params = `?limit=${limit}${round_num ? `&round_number=${round_num}` : ''}`;
+    const key = `/fantasy-seasons/${seasonId}/fantasy-points-scored-rankings${query_params}`;
+    
     const { data, isLoading, mutate } = useSWR(key, () => fantasySeasonsService.getFantasyPointsScoredRankings(
         seasonId,
-        limit
+        limit,
+        round_num
     ));
 
     const rankings = useMemo(() => {

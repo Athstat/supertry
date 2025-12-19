@@ -281,17 +281,17 @@ function TeamExistsView({ teamUrl, nextDeadline, scoringGameweek, nextDeadlineRo
         </button>
       </div>
 
-      <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
+      {/* <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
         <img
           src='/images/dashboard/all_blacks_player_haka.png'
           className='h-32 object-contain'
         />
-      </div>
+      </div> */}
 
-      <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
+      <div className='z-[20] max-h-32 sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
         <img
           src='/images/dashboard/beast_screeming.png'
-          className='h-32 object-contain'
+          className='h-32 sm:h-32 object-contain'
         />
       </div>
     </div>
@@ -402,17 +402,17 @@ function FirstTimeUserView({ nextDeadline, nextDeadlineRound }: FirstTimeUserVie
           </div>
         </div>
 
-        <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
-          <img
-            src='/images/dashboard/all_blacks_player_haka.png'
-            className='h-32 object-contain'
-          />
-        </div>
+        {/* <div className='z-[20] absolute max-h-32 bottom-0 right-0 px-2' >
+        <img
+          src='/images/dashboard/all_blacks_player_haka.png'
+          className='h-32 object-contain'
+        />
+      </div> */}
 
-        <div className='z-[20] max-h-32  absolute bottom-0 left-0 px-2' >
+        <div className='z-[20] max-h-32 sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
           <img
             src='/images/dashboard/beast_screeming.png'
-            className='h-32 object-contain'
+            className='h-32 sm:h-32 object-contain'
           />
         </div>
       </div>
@@ -434,7 +434,7 @@ function DashboardHeroLoadingSkeleton() {
 /**Renders a username header */
 function UsernameHeader() {
   const navigate = useNavigate();
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
 
   const handleClick = () => {
     navigate('/profile');

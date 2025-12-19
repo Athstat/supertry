@@ -1,8 +1,9 @@
-import { ReactNode } from "react"
+import { ReactNode, useRef } from "react"
 import BottomSheetHandle from "./BottomSheetHandle"
 import { twMerge } from "tailwind-merge"
 import { AnimatePresence, motion } from "framer-motion"
 import { AppColours } from "../../types/constants"
+import { useClickOutside } from "../../hooks/useClickOutside"
 
 type Props = {
     children?: ReactNode,
@@ -10,18 +11,29 @@ type Props = {
     hideHandle?: boolean,
     noAnimation?: boolean,
     showTopBorder?: boolean,
-    overlayBg?: boolean
+    overlayBg?: boolean,
+    onClickOutside?: () => void
 }
 
 /** Renders a bottom sheet view that starts from the bottom of the screen */
-export default function BottomSheetView({ className, children, hideHandle, noAnimation, showTopBorder, overlayBg }: Props) {
+export default function BottomSheetView({ className, children, hideHandle, noAnimation, showTopBorder, onClickOutside }: Props) {
+
+    const ref = useRef<HTMLDivElement>(null);
+
+    const handleClickOutside = () => {
+        if (onClickOutside) {
+            onClickOutside();
+        }
+    }
+
+    useClickOutside(ref, handleClickOutside);
 
     if (noAnimation) {
         return (
             <div
                 className="fixed z-[150] bottom-0 left-0 right-0 w-full  flex flex-col items-center justify-center"
             >
-                <div className={twMerge(
+                <div ref={ref} className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white  rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className,
                     showTopBorder && "border-t dark:border-slate-600",
@@ -51,7 +63,7 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
                     damping: 40,
                 }}
             >
-                <div className={twMerge(
+                <div ref={ref} className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className,
                     showTopBorder && "border-t dark:border-slate-600",

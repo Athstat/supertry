@@ -34,7 +34,8 @@ export const FANTASY_TEAM_POSITIONS = [
 
 
 export const queryParamKeys = {
-  ROUND_ID_QUERY_KEY: 'round_id'
+  ROUND_ID_QUERY_KEY: 'round_id',
+  ROUND_NUMBER_QUERY_KEY: 'round_number',
 }
 
 /** Classname for app lighter dark blue */

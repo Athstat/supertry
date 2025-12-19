@@ -54,7 +54,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
             )}
 
-            {showAvailabilityWarning && (
+            {/* {showAvailabilityWarning && (
                 <div className="absolute top-0 left-0 p-1" >
                     <div className={twMerge(
                         " dark:bg-yellow-300 bg-yellow-400 hover:bg-yellow-400  border-yellow-500 dark:border-yellow-500 w-6 h-6 rounded-md flex flex-col items-center justify-center",
@@ -64,7 +64,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         )} />
                     </div>
                 </div>
-            )}
+            )} */}
 
             <div
                 className={twMerge(
@@ -73,7 +73,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col',
                     player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
                     !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
-                    showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
+                    // showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}
                 onClick={handleClick}
             >
@@ -111,7 +111,8 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     <div className={twMerge(
                         'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
                         "from-slate-200 to-slate-300",
-                        "dark:from-slate-600 dark:to-slate-700 dark:text-white",
+                        showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
+                        !showAvailabilityWarning && "dark:from-slate-600 dark:to-slate-700 dark:text-white",
                     )} >
 
                         <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
@@ -183,7 +184,10 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 </Activity>
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
-                    <p className="dark:text-yellow-200 text-[8px] md:text-[10px] font-medium text-yellow-300" >Not Playing ⚠️</p>
+                    <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
+                        <p className="text-[8px] md:text-[10px] font-medium" >Not Playing </p>
+                        <TriangleAlert className="w-3 h-3" />
+                    </div>
                 </Activity>
 
                 <Activity mode={showScore ? 'visible' : 'hidden'}  >
