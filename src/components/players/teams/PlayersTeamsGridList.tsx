@@ -88,6 +88,7 @@ function SeasonTeamGridList({ season, onSuccess }: SeasonTeamListProps) {
             <TeamItem
               team={t}
               onClick={handleOnClick}
+              key={t.athstat_id}
             />
           )
         })}

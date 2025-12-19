@@ -3,7 +3,7 @@ import { ScopeProvider } from 'jotai-scope';
 import { IProAthlete } from '../types/athletes';
 import { swrFetchKeys } from '../utils/swrKeys';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { Fragment, ReactNode, useEffect, useMemo} from 'react';
+import { Fragment, ReactNode, useEffect, useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete';
 import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
 import { teamPlayersProfileCacheAtom, teamPlayersSeasonsCacheAtom, } from '../state/playerProfileCache.atoms';
@@ -13,11 +13,12 @@ type Props = {
   children?: ReactNode;
   player: IProAthlete | IFantasyTeamAthlete;
   onClose?: () => void;
-  loadingFallback?: ReactNode
+  loadingFallback?: ReactNode,
+  errorFallback?: ReactNode
 };
 
 /** Provides a players data and stats down to child components */
-export default function PlayerDataProvider({ children, player, onClose, loadingFallback }: Props) {
+export default function PlayerDataProvider({ children, player, onClose, loadingFallback, errorFallback }: Props) {
   const atoms = [
     playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom,
     playerSelectedFixtureAtom, showPlayerScoutingActionsModalAtom
@@ -25,28 +26,18 @@ export default function PlayerDataProvider({ children, player, onClose, loadingF
 
   return (
     <ScopeProvider atoms={atoms}>
-      <ProviderInner player={player} onClose={onClose} loadingFallback={loadingFallback} >
+      <ProviderInner errorFallback={errorFallback} player={player} onClose={onClose} loadingFallback={loadingFallback} >
         {children}
       </ProviderInner>
     </ScopeProvider>
   );
 }
 
-function ProviderInner({ children, player, loadingFallback }: Props) {
+function ProviderInner({ children, player, loadingFallback, errorFallback }: Props) {
   const setPlayer = useSetAtom(playerAtom);
   const setSeasons = useSetAtom(playerSeasonsAtom);
 
-  // Check global cache first
-  const profileCache = useAtomValue(teamPlayersProfileCacheAtom);
-  const seasonsCache = useAtomValue(teamPlayersSeasonsCacheAtom);
-
-  const cachedProfile = profileCache.get(player.tracking_id);
-  const cachedSeasons = seasonsCache.get(player.tracking_id);
-
-
-
-  // Only fetch if not in cache
-  const shouldFetch = !cachedProfile || !cachedSeasons;
+  const shouldFetch = true;
 
   const seasonFetchKey = shouldFetch ? swrFetchKeys.getAthleteSeasons(player.tracking_id) : null;
   const { data: seasons, isLoading: loadingSeasons } = useSWR(seasonFetchKey, () =>
@@ -58,28 +49,33 @@ function ProviderInner({ children, player, loadingFallback }: Props) {
     djangoAthleteService.getAthleteById(player.tracking_id)
   );
 
-  const isLoading = shouldFetch && (loadingPlayer || loadingSeasons);
+  const isLoading = loadingPlayer || loadingSeasons;
 
   useEffect(() => {
-    // Use cached data if available, otherwise use fetched data
-    if (cachedProfile) {
-      setPlayer(cachedProfile);
-    } else if (fetchedPlayer) {
+    
+    if (fetchedPlayer) {
       setPlayer(fetchedPlayer);
     }
 
-    if (cachedSeasons) {
-      setSeasons(cachedSeasons);
-    } else if (seasons) {
+    if (seasons) {
       setSeasons(seasons);
     }
-  }, [player, seasons, fetchedPlayer, cachedProfile, cachedSeasons, setPlayer, setSeasons]);
+
+  }, [fetchedPlayer, seasons, setPlayer, setSeasons]);
+
+  if (!isLoading && !fetchedPlayer && errorFallback) {
+    return (
+      <>{errorFallback}</>
+    )
+  }
 
   if (isLoading) {
     return (
       <>{loadingFallback}</>
     )
   }
+
+
 
   return <Fragment>{children}</Fragment>;
 }

@@ -9,7 +9,11 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 export function useLeagueRoundStandingsFilter() {
 
     const { sortedRounds, scoringRound } = useFantasyLeagueGroup();
-    const defaultFilterVal = scoringRound?.id || "overall";
+    
+    const defaultFilterVal = useMemo(() => {
+        return scoringRound?.id || "overall"
+    }, [scoringRound?.id]);
+
     const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: defaultFilterVal });
 
     const options = useMemo(() => {
