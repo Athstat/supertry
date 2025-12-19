@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import PageView from "./PageView";
 import TeamHistoryProvider from "../providers/fantasy-teams/TeamHistoryProvider";
 import FantasyLeagueGroupDataProvider from "../components/fantasy-league/providers/FantasyLeagueGroupDataProvider";
@@ -19,6 +19,7 @@ import NoTeamCreatedFallback from "../components/fantasy-leagues/NoTeamCreatedFa
 import CircleButton from "../components/shared/buttons/BackButton";
 import { ArrowLeft } from "lucide-react";
 import { useHideTopNavBar } from "../hooks/navigation/useNavigationBars";
+import { useNavigateBack } from "../hooks/web/useNavigateBack";
 
 
 export default function LeagueMemberTeamScreen() {
@@ -55,18 +56,15 @@ export default function LeagueMemberTeamScreen() {
 
 function Content() {
 
+    const {hardPop} = useNavigateBack();
     const { round, roundTeam, manager } = useTeamHistory();
-    const { leagueConfig, league } = useFantasyLeagueGroup();
+    const { leagueConfig } = useFantasyLeagueGroup();
     const [isDelaying, setDelaying] = useState<boolean>(false);
-
-    const navigate = useNavigate();
 
     const [visitedRounds, setVistedRounds] = useState<IFantasyLeagueRound[]>([]);
 
     const handleBack = () => {
-        if (league) {
-            navigate(`/league/${league?.id}/standings`);
-        }
+        hardPop('/leagues');
     }
 
     useEffect(() => {

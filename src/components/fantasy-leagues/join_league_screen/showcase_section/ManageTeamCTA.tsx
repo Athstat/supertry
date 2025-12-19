@@ -141,7 +141,7 @@ function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
 
         <div className='flex flex-col items-center justify-center' >
           <p className='font-bold text-2xl' >{Math.floor(userScore || 0)}</p>
-          <p className='text-xs' >Your Score</p>
+          <p className='text-xs' >My Score</p>
         </div>
 
         <div className='flex flex-col items-center justify-center' >
@@ -187,12 +187,12 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
       {showViewTeam && <TranslucentButton
         onClick={handleManageTeam}
       >
-        View Your Team
+        View My Team
       </TranslucentButton>}
 
       {showCreateTeam && (
         <TranslucentButton onClick={handleManageTeam} >
-          Create Your Team
+          Create My Team
         </TranslucentButton>
       )}
 
