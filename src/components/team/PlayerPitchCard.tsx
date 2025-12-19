@@ -8,7 +8,7 @@ import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, TriangleAlert } from "lucide-react";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
@@ -68,11 +68,11 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
             <div
                 className={twMerge(
-                    'cursor-pointer',
+                    'cursor-pointer rounded-lg ',
                     "min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px]",
                     'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col',
-                    // player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
-                    // !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
+                    player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
+                    !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
                     // showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}
                 onClick={handleClick}
@@ -88,7 +88,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <TeamJersey
                             teamId={player.athlete_team_id}
                             useBaseClasses={false}
-                            className="h-[100px] rounded-b-2xl md:h-[110px] object-cover  absolute -bottom-4 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
+                            className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
                             key={player.tracking_id}
@@ -99,19 +99,20 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
 
                 <div className={twMerge(
-                    'flex-1 w-full items-center justify-between text-[#011E5C] dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
-                    // "dark:from-slate-700 dark:to-slate-800 dark:text-white",
+                    'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] rounded-lg bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
+                    "dark:from-slate-700 dark:to-slate-800 dark:text-white",
                     'min-h-[50px] max-h-[50px]'
                 )} >
 
                     <div className='flex px-2 h-[25px] md:h-[25px] flex-col items-center justify-center' >
-                        <p className='text-[10px] md:text-[11px] max-w-[80%] font-semibold text-center text-nowrap truncate' >{player.athstat_lastname}</p>
+                        <p className=' text-[10px] md:text-[11px] font-semibold' >{player.athstat_firstname}</p>
                     </div>
 
                     <div className={twMerge(
-                        'flex flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
-                        "from-[#011E5C] to-[#011E5C] text-white",
-                        showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-yellow-900",
+                        'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
+                        "from-slate-200 to-slate-300",
+                        showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
+                        !showAvailabilityWarning && "dark:from-slate-600 dark:to-slate-700 dark:text-white",
                     )} >
 
                         <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
@@ -183,7 +184,10 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 </Activity>
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
-                    <p className="text-[8px] md:text-[10px] font-semibold" >Not Playing ⚠️</p>
+                    <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
+                        <p className="text-[8px] md:text-[10px] font-medium" >Not Playing </p>
+                        <TriangleAlert className="w-3 h-3" />
+                    </div>
                 </Activity>
 
                 <Activity mode={showScore ? 'visible' : 'hidden'}  >
