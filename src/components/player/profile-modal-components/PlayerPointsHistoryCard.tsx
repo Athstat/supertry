@@ -27,7 +27,7 @@ export default function PlayerPointsHistoryCard({ player, season, className, loa
     const key = swrFetchKeys.getPlayerPointsHistory(season.id, player.tracking_id)
     const { data, isLoading } = useSWR(key, () => fantasySeasonsService.getPlayerPointsHistory(season.id, player.tracking_id));
 
-    const {setSelectedFixture} = usePlayerData();
+    const { setSelectedFixture } = usePlayerData();
 
     const handleClickFixture = (fixture: IFixture) => {
         setSelectedFixture(fixture);
@@ -72,7 +72,7 @@ export default function PlayerPointsHistoryCard({ player, season, className, loa
                 </Activity>
 
                 <Activity mode={hasHistory ? "visible" : "hidden"} >
-                    <div className="flex flex-row items-center  justify-between gap-3" >
+                    <div className="flex flex-row items-center justify-between gap-1 overflow-hidden" >
                         {history.map((h) => {
                             return (
                                 <PointsHistoryItem
@@ -84,28 +84,6 @@ export default function PlayerPointsHistoryCard({ player, season, className, loa
                             )
                         })}
                     </div>
-
-                    {/* <div className="flex flex-row gap-1 text-[10px]" >
-                    <SecondaryText className="text-[10px]" >Legend</SecondaryText>
-
-                    <div className="flex flex-row items-center gap-2" >
-                        <div className="bg-green-500 px-2 rounded-md text-black font-semibold" >
-                            <p>Win</p>
-                        </div>
-
-                        <div className="bg-red-500 dark:bg-red-600 rounded-md px-2 rounded-m font-semibold" >
-                            <p>Loss</p>
-                        </div>
-
-                        <div className="bg-slate-400 dark:bg-slate-700 rounded-md px-2 rounded-m font-semibold" >
-                            <p>Draw</p>
-                        </div>
-                    </div>
-                </div> */}
-
-
-
-
                 </Activity>
             </RoundedCard>
 
