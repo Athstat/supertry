@@ -53,7 +53,7 @@ export default function FantasyPointsScoredPlayerList() {
   });
 
   const handleViewMore = () => {
-    navigate('/players/fantasy-points-rankings')
+    navigate('/players')
   }
 
   if (!finalSeason) {

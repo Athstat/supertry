@@ -3,7 +3,7 @@ import { IFixture } from "../../types/games"
 import { IProTeam } from "../../types/team"
 import { fixtureSummary } from "../../utils/fixtureUtils"
 import SecondaryText from "../shared/SecondaryText"
-import { Activity, useState } from "react"
+import { Activity, useMemo, useState } from "react"
 import { FixtureCardModal } from "../fixtures/FixtureCard"
 import TeamLogo from "./TeamLogo"
 
@@ -24,6 +24,18 @@ export default function TeamFormGnatChart({ team, fixtures }: Props) {
         setFixture(undefined);
     }
 
+    const sortedFixtures = useMemo(() => {
+        const copy = [...fixtures];
+        const sorted = [...copy.sort((a, b) => {
+            const aDate = a.kickoff_time ? new Date(a.kickoff_time) : new Date();
+            const bDate = b.kickoff_time ? new Date(b.kickoff_time) : new Date();
+
+            return aDate.valueOf() - bDate.valueOf()
+        })];
+
+        return sorted;
+    }, [fixtures]);
+
     return (
         <div className="flex h-[40px] flex-row items-center gap-2" >
 
@@ -36,7 +48,7 @@ export default function TeamFormGnatChart({ team, fixtures }: Props) {
             </div>
 
             <div className="flex overflow-clip overflow-x-hidden gap-1 h-[40px] w-full flex-row items-center justify-end" >
-                {fixtures.map((f, index) => {
+                {sortedFixtures.map((f, index) => {
                     return <FixtureWinLossCard
                         key={f.game_id}
                         fixture={f}

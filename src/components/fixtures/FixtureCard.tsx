@@ -12,6 +12,7 @@ import GameHighlightsCard from '../video/GameHighlightsCard';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';
+import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 type Props = {
   fixture: IFixture;
   className?: string;
@@ -235,7 +236,7 @@ export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
     >
       <div className="flex p-2 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700 text-xs text-wrap text-center rounded-xl bg-slate-100 dark:bg-slate-800 flex-row items-center justify-center">
         <p>
-          {fixture.competition_name} 𐄁 {fixture.venue}
+          {abbreviateSeasonName(fixture.competition_name || "")} 𐄁 Round {fixture.round} 𐄁 {fixture.kickoff_time ? format(fixture.kickoff_time, "dd MMMM yyy") : ""}
         </p>
       </div>
 
