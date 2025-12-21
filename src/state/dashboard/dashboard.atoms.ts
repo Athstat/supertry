@@ -10,7 +10,7 @@ const isDashboardLoadingAtom = atom<boolean>(false);
 /** Holds the selected competition/season on the dashboard */
 const selectedDashboardSeasonAtom = atom<IFantasySeason | undefined>(undefined);
 
-export const dashboardAtoms = {
+export const fantasySeasonsAtoms = {
   currentSeasonAtom,
   currentSeasonRoundAtom,
   isDashboardLoadingAtom,

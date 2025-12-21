@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
-import { useDashboard } from '../../../hooks/dashboard/useDashboard';
+import { useFantasySeasons } from '../../../hooks/dashboard/useDashboard';
 import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import RoundedCard from '../../shared/RoundedCard';
 import { IProAthlete } from '../../../types/athletes';
@@ -14,7 +14,7 @@ type Props = {
 }
 
 export default function FantasyPointsScoredPlayerList({className} : Props) {
-  const { currentSeason, currentRound, selectedSeason, seasonRounds } = useDashboard();
+  const { currentSeason, currentRound, selectedSeason, seasonRounds } = useFantasySeasons();
   const navigate = useNavigate();
 
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();

@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react';
 import { useAtom } from 'jotai';
-import { dashboardAtoms } from '../../state/dashboard/dashboard.atoms';
+import { fantasySeasonsAtoms } from '../../state/dashboard/dashboard.atoms';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { swrFetchKeys } from '../../utils/swrKeys';
@@ -16,7 +16,7 @@ const abbreviateSeasonName = (name: string): string => {
 };
 
 export default function CompetitionSelector() {
-  const [selectedSeason, setSelectedSeason] = useAtom(dashboardAtoms.selectedDashboardSeasonAtom);
+  const [selectedSeason, setSelectedSeason] = useAtom(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
 
   // Fetch fantasy seasons data directly
   const seasonsKey = swrFetchKeys.getActiveFantasySeasons();

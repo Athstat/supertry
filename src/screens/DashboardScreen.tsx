@@ -1,29 +1,29 @@
 import PageView from './PageView';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
-import { useDashboard } from '../hooks/dashboard/useDashboard';
+import { useFantasySeasons } from '../hooks/dashboard/useDashboard';
 import DashboardHero from '../components/dashboard/hero/DashboardHero';
 import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
-import DashboardDataProvider from '../components/dashboard/provider/DashboardDataProvider';
+import FantasySeasonsProvider from '../components/dashboard/provider/DashboardDataProvider';
 import DominateScrumCard from '../components/dashboard/DominateScrumCard';
 import PickemCtaCard from '../components/dashboard/PickemCtaCard';
 
 /** Renders a Dashboard Screen */
 export function DashboardScreen() {
   return (
-    <DashboardDataProvider>
+    <FantasySeasonsProvider>
       <DashboardContent />
-    </DashboardDataProvider>
+    </FantasySeasonsProvider>
   );
 }
 
 
 function DashboardContent() {
 
-  const { currentSeason, selectedSeason } = useDashboard();
+  const { currentSeason, selectedSeason } = useFantasySeasons();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */

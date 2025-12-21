@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
-import { useDashboard } from '../../../hooks/dashboard/useDashboard';
+import { useFantasySeasons } from '../../../hooks/dashboard/useDashboard';
 import { IProSeason } from '../../../types/season';
 import { useSportActionRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import RoundedCard from '../../shared/RoundedCard';
@@ -18,7 +18,7 @@ type Props = {
 
 /** Renders a sports action ranking card */
 export default function SportActionRankingsList({ season, actionName, title, className }: Props) {
-  const { currentSeason } = useDashboard();
+  const { currentSeason } = useFantasySeasons();
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
   const toggleModal = () => {
     setSelectedPlayer(undefined);
