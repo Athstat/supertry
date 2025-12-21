@@ -13,6 +13,7 @@ import AuthTokenProvider from "./providers/AuthTokenProvider";
 import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvider";
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
+import FantasySeasonsProvider from "./components/dashboard/provider/DashboardDataProvider";
 
 type Props = {
     children?: ReactNode
@@ -78,13 +79,15 @@ function NavigationLayer({ children }: Props) {
 function DataLayer({ children }: Props) {
 
     return (
-        <AthleteProvider>
-            <SportActionsDefinitionsProvider>
-                <PlayerProfileProvider>
-                    {children}
-                </PlayerProfileProvider>
-            </SportActionsDefinitionsProvider>
-        </AthleteProvider>
+        <FantasySeasonsProvider>
+            <AthleteProvider>
+                <SportActionsDefinitionsProvider>
+                    <PlayerProfileProvider>
+                        {children}
+                    </PlayerProfileProvider>
+                </SportActionsDefinitionsProvider>
+            </AthleteProvider>
+        </FantasySeasonsProvider>
     )
 }
 

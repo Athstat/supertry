@@ -5,7 +5,7 @@ import { IFantasySeason, ISeasonRound } from '../../types/fantasy/fantasySeason'
 const currentSeasonAtom = atom<IFantasySeason>();
 const currentSeasonRoundAtom = atom<ISeasonRound>();
 const seasonRoundsAtom = atom<ISeasonRound[]>([]);
-const isDashboardLoadingAtom = atom<boolean>(false);
+const isFantasySeasonsLoadingAtom = atom<boolean>(false);
 
 /** Holds the selected competition/season on the dashboard */
 const selectedDashboardSeasonAtom = atom<IFantasySeason | undefined>(undefined);
@@ -13,7 +13,7 @@ const selectedDashboardSeasonAtom = atom<IFantasySeason | undefined>(undefined);
 export const fantasySeasonsAtoms = {
   currentSeasonAtom,
   currentSeasonRoundAtom,
-  isDashboardLoadingAtom,
+  isFantasySeasonsLoadingAtom,
   seasonRoundsAtom,
   selectedDashboardSeasonAtom,
 };

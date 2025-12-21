@@ -2,7 +2,7 @@ import { Fragment, ReactNode, useEffect } from 'react';
 import { fantasySeasonsAtom } from '../../../state/fantasy/fantasyLeagueScreen.atoms';
 import { fantasySeasonsAtoms } from '../../../state/dashboard/dashboard.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
@@ -12,7 +12,6 @@ import PageView from '../../../screens/PageView';
 import RoundedCard from '../../shared/RoundedCard';
 
 import { useDebounced } from '../../../hooks/useDebounced';
-import { Activity } from '../../shared/Activity';
 import { DashboardHeroLoadingSkeleton } from '../hero/DashboardHeroSections';
 
 type Props = {
@@ -26,6 +25,7 @@ export default function FantasySeasonsProvider({ children }: Props) {
     fantasySeasonsAtoms.currentSeasonAtom,
     fantasySeasonsAtoms.currentSeasonRoundAtom,
     fantasySeasonsAtoms.seasonRoundsAtom,
+    fantasySeasonsAtoms.isFantasySeasonsLoadingAtom
   ];
 
   return (
@@ -40,6 +40,7 @@ function InnerProvider({ children }: Props) {
   const [currentSeason, setCurrentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
   const [seasonRounds, setSeasonRounds] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
   const [, setCurrentRound] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
+  const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
   const seasonsKey = swrFetchKeys.getActiveFantasySeasons();
   const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
@@ -51,8 +52,12 @@ function InnerProvider({ children }: Props) {
     seasonService.getSeasonRounds(currentSeason?.id ?? '')
   );
 
-  const isLoading = loadingRounds || loadingSeasons;
-  const isLoadingDebounced = useDebounced(isLoading, 500);
+  const isFetching = loadingRounds || loadingSeasons;
+  const isFetchingDebounced = useDebounced(isFetching, 500);
+
+  useEffect(() => {
+    setLoading(isFetchingDebounced);
+  }, [isFetchingDebounced, setLoading]);
 
   useEffect(() => {
     if (seasonsFetched) {
@@ -97,15 +102,12 @@ function InnerProvider({ children }: Props) {
 
   return (
     <Fragment>
-      <Activity mode={isLoadingDebounced ? 'hidden' : 'visible'}>{children}</Activity>
-
-      <Activity mode={isLoadingDebounced ? 'visible' : 'hidden'}>
-        <LoadingSkeleton />
-      </Activity>
+      {children}
     </Fragment>
   );
 }
 
+// TODO: Put this loading skeleton on the dashboard
 function LoadingSkeleton() {
   return (
     <PageView className="flex flex-col space-y-4 py-4">
