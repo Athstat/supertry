@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import ScrummyLogoHorizontal from './branding/scrummy_logo_horizontal';
 import { isInProduction } from '../utils/webUtils';
 import BetaTag from './branding/BetaTag';
-import NotificationsBell from './notifications/NotificationsBell';
+import NotificationsBellButton from './notifications/NotificationsBell';
 import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 import CompetitionSelector from './dashboard/CompetitionSelector';
 import { twMerge } from 'tailwind-merge';
@@ -19,10 +19,6 @@ export function Header() {
 
   const handleProfileClick = () => {
     navigate('/profile');
-  };
-
-  const handleInAppMessages = () => {
-    navigate('/in-app-messages');
   };
 
   const isProfileActive = location.pathname === '/profile';
@@ -57,7 +53,7 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-4">
-            <NotificationsBell onClick={handleInAppMessages} />
+            <NotificationsBellButton/>
 
             <button
               onClick={handleProfileClick}
