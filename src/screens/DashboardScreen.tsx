@@ -9,16 +9,21 @@ import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
+import DashboardDataProvider from '../components/dashboard/provider/DashboardDataProvider';
 
+/** Renders a Dashboard Screen */
 export function DashboardScreen() {
   return (
-    <DashboardContent />
+    <DashboardDataProvider>
+      <DashboardContent />
+    </DashboardDataProvider>
   );
 }
 
+
 function DashboardContent() {
   const navigate = useNavigate();
-  const { currentSeason, selectedSeason} = useDashboard();
+  const { currentSeason, selectedSeason } = useDashboard();
 
   /** Hook for temporal fix, that prompts user to enable
    * notification if they havem't already seen a message to do so */

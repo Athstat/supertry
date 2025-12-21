@@ -38,7 +38,6 @@ import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
-import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
 import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 import OnboardingDataProvider from './providers/OnboardingDataProvider';
 import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
@@ -122,9 +121,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <DashboardDataProvider>
-                  <DashboardScreen />
-                </DashboardDataProvider>
+                <DashboardScreen />
               </Layout>
             </ProtectedRoute>
           }
