@@ -7,9 +7,13 @@ import PlayerProfileModal from '../../player/PlayerProfileModal';
 import NoContentCard from '../../shared/NoContentMessage';
 import { PlayerRankingCard } from '../../players/ranking/PlayerRankingCard';
 import { useNavigate } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
+type Props = {
+  className?: string
+}
 
-export default function FantasyPointsScoredPlayerList() {
+export default function FantasyPointsScoredPlayerList({className} : Props) {
   const { currentSeason, currentRound, selectedSeason, seasonRounds } = useDashboard();
   const navigate = useNavigate();
 
@@ -70,7 +74,11 @@ export default function FantasyPointsScoredPlayerList() {
 
   return (
     <Fragment>
-      <RoundedCard className="rounded-xl overflow-hidden">
+      <RoundedCard className={twMerge(
+        "rounded-xl overflow-hidden",
+        className
+      )}>
+        
         {/* Title */}
         <div className="p-4">
           <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
