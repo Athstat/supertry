@@ -13,6 +13,7 @@ import RoundedCard from '../../shared/RoundedCard';
 
 import { useDebounced } from '../../../hooks/useDebounced';
 import { Activity } from '../../shared/Activity';
+import { DashboardHeroLoadingSkeleton } from '../hero/DashboardHeroSections';
 
 type Props = {
   children?: ReactNode;
@@ -106,21 +107,25 @@ function InnerProvider({ children }: Props) {
 
 function LoadingSkeleton() {
   return (
-    <PageView className="flex flex-col space-y-4 p-4">
+    <PageView className="flex flex-col space-y-4 py-4">
       <div className="flex flex-col gap-2">
-        <div className="flex flex-row items-center gap-2">
-          <RoundedCard className=" bg-slate-200 dark:bg-gray-800 h-[50px] w-[50px] border-none animate-pulse" />
-          <RoundedCard className=" bg-slate-200 dark:bg-gray-800 h-[40px] w-[200px] border-none animate-pulse" />
+        <DashboardHeroLoadingSkeleton />
+
+        <div className='w-full p-4' >
+          <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[100px] border-none animate-pulse" />
         </div>
 
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[200px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[50px] border-none animate-pulse" />
+        <div>
+          <RoundedCard className="w-full rounded-none bg-slate-200 dark:bg-gray-800 h-[160px] border-none animate-pulse" />
+        </div>
 
-        <RoundedCard className=" bg-slate-200 dark:bg-gray-800 mt-5 h-[30px] w-[200px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
+        <div className='p-4'>
+          <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[450px] border-none animate-pulse" />
+        </div>
+
+        <div className='p-4'>
+          <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
+        </div>
       </div>
     </PageView>
   );

@@ -15,11 +15,13 @@ import RoundedCard from "../../shared/RoundedCard";
 
 
 export function DashboardHeroLoadingSkeleton() {
-  return <div>
-    <RoundedCard className="p-6 animate-pulse bg-gray-200 dark:bg-slate-800 border-none">
-      <div className="h-64"></div>
-    </RoundedCard>
-  </div>
+  return (
+    <div>
+      <RoundedCard className="p-6 rounded-none animate-pulse bg-gray-200 dark:bg-slate-800 border-none">
+        <div className="h-64"></div>
+      </RoundedCard>
+    </div>
+  )
 }
 
 type DashboardFrameProps = {
