@@ -1,46 +1,31 @@
 import { useAuth } from '../../../contexts/AuthContext';
-import { IFantasySeason } from '../../../types/fantasy/fantasySeason';
-import { useMemo } from 'react';
-import useSWR from 'swr';
-import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsService';
 import FantasyLeagueGroupDataProvider from '../../fantasy-league/providers/FantasyLeagueGroupDataProvider';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { useUserRoundTeam } from '../../../hooks/fantasy/useUserRoundTeam';
 import { useDelay } from '../../../hooks/useDelay';
 import { DashboardHeroLoadingSkeleton, DashboardHeroFrame, DashboardHeroHeader, DashboardHeroScoreSection, DashboardHeroCTASection } from './DashboardHeroSections';
+import { useFeaturedLeague } from '../../../hooks/leagues/useFeaturedLeague';
 
-type Props = {
-  season?: IFantasySeason;
-};
+/** Renders the dashboard hero */
+export default function DashboardHero() {
 
-export default function DashboardHero({ season }: Props) {
-
-  const key = season ? `fantasy-season/${season.id}/` : null;
-  const { data: featuredLeagues } = useSWR(key, () => fantasySeasonsService.getFeaturedLeagueGroups(season?.id || ''));
-
-  const featuredLeague = useMemo(() => {
-    if (featuredLeagues && featuredLeagues.length > 0) {
-      return featuredLeagues[0];
-    }
-
-    return undefined;
-  }, [featuredLeagues]);
+  const {featuredLeague} = useFeaturedLeague();
 
   return (
     <FantasyLeagueGroupDataProvider
       leagueId={featuredLeague?.id}
       loadingFallback={<DashboardHeroLoadingSkeleton />}
     >
-      <Content season={season} />
+      <Content/>
     </FantasyLeagueGroupDataProvider>
   )
 }
 
-function Content({ season }: Props) {
+function Content() {
   const { authUser } = useAuth();
 
   const { isDelaying } = useDelay(500);
-  const { currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
+  const {  league, currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
 
   const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
   const isLoading = loadingGroup || loadingRoundTeam;
@@ -51,7 +36,7 @@ function Content({ season }: Props) {
     );
   }
 
-  if (!season) {
+  if (!league) {
     return null;
   }
 

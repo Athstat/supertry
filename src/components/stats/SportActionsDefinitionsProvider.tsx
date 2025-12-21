@@ -37,7 +37,7 @@ function Content({children} : Props) {
 
     useEffect(() => {
         if (fetchedDefintions) setDefintions(fetchedDefintions);
-    }, [fetchedDefintions]);
+    }, [fetchedDefintions, setDefintions]);
 
     if (isLoading) return <ScrummyLoadingState />
 

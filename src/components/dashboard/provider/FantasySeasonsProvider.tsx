@@ -106,30 +106,3 @@ function InnerProvider({ children }: Props) {
     </Fragment>
   );
 }
-
-// TODO: Put this loading skeleton on the dashboard
-function LoadingSkeleton() {
-  return (
-    <PageView className="flex flex-col space-y-4 py-4">
-      <div className="flex flex-col gap-2">
-        <DashboardHeroLoadingSkeleton />
-
-        <div className='w-full p-4' >
-          <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[100px] border-none animate-pulse" />
-        </div>
-
-        <div>
-          <RoundedCard className="w-full rounded-none bg-slate-200 dark:bg-gray-800 h-[160px] border-none animate-pulse" />
-        </div>
-
-        <div className='p-4'>
-          <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[450px] border-none animate-pulse" />
-        </div>
-
-        <div className='p-4'>
-          <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-        </div>
-      </div>
-    </PageView>
-  );
-}

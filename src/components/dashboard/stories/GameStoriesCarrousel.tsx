@@ -1,5 +1,5 @@
 import { Fragment, useState, useMemo } from "react";
-import { useFantasySeasons } from "../../../hooks/dashboard/useDashboard"
+import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons"
 import { useRoundGames } from "../../../hooks/fixtures/useRoundGames";
 import { IFixture } from "../../../types/games";
 import RoundedCard from "../../shared/RoundedCard";

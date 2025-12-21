@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
-import { useFantasySeasons } from '../../../hooks/dashboard/useDashboard';
+import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import RoundedCard from '../../shared/RoundedCard';
 import { IProAthlete } from '../../../types/athletes';

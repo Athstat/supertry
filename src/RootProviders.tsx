@@ -13,7 +13,7 @@ import AuthTokenProvider from "./providers/AuthTokenProvider";
 import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvider";
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
-import FantasySeasonsProvider from "./components/dashboard/provider/DashboardDataProvider";
+import FantasySeasonsProvider from "./components/dashboard/provider/FantasySeasonsProvider";
 
 type Props = {
     children?: ReactNode
