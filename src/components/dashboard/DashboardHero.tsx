@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import RoundedCard from '../shared/RoundedCard';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { formatCountdown } from '../../utils/countdown';
 import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
 import TrophyIcon from '../shared/icons/TrophyIcon';
@@ -14,6 +14,7 @@ import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { useDelay } from '../../hooks/useDelay';
 
 type Props = {
   season?: IFantasySeason;
@@ -45,7 +46,7 @@ export default function DashboardHero({ season }: Props) {
 function Content({ season }: Props) {
   const { authUser } = useAuth();
 
-  const [isDelaying, setIsDelaying] = useState(false);
+  const {isDelaying} = useDelay();
   const { currentRound: currentGameweek, isLoading: loadingGroup, rounds, league } = useFantasyLeagueGroup();
 
   const previousGameweek = useMemo(() => {
@@ -114,18 +115,6 @@ function Content({ season }: Props) {
   }, [currentGameweek, nextGameweek?.join_deadline]);
 
   const isLoading = loadingGroup || loadingRoundTeam;
-
-  useEffect(() => {
-    setIsDelaying(true);
-
-    const timeout = setTimeout(() => {
-      setIsDelaying(false)
-    }, 500);
-
-    return () => {
-      clearTimeout(timeout);
-    }
-  }, []);
 
   if (isLoading || isDelaying) {
     return (
