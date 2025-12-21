@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import RoundedCard from '../../shared/RoundedCard';
@@ -14,43 +14,13 @@ type Props = {
 }
 
 export default function FantasyPointsScoredPlayerList({className} : Props) {
-  const { currentSeason, currentRound, selectedSeason, seasonRounds } = useFantasySeasons();
+  const { selectedSeason: finalSeason, scoringRound } = useFantasySeasons();
   const navigate = useNavigate();
 
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
   const toggleModal = () => {
     setSelectedPlayer(undefined);
   };
-
-  const finalSeason = useMemo(() => {
-    return selectedSeason || currentSeason;
-  }, [currentSeason, selectedSeason]);
-
-  const previousRound = useMemo(() => {
-    if (currentRound && seasonRounds) {
-      return seasonRounds.find((r) => {
-        return r.round_number = currentRound.round_number - 1
-      });
-    }
-
-    return undefined;
-
-  }, [seasonRounds, currentRound]);
-
-  
-  const scoringRound = useMemo(() => {
-    const now = new Date();
-
-    const curr_kickoff = currentRound?.games_start ? new Date(currentRound?.games_start) : undefined
-
-    if (curr_kickoff && curr_kickoff.valueOf() <= now.valueOf()) {
-      return currentRound
-    }
-
-    return previousRound || currentRound;
-
-  }, [currentRound, previousRound]);
-
 
   const { rankings, isLoading } = useFantasyPointsRankings((finalSeason?.id ?? ''), 5, {
     round_number: scoringRound?.round_number
