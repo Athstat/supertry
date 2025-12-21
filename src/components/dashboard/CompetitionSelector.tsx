@@ -56,7 +56,7 @@ export default function CompetitionSelector() {
         >
           {availableSeasons.map(season => (
             <option key={season.id} value={season.id}>
-              {abbreviateSeasonName(season.name)}
+              {trimSeasonYear(season.name)}
             </option>
           ))}
         </select>
@@ -64,4 +64,15 @@ export default function CompetitionSelector() {
       </div>
     </div>
   );
+}
+
+
+export function trimSeasonYear(seasonName: string) {
+  const abbreviated = abbreviateSeasonName(seasonName);
+  if (seasonName.includes(" ") && abbreviated) {
+    const [seasonNamePart] = abbreviated.split(" ");
+    return seasonNamePart;
+  }
+
+  return abbreviated || seasonName;
 }

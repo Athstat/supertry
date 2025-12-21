@@ -1,6 +1,5 @@
 import { twMerge } from 'tailwind-merge';
 import { IProSeason } from '../../../types/season'
-import { abbreviateSeasonName } from '../../players/compare/PlayerCompareSeasonPicker';
 import { Trophy } from 'lucide-react';
 
 type Props = {
@@ -11,7 +10,7 @@ type Props = {
 
 export default function SeasonInput({ options, value, onChange }: Props) {
     return (
-        <div className='dark:text-white' >
+        <div className='dark:text-white flex flex-col gap-2' >
             <label>Season</label>
 
             <div className="flex flex-row no-scrollbar items-center flex-nowrap gap-2 overflow-x-auto" >
@@ -42,7 +41,7 @@ export default function SeasonInput({ options, value, onChange }: Props) {
                                     <p className={twMerge(
                                         // isSelected && "text-blue-500 font-bold"
                                         "truncate"
-                                    )} >{season.name ? abbreviateSeasonName(season.name) : ''}</p>
+                                    )} >{season.name || ''}</p>
                                 </div>
 
                                 <div className={twMerge(

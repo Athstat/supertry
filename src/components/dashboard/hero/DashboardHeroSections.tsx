@@ -12,6 +12,8 @@ import { formatCountdown } from "../../../utils/countdown";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import RoundedCard from "../../shared/RoundedCard";
+import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
+import { trimSeasonYear } from "../CompetitionSelector";
 
 
 export function DashboardHeroLoadingSkeleton() {
@@ -72,6 +74,8 @@ export function DashboardHeroHeader() {
   const navigate = useNavigate();
   const { authUser } = useAuth();
 
+  const {selectedSeason} = useFantasySeasons();
+
   const handleClick = () => {
     navigate('/profile');
   }
@@ -88,7 +92,7 @@ export function DashboardHeroHeader() {
         className="text-center font-normal text-md leading-6 text-white"
         style={{ fontFamily: "'Race Sport', sans-serif" }}
       >
-        PLAY URC FANTASY
+        PLAY {selectedSeason?.name ? `${trimSeasonYear(selectedSeason.name)}` : 'URC'} FANTASY
         <br />
         {/* {abbreviateSeasonName(season.name).toUpperCase()} CHALLENGE */}
       </h1>

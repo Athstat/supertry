@@ -35,7 +35,6 @@ export function FantasyCompetitionDashboard({ fantasySeason }: Props) {
         fantasySeason={fantasySeason}
       />
 
-
     </div>
   );
 }
