@@ -18,8 +18,8 @@ export function Header() {
   const isInQa = isInProduction() !== true;
 
   const showCompetitionSelector =
-    // location.pathname === '/dashboard' || location.pathname.startsWith('/league');
-    location.pathname === '/dashboard';
+    location.pathname === '/dashboard' || location.pathname.startsWith('/league');
+    
 
   return (
     <Activity mode={topNavViewMode}>
