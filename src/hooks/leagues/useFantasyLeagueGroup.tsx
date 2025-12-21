@@ -15,7 +15,7 @@ import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 
 /** Hook that provides fantasy league group info. Should be used with in the fantasy league group provider */
 export function useFantasyLeagueGroup() {
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
 
   const [league, setLeague] = useAtom(fantasyLeagueGroupAtom);
   const members = useAtomValue(fantasyLeagueGroupMembersAtom);
@@ -98,6 +98,26 @@ export function useFantasyLeagueGroup() {
     return previousRound || currentRound;
   }, [currentRound, previousRound]);
 
+  const nextRound = useMemo(() => {
+    if (currentRound && rounds) {
+      const nextRoundStart = (currentRound.start_round || 0) + 1;
+      return rounds.find((r) => {
+        return r.start_round === nextRoundStart
+      })
+
+    }
+
+    return undefined;
+  }, [currentRound, rounds]);
+
+  const nextDeadlineRound = useMemo(() => {
+    if (currentRound && isLeagueRoundLocked(currentRound)) {
+      return nextRound;
+    }
+
+    return currentRound;
+  }, [currentRound, nextRound]);
+
   return {
     league,
     members,
@@ -113,6 +133,8 @@ export function useFantasyLeagueGroup() {
     leagueConfig,
     isLoading,
     previousRound,
-    scoringRound
+    scoringRound,
+    nextRound,
+    nextDeadlineRound
   };
 }
