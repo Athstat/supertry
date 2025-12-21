@@ -1,52 +1,22 @@
 import { Bell } from 'lucide-react'
 import PageView from '../PageView'
 import RoundedCard from '../../components/shared/RoundedCard'
-import useSWR from 'swr'
-import { inAppMessagesServices } from '../../services/notifications/inAppMessagesService';
 import InAppMessageCard from '../../components/notifications/InAppMessage';
-import { useEffect, useMemo } from 'react';
+import { Activity, useEffect } from 'react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../components/shared/tabs/TabView';
-import EmptyUnreadNotificationsMessage, { EmptyReadNotificationsMessage } from '../../components/notifications/EmptyNotificationsMessage';
+import { EmptyReadNotificationsMessage } from '../../components/notifications/EmptyNotificationsMessage';
+import { useInAppMessageList } from '../../hooks/notifications/useInAppMessageList';
+import { InAppMessage } from '../../types/notifications/inAppMessage';
 
 export default function InAppMessagesScreen() {
 
-    const key = `/in-app-notifications/user-messages`;
-    const { data: messages, isLoading, mutate } = useSWR(key, () => inAppMessagesServices.getMessages());
+    const { readCount, readMessages, isLoading, refresh, unreadCount, unreadMessages } = useInAppMessageList();
 
     useEffect(() => {
-
-        /** Refresh notifications list after closing component */
         return () => {
-            mutate();
+            refresh();
         }
-    }, [mutate]);
-
-    const sortedMessages = useMemo(() => {
-        const copy = [...(messages ?? [])]
-        return copy.sort((a, b) => {
-            const aEpoch = new Date(a.created_at).valueOf();
-            const bEpoch = new Date(b.created_at).valueOf();
-
-            return bEpoch - aEpoch
-        })
-    }, [messages]);
-
-    const unreadMessages = useMemo(() => {
-        const copy = [...(sortedMessages ?? [])]
-        return copy.filter((m) => {
-            return m.is_read === false
-        })
-    }, [sortedMessages]);
-
-    const readMessages = useMemo(() => {
-        const copy = [...(sortedMessages ?? [])]
-        return copy.filter((m) => {
-            return m.is_read === true
-        })
-    }, [sortedMessages]);
-
-    const unreadCount = unreadMessages.length;
-    const readCount = readMessages.length;
+    }, [refresh]);
 
     const tabItems: TabViewHeaderItem[] = [
         {
@@ -72,57 +42,61 @@ export default function InAppMessagesScreen() {
                 <p className='font-bold text-xl' >Notifications</p>
             </div>
 
-            {isLoading && <LoadingSkeleton />}
+            <Activity mode={isLoading ? "visible" : "hidden"} >
+                <LoadingSkeleton />
+            </Activity>
 
-            {!isLoading && <TabView
-                tabHeaderItems={tabItems}
-            >
-
-                <TabViewPage
-                    tabKey='unread'
+            <Activity mode={isLoading ? "hidden" : "visible"} >
+                <TabView
+                    tabHeaderItems={tabItems}
                 >
-                    {!isLoading && <div className='flex flex-col w-full gap-4' >
-                        {(unreadMessages).map((m) => {
-                            return (
-                                <InAppMessageCard
-                                    message={m}
-                                    key={m.id}
-                                />
-                            )
-                        })}
-                    </div>}
 
-                    {unreadCount === 0 && (
-                        <EmptyUnreadNotificationsMessage />
-                    )}
+                    <TabViewPage tabKey='unread' >
+                        <MessageList messages={unreadMessages} />
+                    </TabViewPage>
 
-                </TabViewPage>
+                    <TabViewPage tabKey='read' >
+                        <MessageList messages={readMessages} />
+                    </TabViewPage>
 
-                <TabViewPage
-                    tabKey='read'
-                >
-                    {!isLoading && <div className='flex flex-col w-full gap-4' >
-                        {(readMessages).map((m) => {
-                            return (
-                                <InAppMessageCard
-                                    message={m}
-                                    key={m.id}
-                                />
-                            )
-                        })}
-                    </div>}
-
-                    {readCount === 0 && (
-                        <EmptyReadNotificationsMessage />
-                    )}
-                </TabViewPage>
-
-            </TabView>}
+                </TabView>
+            </Activity>
 
 
         </PageView>
     )
 }
+
+type MessageListProps = {
+    messages: InAppMessage[]
+}
+
+function MessageList({ messages }: MessageListProps) {
+
+    const isListEmpty = messages.length === 0;
+
+    if (isListEmpty) {
+        return (
+            <div className='flex flex-col h-[200px] items-center justify-center' >
+                <EmptyReadNotificationsMessage />
+            </div>
+        )
+    }
+
+    return (
+        <div className='flex flex-col w-full gap-4' >
+            {(messages).map((m) => {
+                return (
+                    <InAppMessageCard
+                        message={m}
+                        key={m.id}
+                    />
+                )
+            })}
+        </div>
+    )
+}
+
 
 
 function LoadingSkeleton() {
