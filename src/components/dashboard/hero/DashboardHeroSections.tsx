@@ -1,78 +1,20 @@
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import { IFantasySeason } from '../../types/fantasy/fantasySeason';
-import RoundedCard from '../shared/RoundedCard';
-import { Fragment, ReactNode, useMemo, useState } from 'react';
-import { formatCountdown } from '../../utils/countdown';
-import ScrummyGamePlayModal from '../branding/help/ScrummyGamePlayModal';
-import TrophyIcon from '../shared/icons/TrophyIcon';
-import useSWR from 'swr';
-import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
-import FantasyLeagueGroupDataProvider from '../fantasy-league/providers/FantasyLeagueGroupDataProvider';
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
-import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
-import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
-import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
-import { useDelay } from '../../hooks/useDelay';
+/** Composer Components for Dashboard Hero */
 
-type Props = {
-  season?: IFantasySeason;
-};
+import { TrophyIcon } from "lucide-react";
+import { ReactNode, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Fragment } from "react/jsx-runtime";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useRoundScoringSummary } from "../../../hooks/fantasy/useRoundScoringSummary";
+import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
+import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
+import { formatCountdown } from "../../../utils/countdown";
+import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
+import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
+import RoundedCard from "../../shared/RoundedCard";
 
-export default function DashboardHero({ season }: Props) {
 
-  const key = season ? `fantasy-season/${season.id}/` : null;
-  const { data: featuredLeagues } = useSWR(key, () => fantasySeasonsService.getFeaturedLeagueGroups(season?.id || ''));
-
-  const featuredLeague = useMemo(() => {
-    if (featuredLeagues && featuredLeagues.length > 0) {
-      return featuredLeagues[0];
-    }
-
-    return undefined;
-  }, [featuredLeagues]);
-
-  return (
-    <FantasyLeagueGroupDataProvider
-      leagueId={featuredLeague?.id}
-      loadingFallback={<DashboardHeroLoadingSkeleton />}
-    >
-      <Content season={season} />
-    </FantasyLeagueGroupDataProvider>
-  )
-}
-
-function Content({ season }: Props) {
-  const { authUser } = useAuth();
-
-  const { isDelaying } = useDelay(500);
-  const { currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
-
-  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
-  const isLoading = loadingGroup || loadingRoundTeam;
-
-  if (isLoading || isDelaying) {
-    return (
-      <DashboardHeroLoadingSkeleton />
-    );
-  }
-
-  if (!season) {
-    return null;
-  }
-
-  return (
-    <DashboardHeroFrame>
-      <DashboardHeroHeader />
-      <DashboardHeroScoreSection roundTeam={roundTeam} />
-      <DashboardHeroCTASection roundTeam={roundTeam} />
-    </DashboardHeroFrame>
-  )
-
-}
-
-function DashboardHeroLoadingSkeleton() {
+export function DashboardHeroLoadingSkeleton() {
   return <div>
     <RoundedCard className="p-6 animate-pulse bg-gray-200 dark:bg-slate-800 border-none">
       <div className="h-64"></div>
@@ -85,7 +27,7 @@ type DashboardFrameProps = {
 }
 
 /** Renders the dashboard frame */
-function DashboardHeroFrame({ children }: DashboardFrameProps) {
+export function DashboardHeroFrame({ children }: DashboardFrameProps) {
   return (
     <div className="relative w-full overflow-hidden shadow-md">
 
@@ -123,7 +65,7 @@ function DashboardHeroFrame({ children }: DashboardFrameProps) {
 }
 
 /** Renders the DashboardBoardHero.Header */
-function DashboardHeroHeader() {
+export function DashboardHeroHeader() {
 
   const navigate = useNavigate();
   const { authUser } = useAuth();
@@ -156,7 +98,7 @@ type ScoreProps = {
   roundTeam?: IFantasyLeagueTeam
 }
 
-function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
+export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
 
   const { scoringRound } = useFantasyLeagueGroup();
 
@@ -225,7 +167,7 @@ type CTASectionProps = {
 
 }
 
-function DashboardHeroCTASection({ roundTeam }: CTASectionProps) {
+export function DashboardHeroCTASection({ roundTeam }: CTASectionProps) {
 
   const navigate = useNavigate();
   const [showHelpModal, setShowHelpModal] = useState(false);

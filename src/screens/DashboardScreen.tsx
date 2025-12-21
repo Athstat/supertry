@@ -2,7 +2,7 @@ import PageView from './PageView';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import { useDashboard } from '../hooks/dashboard/useDashboard';
-import DashboardHero from '../components/dashboard/DashboardHero';
+import DashboardHero from '../components/dashboard/hero/DashboardHero';
 import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { useMemo } from 'react';

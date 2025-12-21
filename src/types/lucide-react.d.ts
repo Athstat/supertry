@@ -141,5 +141,6 @@ declare module "lucide-react" {
   export const CloudRain : CIP;
   export const TrendingUpDown : CIP;
   export const FastForward : CIP;
+  export const TrophyIcon : CIP;
 }
 
