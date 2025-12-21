@@ -1,13 +1,18 @@
 import PageView from './PageView';
 import { Trophy } from 'lucide-react';
 import { FantasyCompetitionDashboard } from '../components/fantasy-seasons/FantasyCompetitionDashboard';
-import FantasySeasonsOverview from '../components/fantasy-seasons/FantasySeasonsOverview';
+import FantasySeasonOptionsList from '../components/fantasy-seasons/FantasySeasonOptionsList';
 import { Activity } from '../components/shared/Activity';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
+import { LoadingState } from '../components/ui/LoadingState';
 
 /** Renders the Fantasy/League Screen */
 export function FantasyScreen() {
-  const { selectedSeason } = useFantasySeasons();
+  const { selectedSeason, isLoading } = useFantasySeasons();
+
+  const showLoading = isLoading;
+  const showFantasySeasonDashboard = (isLoading === false) && (selectedSeason !== undefined);
+  const showSeasonsOverview = (isLoading === false) && (selectedSeason === undefined);
 
   return (
     <PageView className="px-4 pt-4 flex flex-col gap-3">
@@ -19,11 +24,18 @@ export function FantasyScreen() {
         </div>
       </div>
 
-      <Activity mode={selectedSeason ? 'visible' : 'hidden'}>
+      <Activity mode={showLoading ? "visible" : "hidden"} >
+        <LoadingState />
+      </Activity>
+
+      <Activity mode={showFantasySeasonDashboard ? 'visible' : 'hidden'}>
         {selectedSeason && <FantasyCompetitionDashboard fantasySeason={selectedSeason} />}
       </Activity>
 
-      {!selectedSeason && <FantasySeasonsOverview />}
+      <Activity mode={showSeasonsOverview ? "visible" : "hidden"} >
+        <FantasySeasonOptionsList />
+      </Activity>
+
     </PageView>
   );
 }

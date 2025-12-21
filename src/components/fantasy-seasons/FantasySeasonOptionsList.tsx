@@ -9,9 +9,10 @@ import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup
 import { ChevronRight, Trophy } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import LearnScrummyNoticeCard from "../branding/help/LearnScrummyNoticeCard";
+import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
 
 /** Component rendered when there are not selected fantasy season pages */
-export default function FantasySeasonsOverview() {
+export default function FantasySeasonOptionsList() {
 
     const { fantasySeasons } = useFantasyLeaguesScreen();
 
@@ -45,7 +46,7 @@ type FantasySeasonCardProps = {
 
 function FantasySeasonCard({ fantasySeason, index }: FantasySeasonCardProps) {
 
-    const { setSelectedSeason } = useFantasyLeaguesScreen();
+    const { setSelectedSeason } = useFantasySeasons();
     const featuredLeagueKey = `/featured-league/${fantasySeason.id}`;
     const { data: featuredLeagues, isLoading } = useSWR(featuredLeagueKey, () => fantasySeasonsService.getFeaturedLeagueGroups(fantasySeason.id));
 
