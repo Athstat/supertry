@@ -8,11 +8,7 @@ import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsS
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { seasonService } from '../../../services/seasonsService';
 import { logger } from '../../../services/logger';
-import PageView from '../../../screens/PageView';
-import RoundedCard from '../../shared/RoundedCard';
-
 import { useDebounced } from '../../../hooks/useDebounced';
-import { DashboardHeroLoadingSkeleton } from '../hero/DashboardHeroSections';
 
 type Props = {
   children?: ReactNode;
