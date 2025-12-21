@@ -14,7 +14,7 @@ export function useFantasySeasons() {
     const isLoading = useAtomValue(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
     const diplaySeason = useMemo(() => {
-        return currentSeason || selectedSeason;
+        return selectedSeason || currentSeason;
     }, [currentSeason, selectedSeason]);
 
     const previousRound = useMemo(() => {
@@ -50,7 +50,6 @@ export function useFantasySeasons() {
         selectedSeason: diplaySeason,
         isLoading,
         setSelectedSeason,
-
         /** Previous round to the current round */
         previousRound,
         /** The round to display scored for in the app */
