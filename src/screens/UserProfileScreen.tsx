@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import ProfileSettingCard from '../components/settings/ProfileSettingCard';
 import { UserCircle, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { CoachTip } from '../components/shared/containers/CoachTip';
 
 export function UserProfileScreen() {
 
