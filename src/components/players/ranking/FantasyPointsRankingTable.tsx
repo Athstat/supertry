@@ -14,7 +14,7 @@ import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import MatchPrCard from "../../rankings/MatchPrCard";
 
 
-type CustomSortField = "points" | SortField;
+type CustomSortField = "points" | "rank" | SortField;
 
 type TableProps = {
     players: FantasyPointsScoredRankingItem[],
@@ -27,7 +27,7 @@ type TableProps = {
 }
 
 /** Renders Players List Table */
-export function FantasyPointsRankingTable({ players, onClick, searchQuery, onClearSearchQuery }: TableProps) {
+export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, searchQuery, onClearSearchQuery }: TableProps) {
 
     const [currentSortField, setCurrentSortField] = useState<CustomSortField>("points");
     const [currentSortDirection, setCurrentSortDirection] = useState<SortDirection>("desc");
@@ -38,6 +38,14 @@ export function FantasyPointsRankingTable({ players, onClick, searchQuery, onCle
         setCurrentSortField(field);
         setCurrentSortDirection(direction);
     }
+
+    const players = useMemo(() => {
+        return [...unrankedPlayers].sort((a, b) => {
+            return (b.total_points || 0) - (a.total_points || 0)
+        }).map((p, index) => {
+            return {...p, rank: index + 1}
+        });
+    }, [unrankedPlayers]);
 
     const sortedPlayers = useMemo(() => {
 
@@ -101,6 +109,15 @@ export function FantasyPointsRankingTable({ players, onClick, searchQuery, onCle
 
                 <thead>
                     <tr>
+
+                        <TableColumn
+                            className="pb-4"
+                            label="#No"
+                            fieldName={"rank"}
+                            currentSortDirection={currentSortDirection}
+                            currentSortField={currentSortField}
+                            onSort={onSort}
+                        />
 
                         <TableColumn
                             className="pb-4"
@@ -277,6 +294,12 @@ function RowItem({ player, onClick }: Props) {
             onClick={handelClick}
             className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
         >
+            <td className="py-3" >
+                <SecondaryText className="flex flex-row items-center justify-center w-full flex-1" >
+                    {Math.floor((player as FantasyPointsScoredRankingItem & {rank?: number}).rank || 0)}
+                </SecondaryText>
+            </td>
+
             <td className="py-3" >
                 <div className="flex flex-row items-center gap-2" >
                     <div>
