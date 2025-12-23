@@ -80,6 +80,33 @@ export const gameplayModalData: GameplayModalData = {
           "description": "Track the leaderboard, challenge your friends, and celebrate victories. Leagues make every win sweeter when bragging rights are on the line."
         }
       ]
+    },
+    {
+      "title": "Fantasy Points Breakdown",
+      "emoji": "📊",
+      "description": "Understanding how players earn fantasy points is key to building a winning squad. Points are awarded based on in-game actions, with different values for attacking plays, defensive efforts, and disciplinary actions.",
+      "subTopics": [
+        {
+          "title": "High Value Actions",
+          "description": "Tries: 4 points | Try Assist: 2 points | Kick Try Scored: 2 points. These are the game-changing moments that can make or break your fantasy week."
+        },
+        {
+          "title": "Core Defensive & Attacking Actions",
+          "description": "Clean Breaks, Defenders Beaten, Dominant Tackles, Lineout Won Steal, Offload, Tackle Turnover, Turnover Won: 1 point each. Consistent performers in these areas rack up solid points."
+        },
+        {
+          "title": "Goal Kicking",
+          "description": "Conversion Goals, Penalty Goals, Drop Goals Converted: 0.5 points each. Reliable kickers add steady points throughout the match."
+        },
+        {
+          "title": "Minor Actions",
+          "description": "Tackles: 0.5 points | Carries Crossed Gain Line: 0.3 points | Post Contact Metres: 0.1 points | Carry Metres Total & Ruck Arrival Attack: 0.05 points each. The small actions that add up over time."
+        },
+        {
+          "title": "Penalties",
+          "description": "Missed Tackles/Conversions/Penalties/Drop Goals: -0.5 points each | Turnovers Conceded: -1 point | Red Cards & Second Yellow: -5 points each. Discipline matters — poor decisions cost you points."
+        }
+      ]
     }
   ]
 };
