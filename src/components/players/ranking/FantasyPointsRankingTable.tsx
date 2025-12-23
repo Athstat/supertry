@@ -307,7 +307,7 @@ function RowItem({ player, onClick }: Props) {
         >
             <td className="py-3" >
                 <SecondaryText className="flex min-w-[10px] flex-row items-center justify-center w-full flex-1" >
-                    {Math.floor((player as FantasyPointsScoredRankingItem & { rank?: number }).rank || 0)}
+                    {Math.floor(player.rank || 0)}
                 </SecondaryText>
             </td>
 
