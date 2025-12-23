@@ -21,7 +21,7 @@ export function useFantasySeasons() {
     const previousRound = useMemo(() => {
         if (currentRound && seasonRounds) {
             return seasonRounds.find((r) => {
-                return r.round_number = currentRound.round_number - 1
+                return r.round_number === currentRound.round_number - 1
             });
         }
 

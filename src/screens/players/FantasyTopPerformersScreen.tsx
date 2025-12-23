@@ -89,9 +89,6 @@ export default function FantasyTopPerformersScreen() {
         onClose={toggleRoundModal}
         currentRound={roundNumber || "overall"}
       />
-
-
-
     </PageView>
   )
 }

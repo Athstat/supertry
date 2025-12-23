@@ -14,6 +14,7 @@ import SecondaryText from '../../../shared/SecondaryText';
 import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import FormIndicator from '../../../shared/FormIndicator';
 import PlayerTeamCard from '../PlayerTeamCard';
+import Experimental from '../../../shared/ab_testing/Experimental';
 
 type Props = {
   player: IProAthlete;
@@ -106,12 +107,12 @@ export default function PlayerOverviewTab({ player }: Props) {
 
       </RoundedCard>
 
-
-
       <CoachScrummyPlayerReport player={player} />
 
       {currentSeason && (
-        <PlayerIconsCard player={player} season={currentSeason} />
+        <Experimental>
+          <PlayerIconsCard player={player} season={currentSeason} />
+        </Experimental>
       )}
 
       <PlayerTeamFormCard
