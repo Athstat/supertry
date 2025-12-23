@@ -9,7 +9,7 @@ tags:
   - signin
 ---
 # Launch the web app
-- launchApp: "http://localhost:5173/signin"
+- launchApp: http://localhost:5173/signin
 
 # Wait for page to load
 - assertVisible: "Welcome back"
@@ -26,7 +26,9 @@ tags:
     index: 0
 
 # Input test email from config
-- inputText: ${TEST_EMAIL}
+- inputText: test@gmail.com
+
+- tapOn: "Continue with Email"
 
 # ============================================
 # Enter Password
@@ -37,17 +39,17 @@ tags:
 # Tap on password input field
 - tapOn:
     text: ".*[Pp]assword.*"
-    index: 0
+    index: 1
 
 # Input test password from config
-- inputText: ${TEST_PASSWORD}
+- inputText: qsqsqs
 
 # ============================================
 # Submit Sign In
 # ============================================
 # Tap Sign In button
 - tapOn:
-    text: ".*[Ss]ign [Ii]n.*"
+    text: "Sign In"
 
 # Wait for authentication to complete
 - waitForAnimationToEnd
@@ -57,11 +59,11 @@ tags:
 # ============================================
 # Verify user is redirected to dashboard
 - assertVisible:
-    text: ".*[Dd]ashboard.*"
+    text: "maestro test"
 
 # Verify key dashboard elements are present
 - assertVisible:
-    text: ".*([Mm]y [Tt]eams|[Ll]eagues).*"
+    text: "PLAY URC FANTASY"
 
 # Take screenshot for test evidence
 - takeScreenshot: signin-success
@@ -77,7 +79,11 @@ tags:
 
 # User should still be logged in (not redirected to login)
 - assertVisible:
-    text: ".*[Dd]ashboard.*"
+    text: "maestro test"
+
+# Verify key dashboard elements are present
+- assertVisible:
+    text: "PLAY URC FANTASY"
 
 # Take screenshot
 - takeScreenshot: session-persisted
