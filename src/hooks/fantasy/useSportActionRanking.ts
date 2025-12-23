@@ -42,7 +42,7 @@ export function useMostSelectedPlayers(seasonId: string, limit: number = 5) {
 }
 
 type FantasyPointsRankingsOptions = {
-    round_number?: number 
+    round_number?: number | string
 }
 
 /** Hook for most selected player rankings based of a sports action */

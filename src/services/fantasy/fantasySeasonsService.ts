@@ -78,7 +78,7 @@ export const fantasySeasonsService = {
     },
 
     /** returns a ranking of players based on fantasy points scored */
-    getFantasyPointsScoredRankings: async (id: string, limit: number = 5, round_number: number | undefined = undefined) : Promise<FantasyPointsScoredRankingItem[]> => {
+    getFantasyPointsScoredRankings: async (id: string, limit: number = 5, round_number: number | string | undefined = undefined) : Promise<FantasyPointsScoredRankingItem[]> => {
         try {
 
             const query_params = `?limit=${limit}${round_number ? `&round_number=${round_number}` : ''}`;

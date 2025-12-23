@@ -2,6 +2,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { fantasySeasonsAtoms } from "../../state/dashboard/dashboard.atoms";
 import { fantasySeasonsAtom } from "../../state/fantasy/fantasyLeagueScreen.atoms";
 import { useMemo } from "react";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 /** useDashboard is a useful hook to read state of the fantasys easons */
 export function useFantasySeasons() {
@@ -42,6 +43,27 @@ export function useFantasySeasons() {
 
     }, [currentRound, previousRound]);
 
+
+    const pastAndPresentRounds = useMemo(() => {
+        const set: ISeasonRound[] = [];
+
+        seasonRounds.forEach((r) => {
+            if (!set.find((y) => y.round_number === r.round_number)) {
+                set.push(r);
+            }
+        });
+
+        return [...set].sort((a, b) => {
+            return (a.round_number || 0) - (b.round_number || 0)
+        }).filter((r) => {
+            if (scoringRound) {
+                return r.round_number <= scoringRound.round_number
+            }
+
+            return true;
+        });
+    }, [scoringRound, seasonRounds]);
+
     return {
         fantasySeasons,
         currentSeason,
@@ -53,7 +75,8 @@ export function useFantasySeasons() {
         /** Previous round to the current round */
         previousRound,
         /** The round to display scored for in the app */
-        scoringRound
+        scoringRound,
+        pastAndPresentRounds
     }
 
 }
