@@ -3,15 +3,15 @@
 
 env:
   # Base URL for the web app (adjust for your environment)
-  BASE_URL: "http://localhost:5173"
+  MAESTRO_BASE_URL: "http://localhost:5173"
   
   # API endpoints (if needed for setup/teardown)
-  API_URL: "your-api-url"
+  MAESTRO_API_URL: "your-api-url"
   
   # Test user credentials
-  TEST_EMAIL: "maestro_test@example.com"
-  TEST_PASSWORD: "TestPassword123!"
-  TEST_USERNAME: "maestro_test_user"
+  MAESTRO_TEST_EMAIL: "maestro_test@example.com"
+  MAESTRO_TEST_PASSWORD: "TestPassword123!"
+  MAESTRO_TEST_USERNAME: "maestro_test_user"
   
   # Timeouts
   MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000

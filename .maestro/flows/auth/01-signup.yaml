@@ -2,14 +2,14 @@
 # Tests the complete user registration process through all 4 steps
 # Flow: Username → Email → Password → Review → Dashboard
 
-url: ${BASE_URL}
+url: http://localhost:5173
 tags:
   - auth
   - critical
   - signup
 ---
 # Launch the web app
-- launchApp: "${BASE_URL}/signup"
+- launchApp: "http://localhost:5173/signup"
 
 # Wait for page to load
 - assertVisible: "Create your account"
