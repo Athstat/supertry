@@ -10,9 +10,6 @@ import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { FantasyScreen } from './screens/FantasyScreen';
 import { FantasyLeagueScreen } from './screens/LeagueScreen';
-import { MyTeamsListScreen } from './screens/MyTeamsScreen';
-import { TeamCreationScreen } from './screens/TeamCreationScreen';
-import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
 import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
@@ -155,28 +152,6 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <FantasyLeagueGroupStandingsScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/:officialLeagueId/create-team"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <TeamCreationScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/review-team"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <ReviewTeamScreen />
               </Layout>
             </ProtectedRoute>
           }
