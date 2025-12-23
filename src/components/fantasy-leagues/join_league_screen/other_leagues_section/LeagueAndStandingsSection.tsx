@@ -2,15 +2,14 @@ import { Trophy } from "lucide-react"
 import { FantasyLeagueGroup } from "../../../../types/fantasyLeagueGroups"
 import { LeagueGroupCardSmall } from "../../league_card_small/LeagueGroupCardSmall"
 import PrimaryButton from "../../../shared/buttons/PrimaryButton"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import CreateLeagueModal from "../../CreateLeagueModal"
 import { useNavigate } from "react-router-dom"
 import NoContentCard from "../../../shared/NoContentMessage"
 import { IFantasySeason } from "../../../../types/fantasy/fantasySeason"
-import useSWR from "swr"
-import { fantasyLeagueGroupsService } from "../../../../services/fantasy/fantasyLeagueGroupsService"
 import RoundedCard from "../../../shared/RoundedCard"
 import SecondaryText from "../../../shared/SecondaryText"
+import { useUserJoinedLeagues } from "../../../../hooks/leagues/useUserJoinedLeagues"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -20,15 +19,7 @@ type Props = {
 export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     const navigate = useNavigate();
-    const key = `/user-joined-leagues/${fantasySeason.id}`;
-
-    const { data: fetchedLeagues, isLoading: loadingUserLeagues } = useSWR(
-        key, () => fantasyLeagueGroupsFetcher(fantasySeason.id), {
-        revalidateOnFocus: false
-    });
-
-    const leagues = useMemo(() => (fetchedLeagues ?? []), [fetchedLeagues]);
-    const isLoading = loadingUserLeagues;
+    const {leagues, isLoading} = useUserJoinedLeagues(fantasySeason.id);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [initTab, setInitTab] = useState<"join" | "create">("create");
@@ -119,14 +110,4 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
             )}
         </div>
     )
-}
-
-
-async function fantasyLeagueGroupsFetcher(seasonId: string) {
-    const joinedLeagues = await fantasyLeagueGroupsService.getJoinedLeagues(seasonId);
-    const mineLeagues = await fantasyLeagueGroupsService.getMyCreatedLeagues(seasonId);
-
-    const aggregate = [...mineLeagues, ...joinedLeagues];
-
-    return aggregate;
 }

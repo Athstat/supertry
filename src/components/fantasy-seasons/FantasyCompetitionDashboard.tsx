@@ -10,7 +10,7 @@ type Props = {
 }
 
 /** Serves a dashboard for a fantasy season */
-export function FantasyCompetitionDashboard({ fantasySeason }: Props) {
+export function FantasySeasonDashboard({ fantasySeason }: Props) {
 
   const {featuredLeague: featuredGroup, isLoading} = useFeaturedLeague();
 

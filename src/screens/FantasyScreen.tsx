@@ -1,6 +1,6 @@
 import PageView from './PageView';
 import { Trophy } from 'lucide-react';
-import { FantasyCompetitionDashboard } from '../components/fantasy-seasons/FantasyCompetitionDashboard';
+import { FantasySeasonDashboard } from '../components/fantasy-seasons/FantasyCompetitionDashboard';
 import FantasySeasonOptionsList from '../components/fantasy-seasons/FantasySeasonOptionsList';
 import { Activity } from '../components/shared/Activity';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
@@ -29,7 +29,7 @@ export function FantasyScreen() {
       </Activity>
 
       <Activity mode={showFantasySeasonDashboard ? 'visible' : 'hidden'}>
-        {selectedSeason && <FantasyCompetitionDashboard fantasySeason={selectedSeason} />}
+        {selectedSeason && <FantasySeasonDashboard fantasySeason={selectedSeason} />}
       </Activity>
 
       <Activity mode={showSeasonsOverview ? "visible" : "hidden"} >
