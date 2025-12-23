@@ -1,0 +1,72 @@
+# Edit Team Flow Test
+# Tests the team editing functionality
+# Prerequisites: User must be logged in and have at least one team
+# Flow: Navigate to team → Edit team → Make changes → Save
+
+url: http://localhost:5173
+---
+# Use helper flow to login first
+#- runFlow: ../auth/02-signin.yaml
+
+# ============================================
+# Dashboard screen is visible
+# ============================================
+- assertVisible:
+    text: 'maestro test'
+
+- assertVisible:
+    text: 'PLAY NOW'
+
+- takeScreenshot: dasboard-screen
+
+# ============================================
+# Players screen is visible
+# ============================================
+
+- tapOn:
+    text: Players
+
+- assertVisible:
+    text: 'Players'
+
+- takeScreenshot: players-screen
+
+# ============================================
+# Fantasy screen is visible
+# ============================================
+
+- tapOn:
+    text: Fantasy
+
+- assertVisible:
+    text: 'Fantasy'
+
+- takeScreenshot: fantasy-screen
+
+# ============================================
+# Fixtures screen is visible
+# ============================================
+
+- tapOn:
+    text: Fixtures
+
+- assertVisible:
+    text: 'Pro Rugby'
+
+- takeScreenshot: fixtures-screen
+
+# ============================================
+# Schools screen is visible
+# ============================================
+
+- tapOn:
+    text: Schools
+
+- assertVisible:
+    text: 'Schoolboy Rugby'
+
+- takeScreenshot: sbr-screen
+
+# Output test results
+- evalScript: |
+    console.log('✅ All screens load test Passed');
