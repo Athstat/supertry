@@ -8,6 +8,7 @@ import NoContentCard from '../../shared/NoContentMessage';
 import { PlayerRankingCard } from '../../players/ranking/PlayerRankingCard';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+import { queryParamKeys } from '../../../types/constants';
 
 type Props = {
   className?: string
@@ -27,7 +28,8 @@ export default function FantasyPointsScoredPlayerList({className} : Props) {
   });
 
   const handleViewMore = () => {
-    navigate('/players')
+    const queryParam = scoringRound?.round_number ? `?${queryParamKeys.ROUND_NUMBER_QUERY_KEY}=${scoringRound.round_number}` : '';
+    navigate(`/players/fantasy-top-performers${queryParam}`);
   }
 
   if (!finalSeason) {

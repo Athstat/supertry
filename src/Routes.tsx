@@ -48,6 +48,7 @@ import { twMerge } from 'tailwind-merge';
 import { AppColours } from './types/constants';
 import FantasyLeagueGroupStandingsScreen from './screens/fantasy-leagues/FantasyLeagueGroupStandingsScreen';
 import PlayersByTeamScreens from './screens/players/PlayersByTeamScreens';
+import FantasyTopPerformersScreen from './screens/players/FantasyTopPerformersScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -240,6 +241,17 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <ScoutingListScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/fantasy-top-performers"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FantasyTopPerformersScreen />
               </Layout>
             </ProtectedRoute>
           }
