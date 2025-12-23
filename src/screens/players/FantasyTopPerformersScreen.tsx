@@ -14,6 +14,8 @@ import { Activity, useState } from "react";
 import RoundedCard from "../../components/shared/RoundedCard";
 import { twMerge } from "tailwind-merge";
 import { useNavigate } from "react-router-dom";
+import { IProAthlete } from "../../types/athletes";
+import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 
 
 /** Renders a screen that shows the fantasy top performers */
@@ -29,11 +31,20 @@ export default function FantasyTopPerformersScreen() {
   });
 
   const [showRoundModal, setShowRoundModal] = useState<boolean>(false);
+  const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
 
   const toggleRoundModal = () => setShowRoundModal(prev => !prev);
 
   const handleBack = () => {
     hardPop('/dashboard');
+  }
+
+  const handlePlayerClick = (player: IProAthlete) => {
+    setSelectedPlayer(player);
+  }
+
+  const handleClosePlayerModal = () => {
+    setSelectedPlayer(undefined);
   }
 
   return (
@@ -64,6 +75,13 @@ export default function FantasyTopPerformersScreen() {
 
       {!isLoading && <FantasyPointsRankingTable
         players={rankings}
+        onClick={handlePlayerClick}
+      />}
+
+      {selectedPlayer && <PlayerProfileModal
+        player={selectedPlayer}
+        onClose={handleClosePlayerModal}
+        isOpen={Boolean(selectedPlayer)}
       />}
 
       <RoundSelectorSheet
@@ -71,6 +89,8 @@ export default function FantasyTopPerformersScreen() {
         onClose={toggleRoundModal}
         currentRound={roundNumber || "overall"}
       />
+
+
 
     </PageView>
   )
@@ -96,6 +116,9 @@ function RoundSelectorSheet({ isOpen, onClose, currentRound }: RoundSelectorShee
     } else {
       const queryParam = round ? `?${queryParamKeys.ROUND_NUMBER_QUERY_KEY}=${round}` : '';
       navigate(`/players/fantasy-top-performers${queryParam}`);
+    }
+    if (onClose) {
+      onClose();
     }
   }
 
