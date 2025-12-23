@@ -3,7 +3,6 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import { SignUpScreen } from './screens/auth/SignUpScreen';
 import { SignInScreen } from './screens/auth/SignInScreen';
-import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
 import { ForgotPasswordScreen } from './screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
 import OnBoardingScreen from './screens/OnboardingScreen';
@@ -106,14 +105,6 @@ const AppRoutes = () => {
         />
         <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
         <Route path="/reset-password" element={<ResetPasswordScreen />} />
-        <Route
-          path="/auth-choice"
-          element={
-            <AuthRoute>
-              <AuthChoiceScreen />
-            </AuthRoute>
-          }
-        />
 
         {/* Protected routes */}
         <Route
