@@ -123,7 +123,8 @@ function RoundSelectorSheet({ isOpen, onClose, currentRound }: RoundSelectorShee
 
     <Activity mode={isOpen ? "visible" : "hidden"} >
       <BottomSheetView
-        className="px-4 min-h-[500px] pb-8"
+        className="px-4 min-h-[500px] pb-8 p-4"
+        hideHandle
       >
         <div className="flex flex-row items-center justify-between" >
           <p className="font-semibold " >Select Week {currentRound}</p>

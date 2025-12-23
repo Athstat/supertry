@@ -43,7 +43,7 @@ export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, s
         return [...unrankedPlayers].sort((a, b) => {
             return (b.total_points || 0) - (a.total_points || 0)
         }).map((p, index) => {
-            return {...p, rank: index + 1}
+            return { ...p, rank: index + 1 }
         });
     }, [unrankedPlayers]);
 
@@ -80,6 +80,17 @@ export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, s
                 }
 
                 return (a.power_rank_rating || 0) - (b.power_rank_rating || 0)
+            })
+        }
+
+        if (currentSortField === "rank") {
+            return [...players].sort((a, b) => {
+
+                if (currentSortDirection === "desc") {
+                    return (b?.rank || 0) - (a?.rank || 0)
+                }
+
+                return (a?.rank || 0) - (b?.rank || 0)
             })
         }
 
@@ -295,8 +306,8 @@ function RowItem({ player, onClick }: Props) {
             className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
         >
             <td className="py-3" >
-                <SecondaryText className="flex flex-row items-center justify-center w-full flex-1" >
-                    {Math.floor((player as FantasyPointsScoredRankingItem & {rank?: number}).rank || 0)}
+                <SecondaryText className="flex min-w-[10px] flex-row items-center justify-center w-full flex-1" >
+                    {Math.floor((player as FantasyPointsScoredRankingItem & { rank?: number }).rank || 0)}
                 </SecondaryText>
             </td>
 
@@ -312,7 +323,7 @@ function RowItem({ player, onClick }: Props) {
 
                     <div>
                         <div>
-                            <p className="text-sm" >{player.player_name}</p>
+                            <p className="text-sm max-w-[160px] truncate" >{player.player_name}</p>
                         </div>
 
                         <div className="flex flex-row items-center gap-2" >
