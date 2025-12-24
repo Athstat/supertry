@@ -8,7 +8,7 @@ import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import { CirclePlus, TriangleAlert } from "lucide-react";
+import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
@@ -76,7 +76,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <TeamJersey
                             teamId={player.athlete_team_id}
                             useBaseClasses={false}
-                            className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_6px_6px_rgba(0,0,0,0.9)] shadow-black"
+                            className="h-[80px] object-cover  absolute -bottom-0  drop-shadow-[0_6px_6px_rgba(0,0,0,0.9)] shadow-black"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
                             key={player.tracking_id}
@@ -163,7 +163,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
     const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
-
+    const showPrice = true;
 
     return (
         <>
@@ -172,15 +172,22 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 isLoading && "animate-pulse"
             )} >
 
-
+                {/* 
                 <Activity mode={isLoading ? "visible" : "hidden"} >
                     <div className="w-[60%] h-[10px] bg-white/50 animate-pulse rounded-xl" >
 
                     </div>
-                </Activity>
+                </Activity> */}
 
-                <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
+                {/* <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
                     <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+                </Activity> */}
+
+                <Activity mode={showPrice ? "visible" : "hidden"} >
+                    <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
+                        <p className="text-[10px] md:text-[10px]" >{player.price}</p>
+                        <Coins className="text-yellow-500 w-2.5 h-2.5" />
+                    </div>
                 </Activity>
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
