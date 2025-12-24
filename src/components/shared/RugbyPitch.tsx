@@ -100,7 +100,7 @@ export function RugbyPitch3DRaster({className, pitchClassName, hideGoalPost} : P
         )} >
 
             <img src={src} className={twMerge(
-                "min-w-[140%] max-w-[100px]",
+                "min-w-[140%] max-w-[100px] drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] shadow-black",
                 "md:min-w-[670px] lg:min-w-[650px] lg:max-w-[200px] h-fit",
                 pitchClassName
             )} />
