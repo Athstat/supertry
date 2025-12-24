@@ -1,11 +1,10 @@
-import { useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3DRaster } from '../shared/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 import { useFantasyLeagueTeam } from '../fantasy-leagues/my-team/FantasyLeagueTeamProvider';
 import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
-import { IFantasyLeagueTeamSlot } from '../../types/fantasyLeagueTeam';
+import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLeagueTeam';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -14,79 +13,53 @@ interface TeamFormationProps {
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
+export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormationProps) {
 
   const { slots, leagueRound: round } = useFantasyLeagueTeam();
 
-  const firstRowSlots = useMemo(() => {
-    return slots
-      .filter((a) => {
-        return a.slotNumber <= 2;
-      });
-  }, [slots]);
+  const slotPositions = [
+    { x: 20, y: 10 },
+    { x: 80, y: 10 },
+    { x: 50, y: 25 },
+    { x: 30, y: 50 },
+    { x: 80, y: 58 },
+  ]
 
-  const lastRowSlots = useMemo(() => {
-    return slots
-      .filter((a) => {
-        return a.slotNumber >= 3 && a.slotNumber < 6;
-      });
-  }, [slots]);
-
-  const getSlot = (slotNum: number, callback: (slot: IFantasyLeagueTeamSlot) => ReactNode) => {
-    const slot = slots.find((s) => s.slotNumber === slotNum);
-    if (slot) {
-      return callback(slot);
-    }
-
-    return null;
-  }
 
   if (!round) {
     return;
   }
 
   return (
-    <div className="relative  w-full mt-10  flex flex-col justify-center">
+    <div className="relative w-full mt-10  flex flex-col justify-center">
 
       <RugbyPitch3DRaster className={twMerge(
         'mt-12',
         marginCN
       )} />
 
-      <div className='top-0 left-0 absolute w-full p-3 flex flex-col gap-6' >
+      <div className='top-0 mt-2 left-0 absolute w-full p-3 flex flex-col gap-0' >
+        <div className='w-full h-full p-2 relative min-h-[750px]' >
+          {slotPositions.map((pos, index) => {
 
-        <div className={twMerge(
-          'flex mt-20 flex-row items-center gap-4 justify-center',
-          firstRowMargin
-        )} >
+            const slotNumber = index + 1;
+            const slot = slots.find((s) => s.slotNumber === slotNumber);
 
-          {firstRowSlots.map((s) => {
+            if (!slot) {
+              return null;
+            }
+
             return (
               <SlotCard
-                slot={s}
-                onPlayerClick={onPlayerClick}
-                key={s.slotNumber}
+                slot={slot}
+                position={pos}
                 round={round}
+                onPlayerClick={onPlayerClick}
               />
             )
-          })}
 
-        </div>
-
-        <div className='flex flex-row items-center gap-3 justify-center' >
-          {lastRowSlots.map((s) => {
-            return (
-              <SlotCard
-                slot={s}
-                onPlayerClick={onPlayerClick}
-                key={s.slotNumber}
-                round={round}
-              />
-            )
           })}
         </div>
-
-
       </div>
 
     </div>
@@ -97,17 +70,28 @@ type SlotCardProps = {
   slot: IFantasyLeagueTeamSlot,
   onPlayerClick?: (player: IFantasyTeamAthlete) => void,
   round?: IFantasyLeagueRound,
-  className?: string
+  className?: string,
+  position: SlotCardPosition
 }
 
-function SlotCard({ slot, onPlayerClick, round }: SlotCardProps) {
+function SlotCard({ slot, onPlayerClick, round, position }: SlotCardProps) {
+
   const { athlete } = slot;
 
   if (!athlete) {
     return (
-      <EmptySlotPitchCard
-        slot={slot}
-      />
+      <div
+        className="absolute"
+        style={{
+          left: `${position.x}%`,
+          top: `${position.y}%`,
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <EmptySlotPitchCard
+          slot={slot}
+        />
+      </div>
     )
   };
 
@@ -115,12 +99,24 @@ function SlotCard({ slot, onPlayerClick, round }: SlotCardProps) {
     return null;
   }
 
+
   return (
-    <PlayerPitchCard
-      player={athlete}
-      onClick={onPlayerClick}
-      key={slot.slotNumber}
-      round={round}
-    />
+    <div
+      className="absolute"
+      style={{
+        left: `${position.x}%`,
+        top: `${position.y}%`,
+        transform: 'translate(-50%, -50%)',
+      }}
+    >
+
+      <PlayerPitchCard
+        player={athlete}
+        onClick={onPlayerClick}
+        key={slot.slotNumber}
+        round={round}
+      />
+
+    </div>
   )
 }

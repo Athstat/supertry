@@ -31,3 +31,9 @@ export type IFantasyLeagueTeamSlot = {
     is_starting: boolean,
     isCaptain?: boolean
 }
+
+/** Type represents the position of a slot card */
+export type SlotCardPosition = {
+    x: number,
+    y: number
+}
