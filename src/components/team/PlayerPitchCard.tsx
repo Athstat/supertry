@@ -76,13 +76,13 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <TeamJersey
                             teamId={player.athlete_team_id}
                             useBaseClasses={false}
-                            className="h-[80px] object-cover  absolute -bottom-1"
+                            className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
                             key={player.tracking_id}
-                            eclipseJersey
                         />
                     </div>
+
                     {/* )} */}
 
                 </div>
@@ -94,7 +94,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 )} >
 
                     <div className='flex px-2 h-[22px] md:h-[22px] flex-col items-center justify-center' >
-                        <p className=' text-[12px] md:text-[12px] font-semibold text-nowrap max-w-[100px] truncate' >{player.athstat_lastname}</p>
+                        <p className=' text-[10px] md:text-[10px] font-semibold text-nowrap max-w-[100px] truncate' >{player.athstat_lastname}</p>
                     </div>
 
                     <div className={twMerge(
