@@ -98,9 +98,8 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
                     <div className={twMerge(
                         'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
-                        "from-slate-200 to-slate-300",
                         showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
-                        !showAvailabilityWarning && "dark:from-blue-900 dark:to-blue-900 dark:text-white",
+                        !showAvailabilityWarning && "from-blue-900 to-blue-900 dark:text-white text-white",
                     )} >
 
                         <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
