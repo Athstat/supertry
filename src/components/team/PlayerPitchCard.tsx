@@ -50,7 +50,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
             {isTeamCaptain && (
                 <div className="absolute top-4 md:top-0 left-0 p-1" >
-                    <CaptainsArmBand className="font-black" />
+                    <CaptainsArmBand className="font-black bg-yellow-500 dark:bg-yellow text-black dark:text-black"  />
                 </div>
             )}
 
@@ -100,7 +100,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     <div className={twMerge(
                         'flex flex-row h-[20px] md:h-[20px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
                         showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
-                        !showAvailabilityWarning && "from-blue-900 to-blue-900 dark:text-white text-white",
+                        !showAvailabilityWarning && "from-[#011E5C] to-[#011E5C] dark:text-white text-white",
                     )} >
 
                         <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
@@ -186,8 +186,8 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
                 <Activity mode={showPrice ? "visible" : "hidden"} >
                     <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
-                        <p className="text-[10px] md:text-[10px]" >{player.price}</p>
-                        <Coins className="text-yellow-500 w-2.5 h-2.5" />
+                        <p className="text-[10px] md:text-[10px]" >${player.price}M</p>
+                        {/* <Coins className="text-yellow-500 w-2.5 h-2.5" /> */}
                     </div>
                 </Activity>
 
