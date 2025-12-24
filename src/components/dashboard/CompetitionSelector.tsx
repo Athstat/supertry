@@ -27,8 +27,6 @@ export default function CompetitionSelector() {
     })
   }, [availableSeasons, defferedSeasonId, setSelectedSeason]);
 
-  console.log("Selected Season ", selectedSeason);
-
   // Show loading skeleton ONLY while actively loading and no data yet
   if (isLoading) {
     return (
