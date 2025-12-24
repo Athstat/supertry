@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   currGroupMemberAtom,
   fantasyLeagueConfigAtom,
@@ -21,12 +21,14 @@ type Props = {
   children?: ReactNode;
   leagueId?: string;
   loadingFallback?: ReactNode;
+  skipCache?: boolean
 };
 
 export default function FantasyLeagueGroupDataProvider({
   children,
   leagueId,
   loadingFallback,
+  skipCache
 }: Props) {
   const atoms = [
     fantasyLeagueGroupAtom,
@@ -39,14 +41,14 @@ export default function FantasyLeagueGroupDataProvider({
 
   return (
     <ScopeProvider atoms={atoms}>
-      <Fetcher leagueId={leagueId} loadingFallback={loadingFallback}>
+      <Fetcher leagueId={leagueId} loadingFallback={loadingFallback} skipCache={skipCache} >
         {children}
       </Fetcher>
     </ScopeProvider>
   );
 }
 
-function Fetcher({ children, leagueId, loadingFallback }: Props) {
+function Fetcher({ children, leagueId, loadingFallback, skipCache }: Props) {
   const [leagueGroup, setFantasyLeagueGroup] = useAtom(fantasyLeagueGroupAtom);
   const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
   const setFantasyLeagueGroupRounds = useSetAtom(fantasyLeagueGroupRoundsAtom);
@@ -57,7 +59,11 @@ function Fetcher({ children, leagueId, loadingFallback }: Props) {
 
   const { leagueConfig, isLoading: loadingConfig } = useLeagueConfig(leagueGroup?.season_id);
 
-  const key = leagueId ? swrFetchKeys.getFantasyLeagueGroupById(leagueId) : null;
+  const datePart = useMemo(() => {
+    return skipCache ? `${new Date().valueOf()}` : ""
+  }, [skipCache]);
+
+  const key = leagueId ? (swrFetchKeys.getFantasyLeagueGroupById(leagueId) + `${datePart}`) : null;
   const { data: league, isLoading: loadingLeague } = useSWR(key, () =>
     fantasyLeagueGroupsService.getGroupById(leagueId ?? '')
   );

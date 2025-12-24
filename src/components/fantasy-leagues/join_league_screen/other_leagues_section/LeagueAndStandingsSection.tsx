@@ -4,7 +4,7 @@ import { LeagueGroupCardSmall } from "../../league_card_small/LeagueGroupCardSma
 import PrimaryButton from "../../../shared/buttons/PrimaryButton"
 import { useState } from "react"
 import CreateLeagueModal from "../../CreateLeagueModal"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import NoContentCard from "../../../shared/NoContentMessage"
 import { IFantasySeason } from "../../../../types/fantasy/fantasySeason"
 import RoundedCard from "../../../shared/RoundedCard"
@@ -41,9 +41,12 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
         navigate(`/league/${league.id}`);
     }
 
-    const handleClickLeagueCard = (league: FantasyLeagueGroup) => {
-        navigate(`/league/${league.id}/standings`);
+
+
+    const getLeagueLink = (league: FantasyLeagueGroup) => {
+        return `/league/${league.id}/standings`;
     }
+
 
     if (isLoading) {
         return (
@@ -87,11 +90,12 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
                 {leagues.map((l) => {
                     return (
-                        <LeagueGroupCardSmall
-                            leagueGroup={l}
-                            key={l.id}
-                            onClick={handleClickLeagueCard}
-                        />
+                        <Link to={getLeagueLink(l)} >
+                            <LeagueGroupCardSmall
+                                leagueGroup={l}
+                                key={l.id}
+                            />
+                        </Link>
                     )
                 })}
             </div>

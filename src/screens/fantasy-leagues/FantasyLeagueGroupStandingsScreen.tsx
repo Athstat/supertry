@@ -17,6 +17,7 @@ export default function FantasyLeagueGroupStandingsScreen() {
         <FantasyLeagueGroupDataProvider
             leagueId={leagueId}
             loadingFallback={<LoadingSkeleton />}
+            skipCache
         >
             <Content />
         </FantasyLeagueGroupDataProvider>
