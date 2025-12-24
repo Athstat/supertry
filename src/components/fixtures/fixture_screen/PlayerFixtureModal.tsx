@@ -484,7 +484,7 @@ function MatchPointsBreakdown({ sportActions }: MatchPointsBreakdownProps) {
                         </div>
                         <SecondaryText className="text-sm">Points earned in this match</SecondaryText>
                     </div>
-                    <div className="font-bold text-2xl text-primary-600 dark:text-primary-400 pr-2">
+                    <div className="font-bold text-xl text-primary-600 dark:text-primary-400 pr-2">
                         {totalFantasyPoints.toFixed(1)}
                     </div>
                 </div>
