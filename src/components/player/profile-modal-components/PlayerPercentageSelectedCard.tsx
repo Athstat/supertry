@@ -41,7 +41,7 @@ export default function PlayerPercentageSelectedCard({ player, season }: Props) 
 
                 <div className="flex flex-col items-center gap-2" >
                     <p className="text-lg font-semibold" >{selection.times_selected}</p>
-                    <SecondaryText className="text-center text-[10px]" >Managers <br/> Selected</SecondaryText>
+                    <SecondaryText className="text-center text-[10px]" >Times<br/> Selected</SecondaryText>
                 </div>
 
                 <div className="flex flex-col items-center gap-2" >
