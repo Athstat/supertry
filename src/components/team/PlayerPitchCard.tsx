@@ -130,8 +130,10 @@ type PlayerPointsScoreProps = {
 function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const isLocked = isLeagueRoundLocked(round);
-    const { isLoading, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
     const { league } = useFantasyLeagueGroup();
+
+    const isLoading = loadingScore;
 
     const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
         player.tracking_id,
@@ -160,13 +162,24 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const showScore = !isLoading && isLocked;
 
-    const showAvailabilityWarning = (isNotAvailable || isTeamNotPlaying) && !showScore;
-    const showNextMatchInfo = !showAvailabilityWarning && homeOrAway && opponent && !showScore;
+    const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
+    const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
+
 
     return (
         <>
+            <div className={twMerge(
+                "min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row",
+                isLoading && "animate-pulse"
+            )} >
 
-            <div className="min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row" >
+
+                <Activity mode={isLoading ? "visible" : "hidden"} >
+                    <div className="w-[60%] h-[10px] bg-white/50 animate-pulse rounded-xl" >
+
+                    </div>
+                </Activity>
+
                 <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
                     <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
                 </Activity>
@@ -183,6 +196,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                         <p className='text-[10px] md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
                     </div>
                 </Activity>
+
             </div>
         </>
     )
@@ -230,7 +244,7 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
             </div> */}
 
             <div className="min-h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
-                
+
             </div>
         </div>
     );
