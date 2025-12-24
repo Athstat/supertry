@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import DialogModal from "../../shared/DialogModal";
 import GameplayOverview from "./GameplayOverview";
 import TopicDetail from "./TopicDetail";
@@ -12,6 +12,7 @@ type Props = {
 export default function ScrummyGamePlayModal({ isOpen, onClose }: Props) {
 
     const [selectedTopic, setSelectedTopic] = useState<GameplayTopic | null>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const handleTopicSelect = (topic: GameplayTopic) => {
         setSelectedTopic(topic);
@@ -21,8 +22,19 @@ export default function ScrummyGamePlayModal({ isOpen, onClose }: Props) {
         setSelectedTopic(null);
     };
 
+    // Scroll to top when topic changes
+    useEffect(() => {
+        if (modalRef.current) {
+            const scrollableContainer = modalRef.current.closest('.overflow-y-auto');
+            if (scrollableContainer) {
+                scrollableContainer.scrollTop = 0;
+            }
+        }
+    }, [selectedTopic]);
+
     return (
         <DialogModal
+            ref={modalRef}
             open={isOpen}
             onClose={onClose}
             title={selectedTopic ? selectedTopic.title : "How to Play Scrummy"}
@@ -31,13 +43,13 @@ export default function ScrummyGamePlayModal({ isOpen, onClose }: Props) {
             className="w-full h-full mb-10"
         >
             {selectedTopic ? (
-                <TopicDetail 
-                    topic={selectedTopic} 
-                    onBack={handleBackToOverview} 
+                <TopicDetail
+                    topic={selectedTopic}
+                    onBack={handleBackToOverview}
                 />
             ) : (
-                <GameplayOverview 
-                    onTopicSelect={handleTopicSelect} 
+                <GameplayOverview
+                    onTopicSelect={handleTopicSelect}
                     onClose={onClose}
                 />
             )}

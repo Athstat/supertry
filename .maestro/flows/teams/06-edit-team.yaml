@@ -3,24 +3,24 @@
 # Prerequisites: User must be logged in and have at least one team
 # Flow: Navigate to team → Edit team → Make changes → Save
 
-url: ${BASE_URL}
+url: http://localhost:5173
 tags:
   - teams
   - edit-team
 ---
 # Use helper flow to login first
-- runFlow: ../helpers/login-helper.yaml
+- runFlow: ../auth/02-signin.yaml
 
 # ============================================
 # Navigate to My Teams
 # ============================================
 # Look for My Teams link
 - assertVisible:
-    text: ".*([Mm]y [Tt]eams).*"
+    text: 'PLAY NOW'
 
 # Tap on My Teams
 - tapOn:
-    text: ".*([Mm]y [Tt]eams).*"
+    text: 'PLAY NOW'
 
 # Wait for navigation
 - waitForAnimationToEnd
@@ -29,123 +29,36 @@ tags:
 # Verify Teams List
 # ============================================
 - assertVisible:
-    text: ".*([Yy]our [Tt]eams|[Mm]y [Tt]eams).*"
+    text: 'My Team'
 
 # Take screenshot of teams list
 - takeScreenshot: my-teams-list
 
 # ============================================
-# Select First Team
+# Select First Player
 # ============================================
 # Tap on first team card
-- tapOn:
-    text: ".*[Tt]eam.*"
-    index: 0
 
 # Wait for team details to load
 - waitForAnimationToEnd
 
-# ============================================
-# Verify Team Details Screen
-# ============================================
-- assertVisible:
-    text: ".*([Tt]eam [Dd]etails|[Pp]layers).*"
-
-# Take screenshot of team details
-- takeScreenshot: team-details
-
-# ============================================
-# Navigate to Edit Mode
-# ============================================
-# Look for Edit Team button
-- assertVisible:
-    text: ".*([Ee]dit [Tt]eam|[Ee]dit).*"
-
-# Tap on Edit Team
 - tapOn:
-    text: ".*([Ee]dit [Tt]eam|[Ee]dit).*"
+    text: C
 
-# Wait for edit mode to load
-- waitForAnimationToEnd
-
-# ============================================
-# Make a Transfer (Remove and Add Player)
-# ============================================
-# Verify budget is displayed
 - assertVisible:
-    text: ".*([Bb]udget|[Rr]emaining).*"
+    text: Quick Actions
 
-# Look for remove/transfer button on a player
+- tapOn:
+    text: Swap
+
+- tapOn:
+    point: 68%,47%
+
+- tapOn:
+    text: Save Changes
+
 - assertVisible:
-    text: ".*([Rr]emove|[Tt]ransfer).*"
-    optional: true
-
-# Take screenshot of edit mode
-- takeScreenshot: team-edit-mode
-
-# Tap on remove button for a player
-- tapOn:
-    text: ".*([Rr]emove|X).*"
-    optional: true
-    index: 0
-
-# Wait for removal
-- waitForAnimationToEnd
-
-# ============================================
-# Add New Player
-# ============================================
-# Tap on empty position or Add Player button
-- tapOn:
-    text: ".*([Aa]dd [Pp]layer|[Ss]elect).*"
-    optional: true
-    index: 0
-
-# Wait for player selection modal
-- waitForAnimationToEnd
-
-# Select a player
-- tapOn:
-    text: ".*([Pp]layer).*"
-    optional: true
-    index: 0
-
-# Confirm selection
-- tapOn:
-    text: ".*([Cc]onfirm|[Aa]dd).*"
-    optional: true
-
-# Wait for modal to close
-- waitForAnimationToEnd
-
-# Take screenshot after changes
-- takeScreenshot: team-modified
-
-# ============================================
-# Save Changes
-# ============================================
-# Scroll to find Save button
-- scroll:
-    direction: down
-
-# Look for Save button
-- assertVisible:
-    text: ".*([Ss]ave|[Ss]ave [Cc]hanges).*"
-
-# Tap Save button
-- tapOn:
-    text: ".*([Ss]ave|[Ss]ave [Cc]hanges).*"
-
-# Wait for save to complete
-- waitForAnimationToEnd
-
-# ============================================
-# Verify Success
-# ============================================
-# Check for success message or confirmation
-- assertVisible:
-    text: ".*([Ss]aved|[Ss]uccess|[Uu]pdated).*"
-    optional: true
+    text: 'Team Updated!'
 
 # Take screenshot of updated team
 - takeScreenshot: team-updated
