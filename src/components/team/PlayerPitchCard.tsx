@@ -8,7 +8,7 @@ import { Activity, useMemo } from "react";
 import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import { CirclePlus, Coins, TriangleAlert } from "lucide-react";
+import { CirclePlus, TriangleAlert } from "lucide-react";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
@@ -164,7 +164,6 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
     const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
-    const showPrice = true;
 
     return (
         <>
@@ -180,16 +179,16 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                     </div>
                 </Activity> */}
 
-                {/* <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
+                <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
                     <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
-                </Activity> */}
+                </Activity>
 
-                <Activity mode={showPrice ? "visible" : "hidden"} >
+                {/* <Activity mode={showPrice ? "visible" : "hidden"} >
                     <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
                         <p className="text-[10px] md:text-[10px]" >{player.price}</p>
                         <Coins className="text-yellow-500 w-2.5 h-2.5" />
                     </div>
-                </Activity>
+                </Activity> */}
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
