@@ -46,14 +46,16 @@ type FantasyPointsRankingsOptions = {
 }
 
 /** Hook for most selected player rankings based of a sports action */
-export function useFantasyPointsRankings(seasonId: string, limit: number = 5, options?: FantasyPointsRankingsOptions) {
+export function useFantasyPointsRankings(seasonId?: string, limit: number = 5, options?: FantasyPointsRankingsOptions) {
     
     const round_num = options?.round_number;
     const query_params = `?limit=${limit}${round_num ? `&round_number=${round_num}` : ''}`;
-    const key = `/fantasy-seasons/${seasonId}/fantasy-points-scored-rankings${query_params}`;
+
+    // When key is null SWR will not make fetch call
+    const key = seasonId ? `/fantasy-seasons/${seasonId}/fantasy-points-scored-rankings${query_params}` : null;
     
     const { data, isLoading, mutate } = useSWR(key, () => fantasySeasonsService.getFantasyPointsScoredRankings(
-        seasonId,
+        seasonId || "",
         limit,
         round_num
     ));

@@ -2,9 +2,9 @@ import { Bell } from 'lucide-react'
 import PageView from '../PageView'
 import RoundedCard from '../../components/shared/RoundedCard'
 import InAppMessageCard from '../../components/notifications/InAppMessage';
-import { Activity, useEffect } from 'react';
+import { Activity, ReactNode, useEffect } from 'react';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../../components/shared/tabs/TabView';
-import { EmptyReadNotificationsMessage } from '../../components/notifications/EmptyNotificationsMessage';
+import EmptyUnreadNotificationsMessage, { EmptyReadNotificationsMessage } from '../../components/notifications/EmptyNotificationsMessage';
 import { useInAppMessageList } from '../../hooks/notifications/useInAppMessageList';
 import { InAppMessage } from '../../types/notifications/inAppMessage';
 
@@ -52,11 +52,17 @@ export default function InAppMessagesScreen() {
                 >
 
                     <TabViewPage tabKey='unread' >
-                        <MessageList messages={unreadMessages} />
+                        <MessageList 
+                            messages={unreadMessages}
+                            emptyFallBack={<EmptyUnreadNotificationsMessage />} 
+                        />
                     </TabViewPage>
 
                     <TabViewPage tabKey='read' >
-                        <MessageList messages={readMessages} />
+                        <MessageList 
+                            messages={readMessages} 
+                            emptyFallBack={<EmptyReadNotificationsMessage />}
+                        />
                     </TabViewPage>
 
                 </TabView>
@@ -68,17 +74,18 @@ export default function InAppMessagesScreen() {
 }
 
 type MessageListProps = {
-    messages: InAppMessage[]
+    messages: InAppMessage[],
+    emptyFallBack?: ReactNode
 }
 
-function MessageList({ messages }: MessageListProps) {
+function MessageList({ messages, emptyFallBack }: MessageListProps) {
 
     const isListEmpty = messages.length === 0;
 
     if (isListEmpty) {
         return (
             <div className='flex flex-col h-[200px] items-center justify-center' >
-                <EmptyReadNotificationsMessage />
+                {emptyFallBack ? emptyFallBack : <EmptyReadNotificationsMessage />}
             </div>
         )
     }

@@ -188,7 +188,6 @@ export function DashboardHeroCTASection({ roundTeam }: CTASectionProps) {
 
   const isGameweekOpen = currentRound && !isLeagueRoundLocked(currentRound);
 
-  // TODO: Define Team URL
   const teamUrl = useMemo(() => {
     const leagueGroupId = league?.id;
 
