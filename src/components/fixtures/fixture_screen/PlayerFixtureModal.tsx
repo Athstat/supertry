@@ -150,7 +150,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                             <button
                                 onClick={() => setActiveTab("match-stats")}
                                 className={`px-4 py-2 font-semibold transition-colors ${activeTab === "match-stats"
-                                    ? "border-b-2 border-primary-500 text-primary-500"
+                                    ? "border-b-2 border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-400"
                                     : "text-gray-500 dark:text-gray-400"
                                     }`}
                             >
@@ -159,7 +159,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                             <button
                                 onClick={() => setActiveTab("points-breakdown")}
                                 className={`px-4 py-2 font-semibold transition-colors ${activeTab === "points-breakdown"
-                                    ? "border-b-2 border-primary-500 text-primary-500"
+                                    ? "border-b-2 border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-400"
                                     : "text-gray-500 dark:text-gray-400"
                                     }`}
                             >
