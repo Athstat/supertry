@@ -172,12 +172,12 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 isLoading && "animate-pulse"
             )} >
 
-                {/* 
+                
                 <Activity mode={isLoading ? "visible" : "hidden"} >
-                    <div className="w-[60%] h-[10px] bg-white/50 animate-pulse rounded-xl" >
+                    <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
 
                     </div>
-                </Activity> */}
+                </Activity>
 
                 <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
                     <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
