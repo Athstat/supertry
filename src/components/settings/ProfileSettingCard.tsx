@@ -15,12 +15,12 @@ type Props = {
 /** Renders profile settings card */
 export default function ProfileSettingCard({ icon, onClick, title, description, hideForGuestUsers }: Props) {
 
-    const {authUser} = useAuth();
+    const { authUser } = useAuth();
     const isGuest = isGuestUser(authUser);
 
     if (isGuest && hideForGuestUsers) {
         return;
-    } 
+    }
 
     return (
         <button
@@ -32,14 +32,14 @@ export default function ProfileSettingCard({ icon, onClick, title, description, 
             </div>
 
             <div className='flex flex-col items-start justify-center' >
-                <div  className='flex flex-row items-center gap-2' >
+                <div className='flex flex-row items-center gap-2' >
                     <span className="font-medium dark:text-gray-100">{title}</span>
                     <ChevronRight size={20} className="text-gray-400" />
                 </div>
-                <SecondaryText className='text-xs' >{description}</SecondaryText>
+                <SecondaryText className='text-xs text-left' >{description}</SecondaryText>
             </div>
 
-            
+
         </button>
     )
 }

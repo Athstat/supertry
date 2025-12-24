@@ -1,9 +1,9 @@
-import { Activity, useCallback, useMemo } from "react"
+import { Activity, useCallback, useMemo, useState } from "react"
 import { IProAthlete } from "../../../types/athletes"
 import { IFixture } from "../../../types/games"
 import BottomSheetView from "../../ui/BottomSheetView"
 import CircleButton from "../../shared/buttons/BackButton"
-import { Binoculars, X } from "lucide-react"
+import { Binoculars, X, Info } from "lucide-react"
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot"
 import MatchPrCard from "../../rankings/MatchPrCard"
 import { useAthleteMatchPr } from "../../../hooks/athletes/useAthleteMatchPr"
@@ -22,6 +22,7 @@ import { twMerge } from "tailwind-merge"
 import TeamLogo from "../../team/TeamLogo"
 import PrimaryButton from "../../shared/buttons/PrimaryButton"
 import { useNavigate } from "react-router-dom"
+import FantasyPointsInfoModal from "../../branding/help/FantasyPointsInfoModal"
 
 type Props = {
     fixture: IFixture,
@@ -51,6 +52,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
 
 
     const hasActions = sportActions.length > 0;
+    const [activeTab, setActiveTab] = useState<"match-stats" | "points-breakdown">("match-stats");
 
     const handleClose = () => {
         if (onClose) {
@@ -142,6 +144,30 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                         </QuickActionButton>}
                     </div>
 
+                    {/* Tabs */}
+                    <Activity mode={hasActions ? "visible" : "hidden"} >
+                        <div className="flex flex-row gap-2 mt-4 border-b dark:border-slate-700">
+                            <button
+                                onClick={() => setActiveTab("match-stats")}
+                                className={`px-4 py-2 font-semibold transition-colors ${activeTab === "match-stats"
+                                    ? "border-b-2 border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-400"
+                                    : "text-gray-500 dark:text-gray-400"
+                                    }`}
+                            >
+                                Match Stats
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("points-breakdown")}
+                                className={`px-4 py-2 font-semibold transition-colors ${activeTab === "points-breakdown"
+                                    ? "border-b-2 border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-400"
+                                    : "text-gray-500 dark:text-gray-400"
+                                    }`}
+                            >
+                                Points Breakdown
+                            </button>
+                        </div>
+                    </Activity>
+
                     {showMatchInfo && <RoundedCard className="flex flex-col p-4 mt-2 gap-2" >
 
                         <div className="flex flex-row w-full items-start" >
@@ -169,7 +195,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                         </div>
                     </RoundedCard>}
 
-                    <Activity mode={hasActions ? "visible" : "hidden"} >
+                    <Activity mode={hasActions && activeTab === "match-stats" ? "visible" : "hidden"} >
                         <div className="flex flex-col gap-4 mt-4" >
 
                             <div className="flex flex-row items-center gap-2" >
@@ -262,6 +288,11 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                             ]}
                         />
 
+                    </Activity>
+
+                    {/* Points Breakdown Tab */}
+                    <Activity mode={hasActions && activeTab === "points-breakdown" ? "visible" : "hidden"} >
+                        <MatchPointsBreakdown sportActions={sportActions} />
                     </Activity>
 
                     <Activity mode={!hasActions ? "visible" : "hidden"} >
@@ -358,6 +389,150 @@ function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
             </div>
         </div>
     )
+}
+
+type MatchPointsBreakdownProps = {
+    sportActions: GameSportAction[]
+}
+
+// Fantasy Points Scoring Rules (client-side calculation)
+const FANTASY_POINTS_MAP: Record<string, number> = {
+    // High Impact Actions
+    'tries': 4,
+    'try_assit': 2,
+    'try_kicks': 2,
+
+    // Core Actions
+    'clean_breaks': 1,
+    'defenders_beaten': 1,
+    'dominant_tackles': 1,
+    'lineout_won_steal': 1,
+    'offload': 1,
+    'tackle_turnover': 1,
+    'turnover_won': 1,
+
+    // Goal Kicking
+    'conversion_goals': 0.5,
+    'kick_penalty_good': 0.5,
+    'drop_goals_converted': 0.5,
+
+    // Minor Actions
+    'tackles': 0.5,
+    'carries_crossing_gain_line': 0.3,
+    'post_contact_metres': 0.1,
+    'carries_metres': 0.05,
+    'ruck_arrival_attack': 0.05,
+
+    // Penalties (negative)
+    'missed_tackles': -0.5,
+    'missed_conversion_goals': -0.5,
+    'kick_penalty_bad': -0.5,
+    'drop_goals_missed': -0.5,
+    'turnovers_conceded': -1,
+    'red_cards': -5,
+    'yellow_cards': -5,
+};
+
+function MatchPointsBreakdown({ sportActions }: MatchPointsBreakdownProps) {
+    const [showPointsInfo, setShowPointsInfo] = useState(false);
+
+    const actionsWithPoints = useMemo(() => {
+        return sportActions
+            .map((action) => {
+                // Get point value from mapping
+                const pointValue = FANTASY_POINTS_MAP[action.action] || 0;
+                const calculatedPoints = pointValue * action.action_count;
+
+                return {
+                    ...action,
+                    calculatedPoints
+                };
+            })
+            .filter((action) => action.action_count > 0 && action.calculatedPoints !== 0);
+    }, [sportActions]);
+
+    const totalFantasyPoints = useMemo(() => {
+        return actionsWithPoints.reduce((sum, action) => {
+            return sum + action.calculatedPoints;
+        }, 0);
+    }, [actionsWithPoints]);
+
+    if (actionsWithPoints.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center py-8 px-4">
+                <SecondaryText className="text-center">
+                    No fantasy points earned in this match yet
+                </SecondaryText>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <div className="flex flex-col gap-2 mt-4 pb-4">
+                <div className="mb-2 flex flex-row items-center justify-between">
+                    <div className="flex flex-col  pl-2">
+                        <div className="flex items-center gap-2">
+                            <p className="font-semibold text-lg">Fantasy Points</p>
+                            <button
+                                onClick={() => setShowPointsInfo(true)}
+                                className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
+                                aria-label="View points breakdown information"
+                            >
+                                <Info className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                            </button>
+                        </div>
+                        <SecondaryText className="text-sm">Points earned in this match</SecondaryText>
+                    </div>
+                    <div className="font-bold text-xl text-primary-600 dark:text-primary-400 pr-2">
+                        {totalFantasyPoints.toFixed(1)}
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                    {actionsWithPoints.map((action, index) => {
+                        const points = action.calculatedPoints;
+                        const isNegative = points < 0;
+                        const displayName = action.definition?.display_name || action.action;
+
+                        // Determine the correct unit based on action type
+                        const isMetreBased = displayName.toLowerCase().includes('metres') || displayName.toLowerCase().includes('meters');
+                        const unit = isMetreBased ? 'm' : '';
+
+                        return (
+                            <RoundedCard
+                                key={index}
+                                className="border-none shadow-none bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 hover:dark:bg-slate-700 flex py-2.5 px-4 flex-row items-center justify-between"
+                            >
+                                <div className="flex flex-col gap-0.5">
+                                    <p className="text-sm font-medium dark:text-white">
+                                        {displayName}
+                                    </p>
+                                    <SecondaryText className="text-xs">
+                                        {action.action_count} {unit}
+                                    </SecondaryText>
+                                </div>
+
+                                <div
+                                    className={`font-bold text-base ${isNegative
+                                        ? 'text-red-600 dark:text-red-400'
+                                        : 'text-green-600 dark:text-green-400'
+                                        }`}
+                                >
+                                    {isNegative ? '' : '+'}{points.toFixed(1)}
+                                </div>
+                            </RoundedCard>
+                        );
+                    })}
+                </div>
+            </div>
+
+            <FantasyPointsInfoModal
+                isOpen={showPointsInfo}
+                onClose={() => setShowPointsInfo(false)}
+            />
+        </>
+    );
 }
 
 type SkeletonProps = {

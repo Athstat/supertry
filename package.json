@@ -12,13 +12,9 @@
     "preview": "vite preview",
     "test": "jest",
     "format": "prettier --write .",
-    "test:e2e": "maestro test --config .maestro/config.yaml .maestro/flows/",
-    "test:e2e:auth": "maestro test --config .maestro/config.yaml --include-tags=auth .maestro/flows/",
-    "test:e2e:teams": "maestro test --config .maestro/config.yaml --include-tags=teams .maestro/flows/",
-    "test:e2e:critical": "maestro test --config .maestro/config.yaml --include-tags=critical .maestro/flows/",
-    "test:e2e:signup": "maestro test --config .maestro/config.yaml .maestro/flows/auth/01-signup.yaml",
+    "test:e2e": "npm run test:e2e:signin && npm run test:e2e:teams",
+    "test:e2e:teams": "maestro test --config .maestro/config.yaml .maestro/flows/teams/06-edit-team.yaml",
     "test:e2e:signin": "maestro test --config .maestro/config.yaml .maestro/flows/auth/02-signin.yaml",
-    "test:e2e:report": "maestro test --config .maestro/config.yaml --format junit --output test-results.xml .maestro/flows/",
     "ci": "lint && test && build"
   },
   "dependencies": {

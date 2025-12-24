@@ -12,8 +12,10 @@ import Experimental from '../components/shared/ab_testing/Experimental';
 import QaNoticeCard from '../components/settings/QaNoticeCard';
 import { useNavigate } from 'react-router-dom';
 import ProfileSettingCard from '../components/settings/ProfileSettingCard';
-import { UserCircle, Moon, Sun } from 'lucide-react';
+import { UserCircle, Moon, Sun, HelpCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import ScrummyGamePlayModal from '../components/branding/help/ScrummyGamePlayModal';
+import { useState } from 'react';
 
 export function UserProfileScreen() {
 
@@ -35,9 +37,18 @@ function Content() {
   const isGuestAccount = useAtomValue(isGuestUserAtom);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const [isGameplayModalOpen, setIsGameplayModalOpen] = useState(false);
 
   const handleEditUserProfile = () => {
     navigate('/profile/account-info');
+  }
+
+  const handleOpenGameplayModal = () => {
+    setIsGameplayModalOpen(true);
+  }
+
+  const handleCloseGameplayModal = () => {
+    setIsGameplayModalOpen(false);
   }
 
   return (
@@ -80,6 +91,13 @@ function Content() {
           onClick={toggleTheme}
         />
 
+        <ProfileSettingCard
+          title='How to Play'
+          description='Learn about Scrummy gameplay and fantasy points'
+          icon={<HelpCircle />}
+          onClick={handleOpenGameplayModal}
+        />
+
         <LicensingModal />
 
         <QaNoticeCard />
@@ -93,6 +111,11 @@ function Content() {
           isGuestAccount={isGuestAccount}
         />
       </div>
+
+      <ScrummyGamePlayModal
+        isOpen={isGameplayModalOpen}
+        onClose={handleCloseGameplayModal}
+      />
     </main>
   )
 }
