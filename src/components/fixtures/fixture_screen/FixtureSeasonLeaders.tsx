@@ -9,15 +9,17 @@ import SecondaryText from "../../shared/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";
+import { IProAthlete } from "../../../types/athletes";
 
 type Props = {
-    fixture: IFixture
+    fixture: IFixture,
+    onPlayerClick?: (player: IProAthlete) => void
 }
 
-export default function FixtureSeasonLeaders({ fixture }: Props) {
+export default function FixtureSeasonLeaders({ fixture, onPlayerClick }: Props) {
 
     const { team, opposition_team } = fixture;
-    const {matchFinal} = fixtureSummary(fixture);
+    const { matchFinal } = fixtureSummary(fixture);
     const { leaders: leaders1, isLoading: loadingHome } = useTeamSeasonLeaders(team?.athstat_id, fixture.league_id);
     const { leaders: leaders2, isLoading: loadingAway } = useTeamSeasonLeaders(opposition_team?.athstat_id, fixture.league_id);
 
@@ -39,6 +41,7 @@ export default function FixtureSeasonLeaders({ fixture }: Props) {
     return (
         <RoundedCard className={"p-4 dark:border-none flex flex-col gap-4"}>
             <div className="flex flex-row px-8 items-center justify-between" >
+
                 <div className="flex flex-row flex-1 items-center justify-start" >
                     <TeamLogo
                         url={fixture.team?.image_url}
@@ -46,8 +49,8 @@ export default function FixtureSeasonLeaders({ fixture }: Props) {
                     />
                 </div>
 
-                <div className="flex-1" >
-                    <p className="text-sm font-semibold" >Season Leaders</p>
+                <div className="flex-2 w-full flex flex-row items-center justify-center" >
+                    <p className="text-[12px] text-nowrap font-semibold" >Season Leaders</p>
                 </div>
 
                 <div className="flex flex-row flex-1 items-center justify-end" >
@@ -63,39 +66,44 @@ export default function FixtureSeasonLeaders({ fixture }: Props) {
                     team1Leaders={homeLeaders}
                     team2Leaders={awayLeaders}
                     actionNames={['tries', "Tries"]}
+                    onClick={onPlayerClick}
                 />
 
                 <StatLeadersItem
                     team1Leaders={homeLeaders}
                     team2Leaders={awayLeaders}
                     actionNames={['passes', "Passes"]}
+                    onClick={onPlayerClick}
                 />
 
                 <StatLeadersItem
                     team1Leaders={homeLeaders}
                     team2Leaders={awayLeaders}
                     actionNames={['tackles', "Tackles"]}
+                    onClick={onPlayerClick}
                 />
 
                 <StatLeadersItem
                     team1Leaders={homeLeaders}
                     team2Leaders={awayLeaders}
                     actionNames={['points', "Points"]}
+                    onClick={onPlayerClick}
                 />
 
                 <StatLeadersItem
                     team1Leaders={homeLeaders}
                     team2Leaders={awayLeaders}
                     actionNames={["carry_dominant", 'CarryDominant']}
+                    onClick={onPlayerClick}
                 />
 
                 <StatLeadersItem
                     team1Leaders={homeLeaders}
                     team2Leaders={awayLeaders}
                     actionNames={["conversion_goals", 'ConversionGoals']}
+                    onClick={onPlayerClick}
                 />
             </div>
-
         </RoundedCard>
     )
 }
@@ -104,9 +112,10 @@ type StatLeaderItemProps = {
     team1Leaders: TeamSeasonLeader[],
     team2Leaders: TeamSeasonLeader[],
     actionNames: string[],
+    onClick?: (player: IProAthlete) => void
 }
 
-function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeaderItemProps) {
+function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: StatLeaderItemProps) {
 
     const { defintions } = useSportActions();
 
@@ -139,14 +148,28 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
         return `${firstName} ${lastName}`
     }
 
+    const handleClickPlayer = (leader: TeamSeasonLeader) => {
+        if (onClick) {
+
+            const playerInfoObj: IProAthlete = {
+                tracking_id: leader.athlete_id,
+                ...leader
+            } 
+
+            onClick(playerInfoObj);
+        }
+    }
+
     if (!leader1 || !leader2) {
         return null;
     }
 
+
+
     return (
         <div className="flex flex-row items-center justify-between" >
 
-            <div className="flex flex-row items-center gap-1" >
+            <div key={leader1?.athlete_id} onClick={() => handleClickPlayer(leader1)} className="flex flex-row items-center gap-1" >
 
                 <div className="flex flex-col items-center gap-1" >
                     <SmartPlayerMugshot
@@ -168,7 +191,7 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders }: StatLeader
                 <SecondaryText className="text-xs" >{actionDef?.display_name}</SecondaryText>
             </div>
 
-            <div key={leader2?.athlete_id} className="flex flex-row items-center gap-1" >
+            <div onClick={() => handleClickPlayer(leader2)} key={leader2?.athlete_id} className="flex flex-row items-center gap-1" >
 
                 <div>
                     <p className="font-semibold text-sm" >{sanitizeStat(leader2?.action_count)}</p>

@@ -317,9 +317,9 @@ function RowItem({ player, onClick }: Props) {
 
             <td className="py-3" >
                 <div className="flex flex-row items-center gap-2" >
-                    <SecondaryText className="flex text-[12px] font-semibold mr-2 min-w-[5px] max-w-[5px] flex-row items-center justify-center w-full flex-1" >
+                    {/* <SecondaryText className="flex text-[12px] font-semibold mr-2 min-w-[5px] max-w-[5px] flex-row items-center justify-center w-full flex-1" >
                         {player.rank ? Math.floor(player.rank) : "-"}
-                    </SecondaryText>
+                    </SecondaryText> */}
 
                     <div>
                         <SmartPlayerMugshot

@@ -4,6 +4,8 @@ import { IFixture } from "../../../types/games";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import { Sticky } from "../../shared/Sticky";
 import TeamLogo from "../../team/TeamLogo";
+import { twMerge } from "tailwind-merge";
+import { AppColours } from "../../../types/constants";
 
 type Props = {
     fixture: IFixture
@@ -21,7 +23,10 @@ export function FixtureStickyHeader({ fixture }: Props) {
             <div ref={sentinelRef} />
             {isSticky && <Sticky className={"dark:bg-transparent"}  >
 
-                <div className="flex z-30 flex-row w-full items-center shadow-lg shadow-black/10 dark:shadow-black justify-between py-2 lg:px-[15%] bg-white dark:bg-[#101010] h-16 px-4" >
+                <div className={twMerge(
+                    "flex z-30 flex-row w-full items-center shadow-lg shadow-black/10 dark:shadow-black justify-between py-2 lg:px-[15%] bg-white dark:bg-[#101010] h-16 px-4",
+                    AppColours.BACKGROUND
+                )} >
 
                     <div className="flex-1 flex flex-row items-center justify-start gap-3"  >
                         <TeamLogo className="h-10 w-10" url={fixture?.team?.image_url} teamName={fixture?.team?.athstat_name} />

@@ -57,15 +57,13 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
 
   }, [onClose, player.tracking_id, startTime]);
 
-
-
   return (
     <PlayerDataProvider 
       onClose={handleCloseModal} 
       player={player}
       loadingFallback={<DefaultLoadingSkeleton onClose={handleCloseModal} />}
       errorFallback={<PlayerNotFound player={player} onClose={onClose} />}
-       
+      shouldRefetch
     >
       <Activity mode={isOpen ? "visible" : "hidden"} >
         <div className='w-fit' >
