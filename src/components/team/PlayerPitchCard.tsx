@@ -56,9 +56,9 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
             <div
                 className={twMerge(
-                    'cursor-pointer rounded-lg ',
-                    "min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px]",
-                    'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col',
+                    'cursor-pointer',
+                    "min-h-[140px] max-h-[140px] min-w-[115px] max-w-[115px]",
+                    'md:min-h-[140px] md:max-h-[140px] md:min-w-[110px] md:max-w-[110px] flex flex-col',
                     // player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
                     // !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
                     // showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
@@ -87,17 +87,17 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
 
                 <div className={twMerge(
-                    'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] rounded-lg bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
+                    'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
                     "dark:from-white dark:to-white dark:text-black",
-                    'min-h-[50px] max-h-[50px]'
+                    'min-h-[40px] max-h-[40px]'
                 )} >
 
-                    <div className='flex px-2 h-[25px] md:h-[25px] flex-col items-center justify-center' >
-                        <p className=' text-[10px] md:text-[11px] font-semibold text-nowrap max-w-[100px] truncate' >{player.athstat_lastname}</p>
+                    <div className='flex px-2 h-[20px] md:h-[20px] flex-col items-center justify-center' >
+                        <p className=' text-[9px] md:text-[9px] font-semibold text-nowrap max-w-[100px] truncate' >{player.athstat_lastname}</p>
                     </div>
 
                     <div className={twMerge(
-                        'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
+                        'flex flex-row h-[20px] md:h-[20px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
                         showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
                         !showAvailabilityWarning && "from-blue-900 to-blue-900 dark:text-white text-white",
                     )} >
@@ -112,9 +112,9 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
             </div>
 
-            <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+            {/* <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
                 <p className="text-[10px] font-medium" >{formatPosition(player.position_class)}</p>
-            </div>
+            </div> */}
 
         </div>
 
