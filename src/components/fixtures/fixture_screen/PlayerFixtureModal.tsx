@@ -471,7 +471,7 @@ function MatchPointsBreakdown({ sportActions }: MatchPointsBreakdownProps) {
         <>
             <div className="flex flex-col gap-2 mt-4 pb-4">
                 <div className="mb-2 flex flex-row items-center justify-between">
-                    <div className="flex flex-col">
+                    <div className="flex flex-col  pl-2">
                         <div className="flex items-center gap-2">
                             <p className="font-semibold text-lg">Fantasy Points</p>
                             <button
