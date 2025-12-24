@@ -18,11 +18,11 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
   const { slots, leagueRound: round } = useFantasyLeagueTeam();
 
   const slotPositions = [
-    { x: 20, y: 10 },
-    { x: 80, y: 10 },
-    { x: 50, y: 25 },
-    { x: 30, y: 50 },
-    { x: 80, y: 58 },
+    { x: 20, y: 10, slot: 1 },
+    { x: 80, y: 10, slot: 2 },
+    { x: 50, y: 25, slot: 4 },
+    { x: 35, y: 44, slot: 3 },
+    { x: 80, y: 55, slot: 5 },
   ]
 
 
@@ -40,9 +40,9 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
 
       <div className='top-0 mt-2 left-0 absolute w-full p-3 flex flex-col gap-0' >
         <div className='w-full h-full p-2 relative min-h-[750px]' >
-          {slotPositions.map((pos, index) => {
+          {slotPositions.map((pos) => {
 
-            const slotNumber = index + 1;
+            const slotNumber = pos.slot;
             const slot = slots.find((s) => s.slotNumber === slotNumber);
 
             if (!slot) {
