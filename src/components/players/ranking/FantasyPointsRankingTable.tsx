@@ -16,6 +16,9 @@ import MatchPrCard from "../../rankings/MatchPrCard";
 
 type CustomSortField = "points" | "rank" | SortField;
 
+// A custom type that adds a rank that is added on the client as the server doesn't return this
+type CustomFantasyPointsScoredRankingItem = FantasyPointsScoredRankingItem & {rank: number}
+
 type TableProps = {
     players: FantasyPointsScoredRankingItem[],
     onClick?: (player: IProAthlete) => void,
@@ -39,7 +42,8 @@ export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, s
         setCurrentSortDirection(direction);
     }
 
-    const players = useMemo(() => {
+    // Adds the rank on the client side for each player in order of points scored desc
+    const players = useMemo<CustomFantasyPointsScoredRankingItem[]>(() => {
         return [...unrankedPlayers].sort((a, b) => {
             return (b.total_points || 0) - (a.total_points || 0)
         }).map((p, index) => {
@@ -47,7 +51,7 @@ export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, s
         });
     }, [unrankedPlayers]);
 
-    const sortedPlayers = useMemo(() => {
+    const sortedPlayers = useMemo<CustomFantasyPointsScoredRankingItem[]>(() => {
 
         if (currentSortField === "points") {
             return [...players].sort((a, b) => {
@@ -285,7 +289,7 @@ export function FantasyPointsRankingTableLoadingSkeleton() {
 }
 
 type Props = {
-    player: FantasyPointsScoredRankingItem,
+    player: CustomFantasyPointsScoredRankingItem,
     onClick?: (player: IProAthlete) => void
 }
 

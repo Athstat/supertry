@@ -62,7 +62,6 @@ export type MostSelectedRankingItem = IProAthlete & {
 
 export type FantasyPointsScoredRankingItem = IProAthlete & {
   total_points: number;
-  rank?: number
 };
 
 /** type definition for a single player sport action ranking item */
