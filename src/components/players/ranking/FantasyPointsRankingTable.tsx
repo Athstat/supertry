@@ -17,7 +17,7 @@ import MatchPrCard from "../../rankings/MatchPrCard";
 type CustomSortField = "points" | "rank" | SortField;
 
 // A custom type that adds a rank that is added on the client as the server doesn't return this
-type CustomFantasyPointsScoredRankingItem = FantasyPointsScoredRankingItem & {rank: number}
+type CustomFantasyPointsScoredRankingItem = FantasyPointsScoredRankingItem & { rank: number }
 
 type TableProps = {
     players: FantasyPointsScoredRankingItem[],
@@ -119,20 +119,20 @@ export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, s
     }, [isEmpty]);
 
     return (
-        <div className="w-full min-h-screen" >
-            <table className="w-full"  >
+        <div className="w-full min-h-screen overflow-y-hidden " >
+            <table className="w-full overflow-y-hidden"  >
 
                 <thead>
                     <tr>
 
-                        <TableColumn
+                        {/* <TableColumn
                             className="pb-4"
                             label="#No"
                             fieldName={"rank"}
                             currentSortDirection={currentSortDirection}
                             currentSortField={currentSortField}
                             onSort={onSort}
-                        />
+                        /> */}
 
                         <TableColumn
                             className="pb-4"
@@ -309,14 +309,18 @@ function RowItem({ player, onClick }: Props) {
             onClick={handelClick}
             className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
         >
-            <td className="py-3" >
-                <SecondaryText className="flex min-w-[10px] flex-row items-center justify-center w-full flex-1" >
-                    {Math.floor(player.rank || 0)}
+            {/* <td className="py-3 bg-red-500 w-fit" >
+                <SecondaryText className="flex text-[10px] min-w-[5px] max-w-[5px] flex-row items-center justify-center w-full flex-1" >
+                    {player.rank ? Math.floor(player.rank) : "-"}
                 </SecondaryText>
-            </td>
+            </td> */}
 
             <td className="py-3" >
                 <div className="flex flex-row items-center gap-2" >
+                    <SecondaryText className="flex text-[12px] font-semibold mr-2 min-w-[5px] max-w-[5px] flex-row items-center justify-center w-full flex-1" >
+                        {player.rank ? Math.floor(player.rank) : "-"}
+                    </SecondaryText>
+
                     <div>
                         <SmartPlayerMugshot
                             url={player.image_url}
@@ -332,13 +336,13 @@ function RowItem({ player, onClick }: Props) {
 
                         <div className="flex flex-row items-center gap-2" >
 
-                            <SecondaryText className="text-xs" >{formatPosition(player.position)} </SecondaryText>
+                            <SecondaryText className="text-xs max-w-[100px] truncate text-nowrap" >{formatPosition(player.position)} </SecondaryText>
 
                             {player.nationality && (
                                 <>
                                     <div className="w-1 h-1 rounded-full bg-slate-700 dark:bg-slate-400" ></div>
 
-                                    <SecondaryText className="text-xs" >
+                                    <SecondaryText className="text-xs max-w-[60px] truncate text-nowrap" >
                                         {countryFlag} {stripCountryName(player.nationality)}
                                     </SecondaryText>
                                 </>

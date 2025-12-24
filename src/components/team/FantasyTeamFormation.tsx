@@ -20,8 +20,8 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
   const slotPositions = [
     { x: 20, y: 10, slot: 1 },
     { x: 80, y: 10, slot: 2 },
-    { x: 50, y: 20, slot: 4 },
-    { x: 35, y: 44, slot: 3 },
+    { x: 50, y: 28, slot: 4 },
+    { x: 35, y: 45, slot: 3 },
     { x: 80, y: 50, slot: 5 },
   ]
 

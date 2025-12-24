@@ -14,7 +14,8 @@ type Props = {
   teamId?: string;
   isCaptain?: boolean;
   scrummyLogoClassName?: string;
-  useBaseClassNameForJersey?: boolean
+  useBaseClassNameForJersey?: boolean;
+  jerseyClassName?: string;
 };
 
 /** Component that renders a player's mugshot */
@@ -27,7 +28,8 @@ export default function PlayerMugshot({
   teamId,
   isCaptain = false,
   scrummyLogoClassName, 
-  useBaseClassNameForJersey = true
+  useBaseClassNameForJersey = true,
+  jerseyClassName
 }: Props) {
 
   const teamFallbackUrl = getTeamJerseyImage(teamId);
@@ -108,6 +110,7 @@ export default function PlayerMugshot({
           teamId={teamId}
           className={twMerge(
             'w-full h-full object-contain',
+            jerseyClassName
           )}
           useBaseClasses={useBaseClassNameForJersey}
         />
