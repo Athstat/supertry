@@ -4,8 +4,9 @@ import RoundedCard from './shared/RoundedCard';
 import PrimaryButton from './shared/buttons/PrimaryButton';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
 
 interface JoinLeagueCardProps {
   leagueGroup: FantasyLeagueGroup
@@ -16,11 +17,23 @@ export function JoinLeagueCard({ leagueGroup }: JoinLeagueCardProps) {
   const key = `/league-group/${leagueGroup.id}/league-group-members/`;
   const {data, isLoading} = useSWR(key, () => fantasyLeagueGroupsService.getGroupMembers(leagueGroup.id));
 
+  const {handleJoinLeague: onJoin, isLoading: isJoining} = useJoinLeague();
+
   const memberCount = useMemo(() => {
     return (data || []).length;
   }, [data])
 
   const name = leagueGroup.title;
+
+  const handleJoin = useCallback(() => {
+    const nextUrl = `/league/${leagueGroup.id}/standings`;
+
+    onJoin(
+      leagueGroup,
+      nextUrl
+    );
+
+  }, [leagueGroup, onJoin])
 
   return (
     <RoundedCard className='py-2 px-4 dark:border-none ' >
@@ -39,7 +52,7 @@ export function JoinLeagueCard({ leagueGroup }: JoinLeagueCardProps) {
           </div>
         </div>
 
-        <PrimaryButton className="w-fit text-white py-1.5 px-2 text-xs font-medium transition-colors flex items-center">
+        <PrimaryButton onClick={handleJoin} isLoading={isJoining} className="w-fit text-white py-1.5 px-2 text-xs font-medium transition-colors flex items-center">
           Join
           {/* <ChevronRight className='w-4 h-4' /> */}
         </PrimaryButton>
