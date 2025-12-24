@@ -18,7 +18,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
   const { slots, leagueRound: round } = useFantasyLeagueTeam();
 
   const slotPositions = [
-    { x: 20, y: 10, slot: 1 },
+    { x: 20, y: 10, slot: 1, emptyX: 20, exmptyY: 10 },
     { x: 80, y: 10, slot: 2 },
     { x: 50, y: 20, slot: 4 },
     { x: 35, y: 44, slot: 3 },
@@ -84,7 +84,7 @@ function SlotCard({ slot, onPlayerClick, round, position }: SlotCardProps) {
         className="absolute"
         style={{
           left: `${position.x}%`,
-          top: `${position.y}%`,
+          top: `${position.y + 4}%`,
           transform: 'translate(-50%, -50%)',
         }}
       >
