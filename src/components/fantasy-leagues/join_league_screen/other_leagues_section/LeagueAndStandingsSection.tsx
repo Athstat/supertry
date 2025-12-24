@@ -10,6 +10,7 @@ import { IFantasySeason } from "../../../../types/fantasy/fantasySeason"
 import RoundedCard from "../../../shared/RoundedCard"
 import SecondaryText from "../../../shared/SecondaryText"
 import { useUserJoinedLeagues } from "../../../../hooks/leagues/useUserJoinedLeagues"
+import OtherLeaguesSection from "./OtherLeaguesSection"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -57,7 +58,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
                 <div className="flex flex-row items-center gap-2" >
                     <Trophy className="w-4 h-4" />
-                    <p className="text-md font-medium" >Leagues & Standings</p>
+                    <p className="text-lg font-bold" >My Leagues & Standings</p>
                     {/* <GamePlayHelpButton className="" iconHw="w-4 h-4" /> */}
                 </div>
             </div>
@@ -93,6 +94,10 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                     )
                 })}
             </div>
+
+            <OtherLeaguesSection 
+                fantasySeason={fantasySeason}
+            />
 
             {leagues.length === 0 && (
                 <NoContentCard
