@@ -5,7 +5,7 @@ export default function FantasyPointsBreakdown() {
   return (
     <div className="space-y-4 pb-10">
       {/* High Impact Actions */}
-      <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500/20 to-primary-500/20 dark:from-green-600/30 dark:to-primary-600/30 border-2 border-green-500/50 dark:border-green-400/50 p-4 pb-10 shadow-lg">
+      <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500/20 to-primary-500/20 dark:from-green-600/30 dark:to-primary-600/30 border-2 border-green-500/50 dark:border-green-400/50 p-4 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
           <div className="p-2 rounded-full bg-green-500/20 dark:bg-green-400/20">
             <Zap className="w-5 h-5 text-green-600 dark:text-green-400" />
