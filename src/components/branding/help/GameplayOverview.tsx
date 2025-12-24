@@ -13,7 +13,7 @@ type Props = {
 
 export default function GameplayOverview({ onTopicSelect, onClose }: Props) {
     return (
-        <div className="flex flex-col items-center justify-center w-full h-[100%] gap-4">
+        <div className="flex flex-col items-center justify-center w-full  gap-4">
             {/* Header */}
 
             <div className="text-center flex flex-col justify-center items-center gap-1">
