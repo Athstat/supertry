@@ -21,7 +21,7 @@ import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureSt
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
 import { FixtureScreenProvider } from '../providers/fixtures/FixtureScreenProvider';
 import { useFixtureScreen } from '../hooks/fixtures/useFixture';
-import PlayerFixtureModal from '../components/fixtures/fixture_screen/PlayerFixtureModal';
+import PlayerMatchModal from '../components/fixtures/fixture_screen/PlayerFixtureModal';
 import PlayerProfileModal from '../components/player/PlayerProfileModal';
 
 export default function FixtureScreen() {
@@ -153,7 +153,7 @@ function Content() {
       )}
 
       {showPlayerMatchModal && selectedPlayer && (
-        <PlayerFixtureModal
+        <PlayerMatchModal
           fixture={fixture}
           player={selectedPlayer}
           isOpen={showPlayerMatchModal}

@@ -9,7 +9,7 @@ import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataPro
 import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
-import PlayerFixtureModal from '../fixtures/fixture_screen/PlayerFixtureModal';
+import PlayerMatchModal from '../fixtures/fixture_screen/PlayerFixtureModal';
 import PlayerScoutingActionModal from '../scouting/PlayerScoutingActionModal';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import RoundedCard from '../shared/RoundedCard';
@@ -116,7 +116,7 @@ function PlayerFixtureModalWrapper() {
   return (
     <>
       {selectedFixture && player && <div className="absolute top-0 left-0 right-0 h-screen" >
-        <PlayerFixtureModal
+        <PlayerMatchModal
           player={player}
           fixture={selectedFixture}
           isOpen={Boolean(selectedFixture)}
