@@ -95,3 +95,8 @@ th {
 html {
   scroll-behavior: smooth;
 }
+
+.jersey-eclipse {
+  clip-path: ellipse(60% 90% at 50% 0%);
+  overflow: hidden;
+}

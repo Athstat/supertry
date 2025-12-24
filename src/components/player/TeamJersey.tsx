@@ -8,10 +8,11 @@ type Props = {
     className?: string,
     hideFade?: boolean,
     useBaseClasses?: boolean,
-    scummyLogoClassName?: string
+    scummyLogoClassName?: string,
+    eclipseJersey?: boolean
 }
 
-export default function TeamJersey({ teamId, className, hideFade, useBaseClasses = true, scummyLogoClassName }: Props) {
+export default function TeamJersey({ teamId, className, hideFade, useBaseClasses = true, scummyLogoClassName, eclipseJersey }: Props) {
 
     const imageUrl = teamId ? getTeamJerseyImage(teamId) : undefined;
     const [error, setError] = useState<boolean>(false);
@@ -32,21 +33,28 @@ export default function TeamJersey({ teamId, className, hideFade, useBaseClasses
 
 
     return (
-
-        <img
-            src={imageUrl}
+        <div
             className={twMerge(
-                useBaseClasses && 'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px] object-cover object-top',
+                useBaseClasses && 'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px]',
                 useBaseClasses && 'lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px]',
-                !hideFade && '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
-                !hideFade && '[mask - repeat:no-repeat] [mask-size:100%_100%]',
-                !hideFade && '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
-                !hideFade && '[-webkit-mask-repeat:no-repeat]',
-                !hideFade && '[-webkit-mask-size:100%_100%',
+                eclipseJersey && 'jersey-eclipse',
                 className
             )}
-            onError={() => setError(true)}
-        />
-
+        >
+            <img
+                src={imageUrl}
+                className={twMerge(
+                    'w-full h-full object-cover object-top',
+                    eclipseJersey && 'scale-y-[1.08] translate-y-2',
+                    !hideFade && !eclipseJersey && '[mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                    !hideFade && !eclipseJersey && '[mask-repeat:no-repeat] [mask-size:100%_100%]',
+                    !hideFade && !eclipseJersey && '[-webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent)]',
+                    !hideFade && !eclipseJersey && '[-webkit-mask-repeat:no-repeat]',
+                    !hideFade && !eclipseJersey && '[-webkit-mask-size:100%_100%]'
+                )}
+                onError={() => setError(true)}
+            />
+        </div>
     )
+
 }

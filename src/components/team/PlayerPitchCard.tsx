@@ -76,10 +76,11 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <TeamJersey
                             teamId={player.athlete_team_id}
                             useBaseClasses={false}
-                            className="h-[80px] object-cover  absolute -bottom-0  drop-shadow-[0_6px_6px_rgba(0,0,0,0.9)] shadow-black"
+                            className="h-[80px] object-cover  absolute -bottom-1"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
                             key={player.tracking_id}
+                            eclipseJersey
                         />
                     </div>
                     {/* )} */}
