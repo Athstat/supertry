@@ -49,7 +49,7 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
         >
 
             {isTeamCaptain && (
-                <div className="absolute top-4 left-0 p-1" >
+                <div className="absolute top-4 md:top-0 left-0 p-1" >
                     <CaptainsArmBand className="font-black" />
                 </div>
             )}

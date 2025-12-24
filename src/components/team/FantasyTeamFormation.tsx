@@ -20,7 +20,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
   const slotPositions = [
     { x: 20, y: 10, slot: 1 },
     { x: 80, y: 10, slot: 2 },
-    { x: 50, y: 25, slot: 4 },
+    { x: 50, y: 20, slot: 4 },
     { x: 35, y: 44, slot: 3 },
     { x: 80, y: 55, slot: 5 },
   ]
@@ -38,8 +38,8 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
         marginCN
       )} />
 
-      <div className='top-0 mt-2 left-0 absolute w-full p-3 flex flex-col gap-0' >
-        <div className='w-full h-full p-2 relative min-h-[750px]' >
+      <div className='top-0 mt-2 left-0 absolute w-full p-3 flex flex-col items-center justify-center gap-0' >
+        <div className='w-full h-full p-2 relative min-h-[750px] lg:min-h-[800px] md:min-w-[670px] lg:min-w-[450px] lg:max-w-[150px]' >
           {slotPositions.map((pos) => {
 
             const slotNumber = pos.slot;

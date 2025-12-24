@@ -28,7 +28,8 @@ export default function RugbyPitch({ count = 5 }: Props) {
 
 type PitchProps = {
     className?: string,
-    pitchClassName?: string
+    pitchClassName?: string,
+    hideGoalPost?: boolean
 }
 
 /** Renders a 3 Dimensional Rugby Pitch by perspective like FPL */
@@ -87,14 +88,18 @@ export function RugbyPitch3D({className} : PitchProps) {
 
 
 /** Renders a 3 Dimensional Rugby Pitch by perspective like FPL */
-export function RugbyPitch3DRaster({className, pitchClassName} : PitchProps) {
+export function RugbyPitch3DRaster({className, pitchClassName, hideGoalPost} : PitchProps) {
+    
+    // const src = "/pitch/pitch_final_8.png";
+    const src = hideGoalPost ? "/pitch/scrummy-pitch-11.png" : "/pitch/scrummy-pitch-12.png";
+    
     return (
         <div className={twMerge(
             "min-h-[500px] md:max-h-[700px] lg:max-h-[900px] overflow-clip w-full flex flex-col items-center justify-center",
             className
         )} >
 
-            <img src="/pitch/pitch_final_8.png" className={twMerge(
+            <img src={src} className={twMerge(
                 "min-w-[140%] max-w-[100px]",
                 "md:min-w-[670px] lg:min-w-[650px] lg:max-w-[200px] h-fit",
                 pitchClassName
