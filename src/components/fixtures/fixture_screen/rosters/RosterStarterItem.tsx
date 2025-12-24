@@ -44,6 +44,8 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
                         teamId={item.team_id}
                         className="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 w-16 h-16 hover:bg-green-400"
                         useBaseClassNameForJersey={false}
+                        jerseyClassName="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 w-20 h-20 hover:bg-green-400"
+                        
                     />
                 </Activity>
 
