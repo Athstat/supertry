@@ -9,7 +9,7 @@ import { useTabView } from '../shared/tabs/TabView';
 
 import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
-import { TeamFormation3D } from '../team/TeamFormation';
+import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
 import TeamBenchDrawer from './my-team/TeamBenchDrawer';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
@@ -91,7 +91,7 @@ export default function CreateTeamView() {
       <CreateTeamViewHeader />
 
       <div className='relative' >
-        <TeamFormation3D
+        <FantasyTeamFormation3D
           onPlayerClick={handleOpenActionModal}
           marginCN='mt-0'
           firstRowMargin='mt-8'

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
-import { TeamFormation3D } from '../../team/TeamFormation';
+import { FantasyTeamFormation3D } from '../../team/FantasyTeamFormation';
 import { PlayerActionModal } from '../../team/PlayerActionModal';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import PointsBreakdownModal from '../../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal';
@@ -80,7 +80,7 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
 
 
         {leagueRound && starters.length > 0 && (
-          <TeamFormation3D marginCN='mt-0' firstRowMargin='mt-8 md:mt-10' onPlayerClick={handlePlayerClick} />
+          <FantasyTeamFormation3D marginCN='mt-0' firstRowMargin='mt-8 md:mt-10' onPlayerClick={handlePlayerClick} />
         )}
 
         {/* Super Substitute */}

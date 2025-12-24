@@ -4,6 +4,8 @@ import { RugbyPitch3DRaster } from '../shared/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 import { useFantasyLeagueTeam } from '../fantasy-leagues/my-team/FantasyLeagueTeamProvider';
 import { twMerge } from 'tailwind-merge';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { IFantasyLeagueTeamSlot } from '../../types/fantasyLeagueTeam';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -12,7 +14,7 @@ interface TeamFormationProps {
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
+export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
 
   const { slots, leagueRound: round } = useFantasyLeagueTeam();
 
@@ -30,14 +32,14 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
       });
   }, [slots]);
 
-  // const getSlot = (slotNum: number, callback: (slot: IFantasyLeagueTeamSlot) => ReactNode) => {
-  //   const slot = slots.find((s) => s.slotNumber === slotNum);
-  //   if (slot) {
-  //     return callback(slot);
-  //   }
+  const getSlot = (slotNum: number, callback: (slot: IFantasyLeagueTeamSlot) => ReactNode) => {
+    const slot = slots.find((s) => s.slotNumber === slotNum);
+    if (slot) {
+      return callback(slot);
+    }
 
-  //   return null;
-  // }
+    return null;
+  }
 
   if (!round) {
     return;
@@ -57,22 +59,12 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
           'flex mt-20 flex-row items-center gap-4 justify-center',
           firstRowMargin
         )} >
+
           {firstRowSlots.map((s) => {
-
-            const { athlete } = s;
-
-            if (!athlete) {
-              return (
-                <EmptySlotPitchCard
-                  slot={s}
-                />
-              )
-            };
-
             return (
-              <PlayerPitchCard
-                player={athlete}
-                onClick={onPlayerClick}
+              <SlotCard
+                slot={s}
+                onPlayerClick={onPlayerClick}
                 key={s.slotNumber}
                 round={round}
               />
@@ -83,21 +75,10 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
 
         <div className='flex flex-row items-center gap-3 justify-center' >
           {lastRowSlots.map((s) => {
-
-            const { athlete } = s;
-            
-            if (!athlete) {
-              return (
-                <EmptySlotPitchCard
-                  slot={s}
-                />
-              )
-            };
-
             return (
-              <PlayerPitchCard
-                player={athlete}
-                onClick={onPlayerClick}
+              <SlotCard
+                slot={s}
+                onPlayerClick={onPlayerClick}
                 key={s.slotNumber}
                 round={round}
               />
@@ -112,34 +93,34 @@ export function TeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: Tea
   );
 }
 
-// type SlotCardProps = {
-//   slot: IFantasyLeagueTeamSlot,
-//   onPlayerClick?: (player: IFantasyTeamAthlete) => void,
-//   round?: IFantasyLeagueRound,
-//   className?: string
-// }
+type SlotCardProps = {
+  slot: IFantasyLeagueTeamSlot,
+  onPlayerClick?: (player: IFantasyTeamAthlete) => void,
+  round?: IFantasyLeagueRound,
+  className?: string
+}
 
-// function SlotCard({ slot, onPlayerClick, round }: SlotCardProps) {
-//   const { athlete } = slot;
+function SlotCard({ slot, onPlayerClick, round }: SlotCardProps) {
+  const { athlete } = slot;
 
-//   if (!athlete) {
-//     return (
-//       <EmptySlotPitchCard
-//         slot={slot}
-//       />
-//     )
-//   };
+  if (!athlete) {
+    return (
+      <EmptySlotPitchCard
+        slot={slot}
+      />
+    )
+  };
 
-//   if (!round) {
-//     return null;
-//   }
+  if (!round) {
+    return null;
+  }
 
-//   return (
-//     <PlayerPitchCard
-//       player={athlete}
-//       onClick={onPlayerClick}
-//       key={s.slotNumber}
-//       round={round}
-//     />
-//   )
-// }
+  return (
+    <PlayerPitchCard
+      player={athlete}
+      onClick={onPlayerClick}
+      key={slot.slotNumber}
+      round={round}
+    />
+  )
+}
