@@ -5,7 +5,6 @@ import { LoadingState } from '../components/ui/LoadingState';
 import { boxScoreService } from '../services/boxScoreService';
 import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
-import FixtureChat from '../components/fixtures/FixtureChat';
 import GameHighlightsCard from '../components/video/GameHighlightsCard';
 import { ProMotmVotingBox } from '../components/pro/motm';
 import { ErrorState } from '../components/ui/ErrorState';
@@ -139,10 +138,6 @@ function Content() {
 
             <TabViewPage className='p-0 px-0' tabKey="rosters">
               <FixtureRostersTab fixture={fixture} />
-            </TabViewPage>
-
-            <TabViewPage tabKey="chat">
-              <FixtureChat fixture={fixture} />
             </TabViewPage>
 
             <TabViewPage tabKey="standings" className='px-4'>

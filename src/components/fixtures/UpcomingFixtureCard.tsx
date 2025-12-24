@@ -21,7 +21,7 @@ export function UpcomingFixtureCard({ fixture, onClickPredict }: Props) {
   const { push } = useRouter();
 
   const handleClickChat = () => {
-    push(`/fixtures/${fixture.game_id}#chat`);
+    push(`/fixtures/${fixture.game_id}`);
   };
 
   const handleClickPredict = () => {
