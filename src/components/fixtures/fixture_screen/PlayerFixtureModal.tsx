@@ -525,12 +525,15 @@ function MatchPointsBreakdown({ sportActions }: MatchPointsBreakdownProps) {
                         );
                     })}
                 </div>
+
+                <FantasyPointsInfoModal
+                    isOpen={showPointsInfo}
+                    onClose={() => setShowPointsInfo(false)}
+                />
+                
             </div>
 
-            <FantasyPointsInfoModal
-                isOpen={showPointsInfo}
-                onClose={() => setShowPointsInfo(false)}
-            />
+
         </>
     );
 }

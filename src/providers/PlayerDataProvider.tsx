@@ -6,7 +6,6 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { Fragment, ReactNode, useEffect, useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete';
 import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
-import { teamPlayersProfileCacheAtom, teamPlayersSeasonsCacheAtom, } from '../state/playerProfileCache.atoms';
 import { playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom, playerSelectedFixtureAtom, showPlayerScoutingActionsModalAtom } from '../state/player.atoms';
 
 type Props = {
