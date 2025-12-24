@@ -33,7 +33,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
   return (
     <div className="relative w-full mt-10  flex flex-col justify-center">
 
-      <RugbyPitch3DRaster hideGoalPost className={twMerge(
+      <RugbyPitch3DRaster className={twMerge(
         'mt-12',
         marginCN
       )} />
