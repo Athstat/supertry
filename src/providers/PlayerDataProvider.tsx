@@ -13,11 +13,12 @@ type Props = {
   player: IProAthlete | IFantasyTeamAthlete;
   onClose?: () => void;
   loadingFallback?: ReactNode,
-  errorFallback?: ReactNode
+  errorFallback?: ReactNode,
+  shouldRefetch?: boolean
 };
 
 /** Provides a players data and stats down to child components */
-export default function PlayerDataProvider({ children, player, onClose, loadingFallback, errorFallback }: Props) {
+export default function PlayerDataProvider({ children, player, onClose, loadingFallback, errorFallback, shouldRefetch }: Props) {
   const atoms = [
     playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom,
     playerSelectedFixtureAtom, showPlayerScoutingActionsModalAtom
@@ -25,25 +26,25 @@ export default function PlayerDataProvider({ children, player, onClose, loadingF
 
   return (
     <ScopeProvider atoms={atoms}>
-      <ProviderInner errorFallback={errorFallback} player={player} onClose={onClose} loadingFallback={loadingFallback} >
+      <ProviderInner errorFallback={errorFallback} shouldRefetch={shouldRefetch} player={player} onClose={onClose} loadingFallback={loadingFallback} >
         {children}
       </ProviderInner>
     </ScopeProvider>
   );
 }
 
-function ProviderInner({ children, player, loadingFallback, errorFallback }: Props) {
+function ProviderInner({ children, player, loadingFallback, errorFallback, shouldRefetch: shouldRefetchPlayer }: Props) {
   const setPlayer = useSetAtom(playerAtom);
   const setSeasons = useSetAtom(playerSeasonsAtom);
 
-  const shouldFetch = true;
+  const shouldFetchSeason = true;
 
-  const seasonFetchKey = shouldFetch ? swrFetchKeys.getAthleteSeasons(player.tracking_id) : null;
+  const seasonFetchKey = shouldFetchSeason ? swrFetchKeys.getAthleteSeasons(player.tracking_id) : null;
   const { data: seasons, isLoading: loadingSeasons } = useSWR(seasonFetchKey, () =>
     djangoAthleteService.getAthleteSeasons(player.tracking_id)
   );
 
-  const playerKey = shouldFetch ? swrFetchKeys.getAthleteById(player.tracking_id) : null;
+  const playerKey = shouldRefetchPlayer ? swrFetchKeys.getAthleteById(player.tracking_id) : null;
   const { data: fetchedPlayer, isLoading: loadingPlayer } = useSWR(playerKey, () =>
     djangoAthleteService.getAthleteById(player.tracking_id)
   );

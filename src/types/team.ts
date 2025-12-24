@@ -59,7 +59,7 @@ export type TeamSeasonLeader = {
   athstat_lastname: string,
   power_rank_rating: number,
   position: string,
-  nationality?: string | null,
+  nationality?: string,
   price: number,
   team_id: string
 }

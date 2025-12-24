@@ -9,16 +9,17 @@ import SecondaryText from "../../shared/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";
+import { IProAthlete } from "../../../types/athletes";
 
 type Props = {
     fixture: IFixture,
-    onPlayerClick?: (player: TeamSeasonLeader) => void
+    onPlayerClick?: (player: IProAthlete) => void
 }
 
 export default function FixtureSeasonLeaders({ fixture, onPlayerClick }: Props) {
 
     const { team, opposition_team } = fixture;
-    const {matchFinal} = fixtureSummary(fixture);
+    const { matchFinal } = fixtureSummary(fixture);
     const { leaders: leaders1, isLoading: loadingHome } = useTeamSeasonLeaders(team?.athstat_id, fixture.league_id);
     const { leaders: leaders2, isLoading: loadingAway } = useTeamSeasonLeaders(opposition_team?.athstat_id, fixture.league_id);
 
@@ -40,7 +41,7 @@ export default function FixtureSeasonLeaders({ fixture, onPlayerClick }: Props) 
     return (
         <RoundedCard className={"p-4 dark:border-none flex flex-col gap-4"}>
             <div className="flex flex-row px-8 items-center justify-between" >
-                
+
                 <div className="flex flex-row flex-1 items-center justify-start" >
                     <TeamLogo
                         url={fixture.team?.image_url}
@@ -111,7 +112,7 @@ type StatLeaderItemProps = {
     team1Leaders: TeamSeasonLeader[],
     team2Leaders: TeamSeasonLeader[],
     actionNames: string[],
-    onClick?: (player: TeamSeasonLeader) => void
+    onClick?: (player: IProAthlete) => void
 }
 
 function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: StatLeaderItemProps) {
@@ -148,15 +149,21 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: S
     }
 
     const handleClickPlayer = (leader: TeamSeasonLeader) => {
-       if (onClick) {
-           onClick(leader);
-       }
+        if (onClick) {
+
+            const playerInfoObj: IProAthlete = {
+                tracking_id: leader.athlete_id,
+                ...leader
+            } 
+
+            onClick(playerInfoObj);
+        }
     }
 
     if (!leader1 || !leader2) {
         return null;
     }
-    
+
 
 
     return (
