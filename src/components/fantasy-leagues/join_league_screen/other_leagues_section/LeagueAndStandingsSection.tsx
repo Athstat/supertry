@@ -11,7 +11,6 @@ import RoundedCard from "../../../shared/RoundedCard"
 import SecondaryText from "../../../shared/SecondaryText"
 import { useUserJoinedLeagues } from "../../../../hooks/leagues/useUserJoinedLeagues"
 import OtherLeaguesSection from "./OtherLeaguesSection"
-import Experimental from "../../../shared/ab_testing/Experimental"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -100,11 +99,9 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 })}
             </div>
 
-            <Experimental>
-                <OtherLeaguesSection
-                    fantasySeason={fantasySeason}
-                />
-            </Experimental>
+            <OtherLeaguesSection
+                fantasySeason={fantasySeason}
+            />
 
             {leagues.length === 0 && (
                 <NoContentCard

@@ -17,7 +17,7 @@ export default function OtherLeaguesSection({ fantasySeason }: Props) {
     const { joinableLeagues: leagues, isLoading } = useJoinableLeagues(fantasySeason.id);
 
     const trimmedList = useMemo(() => {
-        return [...leagues].slice(0, 3);
+        return [...leagues].slice(0, 5);
     }, [leagues]);
 
     if (isLoading) {
