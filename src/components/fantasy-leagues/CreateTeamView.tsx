@@ -19,7 +19,7 @@ import { PlayerActionModal } from '../team/PlayerActionModal';
 
 export default function CreateTeamView() {
 
-  const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
+  const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap, slots } = useCreateFantasyTeam();
 
 
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
@@ -30,8 +30,16 @@ export default function CreateTeamView() {
   useHideBottomNavBar();
 
   const excludePlayers = useMemo(() => {
-    return swapPlayer ? [swapPlayer] : []
-  }, [swapPlayer])
+    const alreadySelectedPlayers: IFantasyTeamAthlete[] = [];
+
+    slots.forEach((s) => {
+      if (s.athlete && s.athlete.tracking_id !== swapPlayer?.tracking_id) {
+        alreadySelectedPlayers.push(s.athlete);
+      }
+    })
+
+    return swapPlayer ? [swapPlayer, ...alreadySelectedPlayers] : [...alreadySelectedPlayers]
+  }, [slots, swapPlayer])
 
   const onClosePickerModal = () => {
     cancelSwap();
