@@ -11,6 +11,7 @@ import RoundedCard from "../../../shared/RoundedCard"
 import SecondaryText from "../../../shared/SecondaryText"
 import { useUserJoinedLeagues } from "../../../../hooks/leagues/useUserJoinedLeagues"
 import OtherLeaguesSection from "./OtherLeaguesSection"
+import Experimental from "../../../shared/ab_testing/Experimental"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -20,7 +21,7 @@ type Props = {
 export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     const navigate = useNavigate();
-    const {leagues, isLoading} = useUserJoinedLeagues(fantasySeason.id);
+    const { leagues, isLoading } = useUserJoinedLeagues(fantasySeason.id);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [initTab, setInitTab] = useState<"join" | "create">("create");
@@ -95,9 +96,11 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 })}
             </div>
 
-            <OtherLeaguesSection 
-                fantasySeason={fantasySeason}
-            />
+            <Experimental>
+                <OtherLeaguesSection
+                    fantasySeason={fantasySeason}
+                />
+            </Experimental>
 
             {leagues.length === 0 && (
                 <NoContentCard
