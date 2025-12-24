@@ -1,31 +1,18 @@
-import { useEffect, useMemo } from 'react';
-import useSWR from 'swr';
+import { useEffect } from 'react';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
 import LeagueAndStandingsSection from '../fantasy-leagues/join_league_screen/other_leagues_section/LeagueAndStandingsSection';
 import ManageTeamCTA from '../fantasy-leagues/join_league_screen/showcase_section/ManageTeamCTA';
 import RoundedCard from '../shared/RoundedCard';
-import { swrFetchKeys } from '../../utils/swrKeys';
-import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
+import { useFeaturedLeague } from '../../hooks/leagues/useFeaturedLeague';
 
 type Props = {
   fantasySeason: IFantasySeason
 }
 
 /** Serves a dashboard for a fantasy season */
-export function FantasyCompetitionDashboard({ fantasySeason }: Props) {
+export function FantasySeasonDashboard({ fantasySeason }: Props) {
 
-  const key = swrFetchKeys.getFantasySeasonFeaturedGroup(fantasySeason.id);
-  const {data: fetchedFeatured, isLoading} = useSWR(key, () => fantasySeasonsService.getFeaturedLeagueGroups(fantasySeason.id));
-
-  const featuredGroup = useMemo(() => {
-    const res = (fetchedFeatured || []);
-
-    if (res.length > 0) {
-      return res[0];
-    }
-
-    return undefined;
-  }, [fetchedFeatured]);
+  const {featuredLeague: featuredGroup, isLoading} = useFeaturedLeague();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,7 +34,6 @@ export function FantasyCompetitionDashboard({ fantasySeason }: Props) {
       <LeagueAndStandingsSection
         fantasySeason={fantasySeason}
       />
-
 
     </div>
   );

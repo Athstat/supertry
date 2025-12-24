@@ -7,6 +7,7 @@ interface CoachTipProps {
   onDismiss: () => void;
 }
 
+/** Renders Coach Tip Component */
 export const CoachTip: React.FC<CoachTipProps> = ({ message, onDismiss }) => {
   return (
     <motion.div

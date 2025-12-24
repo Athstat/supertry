@@ -49,30 +49,18 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
         >
 
             {isTeamCaptain && (
-                <div className="absolute top-0 right-0 p-1" >
-                    <CaptainsArmBand className="font-black" />
+                <div className="absolute top-4 md:top-0 left-0 p-1" >
+                    <CaptainsArmBand className="font-black bg-yellow-500 dark:bg-yellow-500 text-black dark:text-black"  />
                 </div>
             )}
 
-            {/* {showAvailabilityWarning && (
-                <div className="absolute top-0 left-0 p-1" >
-                    <div className={twMerge(
-                        " dark:bg-yellow-300 bg-yellow-400 hover:bg-yellow-400  border-yellow-500 dark:border-yellow-500 w-6 h-6 rounded-md flex flex-col items-center justify-center",
-                    )} >
-                        <TriangleAlert className={twMerge(
-                            "w-3.5  text-yellow-600 dark:text-yellow-700 h-4",
-                        )} />
-                    </div>
-                </div>
-            )} */}
-
             <div
                 className={twMerge(
-                    'cursor-pointer rounded-lg ',
-                    "min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px]",
-                    'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col',
-                    player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
-                    !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
+                    'cursor-pointer',
+                    "min-h-[140px] max-h-[140px] min-w-[115px] max-w-[115px]",
+                    'md:min-h-[140px] md:max-h-[140px] md:min-w-[110px] md:max-w-[110px] flex flex-col',
+                    // player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
+                    // !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
                     // showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}
                 onClick={handleClick}
@@ -88,10 +76,11 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <TeamJersey
                             teamId={player.athlete_team_id}
                             useBaseClasses={false}
-                            className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
+                            className="h-[80px] object-cover  absolute -bottom-1"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
                             key={player.tracking_id}
+                            eclipseJersey
                         />
                     </div>
                     {/* )} */}
@@ -99,20 +88,19 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
 
                 <div className={twMerge(
-                    'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] rounded-lg bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
-                    "dark:from-slate-700 dark:to-slate-800 dark:text-white",
-                    'min-h-[50px] max-h-[50px]'
+                    'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
+                    "dark:from-white dark:to-white dark:text-black",
+                    'min-h-[40px] max-h-[40px]'
                 )} >
 
-                    <div className='flex px-2 h-[25px] md:h-[25px] flex-col items-center justify-center' >
-                        <p className=' text-[10px] md:text-[11px] font-semibold' >{player.athstat_firstname}</p>
+                    <div className='flex px-2 h-[22px] md:h-[22px] flex-col items-center justify-center' >
+                        <p className=' text-[12px] md:text-[12px] font-semibold text-nowrap max-w-[100px] truncate' >{player.athstat_lastname}</p>
                     </div>
 
                     <div className={twMerge(
-                        'flex rounded-b-lg flex-row h-[25px] md:h-[25px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
-                        "from-slate-200 to-slate-300",
+                        'flex flex-row h-[22px] md:h-[22px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
                         showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
-                        !showAvailabilityWarning && "dark:from-slate-600 dark:to-slate-700 dark:text-white",
+                        !showAvailabilityWarning && "from-[#011E5C] to-[#011E5C] dark:text-white text-white",
                     )} >
 
                         <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
@@ -125,9 +113,9 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                 </div>
             </div>
 
-            <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+            {/* <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
                 <p className="text-[10px] font-medium" >{formatPosition(player.position_class)}</p>
-            </div>
+            </div> */}
 
         </div>
 
@@ -142,8 +130,10 @@ type PlayerPointsScoreProps = {
 function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const isLocked = isLeagueRoundLocked(round);
-    const { isLoading, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
     const { league } = useFantasyLeagueGroup();
+
+    const isLoading = loadingScore;
 
     const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
         player.tracking_id,
@@ -172,16 +162,33 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const showScore = !isLoading && isLocked;
 
-    const showAvailabilityWarning = (isNotAvailable || isTeamNotPlaying) && !showScore;
-    const showNextMatchInfo = !showAvailabilityWarning && homeOrAway && opponent && !showScore;
+    const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
+    const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
 
     return (
         <>
+            <div className={twMerge(
+                "min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row",
+                isLoading && "animate-pulse"
+            )} >
 
-            <div className="min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row" >
+                
+                <Activity mode={isLoading ? "visible" : "hidden"} >
+                    <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
+
+                    </div>
+                </Activity>
+
                 <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
                     <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
                 </Activity>
+
+                {/* <Activity mode={showPrice ? "visible" : "hidden"} >
+                    <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
+                        <p className="text-[10px] md:text-[10px]" >{player.price}</p>
+                        <Coins className="text-yellow-500 w-2.5 h-2.5" />
+                    </div>
+                </Activity> */}
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
@@ -195,6 +202,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                         <p className='text-[10px] md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
                     </div>
                 </Activity>
+
             </div>
         </>
     )
@@ -242,7 +250,7 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
             </div> */}
 
             <div className="min-h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
-                
+
             </div>
         </div>
     );

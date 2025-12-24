@@ -1,5 +1,5 @@
 import { Fragment, useState, useMemo } from "react";
-import { useDashboard } from "../../../hooks/dashboard/useDashboard"
+import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons"
 import { useRoundGames } from "../../../hooks/fixtures/useRoundGames";
 import { IFixture } from "../../../types/games";
 import RoundedCard from "../../shared/RoundedCard";
@@ -9,7 +9,7 @@ import GameStoryModal from "./GameStoryModal";
 /** Renders an instagram like game stories carrousel component */
 export default function GameStoriesCarrousel() {
 
-  const { currentRound } = useDashboard();
+  const { currentRound } = useFantasySeasons();
   const { games: fetchedGames, isLoading } = useRoundGames(currentRound);
   
   const games = (fetchedGames.filter((g) => {

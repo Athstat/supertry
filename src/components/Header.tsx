@@ -1,14 +1,14 @@
-import { User } from 'lucide-react';
 import { Activity } from './shared/Activity';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ScrummyLogoHorizontal from './branding/scrummy_logo_horizontal';
 import { isInProduction } from '../utils/webUtils';
 import BetaTag from './branding/BetaTag';
-import NotificationsBell from './notifications/NotificationsBell';
+import NotificationsBellButton from './notifications/NotificationsBellButton';
 import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 import CompetitionSelector from './dashboard/CompetitionSelector';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
+import UserProfileButton from './auth/UserProfileButton';
 
 export function Header() {
   const navigate = useNavigate();
@@ -17,18 +17,9 @@ export function Header() {
 
   const isInQa = isInProduction() !== true;
 
-  const handleProfileClick = () => {
-    navigate('/profile');
-  };
-
-  const handleInAppMessages = () => {
-    navigate('/in-app-messages');
-  };
-
-  const isProfileActive = location.pathname === '/profile';
   const showCompetitionSelector =
-    // location.pathname === '/dashboard' || location.pathname.startsWith('/league');
-    location.pathname === '/dashboard';
+    location.pathname === '/dashboard' || location.pathname.startsWith('/league');
+    
 
   return (
     <Activity mode={topNavViewMode}>
@@ -57,19 +48,10 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-4">
-            <NotificationsBell onClick={handleInAppMessages} />
-
-            <button
-              onClick={handleProfileClick}
-              className={`p-2 transition-colors ${isProfileActive
-                ? 'text-primary-500'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
-                }`}
-              aria-label="Profile"
-            >
-              <User size={20} />
-            </button>
+            <NotificationsBellButton/>
+            <UserProfileButton />
           </div>
+
         </div>
       </header>
     </Activity>

@@ -9,7 +9,7 @@ import { useTabView } from '../shared/tabs/TabView';
 
 import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
-import { TeamFormation3D } from '../team/TeamFormation';
+import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
 import TeamBenchDrawer from './my-team/TeamBenchDrawer';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
@@ -19,7 +19,7 @@ import { PlayerActionModal } from '../team/PlayerActionModal';
 
 export default function CreateTeamView() {
 
-  const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap } = useCreateFantasyTeam();
+  const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap, slots } = useCreateFantasyTeam();
 
 
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
@@ -30,8 +30,16 @@ export default function CreateTeamView() {
   useHideBottomNavBar();
 
   const excludePlayers = useMemo(() => {
-    return swapPlayer ? [swapPlayer] : []
-  }, [swapPlayer])
+    const alreadySelectedPlayers: IFantasyTeamAthlete[] = [];
+
+    slots.forEach((s) => {
+      if (s.athlete && s.athlete.tracking_id !== swapPlayer?.tracking_id) {
+        alreadySelectedPlayers.push(s.athlete);
+      }
+    })
+
+    return swapPlayer ? [swapPlayer, ...alreadySelectedPlayers] : [...alreadySelectedPlayers]
+  }, [slots, swapPlayer])
 
   const onClosePickerModal = () => {
     cancelSwap();
@@ -91,7 +99,7 @@ export default function CreateTeamView() {
       <CreateTeamViewHeader />
 
       <div className='relative' >
-        <TeamFormation3D
+        <FantasyTeamFormation3D
           onPlayerClick={handleOpenActionModal}
           marginCN='mt-0'
           firstRowMargin='mt-8'

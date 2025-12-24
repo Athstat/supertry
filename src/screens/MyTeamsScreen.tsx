@@ -3,7 +3,6 @@ import { PlusCircle, Users, Loader, Shield } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fantasyTeamService } from "../services/fantasyTeamService";
 import useSWR from "swr";
-import { MyTeamsListCard } from "../components/my-team/list/MyTeamListCard";
 
 export function MyTeamsListScreen() {
   
@@ -110,9 +109,6 @@ export function MyTeamsListScreen() {
         <NoTeamsMessage />
       ) : (
         <div className="space-y-4">
-          {userTeams.map((team) => {
-            return <MyTeamsListCard team={team} />
-          })}
         </div>
       )}
     </main>

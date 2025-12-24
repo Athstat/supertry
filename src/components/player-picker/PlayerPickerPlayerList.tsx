@@ -249,7 +249,7 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
                 </div>
             )}
 
-            {list.length === 0 && (
+            {list.length === 0 && viewType === "scouting-list" && (
                 <div className="flex flex-1 w-full h-[150px] flex-col items-center justify-center gap-4" >
                     <SecondaryText className="text-center" >
                         {`Your scouting list is empty. When you add players to your scouting list, you will be able to see them here`}

@@ -1,50 +1,34 @@
 import { ChevronDown } from 'lucide-react';
-import { useAtom } from 'jotai';
-import { dashboardAtoms } from '../../state/dashboard/dashboard.atoms';
-import { useMemo } from 'react';
-import useSWR from 'swr';
-import { swrFetchKeys } from '../../utils/swrKeys';
-import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
+import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
+import { useDeferredValue, useEffect, useState } from 'react';
 
-// Helper function to abbreviate season names
-const abbreviateSeasonName = (name: string): string => {
-  // Handle "United Rugby Championship" -> "URC"
-  if (name.toLowerCase().includes('united rugby championship')) {
-    return name.replace(/united rugby championship 25\/26/i, 'URC');
-  }
-  return name;
-};
 
 export default function CompetitionSelector() {
-  const [selectedSeason, setSelectedSeason] = useAtom(dashboardAtoms.selectedDashboardSeasonAtom);
 
-  // Fetch fantasy seasons data directly
-  const seasonsKey = swrFetchKeys.getActiveFantasySeasons();
-  const {
-    data: fantasySeasons,
-    isLoading,
-    error,
-  } = useSWR(seasonsKey, () => fantasySeasonsService.getAllFantasySeasons(true));
+  const { fantasySeasons, selectedSeason, setSelectedSeason, isLoading } = useFantasySeasons();
 
-  // Use all active seasons (no filtering by fantasy_supported)
-  const availableSeasons = useMemo(() => {
-    if (!fantasySeasons) return [];
-    return fantasySeasons;
-  }, [fantasySeasons]);
+  const [seasonId, setSeasonId] = useState<string | undefined>(selectedSeason?.id);
+  const defferedSeasonId = useDeferredValue(seasonId);
+
+  const availableSeasons = fantasySeasons;
 
   const handleSeasonChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const seasonId = e.target.value;
-    const season = availableSeasons.find(s => s.id === seasonId);
-    if (season) {
-      setSelectedSeason(season);
+    const inputSeasonId = e.target.value;
+
+    if (inputSeasonId) {
+      setSeasonId(inputSeasonId);
     }
   };
 
-  // Use selected season or fall back to first available season
-  const displaySeason = selectedSeason || availableSeasons[0];
+  useEffect(() => {
+    setSelectedSeason(() => {
+      return availableSeasons.find((s) => s.id === defferedSeasonId);
+    })
+  }, [availableSeasons, defferedSeasonId, setSelectedSeason]);
 
   // Show loading skeleton ONLY while actively loading and no data yet
-  if (isLoading && !fantasySeasons) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center">
         <div className="relative">
@@ -55,22 +39,22 @@ export default function CompetitionSelector() {
   }
 
   // If error or no seasons available after loading, hide the selector
-  if (error || availableSeasons.length === 0) {
-    console.error('CompetitionSelector - Error or no available seasons:', error);
+  if (availableSeasons.length === 0) {
     return null;
   }
 
   return (
     <div className="flex justify-center items-center">
       <div className="relative">
+
         <select
-          value={displaySeason?.id || ''}
+          value={seasonId}
           onChange={handleSeasonChange}
           className="appearance-none dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-md font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
         >
           {availableSeasons.map(season => (
             <option key={season.id} value={season.id}>
-              {abbreviateSeasonName(season.name)}
+              {trimSeasonYear(season.name)}
             </option>
           ))}
         </select>
@@ -78,4 +62,15 @@ export default function CompetitionSelector() {
       </div>
     </div>
   );
+}
+
+
+export function trimSeasonYear(seasonName: string) {
+  const abbreviated = abbreviateSeasonName(seasonName);
+  if (seasonName.includes(" ") && abbreviated) {
+    const [seasonNamePart] = abbreviated.split(" ");
+    return seasonNamePart;
+  }
+
+  return abbreviated || seasonName;
 }

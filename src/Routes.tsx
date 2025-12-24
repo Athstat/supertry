@@ -3,7 +3,6 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import { SignUpScreen } from './screens/auth/SignUpScreen';
 import { SignInScreen } from './screens/auth/SignInScreen';
-import { AuthChoiceScreen } from './screens/auth/AuthChoiceScreen';
 import { ForgotPasswordScreen } from './screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
 import OnBoardingScreen from './screens/OnboardingScreen';
@@ -11,9 +10,6 @@ import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { FantasyScreen } from './screens/FantasyScreen';
 import { FantasyLeagueScreen } from './screens/LeagueScreen';
-import { MyTeamsListScreen } from './screens/MyTeamsScreen';
-import { TeamCreationScreen } from './screens/TeamCreationScreen';
-import { ReviewTeamScreen } from './screens/ReviewTeamScreen';
 import { UserProfileScreen } from './screens/UserProfileScreen';
 import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
 import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
@@ -38,7 +34,6 @@ import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
-import DashboardDataProvider from './components/dashboard/provider/DashboardDataProvider';
 import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 import OnboardingDataProvider from './providers/OnboardingDataProvider';
 import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
@@ -53,6 +48,7 @@ import { twMerge } from 'tailwind-merge';
 import { AppColours } from './types/constants';
 import FantasyLeagueGroupStandingsScreen from './screens/fantasy-leagues/FantasyLeagueGroupStandingsScreen';
 import PlayersByTeamScreens from './screens/players/PlayersByTeamScreens';
+import FantasyTopPerformersScreen from './screens/players/FantasyTopPerformersScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -107,14 +103,6 @@ const AppRoutes = () => {
         />
         <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
         <Route path="/reset-password" element={<ResetPasswordScreen />} />
-        <Route
-          path="/auth-choice"
-          element={
-            <AuthRoute>
-              <AuthChoiceScreen />
-            </AuthRoute>
-          }
-        />
 
         {/* Protected routes */}
         <Route
@@ -122,9 +110,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <DashboardDataProvider>
-                  <DashboardScreen />
-                </DashboardDataProvider>
+                <DashboardScreen />
               </Layout>
             </ProtectedRoute>
           }
@@ -167,39 +153,6 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <FantasyLeagueGroupStandingsScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/my-teams"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <MyTeamsListScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/:officialLeagueId/create-team"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <TeamCreationScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/review-team"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <ReviewTeamScreen />
               </Layout>
             </ProtectedRoute>
           }
@@ -288,6 +241,17 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <Layout>
                 <ScoutingListScreen />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/players/fantasy-top-performers"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FantasyTopPerformersScreen />
               </Layout>
             </ProtectedRoute>
           }

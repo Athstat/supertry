@@ -1,21 +1,13 @@
 import { Trophy } from 'lucide-react';
 import PageView from './PageView';
-import useSWR from 'swr';
-import { seasonService } from '../services/seasonsService';
 import { LoadingState } from '../components/ui/LoadingState';
 import SeasonCard from '../components/seasons/SeasonCard';
 import NoContentCard from '../components/shared/NoContentMessage';
-import { swrFetchKeys } from '../utils/swrKeys';
-import { useMemo } from 'react';
+import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 
 /** Renders Competition Screen */
 export default function CompetitionsScreen() {
-  const key = swrFetchKeys.getAllSuppportedSeasons();
-  const { data, isLoading } = useSWR(key, () => seasonService.getAllSupportedSeasons());
-
-  const seasons = useMemo(() => {
-    return data ?? [];
-  }, [data]);
+  const {fantasySeasons: seasons, isLoading} = useFantasySeasons();
 
   if (isLoading) return <LoadingState />;
 

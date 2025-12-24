@@ -1,5 +1,5 @@
-import { Fragment, useMemo, useState } from 'react';
-import { useDashboard } from '../../../hooks/dashboard/useDashboard';
+import { Fragment, useState } from 'react';
+import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import RoundedCard from '../../shared/RoundedCard';
 import { IProAthlete } from '../../../types/athletes';
@@ -7,10 +7,15 @@ import PlayerProfileModal from '../../player/PlayerProfileModal';
 import NoContentCard from '../../shared/NoContentMessage';
 import { PlayerRankingCard } from '../../players/ranking/PlayerRankingCard';
 import { useNavigate } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+import { queryParamKeys } from '../../../types/constants';
 
+type Props = {
+  className?: string
+}
 
-export default function FantasyPointsScoredPlayerList() {
-  const { currentSeason, currentRound, selectedSeason, seasonRounds } = useDashboard();
+export default function FantasyPointsScoredPlayerList({className} : Props) {
+  const { selectedSeason: finalSeason, scoringRound } = useFantasySeasons();
   const navigate = useNavigate();
 
   const [selectedPlayer, setSelectedPlayer] = useState<IProAthlete>();
@@ -18,42 +23,13 @@ export default function FantasyPointsScoredPlayerList() {
     setSelectedPlayer(undefined);
   };
 
-  const finalSeason = useMemo(() => {
-    return selectedSeason || currentSeason;
-  }, [currentSeason, selectedSeason]);
-
-  const previousRound = useMemo(() => {
-    if (currentRound && seasonRounds) {
-      return seasonRounds.find((r) => {
-        return r.round_number = currentRound.round_number - 1
-      });
-    }
-
-    return undefined;
-
-  }, [seasonRounds, currentRound]);
-
-  
-  const scoringRound = useMemo(() => {
-    const now = new Date();
-
-    const curr_kickoff = currentRound?.games_start ? new Date(currentRound?.games_start) : undefined
-
-    if (curr_kickoff && curr_kickoff.valueOf() <= now.valueOf()) {
-      return currentRound
-    }
-
-    return previousRound || currentRound;
-
-  }, [currentRound, previousRound]);
-
-
   const { rankings, isLoading } = useFantasyPointsRankings((finalSeason?.id ?? ''), 5, {
     round_number: scoringRound?.round_number
   });
 
   const handleViewMore = () => {
-    navigate('/players')
+    const queryParam = scoringRound?.round_number ? `?${queryParamKeys.ROUND_NUMBER_QUERY_KEY}=${scoringRound.round_number}` : '';
+    navigate(`/players/fantasy-top-performers${queryParam}`);
   }
 
   if (!finalSeason) {
@@ -70,7 +46,11 @@ export default function FantasyPointsScoredPlayerList() {
 
   return (
     <Fragment>
-      <RoundedCard className="rounded-xl overflow-hidden">
+      <RoundedCard className={twMerge(
+        "rounded-xl overflow-hidden",
+        className
+      )}>
+        
         {/* Title */}
         <div className="p-4">
           <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>

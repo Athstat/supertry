@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { useDashboard } from "../../../hooks/dashboard/useDashboard"
+import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons"
 import { useRoundGames } from "../../../hooks/fixtures/useRoundGames";
 import { IFixture } from "../../../types/games";
 import TeamLogo from "../../team/TeamLogo";
@@ -10,7 +10,7 @@ import { format } from "date-fns";
 /** Renders top fixture carrousel */
 export default function FixtureCarrousel() {
 
-    const { currentRound } = useDashboard();
+    const { currentRound } = useFantasySeasons();
     const { games, isLoading } = useRoundGames(currentRound);
 
     if (isLoading) {

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import DialogModal from '../shared/DialogModal';
 import InputField, { TextField } from '../shared/InputField';
 import LeagueVisibilityInput from './ui/LeagueVisibilityInput';
-import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
 import PrimaryButton from '../shared/buttons/PrimaryButton';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +9,9 @@ import { ErrorState } from '../ui/ErrorState';
 import TabView, { TabViewHeaderItem, TabViewPage } from '../shared/tabs/TabView';
 import JoinLeagueByCode from './JoinLeagueByCode';
 import SecondaryText from '../shared/SecondaryText';
-import { useFantasyLeaguesScreen } from '../../hooks/fantasy/useFantasyLeaguesScreen';
 import SeasonInput from './ui/SeasonInput';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 
 interface CreateLeagueModalProps {
   isOpen: boolean;
@@ -65,19 +64,17 @@ export default function CreateLeagueModal({ isOpen, onClose, initMode }: CreateL
 }
 
 function CreateLeagueForm() {
-  const { isLoading: loadingSupportedSeasons, fantasySupportedSeasons: seasons } = useSupportedSeasons();
 
   const navigate = useNavigate();
   const [isSubmiting, setSubmiting] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
 
-  const {selectedSeason} = useFantasyLeaguesScreen();
-
-  const isLoading = loadingSupportedSeasons;
+  const {selectedSeason, isLoading: loadingSeasons} = useFantasySeasons();
+  const isLoading = loadingSeasons;
 
   const [form, setForm] = useState<CreateLeagueForm>({
     title: '',
-    season_id: (selectedSeason ? selectedSeason?.id : undefined) ?? seasons.length > 0 ? seasons[0]?.id : 'c4c29ce1-8669-5f51-addc-cbed01ce9bd0',
+    season_id: selectedSeason?.id || "",
     is_private: false,
     description: ''
   });

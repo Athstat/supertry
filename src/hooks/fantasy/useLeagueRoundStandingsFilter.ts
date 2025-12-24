@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { getLeagueStandingsFilterItems } from "../../utils/standingsUtils";
 import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
 import { useQueryState } from "../useQueryState";
@@ -9,7 +9,7 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 export function useLeagueRoundStandingsFilter() {
 
     const { sortedRounds, scoringRound } = useFantasyLeagueGroup();
-    
+
     const defaultFilterVal = useMemo(() => {
         return scoringRound?.id || "overall"
     }, [scoringRound?.id]);
@@ -42,6 +42,14 @@ export function useLeagueRoundStandingsFilter() {
         })
 
     }, [roundFilterId, sortedRounds]);
+
+    useEffect(() => {
+        if (roundFilterId === undefined && scoringRound) {
+            setRoundFilterId(scoringRound.id);
+        }
+    }, [roundFilterId, scoringRound, setRoundFilterId]);
+
+    console.log("Round Filter ID ", roundFilterId);
 
 
     return {

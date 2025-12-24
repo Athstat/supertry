@@ -7,10 +7,7 @@ export function useInAppMessageCount() {
     const key = `/in-app-messages-count`;
     const { data, isLoading } = useSWR(
         key,
-        () => inAppMessagesServices.getCount(),
-        {
-            refreshInterval: 10
-        }
+        () => inAppMessagesServices.getCount()
     );
 
     const unread_count = useMemo(() => {

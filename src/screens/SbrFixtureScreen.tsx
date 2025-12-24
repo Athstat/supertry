@@ -15,7 +15,6 @@ import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "
 import { ScopeProvider } from "jotai-scope";
 import { useAtomValue } from "jotai";
 import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
-import SbrFixtureChat from "../components/sbr/fixture/SbrFixtureChat";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { sbrService } from "../services/sbr/sbrService";
@@ -87,11 +86,6 @@ function SbrFixtureScreenContent() {
         },
 
         {
-            label: "Chat",
-            tabKey: "chat"
-        },
-
-        {
             label: "Top Dawg",
             tabKey: "motm"
         }
@@ -151,9 +145,6 @@ function SbrFixtureScreenContent() {
                         <SbrMotmVotingBox fixture={fixture} />
                     </TabViewPage>
 
-                    <TabViewPage tabKey="chat" >
-                        <SbrFixtureChat fixture={fixture} />
-                    </TabViewPage>
                 </TabView>
             </PageView>
         </div>

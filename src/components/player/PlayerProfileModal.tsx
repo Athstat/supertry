@@ -9,7 +9,7 @@ import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataPro
 import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
-import PlayerFixtureModal from '../fixtures/fixture_screen/PlayerFixtureModal';
+import PlayerMatchModal from '../fixtures/fixture_screen/PlayerFixtureModal';
 import PlayerScoutingActionModal from '../scouting/PlayerScoutingActionModal';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import RoundedCard from '../shared/RoundedCard';
@@ -68,7 +68,7 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
        
     >
       <Activity mode={isOpen ? "visible" : "hidden"} >
-        <div ref={ref} className='w-fit' >
+        <div className='w-fit' >
           <BottomSheetView
 
             className={twMerge(
@@ -116,7 +116,7 @@ function PlayerFixtureModalWrapper() {
   return (
     <>
       {selectedFixture && player && <div className="absolute top-0 left-0 right-0 h-screen" >
-        <PlayerFixtureModal
+        <PlayerMatchModal
           player={player}
           fixture={selectedFixture}
           isOpen={Boolean(selectedFixture)}
@@ -168,7 +168,13 @@ function DefaultLoadingSkeleton({ onClose }: LoadingProps) {
 
         hideHandle
       >
-        <RoundedCard className="animate-pulse bg-slate-200 dark:bg-slate-700 border-none h-[200px]"></RoundedCard>
+        <RoundedCard className="animate-pulse relative bg-slate-200 dark:bg-slate-700 border-none h-[200px]"></RoundedCard>
+
+        <div className='absolute top-0 right-0 p-2' >
+          <CircleButton onClick={onClose} className='dark:bg-slate-600 dark:hover:bg-slate-600' >
+            <X />
+          </CircleButton>
+        </div>
 
         <div className="flex flex-row px-4 justify-between">
           <div className="flex flex-col gap-2">

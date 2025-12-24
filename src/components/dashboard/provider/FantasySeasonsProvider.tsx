@@ -1,29 +1,27 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { fantasySeasonsAtom } from '../../../state/fantasy/fantasyLeagueScreen.atoms';
-import { dashboardAtoms } from '../../../state/dashboard/dashboard.atoms';
+import { fantasySeasonsAtoms } from '../../../state/dashboard/dashboard.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { seasonService } from '../../../services/seasonsService';
 import { logger } from '../../../services/logger';
-import PageView from '../../../screens/PageView';
-import RoundedCard from '../../shared/RoundedCard';
-
 import { useDebounced } from '../../../hooks/useDebounced';
-import { Activity } from '../../shared/Activity';
 
 type Props = {
   children?: ReactNode;
 };
 
-export default function DashboardDataProvider({ children }: Props) {
+/** renders a Provider that provides Fantasy Seasons to its children */
+export default function FantasySeasonsProvider({ children }: Props) {
   const atoms = [
     fantasySeasonsAtom,
-    dashboardAtoms.currentSeasonAtom,
-    dashboardAtoms.currentSeasonRoundAtom,
-    dashboardAtoms.seasonRoundsAtom,
+    fantasySeasonsAtoms.currentSeasonAtom,
+    fantasySeasonsAtoms.currentSeasonRoundAtom,
+    fantasySeasonsAtoms.seasonRoundsAtom,
+    fantasySeasonsAtoms.isFantasySeasonsLoadingAtom
   ];
 
   return (
@@ -35,9 +33,10 @@ export default function DashboardDataProvider({ children }: Props) {
 
 function InnerProvider({ children }: Props) {
   const [fantasySeasons, setFantasySeasons] = useAtom(fantasySeasonsAtom);
-  const [currentSeason, setCurrentSeason] = useAtom(dashboardAtoms.currentSeasonAtom);
-  const [seasonRounds, setSeasonRounds] = useAtom(dashboardAtoms.seasonRoundsAtom);
-  const [, setCurrentRound] = useAtom(dashboardAtoms.currentSeasonRoundAtom);
+  const [currentSeason, setCurrentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
+  const [seasonRounds, setSeasonRounds] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
+  const [, setCurrentRound] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
+  const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
   const seasonsKey = swrFetchKeys.getActiveFantasySeasons();
   const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
@@ -49,8 +48,12 @@ function InnerProvider({ children }: Props) {
     seasonService.getSeasonRounds(currentSeason?.id ?? '')
   );
 
-  const isLoading = loadingRounds || loadingSeasons;
-  const isLoadingDebounced = useDebounced(isLoading, 500);
+  const isFetching = loadingRounds || loadingSeasons;
+  const isFetchingDebounced = useDebounced(isFetching, 500);
+
+  useEffect(() => {
+    setLoading(isFetchingDebounced);
+  }, [isFetchingDebounced, setLoading]);
 
   useEffect(() => {
     if (seasonsFetched) {
@@ -66,6 +69,7 @@ function InnerProvider({ children }: Props) {
 
   useEffect(() => {
     if (roundsFetched) {
+      console.log("Season Rounds ", roundsFetched);
       setSeasonRounds(roundsFetched);
     }
   }, [roundsFetched, setSeasonRounds]);
@@ -95,33 +99,7 @@ function InnerProvider({ children }: Props) {
 
   return (
     <Fragment>
-      <Activity mode={isLoadingDebounced ? 'hidden' : 'visible'}>{children}</Activity>
-
-      <Activity mode={isLoadingDebounced ? 'visible' : 'hidden'}>
-        <LoadingSkeleton />
-      </Activity>
+      {children}
     </Fragment>
-  );
-}
-
-function LoadingSkeleton() {
-  return (
-    <PageView className="flex flex-col space-y-4 p-4">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-row items-center gap-2">
-          <RoundedCard className=" bg-slate-200 dark:bg-gray-800 h-[50px] w-[50px] border-none animate-pulse" />
-          <RoundedCard className=" bg-slate-200 dark:bg-gray-800 h-[40px] w-[200px] border-none animate-pulse" />
-        </div>
-
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[200px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[50px] border-none animate-pulse" />
-
-        <RoundedCard className=" bg-slate-200 dark:bg-gray-800 mt-5 h-[30px] w-[200px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-        <RoundedCard className="w-full bg-slate-200 dark:bg-gray-800 h-[150px] border-none animate-pulse" />
-      </div>
-    </PageView>
   );
 }

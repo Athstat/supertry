@@ -1,40 +1,64 @@
-import { Users, ChevronRight } from 'lucide-react';
+import { Users } from 'lucide-react';
+import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
+import RoundedCard from './shared/RoundedCard';
+import PrimaryButton from './shared/buttons/PrimaryButton';
+import useSWR from 'swr';
+import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
+import { useCallback, useMemo } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
 
 interface JoinLeagueCardProps {
-  name: string;
-  entryFee: string;
-  prizePool: string;
-  players: number;
-  maxPlayers: number;
+  leagueGroup: FantasyLeagueGroup
 }
 
-export function JoinLeagueCard({ name, entryFee, prizePool, players, maxPlayers }: JoinLeagueCardProps) {
+export function JoinLeagueCard({ leagueGroup }: JoinLeagueCardProps) {
+
+  const key = `/league-group/${leagueGroup.id}/league-group-members/`;
+  const {data, isLoading} = useSWR(key, () => fantasyLeagueGroupsService.getGroupMembers(leagueGroup.id));
+
+  const {handleJoinLeague: onJoin, isLoading: isJoining} = useJoinLeague();
+
+  const memberCount = useMemo(() => {
+    return (data || []).length;
+  }, [data])
+
+  const name = leagueGroup.title;
+
+  const handleJoin = useCallback(() => {
+    const nextUrl = `/league/${leagueGroup.id}/standings`;
+
+    onJoin(
+      leagueGroup,
+      nextUrl
+    );
+
+  }, [leagueGroup, onJoin])
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-indigo-600 transition-all">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="text-lg font-semibold mb-1">{name}</h3>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Users size={16} />
-            <span>{players}/{maxPlayers} players</span>
+    <RoundedCard className='py-2 px-4 dark:border-none ' >
+
+      <div className={twMerge(
+        "flex flex-row items-center justify-between",
+        isLoading && "opacity-0"
+      )}>
+
+        <div className='flex flex-col gap-1' >
+          <h3 className="text-sm">{name}</h3>
+
+          <div className="flex items-center gap-1 text-sm text-gray-400">
+            <Users className='w-4 h-4' />
+            <span className='text-xs' >Players {memberCount}</span>
           </div>
         </div>
-        <div className="text-right">
-          <div className="text-sm text-gray-600">Entry Fee</div>
-          <div className="font-semibold">{entryFee}</div>
-        </div>
+
+        <PrimaryButton onClick={handleJoin} isLoading={isJoining} className="w-fit text-white py-1.5 px-2 text-xs font-medium transition-colors flex items-center">
+          Join
+          {/* <ChevronRight className='w-4 h-4' /> */}
+        </PrimaryButton>
+
       </div>
-      
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="text-sm text-gray-600">Prize Pool</div>
-          <div className="font-semibold text-green-600">{prizePool}</div>
-        </div>
-        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors flex items-center gap-1">
-          Join Now
-          <ChevronRight size={16} />
-        </button>
-      </div>
-    </div>
+
+    </RoundedCard>
   );
 }

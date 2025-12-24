@@ -1,19 +1,16 @@
 import { Bell } from "lucide-react";
 import { useInAppMessageCount } from "../../hooks/notifications/useInAppMessageCount";
 import { twMerge } from "tailwind-merge";
+import { useNavigate } from "react-router-dom";
 
-type Props = {
-    onClick?: () => void
-}
 
-export default function NotificationsBell({ onClick }: Props) {
+export default function NotificationsBellButton() {
 
-    const {unread_count} = useInAppMessageCount();
+    const navigate = useNavigate();
+    const { unread_count } = useInAppMessageCount();
 
     const handleClick = () => {
-        if (onClick) {
-            onClick()
-        }
+        navigate('/in-app-messages');
     }
 
     return (

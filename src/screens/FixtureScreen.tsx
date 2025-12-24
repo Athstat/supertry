@@ -5,7 +5,6 @@ import { LoadingState } from '../components/ui/LoadingState';
 import { boxScoreService } from '../services/boxScoreService';
 import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
-import FixtureChat from '../components/fixtures/FixtureChat';
 import GameHighlightsCard from '../components/video/GameHighlightsCard';
 import { ProMotmVotingBox } from '../components/pro/motm';
 import { ErrorState } from '../components/ui/ErrorState';
@@ -21,7 +20,7 @@ import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureSt
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
 import { FixtureScreenProvider } from '../providers/fixtures/FixtureScreenProvider';
 import { useFixtureScreen } from '../hooks/fixtures/useFixture';
-import PlayerFixtureModal from '../components/fixtures/fixture_screen/PlayerFixtureModal';
+import PlayerMatchModal from '../components/fixtures/fixture_screen/PlayerFixtureModal';
 import PlayerProfileModal from '../components/player/PlayerProfileModal';
 
 export default function FixtureScreen() {
@@ -141,10 +140,6 @@ function Content() {
               <FixtureRostersTab fixture={fixture} />
             </TabViewPage>
 
-            <TabViewPage tabKey="chat">
-              <FixtureChat fixture={fixture} />
-            </TabViewPage>
-
             <TabViewPage tabKey="standings" className='px-4'>
               <FixtureStandingsTab fixture={fixture} />
             </TabViewPage>
@@ -153,7 +148,7 @@ function Content() {
       )}
 
       {showPlayerMatchModal && selectedPlayer && (
-        <PlayerFixtureModal
+        <PlayerMatchModal
           fixture={fixture}
           player={selectedPlayer}
           isOpen={showPlayerMatchModal}

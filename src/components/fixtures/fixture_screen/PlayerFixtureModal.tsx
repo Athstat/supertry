@@ -206,7 +206,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                                 />
 
                                 <StatCard
-                                    label="Points Scored"
+                                    label="Game Points"
                                     value={sanitizeStat(pointsScored?.action_count)}
                                     className="flex-1"
                                 />
@@ -525,12 +525,15 @@ function MatchPointsBreakdown({ sportActions }: MatchPointsBreakdownProps) {
                         );
                     })}
                 </div>
+
+                <FantasyPointsInfoModal
+                    isOpen={showPointsInfo}
+                    onClose={() => setShowPointsInfo(false)}
+                />
+                
             </div>
 
-            <FantasyPointsInfoModal
-                isOpen={showPointsInfo}
-                onClose={() => setShowPointsInfo(false)}
-            />
+
         </>
     );
 }

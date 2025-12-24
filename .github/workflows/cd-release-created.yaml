@@ -114,7 +114,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "*Release Notes:*\n${{ github.event.release.body }}"
+                      "text": ${{ toJson(format('*Release Notes:*\\n{0}', github.event.release.body || 'No release notes provided')) }}
                     }
                   },
                   {

@@ -10,7 +10,9 @@ import { IFixture } from '../../types/games';
 function initAmplitude() {
   try {
     const apiKey = import.meta.env.VITE_AMPLITUDE_API_KEY;
-    if (apiKey) {
+    const ignoreApiKey = apiKey === "dummy-api-key";
+
+    if (apiKey && !ignoreApiKey) {
       amplitude.init(apiKey, {
         defaultTracking: true,
       });

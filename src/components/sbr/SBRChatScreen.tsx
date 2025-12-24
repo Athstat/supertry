@@ -1,5 +1,4 @@
 import { Users } from 'lucide-react';
-import SchoolBoyRugbyChat from './SchoolBoyRugbyChat';
 
 export default function SbrChatTab() {
 
@@ -15,7 +14,6 @@ export default function SbrChatTab() {
                 <MessageCircle />
                 <h1 className='text-2xl font-bold' >SBR Chat</h1>
             </div> */}
-            <SchoolBoyRugbyChat />
         </div>
     )
 }

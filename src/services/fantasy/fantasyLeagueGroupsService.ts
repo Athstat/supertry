@@ -47,10 +47,10 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
-    getDiscoverLeagues: async (): Promise<FantasyLeagueGroup[]> => {
-        try {
-
-            const uri = getUri(`/api/v1/fantasy-league-groups/discover`);
+    getDiscoverLeagues: async (seasonId?: string): Promise<FantasyLeagueGroup[]> => {
+        try { 
+            const params = seasonId ? `?season_id=${seasonId}` : ""
+            const uri = getUri(`/api/v1/fantasy-league-groups/discover${params}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });

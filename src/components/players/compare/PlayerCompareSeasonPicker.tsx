@@ -12,6 +12,11 @@ export const abbreviateSeasonName = (seasonName: string): string => {
     if (seasonName.startsWith("Investec Champions Cup")) {
         return seasonName.replace("Investec Champions Cup", "Invest Cup");
     }
+
+    if (seasonName.startsWith("Womens Rugby World Cup")) {
+        return seasonName.replace("Womens Rugby World Cup", "WRC");
+    }
+    
     return seasonName;
 };
 
@@ -43,7 +48,7 @@ export default function PlayerCompareSeasonPicker({ seasons, currSeason, setCurr
         if (currSeason === undefined) {
             setCurrSeason(seasons[0]);
         }
-    }, [currSeason, seasons]);
+    }, [currSeason, seasons, setCurrSeason]);
 
     const handleSeasonSelect = (season: IProSeason) => {
         setCurrSeason(season);
