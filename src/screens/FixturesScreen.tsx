@@ -2,21 +2,22 @@ import PageView from './PageView';
 import { useQueryState } from '../hooks/useQueryState';
 import ProMatchCenterList from '../components/match_center/ProMatchCenterList';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
-import { Fragment, useState, useEffect, useDeferredValue, Activity } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useProFixtures } from '../hooks/fixtures/useProFixtures';
 import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
 import PickEmCardSkeleton from '../components/fixtures/PickEmCardSkeleton';
 import { LoadingState } from '../components/ui/LoadingState';
 import FixtureSearchResults from '../components/fixtures/fixtures_list/FixtureSearchResults';
 import ProMatchCenterHeader from '../components/match_center/ProMatchCenterHeader';
+import { useDebounced } from '../hooks/useDebounced';
 
 export default function FixturesScreen() {
 
-  const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
-  const defferedSearchQuery = useDeferredValue(searchQuery);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const defferedSearchQuery = useDebounced(searchQuery, 200);
 
   const [viewParam] = useQueryState<string>('view', { init: '' });
-  
+
   const [viewMode, setViewMode] = useState<'fixtures' | 'pickem'>(
     viewParam === 'pickem' ? 'pickem' : 'fixtures'
   );
@@ -57,7 +58,7 @@ export default function FixturesScreen() {
     <Fragment>
       <PageView className="dark:text-white lg:w-[60%] p-4 md:p-6 flex flex-col gap-4 pb-28 md:pb-32">
 
-        <ProMatchCenterHeader 
+        <ProMatchCenterHeader
           viewMode={viewMode}
           onMoveNextWeek={handleNextWeek}
           onMovePreviousWeek={handlePreviousWeek}
@@ -68,25 +69,22 @@ export default function FixturesScreen() {
           weekHeader={weekHeader}
         />
 
-        <Activity mode={defferedSearchQuery ? "hidden" : "visible"} >
-          <div className="w-full mx-auto">
-            <ProMatchCenterList
-              searchQuery={defferedSearchQuery}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-              onMoveNextWeek={handleNextWeek}
-              displayFixtures={weekFixtures}
-              hasAnyFixtures={hasAnyFixtures}
-            />
-          </div>
-        </Activity>
-
-        <Activity mode={defferedSearchQuery ? "visible" : "hidden"} >
-          <FixtureSearchResults
+        {!defferedSearchQuery && <div className="w-full mx-auto">
+          <ProMatchCenterList
             searchQuery={defferedSearchQuery}
             viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            onMoveNextWeek={handleNextWeek}
+            displayFixtures={weekFixtures}
+            hasAnyFixtures={hasAnyFixtures}
           />
-        </Activity>
+        </div>}
+
+        {defferedSearchQuery && <FixtureSearchResults
+          searchQuery={defferedSearchQuery}
+          viewMode={viewMode}
+        />}
+
       </PageView>
 
       <FloatingSearchBar
