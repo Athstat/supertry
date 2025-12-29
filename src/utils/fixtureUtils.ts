@@ -1,4 +1,4 @@
-import { endOfDay, startOfDay, startOfWeek, endOfWeek, getWeek, getYear, format, addDays, subDays, add } from 'date-fns';
+import { endOfDay, startOfDay, startOfWeek, endOfWeek, getWeek, getYear, format, addDays, subDays } from 'date-fns';
 import { IFixture } from '../types/games';
 import { ISbrFixture } from '../types/sbr';
 import { IProAthlete } from '../types/athletes';
@@ -348,7 +348,6 @@ export function getWeekDateRange(weekNumber: number, year: number): { start: Dat
 
 /** Format week header: "Week 45, 27 Oct - 2 Nov" */
 export function formatWeekHeader(
-  weekNumber: number,
   dateRange: { start: Date; end: Date }
 ): string {
   const startFormatted = format(dateRange.start, 'd MMM yy');
@@ -524,25 +523,29 @@ export function findPreviousWeekWithSbrFixtures<T extends { kickoff_time?: Date 
 /** Find the closest week with fixtures (checks current, then forward, then backward) */
 export function findClosestWeekWithFixtures(
   fixtures: IFixture[],
-  startWeek: number,
-  startYear: number
-): { weekNumber: number; year: number } | null {
+  pivotDate: Date
+): Date | null | undefined {
+
+  const weekStart = startOfWeek(pivotDate ? new Date(pivotDate) : new Date());
+  const weekEnd = endOfWeek(pivotDate ? new Date(pivotDate) : new Date());
+
   // First check if current week has fixtures
-  const currentWeekFixtures = getFixturesForWeek(fixtures, startWeek, startYear);
+  const currentWeekFixtures = getFixturesForWeek(fixtures, weekStart, weekEnd);
+
   if (currentWeekFixtures.length > 0) {
-    return { weekNumber: startWeek, year: startYear };
+    return pivotDate;
   }
 
   // Try finding next week with fixtures
-  const nextWeek = findNextWeekPivotWithFixtures(fixtures, startWeek, startYear, 26);
-  if (nextWeek) {
-    return nextWeek;
+  const nextWeekPivot = findNextWeekPivotWithFixtures(fixtures, pivotDate, 114);
+  if (nextWeekPivot) {
+    return nextWeekPivot;
   }
 
   // Fallback to previous week with fixtures
-  const previousWeek = findPreviousWeekPivotWithFixtures(fixtures, startWeek, startYear, 26);
-  if (previousWeek) {
-    return previousWeek;
+  const previousWeekPivot = findPreviousWeekPivotWithFixtures(fixtures, pivotDate, 114);
+  if (previousWeekPivot) {
+    return previousWeekPivot;
   }
 
   return null;

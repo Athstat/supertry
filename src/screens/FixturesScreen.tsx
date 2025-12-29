@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useCallback } from 'react';
+import { Fragment, useState, useEffect, useMemo, useDeferredValue } from 'react';
 import PageView from './PageView';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useQueryState } from '../hooks/useQueryState';
@@ -6,73 +6,73 @@ import ProMatchCenter from '../components/match_center/ProMatchCenter';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import SegmentedControl from '../components/ui/SegmentedControl';
 import { format } from 'date-fns';
-import { findNextWeekPivotWithFixtures, findPreviousWeekPivotWithFixtures, formatWeekHeader } from '../utils/fixtureUtils';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
-import { useWeekCursor } from '../hooks/navigation/useWeekCursor';
 import { useProFixtures } from '../hooks/fixtures/useProFixtures';
+import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
+import { searchProFixturePredicate } from '../utils/fixtureUtils';
+import PickEmCardSkeleton from '../components/fixtures/PickEmCardSkeleton';
+import { LoadingState } from '../components/ui/LoadingState';
 
 export default function FixturesScreen() {
 
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
+  const defferedSearchQuery = useDeferredValue(searchQuery);
+  
   const [viewParam] = useQueryState<string>('view', { init: '' });
   const [viewMode, setViewMode] = useState<'fixtures' | 'pickem'>(
     viewParam === 'pickem' ? 'pickem' : 'fixtures'
   );
 
+  const { fixtures, isLoading } = useProFixtures();
+
   const {
-    weekEnd, weekStart, isCurrentWeek,
-    moveNextWeek, movePreviousWeek, reset, pivotDate,
-    switchPivot
-  } = useWeekCursor();
-
-  const {fixtures, isLoading} = useProFixtures();
-
-  const weekHeader = formatWeekHeader(0, {
-    start: weekStart, end: weekEnd
+    handleJumpToCurrentWeek, handleNextWeek, handlePreviousWeek,
+    weekStart, weekHeader, hasNextWeek, hasPreviousWeek,
+    hasAnyFixtures, isCurrentWeek, weekFixtures
+  } = useFixtureCursor({
+    fixtures, isLoading, initDateVal: new Date(2023, 1, 1)
   });
 
-  const handlePreviousWeek = useCallback(() => {
+  const searchedFixtures = fixtures.filter(f => {
+    return defferedSearchQuery ? searchProFixturePredicate(defferedSearchQuery, f) : true;
+  });
 
-    const previousPivot = findPreviousWeekPivotWithFixtures(fixtures, pivotDate, 114);
+  const displayFixtures = useMemo(() => {
 
-    if (previousPivot) {
-      switchPivot(previousPivot);
-      return;
+    if (defferedSearchQuery) {
+      return searchedFixtures.sort((a, b) => {
+        const aDate = new Date(a.kickoff_time ?? new Date());
+        const bDate = new Date(b.kickoff_time ?? new Date());
+        return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
+      })
     }
 
-    movePreviousWeek();
-  }, [fixtures, movePreviousWeek, pivotDate, switchPivot])
+    return weekFixtures;
 
-  const handleNextWeek = useCallback(() => {
-    const nextPivot = findNextWeekPivotWithFixtures(fixtures, pivotDate, 114);
-
-    if (nextPivot) {
-      switchPivot(nextPivot);
-      return;
-    }
-
-    moveNextWeek()
-  }, [fixtures, moveNextWeek, pivotDate, switchPivot])
-
-  const handleJumpToCurrentWeek = () => {
-    reset();
-  };
-
-  // Check if navigation buttons should be disabled
-  // const hasPreviousWeek =
-  //   findPreviousWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
-  // const hasNextWeek = findNextWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
-
-  const hasPreviousWeek = true;
-  const hasNextWeek = true;
-
-  const hasAnyFixtures = fixtures.length > 0;
+  }, [defferedSearchQuery, searchedFixtures, weekFixtures]);
 
   // Scroll to top when date range changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [weekStart]);
+
+  if (isLoading) {
+    // Show different loading states based on view mode
+    if (viewMode === 'pickem') {
+      return (
+        <div className="flex flex-col gap-3 w-full">
+          {[...Array(5)].map((_, index) => (
+            <PickEmCardSkeleton
+              key={index}
+              className="rounded-xl border w-full dark:border-slate-700"
+            />
+          ))}
+        </div>
+      );
+    }
+    return <LoadingState />;
+  }
 
   return (
     <Fragment>
@@ -145,14 +145,11 @@ export default function FixturesScreen() {
         <div className="w-full mx-auto">
           <ProMatchCenter
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
             viewMode={viewMode}
             onViewModeChange={setViewMode}
-            weekEnd={weekEnd}
-            weekStart={weekStart}
             onMoveNextWeek={handleNextWeek}
-            isLoading={isLoading}
-            fixtures={fixtures}
+            displayFixtures={displayFixtures}
+            hasAnyFixtures={hasAnyFixtures}
           />
         </div>
       </PageView>
@@ -167,3 +164,4 @@ export default function FixturesScreen() {
     </Fragment>
   );
 }
+
