@@ -4,7 +4,10 @@ import { useCallback, useMemo, useState } from "react";
 /** Hook that allows you to move inbetween different weeks */
 export function useWeekCursor() {
 
-    const today = new Date();
+    const today = useMemo(() => {
+        return new Date();
+    }, []);
+    
     const [pivotDate, setPivotDate] = useState(today);
 
     const weekStart = useMemo(() => {
@@ -52,8 +55,13 @@ export function useWeekCursor() {
     const isCurrentWeek = useMemo(() => {
         const todayWeekStart = startOfWeek(today);
         return isSameDay(weekStart, todayWeekStart);
-    }, [today, weekStart])
+    }, [today, weekStart]);
 
+    const switchPivot = (newPivot: Date) => {
+        if (newPivot) {
+            setPivotDate(newPivot);
+        }
+    }
 
     return {
         today,
@@ -63,6 +71,7 @@ export function useWeekCursor() {
         weekEnd,
         weekStart,
         reset,
-        isCurrentWeek
+        isCurrentWeek,
+        switchPivot
     }
 }

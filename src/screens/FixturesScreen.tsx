@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useCallback } from 'react';
 import PageView from './PageView';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useQueryState } from '../hooks/useQueryState';
@@ -6,52 +6,56 @@ import ProMatchCenter from '../components/match_center/ProMatchCenter';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import SegmentedControl from '../components/ui/SegmentedControl';
 import { format } from 'date-fns';
-import { formatWeekHeader } from '../utils/fixtureUtils';
+import { findNextWeekPivotWithFixtures, findPreviousWeekPivotWithFixtures, formatWeekHeader } from '../utils/fixtureUtils';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
 import { useWeekCursor } from '../hooks/navigation/useWeekCursor';
-import { IFixture } from '../types/games';
+import { useProFixtures } from '../hooks/fixtures/useProFixtures';
 
 export default function FixturesScreen() {
+
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
   const [viewParam] = useQueryState<string>('view', { init: '' });
   const [viewMode, setViewMode] = useState<'fixtures' | 'pickem'>(
     viewParam === 'pickem' ? 'pickem' : 'fixtures'
   );
 
-  // Week state management
-  const {weekEnd, weekStart, isCurrentWeek, moveNextWeek, movePreviousWeek, reset} = useWeekCursor();
-  const [fixtures, setFixtures] = useState<IFixture[]>([]);
+  const {
+    weekEnd, weekStart, isCurrentWeek,
+    moveNextWeek, movePreviousWeek, reset, pivotDate,
+    switchPivot
+  } = useWeekCursor();
+
+  const {fixtures, isLoading} = useProFixtures();
 
   const weekHeader = formatWeekHeader(0, {
     start: weekStart, end: weekEnd
   });
 
-  const handlePreviousWeek = () => {
-    // const previousWeek = findPreviousWeekWithFixtures(fixtures, selectedWeek, selectedYear);
-    // if (previousWeek) {
-    //   setSelectedWeek(previousWeek.weekNumber);
-    //   setSelectedYear(previousWeek.year);
-    // }
+  const handlePreviousWeek = useCallback(() => {
+
+    const previousPivot = findPreviousWeekPivotWithFixtures(fixtures, pivotDate, 114);
+
+    if (previousPivot) {
+      switchPivot(previousPivot);
+      return;
+    }
 
     movePreviousWeek();
-  };
+  }, [fixtures, movePreviousWeek, pivotDate, switchPivot])
 
-  const handleNextWeek = () => {
-    // const nextWeek = findNextWeekWithFixtures(fixtures, selectedWeek, selectedYear);
-    // if (nextWeek) {
-    //   setSelectedWeek(nextWeek.weekNumber);
-    //   setSelectedYear(nextWeek.year);
-    // }
+  const handleNextWeek = useCallback(() => {
+    const nextPivot = findNextWeekPivotWithFixtures(fixtures, pivotDate, 114);
+
+    if (nextPivot) {
+      switchPivot(nextPivot);
+      return;
+    }
 
     moveNextWeek()
-  };
+  }, [fixtures, moveNextWeek, pivotDate, switchPivot])
 
   const handleJumpToCurrentWeek = () => {
-    // const current = getCurrentWeek();
-    // setSelectedWeek(current.weekNumber);
-    // setSelectedYear(current.year);
-
     reset();
   };
 
@@ -60,8 +64,8 @@ export default function FixturesScreen() {
   //   findPreviousWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
   // const hasNextWeek = findNextWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
 
-    const hasPreviousWeek = true;
-    const hasNextWeek = true;
+  const hasPreviousWeek = true;
+  const hasNextWeek = true;
 
   const hasAnyFixtures = fixtures.length > 0;
 
@@ -144,10 +148,11 @@ export default function FixturesScreen() {
             onSearchChange={setSearchQuery}
             viewMode={viewMode}
             onViewModeChange={setViewMode}
-            onFixturesLoad={setFixtures}
             weekEnd={weekEnd}
             weekStart={weekStart}
             onMoveNextWeek={handleNextWeek}
+            isLoading={isLoading}
+            fixtures={fixtures}
           />
         </div>
       </PageView>

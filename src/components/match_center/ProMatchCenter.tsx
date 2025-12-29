@@ -1,19 +1,15 @@
-import useSWR from 'swr';
-import { gamesService } from '../../services/gamesService';
 import { LoadingState } from '../ui/LoadingState';
 import FixtureCard from '../fixtures/FixtureCard';
 import PickEmCard from '../fixtures/PickEmCard';
 import PickEmCardSkeleton from '../fixtures/PickEmCardSkeleton';
 import NoContentCard from '../shared/NoContentMessage';
-import { searchProFixturePredicate } from '../../utils/fixtureUtils';
+import { getFixturesForWeek, searchProFixturePredicate } from '../../utils/fixtureUtils';
 import { ChevronRight } from 'lucide-react';
 import { IFixture } from '../../types/games';
 import { useEffect, useMemo } from 'react';
 import {
   getCurrentWeek,
-  getFixturesForWeek,
   findClosestWeekWithFixtures,
-  findNextWeekWithFixtures,
 } from '../../utils/fixtureUtils';
 
 // Competition priority order
@@ -60,28 +56,24 @@ type Props = {
   weekStart: Date,
   weekEnd: Date,
   onMoveNextWeek: () => void,
-  onFixturesLoad: (fixtures: IFixture[]) => void;
+  fixtures: IFixture[],
+  isLoading: boolean
 };
 
 export default function ProMatchCenter({
   searchQuery,
   viewMode,
-  onFixturesLoad,
   onMoveNextWeek,
   weekStart,
-  weekEnd
+  weekEnd,
+  fixtures,
+  isLoading
 }: Props) {
-  const key = 'pro-fixtures';
-  const { data, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
-
-  const fixtures = useMemo(() => {
-    return data || [];
-  }, [data]);
 
   // Update to closest week with fixtures when component mounts or fixtures load
   useEffect(() => {
     if (fixtures && fixtures.length > 0) {
-      onFixturesLoad(fixtures);
+      // onFixturesLoad(fixtures);
       const current = getCurrentWeek();
       const closestWeek = findClosestWeekWithFixtures(fixtures, current.weekNumber, current.year);
       if (closestWeek) {
@@ -89,7 +81,7 @@ export default function ProMatchCenter({
         // setSelectedYear(closestWeek.year);
       }
     }
-  }, [fixtures, fixtures.length, onFixturesLoad]);
+  }, [fixtures, fixtures.length]);
 
 
   // Filter by search first
@@ -107,19 +99,7 @@ export default function ProMatchCenter({
       })
     }
 
-    return fixtures.filter((f) => {
-      const kickoff = f.kickoff_time ? new Date(f.kickoff_time) : undefined;
-
-      if (!kickoff) {
-        return undefined;
-      }
-
-      return (kickoff.valueOf() >= weekStart.valueOf()) && (kickoff.valueOf() <= weekEnd.valueOf());
-    }).sort((a, b) => {
-      const aDate = new Date(a.kickoff_time ?? new Date());
-      const bDate = new Date(b.kickoff_time ?? new Date());
-      return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
-    })
+    return getFixturesForWeek(fixtures, weekStart, weekEnd);
 
   }, [fixtures, searchQuery, searchedFixtures, weekEnd, weekStart])
 
