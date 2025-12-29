@@ -2,7 +2,7 @@ import FixtureCard from '../fixtures/FixtureCard';
 import PickEmCard from '../fixtures/PickEmCard';
 import NoContentCard from '../shared/NoContentMessage';
 import { ChevronRight } from 'lucide-react';
-import { IFixture } from '../../types/games';
+import { FixtureListViewMode, IFixture } from '../../types/games';
 
 // Competition priority order
 const COMPETITION_PRIORITY: Record<string, number> = {
@@ -42,8 +42,8 @@ function sortCompetitions(competitions: string[]): string[] {
 
 type Props = {
   searchQuery: string;
-  viewMode: 'fixtures' | 'pickem';
-  onViewModeChange: (mode: 'fixtures' | 'pickem') => void;
+  viewMode: FixtureListViewMode;
+  onViewModeChange: (mode: FixtureListViewMode) => void;
   onMoveNextWeek: () => void,
   displayFixtures: IFixture[],
   hasAnyFixtures?: boolean
