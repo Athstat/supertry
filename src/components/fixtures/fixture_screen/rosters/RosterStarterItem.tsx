@@ -79,7 +79,7 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
                 {pr && (
                     <div className="absolute top-0 right-0" >
                         <SmallMatchPrCard 
-                            pr={pr.updated_power_ranking}
+                        pr={pr.updated_power_ranking}
                         />
                     </div>
                 )}

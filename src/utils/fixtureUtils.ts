@@ -350,8 +350,8 @@ export function getWeekDateRange(weekNumber: number, year: number): { start: Dat
 export function formatWeekHeader(
   dateRange: { start: Date; end: Date }
 ): string {
-  const startFormatted = format(dateRange.start, 'd MMM yy');
-  const endFormatted = format(dateRange.end, 'd MMM yy');
+  const startFormatted = format(dateRange.start, 'dd MMM');
+  const endFormatted = format(dateRange.end, 'dd MMM');
 
   return `${startFormatted} - ${endFormatted}`;
 }
