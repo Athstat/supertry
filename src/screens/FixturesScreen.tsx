@@ -67,6 +67,7 @@ export default function FixturesScreen() {
           isCurrentWeek={isCurrentWeek}
           onChangeViewMode={setViewMode}
           weekHeader={weekHeader}
+          searchQuery={defferedSearchQuery}
         />
 
         {!defferedSearchQuery && <div className="w-full mx-auto">
