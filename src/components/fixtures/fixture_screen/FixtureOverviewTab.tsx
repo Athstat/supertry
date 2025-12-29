@@ -43,7 +43,7 @@ export default function FixtureOverviewTab({ fixture }: Props) {
 
                 {fixture.kickoff_time && <div className="flex flex-row gap-2 items-center justify-start" >
                     <Calendar className="w-5 h-5" />
-                    <p>{format(fixture.kickoff_time, "EEEE MMMM yyyy")} ᐧ {format(fixture.kickoff_time, "HH:mm")}</p>
+                    <p>{format(fixture.kickoff_time, "EEEE d MMMM yyyy")} ᐧ {format(fixture.kickoff_time, "HH:mm")}</p>
                 </div>}
 
                 {fixture.venue && <div className="flex flex-row gap-2 items-center justify-start" >
