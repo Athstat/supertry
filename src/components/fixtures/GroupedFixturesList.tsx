@@ -13,7 +13,7 @@ type Props = {
 }
 
 /** Groups Fixtures into dates and renders them by date, with an optionable pickem card view */
-export default function GroupedFixturesList({ fixtures, search, generateMessage, descendingOrder, viewMode }: Props) {
+export default function GroupedFixturesList({ fixtures, viewMode }: Props) {
 
     const groupedFixtures = groupFixturesByCompetition(fixtures);
     const competitions = sortCompetitions(Array.from(groupedFixtures.keys()));

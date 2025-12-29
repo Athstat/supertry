@@ -42,7 +42,7 @@ export default function FixtureSearchResults({ searchQuery, viewMode }: Props) {
     }, [fixtures, isLoading, searchQuery]);
 
     const isBuffering = isLoading || isProcessing;
-    const hasAnyFixtures = results.length;
+    const hasAnyFixtures = results.length > 0;
 
     return (
         <div>

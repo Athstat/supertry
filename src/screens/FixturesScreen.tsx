@@ -1,24 +1,24 @@
-import { Fragment, useState, useEffect, useMemo, useDeferredValue } from 'react';
 import PageView from './PageView';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useQueryState } from '../hooks/useQueryState';
 import ProMatchCenter from '../components/match_center/ProMatchCenter';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import SegmentedControl from '../components/ui/SegmentedControl';
+import { Fragment, useState, useEffect, useDeferredValue, Activity } from 'react';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
 import { useProFixtures } from '../hooks/fixtures/useProFixtures';
 import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
-import { searchProFixturePredicate } from '../utils/fixtureUtils';
 import PickEmCardSkeleton from '../components/fixtures/PickEmCardSkeleton';
 import { LoadingState } from '../components/ui/LoadingState';
+import FixtureSearchResults from '../components/fixtures/fixtures_list/FixtureSearchResults';
 
 export default function FixturesScreen() {
 
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
   const defferedSearchQuery = useDeferredValue(searchQuery);
-  
+
   const [viewParam] = useQueryState<string>('view', { init: '' });
   const [viewMode, setViewMode] = useState<'fixtures' | 'pickem'>(
     viewParam === 'pickem' ? 'pickem' : 'fixtures'
@@ -33,24 +33,6 @@ export default function FixturesScreen() {
   } = useFixtureCursor({
     fixtures, isLoading
   });
-
-  const searchedFixtures = fixtures.filter(f => {
-    return defferedSearchQuery ? searchProFixturePredicate(defferedSearchQuery, f) : true;
-  });
-
-  const displayFixtures = useMemo(() => {
-
-    if (defferedSearchQuery) {
-      return searchedFixtures.sort((a, b) => {
-        const aDate = new Date(a.kickoff_time ?? new Date());
-        const bDate = new Date(b.kickoff_time ?? new Date());
-        return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
-      })
-    }
-
-    return weekFixtures;
-
-  }, [defferedSearchQuery, searchedFixtures, weekFixtures]);
 
   // Scroll to top when date range changes
   useEffect(() => {
@@ -100,7 +82,7 @@ export default function FixturesScreen() {
           <div className="flex flex-row items-center justify-between gap-2">
             <div className="flex flex-col gap-1">
               <h2 className="font-semibold text-base md:text-lg">
-                {searchQuery ? 'Search Results' : weekHeader}
+                {defferedSearchQuery ? `Search Results for '${defferedSearchQuery}'` : weekHeader}
               </h2>
               {!searchQuery && (
                 <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -142,16 +124,25 @@ export default function FixturesScreen() {
           </div>
         </div>
 
-        <div className="w-full mx-auto">
-          <ProMatchCenter
+        <Activity mode={searchQuery ? "hidden" : "visible"} >
+          <div className="w-full mx-auto">
+            <ProMatchCenter
+              searchQuery={searchQuery}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              onMoveNextWeek={handleNextWeek}
+              displayFixtures={weekFixtures}
+              hasAnyFixtures={hasAnyFixtures}
+            />
+          </div>
+        </Activity>
+
+        <Activity mode={searchQuery ? "visible" : "hidden"} >
+          <FixtureSearchResults
             searchQuery={searchQuery}
             viewMode={viewMode}
-            onViewModeChange={setViewMode}
-            onMoveNextWeek={handleNextWeek}
-            displayFixtures={displayFixtures}
-            hasAnyFixtures={hasAnyFixtures}
           />
-        </div>
+        </Activity>
       </PageView>
 
       <FloatingSearchBar

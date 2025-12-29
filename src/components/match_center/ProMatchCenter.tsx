@@ -62,8 +62,6 @@ export default function ProMatchCenter({
     onMoveNextWeek();
   };
 
-
-
   return (
     <div className="flex flex-col gap-6 w-full">
       {!hasAnyFixtures && !searchQuery && <NoContentCard message="No fixtures available" />}
