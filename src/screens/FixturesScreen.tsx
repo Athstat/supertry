@@ -6,15 +6,11 @@ import ProMatchCenter from '../components/match_center/ProMatchCenter';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import SegmentedControl from '../components/ui/SegmentedControl';
 import { format } from 'date-fns';
-import {
-  getCurrentWeek,
-  getWeekDateRange,
-  formatWeekHeader,
-  findNextWeekWithFixtures,
-  findPreviousWeekWithFixtures,
-} from '../utils/fixtureUtils';
+import { formatWeekHeader } from '../utils/fixtureUtils';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
+import { useWeekCursor } from '../hooks/navigation/useWeekCursor';
+import { IFixture } from '../types/games';
 
 export default function FixturesScreen() {
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
@@ -24,52 +20,55 @@ export default function FixturesScreen() {
   );
 
   // Week state management
-  const currentWeek = getCurrentWeek();
-  const [selectedWeek, setSelectedWeek] = useState(currentWeek.weekNumber);
-  const [selectedYear, setSelectedYear] = useState(currentWeek.year);
-  const [fixtures, setFixtures] = useState<any[]>([]);
+  const {weekEnd, weekStart, isCurrentWeek, moveNextWeek, movePreviousWeek, reset} = useWeekCursor();
+  const [fixtures, setFixtures] = useState<IFixture[]>([]);
 
-  // Check if we're on current week
-  const isCurrentWeek =
-    selectedWeek === currentWeek.weekNumber && selectedYear === currentWeek.year;
-
-  // Get date range for header
-  const dateRange = getWeekDateRange(selectedWeek, selectedYear);
-  const weekHeader = formatWeekHeader(selectedWeek, dateRange);
+  const weekHeader = formatWeekHeader(0, {
+    start: weekStart, end: weekEnd
+  });
 
   const handlePreviousWeek = () => {
-    const previousWeek = findPreviousWeekWithFixtures(fixtures, selectedWeek, selectedYear);
-    if (previousWeek) {
-      setSelectedWeek(previousWeek.weekNumber);
-      setSelectedYear(previousWeek.year);
-    }
+    // const previousWeek = findPreviousWeekWithFixtures(fixtures, selectedWeek, selectedYear);
+    // if (previousWeek) {
+    //   setSelectedWeek(previousWeek.weekNumber);
+    //   setSelectedYear(previousWeek.year);
+    // }
+
+    movePreviousWeek();
   };
 
   const handleNextWeek = () => {
-    const nextWeek = findNextWeekWithFixtures(fixtures, selectedWeek, selectedYear);
-    if (nextWeek) {
-      setSelectedWeek(nextWeek.weekNumber);
-      setSelectedYear(nextWeek.year);
-    }
+    // const nextWeek = findNextWeekWithFixtures(fixtures, selectedWeek, selectedYear);
+    // if (nextWeek) {
+    //   setSelectedWeek(nextWeek.weekNumber);
+    //   setSelectedYear(nextWeek.year);
+    // }
+
+    moveNextWeek()
   };
 
   const handleJumpToCurrentWeek = () => {
-    const current = getCurrentWeek();
-    setSelectedWeek(current.weekNumber);
-    setSelectedYear(current.year);
+    // const current = getCurrentWeek();
+    // setSelectedWeek(current.weekNumber);
+    // setSelectedYear(current.year);
+
+    reset();
   };
 
   // Check if navigation buttons should be disabled
-  const hasPreviousWeek =
-    findPreviousWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
-  const hasNextWeek = findNextWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
+  // const hasPreviousWeek =
+  //   findPreviousWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
+  // const hasNextWeek = findNextWeekWithFixtures(fixtures, selectedWeek, selectedYear) !== null;
+
+    const hasPreviousWeek = true;
+    const hasNextWeek = true;
 
   const hasAnyFixtures = fixtures.length > 0;
 
   // Scroll to top when date range changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [selectedWeek, selectedYear]);
+  }, [weekStart]);
 
   return (
     <Fragment>
@@ -145,11 +144,10 @@ export default function FixturesScreen() {
             onSearchChange={setSearchQuery}
             viewMode={viewMode}
             onViewModeChange={setViewMode}
-            selectedWeek={selectedWeek}
-            selectedYear={selectedYear}
-            setSelectedWeek={setSelectedWeek}
-            setSelectedYear={setSelectedYear}
             onFixturesLoad={setFixtures}
+            weekEnd={weekEnd}
+            weekStart={weekStart}
+            onMoveNextWeek={handleNextWeek}
           />
         </div>
       </PageView>

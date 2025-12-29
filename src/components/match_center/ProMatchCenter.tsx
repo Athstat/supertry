@@ -57,21 +57,19 @@ type Props = {
   onSearchChange: (query: string) => void;
   viewMode: 'fixtures' | 'pickem';
   onViewModeChange: (mode: 'fixtures' | 'pickem') => void;
-  selectedWeek: number;
-  selectedYear: number;
-  setSelectedWeek: (week: number) => void;
-  setSelectedYear: (year: number) => void;
+  weekStart: Date,
+  weekEnd: Date,
+  onMoveNextWeek: () => void,
   onFixturesLoad: (fixtures: IFixture[]) => void;
 };
 
 export default function ProMatchCenter({
   searchQuery,
   viewMode,
-  selectedWeek,
-  selectedYear,
-  setSelectedWeek,
-  setSelectedYear,
   onFixturesLoad,
+  onMoveNextWeek,
+  weekStart,
+  weekEnd
 }: Props) {
   const key = 'pro-fixtures';
   const { data, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
@@ -87,11 +85,56 @@ export default function ProMatchCenter({
       const current = getCurrentWeek();
       const closestWeek = findClosestWeekWithFixtures(fixtures, current.weekNumber, current.year);
       if (closestWeek) {
-        setSelectedWeek(closestWeek.weekNumber);
-        setSelectedYear(closestWeek.year);
+        // setSelectedWeek(closestWeek.weekNumber);
+        // setSelectedYear(closestWeek.year);
       }
     }
-  }, [fixtures, fixtures.length, onFixturesLoad, setSelectedWeek, setSelectedYear]);
+  }, [fixtures, fixtures.length, onFixturesLoad]);
+
+
+  // Filter by search first
+  const searchedFixtures = fixtures.filter(f => {
+    return searchQuery ? searchProFixturePredicate(searchQuery, f) : true;
+  });
+
+  const displayFixtures = useMemo(() => {
+
+    if (searchQuery) {
+      return searchedFixtures.sort((a, b) => {
+        const aDate = new Date(a.kickoff_time ?? new Date());
+        const bDate = new Date(b.kickoff_time ?? new Date());
+        return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
+      })
+    }
+
+    return fixtures.filter((f) => {
+      const kickoff = f.kickoff_time ? new Date(f.kickoff_time) : undefined;
+
+      if (!kickoff) {
+        return undefined;
+      }
+
+      return (kickoff.valueOf() >= weekStart.valueOf()) && (kickoff.valueOf() <= weekEnd.valueOf());
+    }).sort((a, b) => {
+      const aDate = new Date(a.kickoff_time ?? new Date());
+      const bDate = new Date(b.kickoff_time ?? new Date());
+      return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
+    })
+
+  }, [fixtures, searchQuery, searchedFixtures, weekEnd, weekStart])
+
+  // Check if there are any fixtures at all (for edge case handling)
+  const hasAnyFixtures = fixtures.length > 0;
+
+  const handleJumpToNextFixtures = () => {
+    // const nextWeek = findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear);
+    // if (nextWeek) {
+    //   setSelectedWeek(nextWeek.weekNumber);
+    //   setSelectedYear(nextWeek.year);
+    // }
+
+    onMoveNextWeek();
+  };
 
   if (isLoading) {
     // Show different loading states based on view mode
@@ -110,39 +153,13 @@ export default function ProMatchCenter({
     return <LoadingState />;
   }
 
-  // Filter by search first
-  const searchedFixtures = fixtures.filter(f => {
-    return searchQuery ? searchProFixturePredicate(searchQuery, f) : true;
-  });
-
-  // If searching, show all fixtures across all weeks (latest first)
-  // Otherwise, show only fixtures for the selected week
-  const displayFixtures = searchQuery
-    ? searchedFixtures.sort((a, b) => {
-        const aDate = new Date(a.kickoff_time ?? new Date());
-        const bDate = new Date(b.kickoff_time ?? new Date());
-        return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
-      })
-    : getFixturesForWeek(searchedFixtures, selectedWeek, selectedYear);
-
-  // Check if there are any fixtures at all (for edge case handling)
-  const hasAnyFixtures = fixtures.length > 0;
-
-  const handleJumpToNextFixtures = () => {
-    const nextWeek = findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear);
-    if (nextWeek) {
-      setSelectedWeek(nextWeek.weekNumber);
-      setSelectedYear(nextWeek.year);
-    }
-  };
-
   return (
     <div className="flex flex-col gap-6 w-full">
       {!hasAnyFixtures && !searchQuery && <NoContentCard message="No fixtures available" />}
       {displayFixtures.length === 0 && !searchQuery && hasAnyFixtures && (
         <div className="flex flex-col gap-3 items-center">
           <NoContentCard message="No fixtures found for this week" />
-          {findNextWeekWithFixtures(searchedFixtures, selectedWeek, selectedYear) && (
+          {(
             <button
               onClick={handleJumpToNextFixtures}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors"
