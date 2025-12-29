@@ -1,82 +1,103 @@
-import { format } from "date-fns";
-import { IFixture } from "../../types/games";
-import { searchFixturesPredicate } from "../../utils/fixtureUtils";
+import { FixtureListViewMode, IFixture } from "../../types/games";
 import FixtureCard from "./FixtureCard";
+import PickEmCard from "./PickEmCard";
+
+
 
 type Props = {
     fixtures: IFixture[],
     search?: string,
     generateMessage?: (fixture: IFixture) => string,
-    descendingOrder?: boolean
+    descendingOrder?: boolean,
+    viewMode: FixtureListViewMode
 }
 
-/** Groups Fixtures into dates and renders them by date */
-export default function GroupedFixturesList({ fixtures, search, generateMessage, descendingOrder }: Props) {
+/** Groups Fixtures into dates and renders them by date, with an optionable pickem card view */
+export default function GroupedFixturesList({ fixtures, viewMode }: Props) {
 
-    // Group fixtures by day
-    const fixturesByDay: Record<string, IFixture[]> = {};
+    const groupedFixtures = groupFixturesByCompetition(fixtures);
+    const competitions = sortCompetitions(Array.from(groupedFixtures.keys()));
 
-    fixtures.forEach((fixture) => {
-        if (
-            fixture.kickoff_time &&
-            searchFixturesPredicate(fixture, search)
-        ) {
-            const dayKey = format(
-                new Date(fixture.kickoff_time),
-                "yyyy-MM-dd"
-            );
-            if (!fixturesByDay[dayKey]) {
-                fixturesByDay[dayKey] = [];
-            }
-            fixturesByDay[dayKey].push(fixture);
-        }
+
+
+    return competitions.map((competition) => {
+        const fixtures = groupedFixtures.get(competition)!;
+
+        return (
+            <div key={competition} className="flex flex-col gap-3">
+                {/* Competition Header */}
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
+                    <h3 className="font-bold text-sm text-slate-700 dark:text-slate-200">
+                        {competition}
+                    </h3>
+                </div>
+
+                {/* Competition Fixtures */}
+                <div className="flex flex-col gap-3">
+                    {fixtures.map((fixture, index) => (
+                        <FixtureItem
+                            fixture={fixture}
+                            key={`${competition}-${viewMode}-${index}`}
+                            viewMode={viewMode}
+                            className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
+                        />
+                    ))}
+                </div>
+            </div>
+        );
     });
+}
 
-    // Get sorted day keys
-    const sortedDays = Object.keys(fixturesByDay).sort((a, b) => {
-        if (descendingOrder) return new Date(b).valueOf() - new Date(a).valueOf()
-        return new Date(a).valueOf() - new Date(b).valueOf()
-    });
 
+type FixtureItemProps = {
+    fixture: IFixture;
+    viewMode: 'fixtures' | 'pickem';
+    className?: string;
+};
+
+function FixtureItem({ fixture, viewMode, className }: FixtureItemProps) {
     return (
-        <div className="grid grid-cols-1 gap-3">
-            {(() => {
+        <>
+            {viewMode === 'fixtures' && (
+                <FixtureCard fixture={fixture} showLogos showCompetition className={className} />
+            )}
+            {viewMode === 'pickem' && <PickEmCard fixture={fixture} className={className} />}
+        </>
+    );
+}
 
 
-                return sortedDays.map((dayKey) => {
+// Sort competitions by priority
+function sortCompetitions(competitions: string[]): string[] {
+    return competitions.sort((a, b) => {
+        const aPriority = COMPETITION_PRIORITY[a] || 999;
+        const bPriority = COMPETITION_PRIORITY[b] || 999;
 
-                    const dayFixtures = fixturesByDay[dayKey];
-                    const firstKickOff = dayFixtures.length > 0 ? dayFixtures[0]?.kickoff_time : undefined;
-                    const dayDate = firstKickOff ? new Date(firstKickOff) : new Date(dayKey);
+        if (aPriority !== bPriority) {
+            return aPriority - bPriority;
+        }
 
-                    return (
-                        <div key={dayKey} className="mb-4">
-                            {/* Day header */}
+        // If both have same priority (or both are "other"), sort alphabetically
+        return a.localeCompare(b);
+    });
+}
 
-                            <div className="px-4 text-sm lg:text-base py-2 mb-3 bg-gray-100 dark:bg-gray-800/40 font-medium text-gray-800 dark:text-gray-200 rounded-lg">
-                                {format(dayDate, "EEEE, MMMM d, yyyy")}
-                            </div>
+const COMPETITION_PRIORITY: Record<string, number> = {
+    URC: 1,
+    'Autumn Nations': 2,
+};
 
-                            {/* Fixtures for this day */}
-                            <div className="grid grid-cols-1 gap-3">
-                                {fixturesByDay[dayKey].map((fixture, index) => (
+// Group fixtures by competition
+function groupFixturesByCompetition(fixtures: IFixture[]): Map<string, IFixture[]> {
+    const grouped = new Map<string, IFixture[]>();
 
-                                    <FixtureCard
-                                        showLogos
-                                        showCompetition
-                                        className="dark:bg-gray-800/40 dark:hover:bg-gray-800/60 border border-gray-300 dark:border-gray-700 bg-white hover:bg-slate-50 rounded-xl"
-                                        fixture={fixture}
-                                        key={index}
-                                        showVenue
-                                        hideDate
-                                        message={generateMessage ? generateMessage(fixture) : undefined}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    )
-                });
-            })()}
-        </div>
-    )
+    fixtures.forEach(fixture => {
+        const competition = fixture.competition_name || 'Other';
+        if (!grouped.has(competition)) {
+            grouped.set(competition, []);
+        }
+        grouped.get(competition)!.push(fixture);
+    });
+
+    return grouped;
 }

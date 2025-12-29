@@ -6,7 +6,7 @@ import { IRosterItem } from "../../../../types/games";
 import TeamJersey from "../../../player/TeamJersey";
 import { SmallMatchPrCard } from "../../../rankings/MatchPrCard";
 import PlayerMugshot from "../../../shared/PlayerMugshot";
-import { Activity } from "react";
+import { Activity, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 
 type RosterItemProps = {
@@ -26,6 +26,19 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
             openPlayerMatchModal(item?.athlete);
         }
     }
+
+    const playerFullName = useMemo(() => {
+        if (!item) {
+            return '';
+        }
+
+        const {athlete} = item;
+
+        if (athlete) {
+            const {athstat_lastname} = athlete;
+            return athstat_lastname || ""; 
+        }
+    }, [item]);
 
     return (
         <div
@@ -59,12 +72,12 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
                     </div>
                 </Activity>
 
-                <p className="text-[10px] text-white font-medium" >{item.player_number}. {item.athlete.athstat_firstname}</p>
+                <p className="text-[10px] text-white font-medium max-w-[100px] truncate" >{item.player_number}. {playerFullName}</p>
 
                 {pr && (
                     <div className="absolute top-0 right-0" >
                         <SmallMatchPrCard 
-                            pr={pr.updated_power_ranking}
+                        pr={pr.updated_power_ranking}
                         />
                     </div>
                 )}

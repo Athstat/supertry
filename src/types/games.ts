@@ -262,3 +262,6 @@ export type SeasonFilterBarItem = {
   name: string;
   id: string;
 };
+
+
+export type FixtureListViewMode = 'fixtures' | 'pickem';

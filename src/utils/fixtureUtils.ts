@@ -1,7 +1,8 @@
-import { endOfDay, startOfDay, startOfWeek, endOfWeek, getWeek, getYear, format } from 'date-fns';
+import { endOfDay, startOfDay, startOfWeek, endOfWeek, getWeek, getYear, format, addDays, subDays } from 'date-fns';
 import { IFixture } from '../types/games';
 import { ISbrFixture } from '../types/sbr';
 import { IProAthlete } from '../types/athletes';
+import { SortDirection } from '../types/playerSorting';
 
 export function fixtureSummary(fixture: IFixture) {
   const { team_score, kickoff_time, game_status, opposition_score } = fixture;
@@ -347,11 +348,10 @@ export function getWeekDateRange(weekNumber: number, year: number): { start: Dat
 
 /** Format week header: "Week 45, 27 Oct - 2 Nov" */
 export function formatWeekHeader(
-  weekNumber: number,
   dateRange: { start: Date; end: Date }
 ): string {
-  const startFormatted = format(dateRange.start, 'd MMM');
-  const endFormatted = format(dateRange.end, 'd MMM');
+  const startFormatted = format(dateRange.start, 'dd MMM');
+  const endFormatted = format(dateRange.end, 'dd MMM');
 
   return `${startFormatted} - ${endFormatted}`;
 }
@@ -359,26 +359,32 @@ export function formatWeekHeader(
 /** Get fixtures for a specific week */
 export function getFixturesForWeek(
   fixtures: IFixture[],
-  weekNumber: number,
-  year: number
+  weekStart: Date,
+  weekEnd: Date,
+  sortDirection: SortDirection = "asc"
 ): IFixture[] {
-  const { start, end } = getWeekDateRange(weekNumber, year);
-  const startEpoch = startOfDay(start).valueOf();
-  const endEpoch = endOfDay(end).valueOf();
 
   return fixtures
-    .filter(f => {
-      if (f.kickoff_time) {
-        const kickoffEpoch = new Date(f.kickoff_time).valueOf();
-        return kickoffEpoch >= startEpoch && kickoffEpoch <= endEpoch;
+    .filter((f) => {
+      const kickoff = f.kickoff_time ? new Date(f.kickoff_time) : undefined;
+
+      if (!kickoff) {
+        return undefined;
       }
-      return false;
-    })
-    .sort((a, b) => {
+
+      return (kickoff.valueOf() >= weekStart.valueOf()) && (kickoff.valueOf() <= weekEnd.valueOf());
+    }).sort((a, b) => {
+
       const aDate = new Date(a.kickoff_time ?? new Date());
       const bDate = new Date(b.kickoff_time ?? new Date());
-      return aDate.valueOf() - bDate.valueOf();
-    });
+
+      if (sortDirection === "asc") {
+        return aDate.valueOf() - bDate.valueOf();
+      }
+
+      return bDate.valueOf() - aDate.valueOf(); // Sort descending (latest first)
+
+    })
 }
 
 /** Get SBR fixtures for a specific week */
@@ -407,29 +413,23 @@ export function getSbrFixturesForWeek<T extends { kickoff_time?: Date }>(
 }
 
 /** Find the next week with fixtures (searches forward up to maxWeeks) */
-export function findNextWeekWithFixtures(
-  fixtures: IFixture[],
-  startWeek: number,
-  startYear: number,
-  maxWeeks: number = 12
-): { weekNumber: number; year: number } | null {
-  let currentWeek = startWeek;
-  let currentYear = startYear;
+export function findNextWeekPivotWithFixtures(fixtures: IFixture[], pivotDate: Date, maxWeeks: number = 12): Date | null {
+  let currPivot = pivotDate || new Date();
+  currPivot = addDays(currPivot, 7);
 
   for (let i = 0; i < maxWeeks; i++) {
-    // Move to next week
-    if (currentWeek === 52) {
-      currentWeek = 1;
-      currentYear++;
-    } else {
-      currentWeek++;
-    }
+
+    const weekStart = startOfWeek(currPivot);
+    const weekEnd = endOfWeek(currPivot);
 
     // Check if this week has fixtures
-    const weekFixtures = getFixturesForWeek(fixtures, currentWeek, currentYear);
+    const weekFixtures = getFixturesForWeek(fixtures, weekStart, weekEnd);
+
     if (weekFixtures.length > 0) {
-      return { weekNumber: currentWeek, year: currentYear };
+      return currPivot;
     }
+
+    currPivot = addDays(currPivot, 7);
   }
 
   return null;
@@ -464,30 +464,25 @@ export function findNextWeekWithSbrFixtures<T extends { kickoff_time?: Date }>(
   return null;
 }
 
-/** Find the previous week with fixtures (searches backward up to maxWeeks) */
-export function findPreviousWeekWithFixtures(
-  fixtures: IFixture[],
-  startWeek: number,
-  startYear: number,
-  maxWeeks: number = 26
-): { weekNumber: number; year: number } | null {
-  let currentWeek = startWeek;
-  let currentYear = startYear;
+/** Find the previous week pivot with fixtures (searches backward up to maxWeeks) */
+export function findPreviousWeekPivotWithFixtures(fixtures: IFixture[], pivotDate: Date, maxWeeks: number = 26): Date | null {
+
+  let currPivot = pivotDate || new Date();
+  currPivot = subDays(currPivot, 7);
 
   for (let i = 0; i < maxWeeks; i++) {
-    // Move to previous week
-    if (currentWeek === 1) {
-      currentWeek = 52;
-      currentYear--;
-    } else {
-      currentWeek--;
-    }
+
+    const weekStart = startOfWeek(currPivot);
+    const weekEnd = endOfWeek(currPivot);
 
     // Check if this week has fixtures
-    const weekFixtures = getFixturesForWeek(fixtures, currentWeek, currentYear);
+    const weekFixtures = getFixturesForWeek(fixtures, weekStart, weekEnd);
+
     if (weekFixtures.length > 0) {
-      return { weekNumber: currentWeek, year: currentYear };
+      return currPivot;
     }
+
+    currPivot = subDays(currPivot, 7);
   }
 
   return null;
@@ -525,25 +520,29 @@ export function findPreviousWeekWithSbrFixtures<T extends { kickoff_time?: Date 
 /** Find the closest week with fixtures (checks current, then forward, then backward) */
 export function findClosestWeekWithFixtures(
   fixtures: IFixture[],
-  startWeek: number,
-  startYear: number
-): { weekNumber: number; year: number } | null {
+  pivotDate: Date
+): Date | null | undefined {
+
+  const weekStart = startOfWeek(pivotDate ? new Date(pivotDate) : new Date());
+  const weekEnd = endOfWeek(pivotDate ? new Date(pivotDate) : new Date());
+
   // First check if current week has fixtures
-  const currentWeekFixtures = getFixturesForWeek(fixtures, startWeek, startYear);
+  const currentWeekFixtures = getFixturesForWeek(fixtures, weekStart, weekEnd);
+
   if (currentWeekFixtures.length > 0) {
-    return { weekNumber: startWeek, year: startYear };
+    return pivotDate;
   }
 
   // Try finding next week with fixtures
-  const nextWeek = findNextWeekWithFixtures(fixtures, startWeek, startYear, 26);
-  if (nextWeek) {
-    return nextWeek;
+  const nextWeekPivot = findNextWeekPivotWithFixtures(fixtures, pivotDate, 114);
+  if (nextWeekPivot) {
+    return nextWeekPivot;
   }
 
   // Fallback to previous week with fixtures
-  const previousWeek = findPreviousWeekWithFixtures(fixtures, startWeek, startYear, 26);
-  if (previousWeek) {
-    return previousWeek;
+  const previousWeekPivot = findPreviousWeekPivotWithFixtures(fixtures, pivotDate, 114);
+  if (previousWeekPivot) {
+    return previousWeekPivot;
   }
 
   return null;
@@ -578,8 +577,8 @@ export function findClosestWeekWithSbrFixtures<T extends { kickoff_time?: Date }
 
 
 export function getOpponent(fixture: IFixture, player: IProAthlete) {
-  const {team: playerTeam} = player;
-  const {team, opposition_team} = fixture;
+  const { team: playerTeam } = player;
+  const { team, opposition_team } = fixture;
 
   if (!team || !opposition_team || !team) {
     return undefined;
