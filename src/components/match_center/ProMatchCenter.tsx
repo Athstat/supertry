@@ -6,20 +6,15 @@ import PickEmCard from '../fixtures/PickEmCard';
 import PickEmCardSkeleton from '../fixtures/PickEmCardSkeleton';
 import NoContentCard from '../shared/NoContentMessage';
 import { searchProFixturePredicate } from '../../utils/fixtureUtils';
-import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { IFixture } from '../../types/games';
-import { useState, useEffect } from 'react';
-import { format } from 'date-fns';
+import { useEffect, useMemo } from 'react';
 import {
   getCurrentWeek,
-  getWeekDateRange,
-  formatWeekHeader,
   getFixturesForWeek,
   findClosestWeekWithFixtures,
   findNextWeekWithFixtures,
-  findPreviousWeekWithFixtures,
 } from '../../utils/fixtureUtils';
-import SegmentedControl from '../ui/SegmentedControl';
 
 // Competition priority order
 const COMPETITION_PRIORITY: Record<string, number> = {
@@ -79,7 +74,11 @@ export default function ProMatchCenter({
   onFixturesLoad,
 }: Props) {
   const key = 'pro-fixtures';
-  let { data: fixtures, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
+  const { data, isLoading } = useSWR(key, () => gamesService.getAllSupportedGames());
+
+  const fixtures = useMemo(() => {
+    return data || [];
+  }, [data]);
 
   // Update to closest week with fixtures when component mounts or fixtures load
   useEffect(() => {
@@ -92,7 +91,7 @@ export default function ProMatchCenter({
         setSelectedYear(closestWeek.year);
       }
     }
-  }, [fixtures?.length, onFixturesLoad, setSelectedWeek, setSelectedYear]);
+  }, [fixtures, fixtures.length, onFixturesLoad, setSelectedWeek, setSelectedYear]);
 
   if (isLoading) {
     // Show different loading states based on view mode
@@ -110,8 +109,6 @@ export default function ProMatchCenter({
     }
     return <LoadingState />;
   }
-
-  fixtures = fixtures ?? [];
 
   // Filter by search first
   const searchedFixtures = fixtures.filter(f => {
