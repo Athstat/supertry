@@ -35,9 +35,10 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
         const {athlete} = item;
 
         if (athlete) {
-            const {athstat_firstname, athstat_lastname} = athlete;
-            const firstPart = (athstat_firstname && athstat_firstname?.length || 0) > 1 ? `${(athstat_firstname || " ")[0]} ` : '';
-            return `${firstPart}${athstat_lastname}`; 
+            const {athstat_lastname} = athlete;
+            // const firstPart = (athstat_firstname && athstat_firstname?.length || 0) > 1 ? `${(athstat_firstname || " ")[0]} ` : '';
+            // return `${firstPart}${athstat_lastname}`; 
+            return `${athstat_lastname}`; 
         }
     }, [item]);
 
