@@ -31,7 +31,7 @@ export default function FixturesScreen() {
     weekStart, weekHeader, hasNextWeek, hasPreviousWeek,
     hasAnyFixtures, isCurrentWeek, weekFixtures
   } = useFixtureCursor({
-    fixtures, isLoading, initDateVal: new Date(2023, 1, 1)
+    fixtures, isLoading
   });
 
   const searchedFixtures = fixtures.filter(f => {

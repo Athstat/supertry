@@ -11,7 +11,7 @@ type Props = {
 
 /** Hook that provides a cursor to view fixtures, over week periods */
 export function useFixtureCursor({ fixtures, isLoading, initDateVal }: Props) {
-    const [initDate, setInitDate] = useState(initDateVal ? new Date(initDateVal) : new Date(2023, 1, 1));
+    const [initDate, setInitDate] = useState(initDateVal ? new Date(initDateVal) : new Date());
 
     const {
         weekEnd, weekStart, isCurrentWeek,
@@ -62,12 +62,10 @@ export function useFixtureCursor({ fixtures, isLoading, initDateVal }: Props) {
             return;
         }
 
-        const today = new Date(2023, 1, 1);
+        const today = initDateVal ? new Date(initDateVal) : new Date();
 
         if (hasAnyFixtures) {
             const closestPivot = findClosestWeekWithFixtures(fixtures, today);
-
-            console.log("Closes Pivot on init ", closestPivot);
 
             if (closestPivot) {
                 setInitDate(closestPivot);
@@ -78,7 +76,7 @@ export function useFixtureCursor({ fixtures, isLoading, initDateVal }: Props) {
 
         setInitDate(today);
 
-    }, [fixtures, hasAnyFixtures, isLoading, setInitDate]);
+    }, [fixtures, hasAnyFixtures, initDateVal, isLoading, setInitDate]);
 
     const weekFixtures = useMemo(() => {
 

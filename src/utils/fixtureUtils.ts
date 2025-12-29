@@ -424,7 +424,6 @@ export function findNextWeekPivotWithFixtures(fixtures: IFixture[], pivotDate: D
 
     // Check if this week has fixtures
     const weekFixtures = getFixturesForWeek(fixtures, weekStart, weekEnd);
-    console.log(`Week Fixtures ${format(weekStart, "dd MMM yyyy")}`, weekFixtures);
 
     if (weekFixtures.length > 0) {
       return currPivot;
@@ -478,8 +477,6 @@ export function findPreviousWeekPivotWithFixtures(fixtures: IFixture[], pivotDat
 
     // Check if this week has fixtures
     const weekFixtures = getFixturesForWeek(fixtures, weekStart, weekEnd);
-
-    console.log(`Week Fixtures with pivot ${format(currPivot, "dd MMM yyyy")}, starting from  ${format(weekStart, "dd MMM yyyy")} - ${format(weekEnd, "dd MMM yyyy")}`, weekFixtures);
 
     if (weekFixtures.length > 0) {
       return currPivot;
