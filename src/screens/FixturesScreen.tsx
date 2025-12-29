@@ -1,7 +1,7 @@
 import PageView from './PageView';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useQueryState } from '../hooks/useQueryState';
-import ProMatchCenter from '../components/match_center/ProMatchCenter';
+import ProMatchCenterList from '../components/match_center/ProMatchCenterList';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import SegmentedControl from '../components/ui/SegmentedControl';
 import { Fragment, useState, useEffect, useDeferredValue, Activity } from 'react';
@@ -126,7 +126,7 @@ export default function FixturesScreen() {
 
         <Activity mode={searchQuery ? "hidden" : "visible"} >
           <div className="w-full mx-auto">
-            <ProMatchCenter
+            <ProMatchCenterList
               searchQuery={searchQuery}
               viewMode={viewMode}
               onViewModeChange={setViewMode}
