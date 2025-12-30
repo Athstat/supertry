@@ -13,6 +13,8 @@ import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvide
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
 import FantasySeasonsProvider from "./components/dashboard/provider/FantasySeasonsProvider";
+import { SWRConfig } from "swr";
+import { localStorageCacheProvider } from "./providers/caching/localStorageCacheProvider";
 
 type Props = {
     children?: ReactNode
@@ -25,17 +27,19 @@ export default function RootProviders({ children }: Props) {
 
     return (
         <ThemeLayer>
-            {/* Ensure Authentication and data providers are mounted before AppStateProvider
-                so AppState can safely consume contexts like AthleteContext */}
-            <AuthenticationLayer>
-                <DataLayer>
-                    <AppStateLayer>
-                        <NavigationLayer>
-                            {children}
-                        </NavigationLayer>
-                    </AppStateLayer>
-                </DataLayer>
-            </AuthenticationLayer>
+            <SWRConfig
+                value={{provider: localStorageCacheProvider}}
+            >
+                <AuthenticationLayer>
+                    <DataLayer>
+                        <AppStateLayer>
+                            <NavigationLayer>
+                                {children}
+                            </NavigationLayer>
+                        </AppStateLayer>
+                    </DataLayer>
+                </AuthenticationLayer>
+            </SWRConfig>
         </ThemeLayer>
     )
 }

@@ -19,6 +19,8 @@ function App() {
     );
   }, []);
 
+  console.log(localStorage.getItem('app-cache'));
+
   return (
     <RootProviders>
       <AppRoutes />
