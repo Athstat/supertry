@@ -43,7 +43,7 @@ function InnerProvider({ children }: Props) {
 
   const {authUser} = useAuth();
 
-  const seasonsKey = swrFetchKeys.getActiveFantasySeasons(authUser?.kc_id);
+  const seasonsKey = authUser ? swrFetchKeys.getActiveFantasySeasons(authUser?.kc_id) : null;
   const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
     fantasySeasonsService.getAllFantasySeasons(true), {
       revalidateOnFocus: false,
