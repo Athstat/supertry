@@ -36,9 +36,7 @@ function Content({children} : Props) {
     const key = swrFetchKeys.getSportActionsDefinitions();
     const {data: fetchedDefintions, isLoading} = useSWR(key, () => sportActionsService.getDefinitionList(), {
         dedupingInterval: CACHING_CONFIG.sportsActionCachePeriod,
-        refreshWhenHidden: false,
         revalidateIfStale: true,
-        revalidateOnMount: false,
         revalidateOnFocus: false
     });
 
