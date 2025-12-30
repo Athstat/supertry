@@ -8,10 +8,12 @@ export function useNavigationGuard(func: () => boolean) {
 
     useEffect(() => {
         
-        setGuardFun(func);
+        setGuardFun({
+            guard: func
+        });
 
         return () => {
-            setGuardFun(undefined);
+            setGuardFun({guard: () => true});
         }
 
     }, [func, setGuardFun]);

@@ -7,11 +7,24 @@ import { useNavigate } from "react-router-dom";
 export function useNavigateBack() {
     const navigate = useNavigate();
     const [stack, setStack] = useAtom(browserHistoryAtoms.historyStackAtom);
-    const navigationGuard = useAtomValue(navigationBarsAtoms.navigationGuardFunctionAtom);
+    const navigationGuardObj = useAtomValue(navigationBarsAtoms.navigationGuardFunctionAtom);
 
-    console.log("Navigation Guard Function ", navigationGuard);
+    const checkShouldNavigate = useCallback(() => {
+        if (navigationGuardObj !== undefined) {
+            const { guard } = navigationGuardObj;
+            const shouldNavigate = guard();
+
+            return shouldNavigate;
+        }
+
+        return true;
+    }, [navigationGuardObj])
 
     const hardPop = useCallback((fallback?: string) => {
+
+        if (checkShouldNavigate() === false) {
+            return;
+        }
 
         stack.hardPop();
         const nextPath = stack.peek();
@@ -28,9 +41,14 @@ export function useNavigateBack() {
             return;
         }
 
-    }, [navigate, setStack, stack]);
+    }, [checkShouldNavigate, navigate, setStack, stack]);
 
     const softPop = useCallback((fallback?: string) => {
+
+        if (checkShouldNavigate() === false) {
+            return;
+        }
+
         stack.softPop();
         const nextPath = stack.peek();
 
@@ -45,7 +63,7 @@ export function useNavigateBack() {
             navigate(fallback);
             return;
         }
-    }, [navigate, setStack, stack]);
+    }, [checkShouldNavigate, navigate, setStack, stack]);
 
     return { softPop, hardPop }
 }

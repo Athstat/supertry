@@ -9,7 +9,9 @@ const bottomBarViewModeAtom = atom<NavigationElementViewMode>("visible");
 
 /** Holds a function that will run before the navigation logic is run
  * its returns false to stop navigation from taking place */
-const navigationGuardFunctionAtom = atom<() => boolean>();
+const navigationGuardFunctionAtom = atom<{guard: () => boolean}>({guard: () => {
+    return true;
+}});
 
 /** Atoms for manipulating state of the navigation bars */
 export const navigationBarsAtoms = {
