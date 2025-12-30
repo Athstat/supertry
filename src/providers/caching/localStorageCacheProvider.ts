@@ -1,4 +1,5 @@
 import { Cache } from "swr"
+import { logger } from "../../services/logger";
 
 const CACHE_KEY = 'web-app-cache';
 
@@ -13,20 +14,19 @@ export function localStorageCacheProvider(): Cache {
     persistCache(map);
   });
 
-  return {
-    get: <Data>(key: string) => map.get(key) as Data, 
-    set: <Data>(key: string, value: Data) => {
-      map.set(key, value);
-      persistCache(map);
-    },
-    delete: (key: string) => {
-      map.delete(key);
-      persistCache(map);
-    },
-    keys: () => {
-      return map.keys() as IterableIterator<string>;
+  window.addEventListener('message', (event) => {
+    try {
+      const msg = JSON.parse(event.data);
+
+      if (msg.type === "PERSIST_WEBVIEW_CACHE") {
+        persistCache(map);
+      }
+    } catch(err) {
+      logger.error("Error persisting webview cache ", err);
     }
-  };
+  });
+
+  return map as Cache
 }
 
 /** Function that clears the apps, cache */
@@ -34,18 +34,16 @@ export function clearAppCache() {
   localStorage.removeItem(CACHE_KEY);
 }
 
-function persistCache(map: Map<string, unknown>) {
+async function persistCache(map: Map<string, unknown>) {
   const webviewBridge = window.ReactNativeWebView;
 
-  if (!webviewBridge) {
-    return;
+  const serialized = JSON.stringify(Array.from(map.entries()))
+  
+  localStorage.setItem(CACHE_KEY, serialized);
+  
+  if (webviewBridge) {
+    const message = { type: 'SAVE_WEBVIEW_CACHE', payload: serialized };
+    webviewBridge.postMessage(JSON.stringify(message));
   }
 
-  const serialized = JSON.stringify(Array.from(map.entries()))
-  const message = { type: 'SAVE_WEBVIEW_CACHE', payload: serialized };
-
-  localStorage.setItem(CACHE_KEY, serialized);
-  webviewBridge.postMessage(JSON.stringify(message));
-
-  console.log("Message sent to webview ", message);
 }
