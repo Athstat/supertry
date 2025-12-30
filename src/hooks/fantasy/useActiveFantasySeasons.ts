@@ -7,7 +7,9 @@ import { useAuth } from "../../contexts/AuthContext";
 export function useActiveFantasySeasons() {
     const {authUser} = useAuth();
     const seasonsKey = authUser ? swrFetchKeys.getActiveFantasySeasons(authUser?.kc_id) : null;
-    const { data, isLoading, error, mutate } = useSWR(seasonsKey, () => fantasySeasonsService.getAllFantasySeasons(true));
+    const { data, isLoading, error, mutate } = useSWR(seasonsKey, () => fantasySeasonsService.getAllFantasySeasons(true), {
+        revalidateOnFocus: false
+    });
 
     return {
         seasons: data,
