@@ -146,8 +146,8 @@ export const swrFetchKeys = {
     return `/fantasy-league-rounds/${leagueRoundId}/scoring-overview`;
   },
 
-  getActiveFantasySeasons: () => {
-    return '/fantasy-seaons/active';
+  getActiveFantasySeasons: (userId?: string) => {
+    return `/fantasy-seaons/active/${userId}`;
   },
 
   getSeasonRounds: (seasonId?: string) => {

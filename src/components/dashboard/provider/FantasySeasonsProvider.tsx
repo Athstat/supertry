@@ -11,6 +11,7 @@ import { useDebounced } from '../../../hooks/useDebounced';
 import useSWRImmutable from 'swr/immutable';
 import useSWR from 'swr';
 import { CACHING_CONFIG } from '../../../types/constants';
+import { useAuth } from '../../../contexts/AuthContext';
 
 type Props = {
   children?: ReactNode;
@@ -40,7 +41,9 @@ function InnerProvider({ children }: Props) {
   const [, setCurrentRound] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
   const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
-  const seasonsKey = swrFetchKeys.getActiveFantasySeasons();
+  const {authUser} = useAuth();
+
+  const seasonsKey = swrFetchKeys.getActiveFantasySeasons(authUser?.kc_id);
   const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
     fantasySeasonsService.getAllFantasySeasons(true), {
       revalidateOnFocus: false,
