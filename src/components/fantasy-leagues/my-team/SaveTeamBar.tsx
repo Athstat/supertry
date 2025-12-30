@@ -12,6 +12,7 @@ import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../../types/constants";
 import { useNavigationGuard } from "../../../hooks/web/useNavigationGuard";
 import UnsavedChangesWarningModal from "../../shared/UnsavedChangesModal";
+import { useNavigateBack } from "../../../hooks/web/useNavigateBack";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -21,6 +22,7 @@ type Props = {
 /** Renders Save Team Bar */
 export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
 
+    const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
     const isLocked = isLeagueRoundLocked(leagueRound);
@@ -28,14 +30,21 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
 
     const { setRoundTeam } = useTeamHistory();
 
+    const toggleUnSavedChangesModal = () => {
+        setShowUnsavedChangesModal(prev => !prev);
+    }
+
     const {
         changesDetected,
         resetToOriginalTeam,
         isTeamFull, slots, team, teamCaptain
     } = useFantasyLeagueTeam();
 
+    const {hardPop} = useNavigateBack();
+
     const navigationGuard = useCallback(() => {
         if (changesDetected) {
+            toggleUnSavedChangesModal();
             return false;
         }
 
@@ -54,6 +63,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
         fantasyAnalytics.trackCanceledTeamEdits();
     };
 
+    
 
     const buildPayloadAndSave = async () => {
         if (isLocked) return;
@@ -113,6 +123,11 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             setIsSaving(false);
         }
     };
+
+    const handleLeaveWithoutSavingChanges = () => {
+        handleCancelEdits();
+        hardPop("/leagues", {bypassGuard: true});
+    }
 
     return (
         <div className="max-h-[50px] min-h-[50px]" >
@@ -202,10 +217,11 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
             }
             
             <UnsavedChangesWarningModal 
+                isOpen={showUnsavedChangesModal}
                 title="Unsaved Changes"
                 message="Wait up, are you sure you want to discard the changes you made to your team? Your changes will be lost"
-                onCancel={() => {}}
-                onLeave={() => {}}
+                onCancel={toggleUnSavedChangesModal}
+                onDiscard={handleLeaveWithoutSavingChanges}
             />
 
         </div>

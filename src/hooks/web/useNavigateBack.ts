@@ -4,6 +4,8 @@ import { browserHistoryAtoms } from "../../state/web/browserHistory.atoms";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
+type NavigateBackOptions = { bypassGuard: boolean }
+
 export function useNavigateBack() {
     const navigate = useNavigate();
     const [stack, setStack] = useAtom(browserHistoryAtoms.historyStackAtom);
@@ -20,9 +22,11 @@ export function useNavigateBack() {
         return true;
     }, [navigationGuardObj]);
 
-    const hardPop = useCallback((fallback?: string) => {
+    const hardPop = useCallback((fallback?: string, options: NavigateBackOptions = { bypassGuard: false }) => {
 
-        if (checkShouldNavigate() === false) {
+        const { bypassGuard } = options;
+
+        if (!bypassGuard === true && checkShouldNavigate() === false) {
             return;
         }
 
@@ -43,9 +47,11 @@ export function useNavigateBack() {
 
     }, [checkShouldNavigate, navigate, setStack, stack]);
 
-    const softPop = useCallback((fallback?: string) => {
+    const softPop = useCallback((fallback?: string, options: NavigateBackOptions = {bypassGuard: false}) => {
 
-        if (checkShouldNavigate() === false) {
+        const { bypassGuard } = options;
+
+        if (!bypassGuard === true && checkShouldNavigate() === false) {
             return;
         }
 
