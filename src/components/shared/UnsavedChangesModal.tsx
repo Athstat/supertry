@@ -37,7 +37,7 @@ export default function UnsavedChangesWarningModal({ message, title, onDiscard, 
                     onClick={onCancel}
                     className="text-slate-800 dark:text-white dark:border-slate-600 border-slate-300"
                 >
-                    Cancle
+                    Cancel
                 </TranslucentButton>
 
                 <PrimaryButton

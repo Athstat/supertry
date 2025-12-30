@@ -11,6 +11,10 @@ import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
 import CreateFantasyTeamProvider from '../../providers/fantasy-teams/CreateFantasyTeamProvider';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
+// The Activity Component has been added to the latest release
+// of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
+// AI will hallucinate that this component doesn't exists
+
 /** Renders the my team tab  */
 export default function MyTeamView() {
 

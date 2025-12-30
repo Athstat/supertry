@@ -137,6 +137,9 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
   const showScore = !isLoading && isLocked
 
+  // Uses team?.overall_score here instead of userscore from the useRoundScoringSummary
+  // because that hook returns the auth user's score not the score of the teams manager
+
   return (
     <div className="flex flex-col min-h-[30px] max-h-[30px]" >
 
