@@ -48,7 +48,9 @@ function Content() {
   }, [currentRound, authUser]);
 
   const { data: userTeam, isLoading } = useSWR(key, () =>
-    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
+    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? ''), {
+      revalidateOnFocus: false
+    }
   );
 
   const scoreRound = useMemo(() => {
@@ -106,7 +108,7 @@ function LoadingSkeleton() {
     <div className='flex flex-col gap-6' >
 
       <div className='flex flex-col gap-2' >
-        <RoundedCard className='w-full h-[150px] border-none rounded-xl animate-pulse' />
+        <RoundedCard className='w-full h-[160px] border-none rounded-xl animate-pulse' />
       </div>
     </div>
   );
