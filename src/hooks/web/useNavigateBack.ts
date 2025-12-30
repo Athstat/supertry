@@ -18,7 +18,7 @@ export function useNavigateBack() {
         }
 
         return true;
-    }, [navigationGuardObj])
+    }, [navigationGuardObj]);
 
     const hardPop = useCallback((fallback?: string) => {
 
