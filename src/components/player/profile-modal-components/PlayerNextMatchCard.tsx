@@ -1,11 +1,10 @@
 import { usePlayerNextMatch } from "../../../hooks/athletes/usePlayerNextMatch"
-import { IProAthlete } from "../../../types/athletes"
 import FixtureCard from "../../fixtures/FixtureCard"
 import NoContentCard from "../../shared/NoContentMessage"
 import RoundedCard from "../../shared/RoundedCard"
 
 type Props = {
-    player: IProAthlete
+    player: {tracking_id: string}
 }
 
 /** Player Next Match Card */

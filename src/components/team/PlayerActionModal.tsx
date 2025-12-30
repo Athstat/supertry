@@ -88,7 +88,7 @@ export function PlayerActionModal({
   return (
     <BottomSheetView
       className={twMerge(
-        "max-h-[440px] min-h-[400px] py-4 px-6",
+        "max-h-[640px] min-h-[400px] py-4 px-6",
         isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
       hideHandle
@@ -185,7 +185,6 @@ export function PlayerActionModal({
         />
       </div> */}
 
-
       <Activity mode={isReadOnly ? "hidden" : "visible"} >
 
         <div className="mt-3" >
@@ -240,6 +239,7 @@ export function PlayerActionModal({
           </div>}
         </div>
       </Activity>
+
 
 
     </BottomSheetView>
