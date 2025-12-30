@@ -128,8 +128,9 @@ function LeagueStandingsRow({ ranking, isUser, hideUserScore, index, onClick }: 
 
   const rank = ranking.league_rank ?? index + 1;
 
-  const pointsDisplay =
-    isUser && hideUserScore ? '-' : ranking.total_score ? smartRoundUp(ranking.total_score) : '-';
+  const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score 
+
+  const pointsDisplay =  shouldHideScore ? '-' :  smartRoundUp(ranking.total_score);
 
   const handleClick = () => {
     if (onClick && memberRecord) {
