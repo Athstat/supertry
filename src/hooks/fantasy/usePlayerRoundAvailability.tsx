@@ -37,7 +37,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
       const { kickoff_time } = nextMatch;
 
       if (kickoff_time) {
-        const timeGap = 1000 * 60 * 60 * 24 * 7;
+        const timeGap = 1000 * 60 * 60 * 24 * 10;
         const adjustedKickoff = new Date(kickoff_time).valueOf() - timeGap
         return dateNow.valueOf() < adjustedKickoff;
       }
@@ -47,8 +47,8 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
   }, [nextMatch]);
 
   const isTeamNotPlaying = useMemo(() => {
-    return firstReport?.status === "TEAM_NOT_PLAYING" || isGameTooFarAway;
-  }, [firstReport?.status, isGameTooFarAway]);
+    return firstReport?.status === "TEAM_NOT_PLAYING";
+  }, [firstReport?.status]);
 
   const isAvailable = useMemo(() => {
     return firstReport?.status === "AVAILABLE";

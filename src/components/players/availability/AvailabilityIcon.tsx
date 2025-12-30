@@ -159,7 +159,7 @@ export function RoundAvailabilityText({ athlete, className, round }: RoundProps)
     }
 
     const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE" || isNotAvailable || isTeamNotPlaying;
-    const isPast = isPastFixture(report.game)
+    const isPast = isPastFixture(report.game);
 
     if (!notAvailable) {
         return;

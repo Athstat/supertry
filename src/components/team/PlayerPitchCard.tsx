@@ -160,7 +160,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     }, [nextMatch, player.athlete_team_id]);
 
-    const showScore = !!isLoading && isLocked;
+    const showScore = !isLoading && isLocked;
 
     const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
     const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
