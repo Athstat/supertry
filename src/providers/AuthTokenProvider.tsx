@@ -1,10 +1,9 @@
-import { createContext, ReactNode, useContext } from "react"
+import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 import { DjangoAuthUser } from "../types/auth";
 import { authTokenService } from "../services/auth/authTokenService";
-import { getBridgeAuthV2 } from "../hooks/useBridgeAuth";
 import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { logoutFromBridge } from "../utils/bridgeUtils";
-import useSWR from "swr";
+import { getBridgeAuthV2 } from "../hooks/useBridgeAuth";
 
 type AuthTokenContextProps = {
     /** The auth token for the current login session */
@@ -36,13 +35,45 @@ type Props = {
 
 export default function AuthTokenProvider({ children }: Props) {
 
-    const key = `auth/auth-token`;
-    const {saveAccessTokenToMobile} = getBridgeAuthV2();
-    const {data: accessToken, isLoading, mutate: setAccessToken} = useSWR(key, () => fetcher());
+    const [accessToken, setAccessToken] = useState<string>();
+    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = getBridgeAuthV2();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        // If scrummy bridge is available retrieve auth token first
+        // else check auth token from the local storage
+
+        const fetcher = async () => {
+
+            setIsLoading(true);
+            const tokenFromBridge = await getSavedAccessTokenFromMobile();
+
+            if (tokenFromBridge) {
+                console.log("Access Token from bridge ", tokenFromBridge);
+                setAccessToken(tokenFromBridge);
+                authTokenService.setAccessToken(tokenFromBridge);
+                setIsLoading(false);
+                return;
+            }
+
+            const tokenFromLocalStorage = authTokenService.getAccessToken();
+
+            if (tokenFromLocalStorage) {
+                setAccessToken(tokenFromLocalStorage);
+                saveAccessTokenToMobile(tokenFromLocalStorage);
+                setIsLoading(false);
+                return;
+            }
+
+            setIsLoading(false);
+        }
+
+        fetcher();
+    }, []);
 
     // If auth token has been replaced, then notify bridge of this
-    const handleChangeAuthToken = async (token: string) => {
-        await setAccessToken(token);
+    const handleChangeAuthToken = (token: string) => {
+        setAccessToken(token);
         authTokenService.setAccessToken(token);
         saveAccessTokenToMobile(token);
     }
@@ -59,7 +90,7 @@ export default function AuthTokenProvider({ children }: Props) {
 
     const handleClearAuthTokenAndUser = () => {
         setAccessToken(undefined);
-
+        
         logoutFromBridge();
 
         authTokenService.clearAccessToken();
@@ -95,25 +126,4 @@ export function useAuthToken(): AuthTokenContextProps {
     }
 
     return context
-}
-
-const fetcher = async () => {
-
-    const {getSavedAccessTokenFromMobile, saveAccessTokenToMobile} = getBridgeAuthV2();
-
-    const tokenFromBridge = await getSavedAccessTokenFromMobile();
-
-    if (tokenFromBridge) {
-        authTokenService.setAccessToken(tokenFromBridge);
-        return tokenFromBridge;
-    }
-
-    const tokenFromLocalStorage = authTokenService.getAccessToken();
-
-    if (tokenFromLocalStorage) {
-        saveAccessTokenToMobile(tokenFromLocalStorage);
-        return tokenFromLocalStorage;
-    }
-
-    return undefined;
 }
