@@ -6,9 +6,8 @@ import TeamLogo from '../team/TeamLogo';
 import { fixtureSummary } from '../../utils/fixtureUtils';
 import { useGameVotes } from '../../hooks/useGameVotes';
 import { gamesService } from '../../services/gamesService';
-import { mutate } from 'swr';
 import ConsensusBar from './ConsensusBar';
-import { Check, Loader } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import PickEmCardSkeleton from './PickEmCardSkeleton';
 
@@ -19,7 +18,7 @@ type Props = {
 
 export default function PickEmCard({ fixture, className }: Props) {
   const { ref, inView } = useInView({ triggerOnce: true });
-  const { userVote, percentages, homeVotes, awayVotes, drawVotes, isLoading } = useGameVotes(
+  const { userVote, percentages, homeVotes, awayVotes, drawVotes, isLoading, mutate } = useGameVotes(
     fixture,
     inView
   );
@@ -49,7 +48,7 @@ export default function PickEmCard({ fixture, className }: Props) {
       }
 
       // Refresh the votes data
-      await mutate(`game-votes-${fixture.game_id}`);
+      await mutate();
     } catch (error) {
       console.error('Error voting:', error);
     } finally {
