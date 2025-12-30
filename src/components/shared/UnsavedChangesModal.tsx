@@ -1,6 +1,5 @@
 import { TriangleAlert } from "lucide-react"
 import DialogModal from "./DialogModal"
-import SecondaryText from "./SecondaryText"
 import WarningCard from "./WarningCard"
 import PrimaryButton, { TranslucentButton } from "./buttons/PrimaryButton"
 
@@ -29,14 +28,14 @@ export default function UnsavedChangesWarningModal({ message, title, onDiscard, 
                 </WarningCard>
 
                 <div className="h-full items-center justify-center flex flex-col" >
-                    <SecondaryText className="text-sm">{message}</SecondaryText>
+                    <p className="text-sm dark:text-slate-200 text-slate-700">{message}</p>
                 </div>
             </div>
 
             <div className="flex flex-col items-center justify-end gap-2" >
                 <TranslucentButton
                     onClick={onCancel}
-                    className="text-slate-800 border-slate-300"
+                    className="text-slate-800 dark:text-white dark:border-slate-600 border-slate-300"
                 >
                     Cancle
                 </TranslucentButton>
