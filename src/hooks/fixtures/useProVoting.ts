@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { mutate } from "swr";
 import { gamesService } from "../../services/gamesService";
 import { IFixture } from "../../types/games";
 import { fixtureSummary, isProGameTBD } from "../../utils/fixtureUtils";
@@ -9,7 +8,7 @@ export function useProVoting(fixture: IFixture) {
 
     const { gameKickedOff, homeTeamWon, awayTeamWon } = fixtureSummary(fixture);
 
-    const { homeVotes, awayVotes, userVote, isLoading } = useGameVotes(fixture, true);
+    const { homeVotes, awayVotes, userVote, isLoading, mutate } = useGameVotes(fixture, true);
     const [isVoting, setIsVoting] = useState(false);
 
     // Calculate voting percentages
@@ -36,7 +35,7 @@ export function useProVoting(fixture: IFixture) {
             }
 
             // Refresh the votes data
-            await mutate(`game-votes-${fixture.game_id}`);
+            await mutate();
         } catch (error) {
             console.error('Error voting:', error);
         } finally {
