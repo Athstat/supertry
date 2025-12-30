@@ -36,7 +36,7 @@ function Content() {
   }
 
   if (!league) {
-    return null;
+    return <DashboardHeroLoadingSkeleton />;
   }
 
   return (

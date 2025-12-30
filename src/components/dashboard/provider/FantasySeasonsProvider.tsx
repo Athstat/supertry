@@ -9,6 +9,8 @@ import { seasonService } from '../../../services/seasonsService';
 import { logger } from '../../../services/logger';
 import { useDebounced } from '../../../hooks/useDebounced';
 import useSWRImmutable from 'swr/immutable';
+import useSWR from 'swr';
+import { CACHING_CONFIG } from '../../../types/constants';
 
 type Props = {
   children?: ReactNode;
@@ -39,8 +41,12 @@ function InnerProvider({ children }: Props) {
   const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
   const seasonsKey = swrFetchKeys.getActiveFantasySeasons();
-  const { data: seasonsFetched, isLoading: loadingSeasons } = useSWRImmutable(seasonsKey, () =>
-    fantasySeasonsService.getAllFantasySeasons(true)
+  const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
+    fantasySeasonsService.getAllFantasySeasons(true), {
+      revalidateOnFocus: false,
+      revalidateOnMount: false,
+      dedupingInterval: CACHING_CONFIG.fantasySeasonsCachePeriod
+    }
   );
 
   const roundsKey = currentSeason ? swrFetchKeys.getSeasonRounds(currentSeason.id) : null;

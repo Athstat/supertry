@@ -21,7 +21,7 @@ export function DashboardHeroLoadingSkeleton() {
   return (
     <div>
       <RoundedCard className="p-6 rounded-none animate-pulse bg-gray-200 dark:bg-slate-800 border-none">
-        <div className="h-64"></div>
+        <div className="h-[320px]"></div>
       </RoundedCard>
     </div>
   )
