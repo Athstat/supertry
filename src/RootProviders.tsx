@@ -8,7 +8,6 @@ import { AppStateProvider } from "./contexts/AppStateContext";
 import { AthleteProvider } from "./contexts/AthleteContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { PlayerProfileProvider } from "./hooks/usePlayerProfile";
 import AuthTokenProvider from "./providers/AuthTokenProvider";
 import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvider";
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
@@ -82,9 +81,7 @@ function DataLayer({ children }: Props) {
         <FantasySeasonsProvider>
             <AthleteProvider>
                 <SportActionsDefinitionsProvider>
-                    <PlayerProfileProvider>
-                        {children}
-                    </PlayerProfileProvider>
+                    {children}
                 </SportActionsDefinitionsProvider>
             </AthleteProvider>
         </FantasySeasonsProvider>

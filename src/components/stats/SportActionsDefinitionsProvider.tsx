@@ -1,11 +1,11 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { sportActionDefinitionsAtom } from '../../state/sportActions.atoms'
 import {ScopeProvider} from 'jotai-scope';
-import useSWR from 'swr';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { sportActionsService } from '../../services/sportActionsService';
 import { ReactNode, useEffect, useMemo } from 'react';
 import ScrummyLoadingState from '../ui/ScrummyLoadingState';
+import useSWRImmutable from 'swr/immutable';
 
 type Props = {
     children?: ReactNode
@@ -33,7 +33,7 @@ function Content({children} : Props) {
     const setDefintions = useSetAtom(sportActionDefinitionsAtom);
     
     const key = swrFetchKeys.getSportActionsDefinitions();
-    const {data: fetchedDefintions, isLoading} = useSWR(key, () => sportActionsService.getDefinitionList());
+    const {data: fetchedDefintions, isLoading} = useSWRImmutable(key, () => sportActionsService.getDefinitionList());
 
     useEffect(() => {
         if (fetchedDefintions) setDefintions(fetchedDefintions);

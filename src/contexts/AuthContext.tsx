@@ -2,11 +2,12 @@ import { createContext, useContext, ReactNode, useCallback } from 'react';
 import { authService } from '../services/authService';
 import { useAuthToken } from '../providers/AuthTokenProvider';
 import { Activity } from '../components/shared/Activity';
-import useSWR, { KeyedMutator } from 'swr';
+import { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { analytics } from '../services/analytics/anayticsService';
 import { useDebounced } from '../hooks/useDebounced';
+import useSWRImmutable from 'swr/immutable'
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -48,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     data: authUser,
     isLoading,
     mutate,
-  } = useSWR(fetchKey, () => authService.whoami(accessToken));
+  } = useSWRImmutable(fetchKey, () => authService.whoami(accessToken));
 
   const setAuth = useCallback(
     (token: string, user: DjangoAuthUser) => {

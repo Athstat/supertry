@@ -3,12 +3,12 @@ import { fantasySeasonsAtom } from '../../../state/fantasy/fantasyLeagueScreen.a
 import { fantasySeasonsAtoms } from '../../../state/dashboard/dashboard.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import { useAtom, useSetAtom } from 'jotai';
-import useSWR from 'swr';
 import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { seasonService } from '../../../services/seasonsService';
 import { logger } from '../../../services/logger';
 import { useDebounced } from '../../../hooks/useDebounced';
+import useSWRImmutable from 'swr/immutable';
 
 type Props = {
   children?: ReactNode;
@@ -39,12 +39,12 @@ function InnerProvider({ children }: Props) {
   const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
   const seasonsKey = swrFetchKeys.getActiveFantasySeasons();
-  const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
+  const { data: seasonsFetched, isLoading: loadingSeasons } = useSWRImmutable(seasonsKey, () =>
     fantasySeasonsService.getAllFantasySeasons(true)
   );
 
   const roundsKey = currentSeason ? swrFetchKeys.getSeasonRounds(currentSeason.id) : null;
-  const { data: roundsFetched, isLoading: loadingRounds } = useSWR(roundsKey, () =>
+  const { data: roundsFetched, isLoading: loadingRounds } = useSWRImmutable(roundsKey, () =>
     seasonService.getSeasonRounds(currentSeason?.id ?? '')
   );
 
