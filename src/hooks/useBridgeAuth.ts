@@ -105,7 +105,7 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
       authTokenService.clearUserTokens();
       return false;
     }
-  }, [window]);
+  }, [setIsAuthenticated]);
 
   useEffect(() => {
     // Set up the listener for when mobile app provides auth status
@@ -144,7 +144,7 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
     return () => {
       window.onScrummyAuthStatusReady = undefined;
     };
-  }, []);
+  }, [setIsAuthenticated]);
 
   /** Notifies the bridge of login by reading the auth token,
    * and setting the user data */
