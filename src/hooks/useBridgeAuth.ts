@@ -185,7 +185,7 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
   };
 }
 
-export function useBrudgeAuthV2() {
+export function getBridgeAuthV2() {
   /** Communicates with bridge for the auth token to be
    * saved on the mobile devices async storage
    */
