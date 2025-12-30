@@ -14,7 +14,6 @@ import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTe
 import { useMemo } from "react";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
-import TeamJersey from "../player/TeamJersey";
 import { Activity } from "../shared/Activity";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
@@ -117,22 +116,11 @@ export function PlayerActionModal({
 
         <div className="flex flex-row items-center justify-between" >
           <div className="" >
-            {player.image_url && <PlayerMugshot
+            {<PlayerMugshot
               className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-800"
               url={player.image_url}
+              teamId={player.athlete_team_id}
             />}
-
-            {!player.image_url && (
-
-              <div className="relative w-20 h-20 overflow-clip rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex flex-col items-center justify-center" >
-                <TeamJersey
-                  className="w-16 h-16 -bottom-2 absolute rounded-full"
-                  hideFade
-                  teamId={player.athlete_team_id ?? ""}
-                  useBaseClasses={false}
-                />
-              </div>
-            )}
           </div>
 
           <div className="flex flex-col items-center justify-center" >

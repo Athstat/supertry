@@ -6,7 +6,6 @@ import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { twMerge } from "tailwind-merge";
-import TeamJersey from "../../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
@@ -136,22 +135,11 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
             </div>
           )}
 
-          {player.image_url && <PlayerMugshot
+          {<PlayerMugshot
             url={player.image_url}
             teamId={player.athlete_team_id}
+            className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-blue-800"
           />}
-
-          {!player.image_url && (
-            <div className="w-12 h-12 flex flex-col items-center justify-center rounded-full bg-blue-600/40" >
-              <TeamJersey
-                teamId={player.athlete_team_id}
-                className="w-10 h-10"
-                useBaseClasses={false}
-              />
-            </div>
-          )}
-
-
         </div>
 
         <div className="flex flex-col items-start justify-center" >
