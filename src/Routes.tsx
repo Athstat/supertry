@@ -46,7 +46,7 @@ import AllPlayersScreen from './screens/players/AllPlayersScreen';
 import ScoutingListScreen from './screens/scouting/ScoutingListScreen';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from './types/constants';
-import FantasyLeagueGroupStandingsScreen from './screens/fantasy-leagues/FantasyLeagueGroupStandingsScreen';
+import LeagueStandingsScreen from './screens/fantasy-leagues/LeagueStandingsScreen';
 import PlayersByTeamScreens from './screens/players/PlayersByTeamScreens';
 import FantasyTopPerformersScreen from './screens/players/FantasyTopPerformersScreen';
 
@@ -152,7 +152,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <FantasyLeagueGroupStandingsScreen />
+                <LeagueStandingsScreen />
               </Layout>
             </ProtectedRoute>
           }

@@ -22,7 +22,11 @@ export function MyFantasyTeamScreen() {
   const { authUser } = useAuth();
 
   return (
-    <FantasyLeagueGroupDataProvider loadingFallback={<LeagueScreenLoadingSkeleton />} leagueId={leagueId}>
+    <FantasyLeagueGroupDataProvider
+      loadingFallback={<LeagueScreenLoadingSkeleton />}
+      leagueId={leagueId}
+      fetchMembers={false}
+    >
       <TeamHistoryProvider user={authUser} loadingFallback={<LeagueScreenLoadingSkeleton />} >
         <Content />
       </TeamHistoryProvider>

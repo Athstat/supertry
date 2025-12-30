@@ -41,6 +41,7 @@ export default function LeagueMemberTeamScreen() {
             <FantasyLeagueGroupDataProvider
                 leagueId={leagueId}
                 loadingFallback={<LoadingFallback />}
+                fetchMembers={false}
             >
                 <TeamHistoryProvider
                     loadingFallback={<LoadingFallback />}

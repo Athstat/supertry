@@ -27,6 +27,7 @@ export default function ManageTeamCTA({ leagueGroup }: Props) {
     <FantasyLeagueGroupDataProvider
       loadingFallback={<LoadingSkeleton />}
       leagueId={leagueGroup.id}
+      fetchMembers={false}
     >
       <Content />
     </FantasyLeagueGroupDataProvider>

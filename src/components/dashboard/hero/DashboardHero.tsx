@@ -14,6 +14,7 @@ export default function DashboardHero() {
     <FantasyLeagueGroupDataProvider
       leagueId={featuredLeague?.id}
       loadingFallback={<DashboardHeroLoadingSkeleton />}
+      fetchMembers={false}
     >
       <Content/>
     </FantasyLeagueGroupDataProvider>
