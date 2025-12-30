@@ -14,7 +14,7 @@ import CreateFantasyTeamProvider from '../../providers/fantasy-teams/CreateFanta
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
 /** Renders the my team tab  */
-export default function MyTeamsTab() {
+export default function MyTeamView() {
   const { authUser } = useAuth();
 
   return (

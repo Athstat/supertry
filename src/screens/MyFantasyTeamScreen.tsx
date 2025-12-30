@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import MyTeamsTab from '../components/fantasy-leagues/MyTeamTab';
+import MyTeamView from '../components/fantasy-leagues/MyTeamView';
 import { useEffect } from 'react';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
@@ -14,11 +14,13 @@ import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
 import PitchViewLoadingSkeleton from '../components/fantasy-leagues/my-team/PitchViewLoadingSkeleton';
 
-export function FantasyLeagueScreen() {
+/** Renders my fantasy team screen */
+export function MyFantasyTeamScreen() {
   const { leagueId } = useParams();
 
   return (
     <FantasyLeagueGroupDataProvider loadingFallback={<LeagueScreenLoadingSkeleton />} leagueId={leagueId}>
+
       <Content />
     </FantasyLeagueGroupDataProvider>
   );
@@ -48,7 +50,7 @@ function Content() {
 
       <LeagueGroupScreenHeader />
       <LearnScrummyNoticeCard />
-      <MyTeamsTab />
+      <MyTeamView />
 
     </PageView>
   );
