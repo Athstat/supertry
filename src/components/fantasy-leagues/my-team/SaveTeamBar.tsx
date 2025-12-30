@@ -11,6 +11,7 @@ import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../../types/constants";
 import { useNavigationGuard } from "../../../hooks/web/useNavigationGuard";
+import UnsavedChangesWarningModal from "../../shared/UnsavedChangesModal";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -199,6 +200,13 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     </div>
                 )
             }
+            
+            <UnsavedChangesWarningModal 
+                title="Unsaved Changes"
+                message="Wait up, are you sure you want to discard the changes you made to your team? Your changes will be lost"
+                onCancel={() => {}}
+                onLeave={() => {}}
+            />
 
         </div>
     )
