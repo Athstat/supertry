@@ -243,6 +243,8 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
     const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
     const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
 
+    
+
     return (
         <>
             <div className={twMerge(
@@ -270,7 +272,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
-                        <p className="text-sm md:text-[10px] font-medium" >Not Playing </p>
+                        <p className="text-sm md:text-[10px] font-medium" >Not Playing</p>
                         <TriangleAlert className="w-3 h-3" />
                     </div>
                 </Activity>

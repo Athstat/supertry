@@ -130,7 +130,7 @@ type RoundProps = Props & {
 export function RoundAvailabilityText({ athlete, className, round }: RoundProps) {
 
     const { league } = useFantasyLeagueGroup();
-    const { report, isLoading } = usePlayerRoundAvailability(
+    const { report, isLoading, isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
         athlete.tracking_id,
         league?.season_id ?? "",
         round.start_round ?? 0
@@ -158,7 +158,7 @@ export function RoundAvailabilityText({ athlete, className, round }: RoundProps)
         return;
     }
 
-    const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE";
+    const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE" || isNotAvailable || isTeamNotPlaying;
     const isPast = isPastFixture(report.game)
 
     if (!notAvailable) {
@@ -185,9 +185,12 @@ export function RoundAvailabilityText({ athlete, className, round }: RoundProps)
                 {!isPast && 'Consider taking action if he is in your team'}
             </p>)}
 
-
-
             {report.status == "TEAM_NOT_PLAYING" && (<p className="text-xs" >
+                {athlete.player_name}'s {isPast ? 'was' : 'is'} team is not playing in this round
+                {!isPast && ' Consider taking action if he is in your team'}
+            </p>)}
+
+            {isTeamNotPlaying && (<p className="text-xs" >
                 {athlete.player_name}'s {isPast ? 'was' : 'is'} team is not playing in this round
                 {!isPast && ' Consider taking action if he is in your team'}
             </p>)}

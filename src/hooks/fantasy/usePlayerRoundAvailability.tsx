@@ -8,7 +8,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
 
   const shouldFetch = (Boolean(athleteId) && Boolean(seasonId)) && (roundNumber > 0);
   const key = shouldFetch ? `/athlete/${athleteId}/general-availabilityby-season/${seasonId}/${roundNumber}` : null;
-  
+
   const { data, isLoading } = useSWR(key, () => djangoAthleteService.getRoundAvailabilityReport(
     athleteId,
     seasonId,
@@ -31,9 +31,24 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     return firstReport?.status === "NOT_AVAILABLE";
   }, [firstReport]);
 
+  const isGameTooFarAway = useMemo(() => {
+    if (nextMatch) {
+      const dateNow = new Date();
+      const { kickoff_time } = nextMatch;
+
+      if (kickoff_time) {
+        const timeGap = 1000 * 60 * 60 * 24 * 7;
+        const adjustedKickoff = new Date(kickoff_time).valueOf() - timeGap
+        return dateNow.valueOf() < adjustedKickoff;
+      }
+    }
+
+    return false;
+  }, [nextMatch]);
+
   const isTeamNotPlaying = useMemo(() => {
-    return firstReport?.status === "TEAM_NOT_PLAYING";
-  }, [firstReport]);
+    return firstReport?.status === "TEAM_NOT_PLAYING" || isGameTooFarAway;
+  }, [firstReport?.status, isGameTooFarAway]);
 
   const isAvailable = useMemo(() => {
     return firstReport?.status === "AVAILABLE";
@@ -53,7 +68,9 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     }
 
     return false;
-  }, [nextMatch])
+  }, [nextMatch]);
+
+
 
   return {
     report: firstReport,
@@ -63,6 +80,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     isNotAvailable,
     isTeamNotPlaying,
     isPastGame,
-    isAvailable
+    isAvailable,
+    isGameTooFarAway
   };
 }
