@@ -57,5 +57,6 @@ console.log("Card Background", window.DARK_CARD_BACKGROUND_CLASSNAME);
 
 
 export const CACHING_CONFIG = {
-  userProfileCachePeriod: 1000 * 60 * 60 * 24 // 24 Hours
+  userProfileCachePeriod: 1000 * 60 * 60 * 24, // 24 Hours
+  sportsActionCachePeriod: 1000 * 60 * 60 * 24, // 24 Hours
 }

@@ -5,7 +5,8 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import { sportActionsService } from '../../services/sportActionsService';
 import { ReactNode, useEffect, useMemo } from 'react';
 import ScrummyLoadingState from '../ui/ScrummyLoadingState';
-import useSWRImmutable from 'swr/immutable';
+import useSWR from 'swr';
+import { CACHING_CONFIG } from '../../types/constants';
 
 type Props = {
     children?: ReactNode
@@ -33,7 +34,13 @@ function Content({children} : Props) {
     const setDefintions = useSetAtom(sportActionDefinitionsAtom);
     
     const key = swrFetchKeys.getSportActionsDefinitions();
-    const {data: fetchedDefintions, isLoading} = useSWRImmutable(key, () => sportActionsService.getDefinitionList());
+    const {data: fetchedDefintions, isLoading} = useSWR(key, () => sportActionsService.getDefinitionList(), {
+        dedupingInterval: CACHING_CONFIG.sportsActionCachePeriod,
+        refreshWhenHidden: false,
+        revalidateIfStale: true,
+        revalidateOnMount: false,
+        revalidateOnFocus: false
+    });
 
     useEffect(() => {
         if (fetchedDefintions) setDefintions(fetchedDefintions);
