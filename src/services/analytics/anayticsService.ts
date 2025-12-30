@@ -17,8 +17,6 @@ function initAmplitude() {
         defaultTracking: true,
       });
     }
-
-    console.log("Amplitude is Initialized");
     
   } catch (err) {
     console.log("error intializing amplitude ", err);

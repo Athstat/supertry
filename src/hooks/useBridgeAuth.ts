@@ -17,7 +17,6 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
 
       // If bridge is available, request auth status
       if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
-        console.log('AuthContext: Requesting auth status from mobile app via initializeAuth');
         const authStatus = await window.ScrummyBridge.initializeAuth();
 
         if (authStatus && authStatus.isAuthenticated) {
@@ -215,7 +214,6 @@ export function useGetBridgeAuthV2() {
 
       // If bridge is available, request auth status
       if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
-        console.log('AuthContext: Requesting auth status from mobile app via initializeAuth');
         const authStatus = await window.ScrummyBridge.initializeAuth();
 
         

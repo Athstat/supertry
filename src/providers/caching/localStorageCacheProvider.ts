@@ -6,8 +6,6 @@ const CACHE_KEY = 'web-app-cache';
 /** Creates a cache that can be synced with local storage */
 export function localStorageCacheProvider(): Cache {
 
-  console.log("Using Local Storage Cache 🍪");
-
   const map: Map<string, unknown> = new Map(JSON.parse(localStorage.getItem(CACHE_KEY) || '[]'))
 
   window.addEventListener('beforeunload', () => {
