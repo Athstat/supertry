@@ -15,6 +15,7 @@ import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import FormIndicator from '../../../shared/FormIndicator';
 import PlayerTeamCard from '../PlayerTeamCard';
 import Experimental from '../../../shared/ab_testing/Experimental';
+import PlayerNextMatchCard from '../PlayerNextMatchCard';
 
 type Props = {
   player: IProAthlete;
@@ -125,11 +126,15 @@ export default function PlayerOverviewTab({ player }: Props) {
         season={currentSeason}
       />}
 
+      <PlayerNextMatchCard
+        player={player}
+      />
 
       {currentSeason && <PlayerPercentageSelectedCard
         player={player}
         season={currentSeason}
       />}
+
       {/* 
       <PlayerPriceHistoryCard
         player={player}

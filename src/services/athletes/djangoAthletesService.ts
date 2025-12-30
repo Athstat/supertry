@@ -1,4 +1,5 @@
 import { IProAthlete, IAthleteSeasonStarRatings, AthleteRoundAvailabilityReport, PlayerPriceHistoryItem } from '../../types/athletes';
+import { IFixture } from '../../types/games';
 import { IProSeason } from '../../types/season';
 import { SportAction } from '../../types/sports_actions';
 import { getUri, getAuthHeader } from '../../utils/backendUtils';
@@ -248,6 +249,23 @@ export const djangoAthleteService = {
       }
     } catch (err) {
       logger.error("Error fetching price history ", err);
+    }
+
+    return [];
+  },
+
+  getNextNMatches: async (athleteId: string, limit: number = 1) : Promise<IFixture[]> => {
+    try {
+      const uri = getUri(`/api/v1/athletes/${athleteId}/next-matches?limit=${limit}`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as IFixture[];
+      }
+    } catch (err) {
+      logger.error("Error fetching next match ", err);
     }
 
     return [];
