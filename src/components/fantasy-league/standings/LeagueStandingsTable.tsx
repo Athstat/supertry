@@ -10,6 +10,7 @@ import SecondaryText from '../../shared/SecondaryText';
 import { useMemo } from 'react';
 import { useLeagueRoundStandingsFilter } from '../../../hooks/fantasy/useLeagueRoundStandingsFilter';
 import { useAuth } from '../../../contexts/AuthContext';
+import { smartRoundUp } from '../../../utils/intUtils';
 
 type Props = {
   isLoading?: boolean;
@@ -128,7 +129,7 @@ function LeagueStandingsRow({ ranking, isUser, hideUserScore, index, onClick }: 
   const rank = ranking.league_rank ?? index + 1;
 
   const pointsDisplay =
-    isUser && hideUserScore ? '-' : ranking.total_score ? Math.floor(ranking.total_score) : '-';
+    isUser && hideUserScore ? '-' : ranking.total_score ? smartRoundUp(ranking.total_score) : '-';
 
   const handleClick = () => {
     if (onClick && memberRecord) {
