@@ -31,7 +31,6 @@ export function useLeagueConfig(seasonId?: string) {
 
                 if (config) {
                     setLeagueConfig(config);
-                    console.log("League config: ", config);
                 } else {
                     console.log("Failed to load league configuration");
                 }

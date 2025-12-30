@@ -137,8 +137,6 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
   const showScore = !isLoading && isLocked
 
-  console.log("User Team ", team);
-
   return (
     <div className="flex flex-col min-h-[30px] max-h-[30px]" >
 

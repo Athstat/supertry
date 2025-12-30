@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { fantasyTeamService } from "../../../services/fantasyTeamService";
@@ -10,6 +10,7 @@ import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
 import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../../types/constants";
+import { useNavigationGuard } from "../../../hooks/web/useNavigationGuard";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -32,7 +33,15 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
         isTeamFull, slots, team, teamCaptain
     } = useFantasyLeagueTeam();
 
-    console.log("Selected team and full data structure ", team);
+    const navigationGuard = useCallback(() => {
+        if (changesDetected) {
+            return false;
+        }
+
+        return true;
+    }, [changesDetected]);
+
+    useNavigationGuard(navigationGuard);
 
     const isEditing = useMemo(() => {
         return changesDetected;

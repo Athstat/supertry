@@ -7,8 +7,13 @@ export type NavigationElementViewMode = "hidden" | "visible";
 const topBarViewModeAtom = atom<NavigationElementViewMode>("visible");
 const bottomBarViewModeAtom = atom<NavigationElementViewMode>("visible");
 
+/** Holds a function that will run before the navigation logic is run
+ * its returns false to stop navigation from taking place */
+const navigationGuardFunctionAtom = atom<() => boolean>();
+
 /** Atoms for manipulating state of the navigation bars */
 export const navigationBarsAtoms = {
     topBarViewModeAtom,
-    bottomBarViewModeAtom
+    bottomBarViewModeAtom,
+    navigationGuardFunctionAtom
 }

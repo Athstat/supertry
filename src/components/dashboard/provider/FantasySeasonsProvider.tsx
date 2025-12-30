@@ -69,7 +69,6 @@ function InnerProvider({ children }: Props) {
 
   useEffect(() => {
     if (roundsFetched) {
-      console.log("Season Rounds ", roundsFetched);
       setSeasonRounds(roundsFetched);
     }
   }, [roundsFetched, setSeasonRounds]);

@@ -35,7 +35,6 @@ function InnerProvider({ children }: Props) {
         if (pathAndSearch) {
             setRouterStack(stack => {
                 stack.push(pathAndSearch);
-                console.log("Current stack: ", stack);
                 return stack;
             });
         }

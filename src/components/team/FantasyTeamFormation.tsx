@@ -51,6 +51,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
 
             return (
               <SlotCard
+                key={slot.slotNumber}
                 slot={slot}
                 position={pos}
                 round={round}

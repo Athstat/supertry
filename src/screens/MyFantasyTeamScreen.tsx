@@ -13,15 +13,19 @@ import RoundedCard from '../components/shared/RoundedCard';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
 import PitchViewLoadingSkeleton from '../components/fantasy-leagues/my-team/PitchViewLoadingSkeleton';
+import TeamHistoryProvider from '../providers/fantasy-teams/TeamHistoryProvider';
+import { useAuth } from '../contexts/AuthContext';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
   const { leagueId } = useParams();
+  const { authUser } = useAuth();
 
   return (
     <FantasyLeagueGroupDataProvider loadingFallback={<LeagueScreenLoadingSkeleton />} leagueId={leagueId}>
-
-      <Content />
+      <TeamHistoryProvider user={authUser} loadingFallback={<LeagueScreenLoadingSkeleton />} >
+        <Content />
+      </TeamHistoryProvider>
     </FantasyLeagueGroupDataProvider>
   );
 }

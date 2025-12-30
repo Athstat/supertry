@@ -2,8 +2,6 @@ import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
 import CreateTeamView from './CreateTeamView';
 import FantasyTeamView from './my-team/FantasyTeamView';
 import NoTeamCreatedFallback from './NoTeamCreatedFallback';
-import TeamHistoryProvider from '../../providers/fantasy-teams/TeamHistoryProvider';
-import { useAuth } from '../../contexts/AuthContext';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
@@ -15,12 +13,9 @@ import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
 /** Renders the my team tab  */
 export default function MyTeamView() {
-  const { authUser } = useAuth();
 
   return (
-    <TeamHistoryProvider user={authUser} loadingFallback={<PitchViewLoadingSkeleton />}>
-      <MyTeamModeSelector />
-    </TeamHistoryProvider>
+    <MyTeamModeSelector />
   );
 }
 
@@ -90,8 +85,8 @@ function MyTeamModeSelector() {
             <FantasyTeamView
               leagueConfig={leagueConfig}
               leagueRound={round}
-              onTeamUpdated={async () => {}}
-              onBack={() => {}}
+              onTeamUpdated={async () => { }}
+              onBack={() => { }}
             />
           </FantasyLeagueTeamProvider>
         )}
