@@ -21,7 +21,6 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
         const authStatus = await window.ScrummyBridge.initializeAuth();
 
         if (authStatus && authStatus.isAuthenticated) {
-          console.log('AuthContext: Found authentication status from mobile app:', authStatus);
           const { tokens, userData } = authStatus;
 
           if (tokens && tokens.accessToken) {
@@ -220,7 +219,6 @@ export function useBrudgeAuthV2() {
         const authStatus = await window.ScrummyBridge.initializeAuth();
 
         if (authStatus && authStatus.isAuthenticated) {
-          console.log('AuthContext: Found authentication status from mobile app:', authStatus);
 
           const { tokens } = authStatus;
           return tokens?.accessToken;

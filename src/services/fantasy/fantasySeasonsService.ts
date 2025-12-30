@@ -83,7 +83,6 @@ export const fantasySeasonsService = {
 
             const query_params = `?limit=${limit}${round_number ? `&round_number=${round_number}` : ''}`;
             const uri = getUri(`/api/v1/fantasy-seasons/${id}/player-rankings/by-points-scored${query_params}`);
-            console.log("FInal URI ", uri);
 
             const res = await fetch(uri, {
                 headers: getAuthHeader()
