@@ -46,11 +46,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchKey = accessToken ? `/auth-user/${accessToken}` : null;
 
+  console.log("Fetch key ", fetchKey);
+
   const { data: authUser, isLoading, mutate } = useSWR(fetchKey, () => authService.whoami(accessToken), {
     dedupingInterval: CACHING_CONFIG.userProfileCachePeriod,
     revalidateOnFocus: false,
-    revalidateOnMount: false,
-    revalidateOnReconnect: false
   });
 
   const setAuth = useCallback(

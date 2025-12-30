@@ -185,7 +185,7 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
   };
 }
 
-export function getBridgeAuthV2() {
+export function useGetBridgeAuthV2() {
   /** Communicates with bridge for the auth token to be
    * saved on the mobile devices async storage
    */
@@ -218,8 +218,9 @@ export function getBridgeAuthV2() {
         console.log('AuthContext: Requesting auth status from mobile app via initializeAuth');
         const authStatus = await window.ScrummyBridge.initializeAuth();
 
+        
         if (authStatus && authStatus.isAuthenticated) {
-
+          
           const { tokens } = authStatus;
           return tokens?.accessToken;
         }

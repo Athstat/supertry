@@ -3,7 +3,7 @@ import { DjangoAuthUser } from "../types/auth";
 import { authTokenService } from "../services/auth/authTokenService";
 import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { logoutFromBridge } from "../utils/bridgeUtils";
-import { getBridgeAuthV2 } from "../hooks/useBridgeAuth";
+import { useGetBridgeAuthV2 } from "../hooks/useBridgeAuth";
 
 type AuthTokenContextProps = {
     /** The auth token for the current login session */
@@ -36,7 +36,7 @@ type Props = {
 export default function AuthTokenProvider({ children }: Props) {
 
     const [accessToken, setAccessToken] = useState<string>();
-    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = getBridgeAuthV2();
+    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = useGetBridgeAuthV2();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {

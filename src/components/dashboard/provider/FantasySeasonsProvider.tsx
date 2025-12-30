@@ -44,7 +44,7 @@ function InnerProvider({ children }: Props) {
   const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
     fantasySeasonsService.getAllFantasySeasons(true), {
       revalidateOnFocus: false,
-      revalidateOnMount: false,
+      revalidateOnMount: true,
       dedupingInterval: CACHING_CONFIG.fantasySeasonsCachePeriod
     }
   );
