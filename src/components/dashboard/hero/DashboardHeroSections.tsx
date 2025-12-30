@@ -14,6 +14,7 @@ import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import RoundedCard from "../../shared/RoundedCard";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import { trimSeasonYear } from "../CompetitionSelector";
+import { smartRoundUp } from "../../../utils/intUtils";
 
 
 export function DashboardHeroLoadingSkeleton() {
@@ -127,7 +128,7 @@ export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
       {/* Global Average */}
       <div className='flex flex-col items-center justify-center gap-1' >
         <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-          {Math.floor(averagePointsScored || 0)}
+          {smartRoundUp(averagePointsScored || 0)}
         </p>
 
         <div className="flex-1 flex justify-center">
@@ -138,7 +139,7 @@ export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
       {/* User Score */}
       <div className='flex flex-col items-center justify-center gap-1' >
         <p className="text-2xl font-semibold text-white" style={{ fontFamily: 'Oswald, sans-serif', marginBottom: -5 }}>
-          {Math.floor(userScore || 0)}
+          {smartRoundUp(userScore || 0)}
         </p>
         <p className="text-xs text-white" style={{ marginBottom: -10 }}>points</p>
 
@@ -156,7 +157,7 @@ export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
       {/* Highest Points Scored */}
       <div className='flex flex-col items-center justify-center gap-1' >
         <p className="text-lg font-medium text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>
-          {Math.floor(highestPointsScored || 0)}
+          {smartRoundUp(highestPointsScored || 0)}
         </p>
 
         <div className="flex-1 flex justify-center">
