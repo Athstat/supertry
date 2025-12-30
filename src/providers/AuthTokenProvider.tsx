@@ -41,8 +41,8 @@ export default function AuthTokenProvider({ children }: Props) {
     const {data: accessToken, isLoading, mutate: setAccessToken} = useSWR(key, () => fetcher());
 
     // If auth token has been replaced, then notify bridge of this
-    const handleChangeAuthToken = (token: string) => {
-        setAccessToken(token);
+    const handleChangeAuthToken = async (token: string) => {
+        await setAccessToken(token);
         authTokenService.setAccessToken(token);
         saveAccessTokenToMobile(token);
     }
