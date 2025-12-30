@@ -30,7 +30,7 @@ export default function PlayerNextMatchCard({ player }: Props) {
                 fixture={nextMatch}
                 showCompetition
                 showLogos
-                className="border-none w-full hover:bg-transparent dark:hover:bg-transparent p-0 bg-transparent dark:bg-transparent"
+                className="border-none w-full shadow-none hover:bg-transparent dark:hover:bg-transparent p-0 bg-transparent dark:bg-transparent"
             />}
 
             {!nextMatch && (
