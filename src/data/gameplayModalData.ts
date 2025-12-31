@@ -84,27 +84,27 @@ export const gameplayModalData: GameplayModalData = {
     {
       "title": "Fantasy Points Breakdown",
       "emoji": "📊",
-      "description": "Understanding how players earn fantasy points is key to building a winning squad. Points are awarded based on in-game actions, with different values for attacking plays, defensive efforts, and disciplinary actions.",
+      "description": "Understanding how players earn fantasy points is key to building a winning squad. Points are awarded based on in-game actions, with different values for attacking plays, defensive efforts, set piece work, and disciplinary actions.",
       "subTopics": [
         {
-          "title": "High Value Actions",
-          "description": "Tries: 4 points | Try Assist: 2 points | Kick Try Scored: 2 points. These are the game-changing moments that can make or break your fantasy week."
+          "title": "High Impact Actions",
+          "description": "Try Assist: 2 points | Scrums Won Outright: 1.2 points | Scrums Won Free Kick: 1.1 points. These are the game-changing moments that make a real difference."
         },
         {
           "title": "Core Defensive & Attacking Actions",
-          "description": "Clean Breaks, Defenders Beaten, Dominant Tackles, Lineout Won Steal, Offload, Tackle Turnover, Turnover Won: 1 point each. Consistent performers in these areas rack up solid points."
+          "description": "Clean Breaks, Defenders Beaten, Dominant Tackles, Lineout Won Steal, Offload, Tackle Turnover, Turnover Won: 1 point each. Consistent performers in these areas rack up solid points week after week."
         },
         {
-          "title": "Goal Kicking",
-          "description": "Conversion Goals, Penalty Goals, Drop Goals Converted: 0.5 points each. Reliable kickers add steady points throughout the match."
+          "title": "Scoring & Set Piece",
+          "description": "Match Points Scored: 0.8 points | Carry Dominant, Tackles, Scrums Won Penalty, Lineout Won Own Throw, Kick Penalty Good: 0.5 points each. Reliable contributors who keep the scoreboard ticking."
         },
         {
           "title": "Minor Actions",
-          "description": "Tackles: 0.5 points | Carries Crossed Gain Line: 0.3 points | Post Contact Metres: 0.1 points | Carry Metres Total & Ruck Arrival Attack: 0.05 points each. The small actions that add up over time."
+          "description": "Carry Crossed Gain Line: 0.3 points | Post Contact Metres: 0.1 points | Ruck Arrival Attack: 0.05 points | Minutes Played: 0.025 points | Carry Metres: 0.005 points. The small actions that add up over time."
         },
         {
           "title": "Penalties",
-          "description": "Missed Tackles/Conversions/Penalties/Drop Goals: -0.5 points each | Turnovers Conceded: -1 point | Red Cards & Second Yellow: -5 points each. Discipline matters — poor decisions cost you points."
+          "description": "Missed Tackles, Kick Penalty Bad, Scrums Lost Penalty: -0.5 points each | Scrums Lost Outright: -1 point. Discipline matters — poor decisions and errors cost you points."
         }
       ]
     }
