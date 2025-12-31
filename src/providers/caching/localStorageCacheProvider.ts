@@ -8,11 +8,8 @@ export function localStorageCacheProvider(): Cache {
 
   try {
 
-
     const initCache = JSON.parse(window?.INIT_WEBVIEW_CACHE || localStorage.getItem(CACHE_KEY) || '[]');
     const map: Map<string, unknown> = new Map(initCache);
-
-    console.log("Map init ", map);
 
     window.__WEB_VIEW_CACHE__ = map;
 
@@ -60,19 +57,17 @@ function persistCache(map: Map<string, unknown>) {
   try {
     localStorage.setItem(CACHE_KEY, serialized);
   } catch (err) {
-    console.log("Failed to write cache to local storage ", err);
+    logger.error("Failed to write cache to local storage ", err);
   }
 
 
   try {
-    console.log("Persisting the cache here no bridge no yet", map);
 
     if (scrummyBridge?.persistCache) {
-      console.log("Persisting the cache ", map);
       scrummyBridge.persistCache();
     }
   } catch (err) {
-    console.log("Error caching app data to webview", err);
+    logger.error("Error caching app data to webview", err);
   }
 
 }
