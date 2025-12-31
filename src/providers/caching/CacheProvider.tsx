@@ -13,37 +13,9 @@ type Props = {
 
 export default function CacheProvider({ children }: Props) {
 
-    const [isBridgeAvailable, setBridgeAvailable] = useState<boolean | null>(null);
+    const shouldUseMobile = isBridgeAvailable();
 
-    useEffect(() => {
-        const checkBridge = () => {
-            try {
-                const available = Boolean(window.ScrummyBridge);
-                setBridgeAvailable(available);
-            } catch (err) {
-                logger.error("Bridge check failed", err);
-                setBridgeAvailable(false);
-            }
-        };
-
-        // Give a small delay for bridge to initialize if needed
-        if (window.ScrummyBridge) {
-            checkBridge();
-        } else {
-            const interval = setInterval(() => {
-                if (window.ScrummyBridge) {
-                    clearInterval(interval);
-                    checkBridge();
-                }
-            }, 100); // check every 100ms until bridge appears
-        }
-    }, []);
-
-    if (isBridgeAvailable === null) {
-        return <LoadingState />; // wait until we know
-    }
-
-    if (isBridgeAvailable) {
+    if (shouldUseMobile) {
         return (
             <MobileCacheProvider>
                 {children}
@@ -139,4 +111,13 @@ export function MobileCacheProvider({ children }: Props) {
             {children}
         </SWRConfig>
     )
+}
+
+function isBridgeAvailable () {
+    try {
+        return Boolean(window.ScrummyBridge) 
+    } catch (err) {
+        logger.error(err);
+        return false;
+    }
 }
