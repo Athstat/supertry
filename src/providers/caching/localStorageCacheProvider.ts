@@ -25,6 +25,8 @@ export function localStorageCacheProvider(): Cache {
     });
 
     window.addEventListener('message', (event) => {
+      if (typeof event.data !== 'string') return;
+      
       try {
         const msg = JSON.parse(event.data);
 
