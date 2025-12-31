@@ -6,35 +6,45 @@ const CACHE_KEY = 'web-app-cache';
 /** Creates a cache that can be synced with local storage */
 export function localStorageCacheProvider(): Cache {
 
-  const map: Map<string, unknown> = new Map(JSON.parse(localStorage.getItem(CACHE_KEY) || '[]'));
+  try {
 
-  window.__WEB_VIEW_CACHE__ = map;
 
-  setInterval(() => {
-    persistCache(map);
-  }, 1000 * 10);
+    const initCache = JSON.parse(window?.INIT_WEBVIEW_CACHE || localStorage.getItem(CACHE_KEY) || '[]');
+    const map: Map<string, unknown> = new Map(initCache);
 
-  window.addEventListener('visibilitychange', () => {
-    
-    if (document.visibilityState === 'hidden') {
+    console.log("Map init ", map);
+
+    window.__WEB_VIEW_CACHE__ = map;
+
+    setInterval(() => {
       persistCache(map);
-    }
+    }, 1000 * 60 * 2);
 
-  });
+    window.addEventListener('visibilitychange', () => {
 
-  window.addEventListener('message', (event) => {
-    try {
-      const msg = JSON.parse(event.data);
-
-      if (msg.type === "PERSIST_WEBVIEW_CACHE") {
+      if (document.visibilityState === 'hidden') {
         persistCache(map);
       }
-    } catch (err) {
-      logger.error("Error persisting webview cache ", err);
-    }
-  });
 
-  return map as Cache
+    });
+
+    window.addEventListener('message', (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+
+        if (msg.type === "PERSIST_WEBVIEW_CACHE") {
+          persistCache(map);
+        }
+      } catch (err) {
+        logger.error("Error persisting webview cache ", err);
+      }
+    });
+
+    return map as Cache
+  } catch (err) {
+    console.log("Caching error ", err);
+    return new Map<string, unknown>() as Cache;
+  }
 }
 
 /** Function that clears the apps, cache */
