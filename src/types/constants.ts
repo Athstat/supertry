@@ -58,3 +58,6 @@ export const CACHING_CONFIG = {
   fantasySeasonsCachePeriod: 1000 * 60 * 60 * 1, // 1 Hour
   athletesCachePeriod: 1000 * 60 * 60 * 1 // 1 Hours
 }
+
+/** The Cache Key for where cached app data should be stored */
+export const APP_CACHE_KEY = 'app-cache';

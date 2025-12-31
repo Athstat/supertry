@@ -14,7 +14,7 @@ import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
 import FantasySeasonsProvider from "./components/dashboard/provider/FantasySeasonsProvider";
 import { SWRConfig } from "swr";
-import { localStorageCacheProvider } from "./providers/caching/localStorageCacheProvider";
+import { cacheProviderFactory } from "./providers/caching/cacheProviderFactory";
 
 type Props = {
     children?: ReactNode
@@ -23,12 +23,10 @@ type Props = {
 /** Difines all the root providers to its children */
 export default function RootProviders({ children }: Props) {
 
-
-
     return (
         <ThemeLayer>
             <SWRConfig
-                value={{provider: localStorageCacheProvider}}
+                value={{provider: cacheProviderFactory()}}
             >
                 <AuthenticationLayer>
                     <DataLayer>

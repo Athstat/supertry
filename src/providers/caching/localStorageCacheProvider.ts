@@ -1,89 +1,48 @@
 import { Cache } from "swr"
+import { APP_CACHE_KEY } from "../../types/constants"
+import { idxKVStore } from "../../utils/web/indexedDbUtils";
 import { logger } from "../../services/logger";
 
-const CACHE_KEY = 'web-app-cache';
-
-/** Creates a cache that can be synced with local storage */
 export function localStorageCacheProvider(): Cache {
 
-  try {
+  // When initializing, we restore the data from `localStorage` into a map.
+  const map = mapFactory();
 
-    const map = mapFactory();
+  setInterval(() => {
+    const appCache = JSON.stringify(Array.from(map.entries()))
+    idxKVStore.set(APP_CACHE_KEY, appCache)
 
-    window.__WEB_VIEW_CACHE__ = map;
+    console.log("Saving data to cache ", appCache);
+  }, 1000 * 5);
 
-    setInterval(() => {
-      persistCache(map);
-    }, 1000 * 60 * 2);
+  // Before unloading the app, we write back all the data into `localStorage`.
+  window.addEventListener('beforeunload', () => {
+    const appCache = JSON.stringify(Array.from(map.entries()))
+    idxKVStore.set(APP_CACHE_KEY, appCache)
 
-    window.addEventListener('visibilitychange', () => {
+    console.log("Saving data to cache ", appCache);
+  });
 
-      if (document.visibilityState === 'hidden') {
-        persistCache(map);
-      }
-
-    });
-
-    window.addEventListener('message', (event) => {
-      if (typeof event.data !== 'string') return;
-      
-      try {
-        const msg = JSON.parse(event.data);
-
-        if (msg.type === "PERSIST_WEBVIEW_CACHE") {
-          persistCache(map);
-        }
-      } catch (err) {
-        logger.error("Error persisting webview cache ", err);
-      }
-    });
-
-    return map as Cache;
-  } catch(err) {
-    logger.error("Failed to get local storage provider defaulting to simple inmemory cache ", err);
-    return new Map<string, unknown>() as Cache;
-  }
+  return map as Cache
 }
 
 /** Function that clears the apps, cache */
 export function clearAppCache() {
-  localStorage.removeItem(CACHE_KEY);
+  localStorage.removeItem(APP_CACHE_KEY);
 }
 
-function persistCache(map: Map<string, unknown>) {
-
-  const scrummyBridge = window?.ScrummyBridge;
-  const serialized = JSON.stringify(Array.from(map.entries()));
-
-  try {
-    localStorage.setItem(CACHE_KEY, serialized);
-  } catch (err) {
-    logger.error("Failed to write cache to local storage ", err);
-  }
-
+export function mapFactory() {
+  let map = new Map<string, unknown>();
 
   try {
 
-    if (scrummyBridge?.persistCache) {
-      scrummyBridge.persistCache();
-    }
+    idxKVStore.get(APP_CACHE_KEY).then((val) => {
+      map = new Map(JSON.parse(val || '[]'));
+    });
+
   } catch (err) {
-    logger.error("Error caching app data to webview", err);
+    logger.error("Failed to get value from index store, defaulting to inmem map ", err);
   }
 
-}
-
-/** Function that creates a map object */
-function mapFactory() {
-  try {
-
-    const initCache = JSON.parse(window?.INIT_WEBVIEW_CACHE || localStorage.getItem(CACHE_KEY) || '[]');
-    const map: Map<string, unknown> = new Map(initCache);
-
-    return map;
-  } catch (err) {
-    logger.error("Error loading initial cache ", err);
-  }
-
-  return new Map<string, unknown>();
+  return map;
 }
