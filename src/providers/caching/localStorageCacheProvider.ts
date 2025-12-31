@@ -10,8 +10,16 @@ export function localStorageCacheProvider(): Cache {
 
   window.__WEB_VIEW_CACHE__ = map;
 
-  window.addEventListener('beforeunload', () => {
+  setInterval(() => {
     persistCache(map);
+  }, 1000 * 10);
+
+  window.addEventListener('visibilitychange', () => {
+    
+    if (document.visibilityState === 'hidden') {
+      persistCache(map);
+    }
+
   });
 
   window.addEventListener('message', (event) => {
@@ -21,16 +29,10 @@ export function localStorageCacheProvider(): Cache {
       if (msg.type === "PERSIST_WEBVIEW_CACHE") {
         persistCache(map);
       }
-    } catch(err) {
+    } catch (err) {
       logger.error("Error persisting webview cache ", err);
     }
   });
-
-  const delay = 1000 * 10; // 1 Minute
-
-  setInterval(() => {
-    persistCache(map);
-  }, delay);
 
   return map as Cache
 }
@@ -40,14 +42,27 @@ export function clearAppCache() {
   localStorage.removeItem(CACHE_KEY);
 }
 
-async function persistCache(map: Map<string, unknown>) {
+function persistCache(map: Map<string, unknown>) {
+
   const scrummyBridge = window?.ScrummyBridge;
   const serialized = JSON.stringify(Array.from(map.entries()));
-  
-  localStorage.setItem(CACHE_KEY, serialized);
-  
-  if (scrummyBridge?.persistCache) {
-    scrummyBridge.persistCache();
+
+  try {
+    localStorage.setItem(CACHE_KEY, serialized);
+  } catch (err) {
+    console.log("Failed to write cache to local storage ", err);
+  }
+
+
+  try {
+    console.log("Persisting the cache here no bridge no yet", map);
+
+    if (scrummyBridge?.persistCache) {
+      console.log("Persisting the cache ", map);
+      scrummyBridge.persistCache();
+    }
+  } catch (err) {
+    console.log("Error caching app data to webview", err);
   }
 
 }
