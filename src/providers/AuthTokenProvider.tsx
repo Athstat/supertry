@@ -49,7 +49,6 @@ export default function AuthTokenProvider({ children }: Props) {
             const tokenFromBridge = await getSavedAccessTokenFromMobile();
 
             if (tokenFromBridge) {
-                console.log("Access Token from bridge ", tokenFromBridge);
                 setAccessToken(tokenFromBridge);
                 authTokenService.setAccessToken(tokenFromBridge);
                 setIsLoading(false);

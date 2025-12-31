@@ -6,7 +6,9 @@ const CACHE_KEY = 'web-app-cache';
 /** Creates a cache that can be synced with local storage */
 export function localStorageCacheProvider(): Cache {
 
-  const map: Map<string, unknown> = new Map(JSON.parse(localStorage.getItem(CACHE_KEY) || '[]'))
+  const map: Map<string, unknown> = new Map(JSON.parse(localStorage.getItem(CACHE_KEY) || '[]'));
+
+  window.__WEB_VIEW_CACHE__ = map;
 
   window.addEventListener('beforeunload', () => {
     persistCache(map);
@@ -24,6 +26,12 @@ export function localStorageCacheProvider(): Cache {
     }
   });
 
+  const delay = 1000 * 10; // 1 Minute
+
+  setInterval(() => {
+    persistCache(map);
+  }, delay);
+
   return map as Cache
 }
 
@@ -33,15 +41,13 @@ export function clearAppCache() {
 }
 
 async function persistCache(map: Map<string, unknown>) {
-  const webviewBridge = window.ReactNativeWebView;
-
-  const serialized = JSON.stringify(Array.from(map.entries()))
+  const scrummyBridge = window?.ScrummyBridge;
+  const serialized = JSON.stringify(Array.from(map.entries()));
   
   localStorage.setItem(CACHE_KEY, serialized);
   
-  if (webviewBridge) {
-    const message = { type: 'SAVE_WEBVIEW_CACHE', payload: serialized };
-    webviewBridge.postMessage(JSON.stringify(message));
+  if (scrummyBridge?.persistCache) {
+    scrummyBridge.persistCache();
   }
 
 }

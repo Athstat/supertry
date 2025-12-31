@@ -33,9 +33,6 @@ function getProdMobileDeviceId(): DeviceIdPair {
   let storedDeviceId = localStorage.getItem('device_id') || localStorage.getItem('mobile device_id') || '';
   let realDeviceId = window.deviceId || '';
 
-  console.log('Stored device ID: ', storedDeviceId);
-  console.log('Real device ID: ', realDeviceId);
-
   if (!storedDeviceId && !realDeviceId) {
     // throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');
     console.log('Unable to obtain mobile device ID, defaulting to random UUID');

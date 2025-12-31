@@ -74,6 +74,7 @@ declare global {
         error?: string;
       }>;
       openNotificationSettings?(): Promise<{ success: boolean }>;
+      persistCache?: () => void 
     };
     // Also support lowercase version (as injected by mobile app)
     scrummyBridge?: {
@@ -128,11 +129,13 @@ declare global {
         authUrl?: string;
       }>;
       openNotificationSettings?(): Promise<{ success: boolean }>;
+      persistCache?: () => void
     };
 
     DARK_BACKGROUND_CLASSNAME?: string,
     DARK_CARD_BACKGROUND_CLASSNAME?: string,
-    MOBILE_THEME_NUMBER?: string
+    MOBILE_THEME_NUMBER?: string,
+    __WEB_VIEW_CACHE__?: Map<string, unknown>
   }
 }
 

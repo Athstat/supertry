@@ -51,9 +51,6 @@ export const AppColours = {
   CARD_BACKGROUND: currentTheme.cardBackgroundCN
 }
 
-console.log("Background", window.DARK_BACKGROUND_CLASSNAME)
-console.log("Card Background", window.DARK_CARD_BACKGROUND_CLASSNAME);
-
 
 export const CACHING_CONFIG = {
   userProfileCachePeriod: 1000 * 60 * 60 * 24, // 24 Hours
