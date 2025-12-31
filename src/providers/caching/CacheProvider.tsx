@@ -64,16 +64,12 @@ export function WebCacheProvider({ children }: Props) {
         setInterval(() => {
             const appCache = JSON.stringify(Array.from(map.entries()))
             idxKVStore.set(APP_CACHE_KEY, appCache)
-
-            console.log("Saving data to cache ", appCache);
-        }, 1000 * 5);
+        }, 1000 * 60 * 20); // 20 minutes
 
         // Before unloading the app, we write back all the data into `localStorage`.
         window.addEventListener('beforeunload', () => {
             const appCache = JSON.stringify(Array.from(map.entries()))
             idxKVStore.set(APP_CACHE_KEY, appCache)
-
-            console.log("Saving data to cache ", appCache);
         });
 
         return map as Cache;
