@@ -79,8 +79,6 @@ function mapFactory() {
     const initCache = JSON.parse(window?.INIT_WEBVIEW_CACHE || localStorage.getItem(APP_CACHE_KEY) || '[]');
     const map: Map<string, unknown> = new Map(initCache);
 
-    console.log("Initial Cache ", initCache);
-
     return map;
   } catch (err) {
     logger.error("Error loading initial cache ", err);

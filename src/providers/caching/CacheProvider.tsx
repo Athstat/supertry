@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react"
 import { logger } from "../../services/logger";
 import { APP_CACHE_KEY } from "../../types/constants";
 import { idxKVStore } from "../../utils/web/indexedDbUtils";
@@ -13,15 +13,35 @@ type Props = {
 
 export default function CacheProvider({ children }: Props) {
 
-    const isBridgeAvailable = useMemo(() => {
-        try {
-            return Boolean(window.ScrummyBridge?.isMobileApp() || false) 
-        } catch(err) {
-            logger.error("Bridge is not available ", err);
-        }
+    const [isBridgeAvailable, setBridgeAvailable] = useState<boolean | null>(null);
 
-        return false;
+    useEffect(() => {
+        const checkBridge = () => {
+            try {
+                const available = Boolean(window.ScrummyBridge);
+                setBridgeAvailable(available);
+            } catch (err) {
+                logger.error("Bridge check failed", err);
+                setBridgeAvailable(false);
+            }
+        };
+
+        // Give a small delay for bridge to initialize if needed
+        if (window.ScrummyBridge) {
+            checkBridge();
+        } else {
+            const interval = setInterval(() => {
+                if (window.ScrummyBridge) {
+                    clearInterval(interval);
+                    checkBridge();
+                }
+            }, 100); // check every 100ms until bridge appears
+        }
     }, []);
+
+    if (isBridgeAvailable === null) {
+        return <LoadingState />; // wait until we know
+    }
 
     if (isBridgeAvailable) {
         return (
@@ -81,6 +101,8 @@ export function WebCacheProvider({ children }: Props) {
         )
     }
 
+    console.log("Using WebView Cache");
+
     return (
         <SWRConfig value={{
             provider: providerFunc
@@ -107,6 +129,9 @@ async function webMapFactory() {
 }
 
 export function MobileCacheProvider({ children }: Props) {
+    
+    console.log("Using Mobile Cache");
+    
     return (
         <SWRConfig
             value={{ provider: mobileCacheProvider }}
