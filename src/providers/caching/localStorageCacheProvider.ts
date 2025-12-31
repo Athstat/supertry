@@ -31,7 +31,7 @@ export function clearAppCache() {
   localStorage.removeItem(APP_CACHE_KEY);
 }
 
-export function mapFactory() {
+function mapFactory() {
   let map = new Map<string, unknown>();
 
   try {

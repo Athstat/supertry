@@ -13,8 +13,7 @@ import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvide
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
 import FantasySeasonsProvider from "./components/dashboard/provider/FantasySeasonsProvider";
-import { SWRConfig } from "swr";
-import { cacheProviderFactory } from "./providers/caching/cacheProviderFactory";
+import CacheProvider from "./providers/caching/CacheProvider";
 
 type Props = {
     children?: ReactNode
@@ -25,9 +24,7 @@ export default function RootProviders({ children }: Props) {
 
     return (
         <ThemeLayer>
-            <SWRConfig
-                value={{provider: cacheProviderFactory()}}
-            >
+            <CacheProvider>
                 <AuthenticationLayer>
                     <DataLayer>
                         <AppStateLayer>
@@ -37,7 +34,7 @@ export default function RootProviders({ children }: Props) {
                         </AppStateLayer>
                     </DataLayer>
                 </AuthenticationLayer>
-            </SWRConfig>
+            </CacheProvider>
         </ThemeLayer>
     )
 }
