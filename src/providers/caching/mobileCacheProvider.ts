@@ -35,7 +35,7 @@ export function mobileCacheProvider(): Cache {
 
     setInterval(() => {
       persistCache(map);
-    }, 1000 * 60 * 2); // 2 minutes
+    }, 1000 * 60 * 20); // 20 minutes
 
     return map as Cache;
   } catch (err) {
