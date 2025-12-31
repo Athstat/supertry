@@ -6,35 +6,41 @@ const CACHE_KEY = 'web-app-cache';
 /** Creates a cache that can be synced with local storage */
 export function localStorageCacheProvider(): Cache {
 
-  const map = mapFactory();
+  try {
 
-  window.__WEB_VIEW_CACHE__ = map;
+    const map = mapFactory();
 
-  setInterval(() => {
-    persistCache(map);
-  }, 1000 * 60 * 2);
+    window.__WEB_VIEW_CACHE__ = map;
 
-  window.addEventListener('visibilitychange', () => {
-
-    if (document.visibilityState === 'hidden') {
+    setInterval(() => {
       persistCache(map);
-    }
+    }, 1000 * 60 * 2);
 
-  });
+    window.addEventListener('visibilitychange', () => {
 
-  window.addEventListener('message', (event) => {
-    try {
-      const msg = JSON.parse(event.data);
-
-      if (msg.type === "PERSIST_WEBVIEW_CACHE") {
+      if (document.visibilityState === 'hidden') {
         persistCache(map);
       }
-    } catch (err) {
-      logger.error("Error persisting webview cache ", err);
-    }
-  });
 
-  return map as Cache;
+    });
+
+    window.addEventListener('message', (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+
+        if (msg.type === "PERSIST_WEBVIEW_CACHE") {
+          persistCache(map);
+        }
+      } catch (err) {
+        logger.error("Error persisting webview cache ", err);
+      }
+    });
+
+    return map as Cache;
+  } catch(err) {
+    logger.error("Failed to get local storage provider defaulting to simple inmemory cache ", err);
+    return new Map<string, unknown>() as Cache;
+  }
 }
 
 /** Function that clears the apps, cache */
