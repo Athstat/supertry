@@ -1,10 +1,7 @@
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react"
+import { ReactNode } from "react"
 import { logger } from "../../services/logger";
-import { APP_CACHE_KEY } from "../../types/constants";
-import { idxKVStore } from "../../utils/web/indexedDbUtils";
-import { LoadingState } from "../../components/ui/LoadingState";
-import { Cache, SWRConfig } from "swr";
-import { mobileCacheProvider } from "./mobileCacheProvider";
+import {MobileCacheProvider} from "./MobileCacheProvider";
+import { WebCacheProvider } from "./WebCacheProvider";
 
 type Props = {
     children?: ReactNode
@@ -30,92 +27,9 @@ export default function CacheProvider({ children }: Props) {
     )
 }
 
-
-export function WebCacheProvider({ children }: Props) {
-
-    const [isLoading, setLoading] = useState(false);
-    const mapRef = useRef(new Map<string, unknown>());
-
-    useEffect(() => {
-        const fetcher = async () => {
-            setLoading(true);
-            try {
-                mapRef.current = await webMapFactory();
-            } catch (err) {
-                logger.error("Failed to get map from factory ", err);
-            }
-            setLoading(false);
-        };
-
-        fetcher();
-    }, []);
-
-    const providerFunc = useCallback(() => {
-        const map = mapRef.current;
-
-        setInterval(() => {
-            const appCache = JSON.stringify(Array.from(map.entries()))
-            idxKVStore.set(APP_CACHE_KEY, appCache)
-        }, 1000 * 60 * 20); // 20 minutes
-
-        // Before unloading the app, we write back all the data into `localStorage`.
-        window.addEventListener('beforeunload', () => {
-            const appCache = JSON.stringify(Array.from(map.entries()))
-            idxKVStore.set(APP_CACHE_KEY, appCache)
-        });
-
-        return map as Cache;
-    }, [mapRef]);
-
-    if (isLoading) {
-        return (
-            <LoadingState />
-        )
-    }
-
-    console.log("Using WebView Cache");
-
-    return (
-        <SWRConfig value={{
-            provider: providerFunc
-        }} >
-            {children}
-        </SWRConfig>
-    )
-}
-
-
-async function webMapFactory() {
-    let map = new Map<string, unknown>();
-
+function isBridgeAvailable() {
     try {
-
-        const prevCache = await idxKVStore.get(APP_CACHE_KEY);
-        map = new Map(JSON.parse(prevCache || '[]'));
-
-    } catch (err) {
-        logger.error("Failed to get value from index store, defaulting to inmem map ", err);
-    }
-
-    return map;
-}
-
-export function MobileCacheProvider({ children }: Props) {
-    
-    console.log("Using Mobile Cache");
-    
-    return (
-        <SWRConfig
-            value={{ provider: mobileCacheProvider }}
-        >
-            {children}
-        </SWRConfig>
-    )
-}
-
-function isBridgeAvailable () {
-    try {
-        return Boolean(window.ScrummyBridge) 
+        return Boolean(window.ScrummyBridge)
     } catch (err) {
         logger.error(err);
         return false;
