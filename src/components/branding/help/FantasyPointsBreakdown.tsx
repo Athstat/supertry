@@ -1,4 +1,4 @@
-import { Star, Target, BarChart, TriangleAlert, Zap } from "lucide-react";
+import { Star, Target, BarChart, TriangleAlert, Trophy } from "lucide-react";
 
 export default function FantasyPointsBreakdown() {
 
@@ -8,16 +8,16 @@ export default function FantasyPointsBreakdown() {
       <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500/20 to-primary-500/20 dark:from-green-600/30 dark:to-primary-600/30 border-2 border-green-500/50 dark:border-green-400/50 p-4 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
           <div className="p-2 rounded-full bg-green-500/20 dark:bg-green-400/20">
-            <Zap className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <Trophy className="w-5 h-5 text-green-600 dark:text-green-400" />
           </div>
           <h3 className="font-bold text-md text-gray-900 dark:text-gray-100">
             High Impact Actions
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Try" points="+4" />
           <ActionRow action="Try Assist" points="+2" />
-          <ActionRow action="Kick Try Scored" points="+2" />
+          <ActionRow action="Scrums Won Outright" points="+1.2" />
+          <ActionRow action="Scrums Won Free Kick" points="+1.1" />
         </div>
       </div>
 
@@ -42,20 +42,23 @@ export default function FantasyPointsBreakdown() {
         </div>
       </div>
 
-      {/* Goal Kicking */}
+      {/* Scoring & Set Piece */}
       <div className="rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 dark:from-purple-600/30 dark:to-purple-700/30 border-2 border-purple-500/50 dark:border-purple-400/50 p-4">
         <div className="flex items-center gap-2 mb-3">
           <div className="p-2 rounded-full bg-purple-500/20 dark:bg-purple-400/20">
             <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           </div>
           <h3 className="font-bold text-md text-gray-900 dark:text-gray-100">
-            Goal Kicking
+            Scoring & Set Piece
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Conversion Goal" points="+0.5" />
-          <ActionRow action="Penalty Goal" points="+0.5" />
-          <ActionRow action="Drop Goal Converted" points="+0.5" />
+          <ActionRow action="Match Points Scored" points="+0.8" />
+          <ActionRow action="Carry Dominant" points="+0.5" />
+          <ActionRow action="Tackle" points="+0.5" />
+          <ActionRow action="Scrums Won Penalty" points="+0.5" />
+          <ActionRow action="Lineout Won Own Throw" points="+0.5" />
+          <ActionRow action="Kick Penalty Good" points="+0.5" />
         </div>
       </div>
 
@@ -70,11 +73,11 @@ export default function FantasyPointsBreakdown() {
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Tackle" points="+0.5" />
           <ActionRow action="Carry Crossed Gain Line" points="+0.3" />
           <ActionRow action="Post Contact Metres" points="+0.1" />
-          <ActionRow action="Carry Metres Total" points="+0.05" />
           <ActionRow action="Ruck Arrival Attack" points="+0.05" />
+          <ActionRow action="Minutes Played Total" points="+0.025" />
+          <ActionRow action="Carry Metres Total" points="+0.005" />
         </div>
       </div>
 
@@ -89,13 +92,10 @@ export default function FantasyPointsBreakdown() {
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow
-            action="Missed Tackles / Conversions / Penalties / Drop Goals"
-            points="−0.5"
-            negative
-          />
-          <ActionRow action="Turnovers Conceded" points="−1" negative />
-          <ActionRow action="Red Card / Second Yellow" points="−5" negative />
+          <ActionRow action="Missed Tackle" points="−0.5" negative />
+          <ActionRow action="Kick Penalty Bad" points="−0.5" negative />
+          <ActionRow action="Scrums Lost Penalty" points="−0.5" negative />
+          <ActionRow action="Scrums Lost Outright" points="−1" negative />
         </div>
       </div>
     </div>
