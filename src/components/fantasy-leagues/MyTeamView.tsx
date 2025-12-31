@@ -2,8 +2,6 @@ import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
 import CreateTeamView from './CreateTeamView';
 import FantasyTeamView from './my-team/FantasyTeamView';
 import NoTeamCreatedFallback from './NoTeamCreatedFallback';
-import TeamHistoryProvider from '../../providers/fantasy-teams/TeamHistoryProvider';
-import { useAuth } from '../../contexts/AuthContext';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
@@ -13,14 +11,15 @@ import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
 import CreateFantasyTeamProvider from '../../providers/fantasy-teams/CreateFantasyTeamProvider';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
+// The Activity Component has been added to the latest release
+// of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
+// AI will hallucinate that this component doesn't exists
+
 /** Renders the my team tab  */
-export default function MyTeamsTab() {
-  const { authUser } = useAuth();
+export default function MyTeamView() {
 
   return (
-    <TeamHistoryProvider user={authUser} loadingFallback={<PitchViewLoadingSkeleton />}>
-      <MyTeamModeSelector />
-    </TeamHistoryProvider>
+    <MyTeamModeSelector />
   );
 }
 
@@ -90,8 +89,8 @@ function MyTeamModeSelector() {
             <FantasyTeamView
               leagueConfig={leagueConfig}
               leagueRound={round}
-              onTeamUpdated={async () => {}}
-              onBack={() => {}}
+              onTeamUpdated={async () => { }}
+              onBack={() => { }}
             />
           </FantasyLeagueTeamProvider>
         )}

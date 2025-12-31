@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
+import { clearAppCache } from '../../providers/caching/localStorageCacheProvider';
 
 type Props = {
     isGuestAccount?: boolean
@@ -16,8 +17,9 @@ export default function LogoutButton({ isGuestAccount }: Props) {
         try {
             setIsLoggingOut(true);
             await logout();
+            clearAppCache();
             setIsLoggingOut(false);
-        } catch { };
+        } catch {console.log("Logging user out")} ;
     };
 
     return (

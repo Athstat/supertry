@@ -17,11 +17,9 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
 
       // If bridge is available, request auth status
       if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
-        console.log('AuthContext: Requesting auth status from mobile app via initializeAuth');
         const authStatus = await window.ScrummyBridge.initializeAuth();
 
         if (authStatus && authStatus.isAuthenticated) {
-          console.log('AuthContext: Found authentication status from mobile app:', authStatus);
           const { tokens, userData } = authStatus;
 
           if (tokens && tokens.accessToken) {
@@ -106,7 +104,7 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
       authTokenService.clearUserTokens();
       return false;
     }
-  }, [window]);
+  }, [setIsAuthenticated]);
 
   useEffect(() => {
     // Set up the listener for when mobile app provides auth status
@@ -145,7 +143,7 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
     return () => {
       window.onScrummyAuthStatusReady = undefined;
     };
-  }, []);
+  }, [setIsAuthenticated]);
 
   /** Notifies the bridge of login by reading the auth token,
    * and setting the user data */
@@ -186,7 +184,7 @@ export function useBrudgeAuth(_: boolean, setIsAuthenticated: (val: boolean) => 
   };
 }
 
-export function useBrudgeAuthV2() {
+export function useGetBridgeAuthV2() {
   /** Communicates with bridge for the auth token to be
    * saved on the mobile devices async storage
    */
@@ -216,12 +214,11 @@ export function useBrudgeAuthV2() {
 
       // If bridge is available, request auth status
       if (window.ScrummyBridge && typeof window.ScrummyBridge.initializeAuth === 'function') {
-        console.log('AuthContext: Requesting auth status from mobile app via initializeAuth');
         const authStatus = await window.ScrummyBridge.initializeAuth();
 
+        
         if (authStatus && authStatus.isAuthenticated) {
-          console.log('AuthContext: Found authentication status from mobile app:', authStatus);
-
+          
           const { tokens } = authStatus;
           return tokens?.accessToken;
         }

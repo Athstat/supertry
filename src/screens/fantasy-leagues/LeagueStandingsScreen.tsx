@@ -10,7 +10,8 @@ import { LeagueStandings } from "../../components/fantasy-league/LeagueStandings
 import RoundedCard from "../../components/shared/RoundedCard";
 
 
-export default function FantasyLeagueGroupStandingsScreen() {
+/** Renders League standings screen */
+export default function LeagueStandingsScreen() {
 
     const { leagueId } = useParams();
     return (

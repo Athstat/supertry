@@ -192,7 +192,8 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
-                        <p className="text-[8px] md:text-[10px] font-medium" >Not Playing </p>
+                        {isNotAvailable && <p className="text-[8px] md:text-[10px] font-medium" >Not Playing </p>}
+                        {isTeamNotPlaying && <p className="text-[8px] md:text-[10px] font-medium" >Team Not Playing </p>}
                         <TriangleAlert className="w-3 h-3" />
                     </div>
                 </Activity>

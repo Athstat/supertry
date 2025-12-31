@@ -11,6 +11,7 @@ import SecondaryText from '../../shared/SecondaryText';
 import { useMyTeamView } from './MyTeamStateProvider';
 import { LeagueRoundCountdown2 } from '../../fantasy-league/LeagueCountdown';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import { smartRoundUp } from '../../../utils/intUtils';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;
@@ -129,12 +130,15 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
-  const { isReadOnly } = useFantasyLeagueTeam();
+  const { isReadOnly, team } = useFantasyLeagueTeam();
   const isLocked = isLeagueRoundLocked(leagueRound);
-  const { userScore, highestPointsScored, averagePointsScored, isLoading } =
+  const { highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummary(leagueRound);
 
   const showScore = !isLoading && isLocked
+
+  // Uses team?.overall_score here instead of userscore from the useRoundScoringSummary
+  // because that hook returns the auth user's score not the score of the teams manager
 
   return (
     <div className="flex flex-col min-h-[30px] max-h-[30px]" >
@@ -143,17 +147,17 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
         <div className="flex flex-row items-center justify-center gap-3" >
 
           <div className="flex flex-col items-center justify-center" >
-            <p className="font-black text-md" >{Math.round(averagePointsScored ?? 0)}</p>
+            <p className="font-black text-md" >{smartRoundUp(averagePointsScored ?? 0)}</p>
             <SecondaryText className="text-[10px]" >Average</SecondaryText>
           </div>
 
           <div className="flex flex-col items-center justify-center" >
-            <p className="font-black text-md" >{Math.round(userScore ?? 0)}</p>
+            <p className="font-black text-md" >{smartRoundUp(team?.overall_score ?? 0)}</p>
             <SecondaryText className="text-[10px]" >Score</SecondaryText>
           </div>
 
           <div className="flex flex-col items-center justify-center" >
-            <p className="font-black text-md" >{Math.round(highestPointsScored ?? 0)}</p>
+            <p className="font-black text-md" >{smartRoundUp(highestPointsScored ?? 0)}</p>
             <SecondaryText className="text-[10px]" >Highest</SecondaryText>
           </div>
         </div>

@@ -5,134 +5,89 @@
 import { BridgeUserData } from '../types/auth';
 import { authService } from '../services/authService';
 
+type ScrummyBridgeType = {
+  requestPushPermission(userData?: any): Promise<{
+    granted: boolean;
+    onesignal_id?: string;
+  }>;
+  login(
+    tokens: { accessToken: string; refreshToken: string },
+    userData: BridgeUserData
+  ): Promise<{ success: boolean }>;
+  logout(): Promise<{ success: boolean }>;
+  getAuthStatus(): Promise<{
+    isAuthenticated: boolean;
+    userData?: {
+      name?: string;
+      email?: string;
+      user_id?: string;
+      onesignal_id?: string;
+    };
+  }>;
+  getDeviceId(): Promise<string>;
+  getPushPermissionStatus?(): Promise<{
+    status: 'granted' | 'denied' | 'prompt';
+    onesignal_id?: string;
+  }>;
+  initializeAuth(): Promise<{
+    isAuthenticated: boolean;
+    tokens?: {
+      accessToken: string;
+      refreshToken: string;
+    };
+    userData?: {
+      name?: string;
+      email?: string;
+      user_id?: string;
+      external_id?: string;
+    };
+  }>;
+  // OAuth methods
+  isMobileApp(): boolean;
+  requestOAuth(
+    provider: string,
+    options?: {
+      clientId?: string;
+      redirectUri?: string;
+      url?: string;
+    }
+  ): Promise<{
+    success: boolean;
+    message?: string;
+    authUrl?: string;
+  }>;
+  // Native Google Sign-In
+  googleSignIn(): Promise<{
+    success: boolean;
+    idToken?: string;
+    user?: {
+      email: string;
+      name: string;
+      id: string;
+    };
+    error?: string;
+  }>;
+  openNotificationSettings?(): Promise<{ success: boolean }>;
+  persistCache?: () => void,
+};
+
+
 // Type declaration for the ScrummyBridge
 declare global {
   interface Window {
     ReactNativeWebView?: {
       postMessage(message: string): void;
     };
-    ScrummyBridge?: {
-      requestPushPermission(userData?: any): Promise<{
-        granted: boolean;
-        onesignal_id?: string;
-      }>;
-      login(
-        tokens: { accessToken: string; refreshToken: string },
-        userData: BridgeUserData
-      ): Promise<{ success: boolean }>;
-      logout(): Promise<{ success: boolean }>;
-      getAuthStatus(): Promise<{
-        isAuthenticated: boolean;
-        userData?: {
-          name?: string;
-          email?: string;
-          user_id?: string;
-          onesignal_id?: string;
-        };
-      }>;
-      getDeviceId(): Promise<string>;
-      getPushPermissionStatus?(): Promise<{
-        status: 'granted' | 'denied' | 'prompt';
-        onesignal_id?: string;
-      }>;
-      initializeAuth(): Promise<{
-        isAuthenticated: boolean;
-        tokens?: {
-          accessToken: string;
-          refreshToken: string;
-        };
-        userData?: {
-          name?: string;
-          email?: string;
-          user_id?: string;
-          external_id?: string;
-        };
-      }>;
-      // OAuth methods
-      isMobileApp(): boolean;
-      requestOAuth(
-        provider: string,
-        options?: {
-          clientId?: string;
-          redirectUri?: string;
-          url?: string;
-        }
-      ): Promise<{
-        success: boolean;
-        message?: string;
-        authUrl?: string;
-      }>;
-      // Native Google Sign-In
-      googleSignIn(): Promise<{
-        success: boolean;
-        idToken?: string;
-        user?: {
-          email: string;
-          name: string;
-          id: string;
-        };
-        error?: string;
-      }>;
-      openNotificationSettings?(): Promise<{ success: boolean }>;
-    };
-    // Also support lowercase version (as injected by mobile app)
-    scrummyBridge?: {
-      requestPushPermission(userData?: any): Promise<{
-        granted: boolean;
-        onesignal_id?: string;
-      }>;
-      login(
-        tokens: { accessToken: string; refreshToken: string },
-        userData: BridgeUserData
-      ): Promise<{ success: boolean }>;
-      logout(): Promise<{ success: boolean }>;
-      getAuthStatus(): Promise<{
-        isAuthenticated: boolean;
-        userData?: {
-          name?: string;
-          email?: string;
-          user_id?: string;
-          onesignal_id?: string;
-        };
-      }>;
-      getDeviceId(): Promise<string>;
-      getPushPermissionStatus?(): Promise<{
-        status: 'granted' | 'denied' | 'prompt';
-        onesignal_id?: string;
-      }>;
-      initializeAuth(): Promise<{
-        isAuthenticated: boolean;
-        tokens?: {
-          accessToken: string;
-          refreshToken: string;
-        };
-        userData?: {
-          name?: string;
-          email?: string;
-          user_id?: string;
-          external_id?: string;
-        };
-      }>;
-      // OAuth methods
-      isMobileApp(): boolean;
-      requestOAuth(
-        provider: string,
-        options?: {
-          clientId?: string;
-          redirectUri?: string;
-          url?: string;
-        }
-      ): Promise<{
-        success: boolean;
-        message?: string;
-        authUrl?: string;
-      }>;
-      openNotificationSettings?(): Promise<{ success: boolean }>;
-    };
+    ScrummyBridge?: ScrummyBridgeType
 
+    // Also support lowercase version (as injected by mobile app)
+    scrummyBridge?: ScrummyBridgeType,
+
+    __WEB_VIEW_CACHE__?: Map<string, unknown>,
     DARK_BACKGROUND_CLASSNAME?: string,
     DARK_CARD_BACKGROUND_CLASSNAME?: string,
-    MOBILE_THEME_NUMBER?: string
+    MOBILE_THEME_NUMBER?: string,
+    INIT_WEBVIEW_CACHE?: string
   }
 }
 
@@ -265,7 +220,7 @@ export async function getAuthStatus(): Promise<{
 export function listenForBridgeMessages(callback: (message: any) => void): () => void {
   if (typeof window === 'undefined') {
     // Return a no-op cleanup function
-    return () => {};
+    return () => { };
   }
 
   const handler = (event: MessageEvent) => {

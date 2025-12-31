@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy-league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import MyTeamsTab from '../components/fantasy-leagues/MyTeamTab';
+import MyTeamView from '../components/fantasy-leagues/MyTeamView';
 import { useEffect } from 'react';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
@@ -13,13 +13,23 @@ import RoundedCard from '../components/shared/RoundedCard';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
 import PitchViewLoadingSkeleton from '../components/fantasy-leagues/my-team/PitchViewLoadingSkeleton';
+import TeamHistoryProvider from '../providers/fantasy-teams/TeamHistoryProvider';
+import { useAuth } from '../contexts/AuthContext';
 
-export function FantasyLeagueScreen() {
+/** Renders my fantasy team screen */
+export function MyFantasyTeamScreen() {
   const { leagueId } = useParams();
+  const { authUser } = useAuth();
 
   return (
-    <FantasyLeagueGroupDataProvider loadingFallback={<LeagueScreenLoadingSkeleton />} leagueId={leagueId}>
-      <Content />
+    <FantasyLeagueGroupDataProvider
+      loadingFallback={<LeagueScreenLoadingSkeleton />}
+      leagueId={leagueId}
+      fetchMembers={false}
+    >
+      <TeamHistoryProvider user={authUser} loadingFallback={<LeagueScreenLoadingSkeleton />} >
+        <Content />
+      </TeamHistoryProvider>
     </FantasyLeagueGroupDataProvider>
   );
 }
@@ -48,7 +58,7 @@ function Content() {
 
       <LeagueGroupScreenHeader />
       <LearnScrummyNoticeCard />
-      <MyTeamsTab />
+      <MyTeamView />
 
     </PageView>
   );

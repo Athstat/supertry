@@ -1,5 +1,3 @@
-import useSWR from 'swr';
-import { sbrService } from '../../services/sbr/sbrService';
 import { LoadingState } from '../ui/LoadingState';
 import SbrFixtureCard from '../sbr/SbrFixtureCard';
 import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
@@ -12,13 +10,12 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import {
   getCurrentWeek,
-  getWeekDateRange,
-  formatWeekHeader,
   getSbrFixturesForWeek,
   findClosestWeekWithSbrFixtures,
   findNextWeekWithSbrFixtures,
   findPreviousWeekWithSbrFixtures,
 } from '../../utils/fixtureUtils';
+import { useSbrFixtures } from '../../hooks/fixtures/useSbrFixtures';
 
 type Props = {
   searchQuery: string;
@@ -26,8 +23,7 @@ type Props = {
 };
 
 export default function SbrMatchCenter({ searchQuery }: Props) {
-  const key = 'sbr-fixtures';
-  let { data: fixtures, isLoading } = useSWR(key, () => sbrService.getAllFixtures());
+  const { fixtures, isLoading } = useSbrFixtures();
   const [season, setSeason] = useQueryState<string | undefined>('sbrcs', { init: 'all' });
 
   // Get current week on mount
@@ -49,13 +45,12 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
         setSelectedYear(closestWeek.year);
       }
     }
-  }, [fixtures?.length]); // Only run when fixtures are loaded
+  }, [fixtures]); // Only run when fixtures are loaded
 
   if (isLoading) {
     return <LoadingState />;
   }
 
-  fixtures = fixtures ?? [];
   const seasons: SeasonFilterBarItem[] = [];
 
   fixtures.forEach(f => {
@@ -81,8 +76,8 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
     : getSbrFixturesForWeek(filteredFixtures, selectedWeek, selectedYear);
 
   // Get date range for header
-  const dateRange = getWeekDateRange(selectedWeek, selectedYear);
-  const weekHeader = formatWeekHeader(selectedWeek, dateRange);
+  // const dateRange = getWeekDateRange(selectedWeek, selectedYear);
+  // const weekHeader = formatWeekHeader(selectedWeek, dateRange);
 
   // Check if we're on current week
   const isCurrentWeek =
@@ -142,7 +137,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-col gap-1">
             <h2 className="font-semibold text-base md:text-lg">
-              {searchQuery ? 'Search Results' : weekHeader}
+              {/* {searchQuery ? 'Search Results' : weekHeader} */}
             </h2>
             {!searchQuery && (
               <p className="text-xs text-slate-500 dark:text-slate-400">

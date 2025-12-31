@@ -5,6 +5,7 @@ import { djangoAthleteService } from "../services/athletes/djangoAthletesService
 import { IProTeam } from "../types/team";
 import { IProAthlete } from "../types/athletes";
 import { getAthletesSummary } from "../utils/athleteUtils";
+import { CACHING_CONFIG } from "../types/constants";
 
 interface AthleteContextType {
   athletes: IProAthlete[];
@@ -24,7 +25,11 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 
   const key = swrFetchKeys.getAllProAthletesKey();
-  const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = useSWR(key, () => djangoAthleteService.getAllAthletes());
+  const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = 
+    useSWR(key, () => djangoAthleteService.getAllAthletes(), {
+      revalidateOnFocus: false,
+      dedupingInterval: CACHING_CONFIG.fantasySeasonsCachePeriod
+    });
 
   const athletes = useMemo(() => {
     return fetchedAthletes ?? []

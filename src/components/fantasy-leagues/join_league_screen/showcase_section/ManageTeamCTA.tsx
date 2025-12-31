@@ -15,6 +15,7 @@ import { isLeagueRoundLocked } from '../../../../utils/leaguesUtils';
 import { useRoundScoringSummary } from '../../../../hooks/fantasy/useRoundScoringSummary';
 import { LeagueRoundCountdown2 } from '../../../fantasy-league/LeagueCountdown';
 import { TranslucentButton } from '../../../shared/buttons/PrimaryButton';
+import { smartRoundUp } from '../../../../utils/intUtils';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -26,6 +27,7 @@ export default function ManageTeamCTA({ leagueGroup }: Props) {
     <FantasyLeagueGroupDataProvider
       loadingFallback={<LoadingSkeleton />}
       leagueId={leagueGroup.id}
+      fetchMembers={false}
     >
       <Content />
     </FantasyLeagueGroupDataProvider>
@@ -46,7 +48,9 @@ function Content() {
   }, [currentRound, authUser]);
 
   const { data: userTeam, isLoading } = useSWR(key, () =>
-    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
+    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? ''), {
+      revalidateOnFocus: false
+    }
   );
 
   const scoreRound = useMemo(() => {
@@ -104,7 +108,7 @@ function LoadingSkeleton() {
     <div className='flex flex-col gap-6' >
 
       <div className='flex flex-col gap-2' >
-        <RoundedCard className='w-full h-[150px] border-none rounded-xl animate-pulse' />
+        <RoundedCard className='w-full h-[160px] border-none rounded-xl animate-pulse' />
       </div>
     </div>
   );
@@ -135,17 +139,17 @@ function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
       <div className='grid grid-cols-3 px-[10%]' >
 
         <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-xl' >{Math.floor(averagePointsScored || 0)}</p>
+          <p className='font-bold text-xl' >{smartRoundUp(averagePointsScored || 0)}</p>
           <p className='text-xs' >Average</p>
         </div>
 
         <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-2xl' >{Math.floor(userScore || 0)}</p>
+          <p className='font-bold text-2xl' >{smartRoundUp(userScore || 0)}</p>
           <p className='text-xs' >My Score</p>
         </div>
 
         <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-xl' >{Math.floor(highestPointsScored || 0)}</p>
+          <p className='font-bold text-xl' >{smartRoundUp(highestPointsScored || 0)}</p>
           <p className='text-xs' >Highest</p>
         </div>
       </div>

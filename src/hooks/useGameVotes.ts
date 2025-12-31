@@ -6,7 +6,9 @@ import { authService } from '../services/authService';
 
 export function useGameVotes(fixture: IFixture, fetchData: boolean = true) {
   const key = fetchData ? (fixture.game_id ? `game-votes-${fixture.game_id}` : null) : null;
-  const { data, isLoading } = useSWR(key, () => gamesService.getGameVotes(fixture.game_id));
+  const { data, isLoading, mutate } = useSWR(key, () => gamesService.getGameVotes(fixture.game_id), {
+    revalidateIfStale: true
+  });
 
   const [homeVotes, setHomeVotes] = useState<IGameVote[]>([]);
   const [awayVotes, setAwayVotes] = useState<IGameVote[]>([]);
@@ -51,5 +53,6 @@ export function useGameVotes(fixture: IFixture, fetchData: boolean = true) {
     userVote,
     percentages,
     isLoading,
+    mutate
   };
 }

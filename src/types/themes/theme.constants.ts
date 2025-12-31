@@ -16,6 +16,8 @@ export function getAppTheme() {
 
     const themeNumber = window.MOBILE_THEME_NUMBER || '1';
 
+    console.log("Theme Number ", themeNumber);
+
     if (themeNumber === '1') {
         return appTheme1;
     }

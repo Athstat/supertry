@@ -7,6 +7,7 @@ import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { analytics } from '../services/analytics/anayticsService';
 import { useDebounced } from '../hooks/useDebounced';
+import { CACHING_CONFIG } from '../types/constants';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -44,11 +45,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useAuthToken();
 
   const fetchKey = accessToken ? `/auth-user/${accessToken}` : null;
-  const {
-    data: authUser,
-    isLoading,
-    mutate,
-  } = useSWR(fetchKey, () => authService.whoami(accessToken));
+
+  const { data: authUser, isLoading, mutate } = useSWR(fetchKey, () => authService.whoami(accessToken), {
+    dedupingInterval: CACHING_CONFIG.userProfileCachePeriod,
+    revalidateOnFocus: false,
+  });
 
   const setAuth = useCallback(
     (token: string, user: DjangoAuthUser) => {

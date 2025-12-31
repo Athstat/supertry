@@ -8,12 +8,12 @@ import { AppStateProvider } from "./contexts/AppStateContext";
 import { AthleteProvider } from "./contexts/AthleteContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { PlayerProfileProvider } from "./hooks/usePlayerProfile";
 import AuthTokenProvider from "./providers/AuthTokenProvider";
 import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvider";
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
 import FantasySeasonsProvider from "./components/dashboard/provider/FantasySeasonsProvider";
+import CacheProvider from "./providers/caching/CacheProvider";
 
 type Props = {
     children?: ReactNode
@@ -22,21 +22,19 @@ type Props = {
 /** Difines all the root providers to its children */
 export default function RootProviders({ children }: Props) {
 
-
-
     return (
         <ThemeLayer>
-            {/* Ensure Authentication and data providers are mounted before AppStateProvider
-                so AppState can safely consume contexts like AthleteContext */}
-            <AuthenticationLayer>
-                <DataLayer>
-                    <AppStateLayer>
-                        <NavigationLayer>
-                            {children}
-                        </NavigationLayer>
-                    </AppStateLayer>
-                </DataLayer>
-            </AuthenticationLayer>
+            <CacheProvider>
+                <AuthenticationLayer>
+                    <DataLayer>
+                        <AppStateLayer>
+                            <NavigationLayer>
+                                {children}
+                            </NavigationLayer>
+                        </AppStateLayer>
+                    </DataLayer>
+                </AuthenticationLayer>
+            </CacheProvider>
         </ThemeLayer>
     )
 }
@@ -82,9 +80,7 @@ function DataLayer({ children }: Props) {
         <FantasySeasonsProvider>
             <AthleteProvider>
                 <SportActionsDefinitionsProvider>
-                    <PlayerProfileProvider>
-                        {children}
-                    </PlayerProfileProvider>
+                    {children}
                 </SportActionsDefinitionsProvider>
             </AthleteProvider>
         </FantasySeasonsProvider>

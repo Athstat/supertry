@@ -95,7 +95,13 @@ export function useNetworkStatus( ) {
 export function useServerPing() {
 
     const pingKey = '/server-ping';
-    const {data: message, isLoading, error} = useSWR(pingKey, () => pingServer());
+    const {data: message, isLoading, error} = useSWR(pingKey, () => pingServer(), {
+        revalidateOnFocus: true,
+        revalidateOnMount: true,
+        revalidateOnReconnect: true,
+        revalidateIfStale: true,
+        refreshInterval: 1000 * 60 * 60
+    });
 
     const reachable = message !== undefined;
 

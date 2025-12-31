@@ -3,12 +3,15 @@ import { fantasySeasonsAtom } from '../../../state/fantasy/fantasyLeagueScreen.a
 import { fantasySeasonsAtoms } from '../../../state/dashboard/dashboard.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import { useAtom, useSetAtom } from 'jotai';
-import useSWR from 'swr';
 import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { seasonService } from '../../../services/seasonsService';
 import { logger } from '../../../services/logger';
 import { useDebounced } from '../../../hooks/useDebounced';
+import useSWRImmutable from 'swr/immutable';
+import useSWR from 'swr';
+import { CACHING_CONFIG } from '../../../types/constants';
+import { useAuth } from '../../../contexts/AuthContext';
 
 type Props = {
   children?: ReactNode;
@@ -38,13 +41,19 @@ function InnerProvider({ children }: Props) {
   const [, setCurrentRound] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
   const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
-  const seasonsKey = swrFetchKeys.getActiveFantasySeasons();
+  const {authUser} = useAuth();
+
+  const seasonsKey = authUser ? swrFetchKeys.getActiveFantasySeasons(authUser?.kc_id) : null;
   const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
-    fantasySeasonsService.getAllFantasySeasons(true)
+    fantasySeasonsService.getAllFantasySeasons(true), {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      dedupingInterval: CACHING_CONFIG.fantasySeasonsCachePeriod
+    }
   );
 
   const roundsKey = currentSeason ? swrFetchKeys.getSeasonRounds(currentSeason.id) : null;
-  const { data: roundsFetched, isLoading: loadingRounds } = useSWR(roundsKey, () =>
+  const { data: roundsFetched, isLoading: loadingRounds } = useSWRImmutable(roundsKey, () =>
     seasonService.getSeasonRounds(currentSeason?.id ?? '')
   );
 
@@ -69,7 +78,6 @@ function InnerProvider({ children }: Props) {
 
   useEffect(() => {
     if (roundsFetched) {
-      console.log("Season Rounds ", roundsFetched);
       setSeasonRounds(roundsFetched);
     }
   }, [roundsFetched, setSeasonRounds]);

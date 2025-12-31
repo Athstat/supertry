@@ -21,14 +21,16 @@ type Props = {
   children?: ReactNode;
   leagueId?: string;
   loadingFallback?: ReactNode;
-  skipCache?: boolean
+  skipCache?: boolean;
+  fetchMembers?: boolean;
 };
 
 export default function FantasyLeagueGroupDataProvider({
   children,
   leagueId,
   loadingFallback,
-  skipCache
+  skipCache,
+  fetchMembers
 }: Props) {
   const atoms = [
     fantasyLeagueGroupAtom,
@@ -41,14 +43,19 @@ export default function FantasyLeagueGroupDataProvider({
 
   return (
     <ScopeProvider atoms={atoms}>
-      <Fetcher leagueId={leagueId} loadingFallback={loadingFallback} skipCache={skipCache} >
+      <Fetcher 
+        leagueId={leagueId}
+        loadingFallback={loadingFallback}
+        skipCache={skipCache} 
+        fetchMembers={fetchMembers}
+      >
         {children}
       </Fetcher>
     </ScopeProvider>
   );
 }
 
-function Fetcher({ children, leagueId, loadingFallback, skipCache }: Props) {
+function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers = true }: Props) {
   const [leagueGroup, setFantasyLeagueGroup] = useAtom(fantasyLeagueGroupAtom);
   const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
   const setFantasyLeagueGroupRounds = useSetAtom(fantasyLeagueGroupRoundsAtom);
@@ -68,7 +75,8 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache }: Props) {
     fantasyLeagueGroupsService.getGroupById(leagueId ?? '')
   );
 
-  const membersKey = leagueId ? swrFetchKeys.getLeagueGroupMembers(leagueId) : null;
+  const shouldFetchMembers = leagueId && fetchMembers;
+  const membersKey = shouldFetchMembers ? swrFetchKeys.getLeagueGroupMembers(leagueId) : null;
   const {
     data: members,
     isLoading: loadingMembers,

@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 import { DjangoAuthUser } from "../types/auth";
 import { authTokenService } from "../services/auth/authTokenService";
-import { useBrudgeAuthV2 } from "../hooks/useBridgeAuth";
 import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { logoutFromBridge } from "../utils/bridgeUtils";
+import { useGetBridgeAuthV2 } from "../hooks/useBridgeAuth";
 
 type AuthTokenContextProps = {
     /** The auth token for the current login session */
@@ -36,7 +36,7 @@ type Props = {
 export default function AuthTokenProvider({ children }: Props) {
 
     const [accessToken, setAccessToken] = useState<string>();
-    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = useBrudgeAuthV2();
+    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = useGetBridgeAuthV2();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -49,7 +49,6 @@ export default function AuthTokenProvider({ children }: Props) {
             const tokenFromBridge = await getSavedAccessTokenFromMobile();
 
             if (tokenFromBridge) {
-                console.log("Access Token from bridge ", tokenFromBridge);
                 setAccessToken(tokenFromBridge);
                 authTokenService.setAccessToken(tokenFromBridge);
                 setIsLoading(false);

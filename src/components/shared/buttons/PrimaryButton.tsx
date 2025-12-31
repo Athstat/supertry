@@ -10,7 +10,8 @@ type Props = {
     disabled?: boolean,
     isLoading?: boolean,
     type?: "submit" | "reset" | "button" | undefined,
-    destroy?: boolean
+    destroy?: boolean,
+    slate?: boolean
 }
 export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy }: Props) {
 

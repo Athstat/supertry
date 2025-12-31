@@ -1,8 +1,6 @@
-import { ArrowLeft, Share2 } from 'lucide-react'
-import PrimaryButton from '../shared/buttons/PrimaryButton'
-import JoinLeagueButton, { JoinOrInviteButton } from './buttons/JoinLeagueButton'
+import { ArrowLeft } from 'lucide-react'
+import { JoinOrInviteButton } from './buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { useShareLeague } from '../../hooks/leagues/useShareLeague';
 import CircleButton from '../shared/buttons/BackButton';
 import { useNavigateBack } from '../../hooks/web/useNavigateBack';
 

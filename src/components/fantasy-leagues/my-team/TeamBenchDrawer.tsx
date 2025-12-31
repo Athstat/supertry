@@ -1,4 +1,4 @@
-import { ArrowUpDown, CirclePlus, Coins, TriangleAlert } from "lucide-react";
+import { ArrowUpDown, CirclePlus, TriangleAlert } from "lucide-react";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../../utils/athleteUtils";
@@ -6,12 +6,13 @@ import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
 import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
 import { twMerge } from "tailwind-merge";
-import TeamJersey from "../../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
-import { useMemo } from "react";
+import { Activity, useMemo } from "react";
 import { AppColours } from "../../../types/constants";
+import { useAthleteRoundScore } from "../../../hooks/useAthletePointsBreakdown";
+import { sanitizeStat } from "../../../utils/stringUtils";
 
 
 type Props = {
@@ -97,7 +98,7 @@ type SubPlayerProps = {
 
 function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
-  const { position_class, purchase_price } = player;
+  const { position_class } = player;
   const { league } = useFantasyLeagueGroup();
   const isLocked = isLeagueRoundLocked(round);
 
@@ -134,22 +135,11 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
             </div>
           )}
 
-          {player.image_url && <PlayerMugshot
+          {<PlayerMugshot
             url={player.image_url}
             teamId={player.athlete_team_id}
+            className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-blue-800"
           />}
-
-          {!player.image_url && (
-            <div className="w-12 h-12 flex flex-col items-center justify-center rounded-full bg-blue-600/40" >
-              <TeamJersey
-                teamId={player.athlete_team_id}
-                className="w-10 h-10"
-                useBaseClasses={false}
-              />
-            </div>
-          )}
-
-
         </div>
 
         <div className="flex flex-col items-start justify-center" >
@@ -166,9 +156,16 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
       </div>
 
       <div className="flex flex-row items-center gap-4 mr-2" >
-        <div className="flex flex-row items-center gap-1" >
+        {/* <div className="flex flex-row items-center gap-1" >
           <Coins className="w-4 h-4 text-yellow-500" />
           <p className="text-sm" >{purchase_price}</p>
+        </div> */}
+
+        <div className="flex flex-row items-center gap-1" >
+          <SubPlayerScoreIndicator 
+            player={player}
+            round={round}
+          />
         </div>
       </div>
 
@@ -189,4 +186,92 @@ function EmptySuperSubSlot() {
       <p className="text-sm font-semibold" >Super Sub</p>
     </div>
   )
+}
+
+type PlayerPointsScoreProps = {
+    round: IFantasyLeagueRound,
+    player: IFantasyTeamAthlete,
+}
+
+function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
+
+    const isLocked = isLeagueRoundLocked(round);
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
+    const { league } = useFantasyLeagueGroup();
+
+    const isLoading = loadingScore;
+
+    const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
+        player.tracking_id,
+        league?.season_id ?? "",
+        round?.start_round ?? 0,
+    );
+
+    const [homeOrAway, opponent] = useMemo(() => {
+        if (!nextMatch) {
+            return [undefined, undefined];
+        }
+
+        const playerTeamId = player.athlete_team_id;
+
+        if (playerTeamId === nextMatch.team?.athstat_id) {
+            return ["(H)", nextMatch.opposition_team];
+        }
+
+        if (playerTeamId === nextMatch.opposition_team?.athstat_id) {
+            return ["(A)", nextMatch.team];
+        }
+
+        return [undefined, undefined];
+
+    }, [nextMatch, player.athlete_team_id]);
+
+    const showScore = !isLoading && isLocked;
+
+    const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
+    const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
+
+    
+
+    return (
+        <>
+            <div className={twMerge(
+                "w-full overflow-clip items-center justify-center flex flex-row",
+                isLoading && "animate-pulse"
+            )} >
+
+                
+                <Activity mode={isLoading ? "visible" : "hidden"} >
+                    <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
+
+                    </div>
+                </Activity>
+
+                <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
+                    <p className=" text-sm md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+                </Activity>
+
+                {/* <Activity mode={showPrice ? "visible" : "hidden"} >
+                    <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
+                        <p className="text-[10px] md:text-[10px]" >{player.price}</p>
+                        <Coins className="text-yellow-500 w-2.5 h-2.5" />
+                    </div>
+                </Activity> */}
+
+                <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
+                    <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
+                        <p className="text-sm md:text-[10px] font-medium" >Not Playing</p>
+                        <TriangleAlert className="w-3 h-3" />
+                    </div>
+                </Activity>
+
+                <Activity mode={showScore ? 'visible' : 'hidden'}  >
+                    <div>
+                        <p className='text-base md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
+                    </div>
+                </Activity>
+
+            </div>
+        </>
+    )
 }

@@ -17,8 +17,6 @@ function initAmplitude() {
         defaultTracking: true,
       });
     }
-
-    console.log("Amplitude is Initialized");
     
   } catch (err) {
     console.log("error intializing amplitude ", err);
@@ -49,11 +47,7 @@ function track(event: string, eventInfo?: Record<string, unknown>) {
       userId: user ? user.kc_id : null,
     };
 
-    console.log('Logging Event ', reqBody);
-
-    const res = amplitude.track(event, reqBody);
-
-    console.log('Amplitude Res ', res);
+    amplitude.track(event, reqBody);
   } catch {
     // console.log("Error Logging event ", err);
   }
