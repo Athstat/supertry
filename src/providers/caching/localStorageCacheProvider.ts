@@ -6,42 +6,35 @@ const CACHE_KEY = 'web-app-cache';
 /** Creates a cache that can be synced with local storage */
 export function localStorageCacheProvider(): Cache {
 
-  try {
+  const map = mapFactory();
 
-    const initCache = JSON.parse(window?.INIT_WEBVIEW_CACHE || localStorage.getItem(CACHE_KEY) || '[]');
-    const map: Map<string, unknown> = new Map(initCache);
+  window.__WEB_VIEW_CACHE__ = map;
 
-    window.__WEB_VIEW_CACHE__ = map;
+  setInterval(() => {
+    persistCache(map);
+  }, 1000 * 60 * 2);
 
-    setInterval(() => {
+  window.addEventListener('visibilitychange', () => {
+
+    if (document.visibilityState === 'hidden') {
       persistCache(map);
-    }, 1000 * 60 * 2);
+    }
 
-    window.addEventListener('visibilitychange', () => {
+  });
 
-      if (document.visibilityState === 'hidden') {
+  window.addEventListener('message', (event) => {
+    try {
+      const msg = JSON.parse(event.data);
+
+      if (msg.type === "PERSIST_WEBVIEW_CACHE") {
         persistCache(map);
       }
+    } catch (err) {
+      logger.error("Error persisting webview cache ", err);
+    }
+  });
 
-    });
-
-    window.addEventListener('message', (event) => {
-      try {
-        const msg = JSON.parse(event.data);
-
-        if (msg.type === "PERSIST_WEBVIEW_CACHE") {
-          persistCache(map);
-        }
-      } catch (err) {
-        logger.error("Error persisting webview cache ", err);
-      }
-    });
-
-    return map as Cache
-  } catch (err) {
-    console.log("Caching error ", err);
-    return new Map<string, unknown>() as Cache;
-  }
+  return map as Cache;
 }
 
 /** Function that clears the apps, cache */
@@ -70,4 +63,19 @@ function persistCache(map: Map<string, unknown>) {
     logger.error("Error caching app data to webview", err);
   }
 
+}
+
+/** Function that creates a map object */
+function mapFactory() {
+  try {
+
+    const initCache = JSON.parse(window?.INIT_WEBVIEW_CACHE || localStorage.getItem(CACHE_KEY) || '[]');
+    const map: Map<string, unknown> = new Map(initCache);
+
+    return map;
+  } catch (err) {
+    logger.error("Error loading initial cache ", err);
+  }
+
+  return new Map<string, unknown>();
 }
