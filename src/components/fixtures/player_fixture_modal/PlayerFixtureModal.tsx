@@ -5,7 +5,6 @@ import BottomSheetView from "../../ui/BottomSheetView"
 import CircleButton from "../../shared/buttons/BackButton"
 import { Binoculars, X, Info } from "lucide-react"
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot"
-import MatchPrCard from "../../rankings/MatchPrCard"
 import { useAthleteMatchPr } from "../../../hooks/athletes/useAthleteMatchPr"
 import SecondaryText from "../../shared/SecondaryText"
 import { StatCard } from "../../shared/StatCard"
@@ -14,7 +13,6 @@ import useSWR from "swr"
 import { gamesService } from "../../../services/gamesService"
 import { GameSportAction } from "../../../types/boxScore"
 import { getStatUnit, sanitizeStat } from "../../../utils/stringUtils"
-import QuickActionButton from "../../ui/QuickActionButton"
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture"
 import { fixtureSummary } from "../../../utils/fixtureUtils"
 import RoundedCard from "../../shared/RoundedCard"
@@ -23,6 +21,7 @@ import TeamLogo from "../../team/TeamLogo"
 import PrimaryButton from "../../shared/buttons/PrimaryButton"
 import { useNavigate } from "react-router-dom"
 import FantasyPointsInfoModal from "../../branding/help/FantasyPointsInfoModal"
+import FixtureModalHeader from "./FixtureModalHeader"
 
 type Props = {
     fixture: IFixture,
@@ -89,60 +88,13 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
 
                 <Activity mode={isLoading ? "hidden" : "visible"} >
 
-                    <div className="flex py-2 flex-row items-center justify-between " >
-
-                        <div className="flex flex-row items-center gap-2" >
-                            <Binoculars />
-                            <p>Match Performance Overview</p>
-                        </div>
-
-                        <div>
-                            <CircleButton
-                                onClick={handleClose}
-                            >
-                                <X className="w-4 h-4" />
-                            </CircleButton>
-                        </div>
-                    </div>
-
-
-                    <div className="flex mt-2 flex-row items-center justify-between" >
-
-                        <div className="flex flex-row items-center gap-2" >
-
-                            <div>
-                                <SmartPlayerMugshot
-                                    url={player.image_url}
-                                    teamId={player.team_id}
-                                    playerImageClassName="w-16 h-16"
-                                    jerseyClassName="min-w-16 min-h-16"
-                                    jerseyConClassName="min-w-16 min-h-16"
-                                />
-                            </div>
-
-                            <div className="flex flex-col gap-0.5" >
-                                <p>{player.player_name}</p>
-                                <SecondaryText>{player.team?.athstat_name}</SecondaryText>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col items-end justify-center gap-2" >
-
-                            {pr && <MatchPrCard
-                                pr={pr.updated_power_ranking}
-                            />}
-
-                            <SecondaryText className="text-wrap text-center text-xs" >Match Rating</SecondaryText>
-                        </div>
-                    </div>
-
-                    <div className="" >
-                        {!hideViewPlayerProfile && <QuickActionButton
-                            onClick={handleViewPlayerProfile}
-                        >
-                            View Player Profile
-                        </QuickActionButton>}
-                    </div>
+                    <FixtureModalHeader 
+                        player={player}
+                        onClose={handleClose}
+                        onViewPlayerProfile={handleViewPlayerProfile}
+                        hideViewPlayerProfile={hideViewPlayerProfile}
+                        powerRanking={pr}
+                    />
 
                     {/* Tabs */}
                     <Activity mode={hasActions ? "visible" : "hidden"} >
