@@ -6,7 +6,7 @@ import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 
 /** Hook that fetches a players athlete points breakdown */
 export function useAthletePointsBreakdown(athlete: IProAthlete | IFantasyTeamAthlete, roundNumber: number, seasonId: string) {
-    const key = `/fantasy-atheltes/${athlete.tracking_id}/athlete-points-breakdown?season_id=${seasonId}&round=${roundNumber}`;
+    const key = `/fantasy-athletes/${athlete.tracking_id}/athlete-points-breakdown?season_id=${seasonId}&round=${roundNumber}`;
     const { data: pointItems, isLoading } = useSWR(key, () => fantasyAthleteService.getRoundPointsBreakdown(
         athlete.tracking_id,
         roundNumber,
