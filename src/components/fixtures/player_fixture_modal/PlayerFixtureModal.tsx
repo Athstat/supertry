@@ -108,7 +108,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                                     : "text-gray-500 dark:text-gray-400"
                                     }`}
                             >
-                                Points Breakdown
+                                Fantasy Points Breakdown
                             </button>
                         </div>
                     </Activity>

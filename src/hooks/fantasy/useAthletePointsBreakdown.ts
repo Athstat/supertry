@@ -11,7 +11,9 @@ export function useAthletePointsBreakdown(athlete: IProAthlete | IFantasyTeamAth
         athlete.tracking_id,
         roundNumber,
         seasonId
-    ));
+    ), {
+        refreshInterval: 1000 * 60 * 1 // Every minute
+    });
 
     const totalPoints = useMemo(() => {
         return pointItems?.reduce((sum, curr) => {
