@@ -113,6 +113,8 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                         </div>
                     </Activity>
 
+                    
+
                     {showMatchInfo && <RoundedCard className="flex flex-col p-4 mt-2 gap-2" >
 
                         <div className="flex flex-row w-full items-start" >

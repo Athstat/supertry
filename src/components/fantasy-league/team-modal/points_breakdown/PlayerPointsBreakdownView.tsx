@@ -8,9 +8,8 @@ import RoundedCard from "../../../shared/RoundedCard"
 import { FantasyAthletePointsBreakdownItem, IFantasyTeamAthlete } from "../../../../types/fantasyTeamAthlete"
 import { useSportActions } from "../../../stats/SportActionsDefinitionsProvider"
 import { twMerge } from "tailwind-merge"
-import { ReactNode, useEffect, useRef } from "react"
+import { ReactNode } from "react"
 import NoContentCard from "../../../shared/NoContentMessage"
-import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytics"
 import { AvailabilityText } from "../../../players/availability/AvailabilityIcon"
 import { IFixture } from "../../../../types/games"
 
@@ -37,28 +36,8 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
 
     const isLoading = loadingPointsBreakdown;
 
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-
-        athleteAnalytics.trackPointsBreakdownViewed(
-            athlete.tracking_id,
-            seasonId,
-            roundNumber
-        );
-
-    }, [athlete, roundNumber, seasonId]);
-
-    useEffect(() => {
-        if (ref.current) {
-            ref.current.scrollIntoView({
-                behavior: 'instant'
-            });
-        }
-    }, [athlete]);
-
     return (
-        <div className="flex flex-col gap-4 dark:text-white" ref={ref} >
+        <div className="flex flex-col gap-4 dark:text-white" >
             <div className="flex flex-row truncate items-center gap-2" >
 
 
@@ -79,7 +58,7 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
                     )}
                     {isLoading && (
                         <RoundedCard
-                            className="h-[20px] w-[80px] animate-pulse border-none rounded-xl"
+                            className="h-[30px] w-[60px] animate-pulse border-none rounded-xl"
                         />
                     )}
                 </div>
@@ -98,27 +77,27 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
                 <div className="flex flex-col gap-2" >
 
                     <RoundedCard
-                        className="h-[30px] animate-pulse border-none rounded-xl w-full"
+                        className="h-[45px] animate-pulse border-none rounded-xl w-full"
                     />
 
                     <RoundedCard
-                        className="h-[30px] animate-pulse border-none rounded-xl w-full"
+                        className="h-[45px] animate-pulse border-none rounded-xl w-full"
                     />
 
                     <RoundedCard
-                        className="h-[30px] animate-pulse border-none rounded-xl w-full"
+                        className="h-[45px] animate-pulse border-none rounded-xl w-full"
                     />
 
                     <RoundedCard
-                        className="h-[30px] animate-pulse border-none rounded-xl w-full"
+                        className="h-[45px] animate-pulse border-none rounded-xl w-full"
                     />
 
                     <RoundedCard
-                        className="h-[30px] animate-pulse border-none rounded-xl w-full"
+                        className="h-[45px] animate-pulse border-none rounded-xl w-full"
                     />
 
                     <RoundedCard
-                        className="h-[30px] animate-pulse border-none rounded-xl w-full"
+                        className="h-[45px] animate-pulse border-none rounded-xl w-full"
                     />
 
                 </div>
