@@ -151,6 +151,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                     {/* Points Breakdown Tab */}
                     <Activity mode={hasActions && activeTab === "points-breakdown" ? "visible" : "hidden"} >
                         <PlayerPointsBreakdownView
+                            key={fixture.game_id}
                             athlete={player}
                             game={fixture}
                             hideSubtitle

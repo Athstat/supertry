@@ -29,7 +29,7 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
 
     const roundNumber = leagueRound?.start_round || game?.round || 0;
     const seasonId = leagueRound?.season_id || leagueRound?.official_league_id || game?.league_id || ''
-
+    
     const { pointItems, totalPoints, isLoading: loadingPointsBreakdown } = useAthletePointsBreakdown(
         athlete, roundNumber, seasonId
     );
