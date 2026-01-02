@@ -8,25 +8,31 @@ import RoundedCard from "../../../shared/RoundedCard"
 import { FantasyAthletePointsBreakdownItem, IFantasyTeamAthlete } from "../../../../types/fantasyTeamAthlete"
 import { useSportActions } from "../../../stats/SportActionsDefinitionsProvider"
 import { twMerge } from "tailwind-merge"
-import { ChevronLeft } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { ReactNode, useEffect, useRef } from "react"
 import NoContentCard from "../../../shared/NoContentMessage"
 import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytics"
 import { AvailabilityText } from "../../../players/availability/AvailabilityIcon"
+import { IFixture } from "../../../../types/games"
 
 type Props = {
     athlete: IProAthlete | IFantasyTeamAthlete,
-    team: IFantasyLeagueTeam | FantasyLeagueTeamWithAthletes,
-    round: IFantasyLeagueRound,
-    onClose?: () => void
+    team?: IFantasyLeagueTeam | FantasyLeagueTeamWithAthletes,
+    round?: IFantasyLeagueRound,
+    game?: IFixture
+    onClose?: () => void,
+
+    /** React Node to render on the header title area */
+    headerTitle?: ReactNode,
+    hideSubtitle?: boolean
 }
 
-export default function PlayerPointsBreakdownView({ athlete, round, onClose }: Props) {
+export default function PlayerPointsBreakdownView({ athlete, round: leagueRound, game, headerTitle, hideSubtitle }: Props) {
+
+    const roundNumber = leagueRound?.start_round || game?.round || 0;
+    const seasonId = leagueRound?.season_id || leagueRound?.official_league_id || game?.league_id || ''
 
     const { pointItems, totalPoints, isLoading: loadingPointsBreakdown } = useAthletePointsBreakdown(
-        athlete,
-        round.start_round ?? 0,
-        round.season_id
+        athlete, roundNumber, seasonId
     );
 
     const isLoading = loadingPointsBreakdown;
@@ -37,11 +43,11 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
 
         athleteAnalytics.trackPointsBreakdownViewed(
             athlete.tracking_id,
-            round.official_league_id,
-            round.start_round ?? 0
+            seasonId,
+            roundNumber
         );
 
-    }, [athlete, round]);
+    }, [athlete, roundNumber, seasonId]);
 
     useEffect(() => {
         if (ref.current) {
@@ -55,28 +61,22 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
         <div className="flex flex-col gap-4 dark:text-white" ref={ref} >
             <div className="flex flex-row truncate items-center gap-2" >
 
-                {onClose && <div>
-                    <button onClick={onClose} className="w-8 h-8 flex flex-col rounded-full items-center justify-center hover:bg-slate-200 hover:dark:bg-slate-700/60" >
-                        <ChevronLeft className="w-6 h-6" />
-                    </button>
-                </div>}
 
-                <PlayerMugshot
-                    playerPr={athlete.power_rank_rating}
-                    url={athlete.image_url}
-                    showPrBackground
-                    className="w-14 h-14"
-                />
-
-                <div>
-                    <p className="font-semibold dark:text-white" >{athlete.player_name}</p>
-                    {athlete.position && athlete.position_class && (
-                        <SecondaryText className="" >{formatPosition(athlete.position_class)} | {formatPosition(athlete.position)}</SecondaryText>
-                    )}
-                </div>
+                {headerTitle ? (
+                    <>{headerTitle}</>
+                ) : (
+                    <DefaultHeaderTitle
+                        athlete={athlete}
+                    />
+                )}
 
                 <div className="flex flex-row  font-bold flex-1 items-center justify-end" >
-                    {!isLoading && totalPoints && <p className="text-lg" >{totalPoints?.toFixed(1)}</p>}
+                    {!isLoading && totalPoints && (
+                        <div className="flex flex-col items-end justify-end" >
+                            <p className="text-lg" >{totalPoints?.toFixed(1)}</p>
+                            <SecondaryText className="text-xs font-semibold" >Total Points</SecondaryText>
+                        </div>
+                    )}
                     {isLoading && (
                         <RoundedCard
                             className="h-[20px] w-[80px] animate-pulse border-none rounded-xl"
@@ -90,9 +90,9 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
                 athlete={athlete}
             />
 
-            <div>
+            {!hideSubtitle && <div>
                 <p className="font-semibold text-lg dark:text-white" >Points Breakdown</p>
-            </div>
+            </div>}
 
             {isLoading && (
                 <div className="flex flex-col gap-2" >
@@ -138,7 +138,7 @@ export default function PlayerPointsBreakdownView({ athlete, round, onClose }: P
 
                     {pointItems.length === 0 && (
                         <NoContentCard
-                            message={`${athlete.player_name} has not scored points in ${round.title} yet`}
+                            message={`${athlete.player_name} has not scored points in ${roundNumber ? `Week ${roundNumber}` : "this round"} yet`}
                         />
                     )}
 
@@ -192,5 +192,29 @@ function PlayerPointBreakdownItem({ pointItem }: BreakdownItemProps) {
                 {score.toFixed(1)}
             </div>
         </RoundedCard>
+    )
+}
+
+type HeaderProps = {
+    athlete: IProAthlete | IFantasyTeamAthlete
+}
+
+function DefaultHeaderTitle({ athlete }: HeaderProps) {
+    return (
+        <div className="flex flex-row items-center gap-2" >
+            {<PlayerMugshot
+                playerPr={athlete.power_rank_rating}
+                url={athlete.image_url}
+                showPrBackground
+                className="w-14 h-14"
+            />}
+
+            <div>
+                <p className="font-semibold dark:text-white" >{athlete.player_name}</p>
+                {athlete.position && athlete.position_class && (
+                    <SecondaryText className="" >{formatPosition(athlete.position_class)} | {formatPosition(athlete.position)}</SecondaryText>
+                )}
+            </div>
+        </div>
     )
 }
