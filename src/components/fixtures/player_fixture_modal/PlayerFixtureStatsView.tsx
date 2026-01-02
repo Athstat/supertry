@@ -45,7 +45,7 @@ export default function PlayerFixtureStatsView({ sportActions }: Props) {
                 sportActions={sportActions}
                 actionNames={[
                     ["minutes_played_total", "MinutesPlayedTotal"],
-                    ["minutes_played_first_half", "	MinutesPlayedFirstHalf"],
+                    ["minutes_played_first_half", "MinutesPlayedFirstHalf"],
                     ["minutes_played_second_half", "MinutesPlayedSecondHalf"],
                 ]}
             />
