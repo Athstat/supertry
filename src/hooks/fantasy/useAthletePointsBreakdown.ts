@@ -6,12 +6,17 @@ import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 
 /** Hook that fetches a players athlete points breakdown */
 export function useAthletePointsBreakdown(athlete: IProAthlete | IFantasyTeamAthlete, roundNumber: number, seasonId: string) {
-    const key = `/fantasy-team/${athlete.team_id}/athlete-points-breakdown/${athlete.tracking_id}`
+    
+    const shouldFetch = Boolean(roundNumber && seasonId);
+    
+    const key = shouldFetch ? `/fantasy-athletes/${athlete.tracking_id}/athlete-points-breakdown?season_id=${seasonId}&round=${roundNumber}` : null;
     const { data: pointItems, isLoading } = useSWR(key, () => fantasyAthleteService.getRoundPointsBreakdown(
         athlete.tracking_id,
         roundNumber,
         seasonId
-    ));
+    ), {
+        refreshInterval: 1000 * 60 * 1 // Every minute
+    });
 
     const totalPoints = useMemo(() => {
         return pointItems?.reduce((sum, curr) => {

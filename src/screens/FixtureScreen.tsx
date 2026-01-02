@@ -20,7 +20,7 @@ import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureSt
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
 import { FixtureScreenProvider } from '../providers/fixtures/FixtureScreenProvider';
 import { useFixtureScreen } from '../hooks/fixtures/useFixture';
-import PlayerMatchModal from '../components/fixtures/fixture_screen/PlayerFixtureModal';
+import PlayerMatchModal from '../components/fixtures/player_fixture_modal/PlayerFixtureModal';
 import PlayerProfileModal from '../components/player/PlayerProfileModal';
 
 export default function FixtureScreen() {
