@@ -79,7 +79,7 @@ export default function FixtureModalHeader({player, onClose, powerRanking, hideV
                 </div>
             </div>
 
-            <div className="" >
+            <div className="mt-3" >
                 {!hideViewPlayerProfile && <QuickActionButton
                     onClick={handleViewPlayerProfile}
                 >
