@@ -7,7 +7,7 @@ import { Fragment, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import { FixtureCardModal } from './FixtureCard';
 import { twMerge } from 'tailwind-merge';
-import ProFixtureVotingBox from './voting/ProFixtureVotingBox';
+import ProFixtureVotingBox from '../pickem/voting/ProFixtureVotingBox';
 
 type Props = {
   fixture: IFixture;

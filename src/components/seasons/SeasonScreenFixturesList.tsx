@@ -1,6 +1,6 @@
 import { Calendar } from "lucide-react"
 import { IFixture } from "../../types/games"
-import GroupedFixturesList from "../fixture/GroupedFixturesList"
+import GroupedFixturesList from "../fixtures/GroupedFixturesList"
 import PillBar, { PillBarItems } from "../shared/bars/PillTabBar"
 import { useQueryState } from "../../hooks/useQueryState"
 import NoContentCard from "../shared/NoContentMessage"

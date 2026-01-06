@@ -1,7 +1,7 @@
 import NoContentCard from '../shared/NoContentMessage';
 import { ChevronRight } from 'lucide-react';
 import { FixtureListViewMode, IFixture } from '../../types/games';
-import GroupedFixturesList from '../fixture/GroupedFixturesList';
+import GroupedFixturesList from './GroupedFixturesList';
 
 
 type Props = {

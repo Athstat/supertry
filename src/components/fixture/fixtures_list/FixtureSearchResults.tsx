@@ -4,7 +4,7 @@ import { FixtureListViewMode, IFixture } from "../../../types/games";
 import { searchProFixturePredicate } from "../../../utils/fixtureUtils";
 import NoContentCard from "../../shared/NoContentMessage";
 import { LoadingState } from "../../ui/LoadingState";
-import GroupedFixturesList from "../GroupedFixturesList";
+import GroupedFixturesList from "../../fixtures/GroupedFixturesList";
 
 type Props = {
     searchQuery?: string,
