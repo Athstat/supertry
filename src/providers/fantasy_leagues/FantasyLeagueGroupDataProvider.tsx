@@ -1,21 +1,14 @@
 import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
-import {
-  currGroupMemberAtom,
-  fantasyLeagueConfigAtom,
-  fantasyLeagueGroupAtom,
-  fantasyLeagueGroupLoadingAtom,
-  fantasyLeagueGroupMembersAtom,
-  fantasyLeagueGroupRoundsAtom,
-} from '../../../state/fantasy/fantasyLeagueGroup.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import { useAtom, useSetAtom } from 'jotai';
-import { swrFetchKeys } from '../../../utils/swrKeys';
 import useSWR from 'swr';
-import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService';
-import { LoadingState } from '../../ui/LoadingState';
 import { useLocation } from 'react-router-dom';
-import { useLeagueConfig } from '../../../hooks/useLeagueConfig';
-import { useDebounced } from '../../../hooks/useDebounced';
+import { LoadingState } from '../../components/ui/LoadingState';
+import { useDebounced } from '../../hooks/useDebounced';
+import { useLeagueConfig } from '../../hooks/useLeagueConfig';
+import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
+import { fantasyLeagueGroupAtom, fantasyLeagueGroupMembersAtom, fantasyLeagueGroupRoundsAtom, currGroupMemberAtom, fantasyLeagueConfigAtom, fantasyLeagueGroupLoadingAtom } from '../../state/fantasy/fantasyLeagueGroup.atoms';
+import { swrFetchKeys } from '../../utils/swrKeys';
 
 type Props = {
   children?: ReactNode;
