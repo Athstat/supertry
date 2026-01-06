@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useProFixtures } from "../../../hooks/fixtures/useProFixtures"
-import { FixtureListViewMode, IFixture } from "../../../types/games";
-import { searchProFixturePredicate } from "../../../utils/fixtureUtils";
-import NoContentCard from "../../shared/NoContentMessage";
-import { LoadingState } from "../../ui/LoadingState";
-import GroupedFixturesList from "../../fixtures/GroupedFixturesList";
+import { useProFixtures } from "../../hooks/fixtures/useProFixtures"
+import { FixtureListViewMode, IFixture } from "../../types/games";
+import { searchProFixturePredicate } from "../../utils/fixtureUtils";
+import NoContentCard from "../shared/NoContentMessage";
+import { LoadingState } from "../ui/LoadingState";
+import GroupedFixturesList from "./GroupedFixturesList";
 
 type Props = {
     searchQuery?: string,

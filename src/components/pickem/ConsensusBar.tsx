@@ -9,6 +9,7 @@ type Props = {
   className?: string;
 };
 
+/** Renders a component to show the vote percentages */
 export default function ConsensusBar({
   homePercentage,
   drawPercentage,

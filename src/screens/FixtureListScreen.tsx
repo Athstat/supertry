@@ -12,14 +12,14 @@ import { useEffect, useState } from 'react';
 import { useSectionNavigation } from '../hooks/useSectionNavigation';
 import GroupedFixturesList from '../components/fixtures/GroupedFixturesList';
 import PageView from './PageView';
-import { fixturesDateRangeAtom } from '../components/fixture/calendar/fixtures_calendar.atoms';
+import { fixturesDateRangeAtom } from '../components/fixtures/calendar/fixtures_calendar.atoms';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   filterFixturesByDateRange,
   filterPastFixtures,
   filterUpcomingFixtures,
 } from '../utils/fixtureUtils';
-import FixturesListScreenActionBar from '../components/fixture/fixtures_list/FixtureListScreenActionBar';
+import FixturesListScreenActionBar from '../components/fixtures/FixtureListScreenActionBar';
 import { FileX2 } from 'lucide-react';
 
 const competitionIds = [

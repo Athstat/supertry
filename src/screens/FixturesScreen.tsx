@@ -7,7 +7,7 @@ import { useProFixtures } from '../hooks/fixtures/useProFixtures';
 import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
 import PickEmCardSkeleton from '../components/pickem/PickEmCardSkeleton';
 import { LoadingState } from '../components/ui/LoadingState';
-import FixtureSearchResults from '../components/fixture/fixtures_list/FixtureSearchResults';
+import FixtureSearchResults from '../components/fixtures/FixtureSearchResults';
 import ProMatchCenterHeader from '../components/fixtures/ProMatchCenterHeader';
 import { useDebounced } from '../hooks/useDebounced';
 

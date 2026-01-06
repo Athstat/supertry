@@ -1,7 +1,7 @@
 import { Calendar, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
-import FixtureListScreenCalendar from '../calendar/FixtureListScreenCalendar'
-import { useSectionNavigation } from '../../../hooks/useSectionNavigation';
+import FixtureListScreenCalendar from './calendar/FixtureListScreenCalendar'
+import { useSectionNavigation } from '../../hooks/useSectionNavigation';
 import { ChevronUp } from 'lucide-react';
 
 /** Renders action on the bottom right of fixtures list screen */
