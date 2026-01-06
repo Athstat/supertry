@@ -1,7 +1,6 @@
 import PageView from './PageView';
 import { useQueryState } from '../hooks/useQueryState';
 import ProMatchCenterList from '../components/fixtures/ProMatchCenterList';
-import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import { Fragment, useState, useEffect } from 'react';
 import { useProFixtures } from '../hooks/fixtures/useProFixtures';
 import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
@@ -10,6 +9,7 @@ import { LoadingState } from '../components/ui/LoadingState';
 import FixtureSearchResults from '../components/fixtures/FixtureSearchResults';
 import ProMatchCenterHeader from '../components/fixtures/ProMatchCenterHeader';
 import { useDebounced } from '../hooks/useDebounced';
+import FloatingSearchBar from '../components/players/FloatingSearchBar';
 
 /** Renders Pro Rugby Fixtures Screen */
 export default function ProFixturesScreen() {
