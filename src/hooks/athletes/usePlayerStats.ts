@@ -9,10 +9,15 @@ import { IProSeason } from '../../types/season';
 export default function usePlayerStats(player: IProAthlete) {
 
   const playerStatsKey = swrFetchKeys.getAthleteAggregatedStats(player.tracking_id);
-  let { data: playerStats, isLoading: loadingPlayerStats } = useSWR(playerStatsKey, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
+  const { data, isLoading: loadingPlayerStats } = useSWR(playerStatsKey, () => djangoAthleteService.getAthleteSportsActions(player.tracking_id));
 
-  const seasons: IProSeason[] = [];
-  playerStats = playerStats ?? [];
+  const seasons: IProSeason[] = useMemo(() => {
+    return [];
+  }, []);
+
+  const playerStats = useMemo(() => {
+    return data || []
+  }, [data]);
 
   playerStats.forEach((ps) => {
     if (!seasons.some(x => x.id === ps.season.id)) {

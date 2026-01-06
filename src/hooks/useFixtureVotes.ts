@@ -10,13 +10,15 @@ export function useSbrFixtureVotes(fixture: ISbrFixture, shouldFetch: boolean = 
 
     const key = shouldFetch ? `sbr/${fixture.fixture_id}/votes` : null;
     const { data, isLoading, error } = useSWR(key, () => sbrService.getFixtureVotes(fixture.fixture_id));
-    const votes = data ?? [];
+    const votes = useMemo(() => {
+        return data ?? [];
+    }, [data]);
 
     const userVote = useMemo(() => {
         return votes.find((v) => {
-            return v.user_id === user.kc_id
+            return v.user_id === user?.kc_id
         })
-    }, [votes]);
+    }, [user?.kc_id, votes]);
 
     const homeVotes = votes.filter((v) => {
         return v.vote_for === "home_team";

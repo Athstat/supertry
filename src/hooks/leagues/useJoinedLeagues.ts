@@ -4,7 +4,7 @@ import { fantasyLeagueGroupsService } from "../../services/fantasy/fantasyLeague
 import { useAuth } from "../../contexts/AuthContext";
 
 /** Hook that fetches a user's joined leagues */
-export function useUserJoinedLeagues(fantasySeasonId?: string) {
+export function useJoinedLeagues(fantasySeasonId?: string) {
 
     const {authUser} = useAuth();
 

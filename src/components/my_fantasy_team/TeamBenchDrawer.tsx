@@ -4,7 +4,7 @@ import { Activity, useMemo } from "react";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { useAthleteRoundScore } from "../../hooks/useAthletePointsBreakdown";
+import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { AppColours } from "../../types/constants";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";

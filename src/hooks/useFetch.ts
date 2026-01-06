@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { FetcherResponse, SWRResponse } from "swr/_internal";
+import { SWRResponse } from "swr/_internal";
 
 export function useAsync<T>(func: () => Promise<T>) {
 
@@ -33,6 +33,7 @@ export function useAsync<T>(func: () => Promise<T>) {
 
 }
 
+// TODO: Deperecate
 /** Custom fetch hook with revalidation and caching */
 export function useFetch<T, E = string | number | undefined>(
     cacheGroup: string,

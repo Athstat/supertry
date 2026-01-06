@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { useAthleteRoundScore } from "../../hooks/useAthletePointsBreakdown";
+import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athleteUtils";

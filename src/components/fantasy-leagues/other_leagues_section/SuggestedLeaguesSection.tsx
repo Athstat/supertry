@@ -1,6 +1,6 @@
 import { Trophy } from 'lucide-react'
 import { useMemo } from 'react';
-import { useJoinableLeagues } from '../../../hooks/leagues/useJoinableLeagues';
+import { useSuggestedLeagues } from '../../../hooks/leagues/useSuggestedLeagues';
 import { IFantasySeason } from '../../../types/fantasy/fantasySeason';
 import { JoinLeagueCard } from '../JoinLeagueCard';
 import SecondaryText from '../../ui/typography/SecondaryText';
@@ -14,7 +14,7 @@ type Props = {
 export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
 
 
-    const { joinableLeagues: leagues, isLoading } = useJoinableLeagues(fantasySeason.id);
+    const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(fantasySeason.id);
 
     const trimmedList = useMemo(() => {
         return [...leagues].slice(0, 5);

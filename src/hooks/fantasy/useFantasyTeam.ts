@@ -186,7 +186,7 @@ export function useFantasyTeam() {
         });
 
         setSlots(slots);
-    }, [setSlots, teamAthletes]);
+    }, [setSlots, team?.athletes]);
 
     const originalSlots = useMemo(() => {
         const slots = defaultFantasyPositions.map((p, index) => {

@@ -2,7 +2,7 @@ import { Trophy } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import SuggestedLeaguesSections from "./SuggestedLeaguesSection"
-import { useUserJoinedLeagues } from "../../../hooks/leagues/useUserJoinedLeagues"
+import { useJoinedLeagues } from "../../../hooks/leagues/useJoinedLeagues"
 import { IFantasySeason } from "../../../types/fantasy/fantasySeason"
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups"
 import PrimaryButton from "../../ui/buttons/PrimaryButton"
@@ -21,7 +21,7 @@ type Props = {
 export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     const navigate = useNavigate();
-    const { leagues, isLoading } = useUserJoinedLeagues(fantasySeason.id);
+    const { leagues, isLoading } = useJoinedLeagues(fantasySeason.id);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [initTab, setInitTab] = useState<"join" | "create">("create");
