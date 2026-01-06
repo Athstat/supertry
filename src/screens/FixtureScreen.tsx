@@ -5,7 +5,7 @@ import { LoadingState } from '../components/ui/LoadingState';
 import { boxScoreService } from '../services/boxScoreService';
 import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
-import GameHighlightsCard from '../components/video/GameHighlightsCard';
+import GameHighlightsCard from '../components/ui/video/GameHighlightsCard';
 import { ProMotmVotingBox } from '../components/pickem/motm';
 import { ErrorState } from '../components/ui/ErrorState';
 import { Activity } from '../components/shared/Activity';

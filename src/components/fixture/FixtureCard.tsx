@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
 import WarningCard from '../shared/WarningCard';
-import GameHighlightsCard from '../video/GameHighlightsCard';
+import GameHighlightsCard from '../ui/video/GameHighlightsCard';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';

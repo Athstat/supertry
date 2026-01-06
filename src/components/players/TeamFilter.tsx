@@ -14,6 +14,7 @@ interface TeamFilterProps {
   toggleTeamFilter: (teamId: string) => void;
 }
 
+
 const TeamFilter: React.FC<TeamFilterProps> = ({
   availableTeams,
   teamFilter,
