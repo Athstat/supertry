@@ -1,17 +1,17 @@
 import { useState } from "react";
 import useAthleteFilter from "../../hooks/useAthleteFilter";
 import { IProAthlete } from "../../types/athletes"
-import DialogModal from "../shared/DialogModal";
 import { PlayerSearch } from "./PlayerSearch";
 import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { twMerge } from "tailwind-merge";
 import { useDebounced } from "../../hooks/useDebounced";
 import { X } from "lucide-react";
-import RoundedCard from "../shared/RoundedCard";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
+import RoundedCard from "../ui/cards/RoundedCard";
+import DialogModal from "../ui/modals/DialogModal";
 
 type Props = {
     onSelectPlayers?: (players: IProAthlete[]) => void,

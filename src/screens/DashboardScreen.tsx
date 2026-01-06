@@ -10,7 +10,7 @@ import { twMerge } from 'tailwind-merge';
 import DominateScrumCard from '../components/dashboard/DominateScrumCard';
 import PickemCtaCard from '../components/dashboard/PickemCtaCard';
 import { DashboardHeroLoadingSkeleton } from '../components/dashboard/hero/DashboardHeroSections';
-import RoundedCard from '../components/shared/RoundedCard';
+import RoundedCard from '../components/ui/cards/RoundedCard';
 
 
 export function DashboardScreen() {

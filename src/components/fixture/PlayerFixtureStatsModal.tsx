@@ -1,10 +1,10 @@
 import { IBoxScoreItem } from "../../types/boxScore"
 import { IFixture } from "../../types/games"
-import DialogModal from "../shared/DialogModal"
 import PlayerMugshot from "../player/PlayerMugshot"
-import RoundedCard from "../shared/RoundedCard"
 import { StatCard } from "../ui/cards/StatCard"
 import TeamLogo from "../team/TeamLogo"
+import RoundedCard from "../ui/cards/RoundedCard"
+import DialogModal from "../ui/modals/DialogModal"
 
 type AthleteStatsModalProps = {
   open?: boolean,
@@ -27,7 +27,7 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
     return outStr
   }
 
-  const isHomePlayer = fixture.team.athstat_id === bs.athlete.team_id;
+  const isHomePlayer = fixture.team?.athstat_id === bs.athlete.team_id;
 
   return (
     <DialogModal open={open} className="gap-6 flex dark:text-white text-slate-700 flex-col" onClose={onClose} title={bs.athlete.player_name} >
@@ -44,7 +44,7 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
         </div>
 
         <div>
-          <TeamLogo url={bs.athlete.team.image_url} />
+          <TeamLogo url={bs.athlete.team?.image_url} />
         </div>
 
       </div>
@@ -54,7 +54,7 @@ export default function PlayerFixtureStatsModal({ open, onClose, fixture, boxSco
         <StatCard
           label="Team"
           valueClassName="text-md"
-          value={isHomePlayer ? fixture.team.athstat_name : fixture.opposition_team.athstat_name}
+          value={isHomePlayer ? fixture.team?.athstat_name : fixture.opposition_team?.athstat_name}
         />
 
         <StatCard

@@ -1,12 +1,12 @@
 import { Users } from 'lucide-react';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
-import RoundedCard from '../shared/RoundedCard';
 import PrimaryButton from '../ui/buttons/PrimaryButton';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { useCallback, useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useJoinLeague } from '../../hooks/leagues/useJoinLeague';
+import RoundedCard from '../ui/cards/RoundedCard';
 
 interface JoinLeagueCardProps {
   leagueGroup: FantasyLeagueGroup

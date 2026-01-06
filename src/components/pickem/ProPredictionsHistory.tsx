@@ -10,7 +10,7 @@ import NoContentCard from "../ui/typography/NoContentMessage";
 import { ProGameVote } from "../../types/proPredictions";
 import { gamesService } from "../../services/gamesService";
 import FixtureCard from "../fixture/FixtureCard";
-import RoundedCard from "../shared/RoundedCard";
+import RoundedCard from "../ui/cards/RoundedCard";
 
 export default function UserProPredictionsHistoryTab() {
 

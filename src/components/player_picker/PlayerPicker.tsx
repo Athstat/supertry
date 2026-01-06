@@ -12,10 +12,10 @@ import { formatPosition } from "../../utils/athleteUtils"
 import { useInView } from "react-intersection-observer"
 import PlayerPickerFAB from "./PlayerPickerFAB"
 import { useCallback, useRef } from "react"
-import DialogModal from "../shared/DialogModal"
 import PlayerPickerDataProvider from "../../providers/PlayerPickerDataProvider"
 import { twMerge } from "tailwind-merge"
 import { AppColours } from "../../types/constants"
+import DialogModal from "../ui/modals/DialogModal"
 
 type Props = {
   playerToBeReplaced?: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,

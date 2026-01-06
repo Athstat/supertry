@@ -4,13 +4,13 @@ import { IProSeason } from '../../types/season';
 import useSWR from 'swr';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
-import RoundedCard from '../shared/RoundedCard';
 import { getPlayerAggregatedStat } from '../../types/sports_actions';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { AnimatePresence, motion } from 'framer-motion';
 import PlayerSeasonStatsTray from '../stats/PlayerSeasonStatsTray';
+import RoundedCard from '../ui/cards/RoundedCard';
 
 type Props = {
   player: IProAthlete;

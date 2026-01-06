@@ -4,9 +4,9 @@ import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting"
 import PlayerRowCard from "../player/PlayerRowCard"
 import SecondaryText from "../ui/typography/SecondaryText"
-import RoundedCard from "../shared/RoundedCard"
 import { EmptyPlayerSearchState } from "./EmptyPlayerSearchState"
 import { useEffect, useMemo, useState } from "react"
+import RoundedCard from "../ui/cards/RoundedCard"
 
 type TableProps = {
     players: IProAthlete[],

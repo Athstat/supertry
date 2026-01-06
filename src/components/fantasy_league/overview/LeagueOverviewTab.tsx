@@ -3,7 +3,6 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { leagueService } from '../../../services/leagueService';
-import RoundedCard from '../../shared/RoundedCard';
 import UserRoundOverviewCard, { NoTeamRoundOverviewCard } from './UserRoundOverviewCard';
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import UserRoundScoringUpdate from './UserRoundScoringUpdate';
@@ -13,6 +12,7 @@ import LeagueRoundCountdown from '../LeagueCountdown';
 import BlueGradientCard from '../../ui/cards/BlueGradientCard';
 import { useEffect } from 'react';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
+import RoundedCard from '../../ui/cards/RoundedCard';
 
 export default function LeagueOverviewTab() {
   const { currentRound, league } = useFantasyLeagueGroup();

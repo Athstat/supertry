@@ -11,8 +11,8 @@ import { AppColours } from "../../types/constants";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-import UnsavedChangesWarningModal from "../shared/UnsavedChangesModal";
 import { Toast } from "../ui/Toast";
+import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,

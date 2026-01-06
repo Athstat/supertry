@@ -1,13 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import { IFixture, IGameVote } from "../../../types/games";
 import { IProTeam } from "../../../types/team";
-import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { useProVoting } from "../../../hooks/fixtures/useProVoting";
 import { Activity } from "react";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import { CircleCheck, XCircle } from "lucide-react";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     fixture: IFixture;

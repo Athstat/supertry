@@ -1,12 +1,12 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
-import RoundedCard from "../shared/RoundedCard";
 import { useUserOverallStandings } from "../../hooks/fantasy/standings/useUserOverallStandings";
 
 import React from 'react'
 import { Link } from "react-router-dom";
 import SecondaryText from "../ui/typography/SecondaryText";
+import RoundedCard from "../ui/cards/RoundedCard";
 
 type Props = {
     leagues: FantasyLeagueGroup[]

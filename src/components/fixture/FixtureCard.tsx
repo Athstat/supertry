@@ -2,7 +2,6 @@ import { twMerge } from 'tailwind-merge';
 import { IFixture } from '../../types/games';
 import { format } from 'date-fns';
 import { useState } from 'react';
-import DialogModal from '../shared/DialogModal';
 import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
@@ -13,6 +12,7 @@ import { analytics } from '../../services/analytics/anayticsService';
 import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
+import DialogModal from '../ui/modals/DialogModal';
 type Props = {
   fixture: IFixture;
   className?: string;

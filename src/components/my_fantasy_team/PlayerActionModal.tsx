@@ -3,20 +3,19 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import PlayerMugshot from "../player/PlayerMugshot";
 import AvailabilityIcon, { RoundAvailabilityText } from "../players/availability/AvailabilityIcon";
-import BottomSheetView from "../ui/BottomSheetView";
 import CloseButton from "../ui/buttons/CloseButton";
 import SecondaryText from "../ui/typography/SecondaryText";
-import QuickActionButton from "../ui/QuickActionButton";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-import RoundedCard from "../shared/RoundedCard";
 import SuperSubPill from "./SuperSubPill";
-import { useMemo } from "react";
+import { Activity, useMemo } from "react";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
-import { Activity } from "../shared/Activity";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
+import QuickActionButton from "../ui/buttons/QuickActionButton";
+import RoundedCard from "../ui/cards/RoundedCard";
+import BottomSheetView from "../ui/modals/BottomSheetView";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;

@@ -7,10 +7,10 @@ import { IFantasySeason } from "../../../types/fantasy/fantasySeason"
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups"
 import PrimaryButton from "../../ui/buttons/PrimaryButton"
 import NoContentCard from "../../ui/typography/NoContentMessage"
-import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../ui/typography/SecondaryText"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import LeagueGroupsTable from "../LeagueGroupsTable"
+import RoundedCard from "../../ui/cards/RoundedCard"
 
 type Props = {
     fantasySeason: IFantasySeason

@@ -13,10 +13,8 @@ import { SortField, SortDirection } from "../../types/playerSorting";
 import { IProTeam } from "../../types/team";
 import { getAthletesSummary } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../player/PlayerProfileModal";
-import RoundedCard from "../shared/RoundedCard";
 import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
-import GlassBottomSheet from "../ui/GlassBottomSheet";
 import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
 import { PlayerFilters } from "./PlayerFilters";
@@ -25,6 +23,8 @@ import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
 import { PlayerListTable } from "./PlayerListTable";
 import FloatingSearchBar from "./FloatingSearchBar";
+import RoundedCard from "../ui/cards/RoundedCard";
+import GlassBottomSheet from "../ui/modals/GlassBottomSheet";
 
 type Props = {
     players: IProAthlete[]
