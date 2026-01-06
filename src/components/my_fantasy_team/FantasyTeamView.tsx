@@ -7,7 +7,7 @@ import { requestPushPermissions } from '../../../utils/bridgeUtils';
 import MyTeamViewHeader from './MyTeamViewHeader';
 import PlayerPickerV2 from '../../player-picker/PlayerPickerV2';
 import { PositionClass } from '../../../types/athletes';
-import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
+import { useFantasyLeagueTeam } from '../../providers/fantasy_teams/FantasyTeamProvider';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;

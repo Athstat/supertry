@@ -4,7 +4,7 @@ import { ScopeProvider } from 'jotai-scope'
 import { myTeamModeAtom } from '../../../state/fantasy/myTeam.atoms'
 import { useAtom } from 'jotai'
 import { MyTeamViewMode } from '../../../types/fantasy/myTeam'
-import FantasyLeagueTeamProvider from './FantasyLeagueTeamProvider'
+import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider'
 
 type Props = {
     children?: ReactNode,
@@ -28,9 +28,9 @@ export default function MyTeamViewStateProvider({ children, team }: Props) {
 function InnerProvider({ children, team }: Props) {
     return (
         <>
-            <FantasyLeagueTeamProvider team={team}>
+            <FantasyTeamProvider team={team}>
                 {children}
-            </FantasyLeagueTeamProvider>
+            </FantasyTeamProvider>
         </>
     )
 }

@@ -1,15 +1,15 @@
 import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
-import CreateFantasyTeamView from './CreateTeamView';
-import FantasyTeamView from './my-team/FantasyTeamView';
-import NoTeamCreatedFallback from './NoTeamCreatedFallback';
+import NoTeamCreatedFallback from '../fantasy-leagues/NoTeamCreatedFallback';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
-import TeamHistoryBar from './my-team/TeamHistoryBar';
-import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
 import CreateFantasyTeamProvider from '../../providers/fantasy_teams/CreateFantasyTeamProvider';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
+import FantasyTeamView from './FantasyTeamView';
+import PitchViewLoadingSkeleton from './PitchViewLoadingSkeleton';
+import TeamHistoryBar from './TeamHistoryBar';
+import CreateFantasyTeamView from './CreateTeamView';
 
 // The Activity Component has been added to the latest release
 // of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
@@ -85,14 +85,14 @@ function MyTeamModeSelector() {
 
       <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
         {roundTeam && (
-          <FantasyLeagueTeamProvider leagueRound={round} team={roundTeam}>
+          <FantasyTeamProvider leagueRound={round} team={roundTeam}>
             <FantasyTeamView
               leagueConfig={leagueConfig}
               leagueRound={round}
               onTeamUpdated={async () => { }}
               onBack={() => { }}
             />
-          </FantasyLeagueTeamProvider>
+          </FantasyTeamProvider>
         )}
       </Activity>
 

@@ -3,7 +3,7 @@ import FantasyLeagueGroupDataProvider from '../components/fantasy_league/provide
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import MyTeamView from '../components/fantasy-leagues/MyTeamView';
+import MyTeamView from '../components/my_fantasy_team/MyTeamView';
 import { useEffect } from 'react';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';

@@ -1,6 +1,6 @@
 import { Check, Info, Loader, Shield } from "lucide-react";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
-import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
+import { useFantasyLeagueTeam } from "../../providers/fantasy_teams/FantasyTeamProvider";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
 import { useSubmitTeam } from "../../../hooks/fantasy/useSubmitTeam";
 import { useCallback, useState } from "react";

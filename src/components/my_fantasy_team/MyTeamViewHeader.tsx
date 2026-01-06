@@ -3,7 +3,7 @@ import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import SaveTeamBar from './SaveTeamBar';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { Coins, Lock } from 'lucide-react';
-import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
+import { useFantasyLeagueTeam } from '../../providers/fantasy_teams/FantasyTeamProvider';
 import RoundedCard from '../../shared/RoundedCard';
 import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSummary';
 import { Activity } from '../../shared/Activity';

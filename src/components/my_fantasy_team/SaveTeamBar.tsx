@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import PrimaryButton from "../../shared/buttons/PrimaryButton";
-import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
+import { useFantasyLeagueTeam } from "../../providers/fantasy_teams/FantasyTeamProvider";
 import { fantasyTeamService } from "../../../services/fantasyTeamService";
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";

@@ -13,8 +13,8 @@ import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
 import { PlayerActionModal } from '../team/PlayerActionModal';
-import CreateTeamViewHeader from '../my_fantasy_team/CreateTeamViewHeader';
-import TeamBenchDrawer from '../my_fantasy_team/TeamBenchDrawer';
+import CreateTeamViewHeader from './CreateTeamViewHeader';
+import TeamBenchDrawer from './TeamBenchDrawer';
 
 
 export default function CreateFantasyTeamView() {

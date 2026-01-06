@@ -4,7 +4,7 @@ import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../../utils/athleteUtils";
 import PlayerMugshot from "../../shared/PlayerMugshot";
 import SecondaryText from "../../shared/SecondaryText";
-import { useFantasyLeagueTeam } from "./FantasyLeagueTeamProvider";
+import { useFantasyLeagueTeam } from "../../providers/fantasy_teams/FantasyTeamProvider";
 import { twMerge } from "tailwind-merge";
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";

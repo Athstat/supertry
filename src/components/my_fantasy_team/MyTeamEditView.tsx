@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../../types/leagueConfig';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
-import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
+import { useFantasyLeagueTeam } from '../../providers/fantasy_teams/FantasyTeamProvider';
 import { EditableTeamSlotItem } from './EditableTeamSlotItem';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import WarningCard from '../../shared/WarningCard';
