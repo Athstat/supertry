@@ -8,7 +8,7 @@ import { StatCard } from "../../shared/StatCard"
 import RoundedCard from "../../shared/RoundedCard"
 import NoContentCard from "../../shared/NoContentMessage"
 import TeamOverviewView from "./team_overview/TeamOverviewView"
-import PlayerPointsBreakdownView from "./points_breakdown/PlayerPointsBreakdownView"
+import PlayerPointsBreakdownView from "../../points_breakdown/PlayerPointsBreakdownView"
 import { useMemo, useState } from "react"
 import { IProAthlete } from "../../../types/athletes"
 import { Lock } from "lucide-react"
@@ -23,6 +23,7 @@ type Props = {
     onClose?: () => void
 }
 
+// TODO: Delete Component
 /** Renders a fantasy league group members team on a modal */
 export default function FantasyLeagueMemberModal({ onClose, isOpen, member }: Props) {
 

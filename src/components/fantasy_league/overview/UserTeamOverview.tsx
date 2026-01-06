@@ -4,7 +4,7 @@ import {
   IDetailedFantasyAthlete,
   IFantasyLeagueRound,
 } from '../../../types/fantasyLeague';
-import PlayerPointsBreakdownView from '../team-modal/points_breakdown/PlayerPointsBreakdownView';
+import PlayerPointsBreakdownView from '../../points_breakdown/PlayerPointsBreakdownView';
 import { IProAthlete } from '../../../types/athletes';
 import DialogModal from '../../shared/DialogModal';
 import { useGeneralPlayerAvailability } from '../../../hooks/fantasy/usePlayerSquadReport';

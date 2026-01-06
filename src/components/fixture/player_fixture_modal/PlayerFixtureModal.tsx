@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom"
 import FantasyPointsInfoModal from "../../branding/help/FantasyPointsInfoModal"
 import FixtureModalHeader from "./FixtureModalHeader"
 import PlayerFixtureStatsView from "./PlayerFixtureStatsView"
-import PlayerPointsBreakdownView from "../../fantasy_league/team-modal/points_breakdown/PlayerPointsBreakdownView"
+import PlayerPointsBreakdownView from "../../points_breakdown/PlayerPointsBreakdownView"
 
 type Props = {
     fixture: IFixture,

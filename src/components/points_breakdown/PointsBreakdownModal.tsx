@@ -1,10 +1,10 @@
 import { useEffect } from "react"
-import { IProAthlete } from "../../../../types/athletes"
-import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../../types/fantasyLeague"
-import { IFantasyTeamAthlete } from "../../../../types/fantasyTeamAthlete"
-import DialogModal from "../../../shared/DialogModal"
+import { IProAthlete } from "../../types/athletes"
+import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../types/fantasyLeague"
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete"
+import DialogModal from "../shared/DialogModal"
 import PlayerPointsBreakdownView from "./PlayerPointsBreakdownView"
-import { athleteAnalytics } from "../../../../services/analytics/athleteAnalytics"
+import { athleteAnalytics } from "../../services/analytics/athleteAnalytics"
 
 type Props = {
     athlete: IProAthlete | IFantasyTeamAthlete,

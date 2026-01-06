@@ -4,7 +4,7 @@ import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { FantasyTeamFormation3D } from '../../team/FantasyTeamFormation';
 import { PlayerActionModal } from '../../team/PlayerActionModal';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
-import PointsBreakdownModal from '../../fantasy_league/team-modal/points_breakdown/PointsBreakdownModal';
+import PointsBreakdownModal from '../../points_breakdown/PointsBreakdownModal';
 import { useFantasyLeagueTeam } from './FantasyLeagueTeamProvider';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useHideBottomNavBar } from '../../../hooks/navigation/useNavigationBars';

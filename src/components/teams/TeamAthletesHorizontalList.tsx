@@ -6,7 +6,7 @@ import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup
 import { IProAthlete } from "../../types/athletes";
 import { FantasyLeagueTeamWithAthletes } from "../../types/fantasyLeague";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
-import PointsBreakdownModal from "../fantasy_league/team-modal/points_breakdown/PointsBreakdownModal";
+import PointsBreakdownModal from "../points_breakdown/PointsBreakdownModal";
 import PlayerMugshot from "../shared/PlayerMugshot";
 import RoundedCard from "../shared/RoundedCard";
 import { Lock } from "lucide-react";
