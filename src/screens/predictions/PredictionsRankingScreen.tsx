@@ -4,9 +4,9 @@ import useSWR from "swr";
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
 import { LoadingState } from "../../components/ui/LoadingState";
 import { IStatCard, TopicPageView } from "../PageView";
-import ProPredictionsLeaderboard from "../../components/predictions/ProPredictionsLeaderboard";
+import ProPredictionsLeaderboard from "../../components/pickem/ProPredictionsLeaderboard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/shared/tabs/TabView";
-import UserProPredictionsHistoryTab from "../../components/predictions/ProPredictionsHistory";
+import UserProPredictionsHistoryTab from "../../components/pickem/ProPredictionsHistory";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function PredictionsRankingScreen() {

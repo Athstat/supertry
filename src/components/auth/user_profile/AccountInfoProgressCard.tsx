@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
-import RoundedCard from "../shared/RoundedCard";
-import SecondaryText from "../shared/SecondaryText";
-import { useDebounced } from "../../hooks/useDebounced";
+import RoundedCard from "../../shared/RoundedCard";
+import SecondaryText from "../../shared/SecondaryText";
+import { useDebounced } from "../../../hooks/useDebounced";
 import { AnimatePresence, motion } from "framer-motion";
 
 type Props = {

@@ -1,5 +1,5 @@
-import { isInProduction } from "../../utils/webUtils"
-import WarningCard from "../shared/WarningCard";
+import { isInProduction } from "../../../../utils/webUtils"
+import WarningCard from "../../../shared/WarningCard";
 import { twMerge } from "tailwind-merge";
 import { FlaskConical } from "lucide-react";
 

@@ -1,8 +1,8 @@
 import { ChevronRight } from 'lucide-react';
 import { ReactNode } from 'react'
-import SecondaryText from '../shared/SecondaryText';
-import { useAuth } from '../../contexts/AuthContext';
-import { isGuestUser } from '../../utils/deviceId/deviceIdUtils';
+import SecondaryText from '../../../shared/SecondaryText';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { isGuestUser } from '../../../../utils/deviceId/deviceIdUtils';
 
 type Props = {
     icon?: ReactNode,

@@ -1,7 +1,7 @@
 import useSWR from "swr";
-import { useAuthUser } from "../../hooks/useAuthUser";
-import { fantasyRankingsService } from "../../services/fantasyRankingsService";
-import { LoadingState } from "../ui/LoadingState";
+import { useAuthUser } from "../../../hooks/useAuthUser";
+import { fantasyRankingsService } from "../../../services/fantasyRankingsService";
+import { LoadingState } from "../../ui/LoadingState";
 
 
 export default function UserStatsGrid() {

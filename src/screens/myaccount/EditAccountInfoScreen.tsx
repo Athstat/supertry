@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useCallback, useMemo, useState } from "react";
 import InputField from "../../components/shared/InputField";
 import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
-import AccountInfoProgressCard from "../../components/profile/AccountInfoProgressCard";
+import AccountInfoProgressCard from "../../components/auth/user_profile/AccountInfoProgressCard";
 import { userService } from "../../services/userService";
 import { Toast } from "../../components/ui/Toast";
 import { useNavigate } from "react-router-dom";

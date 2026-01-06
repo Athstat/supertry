@@ -1,4 +1,4 @@
-import UserNotificationsSettings from '../components/settings/UserNotificationsSettings';
+import UserNotificationsSettings from '../components/auth/user_profile/settings/UserNotificationsSettings';
 import LicensingModal from '../components/branding/licensing/LicensingModel';
 import { authUserAtom, isGuestUserAtom } from '../state/authUser.atoms';
 import { ScopeProvider } from 'jotai-scope';
@@ -9,9 +9,9 @@ import ClaimGuestAccountBox from '../components/auth/guest/ClaimGuestAccountBox'
 import LogoutButton from '../components/auth/LogoutButton';
 import DeleteAccountButton from '../components/auth/DeleteAccountButton';
 import Experimental from '../components/shared/ab_testing/Experimental';
-import QaNoticeCard from '../components/settings/QaNoticeCard';
+import QaNoticeCard from '../components/auth/user_profile/settings/QaNoticeCard';
 import { useNavigate } from 'react-router-dom';
-import ProfileSettingCard from '../components/settings/ProfileSettingCard';
+import ProfileSettingCard from '../components/auth/user_profile/settings/ProfileSettingCard';
 import { UserCircle, Moon, Sun, HelpCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import ScrummyGamePlayModal from '../components/branding/help/ScrummyGamePlayModal';
