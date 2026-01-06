@@ -9,7 +9,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { PasswordResetTokenIntrospect, RestError } from '../../types/auth';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { PasswordInputField } from '../../components/shared/InputField';
-import FormErrorText from '../../components/shared/FormError';
+import FormErrorText from '../../components/shared/forms/FormError';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 
 // Success Modal Component

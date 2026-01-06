@@ -4,7 +4,7 @@ import { getCountryEmojiFlag } from "../../utils/svrUtils"
 import MatchPrCard from "../rankings/MatchPrCard"
 import SecondaryText from "../shared/SecondaryText"
 import SmartPlayerMugshot from "./SmartPlayerMugshot"
-import FormIndicator from "../shared/FormIndicator"
+import FormIndicator from "./FormIndicator"
 import { stripCountryName } from "../../utils/stringUtils"
 
 type Props = {

@@ -6,7 +6,6 @@ import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { Activity, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataProvider';
-import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
 import PlayerMatchModal from '../fixture/player_fixture_modal/PlayerFixtureModal';
@@ -16,6 +15,7 @@ import CircleButton from '../ui/buttons/BackButton';
 import { X } from 'lucide-react';
 import SecondaryText from '../shared/SecondaryText';
 import PlayerScoutingActionModal from '../players/scouting/PlayerScoutingActionModal';
+import BottomSheetView from '../ui/modals/BottomSheetView';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;

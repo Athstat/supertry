@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatPosition } from '../../../utils/athleteUtils';
-import FormIndicator from '../../shared/FormIndicator';
+import FormIndicator from '../FormIndicator';
 import { IProAthlete } from '../../../types/athletes';
 
 interface PlayerInfoProps {

@@ -1,6 +1,6 @@
 import SecondaryText from '../../shared/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
-import FormIndicator from '../../shared/FormIndicator';
+import FormIndicator from '../FormIndicator';
 
 import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';

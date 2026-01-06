@@ -1,6 +1,6 @@
 import { IProAthlete } from '../../../types/athletes';
 import { formatPosition } from '../../../utils/athleteUtils';
-import FormIndicator from '../../shared/FormIndicator';
+import FormIndicator from '../FormIndicator';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
