@@ -9,13 +9,13 @@ import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 import PlayerTeamFormCard from '../PlayerTeamForm';
 import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
 import PlayerPointsHistoryCard from '../PlayerPointsHistoryCard';
-import RoundedCard from '../../../shared/RoundedCard';
 import SecondaryText from '../../../ui/typography/SecondaryText';
 import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import FormIndicator from '../../FormIndicator';
 import PlayerTeamCard from '../PlayerTeamCard';
 import Experimental from '../../../ui/ab_testing/Experimental';
 import PlayerNextMatchCard from '../PlayerNextMatchCard';
+import RoundedCard from '../../../ui/cards/RoundedCard';
 
 type Props = {
   player: IProAthlete;

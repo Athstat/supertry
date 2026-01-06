@@ -1,7 +1,6 @@
 import useSWR from "swr";
 import { Fragment, ReactNode, useEffect } from "react";
 import { useSetAtom } from "jotai";
-import RoundedCard from "../components/shared/RoundedCard";
 import { fantasyLeagueGroupsService } from "../services/fantasy/fantasyLeagueGroupsService";
 import { fantasyLeagueAtom } from "../state/fantasy/fantasyLeague.atoms";
 import { playerPickerAtoms } from "../state/playerPicker/playerPicker";
@@ -10,6 +9,7 @@ import { IFantasyLeagueRound } from "../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../types/fantasyTeamAthlete";
 import { IFantasyAthlete } from "../types/rugbyPlayer";
 import { swrFetchKeys } from "../utils/swrKeys";
+import RoundedCard from "../components/ui/cards/RoundedCard";
 
 type Props = {
     leagueRound?: IFantasyLeagueRound,

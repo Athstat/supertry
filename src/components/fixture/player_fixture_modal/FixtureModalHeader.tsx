@@ -3,9 +3,9 @@ import SmartPlayerMugshot from "../../player/SmartPlayerMugshot"
 import MatchPrCard from "../../rankings/MatchPrCard"
 import CircleButton from "../../ui/buttons/BackButton"
 import SecondaryText from "../../ui/typography/SecondaryText"
-import QuickActionButton from "../../ui/QuickActionButton"
 import { IProAthlete } from "../../../types/athletes"
 import { SingleMatchPowerRanking } from "../../../types/powerRankings"
+import QuickActionButton from "../../ui/buttons/QuickActionButton"
 
 type Props = {
     player: IProAthlete,

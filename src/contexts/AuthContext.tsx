@@ -1,7 +1,6 @@
-import { createContext, useContext, ReactNode, useCallback } from 'react';
+import { createContext, useContext, ReactNode, useCallback, Activity } from 'react';
 import { authService } from '../services/authService';
 import { useAuthToken } from '../providers/AuthTokenProvider';
-import { Activity } from '../components/shared/Activity';
 import useSWR, { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
@@ -86,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

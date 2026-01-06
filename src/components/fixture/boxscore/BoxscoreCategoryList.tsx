@@ -1,11 +1,11 @@
 import useSWR from 'swr';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import PlayerMugshot from '../../player/PlayerMugshot';
-import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import { useCallback, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import NoContentCard from '../../ui/typography/NoContentMessage';
+import RoundedCard from '../../ui/cards/RoundedCard';
 
 export type BoxscoreListRecordItem = {
   athleteId: string;

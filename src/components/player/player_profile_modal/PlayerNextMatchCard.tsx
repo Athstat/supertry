@@ -1,7 +1,7 @@
 import { usePlayerNextMatch } from "../../../hooks/athletes/usePlayerNextMatch"
 import FixtureCard from "../../fixture/FixtureCard"
+import RoundedCard from "../../ui/cards/RoundedCard"
 import NoContentCard from "../../ui/typography/NoContentMessage"
-import RoundedCard from "../../shared/RoundedCard"
 
 type Props = {
     player: {tracking_id: string}

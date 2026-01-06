@@ -7,11 +7,11 @@ import TeamLogo from '../../team/TeamLogo';
 import { twMerge } from 'tailwind-merge';
 import { IProAthlete } from '../../../types/athletes';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
-import RoundedCard from '../../shared/RoundedCard';
 import MatchPrCard from '../../rankings/MatchPrCard';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import { abbreviateSeasonName } from '../../players/compare/PlayerCompareSeasonPicker';
-import formatDate from 'date-fns/format';
+import RoundedCard from '../../ui/cards/RoundedCard';
+import { formatDate } from 'date-fns';
 
 type Props = {
   player: IProAthlete;

@@ -1,29 +1,29 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, UserCircle, X } from 'lucide-react';
-import { authService } from '../services/authService';
-import ScrummyLogo from '../components/branding/scrummy_logo';
-import RoundedCard from '../components/shared/RoundedCard';
-import { ClaimGuestAccountReq } from '../types/auth';
-import InputField, { PasswordInputField } from '../components/ui/forms/InputField';
-import PrimaryButton from '../components/ui/buttons/PrimaryButton';
-import { useEmailUniqueValidator } from '../hooks/useEmailUniqueValidator';
-import { authUserAtom, isGuestUserAtom } from '../state/authUser.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import AuthUserDataProvider from '../components/auth/AuthUserDataProvider';
-import NoContentCard from '../components/ui/typography/NoContentMessage';
-import { useAuth } from '../contexts/AuthContext';
-import SecondaryText from '../components/ui/typography/SecondaryText';
-import { ErrorMessage } from '../components/ui/ErrorState';
-import { emailValidator } from '../utils/stringUtils';
-import { validatePassword } from '../utils/authUtils';
-import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
-import FormStepIndicator from '../components/ui/forms/FormStepIndicator';
 import { KeyRound } from 'lucide-react';
 import { BadgeCheck } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
-import { authAnalytics } from '../services/analytics/authAnalytics';
-import PageView from './PageView';
+import AuthUserDataProvider from '../../components/auth/AuthUserDataProvider';
+import ScrummyLogo from '../../components/branding/scrummy_logo';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
+import RoundedCard from '../../components/ui/cards/RoundedCard';
+import PageView from '../../components/ui/containers/PageView';
+import ScrummyMatrixBackground from '../../components/ui/containers/ScrummyMatrixBackground';
+import FormStepIndicator from '../../components/ui/forms/FormStepIndicator';
+import InputField, { PasswordInputField } from '../../components/ui/forms/InputField';
+import NoContentCard from '../../components/ui/typography/NoContentMessage';
+import SecondaryText from '../../components/ui/typography/SecondaryText';
+import { useAuth } from '../../contexts/AuthContext';
+import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
+import { authAnalytics } from '../../services/analytics/authAnalytics';
+import { authService } from '../../services/authService';
+import { authUserAtom, isGuestUserAtom } from '../../state/authUser.atoms';
+import { ClaimGuestAccountReq } from '../../types/auth';
+import { validatePassword } from '../../utils/authUtils';
+import { emailValidator } from '../../utils/stringUtils';
+import ErrorCard from '../../components/ui/cards/ErrorCard';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];
@@ -229,12 +229,12 @@ function EmailUsernameStep({ onNextStep, form, setForm }: StepProps) {
           type="email"
         />
 
-        {emailTaken && <ErrorMessage message="Email is registered with another account" />}
+        {emailTaken && <ErrorCard message="Email is registered with another account" />}
       </div>
 
       <PrimaryButton disabled={!isFormComplete}>Continue</PrimaryButton>
 
-      {error && <ErrorMessage message={error} />}
+      {error && <ErrorCard message={error} />}
     </form>
   );
 }
@@ -294,7 +294,7 @@ function CreatePasswordStep({ form, setForm, onNextStep }: StepProps) {
 
       <PrimaryButton disabled={!isFormComplete}>Continue</PrimaryButton>
 
-      {error && <ErrorMessage message={error} />}
+      {error && <ErrorCard message={error} />}
     </form>
   );
 }
@@ -365,7 +365,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
         return;
       }
 
-      setErrors(error?.message);
+      setErrors({message: error?.message});
     } catch (error: any) {
       console.error('Error claiming account:', error);
       let errorMessage = error.message || 'Failed to complete profile. Please try again.';
@@ -408,7 +408,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
         Claim Account
       </PrimaryButton>
 
-      {submitError && <ErrorMessage message={submitError} />}
+      {submitError && <ErrorCard message={submitError} />}
     </form>
   );
 }

@@ -1,5 +1,5 @@
 import { Search } from "lucide-react"
-import RoundedCard from "../shared/RoundedCard"
+import RoundedCard from "../ui/cards/RoundedCard";
 
 type Props = {
     value?: string,

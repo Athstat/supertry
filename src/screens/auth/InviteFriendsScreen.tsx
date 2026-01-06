@@ -1,7 +1,6 @@
 import { Copy } from "lucide-react";
-import ScrummyLogo from "../components/branding/scrummy_logo";
-import { useAuthUser } from "../hooks/useAuthUser";
-import { analytics } from "../services/analytics/anayticsService";
+import ScrummyLogo from "../../components/branding/scrummy_logo";
+import { useAuthUser } from "../../hooks/auth/useAuthUser";
 
 export default function InviteFriendsScreen() {
 
@@ -15,7 +14,7 @@ export default function InviteFriendsScreen() {
 
     const handleClickInvite = () => {
         navigator.clipboard.writeText(inviteLink);
-        analytics.trackFriendInvitesSent("Link");
+        // analytics.trackFriendInvitesSent("Link");
         alert("Invite Link Copied");
     }
 

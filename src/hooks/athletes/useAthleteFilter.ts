@@ -1,12 +1,8 @@
 import { useEffect, useState, useTransition } from 'react';
-import { IProAthlete } from '../types/athletes';
-import {
-  athletePositionFilter,
-  athleteSearchFilter,
-  athleteSorter,
-  athleteTeamFilter,
-} from '../utils/athleteUtils';
-import { SortDirection, SortField } from '../types/playerSorting';
+import { IProAthlete } from '../../types/athletes';
+import { SortField, SortDirection } from '../../types/playerSorting';
+import { athletePositionFilter, athleteTeamFilter, athleteSearchFilter, athleteSorter } from '../../utils/athleteUtils';
+
 
 type Props = {
   athletes: IProAthlete[];

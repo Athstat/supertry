@@ -1,15 +1,15 @@
 import useSWR from "swr";
 import { useFantasyLeaguesScreen } from "../../hooks/fantasy/useFantasyLeaguesScreen"
 import { IFantasySeason } from "../../types/fantasy/fantasySeason"
-import RoundedCard from "../shared/RoundedCard";
 import { fantasySeasonsService } from "../../services/fantasy/fantasySeasonsService";
 import SecondaryText from "../ui/typography/SecondaryText";
-import FantasyLeagueGroupDataProvider from "../fantasy_league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { ChevronRight, Trophy } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import LearnScrummyNoticeCard from "../branding/help/LearnScrummyNoticeCard";
 import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
+import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
+import RoundedCard from "../ui/cards/RoundedCard";
 
 /** Component rendered when there are not selected fantasy season pages */
 export default function FantasySeasonOptionsList() {

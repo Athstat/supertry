@@ -1,4 +1,4 @@
-import DialogModal from "../../shared/DialogModal";
+import DialogModal from "../../ui/modals/DialogModal";
 import FantasyPointsBreakdown from "./FantasyPointsBreakdown";
 
 type Props = {

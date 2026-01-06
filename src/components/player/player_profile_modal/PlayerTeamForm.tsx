@@ -1,7 +1,7 @@
 import { IProAthlete } from "../../../types/athletes"
 import { useTeamLastNFixtures } from "../../../hooks/teams/useTeamLastNFixtures";
-import RoundedCard from "../../shared/RoundedCard";
 import TeamFormGnatChart from "../../team/TeamFormGnatChart";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     player: IProAthlete

@@ -1,6 +1,7 @@
-import BetaTag from '../branding/BetaTag';
-import ScrummyLogo from '../branding/scrummy_logo';
-import ScrummyMatrixBackground from '../shared/ScrummyMatrixBackground';
+import BetaTag from "../../branding/BetaTag";
+import ScrummyLogo from "../../branding/scrummy_logo";
+import ScrummyMatrixBackground from "../../ui/containers/ScrummyMatrixBackground";
+
 
 interface AuthLayoutProps {
   children: React.ReactNode;

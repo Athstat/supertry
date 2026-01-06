@@ -2,10 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext"
 import { isGuestUser } from "../../../utils/deviceId/deviceIdUtils";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
-import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { CircleUserRound } from "lucide-react";
 import { authAnalytics } from "../../../services/analytics/authAnalytics";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     reasonNum?: number

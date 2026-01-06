@@ -1,7 +1,7 @@
 import { TriangleAlert } from "lucide-react"
 import DialogModal from "./DialogModal"
-import WarningCard from "./WarningCard"
-import PrimaryButton, { TranslucentButton } from "../ui/buttons/PrimaryButton"
+import PrimaryButton, { TranslucentButton } from "../buttons/PrimaryButton"
+import WarningCard from "../cards/WarningCard"
 
 type Props = {
     onDiscard?: () => void,

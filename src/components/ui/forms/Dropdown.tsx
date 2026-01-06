@@ -1,10 +1,10 @@
 import { Activity, useEffect, useMemo, useRef, useState } from "react"
-import { DropdownOption } from "../../types/ui"
-import RoundedCard from "./RoundedCard"
 import { twMerge } from "tailwind-merge"
 import { ChevronDown } from "lucide-react"
 import { useInView } from "react-intersection-observer"
-import { useClickOutside } from "../../hooks/useClickOutside"
+import { useClickOutside } from "../../../hooks/web/useClickOutside"
+import { DropdownOption } from "../../../types/ui"
+import RoundedCard from "../cards/RoundedCard"
 
 type Props = {
     onChange?: (value?: string) => void,

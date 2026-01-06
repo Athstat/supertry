@@ -2,8 +2,8 @@ import { ReactNode, useRef } from "react"
 import BottomSheetHandle from "./BottomSheetHandle"
 import { twMerge } from "tailwind-merge"
 import { AnimatePresence, motion } from "framer-motion"
-import { AppColours } from "../../types/constants"
-import { useClickOutside } from "../../hooks/useClickOutside"
+import { useClickOutside } from "../../../hooks/web/useClickOutside"
+import { AppColours } from "../../../types/constants"
 
 type Props = {
     children?: ReactNode,

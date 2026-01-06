@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react"
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../types/fantasyLeague"
 import { useAuth } from "../../contexts/AuthContext";
-import FantasyLeagueTeamProvider from "../../components/fantasy-leagues/my-team/FantasyLeagueTeamProvider";
+import FantasyTeamProvider from "./FantasyTeamProvider";
 
 
 type Props = {
@@ -55,11 +55,11 @@ export default function CreateFantasyTeamProvider({leagueRound, children}: Props
     }
 
     return (
-        <FantasyLeagueTeamProvider
+        <FantasyTeamProvider
             team={fakeTeam}
             leagueRound={leagueRound}
         >
             {children}
-        </FantasyLeagueTeamProvider>
+        </FantasyTeamProvider>
     )
 }

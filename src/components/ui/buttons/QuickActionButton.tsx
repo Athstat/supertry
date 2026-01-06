@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
-import RoundedCard from "../shared/RoundedCard"
 import { twMerge } from "tailwind-merge"
 import { ArrowUpRight } from "lucide-react"
+import RoundedCard from "../cards/RoundedCard"
 
 type Props = {
   children?: ReactNode,

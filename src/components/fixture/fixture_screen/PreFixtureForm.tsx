@@ -1,8 +1,8 @@
 import { useTeamLastNFixtures } from '../../../hooks/teams/useTeamLastNFixtures'
 import { IFixture } from '../../../types/games'
 import { fixtureSummary } from '../../../utils/fixtureUtils';
-import RoundedCard from '../../shared/RoundedCard';
 import TeamFormGnatChart from '../../team/TeamFormGnatChart';
+import RoundedCard from '../../ui/cards/RoundedCard';
 
 type Props = {
     fixture: IFixture

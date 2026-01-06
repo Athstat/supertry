@@ -1,17 +1,17 @@
 import { Activity, useCallback } from "react";
 import useSWR from "swr";
-import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
-import { scoutingService } from "../../services/fantasy/scoutingService";
-import { IProAthlete } from "../../types/athletes"
-import { swrFetchKeys } from "../../utils/swrKeys";
-import BottomSheetView from "../ui/BottomSheetView"
 import { twMerge } from "tailwind-merge";
-import { lighterDarkBlueCN } from "../../types/constants";
-import CircleButton from "../shared/buttons/BackButton";
-import { X } from "lucide-react";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
-import RoundedCard from "../shared/RoundedCard";
 import { useNavigate } from "react-router-dom";
+import { scoutingService } from "../../../services/fantasy/scoutingService";
+import { X } from "lucide-react";
+import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList";
+import { IProAthlete } from "../../../types/athletes";
+import { lighterDarkBlueCN } from "../../../types/constants";
+import { swrFetchKeys } from "../../../utils/swrKeys";
+import CircleButton from "../../ui/buttons/BackButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
+import RoundedCard from "../../ui/cards/RoundedCard";
+import BottomSheetView from "../../ui/modals/BottomSheetView";
 
 type Props = {
     player: IProAthlete,

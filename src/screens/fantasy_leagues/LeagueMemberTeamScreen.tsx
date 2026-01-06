@@ -1,25 +1,25 @@
-import { useParams } from "react-router-dom";
-import PageView from "./PageView";
-import TeamHistoryProvider from "../providers/fantasy_teams/TeamHistoryProvider";
-import FantasyLeagueGroupDataProvider from "../components/fantasy_league/providers/FantasyLeagueGroupDataProvider";
-import useSWR from "swr";
-import { swrFetchKeys } from "../utils/swrKeys";
-import { userService } from "../services/userService";
-import { useTeamHistory } from "../hooks/fantasy/useTeamHistory";
-import TeamHistoryBar from "../components/fantasy-leagues/my-team/TeamHistoryBar";
-import FantasyLeagueTeamProvider from "../components/fantasy-leagues/my-team/FantasyLeagueTeamProvider";
-import FantasyTeamView from "../components/fantasy-leagues/my-team/FantasyTeamView";
-import { useFantasyLeagueGroup } from "../hooks/leagues/useFantasyLeagueGroup";
-import PitchViewLoadingSkeleton from "../components/fantasy-leagues/my-team/PitchViewLoadingSkeleton";
-import RoundedCard from "../components/shared/RoundedCard";
-import { Fragment } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
-import { IFantasyLeagueRound } from "../types/fantasyLeague";
-import NoTeamCreatedFallback from "../components/fantasy-leagues/NoTeamCreatedFallback";
-import CircleButton from "../components/ui/buttons/BackButton";
 import { ArrowLeft } from "lucide-react";
-import { useHideTopNavBar } from "../hooks/navigation/useNavigationBars";
-import { useNavigateBack } from "../hooks/web/useNavigateBack";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Fragment } from "react/jsx-runtime";
+import useSWR from "swr";
+import NoTeamCreatedFallback from "../../components/fantasy-leagues/NoTeamCreatedFallback";
+import FantasyTeamView from "../../components/my_fantasy_team/FantasyTeamView";
+import PitchViewLoadingSkeleton from "../../components/my_fantasy_team/PitchViewLoadingSkeleton";
+import TeamHistoryBar from "../../components/my_fantasy_team/TeamHistoryBar";
+import CircleButton from "../../components/ui/buttons/BackButton";
+import RoundedCard from "../../components/ui/cards/RoundedCard";
+import PageView from "../../components/ui/containers/PageView";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
+import { useNavigateBack } from "../../hooks/web/useNavigateBack";
+import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
+import TeamHistoryProvider from "../../providers/fantasy_teams/TeamHistoryProvider";
+import { userService } from "../../services/userService";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { swrFetchKeys } from "../../utils/swrKeys";
+import FantasyTeamProvider from "../../providers/fantasy_teams/FantasyTeamProvider";
 
 
 export default function LeagueMemberTeamScreen() {
@@ -111,7 +111,7 @@ function Content() {
             />
             
             {roundTeam && !isDelaying && (
-                <FantasyLeagueTeamProvider
+                <FantasyTeamProvider
                     leagueRound={round}
                     team={roundTeam}
                     readOnly
@@ -122,7 +122,7 @@ function Content() {
                         onTeamUpdated={async () => { }}
                         onBack={() => { }}
                     />
-                </FantasyLeagueTeamProvider>
+                </FantasyTeamProvider>
             )}
 
 

@@ -1,10 +1,10 @@
-import PageView from './PageView';
 import { Trophy } from 'lucide-react';
-import { FantasySeasonDashboard } from '../components/fantasy-seasons/FantasyCompetitionDashboard';
-import FantasySeasonOptionsList from '../components/fantasy-seasons/FantasySeasonOptionsList';
-import { Activity } from '../components/shared/Activity';
-import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
-import { LoadingIndicator } from '../components/ui/LoadingIndicator';
+import { FantasySeasonDashboard } from '../../components/fantasy-seasons/FantasyCompetitionDashboard';
+import FantasySeasonOptionsList from '../../components/fantasy-seasons/FantasySeasonOptionsList';
+import PageView from '../../components/ui/containers/PageView';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
+import { Activity } from 'react';
 
 /** Renders the Fantasy/League Screen */
 export function FantasyScreen() {

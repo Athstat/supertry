@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import { IProAthlete } from '../../../types/athletes';
 import { usePowerRankings } from '../../../hooks/athletes/usePowerRankings';
 import { LoadingIndicator } from '../../ui/LoadingIndicator';
-import RoundedCard from '../../shared/RoundedCard';
-import { BarChartRecord, PlainBarChart } from '../../players/ui/PlainBarChart';
 import { twMerge } from 'tailwind-merge';
 import { getOpponent } from '../../../utils/fixtureUtils';
+import { BarChartRecord, PlainBarChart } from '../../players/PlainBarChart';
+import RoundedCard from '../../ui/cards/RoundedCard';
 
 type Props = {
     player: IProAthlete

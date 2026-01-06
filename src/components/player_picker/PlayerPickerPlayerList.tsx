@@ -1,7 +1,6 @@
 import { Activity, useCallback, useMemo, useState } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker";
 import { IProAthlete } from "../../types/athletes";
-import RoundedCard from "../shared/RoundedCard";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { athleteSearchPredicate } from "../../utils/athleteUtils";
 import useSWR from "swr";
@@ -16,8 +15,9 @@ import AvailabilityIcon from "../players/availability/AvailabilityIcon";
 import MatchPrCard from "../rankings/MatchPrCard";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
-import QuickActionButton from "../ui/QuickActionButton";
 import { useNavigate } from "react-router-dom";
+import QuickActionButton from "../ui/buttons/QuickActionButton";
+import RoundedCard from "../ui/cards/RoundedCard";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;

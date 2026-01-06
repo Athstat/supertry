@@ -1,19 +1,19 @@
+import { Binoculars, X } from "lucide-react";
 import { twMerge } from "tailwind-merge"
-import { ScoutingListPlayer } from "../../types/fantasy/scouting"
-import BottomSheetView from "../ui/BottomSheetView"
-import { lighterDarkBlueCN } from "../../types/constants"
-import { Binoculars, X } from "lucide-react"
-import CircleButton from "../shared/buttons/BackButton"
-import SmartPlayerMugshot from "../player/SmartPlayerMugshot"
-import ScoutPlayerButton from "../player/player_profile_modal/ScoutPlayerButton"
-import MatchPrCard from "../rankings/MatchPrCard"
-import PlayerTeamCard from "../player/player_profile_modal/PlayerTeamCard"
-import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList"
-import PrimaryButton from "../shared/buttons/PrimaryButton"
-import QuickActionButton from "../ui/QuickActionButton"
-import PlayerDataProvider, { usePlayerData } from "../../providers/PlayerDataProvider"
-import PlayerPointsHistoryCard from "../player/player_profile_modal/PlayerPointsHistoryCard"
-import RoundedCard from "../shared/RoundedCard"
+import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList";
+import PlayerDataProvider, { usePlayerData } from "../../../providers/PlayerDataProvider";
+import { lighterDarkBlueCN } from "../../../types/constants";
+import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
+import PlayerPointsHistoryCard from "../../player/player_profile_modal/PlayerPointsHistoryCard";
+import PlayerTeamCard from "../../player/player_profile_modal/PlayerTeamCard";
+import ScoutPlayerButton from "../../player/player_profile_modal/ScoutPlayerButton";
+import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
+import MatchPrCard from "../../rankings/MatchPrCard";
+import CircleButton from "../../ui/buttons/BackButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
+import QuickActionButton from "../../ui/buttons/QuickActionButton";
+import RoundedCard from "../../ui/cards/RoundedCard";
+import BottomSheetView from "../../ui/modals/BottomSheetView";
 
 type Props = {
     item: ScoutingListPlayer,

@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { twMerge } from "tailwind-merge";
 import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
-import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { BoxscoreListRecordItem } from "../../../types/boxScore";
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type TableRecordProps = {
     record: BoxscoreListRecordItem,

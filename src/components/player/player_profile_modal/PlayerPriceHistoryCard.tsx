@@ -2,8 +2,8 @@ import useSWR from "swr"
 import { IProAthlete } from "../../../types/athletes"
 import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
 import { useMemo } from "react";
-import RoundedCard from "../../shared/RoundedCard";
-import { BarChartRecord, PlainBarChart } from "../../players/ui/PlainBarChart";
+import { BarChartRecord, PlainBarChart } from "../../players/PlainBarChart";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     player: IProAthlete

@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useAuth } from '../../contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
-import { clearAppCache } from '../../providers/caching/clearCache';
+import { useAuth } from '../../../contexts/AuthContext';
+import { clearAppCache } from '../../../providers/caching/clearCache';
 
 type Props = {
     isGuestAccount?: boolean

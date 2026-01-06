@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
-import CloseButton from '../ui/buttons/CloseButton';
+import CloseButton from '../buttons/CloseButton';
 
 type Props = {
   children?: React.ReactNode;

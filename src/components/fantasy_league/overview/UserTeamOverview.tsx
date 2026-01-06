@@ -6,7 +6,6 @@ import {
 } from '../../../types/fantasyLeague';
 import PlayerPointsBreakdownView from '../../points_breakdown/PlayerPointsBreakdownView';
 import { IProAthlete } from '../../../types/athletes';
-import DialogModal from '../../shared/DialogModal';
 import { useGeneralPlayerAvailability } from '../../../hooks/fantasy/usePlayerSquadReport';
 import { twMerge } from 'tailwind-merge';
 import SecondaryText from '../../ui/typography/SecondaryText';
@@ -14,6 +13,7 @@ import { ArrowRight } from 'lucide-react';
 import { useTabView } from '../../ui/tabs/TabView';
 import { useNavigate } from 'react-router-dom';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
+import DialogModal from '../../ui/modals/DialogModal';
 
 type Props = {
   userTeam: FantasyLeagueTeamWithAthletes;

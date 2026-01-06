@@ -2,9 +2,9 @@ import useSWR from "swr"
 import { IProAthlete } from "../../../types/athletes"
 import { IProSeason } from "../../../types/season"
 import { fantasySeasonsService } from "../../../services/fantasy/fantasySeasonsService"
-import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../ui/typography/SecondaryText"
 import { abbreviateSeasonName } from "../../players/compare/PlayerCompareSeasonPicker"
+import RoundedCard from "../../ui/cards/RoundedCard"
 
 type Props = {
     player: IProAthlete,

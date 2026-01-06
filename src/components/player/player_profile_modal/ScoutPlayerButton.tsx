@@ -2,7 +2,6 @@ import useSWR from "swr";
 import { IProAthlete } from "../../../types/athletes"
 import { scoutingService } from "../../../services/fantasy/scoutingService";
 import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList";
-import RoundedCard from "../../shared/RoundedCard";
 import { Binoculars } from "lucide-react";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { Activity, Fragment, useMemo } from "react";
@@ -10,6 +9,7 @@ import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
 import { Toast } from "../../ui/Toast";
 import { swrFetchKeys } from "../../../utils/swrKeys";
 import { usePlayerData } from "../../../providers/PlayerDataProvider";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     player: IProAthlete

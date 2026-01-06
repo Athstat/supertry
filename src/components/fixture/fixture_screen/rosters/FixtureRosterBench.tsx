@@ -1,7 +1,5 @@
 import { IRosterItem } from "../../../../types/games"
 import SmartPlayerMugshot from "../../../player/SmartPlayerMugshot"
-import RoundedCard from "../../../shared/RoundedCard"
-import BottomSheetView from "../../../ui/BottomSheetView"
 import CircleButton from "../../../ui/buttons/BackButton"
 import { useState } from "react"
 import { twMerge } from "tailwind-merge"
@@ -12,6 +10,8 @@ import { useAthleteMatchPr } from "../../../../hooks/athletes/useAthleteMatchPr"
 import { useFixtureScreen } from "../../../../hooks/fixtures/useFixture"
 import { fixtureAtom } from "../../../../state/fixtures/fixture.atoms"
 import { SmallMatchPrCard } from "../../../rankings/MatchPrCard"
+import RoundedCard from "../../../ui/cards/RoundedCard"
+import BottomSheetView from "../../../ui/modals/BottomSheetView"
 
 type Props = {
     bench: IRosterItem[]

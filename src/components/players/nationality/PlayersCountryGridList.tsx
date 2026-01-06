@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthletes"
 import CountryCard from "../../teams/countries/CountryCard";
 import { useNavigate } from "react-router-dom";
-import RoundedCard from "../../shared/RoundedCard";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 /** Renders a list of countries for available players through use athletes */
 export default function PlayersCountryGridList() {

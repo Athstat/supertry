@@ -1,6 +1,5 @@
 import { Fragment, useState } from 'react';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
-import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionRanking';
 import { IProAthlete } from '../../../types/athletes';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
 import NoContentCard from '../../ui/typography/NoContentMessage';
@@ -9,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { queryParamKeys } from '../../../types/constants';
 import RoundedCard from '../../ui/cards/RoundedCard';
+import { useFantasyPointsRankings } from '../../../hooks/athletes/useFantasyPointsRankings';
 
 type Props = {
   className?: string

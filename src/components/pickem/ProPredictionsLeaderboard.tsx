@@ -4,21 +4,20 @@ import { LoadingIndicator } from "../ui/LoadingIndicator";
 import { ProPredictionsRanking } from "../../types/proPredictions";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { twMerge } from "tailwind-merge";
-import { useAuthUser } from "../../hooks/useAuthUser";
 import { User } from "lucide-react";
 import { isEmail } from "../../utils/stringUtils";
 import NoContentCard from "../ui/typography/NoContentMessage";
+import { useAuth } from "../../contexts/AuthContext";
+import { useMemo } from "react";
 
+// TODO: Reuse or Deprecate component
 export default function ProPredictionsLeaderboard() {
 
-    const user = useAuthUser();
+    const { authUser: user } = useAuth();
     const key = `pro-predictions-rankings`;
-    let { data: rankings, isLoading } = useSWR(key, () => proPredictionsRankingService.getAllUserRankings());
+    const { data, isLoading } = useSWR(key, () => proPredictionsRankingService.getAllUserRankings());
 
-    if (isLoading) {
-        return <LoadingIndicator />
-    }
-
+    const rankings = useMemo(() => data || [], [data]);
     let rankingsList = rankings !== undefined ? rankings : []
 
     rankingsList = rankingsList.sort((a, b) => {
@@ -37,10 +36,14 @@ export default function ProPredictionsLeaderboard() {
     });
 
     const shouldHide = (r: ProPredictionsRanking) => {
-        return isEmail(r.username) && r.user_id !== user.kc_id;
+        return isEmail(r.username) && r.user_id !== user?.kc_id;
     }
 
     const isEmpty = rankingsList.length === 0;
+
+    if (isLoading) {
+        return <LoadingIndicator />
+    }
 
     return (
         <div className="flex flex-col gap-4 " >
@@ -55,12 +58,12 @@ export default function ProPredictionsLeaderboard() {
                     return <LeaderboardItem
                         ranking={r}
                         key={index}
-                        isUser={user.kc_id === r.user_id}
+                        isUser={user?.kc_id === r.user_id}
                     />
                 })}
             </div>
 
-           {unRankedUsers.length > 0 && <p className="font-bold text-lg" >Unranked</p>}
+            {unRankedUsers.length > 0 && <p className="font-bold text-lg" >Unranked</p>}
 
             <div className="flex flex-col gap-2 " >
                 {unRankedUsers.map((r, index) => {
@@ -72,7 +75,7 @@ export default function ProPredictionsLeaderboard() {
                     return <LeaderboardItem
                         ranking={r}
                         key={index}
-                        isUser={user.kc_id === r.user_id}
+                        isUser={user?.kc_id === r.user_id}
                     />
                 })}
             </div>
@@ -86,7 +89,7 @@ export default function ProPredictionsLeaderboard() {
             )} */}
 
             {isEmpty && (
-                <NoContentCard 
+                <NoContentCard
                     message="No pro predictions rankings available right now"
                 />
             )}

@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
-import CircleButton from "../../shared/buttons/BackButton";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import CircleButton from "../ui/buttons/BackButton";
 
 type Props = {
     lock?: boolean

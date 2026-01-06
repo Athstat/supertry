@@ -1,6 +1,5 @@
 import useSWR from "swr";
 import { swrFetchKeys } from "../../utils/swrKeys"
-import RoundedCard from "../shared/RoundedCard"
 import { seasonService } from "../../services/seasonsService";
 import { useSeason } from "../../hooks/seasons/useSeason";
 import { useMemo } from "react";
@@ -8,6 +7,7 @@ import { SeasonStandingsItem } from "../../types/season";
 import TeamLogo from "../team/TeamLogo";
 import { twMerge } from "tailwind-merge";
 import SecondaryText from "../ui/typography/SecondaryText";
+import RoundedCard from "../ui/cards/RoundedCard";
 
 type Props = {
     seasonId?: string,

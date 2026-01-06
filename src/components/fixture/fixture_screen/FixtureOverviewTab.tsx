@@ -4,11 +4,11 @@ import { MapPin } from "lucide-react"
 import { format } from "date-fns"
 import { useNavigate } from "react-router-dom"
 import GameHighlightsCard from "../../ui/video/GameHighlightsCard"
-import RoundedCard from "../../shared/RoundedCard"
 import { FixtureVotingCard } from "../../pickem/voting/FixtureVotingCard"
 import PastMatchupsCard from "./PastMatchupsCard"
 import PreFixtureForm from "./PreFixtureForm"
 import FixturePotmCard from "./FixturePotmCard"
+import RoundedCard from "../../ui/cards/RoundedCard"
 
 type Props = {
     fixture: IFixture

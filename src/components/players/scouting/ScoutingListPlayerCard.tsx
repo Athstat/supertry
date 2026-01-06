@@ -1,9 +1,10 @@
-import { ScoutingListPlayer } from "../../types/fantasy/scouting";
-import { formatPosition } from "../../utils/athleteUtils";
-import SmartPlayerMugshot from "../player/SmartPlayerMugshot";
-import MatchPrCard from "../rankings/MatchPrCard";
-import RoundedCard from "../shared/RoundedCard";
-import SecondaryText from "../shared/SecondaryText";
+import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
+import { formatPosition } from "../../../utils/athleteUtils";
+import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
+import MatchPrCard from "../../rankings/MatchPrCard";
+import RoundedCard from "../../ui/cards/RoundedCard";
+import SecondaryText from "../../ui/typography/SecondaryText";
+
 
 type Props = {
     item: ScoutingListPlayer,

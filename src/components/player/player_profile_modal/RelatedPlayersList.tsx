@@ -4,9 +4,9 @@ import { swrFetchKeys } from '../../../utils/swrKeys';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import { Users } from 'lucide-react';
 import SecondaryText from '../../ui/typography/SecondaryText';
-import RoundedCard from '../../shared/RoundedCard';
 import PlayerMugshot from '../PlayerMugshot';
 import TeamLogo from '../../team/TeamLogo';
+import RoundedCard from '../../ui/cards/RoundedCard';
 
 type Props = {
   player: IProAthlete;

@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
-import { AppColours } from "../../types/constants"
+import { AppColours } from "../../../types/constants"
 
 type Props = {
     children?: ReactNode,

@@ -1,4 +1,3 @@
-import DialogModal from "../../shared/DialogModal";
 import PlayersCompareItem from "./PlayerCompareItem";
 import { useAtomValue, useSetAtom } from "jotai";
 import { comparePlayersAtom, comparePlayersAtomGroup, comparePlayersStatsAtom, comparePlayersStarRatingsAtom } from "../../../state/comparePlayers.atoms";
@@ -8,6 +7,7 @@ import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
 import { useImagePreloader } from "../../../hooks/web/useImagePreloader";
 import { useEffect } from "react";
 import { analytics } from "../../../services/analytics/anayticsService";
+import DialogModal from "../../ui/modals/DialogModal";
 
 export default function PlayerCompareModal() {
 

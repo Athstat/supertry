@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
-import { AUTH_USER_KEY, authTokenService } from '../services/auth/authTokenService';
-import { authService } from '../services/authService';
-import { DjangoAuthUser } from '../types/auth';
-import { loginWithBridge } from '../utils/bridgeUtils';
+import { authTokenService, AUTH_USER_KEY } from '../../services/auth/authTokenService';
+import { authService } from '../../services/authService';
+import { DjangoAuthUser } from '../../types/auth';
+import { loginWithBridge } from '../../utils/bridgeUtils';
 
 type AuthStatusRes = {
   authToken?: string;

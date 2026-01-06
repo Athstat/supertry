@@ -5,9 +5,9 @@ import useSWR from 'swr';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { IProSeason } from '../../../types/season';
-import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import { Sparkles } from 'lucide-react';
+import RoundedCard from '../../ui/cards/RoundedCard';
 
 interface Props {
   player: IProAthlete;

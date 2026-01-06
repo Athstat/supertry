@@ -3,8 +3,8 @@ import { gameplayModalData } from "../../../data/gameplayModalData";
 import { GameplayTopic } from "../../../types/gameplayModal";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import PrimaryButton, { TranslucentButton } from "../../ui/buttons/PrimaryButton";
-import RoundedCard from "../../shared/RoundedCard";
 import ScrummyLogo from "../scrummy_logo";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     onTopicSelect: (topic: GameplayTopic, index: number) => void;

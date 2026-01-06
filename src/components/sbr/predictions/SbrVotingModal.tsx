@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { ISbrFixture } from "../../../types/sbr"
-import DialogModal from "../../shared/DialogModal"
 import SbrTeamLogo from "../fixtures/SbrTeamLogo"
 import { format } from "date-fns"
 import { useSbrFixtureVotes } from "../../../hooks/fixtures/useFixtureVotes"
@@ -13,6 +12,7 @@ import { getCountryEmojiFlag } from "../../../utils/svrUtils"
 import SbrVotingModalNavigator from "./SbrVotingModalNavigator"
 import SbrPersonalVotingSummary from "./SbrPersonalVotingSummary"
 import { twMerge } from "tailwind-merge"
+import DialogModal from "../../ui/modals/DialogModal"
 
 type Props = {
     className?: string,

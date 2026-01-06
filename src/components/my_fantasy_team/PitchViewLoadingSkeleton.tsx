@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
-import RoundedCard from "../../shared/RoundedCard";
-import { RugbyPitch3DRaster } from "../../shared/RugbyPitch";
-import BottomSheetView from "../../ui/BottomSheetView";
+import RoundedCard from "../ui/cards/RoundedCard";
+import { RugbyPitch3DRaster } from "../ui/containers/RugbyPitch";
+import BottomSheetView from "../ui/modals/BottomSheetView";
 
 type Props = {
     className?: string,

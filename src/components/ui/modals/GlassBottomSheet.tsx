@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { ReactNode, useEffect } from 'react';
-import BottomSheetHandle from './modals/BottomSheetHandle';
+import { ReactNode, useEffect } from 'react';
+import BottomSheetHandle from './BottomSheetHandle';
 
 type GlassBottomSheetProps = {
   isOpen: boolean;

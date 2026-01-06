@@ -1,12 +1,12 @@
 import { twMerge } from "tailwind-merge"
 import { IFixture, ITeamActionName } from "../../../types/games"
 import { TeamActionsParser, TeamHeadtoHeadItem } from "../../../utils/teamActionsUtils"
-import RoundedCard from "../../shared/RoundedCard"
 import TeamLogo from "../../team/TeamLogo"
 import useSWR from "swr"
 import { gamesService } from "../../../services/gamesService"
 import { mapSportsActionToAthstatName } from "../../../utils/sportsActionUtils"
 import { fixtureSummary } from "../../../utils/fixtureUtils"
+import RoundedCard from "../../ui/cards/RoundedCard"
 
 type Props = {
     fixture: IFixture

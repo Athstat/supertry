@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import { PositionClass } from "../../../types/athletes";
-import RoundedCard from "../../shared/RoundedCard";
 import { ReactNode } from "react";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     positionClass?: PositionClass,

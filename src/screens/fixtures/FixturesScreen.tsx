@@ -1,15 +1,15 @@
-import PageView from './PageView';
-import { useQueryState } from '../hooks/useQueryState';
-import ProMatchCenterList from '../components/fixtures/ProMatchCenterList';
 import { Fragment, useState, useEffect } from 'react';
-import { useProFixtures } from '../hooks/fixtures/useProFixtures';
-import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
-import PickEmCardSkeleton from '../components/pickem/PickEmCardSkeleton';
-import { LoadingIndicator } from '../components/ui/LoadingIndicator';
-import FixtureSearchResults from '../components/fixtures/FixtureSearchResults';
-import ProMatchCenterHeader from '../components/fixtures/ProMatchCenterHeader';
-import { useDebounced } from '../hooks/useDebounced';
-import FloatingSearchBar from '../components/players/FloatingSearchBar';
+import FixtureSearchResults from '../../components/fixtures/FixtureSearchResults';
+import ProMatchCenterHeader from '../../components/fixtures/ProMatchCenterHeader';
+import ProMatchCenterList from '../../components/fixtures/ProMatchCenterList';
+import PickEmCardSkeleton from '../../components/pickem/PickEmCardSkeleton';
+import FloatingSearchBar from '../../components/players/FloatingSearchBar';
+import PageView from '../../components/ui/containers/PageView';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
+import { useFixtureCursor } from '../../hooks/fixtures/useFixtureCursor';
+import { useProFixtures } from '../../hooks/fixtures/useProFixtures';
+import { useDebounced } from '../../hooks/web/useDebounced';
+import { useQueryState } from '../../hooks/web/useQueryState';
 
 /** Renders Pro Rugby Fixtures Screen */
 export default function ProFixturesScreen() {

@@ -1,6 +1,5 @@
 import useSWR from "swr"
 import { IProAthlete } from "../../../types/athletes"
-import RoundedCard from "../../shared/RoundedCard"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import { IProSeason } from "../../../types/season"
 import { fantasySeasonsService } from "../../../services/fantasy/fantasySeasonsService"
@@ -13,6 +12,7 @@ import { fixtureSummary, getOpponent } from "../../../utils/fixtureUtils"
 import { twMerge } from "tailwind-merge"
 import { IFixture } from "../../../types/games"
 import { usePlayerData } from "../../../providers/PlayerDataProvider"
+import RoundedCard from "../../ui/cards/RoundedCard"
 
 type Props = {
     player: IProAthlete,

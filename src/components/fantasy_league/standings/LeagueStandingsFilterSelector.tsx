@@ -3,7 +3,7 @@ import { Fragment } from "react/jsx-runtime";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { DropdownOption } from "../../../types/ui";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
-import Dropdown from "../../shared/Dropdown";
+import Dropdown from "../../ui/forms/Dropdown";
 
 
 /** Renders a drop down to select a week for a fantasy league group */

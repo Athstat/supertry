@@ -1,6 +1,5 @@
 import useSWR from "swr"
 import { IFixture } from "../../../types/games"
-import RoundedCard from "../../shared/RoundedCard"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import { gamesService } from "../../../services/gamesService"
 import TeamLogo from "../../team/TeamLogo"
@@ -11,6 +10,7 @@ import { format } from "date-fns"
 import { twMerge } from "tailwind-merge"
 import SecondaryText from "../../ui/typography/SecondaryText"
 import { Link } from "react-router-dom"
+import RoundedCard from "../../ui/cards/RoundedCard"
 
 type Props = {
   fixture: IFixture
@@ -55,7 +55,7 @@ export default function PastMatchupsCard({ fixture }: Props) {
     <RoundedCard className={twMerge(
       "p-3 px-4 flex dark:border-none flex-col gap-4",
       
-    )} >
+  )} >
 
       <div className="flex flex-row items-center justify-between w-full" >
 
