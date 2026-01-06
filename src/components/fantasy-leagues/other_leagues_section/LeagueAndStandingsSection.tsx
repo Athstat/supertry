@@ -10,7 +10,7 @@ import NoContentCard from "../../shared/NoContentMessage"
 import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../shared/SecondaryText"
 import CreateLeagueModal from "../CreateLeagueModal"
-import LeagueGroupsTable from "../league_card_small/LeagueGroupsTable"
+import LeagueGroupsTable from "../LeagueGroupsTable"
 
 type Props = {
     fantasySeason: IFantasySeason

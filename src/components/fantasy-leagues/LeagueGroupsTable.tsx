@@ -1,12 +1,12 @@
-import { useAuth } from "../../../contexts/AuthContext";
-import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups";
+import { useAuth } from "../../contexts/AuthContext";
+import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
-import RoundedCard from "../../shared/RoundedCard";
-import { useUserOverallStandings } from "../../../hooks/fantasy/standings/useUserOverallStandings";
+import RoundedCard from "../shared/RoundedCard";
+import { useUserOverallStandings } from "../../hooks/fantasy/standings/useUserOverallStandings";
 
 import React from 'react'
 import { Link } from "react-router-dom";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../shared/SecondaryText";
 
 type Props = {
     leagues: FantasyLeagueGroup[]
@@ -48,9 +48,8 @@ type CardProps = {
     custom?: number
 }
 
-// TODO: Delete Component
 /** Renders a fantasy league group card */
-export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
+function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
     const { authUser } = useAuth();
     const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id)
