@@ -12,7 +12,7 @@ import AuthTokenProvider from "./providers/AuthTokenProvider";
 import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvider";
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
-import FantasySeasonsProvider from "./components/dashboard/provider/FantasySeasonsProvider";
+import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsProvider";
 import CacheProvider from "./providers/caching/CacheProvider";
 
 type Props = {

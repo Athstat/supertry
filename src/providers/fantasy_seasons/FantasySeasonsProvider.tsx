@@ -1,17 +1,17 @@
 import { Fragment, ReactNode, useEffect } from 'react';
-import { fantasySeasonsAtom } from '../../../state/fantasy/fantasyLeagueScreen.atoms';
-import { fantasySeasonsAtoms } from '../../../state/dashboard/dashboard.atoms';
+import { fantasySeasonsAtom } from '../../state/fantasy/fantasyLeagueScreen.atoms';
+import { fantasySeasonsAtoms } from '../../state/dashboard/dashboard.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import { useAtom, useSetAtom } from 'jotai';
-import { fantasySeasonsService } from '../../../services/fantasy/fantasySeasonsService';
-import { swrFetchKeys } from '../../../utils/swrKeys';
-import { seasonService } from '../../../services/seasonsService';
-import { logger } from '../../../services/logger';
-import { useDebounced } from '../../../hooks/useDebounced';
+import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
+import { swrFetchKeys } from '../../utils/swrKeys';
+import { seasonService } from '../../services/seasonsService';
+import { logger } from '../../services/logger';
+import { useDebounced } from '../../hooks/useDebounced';
 import useSWRImmutable from 'swr/immutable';
 import useSWR from 'swr';
-import { CACHING_CONFIG } from '../../../types/constants';
-import { useAuth } from '../../../contexts/AuthContext';
+import { CACHING_CONFIG } from '../../types/constants';
+import { useAuth } from '../../contexts/AuthContext';
 
 type Props = {
   children?: ReactNode;

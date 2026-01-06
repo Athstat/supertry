@@ -8,7 +8,7 @@ import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup
 import FantasyLeagueTeamProvider from './my-team/FantasyLeagueTeamProvider';
 import TeamHistoryBar from './my-team/TeamHistoryBar';
 import PitchViewLoadingSkeleton from './my-team/PitchViewLoadingSkeleton';
-import CreateFantasyTeamProvider from '../../providers/fantasy-teams/CreateFantasyTeamProvider';
+import CreateFantasyTeamProvider from '../../providers/fantasy_teams/CreateFantasyTeamProvider';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 
 // The Activity Component has been added to the latest release

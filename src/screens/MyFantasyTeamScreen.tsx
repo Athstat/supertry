@@ -13,7 +13,7 @@ import RoundedCard from '../components/shared/RoundedCard';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
 import PitchViewLoadingSkeleton from '../components/fantasy-leagues/my-team/PitchViewLoadingSkeleton';
-import TeamHistoryProvider from '../providers/fantasy-teams/TeamHistoryProvider';
+import TeamHistoryProvider from '../providers/fantasy_teams/TeamHistoryProvider';
 import { useAuth } from '../contexts/AuthContext';
 
 /** Renders my fantasy team screen */
