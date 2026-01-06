@@ -1,4 +1,3 @@
-import { Filter, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { IProTeam } from '../../types/team';
 import TeamLogo from '../team/TeamLogo';

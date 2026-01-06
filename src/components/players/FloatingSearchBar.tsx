@@ -25,7 +25,8 @@ export default function FloatingSearchBar({
   showFilterButton = true,
   showCompareButton = true,
 }: Props) {
-  const [isScrollingDown, setIsScrollingDown] = useState(false);
+  
+  const [isScrollingDown, ] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
 
   // Simplified color classes for opaque backgrounds
