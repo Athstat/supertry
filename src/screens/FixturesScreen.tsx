@@ -5,7 +5,7 @@ import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import { Fragment, useState, useEffect } from 'react';
 import { useProFixtures } from '../hooks/fixtures/useProFixtures';
 import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
-import PickEmCardSkeleton from '../components/fixture/PickEmCardSkeleton';
+import PickEmCardSkeleton from '../components/pickem/PickEmCardSkeleton';
 import { LoadingState } from '../components/ui/LoadingState';
 import FixtureSearchResults from '../components/fixture/fixtures_list/FixtureSearchResults';
 import ProMatchCenterHeader from '../components/match_center/ProMatchCenterHeader';

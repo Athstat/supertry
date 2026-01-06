@@ -6,7 +6,7 @@ import TeamLogo from '../team/TeamLogo';
 import { fixtureSummary } from '../../utils/fixtureUtils';
 import { useGameVotes } from '../../hooks/useGameVotes';
 import { gamesService } from '../../services/gamesService';
-import ConsensusBar from './ConsensusBar';
+import ConsensusBar from '../fixture/ConsensusBar';
 import { Loader } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import PickEmCardSkeleton from './PickEmCardSkeleton';
