@@ -14,7 +14,8 @@ type Props = {
   className?: string
 }
 
-export default function FantasyPointsScoredPlayerList({className} : Props) {
+/** Renders a fantasy top performers card */
+export default function FantasyTopPerformersCard({className} : Props) {
   const { selectedSeason: finalSeason, scoringRound } = useFantasySeasons();
   const navigate = useNavigate();
 

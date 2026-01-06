@@ -4,7 +4,7 @@ import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotifi
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 import DashboardHero from '../components/dashboard/hero/DashboardHero';
 import SchoolRugbyBanner from '../components/dashboard/banners/SchoolRugbyBanner';
-import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
+import FantasyTopPerformersCard from '../components/dashboard/rankings/FantasyTopPerformersCard';
 import { Activity, Fragment } from 'react';
 import { twMerge } from 'tailwind-merge';
 import DominateScrumCard from '../components/dashboard/DominateScrumCard';
@@ -41,7 +41,7 @@ export function DashboardScreen() {
           <DominateScrumCard className='p-4 lg:p-6 m-4' />
           <SchoolRugbyBanner />
 
-          <FantasyPointsScoredPlayerList className='px-2 m-4' />
+          <FantasyTopPerformersCard className='px-2 m-4' />
 
           <PickemCtaCard className='p-4 m-4' />
 
