@@ -6,8 +6,8 @@ import { Fragment, ReactNode, useEffect } from "react";
 import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { DjangoUserMinimal } from "../../types/auth";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
-import { useDebounced } from "../../hooks/useDebounced";
-import { useQueryState } from "../../hooks/useQueryState";
+import { useDebounced } from "../../hooks/web/useDebounced";
+import { useQueryState } from "../../hooks/web/useQueryState";
 import { queryParamKeys } from "../../types/constants";
 import { AnimatePresence } from "framer-motion";
 

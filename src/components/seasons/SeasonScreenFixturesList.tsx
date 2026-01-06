@@ -2,7 +2,7 @@ import { Calendar } from "lucide-react"
 import { IFixture } from "../../types/games"
 import GroupedFixturesList from "../fixtures/GroupedFixturesList"
 import PillBar, { PillBarItems } from "../ui/bars/PillTabBar"
-import { useQueryState } from "../../hooks/useQueryState"
+import { useQueryState } from "../../hooks/web/useQueryState"
 import NoContentCard from "../ui/typography/NoContentMessage"
 
 type Props = {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useImageCache } from './useImageCache';
-import { IProAthlete } from '../types/athletes';
+import { IProAthlete } from '../../types/athletes';
 
 interface UseImagePreloaderProps {
   players: IProAthlete[];

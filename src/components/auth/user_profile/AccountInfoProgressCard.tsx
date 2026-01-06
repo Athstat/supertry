@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import SecondaryText from "../../ui/typography/SecondaryText";
-import { useDebounced } from "../../../hooks/useDebounced";
+import { useDebounced } from "../../../hooks/web/useDebounced";
 import { AnimatePresence, motion } from "framer-motion";
 import RoundedCard from "../../ui/cards/RoundedCard";
 

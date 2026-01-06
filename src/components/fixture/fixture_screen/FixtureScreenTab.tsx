@@ -1,4 +1,4 @@
-import { useSectionNavigation } from "../../../hooks/useSectionNavigation";
+import { useSectionNavigation } from "../../../hooks/web/useSectionNavigation";
 import { TabButton } from "../../ui/buttons/TabButton";
 
 

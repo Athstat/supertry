@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge"
-import { useQueryState } from "../../../hooks/useQueryState"
+import { useQueryState } from "../../../hooks/web/useQueryState"
 
 export type PillBarItems = {
     label?: string,

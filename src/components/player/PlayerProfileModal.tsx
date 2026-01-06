@@ -9,7 +9,7 @@ import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataPro
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
 import PlayerMatchModal from '../fixture/player_fixture_modal/PlayerFixtureModal';
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useClickOutside } from '../../hooks/web/useClickOutside';
 import CircleButton from '../ui/buttons/BackButton';
 import { X } from 'lucide-react';
 import SecondaryText from '../ui/typography/SecondaryText';

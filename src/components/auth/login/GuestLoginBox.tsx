@@ -2,7 +2,7 @@ import { User } from "lucide-react";
 import { ErrorState } from "../../ui/ErrorState";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useGuestLogin } from "../../../hooks/auth/useGuestLogin";
-import { useDeviceId } from "../../../hooks/useDeviceId";
+import { useDeviceId } from "../../../hooks/web/useDeviceId";
 import { Fragment } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
 import { isMobileWebView } from "../../../utils/bridgeUtils";

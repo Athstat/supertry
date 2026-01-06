@@ -4,7 +4,7 @@ import { PlayerSearch } from "./PlayerSearch";
 import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { twMerge } from "tailwind-merge";
-import { useDebounced } from "../../hooks/useDebounced";
+import { useDebounced } from "../../hooks/web/useDebounced";
 import { X } from "lucide-react";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";

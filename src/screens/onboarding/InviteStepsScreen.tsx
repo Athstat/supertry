@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useQueryValue } from '../../hooks/useQueryState';
+import { useQueryValue } from '../../hooks/web/useQueryState';
 import ScrummyLogoHorizontal from '../../components/branding/scrummy_logo_horizontal';
 import SecondaryText from '../../components/ui/typography/SecondaryText';
 import { useTheme } from '../../contexts/ThemeContext';

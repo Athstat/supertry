@@ -1,7 +1,7 @@
 import { LoadingIndicator } from '../ui/LoadingIndicator';
 import SbrFixtureCard from '../sbr/SbrFixtureCard';
 import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
-import { useQueryState } from '../../hooks/useQueryState';
+import { useQueryState } from '../../hooks/web/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import NoContentCard from '../ui/typography/NoContentMessage';

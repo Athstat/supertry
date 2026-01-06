@@ -4,8 +4,8 @@ import { comparePlayersStatsAtom } from '../../state/comparePlayers.atoms';
 import { SportAction } from '../../types/sports_actions';
 import { shouldShowSportAction } from '../../utils/sportsActionUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
-import { useClickOutside } from '../../hooks/useClickOutside';
-import { useHoverCoordinates } from '../../hooks/useSmartMouseHover';
+import { useClickOutside } from '../../hooks/web/useClickOutside';
+import { useHoverCoordinates } from '../../hooks/web/useSmartMouseHover';
 import TooltipCard from '../ui/cards/Tooltip';
 import { useSportActions } from './SportActionsDefinitionsProvider';
 

@@ -7,7 +7,7 @@ import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsServ
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { seasonService } from '../../services/seasonsService';
 import { logger } from '../../services/logger';
-import { useDebounced } from '../../hooks/useDebounced';
+import { useDebounced } from '../../hooks/web/useDebounced';
 import useSWRImmutable from 'swr/immutable';
 import useSWR from 'swr';
 import { CACHING_CONFIG } from '../../types/constants';

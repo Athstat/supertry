@@ -5,7 +5,7 @@ import { comparePlayersAtom, comparePlayersAtomGroup, comparePlayersStatsAtom, c
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
-import { useImagePreloader } from "../../../hooks/useImagePreloader";
+import { useImagePreloader } from "../../../hooks/web/useImagePreloader";
 import { useEffect } from "react";
 import { analytics } from "../../../services/analytics/anayticsService";
 

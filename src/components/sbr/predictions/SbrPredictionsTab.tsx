@@ -1,19 +1,20 @@
 import { CircleCheck, Info, Sparkles} from "lucide-react";
 import { sbrService } from "../../../services/sbr/sbrService";
-import { useFetch } from "../../../hooks/useFetch";
-import { useAuthUser } from "../../../hooks/useAuthUser";
 import { UserPredictionsRanking } from "../../../types/sbr";
 import { BowArrow } from "lucide-react";
 import { XCircle } from "lucide-react";
 import { Percent } from "lucide-react";
 import SbrPredictionsTabLeaderboard from "./SbrPredictionsTabLeaderboard";
+import { useAuth } from "../../../contexts/AuthContext";
+import useSWR from "swr";
 
 export default function SbrPredictionsTab() {
 
-  const user = useAuthUser();
-  const uid = (user as any)?.kc_id ?? (user as any)?.id;
+  const {authUser: user} = useAuth();
+  const userId = user?.kc_id;
 
-  const { data: userRank, isLoading: loadingUserRank } = useFetch("user-predictions-ranking", uid, sbrService.getUserPredictionsRanking)
+  const key = userId ? `/users/${userId}/predictions-ranking` : null;
+  const { data: userRank, isLoading: loadingUserRank } = useSWR(key, () => sbrService.getUserPredictionsRanking(userId || ""))
 
   return (
     <div className="flex flex-col gap-3" >

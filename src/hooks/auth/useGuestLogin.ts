@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { authService } from '../../services/authService';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useDeviceId } from '../../hooks/useDeviceId';
+import { useDeviceId } from '../web/useDeviceId';
 
 /** Hook that provides functionality to handle guest login */
 export function useGuestLogin(nextRoute?: string) {

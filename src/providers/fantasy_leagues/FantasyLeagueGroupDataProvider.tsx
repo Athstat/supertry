@@ -4,7 +4,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import { useLocation } from 'react-router-dom';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
-import { useDebounced } from '../../hooks/useDebounced';
+import { useDebounced } from '../../hooks/web/useDebounced';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { fantasyLeagueGroupAtom, fantasyLeagueGroupMembersAtom, fantasyLeagueGroupRoundsAtom, currGroupMemberAtom, fantasyLeagueConfigAtom, fantasyLeagueGroupLoadingAtom } from '../../state/fantasy/fantasyLeagueGroup.atoms';

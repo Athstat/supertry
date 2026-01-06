@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { IFixture } from "../../types/games";
-import { useQueryState } from "../useQueryState";
+import { useQueryState } from "../web/useQueryState";
 import { IProTeam } from "../../types/team";
 
 /** Hook thats provides functionality for filtering athletes in a boxscore */

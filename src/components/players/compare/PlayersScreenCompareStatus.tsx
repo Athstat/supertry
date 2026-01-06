@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useSticky } from '../../../hooks/useSticky';
+import { useSticky } from '../../../hooks/web/useSticky';
 import { Sticky } from '../../ui/containers/Sticky';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtomGroup } from '../../../state/comparePlayers.atoms';

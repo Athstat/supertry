@@ -6,7 +6,7 @@ import useSWR, { KeyedMutator } from 'swr';
 import { DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { analytics } from '../services/analytics/anayticsService';
-import { useDebounced } from '../hooks/useDebounced';
+import { useDebounced } from '../hooks/web/useDebounced';
 import { CACHING_CONFIG } from '../types/constants';
 
 type AuthContextType = {

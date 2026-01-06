@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { getLeagueStandingsFilterItems } from "../../utils/standingsUtils";
 import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
-import { useQueryState } from "../useQueryState";
+import { useQueryState } from "../web/useQueryState";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 

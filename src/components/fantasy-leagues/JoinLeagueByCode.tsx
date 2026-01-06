@@ -1,6 +1,6 @@
 import { AlertCircle, Check, ChevronRight, Users } from 'lucide-react';
 import PrimaryButton from '../ui/buttons/PrimaryButton';
-import { useQueryState } from '../../hooks/useQueryState';
+import { useQueryState } from '../../hooks/web/useQueryState';
 import useSWR from 'swr';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';

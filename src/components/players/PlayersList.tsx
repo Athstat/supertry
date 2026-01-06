@@ -3,9 +3,9 @@ import { X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
-import { useDebounced } from "../../hooks/useDebounced";
+import { useDebounced } from "../../hooks/web/useDebounced";
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare";
-import { useQueryState } from "../../hooks/useQueryState";
+import { useQueryState } from "../../hooks/web/useQueryState";
 import { comparePlayersAtomGroup } from "../../state/comparePlayers.atoms";
 import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting";

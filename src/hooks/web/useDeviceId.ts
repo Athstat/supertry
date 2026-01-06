@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDeviceId } from '../utils/deviceId/deviceIdUtils';
+import { getDeviceId } from '../../utils/deviceId/deviceIdUtils';
 
 type DeviceIdData = {
   realDeviceId: string;

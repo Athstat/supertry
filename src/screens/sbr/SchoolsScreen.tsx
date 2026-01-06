@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import PageView from '../../components/ui/containers/PageView';
 import { Calendar } from 'lucide-react';
-import { useQueryState } from '../../hooks/useQueryState';
+import { useQueryState } from '../../hooks/web/useQueryState';
 import SbrMatchCenter from '../../components/fixtures/SbrMatchCenter';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 

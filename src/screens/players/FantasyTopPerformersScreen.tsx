@@ -2,9 +2,8 @@ import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../../components/ui/containers/PageView";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
-import { useQueryState } from "../../hooks/useQueryState";
+import { useQueryState } from "../../hooks/web/useQueryState";
 import { queryParamKeys } from "../../types/constants";
-import { useFantasyPointsRankings } from "../../hooks/fantasy/useSportActionRanking";
 import { ArrowLeft, ChevronDown, X } from "lucide-react";
 import { FantasyPointsRankingTable, FantasyPointsRankingTableLoadingSkeleton } from "../../components/players/ranking/FantasyPointsRankingTable";
 import SecondaryText from "../../components/ui/typography/SecondaryText";
@@ -16,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { IProAthlete } from "../../types/athletes";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import BottomSheetView from "../../components/ui/modals/BottomSheetView";
+import { useFantasyPointsRankings } from "../../hooks/athletes/useFantasyPointsRankings";
 
 
 /** Renders a screen that shows the fantasy top performers */

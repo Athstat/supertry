@@ -1,14 +1,13 @@
 import { ReactNode, useEffect } from "react"
 import { ISbrFixture } from "../../../types/sbr";
 import { useSetAtom } from "jotai";
-import { sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms";
+import { sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom } from "../../../state/sbrMotm.atoms";
 import useSWR from "swr";
 import { sbrMotmService } from "../../../services/sbrMotmService";
 import { sbrService } from "../../../services/sbr/sbrService";
 import { LoadingIndicator } from "../../ui/LoadingIndicator";
 import { swrFetchKeys } from "../../../utils/swrKeys";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
-import { useFetch } from "../../../hooks/useFetch";
 
 type Props = {
     children?: ReactNode,
@@ -36,7 +35,7 @@ export default function SbrMotmVotingDataProvider({ children, fixture }: Props) 
         if (rosters !== undefined) setVotingCandiates(rosters);
         if (allVotes) setAllMotmVotes(allVotes);
         if (fixture) setFixture(fixture);
-    }, [fixture, rosters, allVotes]);
+    }, [fixture, rosters, allVotes, setVotingCandiates, setAllMotmVotes, setFixture]);
 
     if (isLoading) return <LoadingIndicator />
 

@@ -1,6 +1,6 @@
 import { Sparkles } from "lucide-react"
 import { twMerge } from "tailwind-merge"
-import { useSticky } from "../../hooks/useSticky"
+import { useSticky } from "../../hooks/web/useSticky"
 import PrimaryButton from "../ui/buttons/PrimaryButton"
 import { Sticky } from "../ui/containers/Sticky"
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare"

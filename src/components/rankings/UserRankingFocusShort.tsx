@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useAuthUser } from "../../hooks/useAuthUser"
-import { useScrollTo } from "../../hooks/useScrollTo";
+import { useScrollTo } from "../../hooks/web/useScrollTo";
 import { UserRanking } from "../../types/userRanking"
 import UserRankingsItem from "./UserRankingsItem";
 
