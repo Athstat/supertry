@@ -1,21 +1,21 @@
-import { useFantasyLeagueGroup } from '../../../../hooks/leagues/useFantasyLeagueGroup';
-import { FantasyLeagueGroup } from '../../../../types/fantasyLeagueGroups';
-import FantasyLeagueGroupDataProvider from '../../../fantasy_league/providers/FantasyLeagueGroupDataProvider';
-import LearnScrummyNoticeCard from '../../../branding/help/LearnScrummyNoticeCard';
+import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
+import LearnScrummyNoticeCard from '../branding/help/LearnScrummyNoticeCard';
 import useSWR from 'swr';
-import { useAuth } from '../../../../contexts/AuthContext';
-import { leagueService } from '../../../../services/leagueService';
-import { swrFetchKeys } from '../../../../utils/swrKeys';
+import { useAuth } from '../../contexts/AuthContext';
+import { leagueService } from '../../services/leagueService';
+import { swrFetchKeys } from '../../utils/swrKeys';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
-import RoundedCard from '../../../shared/RoundedCard';
-import BlueGradientCard from '../../../shared/BlueGradientCard';
-import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../../types/fantasyLeague';
-import { isLeagueRoundLocked } from '../../../../utils/leaguesUtils';
-import { useRoundScoringSummary } from '../../../../hooks/fantasy/useRoundScoringSummary';
-import { LeagueRoundCountdown2 } from '../../../fantasy_league/LeagueCountdown';
-import { TranslucentButton } from '../../../shared/buttons/PrimaryButton';
-import { smartRoundUp } from '../../../../utils/intUtils';
+import RoundedCard from '../shared/RoundedCard';
+import BlueGradientCard from '../shared/BlueGradientCard';
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
+import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
+import { TranslucentButton } from '../shared/buttons/PrimaryButton';
+import { smartRoundUp } from '../../utils/intUtils';
+import FantasyLeagueGroupDataProvider from '../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;

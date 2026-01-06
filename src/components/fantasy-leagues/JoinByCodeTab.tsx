@@ -1,4 +1,4 @@
-import JoinLeagueByCode from "../JoinLeagueByCode";
+import JoinLeagueByCode from "./JoinLeagueByCode";
 
 
 export default function JoinLeagueByCodeTab() {
