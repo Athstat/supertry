@@ -3,7 +3,7 @@ interface EmptyStateProps {
   onClearSearch?: () => void;
 }
 
-export const EmptyState = ({ searchQuery, onClearSearch }: EmptyStateProps) => {
+export const EmptyPlayerSearchState = ({ searchQuery, onClearSearch }: EmptyStateProps) => {
   return (
     <div className="text-center py-12">
       <p className="text-gray-600 dark:text-gray-400">No players found</p>

@@ -5,7 +5,7 @@ import { SortField, SortDirection } from "../../types/playerSorting"
 import PlayerRowCard from "../player/PlayerRowCard"
 import SecondaryText from "../shared/SecondaryText"
 import RoundedCard from "../shared/RoundedCard"
-import { EmptyState } from "./EmptyState"
+import { EmptyPlayerSearchState } from "./EmptyPlayerSearchState"
 import { useEffect, useMemo, useState } from "react"
 
 type TableProps = {
@@ -100,7 +100,7 @@ export function PlayerListTable({ players, onClick, onSort, currentSortDirection
             </table>
 
             {/* Empty State */}
-            {isEmpty && !isDelaying && <EmptyState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
+            {isEmpty && !isDelaying && <EmptyPlayerSearchState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
 
         </div>
     )

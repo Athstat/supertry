@@ -5,7 +5,7 @@ import { IProAthlete } from "../../../types/athletes";
 import { SortField, SortDirection } from "../../../types/playerSorting";
 import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../shared/SecondaryText";
-import { EmptyState } from "../EmptyState";
+import { EmptyPlayerSearchState } from "../EmptyPlayerSearchState";
 import { FantasyPointsScoredRankingItem } from "../../../types/fantasyLeagueGroups";
 import { formatPosition } from "../../../utils/athleteUtils";
 import { stripCountryName } from "../../../utils/stringUtils";
@@ -179,7 +179,7 @@ export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, s
             </table>
 
             {/* Empty State */}
-            {isEmpty && !isDelaying && <EmptyState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
+            {isEmpty && !isDelaying && <EmptyPlayerSearchState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
 
         </div>
     )
