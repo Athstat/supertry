@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { leaguePredictionsService } from '../../../services/fantasy/leaguePredictionsService';
 import DialogModal from '../../shared/DialogModal';
 import { LoadingState } from '../../ui/LoadingState';
-import FixtureCard from '../../fixtures/FixtureCard';
+import FixtureCard from '../../fixture/FixtureCard';
 import NoContentCard from '../../shared/NoContentMessage';
 
 interface UserPredictionsHistoryModalProps {

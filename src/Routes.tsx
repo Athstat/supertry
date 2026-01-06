@@ -19,7 +19,7 @@ import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import SbrScreen from './screens/SbrScreen';
 import FixtureScreen from './screens/FixtureScreen';
-import FixturesScreen from './screens/FixturesScreen';
+import ProFixturesScreen from './screens/FixturesScreen';
 import SchoolsScreen from './screens/SchoolsScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
@@ -306,7 +306,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <FixturesScreen />
+                <ProFixturesScreen />
               </Layout>
             </ProtectedRoute>
           }

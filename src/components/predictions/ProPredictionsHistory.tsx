@@ -9,7 +9,7 @@ import { ErrorState } from "../ui/ErrorState";
 import NoContentCard from "../shared/NoContentMessage";
 import { ProGameVote } from "../../types/proPredictions";
 import { gamesService } from "../../services/gamesService";
-import FixtureCard from "../fixtures/FixtureCard";
+import FixtureCard from "../fixture/FixtureCard";
 import RoundedCard from "../shared/RoundedCard";
 
 export default function UserProPredictionsHistoryTab() {

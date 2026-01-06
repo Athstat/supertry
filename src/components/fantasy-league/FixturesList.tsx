@@ -3,7 +3,7 @@ import { gamesService } from '../../services/gamesService';
 import useSWR from 'swr';
 import { LoadingSpinner } from '../team-creation/player-list/LoadingSpinner';
 import { ErrorState } from '../ui/ErrorState';
-import FixtureCard from '../fixtures/FixtureCard';
+import FixtureCard from '../fixture/FixtureCard';
 import { IFixture } from '../../types/games';
 import { Calendar } from 'lucide-react';
 import { format } from 'date-fns';

@@ -10,14 +10,14 @@ import {
 } from '../types/constants';
 import { LoadingState } from '../components/ui/LoadingState';
 import { useAtom, useAtomValue } from 'jotai';
-import { fixturesDateRangeAtom } from '../components/fixtures/calendar/fixtures_calendar.atoms';
+import { fixturesDateRangeAtom } from '../components/fixture/calendar/fixtures_calendar.atoms';
 import {
   filterFixturesByDateRange,
   filterPastFixtures,
   filterUpcomingFixtures,
 } from '../utils/fixtureUtils';
-import FixturesListScreenActionBar from '../components/fixtures/fixtures_list/FixtureListScreenActionBar';
-import FixtureCard from '../components/fixtures/FixtureCard';
+import FixturesListScreenActionBar from '../components/fixture/fixtures_list/FixtureListScreenActionBar';
+import FixtureCard from '../components/fixture/FixtureCard';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 

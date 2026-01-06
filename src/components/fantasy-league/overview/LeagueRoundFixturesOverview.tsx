@@ -3,7 +3,7 @@ import { IFantasyLeagueRound } from "../../../types/fantasyLeague"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import useSWR from "swr"
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService"
-import SmallFixtureCard from "../../fixtures/SmallFixtureCard"
+import SmallFixtureCard from "../../fixture/SmallFixtureCard"
 
 type Props = {
     leagueRound: IFantasyLeagueRound

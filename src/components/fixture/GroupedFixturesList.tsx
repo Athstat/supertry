@@ -18,8 +18,6 @@ export default function GroupedFixturesList({ fixtures, viewMode }: Props) {
     const groupedFixtures = groupFixturesByCompetition(fixtures);
     const competitions = sortCompetitions(Array.from(groupedFixtures.keys()));
 
-
-
     return competitions.map((competition) => {
         const fixtures = groupedFixtures.get(competition)!;
 

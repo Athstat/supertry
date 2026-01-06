@@ -14,7 +14,7 @@ import { hasProMotmVotingEnded, proFixtureSummary } from "../../../utils/proMotm
 import ProMotmWinnerCard from "./ProMotmWinnerCard";
 import { Trophy } from "lucide-react";
 import ProMotmVotingDataProvider from "../../../providers/ProMotmVotingDataProvider";
-import FixtureRosters from "../../fixtures/fixture_screen/FixtureRosters";
+import FixtureRosters from "../../fixture/fixture_screen/FixtureRosters";
 
 type Props = {
     fixture: IFixture;

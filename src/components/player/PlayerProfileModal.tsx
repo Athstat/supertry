@@ -9,7 +9,7 @@ import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataPro
 import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
-import PlayerMatchModal from '../fixtures/player_fixture_modal/PlayerFixtureModal';
+import PlayerMatchModal from '../fixture/player_fixture_modal/PlayerFixtureModal';
 import PlayerScoutingActionModal from '../scouting/PlayerScoutingActionModal';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import RoundedCard from '../shared/RoundedCard';

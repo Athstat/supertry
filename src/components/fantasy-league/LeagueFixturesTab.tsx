@@ -6,7 +6,7 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import RoundedCard from '../shared/RoundedCard';
-import GroupedFixturesList from '../fixtures/GroupedFixturesList';
+import GroupedFixturesList from '../fixture/GroupedFixturesList';
 import NoContentCard from '../shared/NoContentMessage';
 
 export default function LeagueFixturesTab() {

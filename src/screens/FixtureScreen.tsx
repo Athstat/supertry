@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import FixtureOverviewTab from '../components/fixtures/fixture_screen/FixtureOverviewTab';
+import FixtureOverviewTab from '../components/fixture/fixture_screen/FixtureOverviewTab';
 import useSWR from 'swr';
 import { LoadingState } from '../components/ui/LoadingState';
 import { boxScoreService } from '../services/boxScoreService';
@@ -10,17 +10,17 @@ import { ProMotmVotingBox } from '../components/pro/motm';
 import { ErrorState } from '../components/ui/ErrorState';
 import { Activity } from '../components/shared/Activity';
 import PilledTabView from '../components/shared/tabs/PilledTabView';
-import FixtureBoxscoreTab from '../components/fixtures/fixture_screen/FixtureBoxscoreTab';
-import FixtureH2HTab from '../components/fixtures/fixture_screen/FixtureH2HTab';
-import FixtureHero from '../components/fixtures/fixture_screen/FixtureHero';
-import { FixtureStickyHeader } from '../components/fixtures/fixture_screen/FixtureStickyHeader';
-import FixtureRostersTab from '../components/fixtures/fixture_screen/rosters/FixtureRostersTab';
+import FixtureBoxscoreTab from '../components/fixture/fixture_screen/FixtureBoxscoreTab';
+import FixtureH2HTab from '../components/fixture/fixture_screen/FixtureH2HTab';
+import FixtureHero from '../components/fixture/fixture_screen/FixtureHero';
+import { FixtureStickyHeader } from '../components/fixture/fixture_screen/FixtureStickyHeader';
+import FixtureRostersTab from '../components/fixture/fixture_screen/rosters/FixtureRostersTab';
 import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
-import FixtureStandingsTab from '../components/fixtures/fixture_screen/FixtureStandingsTab';
+import FixtureStandingsTab from '../components/fixture/fixture_screen/FixtureStandingsTab';
 import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
 import { FixtureScreenProvider } from '../providers/fixtures/FixtureScreenProvider';
 import { useFixtureScreen } from '../hooks/fixtures/useFixture';
-import PlayerMatchModal from '../components/fixtures/player_fixture_modal/PlayerFixtureModal';
+import PlayerMatchModal from '../components/fixture/player_fixture_modal/PlayerFixtureModal';
 import PlayerProfileModal from '../components/player/PlayerProfileModal';
 
 export default function FixtureScreen() {

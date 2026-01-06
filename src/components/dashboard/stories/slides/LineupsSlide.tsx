@@ -5,7 +5,7 @@ import { IFixture, IRosterItem } from "../../../../types/games";
 import { Users } from "lucide-react";
 import PlayerMugshot from "../../../shared/PlayerMugshot";
 import SecondaryText from "../../../shared/SecondaryText";
-import { CaptainsArmBand } from "../../../fixtures/FixtureRosterList";
+import { CaptainsArmBand } from "../../../fixture/FixtureRosterList";
 import { LoadingState } from "../../../ui/LoadingState";
 
 interface LineupsSlideProps {

@@ -7,7 +7,7 @@ import { Calendar } from 'lucide-react';
 import { useRouter } from '../../hooks/useRoter';
 import { Fragment } from 'react';
 import { useQueryState } from '../../hooks/useQueryState';
-import FixtureCard from '../fixtures/FixtureCard';
+import FixtureCard from '../fixture/FixtureCard';
 import SecondaryText from '../shared/SecondaryText';
 import { Tv } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
