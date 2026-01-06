@@ -5,7 +5,7 @@ import { ScrummyDarkModeLogo } from '../../branding/scrummy_logo';
 import { CircleDollarSign, X } from 'lucide-react';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
-import CircleButton from '../../shared/buttons/BackButton';
+import CircleButton from '../../ui/buttons/BackButton';
 
 type Props = {
   onClose?: () => void

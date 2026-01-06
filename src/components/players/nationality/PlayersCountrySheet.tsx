@@ -3,7 +3,7 @@ import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthlet
 import CountryCard from "../../teams/countries/CountryCard";
 import { useNavigate, useParams } from "react-router-dom";
 import BottomSheetView from "../../ui/BottomSheetView";
-import CircleButton from "../../shared/buttons/BackButton";
+import CircleButton from "../../ui/buttons/BackButton";
 import { X } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { lighterDarkBlueCN } from "../../../types/constants";

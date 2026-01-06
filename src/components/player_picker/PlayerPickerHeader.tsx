@@ -3,7 +3,7 @@ import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
 import BlueGradientCard from "../shared/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
-import Experimental from "../shared/ab_testing/Experimental";
+import Experimental from "../ui/ab_testing/Experimental";
 import { Coins } from "lucide-react";
 import SearchBar from "./SearchBar";
 

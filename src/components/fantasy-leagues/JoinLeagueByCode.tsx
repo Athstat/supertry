@@ -1,5 +1,5 @@
 import { AlertCircle, Check, ChevronRight, Users } from 'lucide-react';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 import { useQueryState } from '../../hooks/useQueryState';
 import useSWR from 'swr';
 import { swrFetchKeys } from '../../utils/swrKeys';

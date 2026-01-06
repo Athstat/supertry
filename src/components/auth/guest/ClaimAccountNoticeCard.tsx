@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext"
 import { isGuestUser } from "../../../utils/deviceId/deviceIdUtils";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import RoundedCard from "../../shared/RoundedCard";
 import SecondaryText from "../../shared/SecondaryText";
 import { CircleUserRound } from "lucide-react";

@@ -1,5 +1,5 @@
 import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups'
-import PrimaryButton from '../../shared/buttons/PrimaryButton'
+import PrimaryButton from '../../ui/buttons/PrimaryButton'
 import { Activity, Fragment, useMemo } from 'react'
 import { Toast } from '../../ui/Toast'
 import { useJoinLeague } from '../../../hooks/leagues/useJoinLeague'

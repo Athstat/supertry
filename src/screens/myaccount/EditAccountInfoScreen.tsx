@@ -1,10 +1,10 @@
 import { ArrowLeft } from "lucide-react";
-import CircleButton from "../../components/shared/buttons/BackButton";
+import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../PageView";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCallback, useMemo, useState } from "react";
 import InputField from "../../components/shared/InputField";
-import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 import AccountInfoProgressCard from "../../components/auth/user_profile/AccountInfoProgressCard";
 import { userService } from "../../services/userService";
 import { Toast } from "../../components/ui/Toast";

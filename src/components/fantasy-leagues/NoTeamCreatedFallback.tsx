@@ -1,7 +1,7 @@
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import PitchViewLoadingSkeleton from "../my_fantasy_team/PitchViewLoadingSkeleton";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useTabView } from "../shared/tabs/TabView";
 
 type Props = {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { ScrummyDarkModeLogo } from '../../components/branding/scrummy_logo';
-import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
 import MovingRugbyPitch from '../../components/shared/MovingRugbyPitch';
 import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';

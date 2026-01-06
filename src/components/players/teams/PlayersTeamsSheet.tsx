@@ -1,7 +1,7 @@
 import { Activity } from "react"
 import BottomSheetView from "../../ui/BottomSheetView"
 import PlayersTeamsGridList from "./PlayersTeamsGridList"
-import CircleButton from "../../shared/buttons/BackButton"
+import CircleButton from "../../ui/buttons/BackButton"
 import { X } from "lucide-react"
 
 type Props = {

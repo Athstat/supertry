@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import PageView from '../PageView';
 import RoundedCard from '../../components/shared/RoundedCard';
 import { formatPosition } from '../../utils/athleteUtils';
-import CircleButton from '../../components/shared/buttons/BackButton';
+import CircleButton from '../../components/ui/buttons/BackButton';
 import PlayersPositionsSheet from '../../components/players/positioning/PlayersPositionsSheet';
 import { useMemo, useState } from 'react';
 import PlayersList from '../../components/players/PlayersList';

@@ -1,5 +1,5 @@
 import React from 'react';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
+import PrimaryButton from './buttons/PrimaryButton';
 
 type Props = {
   visible: boolean;

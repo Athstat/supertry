@@ -1,4 +1,4 @@
-import CircleButton from "../../components/shared/buttons/BackButton";
+import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../PageView";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import BottomSheetView from "../../components/ui/BottomSheetView";

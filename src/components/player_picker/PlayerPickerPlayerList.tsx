@@ -14,7 +14,7 @@ import WarningCard from "../shared/WarningCard";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import AvailabilityIcon from "../players/availability/AvailabilityIcon";
 import MatchPrCard from "../rankings/MatchPrCard";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
 import QuickActionButton from "../ui/QuickActionButton";
 import { useNavigate } from "react-router-dom";

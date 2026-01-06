@@ -2,7 +2,7 @@ import { ChevronRight } from "lucide-react";
 import { gameplayModalData } from "../../../data/gameplayModalData";
 import { GameplayTopic } from "../../../types/gameplayModal";
 import SecondaryText from "../../shared/SecondaryText";
-import PrimaryButton, { TranslucentButton } from "../../shared/buttons/PrimaryButton";
+import PrimaryButton, { TranslucentButton } from "../../ui/buttons/PrimaryButton";
 import RoundedCard from "../../shared/RoundedCard";
 import ScrummyLogo from "../scrummy_logo";
 

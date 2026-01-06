@@ -16,7 +16,7 @@ import { Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import { IFantasyLeagueRound } from "../types/fantasyLeague";
 import NoTeamCreatedFallback from "../components/fantasy-leagues/NoTeamCreatedFallback";
-import CircleButton from "../components/shared/buttons/BackButton";
+import CircleButton from "../components/ui/buttons/BackButton";
 import { ArrowLeft } from "lucide-react";
 import { useHideTopNavBar } from "../hooks/navigation/useNavigationBars";
 import { useNavigateBack } from "../hooks/web/useNavigateBack";

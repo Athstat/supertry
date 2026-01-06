@@ -1,7 +1,7 @@
 import { Binoculars, X } from "lucide-react"
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot"
 import MatchPrCard from "../../rankings/MatchPrCard"
-import CircleButton from "../../shared/buttons/BackButton"
+import CircleButton from "../../ui/buttons/BackButton"
 import SecondaryText from "../../shared/SecondaryText"
 import QuickActionButton from "../../ui/QuickActionButton"
 import { IProAthlete } from "../../../types/athletes"

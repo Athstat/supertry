@@ -9,7 +9,7 @@ import { twMerge } from "tailwind-merge";
 import { useDebounced } from "../../hooks/useDebounced";
 import { X } from "lucide-react";
 import RoundedCard from "../shared/RoundedCard";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 

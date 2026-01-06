@@ -2,7 +2,7 @@ import { Fragment } from 'react/jsx-runtime';
 import { twMerge } from 'tailwind-merge';
 import { useSbrFixtureVotes } from '../../../hooks/useFixtureVotes';
 import { ISbrFixture } from '../../../types/sbr'
-import { VotingOptionBar, VotingOptionsResults } from '../../shared/bars/VotingOptionBar';
+import { VotingOptionBar, VotingOptionsResults } from '../../pickem/VotingOptionBar';
 import { useState } from 'react';
 import { mutate } from 'swr';
 import { sbrService } from '../../../services/sbr/sbrService';

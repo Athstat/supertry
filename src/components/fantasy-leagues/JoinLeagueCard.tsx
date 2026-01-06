@@ -1,7 +1,7 @@
 import { Users } from 'lucide-react';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import RoundedCard from '../shared/RoundedCard';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 import useSWR from 'swr';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { useCallback, useMemo } from 'react';

@@ -5,7 +5,7 @@ import ScrummyLoadingState from '../ui/ScrummyLoadingState';
 import { twMerge } from 'tailwind-merge';
 import { WifiOff } from 'lucide-react';
 import ScrummyLogoHorizontal from '../branding/scrummy_logo_horizontal';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 import { AppColours } from '../../types/constants';
 
 type Props = {

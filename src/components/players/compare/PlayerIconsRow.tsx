@@ -1,6 +1,6 @@
 import { IProAthlete } from '../../../types/athletes';
 import { getPlayerIcons } from '../../../utils/playerIcons';
-import Experimental from '../../shared/ab_testing/Experimental';
+import Experimental from '../../ui/ab_testing/Experimental';
 import PlayerIconComponent from './PlayerIconComponent';
 import useSWR from 'swr';
 import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';

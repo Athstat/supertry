@@ -5,7 +5,7 @@ import { isFirstVisitCompleted, markFirstVisitCompleted } from "../../../utils/f
 import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ErrorMessage } from "../../ui/ErrorState"
-import PrimaryButton from "../../shared/buttons/PrimaryButton"
+import PrimaryButton from "../../ui/buttons/PrimaryButton"
 import { useAuth } from "../../../contexts/AuthContext"
 
 type Props = {

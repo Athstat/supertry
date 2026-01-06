@@ -8,7 +8,7 @@ import UserProfileHeader from '../components/auth/UserProfileHeader';
 import ClaimGuestAccountBox from '../components/auth/guest/ClaimGuestAccountBox';
 import LogoutButton from '../components/auth/LogoutButton';
 import DeleteAccountButton from '../components/auth/DeleteAccountButton';
-import Experimental from '../components/shared/ab_testing/Experimental';
+import Experimental from '../components/ui/ab_testing/Experimental';
 import QaNoticeCard from '../components/auth/user_profile/settings/QaNoticeCard';
 import { useNavigate } from 'react-router-dom';
 import ProfileSettingCard from '../components/auth/user_profile/settings/ProfileSettingCard';

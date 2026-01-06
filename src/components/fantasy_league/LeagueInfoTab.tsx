@@ -4,7 +4,7 @@ import { InfoCard } from '../shared/StatCard';
 import { UserCog2 } from 'lucide-react';
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { Hash } from 'lucide-react';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 import { Copy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Toast } from '../ui/Toast';

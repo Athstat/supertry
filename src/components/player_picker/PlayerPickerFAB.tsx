@@ -1,7 +1,7 @@
 /** Renders a floating action button  */
 
 import { ChevronUp } from "lucide-react";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 type Props = {
     onClick?: () => void;

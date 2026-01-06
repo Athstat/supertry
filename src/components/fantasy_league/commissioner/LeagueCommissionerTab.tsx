@@ -4,7 +4,7 @@ import InputField, { TextField } from "../../shared/InputField";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import SecondaryText from "../../shared/SecondaryText";
 import LeagueVisibilityInput from "../../fantasy-leagues/create_league_modal/LeagueVisibilityInput";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
 import { ErrorState } from "../../ui/ErrorState";

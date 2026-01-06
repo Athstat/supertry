@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague"
-import { TranslucentButton } from "../shared/buttons/PrimaryButton";
+import { TranslucentButton } from "../ui/buttons/PrimaryButton";
 import { twMerge } from "tailwind-merge";
 
 type Props = {

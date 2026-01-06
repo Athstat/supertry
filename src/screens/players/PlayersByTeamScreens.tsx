@@ -1,6 +1,6 @@
 import { ArrowLeft, ChevronDown } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import CircleButton from "../../components/shared/buttons/BackButton";
+import CircleButton from "../../components/ui/buttons/BackButton";
 import RoundedCard from "../../components/shared/RoundedCard";
 import { AppColours } from "../../types/constants";
 import PageView from "../PageView";

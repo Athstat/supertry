@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DialogModal from '../../shared/DialogModal';
 import InputField, { TextField } from '../../shared/InputField';
 import LeagueVisibilityInput from './LeagueVisibilityInput';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService';
 import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';

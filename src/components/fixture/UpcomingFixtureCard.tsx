@@ -7,7 +7,7 @@ import { useRouter } from "../../hooks/useRoter";
 import { gamesService } from "../../services/gamesService";
 import { IFixture } from "../../types/games";
 import { fixtureSummary } from "../../utils/fixtureUtils";
-import { VotingOptionBar } from "../shared/bars/VotingOptionBar";
+import { VotingOptionBar } from "../pickem/VotingOptionBar";
 import DialogModal from "../shared/DialogModal";
 import SecondaryText from "../shared/SecondaryText";
 import TeamLogo from "../team/TeamLogo";

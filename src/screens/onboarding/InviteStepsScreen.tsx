@@ -8,7 +8,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { Copy, Lock } from 'lucide-react';
-import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import { InfoCard } from '../../components/shared/StatCard';
 import { Toast } from '../../components/ui/Toast';
 import { analytics } from '../../services/analytics/anayticsService';

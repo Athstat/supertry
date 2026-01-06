@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import AppleSignin from "react-apple-signin-auth";
 import { ErrorMessage } from '../../ui/ErrorState';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { isInProduction } from '../../../utils/webUtils';
 import WarningCard from '../../shared/WarningCard';
 import { TriangleAlert } from 'lucide-react';

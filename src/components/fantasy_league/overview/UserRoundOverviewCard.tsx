@@ -1,7 +1,7 @@
 import { ArrowRight, Lock } from 'lucide-react';
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import BlueGradientCard from '../../shared/BlueGradientCard';
-import { TranslucentButton } from '../../shared/buttons/PrimaryButton';
+import { TranslucentButton } from '../../ui/buttons/PrimaryButton';
 import { Shield } from 'lucide-react';
 import LeagueRoundCountdown, { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';

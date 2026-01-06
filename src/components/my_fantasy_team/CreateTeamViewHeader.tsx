@@ -8,7 +8,7 @@ import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { isGuestUserAtom } from "../../state/authUser.atoms";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
 
 

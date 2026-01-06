@@ -10,7 +10,7 @@ import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { AppColours } from "../../types/constants";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 import UnsavedChangesWarningModal from "../shared/UnsavedChangesModal";
 import { Toast } from "../ui/Toast";
 

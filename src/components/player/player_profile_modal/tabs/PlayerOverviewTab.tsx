@@ -14,7 +14,7 @@ import SecondaryText from '../../../shared/SecondaryText';
 import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import FormIndicator from '../../../shared/FormIndicator';
 import PlayerTeamCard from '../PlayerTeamCard';
-import Experimental from '../../../shared/ab_testing/Experimental';
+import Experimental from '../../../ui/ab_testing/Experimental';
 import PlayerNextMatchCard from '../PlayerNextMatchCard';
 
 type Props = {

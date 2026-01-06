@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge"
 import { RadioListOption } from "../../../types/ui"
-import SecondaryText from "../SecondaryText"
+import SecondaryText from "../../shared/SecondaryText"
 
 type Props = {
   options: RadioListOption[],

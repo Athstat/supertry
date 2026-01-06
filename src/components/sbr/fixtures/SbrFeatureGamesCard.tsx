@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai"
 import { sbrWeekFeatureGamesAtom } from "../../../state/sbrFixtures.atoms"
 import { Swords } from "lucide-react";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useState } from "react";
 import { ISbrFixture } from "../../../types/sbr";
 import DialogModal from "../../shared/DialogModal";

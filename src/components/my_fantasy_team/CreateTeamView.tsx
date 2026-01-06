@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import PrimaryButton from '../shared/buttons/PrimaryButton';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';

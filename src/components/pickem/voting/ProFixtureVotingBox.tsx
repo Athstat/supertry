@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { VotingOptionsResults, VotingOptionBar } from '../../shared/bars/VotingOptionBar';
+import { VotingOptionsResults, VotingOptionBar } from '../VotingOptionBar';
 import { useState } from 'react';
 import { mutate } from 'swr';
 import { useGameVotes } from '../../../hooks/useGameVotes';

@@ -7,14 +7,14 @@ import { useMemo, useState } from "react";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import ScoutingListPlayerModal from "../../components/scouting/ScoutingListPlayerModal";
 import { ScoutingListPlayer } from "../../types/fantasy/scouting";
-import CircleButton from "../../components/shared/buttons/BackButton";
+import CircleButton from "../../components/ui/buttons/BackButton";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import SecondaryText from "../../components/shared/SecondaryText";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { IProAthlete } from "../../types/athletes";
 import SmartPlayerMugshot from "../../components/player/SmartPlayerMugshot";
 import { formatPosition } from "../../utils/athleteUtils";
-import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 
 /** Renders scouting list screen */

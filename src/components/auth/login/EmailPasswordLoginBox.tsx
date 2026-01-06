@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import InputField, { PasswordInputField } from '../../shared/InputField';
 import { Info, Mail } from 'lucide-react';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { authService } from '../../../services/authService';
 import { ErrorMessage } from '../../ui/ErrorState';
 import { useNavigate } from 'react-router-dom';

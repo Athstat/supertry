@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPushPermissionStatus, isBridgeAvailable, isMobileWebView, openSystemNotificationSettings, requestPushPermissions } from "../../utils/bridgeUtils";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { authService } from "../../services/authService";
 import { logger } from "../../services/logger";
 import PushOptInModal from "../ui/PushOptInModal";

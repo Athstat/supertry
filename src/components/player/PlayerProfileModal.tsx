@@ -12,7 +12,7 @@ import { lighterDarkBlueCN } from '../../types/constants';
 import PlayerMatchModal from '../fixture/player_fixture_modal/PlayerFixtureModal';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import RoundedCard from '../shared/RoundedCard';
-import CircleButton from '../shared/buttons/BackButton';
+import CircleButton from '../ui/buttons/BackButton';
 import { X } from 'lucide-react';
 import SecondaryText from '../shared/SecondaryText';
 import PlayerScoutingActionModal from '../players/scouting/PlayerScoutingActionModal';

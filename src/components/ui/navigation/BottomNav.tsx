@@ -1,8 +1,7 @@
 import { useLocation, Link } from 'react-router-dom';
 import { Home, Trophy, Users, Calendar } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Activity } from 'react';
 import { useNavigationBars } from '../../../hooks/navigation/useNavigationBars';
-import { Activity } from '../../shared/Activity';
 import { School } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../../../types/constants';

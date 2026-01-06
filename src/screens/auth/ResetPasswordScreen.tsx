@@ -10,7 +10,7 @@ import { PasswordResetTokenIntrospect, RestError } from '../../types/auth';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { PasswordInputField } from '../../components/shared/InputField';
 import FormErrorText from '../../components/shared/FormError';
-import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 
 // Success Modal Component
 interface SuccessModalProps {

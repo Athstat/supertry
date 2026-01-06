@@ -6,7 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/analytics/anayticsService';
 import { authService } from '../../services/authService';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
-import Experimental from '../../components/shared/ab_testing/Experimental';
+import Experimental from '../../components/ui/ab_testing/Experimental';
 import { ProgressIndicator } from '../../components/auth/signup/ProgressIndicator';
 import { OnboardingStep1Username } from '../../components/auth/signup/OnboardingStep1Username';
 import { OnboardingStep2Email } from '../../components/auth/signup/OnboardingStep2Email';

@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import CircleButton from "../../components/shared/buttons/BackButton";
+import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../PageView";
 import { useNavigate, useParams } from "react-router-dom";
 import FantasyLeagueGroupDataProvider from "../../components/fantasy_league/providers/FantasyLeagueGroupDataProvider";

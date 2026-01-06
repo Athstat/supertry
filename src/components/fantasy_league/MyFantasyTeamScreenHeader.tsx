@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import { JoinOrInviteButton } from './buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import CircleButton from '../shared/buttons/BackButton';
+import CircleButton from '../ui/buttons/BackButton';
 import { useNavigateBack } from '../../hooks/web/useNavigateBack';
 
 

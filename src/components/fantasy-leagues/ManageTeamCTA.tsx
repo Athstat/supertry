@@ -13,7 +13,7 @@ import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../types/
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
-import { TranslucentButton } from '../shared/buttons/PrimaryButton';
+import { TranslucentButton } from '../ui/buttons/PrimaryButton';
 import { smartRoundUp } from '../../utils/intUtils';
 import FantasyLeagueGroupDataProvider from '../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
 

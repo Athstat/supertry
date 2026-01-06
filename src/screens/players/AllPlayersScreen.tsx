@@ -1,6 +1,6 @@
 import PageView from '../PageView'
 import { ArrowLeft } from 'lucide-react'
-import CircleButton from '../../components/shared/buttons/BackButton'
+import CircleButton from '../../components/ui/buttons/BackButton'
 import { useSupportedAthletes } from '../../hooks/athletes/useSupportedAthletes'
 import PlayersList from '../../components/players/PlayersList';
 import { useNavigate } from 'react-router-dom';

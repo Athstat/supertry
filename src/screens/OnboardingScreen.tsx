@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { IOnboardingTab } from '../types/onboarding';
-import PrimaryButton from '../components/shared/buttons/PrimaryButton';
+import PrimaryButton from '../components/ui/buttons/PrimaryButton';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 
 import { useNavigate } from 'react-router-dom';

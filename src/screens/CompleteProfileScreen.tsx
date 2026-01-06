@@ -6,7 +6,7 @@ import ScrummyLogo from '../components/branding/scrummy_logo';
 import RoundedCard from '../components/shared/RoundedCard';
 import { ClaimGuestAccountReq } from '../types/auth';
 import InputField, { PasswordInputField } from '../components/shared/InputField';
-import PrimaryButton from '../components/shared/buttons/PrimaryButton';
+import PrimaryButton from '../components/ui/buttons/PrimaryButton';
 import { useEmailUniqueValidator } from '../hooks/useEmailUniqueValidator';
 import { authUserAtom, isGuestUserAtom } from '../state/authUser.atoms';
 import { ScopeProvider } from 'jotai-scope';

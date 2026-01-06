@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { User, Mail, Lock, Pencil, ArrowLeft } from 'lucide-react';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 
 interface OnboardingStep4Props {
   username: string;

@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge"
-import RoundedCard from "../RoundedCard"
+import RoundedCard from "../../shared/RoundedCard"
 
 type Props = {
     className?: string,

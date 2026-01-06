@@ -1,6 +1,6 @@
 import { User } from "lucide-react";
 import { ErrorState } from "../../ui/ErrorState";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useGuestLogin } from "../../../hooks/auth/useGuestLogin";
 import { useDeviceId } from "../../../hooks/useDeviceId";
 import { Fragment } from "react/jsx-runtime";

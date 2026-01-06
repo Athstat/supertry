@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, ChevronDown } from "lucide-react";
 import RoundedCard from "../../components/shared/RoundedCard";
 import PlayersCountrySheet from "../../components/players/nationality/PlayersCountrySheet";
-import CircleButton from "../../components/shared/buttons/BackButton";
+import CircleButton from "../../components/ui/buttons/BackButton";
 import PlayersList from "../../components/players/PlayersList";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";

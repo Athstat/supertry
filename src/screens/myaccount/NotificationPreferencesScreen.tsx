@@ -1,16 +1,16 @@
 import { ArrowLeft } from "lucide-react";
-import CircleButton from "../../components/shared/buttons/BackButton";
+import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../PageView";
 import { useNavigate } from "react-router-dom";
 import SecondaryText from "../../components/shared/SecondaryText";
-import ToggleButton from "../../components/shared/buttons/ToggleButton";
+import ToggleButton from "../../components/ui/buttons/ToggleButton";
 import RoundedCard from "../../components/shared/RoundedCard";
 import { GoSync } from "react-icons/go";
 import { Toast } from "../../components/ui/Toast";
 import { ErrorState } from "../../components/ui/ErrorState";
 import { useNotificationPreferences } from "../../hooks/notifications/useNotificationPreferences";
 import { twMerge } from "tailwind-merge";
-import RadioList from "../../components/shared/buttons/RadioList";
+import RadioList from "../../components/ui/buttons/RadioList";
 import { GameUpdatesPreference, gameUpdatesPreferenceRadioListOptions } from "../../types/notifications";
 import { useEffect } from "react";
 
