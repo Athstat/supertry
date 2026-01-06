@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import DialogModal from '../../shared/DialogModal';
 import InputField, { TextField } from '../../ui/forms/InputField';
 import LeagueVisibilityInput from './LeagueVisibilityInput';
 import PrimaryButton from '../../ui/buttons/PrimaryButton';
@@ -12,6 +11,7 @@ import SecondaryText from '../../ui/typography/SecondaryText';
 import SeasonInput from './SeasonInput';
 import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
+import DialogModal from '../../ui/modals/DialogModal';
 
 interface CreateLeagueModalProps {
   isOpen: boolean;
