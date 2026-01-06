@@ -2,11 +2,11 @@ import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/shared/buttons/BackButton";
 import PageView from "../PageView";
 import { useNavigate, useParams } from "react-router-dom";
-import FantasyLeagueGroupDataProvider from "../../components/fantasy-league/providers/FantasyLeagueGroupDataProvider";
+import FantasyLeagueGroupDataProvider from "../../components/fantasy_league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { JoinOrInviteButton } from "../../components/fantasy-league/buttons/JoinLeagueButton";
+import { JoinOrInviteButton } from "../../components/fantasy_league/buttons/JoinLeagueButton";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
-import { LeagueStandings } from "../../components/fantasy-league/LeagueStandings";
+import { LeagueStandings } from "../../components/fantasy_league/LeagueStandings";
 import RoundedCard from "../../components/shared/RoundedCard";
 
 

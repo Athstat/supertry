@@ -1,5 +1,5 @@
 import { useAuth } from '../../../contexts/AuthContext';
-import FantasyLeagueGroupDataProvider from '../../fantasy-league/providers/FantasyLeagueGroupDataProvider';
+import FantasyLeagueGroupDataProvider from '../../fantasy_league/providers/FantasyLeagueGroupDataProvider';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { useUserRoundTeam } from '../../../hooks/fantasy/useUserRoundTeam';
 import { DashboardHeroLoadingSkeleton, DashboardHeroFrame, DashboardHeroHeader, DashboardHeroScoreSection, DashboardHeroCTASection } from './DashboardHeroSections';

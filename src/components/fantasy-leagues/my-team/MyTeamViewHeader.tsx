@@ -9,7 +9,7 @@ import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSu
 import { Activity } from '../../shared/Activity';
 import SecondaryText from '../../shared/SecondaryText';
 import { useMyTeamView } from './MyTeamStateProvider';
-import { LeagueRoundCountdown2 } from '../../fantasy-league/LeagueCountdown';
+import { LeagueRoundCountdown2 } from '../../fantasy_league/LeagueCountdown';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { smartRoundUp } from '../../../utils/intUtils';
 

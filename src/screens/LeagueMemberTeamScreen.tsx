@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import PageView from "./PageView";
 import TeamHistoryProvider from "../providers/fantasy_teams/TeamHistoryProvider";
-import FantasyLeagueGroupDataProvider from "../components/fantasy-league/providers/FantasyLeagueGroupDataProvider";
+import FantasyLeagueGroupDataProvider from "../components/fantasy_league/providers/FantasyLeagueGroupDataProvider";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { userService } from "../services/userService";

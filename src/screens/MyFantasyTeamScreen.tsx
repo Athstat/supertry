@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import FantasyLeagueGroupDataProvider from '../components/fantasy-league/providers/FantasyLeagueGroupDataProvider';
+import FantasyLeagueGroupDataProvider from '../components/fantasy_league/providers/FantasyLeagueGroupDataProvider';
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
 import { useHideBottomNavBar, useHideTopNavBar } from '../hooks/navigation/useNavigationBars';
-import LeagueGroupScreenHeader from '../components/fantasy-league/LeagueGroupScreenHeader';
+import LeagueGroupScreenHeader from '../components/fantasy_league/LeagueGroupScreenHeader';
 import RoundedCard from '../components/shared/RoundedCard';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';

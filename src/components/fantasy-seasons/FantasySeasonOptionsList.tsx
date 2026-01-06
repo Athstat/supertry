@@ -4,7 +4,7 @@ import { IFantasySeason } from "../../types/fantasy/fantasySeason"
 import RoundedCard from "../shared/RoundedCard";
 import { fantasySeasonsService } from "../../services/fantasy/fantasySeasonsService";
 import SecondaryText from "../shared/SecondaryText";
-import FantasyLeagueGroupDataProvider from "../fantasy-league/providers/FantasyLeagueGroupDataProvider";
+import FantasyLeagueGroupDataProvider from "../fantasy_league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { ChevronRight, Trophy } from "lucide-react";
 import { twMerge } from "tailwind-merge";

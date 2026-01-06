@@ -1,6 +1,6 @@
 import { useFantasyLeagueGroup } from '../../../../hooks/leagues/useFantasyLeagueGroup';
 import { FantasyLeagueGroup } from '../../../../types/fantasyLeagueGroups';
-import FantasyLeagueGroupDataProvider from '../../../fantasy-league/providers/FantasyLeagueGroupDataProvider';
+import FantasyLeagueGroupDataProvider from '../../../fantasy_league/providers/FantasyLeagueGroupDataProvider';
 import LearnScrummyNoticeCard from '../../../branding/help/LearnScrummyNoticeCard';
 import useSWR from 'swr';
 import { useAuth } from '../../../../contexts/AuthContext';
@@ -13,7 +13,7 @@ import BlueGradientCard from '../../../shared/BlueGradientCard';
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../../types/fantasyLeague';
 import { isLeagueRoundLocked } from '../../../../utils/leaguesUtils';
 import { useRoundScoringSummary } from '../../../../hooks/fantasy/useRoundScoringSummary';
-import { LeagueRoundCountdown2 } from '../../../fantasy-league/LeagueCountdown';
+import { LeagueRoundCountdown2 } from '../../../fantasy_league/LeagueCountdown';
 import { TranslucentButton } from '../../../shared/buttons/PrimaryButton';
 import { smartRoundUp } from '../../../../utils/intUtils';
 
