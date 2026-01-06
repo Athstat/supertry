@@ -1,10 +1,10 @@
 import { ReactNode, useCallback } from 'react'
-import { IFantasyLeagueTeam } from '../../../types/fantasyLeague'
 import { ScopeProvider } from 'jotai-scope'
-import { myTeamModeAtom } from '../../../state/fantasy/myTeam.atoms'
 import { useAtom } from 'jotai'
-import { MyTeamViewMode } from '../../../types/fantasy/myTeam'
 import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider'
+import { myTeamModeAtom } from '../../state/fantasy/myTeam.atoms'
+import { MyTeamViewMode } from '../../types/fantasy/myTeam'
+import { IFantasyLeagueTeam } from '../../types/fantasyLeague'
 
 type Props = {
     children?: ReactNode,

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
-import MyTeamView from '../components/my_fantasy_team/MyTeamView';
+import MyTeamModeSelector from '../components/my_fantasy_team/MyTeamModeSelector';
 import { useEffect } from 'react';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
@@ -58,7 +58,7 @@ function Content() {
 
       <MyFantasyTeamScreenHeader />
       <LearnScrummyNoticeCard />
-      <MyTeamView />
+      <MyTeamModeSelector />
 
     </PageView>
   );

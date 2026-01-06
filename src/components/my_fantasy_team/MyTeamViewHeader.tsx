@@ -1,7 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import SaveTeamBar from './SaveTeamBar';
 import { Coins, Lock } from 'lucide-react';
-import { useMyTeamView } from './MyTeamStateProvider';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
@@ -12,6 +11,7 @@ import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
 import RoundedCard from '../shared/RoundedCard';
 import SecondaryText from '../shared/SecondaryText';
 import { Activity } from 'react';
+import { useMyTeamView } from './MyTeamStateProvider';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;

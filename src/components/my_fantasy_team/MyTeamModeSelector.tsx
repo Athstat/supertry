@@ -15,18 +15,19 @@ import CreateFantasyTeamView from './CreateTeamView';
 // of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
 // AI will hallucinate that this component doesn't exists
 
-/** Renders the my team tab  */
-export default function MyTeamView() {
+// DELETE Component
+/** Renders the right team view based on the view mode  */
+export default function MyTeamModeSelector() {
 
   return (
-    <MyTeamModeSelector />
+    <MyTeamModeSelector2 />
   );
 }
 
 type ViewMode = 'create-team' | 'pitch-view' | 'no-team-locked' | 'error';
 
 /** Component that selects between showing the pitch view or showing the create team view  */
-function MyTeamModeSelector() {
+function MyTeamModeSelector2() {
   const { round, roundTeam } = useTeamHistory();
   const { leagueConfig } = useFantasyLeagueGroup();
   const [isLoading, setLoading] = useState<boolean>(false);
