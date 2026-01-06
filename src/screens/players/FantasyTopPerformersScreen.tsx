@@ -8,7 +8,7 @@ import { queryParamKeys } from "../../types/constants";
 import { useFantasyPointsRankings } from "../../hooks/fantasy/useSportActionRanking";
 import { ArrowLeft, ChevronDown, X } from "lucide-react";
 import { FantasyPointsRankingTable, FantasyPointsRankingTableLoadingSkeleton } from "../../components/players/ranking/FantasyPointsRankingTable";
-import SecondaryText from "../../components/shared/SecondaryText";
+import SecondaryText from "../../components/ui/typography/SecondaryText";
 import { abbreviateSeasonName } from "../../components/players/compare/PlayerCompareSeasonPicker";
 import { Activity, useState } from "react";
 import RoundedCard from "../../components/shared/RoundedCard";

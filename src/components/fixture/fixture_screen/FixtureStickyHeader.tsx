@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { useSticky } from "../../../hooks/useSticky";
 import { IFixture } from "../../../types/games";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
-import { Sticky } from "../../shared/Sticky";
+import { Sticky } from "../../ui/containers/Sticky";
 import TeamLogo from "../../team/TeamLogo";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../../types/constants";

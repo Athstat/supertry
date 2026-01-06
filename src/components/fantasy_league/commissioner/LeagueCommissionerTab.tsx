@@ -1,8 +1,8 @@
 import { Settings } from "lucide-react";
 import { useState } from "react";
-import InputField, { TextField } from "../../shared/InputField";
+import InputField, { TextField } from "../../ui/forms/InputField";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import LeagueVisibilityInput from "../../fantasy-leagues/create_league_modal/LeagueVisibilityInput";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";

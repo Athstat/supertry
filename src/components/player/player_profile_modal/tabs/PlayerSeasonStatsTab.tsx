@@ -1,6 +1,6 @@
 import { usePlayerData } from "../../../../providers/PlayerDataProvider";
 import { IProAthlete } from "../../../../types/athletes"
-import NoContentCard from "../../../shared/NoContentMessage";
+import NoContentCard from "../../../ui/typography/NoContentMessage";
 import PlayerSeasonStatsCard from "../../PlayerSeasonStatsCard";
 
 type Props = {

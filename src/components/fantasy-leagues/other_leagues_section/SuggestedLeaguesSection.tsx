@@ -4,7 +4,7 @@ import { useJoinableLeagues } from '../../../hooks/leagues/useJoinableLeagues';
 import { IFantasySeason } from '../../../types/fantasy/fantasySeason';
 import { JoinLeagueCard } from '../JoinLeagueCard';
 import RoundedCard from '../../shared/RoundedCard';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 
 type Props = {
     fantasySeason: IFantasySeason

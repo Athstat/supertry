@@ -1,7 +1,7 @@
 import { IProAthlete } from "../../../types/athletes";
 import { IRosterItem } from "../../../types/games";
 import { formatPosition } from "../../../utils/athleteUtils";
-import PlayerMugshot from "../../shared/PlayerMugshot";
+import PlayerMugshot from "../../player/PlayerMugshot";
 import { CaptainsArmBand } from "../../player/CaptainsArmBand";
 
 type RosterListProps = {

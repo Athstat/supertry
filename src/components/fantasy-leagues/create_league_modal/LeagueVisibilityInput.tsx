@@ -1,5 +1,5 @@
 import { Globe, Lock } from "lucide-react"
-import SecondaryText from "../../shared/SecondaryText"
+import SecondaryText from "../../ui/typography/SecondaryText"
 import { twMerge } from "tailwind-merge"
 import { ReactNode } from "react"
 

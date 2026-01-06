@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react"
 import { ISbrFixture } from "../../../types/sbr"
-import BlueGradientCard from "../../shared/BlueGradientCard"
+import BlueGradientCard from "../../ui/cards/BlueGradientCard"
 import { hasSbrRoundPassed } from "../../../utils/sbrUtils"
 import { Fragment, useState } from "react"
 import SbrVotingModal from "../predictions/SbrVotingModal"

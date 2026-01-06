@@ -1,6 +1,6 @@
 import PageView from "./PageView";
 import SbrScreenHeader from "../components/sbr/SbrScreenHeader";
-import TabView, { TabViewHeaderItem, TabViewPage } from "../components/shared/tabs/TabView";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../components/ui/tabs/TabView";
 import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
 import SbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
 import SbrChatTab from "../components/sbr/SBRChatScreen";

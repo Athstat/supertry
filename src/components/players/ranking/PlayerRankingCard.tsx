@@ -1,7 +1,7 @@
 import { IProAthlete } from '../../../types/athletes';
 import TeamJersey from '../../player/TeamJersey';
-import PlayerMugshot from '../../shared/PlayerMugshot';
-import SecondaryText from '../../shared/SecondaryText';
+import PlayerMugshot from '../../player/PlayerMugshot';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
 
 type Props = {

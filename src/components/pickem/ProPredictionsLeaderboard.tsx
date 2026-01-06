@@ -2,12 +2,12 @@ import useSWR from "swr"
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
 import { ProPredictionsRanking } from "../../types/proPredictions";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 import { twMerge } from "tailwind-merge";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { User } from "lucide-react";
 import { isEmail } from "../../utils/stringUtils";
-import NoContentCard from "../shared/NoContentMessage";
+import NoContentCard from "../ui/typography/NoContentMessage";
 
 export default function ProPredictionsLeaderboard() {
 

@@ -3,7 +3,7 @@ import { useAuth } from "../../../contexts/AuthContext"
 import { isGuestUser } from "../../../utils/deviceId/deviceIdUtils";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import RoundedCard from "../../shared/RoundedCard";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { CircleUserRound } from "lucide-react";
 import { authAnalytics } from "../../../services/analytics/authAnalytics";
 

@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { useSticky } from '../../../hooks/useSticky';
-import { Sticky } from '../../shared/Sticky';
+import { Sticky } from '../../ui/containers/Sticky';
 import { useAtomValue } from 'jotai';
 import { comparePlayersAtomGroup } from '../../../state/comparePlayers.atoms';
 import { usePlayerCompareActions } from '../../../hooks/usePlayerCompare';

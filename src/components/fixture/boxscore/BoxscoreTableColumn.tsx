@@ -5,8 +5,8 @@ import { useTableSort } from "../../../hooks/tables/useTableSort";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import { useNodeCoordinates } from "../../../hooks/useNodeCoordinates";
 import { BoxscoreHeader } from "../../../types/boxScore";
-import SecondaryText from "../../shared/SecondaryText";
-import TooltipCard from "../../shared/Tooltip";
+import SecondaryText from "../../ui/typography/SecondaryText";
+import TooltipCard from "../../ui/cards/Tooltip";
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 import { useBoxscoreTable } from "./BoxscoreTableProvider";
 

@@ -14,7 +14,7 @@ import { IProTeam } from "../../types/team";
 import { getAthletesSummary } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import RoundedCard from "../shared/RoundedCard";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import GlassBottomSheet from "../ui/GlassBottomSheet";
 import PlayerCompareModal from "./compare/PlayerCompareModal";

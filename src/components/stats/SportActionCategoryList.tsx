@@ -3,10 +3,10 @@ import { useAtomValue } from 'jotai';
 import { comparePlayersStatsAtom } from '../../state/comparePlayers.atoms';
 import { SportAction } from '../../types/sports_actions';
 import { shouldShowSportAction } from '../../utils/sportsActionUtils';
-import SecondaryText from '../shared/SecondaryText';
+import SecondaryText from '../ui/typography/SecondaryText';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import { useHoverCoordinates } from '../../hooks/useSmartMouseHover';
-import TooltipCard from '../shared/Tooltip';
+import TooltipCard from '../ui/cards/Tooltip';
 import { useSportActions } from './SportActionsDefinitionsProvider';
 
 type Props = {

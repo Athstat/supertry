@@ -1,8 +1,8 @@
 import { useAtomValue } from "jotai"
 import { sbrFixtureTimelineAtom } from "../../../state/sbrFixtureScreen.atoms"
-import TitledCard from "../../shared/TitledCard";
+import TitledCard from "../../ui/cards/TitledCard";
 import { twMerge } from "tailwind-merge";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { ReactNode } from "react";
 import { XIcon } from "lucide-react";
 import { MdSportsRugby } from "react-icons/md";

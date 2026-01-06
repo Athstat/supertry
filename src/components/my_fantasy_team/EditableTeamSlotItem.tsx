@@ -8,7 +8,7 @@ import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { PlayerGameCard } from "../player/PlayerGameCard";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 
 type SlotProps = {
   slot: IFantasyLeagueTeamSlot,

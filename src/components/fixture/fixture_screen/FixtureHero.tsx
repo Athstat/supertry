@@ -6,7 +6,7 @@ import { useNavigateBack } from '../../../hooks/web/useNavigateBack';
 import { IFixture } from '../../../types/games';
 import { IProTeam } from '../../../types/team';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../../utils/fixtureUtils';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
 import TeamSeasonRecordText from '../../teams/TeamSeasonRecordText';
 import { useMemo } from 'react';

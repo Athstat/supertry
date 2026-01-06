@@ -8,7 +8,7 @@ import AppleSignin from "react-apple-signin-auth";
 import { ErrorMessage } from '../../ui/ErrorState';
 import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { isInProduction } from '../../../utils/webUtils';
-import WarningCard from '../../shared/WarningCard';
+import WarningCard from '../../ui/cards/WarningCard';
 import { TriangleAlert } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 

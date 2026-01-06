@@ -4,7 +4,7 @@ import { useFantasyPointsRankings } from '../../../hooks/fantasy/useSportActionR
 import RoundedCard from '../../shared/RoundedCard';
 import { IProAthlete } from '../../../types/athletes';
 import PlayerProfileModal from '../../player/PlayerProfileModal';
-import NoContentCard from '../../shared/NoContentMessage';
+import NoContentCard from '../../ui/typography/NoContentMessage';
 import { PlayerRankingCard } from '../../players/ranking/PlayerRankingCard';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';

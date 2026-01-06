@@ -1,4 +1,4 @@
-import NoContentCard from '../shared/NoContentMessage';
+import NoContentCard from '../ui/typography/NoContentMessage';
 import { ChevronRight } from 'lucide-react';
 import { FixtureListViewMode, IFixture } from '../../types/games';
 import GroupedFixturesList from './GroupedFixturesList';

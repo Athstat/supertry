@@ -1,6 +1,6 @@
 import { Binoculars } from "lucide-react";
 import { IProAthlete } from "../../../types/athletes"
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 type Props = {
     player: IProAthlete

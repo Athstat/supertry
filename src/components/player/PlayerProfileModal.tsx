@@ -13,7 +13,7 @@ import { useClickOutside } from '../../hooks/useClickOutside';
 import RoundedCard from '../shared/RoundedCard';
 import CircleButton from '../ui/buttons/BackButton';
 import { X } from 'lucide-react';
-import SecondaryText from '../shared/SecondaryText';
+import SecondaryText from '../ui/typography/SecondaryText';
 import PlayerScoutingActionModal from '../players/scouting/PlayerScoutingActionModal';
 import BottomSheetView from '../ui/modals/BottomSheetView';
 

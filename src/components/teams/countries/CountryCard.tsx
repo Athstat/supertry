@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import { getCountryEmojiFlag } from "../../../utils/svrUtils"
 import RoundedCard from "../../shared/RoundedCard"
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 type Props = {
     countryName?: string,

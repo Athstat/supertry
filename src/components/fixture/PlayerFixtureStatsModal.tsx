@@ -1,9 +1,9 @@
 import { IBoxScoreItem } from "../../types/boxScore"
 import { IFixture } from "../../types/games"
 import DialogModal from "../shared/DialogModal"
-import PlayerMugshot from "../shared/PlayerMugshot"
+import PlayerMugshot from "../player/PlayerMugshot"
 import RoundedCard from "../shared/RoundedCard"
-import { StatCard } from "../shared/StatCard"
+import { StatCard } from "../ui/cards/StatCard"
 import TeamLogo from "../team/TeamLogo"
 
 type AthleteStatsModalProps = {

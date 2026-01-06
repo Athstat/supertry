@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import PlayerMugshot from '../shared/PlayerMugshot'
+import PlayerMugshot from './PlayerMugshot'
 import { IBoxScoreItem } from '../../types/boxScore'
 import PlayerFixtureStatsModal from '../fixture/PlayerFixtureStatsModal'
 import { IFixture } from '../../types/games'

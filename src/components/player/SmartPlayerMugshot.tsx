@@ -1,5 +1,5 @@
 import { Activity } from "react"
-import PlayerMugshot from "../shared/PlayerMugshot"
+import PlayerMugshot from "./PlayerMugshot"
 import TeamJersey from "./TeamJersey"
 import { twMerge } from "tailwind-merge"
 

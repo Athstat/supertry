@@ -6,7 +6,7 @@ import { swrFetchKeys } from "../../utils/swrKeys";
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
 import { ErrorState } from "../ui/ErrorState";
-import NoContentCard from "../shared/NoContentMessage";
+import NoContentCard from "../ui/typography/NoContentMessage";
 import { ProGameVote } from "../../types/proPredictions";
 import { gamesService } from "../../services/gamesService";
 import FixtureCard from "../fixture/FixtureCard";

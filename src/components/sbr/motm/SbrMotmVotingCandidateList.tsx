@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from "jotai"
 import { ISbrFixtureRosterItem } from "../../../types/sbr"
-import SecondaryText from "../../shared/SecondaryText"
+import SecondaryText from "../../ui/typography/SecondaryText"
 import { hasUserSubmittedSbrMotmAtom, isSendingSbrMotmVoteAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms"
 import { sbrMotmService } from "../../../services/sbrMotmService"
 import { mutate } from "swr"

@@ -1,6 +1,6 @@
 import { IFixture } from "../../../types/games";
-import TabView, { TabViewHeaderItem, TabViewPage } from "../../shared/tabs/TabView";
-import SecondaryText from "../../shared/SecondaryText";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../../ui/tabs/TabView";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { ProMotmVotingCandidateList } from "./ProMotmVotingCandidateList";
 import { useAtomValue } from "jotai";
 import { 
@@ -9,7 +9,7 @@ import {
     proGameMotmVotesAtom 
 } from "../../../state/proMotm.atoms";
 import { ScopeProvider } from "jotai-scope";
-import NoContentCard from "../../shared/NoContentMessage";
+import NoContentCard from "../../ui/typography/NoContentMessage";
 import { hasProMotmVotingEnded, proFixtureSummary } from "../../../utils/proMotmUtils";
 import ProMotmWinnerCard from "./ProMotmWinnerCard";
 import { Trophy } from "lucide-react";

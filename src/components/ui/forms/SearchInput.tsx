@@ -1,5 +1,5 @@
 import { Search } from "lucide-react"
-import InputField from "../InputField"
+import InputField from "./InputField"
 import { twMerge } from "tailwind-merge"
 
 

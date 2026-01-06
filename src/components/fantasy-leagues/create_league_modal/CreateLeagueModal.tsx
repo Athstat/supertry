@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import DialogModal from '../../shared/DialogModal';
-import InputField, { TextField } from '../../shared/InputField';
+import InputField, { TextField } from '../../ui/forms/InputField';
 import LeagueVisibilityInput from './LeagueVisibilityInput';
 import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService';
 import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
-import TabView, { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
+import TabView, { TabViewHeaderItem, TabViewPage } from '../../ui/tabs/TabView';
 import JoinLeagueByCode from '../JoinLeagueByCode';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import SeasonInput from './SeasonInput';
 import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';

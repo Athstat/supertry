@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge"
 import { IFixture } from "../../../types/games"
 import { IProTeam } from "../../../types/team"
-import SecondaryText from "../../shared/SecondaryText"
+import SecondaryText from "../../ui/typography/SecondaryText"
 import TeamLogo from "../../team/TeamLogo"
 
 type Props = {

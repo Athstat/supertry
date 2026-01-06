@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { SeasonStandingsItem } from "../../types/season";
 import TeamLogo from "../team/TeamLogo";
 import { twMerge } from "tailwind-merge";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 
 type Props = {
     seasonId?: string,

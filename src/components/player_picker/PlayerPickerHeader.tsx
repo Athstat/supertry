@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
-import BlueGradientCard from "../shared/BlueGradientCard";
+import BlueGradientCard from "../ui/cards/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
 import Experimental from "../ui/ab_testing/Experimental";
 import { Coins } from "lucide-react";

@@ -1,7 +1,7 @@
 import { format } from "date-fns"
 import { ISbrFixture, ISbrFixtureRosterItem } from "../../../types/sbr"
-import SecondaryText from "../../shared/SecondaryText"
-import TabView, { TabViewHeaderItem, TabViewPage } from "../../shared/tabs/TabView"
+import SecondaryText from "../../ui/typography/SecondaryText"
+import TabView, { TabViewHeaderItem, TabViewPage } from "../../ui/tabs/TabView"
 
 type Props = {
   homeLineup: ISbrFixtureRosterItem[],

@@ -2,7 +2,7 @@ import { Trophy } from 'lucide-react'
 import { useAuthUser } from '../../hooks/useAuthUser';
 import useSWR from 'swr';
 import { fantasyRankingsService } from '../../services/fantasyRankingsService';
-import BlueGradientCard from '../shared/BlueGradientCard';
+import BlueGradientCard from '../ui/cards/BlueGradientCard';
 
 
 export default function UserRankingCard() {

@@ -10,7 +10,7 @@ import UserRoundScoringUpdate from './UserRoundScoringUpdate';
 import UserTeamOverview from './UserTeamOverview';
 import { GamePlayHelpButton } from '../../branding/help/LearnScrummyNoticeCard';
 import LeagueRoundCountdown from '../LeagueCountdown';
-import BlueGradientCard from '../../shared/BlueGradientCard';
+import BlueGradientCard from '../../ui/cards/BlueGradientCard';
 import { useEffect } from 'react';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 

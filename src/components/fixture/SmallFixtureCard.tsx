@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { IFixture } from '../../types/games';
-import SecondaryText from '../shared/SecondaryText';
+import SecondaryText from '../ui/typography/SecondaryText';
 import TeamLogo from '../team/TeamLogo';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Fragment, useState } from 'react';

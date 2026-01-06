@@ -7,7 +7,7 @@ import TeamLogo from '../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
-import WarningCard from '../shared/WarningCard';
+import WarningCard from '../ui/cards/WarningCard';
 import GameHighlightsCard from '../ui/video/GameHighlightsCard';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';

@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import React from 'react';
 
 type Props = {

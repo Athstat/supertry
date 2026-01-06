@@ -1,6 +1,6 @@
-import { TabViewHeaderItem, TabViewPage } from '../../shared/tabs/TabView';
+import { TabViewHeaderItem, TabViewPage } from '../../ui/tabs/TabView';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
-import PilledTabView from '../../shared/tabs/PilledTabView';
+import PilledTabView from '../../ui/tabs/PilledTabView';
 import PlayerMatchesTab from './tabs/PlayerStatsTab';
 import { AvailabilityText } from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';

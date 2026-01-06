@@ -6,7 +6,7 @@ import { useUserOverallStandings } from "../../hooks/fantasy/standings/useUserOv
 
 import React from 'react'
 import { Link } from "react-router-dom";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 
 type Props = {
     leagues: FantasyLeagueGroup[]

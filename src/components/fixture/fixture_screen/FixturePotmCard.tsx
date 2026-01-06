@@ -7,7 +7,7 @@ import { useAthlete } from "../../../hooks/athletes/useAthlete";
 import RoundedCard from "../../shared/RoundedCard";
 import { Crown, Star } from "lucide-react";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import MatchPrCard from "../../rankings/MatchPrCard";
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
 

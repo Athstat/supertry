@@ -1,9 +1,9 @@
 import { useAtomValue } from "jotai";
 import { proGameMotmVotesAtom, proGameMotmCandidatesAtom } from "../../../state/proMotm.atoms";
 import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { Trophy } from "lucide-react";
-import BlueGradientCard from "../../shared/BlueGradientCard";
+import BlueGradientCard from "../../ui/cards/BlueGradientCard";
 import { IFixture } from "../../../types/games";
 import TeamLogo from "../../team/TeamLogo";
 

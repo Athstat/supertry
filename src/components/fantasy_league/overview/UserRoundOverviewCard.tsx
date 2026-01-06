@@ -1,11 +1,11 @@
 import { ArrowRight, Lock } from 'lucide-react';
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import BlueGradientCard from '../../shared/BlueGradientCard';
+import BlueGradientCard from '../../ui/cards/BlueGradientCard';
 import { TranslucentButton } from '../../ui/buttons/PrimaryButton';
 import { Shield } from 'lucide-react';
 import LeagueRoundCountdown, { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
-import { useTabView } from '../../shared/tabs/TabView';
+import { useTabView } from '../../ui/tabs/TabView';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {

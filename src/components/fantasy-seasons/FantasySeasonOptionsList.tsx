@@ -3,7 +3,7 @@ import { useFantasyLeaguesScreen } from "../../hooks/fantasy/useFantasyLeaguesSc
 import { IFantasySeason } from "../../types/fantasy/fantasySeason"
 import RoundedCard from "../shared/RoundedCard";
 import { fantasySeasonsService } from "../../services/fantasy/fantasySeasonsService";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 import FantasyLeagueGroupDataProvider from "../fantasy_league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { ChevronRight, Trophy } from "lucide-react";

@@ -1,6 +1,6 @@
 import { Info, Lock, Trophy } from 'lucide-react'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup'
-import { InfoCard } from '../shared/StatCard';
+import { InfoCard } from '../ui/cards/StatCard';
 import { UserCog2 } from 'lucide-react';
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { Hash } from 'lucide-react';

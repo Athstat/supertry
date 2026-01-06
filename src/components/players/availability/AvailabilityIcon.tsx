@@ -3,7 +3,7 @@ import { useGeneralPlayerAvailability } from "../../../hooks/fantasy/usePlayerSq
 import { IProAthlete } from "../../../types/athletes"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { IFantasyAthlete } from "../../../types/rugbyPlayer"
-import WarningCard from "../../shared/WarningCard"
+import WarningCard from "../../ui/cards/WarningCard"
 import { useMemo } from "react"
 import { IProTeam } from "../../../types/team"
 import { isPastFixture } from "../../../utils/fixtureUtils"

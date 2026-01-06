@@ -4,7 +4,7 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { authService } from "../../services/authService";
 import { logger } from "../../services/logger";
 import PushOptInModal from "../ui/PushOptInModal";
-import WarningCard from "../shared/WarningCard";
+import WarningCard from "../ui/cards/WarningCard";
 
 /** Renders a enable notification message that pushes
  * the user to opt into enabling push notifications */

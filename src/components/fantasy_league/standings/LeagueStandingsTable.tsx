@@ -6,7 +6,7 @@ import {
   FantasySeasonOverallRanking,
 } from '../../../types/fantasyLeagueGroups';
 import RoundedCard from '../../shared/RoundedCard';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import { useMemo } from 'react';
 import { useLeagueRoundStandingsFilter } from '../../../hooks/fantasy/useLeagueRoundStandingsFilter';
 import { useAuth } from '../../../contexts/AuthContext';

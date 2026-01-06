@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { GameSportAction } from "../../../types/boxScore";
 import { sanitizeStat, getStatUnit } from "../../../utils/stringUtils";
-import { StatCard } from "../../shared/StatCard";
-import SecondaryText from "../../shared/SecondaryText";
+import { StatCard } from "../../ui/cards/StatCard";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 type Props = {
     sportActions: GameSportAction[]

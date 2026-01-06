@@ -9,7 +9,7 @@ import { IProTeam } from "../../../types/team"
 import { fixtureSummary, formatGameStatus, isGameLive } from "../../../utils/fixtureUtils"
 import { format } from "date-fns"
 import { twMerge } from "tailwind-merge"
-import SecondaryText from "../../shared/SecondaryText"
+import SecondaryText from "../../ui/typography/SecondaryText"
 import { Link } from "react-router-dom"
 
 type Props = {

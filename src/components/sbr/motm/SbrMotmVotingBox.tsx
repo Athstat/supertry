@@ -1,13 +1,13 @@
 import { ISbrFixture } from "../../../types/sbr"
-import TabView, { TabViewHeaderItem, TabViewPage } from "../../shared/tabs/TabView";
-import SecondaryText from "../../shared/SecondaryText";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../../ui/tabs/TabView";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { SbrMotmVotingCandidateList } from "./SbrMotmVotingCandidateList";
 import { useAtomValue } from "jotai";
 import { hasUserSubmittedSbrMotmAtom, sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteAtom } from "../../../state/sbrMotm.atoms";
 import { ScopeProvider } from "jotai-scope";
 import SbrMotmVotingDataProvider from "./SbrMotmVotingDataProvider";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
-import NoContentCard from "../../shared/NoContentMessage";
+import NoContentCard from "../../ui/typography/NoContentMessage";
 import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrTopDawgOfTheMatchCard from "./SbrMotmWinnerCard";
 import SbrFixtureTeamRosters from "../rosters/SbrFixtureTeamLineups";

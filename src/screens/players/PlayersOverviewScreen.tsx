@@ -1,6 +1,6 @@
 import { ArrowRight, BicepsFlexed, Binoculars, Shield, Users, WandSparkles } from 'lucide-react'
 import PageView from '../PageView'
-import SearchInput from '../../components/shared/forms/SearchInput'
+import SearchInput from '../../components/ui/forms/SearchInput'
 import RoundedCard from '../../components/shared/RoundedCard'
 import PositionCard from '../../components/players/positioning/PositionCard'
 import { Activity, Fragment } from 'react'

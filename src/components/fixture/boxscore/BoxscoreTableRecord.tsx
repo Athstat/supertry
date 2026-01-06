@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { twMerge } from "tailwind-merge";
 import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
 import RoundedCard from "../../shared/RoundedCard";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { BoxscoreListRecordItem } from "../../../types/boxScore";
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
 

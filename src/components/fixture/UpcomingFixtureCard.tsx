@@ -9,7 +9,7 @@ import { IFixture } from "../../types/games";
 import { fixtureSummary } from "../../utils/fixtureUtils";
 import { VotingOptionBar } from "../pickem/VotingOptionBar";
 import DialogModal from "../shared/DialogModal";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 
 type Props = {

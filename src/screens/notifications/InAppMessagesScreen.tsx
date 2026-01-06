@@ -3,7 +3,7 @@ import PageView from '../PageView'
 import RoundedCard from '../../components/shared/RoundedCard'
 import InAppMessageCard from '../../components/notifications/InAppMessage';
 import { Activity, ReactNode, useEffect } from 'react';
-import TabView, { TabViewHeaderItem, TabViewPage } from '../../components/shared/tabs/TabView';
+import TabView, { TabViewHeaderItem, TabViewPage } from '../../components/ui/tabs/TabView';
 import EmptyUnreadNotificationsMessage, { EmptyReadNotificationsMessage } from '../../components/notifications/EmptyNotificationsMessage';
 import { useInAppMessageList } from '../../hooks/notifications/useInAppMessageList';
 import { InAppMessage } from '../../types/notifications/inAppMessage';

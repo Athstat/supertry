@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useProFixtures } from "../../hooks/fixtures/useProFixtures"
 import { FixtureListViewMode, IFixture } from "../../types/games";
 import { searchProFixturePredicate } from "../../utils/fixtureUtils";
-import NoContentCard from "../shared/NoContentMessage";
+import NoContentCard from "../ui/typography/NoContentMessage";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
 import GroupedFixturesList from "./GroupedFixturesList";
 

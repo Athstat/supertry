@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
-import SecondaryText from './SecondaryText';
+import SecondaryText from '../typography/SecondaryText';
 
 type Props = {
     title?: string

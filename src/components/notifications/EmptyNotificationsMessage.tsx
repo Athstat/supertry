@@ -1,5 +1,5 @@
 import { Inbox } from "lucide-react";
-import { useTabView } from "../shared/tabs/TabView";
+import { useTabView } from "../ui/tabs/TabView";
 
 /** Eenders Empty Notification message */
 export default function EmptyUnreadNotificationsMessage() {

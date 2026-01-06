@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { IProAthlete } from "../../types/athletes";
 import { IProSeason } from "../../types/season";
 import { SportAction } from "../../types/sports_actions";
-import NoContentCard from "../shared/NoContentMessage";
+import NoContentCard from "../ui/typography/NoContentMessage";
 import SportActionCategoryList from "./SportActionCategoryList";
 import { useSportActions } from "./SportActionsDefinitionsProvider";
 

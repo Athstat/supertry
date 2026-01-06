@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { ISbrFixture } from '../../../types/sbr'
-import WarningCard from '../../shared/WarningCard'
+import WarningCard from '../../ui/cards/WarningCard'
 import { Sparkles } from 'lucide-react'
 import { sbrFixtureService } from '../../../services/sbr/sbrFixtureService'
 

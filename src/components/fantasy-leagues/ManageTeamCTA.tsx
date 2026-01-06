@@ -8,7 +8,7 @@ import { swrFetchKeys } from '../../utils/swrKeys';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import RoundedCard from '../shared/RoundedCard';
-import BlueGradientCard from '../shared/BlueGradientCard';
+import BlueGradientCard from '../ui/cards/BlueGradientCard';
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';

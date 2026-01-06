@@ -4,7 +4,7 @@ import { IBoxScoreItem } from "../../../types/boxScore";
 import { IFixture } from "../../../types/games";
 import { rankByDefensiveStats } from "../../../utils/boxScoreUtils";
 import PlayerBoxScoreSmallCard from "../../player/PlayerSmallCard";
-import TitledCard from "../../shared/TitledCard";
+import TitledCard from "../../ui/cards/TitledCard";
 
 type Props = {
   fixture: IFixture,

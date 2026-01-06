@@ -6,9 +6,9 @@ import { useUserJoinedLeagues } from "../../../hooks/leagues/useUserJoinedLeague
 import { IFantasySeason } from "../../../types/fantasy/fantasySeason"
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups"
 import PrimaryButton from "../../ui/buttons/PrimaryButton"
-import NoContentCard from "../../shared/NoContentMessage"
+import NoContentCard from "../../ui/typography/NoContentMessage"
 import RoundedCard from "../../shared/RoundedCard"
-import SecondaryText from "../../shared/SecondaryText"
+import SecondaryText from "../../ui/typography/SecondaryText"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import LeagueGroupsTable from "../LeagueGroupsTable"
 

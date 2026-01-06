@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { IProAthlete } from '../../../types/athletes';
 import usePowerRankings from '../../../hooks/athletes/usePowerRankings';
 import RoundedCard from '../../shared/RoundedCard';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import MatchPrCard from '../../rankings/MatchPrCard';
 
 type Props = {

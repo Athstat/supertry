@@ -1,6 +1,6 @@
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../../types/fantasyLeague"
 import RoundedCard from "../../shared/RoundedCard"
-import SecondaryText from "../../shared/SecondaryText"
+import SecondaryText from "../../ui/typography/SecondaryText"
 import { useRoundScoringSummary } from "../../../hooks/fantasy/useRoundScoringSummary"
 
 type Props = {

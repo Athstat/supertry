@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../PageView";
 import { useNavigate } from "react-router-dom";
-import SecondaryText from "../../components/shared/SecondaryText";
+import SecondaryText from "../../components/ui/typography/SecondaryText";
 import ToggleButton from "../../components/ui/buttons/ToggleButton";
 import RoundedCard from "../../components/shared/RoundedCard";
 import { GoSync } from "react-icons/go";

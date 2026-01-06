@@ -2,7 +2,7 @@ import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import PitchViewLoadingSkeleton from "../my_fantasy_team/PitchViewLoadingSkeleton";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-import { useTabView } from "../shared/tabs/TabView";
+import { useTabView } from "../ui/tabs/TabView";
 
 type Props = {
     perspective?: "first-person" | "third-person",

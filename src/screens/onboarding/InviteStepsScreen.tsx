@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useQueryValue } from '../../hooks/useQueryState';
 import PageView from '../PageView';
 import ScrummyLogoHorizontal from '../../components/branding/scrummy_logo_horizontal';
-import SecondaryText from '../../components/shared/SecondaryText';
+import SecondaryText from '../../components/ui/typography/SecondaryText';
 import { useTheme } from '../../contexts/ThemeContext';
 
 import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { Copy, Lock } from 'lucide-react';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
-import { InfoCard } from '../../components/shared/StatCard';
+import { InfoCard } from '../../components/ui/cards/StatCard';
 import { Toast } from '../../components/ui/Toast';
 import { analytics } from '../../services/analytics/anayticsService';
 

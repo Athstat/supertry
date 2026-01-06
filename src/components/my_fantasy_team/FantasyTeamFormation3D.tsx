@@ -1,5 +1,5 @@
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { RugbyPitch3DRaster } from '../shared/RugbyPitch';
+import { RugbyPitch3DRaster } from '../ui/containers/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';

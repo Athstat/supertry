@@ -3,7 +3,7 @@ import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../PageView";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCallback, useMemo, useState } from "react";
-import InputField from "../../components/shared/InputField";
+import InputField from "../../components/ui/forms/InputField";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 import AccountInfoProgressCard from "../../components/auth/user_profile/AccountInfoProgressCard";
 import { userService } from "../../services/userService";

@@ -4,7 +4,7 @@ import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes"
 import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
-import SecondaryText from "../../components/shared/SecondaryText";
+import SecondaryText from "../../components/ui/typography/SecondaryText";
 import { PlayerListTable } from "../../components/players/PlayerListTable";
 
 type Props = {

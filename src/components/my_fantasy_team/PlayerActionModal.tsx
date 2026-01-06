@@ -1,11 +1,11 @@
 import { Coins, Lock } from "lucide-react";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import PlayerMugshot from "../shared/PlayerMugshot";
+import PlayerMugshot from "../player/PlayerMugshot";
 import AvailabilityIcon, { RoundAvailabilityText } from "../players/availability/AvailabilityIcon";
 import BottomSheetView from "../ui/BottomSheetView";
 import CloseButton from "../ui/buttons/CloseButton";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 import QuickActionButton from "../ui/QuickActionButton";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import RoundedCard from "../shared/RoundedCard";

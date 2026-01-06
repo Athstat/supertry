@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { atom, useAtom } from 'jotai';
 import { ScopeProvider } from 'jotai-scope';
-import { TabButton } from '../TabButton';
+import { TabButton } from '../buttons/TabButton';
 import { useLocation } from 'react-router-dom';
 
 export const currentTabAtom = atom<string>();

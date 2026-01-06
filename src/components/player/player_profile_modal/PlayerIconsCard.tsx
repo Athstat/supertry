@@ -6,7 +6,7 @@ import { djangoAthleteService } from '../../../services/athletes/djangoAthletesS
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { IProSeason } from '../../../types/season';
 import RoundedCard from '../../shared/RoundedCard';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import { Sparkles } from 'lucide-react';
 
 interface Props {

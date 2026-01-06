@@ -1,4 +1,4 @@
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import { formatPosition } from '../../../utils/athleteUtils';
 import FormIndicator from '../FormIndicator';
 

@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { GameplayTopic } from "../../../types/gameplayModal";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import FantasyPointsBreakdown from "./FantasyPointsBreakdown";
 
 type Props = {

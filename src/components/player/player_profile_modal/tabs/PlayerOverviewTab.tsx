@@ -10,7 +10,7 @@ import PlayerTeamFormCard from '../PlayerTeamForm';
 import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
 import PlayerPointsHistoryCard from '../PlayerPointsHistoryCard';
 import RoundedCard from '../../../shared/RoundedCard';
-import SecondaryText from '../../../shared/SecondaryText';
+import SecondaryText from '../../../ui/typography/SecondaryText';
 import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import FormIndicator from '../../FormIndicator';
 import PlayerTeamCard from '../PlayerTeamCard';

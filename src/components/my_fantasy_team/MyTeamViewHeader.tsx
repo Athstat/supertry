@@ -9,7 +9,7 @@ import { smartRoundUp } from '../../utils/intUtils';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
 import RoundedCard from '../shared/RoundedCard';
-import SecondaryText from '../shared/SecondaryText';
+import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
 import { useMyTeamView } from './MyTeamStateProvider';
 

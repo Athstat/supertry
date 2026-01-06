@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from "jotai";
 import { IRosterItem } from "../../../types/games";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { 
     hasUserSubmittedProMotmAtom, 
     isSendingProMotmVoteAtom, 
@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Loader } from "lucide-react";
 import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
 import { useAuth } from "../../../contexts/AuthContext";
-import PlayerMugshot from "../../shared/PlayerMugshot";
+import PlayerMugshot from "../../player/PlayerMugshot";
 import { formatPosition } from "../../../utils/athleteUtils";
 import { fixtureAnalytics } from "../../../services/analytics/fixtureAnalytics";
 

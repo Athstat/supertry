@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import QuickPlayerSelectModal from "../QuickPlayerPickModal";
 import { Activity, useCallback, useState } from "react";
 import { IProAthlete } from "../../../types/athletes";

@@ -5,7 +5,7 @@ import { useActiveFantasySeasons } from "../../../hooks/fantasy/useActiveFantasy
 import { IProSeason } from "../../../types/season";
 import { useSeasonTeams } from "../../../hooks/seasons/useSeasonTeams";
 import RoundedCard from "../../shared/RoundedCard";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { useNavigate } from "react-router-dom";
 

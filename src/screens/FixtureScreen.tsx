@@ -3,13 +3,13 @@ import FixtureOverviewTab from '../components/fixture/fixture_screen/FixtureOver
 import useSWR from 'swr';
 import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import { boxScoreService } from '../services/boxScoreService';
-import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
+import { TabViewHeaderItem, TabViewPage } from '../components/ui/tabs/TabView';
 import PageView from './PageView';
 import GameHighlightsCard from '../components/ui/video/GameHighlightsCard';
 import { ProMotmVotingBox } from '../components/pickem/motm';
 import { ErrorState } from '../components/ui/ErrorState';
 import { Activity } from '../components/shared/Activity';
-import PilledTabView from '../components/shared/tabs/PilledTabView';
+import PilledTabView from '../components/ui/tabs/PilledTabView';
 import FixtureBoxscoreTab from '../components/fixture/fixture_screen/FixtureBoxscoreTab';
 import FixtureH2HTab from '../components/fixture/fixture_screen/FixtureH2HTab';
 import FixtureHero from '../components/fixture/fixture_screen/FixtureHero';

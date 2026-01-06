@@ -1,7 +1,7 @@
 import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { useSticky } from "../../../hooks/useSticky";
-import { Sticky } from "../../shared/Sticky";
+import { Sticky } from "../../ui/containers/Sticky";
 
 /** Renders the fixture screen header for filtering and searching matches */
 export default function FixtureListScreenHeader() {

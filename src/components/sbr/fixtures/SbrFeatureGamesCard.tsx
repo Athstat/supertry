@@ -10,7 +10,7 @@ import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrFixturePredictionBox from "../predictions/SbrFixturePredictionBox";
 import SbrMotmVotingBox from "../motm/SbrMotmVotingBox";
 import RoundedCard from "../../shared/RoundedCard";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 /** Renders a card of the feature games for a specific week */
 export default function SbrFeatureGamesCard() {

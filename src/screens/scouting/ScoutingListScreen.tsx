@@ -9,7 +9,7 @@ import ScoutingListPlayerModal from "../../components/scouting/ScoutingListPlaye
 import { ScoutingListPlayer } from "../../types/fantasy/scouting";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
-import SecondaryText from "../../components/shared/SecondaryText";
+import SecondaryText from "../../components/ui/typography/SecondaryText";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { IProAthlete } from "../../types/athletes";
 import SmartPlayerMugshot from "../../components/player/SmartPlayerMugshot";

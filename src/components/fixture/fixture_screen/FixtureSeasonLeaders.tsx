@@ -5,7 +5,7 @@ import { TeamSeasonLeader } from "../../../types/team";
 import RoundedCard from "../../shared/RoundedCard";
 import { useSportActions } from "../../stats/SportActionsDefinitionsProvider";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";

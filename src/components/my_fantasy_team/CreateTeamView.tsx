@@ -4,8 +4,8 @@ import PrimaryButton from '../ui/buttons/PrimaryButton';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
-import NoContentCard from '../shared/NoContentMessage';
-import { useTabView } from '../shared/tabs/TabView';
+import NoContentCard from '../ui/typography/NoContentMessage';
+import { useTabView } from '../ui/tabs/TabView';
 
 import PlayerPicker from '../player_picker/PlayerPicker';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';

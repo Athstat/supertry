@@ -5,7 +5,7 @@ import { fixtureAtom } from "../../../../state/fixtures/fixture.atoms";
 import { IRosterItem } from "../../../../types/games";
 import TeamJersey from "../../../player/TeamJersey";
 import { SmallMatchPrCard } from "../../../rankings/MatchPrCard";
-import PlayerMugshot from "../../../shared/PlayerMugshot";
+import PlayerMugshot from "../../../player/PlayerMugshot";
 import { Activity, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 

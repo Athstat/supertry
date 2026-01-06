@@ -2,7 +2,7 @@ import { IProAthlete } from '../../../types/athletes';
 import { formatPosition } from '../../../utils/athleteUtils';
 import FormIndicator from '../FormIndicator';
 import RoundedCard from '../../shared/RoundedCard';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
 
 type Props = {

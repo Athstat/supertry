@@ -1,6 +1,6 @@
 import { useLeagueRoundStandingsFilter } from "../../../hooks/fantasy/useLeagueRoundStandingsFilter";
 import { Fragment } from "react/jsx-runtime";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import { DropdownOption } from "../../../types/ui";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import Dropdown from "../../shared/Dropdown";

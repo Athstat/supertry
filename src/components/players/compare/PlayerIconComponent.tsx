@@ -21,7 +21,7 @@ import { WandSparkles } from 'lucide-react';
 import { Swords } from 'lucide-react';
 import { BadgeDollarSign } from 'lucide-react';
 import { BrickWall } from 'lucide-react';
-import SecondaryText from '../../shared/SecondaryText';
+import SecondaryText from '../../ui/typography/SecondaryText';
 
 type Props = {
   iconName: PlayerIcon;

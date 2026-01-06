@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react';
 import { ReactNode } from 'react'
-import SecondaryText from '../../../shared/SecondaryText';
+import SecondaryText from '../../../ui/typography/SecondaryText';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { isGuestUser } from '../../../../utils/deviceId/deviceIdUtils';
 

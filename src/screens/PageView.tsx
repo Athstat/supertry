@@ -1,8 +1,8 @@
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
-import BlueGradientCard from "../components/shared/BlueGradientCard"
+import BlueGradientCard from "../components/ui/cards/BlueGradientCard"
 import { ChevronLeft } from "lucide-react"
-import TransparentStatCard from "../components/shared/TransparentStatCard"
+import TransparentStatCard from "../components/ui/cards/TransparentStatCard"
 import { useNavigateBack } from "../hooks/web/useNavigateBack"
 import { AppColours } from "../types/constants"
 

@@ -4,8 +4,8 @@ import PrimaryButton from '../components/ui/buttons/PrimaryButton';
 import ScrummyLogo from '../components/branding/scrummy_logo';
 
 import { useNavigate } from 'react-router-dom';
-import TabProgressDots from '../components/shared/TabProgressDots';
-import SecondaryText from '../components/shared/SecondaryText';
+import TabProgressDots from '../components/ui/bars/TabProgressDots';
+import SecondaryText from '../components/ui/typography/SecondaryText';
 import { useAthletes } from '../contexts/AthleteContext';
 import { PlayerGameCard } from '../components/player/PlayerGameCard';
 import { useJoinLeague } from '../hooks/leagues/useJoinLeague';

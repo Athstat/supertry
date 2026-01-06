@@ -1,6 +1,6 @@
 import { usePlayerNextMatch } from "../../../hooks/athletes/usePlayerNextMatch"
 import FixtureCard from "../../fixture/FixtureCard"
-import NoContentCard from "../../shared/NoContentMessage"
+import NoContentCard from "../../ui/typography/NoContentMessage"
 import RoundedCard from "../../shared/RoundedCard"
 
 type Props = {

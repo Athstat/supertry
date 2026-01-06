@@ -11,8 +11,8 @@ import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { sanitizeStat } from "../../utils/stringUtils";
-import PlayerMugshot from "../shared/PlayerMugshot";
-import SecondaryText from "../shared/SecondaryText";
+import PlayerMugshot from "../player/PlayerMugshot";
+import SecondaryText from "../ui/typography/SecondaryText";
 
 
 type Props = {

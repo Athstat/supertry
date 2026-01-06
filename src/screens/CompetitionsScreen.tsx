@@ -2,7 +2,7 @@ import { Trophy } from 'lucide-react';
 import PageView from './PageView';
 import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import SeasonCard from '../components/seasons/SeasonCard';
-import NoContentCard from '../components/shared/NoContentMessage';
+import NoContentCard from '../components/ui/typography/NoContentMessage';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 
 /** Renders Competition Screen */

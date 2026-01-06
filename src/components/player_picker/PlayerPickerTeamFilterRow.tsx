@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import { IProTeam } from "../../types/team";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import { twMerge } from "tailwind-merge";
 import { X } from "lucide-react";

@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import RoundedCard from '../shared/RoundedCard'
-import SecondaryText from '../shared/SecondaryText'
+import SecondaryText from '../ui/typography/SecondaryText'
 import { useNavigate } from 'react-router-dom'
 import { IProSeason } from '../../types/season'
 import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker'

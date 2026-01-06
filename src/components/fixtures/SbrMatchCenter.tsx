@@ -4,7 +4,7 @@ import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
 import { SeasonFilterBarItem } from '../../types/games';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
-import NoContentCard from '../shared/NoContentMessage';
+import NoContentCard from '../ui/typography/NoContentMessage';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';

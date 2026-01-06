@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { useGameRosters } from "../../../../hooks/fixtures/useGameRosters";
 import { IFixture } from "../../../../types/games";
 import { IProTeam } from "../../../../types/team";
-import { RugbyPitch3DRaster } from "../../../shared/RugbyPitch";
+import { RugbyPitch3DRaster } from "../../../ui/containers/RugbyPitch";
 import { RosterStarterItem } from "./RosterStarterItem";
 import FixtureRosterBench from "./FixtureRosterBench";
 
