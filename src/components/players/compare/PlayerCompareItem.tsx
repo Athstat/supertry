@@ -1,5 +1,5 @@
 import { IProAthlete } from '../../../types/athletes';
-import usePlayerStats from '../../player/profile-modal-components/usePlayerStats';
+import usePlayerStats from '../../player/player_profile_modal/usePlayerStats';
 import PlayerCompareSeasonPicker from './PlayerCompareSeasonPicker';
 import PlayerCompareItemHeader from './PlayerCompareItemHeader';
 import { useEffect, useTransition } from 'react';

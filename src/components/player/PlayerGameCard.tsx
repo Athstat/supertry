@@ -39,7 +39,6 @@ export function PlayerGameCard({
   player,
   className,
   onClick,
-  hidePrice = false,
   frameClassName,
 }: Props) {
   const frameSrc = getPositionFrameBackground(player.position_class ?? '');

@@ -1,6 +1,6 @@
-import PlayerProfileBanner from './profile-modal-components/PlayerProfileBanner';
-import PlayerNameAndPosition from './profile-modal-components/PlayerNameAndPosition';
-import PlayerProfileModalTabContent from './profile-modal-components/PlayerProfileModalTabContent';
+import PlayerProfileBanner from './player_profile_modal/PlayerProfileBanner';
+import PlayerNameAndPosition from './player_profile_modal/PlayerNameAndPosition';
+import PlayerProfileModalTabContent from './player_profile_modal/PlayerProfileModalTabContent';
 import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { Activity, useCallback, useEffect, useMemo, useRef, useState } from 'react';

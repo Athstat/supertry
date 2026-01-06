@@ -35,6 +35,7 @@ function InnerProvider({ children, team }: Props) {
     )
 }
 
+// TODO: Move hook to right place
 /** Provides a hook to access the state of the my team view */
 export function useMyTeamView() {
     const [mode, setMode] = useAtom(myTeamModeAtom);
