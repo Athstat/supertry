@@ -2,7 +2,7 @@ import { Check, Info, Loader, Shield } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
-import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useSubmitTeam } from "../../hooks/fantasy/useSubmitTeam";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
@@ -15,7 +15,7 @@ import { Toast } from "../ui/Toast";
 /** Renders Create Team View Header */
 export default function CreateTeamViewHeader() {
     const { leagueConfig } = useFantasyLeagueGroup();
-    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam } = useFantasyLeagueTeam();
+    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam } = useFantasyTeam();
 
     const {setRoundTeam} = useTeamHistory(); 
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
@@ -168,7 +168,7 @@ type SuccessModalProps = {
 
 function SuccessModal({ onContinue }: SuccessModalProps) {
 
-    const { leagueRound } = useFantasyLeagueTeam();
+    const { leagueRound } = useFantasyTeam();
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">

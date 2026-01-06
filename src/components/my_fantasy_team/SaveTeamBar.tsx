@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Check, Loader } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
@@ -38,7 +38,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
         changesDetected,
         resetToOriginalTeam,
         isTeamFull, slots, team, teamCaptain
-    } = useFantasyLeagueTeam();
+    } = useFantasyTeam();
 
     const {hardPop} = useNavigateBack();
 

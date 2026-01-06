@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MyTeamViewHeader from './MyTeamViewHeader';
-import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { PositionClass } from '../../types/athletes';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
@@ -21,7 +21,7 @@ type Props = {
 export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
 
   const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
-    useFantasyLeagueTeam();
+    useFantasyTeam();
 
   // Push opt-in prompt state
   const [showPushModal, setShowPushModal] = useState(false);

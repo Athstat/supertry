@@ -10,7 +10,8 @@ import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { Position } from "../../types/position";
 import { sortFantasyTeamAthletes, hashFantasyTeamAthletes } from "../../utils/athleteUtils";
 
-export function useFantasyLeagueTeam() {
+/** Hook for accessing data about a fantasy league team */
+export function useFantasyTeam() {
 
     const [team, setTeam] = useAtom(fantasyLeagueTeamAtom);
     const [teamAthletes] = useAtom(fantasyTeamAthletesAtom);

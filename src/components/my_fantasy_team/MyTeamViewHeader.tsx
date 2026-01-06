@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 import SaveTeamBar from './SaveTeamBar';
 import { Coins, Lock } from 'lucide-react';
 import { useMyTeamView } from './MyTeamStateProvider';
-import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
@@ -20,7 +20,7 @@ type Props = {
 /** Renders My Team View Header */
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
   const { leagueConfig } = useFantasyLeagueGroup();
-  const { totalSpent, selectedCount, leagueRound } = useFantasyLeagueTeam();
+  const { totalSpent, selectedCount, leagueRound } = useFantasyTeam();
 
   const handleTeamUpdated = async () => {
     if (onTeamUpdated) {
@@ -88,7 +88,7 @@ export function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
 
   const isLocked = isLeagueRoundLocked(leagueRound);
   const { navigate: setViewMode, viewMode } = useMyTeamView();
-  const { changesDetected } = useFantasyLeagueTeam();
+  const { changesDetected } = useFantasyTeam();
 
 
   return (
@@ -130,7 +130,7 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
-  const { isReadOnly, team } = useFantasyLeagueTeam();
+  const { isReadOnly, team } = useFantasyTeam();
   const isLocked = isLeagueRoundLocked(leagueRound);
   const { highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummary(leagueRound);

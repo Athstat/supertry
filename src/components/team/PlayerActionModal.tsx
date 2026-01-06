@@ -16,7 +16,7 @@ import { twMerge } from "tailwind-merge";
 import { Activity } from "../shared/Activity";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
-import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -37,7 +37,7 @@ export function PlayerActionModal({
   // const key = swrFetchKeys.getAthleteById(player.tracking_id);
   // const { data: info, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteById(player.tracking_id));
 
-  const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyLeagueTeam();
+  const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
   const isSub = !player.is_starting;
 
   const playerSlot = useMemo(() => {

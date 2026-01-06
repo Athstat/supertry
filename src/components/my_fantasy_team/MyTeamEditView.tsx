@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { EditableTeamSlotItem } from './EditableTeamSlotItem';
-import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
@@ -20,10 +20,10 @@ type Props = {
 /** Renders My Team Edit Grid */
 export default function MyTeamEditView({ leagueRound }: Props) {
   
-  const { slots } = useFantasyLeagueTeam();
+  const { slots } = useFantasyTeam();
   const { league } = useFantasyLeagueGroup();
 
-  const {initiateSwap, initateSwapOnEmptySlot } = useFantasyLeagueTeam();
+  const {initiateSwap, initateSwapOnEmptySlot } = useFantasyTeam();
 
   const [playerModalPlayer, setPlayerModalPlayer] = useState<IFantasyTeamAthlete>();
   const [showProfileModal, setShowProfileModal] = useState(false);

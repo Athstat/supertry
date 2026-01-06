@@ -12,7 +12,7 @@ import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAv
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import { sanitizeStat } from "../../utils/stringUtils";
-import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useMyTeamView } from "../my_fantasy_team/MyTeamStateProvider";
 
 type PlayerPitchCardProps = {
@@ -24,7 +24,7 @@ type PlayerPitchCardProps = {
 export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps) {
     const { viewMode } = useMyTeamView();
     const { league } = useFantasyLeagueGroup();
-    const { teamCaptain } = useFantasyLeagueTeam();
+    const { teamCaptain } = useFantasyTeam();
 
     const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
         player.tracking_id,
@@ -215,7 +215,7 @@ type EmptySlotProps = {
 
 /** Renders an empty slot card */
 export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
-    const { initateSwapOnEmptySlot } = useFantasyLeagueTeam();
+    const { initateSwapOnEmptySlot } = useFantasyTeam();
 
     const { position } = slot;
     const { position_class } = position;

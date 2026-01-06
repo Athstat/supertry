@@ -1,7 +1,7 @@
 import { ArrowUpDown, CirclePlus, TriangleAlert } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { Activity, useMemo } from "react";
-import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { useAthleteRoundScore } from "../../hooks/useAthletePointsBreakdown";
@@ -22,7 +22,7 @@ type Props = {
 /** Renders a bottom drawer for team subs */
 export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
-  const { leagueRound, slots, initateSwapOnEmptySlot } = useFantasyLeagueTeam();
+  const { leagueRound, slots, initateSwapOnEmptySlot } = useFantasyTeam();
 
   const superSubSlot = useMemo(() => {
     return slots.find((s) => s.slotNumber === 6);

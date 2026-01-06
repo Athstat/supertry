@@ -4,7 +4,7 @@ import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
 import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLeagueTeam';
-import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -15,7 +15,7 @@ interface TeamFormationProps {
 /** Renders a 3 Dimensional-looking pitch view */
 export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormationProps) {
 
-  const { slots, leagueRound: round } = useFantasyLeagueTeam();
+  const { slots, leagueRound: round } = useFantasyTeam();
 
   const slotPositions = [
     { x: 20, y: 10, slot: 1 },

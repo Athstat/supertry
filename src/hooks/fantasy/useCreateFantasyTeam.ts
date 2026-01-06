@@ -1,6 +1,6 @@
-import { useFantasyLeagueTeam } from "./useFantasyTeam";
+import { useFantasyTeam } from "./useFantasyTeam";
 
 /** Hook for accessing create team functionality */
 export function useCreateFantasyTeam() {
-    return useFantasyLeagueTeam();
+    return useFantasyTeam();
 }

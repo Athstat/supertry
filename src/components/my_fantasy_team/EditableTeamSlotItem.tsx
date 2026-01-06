@@ -1,7 +1,7 @@
 import { Lock, X } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
-import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
@@ -22,7 +22,7 @@ type SlotProps = {
 export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiateSwap, onAddPlayerToEmptySlot }: SlotProps) {
 
   const { currentRound } = useFantasyLeagueGroup();
-  const { setTeamCaptainAtSlot, removePlayerAtSlot } = useFantasyLeagueTeam();
+  const { setTeamCaptainAtSlot, removePlayerAtSlot } = useFantasyTeam();
   const athlete = slot.athlete;
 
   const isCurrPlayerCaptain = slot.isCaptain;
