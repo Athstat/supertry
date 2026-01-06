@@ -1,18 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
-import { useFantasyLeagueTeam } from "../../providers/fantasy_teams/FantasyTeamProvider";
-import { fantasyTeamService } from "../../../services/fantasyTeamService";
-import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
-import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { Check, Loader } from "lucide-react";
-import { Toast } from "../../ui/Toast";
-import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
-import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
 import { twMerge } from "tailwind-merge";
-import { AppColours } from "../../../types/constants";
-import { useNavigationGuard } from "../../../hooks/web/useNavigationGuard";
-import UnsavedChangesWarningModal from "../../shared/UnsavedChangesModal";
-import { useNavigateBack } from "../../../hooks/web/useNavigateBack";
+import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import { useNavigateBack } from "../../hooks/web/useNavigateBack";
+import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
+import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
+import { fantasyTeamService } from "../../services/fantasyTeamService";
+import { AppColours } from "../../types/constants";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import PrimaryButton from "../shared/buttons/PrimaryButton";
+import UnsavedChangesWarningModal from "../shared/UnsavedChangesModal";
+import { Toast } from "../ui/Toast";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,

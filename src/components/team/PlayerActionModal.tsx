@@ -10,13 +10,13 @@ import QuickActionButton from "../ui/QuickActionButton";
 import PrimaryButton from "../shared/buttons/PrimaryButton";
 import RoundedCard from "../shared/RoundedCard";
 import SuperSubPill from "./SuperSubPill";
-import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 import { useMemo } from "react";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
 import { Activity } from "../shared/Activity";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
+import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;

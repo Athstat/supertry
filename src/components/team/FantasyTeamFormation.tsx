@@ -1,10 +1,10 @@
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3DRaster } from '../shared/RugbyPitch';
 import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
-import { useFantasyLeagueTeam } from '../fantasy-leagues/my-team/FantasyLeagueTeamProvider';
 import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLeagueTeam';
+import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;

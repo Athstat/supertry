@@ -1,17 +1,17 @@
 import { twMerge } from 'tailwind-merge';
-import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import SaveTeamBar from './SaveTeamBar';
-import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 import { Coins, Lock } from 'lucide-react';
-import { useFantasyLeagueTeam } from '../../providers/fantasy_teams/FantasyTeamProvider';
-import RoundedCard from '../../shared/RoundedCard';
-import { useRoundScoringSummary } from '../../../hooks/fantasy/useRoundScoringSummary';
-import { Activity } from '../../shared/Activity';
-import SecondaryText from '../../shared/SecondaryText';
 import { useMyTeamView } from './MyTeamStateProvider';
-import { LeagueRoundCountdown2 } from '../../fantasy_league/LeagueCountdown';
-import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
-import { smartRoundUp } from '../../../utils/intUtils';
+import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
+import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { smartRoundUp } from '../../utils/intUtils';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
+import RoundedCard from '../shared/RoundedCard';
+import SecondaryText from '../shared/SecondaryText';
+import { Activity } from 'react';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;

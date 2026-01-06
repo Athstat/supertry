@@ -1,18 +1,18 @@
 import { ArrowUpDown, CirclePlus, TriangleAlert } from "lucide-react";
-import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
-import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
-import { formatPosition } from "../../../utils/athleteUtils";
-import PlayerMugshot from "../../shared/PlayerMugshot";
-import SecondaryText from "../../shared/SecondaryText";
-import { useFantasyLeagueTeam } from "../../providers/fantasy_teams/FantasyTeamProvider";
 import { twMerge } from "tailwind-merge";
-import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
-import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import { Activity, useMemo } from "react";
-import { AppColours } from "../../../types/constants";
-import { useAthleteRoundScore } from "../../../hooks/useAthletePointsBreakdown";
-import { sanitizeStat } from "../../../utils/stringUtils";
+import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import { useAthleteRoundScore } from "../../hooks/useAthletePointsBreakdown";
+import { AppColours } from "../../types/constants";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { formatPosition } from "../../utils/athleteUtils";
+import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { sanitizeStat } from "../../utils/stringUtils";
+import PlayerMugshot from "../shared/PlayerMugshot";
+import SecondaryText from "../shared/SecondaryText";
 
 
 type Props = {

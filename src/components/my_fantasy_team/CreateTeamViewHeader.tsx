@@ -1,15 +1,15 @@
 import { Check, Info, Loader, Shield } from "lucide-react";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
-import { useFantasyLeagueTeam } from "../../providers/fantasy_teams/FantasyTeamProvider";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
-import { useSubmitTeam } from "../../../hooks/fantasy/useSubmitTeam";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
-import { isGuestUserAtom } from "../../../state/authUser.atoms";
-import { Toast } from "../../ui/Toast";
-import { useTeamHistory } from "../../../hooks/fantasy/useTeamHistory";
-import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
+import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useSubmitTeam } from "../../hooks/fantasy/useSubmitTeam";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import { isGuestUserAtom } from "../../state/authUser.atoms";
+import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
+import PrimaryButton from "../shared/buttons/PrimaryButton";
+import { Toast } from "../ui/Toast";
 
 
 /** Renders Create Team View Header */

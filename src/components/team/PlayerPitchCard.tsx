@@ -5,15 +5,15 @@ import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { Activity, useMemo } from "react";
-import { useMyTeamView } from "../fantasy-leagues/my-team/MyTeamStateProvider";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
-import { useFantasyLeagueTeam } from "../fantasy-leagues/my-team/FantasyLeagueTeamProvider";
 import { CirclePlus, TriangleAlert } from "lucide-react";
 import TeamJersey from "../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import { sanitizeStat } from "../../utils/stringUtils";
+import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useMyTeamView } from "../my_fantasy_team/MyTeamStateProvider";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;

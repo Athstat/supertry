@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
-import { FantasyTeamFormation3D } from '../../team/FantasyTeamFormation';
-import { PlayerActionModal } from '../../team/PlayerActionModal';
-import PlayerProfileModal from '../../player/PlayerProfileModal';
-import PointsBreakdownModal from '../../points_breakdown/PointsBreakdownModal';
-import { useFantasyLeagueTeam } from '../../providers/fantasy_teams/FantasyTeamProvider';
-import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
-import { useHideBottomNavBar } from '../../../hooks/navigation/useNavigationBars';
 import TeamBenchDrawer from './TeamBenchDrawer';
 import { AnimatePresence } from 'framer-motion';
+import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
+import PlayerProfileModal from '../player/PlayerProfileModal';
+import PointsBreakdownModal from '../points_breakdown/PointsBreakdownModal';
+import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
+import { PlayerActionModal } from '../team/PlayerActionModal';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;

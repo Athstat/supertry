@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { playerPickerAtoms } from "../../state/playerPicker/playerPicker";
 import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
-import { useFantasyLeagueTeam } from "../../components/fantasy-leagues/my-team/FantasyLeagueTeamProvider";
+import { useFantasyLeagueTeam } from "../fantasy/useFantasyTeam";
 
 /** Provides a hook to interface with the player picker component */
 export function usePlayerPicker() {

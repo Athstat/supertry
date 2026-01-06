@@ -1,14 +1,14 @@
 import { Lock, X } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
-import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
-import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
-import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
-import { PlayerGameCard } from "../../player/PlayerGameCard";
-import SecondaryText from "../../shared/SecondaryText";
-import { useFantasyLeagueTeam } from "../../providers/fantasy_teams/FantasyTeamProvider";
-import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics";
+import { useFantasyLeagueTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
+import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { PlayerGameCard } from "../player/PlayerGameCard";
+import SecondaryText from "../shared/SecondaryText";
 
 type SlotProps = {
   slot: IFantasyLeagueTeamSlot,

@@ -1,20 +1,22 @@
-import { IFantasyTeamAthlete } from '../../../types/fantasyTeamAthlete';
 import { useEffect, useState } from 'react';
-import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import { IGamesLeagueConfig } from '../../../types/leagueConfig';
-import PlayerProfileModal from '../../player/PlayerProfileModal';
-import { useFantasyLeagueTeam } from '../../providers/fantasy_teams/FantasyTeamProvider';
 import { EditableTeamSlotItem } from './EditableTeamSlotItem';
-import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
-import WarningCard from '../../shared/WarningCard';
-import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
-import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
+import { IGamesLeagueConfig } from '../../types/leagueConfig';
+import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import PlayerProfileModal from '../player/PlayerProfileModal';
+import WarningCard from '../shared/WarningCard';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
   onEditChange?: (isEditing: boolean) => void;
 };
+
+// TODO: Delete Component
 /** Renders My Team Edit Grid */
 export default function MyTeamEditView({ leagueRound }: Props) {
   

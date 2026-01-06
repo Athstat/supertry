@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import { IGamesLeagueConfig } from '../../../types/leagueConfig';
-import MyTeamPitchView from './MyTeamPitchView';
-import PushOptInModal from '../../ui/PushOptInModal';
-import { requestPushPermissions } from '../../../utils/bridgeUtils';
 import MyTeamViewHeader from './MyTeamViewHeader';
-import PlayerPickerV2 from '../../player-picker/PlayerPickerV2';
-import { PositionClass } from '../../../types/athletes';
-import { useFantasyLeagueTeam } from '../../providers/fantasy_teams/FantasyTeamProvider';
+import { useFantasyLeagueTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { PositionClass } from '../../types/athletes';
+import { IFantasyLeagueRound } from '../../types/fantasyLeague';
+import { IGamesLeagueConfig } from '../../types/leagueConfig';
+import { requestPushPermissions } from '../../utils/bridgeUtils';
+import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
+import PushOptInModal from '../ui/PushOptInModal';
+import MyTeamPitchView from './MyTeamPitchView';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
