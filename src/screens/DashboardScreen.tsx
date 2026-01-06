@@ -3,7 +3,7 @@ import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeC
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 import DashboardHero from '../components/dashboard/hero/DashboardHero';
-import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
+import SchoolRugbyBanner from '../components/dashboard/banners/SchoolRugbyBanner';
 import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
 import { Activity, Fragment } from 'react';
 import { twMerge } from 'tailwind-merge';
