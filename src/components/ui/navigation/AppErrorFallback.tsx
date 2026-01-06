@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useAppState } from '../contexts/AppStateContext';
-import { attemptStateRecovery } from '../utils/appStateUtils';
 import { FallbackProps } from './ErrorBoundary';
+import { useAppState } from '../../../contexts/AppStateContext';
+import { attemptStateRecovery } from '../../../utils/appStateUtils';
 
 /**
  * A fallback UI component that is displayed when the app encounters an error.

@@ -1,6 +1,5 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ErrorInfo, ReactNode, useState } from "react"
-import AppErrorFallback from "./components/AppErrorFallback";
 import ErrorBoundary, { FallbackProps } from "./components/ui/navigation/ErrorBoundary";
 import NetworkStatusProvider from "./components/network/NetworkStatusProvider";
 import SportActionsDefinitionsProvider from "./components/stats/SportActionsDefinitionsProvider";
@@ -14,6 +13,7 @@ import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
 import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsProvider";
 import CacheProvider from "./providers/caching/CacheProvider";
+import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 
 type Props = {
     children?: ReactNode
