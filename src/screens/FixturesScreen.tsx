@@ -5,7 +5,7 @@ import { Fragment, useState, useEffect } from 'react';
 import { useProFixtures } from '../hooks/fixtures/useProFixtures';
 import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
 import PickEmCardSkeleton from '../components/pickem/PickEmCardSkeleton';
-import { LoadingState } from '../components/ui/LoadingState';
+import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import FixtureSearchResults from '../components/fixtures/FixtureSearchResults';
 import ProMatchCenterHeader from '../components/fixtures/ProMatchCenterHeader';
 import { useDebounced } from '../hooks/useDebounced';
@@ -52,7 +52,7 @@ export default function ProFixturesScreen() {
         </div>
       );
     }
-    return <LoadingState />;
+    return <LoadingIndicator />;
   }
 
   return (

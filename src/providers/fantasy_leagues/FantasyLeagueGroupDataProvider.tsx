@@ -3,7 +3,7 @@ import { ScopeProvider } from 'jotai-scope';
 import { useAtom, useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import { useLocation } from 'react-router-dom';
-import { LoadingState } from '../../components/ui/LoadingState';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useDebounced } from '../../hooks/useDebounced';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
@@ -124,7 +124,7 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
   if (debouncedLoading) {
     return (
       <Fragment>
-        {loadingFallback ? <Fragment>{loadingFallback}</Fragment> : <LoadingState />}
+        {loadingFallback ? <Fragment>{loadingFallback}</Fragment> : <LoadingIndicator />}
       </Fragment>
     );
   }

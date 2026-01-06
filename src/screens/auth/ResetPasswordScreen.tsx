@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { usePasswordValidation } from '../../hooks/usePasswordValidation';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { PasswordResetTokenIntrospect, RestError } from '../../types/auth';
-import { LoadingState } from '../../components/ui/LoadingState';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { PasswordInputField } from '../../components/shared/InputField';
 import FormErrorText from '../../components/shared/FormError';
 import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
@@ -58,7 +58,7 @@ export default function ResetPasswordScreen() {
   const onSuccess = () => setShowSuccessModal(true);
 
   if (isLoading) {
-    return <LoadingState />
+    return <LoadingIndicator />
   }
 
   return (

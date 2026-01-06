@@ -7,7 +7,7 @@ import {
   INVESTEC_CHAMPIONSHIP_CUP,
   URC_COMPETIION_ID,
 } from '../types/constants';
-import { LoadingState } from '../components/ui/LoadingState';
+import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import { useEffect, useState } from 'react';
 import { useSectionNavigation } from '../hooks/useSectionNavigation';
 import GroupedFixturesList from '../components/fixtures/GroupedFixturesList';
@@ -41,7 +41,7 @@ export default function FixtureListScreen() {
     scrollToSection(sectionId);
   }, []);
 
-  if (isLoading) return <LoadingState message="Loading Fixtures" />;
+  if (isLoading) return <LoadingIndicator message="Loading Fixtures" />;
 
   const fixtures = data ?? [];
   const fixturesInRange = selectedDateRange

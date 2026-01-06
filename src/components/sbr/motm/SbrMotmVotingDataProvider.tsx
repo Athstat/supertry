@@ -5,7 +5,7 @@ import { sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom, userSbrMotmVoteA
 import useSWR from "swr";
 import { sbrMotmService } from "../../../services/sbrMotmService";
 import { sbrService } from "../../../services/sbr/sbrService";
-import { LoadingState } from "../../ui/LoadingState";
+import { LoadingIndicator } from "../../ui/LoadingIndicator";
 import { swrFetchKeys } from "../../../utils/swrKeys";
 import { currentSbrFixtureAtom } from "../../../state/sbrFixtures.atoms";
 import { useFetch } from "../../../hooks/useFetch";
@@ -38,7 +38,7 @@ export default function SbrMotmVotingDataProvider({ children, fixture }: Props) 
         if (fixture) setFixture(fixture);
     }, [fixture, rosters, allVotes]);
 
-    if (isLoading) return <LoadingState />
+    if (isLoading) return <LoadingIndicator />
 
     return (
         <>

@@ -8,7 +8,7 @@ import {
   INVESTEC_CHAMPIONSHIP_CUP,
   URC_COMPETIION_ID,
 } from '../types/constants';
-import { LoadingState } from '../components/ui/LoadingState';
+import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import { useAtom, useAtomValue } from 'jotai';
 import { fixturesDateRangeAtom } from '../components/fixtures/calendar/fixtures_calendar.atoms';
 import {
@@ -50,7 +50,7 @@ export default function ProFixturesTab() {
   const [, setSelectedDateRange] = useAtom(fixturesDateRangeAtom);
   const [activeFilter, setActiveFilter] = useState<'upcoming' | 'past'>('upcoming');
 
-  if (isLoading) return <LoadingState message="Loading Fixtures" />;
+  if (isLoading) return <LoadingIndicator message="Loading Fixtures" />;
 
   const fixtures = data ?? [];
   const fixturesInRange = selectedDateRange

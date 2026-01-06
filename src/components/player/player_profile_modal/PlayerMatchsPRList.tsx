@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { powerRankingsService } from '../../../services/powerRankingsService';
-import { LoadingState } from '../../ui/LoadingState';
+import { LoadingIndicator } from '../../ui/LoadingIndicator';
 import { SingleMatchPowerRanking } from '../../../types/powerRankings';
 import { Calendar } from 'lucide-react';
 import TeamLogo from '../../team/TeamLogo';
@@ -25,7 +25,7 @@ export default function PlayerMatchsPRList({ player }: Props) {
 
   const matchesPR: SingleMatchPowerRanking[] = data ?? [];
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <LoadingIndicator />;
 
   if (matchesPR.length === 0) {
     return <></>;

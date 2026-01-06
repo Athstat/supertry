@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
-import { LoadingState } from '../components/ui/LoadingState';
+import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import { ErrorState } from '../components/ui/ErrorState';
 import SeasonDataProvider from '../components/seasons/SeasonDataProvider';
 import { useAtomValue } from 'jotai';
@@ -23,7 +23,7 @@ export default function SeasonScreen() {
     seasonService.getSeasonsById(seasonId ?? '')
   );
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <LoadingIndicator />;
 
   if (!season) return <ErrorState error="Season was not found" />;
 

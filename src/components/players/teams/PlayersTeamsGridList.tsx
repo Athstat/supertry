@@ -1,4 +1,4 @@
-import { LoadingState } from "../../ui/LoadingState";
+import { LoadingIndicator } from "../../ui/LoadingIndicator";
 import { useMemo } from "react";
 import { ITeam } from "../../../types/games";
 import { useActiveFantasySeasons } from "../../../hooks/fantasy/useActiveFantasySeasons";
@@ -124,6 +124,6 @@ function TeamItem({ team, onClick }: TeamItemProps) {
 
 function LoadingSkeleton() {
   return (
-    <LoadingState />
+    <LoadingIndicator />
   )
 }

@@ -4,7 +4,7 @@ import { gamesService } from "../../services/gamesService";
 import { fixtureAtom, fixtureSelectedPlayerAtom, showPlayerMatchModalAtom, showPlayerProfileAtom } from "../../state/fixtures/fixture.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { useSetAtom } from "jotai";
-import { LoadingState } from "../../components/ui/LoadingState";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 
 type Props = {
     fixtureId?: string,
@@ -51,7 +51,7 @@ function InnerProvider({ fixtureId, children, loadingFallback }: Props) {
             <Fragment>
                 {loadingFallback ? loadingFallback : null}
                 {!loadingFallback && (
-                    <LoadingState />
+                    <LoadingIndicator />
                 )}
             </Fragment>
         )

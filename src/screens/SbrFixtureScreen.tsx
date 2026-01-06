@@ -18,7 +18,7 @@ import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
 import { sbrService } from "../services/sbr/sbrService";
-import { LoadingState } from "../components/ui/LoadingState";
+import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import SbrFixtureDataProvider from "../providers/SbrFixtureDataProvider";
 
 export default function SbrFixtureScreen() {
@@ -28,7 +28,7 @@ export default function SbrFixtureScreen() {
     const {data: fixture, isLoading, error} = useSWR(key, () => sbrService.getFixtureById(fixtureId ?? ''));
 
     if (isLoading) {
-        return <LoadingState />
+        return <LoadingIndicator />
     }
     
     if (error) return <ErrorState error="Error fetching fixture" message={error} />

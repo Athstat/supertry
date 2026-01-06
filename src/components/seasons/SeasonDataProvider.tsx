@@ -3,7 +3,7 @@ import { seasonAthletesAtoms, seasonAtom, seasonFixtutesAtoms, seasonTeamsAtoms 
 import { ReactNode, useEffect } from 'react'
 import useSWR from 'swr'
 import { seasonService } from '../../services/seasonsService'
-import { LoadingState } from '../ui/LoadingState'
+import { LoadingIndicator } from '../ui/LoadingIndicator'
 import { IProSeason } from '../../types/season'
 import { useSeasonTeams } from '../../hooks/seasons/useSeasonTeams'
 
@@ -35,7 +35,7 @@ export default function SeasonDataProvider({ season, children }: Props) {
     if (athletes) setSeasonAthletes(athletes);
   }, [season, teams, athletes, fixtures, setSeason, setSeasonTeams, setSeasonFixtures, setSeasonAthletes]);
 
-  if (isLoading) return <LoadingState />
+  if (isLoading) return <LoadingIndicator />
 
 
   return (

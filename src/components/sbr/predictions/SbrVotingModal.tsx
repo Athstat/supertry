@@ -8,7 +8,7 @@ import VotingProgressBar from "../../shared/VotingProgressBar"
 import SbrVotingBallotBox, { SbrVotingBallotBoxResults } from "./SbrVotingBallotBox"
 import { CircleCheck } from "lucide-react"
 import PrimaryButton from "../../shared/buttons/PrimaryButton"
-import { LoadingState } from "../../ui/LoadingState"
+import { LoadingIndicator } from "../../ui/LoadingIndicator"
 import { getCountryEmojiFlag } from "../../../utils/svrUtils"
 import SbrVotingModalNavigator from "./SbrVotingModalNavigator"
 import SbrPersonalVotingSummary from "./SbrPersonalVotingSummary"
@@ -149,7 +149,7 @@ function FixtureVotingCard({ fixture }: FixtureVotingCardProps) {
                 </div>
             </div>
 
-            {isLoading && <LoadingState />}
+            {isLoading && <LoadingIndicator />}
 
             {!isLoading && votes && <VotingProgressBar homeVotes={homeVotes.length} awayVotes={awayVotes.length} />}
             {!isLoading && !hasScores && <SbrVotingBallotBox userVote={userVote} fixture={fixture} />}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { LoadingState } from "../../ui/LoadingState";
+import { LoadingIndicator } from "../../ui/LoadingIndicator";
 
 type DelayedViewProps = {
   delay?: number;
@@ -22,7 +22,7 @@ export default function DelayedView({ delay = 2000, children, className }: Delay
       {/* Loading Spinner */}
       {!show && (
         <div className="absolute inset-0 flex items-center justify-center z-10 bg-white dark:bg-black">
-          <LoadingState />
+          <LoadingIndicator />
         </div>
       )}
 

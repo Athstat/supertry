@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { useAuthUser } from "../../../hooks/useAuthUser";
 import { fantasyRankingsService } from "../../../services/fantasyRankingsService";
-import { LoadingState } from "../../ui/LoadingState";
+import { LoadingIndicator } from "../../ui/LoadingIndicator";
 
 
 export default function UserStatsGrid() {
@@ -9,7 +9,7 @@ export default function UserStatsGrid() {
     const user = useAuthUser();
     const  {data: rank, isLoading} = useSWR(user.id, fantasyRankingsService.getUserRankingByUserId);
 
-    if (isLoading) return <LoadingState />
+    if (isLoading) return <LoadingIndicator />
 
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">

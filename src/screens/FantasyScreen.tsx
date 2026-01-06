@@ -4,7 +4,7 @@ import { FantasySeasonDashboard } from '../components/fantasy-seasons/FantasyCom
 import FantasySeasonOptionsList from '../components/fantasy-seasons/FantasySeasonOptionsList';
 import { Activity } from '../components/shared/Activity';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
-import { LoadingState } from '../components/ui/LoadingState';
+import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 
 /** Renders the Fantasy/League Screen */
 export function FantasyScreen() {
@@ -25,7 +25,7 @@ export function FantasyScreen() {
       </div>
 
       <Activity mode={showLoading ? "visible" : "hidden"} >
-        <LoadingState />
+        <LoadingIndicator />
       </Activity>
 
       <Activity mode={showFantasySeasonDashboard ? 'visible' : 'hidden'}>

@@ -3,7 +3,7 @@ import { IProAthlete } from "../../types/athletes";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
-import { LoadingState } from "../../components/ui/LoadingState";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 import SecondaryText from "../../components/shared/SecondaryText";
 import { PlayerListTable } from "../../components/players/PlayerListTable";
 
@@ -58,7 +58,7 @@ export default function PlayerSearchResults({ searchQuery, playerPool }: Props) 
 
             {isLoading && (
                 <div className="flex flex-1 items-center justify-center flex-col" >
-                    <LoadingState />
+                    <LoadingIndicator />
                 </div>
             )}
 

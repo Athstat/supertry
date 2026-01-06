@@ -1,4 +1,4 @@
-import { LoadingState } from '../ui/LoadingState';
+import { LoadingIndicator } from '../ui/LoadingIndicator';
 import SbrFixtureCard from '../sbr/SbrFixtureCard';
 import PilledSeasonFilterBar from './MatcheSeasonFilterBar';
 import { useQueryState } from '../../hooks/useQueryState';
@@ -48,7 +48,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
   }, [fixtures]); // Only run when fixtures are loaded
 
   if (isLoading) {
-    return <LoadingState />;
+    return <LoadingIndicator />;
   }
 
   const seasons: SeasonFilterBarItem[] = [];

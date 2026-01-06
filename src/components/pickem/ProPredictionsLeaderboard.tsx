@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
-import { LoadingState } from "../ui/LoadingState";
+import { LoadingIndicator } from "../ui/LoadingIndicator";
 import { ProPredictionsRanking } from "../../types/proPredictions";
 import SecondaryText from "../shared/SecondaryText";
 import { twMerge } from "tailwind-merge";
@@ -16,7 +16,7 @@ export default function ProPredictionsLeaderboard() {
     let { data: rankings, isLoading } = useSWR(key, () => proPredictionsRankingService.getAllUserRankings());
 
     if (isLoading) {
-        return <LoadingState />
+        return <LoadingIndicator />
     }
 
     let rankingsList = rankings !== undefined ? rankings : []

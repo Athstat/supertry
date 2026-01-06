@@ -1,7 +1,7 @@
 import { fantasyRankingsService } from "../../services/fantasyRankingsService";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import UserRankingFocusShort from "./UserRankingFocusShort";
-import { LoadingState } from "../ui/LoadingState";
+import { LoadingIndicator } from "../ui/LoadingIndicator";
 import UserRankingsItem from "./UserRankingsItem";
 import useSWR from "swr";
 
@@ -13,7 +13,7 @@ export default function FantasyRankingsLeaderBoard() {
 
     console.log("Errors ", error);
     
-    if (isLoading) return <LoadingState  />
+    if (isLoading) return <LoadingIndicator  />
 
     if (!rankings) return;
 

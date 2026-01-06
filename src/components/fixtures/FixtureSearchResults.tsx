@@ -3,7 +3,7 @@ import { useProFixtures } from "../../hooks/fixtures/useProFixtures"
 import { FixtureListViewMode, IFixture } from "../../types/games";
 import { searchProFixturePredicate } from "../../utils/fixtureUtils";
 import NoContentCard from "../shared/NoContentMessage";
-import { LoadingState } from "../ui/LoadingState";
+import { LoadingIndicator } from "../ui/LoadingIndicator";
 import GroupedFixturesList from "./GroupedFixturesList";
 
 type Props = {
@@ -53,7 +53,7 @@ export default function FixtureSearchResults({ searchQuery, viewMode }: Props) {
 
             {isBuffering && (
                 <div>
-                    <LoadingState />
+                    <LoadingIndicator />
                 </div>
             )}
 

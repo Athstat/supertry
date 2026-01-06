@@ -1,6 +1,6 @@
 import { Trophy } from 'lucide-react';
 import PageView from './PageView';
-import { LoadingState } from '../components/ui/LoadingState';
+import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import SeasonCard from '../components/seasons/SeasonCard';
 import NoContentCard from '../components/shared/NoContentMessage';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
@@ -9,7 +9,7 @@ import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 export default function CompetitionsScreen() {
   const {fantasySeasons: seasons, isLoading} = useFantasySeasons();
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <LoadingIndicator />;
 
 
   // Order competitions to show upcoming first, then past

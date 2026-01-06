@@ -7,7 +7,7 @@ import { fixtureSummary } from "../../../utils/fixtureUtils";
 import PlayerProfileModal from "../../player/PlayerProfileModal";
 import NoContentCard from "../../shared/NoContentMessage";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../shared/tabs/TabView";
-import { LoadingState } from "../../ui/LoadingState";
+import { LoadingIndicator } from "../../ui/LoadingIndicator";
 import { FixtureRosterList } from "./FixtureRosterList";
 import { useInView } from "react-intersection-observer";
 
@@ -45,7 +45,7 @@ export default function FixtureRosters({ fixture }: Props) {
     };
 
     if (loadingRosters) {
-        return <LoadingState />
+        return <LoadingIndicator />
     }
 
     const tabs: TabViewHeaderItem[] = [

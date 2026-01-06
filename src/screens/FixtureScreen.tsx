@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import FixtureOverviewTab from '../components/fixture/fixture_screen/FixtureOverviewTab';
 import useSWR from 'swr';
-import { LoadingState } from '../components/ui/LoadingState';
+import { LoadingIndicator } from '../components/ui/LoadingIndicator';
 import { boxScoreService } from '../services/boxScoreService';
 import { TabViewHeaderItem, TabViewPage } from '../components/shared/tabs/TabView';
 import PageView from './PageView';
@@ -52,7 +52,7 @@ function Content() {
 
   const isLoading = loadingSportsActions;
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <LoadingIndicator />;
 
   if (!fixture)
     return <ErrorState error='Whoops!' message="Failed to load match information" />;
@@ -166,7 +166,7 @@ function Content() {
 
       <div className="flex flex-col p-4 gap-5">
         {/* Overview Component */}
-        {loadingSportsActions && <LoadingState />}
+        {loadingSportsActions && <LoadingIndicator />}
       </div>
     </div>
   );

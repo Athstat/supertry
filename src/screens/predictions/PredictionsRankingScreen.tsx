@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
-import { LoadingState } from "../../components/ui/LoadingState";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 import { IStatCard, TopicPageView } from "../PageView";
 import ProPredictionsLeaderboard from "../../components/pickem/ProPredictionsLeaderboard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/shared/tabs/TabView";
@@ -19,7 +19,7 @@ export default function PredictionsRankingScreen() {
     );
 
     if (loadingUserRanking) {
-        return <LoadingState />
+        return <LoadingIndicator />
     }
 
     const stats: IStatCard[] = userRanking ? [

@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { useAuthUser } from "../../hooks/useAuthUser"
 import { swrFetchKeys } from "../../utils/swrKeys";
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
-import { LoadingState } from "../ui/LoadingState";
+import { LoadingIndicator } from "../ui/LoadingIndicator";
 import { ErrorState } from "../ui/ErrorState";
 import NoContentCard from "../shared/NoContentMessage";
 import { ProGameVote } from "../../types/proPredictions";
@@ -22,7 +22,7 @@ export default function UserProPredictionsHistoryTab() {
     const history = data ?? [];
 
     if (isLoading) return (
-        <LoadingState />
+        <LoadingIndicator />
     )
 
     if (error) {
