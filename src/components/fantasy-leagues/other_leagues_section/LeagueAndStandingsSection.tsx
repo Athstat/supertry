@@ -1,20 +1,21 @@
 import { Trophy } from "lucide-react"
-import { FantasyLeagueGroup } from "../../../../types/fantasyLeagueGroups"
-import { LeagueGroupCardSmall } from "../../league_card_small/LeagueGroupCardSmall"
-import PrimaryButton from "../../../shared/buttons/PrimaryButton"
 import { useState } from "react"
-import CreateLeagueModal from "../../CreateLeagueModal"
-import { Link, useNavigate } from "react-router-dom"
-import NoContentCard from "../../../shared/NoContentMessage"
-import { IFantasySeason } from "../../../../types/fantasy/fantasySeason"
-import RoundedCard from "../../../shared/RoundedCard"
-import SecondaryText from "../../../shared/SecondaryText"
-import { useUserJoinedLeagues } from "../../../../hooks/leagues/useUserJoinedLeagues"
-import OtherLeaguesSection from "./OtherLeaguesSection"
+import { useNavigate } from "react-router-dom"
+import SuggestedLeaguesSections from "./SuggestedLeaguesSection"
+import { useUserJoinedLeagues } from "../../../hooks/leagues/useUserJoinedLeagues"
+import { IFantasySeason } from "../../../types/fantasy/fantasySeason"
+import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups"
+import PrimaryButton from "../../shared/buttons/PrimaryButton"
+import NoContentCard from "../../shared/NoContentMessage"
+import RoundedCard from "../../shared/RoundedCard"
+import SecondaryText from "../../shared/SecondaryText"
+import CreateLeagueModal from "../CreateLeagueModal"
+import LeagueGroupsTable from "../league_card_small/LeagueGroupsTable"
 
 type Props = {
     fantasySeason: IFantasySeason
 }
+
 
 /** Renders users league groups section */
 export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
@@ -39,13 +40,6 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     const handleCreateLeague = (league: FantasyLeagueGroup) => {
         navigate(`/league/${league.id}`);
     }
-
-
-
-    const getLeagueLink = (league: FantasyLeagueGroup) => {
-        return `/league/${league.id}/standings`;
-    }
-
 
     if (isLoading) {
         return (
@@ -81,25 +75,11 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 <SecondaryText>Click on a league to view it's standings</SecondaryText>
             </div>
 
-            <div className="flex flex-col gap-2" >
-                <div className="flex font-medium flex-row items-center justify-between" >
-                    <SecondaryText className="text-xs" >League</SecondaryText>
-                    <SecondaryText className="text-xs" >Ranking</SecondaryText>
-                </div>
+            <LeagueGroupsTable 
+                leagues={leagues}
+            />
 
-                {leagues.map((l) => {
-                    return (
-                        <Link to={getLeagueLink(l)} >
-                            <LeagueGroupCardSmall
-                                leagueGroup={l}
-                                key={l.id}
-                            />
-                        </Link>
-                    )
-                })}
-            </div>
-
-            <OtherLeaguesSection
+            <SuggestedLeaguesSections
                 fantasySeason={fantasySeason}
             />
 

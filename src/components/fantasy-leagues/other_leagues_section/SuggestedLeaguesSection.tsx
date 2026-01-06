@@ -1,17 +1,17 @@
 import { Trophy } from 'lucide-react'
-import { useJoinableLeagues } from '../../../../hooks/leagues/useJoinableLeagues'
-import { JoinLeagueCard } from '../../../JoinLeagueCard';
-import { IFantasySeason } from '../../../../types/fantasy/fantasySeason';
-import SecondaryText from '../../../shared/SecondaryText';
-import RoundedCard from '../../../shared/RoundedCard';
 import { useMemo } from 'react';
+import { useJoinableLeagues } from '../../../hooks/leagues/useJoinableLeagues';
+import { IFantasySeason } from '../../../types/fantasy/fantasySeason';
+import { JoinLeagueCard } from '../../JoinLeagueCard';
+import RoundedCard from '../../shared/RoundedCard';
+import SecondaryText from '../../shared/SecondaryText';
 
 type Props = {
     fantasySeason: IFantasySeason
 }
 
 /** Renders other leagues that the user can join */
-export default function OtherLeaguesSection({ fantasySeason }: Props) {
+export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
 
 
     const { joinableLeagues: leagues, isLoading } = useJoinableLeagues(fantasySeason.id);
@@ -76,3 +76,4 @@ function LoadingSkeleton() {
         </div>
     )
 }
+

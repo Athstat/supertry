@@ -4,17 +4,56 @@ import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups";
 import RoundedCard from "../../shared/RoundedCard";
 import { useUserOverallStandings } from "../../../hooks/fantasy/standings/useUserOverallStandings";
 
+import React from 'react'
+import { Link } from "react-router-dom";
+import SecondaryText from "../../shared/SecondaryText";
+
 type Props = {
+    leagues: FantasyLeagueGroup[]
+}
+
+/** Renders a table of Fantasy League Groups */
+export default function LeagueGroupsTable({ leagues }: Props) {
+
+    const getLeagueLink = (league: FantasyLeagueGroup) => {
+        return `/league/${league.id}/standings`;
+    }
+
+    return (
+        <div className="flex flex-col gap-2" >
+            <div className="flex font-medium flex-row items-center justify-between" >
+                <SecondaryText className="text-xs" >League</SecondaryText>
+                <SecondaryText className="text-xs" >Ranking</SecondaryText>
+            </div>
+
+            {leagues.map((l) => {
+                return (
+                    <Link to={getLeagueLink(l)} >
+                        <LeagueGroupCard
+                            leagueGroup={l}
+                            key={l.id}
+                        />
+                    </Link>
+                )
+            })}
+        </div>
+    )
+}
+
+
+
+type CardProps = {
     leagueGroup: FantasyLeagueGroup,
     onClick?: (league: FantasyLeagueGroup) => void,
     custom?: number
 }
 
+// TODO: Delete Component
 /** Renders a fantasy league group card */
-export function LeagueGroupCardSmall({ leagueGroup, onClick }: Props) {
+export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
     const { authUser } = useAuth();
-    const {userRanking, isLoading} = useUserOverallStandings(authUser?.kc_id, leagueGroup.id)
+    const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id)
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
