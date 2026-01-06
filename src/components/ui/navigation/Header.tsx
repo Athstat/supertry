@@ -1,14 +1,14 @@
-import { Activity } from './shared/Activity';
+import { Activity } from '../../shared/Activity';
 import { useNavigate, useLocation } from 'react-router-dom';
-import ScrummyLogoHorizontal from './branding/scrummy_logo_horizontal';
-import { isInProduction } from '../utils/webUtils';
-import BetaTag from './branding/BetaTag';
-import NotificationsBellButton from './notifications/NotificationsBellButton';
-import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
-import CompetitionSelector from './fantasy-seasons/CompetitionSelector';
+import ScrummyLogoHorizontal from '../../branding/scrummy_logo_horizontal';
+import { isInProduction } from '../../../utils/webUtils';
+import BetaTag from '../../branding/BetaTag';
+import NotificationsBellButton from '../../notifications/NotificationsBellButton';
+import { useNavigationBars } from '../../../hooks/navigation/useNavigationBars';
+import CompetitionSelector from '../../fantasy-seasons/CompetitionSelector';
 import { twMerge } from 'tailwind-merge';
-import { AppColours } from '../types/constants';
-import UserProfileButton from './auth/user_profile/UserProfileButton';
+import { AppColours } from '../../../types/constants';
+import UserProfileButton from '../../auth/user_profile/UserProfileButton';
 
 export function Header() {
   const navigate = useNavigate();

@@ -1,17 +1,15 @@
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, Trophy, Users, Calendar, Sparkles, ArrowDownUp } from 'lucide-react';
+import { useLocation, Link } from 'react-router-dom';
+import { Home, Trophy, Users, Calendar } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
-import { Activity } from './shared/Activity';
-import { House } from 'lucide-react';
+import { useNavigationBars } from '../../../hooks/navigation/useNavigationBars';
+import { Activity } from '../../shared/Activity';
 import { School } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
-import { AppColours } from '../types/constants';
+import { AppColours } from '../../../types/constants';
 
 export function BottomNav() {
   const { bottomNavViewMode } = useNavigationBars();
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const [rippleMap, setRippleMap] = useState<Record<string, { x: number; y: number }>>({});
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -52,22 +50,22 @@ export function BottomNav() {
     }, 600);
   };
 
-  const handleMoreClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setShowMoreMenu(!showMoreMenu);
-    handleRipple('more', e);
-  };
+  // const handleMoreClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.stopPropagation();
+  //   setShowMoreMenu(!showMoreMenu);
+  //   handleRipple('more', e);
+  // };
 
-  const handleMenuItemClick = (path: string) => {
-    navigate(path);
-    setShowMoreMenu(false);
-  };
+  // const handleMenuItemClick = (path: string) => {
+  //   navigate(path);
+  //   setShowMoreMenu(false);
+  // };
 
-  const moreMenuItems = [
-    { icon: Trophy, label: 'Competitions', path: '/seasons' },
-    { icon: Sparkles, label: 'Prediction Rankings', path: '/predictions' },
-    { icon: ArrowDownUp, label: 'Fantasy Rankings', path: '/fantasy-rankings' },
-  ];
+  // const moreMenuItems = [
+  //   { icon: Trophy, label: 'Competitions', path: '/seasons' },
+  //   { icon: Sparkles, label: 'Prediction Rankings', path: '/predictions' },
+  //   { icon: ArrowDownUp, label: 'Fantasy Rankings', path: '/fantasy-rankings' },
+  // ];
 
   const navItems = [
     { id: 'dashboard', path: '/dashboard', icon: Home, label: 'Home' },

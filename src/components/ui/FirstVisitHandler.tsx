@@ -3,7 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { WelcomeScreen } from "../../screens/auth/WelcomeScreen";
 import { isFirstAppVisit, markAppVisited } from "../../utils/firstVisitUtils";
-import RouteErrorBoundary from "../RouteErrorBoundary";
+import RouteErrorBoundary from "./navigation/RouteErrorBoundary";
 import { AuthChoiceScreen } from "../../screens/auth/AuthChoiceScreen";
 import { analytics } from "../../services/analytics/anayticsService";
 

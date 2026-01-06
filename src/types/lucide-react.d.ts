@@ -143,5 +143,6 @@ declare module "lucide-react" {
   export const FastForward : CIP;
   export const TrophyIcon : CIP;
   export const Lightbulb : CIP;
+  export const School : CIP;
 }
 

@@ -2,7 +2,7 @@ import { Trophy } from 'lucide-react'
 import { useMemo } from 'react';
 import { useJoinableLeagues } from '../../../hooks/leagues/useJoinableLeagues';
 import { IFantasySeason } from '../../../types/fantasy/fantasySeason';
-import { JoinLeagueCard } from '../../JoinLeagueCard';
+import { JoinLeagueCard } from '../JoinLeagueCard';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
 
