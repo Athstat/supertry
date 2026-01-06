@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Loader, CheckCircle, XCircle, ArrowLeft } from 'lucide-react';
-import { leagueGroupService } from '../services/leagueGroupService';
-import { IJoinLeagueGroup } from '../types/leagueGroup';
+import { Loader, XCircle, ArrowLeft } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
+import { leagueGroupService } from '../../services/leagueGroupService';
+import { IJoinLeagueGroup } from '../../types/leagueGroup';
 
 export default function JoinGroupScreen() {
   const { inviteCode } = useParams<{ inviteCode: string }>();
@@ -12,13 +13,9 @@ export default function JoinGroupScreen() {
   const [success, setSuccess] = useState(false);
   const [groupName, setGroupName] = useState<string>('');
 
-  useEffect(() => {
-    if (inviteCode) {
-      handleJoinGroup(inviteCode);
-    }
-  }, [inviteCode]);
 
-  const handleJoinGroup = async (code: string) => {
+
+  const handleJoinGroup = useCallback(async (code: string) => {
     setIsJoining(true);
     setError(null);
 
@@ -32,10 +29,8 @@ export default function JoinGroupScreen() {
       setTimeout(() => {
         navigate(`/league/${joinedGroup.fantasy_league}`);
       }, 2000);
-    } catch (error: any) {
-      if (error.message.includes('fantasy_league_id')) {
-        // User needs to join the fantasy league first
-        const errorData = JSON.parse(error.message);
+    } catch (error) {
+      if ((`${error}`).includes('fantasy_league_id')) {
         setError(
           `You need to join the fantasy league first. Please join the league before joining this group.`
         );
@@ -46,7 +41,7 @@ export default function JoinGroupScreen() {
     } finally {
       setIsJoining(false);
     }
-  };
+  }, [navigate]);
 
   const handleRetry = () => {
     if (inviteCode) {
@@ -57,6 +52,12 @@ export default function JoinGroupScreen() {
   const handleGoBack = () => {
     navigate('/leagues');
   };
+
+  useEffect(() => {
+    if (inviteCode) {
+      handleJoinGroup(inviteCode);
+    }
+  }, [handleJoinGroup, inviteCode]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center p-4">

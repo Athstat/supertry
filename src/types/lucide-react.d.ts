@@ -144,5 +144,6 @@ declare module "lucide-react" {
   export const TrophyIcon : CIP;
   export const Lightbulb : CIP;
   export const School : CIP;
+  export const CheckCircle : CIP;
 }
 
