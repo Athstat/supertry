@@ -8,7 +8,7 @@ import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
 import CompetitionSelector from './dashboard/CompetitionSelector';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
-import UserProfileButton from './auth/UserProfileButton';
+import UserProfileButton from './auth/user_profile/UserProfileButton';
 
 export function Header() {
   const navigate = useNavigate();

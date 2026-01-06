@@ -5,7 +5,7 @@ import { ScopeProvider } from 'jotai-scope';
 import AuthUserDataProvider from '../components/auth/AuthUserDataProvider';
 import { useAtomValue } from 'jotai';
 import UserProfileHeader from '../components/auth/UserProfileHeader';
-import ClaimGuestAccountBox from '../components/auth/ClaimGuestAccountBox';
+import ClaimGuestAccountBox from '../components/auth/guest/ClaimGuestAccountBox';
 import LogoutButton from '../components/auth/LogoutButton';
 import DeleteAccountButton from '../components/auth/DeleteAccountButton';
 import Experimental from '../components/shared/ab_testing/Experimental';
