@@ -1,9 +1,9 @@
 import { Trophy } from 'lucide-react';
-import PageView from './PageView';
-import { LoadingIndicator } from '../components/ui/LoadingIndicator';
-import SeasonCard from '../components/seasons/SeasonCard';
-import NoContentCard from '../components/ui/typography/NoContentMessage';
-import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
+import PageView from '../../components/ui/containers/PageView';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
+import SeasonCard from '../../components/seasons/SeasonCard';
+import NoContentCard from '../../components/ui/typography/NoContentMessage';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 
 /** Renders Competition Screen */
 export default function CompetitionsScreen() {

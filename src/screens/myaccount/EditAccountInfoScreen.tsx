@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/ui/buttons/BackButton";
-import PageView from "../PageView";
+import PageView from "../../components/ui/containers/PageView";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCallback, useMemo, useState } from "react";
 import InputField from "../../components/ui/forms/InputField";

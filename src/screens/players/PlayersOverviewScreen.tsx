@@ -1,10 +1,10 @@
 import { ArrowRight, BicepsFlexed, Binoculars, Shield, Users, WandSparkles } from 'lucide-react'
-import PageView from '../PageView'
+import PageView from '../../components/ui/containers/PageView'
 import SearchInput from '../../components/ui/forms/SearchInput'
-import RoundedCard from '../../components/shared/RoundedCard'
+import RoundedCard from "../../components/ui/cards/RoundedCard"
 import PositionCard from '../../components/players/positioning/PositionCard'
 import { Activity, Fragment } from 'react'
-import PlayerSearchResults from './PlayerSearchResults'
+import PlayerSearchResults from '../../components/players/PlayerSearchResults'
 import { useQueryState } from '../../hooks/useQueryState'
 import { PositionClass } from '../../types/athletes'
 import { useNavigate } from 'react-router-dom'

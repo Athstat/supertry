@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 import { IProAthlete } from "../../types/athletes";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
-import PlayerProfileModal from "../../components/player/PlayerProfileModal";
-import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
-import SecondaryText from "../../components/ui/typography/SecondaryText";
-import { PlayerListTable } from "../../components/players/PlayerListTable";
+import PlayerProfileModal from "../player/PlayerProfileModal";
+import { LoadingIndicator } from "../ui/LoadingIndicator";
+import SecondaryText from "../ui/typography/SecondaryText";
+import { PlayerListTable } from "./PlayerListTable";
 
 type Props = {
     searchQuery?: string,

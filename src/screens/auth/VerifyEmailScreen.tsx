@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import ScrummyLogo from "../../components/branding/scrummy_logo";
-import PageView from "../PageView";
+import PageView from "../../components/ui/containers/PageView";
 import { CheckCircle2, Loader } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton";

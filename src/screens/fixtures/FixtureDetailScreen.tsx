@@ -1,29 +1,29 @@
 import { useParams } from 'react-router-dom';
-import FixtureOverviewTab from '../components/fixture/fixture_screen/FixtureOverviewTab';
 import useSWR from 'swr';
-import { LoadingIndicator } from '../components/ui/LoadingIndicator';
-import { boxScoreService } from '../services/boxScoreService';
-import { TabViewHeaderItem, TabViewPage } from '../components/ui/tabs/TabView';
-import PageView from './PageView';
-import GameHighlightsCard from '../components/ui/video/GameHighlightsCard';
-import { ProMotmVotingBox } from '../components/pickem/motm';
-import { ErrorState } from '../components/ui/ErrorState';
-import { Activity } from '../components/shared/Activity';
-import PilledTabView from '../components/ui/tabs/PilledTabView';
-import FixtureBoxscoreTab from '../components/fixture/fixture_screen/FixtureBoxscoreTab';
-import FixtureH2HTab from '../components/fixture/fixture_screen/FixtureH2HTab';
-import FixtureHero from '../components/fixture/fixture_screen/FixtureHero';
-import { FixtureStickyHeader } from '../components/fixture/fixture_screen/FixtureStickyHeader';
-import FixtureRostersTab from '../components/fixture/fixture_screen/rosters/FixtureRostersTab';
-import { useHideBottomNavBar } from '../hooks/navigation/useNavigationBars';
-import FixtureStandingsTab from '../components/fixture/fixture_screen/FixtureStandingsTab';
-import SportActionsDefinitionsProvider from '../components/stats/SportActionsDefinitionsProvider';
-import { FixtureScreenProvider } from '../providers/fixtures/FixtureScreenProvider';
-import { useFixtureScreen } from '../hooks/fixtures/useFixture';
-import PlayerMatchModal from '../components/fixture/player_fixture_modal/PlayerFixtureModal';
-import PlayerProfileModal from '../components/player/PlayerProfileModal';
+import FixtureBoxscoreTab from '../../components/fixture/fixture_screen/FixtureBoxscoreTab';
+import FixtureH2HTab from '../../components/fixture/fixture_screen/FixtureH2HTab';
+import FixtureHero from '../../components/fixture/fixture_screen/FixtureHero';
+import FixtureOverviewTab from '../../components/fixture/fixture_screen/FixtureOverviewTab';
+import FixtureStandingsTab from '../../components/fixture/fixture_screen/FixtureStandingsTab';
+import { FixtureStickyHeader } from '../../components/fixture/fixture_screen/FixtureStickyHeader';
+import FixtureRostersTab from '../../components/fixture/fixture_screen/rosters/FixtureRostersTab';
+import { ProMotmVotingBox } from '../../components/pickem/motm';
+import PlayerProfileModal from '../../components/player/PlayerProfileModal';
+import SportActionsDefinitionsProvider from '../../components/stats/SportActionsDefinitionsProvider';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
+import PilledTabView from '../../components/ui/tabs/PilledTabView';
+import { TabViewHeaderItem, TabViewPage } from '../../components/ui/tabs/TabView';
+import GameHighlightsCard from '../../components/ui/video/GameHighlightsCard';
+import { useFixtureScreen } from '../../hooks/fixtures/useFixture';
+import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
+import { FixtureScreenProvider } from '../../providers/fixtures/FixtureScreenProvider';
+import { boxScoreService } from '../../services/boxScoreService';
+import PageView from '../../components/ui/containers/PageView';
+import ErrorCard from '../../components/ui/cards/ErrorCard';
+import { Activity } from 'react';
+import PlayerFixtureModal from '../../components/fixture/player_fixture_modal/PlayerFixtureModal';
 
-export default function FixtureScreen() {
+export default function FixtureDetailScreen() {
 
   const { fixtureId } = useParams();
 
@@ -55,9 +55,9 @@ function Content() {
   if (isLoading) return <LoadingIndicator />;
 
   if (!fixture)
-    return <ErrorState error='Whoops!' message="Failed to load match information" />;
+    return <ErrorCard error='Whoops!' message="Failed to load match information" />;
 
-  if (!fixtureId) return <ErrorState message="Match was not found" />;
+  if (!fixtureId) return <ErrorCard message="Match was not found" />;
 
   const tabItems: TabViewHeaderItem[] = [
     {
@@ -148,7 +148,7 @@ function Content() {
       )}
 
       {showPlayerMatchModal && selectedPlayer && (
-        <PlayerMatchModal
+        <PlayerFixtureModal
           fixture={fixture}
           player={selectedPlayer}
           isOpen={showPlayerMatchModal}

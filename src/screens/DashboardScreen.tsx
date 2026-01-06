@@ -1,4 +1,4 @@
-import PageView from './PageView';
+import PageView from '../components/ui/containers/PageView';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';

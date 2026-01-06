@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useQueryValue } from '../../hooks/useQueryState';
-import PageView from '../PageView';
 import ScrummyLogoHorizontal from '../../components/branding/scrummy_logo_horizontal';
 import SecondaryText from '../../components/ui/typography/SecondaryText';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -12,6 +11,7 @@ import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import { InfoCard } from '../../components/ui/cards/StatCard';
 import { Toast } from '../../components/ui/Toast';
 import { analytics } from '../../services/analytics/anayticsService';
+import { logger } from '../../services/logger';
 
 /** Renders Screen to help show the user's how to except invitations
  * for the app
@@ -82,7 +82,7 @@ export default function InviteStepsScreen() {
       };
       analytics.track('[Marketing] Invite Steps Viewed', utm);
     } catch (e) {
-      // no-op
+      logger.error('Error ', e);
     }
   }, [oneLinkUrl, leagueName, userName, joinCode]);
 

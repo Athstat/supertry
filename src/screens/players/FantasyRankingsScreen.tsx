@@ -1,6 +1,6 @@
 import React from "react";
-import UserRankingCard from "../components/rankings/UserRankingCard";
-import FantasyRankingsLeaderBoard from "../components/rankings/RankingsLeaderBoard";
+import FantasyRankingsLeaderBoard from "../../components/rankings/RankingsLeaderBoard";
+import UserRankingCard from "../../components/rankings/UserRankingCard";
 
 export function FantasyRankingsScreen() {
   

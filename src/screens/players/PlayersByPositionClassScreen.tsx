@@ -1,7 +1,7 @@
 import { ArrowLeft, ChevronDown } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom'
-import PageView from '../PageView';
-import RoundedCard from '../../components/shared/RoundedCard';
+import PageView from '../../components/ui/containers/PageView';
+import RoundedCard from "../../components/ui/cards/RoundedCard";
 import { formatPosition } from '../../utils/athleteUtils';
 import CircleButton from '../../components/ui/buttons/BackButton';
 import PlayersPositionsSheet from '../../components/players/positioning/PlayersPositionsSheet';

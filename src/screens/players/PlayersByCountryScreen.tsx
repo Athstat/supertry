@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import PageView from "../PageView";
+import PageView from "../../components/ui/containers/PageView";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { getCountryEmojiFlag } from "../../utils/svrUtils";
 import { useMemo, useState } from "react";
 import { ArrowLeft, ChevronDown } from "lucide-react";
-import RoundedCard from "../../components/shared/RoundedCard";
+import RoundedCard from "../../components/ui/cards/RoundedCard";
 import PlayersCountrySheet from "../../components/players/nationality/PlayersCountrySheet";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import PlayersList from "../../components/players/PlayersList";

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AuthLayout } from '../../components/auth/AuthLayout';
 import EmailPasswordLoginBox from '../../components/auth/login/EmailPasswordLoginBox';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
 import Experimental from '../../components/ui/ab_testing/Experimental';
+import { AuthLayout } from '../../components/auth/layouts/AuthLayout';
 
 export function SignInScreen() {
   const [isLoading, ] = useState(false);

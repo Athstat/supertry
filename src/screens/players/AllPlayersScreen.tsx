@@ -1,4 +1,4 @@
-import PageView from '../PageView'
+import PageView from '../../components/ui/containers/PageView'
 import { ArrowLeft } from 'lucide-react'
 import CircleButton from '../../components/ui/buttons/BackButton'
 import { useSupportedAthletes } from '../../hooks/athletes/useSupportedAthletes'

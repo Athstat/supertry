@@ -1,21 +1,21 @@
-import UserNotificationsSettings from '../components/auth/user_profile/settings/UserNotificationsSettings';
-import LicensingModal from '../components/branding/licensing/LicensingModel';
-import { authUserAtom, isGuestUserAtom } from '../state/authUser.atoms';
+import UserNotificationsSettings from '../../components/auth/user_profile/settings/UserNotificationsSettings';
+import LicensingModal from '../../components/branding/licensing/LicensingModel';
+import { authUserAtom, isGuestUserAtom } from '../../state/authUser.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import AuthUserDataProvider from '../components/auth/AuthUserDataProvider';
+import AuthUserDataProvider from '../../components/auth/AuthUserDataProvider';
 import { useAtomValue } from 'jotai';
-import UserProfileHeader from '../components/auth/UserProfileHeader';
-import ClaimGuestAccountBox from '../components/auth/guest/ClaimGuestAccountBox';
-import LogoutButton from '../components/auth/LogoutButton';
-import DeleteAccountButton from '../components/auth/DeleteAccountButton';
-import Experimental from '../components/ui/ab_testing/Experimental';
-import QaNoticeCard from '../components/auth/user_profile/settings/QaNoticeCard';
+import ClaimGuestAccountBox from '../../components/auth/guest/ClaimGuestAccountBox';
+import DeleteAccountButton from '../../components/auth/DeleteAccountButton';
+import Experimental from '../../components/ui/ab_testing/Experimental';
+import QaNoticeCard from '../../components/auth/user_profile/settings/QaNoticeCard';
 import { useNavigate } from 'react-router-dom';
-import ProfileSettingCard from '../components/auth/user_profile/settings/ProfileSettingCard';
+import ProfileSettingCard from '../../components/auth/user_profile/settings/ProfileSettingCard';
 import { UserCircle, Moon, Sun, HelpCircle } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
-import ScrummyGamePlayModal from '../components/branding/help/ScrummyGamePlayModal';
+import { useTheme } from '../../contexts/ThemeContext';
+import ScrummyGamePlayModal from '../../components/branding/help/ScrummyGamePlayModal';
 import { useState } from 'react';
+import LogoutButton from '../../components/auth/login/LogoutButton';
+import UserProfileHeader from '../../components/auth/user_profile/UserProfileHeader';
 
 export function UserProfileScreen() {
 

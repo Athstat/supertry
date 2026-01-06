@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthLayout } from '../../components/auth/AuthLayout';
 import { RegisterUserReq } from '../../types/auth';
 import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/analytics/anayticsService';
 import { authService } from '../../services/authService';
-import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
-import Experimental from '../../components/ui/ab_testing/Experimental';
 import { ProgressIndicator } from '../../components/auth/signup/ProgressIndicator';
 import { OnboardingStep1Username } from '../../components/auth/signup/OnboardingStep1Username';
 import { OnboardingStep2Email } from '../../components/auth/signup/OnboardingStep2Email';
 import { OnboardingStep3Password } from '../../components/auth/signup/OnboardingStep3Password';
 import { OnboardingStep4Review } from '../../components/auth/signup/OnboardingStep4Review';
+import { AuthLayout } from '../../components/auth/layouts/AuthLayout';
 
 interface OnboardingState {
   username: string;

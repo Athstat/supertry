@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { IOnboardingTab } from '../types/onboarding';
-import PrimaryButton from '../components/ui/buttons/PrimaryButton';
-import ScrummyLogo from '../components/branding/scrummy_logo';
+import { IOnboardingTab } from '../../types/onboarding';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
+import ScrummyLogo from '../../components/branding/scrummy_logo';
 
 import { useNavigate } from 'react-router-dom';
-import TabProgressDots from '../components/ui/bars/TabProgressDots';
-import SecondaryText from '../components/ui/typography/SecondaryText';
-import { useAthletes } from '../contexts/AthleteContext';
-import { PlayerGameCard } from '../components/player/PlayerGameCard';
-import { useJoinLeague } from '../hooks/leagues/useJoinLeague';
-import { Toast } from '../components/ui/Toast';
+import TabProgressDots from '../../components/ui/bars/TabProgressDots';
+import SecondaryText from '../../components/ui/typography/SecondaryText';
+import { useAthletes } from '../../contexts/AthleteContext';
+import { PlayerGameCard } from '../../components/player/PlayerGameCard';
+import { useJoinLeague } from '../../hooks/leagues/useJoinLeague';
+import { Toast } from '../../components/ui/Toast';
 import { AnimatePresence, motion } from 'framer-motion';
-import ScrummyMatrixBackground from '../components/shared/ScrummyMatrixBackground';
-import { analytics } from '../services/analytics/anayticsService';
-import { useOnboarding } from '../hooks/onboarding/useOnboarding';
+import { analytics } from '../../services/analytics/anayticsService';
+import { useOnboarding } from '../../hooks/onboarding/useOnboarding';
+import ScrummyMatrixBackground from '../../components/ui/containers/ScrummyMatrixBackground';
 
 // Helper to ensure we only render players with valid image URLs
 const hasValidImageUrl = (u?: string | null): boolean => {

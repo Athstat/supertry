@@ -1,21 +1,21 @@
 import { ArrowLeft, Binoculars, Plus } from "lucide-react";
-import PageView from "../PageView";
-import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
-import RoundedCard from "../../components/shared/RoundedCard";
-import { ScoutingListPlayerCard } from "../../components/scouting/ScoutingListPlayerCard";
+import PageView from "../../../components/ui/containers/PageView";
+import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList";
+import RoundedCard from "../../../components/ui/cards/RoundedCard";
 import { useMemo, useState } from "react";
-import PlayerProfileModal from "../../components/player/PlayerProfileModal";
-import ScoutingListPlayerModal from "../../components/scouting/ScoutingListPlayerModal";
-import { ScoutingListPlayer } from "../../types/fantasy/scouting";
-import CircleButton from "../../components/ui/buttons/BackButton";
-import { useNavigateBack } from "../../hooks/web/useNavigateBack";
-import SecondaryText from "../../components/ui/typography/SecondaryText";
-import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
-import { IProAthlete } from "../../types/athletes";
-import SmartPlayerMugshot from "../../components/player/SmartPlayerMugshot";
-import { formatPosition } from "../../utils/athleteUtils";
-import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
-import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
+import PlayerProfileModal from "../../../components/player/PlayerProfileModal";
+import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
+import CircleButton from "../../../components/ui/buttons/BackButton";
+import { useNavigateBack } from "../../../hooks/web/useNavigateBack";
+import SecondaryText from "../../../components/ui/typography/SecondaryText";
+import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthletes";
+import { IProAthlete } from "../../../types/athletes";
+import SmartPlayerMugshot from "../../../components/player/SmartPlayerMugshot";
+import { formatPosition } from "../../../utils/athleteUtils";
+import PrimaryButton from "../../../components/ui/buttons/PrimaryButton";
+import { useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
+import { ScoutingListPlayerCard } from "../../../components/players/scouting/ScoutingListPlayerCard";
+import ScoutingListPlayerModal from "../../../components/players/scouting/ScoutingListPlayerModal";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {

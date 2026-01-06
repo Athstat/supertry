@@ -3,7 +3,7 @@
 import useSWR from "swr";
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
 import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
-import { IStatCard, TopicPageView } from "../PageView";
+import { IStatCard, TopicPageView } from "../../components/ui/containers/PageView";
 import ProPredictionsLeaderboard from "../../components/pickem/ProPredictionsLeaderboard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/ui/tabs/TabView";
 import UserProPredictionsHistoryTab from "../../components/pickem/ProPredictionsHistory";

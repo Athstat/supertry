@@ -1,7 +1,6 @@
 import CircleButton from "../../components/ui/buttons/BackButton";
-import PageView from "../PageView";
+import PageView from "../../components/ui/containers/PageView";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
-import BottomSheetView from "../../components/ui/BottomSheetView";
 import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
 import { useQueryState } from "../../hooks/useQueryState";
 import { queryParamKeys } from "../../types/constants";
@@ -11,11 +10,12 @@ import { FantasyPointsRankingTable, FantasyPointsRankingTableLoadingSkeleton } f
 import SecondaryText from "../../components/ui/typography/SecondaryText";
 import { abbreviateSeasonName } from "../../components/players/compare/PlayerCompareSeasonPicker";
 import { Activity, useState } from "react";
-import RoundedCard from "../../components/shared/RoundedCard";
+import RoundedCard from "../../components/ui/cards/RoundedCard";
 import { twMerge } from "tailwind-merge";
 import { useNavigate } from "react-router-dom";
 import { IProAthlete } from "../../types/athletes";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
+import BottomSheetView from "../../components/ui/modals/BottomSheetView";
 
 
 /** Renders a screen that shows the fantasy top performers */

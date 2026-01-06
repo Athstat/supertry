@@ -1,18 +1,18 @@
 import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/ui/buttons/BackButton";
-import PageView from "../PageView";
+import PageView from "../../components/ui/containers/PageView";
 import { useNavigate } from "react-router-dom";
 import SecondaryText from "../../components/ui/typography/SecondaryText";
 import ToggleButton from "../../components/ui/buttons/ToggleButton";
-import RoundedCard from "../../components/shared/RoundedCard";
 import { GoSync } from "react-icons/go";
 import { Toast } from "../../components/ui/Toast";
-import { ErrorState } from "../../components/ui/ErrorState";
 import { useNotificationPreferences } from "../../hooks/notifications/useNotificationPreferences";
 import { twMerge } from "tailwind-merge";
 import RadioList from "../../components/ui/buttons/RadioList";
 import { GameUpdatesPreference, gameUpdatesPreferenceRadioListOptions } from "../../types/notifications";
 import { useEffect } from "react";
+import RoundedCard from "../../components/ui/cards/RoundedCard";
+import ErrorCard from "../../components/ui/cards/ErrorCard";
 
 
 /** Renders the Notification Preferences Screen */
@@ -169,8 +169,8 @@ export default function NotificationPreferencesScreen() {
 
             {isProfileFetchFailed && (
                 <div>
-                    <ErrorState
-                        error="Whoops! Something wen't wrong"
+                    <ErrorCard
+                        title="Whoops! Something wen't wrong"
                         message="We failed to retreive your notification preferences."
                     />
                 </div>

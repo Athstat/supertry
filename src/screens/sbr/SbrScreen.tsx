@@ -1,13 +1,13 @@
-import PageView from "./PageView";
-import SbrScreenHeader from "../components/sbr/SbrScreenHeader";
-import TabView, { TabViewHeaderItem, TabViewPage } from "../components/ui/tabs/TabView";
-import SbrPredictionsTab from "../components/sbr/predictions/SbrPredictionsTab";
-import SbrFixturesTab from "../components/sbr/fixtures/SbrFixturesTab";
-import SbrChatTab from "../components/sbr/SBRChatScreen";
+import PageView from "../../components/ui/containers/PageView";
+import SbrScreenHeader from "../../components/sbr/SbrScreenHeader";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/ui/tabs/TabView";
+import SbrPredictionsTab from "../../components/sbr/predictions/SbrPredictionsTab";
+import SbrFixturesTab from "../../components/sbr/fixtures/SbrFixturesTab";
+import SbrChatTab from "../../components/sbr/SBRChatScreen";
 import { ScopeProvider } from "jotai-scope";
-import { allSbrWeekFixturesAtom, sbrFixturesPivotDateAtom, sbrFixturesWeekEndAtom, sbrFixturesWeekStartAtom, sbrWeekFeatureGamesAtom, sbrWeekFixturesAtom } from "../state/sbrFixtures.atoms";
+import { allSbrWeekFixturesAtom, sbrFixturesPivotDateAtom, sbrFixturesWeekEndAtom, sbrFixturesWeekStartAtom, sbrWeekFeatureGamesAtom, sbrWeekFixturesAtom } from "../../state/sbrFixtures.atoms";
 import { useAtomValue } from "jotai";
-import SbrScreenDataProvider from "../providers/SbrScreenDataProvider";
+import SbrScreenDataProvider from "../../providers/SbrScreenDataProvider";
 
 export default function SbrScreen() {
 

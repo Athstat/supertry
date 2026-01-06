@@ -1,10 +1,10 @@
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge"
-import BlueGradientCard from "../components/ui/cards/BlueGradientCard"
+import BlueGradientCard from "../cards/BlueGradientCard"
 import { ChevronLeft } from "lucide-react"
-import TransparentStatCard from "../components/ui/cards/TransparentStatCard"
-import { useNavigateBack } from "../hooks/web/useNavigateBack"
-import { AppColours } from "../types/constants"
+import TransparentStatCard from "../cards/TransparentStatCard"
+import { useNavigateBack } from "../../../hooks/web/useNavigateBack"
+import { AppColours } from "../../../types/constants"
 
 type Props = {
   children?: ReactNode;

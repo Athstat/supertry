@@ -1,13 +1,13 @@
 import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/ui/buttons/BackButton";
-import PageView from "../PageView";
+import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
-import FantasyLeagueGroupDataProvider from "../../components/fantasy_league/providers/FantasyLeagueGroupDataProvider";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { JoinOrInviteButton } from "../../components/fantasy_league/buttons/JoinLeagueButton";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { FantasyLeagueStandings } from "../../components/fantasy_league/standings/FantasyLeagueStandings";
-import RoundedCard from "../../components/shared/RoundedCard";
+import RoundedCard from "../../components/ui/cards/RoundedCard";
+import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
 
 
 /** Renders League standings screen */

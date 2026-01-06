@@ -1,25 +1,25 @@
 import { useNavigate, useParams } from "react-router-dom";
-import PageView from "./PageView";
-import { ErrorState } from "../components/ui/ErrorState";
+import PageView from "../../components/ui/containers/PageView";
+import { ErrorState } from "../../components/ui/ErrorState";
 import { ArrowLeft, Minus } from "lucide-react";
-import BlueGradientCard from "../components/ui/cards/BlueGradientCard";
-import SbrTeamLogo from "../components/sbr/fixtures/SbrTeamLogo";
-import TabView, { TabViewHeaderItem, TabViewPage } from "../components/ui/tabs/TabView";
-import { sbrFixtureSummary } from "../utils/sbrUtils";
-import { ISbrFixture } from "../types/sbr";
+import BlueGradientCard from "../../components/ui/cards/BlueGradientCard";
+import SbrTeamLogo from "../../components/sbr/fixtures/SbrTeamLogo";
+import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/ui/tabs/TabView";
+import { sbrFixtureSummary } from "../../utils/sbrUtils";
+import { ISbrFixture } from "../../types/sbr";
 import { format } from "date-fns";
-import SbrFixtureKickOffInfo from "../components/sbr/fixture/SbrFixtureKickOffInfo";
-import SbrFixtureTeamStats from "../components/sbr/fixture/SbrFixtureTeamStats";
-import SbrMotmVotingBox from "../components/sbr/motm/SbrMotmVotingBox";
-import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../state/sbrFixtureScreen.atoms";
+import SbrFixtureKickOffInfo from "../../components/sbr/fixture/SbrFixtureKickOffInfo";
+import SbrFixtureTeamStats from "../../components/sbr/fixture/SbrFixtureTeamStats";
+import SbrMotmVotingBox from "../../components/sbr/motm/SbrMotmVotingBox";
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from "../../state/sbrFixtureScreen.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { useAtomValue } from "jotai";
-import SbrFixtureTimeline from "../components/sbr/fixture/SbrFixtureTimeline";
+import SbrFixtureTimeline from "../../components/sbr/fixture/SbrFixtureTimeline";
 import useSWR from "swr";
-import { swrFetchKeys } from "../utils/swrKeys";
-import { sbrService } from "../services/sbr/sbrService";
-import { LoadingIndicator } from "../components/ui/LoadingIndicator";
-import SbrFixtureDataProvider from "../providers/SbrFixtureDataProvider";
+import { swrFetchKeys } from "../../utils/swrKeys";
+import { sbrService } from "../../services/sbr/sbrService";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
+import SbrFixtureDataProvider from "../../providers/SbrFixtureDataProvider";
 
 export default function SbrFixtureScreen() {
 

@@ -1,20 +1,20 @@
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
-import { LoadingIndicator } from '../components/ui/LoadingIndicator';
-import { ErrorState } from '../components/ui/ErrorState';
-import SeasonDataProvider from '../components/seasons/SeasonDataProvider';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
+import { ErrorState } from '../../components/ui/ErrorState';
+import SeasonDataProvider from '../../components/seasons/SeasonDataProvider';
 import { useAtomValue } from 'jotai';
 import {
   seasonAthletesAtoms,
   seasonAtom,
   seasonFixtutesAtoms,
   seasonTeamsAtoms,
-} from '../state/season.atoms';
+} from '../../state/season.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import { TopicPageView } from './PageView';
-import { seasonService } from '../services/seasonsService';
-import SeasonScreenTeamList from '../components/seasons/SeasonScreenTeamList';
-import SeasonScreenFixturesList from '../components/seasons/SeasonScreenFixturesList';
+import { TopicPageView } from '../../components/ui/containers/PageView';
+import { seasonService } from '../../services/seasonsService';
+import SeasonScreenTeamList from '../../components/seasons/SeasonScreenTeamList';
+import SeasonScreenFixturesList from '../../components/seasons/SeasonScreenFixturesList';
 
 export default function SeasonScreen() {
   const { seasonId } = useParams();
