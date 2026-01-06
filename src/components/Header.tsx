@@ -5,7 +5,7 @@ import { isInProduction } from '../utils/webUtils';
 import BetaTag from './branding/BetaTag';
 import NotificationsBellButton from './notifications/NotificationsBellButton';
 import { useNavigationBars } from '../hooks/navigation/useNavigationBars';
-import CompetitionSelector from './dashboard/CompetitionSelector';
+import CompetitionSelector from './fantasy-seasons/CompetitionSelector';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
 import UserProfileButton from './auth/user_profile/UserProfileButton';

@@ -13,7 +13,7 @@ import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import RoundedCard from "../../shared/RoundedCard";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
-import { trimSeasonYear } from "../CompetitionSelector";
+import { trimSeasonYear } from "../../fantasy-seasons/CompetitionSelector";
 import { smartRoundUp } from "../../../utils/intUtils";
 
 

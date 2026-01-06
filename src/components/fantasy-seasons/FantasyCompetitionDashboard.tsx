@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
-import LeagueAndStandingsSection from '../fantasy-leagues/join_league_screen/other_leagues_section/LeagueAndStandingsSection';
 import ManageTeamCTA from '../fantasy-leagues/ManageTeamCTA';
 import RoundedCard from '../shared/RoundedCard';
 import { useFeaturedLeague } from '../../hooks/leagues/useFeaturedLeague';
+import LeagueAndStandingsSection from '../fantasy-leagues/other_leagues_section/LeagueAndStandingsSection';
 
 type Props = {
   fantasySeason: IFantasySeason
