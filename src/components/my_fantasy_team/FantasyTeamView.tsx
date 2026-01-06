@@ -5,7 +5,7 @@ import { PositionClass } from '../../types/athletes';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { requestPushPermissions } from '../../utils/bridgeUtils';
-import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
+import PlayerPicker from '../player_picker/PlayerPicker';
 import PushOptInModal from '../ui/PushOptInModal';
 import MyTeamPitchView from './MyTeamPitchView';
 
@@ -34,7 +34,7 @@ export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
 
       {leagueRound && <MyTeamPitchView leagueRound={leagueRound} />}
 
-      <PlayerPickerV2
+      <PlayerPicker
         isOpen={swapState.open && swapState.slot != null && Boolean(swapState.position)}
         positionPool={swapState?.position?.positionClass as PositionClass}
         remainingBudget={budgetRemaining + (swapPlayer?.purchase_price || 0)}

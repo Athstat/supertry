@@ -30,7 +30,7 @@ type Props = {
 }
 
 /** Renders player picker version 2, with improved stability */
-export default function PlayerPickerV2({
+export default function PlayerPicker({
   playerToBeReplaced, positionPool,
   onSelectPlayer, targetLeagueRound,
   isOpen, title, remainingBudget,

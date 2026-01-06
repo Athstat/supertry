@@ -7,7 +7,7 @@ import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
 import NoContentCard from '../shared/NoContentMessage';
 import { useTabView } from '../shared/tabs/TabView';
 
-import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
+import PlayerPicker from '../player_picker/PlayerPicker';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
 import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
@@ -111,7 +111,7 @@ export default function CreateFantasyTeamView() {
       </div>
 
 
-      {<PlayerPickerV2
+      {<PlayerPicker
         isOpen={swapState.open}
         positionPool={swapState.position?.positionClass ?? undefined}
         remainingBudget={budgetRemaining}
