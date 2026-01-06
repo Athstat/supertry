@@ -10,14 +10,14 @@ import { useTabView } from '../shared/tabs/TabView';
 import PlayerPickerV2 from '../player-picker/PlayerPickerV2';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
 import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
-import TeamBenchDrawer from './my-team/TeamBenchDrawer';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
-import CreateTeamViewHeader from './my-team/CreateTeamViewHeader';
 import { PlayerActionModal } from '../team/PlayerActionModal';
+import CreateTeamViewHeader from '../my_fantasy_team/CreateTeamViewHeader';
+import TeamBenchDrawer from '../my_fantasy_team/TeamBenchDrawer';
 
 
-export default function CreateTeamView() {
+export default function CreateFantasyTeamView() {
 
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap, slots } = useCreateFantasyTeam();
 

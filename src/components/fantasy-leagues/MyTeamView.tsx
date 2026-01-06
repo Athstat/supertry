@@ -1,5 +1,5 @@
 import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
-import CreateTeamView from './CreateTeamView';
+import CreateFantasyTeamView from './CreateTeamView';
 import FantasyTeamView from './my-team/FantasyTeamView';
 import NoTeamCreatedFallback from './NoTeamCreatedFallback';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
@@ -99,7 +99,7 @@ function MyTeamModeSelector() {
       <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
         {round && (
           <CreateFantasyTeamProvider leagueRound={round}>
-            <CreateTeamView />
+            <CreateFantasyTeamView />
           </CreateFantasyTeamProvider>
         )}
       </Activity>

@@ -23,7 +23,6 @@ type Props = {
   blockGlow?: boolean;
   hideTeamLogo?: boolean;
   hidePrice?: boolean;
-  // Optional style overrides for specific screens (e.g., PlayersScreen)
   priceClassName?: string;
   teamLogoClassName?: string;
   detailsClassName?: string;

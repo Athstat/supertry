@@ -1,10 +1,11 @@
-import React from "react";
 import { motion } from "framer-motion";
 
 interface LoadingStateProps {
   isLoading: boolean;
 }
 
+
+// TODO: Refactor this screen
 export function LoadingState({ isLoading }: LoadingStateProps) {
   if (!isLoading) return null;
 
