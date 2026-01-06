@@ -12,6 +12,7 @@ type Props = {
     requiredPlayersCount?: number;
 };
 
+// TODO: Delete
 /** Renders Budget indicator component */
 export function BudgetIndicator({ remainingBudget = 0 }: Props) {
     const [lastBudget, setLastBudget] = useState(remainingBudget);

@@ -5,9 +5,10 @@ import SecondaryText from "../shared/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import { twMerge } from "tailwind-merge";
 import { X } from "lucide-react";
-import { BudgetIndicator } from "../team-creation/BudgetIndicator";
+import { BudgetIndicator } from "./BudgetIndicator";
 
 
+// TODO: Delete
 export default function PlayerPickerTeamFilterRow() {
 
     const { availbleTeams, filterTeams, setFilterTeams, remainingBudget } = usePlayerPicker();
