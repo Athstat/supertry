@@ -9,7 +9,7 @@ import PrimaryButton from "../../shared/buttons/PrimaryButton"
 import NoContentCard from "../../shared/NoContentMessage"
 import RoundedCard from "../../shared/RoundedCard"
 import SecondaryText from "../../shared/SecondaryText"
-import CreateLeagueModal from "../CreateLeagueModal"
+import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import LeagueGroupsTable from "../LeagueGroupsTable"
 
 type Props = {
