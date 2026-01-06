@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import PageView from './PageView';
 import { Calendar } from 'lucide-react';
 import { useQueryState } from '../hooks/useQueryState';
-import SbrMatchCenter from '../components/match_center/SbrMatchCenter';
+import SbrMatchCenter from '../components/fixtures/SbrMatchCenter';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 
 export default function SchoolsScreen() {

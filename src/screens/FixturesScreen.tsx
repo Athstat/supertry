@@ -1,6 +1,6 @@
 import PageView from './PageView';
 import { useQueryState } from '../hooks/useQueryState';
-import ProMatchCenterList from '../components/match_center/ProMatchCenterList';
+import ProMatchCenterList from '../components/fixtures/ProMatchCenterList';
 import FloatingSearchBar from '../components/players/ui/FloatingSearchBar';
 import { Fragment, useState, useEffect } from 'react';
 import { useProFixtures } from '../hooks/fixtures/useProFixtures';
@@ -8,7 +8,7 @@ import { useFixtureCursor } from '../hooks/fixtures/useFixtureCursor';
 import PickEmCardSkeleton from '../components/pickem/PickEmCardSkeleton';
 import { LoadingState } from '../components/ui/LoadingState';
 import FixtureSearchResults from '../components/fixture/fixtures_list/FixtureSearchResults';
-import ProMatchCenterHeader from '../components/match_center/ProMatchCenterHeader';
+import ProMatchCenterHeader from '../components/fixtures/ProMatchCenterHeader';
 import { useDebounced } from '../hooks/useDebounced';
 
 /** Renders Pro Rugby Fixtures Screen */

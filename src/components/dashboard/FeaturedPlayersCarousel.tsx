@@ -9,7 +9,7 @@ import { useSupportedSeasons } from '../../hooks/useSupportedSeasons';
 import useSWR from 'swr';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { seasonService } from '../../services/seasonsService';
-import { PilledSeasonFilterBar } from '../match_center/MatcheSeasonFilterBar';
+import { PilledSeasonFilterBar } from '../fixtures/MatcheSeasonFilterBar';
 import { useDeterministicShuffle } from '../../hooks/useShuffle';
 
 export default function FeaturedPlayersCarousel() {
