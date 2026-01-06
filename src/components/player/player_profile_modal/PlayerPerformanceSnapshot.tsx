@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { IProAthlete } from '../../../types/athletes';
-import usePowerRankings from './usePowerRankings';
+import usePowerRankings from '../../../hooks/athletes/usePowerRankings';
 import RoundedCard from '../../shared/RoundedCard';
 import SecondaryText from '../../shared/SecondaryText';
 import MatchPrCard from '../../rankings/MatchPrCard';

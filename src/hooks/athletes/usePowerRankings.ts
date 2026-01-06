@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { powerRankingsService } from '../../../services/powerRankingsService';
-import { SingleMatchPowerRanking } from '../../../types/powerRankings';
+import { powerRankingsService } from '../../services/powerRankingsService';
+import { SingleMatchPowerRanking } from '../../types/powerRankings';
 
 export interface UsePowerRankingsResult {
   data: SingleMatchPowerRanking[];

@@ -1,10 +1,10 @@
 import useSWR from 'swr';
-import { IProAthlete } from '../../../types/athletes';
-import { swrFetchKeys } from '../../../utils/swrKeys';
-import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { IProAthlete } from '../../types/athletes';
+import { swrFetchKeys } from '../../utils/swrKeys';
+import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
 import { useEffect, useMemo, useState } from 'react';
-import { groupSportActions } from '../../../services/athletes/athleteService';
-import { IProSeason } from '../../../types/season';
+import { groupSportActions } from '../../services/athletes/athleteService';
+import { IProSeason } from '../../types/season';
 
 export default function usePlayerStats(player: IProAthlete) {
 

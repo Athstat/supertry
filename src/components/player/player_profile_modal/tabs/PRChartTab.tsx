@@ -11,7 +11,7 @@ import {
   Filler,
   ChartOptions,
 } from 'chart.js';
-import usePowerRankings from '../usePowerRankings';
+import usePowerRankings from '../../../../hooks/athletes/usePowerRankings';
 import { useTheme } from '../../../../contexts/ThemeContext';
 import { format } from 'date-fns';
 

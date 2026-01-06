@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { IProAthlete } from '../../../types/athletes';
-import { usePowerRankings } from './usePowerRankings';
+import { usePowerRankings } from '../../../hooks/athletes/usePowerRankings';
 import { LoadingState } from '../../ui/LoadingState';
 import RoundedCard from '../../shared/RoundedCard';
 import { BarChartRecord, PlainBarChart } from '../../players/ui/PlainBarChart';
