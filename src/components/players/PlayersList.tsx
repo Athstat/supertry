@@ -21,10 +21,10 @@ import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
 import { PlayerFilters } from "./PlayerFilters";
 import { PlayerSort } from "./PlayerSort";
-import FloatingSearchBar from "./ui/FloatingSearchBar";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
 import { PlayerListTable } from "./PlayerListTable";
+import FloatingSearchBar from "./FloatingSearchBar";
 
 type Props = {
     players: IProAthlete[]
