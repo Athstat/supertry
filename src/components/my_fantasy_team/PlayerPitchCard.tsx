@@ -13,7 +13,7 @@ import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import { sanitizeStat } from "../../utils/stringUtils";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
-import { useMyTeamView } from "../my_fantasy_team/MyTeamStateProvider";
+import { useMyTeamView } from "./MyTeamStateProvider";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;

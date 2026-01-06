@@ -8,8 +8,8 @@ import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import PointsBreakdownModal from '../points_breakdown/PointsBreakdownModal';
-import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
-import { PlayerActionModal } from '../team/PlayerActionModal';
+import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
+import { PlayerActionModal } from './PlayerActionModal';
 
 type Props = {
   leagueRound: IFantasyLeagueRound;

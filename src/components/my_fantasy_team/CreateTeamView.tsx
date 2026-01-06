@@ -9,10 +9,10 @@ import { useTabView } from '../shared/tabs/TabView';
 
 import PlayerPicker from '../player_picker/PlayerPicker';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
-import { FantasyTeamFormation3D } from '../team/FantasyTeamFormation';
+import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
-import { PlayerActionModal } from '../team/PlayerActionModal';
+import { PlayerActionModal } from './PlayerActionModal';
 import CreateTeamViewHeader from './CreateTeamViewHeader';
 import TeamBenchDrawer from './TeamBenchDrawer';
 
