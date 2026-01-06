@@ -1,30 +1,27 @@
 import { } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Table2, EyeOff } from 'lucide-react';
-import { ErrorState } from '../ui/ErrorState';
+import { ErrorState } from '../../ui/ErrorState';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import { isGuestUser } from '../../utils/deviceId/deviceIdUtils';
-import LeagueStandingsTable from './standings/LeagueStandingsTable';
-import ClaimAccountNoticeCard from '../auth/guest/ClaimAccountNoticeCard';
-import { FantasyLeagueGroupMember } from '../../types/fantasyLeagueGroups';
-import FantasyLeagueMemberModal from './team-modal/FantasyLeagueMemberModal';
-import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { useLeagueRoundStandingsFilter } from '../../hooks/fantasy/useLeagueRoundStandingsFilter';
-import { useLeagueGroupStandings } from '../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
-import LeagueStandingsFilterSelector, { SelectedWeekIndicator } from './standings/LeagueStandingsFilterSelector';
-import { useOfficialLeagueGroup } from '../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
+import { useAuth } from '../../../contexts/AuthContext';
+import { isGuestUser } from '../../../utils/deviceId/deviceIdUtils';
+import LeagueStandingsTable from './LeagueStandingsTable';
+import ClaimAccountNoticeCard from '../../auth/guest/ClaimAccountNoticeCard';
+import { FantasyLeagueGroupMember } from '../../../types/fantasyLeagueGroups';
+import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
+import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
+import { useLeagueRoundStandingsFilter } from '../../../hooks/fantasy/useLeagueRoundStandingsFilter';
+import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
+import LeagueStandingsFilterSelector, { SelectedWeekIndicator } from './LeagueStandingsFilterSelector';
+import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
 
 
-export function LeagueStandings() {
+/** Renders fantasy league group standings */
+export function FantasyLeagueStandings() {
   const { userMemberRecord, league, currentRound } = useFantasyLeagueGroup();
 
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
-
-  const [showModal, setShowModal] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<FantasyLeagueGroupMember | undefined>();
 
   const { roundFilterId, selectedRound } = useLeagueRoundStandingsFilter();
   const navigate = useNavigate();
@@ -43,7 +40,6 @@ export function LeagueStandings() {
 
   const handleSelectMember = useCallback((member: FantasyLeagueGroupMember) => {
 
-    setSelectedMember(member);
     fantasyAnalytics.trackClickedRowOnLeagueStandings();
 
     const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
@@ -59,11 +55,6 @@ export function LeagueStandings() {
     }
 
   }, [authUser, currentRound, featuredLeague, navigate, roundFilterId, selectedRound])
-
-  const handleCloseMemberModal = () => {
-    setSelectedMember(undefined);
-    setShowModal(false);
-  };
 
 
   const isLoading = loadingOfficialLeague || loadingStandings;
@@ -144,13 +135,6 @@ export function LeagueStandings() {
         </PrimaryButton>} */}
       </div>
 
-      {selectedMember && showModal && (
-        <FantasyLeagueMemberModal
-          member={selectedMember}
-          isOpen={showModal}
-          onClose={handleCloseMemberModal}
-        />
-      )}
     </div>
   );
 }

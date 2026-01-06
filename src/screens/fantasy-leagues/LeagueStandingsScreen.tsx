@@ -6,7 +6,7 @@ import FantasyLeagueGroupDataProvider from "../../components/fantasy_league/prov
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { JoinOrInviteButton } from "../../components/fantasy_league/buttons/JoinLeagueButton";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
-import { LeagueStandings } from "../../components/fantasy_league/LeagueStandings";
+import { FantasyLeagueStandings } from "../../components/fantasy_league/standings/FantasyLeagueStandings";
 import RoundedCard from "../../components/shared/RoundedCard";
 
 
@@ -57,7 +57,7 @@ function Content() {
                 <JoinOrInviteButton />
             </div>
 
-            <LeagueStandings />
+            <FantasyLeagueStandings />
         </PageView>
     )
 }

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import LearnScrummyNoticeCard from '../components/branding/help/LearnScrummyNoticeCard';
 import { fantasyAnalytics } from '../services/analytics/fantasyAnalytics';
 import { useHideBottomNavBar, useHideTopNavBar } from '../hooks/navigation/useNavigationBars';
-import LeagueGroupScreenHeader from '../components/fantasy_league/LeagueGroupScreenHeader';
+import MyFantasyTeamScreenHeader from '../components/fantasy_league/MyFantasyTeamScreenHeader';
 import RoundedCard from '../components/shared/RoundedCard';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
@@ -56,7 +56,7 @@ function Content() {
       AppColours.BACKGROUND
     )}>
 
-      <LeagueGroupScreenHeader />
+      <MyFantasyTeamScreenHeader />
       <LearnScrummyNoticeCard />
       <MyTeamView />
 

@@ -6,7 +6,7 @@ import { useNavigateBack } from '../../hooks/web/useNavigateBack';
 
 
 /** Renders a header component on the fantasy league group header */
-export default function LeagueGroupScreenHeader() {
+export default function MyFantasyTeamScreenHeader() {
 
     const {hardPop} = useNavigateBack();
 
