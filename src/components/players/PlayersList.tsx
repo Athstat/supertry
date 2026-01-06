@@ -3,7 +3,6 @@ import { X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
-import useAthleteFilter from "../../hooks/useAthleteFilter";
 import { useDebounced } from "../../hooks/useDebounced";
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare";
 import { useQueryState } from "../../hooks/useQueryState";
@@ -25,6 +24,7 @@ import { PlayerListTable } from "./PlayerListTable";
 import FloatingSearchBar from "./FloatingSearchBar";
 import RoundedCard from "../ui/cards/RoundedCard";
 import GlassBottomSheet from "../ui/modals/GlassBottomSheet";
+import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
 
 type Props = {
     players: IProAthlete[]

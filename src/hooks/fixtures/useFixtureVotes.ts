@@ -1,12 +1,12 @@
 import useSWR from "swr";
-import { sbrService } from "../services/sbr/sbrService";
-import { ISbrFixture } from "../types/sbr";
-import { useAuthUser } from "./useAuthUser";
+import { sbrService } from "../../services/sbr/sbrService";
+import { ISbrFixture } from "../../types/sbr";
 import { useMemo } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function useSbrFixtureVotes(fixture: ISbrFixture, shouldFetch: boolean = true) {
 
-    const user = useAuthUser();
+    const {authUser: user} = useAuth();
 
     const key = shouldFetch ? `sbr/${fixture.fixture_id}/votes` : null;
     const { data, isLoading, error } = useSWR(key, () => sbrService.getFixtureVotes(fixture.fixture_id));

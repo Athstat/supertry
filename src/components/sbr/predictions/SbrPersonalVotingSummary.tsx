@@ -1,5 +1,5 @@
 import { CircleCheck, XIcon } from "lucide-react"
-import { useSbrFixtureVotes } from "../../../hooks/useFixtureVotes"
+import { useSbrFixtureVotes } from "../../../hooks/fixtures/useFixtureVotes"
 import { ISbrFixture } from "../../../types/sbr"
 import { calculatePerc } from "../../../utils/fixtureUtils"
 import { sbrFixtureSummary } from "../../../utils/sbrUtils"

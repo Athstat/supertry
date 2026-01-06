@@ -1,7 +1,6 @@
 /** Render User Pro Predictions History Tab */
 
 import useSWR from "swr";
-import { useAuthUser } from "../../hooks/useAuthUser"
 import { swrFetchKeys } from "../../utils/swrKeys";
 import { proPredictionsRankingService } from "../../services/proPredictionsRankings";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
@@ -11,10 +10,11 @@ import { ProGameVote } from "../../types/proPredictions";
 import { gamesService } from "../../services/gamesService";
 import FixtureCard from "../fixture/FixtureCard";
 import RoundedCard from "../ui/cards/RoundedCard";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function UserProPredictionsHistoryTab() {
 
-    const user = useAuthUser();
+    const {authUser: user} = useAuth();
     const userId = user?.kc_id ?? "";
     const key = swrFetchKeys.getUserProPredictionsHistoryKey(userId);
     const { data, isLoading, error } = useSWR(key, () => proPredictionsRankingService.getUserPredicitionHistory(userId));

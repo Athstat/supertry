@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useAthleteFilter from "../../hooks/useAthleteFilter";
 import { IProAthlete } from "../../types/athletes"
 import { PlayerSearch } from "./PlayerSearch";
 import PlayerMugshot from "../player/PlayerMugshot";
@@ -12,6 +11,7 @@ import { useInView } from "react-intersection-observer";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import RoundedCard from "../ui/cards/RoundedCard";
 import DialogModal from "../ui/modals/DialogModal";
+import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
 
 type Props = {
     onSelectPlayers?: (players: IProAthlete[]) => void,
