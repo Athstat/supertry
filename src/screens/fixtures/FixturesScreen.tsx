@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, Activity } from 'react';
 import FixtureSearchResults from '../../components/fixtures/FixtureSearchResults';
 import ProMatchCenterHeader from '../../components/fixtures/ProMatchCenterHeader';
 import ProMatchCenterList from '../../components/fixtures/ProMatchCenterList';
@@ -10,6 +10,7 @@ import { useFixtureCursor } from '../../hooks/fixtures/useFixtureCursor';
 import { useProFixtures } from '../../hooks/fixtures/useProFixtures';
 import { useDebounced } from '../../hooks/web/useDebounced';
 import { useQueryState } from '../../hooks/web/useQueryState';
+import FixturesProPickemView from '../../components/fixtures/pro_match_center/ProPickemView';
 
 /** Renders Pro Rugby Fixtures Screen */
 export default function ProFixturesScreen() {
@@ -72,14 +73,27 @@ export default function ProFixturesScreen() {
         />
 
         {!defferedSearchQuery && <div className="w-full mx-auto">
-          <ProMatchCenterList
-            searchQuery={defferedSearchQuery}
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-            onMoveNextWeek={handleNextWeek}
-            displayFixtures={weekFixtures}
-            hasAnyFixtures={hasAnyFixtures}
-          />
+          <Activity mode={viewMode === "fixtures" ? "visible" : "hidden"} >
+            <ProMatchCenterList
+              searchQuery={defferedSearchQuery}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              onMoveNextWeek={handleNextWeek}
+              displayFixtures={weekFixtures}
+              hasAnyFixtures={hasAnyFixtures}
+            />
+          </Activity>
+
+          <Activity mode={viewMode === "pickem" ? "visible" : "hidden"} >
+            <FixturesProPickemView
+              searchQuery={defferedSearchQuery}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              onMoveNextWeek={handleNextWeek}
+              displayFixtures={weekFixtures}
+              hasAnyFixtures={hasAnyFixtures}
+            />
+          </Activity>
         </div>}
 
         {defferedSearchQuery && <FixtureSearchResults

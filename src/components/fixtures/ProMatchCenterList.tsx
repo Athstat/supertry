@@ -39,7 +39,7 @@ export default function ProMatchCenterList({ viewMode, onMoveNextWeek, displayFi
 
       <GroupedFixturesList 
         fixtures={displayFixtures}
-        viewMode={viewMode}
+        viewMode={"fixtures"}
       />
 
     </div>
