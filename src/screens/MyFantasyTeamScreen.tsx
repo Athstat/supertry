@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import FantasyLeagueGroupDataProvider from '../components/fantasy_league/providers/FantasyLeagueGroupDataProvider';
 import { useFantasyLeagueGroup } from '../hooks/leagues/useFantasyLeagueGroup';
 import PageView from './PageView';
 import { ErrorState } from '../components/ui/ErrorState';
@@ -12,9 +11,10 @@ import MyFantasyTeamScreenHeader from '../components/fantasy_league/MyFantasyTea
 import RoundedCard from '../components/shared/RoundedCard';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../types/constants';
-import PitchViewLoadingSkeleton from '../components/fantasy-leagues/my-team/PitchViewLoadingSkeleton';
 import TeamHistoryProvider from '../providers/fantasy_teams/TeamHistoryProvider';
 import { useAuth } from '../contexts/AuthContext';
+import FantasyLeagueGroupDataProvider from '../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
+import PitchViewLoadingSkeleton from '../components/my_fantasy_team/PitchViewLoadingSkeleton';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {

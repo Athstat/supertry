@@ -34,10 +34,10 @@ export function ErrorState({ error, isLoading }: ErrorStateProps) {
 
 interface EmptyStateProps {
   isLoading: boolean;
-  availableLeagues: any[];
-  currentLeagues: any[];
+  availableLeagues: [];
+  currentLeagues: [];
   error: string | null;
-  cardVariants: any;
+  cardVariants: unknown;
 }
 
 export function EmptyState({
@@ -73,9 +73,9 @@ export function EmptyState({
 interface NoSearchResultsProps {
   isLoading: boolean;
   searchTerm: string;
-  filteredLeagues: any[];
-  availableLeagues: any[];
-  cardVariants: any;
+  filteredLeagues: [];
+  availableLeagues: [];
+  cardVariants: unknown;
   onClearSearch: () => void;
 }
 

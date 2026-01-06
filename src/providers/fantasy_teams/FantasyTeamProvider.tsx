@@ -1,16 +1,11 @@
+import { useSetAtom } from "jotai";
 import { ScopeProvider } from "jotai-scope"
-import { ReactNode, useCallback, useEffect, useMemo } from "react"
-import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague"
-import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
-import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
-import { IProAthlete, PositionClass } from "../../../types/athletes"
-import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../../../utils/athleteUtils"
-import { Position } from "../../../types/position"
-import { fantasyAnalytics } from "../../../services/analytics/fantasyAnalytics"
-import { MAX_TEAM_BUDGET } from "../../../types/constants"
-import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom, readOnlyAtom } from "../../../state/fantasy/fantasyLeagueTeam.atoms"
-import { fantasyTeamAthletesAtom } from "../../../state/myTeam.atoms"
+import { ReactNode, useEffect } from "react";
+import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom, readOnlyAtom } from "../../state/fantasy/fantasyLeagueTeam.atoms";
+import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
+import { IFantasyLeagueTeam, IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 
 type Props = {
     team: IFantasyLeagueTeam,
