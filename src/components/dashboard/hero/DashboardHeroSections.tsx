@@ -12,9 +12,9 @@ import { formatCountdown } from "../../../utils/countdown";
 import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
 import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
-import { trimSeasonYear } from "../../fantasy-seasons/CompetitionSelector";
 import { smartRoundUp } from "../../../utils/intUtils";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { trimSeasonYear } from "../../../utils/stringUtils";
 
 
 export function DashboardHeroLoadingSkeleton() {

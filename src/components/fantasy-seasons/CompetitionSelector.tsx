@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useDeferredValue, useEffect, useState } from 'react';
-import { abbreviateSeasonName } from '../../utils/stringUtils';
+import { trimSeasonYear } from '../../utils/stringUtils';
 
 
 export default function CompetitionSelector() {
@@ -62,15 +62,4 @@ export default function CompetitionSelector() {
       </div>
     </div>
   );
-}
-
-
-export function trimSeasonYear(seasonName: string) {
-  const abbreviated = abbreviateSeasonName(seasonName);
-  if (seasonName.includes(" ") && abbreviated) {
-    const [seasonNamePart] = abbreviated.split(" ");
-    return seasonNamePart;
-  }
-
-  return abbreviated || seasonName;
 }

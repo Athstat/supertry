@@ -133,3 +133,13 @@ export const abbreviateSeasonName = (seasonName: string): string => {
     
     return seasonName;
 };
+
+export function trimSeasonYear(seasonName: string) {
+  const abbreviated = abbreviateSeasonName(seasonName);
+  if (seasonName.includes(" ") && abbreviated) {
+    const [seasonNamePart] = abbreviated.split(" ");
+    return seasonNamePart;
+  }
+
+  return abbreviated || seasonName;
+}
