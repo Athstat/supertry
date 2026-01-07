@@ -12,8 +12,8 @@ import { calculateAge } from '../../../../utils/playerUtils';
 import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import TeamLogo from '../../../team/TeamLogo';
 import RoundedCard from '../../../ui/cards/RoundedCard';
-import usePlayerStats from '../../../../hooks/athletes/usePlayerStats';
 import PlayerCompareSeasonPicker from '../season_stats/PlayerCompareSeasonPicker';
+import { usePlayerCompareItem } from '../../../../hooks/athletes/usePlayerCompareItem';
 
 type Props = {
   player: IProAthlete;
@@ -21,11 +21,7 @@ type Props = {
 
 export default function PlayerCompareItemHeader({ player }: Props) {
 
-  const {
-    seasons,
-    currSeason,
-    setCurrSeason,
-  } = usePlayerStats(player);
+  const {selectedSeason, seasons, switchSeason} = usePlayerCompareItem();
 
   const { movePlayerLeft, movePlayerRight, removePlayer } = usePlayerCompareActions();
 
@@ -113,8 +109,8 @@ export default function PlayerCompareItemHeader({ player }: Props) {
       {seasons && (
         <PlayerCompareSeasonPicker
           seasons={seasons}
-          setCurrSeason={setCurrSeason}
-          currSeason={currSeason}
+          setCurrSeason={switchSeason}
+          currSeason={selectedSeason}
         />
       )}
 
