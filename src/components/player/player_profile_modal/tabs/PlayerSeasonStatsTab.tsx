@@ -7,6 +7,7 @@ import { DropdownOption } from "../../../../types/ui";
 import { IProSeason } from "../../../../types/season";
 import { abbreviateSeasonName } from "../../../players/compare/PlayerCompareSeasonPicker";
 import { PlayerSeasonStats } from "../../../stats/PlayerSeasonStatsList";
+import CoachScrummyPlayerReport from "../CoachScrummyPlayerReport";
 
 type Props = {
     player: IProAthlete
@@ -38,7 +39,7 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
     console.log("Selected Season ", selectedSeason);
 
     return (
-        <div>
+        <div className="pb-[200px]" >
             {sortedSeasons.length === 0 && (
                 <NoContentCard message={`Career stats for ${player.player_name} are not available`} />
             )}
@@ -67,9 +68,35 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                             player={player}
                         >
                             <PlayerSeasonStats.Header />
+
+                            <PlayerSeasonStats.Category
+                                categoryName="general"
+                                label="General"
+                            />
+
+                            <PlayerSeasonStats.Category
+                                categoryName="attack"
+                                label="Attacking"
+                            />
+
+                            <PlayerSeasonStats.Category
+                                categoryName="defense"
+                                label="Defense"
+                                initiallyOpened={false}
+                            />
+
+                            <PlayerSeasonStats.Category
+                                categoryName="discipline"
+                                label="Discipline"
+                                initiallyOpened={false}
+                            />
+
                         </PlayerSeasonStats.Root>
                     )}
 
+                    <CoachScrummyPlayerReport 
+                        player={player}
+                    />
                 </div>
             )}
         </div>

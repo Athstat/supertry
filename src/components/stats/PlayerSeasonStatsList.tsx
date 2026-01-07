@@ -4,12 +4,14 @@ import { IProAthlete } from "../../types/athletes"
 import { IProSeason } from "../../types/season"
 import { swrFetchKeys } from "../../utils/swrKeys";
 import { djangoAthleteService } from "../../services/athletes/djangoAthletesService";
-import { ReactNode, useContext, useMemo } from "react";
+import { ReactNode, useContext, useMemo, useState } from "react";
 import PlayerSeasonStatsProvider, { PlayerSeasonStatsContext } from "../../contexts/PlayerSeasonStatsContext";
 import { StatCard2 } from "../ui/cards/StatCard";
 import { Target, Trophy } from "lucide-react";
 import { ClockFading } from "lucide-react";
 import RoundedCard from "../ui/cards/RoundedCard";
+import Collapsable from "../ui/containers/Collapsable";
+import SportActionCard from "./SportActionCard";
 
 type Props = {
   season: IProSeason,
@@ -119,8 +121,61 @@ function Header() {
   )
 }
 
+type CategoryProps = {
+  categoryName?: string,
+  label?: string,
+  initiallyOpened?: boolean
+}
+
+function Category({ categoryName, label, initiallyOpened = true}: CategoryProps) {
+
+  const [isOpen, setOpen] = useState(initiallyOpened);
+  const toggle = () => setOpen(prev => !prev);
+  const context = useContext(PlayerSeasonStatsContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { seasonStats, isLoading } = context;
+  const catStats = seasonStats.filter((s) => {
+    const nameMatches = (s.definition?.category || '').toLowerCase() === (categoryName || '').toLowerCase();
+    const showOnUI = s.definition?.show_on_ui;
+    return nameMatches && showOnUI;
+  });
+
+  if (isLoading) {
+    <div>
+      <p>Loading...</p>
+    </div>
+  }
+
+  return (
+    <div>
+      <Collapsable
+        label={label || categoryName}
+        open={isOpen}
+        toggle={toggle}
+      >
+        <div className="" >
+          {catStats.map((s) => {
+            return (
+              <SportActionCard
+                sportAction={s}
+                className="py-2 px-4 rounded-lg hover:bg-slate-200 cursor-pointer"
+                labelClassName="text-sm text-slate-700 dark:text-slate-200"
+              />
+            )
+          })}
+        </div>
+      </Collapsable>
+    </div>
+  )
+}
+
 
 export const PlayerSeasonStats = {
   Root,
-  Header
+  Header,
+  Category
 }
