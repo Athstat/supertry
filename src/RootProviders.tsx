@@ -14,6 +14,7 @@ import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
 import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsProvider";
 import CacheProvider from "./providers/caching/CacheProvider";
 import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
+import TooltipProvider from "./providers/ui/TooltipProvider";
 
 type Props = {
     children?: ReactNode
@@ -105,7 +106,9 @@ function AppStateLayer({ children }: Props) {
                     onError={handleError}
                     fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                 >
-                    {children}
+                    <TooltipProvider>
+                        {children}
+                    </TooltipProvider>
                 </ErrorBoundary>
             </AppStateProvider>
         </NetworkStatusProvider>
