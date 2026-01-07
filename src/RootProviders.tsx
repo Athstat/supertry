@@ -2,7 +2,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ErrorInfo, ReactNode, useState } from "react"
 import ErrorBoundary, { FallbackProps } from "./components/ui/navigation/ErrorBoundary";
 import NetworkStatusProvider from "./components/network/NetworkStatusProvider";
-import SportActionsDefinitionsProvider from "./components/stats/SportActionsDefinitionsProvider";
+import SportActionsDefinitionsProvider from "./providers/SportActionsDefinitionsProvider";
 import { AppStateProvider } from "./contexts/AppStateContext";
 import { AthleteProvider } from "./contexts/AthleteContext";
 import { AuthProvider } from "./contexts/AuthContext";

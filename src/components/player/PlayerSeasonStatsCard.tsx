@@ -18,6 +18,7 @@ type Props = {
   hideTitle?: boolean;
 };
 
+// TODO: Delete Component
 /** Renders a Player Season Stats Card  */
 export default function PlayerSeasonStatsCard({ player, season, hideTitle = false }: Props) {
   const { ref, inView } = useInView({ triggerOnce: true });

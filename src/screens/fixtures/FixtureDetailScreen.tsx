@@ -9,7 +9,7 @@ import { FixtureStickyHeader } from '../../components/fixture/fixture_screen/Fix
 import FixtureRostersTab from '../../components/fixture/fixture_screen/rosters/FixtureRostersTab';
 import { ProMotmVotingBox } from '../../components/pickem/motm';
 import PlayerProfileModal from '../../components/player/PlayerProfileModal';
-import SportActionsDefinitionsProvider from '../../components/stats/SportActionsDefinitionsProvider';
+import SportActionsDefinitionsProvider from '../../providers/SportActionsDefinitionsProvider';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import PilledTabView from '../../components/ui/tabs/PilledTabView';
 import { TabViewHeaderItem, TabViewPage } from '../../components/ui/tabs/TabView';

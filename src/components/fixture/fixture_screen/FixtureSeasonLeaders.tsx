@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useTeamSeasonLeaders } from "../../../hooks/teams/useTeamSeasonLeaders"
 import { IFixture } from "../../../types/games"
 import { TeamSeasonLeader } from "../../../types/team";
-import { useSportActions } from "../../stats/SportActionsDefinitionsProvider";
+import { useSportActions } from "../../../providers/SportActionsDefinitionsProvider";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
