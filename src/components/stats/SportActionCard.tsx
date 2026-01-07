@@ -4,25 +4,36 @@ import { useTooltip } from "../../hooks/ui/useTooltip"
 import { sanitizeStat, getStatUnit } from "../../utils/stringUtils"
 import { GameSportAction } from "../../types/boxScore"
 import { Info } from "lucide-react"
+import { useSportActions } from "../../hooks/useSportActions"
 
 type Props = {
-  sportAction: SportAction | GameSportAction,
+  sportAction?: SportAction | GameSportAction,
   className?: string,
-  labelClassName?: string
+  labelClassName?: string,
+  fallbackValue?: number,
+  fallbackLabel?: string,
+  hideInfoIcon?: boolean,
+  valueClassName?: string,
+  disableTooltip?: boolean
 }
 
 /** Renders a sport action */
-export default function SportActionCard({ sportAction, className, labelClassName }: Props) {
+export default function SportActionCard({ sportAction, className, labelClassName, fallbackLabel, fallbackValue, hideInfoIcon, valueClassName, disableTooltip }: Props) {
 
-  const { definition } = sportAction;
+
+  const { getDefinition } = useSportActions();
   const { openTooltipModal } = useTooltip();
 
+  const otherDef = getDefinition(fallbackLabel);
+  const definition = sportAction?.definition;
+  const finalDef = definition || otherDef;
+
   const handleClick = () => {
-    if (definition) {
-      const { display_name, category, tooltip } = definition;
-      const title = display_name ? `${display_name} (${category})` : display_name;
-      openTooltipModal(title, tooltip);
-    }
+      if (finalDef && !disableTooltip) {
+        const { display_name, category, tooltip } = finalDef;
+        const title = display_name ? `${display_name} (${category})` : display_name;
+        openTooltipModal(title, tooltip);
+      }
   }
 
   return (
@@ -42,12 +53,16 @@ export default function SportActionCard({ sportAction, className, labelClassName
             labelClassName,
           )}
         >
-          {sportAction.definition?.display_name}
+          {sportAction?.definition?.display_name || fallbackLabel}
         </p>
 
-        <Info className="w-4 h-4 dark:text-white/40 text-black/40" />
+        {!hideInfoIcon && <Info className="w-3 h-3 dark:text-white/40 text-black/40" />}
+
       </div>
-      <p className="font-bold text-sm" >{sanitizeStat(sportAction.action_count)}{getStatUnit(sportAction.definition?.display_name)}</p>
+      <p className={twMerge(
+        "font-bold text-sm",
+        valueClassName
+      )} >{sanitizeStat(sportAction?.action_count || fallbackValue)}{getStatUnit(sportAction?.definition?.display_name || fallbackLabel)}</p>
     </div>
   )
 }

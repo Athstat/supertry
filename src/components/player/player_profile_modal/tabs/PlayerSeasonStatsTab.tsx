@@ -6,7 +6,7 @@ import NoContentCard from "../../../ui/typography/NoContentMessage";
 import { DropdownOption } from "../../../../types/ui";
 import { IProSeason } from "../../../../types/season";
 import { abbreviateSeasonName } from "../../../players/compare/PlayerCompareSeasonPicker";
-import { PlayerSeasonStats } from "../../../stats/PlayerSeasonStatsList";
+import { PlayerSeasonStatsList } from "../../../stats/PlayerSeasonStatsList";
 import CoachScrummyPlayerReport from "../CoachScrummyPlayerReport";
 
 type Props = {
@@ -65,36 +65,36 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                     </div>
 
                     {(displaySeason) && (
-                        <PlayerSeasonStats.Root
+                        <PlayerSeasonStatsList.Root
                             season={displaySeason}
                             player={player}
                         >
-                            <PlayerSeasonStats.Header />
+                            <PlayerSeasonStatsList.Header />
 
-                            <PlayerSeasonStats.Category
+                            <PlayerSeasonStatsList.Category
                                 categoryName="general"
                                 label="General"
                                 skeletonItemCount={1}
                             />
 
-                            <PlayerSeasonStats.Category
+                            <PlayerSeasonStatsList.Category
                                 categoryName="attack"
                                 label="Attacking"
                             />
 
-                            <PlayerSeasonStats.Category
+                            <PlayerSeasonStatsList.Category
                                 categoryName="defense"
                                 label="Defense"
                                 initiallyOpened={false}
                             />
 
-                            <PlayerSeasonStats.Category
+                            <PlayerSeasonStatsList.Category
                                 categoryName="discipline"
                                 label="Discipline"
                                 initiallyOpened={false}
                             />
 
-                        </PlayerSeasonStats.Root>
+                        </PlayerSeasonStatsList.Root>
                     )}
 
                     <CoachScrummyPlayerReport 

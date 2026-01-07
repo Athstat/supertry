@@ -12,6 +12,7 @@ import { ClockFading } from "lucide-react";
 import RoundedCard from "../ui/cards/RoundedCard";
 import Collapsable from "../ui/containers/Collapsable";
 import SportActionCard from "./SportActionCard";
+import { useSportActions } from "../../hooks/useSportActions";
 
 type Props = {
   season: IProSeason,
@@ -152,7 +153,7 @@ function Category({ categoryName, label, initiallyOpened = true, skeletonItemCou
     return nameMatches && showOnUI;
   });
 
-  
+
   if (isLoading) {
 
     return (
@@ -195,9 +196,60 @@ function Category({ categoryName, label, initiallyOpened = true, skeletonItemCou
   )
 }
 
+type SpecificActionProps = {
+  actionName?: string,
+  defaultValue?: number
+}
 
-export const PlayerSeasonStats = {
+function SpecificAction({ actionName, defaultValue }: SpecificActionProps) {
+
+  const context = useContext(PlayerSeasonStatsContext);
+  const { getDefinition } = useSportActions();
+  const definition = getDefinition(actionName);
+
+  const sportAction = useMemo(() => {
+    if (context) {
+      const { seasonStats } = context;
+      return seasonStats.find((s) => {
+        return s.definition?.action_name === definition?.action_name
+      });
+    }
+  }, [context, definition?.action_name]);
+
+  if (!context) {
+    return null;
+  }
+
+  const {isLoading} = context;
+
+  if (isLoading) {
+    return (
+      <RoundedCard className="h-[15px] border-none animate-pulse" >
+
+      </RoundedCard>
+    )
+  }
+
+  return (
+    <>
+      <SportActionCard
+        sportAction={sportAction}
+        fallbackLabel={definition?.display_name}
+        fallbackValue={defaultValue}
+        labelClassName="text-xs"
+        valueClassName="text-xs"
+        hideInfoIcon
+        disableTooltip
+        className="cursor-pointer"
+      />
+    </>
+  )
+}
+
+
+export const PlayerSeasonStatsList = {
   Root,
   Header,
-  Category
+  Category,
+  SpecificAction
 }
