@@ -11,8 +11,8 @@ import GameHighlightsCard from '../ui/video/GameHighlightsCard';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';
-import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import DialogModal from '../ui/modals/DialogModal';
+import { abbreviateSeasonName } from '../../utils/stringUtils';
 type Props = {
   fixture: IFixture;
   className?: string;

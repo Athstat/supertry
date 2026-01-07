@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge'
 import { SeasonFilterBarItem } from '../../types/games'
-import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker'
 import RoundedCard from '../ui/cards/RoundedCard'
+import { abbreviateSeasonName } from '../../utils/stringUtils'
 
 type Props = {
     seasons: SeasonFilterBarItem[],

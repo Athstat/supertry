@@ -5,9 +5,9 @@ import Dropdown from "../../../ui/forms/Dropdown";
 import NoContentCard from "../../../ui/typography/NoContentMessage";
 import { DropdownOption } from "../../../../types/ui";
 import { IProSeason } from "../../../../types/season";
-import { abbreviateSeasonName } from "../../../players/compare/PlayerCompareSeasonPicker";
 import { PlayerSeasonStatsList } from "../../../stats/PlayerSeasonStatsList";
 import CoachScrummyPlayerReport from "../CoachScrummyPlayerReport";
+import { abbreviateSeasonName } from "../../../../utils/stringUtils";
 
 type Props = {
     player: IProAthlete

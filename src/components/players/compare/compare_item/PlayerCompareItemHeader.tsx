@@ -1,19 +1,19 @@
-import { IProAthlete } from '../../../types/athletes';
+import { IProAthlete } from '../../../../types/athletes';
 import { X, ChevronLeft, ChevronRight, Coins } from 'lucide-react';
-import { formatPosition } from '../../../utils/athleteUtils';
-import SecondaryText from '../../ui/typography/SecondaryText';
+import { formatPosition } from '../../../../utils/athleteUtils';
+import SecondaryText from '../../../ui/typography/SecondaryText';
 import { twMerge } from 'tailwind-merge';
-import { usePlayerCompareActions } from '../../../hooks/usePlayerCompare';
-import SmartPlayerMugshot from '../../player/SmartPlayerMugshot';
+import { usePlayerCompareActions } from '../../../../hooks/usePlayerCompare';
+import SmartPlayerMugshot from '../../../player/SmartPlayerMugshot';
 import { useMemo } from 'react';
-import { useTooltip } from '../../../hooks/ui/useTooltip';
-import { positionsTooltipMap } from '../../../types/constants';
-import { calculateAge } from '../../../utils/playerUtils';
-import { getCountryEmojiFlag } from '../../../utils/svrUtils';
-import TeamLogo from '../../team/TeamLogo';
-import RoundedCard from '../../ui/cards/RoundedCard';
-import PlayerCompareSeasonPicker from './PlayerCompareSeasonPicker';
-import usePlayerStats from '../../../hooks/athletes/usePlayerStats';
+import { useTooltip } from '../../../../hooks/ui/useTooltip';
+import { positionsTooltipMap } from '../../../../types/constants';
+import { calculateAge } from '../../../../utils/playerUtils';
+import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
+import TeamLogo from '../../../team/TeamLogo';
+import RoundedCard from '../../../ui/cards/RoundedCard';
+import usePlayerStats from '../../../../hooks/athletes/usePlayerStats';
+import PlayerCompareSeasonPicker from '../season_stats/PlayerCompareSeasonPicker';
 
 type Props = {
   player: IProAthlete;

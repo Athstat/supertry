@@ -2,8 +2,8 @@ import { format } from 'date-fns'
 import SecondaryText from '../ui/typography/SecondaryText'
 import { useNavigate } from 'react-router-dom'
 import { IProSeason } from '../../types/season'
-import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker'
 import RoundedCard from '../ui/cards/RoundedCard'
+import { abbreviateSeasonName } from '../../utils/stringUtils'
 
 type Props = {
   season: IProSeason

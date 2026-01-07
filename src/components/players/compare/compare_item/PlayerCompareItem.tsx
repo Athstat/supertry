@@ -1,8 +1,8 @@
-import { IProAthlete } from '../../../types/athletes';
-import usePlayerStats from '../../../hooks/athletes/usePlayerStats';
+import { IProAthlete } from '../../../../types/athletes';
+import usePlayerStats from '../../../../hooks/athletes/usePlayerStats';
 import PlayerCompareItemHeader from './PlayerCompareItemHeader';
-import PlayerIconsRow from './PlayerIconsRow';
-import PlayerCompareSeasonStatsList from './season_stats/PlayerCompareSeasonStats';
+import PlayerIconsRow from '../PlayerIconsRow';
+import PlayerCompareSeasonStatsList from '../season_stats/PlayerCompareSeasonStats';
 
 type Props = {
   player: IProAthlete;

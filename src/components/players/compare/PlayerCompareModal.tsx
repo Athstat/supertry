@@ -1,4 +1,4 @@
-import PlayersCompareItem from "./PlayerCompareItem";
+import PlayersCompareItem from "./compare_item/PlayerCompareItem";
 import { useAtomValue, useSetAtom } from "jotai";
 import { comparePlayersAtom, comparePlayersAtomGroup, comparePlayersStatsAtom, comparePlayersStarRatingsAtom } from "../../../state/comparePlayers.atoms";
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";

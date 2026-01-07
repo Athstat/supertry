@@ -7,7 +7,6 @@ import { queryParamKeys } from "../../types/constants";
 import { ArrowLeft, ChevronDown, X } from "lucide-react";
 import { FantasyPointsRankingTable, FantasyPointsRankingTableLoadingSkeleton } from "../../components/players/ranking/FantasyPointsRankingTable";
 import SecondaryText from "../../components/ui/typography/SecondaryText";
-import { abbreviateSeasonName } from "../../components/players/compare/PlayerCompareSeasonPicker";
 import { Activity, useState } from "react";
 import RoundedCard from "../../components/ui/cards/RoundedCard";
 import { twMerge } from "tailwind-merge";
@@ -16,6 +15,7 @@ import { IProAthlete } from "../../types/athletes";
 import PlayerProfileModal from "../../components/player/PlayerProfileModal";
 import BottomSheetView from "../../components/ui/modals/BottomSheetView";
 import { useFantasyPointsRankings } from "../../hooks/athletes/useFantasyPointsRankings";
+import { abbreviateSeasonName } from "../../utils/stringUtils";
 
 
 /** Renders a screen that shows the fantasy top performers */

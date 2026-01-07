@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { useDeferredValue, useEffect, useState } from 'react';
+import { abbreviateSeasonName } from '../../utils/stringUtils';
 
 
 export default function CompetitionSelector() {

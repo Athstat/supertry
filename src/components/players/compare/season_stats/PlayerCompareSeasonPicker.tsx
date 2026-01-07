@@ -1,24 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
-import { IProSeason } from "../../../types/season";
+import { IProSeason } from "../../../../types/season";
+import { abbreviateSeasonName } from "../../../../utils/stringUtils";
 
-export const abbreviateSeasonName = (seasonName: string): string => {
-    if (seasonName.startsWith("United Rugby Championship")) {
-        return seasonName.replace("United Rugby Championship", "URC");
-    }
-    if (seasonName.startsWith("EPCR Challenge Cup")) {
-        return seasonName.replace("EPCR Challenge Cup", "EPRC");
-    }
-    if (seasonName.startsWith("Investec Champions Cup")) {
-        return seasonName.replace("Investec Champions Cup", "Invest Cup");
-    }
-
-    if (seasonName.startsWith("Womens Rugby World Cup")) {
-        return seasonName.replace("Womens Rugby World Cup", "WRC");
-    }
-    
-    return seasonName;
-};
 
 type Props = {
     seasons: IProSeason[];

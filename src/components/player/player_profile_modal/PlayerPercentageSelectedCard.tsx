@@ -3,8 +3,8 @@ import { IProAthlete } from "../../../types/athletes"
 import { IProSeason } from "../../../types/season"
 import { fantasySeasonsService } from "../../../services/fantasy/fantasySeasonsService"
 import SecondaryText from "../../ui/typography/SecondaryText"
-import { abbreviateSeasonName } from "../../players/compare/PlayerCompareSeasonPicker"
 import RoundedCard from "../../ui/cards/RoundedCard"
+import { abbreviateSeasonName } from "../../../utils/stringUtils"
 
 type Props = {
     player: IProAthlete,

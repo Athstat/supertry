@@ -9,9 +9,9 @@ import { IProAthlete } from '../../../types/athletes';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import MatchPrCard from '../../rankings/MatchPrCard';
 import SecondaryText from '../../ui/typography/SecondaryText';
-import { abbreviateSeasonName } from '../../players/compare/PlayerCompareSeasonPicker';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { formatDate } from 'date-fns';
+import { abbreviateSeasonName } from '../../../utils/stringUtils';
 
 type Props = {
   player: IProAthlete;

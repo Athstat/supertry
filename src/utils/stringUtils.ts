@@ -115,3 +115,21 @@ export const stripCountryName = (name: string) => {
 
     return name;
 }
+
+export const abbreviateSeasonName = (seasonName: string): string => {
+    if (seasonName.startsWith("United Rugby Championship")) {
+        return seasonName.replace("United Rugby Championship", "URC");
+    }
+    if (seasonName.startsWith("EPCR Challenge Cup")) {
+        return seasonName.replace("EPCR Challenge Cup", "EPRC");
+    }
+    if (seasonName.startsWith("Investec Champions Cup")) {
+        return seasonName.replace("Investec Champions Cup", "Invest Cup");
+    }
+
+    if (seasonName.startsWith("Womens Rugby World Cup")) {
+        return seasonName.replace("Womens Rugby World Cup", "WRC");
+    }
+    
+    return seasonName;
+};

@@ -2,13 +2,13 @@ import { Info, Lock, Trophy } from 'lucide-react'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup'
 import { InfoCard } from '../ui/cards/StatCard';
 import { UserCog2 } from 'lucide-react';
-import { abbreviateSeasonName } from '../players/compare/PlayerCompareSeasonPicker';
 import { Hash } from 'lucide-react';
 import PrimaryButton from '../ui/buttons/PrimaryButton';
 import { Copy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Toast } from '../ui/Toast';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
+import { abbreviateSeasonName } from '../../utils/stringUtils';
 
 export default function LeagueInfoTab() {
 
