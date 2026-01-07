@@ -5,13 +5,13 @@ import PlayerMugshot from "../player/PlayerMugshot"
 import SecondaryText from "../ui/typography/SecondaryText"
 import { useAthletePointsBreakdown } from "../../hooks/fantasy/useAthletePointsBreakdown"
 import { FantasyAthletePointsBreakdownItem, IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete"
-import { useSportActions } from "../../providers/SportActionsDefinitionsProvider"
 import { twMerge } from "tailwind-merge"
 import { ReactNode } from "react"
 import NoContentCard from "../ui/typography/NoContentMessage"
 import { AvailabilityText } from "../players/availability/AvailabilityIcon"
 import { IFixture } from "../../types/games"
 import RoundedCard from "../ui/cards/RoundedCard"
+import { useSportActions } from "../../hooks/useSportActions"
 
 type Props = {
     athlete: IProAthlete | IFantasyTeamAthlete,

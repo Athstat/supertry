@@ -10,8 +10,6 @@ import {
 } from '../../../state/comparePlayers.atoms';
 import PlayerIconsRow from './PlayerIconsRow';
 
-import PlayerSeasonStatsTray from '../../stats/PlayerSeasonStatsTray';
-
 type Props = {
   player: IProAthlete;
 };
@@ -22,7 +20,7 @@ export default function PlayersCompareItem({ player }: Props) {
     comparePlayersStarRatingsAtom
   );
 
-  const [_, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const {
     seasonPlayerStats: actions,
@@ -100,14 +98,7 @@ export default function PlayersCompareItem({ player }: Props) {
             {/* Summary removed; 'General' category appears first and includes Tries, Points, Minutes as aligned rows */}
 
             <div>
-              <PlayerSeasonStatsTray
-                player={player}
-                season={currSeason}
-                stats={actions ?? []}
-                isLoading={isLoading}
-                forceCanonicalOrder
-                highlightRowLeaders
-              />
+              {/* TODO: Add back season stats tray */}
             </div>
           </div>
         </div>
