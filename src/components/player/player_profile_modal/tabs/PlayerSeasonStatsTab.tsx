@@ -36,6 +36,8 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
         }
     }
 
+    const displaySeason = selectedSeason || currentSeason;
+
     console.log("Selected Season ", selectedSeason);
 
     return (
@@ -57,14 +59,14 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                                 options={dropdownOptions}
                                 className="max-w-[230px] min-w-[200px]"
                                 onChange={handleChangeSeason}
-                                value={selectedSeason?.id}
+                                value={displaySeason?.id}
                             />
                         </div>
                     </div>
 
-                    {selectedSeason && (
+                    {(displaySeason) && (
                         <PlayerSeasonStats.Root
-                            season={selectedSeason}
+                            season={displaySeason}
                             player={player}
                         >
                             <PlayerSeasonStats.Header />
