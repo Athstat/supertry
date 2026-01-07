@@ -23,7 +23,6 @@ type Props = {
   blockGlow?: boolean;
   hideTeamLogo?: boolean;
   hidePrice?: boolean;
-  // Optional style overrides for specific screens (e.g., PlayersScreen)
   priceClassName?: string;
   teamLogoClassName?: string;
   detailsClassName?: string;
@@ -40,7 +39,6 @@ export function PlayerGameCard({
   player,
   className,
   onClick,
-  hidePrice = false,
   frameClassName,
 }: Props) {
   const frameSrc = getPositionFrameBackground(player.position_class ?? '');

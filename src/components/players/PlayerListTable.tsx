@@ -3,10 +3,10 @@ import { twMerge } from "tailwind-merge"
 import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting"
 import PlayerRowCard from "../player/PlayerRowCard"
-import SecondaryText from "../shared/SecondaryText"
-import RoundedCard from "../shared/RoundedCard"
-import { EmptyState } from "./EmptyState"
+import SecondaryText from "../ui/typography/SecondaryText"
+import { EmptyPlayerSearchState } from "./EmptyPlayerSearchState"
 import { useEffect, useMemo, useState } from "react"
+import RoundedCard from "../ui/cards/RoundedCard"
 
 type TableProps = {
     players: IProAthlete[],
@@ -100,7 +100,7 @@ export function PlayerListTable({ players, onClick, onSort, currentSortDirection
             </table>
 
             {/* Empty State */}
-            {isEmpty && !isDelaying && <EmptyState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
+            {isEmpty && !isDelaying && <EmptyPlayerSearchState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
 
         </div>
     )

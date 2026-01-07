@@ -1,50 +1,41 @@
-import { AlertCircle } from "lucide-react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ErrorStateProps {
-  message?: string;
-  onRetry?: () => void;
-  error?: string
+  error: string;
+  isFromWelcome?: boolean;
+  message?: string
 }
 
-export const ErrorState = ({ message, onRetry, error }: ErrorStateProps) => {
+export const ErrorState: React.FC<ErrorStateProps> = ({
+  error,
+  isFromWelcome,
+  message
+}) => {
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (isFromWelcome) {
+      navigate("/welcome");
+    } else {
+      navigate("/leagues");
+    }
+  };
+
   return (
-    <div className="bg-red-50 border border-red-400 dark:border-red-900 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-6 rounded-lg flex items-center gap-3 my-2">
-      <AlertCircle className="h-6 w-6 flex-shrink-0" />
-      <div>
-        <h3 className="font-medium">{ error ?? "Failed to load players"}</h3>
-        <p className="text-sm">{message}</p>
-        {onRetry && (
-          <button
-            onClick={onRetry}
-            className="mt-2 text-sm font-medium underline"
-          >
-            Try again
-          </button>
-        )}
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-850 py-4 flex items-center justify-center">
+      <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-6 rounded-lg max-w-md">
+        <h2 className="text-xl font-bold mb-2">Error</h2>
+        <p>{error || message}</p>
+        <button
+          onClick={handleBack}
+          className="mt-4 bg-primary-600 text-white px-4 py-2 rounded-lg"
+          tabIndex={0}
+          aria-label={isFromWelcome ? "Back to welcome" : "Back to leagues"}
+        >
+          {isFromWelcome ? "Back to Welcome Screen" : "Back to Leagues"}
+        </button>
       </div>
     </div>
   );
 };
-
-type ErrorMessageProps = {
-  message?: string,
-  hideIfNoMessage?: boolean
-}
-
-export const ErrorMessage = ({ message, hideIfNoMessage }: ErrorMessageProps) => {
-  
-  if (hideIfNoMessage && !message) {
-    return;
-  }
-
-
-  return (
-    <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 border border-red-100 dark:border-red-400/40 rounded-lg flex items-center gap-3 my-6">
-      <AlertCircle className="h-4 w-4 flex-shrink-0" />
-      <div>
-        <p className="text-sm">{message}</p>
-      </div>
-    </div>
-  );
-};
-

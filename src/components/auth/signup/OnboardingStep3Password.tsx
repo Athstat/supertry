@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
-import { PasswordInputField } from '../../shared/InputField';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
+import { PasswordInputField } from '../../ui/forms/InputField';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 
 interface OnboardingStep3Props {
   password: string;

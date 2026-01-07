@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import DialogModal from "../../shared/DialogModal";
 import GameplayOverview from "./GameplayOverview";
 import TopicDetail from "./TopicDetail";
 import { GameplayTopic } from "../../../types/gameplayModal";
+import DialogModal from "../../ui/modals/DialogModal";
 
 type Props = {
     isOpen?: boolean;

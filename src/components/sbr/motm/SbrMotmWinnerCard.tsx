@@ -2,8 +2,8 @@ import { useAtomValue } from "jotai"
 import { sbrFixtureMotmCandidatesAtom, sbrFixtureMotmVotesAtom } from "../../../state/sbrMotm.atoms";
 import { getSbrAthleteMotmVoteTally } from "../../../utils/sbrUtils";
 import { Trophy } from "lucide-react";
-import SecondaryText from "../../shared/SecondaryText";
-import BlueGradientCard from "../../shared/BlueGradientCard";
+import SecondaryText from "../../ui/typography/SecondaryText";
+import BlueGradientCard from "../../ui/cards/BlueGradientCard";
 
 /** Renders the winner of the SBR Motm Voting for a given fixture  */
 export default function SbrTopDawgOfTheMatchCard() {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { User, ArrowRight, ArrowLeft } from 'lucide-react';
-import InputField from '../../shared/InputField';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
+import InputField from '../../ui/forms/InputField';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { useNavigate } from 'react-router-dom';
 
 interface OnboardingStep1Props {

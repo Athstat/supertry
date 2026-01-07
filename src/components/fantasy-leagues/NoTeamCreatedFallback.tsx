@@ -1,13 +1,15 @@
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import PrimaryButton from "../shared/buttons/PrimaryButton";
-import { useTabView } from "../shared/tabs/TabView";
-import PitchViewLoadingSkeleton from "./my-team/PitchViewLoadingSkeleton";
+import PitchViewLoadingSkeleton from "../my_fantasy_team/PitchViewLoadingSkeleton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
+import { useTabView } from "../ui/tabs/TabView";
 
 type Props = {
     perspective?: "first-person" | "third-person",
     hideViewStandingsOption?: boolean
 }
+
+// TODO: Move this to a different component
 
 /** Renders a list of rounds */
 export default function NoTeamCreatedFallback({perspective = "first-person", hideViewStandingsOption} : Props) {

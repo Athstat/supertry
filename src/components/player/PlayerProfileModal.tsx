@@ -1,21 +1,21 @@
-import PlayerProfileBanner from './profile-modal-components/PlayerProfileBanner';
-import PlayerNameAndPosition from './profile-modal-components/PlayerNameAndPosition';
-import PlayerProfileModalTabContent from './profile-modal-components/PlayerProfileModalTabContent';
+import PlayerProfileBanner from './player_profile_modal/PlayerProfileBanner';
+import PlayerNameAndPosition from './player_profile_modal/PlayerNameAndPosition';
+import PlayerProfileModalTabContent from './player_profile_modal/PlayerProfileModalTabContent';
 import { IProAthlete } from '../../types/athletes';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { Activity, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import PlayerDataProvider, { usePlayerData } from '../../providers/PlayerDataProvider';
-import BottomSheetView from '../ui/BottomSheetView';
 import { twMerge } from 'tailwind-merge';
 import { lighterDarkBlueCN } from '../../types/constants';
-import PlayerMatchModal from '../fixtures/player_fixture_modal/PlayerFixtureModal';
-import PlayerScoutingActionModal from '../scouting/PlayerScoutingActionModal';
-import { useClickOutside } from '../../hooks/useClickOutside';
-import RoundedCard from '../shared/RoundedCard';
-import CircleButton from '../shared/buttons/BackButton';
+import PlayerMatchModal from '../fixture/player_fixture_modal/PlayerFixtureModal';
+import { useClickOutside } from '../../hooks/web/useClickOutside';
+import CircleButton from '../ui/buttons/BackButton';
 import { X } from 'lucide-react';
-import SecondaryText from '../shared/SecondaryText';
+import SecondaryText from '../ui/typography/SecondaryText';
+import PlayerScoutingActionModal from '../players/scouting/PlayerScoutingActionModal';
+import BottomSheetView from '../ui/modals/BottomSheetView';
+import RoundedCard from '../ui/cards/RoundedCard';
 
 interface Props {
   player: IProAthlete | IFantasyTeamAthlete;
@@ -76,6 +76,7 @@ export default function PlayerProfileModal({ player, isOpen, onClose, source }: 
 
             noAnimation
             hideHandle
+            onClickOutside={handleCloseModal}
 
           >
             {/* Modal header with player image and close button */}

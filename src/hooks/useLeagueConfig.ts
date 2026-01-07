@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { leagueService } from "../services/leagueService";
 import { IGamesLeagueConfig } from "../types/leagueConfig";
-import { useDebounced } from "./useDebounced";
+import { useDebounced } from "./web/useDebounced";
 
 
 

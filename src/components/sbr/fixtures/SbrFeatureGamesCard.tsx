@@ -1,16 +1,16 @@
 import { useAtomValue } from "jotai"
 import { sbrWeekFeatureGamesAtom } from "../../../state/sbrFixtures.atoms"
 import { Swords } from "lucide-react";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useState } from "react";
 import { ISbrFixture } from "../../../types/sbr";
-import DialogModal from "../../shared/DialogModal";
 import SbrTeamLogo from "./SbrTeamLogo";
 import { hasMotmVotingEnded, sbrFixtureSummary } from "../../../utils/sbrUtils";
 import SbrFixturePredictionBox from "../predictions/SbrFixturePredictionBox";
 import SbrMotmVotingBox from "../motm/SbrMotmVotingBox";
-import RoundedCard from "../../shared/RoundedCard";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
+import RoundedCard from "../../ui/cards/RoundedCard";
+import DialogModal from "../../ui/modals/DialogModal";
 
 /** Renders a card of the feature games for a specific week */
 export default function SbrFeatureGamesCard() {

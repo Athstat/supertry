@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { IOnboardingTab } from '../../types/onboarding';
-import SecondaryText from '../shared/SecondaryText';
+import SecondaryText from '../ui/typography/SecondaryText';
 
 type Props = {
   tab: IOnboardingTab;

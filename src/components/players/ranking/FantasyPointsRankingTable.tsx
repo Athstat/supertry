@@ -3,15 +3,15 @@ import { useState, useMemo, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { IProAthlete } from "../../../types/athletes";
 import { SortField, SortDirection } from "../../../types/playerSorting";
-import RoundedCard from "../../shared/RoundedCard";
-import SecondaryText from "../../shared/SecondaryText";
-import { EmptyState } from "../EmptyState";
+import SecondaryText from "../../ui/typography/SecondaryText";
+import { EmptyPlayerSearchState } from "../EmptyPlayerSearchState";
 import { FantasyPointsScoredRankingItem } from "../../../types/fantasyLeagueGroups";
 import { formatPosition } from "../../../utils/athleteUtils";
 import { stripCountryName } from "../../../utils/stringUtils";
 import { getCountryEmojiFlag } from "../../../utils/svrUtils";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import MatchPrCard from "../../rankings/MatchPrCard";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 
 type CustomSortField = "points" | "rank" | SortField;
@@ -179,7 +179,7 @@ export function FantasyPointsRankingTable({ players: unrankedPlayers, onClick, s
             </table>
 
             {/* Empty State */}
-            {isEmpty && !isDelaying && <EmptyState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
+            {isEmpty && !isDelaying && <EmptyPlayerSearchState searchQuery={searchQuery} onClearSearch={onClearSearchQuery} />}
 
         </div>
     )

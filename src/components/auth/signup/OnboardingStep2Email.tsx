@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Mail, ArrowRight, ArrowLeft } from 'lucide-react';
-import InputField from '../../shared/InputField';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
-import FormErrorText from '../../shared/FormError';
+import InputField from '../../ui/forms/InputField';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
+import FormErrorText from '../../ui/forms/FormError';
 import { useEmailUniqueValidator } from '../../../hooks/useEmailUniqueValidator';
 import { emailValidator } from '../../../utils/stringUtils';
 

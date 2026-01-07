@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai";
 import { useMemo, useCallback } from "react";
 import { fantasySeasonsAtom, SELECTED_FANTASY_SEASON_QUERY_PARAM_KEY } from "../../state/fantasy/fantasyLeagueScreen.atoms";
 import { IFantasySeason } from "../../types/fantasy/fantasySeason";
-import { useQueryState } from "../useQueryState";
+import { useQueryState } from "../web/useQueryState";
 
 /** Provides functionality and access to the fantasy league screens data */
 export function useFantasyLeaguesScreen() {

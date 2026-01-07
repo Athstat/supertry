@@ -1,34 +1,25 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import ScrollToTop from './components/ScrollToTop';
+import ScrollToTop from './components/ui/navigation/ScrollToTop';
 import { SignUpScreen } from './screens/auth/SignUpScreen';
 import { SignInScreen } from './screens/auth/SignInScreen';
 import { ForgotPasswordScreen } from './screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from './screens/auth/ResetPasswordScreen';
-import OnBoardingScreen from './screens/OnboardingScreen';
-import { CompleteProfileScreen } from './screens/CompleteProfileScreen';
+import OnBoardingScreen from './screens/onboarding/OnboardingScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
-import { FantasyScreen } from './screens/FantasyScreen';
-import { MyFantasyTeamScreen } from './screens/MyFantasyTeamScreen';
-import { UserProfileScreen } from './screens/UserProfileScreen';
-import { FantasyRankingsScreen } from './screens/FantasyRankingsScreen';
-import { PlayerProfileScreen } from './screens/PlayerProfileScreen';
-import JoinGroupScreen from './screens/JoinGroupScreen';
+import { MyFantasyTeamScreen } from './screens/fantasy_leagues/MyFantasyTeamScreen';
+import { UserProfileScreen } from './screens/auth/UserProfileScreen';
 import { useAuth } from './contexts/AuthContext';
-import { Header } from './components/Header';
-import { BottomNav } from './components/BottomNav';
-import SbrScreen from './screens/SbrScreen';
-import FixtureScreen from './screens/FixtureScreen';
-import FixturesScreen from './screens/FixturesScreen';
-import SchoolsScreen from './screens/SchoolsScreen';
-import InviteFriendsScreen from './screens/InviteFriendsScreen';
+import { Header } from './components/ui/navigation/Header';
+import { BottomNav } from './components/ui/navigation/BottomNav';
+import SbrScreen from './screens/sbr/SbrScreen';
+import SchoolsScreen from './screens/sbr/SchoolsScreen';
 import SBRChatScreen from './components/sbr/SBRChatScreen';
-import RouteErrorBoundary from './components/RouteErrorBoundary';
-import SbrFixtureScreen from './screens/SbrFixtureScreen';
-import CompetitionsScreen from './screens/CompetitionsScreen';
-import SeasonScreen from './screens/SeasonScreen';
+import RouteErrorBoundary from './components/ui/navigation/RouteErrorBoundary';
+import SbrFixtureScreen from './screens/sbr/SbrFixtureScreen';
+import CompetitionsScreen from './screens/fantasy_seasons/CompetitionsScreen';
+import SeasonScreen from './screens/fantasy_seasons/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
-import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
 import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
@@ -36,19 +27,27 @@ import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
 import InAppMessagesScreen from './screens/notifications/InAppMessagesScreen';
 import EditAccountInfoScreen from './screens/myaccount/EditAccountInfoScreen';
 import OnboardingDataProvider from './providers/OnboardingDataProvider';
-import LeagueMemberTeamScreen from './screens/LeagueMemberTeamScreen';
 import NotificationPreferencesScreen from './screens/myaccount/NotificationPreferencesScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
 import PlayersOverviewScreen from './screens/players/PlayersOverviewScreen';
 import PlayersByCountryScreen from './screens/players/PlayersByCountryScreen';
 import PlayersByPositionClassScreen from './screens/players/PlayersByPositionClassScreen';
 import AllPlayersScreen from './screens/players/AllPlayersScreen';
-import ScoutingListScreen from './screens/scouting/ScoutingListScreen';
+import ScoutingListScreen from './screens/players/scouting/ScoutingListScreen';
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from './types/constants';
-import LeagueStandingsScreen from './screens/fantasy-leagues/LeagueStandingsScreen';
+import LeagueStandingsScreen from './screens/fantasy_leagues/LeagueStandingsScreen';
 import PlayersByTeamScreens from './screens/players/PlayersByTeamScreens';
 import FantasyTopPerformersScreen from './screens/players/FantasyTopPerformersScreen';
+import { ProtectedRoute } from './components/auth/layouts/ProtectedRoute';
+import { CompleteProfileScreen } from './screens/auth/CompleteProfileScreen';
+import InviteFriendsScreen from './screens/auth/InviteFriendsScreen';
+import { FantasyScreen } from './screens/fantasy_leagues/FantasyScreen';
+import JoinGroupScreen from './screens/fantasy_leagues/JoinGroupScreen';
+import LeagueMemberTeamScreen from './screens/fantasy_leagues/LeagueMemberTeamScreen';
+import ProFixturesScreen from './screens/fixtures/FixturesScreen';
+import { FantasyRankingsScreen } from './screens/players/FantasyRankingsScreen';
+import FixtureDetailScreen from './screens/fixtures/FixtureDetailScreen';
 
 // Layout component to maintain consistent structure across routes
 const Layout = ({ children }: { children: React.ReactNode }) => (
@@ -225,17 +224,6 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/players/:playerId"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <PlayerProfileScreen />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
           path="/scouting/my-list"
           element={
             <ProtectedRoute>
@@ -295,7 +283,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <FixtureScreen />
+                <FixtureDetailScreen />
               </Layout>
             </ProtectedRoute>
           }
@@ -306,7 +294,7 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Layout>
-                <FixturesScreen />
+                <ProFixturesScreen />
               </Layout>
             </ProtectedRoute>
           }

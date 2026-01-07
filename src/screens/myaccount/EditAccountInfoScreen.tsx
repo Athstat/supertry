@@ -1,11 +1,11 @@
 import { ArrowLeft } from "lucide-react";
-import CircleButton from "../../components/shared/buttons/BackButton";
-import PageView from "../PageView";
+import CircleButton from "../../components/ui/buttons/BackButton";
+import PageView from "../../components/ui/containers/PageView";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCallback, useMemo, useState } from "react";
-import InputField from "../../components/shared/InputField";
-import PrimaryButton from "../../components/shared/buttons/PrimaryButton";
-import AccountInfoProgressCard from "../../components/profile/AccountInfoProgressCard";
+import InputField from "../../components/ui/forms/InputField";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
+import AccountInfoProgressCard from "../../components/auth/user_profile/AccountInfoProgressCard";
 import { userService } from "../../services/userService";
 import { Toast } from "../../components/ui/Toast";
 import { useNavigate } from "react-router-dom";

@@ -1,8 +1,8 @@
 import { Calendar, FileX2, X } from "lucide-react"
 import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { ISbrFixture } from "../../../types/sbr";
-import PillBar, { PillBarItems } from "../../shared/bars/PillTabBar";
-import { useQueryState } from "../../../hooks/useQueryState";
+import PillBar, { PillBarItems } from "../../ui/bars/PillTabBar";
+import { useQueryState } from "../../../hooks/web/useQueryState";
 import { formatPosition } from "../../../utils/athleteUtils";
 
 type Props = {

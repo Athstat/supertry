@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { authService } from '../../services/authService';
-import { AuthLayout } from '../../components/auth/AuthLayout';
 import useSWR from 'swr';
 import { usePasswordValidation } from '../../hooks/usePasswordValidation';
-import { ErrorState } from '../../components/ui/ErrorState';
 import { PasswordResetTokenIntrospect, RestError } from '../../types/auth';
-import { LoadingState } from '../../components/ui/LoadingState';
-import { PasswordInputField } from '../../components/shared/InputField';
-import FormErrorText from '../../components/shared/FormError';
-import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
+import { PasswordInputField } from '../../components/ui/forms/InputField';
+import FormErrorText from '../../components/ui/forms/FormError';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
+import { AuthLayout } from '../../components/auth/layouts/AuthLayout';
+import ErrorCard from '../../components/ui/cards/ErrorCard';
 
 // Success Modal Component
 interface SuccessModalProps {
@@ -58,7 +58,7 @@ export default function ResetPasswordScreen() {
   const onSuccess = () => setShowSuccessModal(true);
 
   if (isLoading) {
-    return <LoadingState />
+    return <LoadingIndicator />
   }
 
   return (
@@ -73,7 +73,7 @@ export default function ResetPasswordScreen() {
       )}
 
       {!resetToken || !passwordReset || !passwordReset.data && (
-        <ErrorState
+        <ErrorCard
           error={passwordReset.error?.message}
         />
       )}

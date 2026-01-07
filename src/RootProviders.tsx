@@ -1,9 +1,8 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ErrorInfo, ReactNode, useState } from "react"
-import AppErrorFallback from "./components/AppErrorFallback";
-import ErrorBoundary, { FallbackProps } from "./components/ErrorBoundary";
+import ErrorBoundary, { FallbackProps } from "./components/ui/navigation/ErrorBoundary";
 import NetworkStatusProvider from "./components/network/NetworkStatusProvider";
-import SportActionsDefinitionsProvider from "./components/stats/SportActionsDefinitionsProvider";
+import SportActionsDefinitionsProvider from "./providers/SportActionsDefinitionsProvider";
 import { AppStateProvider } from "./contexts/AppStateContext";
 import { AthleteProvider } from "./contexts/AthleteContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -12,8 +11,10 @@ import AuthTokenProvider from "./providers/AuthTokenProvider";
 import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvider";
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
 import { useSyncDeviceId } from "./hooks/auth/useSyncDeviceId";
-import FantasySeasonsProvider from "./components/dashboard/provider/FantasySeasonsProvider";
+import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsProvider";
 import CacheProvider from "./providers/caching/CacheProvider";
+import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
+import TooltipProvider from "./providers/ui/TooltipProvider";
 
 type Props = {
     children?: ReactNode
@@ -105,7 +106,9 @@ function AppStateLayer({ children }: Props) {
                     onError={handleError}
                     fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                 >
-                    {children}
+                    <TooltipProvider>
+                        {children}
+                    </TooltipProvider>
                 </ErrorBoundary>
             </AppStateProvider>
         </NetworkStatusProvider>

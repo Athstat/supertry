@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { useAuthUser } from "../../hooks/useAuthUser"
-import { useScrollTo } from "../../hooks/useScrollTo";
+import { useScrollTo } from "../../hooks/web/useScrollTo";
 import { UserRanking } from "../../types/userRanking"
 import UserRankingsItem from "./UserRankingsItem";
+import { useAuth } from "../../contexts/AuthContext";
 
 type Props = {
     rankings: UserRanking[]
@@ -10,16 +10,11 @@ type Props = {
 
 export default function UserRankingFocusShort({ rankings }: Props) {
 
-    const authUser = useAuthUser();
+    const {authUser} = useAuth();
 
     // get user ranking
-    const rankIndex = rankings.findIndex((r) => r.user_id === authUser.id);
-
-    if (rankIndex === -1) return;
-
+    const rankIndex = rankings.findIndex((r) => r.user_id === authUser?.kc_id);
     const userRanking = rankings[rankIndex];
-
-    if (userRanking.rank <= 15) return;
 
     let rankingSlice = rankings;
     const start = rankIndex - 3;
@@ -29,6 +24,10 @@ export default function UserRankingFocusShort({ rankings }: Props) {
 
     const ref = useRef<HTMLDivElement>(null)
     useScrollTo(ref);
+
+
+        if (rankIndex === -1) return;
+    if (userRanking.rank <= 15) return;
 
     return (
         <div ref={ref} >

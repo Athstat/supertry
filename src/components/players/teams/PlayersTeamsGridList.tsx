@@ -1,13 +1,12 @@
-import { LoadingState } from "../../ui/LoadingState";
-import { useMemo } from "react";
+import { LoadingIndicator } from "../../ui/LoadingIndicator";
 import { ITeam } from "../../../types/games";
-import { useActiveFantasySeasons } from "../../../hooks/fantasy/useActiveFantasySeasons";
 import { IProSeason } from "../../../types/season";
 import { useSeasonTeams } from "../../../hooks/seasons/useSeasonTeams";
-import RoundedCard from "../../shared/RoundedCard";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
 import { useNavigate } from "react-router-dom";
+import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
   onSuccess?: () => void
@@ -16,18 +15,8 @@ type Props = {
 /** Renders a Grid list of teams to discover players by */
 export default function PlayersTeamsGridList({onSuccess} : Props) {
 
-  const { seasons: fantasySeasons, isLoading } = useActiveFantasySeasons();
+  const { selectedSeason: firstSeason, isLoading } = useFantasySeasons();
 
-
-  const firstSeason = useMemo(() => {
-    const seasons = fantasySeasons || [];
-
-    if (seasons.length > 0) {
-      return seasons[0];
-    }
-
-    return undefined;
-  }, [fantasySeasons]);
 
   if (isLoading) {
     return (
@@ -124,6 +113,6 @@ function TeamItem({ team, onClick }: TeamItemProps) {
 
 function LoadingSkeleton() {
   return (
-    <LoadingState />
+    <LoadingIndicator />
   )
 }

@@ -1,8 +1,8 @@
 import { IProAthlete } from '../../../types/athletes';
 import TeamJersey from '../../player/TeamJersey';
-import PlayerMugshot from '../../shared/PlayerMugshot';
-import SecondaryText from '../../shared/SecondaryText';
-import TeamLogo from '../../team/TeamLogo';
+import PlayerMugshot from '../../player/PlayerMugshot';
+import SecondaryText from '../../ui/typography/SecondaryText';
+import RankNumberCard from '../../ui/cards/RankNumberCard';
 
 type Props = {
   rank: number | string;
@@ -28,9 +28,9 @@ export function PlayerRankingCard({ rank, onClick, player, value, borderColor = 
         style={{ borderLeftColor: borderColor }}
       >
         {/* Rank number with grey background */}
-        <div className="flex-shrink-0 w-8 h-8 bg-[#DDE5ED] dark:bg-gray-700 rounded-md flex items-center justify-center">
-          <p className="text-sm font-semibold">{rank}</p>
-        </div>
+        <RankNumberCard 
+          value={rank}
+        />
 
         <div className="flex flex-row items-center gap-2 flex-shrink-0">
           {player.image_url && (

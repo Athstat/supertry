@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useDeviceId } from '../../hooks/useDeviceId';
+import { useDeviceId } from '../web/useDeviceId';
 import { useAuth } from '../../contexts/AuthContext';
 import { authService } from '../../services/authService';
 

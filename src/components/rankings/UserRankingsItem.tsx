@@ -1,7 +1,7 @@
-import { useAuthUser } from "../../hooks/useAuthUser"
 import { UserRanking } from "../../types/userRanking"
 import { Medal, UserCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import { useAuth } from "../../contexts/AuthContext";
 
 type Props = {
     index: number,
@@ -10,9 +10,9 @@ type Props = {
 
 export default function UserRankingsItem({ userRank }: Props) {
 
-    const authUser = useAuthUser();
+    const {authUser} = useAuth();
 
-    const isCurrentUser = authUser.kc_id === userRank.user_id;
+    const isCurrentUser = authUser?.kc_id === userRank.user_id;
 
 
     const isInPromotionZone = userRank.rank <= 5;

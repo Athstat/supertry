@@ -1,12 +1,12 @@
 import { twMerge } from "tailwind-merge"
-import BottomSheetView from "../../ui/BottomSheetView"
 import { lighterDarkBlueCN } from "../../../types/constants"
-import CircleButton from "../../shared/buttons/BackButton"
+import CircleButton from "../../ui/buttons/BackButton"
 import { X } from "lucide-react"
 import PositionCard from "./PositionCard"
 import { PositionClass } from "../../../types/athletes"
 import { formatPosition } from "../../../utils/athleteUtils"
 import { useNavigate, useParams } from "react-router-dom"
+import BottomSheetView from "../../ui/modals/BottomSheetView"
 
 type Props = {
     isOpen?: boolean,

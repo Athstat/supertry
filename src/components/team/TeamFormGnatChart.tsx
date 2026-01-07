@@ -2,9 +2,9 @@ import { twMerge } from "tailwind-merge"
 import { IFixture } from "../../types/games"
 import { IProTeam } from "../../types/team"
 import { fixtureSummary } from "../../utils/fixtureUtils"
-import SecondaryText from "../shared/SecondaryText"
+import SecondaryText from "../ui/typography/SecondaryText"
 import { Activity, useMemo, useState } from "react"
-import { FixtureCardModal } from "../fixtures/FixtureCard"
+import { FixtureCardModal } from "../fixture/FixtureCard"
 import TeamLogo from "./TeamLogo"
 
 type Props = {

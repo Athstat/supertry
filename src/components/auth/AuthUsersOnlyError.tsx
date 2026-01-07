@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import PrimaryButton from '../shared/buttons/PrimaryButton'
-import SecondaryText from '../shared/SecondaryText'
+import PrimaryButton from '../ui/buttons/PrimaryButton'
+import SecondaryText from '../ui/typography/SecondaryText'
 
 type Props = {
     message?: string

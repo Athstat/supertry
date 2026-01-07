@@ -1,0 +1,258 @@
+import { twMerge } from "tailwind-merge";
+import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
+import { IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { formatPosition } from "../../utils/athleteUtils";
+import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { Activity, useMemo } from "react";
+import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
+import { CirclePlus, TriangleAlert } from "lucide-react";
+import TeamJersey from "../player/TeamJersey";
+import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import { CaptainsArmBand } from "../player/CaptainsArmBand";
+import { sanitizeStat } from "../../utils/stringUtils";
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
+import { useMyTeamView } from "./MyTeamStateProvider";
+
+type PlayerPitchCardProps = {
+    player: IFantasyTeamAthlete;
+    onClick?: (player: IFantasyTeamAthlete) => void;
+    round: IFantasyLeagueRound;
+};
+
+export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps) {
+    const { viewMode } = useMyTeamView();
+    const { league } = useFantasyLeagueGroup();
+    const { teamCaptain } = useFantasyTeam();
+
+    const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
+        player.tracking_id,
+        league?.season_id ?? "",
+        round?.start_round ?? 0,
+    );
+
+    const showAvailabilityWarning = isNotAvailable || isTeamNotPlaying;
+
+    const handleClick = () => {
+        if (onClick) {
+            onClick(player);
+        }
+    }
+
+    const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
+
+    return (
+        <div
+            key={player.tracking_id}
+            className='flex flex-col items-center justify-center gap-1 relative'
+        >
+
+            {isTeamCaptain && (
+                <div className="absolute top-4 md:top-0 right-0 p-1" >
+                    <CaptainsArmBand className="font-black bg-yellow-500 dark:bg-yellow-500 text-black dark:text-black"  />
+                </div>
+            )}
+
+            <div
+                className={twMerge(
+                    'cursor-pointer',
+                    "min-h-[140px] max-h-[140px] min-w-[115px] max-w-[115px]",
+                    'md:min-h-[140px] md:max-h-[140px] md:min-w-[110px] md:max-w-[110px] flex flex-col',
+                    // player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
+                    // !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
+                    // showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
+                )}
+                onClick={handleClick}
+            >
+
+                <div className={twMerge(
+                    'flex-3 flex md:min-h-[100px] md:max-h-[100px] overflow-clip flex-col items-center justify-center w-full',
+                    "min-h-[100px] max-h-[100px]"
+                )} >
+
+                    {/* {!player.image_url && ( */}
+                    <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
+                        <TeamJersey
+                            teamId={player.athlete_team_id}
+                            useBaseClasses={false}
+                            className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
+                            scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
+                            hideFade
+                            key={player.tracking_id}
+                        />
+                    </div>
+
+                    {/* )} */}
+
+                </div>
+
+                <div className={twMerge(
+                    'flex-1 w-full items-center justify-between text-slate-800 dark:text-black border-green-900 md:min-h-[40px] md:max-h-[40px] bg-gradient-to-br from-white to-slate-200 dark:from-white dark:to-white',
+                    "dark:from-white dark:to-white dark:text-black",
+                    'min-h-[40px] max-h-[40px]'
+                )} >
+
+                    <div className='flex px-2 h-[22px] md:h-[22px] flex-col items-center justify-center' >
+                        <p className=' text-[10px] md:text-[10px] font-semibold text-nowrap max-w-[100px] truncate' >{player.athstat_lastname}</p>
+                    </div>
+
+                    <div className={twMerge(
+                        'flex flex-row h-[22px] md:h-[22px] items-center bg-gradient-to-r justify-center gap-2 divide-x-1 divide-red-500',
+                        showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
+                        !showAvailabilityWarning && "from-[#011E5C] to-[#011E5C] dark:text-white text-white",
+                    )} >
+
+                        <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
+                            <PlayerScoreIndicator
+                                player={player}
+                                round={round}
+                            />
+                        </Activity>
+                    </div>
+                </div>
+            </div>
+
+            {/* <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+                <p className="text-[10px] font-medium" >{formatPosition(player.position_class)}</p>
+            </div> */}
+
+        </div>
+
+    );
+}
+
+type PlayerPointsScoreProps = {
+    round: IFantasyLeagueRound,
+    player: IFantasyTeamAthlete,
+}
+
+function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
+
+    const isLocked = isLeagueRoundLocked(round);
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
+    const { league } = useFantasyLeagueGroup();
+
+    const isLoading = loadingScore;
+
+    const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
+        player.tracking_id,
+        league?.season_id ?? "",
+        round?.start_round ?? 0,
+    );
+
+    const [homeOrAway, opponent] = useMemo(() => {
+        if (!nextMatch) {
+            return [undefined, undefined];
+        }
+
+        const playerTeamId = player.athlete_team_id;
+
+        if (playerTeamId === nextMatch.team?.athstat_id) {
+            return ["(H)", nextMatch.opposition_team];
+        }
+
+        if (playerTeamId === nextMatch.opposition_team?.athstat_id) {
+            return ["(A)", nextMatch.team];
+        }
+
+        return [undefined, undefined];
+
+    }, [nextMatch, player.athlete_team_id]);
+
+    const showScore = !isLoading && isLocked;
+
+    const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
+    const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
+
+    return (
+        <>
+            <div className={twMerge(
+                "min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row",
+                isLoading && "animate-pulse"
+            )} >
+
+                
+                <Activity mode={isLoading ? "visible" : "hidden"} >
+                    <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
+
+                    </div>
+                </Activity>
+
+                <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
+                    <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+                </Activity>
+
+                {/* <Activity mode={showPrice ? "visible" : "hidden"} >
+                    <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
+                        <p className="text-[10px] md:text-[10px]" >{player.price}</p>
+                        <Coins className="text-yellow-500 w-2.5 h-2.5" />
+                    </div>
+                </Activity> */}
+
+                <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
+                    <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
+                        {isNotAvailable && <p className="text-[8px] md:text-[10px] font-medium" >Not Playing </p>}
+                        {isTeamNotPlaying && <p className="text-[8px] md:text-[10px] font-medium" >Team Not Playing </p>}
+                        <TriangleAlert className="w-3 h-3" />
+                    </div>
+                </Activity>
+
+                <Activity mode={showScore ? 'visible' : 'hidden'}  >
+                    <div>
+                        <p className='text-[10px] md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
+                    </div>
+                </Activity>
+
+            </div>
+        </>
+    )
+}
+
+type EmptySlotProps = {
+    slot: IFantasyLeagueTeamSlot;
+};
+
+/** Renders an empty slot card */
+export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
+    const { initateSwapOnEmptySlot } = useFantasyTeam();
+
+    const { position } = slot;
+    const { position_class } = position;
+
+    const handleClick = () => {
+        initateSwapOnEmptySlot(slot);
+    };
+
+    return (
+        <div className="flex flex-col items-center justify-center gap-1 relative">
+            <div
+                className={twMerge(
+                    'overflow-hidden cursor-pointer rounded-lg min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px] bg-gradient-to-br from-green-900 to-green-900/60',
+                    'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col'
+                )}
+                onClick={handleClick}
+            >
+                <div className="flex-1 h-full flex overflow-clip flex-col items-center justify-center w-full gap-2">
+                    <div>
+                        <CirclePlus className="w-10 text-white/90 h-10" />
+                    </div>
+
+                    <div>
+                        <p className="text-sm text-white/90">
+                            {position_class ? formatPosition(position_class) : ''}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* <div className="min-h-[14px] max-h-[14px] w-full" >
+
+            </div> */}
+
+            <div className="min-h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
+
+            </div>
+        </div>
+    );
+}

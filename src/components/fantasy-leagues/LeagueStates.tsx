@@ -1,10 +1,11 @@
-import React from "react";
 import { motion } from "framer-motion";
 
 interface LoadingStateProps {
   isLoading: boolean;
 }
 
+
+// TODO: Refactor this screen
 export function LoadingState({ isLoading }: LoadingStateProps) {
   if (!isLoading) return null;
 
@@ -33,10 +34,10 @@ export function ErrorState({ error, isLoading }: ErrorStateProps) {
 
 interface EmptyStateProps {
   isLoading: boolean;
-  availableLeagues: any[];
-  currentLeagues: any[];
+  availableLeagues: [];
+  currentLeagues: [];
   error: string | null;
-  cardVariants: any;
+  cardVariants: unknown;
 }
 
 export function EmptyState({
@@ -72,9 +73,9 @@ export function EmptyState({
 interface NoSearchResultsProps {
   isLoading: boolean;
   searchTerm: string;
-  filteredLeagues: any[];
-  availableLeagues: any[];
-  cardVariants: any;
+  filteredLeagues: [];
+  availableLeagues: [];
+  cardVariants: unknown;
   onClearSearch: () => void;
 }
 

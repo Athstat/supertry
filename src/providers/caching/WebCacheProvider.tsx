@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback, ReactNode } from "react";
 import { Cache, SWRConfig } from "swr";
-import { LoadingState } from "../../components/ui/LoadingState";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 import { logger } from "../../services/logger";
 import { APP_CACHE_KEY } from "../../types/constants";
 import { idxKVStore } from "../../utils/web/indexedDbUtils";
@@ -58,7 +58,7 @@ export function WebCacheProvider({ children }: Props) {
 
     if (isLoading) {
         return (
-            <LoadingState />
+            <LoadingIndicator />
         )
     }
 

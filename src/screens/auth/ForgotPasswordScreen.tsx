@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail } from 'lucide-react';
-import { AuthLayout } from '../../components/auth/AuthLayout';
 import { authService } from '../../services/authService';
+import { AuthLayout } from '../../components/auth/layouts/AuthLayout';
 
 export function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');

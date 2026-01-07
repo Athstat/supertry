@@ -3,7 +3,7 @@ import { DjangoAuthUser } from "../types/auth";
 import { authTokenService } from "../services/auth/authTokenService";
 import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { logoutFromBridge } from "../utils/bridgeUtils";
-import { useGetBridgeAuthV2 } from "../hooks/useBridgeAuth";
+import { useGetBridgeAuthV2 } from "../hooks/auth/useBridgeAuth";
 
 type AuthTokenContextProps = {
     /** The auth token for the current login session */

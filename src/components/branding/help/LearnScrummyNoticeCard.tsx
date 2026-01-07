@@ -1,10 +1,10 @@
 import { X } from "lucide-react"
 import { twMerge } from "tailwind-merge"
-import { BlueInfoCard } from "../../shared/WarningCard"
+import { BlueInfoCard } from "../../ui/cards/WarningCard"
 import { useState } from "react"
 import ScrummyGamePlayModal from "./ScrummyGamePlayModal"
 import { BadgeInfo } from "lucide-react"
-import { useLocalStorage } from "../../../hooks/useLocalStorage"
+import { useLocalStorage } from "../../../hooks/web/useLocalStorage"
 import { GrCircleQuestion } from "react-icons/gr"
 
 type Props = {

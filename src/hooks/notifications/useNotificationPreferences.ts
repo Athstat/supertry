@@ -4,7 +4,7 @@ import { logger } from "../../services/logger";
 import { notificationService } from "../../services/notificationsService";
 import { NotificationProfile, UpdateNotificationProfileReq } from "../../types/notifications";
 import { compareProfiles } from "../../utils/notificationUtils";
-import { useDebounced } from "../useDebounced";
+import { useDebounced } from "../web/useDebounced";
 
 export function useNotificationPreferences() {
     const { authUser } = useAuth();

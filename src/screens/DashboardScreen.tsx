@@ -1,16 +1,16 @@
-import PageView from './PageView';
+import PageView from '../components/ui/containers/PageView';
 import ClaimAccountNoticeCard from '../components/auth/guest/ClaimAccountNoticeCard';
 import { useTempEnableNotificationAlert } from '../hooks/notifications/useNotificationAlert';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 import DashboardHero from '../components/dashboard/hero/DashboardHero';
-import SchoolRugbyBanner from '../components/dashboard/SchoolRugbyBanner';
-import FantasyPointsScoredPlayerList from '../components/dashboard/rankings/FantasyPointsPlayerList';
+import SchoolRugbyBanner from '../components/dashboard/banners/SchoolRugbyBanner';
+import FantasyTopPerformersCard from '../components/dashboard/rankings/FantasyTopPerformersCard';
 import { Activity, Fragment } from 'react';
 import { twMerge } from 'tailwind-merge';
 import DominateScrumCard from '../components/dashboard/DominateScrumCard';
 import PickemCtaCard from '../components/dashboard/PickemCtaCard';
 import { DashboardHeroLoadingSkeleton } from '../components/dashboard/hero/DashboardHeroSections';
-import RoundedCard from '../components/shared/RoundedCard';
+import RoundedCard from '../components/ui/cards/RoundedCard';
 
 
 export function DashboardScreen() {
@@ -41,7 +41,7 @@ export function DashboardScreen() {
           <DominateScrumCard className='p-4 lg:p-6 m-4' />
           <SchoolRugbyBanner />
 
-          <FantasyPointsScoredPlayerList className='px-2 m-4' />
+          <FantasyTopPerformersCard className='px-2 m-4' />
 
           <PickemCtaCard className='p-4 m-4' />
 

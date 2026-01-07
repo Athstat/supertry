@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import InputField, { PasswordInputField } from '../../shared/InputField';
+import InputField, { PasswordInputField } from '../../ui/forms/InputField';
 import { Info, Mail } from 'lucide-react';
-import PrimaryButton from '../../shared/buttons/PrimaryButton';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { authService } from '../../../services/authService';
-import { ErrorMessage } from '../../ui/ErrorState';
 import { useNavigate } from 'react-router-dom';
-import WarningCard from '../../shared/WarningCard';
+import WarningCard from '../../ui/cards/WarningCard';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '../../../contexts/AuthContext';
+import ErrorCard from '../../ui/cards/ErrorCard';
 
 export default function EmailPasswordLoginBox() {
   const [email, setEmail] = useState<string>();
@@ -130,7 +130,10 @@ export default function EmailPasswordLoginBox() {
           </PrimaryButton>
         )}
 
-        <ErrorMessage hideIfNoMessage message={message} />
+        <ErrorCard 
+          hideIfNoMessage
+          message={message}
+        />
 
         <AnimatePresence>
           {needsPasswordReset && email && (

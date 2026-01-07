@@ -6,10 +6,10 @@ import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup
 import { IProAthlete } from "../../types/athletes";
 import { FantasyLeagueTeamWithAthletes } from "../../types/fantasyLeague";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
-import PointsBreakdownModal from "../fantasy-league/team-modal/points_breakdown/PointsBreakdownModal";
-import PlayerMugshot from "../shared/PlayerMugshot";
-import RoundedCard from "../shared/RoundedCard";
+import PointsBreakdownModal from "../points_breakdown/PointsBreakdownModal";
+import PlayerMugshot from "../player/PlayerMugshot";
 import { Lock } from "lucide-react";
+import RoundedCard from "../ui/cards/RoundedCard";
 
 type OverviewProps = {
     team: FantasyLeagueTeamWithAthletes

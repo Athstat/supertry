@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useSetAtom } from "jotai";
 import useSWR from "swr";
-import { LoadingState } from "../components/ui/LoadingState";
+import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { gamesService } from "../services/gamesService";
 import { proMotmService } from "../services/proMotmService";
 import { proGameMotmCandidatesAtom, currentProGameAtom, proGameMotmVotesAtom } from "../state/proMotm.atoms";
@@ -40,7 +40,7 @@ export default function ProMotmVotingDataProvider({ children, fixture }: Props) 
         if (gameId) setCurrentGame(gameId);
     }, [gameId, rosters, allVotes, setVotingCandidates, setAllMotmVotes, setCurrentGame]);
 
-    if (isLoading) return <LoadingState message="Loading MOTM data..." />;
+    if (isLoading) return <LoadingIndicator message="Loading MOTM data..." />;
 
     return (
         <>

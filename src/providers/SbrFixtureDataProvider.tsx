@@ -2,7 +2,7 @@ import useSWR from "swr"
 import { useSetAtom } from "jotai";
 import { ReactNode, useEffect } from "react";
 import { ErrorState } from "../components/ui/ErrorState";
-import { LoadingState } from "../components/ui/LoadingState";
+import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { sbrService } from "../services/sbr/sbrService";
 import { ISbrFixture } from "../types/sbr";
 import { swrFetchKeys } from "../utils/swrKeys";
@@ -47,7 +47,7 @@ export default function SbrFixtureDataProvider({ fixture, children, fetchBoxscor
             {!hideShimmer ? (
                 <div className="min-w-[350px] w-full bg-white rounded-xl dark:bg-slate-700/50 animate-pulse h-[250px]" ></div>
             ) : (
-                <LoadingState />
+                <LoadingIndicator />
             )}
         </>
     }

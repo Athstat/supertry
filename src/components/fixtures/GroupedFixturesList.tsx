@@ -1,6 +1,6 @@
 import { FixtureListViewMode, IFixture } from "../../types/games";
-import FixtureCard from "./FixtureCard";
-import PickEmCard from "./PickEmCard";
+import FixtureCard from "../fixture/FixtureCard";
+import PickEmCard from "../pickem/PickEmCard";
 
 
 
@@ -17,8 +17,6 @@ export default function GroupedFixturesList({ fixtures, viewMode }: Props) {
 
     const groupedFixtures = groupFixturesByCompetition(fixtures);
     const competitions = sortCompetitions(Array.from(groupedFixtures.keys()));
-
-
 
     return competitions.map((competition) => {
         const fixtures = groupedFixtures.get(competition)!;

@@ -1,6 +1,6 @@
 import { Users } from "lucide-react"
 import { PlayerGameCard } from "../player/PlayerGameCard"
-import NoContentCard from "../shared/NoContentMessage"
+import NoContentCard from "../ui/typography/NoContentMessage"
 import { IProAthlete } from "../../types/athletes"
 
 type Props = {

@@ -1,7 +1,7 @@
 import { Shield } from "lucide-react"
 import { ITeam } from "../../types/games"
 import ProTeamCard from "../teams/TeamCard"
-import NoContentCard from "../shared/NoContentMessage"
+import NoContentCard from "../ui/typography/NoContentMessage"
 
 type Props = {
     teams: ITeam[]

@@ -1,9 +1,9 @@
 import { ArrowLeft, ChevronDown } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import CircleButton from "../../components/shared/buttons/BackButton";
-import RoundedCard from "../../components/shared/RoundedCard";
+import CircleButton from "../../components/ui/buttons/BackButton";
+import RoundedCard from "../../components/ui/cards/RoundedCard";
 import { AppColours } from "../../types/constants";
-import PageView from "../PageView";
+import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { useProTeam } from "../../hooks/teams/useProTeam";

@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge"
 import { ISbrFixture } from "../../../types/sbr"
-import PrimaryButton from "../../shared/buttons/PrimaryButton"
+import PrimaryButton from "../../ui/buttons/PrimaryButton"
 
 type Props = {
     currentFixture: ISbrFixture,

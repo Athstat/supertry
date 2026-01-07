@@ -1,8 +1,8 @@
 import { ChevronRight, Newspaper } from "lucide-react"
 import { useState } from "react"
-import DialogModal from "../../shared/DialogModal";
-import SecondaryText from "../../shared/SecondaryText";
+import SecondaryText from "../../ui/typography/SecondaryText";
 import ScrummyLogo from "../scrummy_logo";
+import DialogModal from "../../ui/modals/DialogModal";
 
 export default function LicensingModal() {
 

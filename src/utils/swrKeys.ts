@@ -178,8 +178,8 @@ export const swrFetchKeys = {
     return `/fixtures/${fixtureId}/sports-actions/athletes/${athleteId}`;
   },
 
-  getPlayerPointsHistory: (seasonId: string, athleteId: string) => {
-    return `seasons/${seasonId}/athletes/${athleteId}/points-history`;
+  getPlayerPointsHistory: (seasonId: string, athleteId: string, limit?: number) => {
+    return `seasons/${seasonId}/athletes/${athleteId}/points-history` + limit;
   },
 
   getScoutingListPlayer: (athleteId: string) => {

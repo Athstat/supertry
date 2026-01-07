@@ -1,17 +1,11 @@
-
-
 /** Renders the join league onboarding screen where user can
  * join a league and be redirected from there!
  */
 
 import ScrummyLogoHorizontal from "../../components/branding/scrummy_logo_horizontal"
-import PageView from "../PageView"
+import PageView from "../../components/ui/containers/PageView"
 
-type Props = {
-
-}
-
-export default function JoinLeagueOnboardingScreen({} : Props) {
+export default function JoinLeagueOnboardingScreen() {
   return (
     <PageView  className="flex flex-col items-center">
 

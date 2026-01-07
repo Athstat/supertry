@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import PageView from "./PageView";
+import PageView from "../components/ui/containers/PageView";
 import { CloudRain } from "lucide-react";
 
 /** Renders Not Found Screen */

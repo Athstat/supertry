@@ -1,13 +1,13 @@
-import DialogModal from "../../shared/DialogModal";
-import PlayersCompareItem from "./PlayerCompareItem";
+import PlayersCompareItem from "./compare_item/PlayerCompareItem";
 import { useAtomValue, useSetAtom } from "jotai";
 import { comparePlayersAtom, comparePlayersAtomGroup, comparePlayersStatsAtom, comparePlayersStarRatingsAtom } from "../../../state/comparePlayers.atoms";
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
-import { useImagePreloader } from "../../../hooks/useImagePreloader";
+import { useImagePreloader } from "../../../hooks/web/useImagePreloader";
 import { useEffect } from "react";
 import { analytics } from "../../../services/analytics/anayticsService";
+import DialogModal from "../../ui/modals/DialogModal";
 
 export default function PlayerCompareModal() {
 
@@ -45,8 +45,8 @@ export default function PlayerCompareModal() {
       open={open}
       title={title}
       onClose={closeCompareModal}
-      hw="w-[98%] lg:w-[85%] max-h-[98%] min-h-[98%] lg:max-h-[90%] lg:min-h-[90%]"
-      outerCon="p-3 lg:p-6"
+      hw="w-[100%] lg:w-[85%]  max-h-[100%] min-h-[100%] lg:max-h-[90%] lg:min-h-[90%]"
+      outerCon="p-2 lg:p-6 rounded-none lg:rounded-lg"
     >
 
       <div className={twMerge(

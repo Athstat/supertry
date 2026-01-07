@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useQueryValue } from '../../hooks/useQueryState';
-import PageView from '../PageView';
+import { useQueryValue } from '../../hooks/web/useQueryState';
 import ScrummyLogoHorizontal from '../../components/branding/scrummy_logo_horizontal';
-import SecondaryText from '../../components/shared/SecondaryText';
+import SecondaryText from '../../components/ui/typography/SecondaryText';
 import { useTheme } from '../../contexts/ThemeContext';
 
 import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { Copy, Lock } from 'lucide-react';
-import PrimaryButton from '../../components/shared/buttons/PrimaryButton';
-import { InfoCard } from '../../components/shared/StatCard';
+import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
+import { InfoCard } from '../../components/ui/cards/StatCard';
 import { Toast } from '../../components/ui/Toast';
 import { analytics } from '../../services/analytics/anayticsService';
+import { logger } from '../../services/logger';
 
 /** Renders Screen to help show the user's how to except invitations
  * for the app
@@ -82,7 +82,7 @@ export default function InviteStepsScreen() {
       };
       analytics.track('[Marketing] Invite Steps Viewed', utm);
     } catch (e) {
-      // no-op
+      logger.error('Error ', e);
     }
   }, [oneLinkUrl, leagueName, userName, joinCode]);
 

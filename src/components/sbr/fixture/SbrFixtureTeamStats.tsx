@@ -1,6 +1,6 @@
 import { Shield } from "lucide-react"
 import { ISbrBoxscoreItem } from "../../../types/sbr"
-import TitledCard from "../../shared/TitledCard"
+import TitledCard from "../../ui/cards/TitledCard"
 import SbrTeamLogo from "../fixtures/SbrTeamLogo"
 import { twMerge } from "tailwind-merge"
 import { useAtomValue } from "jotai"

@@ -1,9 +1,9 @@
 import { format } from "date-fns";
 import { Calendar, Trophy, Watch } from "lucide-react";
 import { ISbrFixture } from "../../../types/sbr";
-import RoundedCard from "../../shared/RoundedCard";
-import NoContentCard from "../../shared/NoContentMessage";
+import NoContentCard from "../../ui/typography/NoContentMessage";
 import SbrFixturePredictionBox from "../predictions/SbrFixturePredictionBox";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     fixture: ISbrFixture

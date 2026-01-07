@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
-import RoundedCard from '../shared/RoundedCard'
 import { useNavigate } from 'react-router-dom'
+import RoundedCard from '../ui/cards/RoundedCard';
 
 type Props = {
     className?: string

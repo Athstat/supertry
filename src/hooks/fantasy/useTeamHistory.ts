@@ -2,7 +2,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { teamHistoryCurrentTeamAtom, teamHistoryTeamManagerAtom } from "../../state/fantasy/fantasy-teams/teamHistory.atoms";
 import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
 import { useCallback, useMemo } from "react";
-import { useQueryState } from "../useQueryState";
+import { useQueryState } from "../web/useQueryState";
 import { queryParamKeys } from "../../types/constants";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 

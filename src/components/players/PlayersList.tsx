@@ -3,28 +3,28 @@ import { X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
-import useAthleteFilter from "../../hooks/useAthleteFilter";
-import { useDebounced } from "../../hooks/useDebounced";
+import { useDebounced } from "../../hooks/web/useDebounced";
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare";
-import { useQueryState } from "../../hooks/useQueryState";
+import { useQueryState } from "../../hooks/web/useQueryState";
 import { comparePlayersAtomGroup } from "../../state/comparePlayers.atoms";
 import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting";
 import { IProTeam } from "../../types/team";
 import { getAthletesSummary } from "../../utils/athleteUtils";
 import PlayerProfileModal from "../player/PlayerProfileModal";
-import RoundedCard from "../shared/RoundedCard";
-import SecondaryText from "../shared/SecondaryText";
+import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
-import GlassBottomSheet from "../ui/GlassBottomSheet";
 import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
 import { PlayerFilters } from "./PlayerFilters";
 import { PlayerSort } from "./PlayerSort";
-import FloatingSearchBar from "./ui/FloatingSearchBar";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
 import { PlayerListTable } from "./PlayerListTable";
+import FloatingSearchBar from "./FloatingSearchBar";
+import RoundedCard from "../ui/cards/RoundedCard";
+import GlassBottomSheet from "../ui/modals/GlassBottomSheet";
+import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
 
 type Props = {
     players: IProAthlete[]

@@ -1,11 +1,11 @@
 import { User } from "lucide-react";
-import { ErrorState } from "../../ui/ErrorState";
-import PrimaryButton from "../../shared/buttons/PrimaryButton";
-import { useGuestLogin } from "../../../hooks/auth/useGuestLogin";
-import { useDeviceId } from "../../../hooks/useDeviceId";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { Fragment } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
 import { isMobileWebView } from "../../../utils/bridgeUtils";
+import { useDeviceId } from "../../../hooks/web/useDeviceId";
+import { useGuestLogin } from "../../../hooks/auth/useGuestLogin";
+import ErrorCard from "../../ui/cards/ErrorCard";
 
 type Props = {
     className?: string,
@@ -14,12 +14,14 @@ type Props = {
 
 /** Renders a guest login box */
 export default function GuestLoginBox({ className, hideIcon }: Props) {
-    // Only show in mobile app, not in browser
-    if (!isMobileWebView()) return null;
+
 
     const { deviceId } = useDeviceId();
     const { handleGuestLogin, error, isLoading } = useGuestLogin();
     if (!deviceId) return;
+
+    // Only show in mobile app, not in browser
+    if (!isMobileWebView()) return null;
 
     return (
         <Fragment>
@@ -40,7 +42,7 @@ export default function GuestLoginBox({ className, hideIcon }: Props) {
 
             </PrimaryButton>
 
-            {error && <ErrorState error={error} />}
+            {error && <ErrorCard message={error} />}
 
         </Fragment>
     )

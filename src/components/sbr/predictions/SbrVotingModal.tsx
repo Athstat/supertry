@@ -1,18 +1,18 @@
 import { useState } from "react"
 import { ISbrFixture } from "../../../types/sbr"
-import DialogModal from "../../shared/DialogModal"
 import SbrTeamLogo from "../fixtures/SbrTeamLogo"
 import { format } from "date-fns"
-import { useSbrFixtureVotes } from "../../../hooks/useFixtureVotes"
-import VotingProgressBar from "../../shared/VotingProgressBar"
+import { useSbrFixtureVotes } from "../../../hooks/fixtures/useFixtureVotes"
+import VotingProgressBar from "../../pickem/VotingProgressBar"
 import SbrVotingBallotBox, { SbrVotingBallotBoxResults } from "./SbrVotingBallotBox"
 import { CircleCheck } from "lucide-react"
-import PrimaryButton from "../../shared/buttons/PrimaryButton"
-import { LoadingState } from "../../ui/LoadingState"
+import PrimaryButton from "../../ui/buttons/PrimaryButton"
+import { LoadingIndicator } from "../../ui/LoadingIndicator"
 import { getCountryEmojiFlag } from "../../../utils/svrUtils"
 import SbrVotingModalNavigator from "./SbrVotingModalNavigator"
 import SbrPersonalVotingSummary from "./SbrPersonalVotingSummary"
 import { twMerge } from "tailwind-merge"
+import DialogModal from "../../ui/modals/DialogModal"
 
 type Props = {
     className?: string,
@@ -149,7 +149,7 @@ function FixtureVotingCard({ fixture }: FixtureVotingCardProps) {
                 </div>
             </div>
 
-            {isLoading && <LoadingState />}
+            {isLoading && <LoadingIndicator />}
 
             {!isLoading && votes && <VotingProgressBar homeVotes={homeVotes.length} awayVotes={awayVotes.length} />}
             {!isLoading && !hasScores && <SbrVotingBallotBox userVote={userVote} fixture={fixture} />}

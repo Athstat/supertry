@@ -1,13 +1,13 @@
 import useSWR from "swr";
 import { sbrService } from "../../../services/sbr/sbrService";
-import { LoadingState } from "../../ui/LoadingState";
+import { LoadingIndicator } from "../../ui/LoadingIndicator";
 
 /** Renders the SBR Leaderboard component */
 export default function SbrPredictionsTabLeaderboard() {
     const { data, isLoading: loadingRankings } = useSWR("predictions-rankings", sbrService.getPredictionsRanking);
     const rankings = (data ?? []).slice(0, 5);
 
-    if (loadingRankings) return <LoadingState />
+    if (loadingRankings) return <LoadingIndicator />
 
     return (
         <div className="w-full h-fit flex flex-col gap-2 relative" >
