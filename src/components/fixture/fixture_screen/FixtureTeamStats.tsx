@@ -7,6 +7,9 @@ import { gamesService } from "../../../services/gamesService"
 import { mapSportsActionToAthstatName } from "../../../utils/sportsActionUtils"
 import { fixtureSummary } from "../../../utils/fixtureUtils"
 import RoundedCard from "../../ui/cards/RoundedCard"
+import { useSportActions } from "../../../hooks/useSportActions"
+import { useCallback } from "react"
+import { useTooltip } from "../../../hooks/ui/useTooltip"
 
 type Props = {
     fixture: IFixture
@@ -66,7 +69,7 @@ export default function FixtureTeamStats({ fixture }: Props) {
                 }} />
 
                 <HeadToHeadItem stat={taParser.getTries()} />
-                <HeadToHeadItem stat={taParser.getDropGoalsScored()} />
+                <HeadToHeadItem stat={taParser.getDropGoalsScored()}  />
                 <HeadToHeadItem stat={taParser.getConversionsRate()} />
                 <HeadToHeadItem stat={taParser.getPenaltyGoalsScored()} />
                 <HeadToHeadItem stat={taParser.getPenaltiesConceded()} />
@@ -86,10 +89,15 @@ export default function FixtureTeamStats({ fixture }: Props) {
 
 
 type HeadToHeadProps = {
-    stat: TeamHeadtoHeadItem
+    stat: TeamHeadtoHeadItem,
+    actionName?: string
 }
 
-function HeadToHeadItem({ stat }: HeadToHeadProps) {
+function HeadToHeadItem({ stat, actionName }: HeadToHeadProps) {
+    
+    const {getDefinition} = useSportActions();
+    const {openTooltipModal} = useTooltip();
+    
     const { homeValue, awayValue, winner, action, hide, homeStrValue, awayStrValue } = stat;
     const homeTeamWonCategory = winner === 'home';
     const awayTeamWonCategory = winner === 'away';
@@ -98,10 +106,23 @@ function HeadToHeadItem({ stat }: HeadToHeadProps) {
     const homePerc = (total > 0 ? ((homeValue ?? 0) / (total)) : 0) * 100;
     const awayPerc = (total > 0 ? ((awayValue ?? 0) / (total)) : 0) * 100;
 
+    const handleClick = useCallback(() => {
+        const def = getDefinition(actionName);
+        if (def) {
+            const {display_name, tooltip, category} = def;
+            const title =  display_name ? `${display_name} (${category})` : display_name;
+
+            openTooltipModal(title, tooltip);
+        }
+    }, [actionName, getDefinition, openTooltipModal])
+
     if (hide) return;
 
     return (
-        <div className="flex flex-col w-full gap-1" >
+        <div onClick={handleClick} className={twMerge(
+            "flex flex-col w-full gap-1",
+            actionName && "cursor-pointer"
+        )} >
 
             <div className="w-full flex flex-row items-center justify-between" >
                 
