@@ -89,8 +89,10 @@ function RankingItem({ item }: RankingItemProps) {
         />
       </Table.TableData>
 
-      <Table.TableData>
-        <p className="text-sm" >{userLabel} </p>
+      <Table.TableData >
+        <div className="min-w-[60px] max-w-[130px]" >
+          <p className="text-sm text-wrap truncate" >{userLabel} </p>
+        </div>
       </Table.TableData>
 
       <Table.TableData>
