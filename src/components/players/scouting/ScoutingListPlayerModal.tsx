@@ -4,7 +4,7 @@ import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList
 import PlayerDataProvider, { usePlayerData } from "../../../providers/PlayerDataProvider";
 import { lighterDarkBlueCN } from "../../../types/constants";
 import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
-import PlayerPointsHistoryCard from "../../player/player_profile_modal/PlayerPointsHistoryCard";
+import PlayerPointsHistoryCard from "../../player/player_profile_modal/points_history/PlayerPointsHistoryCard";
 import PlayerTeamCard from "../../player/player_profile_modal/PlayerTeamCard";
 import ScoutPlayerButton from "../../player/player_profile_modal/ScoutPlayerButton";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";

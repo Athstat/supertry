@@ -8,7 +8,7 @@ import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { usePlayerData } from '../../../../providers/PlayerDataProvider';
 import PlayerTeamFormCard from '../PlayerTeamForm';
 import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
-import PlayerPointsHistoryCard from '../PlayerPointsHistoryCard';
+import PlayerPointsHistoryCard from '../points_history/PlayerPointsHistoryCard';
 import SecondaryText from '../../../ui/typography/SecondaryText';
 import { getCountryEmojiFlag } from '../../../../utils/svrUtils';
 import FormIndicator from '../../FormIndicator';
