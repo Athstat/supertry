@@ -124,11 +124,13 @@ function Header() {
 type CategoryProps = {
   categoryName?: string,
   label?: string,
-  initiallyOpened?: boolean
+  initiallyOpened?: boolean,
+  skeletonItemCount?: number
 }
 
-function Category({ categoryName, label, initiallyOpened = true}: CategoryProps) {
+function Category({ categoryName, label, initiallyOpened = true, skeletonItemCount = 5 }: CategoryProps) {
 
+  const skeletonCards = Array(skeletonItemCount).fill(0);
   const [isOpen, setOpen] = useState(initiallyOpened);
   const toggle = () => setOpen(prev => !prev);
   const context = useContext(PlayerSeasonStatsContext);
@@ -144,10 +146,24 @@ function Category({ categoryName, label, initiallyOpened = true}: CategoryProps)
     return nameMatches && showOnUI;
   });
 
+  
   if (isLoading) {
-    <div>
-      <p>Loading...</p>
-    </div>
+
+    return (
+      <Collapsable
+        label={label || categoryName}
+        open={isOpen}
+        toggle={toggle}
+      >
+        <div className="flex px-2 pb-4 flex-col gap-2" >
+          {skeletonCards.map((s, index) => {
+            return (
+              <RoundedCard key={s + index} className="h-[40px] rounded-lg bg-slate-200 animate-pulse border-none w-full" />
+            )
+          })}
+        </div>
+      </Collapsable>
+    )
   }
 
   return (

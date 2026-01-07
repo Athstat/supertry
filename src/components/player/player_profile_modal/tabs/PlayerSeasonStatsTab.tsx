@@ -74,6 +74,7 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                             <PlayerSeasonStats.Category
                                 categoryName="general"
                                 label="General"
+                                skeletonItemCount={1}
                             />
 
                             <PlayerSeasonStats.Category
