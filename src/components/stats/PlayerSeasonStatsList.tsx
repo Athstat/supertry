@@ -101,13 +101,17 @@ function Header() {
         label="Tries Scored"
         className="flex-1 bg-white border border-slate-200"
         icon={<Trophy className="text-yellow-500" />}
+        definition={triesScored?.definition}
+        actionName={'tries'}
       />
 
       <StatCard2
         value={gamePointsScored?.action_count || 0}
-        label="Game Points Scored"
+        label="Game Points "
         className="flex-1 bg-white border border-slate-200"
         icon={<Target className="text-blue-500" />}
+        definition={gamePointsScored?.definition}
+        actionName={'points'}
       />
 
 
@@ -116,6 +120,8 @@ function Header() {
         label="Total Minutes Played"
         className="flex-1 bg-white border border-slate-200"
         icon={<ClockFading className="text-green-500" />}
+        definition={minutesPlayed?.definition}
+        actionName={'minutes_played_total'}
       />
     </div>
   )
@@ -178,7 +184,7 @@ function Category({ categoryName, label, initiallyOpened = true, skeletonItemCou
             return (
               <SportActionCard
                 sportAction={s}
-                className="py-2 px-4 rounded-lg hover:bg-slate-200 cursor-pointer"
+                className="py-2 px-4 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer"
                 labelClassName="text-sm text-slate-700 dark:text-slate-200"
               />
             )

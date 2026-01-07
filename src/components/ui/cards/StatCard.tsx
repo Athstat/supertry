@@ -1,6 +1,10 @@
-import { ReactNode } from "react";
+import { ReactNode, useCallback } from "react";
 import { twMerge } from "tailwind-merge";
 import SecondaryText from "../typography/SecondaryText";
+import RoundedCard from "./RoundedCard";
+import { SportActionDefinition } from "../../../types/sports_actions";
+import { useTooltip } from "../../../hooks/ui/useTooltip";
+import { useSportActions } from "../../../hooks/useSportActions";
 
 type StatCardProps = {
   label: string;
@@ -8,7 +12,9 @@ type StatCardProps = {
   icon?: ReactNode;
   valueClassName?: string;
   iconClassName?: string;
-  className?: string
+  className?: string;
+  definition?: SportActionDefinition;
+  actionName?: string
 }
 
 export function StatCard({ label, value, icon, valueClassName, className }: StatCardProps) {
@@ -63,15 +69,35 @@ export function InfoCard({ label, value, icon, valueClassName, className }: Stat
   );
 };
 
-export function StatCard2({ label, value, icon, valueClassName, className }: StatCardProps) {
+export function StatCard2({ label, value, icon, valueClassName, className, definition, actionName }: StatCardProps) {
+
+  const { openTooltipModal } = useTooltip();
+
+  const { getDefinition } = useSportActions();
+
+
+  const handleClick = useCallback(() => {
+    const finalDef = definition || getDefinition(actionName);
+
+    if (finalDef) {
+      const { display_name, category, tooltip } = finalDef;
+      const title = display_name ? `${display_name} (${category})` : display_name;
+      openTooltipModal(title, tooltip);
+    }
+
+  }, [actionName, definition, getDefinition, openTooltipModal]);
 
   if (value === null || value === undefined) return <></>
 
   return (
-    <div className={twMerge(
-      "bg-gray-200 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-4",
-      className
-    )}>
+    <RoundedCard
+      className={twMerge(
+        "bg-gray-200  cursor-pointer border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-4",
+        className
+      )}
+
+      onClick={handleClick}
+    >
 
       <div className="flex flex-col items-center justify-center text-center gap-1 mb-0">
 
@@ -91,6 +117,6 @@ export function StatCard2({ label, value, icon, valueClassName, className }: Sta
       </div>
 
 
-    </div>
+    </RoundedCard>
   );
 };

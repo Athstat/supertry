@@ -25,7 +25,7 @@ export default function TooltipModal() {
                 onClickOutside={handleClose}
             >
                 <div className="flex flex-row items-center justify-between" >
-                    <p className="font-bold text-lg" >{data?.title || "Tooltip"}</p>
+                    <p className="font-bold text-lg dark:text-white" >{data?.title || "Tooltip"}</p>
 
                     <div>
                         <CircleButton

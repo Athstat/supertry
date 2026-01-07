@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { sportActionDefinitionsAtom } from "../state/sportActions.atoms";
 
 /** Provides hook to access sport action defintions */
@@ -38,9 +38,19 @@ export function useSportActions() {
         })
     }, [defintions]);
 
+    const getDefinition = useCallback((name?: string) => {
+        return defintions.find((def) => {
+            const matchesActionName = ((def.action_name || 'action_name').toLowerCase() === (name || 'name').toLowerCase());
+            const matchesDisplayName = ((def.display_name || 'action_name').toLowerCase() === (name || 'name').toLowerCase());
+
+            return matchesActionName || matchesDisplayName
+        })
+    }, [defintions])
+
     return {
         defintions,
         categories,
-        uiDefintions
+        uiDefintions,
+        getDefinition
     }
 }
