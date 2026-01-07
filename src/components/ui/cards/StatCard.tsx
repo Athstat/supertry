@@ -17,15 +17,34 @@ type StatCardProps = {
   actionName?: string
 }
 
-export function StatCard({ label, value, icon, valueClassName, className }: StatCardProps) {
+export function StatCard({ label, value, icon, valueClassName, className, definition, actionName }: StatCardProps) {
 
-  if (value === null || value === undefined) return <></>
+  const { openTooltipModal } = useTooltip();
+  const { getDefinition } = useSportActions();
 
+  const handleClick = useCallback(() => {
+    const finalDef = definition || getDefinition(actionName);
+
+    if (finalDef) {
+      const { display_name, category, tooltip } = finalDef;
+      const title = display_name ? `${display_name} (${category})` : display_name;
+      openTooltipModal(title, tooltip);
+    }
+
+  }, [actionName, definition, getDefinition, openTooltipModal]);
+
+  if (value === null || value === undefined) return <></>;
   return (
-    <div className={twMerge(
-      "bg-gray-200 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-2",
-      className
-    )}>
+    <RoundedCard
+
+      className={twMerge(
+        "bg-gray-200 cursor-pointer border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-2",
+        className
+      )}
+
+      onClick={handleClick}
+
+    >
 
       <div className="flex items-center gap-1 mb-0">
         {icon}
@@ -40,7 +59,7 @@ export function StatCard({ label, value, icon, valueClassName, className }: Stat
         </div>
       </div>
 
-    </div>
+    </RoundedCard>
   );
 };
 

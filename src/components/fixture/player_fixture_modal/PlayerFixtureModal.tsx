@@ -73,7 +73,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
         <Activity mode={isOpen ? "visible" : "hidden"} >
             <BottomSheetView
                 className={twMerge(
-                    "min-h-[80vh] border dark:border-slate-700 z-20 max-h-[80vh] py-2 px-4 flex flex-col gap-2",
+                    "min-h-[80vh] border dark:border-slate-700 z-[170] max-h-[80vh] py-2 px-4 flex flex-col gap-2",
                     className
                 )}
                 hideHandle

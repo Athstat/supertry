@@ -11,11 +11,13 @@ type Props = {
     noAnimation?: boolean,
     showTopBorder?: boolean,
     overlayBg?: boolean,
-    onClickOutside?: () => void
+    onClickOutside?: () => void,
+    hideOverlay?: boolean,
+    rootClassName?: string
 }
 
 /** Renders a bottom sheet view that starts from the bottom of the screen */
-export default function BottomSheetView({ className, children, hideHandle, noAnimation, showTopBorder, onClickOutside }: Props) {
+export default function BottomSheetView({ className, children, hideHandle, noAnimation, showTopBorder, onClickOutside, hideOverlay = false, rootClassName }: Props) {
 
 
     const handleClickOutside = () => {
@@ -24,13 +26,36 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
         }
     }
 
+    if (hideOverlay) {
+        return (
+            <Root className={rootClassName} noAnimation={noAnimation} >
+                <div className={twMerge(
+                    "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
+                    className,
+                    showTopBorder && "border-t dark:border-slate-600",
+                    AppColours.BACKGROUND
+                )}>
+
+                    {!hideHandle && <div className="flex flex-row items-center justify-center w-full" >
+                        <BottomSheetHandle />
+                    </div>}
+
+                    {children}
+                </div>
+            </Root>
+        )
+    }
+
     return (
-        <div className="z-[150] bg-black/50 dark:bg-black/70 top-0 left-0 fixed w-full h-full flex flex-col" >
-            
+        <div className={twMerge(
+            "z-[150] top-0 left-0 fixed w-full h-full flex flex-col",
+            !hideOverlay && "bg-black/50 dark:bg-black/70"
+        )} >
+
             <div onClick={handleClickOutside} className="h-full flex-1" >
             </div>
 
-            <Root noAnimation={noAnimation} >
+            <Root className={rootClassName} noAnimation={noAnimation} >
                 <div className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className,
@@ -50,24 +75,31 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
 }
 
 type NoAnimationProps = {
-    children?: ReactNode
+    children?: ReactNode,
+    className?: string
 }
 
-function NoAnimationRoot({ children }: NoAnimationProps) {
+function NoAnimationRoot({ children, className }: NoAnimationProps) {
     return (
         <div
-            className="fixed z-[200] bottom-0 left-0 right-0 w-full  flex flex-col items-center justify-center"
+            className={twMerge(
+                "fixed z-[200] bottom-0 left-0 right-0 w-full  flex flex-col items-center justify-center",
+                className
+            )}
         >
             {children}
         </div>
     )
 }
 
-function AnimatedRoot({ children }: NoAnimationProps) {
+function AnimatedRoot({ children, className }: NoAnimationProps) {
     return (
         <AnimatePresence>
             <motion.div
-                className="fixed z-[200] bottom-0 right-0 left-0 w-full  flex flex-col items-center justify-center"
+                className={twMerge(
+                    "fixed z-[200] bottom-0 right-0 left-0 w-full  flex flex-col items-center justify-center",
+                    className
+                )}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: ["100%", "50%", "0%"] }}
@@ -85,20 +117,21 @@ function AnimatedRoot({ children }: NoAnimationProps) {
 
 type RootProps = {
     noAnimation?: boolean,
-    children?: ReactNode
+    children?: ReactNode,
+    className?: string
 }
 
-function Root({ children, noAnimation }: RootProps) {
+function Root({ children, noAnimation, className }: RootProps) {
     if (noAnimation) {
         return (
-            <NoAnimationRoot>
+            <NoAnimationRoot className={className} >
                 {children}
             </NoAnimationRoot>
         )
     }
 
     return (
-        <AnimatedRoot>
+        <AnimatedRoot className={className} >
             {children}
         </AnimatedRoot>
     )

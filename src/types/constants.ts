@@ -1,5 +1,7 @@
+import { PositionClass } from "./athletes";
 import { getAppTheme } from "./themes/theme.constants";
 import { AppTheme } from "./themes/themes";
+import { TooltipData } from "./ui";
 
 export const CACHE_DURATION = 5 * 60 * 1000;
 export const URC_COMPETIION_ID = "b5cae2ff-d123-5f12-a771-5faa6d40e967";
@@ -61,3 +63,8 @@ export const CACHING_CONFIG = {
 
 /** The Cache Key for where cached app data should be stored */
 export const APP_CACHE_KEY = 'app-cache';
+
+export const positionsTooltipMap : Map<string, TooltipData> = {
+  // map with tooltip data for all rugby positions, aswell as rugby classes
+  // positions names and position class names are in snake case as the keys
+}

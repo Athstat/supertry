@@ -3,6 +3,7 @@ import { GameSportAction } from "../../../types/boxScore";
 import { sanitizeStat, getStatUnit } from "../../../utils/stringUtils";
 import { StatCard } from "../../ui/cards/StatCard";
 import SecondaryText from "../../ui/typography/SecondaryText";
+import SportActionCard from "../../stats/SportActionCard";
 
 type Props = {
     sportActions: GameSportAction[]
@@ -30,12 +31,14 @@ export default function PlayerFixtureStatsView({ sportActions }: Props) {
                         label="Minutes Played"
                         value={sanitizeStat(minutesPlayed?.action_count) + `${getStatUnit("Minutes Played") || ''}`}
                         className="flex-1"
+                        actionName="minutes_played_total"
                     />
 
                     <StatCard
                         label="Game Points"
                         value={sanitizeStat(pointsScored?.action_count)}
                         className="flex-1"
+                        actionName="points"
                     />
                 </div>
             </div>
@@ -127,43 +130,13 @@ type StatGroupProps = {
 
 function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
 
-    const sanitizeStat = (actionCount?: number) => {
-        if (!actionCount || actionCount === undefined || actionCount === null) {
-            return '-';
-        }
-
-
-        const [, decimal] = actionCount.toString().split(".");
-
-        if (Number(decimal) > 0) {
-            return Number(actionCount.toString()).toFixed(1);
-        }
-
-        return Math.floor(actionCount);
-    }
-
-    const getStatUnit = (actionDisplayName?: string) => {
-        if (!actionDisplayName) {
-            return undefined;
-        }
-
-        if (actionDisplayName.includes("Minute")) {
-            return "'"
-        }
-
-        if (actionDisplayName.includes("Metres")) {
-            return "m"
-        }
-        return undefined;
-    }
-
     return (
         <div className="border-t dark:border-slate-700 p-2 flex flex-col gap-2" >
             <div>
                 <SecondaryText className="text-sm font-semibold" >{groupTitle}</SecondaryText>
             </div>
 
-            <div className="flex flex-col gap-2" >
+            <div className="flex flex-col gap-4" >
                 {actionNames.map((a) => {
 
                     const sportAction = sportActions.find((s) => {
@@ -176,15 +149,12 @@ function StatsGroup({ actionNames, sportActions, groupTitle }: StatGroupProps) {
                     }
 
                     return (
-                        <div className="flex flex-row items-center gap-2 justify-between" >
-                            <div>
-                                <p className="text-sm" >{sportAction.definition?.display_name}</p>
-                            </div>
 
-                            <div>
-                                <p className="text-sm font-semibold" >{sanitizeStat(sportAction.action_count)}{getStatUnit(sportAction.definition?.display_name)}</p>
-                            </div>
-                        </div>
+                        <SportActionCard
+                            sportAction={sportAction}
+                            className="cursor-pointer"
+                        />
+
                     )
                 })}
             </div>

@@ -32,10 +32,13 @@ export default function FixtureRosterBench({ bench }: Props) {
         <BottomSheetView
             hideHandle
             className={twMerge(
-                "p-4 overflow-hidden max-h-[80px] min-h-[80px]",
+                "p-4 z-10 overflow-hidden max-h-[80px] min-h-[80px]",
                 expanded && "max-h-[400px]",
                 "transition-all delay-100 ease-linear"
             )}
+
+            rootClassName="z-10"
+            hideOverlay
         >
             <div className="flex flex-row items-center justify-between" >
                 <div>
