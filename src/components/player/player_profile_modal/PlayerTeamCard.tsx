@@ -48,7 +48,7 @@ export default function PlayerTeamCard({ player }: Props) {
           <p className="text-sm font-semibold dark:text-white">{player.team?.athstat_name}</p>
           {player.position && player.position_class && (
             <div onClick={handleClickPosition} >
-              <SecondaryText className="dark:text-slate-300 cursor-pointer text-xs">
+              <SecondaryText className="dark:text-slate-300 hover:underline cursor-pointer text-xs">
                 {formatPosition(player.position)} | {formatPosition(player.position_class)}
               </SecondaryText>
             </div>
