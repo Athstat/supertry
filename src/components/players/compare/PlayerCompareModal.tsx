@@ -45,8 +45,8 @@ export default function PlayerCompareModal() {
       open={open}
       title={title}
       onClose={closeCompareModal}
-      hw="w-[98%] lg:w-[85%] max-h-[98%] min-h-[98%] lg:max-h-[90%] lg:min-h-[90%]"
-      outerCon="p-3 lg:p-6"
+      hw="w-[100%] lg:w-[85%]  max-h-[100%] min-h-[100%] lg:max-h-[90%] lg:min-h-[90%]"
+      outerCon="p-2 lg:p-6 rounded-none lg:rounded-lg"
     >
 
       <div className={twMerge(

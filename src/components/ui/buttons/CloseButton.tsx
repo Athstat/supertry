@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import CircleButton from "./BackButton";
 
 type Props = {
     className?: string,
@@ -18,7 +19,7 @@ export default function CloseButton({ className, onClick, iconSize = 20, highlig
     }
 
     return (
-        <button
+        <CircleButton
             onClick={handleOnClick}
             className={twMerge(
                 "p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-full text-gray-600 dark:text-gray-400",
@@ -27,6 +28,6 @@ export default function CloseButton({ className, onClick, iconSize = 20, highlig
             )}
         >
             <X size={iconSize} />
-        </button>
+        </CircleButton>
     )
 }

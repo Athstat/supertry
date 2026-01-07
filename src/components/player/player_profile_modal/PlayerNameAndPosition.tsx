@@ -6,9 +6,33 @@ import AvailabilityIcon from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import MatchPrCard from '../../rankings/MatchPrCard';
 import ScoutPlayerButton from './ScoutPlayerButton';
+import { useMemo } from 'react';
+import { useTooltip } from '../../../hooks/ui/useTooltip';
+import { positionsTooltipMap } from '../../../types/constants';
 
 export default function PlayerNameAndPosition() {
   const { player } = usePlayerData();
+
+  const { openTooltipModal } = useTooltip();
+
+  const positionKey = useMemo(() => {
+    const lowCase = player?.position?.toLowerCase();
+    if (lowCase) {
+      return lowCase.replace(' ', '_');
+    }
+
+    return lowCase || '';
+  }, [player?.position])
+
+  const positionDef = positionsTooltipMap.get(positionKey || '');
+
+  const handleClickPosition = () => {
+    if (positionDef) {
+      const { title, description } = positionDef
+      const finalTitle = title && player?.position_class ? `${title} - ${formatPosition(player?.position_class)}` : title;
+      openTooltipModal(finalTitle, description)
+    }
+  }
 
   if (!player) return;
 
@@ -38,14 +62,16 @@ export default function PlayerNameAndPosition() {
 
               <ScoutPlayerButton player={player} />
 
-              <SecondaryText className="text-xs">
-                {player.position && player.position_class && (
-                  <span>
-                    {' '}
-                    {formatPosition(player.position)} - {formatPosition(player.position_class)}
-                  </span>
-                )}
-              </SecondaryText>
+              <button onClick={handleClickPosition} >
+                <SecondaryText className="text-xs hover:underline">
+                  {player.position && player.position_class && (
+                    <span>
+                      {' '}
+                      {formatPosition(player.position)} - {formatPosition(player.position_class)}
+                    </span>
+                  )}
+                </SecondaryText>
+              </button>
 
               {!player.team && player.position && (
                 <SecondaryText>{formatPosition(player.position)}</SecondaryText>

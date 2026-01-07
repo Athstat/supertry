@@ -8,6 +8,7 @@ import { PickemOverallRankingItem } from "../../types/pickem";
 import { useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { twMerge } from "tailwind-merge";
+import NoContentCard from "../ui/typography/NoContentMessage";
 
 /** Renders a pro pick'em leaderboard */
 export default function ProPickemLeaderboard() {
@@ -20,6 +21,8 @@ export default function ProPickemLeaderboard() {
       <LoadingIndicator />
     )
   }
+
+  const emptyRankings = rankings.length === 0;
 
   return (
     <div className="flex flex-col gap-3" >
@@ -54,7 +57,15 @@ export default function ProPickemLeaderboard() {
           })}
         </Table.Body>
 
+
+
       </Table.Root>
+
+      {emptyRankings && (
+        <NoContentCard
+          message="Opps! Pick'em Leaderboard Rankings are currently unavailable"
+        />
+      )}
     </div>
   )
 }
@@ -65,7 +76,7 @@ type RankingItemProps = {
 
 function RankingItem({ item }: RankingItemProps) {
 
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
   const stripColour = getRankingBorderColor(item.rank);
 
   const isUserRanking = authUser?.kc_id === item.user_id;
@@ -86,7 +97,7 @@ function RankingItem({ item }: RankingItemProps) {
 
     >
       <Table.TableData
-        style={ stripColour ? {
+        style={stripColour ? {
           borderLeft: 'solid',
           borderLeftColor: stripColour,
           margin: 1
