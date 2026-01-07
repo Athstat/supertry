@@ -9,6 +9,7 @@ import { twMerge } from 'tailwind-merge';
 import { queryParamKeys } from '../../../types/constants';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useFantasyPointsRankings } from '../../../hooks/athletes/useFantasyPointsRankings';
+import { getRankingBorderColor } from '../../../utils/fantasy/rankingUtils';
 
 type Props = {
   className?: string
@@ -71,18 +72,6 @@ export default function FantasyTopPerformersCard({className} : Props) {
             const val = r.total_points;
             const rank = index + 1;
 
-            // Define border colors based on rank
-            const getBorderColor = (rank: number) => {
-              switch (rank) {
-                case 1: return '#FFD700'; // Gold
-                case 2: return '#C0C0C0'; // Silver
-                case 3: return '#CD7F32'; // Bronze
-                case 4: return '#9333EA'; // Purple
-                case 5: return '#10B981'; // Green
-                default: return '#1196F5'; // Blue
-              }
-            };
-
             return (
               <PlayerRankingCard
                 player={r}
@@ -90,7 +79,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
                 rank={rank}
                 onClick={setSelectedPlayer}
                 value={val ? `${Math.floor(val)}` : '--'}
-                borderColor={getBorderColor(rank)}
+                borderColor={getRankingBorderColor(rank)}
               />
             );
           })}

@@ -50,7 +50,7 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
         </div>
       )}
 
-      <div className="bg-slate-200 dark:bg-slate-700/50 overflow-clip p-1 w-full h-[40px] rounded-xl flex flex-row items-center justify-between" >
+      <div className="bg-slate-200 border dark:border-slate-700/50 dark:bg-slate-800 overflow-clip p-1 w-full h-[45px] rounded-xl flex flex-row items-center justify-between" >
         <TabSwitchOption
           label="Predict"
           value="predict"

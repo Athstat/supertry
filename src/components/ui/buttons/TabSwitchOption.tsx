@@ -25,7 +25,7 @@ export function TabSwitchOption({ label, current, value, onSelect, icon, classNa
             className={twMerge(
                 "flex-1 text-xs cursor-pointer h-full flex flex-row gap-1 text-slate-700 dark:text-slate-300 rounded-xl items-center justify-center",
                 // isCurrent && AppColours.BACKGROUND,
-                isCurrent && "bg-blue-500 dark:bg-blue-600 text-white dark:text-white",
+                isCurrent && "bg-[#064fed] text-white dark:text-white",
                 className
             )}
             onClick={handleOnClick}

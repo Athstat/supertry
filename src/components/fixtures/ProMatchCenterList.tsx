@@ -14,7 +14,7 @@ type Props = {
 };
 
 /** Renders a list of pro matches */
-export default function ProMatchCenterList({ viewMode, onMoveNextWeek, displayFixtures, hasAnyFixtures }: Props) {
+export default function ProMatchCenterList({ onMoveNextWeek, displayFixtures, hasAnyFixtures }: Props) {
 
   const handleJumpToNextFixtures = () => {
     onMoveNextWeek();
