@@ -4,6 +4,8 @@ import PlayerCompareItemHeader from './PlayerCompareItemHeader';
 import PlayerIconsRow from '../PlayerIconsRow';
 import PlayerCompareSeasonStatsList from '../season_stats/PlayerCompareSeasonStats';
 import PlayerPointsHistoryList from '../../../player/player_profile_modal/points_history/PlayerPointsHistoryList';
+import SecondaryText from '../../../ui/typography/SecondaryText';
+import MatchPrCard from '../../../rankings/MatchPrCard';
 
 type Props = {
   player: IProAthlete;
@@ -25,7 +27,17 @@ export default function PlayersCompareItem({ player }: Props) {
 
   return (
     <div className="flex flex-col gap-2 w-[calc(50%-0.25rem)] md:flex-1 md:min-w-[200px] md:max-w-[300px] flex-shrink-0">
+
       <PlayerCompareItemHeader player={player} />
+      <div className='px-3' >
+        <div className='flex flex-row items-center justify-between gap-2' >
+          <SecondaryText>Power Ranking</SecondaryText>
+          <MatchPrCard
+            pr={player.power_rank_rating}
+          />
+        </div>
+      </div>
+
 
       {/* Player Icons Row */}
       {!isLoading && starRatings && actions && currSeason && (
@@ -34,6 +46,9 @@ export default function PlayersCompareItem({ player }: Props) {
 
       {currSeason && (<div className="flex flex-col gap-4">
         {/* Player Statistics Card (same structure as PlayerSeasonStatsCard) */}
+
+
+
         <PlayerPointsHistoryList
           player={player}
           season={currSeason}
@@ -64,3 +79,5 @@ export default function PlayersCompareItem({ player }: Props) {
     </div>
   );
 }
+
+
