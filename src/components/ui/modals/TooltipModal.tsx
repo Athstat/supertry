@@ -7,7 +7,7 @@ import { useTooltip } from "../../../hooks/ui/useTooltip";
 /** Renders a tooltip modal */
 export default function TooltipModal() {
 
-    const {data, closeTooltipModal, isTooltipModalOpen} = useTooltip();
+    const { data, closeTooltipModal, isTooltipModalOpen } = useTooltip();
 
     const handleClose = () => {
         closeTooltipModal();
@@ -18,13 +18,11 @@ export default function TooltipModal() {
     }
 
     return (
-        <div className="z-[200] bg-black/50 top-0 left-0 fixed w-full h-full flex flex-col" >
-            {/* <div className="bg-red-500 h-full flex-1" >
-
-            </div> */}
+        <div className="fixed top-0 bottom-0 z-[300]" >
             <BottomSheetView
                 hideHandle
-                className="p-4 min-h-[120px]"
+                className="p-4 min-h-[160px] flex flex-col gap-4"
+                onClickOutside={handleClose}
             >
                 <div className="flex flex-row items-center justify-between" >
                     <p className="font-bold text-lg" >{data?.title || "Tooltip"}</p>
