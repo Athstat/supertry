@@ -73,14 +73,6 @@ export default function PlayersCompareItem({ player }: Props) {
     <div className="flex flex-col gap-2 w-[calc(50%-0.25rem)] md:flex-1 md:min-w-[200px] md:max-w-[300px] flex-shrink-0">
       <PlayerCompareItemHeader player={player} />
 
-      {seasons && (
-        <PlayerCompareSeasonPicker
-          seasons={seasons}
-          setCurrSeason={setCurrSeason}
-          currSeason={currSeason}
-        />
-      )}
-
       {/* Player Icons Row */}
       {!isLoading && starRatings && actions && currSeason && (
         <PlayerIconsRow player={player} season={currSeason} size="sm" />
