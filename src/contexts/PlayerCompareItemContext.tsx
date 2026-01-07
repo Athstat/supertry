@@ -5,13 +5,16 @@ import { IProSeason } from "../types/season"
 import useSWR from "swr"
 import { djangoAthleteService } from "../services/athletes/djangoAthletesService"
 import { swrFetchKeys } from "../utils/swrKeys"
+import { IFixture } from "../types/games"
 
 type ContextProps = {
     player: IProAthlete,
     seasons: IProSeason[],
     selectedSeason?: IProSeason,
     switchSeason: (newSeason: IProSeason) => void,
-    isLoading?: boolean
+    isLoading?: boolean,
+    selectedFixture?: IFixture,
+    setFixture: (fixture?: IFixture) => void
 }
 
 export const PlayerCompareItemContext = createContext<ContextProps | null>(null);
@@ -47,10 +50,15 @@ export default function PlayerCompareItemProvider({ player, children }: Props) {
     }, [seasons]);
 
     const [selectedSeason, setSeason] = useState(firstSeason);
+    const [selectedFixture, setFixture] = useState<IFixture>();
     const displaySeason = selectedSeason || firstSeason;
 
     const handleSwitchSeason = (szn: IProSeason) => {
         setSeason(szn);
+    }
+
+    const handleChangeFixture = (fixture?: IFixture) => {
+        setFixture(fixture);
     }
 
     return (
@@ -60,7 +68,9 @@ export default function PlayerCompareItemProvider({ player, children }: Props) {
                 isLoading,
                 seasons,
                 switchSeason: handleSwitchSeason,
-                player
+                player,
+                setFixture: handleChangeFixture,
+                selectedFixture: selectedFixture
             }}
         >
             {children}

@@ -18,11 +18,12 @@ type Props = {
     player: IProAthlete,
     season: IProSeason,
     className?: string,
-    loadingClassName?: string
+    loadingClassName?: string,
+    onSelectFixture?: (fixture: IFixture) => void
 }
 
 /** Renders a players point history graph */
-export default function PlayerPointsHistoryList({ player, season, className, loadingClassName }: Props) {
+export default function PlayerPointsHistoryList({ player, season, className, loadingClassName, onSelectFixture }: Props) {
 
     const key = swrFetchKeys.getPlayerPointsHistory(season.id, player.tracking_id, 3)
     const { data, isLoading } = useSWR(key, () => fantasySeasonsService.getPlayerPointsHistory(season.id, player.tracking_id, 3));
@@ -30,6 +31,12 @@ export default function PlayerPointsHistoryList({ player, season, className, loa
     const { setSelectedFixture } = usePlayerData();
 
     const handleClickFixture = (fixture: IFixture) => {
+        
+        if (onSelectFixture) {
+            onSelectFixture(fixture);
+            return;
+        }
+
         setSelectedFixture(fixture);
     }
 

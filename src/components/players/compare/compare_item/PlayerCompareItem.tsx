@@ -7,6 +7,7 @@ import MatchPrCard from '../../../rankings/MatchPrCard';
 import PlayerCompareItemProvider from '../../../../contexts/PlayerCompareItemContext';
 import { usePlayerCompareItem } from '../../../../hooks/athletes/usePlayerCompareItem';
 import RoundedCard from '../../../ui/cards/RoundedCard';
+import PlayerFixtureModal from '../../../fixture/player_fixture_modal/PlayerFixtureModal';
 
 type Props = {
   player: IProAthlete;
@@ -23,10 +24,13 @@ export default function PlayersCompareItem({ player }: Props) {
 
 }
 
-
 function Content() {
 
-  const { selectedSeason, player, isLoading } = usePlayerCompareItem();
+  const { selectedSeason, player, isLoading, hasNoData, setFixture, selectedFixture } = usePlayerCompareItem();
+
+  const handleCloseFixtureModal = () => {
+    setFixture(undefined);
+  }
 
   if (isLoading) {
     return (
@@ -60,28 +64,29 @@ function Content() {
         <PlayerPointsHistoryList
           player={player}
           season={selectedSeason}
+          onSelectFixture={setFixture}
         />
 
         <PlayerCompareSeasonStatsList season={selectedSeason} player={player} />
 
       </div>)}
 
-      {!selectedSeason && <div className="flex flex-col gap-4">
-        <div className="flex flex-col bg-slate-50 border dark:border-slate-600 border-slate-300 dark:bg-slate-700/80 w-full gap-3 p-3 rounded-xl">
-          <div className="flex flex-row items-center justify-between">
-            <div className="w-24 h-4 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="w-16 h-5 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
-            <div className="w-16 h-5 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
-            <div className="w-24 h-5 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="w-full h-24 rounded bg-slate-200 dark:bg-slate-600 animate-pulse" />
+      {!selectedSeason && !hasNoData && (
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col w-full gap-3 p-3 rounded-xl">
+            <SecondaryText className='' >Pick a season to compare player stats against</SecondaryText>
           </div>
         </div>
-      </div>}
+      )}
 
+      {selectedFixture && (
+        <PlayerFixtureModal 
+          player={player}
+          fixture={selectedFixture}
+          onClose={handleCloseFixtureModal}
+          isOpen={Boolean(selectedFixture) && Boolean(player)}
+        />
+      )}
 
       {/* page-level skeleton removed; tray handles loading */}
     </div>

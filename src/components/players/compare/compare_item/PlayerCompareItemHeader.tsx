@@ -21,7 +21,7 @@ type Props = {
 
 export default function PlayerCompareItemHeader({ player }: Props) {
 
-  const {selectedSeason, seasons, switchSeason} = usePlayerCompareItem();
+  const {selectedSeason, seasons, switchSeason, hasNoData} = usePlayerCompareItem();
 
   const { movePlayerLeft, movePlayerRight, removePlayer } = usePlayerCompareActions();
 
@@ -106,12 +106,18 @@ export default function PlayerCompareItemHeader({ player }: Props) {
 
       </div>
 
-      {seasons && (
+      {seasons && !hasNoData && (
         <PlayerCompareSeasonPicker
           seasons={seasons}
           setCurrSeason={switchSeason}
           currSeason={selectedSeason}
         />
+      )}
+
+      {hasNoData && (
+        <RoundedCard className='p-2 min-h-[40px] rounded-md flex flex-col items-center justify-center' >
+          <SecondaryText className='text-xs truncate w-[95%]' >Whoops! No data was found for <strong>{player.player_name}</strong></SecondaryText>
+        </RoundedCard>
       )}
 
       <GeneralInformationSection
