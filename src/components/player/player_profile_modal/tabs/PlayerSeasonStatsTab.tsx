@@ -6,7 +6,7 @@ import NoContentCard from "../../../ui/typography/NoContentMessage";
 import { DropdownOption } from "../../../../types/ui";
 import { IProSeason } from "../../../../types/season";
 import { abbreviateSeasonName } from "../../../players/compare/PlayerCompareSeasonPicker";
-import PlayerSeasonStatsList from "../../../stats/PlayerSeasonStatsList";
+import { PlayerSeasonStats } from "../../../stats/PlayerSeasonStatsList";
 
 type Props = {
     player: IProAthlete
@@ -46,7 +46,7 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
             {sortedSeasons.length > 0 && (
                 <div className="flex flex-col gap-4" key={player.tracking_id + selectedSeason?.id} >
                     <div className="flex flex-row items-center gap-2 justify-between" >
-                        
+
                         <div>
                             <p className="font-semibold" >Season Stats</p>
                         </div>
@@ -61,11 +61,15 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                         </div>
                     </div>
 
-                    {selectedSeason && <PlayerSeasonStatsList 
-                        season={selectedSeason}
-                        player={player}
-                    />}
-                    
+                    {selectedSeason && (
+                        <PlayerSeasonStats.Root
+                            season={selectedSeason}
+                            player={player}
+                        >
+                            <PlayerSeasonStats.Header />
+                        </PlayerSeasonStats.Root>
+                    )}
+
                 </div>
             )}
         </div>

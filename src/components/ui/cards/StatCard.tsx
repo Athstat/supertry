@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
+import SecondaryText from "../typography/SecondaryText";
 
 type StatCardProps = {
   label: string;
@@ -19,7 +20,7 @@ export function StatCard({ label, value, icon, valueClassName, className }: Stat
       "bg-gray-200 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-2",
       className
     )}>
-     
+
       <div className="flex items-center gap-1 mb-0">
         {icon}
         <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -57,6 +58,38 @@ export function InfoCard({ label, value, icon, valueClassName, className }: Stat
           {value ?? "-"}
         </div>
       </div>
+
+    </div>
+  );
+};
+
+export function StatCard2({ label, value, icon, valueClassName, className }: StatCardProps) {
+
+  if (value === null || value === undefined) return <></>
+
+  return (
+    <div className={twMerge(
+      "bg-gray-200 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-4",
+      className
+    )}>
+
+      <div className="flex flex-col items-center justify-center text-center gap-1 mb-0">
+
+        <div>
+          {icon}
+        </div>
+
+        <div className="flex items-center">
+          <div className={twMerge("text-lg font-bold dark:text-gray-100 mr-2", valueClassName)}>
+            {value}
+          </div>
+        </div>
+
+        <SecondaryText className="text-[11px] font-medium text-wrap">
+          {label}
+        </SecondaryText>
+      </div>
+
 
     </div>
   );
