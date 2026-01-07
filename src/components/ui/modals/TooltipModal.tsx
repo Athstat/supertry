@@ -21,7 +21,7 @@ export default function TooltipModal() {
         <div className="fixed top-0 bottom-0 z-[300]" >
             <BottomSheetView
                 hideHandle
-                className="p-4 min-h-[160px] flex flex-col gap-4"
+                className="p-4 min-h-[160px] max-h-[500px] flex flex-col gap-4"
                 onClickOutside={handleClose}
             >
                 <div className="flex flex-row items-center justify-between" >
@@ -36,7 +36,7 @@ export default function TooltipModal() {
                     </div>
                 </div>
 
-                <div>
+                <div className="pb-4" >
                     <SecondaryText className="text-base" >
                         {data?.description}
                     </SecondaryText>
