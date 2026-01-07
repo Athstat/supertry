@@ -11,11 +11,12 @@ type Props = {
     value?: string,
     options: DropdownOption[],
     showSearch?: boolean,
-    className?: string
+    className?: string,
+    selectedClassName?: string
 }
 
 /** Renders a drop down component */
-export default function Dropdown({ onChange, value, options, className }: Props) {
+export default function Dropdown({ onChange, value, options, className, selectedClassName }: Props) {
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -54,6 +55,7 @@ export default function Dropdown({ onChange, value, options, className }: Props)
                 option={selectedOption}
                 isOpen={showOptions}
                 onClick={toggle}
+                className={selectedClassName}
             />}
 
             <Activity mode={showOptions ? "visible" : "hidden"} >
@@ -71,14 +73,18 @@ export default function Dropdown({ onChange, value, options, className }: Props)
 type SelectedProps = {
     option: DropdownOption,
     isOpen?: boolean,
-    onClick?: () => void
+    onClick?: () => void,
+    className?: string
 }
 
 /** Renders a card with the selected item */
-function SelectedIndicator({ option, isOpen, onClick }: SelectedProps) {
+function SelectedIndicator({ option, isOpen, onClick, className }: SelectedProps) {
     return (
         <RoundedCard
-            className="dark:bg-slate-700/60 cursor-pointer px-2 text-sm dark:border-slate-600 flex flex-row items-center justify-between relative w-full h-[35px] rounded-md"
+            className={twMerge(
+                "dark:bg-slate-700/60 cursor-pointer px-2 text-sm dark:border-slate-600 flex flex-row items-center justify-between relative w-full h-[35px] rounded-md",
+                className
+            )}
             onClick={onClick}
         >
             <p>{option.label}</p>

@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useTeamSeasonLeaders } from "../../../hooks/teams/useTeamSeasonLeaders"
 import { IFixture } from "../../../types/games"
 import { TeamSeasonLeader } from "../../../types/team";
-import { useSportActions } from "../../../providers/SportActionsDefinitionsProvider";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";
@@ -10,6 +9,7 @@ import { fixtureSummary } from "../../../utils/fixtureUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";
 import { IProAthlete } from "../../../types/athletes";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { useSportActions } from "../../../hooks/useSportActions";
 
 type Props = {
     fixture: IFixture,
