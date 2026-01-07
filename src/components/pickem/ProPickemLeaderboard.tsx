@@ -6,6 +6,8 @@ import { LoadingIndicator } from "../ui/LoadingIndicator";
 import { getRankingBorderColor } from "../../utils/fantasy/rankingUtils";
 import { PickemOverallRankingItem } from "../../types/pickem";
 import { useMemo } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { twMerge } from "tailwind-merge";
 
 /** Renders a pro pick'em leaderboard */
 export default function ProPickemLeaderboard() {
@@ -25,7 +27,7 @@ export default function ProPickemLeaderboard() {
       <Table.Root
         className="px-4 p"
         style={{
-          borderSpacing: '1px 5px',
+          borderSpacing: '0px 5px',
           borderCollapse: 'separate'
         }}
 
@@ -62,7 +64,11 @@ type RankingItemProps = {
 }
 
 function RankingItem({ item }: RankingItemProps) {
+
+  const {authUser} = useAuth();
   const stripColour = getRankingBorderColor(item.rank);
+
+  const isUserRanking = authUser?.kc_id === item.user_id;
 
   const accuracy = useMemo(() => {
     return item.correct_predictions && item.predictions_made ? `${Math.floor((item.correct_predictions / item.predictions_made) * 100)}%` : '0%';
@@ -73,7 +79,10 @@ function RankingItem({ item }: RankingItemProps) {
   return (
     <Table.Row
       key={item.user_id}
-      className="gap-1 h-[55px] items-center"
+      className={twMerge(
+        "gap-1 h-[55px] items-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800",
+        isUserRanking && 'bg-blue-500 dark:bg-blue-600 text-white'
+      )}
 
     >
       <Table.TableData
@@ -85,7 +94,10 @@ function RankingItem({ item }: RankingItemProps) {
       >
         <RankNumberCard
           value={item.rank}
-          className="min-w-10 min-h-10"
+          className={twMerge(
+            "min-w-10 min-h-10",
+            isUserRanking && "bg-transparent dark:bg-transparent"
+          )}
         />
       </Table.TableData>
 
@@ -96,11 +108,11 @@ function RankingItem({ item }: RankingItemProps) {
       </Table.TableData>
 
       <Table.TableData>
-        <p className="text-center text-sm font-bold" >{item.score || '-'}</p>
+        <p className="text-center text-xs font-semibold" >{item.score || '-'}</p>
       </Table.TableData>
 
       <Table.TableData>
-        <p className="text-center text-sm font-bold" >{accuracy}</p>
+        <p className="text-center text-xs font-semibold" >{accuracy}</p>
       </Table.TableData>
     </Table.Row>
   )
