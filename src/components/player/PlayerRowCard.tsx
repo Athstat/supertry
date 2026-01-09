@@ -70,9 +70,10 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                 </td>
 
 
-                <td className="flex py-3 flex-row items-center justify-center gap-1" >
-                    <p className="text-xs" >{player.price}</p>
-                    {/* <Coins className="text-yellow-500 w-3 h-3" /> */}
+                <td className="py-3 " >
+                    <div className="flex flex-row items-center justify-center w-full flex-1" >
+                        <p className="text-xs" >{player.price}</p>
+                    </div>
                 </td>
 
                 <td className="py-3" >
@@ -81,10 +82,12 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                     </div>
                 </td>
 
-                <td className="flex py-3 flex-col gap-1 items-center justify-center" >
-                    <MatchPrCard
-                        pr={player.power_rank_rating}
-                    />
+                <td className="py-3 " >
+                    <div className="flex flex-row items-center justify-center w-full flex-1" >
+                        <MatchPrCard
+                            pr={player.power_rank_rating}
+                        />
+                    </div>
                 </td>
 
             </tr>}
