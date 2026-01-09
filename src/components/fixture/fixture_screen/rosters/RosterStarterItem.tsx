@@ -55,9 +55,9 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
                     <PlayerMugshot
                         url={item.athlete.image_url}
                         teamId={item.team_id}
-                        className="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 w-16 h-16 hover:bg-green-400"
+                        className="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 lg:w-16 lg:h-16 hover:bg-green-400"
                         useBaseClassNameForJersey={false}
-                        jerseyClassName="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 w-20 h-20 hover:bg-green-400"
+                        jerseyClassName="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 lg:w-20 lg:h-20 hover:bg-green-400"
                         
                     />
                 </Activity>
