@@ -91,6 +91,7 @@ export function PlayerActionModal({
       )}
       hideHandle
       key={player.tracking_id}
+      onClickOutside={onClose}
     >
       <div className="flex flex-col gap-4" >
 

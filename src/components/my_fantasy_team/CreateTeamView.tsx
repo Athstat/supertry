@@ -16,11 +16,10 @@ import { PlayerActionModal } from './PlayerActionModal';
 import CreateTeamViewHeader from './CreateTeamViewHeader';
 import TeamBenchDrawer from './TeamBenchDrawer';
 
-
+/** Renders a create team view */
 export default function CreateFantasyTeamView() {
 
   const { leagueRound, swapState, budgetRemaining, swapPlayer, completeSwap, cancelSwap, slots } = useCreateFantasyTeam();
-
 
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [profileModalPlayer, setProfileModalPlayer] = useState<IFantasyTeamAthlete>();
@@ -141,5 +140,3 @@ export default function CreateFantasyTeamView() {
     </div>
   );
 }
-
-
