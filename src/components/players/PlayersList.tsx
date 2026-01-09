@@ -21,10 +21,10 @@ import { PlayerSort } from "./PlayerSort";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
 import { PlayerListTable } from "./PlayerListTable";
-import FloatingSearchBar from "./FloatingSearchBar";
 import RoundedCard from "../ui/cards/RoundedCard";
 import GlassBottomSheet from "../ui/modals/GlassBottomSheet";
 import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
+import StaticSearchBarArea from "./StatisSearchBarArea";
 
 type Props = {
     players: IProAthlete[]
@@ -141,7 +141,16 @@ export default function PlayersList({ players }: Props) {
                 AppColours.BACKGROUND
             )}>
 
-                {<PlayersScreenCompareStatus />}
+                <div className="w-full" >
+                    <StaticSearchBarArea
+                        value={searchQuery ?? ''}
+                        onChange={handleSearch}
+                        onOpenControls={() => setControlsOpen(true)}
+                        onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
+                        isComparePicking={isPickingPlayers}
+                    />
+                    <PlayersScreenCompareStatus />
+                </div>
 
                 {/* Selected Team Section */}
                 <div>
@@ -208,14 +217,6 @@ export default function PlayersList({ players }: Props) {
                     />
                 )}
             </div>
-
-            <FloatingSearchBar
-                value={searchQuery ?? ''}
-                onChange={handleSearch}
-                onOpenControls={() => setControlsOpen(true)}
-                onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
-                isComparePicking={isPickingPlayers}
-            />
 
             <GlassBottomSheet isOpen={controlsOpen} onClose={() => setControlsOpen(false)}>
                 <div className="space-y-4">

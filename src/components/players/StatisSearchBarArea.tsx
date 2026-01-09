@@ -1,0 +1,124 @@
+import { Search, Filter, User, X } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
+import PrimaryButton from '../ui/buttons/PrimaryButton';
+import { usePlayerCompareActions } from '../../hooks/usePlayerCompare';
+import RoundedCard from '../ui/cards/RoundedCard';
+import { Activity } from 'react';
+import SecondaryText from '../ui/typography/SecondaryText';
+import { AppColours } from '../../types/constants';
+
+type Props = {
+    value: string;
+    onChange: (v: string) => void;
+    onOpenControls?: () => void;
+    onOpenCompare?: () => void;
+    isComparePicking?: boolean;
+    placeholder?: string;
+    className?: string;
+    showFilterButton?: boolean;
+    showCompareButton?: boolean;
+};
+
+export default function StaticSearchBarArea({
+    value,
+    onChange,
+    onOpenControls,
+    isComparePicking,
+    placeholder = 'Search players...',
+    showFilterButton = true,
+    showCompareButton = true,
+}: Props) {
+
+    const { stopPicking, startPicking, isPicking } = usePlayerCompareActions();
+
+    // Simplified color classes for opaque backgrounds
+    const iconColorClass = 'text-slate-700 dark:text-white';
+    const textColorClass = 'text-slate-800 dark:text-white';
+    const placeholderColorClass = 'placeholder:text-slate-500 dark:placeholder:text-slate-400';
+
+    return (
+        <div className='w-full' >
+            <div className={twMerge(
+                'flex sticky w-full top-0 z-[10] left-0 flex-col gap-1 py-1',
+                AppColours.BACKGROUND
+            )} >
+
+                <div
+                    className={twMerge(
+                        'w-full flex items-center justify-center gap-3 rounded-full',
+                        'bg-white/95 dark:bg-dark-850/70 border border-slate-200 dark:border-slate-700',
+                        'h-12 md:h-[52px] px-4 md:px-5',
+                    )}
+                >
+                    <Search className={`w-5 h-5 ${iconColorClass}`} />
+                    <input
+                        type="text"
+                        value={value}
+                        onChange={e => onChange(e.target.value)}
+                        placeholder={placeholder}
+                        className={`flex-1 bg-transparent outline-none text-base ${textColorClass} ${placeholderColorClass}`}
+                    />
+                </div>
+
+
+                <div className='flex flex-row items-center gap-2' >
+                    {showFilterButton && (
+                        <button
+                            aria-label="Open filters and sorting"
+                            onClick={onOpenControls}
+                            className={[
+                                '',
+                                'rounded-2xl px-4 py-1',
+                                'flex items-center justify-center',
+                                'bg-white/95 dark:bg-dark-850/95',
+                                'border border-slate-200 dark:border-slate-700',
+                                'hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98]',
+                                'transition',
+                            ].join(' ')}
+                        >
+                            <p>Filters</p>
+                            <Filter className={`w-5 h-5 ${iconColorClass}`} />
+                        </button>
+                    )}
+
+                    {showCompareButton && (
+                        <button
+                            aria-label="Enter compare mode"
+                            className={[
+                                // Size differs when showing two icons vs. single arrow
+                                '',
+                                'flex items-center justify-center gap-2',
+                                // Style changes with compare mode
+                                'active:scale-[0.98]',
+                                'transition',
+                            ].join(' ')}
+                        >
+                            {isComparePicking ? (
+                                <div className='flex flex-row items-center gap-2' >
+                                    <PrimaryButton onClick={stopPicking} destroy className='flex flex-row items-center gap-2 rounded-2xl h-[32px] px-4' >
+                                        <p>Cancel Compare</p>
+                                        <X className="w-5 h-5 text-white" />
+                                    </PrimaryButton>
+                                </div>
+                            ) : (
+                                <RoundedCard onClick={startPicking} className='flex flex-row items-center gap-2 rounded-2xl h-[32px] px-4' >
+                                    <p>Compare Players</p>
+                                    <div className='flex flex-row items-center' >
+                                        <User className={`w-5 h-5 ${iconColorClass}`} />
+                                        <span className="text-slate-400 dark:text-slate-500">|</span>
+                                        <User className={`w-5 h-5 ${iconColorClass}`} />
+                                    </div>
+                                </RoundedCard>
+                            )}
+                        </button>
+                    )}
+                </div>
+
+                <Activity mode={isPicking ? 'visible' : 'hidden'} >
+                    <SecondaryText>Select players that you want to compare (MAX 5).</SecondaryText>
+                </Activity>
+
+            </div>
+        </div>
+    );
+}
