@@ -44,7 +44,7 @@ export default function PlayersByPositionClassScreen() {
         <PageView className='px-4 py-4 relative' >
 
             <div className={twMerge(
-                'flex sticky w-full p-2 top-0 z-[10] left-0 flex-row items-center justify-between',
+                'flex sticky w-full p-2 top-0 z-[10] left-0 flex-row items-center justify-between h-[50px]',
                 AppColours.BACKGROUND
             )} >
                 <div className='flex flex-row items-center gap-2' >
@@ -69,6 +69,7 @@ export default function PlayersByPositionClassScreen() {
 
             <PlayersList
                 players={positionPlayers}
+                stickyHeaderClassName=''
             />
 
             <PlayersPositionsSheet

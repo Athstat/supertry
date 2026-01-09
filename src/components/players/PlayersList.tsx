@@ -27,11 +27,12 @@ import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
 import StaticSearchBarArea from "./StatisSearchBarArea";
 
 type Props = {
-    players: IProAthlete[]
+    players: IProAthlete[],
+    stickyHeaderClassName?: string
 }
 
 /** Renders a list of player cards, with functionality to filter sort etc */
-export default function PlayersList({ players }: Props) {
+export default function PlayersList({ players, stickyHeaderClassName }: Props) {
     const displayedAthletes = players;
     const [params, setParams] = useSearchParams();
 
@@ -136,21 +137,24 @@ export default function PlayersList({ players }: Props) {
 
     return (
         <Fragment>
+
+            <StaticSearchBarArea
+                value={searchQuery ?? ''}
+                onChange={handleSearch}
+                onOpenControls={() => setControlsOpen(true)}
+                onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
+                isComparePicking={isPickingPlayers}
+                stickyHeaderClassName={stickyHeaderClassName}
+            />
+            <PlayersScreenCompareStatus />
+
+
             <div className={twMerge(
                 "flex flex-col items-center justify-center flex-wrap",
                 AppColours.BACKGROUND
             )}>
 
-                <div className="w-full" >
-                    <StaticSearchBarArea
-                        value={searchQuery ?? ''}
-                        onChange={handleSearch}
-                        onOpenControls={() => setControlsOpen(true)}
-                        onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
-                        isComparePicking={isPickingPlayers}
-                    />
-                    <PlayersScreenCompareStatus />
-                </div>
+
 
                 {/* Selected Team Section */}
                 <div>

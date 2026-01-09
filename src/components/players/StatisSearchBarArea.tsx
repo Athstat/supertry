@@ -3,9 +3,10 @@ import { twMerge } from 'tailwind-merge';
 import PrimaryButton from '../ui/buttons/PrimaryButton';
 import { usePlayerCompareActions } from '../../hooks/usePlayerCompare';
 import RoundedCard from '../ui/cards/RoundedCard';
-import { Activity } from 'react';
+import { Activity, Fragment } from 'react';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { AppColours } from '../../types/constants';
+import { useInView } from 'react-intersection-observer';
 
 type Props = {
     value: string;
@@ -17,6 +18,7 @@ type Props = {
     className?: string;
     showFilterButton?: boolean;
     showCompareButton?: boolean;
+    stickyHeaderClassName?: string
 };
 
 export default function StaticSearchBarArea({
@@ -27,8 +29,11 @@ export default function StaticSearchBarArea({
     placeholder = 'Search players...',
     showFilterButton = true,
     showCompareButton = true,
+    stickyHeaderClassName
 }: Props) {
 
+
+    const { ref: sentinelRef, inView } = useInView();
     const { stopPicking, startPicking, isPicking } = usePlayerCompareActions();
 
     // Simplified color classes for opaque backgrounds
@@ -37,10 +42,13 @@ export default function StaticSearchBarArea({
     const placeholderColorClass = 'placeholder:text-slate-500 dark:placeholder:text-slate-400';
 
     return (
-        <div className='w-full' >
+        <Fragment>
+
             <div className={twMerge(
-                'flex sticky w-full top-0 z-[10] left-0 flex-col gap-1 py-1',
-                AppColours.BACKGROUND
+                'sticky top-0 left-0 z-[20] py-2 pb-2 w-full flex flex-col gap-2',
+                !inView && "border-b",
+                AppColours.BACKGROUND,
+                stickyHeaderClassName
             )} >
 
                 <div
@@ -59,7 +67,6 @@ export default function StaticSearchBarArea({
                         className={`flex-1 bg-transparent outline-none text-base ${textColorClass} ${placeholderColorClass}`}
                     />
                 </div>
-
 
                 <div className='flex flex-row items-center gap-2' >
                     {showFilterButton && (
@@ -119,6 +126,9 @@ export default function StaticSearchBarArea({
                 </Activity>
 
             </div>
-        </div>
+
+            <div ref={sentinelRef} className="h-px" />
+        </Fragment>
+
     );
 }
