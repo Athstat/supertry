@@ -129,7 +129,7 @@ export function PowerRankingChartTab({ player }: Props) {
         ticks: {
           color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
         },
-        min: 70, // Set minimum value to better visualize changes
+        min: 50, // Set minimum value to better visualize changes
         max: 95, // Set maximum value
       },
     },

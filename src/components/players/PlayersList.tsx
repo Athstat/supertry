@@ -2,7 +2,6 @@ import { useAtomValue } from "jotai";
 import { ArrowUp, X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Fragment } from "react/jsx-runtime";
 import { useDebounced } from "../../hooks/web/useDebounced";
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare";
 import { useQueryState } from "../../hooks/web/useQueryState";
@@ -144,7 +143,7 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
     }
 
     return (
-        <Fragment>
+        <div>
 
             <StaticSearchBarArea
                 value={searchQuery ?? ''}
@@ -161,15 +160,14 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
 
             <div className={twMerge(
                 "flex flex-col items-center justify-center flex-wrap",
-                AppColours.BACKGROUND
+                AppColours.BACKGROUND,
+                
             )}>
 
-
-
                 {/* Selected Team Section */}
-                <div>
+                <div className="flex flex-row items-start w-full" >
                     {selectedTeam && (
-                        <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2">
+                        <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items gap-2">
                             <TeamLogo
                                 teamName={selectedTeam.athstat_name}
                                 url={selectedTeam.image_url}
@@ -265,6 +263,6 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
                     />
                 </div>
             </GlassBottomSheet>
-        </Fragment>
+        </div>
     );
 };
