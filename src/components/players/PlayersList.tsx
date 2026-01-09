@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
 import { ArrowUp, X } from "lucide-react";
-import { useMemo, useState, useEffect, useCallback, useRef } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { useDebounced } from "../../hooks/web/useDebounced";
