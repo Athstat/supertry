@@ -17,7 +17,7 @@ export default function PlayersScreenCompareStatus() {
       {isPicking && (
         <Sticky>
           <div className='fixed bottom-20 left-0 w-full' >
-            <RoundedCard className="p-3 shadow-md left-0 mx-2 flex overflow-y-auto flex-col gap-4 dark:bg-slate-700">
+            <RoundedCard className="p-3 shadow-md left-0 mx-2 flex overflow-y-auto flex-col gap-4 dark:bg-slate-700 hover:dark:bg-slate-700">
               <div className="flex flex-row gap-2 items-center justify-between w-full">
 
                 <div className="flex flex-row items-center gap-2">
