@@ -1,5 +1,5 @@
 import { Check, Info, Loader, Shield } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
@@ -10,6 +10,10 @@ import { isGuestUserAtom } from "../../state/authUser.atoms";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
+import { useCreateFantasyTeam } from "../../hooks/fantasy/useCreateFantasyTeam";
+import { useNavigateBack } from "../../hooks/web/useNavigateBack";
+import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
+import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 
 
 /** Renders Create Team View Header */
@@ -17,7 +21,7 @@ export default function CreateTeamViewHeader() {
     const { leagueConfig } = useFantasyLeagueGroup();
     const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam } = useFantasyTeam();
 
-    const {setRoundTeam} = useTeamHistory(); 
+    const { setRoundTeam } = useTeamHistory();
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
     const [createdTeam, setCreatedTeam] = useState<IFantasyLeagueTeam>();
@@ -63,6 +67,7 @@ export default function CreateTeamViewHeader() {
     return (
         <div className="px-4 flex flex-col gap-3.5" >
 
+            <UnsavedChangesGuard />
 
             <div className="flex flex-row  items-center justify-between" >
 
@@ -148,7 +153,7 @@ export default function CreateTeamViewHeader() {
             )}
 
             {saveError && (
-                <Toast 
+                <Toast
                     type="error"
                     message={saveError}
                     onClose={clearSaveError}
@@ -240,5 +245,57 @@ function ClaimAccountModal({ onCancel, onClose }: ClaimAccountModalProps) {
                 </div>
             </div>
         </div>
+    )
+}
+
+/** Renders component that warns user about leaving the
+ * create team screen without saving their team */
+
+function UnsavedChangesGuard() {
+
+    const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
+
+    const {
+        changesDetected,
+        selectedCount
+    } = useCreateFantasyTeam();
+
+    const toggleUnSavedChangesModal = () => {
+        setShowUnsavedChangesModal(prev => !prev);
+    }
+
+    const hasUnsavedChanges = useMemo(() => {
+        return changesDetected || selectedCount > 1
+    }, [changesDetected, selectedCount]);
+
+    const { hardPop } = useNavigateBack();
+
+    const navigationGuard = useCallback(() => {
+        if (hasUnsavedChanges) {
+            toggleUnSavedChangesModal();
+            return false;
+        }
+
+        return true;
+    }, [hasUnsavedChanges]);
+
+    useNavigationGuard(navigationGuard);
+
+    const handleLeaveWithoutSavingChanges = () => {
+        hardPop("/leagues", { bypassGuard: true });
+    }
+
+    return (
+        <>
+
+            <UnsavedChangesWarningModal
+                isOpen={showUnsavedChangesModal}
+                title="Unsaved Changes"
+                message="Hold on! You’re still creating a team and haven’t saved it yet. Do you want to discard your progress?"
+                onCancel={toggleUnSavedChangesModal}
+                onDiscard={handleLeaveWithoutSavingChanges}
+            />
+
+        </>
     )
 }

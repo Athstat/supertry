@@ -228,12 +228,12 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
         <div className="flex flex-col items-center justify-center gap-1 relative">
             <div
                 className={twMerge(
-                    'overflow-hidden cursor-pointer rounded-lg min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px] bg-gradient-to-br from-green-900 to-green-900/60',
+                    'overflow-hidden flex flex-col items-center justify-center cursor-pointer rounded-lg min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px] ',
                     'md:min-h-[150px] md:max-h-[150px] md:min-w-[120px] md:max-w-[120px] flex flex-col'
                 )}
                 onClick={handleClick}
             >
-                <div className="flex-1 h-full flex overflow-clip flex-col items-center justify-center w-full gap-2">
+                <div className="flex bg-gradient-to-br h-[120px] rounded-lg from-green-900 to-green-900/60 overflow-clip flex-col items-center justify-center w-full gap-2">
                     <div>
                         <CirclePlus className="w-10 text-white/90 h-10" />
                     </div>

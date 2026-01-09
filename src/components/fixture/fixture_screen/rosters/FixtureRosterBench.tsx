@@ -59,7 +59,7 @@ export default function FixtureRosterBench({ bench }: Props) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-2" >
+            <div className="grid grid-cols-3 lg:grid-cols-4 gap-2" >
                 {bench.map((r) => {
                     return (
                         <RosterBenchItem
@@ -105,7 +105,7 @@ function RosterBenchItem({ item }: RosterItemProps) {
                 
             />
 
-            <p className="text-sm" >{player_number}. {athlete.athstat_firstname}</p>
+            <p className="text-sm" >{player_number}. {athlete.athstat_lastname}</p>
 
             {pr && (
                 <div className="absolute top-0 right-0" >

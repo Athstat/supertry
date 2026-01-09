@@ -1,9 +1,11 @@
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { comparePlayersAtomGroup } from "../state/comparePlayers.atoms";
 import { IProAthlete } from "../types/athletes";
 
 /** Hook that provides player compare functions */
 export function usePlayerCompareActions() {
+
+    const isPicking = useAtomValue(comparePlayersAtomGroup.isCompareModePicking);
 
     const [compareMode, setCompareMode] = useAtom(
         comparePlayersAtomGroup.compareModeAtom
@@ -61,7 +63,7 @@ export function usePlayerCompareActions() {
             if (prev.length === COMPARE_LIMIT) {
                 return prev;
             }
- 
+
             const isAlreadyThere = isPlayerSelectedAlready(player, prev);
 
             if (isAlreadyThere) {
@@ -141,7 +143,8 @@ export function usePlayerCompareActions() {
         clearSelections,
         isPlayerSelectedAlready,
         addOrRemovePlayer,
-        isCompareLimitReached
+        isCompareLimitReached,
+        isPicking
     }
 
 }

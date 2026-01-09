@@ -1,8 +1,7 @@
 import { useAtomValue } from "jotai";
-import { X } from "lucide-react";
+import { ArrowUp, X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Fragment } from "react/jsx-runtime";
 import { useDebounced } from "../../hooks/web/useDebounced";
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare";
 import { useQueryState } from "../../hooks/web/useQueryState";
@@ -21,17 +20,20 @@ import { PlayerSort } from "./PlayerSort";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
 import { PlayerListTable } from "./PlayerListTable";
-import FloatingSearchBar from "./FloatingSearchBar";
 import RoundedCard from "../ui/cards/RoundedCard";
 import GlassBottomSheet from "../ui/modals/GlassBottomSheet";
 import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
+import StaticSearchBarArea from "./StatisSearchBarArea";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
+import { useInView } from "react-intersection-observer";
 
 type Props = {
-    players: IProAthlete[]
+    players: IProAthlete[],
+    stickyHeaderClassName?: string
 }
 
 /** Renders a list of player cards, with functionality to filter sort etc */
-export default function PlayersList({ players }: Props) {
+export default function PlayersList({ players, stickyHeaderClassName }: Props) {
     const displayedAthletes = players;
     const [params, setParams] = useSearchParams();
 
@@ -48,6 +50,8 @@ export default function PlayersList({ players }: Props) {
 
     const [teamIdFilter, setTeamIdFilter] = useQueryState<string | undefined>('team_id');
     const selectedTeam = availableTeams.find(t => t.athstat_id === teamIdFilter);
+
+    const { ref: topPageRef, inView: isTopPageRefVisible } = useInView();
 
     // Ensure team filter remains valid when dataset changes
     useEffect(() => {
@@ -134,19 +138,36 @@ export default function PlayersList({ players }: Props) {
         setParams(next, { replace: true });
     };
 
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
     return (
-        <Fragment>
+        <div>
+
+            <StaticSearchBarArea
+                value={searchQuery ?? ''}
+                onChange={handleSearch}
+                onOpenControls={() => setControlsOpen(true)}
+                onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
+                isComparePicking={isPickingPlayers}
+                stickyHeaderClassName={stickyHeaderClassName}
+            />
+            <PlayersScreenCompareStatus />
+
+            <div ref={topPageRef} ></div>
+
+
             <div className={twMerge(
                 "flex flex-col items-center justify-center flex-wrap",
-                AppColours.BACKGROUND
+                AppColours.BACKGROUND,
+                
             )}>
 
-                {<PlayersScreenCompareStatus />}
-
                 {/* Selected Team Section */}
-                <div>
+                <div className="flex flex-row items-start w-full" >
                     {selectedTeam && (
-                        <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items-center gap-2">
+                        <RoundedCard className="flex w-fit px-2 py-0.5 dark:bg-slate-800 flex-row items gap-2">
                             <TeamLogo
                                 teamName={selectedTeam.athstat_name}
                                 url={selectedTeam.image_url}
@@ -198,6 +219,18 @@ export default function PlayersList({ players }: Props) {
                     />
                 )}
 
+
+                <div>
+                    {!isTopPageRefVisible && (
+                        <PrimaryButton
+                            className="fixed bottom-20 right-0 rounded-full w-11 h-11 shadow-md mx-4"
+                            onClick={scrollToTop}
+                        >
+                            <ArrowUp />
+                        </PrimaryButton>
+                    )}
+                </div>
+
                 <PlayerCompareModal />
 
                 {playerModalPlayer && (
@@ -208,14 +241,6 @@ export default function PlayersList({ players }: Props) {
                     />
                 )}
             </div>
-
-            <FloatingSearchBar
-                value={searchQuery ?? ''}
-                onChange={handleSearch}
-                onOpenControls={() => setControlsOpen(true)}
-                onOpenCompare={() => (isPickingPlayers ? showCompareModal() : startPicking())}
-                isComparePicking={isPickingPlayers}
-            />
 
             <GlassBottomSheet isOpen={controlsOpen} onClose={() => setControlsOpen(false)}>
                 <div className="space-y-4">
@@ -238,6 +263,6 @@ export default function PlayersList({ players }: Props) {
                     />
                 </div>
             </GlassBottomSheet>
-        </Fragment>
+        </div>
     );
 };

@@ -11,7 +11,7 @@ export function LoadingIndicator({className, loaderClassName} : Props){
   return (
     <div
       className={twMerge(
-        "min-h-screen bg-gray-50 dark:bg-dark-850 flex items-start justify-center pt-[30vh]",
+        "min-h-screen flex items-start justify-center pt-[30vh]",
         className
       )}
       aria-label="Loading"

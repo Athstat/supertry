@@ -29,7 +29,7 @@ export default function PitchViewLoadingSkeleton({ className, hideHistoryBar = f
                 </div>
 
                 <RugbyPitch3DRaster className='bg-blend-color-burn mt-[20] opacity-55 dark:opacity-20' />
-                <BottomSheetView noAnimation className='' hideHandle />
+                <BottomSheetView hideOverlay noAnimation className='' hideHandle />
             </div>
 
         </div>

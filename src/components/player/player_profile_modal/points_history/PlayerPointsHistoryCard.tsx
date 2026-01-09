@@ -62,7 +62,7 @@ export default function PlayerPointsHistoryCard({ player, season, className, loa
                 className
             )} >
                 <div>
-                    <p className="font-bold text-sm" >Points History</p>
+                    <p className="font-bold text-sm" >Fantasy Points History</p>
                 </div>
 
                 <Activity mode={hasHistory ? "hidden" : "visible"} >

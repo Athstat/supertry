@@ -13,14 +13,15 @@ export default function FixtureRostersTab({ fixture }: Props) {
     const [team, setTeam] = useState<IProTeam | undefined>(fixture?.team);
 
     return (
-        <div className="flex flex-col gap-4" >
+        <div className="flex flex-col gap-4 overflow-x-clip" >
+            
             <div className="flex flex-row items-center justify-between" >
                 <div>
                     {/* <ToggleButton /> */}
                 </div>
             </div>
 
-            <div className="flex px-4   flex-col items-center justify-center" >
+            <div className="flex px-4 flex-col items-center justify-center" >
                 <FixtureTeamSelector
                     fixture={fixture}
                     className="w-[70%]"
