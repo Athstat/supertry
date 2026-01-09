@@ -105,7 +105,7 @@ function RosterBenchItem({ item }: RosterItemProps) {
                 
             />
 
-            <p className="text-sm" >{player_number}. {athlete.athstat_firstname}</p>
+            <p className="text-sm" >{player_number}. {athlete.athstat_lastname}</p>
 
             {pr && (
                 <div className="absolute top-0 right-0" >
