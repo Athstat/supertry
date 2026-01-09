@@ -291,7 +291,7 @@ function UnsavedChangesGuard() {
             <UnsavedChangesWarningModal
                 isOpen={showUnsavedChangesModal}
                 title="Unsaved Changes"
-                message="Wait up, are you sure you want to discard creating your team?"
+                message="Hold on! You’re still creating a team and haven’t saved it yet. Do you want to discard your progress?"
                 onCancel={toggleUnSavedChangesModal}
                 onDiscard={handleLeaveWithoutSavingChanges}
             />
