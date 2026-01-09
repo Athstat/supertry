@@ -132,7 +132,7 @@ export default function PlayerCompareSeasonStatsList({season, player} : Props) {
                 />
 
                 <PlayerSeasonStatsList.SpecificAction
-                    actionName={'	missed_conversion_goals'}
+                    actionName={'missed_conversion_goals'}
                     defaultValue={0}
                 />
 
