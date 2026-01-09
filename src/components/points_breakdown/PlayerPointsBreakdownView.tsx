@@ -70,7 +70,7 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
             />
 
             {!hideSubtitle && <div>
-                <p className="font-semibold text-lg dark:text-white" >Points Breakdown</p>
+                <p className="font-semibold text-base lg:text-lg dark:text-white" >Fantasy Points Breakdown</p>
             </div>}
 
             {isLoading && (
