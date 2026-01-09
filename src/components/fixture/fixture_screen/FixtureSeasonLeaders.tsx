@@ -183,18 +183,18 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: S
                 </div>
 
                 <div>
-                    <p className="font-semibold text-sm" >{sanitizeStat(leader1?.action_count)}</p>
+                    <p className="font-semibold text-xs" >{sanitizeStat(leader1?.action_count)}</p>
                 </div>
             </div>
 
             <div>
-                <SecondaryText className="text-xs" >{actionDef?.display_name}</SecondaryText>
+                <SecondaryText className="text-xs text-wrap max-w-[100px] text-center" >{actionDef?.display_name}</SecondaryText>
             </div>
 
             <div onClick={() => handleClickPlayer(leader2)} key={leader2?.athlete_id} className="flex flex-row items-center gap-1" >
 
                 <div>
-                    <p className="font-semibold text-sm" >{sanitizeStat(leader2?.action_count)}</p>
+                    <p className="font-semibold text-xs" >{sanitizeStat(leader2?.action_count)}</p>
                 </div>
 
                 <div className="flex flex-col items-center gap-1" >
