@@ -75,7 +75,7 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
                 <p className="text-[10px] text-white font-medium max-w-[100px] truncate" >{item.player_number}. {playerFullName}</p>
 
                 {pr && (
-                    <div className="absolute top-0 right-0" >
+                    <div className="absolute top-0 -right-2" >
                         <SmallMatchPrCard 
                         pr={pr.updated_power_ranking}
                         />
