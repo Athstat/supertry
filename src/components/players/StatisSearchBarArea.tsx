@@ -46,16 +46,14 @@ export default function StaticSearchBarArea({
 
             <div className={twMerge(
                 'sticky top-0 left-0 z-[20] py-2 pb-2 w-full flex flex-col gap-2',
-                !inView && "border-b",
+                !inView && "border-b dark:border-slate-700",
                 AppColours.BACKGROUND,
                 stickyHeaderClassName
             )} >
 
-                <div
+                <RoundedCard
                     className={twMerge(
-                        'w-full flex items-center justify-center gap-3 rounded-full',
-                        'bg-white/95 dark:bg-dark-850/70 border border-slate-200 dark:border-slate-700',
-                        'h-12 md:h-[52px] px-4 md:px-5',
+                        'flex p-2 border rounded-full dark:border-slate-600 flex-row items-center gap-2 h-[43px] px-4'
                     )}
                 >
                     <Search className={`w-5 h-5 ${iconColorClass}`} />
@@ -64,28 +62,25 @@ export default function StaticSearchBarArea({
                         value={value}
                         onChange={e => onChange(e.target.value)}
                         placeholder={placeholder}
-                        className={`flex-1 bg-transparent outline-none text-base ${textColorClass} ${placeholderColorClass}`}
+                        className={twMerge(
+                            `flex-1 bg-transparent outline-none text-base ${textColorClass} ${placeholderColorClass}`,
+                            
+                        )}
                     />
-                </div>
+                </RoundedCard>
 
                 <div className='flex flex-row items-center gap-2' >
                     {showFilterButton && (
-                        <button
+                        <RoundedCard
                             aria-label="Open filters and sorting"
                             onClick={onOpenControls}
                             className={[
-                                '',
-                                'rounded-2xl px-4 py-1',
-                                'flex items-center justify-center',
-                                'bg-white/95 dark:bg-dark-850/95',
-                                'border border-slate-200 dark:border-slate-700',
-                                'hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98]',
-                                'transition',
+                                'flex border dark:border-slate-600 flex-row items-center gap-2 rounded-2xl h-[32px] px-4'
                             ].join(' ')}
                         >
                             <p>Filters</p>
                             <Filter className={`w-5 h-5 ${iconColorClass}`} />
-                        </button>
+                        </RoundedCard>
                     )}
 
                     {showCompareButton && (
@@ -108,7 +103,7 @@ export default function StaticSearchBarArea({
                                     </PrimaryButton>
                                 </div>
                             ) : (
-                                <RoundedCard onClick={startPicking} className='flex flex-row items-center gap-2 rounded-2xl h-[32px] px-4' >
+                                <RoundedCard onClick={startPicking} className='flex border dark:border-slate-600 flex-row items-center gap-2 rounded-2xl h-[32px] px-4' >
                                     <p>Compare Players</p>
                                     <div className='flex flex-row items-center' >
                                         <User className={`w-5 h-5 ${iconColorClass}`} />

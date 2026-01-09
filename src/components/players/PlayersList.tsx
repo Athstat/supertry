@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
-import { X } from "lucide-react";
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { ArrowUp, X } from "lucide-react";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { useDebounced } from "../../hooks/web/useDebounced";
@@ -25,6 +25,8 @@ import RoundedCard from "../ui/cards/RoundedCard";
 import GlassBottomSheet from "../ui/modals/GlassBottomSheet";
 import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
 import StaticSearchBarArea from "./StatisSearchBarArea";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
+import { useInView } from "react-intersection-observer";
 
 type Props = {
     players: IProAthlete[],
@@ -49,6 +51,8 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
 
     const [teamIdFilter, setTeamIdFilter] = useQueryState<string | undefined>('team_id');
     const selectedTeam = availableTeams.find(t => t.athstat_id === teamIdFilter);
+
+    const { ref: topPageRef, inView: isTopPageRefVisible } = useInView();
 
     // Ensure team filter remains valid when dataset changes
     useEffect(() => {
@@ -135,6 +139,10 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
         setParams(next, { replace: true });
     };
 
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
     return (
         <Fragment>
 
@@ -147,6 +155,8 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
                 stickyHeaderClassName={stickyHeaderClassName}
             />
             <PlayersScreenCompareStatus />
+
+            <div ref={topPageRef} ></div>
 
 
             <div className={twMerge(
@@ -210,6 +220,18 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
                         onClearSearchQuery={() => setSearchQuery("")}
                     />
                 )}
+
+
+                <div>
+                    {!isTopPageRefVisible && (
+                        <PrimaryButton
+                            className="fixed bottom-20 right-0 rounded-full w-11 h-11 shadow-md mx-4"
+                            onClick={scrollToTop}
+                        >
+                            <ArrowUp />
+                        </PrimaryButton>
+                    )}
+                </div>
 
                 <PlayerCompareModal />
 
