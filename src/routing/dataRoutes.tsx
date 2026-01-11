@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import { RootScreen } from "../screens/RootScreen";
 import { SignUpScreen } from "../screens/auth/SignUpScreen";
 import { SignInScreen } from "../screens/auth/SignInScreen";
@@ -40,395 +40,406 @@ import SbrFixtureScreen from "../screens/sbr/SbrFixtureScreen";
 import SbrScreen from "../screens/sbr/SbrScreen";
 import SchoolsScreen from "../screens/sbr/SchoolsScreen";
 import { AuthRoute, MainAppLayout } from "./layouts";
+import RootProviders from "../RootProviders";
 
 /** App Data Router */
 export const dataRouter = createBrowserRouter([
-    { index: true, element: <RootScreen /> },
     {
-        path: "/signup",
         element: (
-            <AuthRoute>
-                <SignUpScreen />
-            </AuthRoute>
-        )
-    },
+            <RootProviders>
+                <Outlet />
+            </RootProviders>
+        ),
 
-    {
-        path: "/signin",
-        element: (
-            <AuthRoute>
-                <SignInScreen />
-            </AuthRoute>
-        )
-    },
+        children: [
+            { index: true, element: <RootScreen /> },
+            {
+                path: "/signup",
+                element: (
+                    <AuthRoute>
+                        <SignUpScreen />
+                    </AuthRoute>
+                )
+            },
 
-    {
-        path: "/forgot-password",
-        element: <ForgotPasswordScreen />
-    },
+            {
+                path: "/signin",
+                element: (
+                    <AuthRoute>
+                        <SignInScreen />
+                    </AuthRoute>
+                )
+            },
 
-    {
-        path: "/reset-password",
-        element: <ResetPasswordScreen />
-    },
+            {
+                path: "/forgot-password",
+                element: <ForgotPasswordScreen />
+            },
 
-    {
-        path: "/dashboard",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <DashboardScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/reset-password",
+                element: <ResetPasswordScreen />
+            },
 
-    {
-        path: "/leagues",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <FantasyScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/dashboard",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <DashboardScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/join-group/:inviteCode",
-        element: (
-            <ProtectedRoute>
-                <JoinGroupScreen />
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/leagues",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <FantasyScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/league/:leagueId",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <MyFantasyTeamScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/join-group/:inviteCode",
+                element: (
+                    <ProtectedRoute>
+                        <JoinGroupScreen />
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/league/:leagueId/standings",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <LeagueStandingsScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/league/:leagueId",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <MyFantasyTeamScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/profile",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <UserProfileScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/league/:leagueId/standings",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <LeagueStandingsScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/players",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <PlayersOverviewScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/profile",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <UserProfileScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/players/all",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <AllPlayersScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/players",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <PlayersOverviewScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/players/country/:countryName",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <PlayersByCountryScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/players/all",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <AllPlayersScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/players/position-class/:positionClass",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <PlayersByPositionClassScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/players/country/:countryName",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <PlayersByCountryScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/players/teams/:teamId",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <PlayersByTeamScreens />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/players/position-class/:positionClass",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <PlayersByPositionClassScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/scouting/my-list",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <ScoutingListScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/players/teams/:teamId",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <PlayersByTeamScreens />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/players/fantasy-top-performers",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <FantasyTopPerformersScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/scouting/my-list",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <ScoutingListScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/sbr",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <SbrScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/players/fantasy-top-performers",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <FantasyTopPerformersScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/sbr/fixtures/:fixtureId",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <SbrFixtureScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/sbr",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <SbrScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    // TODO: Remove route
-    {
-        path: "/sbr/chat",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <SBRChatScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/sbr/fixtures/:fixtureId",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <SbrFixtureScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/fixtures/:fixtureId",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <FixtureDetailScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            // TODO: Remove route
+            {
+                path: "/sbr/chat",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <SBRChatScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/fixtures",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <ProFixturesScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/fixtures/:fixtureId",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <FixtureDetailScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/schools",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <SchoolsScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/fixtures",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <ProFixturesScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/invite-friends",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <InviteFriendsScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/schools",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <SchoolsScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/post-signup-welcome",
-        element: (
-            <ProtectedRoute>
-                <OnboardingDataProvider>
-                    <OnBoardingScreen />
-                </OnboardingDataProvider>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/invite-friends",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <InviteFriendsScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/complete-profile",
-        element: (
-            <ProtectedRoute>
-                <CompleteProfileScreen />
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/post-signup-welcome",
+                element: (
+                    <ProtectedRoute>
+                        <OnboardingDataProvider>
+                            <OnBoardingScreen />
+                        </OnboardingDataProvider>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/profile/account-info",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <EditAccountInfoScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/complete-profile",
+                element: (
+                    <ProtectedRoute>
+                        <CompleteProfileScreen />
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/profile/notification-preferences",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <NotificationPreferencesScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/profile/account-info",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <EditAccountInfoScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/seasons",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <CompetitionsScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/profile/notification-preferences",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <NotificationPreferencesScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/seasons/:seasonId",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <SeasonScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/seasons",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <CompetitionsScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/league/:leagueId/member/:userId",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <LeagueMemberTeamScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/seasons/:seasonId",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <SeasonScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/predictions",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <PredictionsRankingScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/league/:leagueId/member/:userId",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <LeagueMemberTeamScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/fantasy-rankings",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <FantasyRankingsScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/predictions",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <PredictionsRankingScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/verify-email",
-        element: (
-            <VerifyEmailScreen />
-        )
-    },
+            {
+                path: "/fantasy-rankings",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <FantasyRankingsScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
 
-    {
-        path: "/onboarding/join-league",
-        element: (
-            <InviteStepsScreen />
-        )
-    },
+            {
+                path: "/verify-email",
+                element: (
+                    <VerifyEmailScreen />
+                )
+            },
 
-    {
-        path: "/invite-steps",
-        element: (
-            <InviteStepsScreen />
-        )
-    },
+            {
+                path: "/onboarding/join-league",
+                element: (
+                    <InviteStepsScreen />
+                )
+            },
 
-    {
-        path: "/in-app-messages",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <InAppMessagesScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
-    },
+            {
+                path: "/invite-steps",
+                element: (
+                    <InviteStepsScreen />
+                )
+            },
 
-    {
-        path: "*",
-        element: (
-            <ProtectedRoute>
-                <MainAppLayout>
-                    <NotFoundScreen />
-                </MainAppLayout>
-            </ProtectedRoute>
-        )
+            {
+                path: "/in-app-messages",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <InAppMessagesScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
+
+            {
+                path: "*",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <NotFoundScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            }
+
+        ]
     }
-
 ])
