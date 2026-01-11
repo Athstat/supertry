@@ -7,7 +7,7 @@
     "dev": "rm -rf node_modules/.vite &&  vite --host=0.0.0.0",
     "dev-win": "vite --host=0.0.0.0",
     "build": "vite build",
-    "lint": "echo 'lint checks not yet setup'",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "test": "jest",
