@@ -7,6 +7,7 @@ import {
   attemptStateRecovery,
   registerRecoveryListener,
 } from '../utils/appStateUtils';
+import { logger } from '../services/logger';
 
 interface AppStateContextType {
   isActive: boolean;
@@ -82,6 +83,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
       // Increment recovery attempts
       recoveryAttemptsRef.current += 1;
+
+      logger.error("Error handling app state ", error);
     }
   }, [refreshAthletes, location.pathname]);
 
@@ -153,7 +156,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     }, HEALTH_CHECK_INTERVAL);
 
     // Listen for recovery attempts
-    const removeRecoveryListener = registerRecoveryListener(event => {
+    const removeRecoveryListener = registerRecoveryListener(() => {
       const now = Date.now();
       // Prevent too frequent recovery attempts (at most once per minute)
       if (now - lastRecoveryTimeRef.current > 60000) {
