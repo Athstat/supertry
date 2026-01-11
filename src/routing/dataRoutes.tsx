@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import { RootScreen } from "../screens/RootScreen";
-import { AuthRoute, Layout } from "../Routes";
 import { SignUpScreen } from "../screens/auth/SignUpScreen";
 import { SignInScreen } from "../screens/auth/SignInScreen";
 import { ForgotPasswordScreen } from "../screens/auth/ForgotPasswordScreen";
@@ -40,7 +39,9 @@ import PredictionsRankingScreen from "../screens/predictions/PredictionsRankingS
 import SbrFixtureScreen from "../screens/sbr/SbrFixtureScreen";
 import SbrScreen from "../screens/sbr/SbrScreen";
 import SchoolsScreen from "../screens/sbr/SchoolsScreen";
+import { AuthRoute, MainAppLayout } from "./layouts";
 
+/** App Data Router */
 export const dataRouter = createBrowserRouter([
     { index: true, element: <RootScreen /> },
     {
@@ -75,9 +76,9 @@ export const dataRouter = createBrowserRouter([
         path: "/dashboard",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <DashboardScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -86,9 +87,9 @@ export const dataRouter = createBrowserRouter([
         path: "/leagues",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <FantasyScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -106,9 +107,9 @@ export const dataRouter = createBrowserRouter([
         path: "/league/:leagueId",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <MyFantasyTeamScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -117,9 +118,9 @@ export const dataRouter = createBrowserRouter([
         path: "/league/:leagueId/standings",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <LeagueStandingsScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -128,9 +129,9 @@ export const dataRouter = createBrowserRouter([
         path: "/profile",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <UserProfileScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -139,9 +140,9 @@ export const dataRouter = createBrowserRouter([
         path: "/players",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <PlayersOverviewScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -150,9 +151,9 @@ export const dataRouter = createBrowserRouter([
         path: "/players/all",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <AllPlayersScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -161,9 +162,9 @@ export const dataRouter = createBrowserRouter([
         path: "/players/country/:countryName",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <PlayersByCountryScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -172,9 +173,9 @@ export const dataRouter = createBrowserRouter([
         path: "/players/position-class/:positionClass",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <PlayersByPositionClassScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -183,9 +184,9 @@ export const dataRouter = createBrowserRouter([
         path: "/players/teams/:teamId",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <PlayersByTeamScreens />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -194,9 +195,9 @@ export const dataRouter = createBrowserRouter([
         path: "/scouting/my-list",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <ScoutingListScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -205,9 +206,9 @@ export const dataRouter = createBrowserRouter([
         path: "/players/fantasy-top-performers",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <FantasyTopPerformersScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -216,9 +217,9 @@ export const dataRouter = createBrowserRouter([
         path: "/sbr",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <SbrScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -227,9 +228,9 @@ export const dataRouter = createBrowserRouter([
         path: "/sbr/fixtures/:fixtureId",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <SbrFixtureScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -239,9 +240,9 @@ export const dataRouter = createBrowserRouter([
         path: "/sbr/chat",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <SBRChatScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -250,9 +251,9 @@ export const dataRouter = createBrowserRouter([
         path: "/fixtures/:fixtureId",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <FixtureDetailScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -261,9 +262,9 @@ export const dataRouter = createBrowserRouter([
         path: "/fixtures",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <ProFixturesScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -272,9 +273,9 @@ export const dataRouter = createBrowserRouter([
         path: "/schools",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <SchoolsScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -283,9 +284,9 @@ export const dataRouter = createBrowserRouter([
         path: "/invite-friends",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <InviteFriendsScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -314,9 +315,9 @@ export const dataRouter = createBrowserRouter([
         path: "/profile/account-info",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <EditAccountInfoScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -325,9 +326,9 @@ export const dataRouter = createBrowserRouter([
         path: "/profile/notification-preferences",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <NotificationPreferencesScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -336,9 +337,9 @@ export const dataRouter = createBrowserRouter([
         path: "/seasons",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <CompetitionsScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -347,9 +348,9 @@ export const dataRouter = createBrowserRouter([
         path: "/seasons/:seasonId",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <SeasonScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -358,9 +359,9 @@ export const dataRouter = createBrowserRouter([
         path: "/league/:leagueId/member/:userId",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <LeagueMemberTeamScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -369,9 +370,9 @@ export const dataRouter = createBrowserRouter([
         path: "/predictions",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <PredictionsRankingScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -380,9 +381,9 @@ export const dataRouter = createBrowserRouter([
         path: "/fantasy-rankings",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <FantasyRankingsScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -412,9 +413,9 @@ export const dataRouter = createBrowserRouter([
         path: "/in-app-messages",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <InAppMessagesScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     },
@@ -423,9 +424,9 @@ export const dataRouter = createBrowserRouter([
         path: "*",
         element: (
             <ProtectedRoute>
-                <Layout>
+                <MainAppLayout>
                     <NotFoundScreen />
-                </Layout>
+                </MainAppLayout>
             </ProtectedRoute>
         )
     }
