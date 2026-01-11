@@ -31,7 +31,7 @@ function getQaMobileDeviceId(): DeviceIdPair {
 function getProdMobileDeviceId(): DeviceIdPair {
 
   let storedDeviceId = localStorage.getItem('device_id') || localStorage.getItem('mobile device_id') || '';
-  let realDeviceId = window.deviceId || '';
+  const realDeviceId = window.deviceId || '';
 
   if (!storedDeviceId && !realDeviceId) {
     // throw new DeviceIdUnavailableError('Unable to obtain mobile device ID');

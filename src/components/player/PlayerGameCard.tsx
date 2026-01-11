@@ -108,7 +108,7 @@ export function PlayerGameCard({
 
   const playerIcons = getRandomIcons(getRandomIconCount());
 
-  let imageUrl = useMemo(() => {
+  const imageUrl = useMemo(() => {
     // First try to use the player's actual image
     if (player.image_url && !playerImageErr) {
       return player.image_url;

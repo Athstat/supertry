@@ -206,7 +206,7 @@ export const fantasyTeamService = {
   getUserTeamById: async (teamId: string, userId?: string) => {
     try {
       const userTeams = await fantasyTeamService.fetchUserTeams(userId);
-      let currentTeam = userTeams.find(t => t.id == teamId);
+      const currentTeam = userTeams.find(t => t.id == teamId);
 
       return currentTeam;
     } catch (error) {
