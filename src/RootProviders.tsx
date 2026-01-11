@@ -15,7 +15,6 @@ import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsPr
 import CacheProvider from "./providers/caching/CacheProvider";
 import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 import TooltipProvider from "./providers/ui/TooltipProvider";
-import { useInterceptBrowserBack } from "./hooks/web/useInterceptBrowserBack";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "./types/constants";
 
@@ -25,8 +24,6 @@ type Props = {
 
 /** Difines all the root providers to its children */
 export default function RootProviders({ children }: Props) {
-
-    useInterceptBrowserBack();
 
     useEffect(() => {
         document.body.className = twMerge(
