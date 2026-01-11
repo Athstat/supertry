@@ -14,7 +14,7 @@ export function useInterceptBrowserBack() {
         if (blocker.state === "blocked") {
             blocker.reset();
 
-            hardPop('/dashboard', {bypassGuard: true});
+            hardPop('/dashboard');
         }
     }, [blocker, hardPop])
 }
