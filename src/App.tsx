@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { AppColours } from './types/constants';
 import RootProviders from './RootProviders';
 import { useEffect } from 'react';
+import { useInterceptBrowserBack } from './hooks/web/useInterceptBrowserBack';
 
 // The Activity Component has been added to the latest release
 // of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
@@ -10,6 +11,7 @@ import { useEffect } from 'react';
 
 function App() {
 
+  useInterceptBrowserBack();
   // Fixes white overflow when pulling the screen up from the top
   
   useEffect(() => {

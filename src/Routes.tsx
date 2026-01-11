@@ -20,7 +20,7 @@ import SbrFixtureScreen from './screens/sbr/SbrFixtureScreen';
 import CompetitionsScreen from './screens/fantasy_seasons/CompetitionsScreen';
 import SeasonScreen from './screens/fantasy_seasons/SeasonScreen';
 import PredictionsRankingScreen from './screens/predictions/PredictionsRankingScreen';
-import { FirstVisitHandler } from './components/ui/FirstVisitHandler';
+import { RootScreen } from './screens/RootScreen';
 import VerifyEmailScreen from './screens/auth/VerifyEmailScreen';
 import JoinLeagueOnboardingScreen from './screens/onboarding/JoinLeagueOnboardingScreen';
 import InviteStepsScreen from './screens/onboarding/InviteStepsScreen';
@@ -83,7 +83,7 @@ const AppRoutes = () => {
       <ScrollToTop />
       <Routes>
         {/* Auth routes */}
-        <Route path="/" element={<FirstVisitHandler />} />
+        <Route path="/" element={<RootScreen />} />
         <Route
           path="/signup"
           element={
