@@ -1,4 +1,3 @@
-import PlayerIconsCard from '../PlayerIconsCard';
 import { IProAthlete } from '../../../../types/athletes';
 import CoachScrummyPlayerReport from '../CoachScrummyPlayerReport';
 import { usePlayerData } from '../../../../providers/PlayerDataProvider';
@@ -6,7 +5,6 @@ import PlayerTeamFormCard from '../PlayerTeamForm';
 import PlayerPercentageSelectedCard from '../PlayerPercentageSelectedCard';
 import PlayerPointsHistoryCard from '../points_history/PlayerPointsHistoryCard';
 import PlayerTeamCard from '../PlayerTeamCard';
-import Experimental from '../../../ui/ab_testing/Experimental';
 import PlayerNextMatchCard from '../PlayerNextMatchCard';
 import PlayerGeneralnfoCard from './PlayerGeneralnfoCard';
 
@@ -32,11 +30,11 @@ export default function PlayerOverviewTab({ player }: Props) {
 
       <CoachScrummyPlayerReport player={player} />
 
-      {currentSeason && (
+      {/* {currentSeason && (
         <Experimental>
           <PlayerIconsCard player={player} season={currentSeason} />
         </Experimental>
-      )}
+      )} */}
 
       <PlayerTeamFormCard
         player={player}

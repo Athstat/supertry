@@ -9,6 +9,7 @@ import ScoutPlayerButton from './ScoutPlayerButton';
 import { useMemo } from 'react';
 import { useTooltip } from '../../../hooks/ui/useTooltip';
 import { positionsTooltipMap } from '../../../types/constants';
+import { HelpCircle } from 'lucide-react';
 
 export default function PlayerNameAndPosition() {
   const { player } = usePlayerData();
@@ -62,7 +63,10 @@ export default function PlayerNameAndPosition() {
 
               <ScoutPlayerButton player={player} />
 
-              <button onClick={handleClickPosition} >
+              <button 
+                onClick={handleClickPosition}
+                className='flex flex-row items-center gap-1' 
+              >
                 <SecondaryText className="text-xs hover:underline">
                   {player.position && player.position_class && (
                     <span>
@@ -71,6 +75,8 @@ export default function PlayerNameAndPosition() {
                     </span>
                   )}
                 </SecondaryText>
+
+                <HelpCircle className='w-3 h-3 text-slate-600 dark:text-slate-300' />
               </button>
 
               {!player.team && player.position && (
