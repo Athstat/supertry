@@ -5,11 +5,13 @@ import SecondaryText from '../../ui/typography/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useTooltip } from '../../../hooks/ui/useTooltip';
+import { HelpCircle } from 'lucide-react';
 
 type Props = {
   player: IProAthlete;
 };
 
+/** Renders a card showing a player's team card */
 export default function PlayerTeamCard({ player }: Props) {
 
   const { openTooltipModal } = useTooltip();
@@ -34,13 +36,21 @@ export default function PlayerTeamCard({ player }: Props) {
 
         <div className="flex flex-col">
           <p className="text-sm font-semibold dark:text-white">{player.team?.athstat_name}</p>
+
+
           {player.position && player.position_class && (
-            <div onClick={handleClickPosition} >
+            <div 
+              onClick={handleClickPosition} 
+              className='flex flex-row hover:cursor-pointer items-center gap-1'
+            >
               <SecondaryText className="dark:text-slate-300 hover:underline cursor-pointer text-xs">
                 {formatPosition(player.position)} | {formatPosition(player.position_class)}
               </SecondaryText>
+
+              <HelpCircle className='w-3 h-3 text-slate-600 dark:text-slate-300' />
             </div>
           )}
+
         </div>
       </div>
 
