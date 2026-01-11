@@ -15,7 +15,7 @@ export default function AuthUserDataProvider({children} : Props) {
 
     useEffect(() => {
         if (authUser) setAuthUser(authUser);
-    }, [authUser])
+    }, [authUser, setAuthUser])
 
     return (
         <>

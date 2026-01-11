@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext';
+import { logger } from '../../services/logger';
 
 type Props = {
     isGuestAccount?: boolean
@@ -16,7 +17,9 @@ export default function DeleteAccountButton({ isGuestAccount }: Props) {
     const handleLogout = async () => {
         try {
             await logout();
-        } catch { };
+        } catch(err){
+            logger.error("Error logging out ", err);
+        };
     };
 
     const handleDeleteAccount = () => {
