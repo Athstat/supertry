@@ -15,10 +15,6 @@ export function isAppStateValid(): boolean {
       return false;
     }
 
-    // Check if we have authentication tokens when needed
-    const hasAuthToken = localStorage.getItem('access_token') !== null;
-    const hasRefreshToken = localStorage.getItem('refresh_token') !== null;
-
     // Check if React is still responsive by attempting to access React's internal properties
     // This is a heuristic and not foolproof
     const reactInternalProps = Object.keys(rootElement).some(key => 
@@ -43,19 +39,12 @@ export function isAppStateValid(): boolean {
  * Attempt to recover the application state
  * This function tries various strategies to recover from a stale or invalid state
  */
+
+// TODO: Delete this function and all its uses
 export async function attemptStateRecovery(): Promise<boolean> {
   try {
     console.log('AppStateUtils: Attempting state recovery...');
     
-    // First, try to clear any potential memory leaks or stale closures
-    // by running garbage collection indirectly (this is just a hint to the browser)
-    try {
-      // Create and release a large object to encourage garbage collection
-      let largeArray: number[] | undefined = new Array(10000000).fill(0);
-      largeArray = undefined;
-    } catch (memoryError) {
-      console.warn('AppStateUtils: Memory cleanup attempt failed:', memoryError);
-    }
     
     // Check if we need to refresh authentication
     const hasRefreshToken = localStorage.getItem('refresh_token') !== null;

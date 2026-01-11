@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * ScrummyBridge utility functions
  * Provides helper functions for working with the ScrummyBridge
  */
 import { BridgeUserData } from '../types/auth';
 import { authService } from '../services/authService';
+import { logger } from '../services/logger';
 
 type ScrummyBridgeType = {
-  requestPushPermission(userData?: any): Promise<{
+  requestPushPermission(userData?: unknown): Promise<{
     granted: boolean;
     onesignal_id?: string;
   }>;
@@ -217,7 +219,7 @@ export async function getAuthStatus(): Promise<{
  * Listen for messages from the bridge
  * @returns A cleanup function to remove the event listener
  */
-export function listenForBridgeMessages(callback: (message: any) => void): () => void {
+export function listenForBridgeMessages(callback: (message: unknown) => void): () => void {
   if (typeof window === 'undefined') {
     // Return a no-op cleanup function
     return () => { };
@@ -229,6 +231,7 @@ export function listenForBridgeMessages(callback: (message: any) => void): () =>
       callback(message);
     } catch (error) {
       // Ignore non-JSON messages
+      logger.error("Listening for messages from the bridge ", error);
     }
   };
 

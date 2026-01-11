@@ -95,6 +95,7 @@ declare module "lucide-react" {
   export const PlayCircle: CIP;
   export const Minimize2: CIP;
   export const Maximize2: CIP;
+  // eslint-disable-next-line no-shadow-restricted-names
   export const Infinity: CIP;
   export const ArrowDownUp: CIP;
   export const Newspaper: CIP;

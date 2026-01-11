@@ -1,5 +1,5 @@
 export interface Player {
-  team_name: any;
+  team_name: string;
   id: string;
   name: string;
   position: string;

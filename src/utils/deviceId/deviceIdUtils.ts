@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Device ID utilities for both mobile app (via WebView) and web browser
  */
 
 import { DjangoAuthUser } from '../../types/auth';
 import { DeviceIdPair } from '../../types/device';
-import { DeviceIdUnavailableError } from './exceptions';
 import { getMobileDeviceId } from './mobileDeviceIdUtils';
 import { getWebDeviceId } from './webDeviceIdUtils';
 
@@ -17,7 +17,6 @@ import { getWebDeviceId } from './webDeviceIdUtils';
  */
 function getBridge(): any | undefined {
   // Lowercase scrummyBridge is injected by our app, but also support uppercase for safety
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const w = window as any;
   return w.scrummyBridge || w.ScrummyBridge;
 }
@@ -28,83 +27,8 @@ function getBridge(): any | undefined {
  * @returns boolean
  */
 export function isMobileApp(): boolean {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const w = window as any;
   return typeof window !== 'undefined' && (!!w.ReactNativeWebView || !!getBridge());
-}
-
-/**
- * Wait for the mobile bridge to be ready or time out
- * Listens for ScrummyBridgeReady event and polls for getBridge()
- */
-async function waitForBridgeOrTimeout(timeoutMs = 10000): Promise<void> {
-  if (getBridge()) return;
-
-  await new Promise<void>((resolve, reject) => {
-    let done = false;
-    const finish = (ok: boolean, err?: Error) => {
-      if (done) return;
-      done = true;
-      clearTimeout(timeoutId);
-      document.removeEventListener('ScrummyBridgeReady', onReady);
-      if (ok) resolve();
-      else reject(err);
-    };
-
-    const onReady = () => {
-      if (getBridge()) {
-        finish(true);
-      }
-    };
-
-    // Poll every 100ms
-    const poll = () => {
-      if (getBridge()) {
-        finish(true);
-      } else if (!done) {
-        setTimeout(poll, 100);
-      }
-    };
-
-    document.addEventListener('ScrummyBridgeReady', onReady, { once: true });
-    const timeoutId = setTimeout(() => {
-      finish(false, new DeviceIdUnavailableError('Bridge not ready before timeout'));
-    }, timeoutMs);
-
-    // Start polling
-    poll();
-  });
-}
-
-/**
- * Strict normalization/validation for mobile device IDs
- * - Only allow [a-zA-Z0-9-_]
- * - Max length 64
- * - Must start with alphanumeric and be at least 8 chars
- */
-function normalizeDeviceIdStrict(id: string): string {
-  if (!id) {
-    throw new DeviceIdUnavailableError('Received empty device ID');
-  }
-
-  const trimmed = String(id).trim();
-  if (!trimmed) {
-    throw new DeviceIdUnavailableError('Received blank device ID');
-  }
-
-  let formatted = trimmed.replace(/[^a-zA-Z0-9\-_]/g, '');
-
-  if (!/^[a-zA-Z0-9]/.test(formatted)) {
-    throw new DeviceIdUnavailableError('Device ID must start with alphanumeric');
-  }
-
-  formatted = formatted.substring(0, 64);
-
-  if (formatted.length < 8) {
-    throw new DeviceIdUnavailableError('Device ID too short after sanitization');
-  }
-
-  return formatted;
 }
 
 /**
