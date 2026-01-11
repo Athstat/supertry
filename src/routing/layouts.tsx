@@ -34,9 +34,6 @@ export const AuthRoute = ({ children }: { children: React.ReactNode }) => {
 
     if (isAuthenticated) {
         const nextRoute = state?.fromPathname ?? '/dashboard';
-
-        console.log('Next route: ', nextRoute);
-
         return <Navigate to={nextRoute} />;
     }
 

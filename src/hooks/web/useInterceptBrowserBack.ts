@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 /** Hook that overides the browser back functionality */
 export function useInterceptBrowserBack() {
-    const {hardPop} = useNavigateBack();
+    const {hardPop, stack} = useNavigateBack();
 
     const blocker = useBlocker(({historyAction}) => {
         return historyAction === "POP";
