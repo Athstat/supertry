@@ -1,12 +1,10 @@
 import { IProAthlete } from '../../../types/athletes';
-import { formatPosition } from '../../../utils/athleteUtils';
+import { formatPosition, getPositionTooltip } from '../../../utils/athleteUtils';
 import FormIndicator from '../FormIndicator';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';
 import RoundedCard from '../../ui/cards/RoundedCard';
-import { positionsTooltipMap } from '../../../types/constants';
 import { useTooltip } from '../../../hooks/ui/useTooltip';
-import { useMemo } from 'react';
 
 type Props = {
   player: IProAthlete;
@@ -15,23 +13,13 @@ type Props = {
 export default function PlayerTeamCard({ player }: Props) {
 
   const { openTooltipModal } = useTooltip();
-  
-  const positionKey = useMemo(() => {
-    const lowCase = player.position?.toLowerCase();
-    if (lowCase) {
-      return lowCase.replace(' ', '_');
-    }
 
-    return lowCase || '';
-  }, [player.position])
-
-  const positionDef = positionsTooltipMap.get(positionKey || '');
+  const positionDef = getPositionTooltip(player.position, player.position_class);
 
   const handleClickPosition = () => {
     if (positionDef) {
       const { title, description } = positionDef
-      const finalTitle = title && player.position_class ? `${title} - ${formatPosition(player.position_class)}` : title;
-      openTooltipModal(finalTitle, description)
+      openTooltipModal(title, description)
     }
   }
 
