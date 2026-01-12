@@ -45,7 +45,7 @@ export default function VerifyEmailScreen() {
         }
 
         setLoading(false);
-    }, []);
+    }, [token]);
 
     useEffect(() => {
         handleVerifyEmail();

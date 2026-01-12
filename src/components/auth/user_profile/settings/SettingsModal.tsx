@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { XIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';

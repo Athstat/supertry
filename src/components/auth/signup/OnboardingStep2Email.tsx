@@ -19,7 +19,7 @@ export function OnboardingStep2Email({
   onNext,
   onBack,
 }: OnboardingStep2Props) {
-  const [touched, setTouched] = useState(false);
+  const [touched, ] = useState(false);
   const [error, setError] = useState<string>('');
 
   const { emailTaken, isLoading: isEmailCheckLoading } = useEmailUniqueValidator(email);
@@ -38,11 +38,6 @@ export function OnboardingStep2Email({
   };
 
   const isEmailValid = email && emailValidator(email) && !emailTaken;
-
-  const handleBlur = () => {
-    setTouched(true);
-    validateEmail(email);
-  };
 
   const handleChange = (value?: string) => {
     const newValue = (value || '').toLowerCase();

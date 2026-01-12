@@ -16,7 +16,7 @@ export function OnboardingStep3Password({
   onNext,
   onBack,
 }: OnboardingStep3Props) {
-  const [touched, setTouched] = useState(false);
+  const [touched,] = useState(false);
   const [error, setError] = useState<string>('');
 
   const validatePassword = (value: string): boolean => {
@@ -33,11 +33,6 @@ export function OnboardingStep3Password({
   };
 
   const isValid = password.length >= 6;
-
-  const handleBlur = () => {
-    setTouched(true);
-    validatePassword(password);
-  };
 
   const handleChange = (value?: string) => {
     const newValue = value || '';

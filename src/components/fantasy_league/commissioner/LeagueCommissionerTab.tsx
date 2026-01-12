@@ -8,6 +8,7 @@ import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
 import { ErrorState } from "../../ui/ErrorState";
+import { logger } from "../../../services/logger";
 
 export default function LeagueCommissionerTab() {
 
@@ -46,8 +47,8 @@ export default function LeagueCommissionerTab() {
       }
 
     } catch (err) {
-      console.log("Error saving commissioner changes");
-      setError("Something wen't wrong saving your league settings")
+      logger.error("Error saving commissioner changes ", err);
+      setError("Something wen't wrong saving your league settings");
     }
 
     setIsLoading(false);
