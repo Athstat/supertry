@@ -62,8 +62,6 @@ export function WebCacheProvider({ children }: Props) {
         )
     }
 
-    console.log("Using WebView Cache");
-
     return (
         <SWRConfig value={{
             provider: providerFunc

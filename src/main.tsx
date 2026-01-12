@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
 import './index.css';
+import App from './App';
 
 // Sentry.init({
 //   dsn: "https://edd4351604211158f5090f44afa67627@o4509354186702848.ingest.us.sentry.io/4509617556619264",
@@ -11,7 +10,5 @@ import './index.css';
 // });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <App />
 );

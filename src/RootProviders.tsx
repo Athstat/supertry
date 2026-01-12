@@ -23,6 +23,8 @@ type Props = {
 /** Difines all the root providers to its children */
 export default function RootProviders({ children }: Props) {
 
+
+
     return (
         <ThemeLayer>
             <CacheProvider>

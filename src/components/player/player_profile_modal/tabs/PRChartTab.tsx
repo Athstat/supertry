@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -14,6 +15,7 @@ import {
 import usePowerRankings from '../../../../hooks/athletes/usePowerRankings';
 import { useTheme } from '../../../../contexts/ThemeContext';
 import { format } from 'date-fns';
+import { IProAthlete } from '../../../../types/athletes';
 
 // Register ChartJS components
 ChartJS.register(
@@ -28,7 +30,7 @@ ChartJS.register(
 );
 
 type Props = {
-  player: any;
+  player: IProAthlete;
 };
 
 export function PowerRankingChartTab({ player }: Props) {

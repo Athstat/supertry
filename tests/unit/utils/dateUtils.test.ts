@@ -1,4 +1,4 @@
-import {getNextDayOfWeek, getNextTuesdayIfNotTuesday, getPreviousDayOfWeek} from "../../src/utils/dateUtils";
+import {getNextDayOfWeek, getNextTuesdayIfNotTuesday, getPreviousDayOfWeek} from "../../../src/utils/dateUtils";
 
 test('next day of the week date, when next day is ahead of pivot', () => {
     const pivot = new Date('2025-06-01'); // Sunday 01 June 2025

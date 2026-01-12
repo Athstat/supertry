@@ -3,11 +3,7 @@ import WarningCard from "../../../ui/cards/WarningCard";
 import { twMerge } from "tailwind-merge";
 import { FlaskConical } from "lucide-react";
 
-type Props = {
-
-}
-
-export default function QaNoticeCard({ }: Props) {
+export default function QaNoticeCard() {
 
     const isInProd = isInProduction();
 

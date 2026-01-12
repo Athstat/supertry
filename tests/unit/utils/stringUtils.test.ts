@@ -1,4 +1,4 @@
-import { emailValidator, replaceDashesWithUnderscrolls } from "../../src/utils/stringUtils";
+import { emailValidator, replaceDashesWithUnderscrolls } from "../../../src/utils/stringUtils";
 
 test('test email validator returns true for romeogweshe168@gmail.com', () => {
     

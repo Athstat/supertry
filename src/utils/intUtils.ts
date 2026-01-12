@@ -9,3 +9,17 @@ export function smartRoundUp(val?: number | null | undefined) {
 
     return Math.ceil(val);
 }
+
+// Converts centimeters to feet and inches string, e.g., 170 -> 5'7"
+export function cmToFeetInches(cm: number): string {
+  const totalInches = cm / 2.54;
+  const feet = Math.floor(totalInches / 12);
+  const inches = Math.round(totalInches - feet * 12);
+  return `${feet}'${inches}"`;
+}
+
+// Converts kilograms to pounds string, rounded to nearest pound
+export function kgToLbs(kg: number): string {
+  const lbs = Math.round(kg * 2.2046226218);
+  return `${lbs} lbs`;
+}

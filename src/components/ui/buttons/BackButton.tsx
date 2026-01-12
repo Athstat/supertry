@@ -10,7 +10,7 @@ type Props = {
 /** Renders a circle button UI */
 export default function CircleButton({ className, onClick, children }: Props) {
     return (
-        <button
+        <div
             className={twMerge(
                 "flex flex-col items-center justify-center overflow-clip",
                 "bg-slate-200 hover:bg-slate-300 rounded-full w-10 h-10 text-slate-700",
@@ -20,6 +20,6 @@ export default function CircleButton({ className, onClick, children }: Props) {
             onClick={onClick}
         >
             {children}
-        </button>
+        </div>
     )
 }

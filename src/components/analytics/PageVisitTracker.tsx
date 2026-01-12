@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { analytics } from '../../services/analytics/anayticsService';
 import { useAppState } from '../../contexts/AppStateContext';
+import { logger } from '../../services/logger';
 
 const reffererIdKey = 'rfr';
 
@@ -44,7 +45,7 @@ export default function PageVisitsTracker() {
                 analytics.trackPageVisit(location.pathname);
                 // console.log('PageVisitsTracker: Tracked page visit after app became active');
             } catch (error) {
-                // console.error("Error tracking page visit after app became active:", error);
+                logger.error("Error tracking page visit after app became active:", error);
             }
         }
     }, [isActive, location.pathname]);

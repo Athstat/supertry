@@ -9,6 +9,7 @@ import AccountInfoProgressCard from "../../components/auth/user_profile/AccountI
 import { userService } from "../../services/userService";
 import { Toast } from "../../components/ui/Toast";
 import { useNavigate } from "react-router-dom";
+import { logger } from "../../services/logger";
 
 
 /** Renders edit account info screen */
@@ -46,7 +47,7 @@ export default function EditAccountInfoScreen() {
     }
 
     return undefined;
-  }, [form.username]);
+  }, [form]);
 
   const handleSaveChanges = useCallback(async () => {
 
@@ -75,10 +76,11 @@ export default function EditAccountInfoScreen() {
 
     } catch (err) {
       setError("Something wen't wrong updating your user profile");
+      logger.error("Error editing account info ", err);
     }
 
     setIsLoading(false);
-  }, [form, setIsLoading, setSuccessMessage, setError, userNameError]);
+  }, [userNameError, form.username, form.firstName, form.lastName, refreshAuthUser]);
 
   const handleBack = () => {
     navigate('/profile');

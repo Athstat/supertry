@@ -18,6 +18,8 @@ type SlotProps = {
   onAddPlayerToEmptySlot?: (slot: IFantasyLeagueTeamSlot) => void;
 }
 
+
+// TODO: Delete Component
 /** Renders an editable fantasy league team slot */
 export function EditableTeamSlotItem({ slot, onPlayerClick, disabled, onInitiateSwap, onAddPlayerToEmptySlot }: SlotProps) {
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module "framer-motion" {
   import * as React from "react";
 
@@ -63,6 +64,7 @@ declare module "framer-motion" {
     exitBeforeEnter?: boolean;
     initial?: boolean;
     onExitComplete?: () => void;
+    mode?: string
   }>;
 
   export function useAnimationControls(): {

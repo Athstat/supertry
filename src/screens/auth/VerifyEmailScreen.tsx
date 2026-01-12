@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import ScrummyLogo from "../../components/branding/scrummy_logo";
 import PageView from "../../components/ui/containers/PageView";
 import { CheckCircle2, Loader } from "lucide-react";
@@ -22,7 +22,7 @@ export default function VerifyEmailScreen() {
     const shouldSkipVerification = false;
     const navigate = useNavigate();
 
-    const handleVerifyEmail = async () => {
+    const handleVerifyEmail = useCallback(async () => {
 
         setLoading(true);
 
@@ -45,11 +45,11 @@ export default function VerifyEmailScreen() {
         }
 
         setLoading(false);
-    }
+    }, [token]);
 
     useEffect(() => {
         handleVerifyEmail();
-    }, [token]);
+    }, [handleVerifyEmail, token]);
 
     const navigateToSignIn = () => {
         navigate('/signin');

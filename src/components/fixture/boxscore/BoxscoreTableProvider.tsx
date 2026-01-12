@@ -77,7 +77,7 @@ function InnerProvider({ children, columns, tableTitle, records, noContentMessag
     )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
+ 
 export function useBoxscoreTable() {
 
     const columns = useAtomValue(boxscoreTableAtoms.columnsAtom);

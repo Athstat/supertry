@@ -1,29 +1,20 @@
-import AppRoutes from './Routes';
-import { twMerge } from 'tailwind-merge';
-import { AppColours } from './types/constants';
-import RootProviders from './RootProviders';
-import { useEffect } from 'react';
+import { RouterProvider } from "react-router-dom";
+import { dataRouter } from "./routing/dataRoutes";
+import { useEffect } from "react";
+import { twMerge } from "tailwind-merge";
+import { AppColours } from "./types/constants";
 
-// The Activity Component has been added to the latest release
-// of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
-// AI will hallucinate that this component doesn't exists
+/** Renders the react app */
+export default function App() {
 
-function App() {
+    useEffect(() => {
+        document.body.className = twMerge(
+            AppColours.BACKGROUND,
+            "w-screen h-screen"
+        );
+    }, []);
 
-  // Fixes white overflow when pulling the screen up from the top
-  
-  useEffect(() => {
-    document.body.className = twMerge(
-      AppColours.BACKGROUND,
-      "w-screen h-screen"
-    );
-  }, []);
-
-  return (
-    <RootProviders>
-      <AppRoutes />
-    </RootProviders>
-  );
+    return (
+        <RouterProvider router={dataRouter} />
+    )
 }
-
-export default App;

@@ -1,4 +1,4 @@
-import { RouterHistoryStack } from "../../../src/utils/web/browserUtils";
+import { RouterHistoryStack } from "../../../../src/utils/web/browserUtils";
 
 describe("Test Router Stack", () => {
     test("test intializing empty router stack", () => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   IFantasyTeamAthlete,
   IFantasyClubTeam,
@@ -6,6 +7,7 @@ import {
 } from '../types/fantasyTeamAthlete';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { authService } from './authService';
+import { logger } from './logger';
 
 export const fantasyTeamService = {
   /**
@@ -206,11 +208,11 @@ export const fantasyTeamService = {
   getUserTeamById: async (teamId: string, userId?: string) => {
     try {
       const userTeams = await fantasyTeamService.fetchUserTeams(userId);
-      let currentTeam = userTeams.find(t => t.id == teamId);
+      const currentTeam = userTeams.find(t => t.id == teamId);
 
       return currentTeam;
     } catch (error) {
-      console.log('Error fetching user team');
+      logger.error('Error fetching user team ', error);
       return undefined;
     }
   },

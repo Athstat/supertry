@@ -13,7 +13,7 @@ type Props = {
 export default function SeasonScreenFixturesList({ fixtures }: Props) {
 
     const [round] = useQueryState('round');
-    let rounds: number[] = [];
+    const rounds: number[] = [];
 
     fixtures.forEach((f) => {
         if (f.round && !rounds.includes(f.round)) {

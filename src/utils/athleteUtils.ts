@@ -7,6 +7,7 @@ import { IProTeam } from '../types/team';
 import { IComparePlayerStats, ICompareStarRatingsStats } from '../types/comparePlayers';
 import { getPlayerAggregatedStat, PlayerAggregateStatAction } from '../types/sports_actions';
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueTeam } from '../types/fantasyLeague';
+import { positionsTooltipMap } from '../types/constants';
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr?: string) => {
@@ -395,3 +396,26 @@ export function sortFantasyTeamAthletes(athletes: IFantasyTeamAthlete[]) {
   });
 }
 
+
+/** Function that gets a tooltip for a position */
+export function getPositionTooltip(position?: string, position_class?: string) {
+  let lowCase = position?.toLowerCase();
+
+  if (lowCase) {
+    lowCase = lowCase.replace(' ', '_');
+  }
+
+  const positionKey = lowCase;
+  const positionDef = positionsTooltipMap.get(positionKey || '');
+
+  if (positionDef) {
+    const { title, description } = positionDef
+    const finalTitle = title && position_class ? `${title} - ${formatPosition(position_class)}` : title;
+
+    return {
+      title: finalTitle, description
+    }
+  }
+
+  return undefined;
+}

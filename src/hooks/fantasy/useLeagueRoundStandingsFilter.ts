@@ -49,8 +49,6 @@ export function useLeagueRoundStandingsFilter() {
         }
     }, [roundFilterId, scoringRound, setRoundFilterId]);
 
-    console.log("Round Filter ID ", roundFilterId);
-
 
     return {
         currentOption,

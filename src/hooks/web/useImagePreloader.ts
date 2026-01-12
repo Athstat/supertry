@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useImageCache } from './useImageCache';
 import { IProAthlete } from '../../types/athletes';
+import { logger } from '../../services/logger';
 
 interface UseImagePreloaderProps {
   players: IProAthlete[];
@@ -26,7 +27,7 @@ export const useImagePreloader = ({ players, enabled = true }: UseImagePreloader
           await loadImage(imageUrls[i]);
         } catch (error) {
           // Silently fail for preloading - images will load normally when needed
-          console.debug(`Failed to preload image: ${imageUrls[i]}`);
+          logger.error(`Failed to preload image: ${imageUrls[i]} `, error);
         }
       }
     };

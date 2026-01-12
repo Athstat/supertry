@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { User, Mail, Lock, Pencil, ArrowLeft } from 'lucide-react';
+import { User, Mail, Lock, Pencil } from 'lucide-react';
 import PrimaryButton from '../../ui/buttons/PrimaryButton';
 
 interface OnboardingStep4Props {

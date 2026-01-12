@@ -16,8 +16,6 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
     if (!isAuthenticated) {
 
-        console.log("Whiles hitting route: ", pathname, " user was not authenticated");
-
         return <Navigate to="/signin" state={{
             fromPathname: pathname
         }} />;

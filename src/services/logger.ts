@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /** Service for logging errors. For now it just loggs to the console */
 
 import { analytics } from "./analytics/anayticsService";
@@ -14,7 +15,7 @@ function error(message?: any, ...optionalParams: any[]) {
 
 /** Prints message to console if app is in local development */
 function debug(message: string) {
-
+    error(message);
 }
 
 export const logger = {error, debug};

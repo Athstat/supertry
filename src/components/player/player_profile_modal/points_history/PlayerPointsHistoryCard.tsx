@@ -118,21 +118,21 @@ function PointsHistoryItem({ item, player, onClick }: HistoryItemProps) {
 
     return (
         <div onClick={handleOnClick} className="flex rounded-xl cursor-pointer flex-col gap-2 items-center justify-center flex-1" >
-            {kickoff && <SecondaryText className="text-xs" >{format(kickoff, "d MMM")}</SecondaryText>}
+            {kickoff && <SecondaryText className="text-[10px] lg:text-xs" >{format(kickoff, "d MMM")}</SecondaryText>}
             <div>
                 <TeamLogo
                     url={opp?.image_url}
-                    className="w-10 h-10"
+                    className="w-7 h-7 lg:w-10 lg:h-10"
                 />
             </div>
 
             <div className={twMerge(
-                "w-fit px-4 bg-blue-500 py-0.5 rounded-md items-center justify-center text-center flex",
+                "w-fit px-2 lg:px-4 bg-blue-500 py-0.5 rounded-md items-center justify-center text-center flex",
                 isW && "bg-green-500 text-white dark:text-black font-semibold",
                 isL && "bg-red-600 text-white dark:bg-red-600 ",
                 isDraw && "bg-slate-400 text-slate-50 dark:bg-slate-700"
             )} >
-                <p className="text-xs" >{Math.floor(item.total_score)}pts</p>
+                <p className="text-[10px] lg:text-xs" >{Math.floor(item.total_score)}pts</p>
             </div>
 
         </div>

@@ -46,7 +46,7 @@ export function useGuestLogin(nextRoute?: string) {
     } finally {
       setLoading(false);
     }
-  }, [setAuth, nextRoute, deviceId]);
+  }, [deviceId, setAuth, navigate, nextRoute]);
 
   return {
     handleGuestLogin,

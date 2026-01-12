@@ -17,7 +17,7 @@ export function OnboardingStep1Username({
 }: OnboardingStep1Props) {
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
-  const [touched, setTouched] = useState(false);
+  const [touched,] = useState(false);
 
   const validateUsername = (value: string): boolean => {
     if (!value) {
@@ -37,11 +37,6 @@ export function OnboardingStep1Username({
   };
 
   const isValid = username.length >= 3 && username.length <= 20;
-
-  const handleBlur = () => {
-    setTouched(true);
-    validateUsername(username);
-  };
 
   const handleChange = (value?: string) => {
     const newValue = value || '';

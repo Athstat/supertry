@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, UserCircle, X } from 'lucide-react';
@@ -304,7 +305,7 @@ function ConfirmationStep({ form, startTime }: StepProps) {
   const [submitError, setSubmitError] = useState('');
   const { refreshAuthUser } = useAuth();
 
-  const [errors, setErrors] = useState<object>();
+  const [, setErrors] = useState<object>();
   const navigate = useNavigate();
 
   const validateForm = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RugbyPlayer, IFantasyAthlete } from '../../types/rugbyPlayer';
 import { getUri, getAuthHeader } from '../../utils/backendUtils';
 import { logger } from '../logger';

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 
 type Props = {
-    items: any[],
+    items: unknown[],
     currIndex?: number,
     setIndex?: (newIndex: number) => void
 }
