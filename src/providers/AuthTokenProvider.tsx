@@ -68,7 +68,7 @@ export default function AuthTokenProvider({ children }: Props) {
         }
 
         fetcher();
-    }, []);
+    }, [getSavedAccessTokenFromMobile, saveAccessTokenToMobile]);
 
     // If auth token has been replaced, then notify bridge of this
     const handleChangeAuthToken = (token: string) => {

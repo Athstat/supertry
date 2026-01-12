@@ -11,5 +11,5 @@ export function useScrollTo(ref: React.RefObject<HTMLElement>) {
 export function useScrollToCordnates(x: number, y: number) {
   useEffect(() => {
     window.scrollTo(x, y);
-  }, []);
+  }, [x, y]);
 }

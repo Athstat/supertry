@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound, IFantasyLeagueScoringOverview, IFantasyLeagueTeam, ISeason } from '../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../types/leagueConfig';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
@@ -370,7 +371,7 @@ export const leagueService = {
         return (await res.json()) as IFantasyLeagueScoringOverview;
       }
     } catch (err) {
-      console.log("Failed to fetch scoring overview for fantasy league round");
+      console.log("Failed to fetch scoring overview for fantasy league round ", err);
     }
 
     return undefined;

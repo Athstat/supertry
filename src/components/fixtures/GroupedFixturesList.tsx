@@ -9,11 +9,11 @@ type Props = {
     search?: string,
     generateMessage?: (fixture: IFixture) => string,
     descendingOrder?: boolean,
-    viewMode: FixtureListViewMode
+    viewMode?: FixtureListViewMode
 }
 
 /** Groups Fixtures into dates and renders them by date, with an optionable pickem card view */
-export default function GroupedFixturesList({ fixtures, viewMode }: Props) {
+export default function GroupedFixturesList({ fixtures, viewMode = "fixtures" }: Props) {
 
     const groupedFixtures = groupFixturesByCompetition(fixtures);
     const competitions = sortCompetitions(Array.from(groupedFixtures.keys()));

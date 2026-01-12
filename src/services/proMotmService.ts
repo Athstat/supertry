@@ -21,7 +21,7 @@ export const proMotmService = {
             return  undefined;
 
         } catch (error) {
-            logger.error('Error creating vote')
+            logger.error('Error creating vote ', error);
             return undefined;
         }
     },
@@ -39,7 +39,7 @@ export const proMotmService = {
             }
 
         } catch (error) {
-            logger.error('Error creating vote')
+            logger.error('Error creating vote ', error);
         }
 
         return [];
@@ -58,7 +58,7 @@ export const proMotmService = {
             }
 
         } catch (error) {
-            logger.error('Error creating vote')
+            logger.error('Error creating vote ', error);
         }
 
         return [];
@@ -79,7 +79,7 @@ export const proMotmService = {
             }
             
         } catch (error) {
-            logger.error('Error creating vote')
+            logger.error('Error creating vote ', error);
         }
 
         return undefined;
@@ -95,7 +95,7 @@ export const proMotmService = {
             });
 
         } catch (error) {
-            logger.error('Error creating vote')
+            logger.error('Error creating vote ', error)
         }
     },
     

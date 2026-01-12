@@ -1,26 +1,17 @@
-import { Calendar, XIcon } from 'lucide-react';
+import { useAtomValue, useAtom } from 'jotai';
+import { Calendar, FileX2, XIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import useSWR from 'swr';
-import { IFixture } from '../types/games';
-import { gamesService } from '../services/gamesService';
-import {
-  ERPC_COMPETITION_ID,
-  INVESTEC_CHAMPIONSHIP_CUP,
-  URC_COMPETIION_ID,
-} from '../types/constants';
-import { LoadingIndicator } from '../components/ui/LoadingIndicator';
-import { useEffect, useState } from 'react';
-import { useSectionNavigation } from '../hooks/useSectionNavigation';
-import GroupedFixturesList from '../components/fixtures/GroupedFixturesList';
-import PageView from './PageView';
-import { fixturesDateRangeAtom } from '../components/fixtures/calendar/fixtures_calendar.atoms';
-import { useAtom, useAtomValue } from 'jotai';
-import {
-  filterFixturesByDateRange,
-  filterPastFixtures,
-  filterUpcomingFixtures,
-} from '../utils/fixtureUtils';
-import FixturesListScreenActionBar from '../components/fixtures/FixtureListScreenActionBar';
-import { FileX2 } from 'lucide-react';
+import { fixturesDateRangeAtom } from '../../components/fixtures/calendar/fixtures_calendar.atoms';
+import FixturesListScreenActionBar from '../../components/fixtures/FixtureListScreenActionBar';
+import GroupedFixturesList from '../../components/fixtures/GroupedFixturesList';
+import PageView from '../../components/ui/containers/PageView';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
+import { useSectionNavigation } from '../../hooks/web/useSectionNavigation';
+import { gamesService } from '../../services/gamesService';
+import { ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from '../../types/constants';
+import { IFixture } from '../../types/games';
+import { filterFixturesByDateRange, filterPastFixtures, filterUpcomingFixtures } from '../../utils/fixtureUtils';
 
 const competitionIds = [
   ERPC_COMPETITION_ID,
@@ -39,7 +30,7 @@ export default function FixtureListScreen() {
 
   useEffect(() => {
     scrollToSection(sectionId);
-  }, []);
+  }, [scrollToSection]);
 
   if (isLoading) return <LoadingIndicator message="Loading Fixtures" />;
 
@@ -61,7 +52,7 @@ export default function FixtureListScreen() {
 
         {fixturesInRange.length === 0 && <NoFixturesMessage />}
 
-        {pastFixtures.length > 0 && <GroupedFixturesList fixtures={pastFixtures} search={search} />}
+        {pastFixtures.length > 0 && <GroupedFixturesList viewMode='fixtures' fixtures={pastFixtures} search={search} />}
 
         {upcomingFixtures.length > 0 && (
           <>
@@ -69,7 +60,7 @@ export default function FixtureListScreen() {
 
             <h2 className="text-xl font-bold">Upcoming Fixtures</h2>
 
-            <GroupedFixturesList fixtures={upcomingFixtures} search={search} />
+            <GroupedFixturesList viewMode='fixtures' fixtures={upcomingFixtures} search={search} />
           </>
         )}
       </div>

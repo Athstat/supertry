@@ -1,3 +1,4 @@
+ 
 import useSWR from 'swr';
 import { ScopeProvider } from 'jotai-scope';
 import { IProAthlete } from '../types/athletes';

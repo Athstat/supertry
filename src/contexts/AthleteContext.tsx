@@ -80,6 +80,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
+
 export const useAthletes = () => {
   const context = useContext(AthleteContext);
   if (context === undefined) {

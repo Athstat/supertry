@@ -49,7 +49,7 @@ export default function VerifyEmailScreen() {
 
     useEffect(() => {
         handleVerifyEmail();
-    }, [token]);
+    }, [handleVerifyEmail, token]);
 
     const navigateToSignIn = () => {
         navigate('/signin');

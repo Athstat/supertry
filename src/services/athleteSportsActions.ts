@@ -1,5 +1,6 @@
 import { SportAction } from "../types/sports_actions";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
+import { logger } from "./logger";
 
 export const athleteSportActionsService = {
   getByAthlete: async (athleteId: string) => {
@@ -14,7 +15,7 @@ export const athleteSportActionsService = {
 
       return (await res.json()) as SportAction[];
     } catch (error) {
-      console.log("Error fetching athlete aggregate sports actions");
+      logger.error("Error fetching athlete aggregate sports actions ", error);
       return [];
     }
   },

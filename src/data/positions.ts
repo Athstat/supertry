@@ -1,4 +1,4 @@
-import { Position } from "../types/position";
+
 
 export const positions = [
   {

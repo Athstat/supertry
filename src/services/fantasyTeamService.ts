@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   IFantasyTeamAthlete,
   IFantasyClubTeam,
@@ -6,6 +7,7 @@ import {
 } from '../types/fantasyTeamAthlete';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { authService } from './authService';
+import { logger } from './logger';
 
 export const fantasyTeamService = {
   /**
@@ -210,7 +212,7 @@ export const fantasyTeamService = {
 
       return currentTeam;
     } catch (error) {
-      console.log('Error fetching user team');
+      logger.error('Error fetching user team ', error);
       return undefined;
     }
   },

@@ -190,14 +190,11 @@ export function getPlayerIcons(
   const tacklesMade = getPlayerAggregatedStat("TacklesMade", seasonStats)?.action_count || 0;
   const tackleSuccess = getPlayerAggregatedStat("TackleSuccess", seasonStats)?.action_count || 0;
   const turnoversWon = getPlayerAggregatedStat("TurnoversWon", seasonStats)?.action_count || 0;
-  const kicksFromHand = getPlayerAggregatedStat("KicksFromHand", seasonStats)?.action_count || 0;
   const minutesPlayed = getPlayerAggregatedStat('MinutesPlayed', seasonStats)?.action_count || 0;
   const defendersBeaten = getPlayerAggregatedStat("DefendersBeaten", seasonStats)?.action_count || 0;
   const carries = getPlayerAggregatedStat("Carries", seasonStats)?.action_count || 0;
   const points = getPlayerAggregatedStat("Points", seasonStats)?.action_count || 0;
   const ConversionsScored = getPlayerAggregatedStat("ConversionsScored", seasonStats)?.action_count || 0;
-  const penaltyGoalsScored = getPlayerAggregatedStat("PenaltyGoalsScored", seasonStats)?.action_count || 0;
-  const dropGoalsScored = getPlayerAggregatedStat("PenaltyGoalsScored", seasonStats)?.action_count || 0;
 
   // Diamond In the Ruff - Young player with high potential (age < 23 and high power rating)
   if (age && age < 25 && (player.power_rank_rating || 0) > 75 && minutesPlayed > 400) {
@@ -205,7 +202,6 @@ export function getPlayerIcons(
   }
 
   // Rookie - Player is a rookie in their first season (age < 23 and only has stats for 1 season)
-  const uniqueSeasons = new Set(seasonStats.map(stat => stat.season_id)).size;
 
   if (age && age < 20) {
     icons.push('Rookie');
@@ -275,11 +271,6 @@ function isForward(position?: string): boolean {
   return forwardPositions.some(pos => position.toLowerCase().includes(pos.toLowerCase()));
 }
 
-function isBack(position?: string): boolean {
-  if (!position) return false;
-  const backPositions = ['Scrum-half', 'Fly-half', 'Centre', 'Wing', 'Fullback', 'Back'];
-  return backPositions.some(pos => position.toLowerCase().includes(pos.toLowerCase()));
-}
 
 function isLeadershipPosition(position?: string): boolean {
   if (!position) return false;

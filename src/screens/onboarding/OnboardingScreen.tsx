@@ -1,3 +1,4 @@
+ 
 import { useEffect, useState } from 'react';
 import { IOnboardingTab } from '../../types/onboarding';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';

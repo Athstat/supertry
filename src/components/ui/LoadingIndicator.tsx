@@ -3,11 +3,12 @@ import { twMerge } from "tailwind-merge";
 
 type Props = {
   className?: string,
-  loaderClassName?: string
+  loaderClassName?: string,
+  message?: string
 }
 
 /** Renders a loading indicator to show that the UI is busy doing/fetching something */
-export function LoadingIndicator({className, loaderClassName} : Props){
+export function LoadingIndicator({className, loaderClassName, message} : Props){
   return (
     <div
       className={twMerge(
@@ -21,6 +22,8 @@ export function LoadingIndicator({className, loaderClassName} : Props){
         "w-10 h-10 text-primary-600 animate-spin",
         loaderClassName
       )} />
+
+      {message && <p>{message}</p>}
     </div>
   );
 };
