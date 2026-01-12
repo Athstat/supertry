@@ -1,22 +1,14 @@
 import { getPositionFrameBackground, getTeamJerseyImage } from '../../utils/athleteUtils';
 import { IProAthlete } from '../../types/athletes';
-import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';
 import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import darkModeLogo from '../branding/assets/logo_dark_mode.svg';
-
-import { usePlayerSquadReport } from '../../hooks/fantasy/usePlayerSquadReport';
-import useSWR from 'swr';
-import { leagueService } from '../../services/leagueService';
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
-import { useAuth } from '../../contexts/AuthContext';
-import { swrFetchKeys } from '../../utils/swrKeys';
 import AvailabilityIcon from '../players/availability/AvailabilityIcon';
 
 type Props = {
-  player: IProAthlete | IFantasyTeamAthlete;
+  player: IProAthlete;
   name?: string;
   onClick?: () => void;
   className?: string;
@@ -26,7 +18,6 @@ type Props = {
   priceClassName?: string;
   teamLogoClassName?: string;
   detailsClassName?: string;
-  // Optional override for background frame image styling (to avoid cropping in specific contexts)
   frameClassName?: string;
 };
 
@@ -37,12 +28,7 @@ type Props = {
 
 
 // TODO: Delete Component
-export function PlayerGameCard({
-  player,
-  className,
-  onClick,
-  frameClassName,
-}: Props) {
+export function PlayerGameCard({ player, className, onClick, frameClassName }: Props) {
   const frameSrc = getPositionFrameBackground(player.position_class ?? '');
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
 
@@ -70,46 +56,6 @@ export function PlayerGameCard({
     }
   };
 
-  // const { sortedSeasons, currentSeason } = usePlayerData();
-  // const hasSeason = !!currentSeason;
-
-  //console.log('sortedSeasons: ', sortedSeasons);
-
-  // Pre-declare fetchers for SWR; safe because key will be null when season not ready
-  // const fetchSeasonStats = () =>
-  //   djangoAthleteService.getAthleteSeasonStats(player.tracking_id, currentSeason!.id);
-  // const fetchSeasonStars = () =>
-  //   djangoAthleteService.getAthleteSeasonStarRatings(player.tracking_id, currentSeason!.id);
-
-  // const statsKey = hasSeason
-  //   ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, currentSeason!.id)
-  //   : null;
-  // const { data: actions, isLoading: loadingStats } = useSWR(statsKey, fetchSeasonStats);
-
-  // const starsKey = hasSeason
-  //   ? swrFetchKeys.getAthleteSeasonStars(player.tracking_id, currentSeason!.id)
-  //   : null;
-  // const { data: starRatings, isLoading: loadingStars } = useSWR(starsKey, fetchSeasonStars);
-
-  // const isLoading = !hasSeason || loadingStars || loadingStats;
-
-  // const playerIcons = hasSeason
-  //   ? getPlayerIcons(player as IProAthlete, starRatings ?? null, actions ?? [])
-  //   : [];
-
-  const icons = ['Diamond In the Ruff', 'Scrum Master', 'Rookie'];
-
-  // Function to get a random number of icons (1, 2, or 3)
-  const getRandomIconCount = () => Math.floor(Math.random() * 3) + 1;
-
-  // Function to get an array of unique random icons
-  const getRandomIcons = (count: number) => {
-    const shuffled = [...icons].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  };
-
-  const playerIcons = getRandomIcons(getRandomIconCount());
-
   const imageUrl = useMemo(() => {
     // First try to use the player's actual image
     if (player.image_url && !playerImageErr) {
@@ -117,33 +63,16 @@ export function PlayerGameCard({
     }
 
     // Fall back to team jersey image
-    if (player.athlete) {
-      return player.athlete.team?.athstat_id
-        ? getTeamJerseyImage(player.athlete.team?.athstat_id)
+    if (player.team) {
+      return player.team?.athstat_id
+        ? getTeamJerseyImage(player.team?.athstat_id)
         : undefined;
-    } else {
-      return player.team?.athstat_id ? getTeamJerseyImage(player.team?.athstat_id) : undefined;
     }
+
+    return undefined;
   }, [player, playerImageErr]);
 
-  const { currentRound } = useFantasyLeagueGroup();
-  const { authUser } = useAuth();
-
-  const key = swrFetchKeys.getUserFantasyLeagueRoundTeam(
-    currentRound?.fantasy_league_group_id ?? '',
-    currentRound?.id ?? '',
-    authUser?.kc_id
-  );
-
-  const { data: userTeam } = useSWR(key, () =>
-    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? '')
-  );
-
-  const playerId = player.athlete_id || player.athlete?.tracking_id || player.tracking_id;
-
-  const { notAvailable } = !isPlayersScreen
-    ? usePlayerSquadReport(userTeam?.id, playerId)
-    : { notAvailable: false };
+  const notAvailable = false; 
 
   return (
     <div
@@ -195,16 +124,12 @@ export function PlayerGameCard({
                 'lg:w-10'
               )}
             >
-              {player.athlete
-                ? player.athlete.team?.image_url && (
+              {player &&
                     <TeamLogo
-                      url={player.athlete.team.image_url}
+                      url={player.team?.image_url}
                       className="w-6 h-6 lg:w-8 lg:h-8"
                     />
-                  )
-                : player.team?.image_url && (
-                    <TeamLogo url={player.team.image_url} className="w-6 h-6 lg:w-8 lg:h-8" />
-                  )}
+              }
             </div>
 
             {/* <PlayerIconsRow player={player as IProAthlete} size="sm" season={season} /> */}
