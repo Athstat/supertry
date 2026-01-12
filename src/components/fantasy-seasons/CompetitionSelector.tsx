@@ -11,10 +11,6 @@ export default function CompetitionSelector() {
 
   const savedId = localStorage.getItem(SELECTED_SEASON_ID_KEY) || undefined;
   const [seasonId, setSeasonId] = useState<string | undefined>(selectedSeason?.id || savedId);
-  // const defferedSeasonId = useDeferredValue(seasonId);
-
-  console.log("Saved ID ", savedId);
-  console.log("Season ID ", seasonId);
 
   const availableSeasons = fantasySeasons;
 
