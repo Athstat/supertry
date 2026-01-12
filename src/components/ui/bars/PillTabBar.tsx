@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { twMerge } from "tailwind-merge"
 import { useQueryState } from "../../../hooks/web/useQueryState"
 

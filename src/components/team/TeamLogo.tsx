@@ -1,4 +1,3 @@
-import { Shield } from 'lucide-react';
 import { useState } from 'react';
 import { MdShield } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';

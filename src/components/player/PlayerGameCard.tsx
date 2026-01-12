@@ -35,6 +35,8 @@ type Props = {
  *
  * does not rely on team context */
 
+
+// TODO: Delete Component
 export function PlayerGameCard({
   player,
   className,

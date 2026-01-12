@@ -1,9 +1,9 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react"
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react"
 import { DjangoAuthUser } from "../types/auth";
 import { authTokenService } from "../services/auth/authTokenService";
 import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { logoutFromBridge } from "../utils/bridgeUtils";
-import { useGetBridgeAuthV2 } from "../hooks/auth/useBridgeAuth";
+import { useGetBridgeAuthV2 as useBridgeAuth } from "../hooks/auth/useBridgeAuth";
 
 type AuthTokenContextProps = {
     /** The auth token for the current login session */
@@ -36,7 +36,7 @@ type Props = {
 export default function AuthTokenProvider({ children }: Props) {
 
     const [accessToken, setAccessToken] = useState<string>();
-    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = useGetBridgeAuthV2();
+    const { getSavedAccessTokenFromMobile, saveAccessTokenToMobile } = useBridgeAuth();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -71,31 +71,31 @@ export default function AuthTokenProvider({ children }: Props) {
     }, [getSavedAccessTokenFromMobile, saveAccessTokenToMobile]);
 
     // If auth token has been replaced, then notify bridge of this
-    const handleChangeAuthToken = (token: string) => {
+    const handleChangeAuthToken = useCallback((token: string) => {
         setAccessToken(token);
         authTokenService.setAccessToken(token);
         saveAccessTokenToMobile(token);
-    }
+    }, [saveAccessTokenToMobile]);
 
-    const handleSaveLocalStorageUser = (user: DjangoAuthUser) => {
+    const handleSaveLocalStorageUser = useCallback((user: DjangoAuthUser) => {
         // Save user to localstorage
         authTokenService.saveUserToLocalStorage(user);
-    }
+    }, []);
 
-    const getUserInfoFromLocalStorage = (): DjangoAuthUser | undefined => {
+    const getUserInfoFromLocalStorage = useCallback((): DjangoAuthUser | undefined => {
         return authTokenService.getUserFromLocalStorage();
-    }
+    }, []);
 
 
-    const handleClearAuthTokenAndUser = () => {
+    const handleClearAuthTokenAndUser = useCallback(() => {
         setAccessToken(undefined);
-        
+
         logoutFromBridge();
 
         authTokenService.clearAccessToken();
         authTokenService.clearUserTokens();
         authTokenService.cleanupKeycloakTokens();
-    };
+    }, []);
 
     if (isLoading) {
         return <ScrummyLoadingState />

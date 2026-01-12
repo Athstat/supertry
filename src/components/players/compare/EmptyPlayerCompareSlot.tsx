@@ -19,7 +19,7 @@ export default function EmptyPlayerCompareSlot() {
 
     const { addMultiplePlayers, isCompareLimitReached } = usePlayerCompareActions();
 
-    const toggle = () => setShow(!show);
+    const toggle = useCallback(() => setShow(prev => !prev), []);
 
     const onSelectPlayers = (arr: IProAthlete[]) => {
         addMultiplePlayers(arr);

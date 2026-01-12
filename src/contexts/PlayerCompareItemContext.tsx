@@ -1,4 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
+ 
 import { createContext, ReactNode, useMemo, useState } from "react"
 import { IProAthlete } from "../types/athletes"
 import { IProSeason } from "../types/season"

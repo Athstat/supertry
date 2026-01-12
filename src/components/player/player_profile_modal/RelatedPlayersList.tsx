@@ -51,7 +51,7 @@ export default function RelatedPlayersList({ player }: Props) {
       <div className="flex flex-row no-scrollbar overflow-x-auto gap-2">
         <TeamLogo
           teamName={player.team?.athstat_name}
-          url={(player as any)?.athlete?.team.image_url ?? player.team?.image_url}
+          url={player.team?.image_url ?? player.team?.image_url}
           className="w-20 h-20 flex-shrink-0"
           key={player.team?.athstat_id}
         />
