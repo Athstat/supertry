@@ -1,6 +1,6 @@
 /** Sbr utils tests */
 import { add } from "date-fns";
-import { hasMotmVotingEnded } from "../../src/utils/sbrUtils";
+import { hasMotmVotingEnded } from "../../../src/utils/sbrUtils";
 
 test('hasMotmVotingEnded returns true when extactly two hours after kickoff', () => {
     const kickoff = new Date('2025-01-01T15:00Z');
