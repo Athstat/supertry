@@ -1,8 +1,10 @@
 import { useAtom, useAtomValue } from "jotai";
 import { fantasySeasonsAtoms } from "../../state/dashboard/dashboard.atoms";
 import { fantasySeasonsAtom } from "../../state/fantasy/fantasyLeagueScreen.atoms";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { IProSeason } from "../../types/season";
+import { SELECTED_SEASON_ID_KEY } from "../../types/constants";
 
 /** useDashboard is a useful hook to read state of the fantasys easons */
 export function useFantasySeasons() {
@@ -11,8 +13,13 @@ export function useFantasySeasons() {
     const [currentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
     const [seasonRounds,] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
     const [currentRound,] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
-    const [selectedSeason, setSelectedSeason] = useAtom(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
+    const [selectedSeason, selectedSeasonSetter] = useAtom(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
     const isLoading = useAtomValue(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
+
+    const setSelectedSeason = useCallback((newSeason: IProSeason) => {
+        localStorage.setItem(SELECTED_SEASON_ID_KEY, newSeason.id);
+        selectedSeasonSetter(newSeason);
+    }, [selectedSeasonSetter]);
 
     const diplaySeason = useMemo(() => {
         return selectedSeason || currentSeason;

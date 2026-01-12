@@ -275,3 +275,7 @@ export const positionsTooltipMap: Map<string, TooltipData> = new Map([
   ],
 
 ]);
+
+
+/** The selected season local storage key */
+export const SELECTED_SEASON_ID_KEY = 'selected_season_id';

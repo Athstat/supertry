@@ -1,15 +1,20 @@
 import { ChevronDown } from 'lucide-react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { useDeferredValue, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { trimSeasonYear } from '../../utils/stringUtils';
+import { SELECTED_SEASON_ID_KEY } from '../../types/constants';
 
 
 export default function CompetitionSelector() {
 
   const { fantasySeasons, selectedSeason, setSelectedSeason, isLoading } = useFantasySeasons();
 
-  const [seasonId, setSeasonId] = useState<string | undefined>(selectedSeason?.id);
-  const defferedSeasonId = useDeferredValue(seasonId);
+  const savedId = localStorage.getItem(SELECTED_SEASON_ID_KEY) || undefined;
+  const [seasonId, setSeasonId] = useState<string | undefined>(selectedSeason?.id || savedId);
+  // const defferedSeasonId = useDeferredValue(seasonId);
+
+  console.log("Saved ID ", savedId);
+  console.log("Season ID ", seasonId);
 
   const availableSeasons = fantasySeasons;
 
@@ -18,14 +23,19 @@ export default function CompetitionSelector() {
 
     if (inputSeasonId) {
       setSeasonId(inputSeasonId);
+      const requestedSeason = availableSeasons.find((s) => s.id === inputSeasonId);
+      
+      if (requestedSeason) {
+        setSelectedSeason(requestedSeason);
+      }
     }
   };
 
-  useEffect(() => {
-    setSelectedSeason(() => {
-      return availableSeasons.find((s) => s.id === defferedSeasonId);
-    })
-  }, [availableSeasons, defferedSeasonId, setSelectedSeason]);
+  // useEffect(() => {
+  //   setSelectedSeason(() => {
+  //     return availableSeasons.find((s) => s.id === defferedSeasonId);
+  //   })
+  // }, [availableSeasons, defferedSeasonId, setSelectedSeason]);
 
   // Show loading skeleton ONLY while actively loading and no data yet
   if (isLoading) {
