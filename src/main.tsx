@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom/client';
-import { RouterProvider } from 'react-router-dom';
 import './index.css';
-import { dataRouter } from './routing/dataRoutes';
+import App from './App';
 
 // Sentry.init({
 //   dsn: "https://edd4351604211158f5090f44afa67627@o4509354186702848.ingest.us.sentry.io/4509617556619264",
@@ -11,5 +10,5 @@ import { dataRouter } from './routing/dataRoutes';
 // });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <RouterProvider router={dataRouter}  />
+  <App />
 );

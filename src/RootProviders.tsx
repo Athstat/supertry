@@ -1,5 +1,5 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ErrorInfo, ReactNode, useEffect, useState } from "react"
+import { ErrorInfo, ReactNode, useState } from "react"
 import ErrorBoundary, { FallbackProps } from "./components/ui/navigation/ErrorBoundary";
 import NetworkStatusProvider from "./components/network/NetworkStatusProvider";
 import SportActionsDefinitionsProvider from "./providers/SportActionsDefinitionsProvider";
@@ -15,8 +15,6 @@ import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsPr
 import CacheProvider from "./providers/caching/CacheProvider";
 import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 import TooltipProvider from "./providers/ui/TooltipProvider";
-import { twMerge } from "tailwind-merge";
-import { AppColours } from "./types/constants";
 
 type Props = {
     children?: ReactNode
@@ -25,12 +23,7 @@ type Props = {
 /** Difines all the root providers to its children */
 export default function RootProviders({ children }: Props) {
 
-    useEffect(() => {
-        document.body.className = twMerge(
-            AppColours.BACKGROUND,
-            "w-screen h-screen"
-        );
-    }, []);
+
 
     return (
         <ThemeLayer>
