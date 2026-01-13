@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { CardTier } from '../../types/cardTiers';
 import ScrummyLogo from '../branding/scrummy_logo';
@@ -39,18 +39,42 @@ export default function PlayerMugshot({
   const cardTier: CardTier = getAthleteCardTier(pr);
 
 
+  // if (!src) {
+  //   return (
+  //     <div
+  //       className={twMerge(
+  //         'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2',
+  //         className,
+  //         scrummyLogoClassName
+  //       )}
+  //     >
+  //       <ScrummyLogo className="opacity-30" />
+  //     </div>
+  //   );
+  // }
+
   if (!src) {
     return (
-      <div
-        className={twMerge(
-          'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2',
-          className,
-          scrummyLogoClassName
+      <FallbackImage
+        teamId={teamFallbackUrl}
+        isCaptain={isCaptain}
+        showPrBackground={showPrBackground}
+        className={className}
+        cardTier={cardTier}
+        alt={alt}
+        errorComponent={(
+          <div
+            className={twMerge(
+              'w-14 h-14 bg-slate-300 dark:text-slate-400 flex items-center justify-center dark:bg-slate-800 rounded-full p-2',
+              className,
+              scrummyLogoClassName
+            )}
+          >
+            <ScrummyLogo className="opacity-30" />
+          </div>
         )}
-      >
-        <ScrummyLogo className="opacity-30" />
-      </div>
-    );
+      />
+    )
   }
 
   // If using the team fallback image, use the neutral gray circle container (like previous fallback UI)
@@ -134,12 +158,19 @@ type FallbackImageProps = {
   isCaptain?: boolean,
   showPrBackground?: boolean,
   cardTier?: string,
-  className?: string
+  className?: string,
+  errorComponent?: ReactNode
 }
 
-function FallbackImage({ teamId, alt = "", isCaptain, showPrBackground, cardTier, className }: FallbackImageProps) {
-
+function FallbackImage({ teamId, alt = "", isCaptain, showPrBackground, cardTier, className, errorComponent }: FallbackImageProps) {
+  const [error, setError] = useState(false);
   const src = teamId;
+
+  if (error && errorComponent) {
+    return (
+      <>{errorComponent}</>
+    )
+  }
 
   return (
     <div
@@ -170,6 +201,7 @@ function FallbackImage({ teamId, alt = "", isCaptain, showPrBackground, cardTier
         src={src}
         alt={alt}
         className="w-full mt-3 h-full object-contain"
+        onError={() => setError(true)}
       />
 
     </div>

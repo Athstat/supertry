@@ -1,22 +1,39 @@
 import { useAtom, useAtomValue } from "jotai";
 import { fantasySeasonsAtoms } from "../../state/dashboard/dashboard.atoms";
 import { fantasySeasonsAtom } from "../../state/fantasy/fantasyLeagueScreen.atoms";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { IProSeason } from "../../types/season";
+import { SELECTED_SEASON_ID_KEY } from "../../types/constants";
 
 /** useDashboard is a useful hook to read state of the fantasys easons */
 export function useFantasySeasons() {
+
+    /** Atom that dictates whether to show the fantasy seasons drawer or not */
+    const [showDrawer, setShowDrawer] = useAtom(fantasySeasonsAtoms.showFantasySeasonsDrawerAtom);
 
     const [fantasySeasons,] = useAtom(fantasySeasonsAtom);
     const [currentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
     const [seasonRounds,] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
     const [currentRound,] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
-    const [selectedSeason, setSelectedSeason] = useAtom(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
+    const [selectedSeason, selectedSeasonSetter] = useAtom(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
     const isLoading = useAtomValue(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
+    const setSelectedSeason = useCallback((newSeason: IProSeason) => {
+        localStorage.setItem(SELECTED_SEASON_ID_KEY, newSeason.id);
+        selectedSeasonSetter(newSeason);
+    }, [selectedSeasonSetter]);
+
+    const prevSavedSeason = useMemo(() => {
+        const prevSavedId = localStorage.getItem(SELECTED_SEASON_ID_KEY);
+        return fantasySeasons.find((s) => {
+            return s.id === prevSavedId;
+        })
+    }, [fantasySeasons])
+
     const diplaySeason = useMemo(() => {
-        return selectedSeason || currentSeason;
-    }, [currentSeason, selectedSeason]);
+        return selectedSeason || prevSavedSeason || currentSeason;
+    }, [currentSeason, prevSavedSeason, selectedSeason]);
 
     const previousRound = useMemo(() => {
         if (currentRound && seasonRounds) {
@@ -76,7 +93,9 @@ export function useFantasySeasons() {
         previousRound,
         /** The round to display scored for in the app */
         scoringRound,
-        pastAndPresentRounds
+        pastAndPresentRounds,
+        showDrawer, 
+        setShowDrawer
     }
 
 }

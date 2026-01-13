@@ -15,6 +15,8 @@ import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsPr
 import CacheProvider from "./providers/caching/CacheProvider";
 import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 import TooltipProvider from "./providers/ui/TooltipProvider";
+import SeasonTeamsProvider from "./contexts/SeasonTeamsContext";
+import { FantasySeasonsDrawer } from "./components/fantasy-seasons/FantasySeasonsDrawer";
 
 type Props = {
     children?: ReactNode
@@ -81,11 +83,13 @@ function DataLayer({ children }: Props) {
 
     return (
         <FantasySeasonsProvider>
-            <AthleteProvider>
-                <SportActionsDefinitionsProvider>
-                    {children}
-                </SportActionsDefinitionsProvider>
-            </AthleteProvider>
+            <SeasonTeamsProvider>
+                <AthleteProvider>
+                    <SportActionsDefinitionsProvider>
+                        {children}
+                    </SportActionsDefinitionsProvider>
+                </AthleteProvider>
+            </SeasonTeamsProvider>
         </FantasySeasonsProvider>
     )
 }
@@ -109,6 +113,7 @@ function AppStateLayer({ children }: Props) {
                     fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                 >
                     <TooltipProvider>
+                        <FantasySeasonsDrawer />
                         {children}
                     </TooltipProvider>
                 </ErrorBoundary>

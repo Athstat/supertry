@@ -1,9 +1,7 @@
 import { Activity, useMemo, useState } from "react"
 import { IProAthlete } from "../../../types/athletes"
 import { IFixture } from "../../../types/games"
-import CircleButton from "../../ui/buttons/BackButton"
-import { Binoculars, X, Info } from "lucide-react"
-import SmartPlayerMugshot from "../../player/SmartPlayerMugshot"
+import { Info } from "lucide-react"
 import { useAthleteMatchPr } from "../../../hooks/athletes/useAthleteMatchPr"
 import SecondaryText from "../../ui/typography/SecondaryText"
 import { swrFetchKeys } from "../../../utils/swrKeys"
@@ -114,7 +112,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
                         </div>
                     </Activity>
 
-                    
+
 
                     {showMatchInfo && <RoundedCard className="flex flex-col p-4 mt-2 gap-2" >
 
@@ -204,7 +202,7 @@ export default function PlayerFixtureModal({ fixture, player, onClose, isOpen, c
 
 type SkeletonProps = {
     player: IProAthlete,
-    onClose?: () => void
+    onClose?: () => void,
 }
 
 function LoadingSkeleton({ player, onClose }: SkeletonProps) {
@@ -212,49 +210,12 @@ function LoadingSkeleton({ player, onClose }: SkeletonProps) {
 
         <div className="flex flex-col gap-2" >
 
-            <div className="flex py-2 flex-row items-center justify-between " >
-
-                <div className="flex flex-row items-center gap-2" >
-                    <Binoculars />
-                    <p>Match Performance Overview</p>
-                </div>
-
-                <div>
-                    <CircleButton
-                        onClick={onClose}
-                    >
-                        <X className="w-4 h-4" />
-                    </CircleButton>
-                </div>
-            </div>
-
-            <div className="flex mt-2 flex-row items-center justify-between" >
-
-                <div className="flex flex-row items-center gap-2" >
-
-                    <div>
-                        <SmartPlayerMugshot
-                            url={player.image_url}
-                            teamId={player.team_id}
-                            playerImageClassName="w-16 h-16"
-                            jerseyClassName="min-w-16 min-h-16"
-                            jerseyConClassName="min-w-16 min-h-16"
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-0.5" >
-                        <p>{player.player_name}</p>
-                        <SecondaryText>{player.team?.athstat_name}</SecondaryText>
-                    </div>
-                </div>
-
-                <div className="flex flex-col items-end justify-center gap-2" >
-
-                    <RoundedCard className="h-[30px] w-[30px] animate-pulse rounded-xl border-none bg-slate-200" />
-
-                    <SecondaryText className="text-wrap text-center text-xs" >Match Rating</SecondaryText>
-                </div>
-            </div>
+            <FixtureModalHeader
+                player={player}
+                onClose={onClose}
+                onViewPlayerProfile={() => {}}
+                hideViewPlayerProfile={true}
+            />
 
             <div className="mt-2 flex flex-row animate-pulse items-center gap-2 " >
                 <RoundedCard className="border-none h-[50px] w-full flex-1 bg-slate-200" />

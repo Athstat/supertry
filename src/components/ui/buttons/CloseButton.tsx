@@ -22,7 +22,7 @@ export default function CloseButton({ className, onClick, iconSize = 20, highlig
         <CircleButton
             onClick={handleOnClick}
             className={twMerge(
-                "p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-full text-gray-600 dark:text-gray-400",
+                "p-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-dark-700 rounded-full text-gray-600 dark:text-gray-400",
                 highlight && "bg-slate-200 dark:bg-dark-800/50",
                 className
             )}

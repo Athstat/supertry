@@ -8,10 +8,12 @@ type Props = {
     className?: string,
     hideFade?: boolean,
     useBaseClasses?: boolean,
-    scummyLogoClassName?: string
+    scummyLogoClassName?: string,
+    width?: number | string,
+    height?: number | string
 }
 
-export default function TeamJersey({ teamId, className, hideFade, useBaseClasses = true, scummyLogoClassName }: Props) {
+export default function TeamJersey({ teamId, className, hideFade, useBaseClasses = true, scummyLogoClassName, width, height }: Props) {
 
     const imageUrl = teamId ? getTeamJerseyImage(teamId) : undefined;
     const [error, setError] = useState<boolean>(false);
@@ -34,7 +36,13 @@ export default function TeamJersey({ teamId, className, hideFade, useBaseClasses
     return (
 
         <img
+            width={width}
+            height={height}
             src={imageUrl}
+            style={{
+                width: width,
+                height: height
+            }}
             className={twMerge(
                 useBaseClasses && 'min-h-[80px] max-h-[80px] min-w-[80px] max-w-[80px] object-cover object-top',
                 useBaseClasses && 'lg:min-h-[120px] lg:max-h-[120px] lg:min-w-[120px] lg:max-w-[120px]',

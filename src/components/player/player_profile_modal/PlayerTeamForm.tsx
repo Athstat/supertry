@@ -2,15 +2,16 @@ import { IProAthlete } from "../../../types/athletes"
 import { useTeamLastNFixtures } from "../../../hooks/teams/useTeamLastNFixtures";
 import TeamFormGnatChart from "../../team/TeamFormGnatChart";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 
 type Props = {
     player: IProAthlete
 }
 
 export default function PlayerTeamFormCard({ player }: Props) {
-    const { team } = player;
+    
+    const {seasonTeam: team} = usePlayerSeasonTeam(player);
     const { fixtures, isLoading } = useTeamLastNFixtures(team?.athstat_id);
-
 
     if (isLoading) {
         return (

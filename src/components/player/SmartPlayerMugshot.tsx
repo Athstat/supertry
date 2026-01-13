@@ -9,11 +9,12 @@ type Props = {
     className?: string,
     playerImageClassName?: string,
     jerseyClassName?: string,
-    jerseyConClassName?: string
+    jerseyConClassName?: string,
+    useJerseyBaseclass?: boolean
 }
 
 /** A component that either renders a player mugshot if available or a team jersey as a fallback */
-export default function SmartPlayerMugshot({ url, teamId, className, playerImageClassName, jerseyClassName, jerseyConClassName }: Props) {
+export default function SmartPlayerMugshot({ url, teamId, className, playerImageClassName, jerseyClassName, jerseyConClassName, useJerseyBaseclass = true }: Props) {
     return (
         <div className={className} >
             <Activity mode={url ? "visible" : "hidden"} >
@@ -37,11 +38,12 @@ export default function SmartPlayerMugshot({ url, teamId, className, playerImage
                     <TeamJersey
                         teamId={teamId}
                         className={twMerge(
-                            "max-h-12 max-w-10 min-h-10 min-w-10 mt-2 object-center",
+                            "max-h-12 max-w-8 min-h-10 min-w-8 mt-2 object-center",
                             "lg:max-h-12 lg:max-w-10 lg:min-h-10 lg:min-w-10 mt-2",
                             jerseyClassName
                         )}
                         hideFade
+                        useBaseClasses={useJerseyBaseclass}
                     />
                 </div>
             </Activity>

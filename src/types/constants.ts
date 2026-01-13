@@ -56,6 +56,7 @@ export const AppColours = {
 export const CACHING_CONFIG = {
   userProfileCachePeriod: 1000 * 60 * 60 * 24, // 24 Hours
   sportsActionCachePeriod: 1000 * 60 * 60 * 24, // 24 Hours
+  seasonTeamsCachePeriod: 1000 * 60 * 60 * 24, // 24 Hours
   fantasySeasonsCachePeriod: 1000 * 60 * 60 * 1, // 1 Hour
   athletesCachePeriod: 1000 * 60 * 60 * 1 // 1 Hours
 }
@@ -275,3 +276,7 @@ export const positionsTooltipMap: Map<string, TooltipData> = new Map([
   ],
 
 ]);
+
+
+/** The selected season local storage key */
+export const SELECTED_SEASON_ID_KEY = 'selected_season_id';

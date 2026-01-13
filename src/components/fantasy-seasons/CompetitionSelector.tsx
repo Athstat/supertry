@@ -1,33 +1,14 @@
 import { ChevronDown } from 'lucide-react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { useDeferredValue, useEffect, useState } from 'react';
-import { trimSeasonYear } from '../../utils/stringUtils';
+import { abbreviateSeasonName } from '../../utils/stringUtils';
+import RoundedCard from '../ui/cards/RoundedCard';
 
 
 export default function CompetitionSelector() {
 
-  const { fantasySeasons, selectedSeason, setSelectedSeason, isLoading } = useFantasySeasons();
+  const { fantasySeasons, selectedSeason, isLoading, setShowDrawer } = useFantasySeasons();
+  const toggleShowOptions = () => setShowDrawer(prev => !prev);
 
-  const [seasonId, setSeasonId] = useState<string | undefined>(selectedSeason?.id);
-  const defferedSeasonId = useDeferredValue(seasonId);
-
-  const availableSeasons = fantasySeasons;
-
-  const handleSeasonChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const inputSeasonId = e.target.value;
-
-    if (inputSeasonId) {
-      setSeasonId(inputSeasonId);
-    }
-  };
-
-  useEffect(() => {
-    setSelectedSeason(() => {
-      return availableSeasons.find((s) => s.id === defferedSeasonId);
-    })
-  }, [availableSeasons, defferedSeasonId, setSelectedSeason]);
-
-  // Show loading skeleton ONLY while actively loading and no data yet
   if (isLoading) {
     return (
       <div className="flex justify-center items-center">
@@ -38,28 +19,23 @@ export default function CompetitionSelector() {
     );
   }
 
-  // If error or no seasons available after loading, hide the selector
-  if (availableSeasons.length === 0) {
+  if (fantasySeasons.length === 0) {
     return null;
   }
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="relative">
+    <>
 
-        <select
-          value={seasonId}
-          onChange={handleSeasonChange}
-          className="appearance-none dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-md font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-        >
-          {availableSeasons.map(season => (
-            <option key={season.id} value={season.id}>
-              {trimSeasonYear(season.name)}
-            </option>
-          ))}
-        </select>
-        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none w-4 h-4 text-gray-900 dark:text-white" />
-      </div>
-    </div>
+      <RoundedCard
+        className='rounded-md cursor-pointer px-2 py-1 flex flex-row items-center gap-1 justify-between'
+        onClick={toggleShowOptions}
+      >
+        <p>{abbreviateSeasonName(selectedSeason?.name || '')}</p>
+        <div>
+          <ChevronDown className='w-5 h-5' />
+        </div>
+      </RoundedCard>
+    </>
   );
 }
+

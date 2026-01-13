@@ -1,3 +1,4 @@
+import { IProAthlete } from "../../types/athletes";
 import { IFixture } from "../../types/games";
 import { IProTeam, TeamSeasonLeader } from "../../types/team";
 import { getAuthHeader, getUri } from "../../utils/backendUtils"
@@ -53,6 +54,26 @@ export const teamService = {
             }
         } catch (err) {
             logger.error("Errir fetching team season leader ", err);
+        }
+
+        return [];
+    },
+
+    getAthletes: async (teamId: string, seasonId?: string) : Promise<IProAthlete[]> => {
+        try {
+            const searchParams = seasonId ? `?season_id=${seasonId}` : '';
+            const uri = getUri(`/api/v1/teams/${teamId}/athletes${searchParams}`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader(),
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IProAthlete[];
+            }
+
+        } catch (err) {
+            logger.error("Error fetching team athletes ", err);
         }
 
         return [];

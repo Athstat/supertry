@@ -16,6 +16,7 @@ import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import QuickActionButton from "../ui/buttons/QuickActionButton";
 import RoundedCard from "../ui/cards/RoundedCard";
 import BottomSheetView from "../ui/modals/BottomSheetView";
+import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -33,8 +34,7 @@ export function PlayerActionModal({
   league
 }: PlayerActionModalProps) {
 
-  // const key = swrFetchKeys.getAthleteById(player.tracking_id);
-  // const { data: info, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteById(player.tracking_id));
+  const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
   const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
   const isSub = !player.is_starting;
@@ -119,7 +119,7 @@ export function PlayerActionModal({
             {<PlayerMugshot
               className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-800"
               url={player.image_url}
-              teamId={player.athlete_team_id}
+              teamId={seasonTeam?.athstat_id}
             />}
           </div>
 

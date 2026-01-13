@@ -7,13 +7,14 @@ import TeamLogo from "../../team/TeamLogo";
 import { useNavigate } from "react-router-dom";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import NoContentCard from "../../ui/typography/NoContentMessage";
 
 type Props = {
   onSuccess?: () => void
 }
 
 /** Renders a Grid list of teams to discover players by */
-export default function PlayersTeamsGridList({onSuccess} : Props) {
+export default function PlayersTeamsGridList({ onSuccess }: Props) {
 
   const { selectedSeason: firstSeason, isLoading } = useFantasySeasons();
 
@@ -30,7 +31,11 @@ export default function PlayersTeamsGridList({onSuccess} : Props) {
 
 
   return (
-    <div>
+    <div className="flex flex-col gap-4" >
+      <div>
+        <p className='font-bold text-md' >By Team</p>
+      </div>
+
       {firstSeason && <SeasonTeamGridList
         season={firstSeason}
         onSuccess={onSuccess}
@@ -44,11 +49,14 @@ type SeasonTeamListProps = {
   onSuccess?: () => void
 }
 
-function SeasonTeamGridList({ season, onSuccess }: SeasonTeamListProps) {
+function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
 
+  const { selectedSeason } = useFantasySeasons();
   const navigate = useNavigate();
-  const { teams: fetchedTeams, isLoading } = useSeasonTeams(season.id);
+  const { teams: fetchedTeams, isLoading } = useSeasonTeams();
   const teams = fetchedTeams || [];
+
+  const noTeams = teams.length === 0;
 
   const handleOnClick = (team: ITeam) => {
     navigate(`/players/teams/${team.athstat_id}`);
@@ -70,6 +78,12 @@ function SeasonTeamGridList({ season, onSuccess }: SeasonTeamListProps) {
       {/* <div>
         <p className="font-semibold" >{season.name}</p>
       </div> */}
+
+      {noTeams && (
+        <NoContentCard
+          message={`Oops! Something wen't wrong. Could not find any ${selectedSeason?.name} teams`}
+        />
+      )}
 
       <div className="grid grid-cols-3 gap-2" >
         {teams.map((t) => {

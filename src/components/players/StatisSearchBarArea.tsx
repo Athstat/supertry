@@ -69,13 +69,13 @@ export default function StaticSearchBarArea({
                     />
                 </RoundedCard>
 
-                <div className='flex flex-row items-center gap-2' >
+                <div className='flex flex-row cursor-pointer items-center gap-2' >
                     {showFilterButton && (
                         <RoundedCard
                             aria-label="Open filters and sorting"
                             onClick={onOpenControls}
                             className={[
-                                'flex border dark:border-slate-600 flex-row items-center gap-2 rounded-2xl h-[32px] px-4'
+                                'flex border hover:bg-slate-100 dark:border-slate-600 flex-row items-center gap-2 rounded-2xl h-[32px] px-4'
                             ].join(' ')}
                         >
                             <p>Filters</p>

@@ -50,7 +50,8 @@ export type IProAthlete = {
   available?: boolean;
   team_id: string;
   team?: IProTeam;
-  scouting_report?: string
+  scouting_report?: string;
+  athlete_teams?: IAthleteTeam[]
 };
 
 export type IAthleteSeasonStarRatings = {
@@ -89,4 +90,12 @@ export type PlayerPriceHistoryItem = {
   new_price: number,
   old_price: number,
   change_time: Date
+}
+
+/** Represents a pro athletes team */
+export type IAthleteTeam = {
+  team_id: string,
+  season_id: string,
+  player_image_url?: string,
+  registered_position?: string
 }

@@ -15,17 +15,16 @@ import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
-import { PlayerFilters } from "./PlayerFilters";
-import { PlayerSort } from "./PlayerSort";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
 import { PlayerListTable } from "./PlayerListTable";
 import RoundedCard from "../ui/cards/RoundedCard";
-import GlassBottomSheet from "../ui/modals/GlassBottomSheet";
 import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
 import StaticSearchBarArea from "./StatisSearchBarArea";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useInView } from "react-intersection-observer";
+import { useSeasonTeams } from "../../hooks/seasons/useSeasonTeams";
+import PlayersListFilterModal from "./PlayerListFilterModal";
 
 type Props = {
     players: IProAthlete[],
@@ -38,9 +37,11 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
     const [params, setParams] = useSearchParams();
 
     // Derive available teams/positions from the displayed dataset
-    const { teams: availableTeams, positions: availablePositions } = useMemo(() => {
+    const { positions: availablePositions } = useMemo(() => {
         return getAthletesSummary(displayedAthletes);
     }, [displayedAthletes]);
+
+    const { teams: availableTeams } = useSeasonTeams();
 
     const [sortField, setSortField] = useState<SortField>('power_rank_rating');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
@@ -82,6 +83,7 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
     });
 
     const [controlsOpen, setControlsOpen] = useState(false);
+    const toggleControls = () => setControlsOpen(prev => !prev);
 
     const [playerModalPlayer, setPlayerModalPlayer] = useState<IProAthlete>();
     const [showPlayerModal, setShowPlayerModal] = useState(false);
@@ -161,7 +163,7 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
             <div className={twMerge(
                 "flex flex-col items-center justify-center flex-wrap",
                 AppColours.BACKGROUND,
-                
+
             )}>
 
                 {/* Selected Team Section */}
@@ -242,27 +244,19 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
                 )}
             </div>
 
-            <GlassBottomSheet isOpen={controlsOpen} onClose={() => setControlsOpen(false)}>
-                <div className="space-y-4">
-                    <PlayerFilters
-                        variant="inline"
-                        positionFilter={positionFilter ?? ''}
-                        teamFilter={selectedTeam}
-                        availablePositions={availablePositions}
-                        availableTeams={availableTeams}
-                        onPositionFilter={handlePositionFilter}
-                        onTeamFilter={handleTeamFilter}
-                        onClearFilters={clearFilters}
-                    />
-
-                    <PlayerSort
-                        variant="inline"
-                        sortField={sortField}
-                        sortDirection={sortDirection}
-                        onSort={handleSortByField}
-                    />
-                </div>
-            </GlassBottomSheet>
+            <PlayersListFilterModal
+                isOpen={controlsOpen}
+                onClose={toggleControls}
+                positionFilter={positionFilter ?? ''}
+                selectedTeam={selectedTeam}
+                availablePositions={availablePositions}
+                handlePositionFilter={handlePositionFilter}
+                handleTeamFilter={handleTeamFilter}
+                clearFilters={clearFilters}
+                sortField={sortField}
+                sortDirection={sortDirection}
+                handleSortByField={handleSortByField}
+            />
         </div>
     );
 };

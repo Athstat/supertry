@@ -76,7 +76,7 @@ export const PlayerSort = ({
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700'
               }`}
             >
-              Points (High to Low)
+              Power Ranking (High to Low)
             </button>
             <button
               onClick={() => {
@@ -89,7 +89,7 @@ export const PlayerSort = ({
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700'
               }`}
             >
-              Points (Low to High)
+              Power Ranking (Low to High)
             </button>
             <button
               onClick={() => {
@@ -166,7 +166,7 @@ export const PlayerSort = ({
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700'
               }`}
             >
-              Points (High to Low)
+              Power Ranking (High to Low)
             </button>
             <button
               onClick={() => {
@@ -178,7 +178,7 @@ export const PlayerSort = ({
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700'
               }`}
             >
-              Points (Low to High)
+              Power Ranking (Low to High)
             </button>
             <button
               onClick={() => {

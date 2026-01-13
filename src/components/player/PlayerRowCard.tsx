@@ -7,6 +7,7 @@ import SmartPlayerMugshot from "./SmartPlayerMugshot"
 import FormIndicator from "./FormIndicator"
 import { stripCountryName } from "../../utils/stringUtils"
 import { useInView } from "react-intersection-observer"
+import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams"
 
 type Props = {
     player: IProAthlete,
@@ -19,7 +20,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
     const { ref, inView } = useInView({ triggerOnce: true });
     const countryFlag = getCountryEmojiFlag(player.nationality, true);
 
-
+    const {seasonTeam} = usePlayerSeasonTeam(player);
 
     const handelClick = () => {
         if (onClick) {
@@ -42,7 +43,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                         <div>
                             <SmartPlayerMugshot
                                 url={player.image_url}
-                                teamId={player.team_id}
+                                teamId={seasonTeam?.athstat_id}
                                 playerImageClassName="bg-transparent"
                             />
                         </div>

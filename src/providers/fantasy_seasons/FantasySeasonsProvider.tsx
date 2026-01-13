@@ -10,7 +10,7 @@ import { logger } from '../../services/logger';
 import { useDebounced } from '../../hooks/web/useDebounced';
 import useSWRImmutable from 'swr/immutable';
 import useSWR from 'swr';
-import { CACHING_CONFIG } from '../../types/constants';
+import { CACHING_CONFIG, SELECTED_SEASON_ID_KEY } from '../../types/constants';
 import { useAuth } from '../../contexts/AuthContext';
 
 type Props = {
@@ -24,7 +24,8 @@ export default function FantasySeasonsProvider({ children }: Props) {
     fantasySeasonsAtoms.currentSeasonAtom,
     fantasySeasonsAtoms.currentSeasonRoundAtom,
     fantasySeasonsAtoms.seasonRoundsAtom,
-    fantasySeasonsAtoms.isFantasySeasonsLoadingAtom
+    fantasySeasonsAtoms.isFantasySeasonsLoadingAtom,
+    fantasySeasonsAtoms.showFantasySeasonsDrawerAtom,
   ];
 
   return (
@@ -71,7 +72,20 @@ function InnerProvider({ children }: Props) {
   }, [setFantasySeasons, seasonsFetched, loadingSeasons]);
 
   useEffect(() => {
+    const prevSavedSeasonId = localStorage.getItem(SELECTED_SEASON_ID_KEY);
+    
     if (fantasySeasons && fantasySeasons.length > 0) {
+      
+      const prevSavedSeason = fantasySeasons.find((s) => {
+        return s.id === prevSavedSeasonId;
+      })
+      
+      if (prevSavedSeason) {
+        setCurrentSeason(prevSavedSeason);
+        return;
+      }
+      
+
       setCurrentSeason(fantasySeasons[0]);
     }
   }, [setCurrentSeason, fantasySeasons]);

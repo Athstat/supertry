@@ -12,5 +12,6 @@ export type ISeasonRound = {
     games_end: Date,
     coverage_end: Date,
     created_at: Date,
-    season: string
+    season: string,
+    priority?: number
 }

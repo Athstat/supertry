@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import { dataRouter } from "./routing/dataRoutes";
+import { dataRouter } from "./routing/routes";
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "./types/constants";

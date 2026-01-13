@@ -14,6 +14,7 @@ import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import { sanitizeStat } from "../../utils/stringUtils";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useMyTeamView } from "./MyTeamStateProvider";
+import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;
@@ -25,6 +26,8 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
     const { viewMode } = useMyTeamView();
     const { league } = useFantasyLeagueGroup();
     const { teamCaptain } = useFantasyTeam();
+
+    const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
     const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
         player.tracking_id,
@@ -74,12 +77,12 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     {/* {!player.image_url && ( */}
                     <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
                         <TeamJersey
-                            teamId={player.athlete_team_id}
+                            teamId={seasonTeam?.athstat_id}
                             useBaseClasses={false}
                             className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
-                            key={player.tracking_id}
+                            key={seasonTeam?.athstat_id}
                         />
                     </div>
 
@@ -171,7 +174,6 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 "min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row",
                 isLoading && "animate-pulse"
             )} >
-
                 
                 <Activity mode={isLoading ? "visible" : "hidden"} >
                     <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
@@ -180,7 +182,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 </Activity>
 
                 <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
-                    <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+                    <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >vs {opponent?.athstat_name} {homeOrAway}</p>
                 </Activity>
 
                 {/* <Activity mode={showPrice ? "visible" : "hidden"} >
@@ -188,7 +190,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                         <p className="text-[10px] md:text-[10px]" >{player.price}</p>
                         <Coins className="text-yellow-500 w-2.5 h-2.5" />
                     </div>
-                </Activity> */}
+            </Activity> */}
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >

@@ -12,13 +12,11 @@ import { FastForward } from 'lucide-react'
 import { TrendingUpDown } from 'lucide-react'
 import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/web/useDebounced'
-import { useHideTopNavBar } from '../../hooks/navigation/useNavigationBars'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 
 export default function PlayersOverviewScreen() {
 
-  useHideTopNavBar();
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
   const debouncedQuery = useDebounced(searchQuery, 500);
 
@@ -149,15 +147,8 @@ function Content() {
         />
       </div>
 
-      <div>
-        <p className='font-bold text-md' >By Team</p>
-      </div>
+
       <PlayersTeamsGridList />
-
-      <div>
-        <p className='font-bold text-md' >By Country</p>
-      </div>
-
       <PlayersCountryGridList />
     </Fragment>
   )

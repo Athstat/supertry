@@ -1,4 +1,4 @@
-import { Gender } from './athletes';
+import { Gender, IProAthlete } from './athletes';
 import { IProTeam } from './team';
 
 export type IFantasyTeamAthlete = {
@@ -46,6 +46,7 @@ export type IFantasyTeamAthlete = {
   is_captain?: boolean;
   is_super_sub?: boolean;
   team?: IProTeam;
+  athlete?: IProAthlete
 };
 
 export interface IFantasyTeamSubmission {
