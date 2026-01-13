@@ -1,15 +1,13 @@
 import { ChevronDown } from 'lucide-react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { useState } from 'react';
 import { abbreviateSeasonName } from '../../utils/stringUtils';
 import RoundedCard from '../ui/cards/RoundedCard';
 
 
 export default function CompetitionSelector() {
 
-  const { fantasySeasons, selectedSeason, setSelectedSeason, isLoading } = useFantasySeasons();
-  const [showOptions, setShowOptions] = useState<boolean>(false);
-  const toggleShowOptions = () => setShowOptions(prev => !prev);
+  const { fantasySeasons, selectedSeason, isLoading, setShowDrawer } = useFantasySeasons();
+  const toggleShowOptions = () => setShowDrawer(prev => !prev);
 
   if (isLoading) {
     return (

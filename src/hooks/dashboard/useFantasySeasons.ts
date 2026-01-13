@@ -9,6 +9,9 @@ import { SELECTED_SEASON_ID_KEY } from "../../types/constants";
 /** useDashboard is a useful hook to read state of the fantasys easons */
 export function useFantasySeasons() {
 
+    /** Atom that dictates whether to show the fantasy seasons drawer or not */
+    const [showDrawer, setShowDrawer] = useAtom(fantasySeasonsAtoms.showFantasySeasonsDrawerAtom);
+
     const [fantasySeasons,] = useAtom(fantasySeasonsAtom);
     const [currentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
     const [seasonRounds,] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
@@ -90,7 +93,9 @@ export function useFantasySeasons() {
         previousRound,
         /** The round to display scored for in the app */
         scoringRound,
-        pastAndPresentRounds
+        pastAndPresentRounds,
+        showDrawer, 
+        setShowDrawer
     }
 
 }

@@ -9,7 +9,16 @@ import { twMerge } from "tailwind-merge";
 /** Renders a fantasy seasons drawer */
 export function FantasySeasonsDrawer() {
 
-    const { selectedSeason, fantasySeasons, setSelectedSeason } = useFantasySeasons();
+    const { selectedSeason, fantasySeasons, setSelectedSeason, showDrawer, setShowDrawer } = useFantasySeasons();
+
+    if (!showDrawer) {
+        return null;
+    }
+
+    const handleOnClick = (season: IProSeason) => {
+        setSelectedSeason(season);
+        setShowDrawer(false);
+    }
 
     return (
         <BottomSheetView
@@ -29,7 +38,7 @@ export function FantasySeasonsDrawer() {
                         <OptionItem
                             season={fs}
                             isSelected={selectedSeason?.id === fs.id}
-                            onClick={setSelectedSeason}
+                            onClick={handleOnClick}
                         />
                     )
                 })}

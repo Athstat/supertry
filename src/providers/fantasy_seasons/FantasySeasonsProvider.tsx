@@ -24,7 +24,8 @@ export default function FantasySeasonsProvider({ children }: Props) {
     fantasySeasonsAtoms.currentSeasonAtom,
     fantasySeasonsAtoms.currentSeasonRoundAtom,
     fantasySeasonsAtoms.seasonRoundsAtom,
-    fantasySeasonsAtoms.isFantasySeasonsLoadingAtom
+    fantasySeasonsAtoms.isFantasySeasonsLoadingAtom,
+    fantasySeasonsAtoms.showFantasySeasonsDrawerAtom,
   ];
 
   return (
