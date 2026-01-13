@@ -2,16 +2,20 @@ import { useMemo } from "react";
 import useSWR from "swr";
 import { djangoAthleteService } from "../../services/athletes/djangoAthletesService";
 import { IFixture } from "../../types/games";
+import { useFantasySeasons } from "../dashboard/useFantasySeasons";
 
 /** Gets Player Specific Round Availability outside rosters */
 export function usePlayerRoundAvailability(athleteId: string, seasonId: string, roundNumber: number) {
 
-  const shouldFetch = (Boolean(athleteId) && Boolean(seasonId)) && (roundNumber > 0);
-  const key = shouldFetch ? `/athlete/${athleteId}/general-availabilityby-season/${seasonId}/${roundNumber}` : null;
+  const {selectedSeason} = useFantasySeasons();
+  const finalSeasonId = selectedSeason?.id || seasonId;
+
+  const shouldFetch = (Boolean(athleteId) && Boolean(finalSeasonId)) && (roundNumber > 0);
+  const key = shouldFetch ? `/athlete/${athleteId}/general-availabilityby-season/${finalSeasonId}/${roundNumber}` : null;
 
   const { data, isLoading } = useSWR(key, () => djangoAthleteService.getRoundAvailabilityReport(
     athleteId,
-    seasonId,
+    finalSeasonId,
     roundNumber
   ));
 

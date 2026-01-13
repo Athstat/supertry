@@ -171,7 +171,6 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 "min-h-[14px] max-h-[14px] w-full overflow-clip items-center justify-center flex flex-row",
                 isLoading && "animate-pulse"
             )} >
-
                 
                 <Activity mode={isLoading ? "visible" : "hidden"} >
                     <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
@@ -180,7 +179,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                 </Activity>
 
                 <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
-                    <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+                    <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >vs {opponent?.athstat_name} {homeOrAway}</p>
                 </Activity>
 
                 {/* <Activity mode={showPrice ? "visible" : "hidden"} >
