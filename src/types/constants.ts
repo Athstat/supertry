@@ -280,3 +280,10 @@ export const positionsTooltipMap: Map<string, TooltipData> = new Map([
 
 /** The selected season local storage key */
 export const SELECTED_SEASON_ID_KEY = 'selected_season_id';
+
+/** Query Params for a league invite url */
+export const leagueInviteQueryParams = {
+  LEAGUE_ID: 'li',
+  USER_ID:'usri',
+  JOIN_CODE: 'jc'
+}
