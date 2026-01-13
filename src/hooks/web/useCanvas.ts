@@ -31,7 +31,7 @@ export function useCanvas(setErrorMessage: (val?: string) => void, setSuccessMes
                     })
                 ]);
 
-                setSuccessMessage("QR Code was copied to your clipboard")
+                setSuccessMessage("QR-code was copied to your clipboard")
 
             } catch (err) {
                 logger.error('Failed to copy canvas ', err);
@@ -43,15 +43,9 @@ export function useCanvas(setErrorMessage: (val?: string) => void, setSuccessMes
         });
     }
 
-    const clearMessages = () => {
-        setSuccessMessage(undefined);
-        setErrorMessage(undefined);
-    }
-
     return {
         ref,
         copyAsImage,
-        isCopying,
-        clearMessages
+        isCopying
     }
 }

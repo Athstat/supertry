@@ -26,9 +26,21 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   const [successMessage, setSuccessMessage] = useState<string>();
 
   const { inviteLink } = useShareLeague(league);
-  const { ref: qrRef, copyAsImage, clearMessages } = useCanvas(setErrorMessage, setSuccessMessage);
+  const { ref: qrRef, copyAsImage } = useCanvas(setErrorMessage, setSuccessMessage);
 
-  
+  const clearMessages = () => {
+    setSuccessMessage(undefined);
+    setErrorMessage(undefined);
+  }
+
+  const handleCopyJoinCode = async () => {
+    if (league?.entry_code) {
+      clearMessages();
+
+      await navigator.clipboard.writeText(league.entry_code);
+      setSuccessMessage('League join code coppied to your clipboard');
+    }
+  }
 
   if (!isOpen) {
     return null;
@@ -77,7 +89,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
             valueClassName="text-lg"
           />
 
-          <PrimaryButton className="flex-1" >
+          <PrimaryButton onClick={handleCopyJoinCode} className="flex-1" >
             <CopyIcon />
           </PrimaryButton>
         </div>
