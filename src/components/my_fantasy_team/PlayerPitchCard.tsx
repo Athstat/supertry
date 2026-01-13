@@ -14,6 +14,7 @@ import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import { sanitizeStat } from "../../utils/stringUtils";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useMyTeamView } from "./MyTeamStateProvider";
+import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;
@@ -25,6 +26,8 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
     const { viewMode } = useMyTeamView();
     const { league } = useFantasyLeagueGroup();
     const { teamCaptain } = useFantasyTeam();
+
+    const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
     const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
         player.tracking_id,
@@ -74,12 +77,12 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                     {/* {!player.image_url && ( */}
                     <div className=" relative overflow-clip object-contain h-[100px] w-[100px] flex flex-col items-center " >
                         <TeamJersey
-                            teamId={player.athlete_team_id}
+                            teamId={seasonTeam?.athstat_id}
                             useBaseClasses={false}
                             className="h-[90px] md:h-[100px] object-cover  absolute -bottom-6 drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] shadow-black"
                             scummyLogoClassName="absolute top-0 left-0 w-[90px] md:w-[100px] h-full"
                             hideFade
-                            key={player.tracking_id}
+                            key={seasonTeam?.athstat_id}
                         />
                     </div>
 

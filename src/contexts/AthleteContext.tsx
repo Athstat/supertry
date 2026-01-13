@@ -38,9 +38,6 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   const athletes = useMemo(() => {
     return fetchedAthletes ?? []
   }, [fetchedAthletes]);
-
-  console.log("Fetch Key ", key);
-  console.log("Athletes ", athletes);
   
   const isLoading = loadingAthletes;
 

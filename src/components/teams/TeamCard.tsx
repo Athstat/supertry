@@ -9,8 +9,13 @@ type Props = {
 }
 
 export default function ProTeamCard({team, className} : Props) {
+  
+  const onClick = () => {
+    navigator.clipboard.writeText(team.athstat_id)
+  }
+  
   return (
-    <RoundedCard className={twMerge(
+    <RoundedCard onClick={onClick} className={twMerge(
         "p-4 flex flex-col items-center dark:bg-slate-800/60 justify-center gap-2",
         className
     )} >

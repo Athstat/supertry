@@ -365,6 +365,20 @@ export function getPositionFrameBackground(positionClass: string) {
 }
 
 export function getTeamJerseyImage(teamId: string | number | null | undefined) {
+
+  const sixNationsTeamIds = [
+    'ef03fece-166d-5fad-97b9-ece90dacdf35',
+    'a61e600c-0918-5211-b32a-60245e40edb3',
+    '46fd9149-da9d-5998-a180-831f04d71c62',
+    'c44d012a-de0f-5a7d-903a-045b95d7dafc',
+    '0e6f60f8-5500-5944-9946-107b41668165',
+    '99f8a5e7-91cd-5cb5-ae21-f0a32d6119ff',
+  ]
+
+  if (sixNationsTeamIds.includes(teamId as string)) {
+    return `/pro_logos/6nations/${teamId}.png`;
+  }
+
   const teamFallbackUrl = teamId
     ? `https://dp7xhssw324ru.cloudfront.net/${teamId}-ph-removebg-preview.png`
     : undefined;
