@@ -21,9 +21,16 @@ export function useFantasySeasons() {
         selectedSeasonSetter(newSeason);
     }, [selectedSeasonSetter]);
 
+    const prevSavedSeason = useMemo(() => {
+        const prevSavedId = localStorage.getItem(SELECTED_SEASON_ID_KEY);
+        return fantasySeasons.find((s) => {
+            return s.id === prevSavedId;
+        })
+    }, [fantasySeasons])
+
     const diplaySeason = useMemo(() => {
-        return selectedSeason || currentSeason;
-    }, [currentSeason, selectedSeason]);
+        return selectedSeason || prevSavedSeason || currentSeason;
+    }, [currentSeason, prevSavedSeason, selectedSeason]);
 
     const previousRound = useMemo(() => {
         if (currentRound && seasonRounds) {

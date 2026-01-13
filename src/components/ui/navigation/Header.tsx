@@ -17,8 +17,15 @@ export function Header() {
 
   const isInQa = isInProduction() !== true;
 
-  const showCompetitionSelector =
-    location.pathname === '/dashboard' || location.pathname.startsWith('/league');
+  const pathsToShowCompetitionSelector = [
+    '/dashboard',
+    '/league',
+    '/players'
+  ] 
+
+  const showCompetitionSelector = pathsToShowCompetitionSelector.find((p) => {
+    return location.pathname?.startsWith(p);
+  })
     
 
   return (

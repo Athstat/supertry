@@ -5,7 +5,9 @@ import { djangoAthleteService } from "../services/athletes/djangoAthletesService
 import { IProTeam } from "../types/team";
 import { IProAthlete } from "../types/athletes";
 import { getAthletesSummary } from "../utils/athleteUtils";
-import { CACHING_CONFIG } from "../types/constants";
+import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
+import { IProSeason } from "../types/season";
+import { seasonService } from "../services/seasonsService";
 
 interface AthleteContextType {
   athletes: IProAthlete[];
@@ -24,16 +26,21 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
 
-  const key = swrFetchKeys.getAllProAthletesKey();
+  const {selectedSeason} = useFantasySeasons();
+  const key = swrFetchKeys.getAllProAthletesKey(selectedSeason);
+
   const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = 
-    useSWR(key, () => djangoAthleteService.getAllAthletes(), {
+    useSWR(key, () => fetcher(selectedSeason), {
       revalidateOnFocus: false,
-      dedupingInterval: CACHING_CONFIG.fantasySeasonsCachePeriod
+      revalidateIfStale: true,
     });
 
   const athletes = useMemo(() => {
     return fetchedAthletes ?? []
   }, [fetchedAthletes]);
+
+  console.log("Fetch Key ", key);
+  console.log("Athletes ", athletes);
   
   const isLoading = loadingAthletes;
 
@@ -88,3 +95,12 @@ export const useAthletes = () => {
   }
   return context;
 };
+
+
+async function fetcher(season?: IProSeason) {
+  if (season) {
+    return await seasonService.getSeasonAthletes(season.id);
+  }
+
+  return await djangoAthleteService.getAllAthletes()
+}
