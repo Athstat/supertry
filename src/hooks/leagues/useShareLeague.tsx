@@ -7,14 +7,16 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
     const { authUser } = useAuth();
     const username = authUser?.username || authUser?.first_name;
 
+    const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
+    const inviteLink = encodeURI(`${baseUrl}/invite-steps?league_name=${league?.title ?? ''}&user_name=${username ?? ''}&join_code=${league?.entry_code ?? ''}`);
+
     const handleShare = () => {
 
         if (!league) return;
 
-        const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
-        const inviteInstructions = encodeURI(`${baseUrl}/invite-steps?league_name=${league?.title ?? ''}&user_name=${username ?? ''}&join_code=${league?.entry_code ?? ''}`);
+        
 
-        const shareMessage =`You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n${inviteInstructions}`;
+        const shareMessage =`You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n${inviteLink}`;
 
         // Ensure there are no leading blank lines
         //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
@@ -23,7 +25,7 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         // so the share sheet doesn't prepend extra lines.
         const shareData: ShareData = {
             title: `SCRUMMY Fantasy League Invite`,
-            text: `🔥 You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n\n${inviteInstructions}`,
+            text: `🔥 You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n\n${inviteLink}`,
             // url: inviteInstructions
         };
 
@@ -51,7 +53,8 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
 
 
     return {
-        handleShare
+        handleShare,
+        inviteLink
     }
 
 }

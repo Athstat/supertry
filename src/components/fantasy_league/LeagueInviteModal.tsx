@@ -1,0 +1,69 @@
+import { Trophy, X, Share2, CopyIcon } from "lucide-react";
+import CircleButton from "../ui/buttons/BackButton";
+import BottomSheetView from "../ui/modals/BottomSheetView";
+import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
+import { InfoCard } from "../ui/cards/StatCard";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
+import SecondaryText from "../ui/typography/SecondaryText";
+
+type Props = {
+  onClose?: () => void,
+  league?: FantasyLeagueGroup,
+  isOpen?: boolean
+}
+
+/** Renders an invite friends modal */
+export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
+
+  // const { inviteLink } = useShareLeague(league);
+
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <BottomSheetView
+      hideHandle
+      className="min-h-[30vh] max-h-[70vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col gap-6"
+    >
+      <div className="flex flex-row items-center gap-2 justify-between" >
+        <p className="text-xl font-semibold" >Invite Friends</p>
+        <CircleButton onClick={onClose} >
+          <X />
+        </CircleButton>
+      </div>
+
+      <section className="flex flex-col gap-2 items-center justify-center" >
+        <div className="relative" >
+          <Trophy className="w-20 h-20" />
+        </div>
+
+        <p className="text-xl font-semibold" >{league?.title}</p>
+      </section>
+
+
+      <section className="flex flex-col gap-2">
+        <SecondaryText className="text-lg" >Copy Join Code</SecondaryText>
+        <div className="flex flex-row items-center gap-2" >
+          <InfoCard
+            value={league?.entry_code ?? '-'}
+            className="w-[75%] p-2 px-4"
+            valueClassName="text-lg"
+          />
+
+          <PrimaryButton className="flex-1" >
+            <CopyIcon />
+          </PrimaryButton>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <PrimaryButton className="flex-1 py-3 gap-3 flex flex-row items-center"  >
+          <p>Share Join Link</p>
+          <Share2 className="w-5 h-5" />
+        </PrimaryButton>
+      </section>
+
+    </BottomSheetView>
+  )
+}

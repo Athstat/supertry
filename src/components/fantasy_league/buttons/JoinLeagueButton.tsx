@@ -3,12 +3,11 @@ import PrimaryButton from '../../ui/buttons/PrimaryButton'
 import { Activity, Fragment, useMemo } from 'react'
 import { Toast } from '../../ui/Toast'
 import { useJoinLeague } from '../../../hooks/leagues/useJoinLeague'
-import { Share2 } from 'lucide-react'
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup'
-import { useShareLeague } from '../../../hooks/leagues/useShareLeague'
 import { useAuth } from '../../../contexts/AuthContext'
 import useSWR from 'swr'
 import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService'
+import LeagueInviteButton from './LeagueInviteButton'
 
 type Props = {
     league: FantasyLeagueGroup
@@ -50,8 +49,6 @@ export function JoinOrInviteButton() {
     const key = `/fantasy-league-groups/${league?.id}/members/${authUser?.kc_id}`;
     const { isLoading, data: member } = useSWR(key, () => fantasyLeagueGroupsService.getMemberById(league?.id ?? "", authUser?.kc_id ?? ""))
 
-    const { handleShare } = useShareLeague(league);
-
     const isMember = useMemo(() => {
         return member !== undefined;
     }, [member]);
@@ -65,11 +62,7 @@ export function JoinOrInviteButton() {
                 {!isMember && league && <JoinLeagueButton league={league} />}
 
                 {isMember && league && (
-                    <PrimaryButton onClick={handleShare} className='text-xs' >
-                        {/* <Plus className="w-4 h-4" /> */}
-                        <Share2 className="w-4 h-4" />
-                        Invite
-                    </PrimaryButton>
+                    <LeagueInviteButton />
                 )}
 
             </Activity>
