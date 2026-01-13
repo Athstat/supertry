@@ -147,15 +147,8 @@ function Content() {
         />
       </div>
 
-      <div>
-        <p className='font-bold text-md' >By Team</p>
-      </div>
+
       <PlayersTeamsGridList />
-
-      <div>
-        <p className='font-bold text-md' >By Country</p>
-      </div>
-
       <PlayersCountryGridList />
     </Fragment>
   )

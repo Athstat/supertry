@@ -61,7 +61,6 @@ export default function PlayersCountryGridList() {
 
     const finalLoading = isLoading || loadingSupported;
 
-
     if (finalLoading) {
         return (
             <div className="grid grid-cols-4 gap-2 animate-pulse" >
@@ -81,17 +80,27 @@ export default function PlayersCountryGridList() {
         )
     }
 
+    if (countries.length === 0) {
+        return null;
+    }
+
     return (
-        <div className="grid grid-cols-4 gap-2" >
-            {countries.map((c) => {
-                return (
-                    <CountryCard
-                        countryName={c}
-                        onClick={onClick}
-                        key={c}
-                    />
-                )
-            })}
+        <div className="flex flex-col gap-4" >
+            <div>
+                <p className='font-bold text-md' >By Country</p>
+            </div>
+            
+            <div className="grid grid-cols-4 gap-2" >
+                {countries.map((c) => {
+                    return (
+                        <CountryCard
+                            countryName={c}
+                            onClick={onClick}
+                            key={c}
+                        />
+                    )
+                })}
+            </div>
         </div>
     )
 }
