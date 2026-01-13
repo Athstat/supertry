@@ -1,19 +1,17 @@
-import useSWR from "swr";
-import { seasonService } from "../../services/seasonsService";
-import { useMemo } from "react";
+import { useContext } from "react";
+import { SeasonTeamsContext } from "../../contexts/SeasonTeamsContext";
 
-export function useSeasonTeams(seasonId?: string) {
-    const seasonTeamsKey = seasonId ? `seasons-teams/${seasonId}` : null;
-    const { data, isLoading, mutate, error} = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(seasonId ?? ""));
+export function useSeasonTeams() {
+    const context = useContext(SeasonTeamsContext);
 
-    const sortedTeams = useMemo(() => {
-        return [...(data || [])].sort((a, b) => {
-            return a.athstat_name.localeCompare(b.athstat_name)
-        })
-    },[data]);
+    if (context === null) {
+        throw Error("useSeasonTeams() hook must be mounted inside the SeasonTeamsProvider");
+    }
+
+    const {teams, isLoading, refresh: mutate, error} = context;
 
     return {
-        teams: sortedTeams,
+        teams,
         isLoading,
         mutate,
         error

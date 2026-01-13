@@ -44,10 +44,10 @@ type SeasonTeamListProps = {
   onSuccess?: () => void
 }
 
-function SeasonTeamGridList({ season, onSuccess }: SeasonTeamListProps) {
+function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
 
   const navigate = useNavigate();
-  const { teams: fetchedTeams, isLoading } = useSeasonTeams(season.id);
+  const { teams: fetchedTeams, isLoading } = useSeasonTeams();
   const teams = fetchedTeams || [];
 
   const handleOnClick = (team: ITeam) => {
