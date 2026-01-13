@@ -30,7 +30,7 @@ export function Header() {
         "sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 pb-0",
         AppColours.BACKGROUND
       )}>
-        <div className="container mx-auto px-4 h-16 overflow-hidden flex items-center justify-between">
+        <div className="container mx-auto px-1 h-16 overflow-hidden flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div
               className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
