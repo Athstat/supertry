@@ -14,21 +14,17 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
 
         if (!league) return;
 
-        
-
-        const shareMessage =`You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n${inviteLink}`;
+        const shareMessage = `${authUser?.username} is inviting you to join ${league.title} league on SCRUMMY 🏉. Use the link below to join\n\n${inviteLink}`
 
         // Ensure there are no leading blank lines
         //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
 
         // Share ONLY the composed message text (no title/url),
         // so the share sheet doesn't prepend extra lines.
-        const shareData: ShareData = {
-            title: `SCRUMMY Fantasy League Invite`,
-            text: `🔥 You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n\n${inviteLink}`,
-            // url: inviteInstructions
-        };
 
+        const shareData: ShareData = {
+            text: shareMessage
+        };
 
         if (navigator.share) {
             navigator.share(shareData)

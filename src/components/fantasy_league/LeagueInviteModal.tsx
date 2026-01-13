@@ -25,7 +25,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [successMessage, setSuccessMessage] = useState<string>();
 
-  const { inviteLink } = useShareLeague(league);
+  const { inviteLink, handleShare: handleShareJoinLink } = useShareLeague(league);
   const { ref: qrRef, copyAsImage } = useCanvas(setErrorMessage, setSuccessMessage);
 
   const clearMessages = () => {
@@ -96,7 +96,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
       </section>
 
       <section className="flex flex-col gap-3 p-6">
-        <PrimaryButton className="flex-1 py-3 gap-3 flex flex-row items-center"  >
+        <PrimaryButton onClick={handleShareJoinLink} className="flex-1 py-3 gap-3 flex flex-row items-center"  >
           <p>Share Join Link</p>
           <Share2 className="w-5 h-5" />
         </PrimaryButton>
