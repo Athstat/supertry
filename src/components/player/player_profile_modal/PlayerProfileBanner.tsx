@@ -26,8 +26,8 @@ export default function PlayerProfileBanner({onClose} : Props) {
     }
 
     // Fall back to team jersey image
-    return seasonTeam?.image_url || player?.team?.athstat_id ? getTeamJerseyImage(seasonTeam?.image_url || player?.team?.athstat_id) : undefined;
-  }, [player?.image_url, player?.team?.athstat_id, playerImageErr, playerImageUrl, seasonTeam?.image_url]);
+    return seasonTeam?.image_url || player?.team?.athstat_id ? getTeamJerseyImage(seasonTeam?.athstat_id || player?.team?.athstat_id) : undefined;
+  }, [player?.image_url, player?.team?.athstat_id, playerImageErr, playerImageUrl, seasonTeam?.athstat_id, seasonTeam?.image_url]);
 
   const pr = player?.power_rank_rating ?? 0;
   const cardTier: CardTier =
