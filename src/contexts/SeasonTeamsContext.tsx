@@ -6,12 +6,14 @@ import { seasonService } from "../services/seasonsService";
 import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
 import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { CACHING_CONFIG } from "../types/constants";
+import { IProSeason } from "../types/season";
 
 type ContextProps = {
     teams: IProTeam[],
     refresh: () => void,
     error?: any,
-    isLoading?: boolean
+    isLoading?: boolean,
+    season?: IProSeason
 }
 
 export const SeasonTeamsContext = createContext<ContextProps | null>(null);
@@ -50,7 +52,7 @@ export default function SeasonTeamsProvider({children} : ProviderProps) {
 
     return (
         <SeasonTeamsContext.Provider
-            value={{ teams, refresh, isLoading, error }}
+            value={{ teams, refresh, isLoading, error, season: selectedSeason }}
         >
             {children}
         </SeasonTeamsContext.Provider>
