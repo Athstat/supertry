@@ -13,8 +13,11 @@ export const fantasySeasonsService = {
             });
 
             if (res.ok) {
-                const json = (await res.json());
-                return json as IFantasySeason[];
+                const seasons = (await res.json()) as IFantasySeason[];
+
+                return seasons.sort((a, b) => {
+                    return (a.priority ?? 0) - (b.priority ?? 0);
+                });
             }
         } catch (err) {
             logger.error('Error fetcing fantasy seasons', err);
