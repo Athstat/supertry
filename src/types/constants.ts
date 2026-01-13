@@ -287,3 +287,9 @@ export const leagueInviteQueryParams = {
   USER_ID:'usri',
   JOIN_CODE: 'jc'
 }
+
+export type LeagueInviteParamsDef = {
+  'li'?: string,
+  'usri'?: string,
+  'jc'?: string
+}
