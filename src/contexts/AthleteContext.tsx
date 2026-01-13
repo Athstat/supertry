@@ -32,7 +32,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = 
     useSWR(key, () => fetcher(selectedSeason), {
       revalidateOnFocus: false,
-      revalidateIfStale: true,
+      revalidateIfStale: true
     });
 
   const athletes = useMemo(() => {
