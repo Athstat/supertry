@@ -15,6 +15,7 @@ import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsPr
 import CacheProvider from "./providers/caching/CacheProvider";
 import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 import TooltipProvider from "./providers/ui/TooltipProvider";
+import SeasonTeamsProvider from "./contexts/SeasonTeamsContext";
 
 type Props = {
     children?: ReactNode
@@ -81,11 +82,13 @@ function DataLayer({ children }: Props) {
 
     return (
         <FantasySeasonsProvider>
-            <AthleteProvider>
-                <SportActionsDefinitionsProvider>
-                    {children}
-                </SportActionsDefinitionsProvider>
-            </AthleteProvider>
+            <SeasonTeamsProvider>
+                <AthleteProvider>
+                    <SportActionsDefinitionsProvider>
+                        {children}
+                    </SportActionsDefinitionsProvider>
+                </AthleteProvider>
+            </SeasonTeamsProvider>
         </FantasySeasonsProvider>
     )
 }
