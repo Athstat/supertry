@@ -44,6 +44,7 @@ export default function MatchPrCard({ pr, className}: Props) {
             tier === "green" && "bg-green-500 dark:bg-green-600",
             tier === "yellow" && "bg-yellow-500 dark:bg-yellow-600",
             tier === "red" && "bg-red-500 dark:bg-red-600",
+            tier === 'none' && 'bg-slate-300 dark:bg-slate-700',
             className
         )} >
             <p className="" >{ pr ? Math.floor(pr) : "-"}</p>

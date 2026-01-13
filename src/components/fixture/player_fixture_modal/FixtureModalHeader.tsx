@@ -6,6 +6,7 @@ import SecondaryText from "../../ui/typography/SecondaryText"
 import { IProAthlete } from "../../../types/athletes"
 import { SingleMatchPowerRanking } from "../../../types/powerRankings"
 import QuickActionButton from "../../ui/buttons/QuickActionButton"
+import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams"
 
 type Props = {
     player: IProAthlete,
@@ -18,6 +19,8 @@ type Props = {
 /** Renders the header component on the player fixture modal */
 export default function FixtureModalHeader({player, onClose, powerRanking, hideViewPlayerProfile, onViewPlayerProfile} : Props) {
     
+    const {seasonTeam, playerImageUrl} = usePlayerSeasonTeam(player);
+
     const handleClose = () => {
         if (onClose) {
             onClose();
@@ -55,11 +58,12 @@ export default function FixtureModalHeader({player, onClose, powerRanking, hideV
 
                     <div>
                         <SmartPlayerMugshot
-                            url={player.image_url}
-                            teamId={player.team_id}
+                            url={playerImageUrl}
+                            teamId={seasonTeam?.athstat_id}
                             playerImageClassName="w-16 h-16"
-                            jerseyClassName="min-w-16 min-h-16"
+                            jerseyClassName="min-w-14 min-h-20 mt-3"
                             jerseyConClassName="min-w-16 min-h-16"
+                            useJerseyBaseclass={false}
                         />
                     </div>
 
@@ -71,9 +75,9 @@ export default function FixtureModalHeader({player, onClose, powerRanking, hideV
 
                 <div className="flex flex-col items-end justify-center gap-2" >
 
-                    {powerRanking && <MatchPrCard
-                        pr={powerRanking.updated_power_ranking}
-                    />}
+                    <MatchPrCard
+                        pr={powerRanking?.updated_power_ranking}
+                    />
 
                     <SecondaryText className="text-wrap text-center text-xs" >Match Rating</SecondaryText>
                 </div>

@@ -11,13 +11,17 @@ export function FantasySeasonsDrawer() {
 
     const { selectedSeason, fantasySeasons, setSelectedSeason, showDrawer, setShowDrawer } = useFantasySeasons();
 
+    const handleClose = () => {
+        setShowDrawer(false);
+    }
+
     if (!showDrawer) {
         return null;
     }
 
     const handleOnClick = (season: IProSeason) => {
         setSelectedSeason(season);
-        setShowDrawer(false);
+        handleClose();
     }
 
     return (
@@ -27,7 +31,7 @@ export function FantasySeasonsDrawer() {
         >
             <div className="flex flex-row items-center justify-between" >
                 <p className="font-semibold text-lg" >Select Competition</p>
-                <CircleButton>
+                <CircleButton onClick={handleClose} >
                     <X />
                 </CircleButton>
             </div>
@@ -55,13 +59,13 @@ type OptionProp = {
 }
 
 function OptionItem({ onClick, isSelected, season }: OptionProp) {
-    
+
     const handleOnClick = () => {
         if (season && onClick) {
             onClick(season)
         }
     }
-    
+
     return (
         <RoundedCard
             onClick={handleOnClick}
