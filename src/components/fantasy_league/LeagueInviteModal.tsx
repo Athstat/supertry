@@ -1,4 +1,4 @@
-import { X, Share2, CopyIcon } from "lucide-react";
+import { X, Share2, CopyIcon, Trophy } from "lucide-react";
 import CircleButton from "../ui/buttons/BackButton";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
@@ -49,7 +49,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   return (
     <BottomSheetView
       hideHandle
-      className="min-h-[30vh] max-h-[90vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col"
+      className="min-h-[30vh] max-h-[95vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col"
     >
       <div className="flex flex-row items-center gap-2 justify-between" >
         <p className="text-xl font-semibold" >Invite Friends</p>
@@ -60,6 +60,10 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
 
       <section className="flex mt-6 border-b border-slate-200 dark:border-slate-600 pb-6 flex-col gap-4 items-center justify-center" >
 
+        <div className="flex flex-row items-center gap-2 bg-blue-600 dark:bg-blue-600 text-white dark:text-white px-3 py-1 rounded-full" >
+          <Trophy  className="w-4 h-4" />
+          <p className="font-semibold" >{league?.title}</p>
+        </div>
         <SecondaryText className="max-w-[60%] text-center" >Copy this QR-code and share it with your friends to join the league</SecondaryText>
 
         <QRCodeCanvas

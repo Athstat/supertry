@@ -8,7 +8,7 @@ import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGr
 export default function LeagueInviteButton() {
 
     const {league} = useFantasyLeagueGroup();
-    const [showInviteModal, setInviteShowModal] = useState<boolean>(true);
+    const [showInviteModal, setInviteShowModal] = useState<boolean>(false);
     const toggle = () => setInviteShowModal(prev => !prev);
 
     return (
