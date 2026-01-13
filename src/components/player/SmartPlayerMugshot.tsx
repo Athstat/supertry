@@ -37,7 +37,7 @@ export default function SmartPlayerMugshot({ url, teamId, className, playerImage
                     <TeamJersey
                         teamId={teamId}
                         className={twMerge(
-                            "max-h-12 max-w-10 min-h-10 min-w-10 mt-2 object-center",
+                            "max-h-12 max-w-8 min-h-10 min-w-8 mt-2 object-center",
                             "lg:max-h-12 lg:max-w-10 lg:min-h-10 lg:min-w-10 mt-2",
                             jerseyClassName
                         )}
