@@ -25,10 +25,10 @@ type ProviderProps = {
 export default function SeasonTeamsProvider({children} : ProviderProps) {
 
     const { selectedSeason, currentSeason} = useFantasySeasons();
-    const seasonId = selectedSeason?.id || currentSeason?.id;
-
-    const seasonTeamsKey = seasonId ? `seasons-teams/${seasonId}` : null;
-    const { data, isLoading, mutate, error } = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(seasonId ?? ""), {
+    const activeSeason = selectedSeason || currentSeason;
+    const seasonTeamsKey = activeSeason ? `seasons-teams/${activeSeason.id}` : null;
+    
+    const { data, isLoading, mutate, error } = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(activeSeason?.id ?? ""), {
         revalidateOnFocus: false,
         revalidateIfStale: true,
         dedupingInterval: CACHING_CONFIG.seasonTeamsCachePeriod
