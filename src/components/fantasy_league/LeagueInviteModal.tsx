@@ -60,7 +60,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
 
       <section className="flex mt-6 border-b border-slate-200 dark:border-slate-600 pb-6 flex-col gap-4 items-center justify-center" >
 
-        <div className="flex flex-row items-center gap-2 bg-blue-600 dark:bg-blue-600 text-white dark:text-white px-3 py-1 rounded-full" >
+        <div className="flex flex-row cursor-pointer hover:px-4 transition-all ease-in items-center gap-2 bg-blue-600 dark:bg-blue-600 text-white dark:text-white px-3 py-1 rounded-full" >
           <Trophy  className="w-4 h-4" />
           <p className="font-semibold" >{league?.title}</p>
         </div>
