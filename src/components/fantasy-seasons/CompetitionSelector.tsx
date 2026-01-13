@@ -56,7 +56,7 @@ const savedId = localStorage.getItem(SELECTED_SEASON_ID_KEY) || undefined;
         <select
           value={seasonId}
           onChange={handleSeasonChange}
-          className="appearance-none dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-md font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          className="appearance-none border dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-2 pr-10 rounded-md font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
         >
           {availableSeasons.map(season => (
             <option key={season.id} value={season.id}>

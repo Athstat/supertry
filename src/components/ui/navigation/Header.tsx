@@ -1,7 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import ScrummyLogoHorizontal from '../../branding/scrummy_logo_horizontal';
-import { isInProduction } from '../../../utils/webUtils';
-import BetaTag from '../../branding/BetaTag';
 import NotificationsBellButton from '../../notifications/NotificationsBellButton';
 import { useNavigationBars } from '../../../hooks/navigation/useNavigationBars';
 import CompetitionSelector from '../../fantasy-seasons/CompetitionSelector';
@@ -14,8 +12,6 @@ export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { topNavViewMode } = useNavigationBars();
-
-  const isInQa = isInProduction() !== true;
 
   const pathsToShowCompetitionSelector = [
     '/dashboard',
@@ -45,7 +41,7 @@ export function Header() {
               <ScrummyLogoHorizontal className="" />
             </div>
 
-            {isInQa && <BetaTag />}
+            {/* {isInQa && <BetaTag />} */}
 
             {showCompetitionSelector && (
               <div className="ml-2">
