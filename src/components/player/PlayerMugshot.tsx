@@ -174,7 +174,6 @@ function FallbackImage({ teamId, alt = "", isCaptain, showPrBackground, cardTier
 
   return (
     <div
-      onError={() => setError(true)}
       className={twMerge(
         'relative w-14 h-14 overflow-clip cursor-pointer border rounded-full',
         isCaptain
@@ -202,6 +201,7 @@ function FallbackImage({ teamId, alt = "", isCaptain, showPrBackground, cardTier
         src={src}
         alt={alt}
         className="w-full mt-3 h-full object-contain"
+        onError={() => setError(true)}
       />
 
     </div>
