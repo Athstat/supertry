@@ -6,8 +6,11 @@ import { InfoCard } from "../ui/cards/StatCard";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryText from "../ui/typography/SecondaryText";
 
-import QRCode from "react-qr-code";
 import { useShareLeague } from "../../hooks/leagues/useShareLeague";
+import { QRCodeCanvas } from 'qrcode.react';
+import { useCanvas } from "../../hooks/web/useCanvas";
+import { Toast } from "../ui/Toast";
+import { useState } from "react";
 
 
 type Props = {
@@ -19,7 +22,13 @@ type Props = {
 /** Renders an invite friends modal */
 export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
 
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [successMessage, setSuccessMessage] = useState<string>();
+
   const { inviteLink } = useShareLeague(league);
+  const { ref: qrRef, copyAsImage, clearMessages } = useCanvas(setErrorMessage, setSuccessMessage);
+
+  
 
   if (!isOpen) {
     return null;
@@ -28,7 +37,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   return (
     <BottomSheetView
       hideHandle
-      className="min-h-[30vh] max-h-[80vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col"
+      className="min-h-[30vh] max-h-[90vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col"
     >
       <div className="flex flex-row items-center gap-2 justify-between" >
         <p className="text-xl font-semibold" >Invite Friends</p>
@@ -41,20 +50,20 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
 
         <SecondaryText className="max-w-[60%] text-center" >Copy this QR-code and share it with your friends to join the league</SecondaryText>
 
-        <QRCode
+        <QRCodeCanvas
+          ref={qrRef}
           value={inviteLink || ''}
           title={`You have been invited to join ${league?.title}`}
           level='L'
           bgColor="black"
           fgColor="white"
           className="rounded-xl"
-          size={160}
+          size={190}
         />
 
-        <PrimaryButton className="w-fit" >
+        <PrimaryButton onClick={copyAsImage} className="w-fit" >
           Copy QR-code
         </PrimaryButton>
-
 
       </section>
 
@@ -80,6 +89,20 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
           <Share2 className="w-5 h-5" />
         </PrimaryButton>
       </section>
+
+      <Toast
+        isVisible={Boolean(successMessage)}
+        message={successMessage || ''}
+        onClose={clearMessages}
+        type={'success'}
+      />
+
+      <Toast
+        isVisible={Boolean(errorMessage)}
+        message={errorMessage || ''}
+        onClose={clearMessages}
+        type={'error'}
+      />
 
     </BottomSheetView>
   )
