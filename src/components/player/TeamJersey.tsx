@@ -18,8 +18,6 @@ export default function TeamJersey({ teamId, className, hideFade, useBaseClasses
     const imageUrl = teamId ? getTeamJerseyImage(teamId) : undefined;
     const [error, setError] = useState<boolean>(false);
 
-    console.log("Image URL ", imageUrl);
-
     if (error || imageUrl === undefined) {
         return (
             <div>
