@@ -82,7 +82,7 @@ export function useFantasyTeam() {
                     athlete_team_id: athlete.team?.athstat_id,
                     athlete: athlete,
                     is_super_sub: s.slotNumber >= 6,
-                    score: 0
+                    score: 0,
                 },
                 purchasePrice: athlete.price,
             }
