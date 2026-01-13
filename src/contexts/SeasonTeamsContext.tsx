@@ -24,8 +24,8 @@ type ProviderProps = {
 
 export default function SeasonTeamsProvider({children} : ProviderProps) {
 
-    const { selectedSeason } = useFantasySeasons();
-    const seasonId = selectedSeason?.id;
+    const { selectedSeason, currentSeason} = useFantasySeasons();
+    const seasonId = selectedSeason?.id || currentSeason?.id;
 
     const seasonTeamsKey = seasonId ? `seasons-teams/${seasonId}` : null;
     const { data, isLoading, mutate, error } = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(seasonId ?? ""), {
