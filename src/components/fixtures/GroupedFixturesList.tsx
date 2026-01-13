@@ -37,7 +37,7 @@ export default function GroupedFixturesList({ fixtures, viewMode = "fixtures" }:
                             fixture={fixture}
                             key={`${competition}-${viewMode}-${index}`}
                             viewMode={viewMode}
-                            className="rounded-xl border w-full min-h-full dark:border-slate-700 flex-1"
+                            className="rounded-xl border w-full dark:border-slate-700 flex-1"
                         />
                     ))}
                 </div>

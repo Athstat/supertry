@@ -187,7 +187,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
                         <p className="text-[10px] md:text-[10px]" >{player.price}</p>
                         <Coins className="text-yellow-500 w-2.5 h-2.5" />
                     </div>
-                </Activity> */}
+            </Activity> */}
 
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
