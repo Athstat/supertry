@@ -8,6 +8,7 @@ import { Fragment, ReactNode, useEffect, useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete';
 import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
 import { playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom, playerSelectedFixtureAtom, showPlayerScoutingActionsModalAtom } from '../state/player.atoms';
+import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 
 type Props = {
   children?: ReactNode;
@@ -84,6 +85,9 @@ function ProviderInner({ children, player, loadingFallback, errorFallback, shoul
 /** A hook that provides data from the PlayerDataProvider */
 
 export function usePlayerData() {
+
+  const {selectedSeason} = useFantasySeasons();
+
   const [player] = useAtom(playerAtom);
   const [seasons] = useAtom(playerSeasonsAtom);
   const currentSeason = useAtomValue(playerCurrentSeasonAtom);
@@ -100,7 +104,7 @@ export function usePlayerData() {
   }, [seasons]);
 
   return {
-    player, seasons, currentSeason,
+    player, seasons, currentSeason: selectedSeason || currentSeason,
     sortedSeasons, selectedFixture, setSelectedFixture,
     showScoutingActionModal, setShowScoutingActionModal
   };

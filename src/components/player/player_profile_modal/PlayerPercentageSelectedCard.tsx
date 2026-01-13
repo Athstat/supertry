@@ -13,7 +13,7 @@ type Props = {
 
 export default function PlayerPercentageSelectedCard({ player, season }: Props) {
 
-    const key = `/fantasy-seasons/${player.tracking_id}/players/${player.tracking_id}/percentage-selected`;
+    const key = `/fantasy-seasons/${season.id}/${player.tracking_id}/players/${player.tracking_id}/percentage-selected`;
     const { data: selection, isLoading } = useSWR(key, () => fantasySeasonsService.getPlayerPercentageSelected(season.id, player.tracking_id));
     const abrr = abbreviateSeasonName(season.name);
 

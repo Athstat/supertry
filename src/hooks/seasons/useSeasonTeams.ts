@@ -1,6 +1,6 @@
 import { useCallback, useContext } from "react";
 import { SeasonTeamsContext } from "../../contexts/SeasonTeamsContext";
-import { IAthleteTeam } from "../../types/athletes";
+import { IAthleteTeam, IProAthlete } from "../../types/athletes";
 
 export function useSeasonTeams() {
 
@@ -39,3 +39,13 @@ export function useSeasonTeams() {
     }
 }
 
+
+/** Hook that gets an athletes season team */
+export function usePlayerSeasonTeam(player: IProAthlete) {
+    const {getAthleteSeasonTeam} = useSeasonTeams();
+    const seasonTeam = getAthleteSeasonTeam(player.athlete_teams || []) || player.team;
+
+    return {
+        seasonTeam
+    }
+}

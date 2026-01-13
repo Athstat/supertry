@@ -51,7 +51,7 @@ export type IProAthlete = {
   team_id: string;
   team?: IProTeam;
   scouting_report?: string;
-  athlete_teams: IAthleteTeam[]
+  athlete_teams?: IAthleteTeam[]
 };
 
 export type IAthleteSeasonStarRatings = {

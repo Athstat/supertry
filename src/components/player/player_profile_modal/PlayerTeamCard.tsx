@@ -6,6 +6,7 @@ import TeamLogo from '../../team/TeamLogo';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useTooltip } from '../../../hooks/ui/useTooltip';
 import { HelpCircle } from 'lucide-react';
+import { usePlayerSeasonTeam } from '../../../hooks/seasons/useSeasonTeams';
 
 type Props = {
   player: IProAthlete;
@@ -25,17 +26,19 @@ export default function PlayerTeamCard({ player }: Props) {
     }
   }
 
+  const {seasonTeam} = usePlayerSeasonTeam(player);
+
   return (
     <RoundedCard className="flex dark:border-none flex-row p-4 rounded-2xl items-center justify-between transition-all duration-200">
       <div className="flex flex-row items-center gap-4">
         <TeamLogo
-          url={player.team?.image_url}
-          teamName={player.team?.athstat_name}
+          url={seasonTeam?.image_url}
+          teamName={seasonTeam?.athstat_name}
           className="w-10 h-10"
         />
 
         <div className="flex flex-col">
-          <p className="text-sm font-semibold dark:text-white">{player.team?.athstat_name}</p>
+          <p className="text-sm font-semibold dark:text-white">{seasonTeam?.athstat_name}</p>
 
 
           {player.position && player.position_class && (
