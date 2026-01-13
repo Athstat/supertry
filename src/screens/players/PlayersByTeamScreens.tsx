@@ -6,9 +6,8 @@ import { AppColours } from "../../types/constants";
 import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMemo, useState } from "react";
-import { useProTeam } from "../../hooks/teams/useProTeam";
+import { useProTeam, useProTeamAthletes } from "../../hooks/teams/useProTeam";
 import TeamLogo from "../../components/team/TeamLogo";
-import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import PlayersList from "../../components/players/PlayersList";
 import PlayersTeamsSheet from "../../components/players/teams/PlayersTeamsSheet";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
@@ -23,7 +22,7 @@ export default function PlayersByTeamScreens() {
     useHideTopNavBar();
 
     const { team, isLoading: loadingTeam } = useProTeam(teamId);
-    const { athletes, isLoading: loadingAthletes } = useSupportedAthletes();
+    const {athletes, isLoading: loadingAthletes} = useProTeamAthletes(teamId);
 
     const [showModal, setShowModal] = useState(false);
     const toggle = () => setShowModal(prev => !prev);
