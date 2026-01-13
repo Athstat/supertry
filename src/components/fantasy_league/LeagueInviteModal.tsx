@@ -1,10 +1,14 @@
-import { Trophy, X, Share2, CopyIcon } from "lucide-react";
+import { X, Share2, CopyIcon } from "lucide-react";
 import CircleButton from "../ui/buttons/BackButton";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import { InfoCard } from "../ui/cards/StatCard";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryText from "../ui/typography/SecondaryText";
+
+import QRCode from "react-qr-code";
+import { useShareLeague } from "../../hooks/leagues/useShareLeague";
+
 
 type Props = {
   onClose?: () => void,
@@ -15,7 +19,7 @@ type Props = {
 /** Renders an invite friends modal */
 export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
 
-  // const { inviteLink } = useShareLeague(league);
+  const { inviteLink } = useShareLeague(league);
 
   if (!isOpen) {
     return null;
@@ -24,7 +28,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   return (
     <BottomSheetView
       hideHandle
-      className="min-h-[30vh] max-h-[70vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col gap-6"
+      className="min-h-[30vh] max-h-[80vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col"
     >
       <div className="flex flex-row items-center gap-2 justify-between" >
         <p className="text-xl font-semibold" >Invite Friends</p>
@@ -33,16 +37,29 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
         </CircleButton>
       </div>
 
-      <section className="flex flex-col gap-2 items-center justify-center" >
-        <div className="relative" >
-          <Trophy className="w-20 h-20" />
-        </div>
+      <section className="flex mt-6 border-b border-slate-200 dark:border-slate-600 pb-6 flex-col gap-4 items-center justify-center" >
 
-        <p className="text-xl font-semibold" >{league?.title}</p>
+        <SecondaryText className="max-w-[60%] text-center" >Copy this QR-code and share it with your friends to join the league</SecondaryText>
+
+        <QRCode
+          value={inviteLink || ''}
+          title={`You have been invited to join ${league?.title}`}
+          level='L'
+          bgColor="black"
+          fgColor="white"
+          className="rounded-xl"
+          size={160}
+        />
+
+        <PrimaryButton className="w-fit" >
+          Copy QR-code
+        </PrimaryButton>
+
+
       </section>
 
 
-      <section className="flex flex-col gap-2">
+      <section className="flex flex-col gap-2 border-b border-slate-200 dark:border-slate-600 py-6">
         <SecondaryText className="text-lg" >Copy Join Code</SecondaryText>
         <div className="flex flex-row items-center gap-2" >
           <InfoCard
@@ -57,7 +74,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
         </div>
       </section>
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3 p-6">
         <PrimaryButton className="flex-1 py-3 gap-3 flex flex-row items-center"  >
           <p>Share Join Link</p>
           <Share2 className="w-5 h-5" />
