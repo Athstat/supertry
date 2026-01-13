@@ -130,6 +130,10 @@ export const abbreviateSeasonName = (seasonName: string): string => {
     if (seasonName.startsWith("Womens Rugby World Cup")) {
         return seasonName.replace("Womens Rugby World Cup", "WRC");
     }
+
+    if (seasonName.startsWith('Six Nations')) {
+        return seasonName.replace('Six Nations', '6N')
+    }
     
     return seasonName;
 };
