@@ -78,12 +78,13 @@ export default function PlayersByTeamScreens() {
                 </div>
             </div>
 
+            <div className="px-2" >
+                <PlayersList
+                    players={teamAthletes}
+                />
+            </div>
 
-            <PlayersList
-                players={teamAthletes}
-            />
-
-            <PlayersTeamsSheet 
+            <PlayersTeamsSheet
                 isOpen={showModal}
                 onClose={toggle}
                 onSuccess={() => setShowModal(false)}
